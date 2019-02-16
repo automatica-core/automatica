@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\bin\Debug\netcoreapp2.2\P3.Logic.Messenger.deps.json
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\bin\Debug\netcoreapp2.2\P3.Logic.Messenger.dll
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\bin\Debug\netcoreapp2.2\P3.Logic.Messenger.pdb
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\obj\Debug\netcoreapp2.2\P3.Logic.Messenger.csprojAssemblyReference.cache
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\obj\Debug\netcoreapp2.2\P3.Logic.Messenger.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\obj\Debug\netcoreapp2.2\P3.Logic.Messenger.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\obj\Debug\netcoreapp2.2\P3.Logic.Messenger.AssemblyInfo.cs
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\obj\Debug\netcoreapp2.2\P3.Logic.Messenger.dll
-C:\dev\p3\automatica-rules\P3.Logic.Messenger\P3.Logic.Messenger\P3.Logic.MessengerFactory\obj\Debug\netcoreapp2.2\P3.Logic.Messenger.pdb

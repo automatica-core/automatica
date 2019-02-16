@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\bin\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.deps.json
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\bin\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.dll
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\bin\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.pdb
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.csprojAssemblyReference.cache
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.AssemblyInfo.cs
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.dll
-C:\dev\p3\automatica-rules\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Logic.BaseOperations.pdb

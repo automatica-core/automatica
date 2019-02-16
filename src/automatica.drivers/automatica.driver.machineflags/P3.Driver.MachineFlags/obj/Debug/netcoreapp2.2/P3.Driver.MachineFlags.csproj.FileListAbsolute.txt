@@ -1,8 +1,0 @@
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\bin\Debug\netcoreapp2.2\P3.Driver.MachineFlags.deps.json
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\bin\Debug\netcoreapp2.2\P3.Driver.MachineFlags.dll
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\bin\Debug\netcoreapp2.2\P3.Driver.MachineFlags.pdb
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\obj\Debug\netcoreapp2.2\P3.Driver.MachineFlags.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\obj\Debug\netcoreapp2.2\P3.Driver.MachineFlags.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\obj\Debug\netcoreapp2.2\P3.Driver.MachineFlags.AssemblyInfo.cs
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\obj\Debug\netcoreapp2.2\P3.Driver.MachineFlags.dll
-C:\dev\p3\automatica-drivers\P3.Driver.MachineFlags\P3.Driver.MachineFlags\obj\Debug\netcoreapp2.2\P3.Driver.MachineFlags.pdb

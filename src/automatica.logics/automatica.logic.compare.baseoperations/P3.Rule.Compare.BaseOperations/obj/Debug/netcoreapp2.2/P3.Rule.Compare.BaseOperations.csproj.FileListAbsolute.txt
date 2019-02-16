@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\bin\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.deps.json
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\bin\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.dll
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\bin\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.pdb
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.csprojAssemblyReference.cache
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.AssemblyInfo.cs
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.dll
-C:\dev\p3\automatica-rules\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations\obj\Debug\netcoreapp2.2\P3.Rule.Compare.BaseOperations.pdb

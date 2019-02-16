@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\bin\Release\netcoreapp2.2\P3.Knx.Core.Driver.deps.json
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\bin\Release\netcoreapp2.2\P3.Knx.Core.Driver.dll
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\bin\Release\netcoreapp2.2\P3.Knx.Core.Driver.pdb
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\obj\Release\netcoreapp2.2\P3.Knx.Core.Driver.csprojAssemblyReference.cache
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\obj\Release\netcoreapp2.2\P3.Knx.Core.Driver.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\obj\Release\netcoreapp2.2\P3.Knx.Core.Driver.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\obj\Release\netcoreapp2.2\P3.Knx.Core.Driver.AssemblyInfo.cs
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\obj\Release\netcoreapp2.2\P3.Knx.Core.Driver.dll
-C:\dev\p3\automatica-drivers\P3.Driver.KNX\P3.Knx.Core.Driver\obj\Release\netcoreapp2.2\P3.Knx.Core.Driver.pdb

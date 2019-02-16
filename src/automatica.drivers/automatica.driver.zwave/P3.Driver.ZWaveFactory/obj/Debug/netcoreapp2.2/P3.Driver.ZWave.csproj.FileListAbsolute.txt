@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.deps.json
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.dll
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.csprojAssemblyReference.cache
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.AssemblyInfo.cs
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.pdb
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.dll
-C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.pdb

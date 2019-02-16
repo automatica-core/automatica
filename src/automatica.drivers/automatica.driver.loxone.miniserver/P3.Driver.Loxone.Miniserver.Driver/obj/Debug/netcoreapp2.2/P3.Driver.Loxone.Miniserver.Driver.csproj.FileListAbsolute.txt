@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.deps.json
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.dll
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.pdb
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.AssemblyInfo.cs
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.dll
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.pdb
-C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\P3.Driver.Loxone.Miniserver.Driver\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.csprojAssemblyReference.cache

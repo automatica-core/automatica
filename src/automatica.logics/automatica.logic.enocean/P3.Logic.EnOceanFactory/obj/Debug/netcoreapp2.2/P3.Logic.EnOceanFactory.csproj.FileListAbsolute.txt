@@ -1,9 +1,0 @@
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\obj\Debug\netcoreapp2.2\P3.Logic.EnOceanFactory.csprojAssemblyReference.cache
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\obj\Debug\netcoreapp2.2\P3.Logic.EnOceanFactory.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\obj\Debug\netcoreapp2.2\P3.Logic.EnOceanFactory.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\obj\Debug\netcoreapp2.2\P3.Logic.EnOceanFactory.AssemblyInfo.cs
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\bin\Debug\netcoreapp2.2\P3.Logic.EnOcean.deps.json
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\bin\Debug\netcoreapp2.2\P3.Logic.EnOcean.dll
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\bin\Debug\netcoreapp2.2\P3.Logic.EnOcean.pdb
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\obj\Debug\netcoreapp2.2\P3.Logic.EnOcean.dll
-C:\dev\p3\automatica-rules\P3.Logic.EnOcean\P3.Logic.EnOceanFactory\obj\Debug\netcoreapp2.2\P3.Logic.EnOcean.pdb

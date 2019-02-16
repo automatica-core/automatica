@@ -1,5 +1,0 @@
-C:\dev\p3\automatica-drivers\DriverTemplate\DriverTemplate\bin\Debug\netcoreapp2.2\DriverTemplate.deps.json
-C:\dev\p3\automatica-drivers\DriverTemplate\DriverTemplate\bin\Debug\netcoreapp2.2\DriverTemplate.dll
-C:\dev\p3\automatica-drivers\DriverTemplate\DriverTemplate\obj\Debug\netcoreapp2.2\DriverTemplate.csproj.CoreCompileInputs.cache
-C:\dev\p3\automatica-drivers\DriverTemplate\DriverTemplate\obj\Debug\netcoreapp2.2\DriverTemplate.AssemblyInfoInputs.cache
-C:\dev\p3\automatica-drivers\DriverTemplate\DriverTemplate\obj\Debug\netcoreapp2.2\DriverTemplate.AssemblyInfo.cs
