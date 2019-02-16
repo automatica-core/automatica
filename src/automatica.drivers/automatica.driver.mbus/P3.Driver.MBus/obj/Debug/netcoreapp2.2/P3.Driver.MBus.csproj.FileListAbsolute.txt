@@ -1,0 +1,9 @@
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\bin\Debug\netcoreapp2.2\P3.Driver.MBus.deps.json
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\bin\Debug\netcoreapp2.2\P3.Driver.MBus.dll
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\bin\Debug\netcoreapp2.2\P3.Driver.MBus.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\obj\Debug\netcoreapp2.2\P3.Driver.MBus.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\obj\Debug\netcoreapp2.2\P3.Driver.MBus.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\obj\Debug\netcoreapp2.2\P3.Driver.MBus.AssemblyInfo.cs
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\obj\Debug\netcoreapp2.2\P3.Driver.MBus.dll
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\obj\Debug\netcoreapp2.2\P3.Driver.MBus.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.MBus\P3.Driver.MBus\obj\Debug\netcoreapp2.2\P3.Driver.MBus.csprojAssemblyReference.cache

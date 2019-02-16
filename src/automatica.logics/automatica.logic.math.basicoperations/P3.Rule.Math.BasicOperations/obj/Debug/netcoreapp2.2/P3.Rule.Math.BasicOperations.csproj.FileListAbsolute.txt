@@ -1,0 +1,9 @@
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\bin\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.deps.json
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\bin\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.dll
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\bin\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.pdb
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\obj\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.csprojAssemblyReference.cache
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\obj\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\obj\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\obj\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.AssemblyInfo.cs
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\obj\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.dll
+C:\dev\p3\automatica-rules\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations\obj\Debug\netcoreapp2.2\P3.Rule.Math.BasicOperations.pdb

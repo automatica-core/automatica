@@ -1,0 +1,14 @@
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.deps.json
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.runtimeconfig.json
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.runtimeconfig.dev.json
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.dll
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.dll
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\bin\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.csprojAssemblyReference.cache
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.AssemblyInfo.cs
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.csproj.CopyComplete
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.dll
+C:\dev\p3\automatica-drivers\P3.Driver.Loxone.Miniserver\Tests\P3.Driver.Loxone.Miniserver.Driver.Console\obj\Debug\netcoreapp2.2\P3.Driver.Loxone.Miniserver.Driver.Console.pdb

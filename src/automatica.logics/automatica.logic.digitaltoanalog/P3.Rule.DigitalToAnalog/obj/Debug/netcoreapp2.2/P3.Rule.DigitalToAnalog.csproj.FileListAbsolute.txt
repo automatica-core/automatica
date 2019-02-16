@@ -1,0 +1,9 @@
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\bin\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.deps.json
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\bin\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.dll
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\bin\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.pdb
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\obj\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.csprojAssemblyReference.cache
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\obj\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\obj\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\obj\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.AssemblyInfo.cs
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\obj\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.dll
+C:\dev\p3\automatica-rules\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog\obj\Debug\netcoreapp2.2\P3.Rule.DigitalToAnalog.pdb

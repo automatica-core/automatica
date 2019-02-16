@@ -1,0 +1,15 @@
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\bin\Debug\netcoreapp2.2\P3.Rule.Time.deps.json
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\bin\Debug\netcoreapp2.2\P3.Rule.Time.dll
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\bin\Debug\netcoreapp2.2\P3.Rule.Time.pdb
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\obj\Debug\netcoreapp2.2\P3.Rule.Time.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\obj\Debug\netcoreapp2.2\P3.Rule.Time.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\obj\Debug\netcoreapp2.2\P3.Rule.Time.AssemblyInfo.cs
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\obj\Debug\netcoreapp2.2\P3.Rule.Time.dll
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\obj\Debug\netcoreapp2.2\P3.Rule.Time.pdb
+C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win7-x64\Rules\Time\netcoreapp2.2\P3.Rule.Time.deps.json
+C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win7-x64\Rules\Time\netcoreapp2.2\P3.Rule.Time.dll
+C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win7-x64\Rules\Time\netcoreapp2.2\P3.Rule.Time.pdb
+C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\Rules\Time\netcoreapp2.2\P3.Rule.Time.deps.json
+C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\Rules\Time\netcoreapp2.2\P3.Rule.Time.dll
+C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\Rules\Time\netcoreapp2.2\P3.Rule.Time.pdb
+C:\dev\p3\automatica-rules\P3.Rule.Time\P3.Rule.Time\obj\Debug\netcoreapp2.2\P3.Rule.Time.csprojAssemblyReference.cache

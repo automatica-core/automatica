@@ -1,0 +1,16 @@
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.deps.json
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.runtimeconfig.json
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.runtimeconfig.dev.json
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.csprojAssemblyReference.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.AssemblyInfo.cs
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.csproj.CopyComplete
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\obj\Debug\netcoreapp2.2\P3.Driver.ZWave.ConsoleTest.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveAeon.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWave.Console\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveAeon.pdb

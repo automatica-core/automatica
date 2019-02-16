@@ -1,0 +1,8 @@
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\bin\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.deps.json
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\bin\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\bin\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\obj\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\obj\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\obj\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.AssemblyInfo.cs
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\obj\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ModBus\P3.Driver.ModBusDriver\obj\Debug\netcoreapp2.2\P3.Driver.ModBusDriver.pdb

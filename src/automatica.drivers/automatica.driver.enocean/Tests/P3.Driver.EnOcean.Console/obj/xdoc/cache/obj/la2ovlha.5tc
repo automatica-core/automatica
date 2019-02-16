@@ -1,0 +1,10 @@
+id: P3.Driver.EnOcean.Console
+language: CSharp
+name:
+  Default: P3.Driver.EnOcean.Console
+qualifiedName:
+  Default: P3.Driver.EnOcean.Console
+type: Assembly
+modifiers: {}
+items: []
+references: {}

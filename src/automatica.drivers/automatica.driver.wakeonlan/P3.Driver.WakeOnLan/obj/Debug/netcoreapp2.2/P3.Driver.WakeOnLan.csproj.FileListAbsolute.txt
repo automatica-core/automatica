@@ -1,0 +1,8 @@
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\bin\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.deps.json
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\bin\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.dll
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\bin\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\obj\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\obj\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\obj\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.AssemblyInfo.cs
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\obj\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.dll
+C:\dev\p3\automatica-drivers\P3.Driver.WakeOnLan\P3.Driver.WakeOnLan\obj\Debug\netcoreapp2.2\P3.Driver.WakeOnLan.pdb

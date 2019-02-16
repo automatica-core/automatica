@@ -1,0 +1,2861 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.2/linux-arm",
+    "signature": "0c564b87c0e2f4aa0e594a967f48e96cda4f938f"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.2": {},
+    ".NETCoreApp,Version=v2.2/linux-arm": {
+      "P3.Driver.Constants/0.2.0": {
+        "dependencies": {
+          "Automatica.Core.Base": "0.2.0",
+          "Automatica.Core.Driver": "0.2.0",
+          "Automatica.Core.Driver.Utility": "0.2.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "P3.Driver.Constants.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Core/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Http": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Http.Extensions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Core.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authorization/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Authorization.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authorization.Policy/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Authorization": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Authorization.Policy.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Cryptography.Internal/2.2.0-preview2-35157": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Cryptography.KeyDerivation/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Hosting.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Hosting.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Hosting.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Hosting.Server.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Configuration.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Hosting.Server.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.WebUtilities": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.ObjectPool": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157",
+          "Microsoft.Net.Http.Headers": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "2.2.0-preview2-35157",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Extensions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.FileProviders.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Net.Http.Headers": "2.2.0-preview2-35157",
+          "System.Buffers": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Extensions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Mvc.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Routing.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Net.Http.Headers": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Mvc.Core/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.Core": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Authorization.Policy": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Http": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Http.Extensions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Mvc.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.ResponseCaching.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Routing": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Routing.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyInjection": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyModel": "2.1.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "System.Diagnostics.DiagnosticSource": "4.5.0",
+          "System.Threading.Tasks.Extensions": "4.5.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Core.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Razor.Language/2.2.0-preview2-35157": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Language.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.ResponseCaching.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.ResponseCaching.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Routing/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Extensions": "2.2.0-preview2-35157",
+          "Microsoft.AspNetCore.Routing.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.ObjectPool": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netcoreapp2.2/Microsoft.AspNetCore.Routing.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Routing.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Routing.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.WebUtilities/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Net.Http.Headers": "2.2.0-preview2-35157",
+          "System.Text.Encodings.Web": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.Analyzers/1.1.0": {},
+      "Microsoft.CodeAnalysis.Common/2.8.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Analyzers": "1.1.0",
+          "System.AppContext": "4.3.0",
+          "System.Collections": "4.3.0",
+          "System.Collections.Concurrent": "4.3.0",
+          "System.Collections.Immutable": "1.5.0",
+          "System.Console": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.FileVersionInfo": "4.3.0",
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Dynamic.Runtime": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO.Compression": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Metadata": "1.4.2",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.Numerics": "4.3.0",
+          "System.Security.Cryptography.Algorithms": "4.3.0",
+          "System.Security.Cryptography.Encoding": "4.3.0",
+          "System.Security.Cryptography.X509Certificates": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Text.Encoding.CodePages": "4.3.0",
+          "System.Text.Encoding.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0",
+          "System.Threading.Tasks.Parallel": "4.3.0",
+          "System.Threading.Thread": "4.3.0",
+          "System.ValueTuple": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0",
+          "System.Xml.XDocument": "4.3.0",
+          "System.Xml.XPath.XDocument": "4.3.0",
+          "System.Xml.XmlDocument": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.dll": {
+            "assemblyVersion": "2.8.0.0",
+            "fileVersion": "2.8.0.62830"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.CSharp/2.8.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "2.8.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.dll": {
+            "assemblyVersion": "2.8.0.0",
+            "fileVersion": "2.8.0.62830"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+          "Microsoft.CodeAnalysis.Workspaces.Common": "2.8.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Workspaces.dll": {
+            "assemblyVersion": "2.8.0.0",
+            "fileVersion": "2.8.0.62830"
+          }
+        }
+      },
+      "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "2.8.0",
+          "System.Composition": "1.0.31",
+          "System.Diagnostics.Contracts": "4.3.0",
+          "System.Linq.Parallel": "4.3.0",
+          "System.ObjectModel": "4.3.0",
+          "System.Text.RegularExpressions": "4.3.0",
+          "System.Threading.Tasks.Parallel": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.Workspaces.dll": {
+            "assemblyVersion": "2.8.0.0",
+            "fileVersion": "2.8.0.62830"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.5.0": {},
+      "Microsoft.Data.Sqlite.Core/2.2.0-preview2-35157": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "1.1.11"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Data.Sqlite.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.DotNet.PlatformAbstractions/2.1.0": {
+        "dependencies": {
+          "System.AppContext": "4.3.0",
+          "System.Collections": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.Reflection.TypeExtensions": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.DotNet.PlatformAbstractions.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "Microsoft.EntityFrameworkCore/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.EntityFrameworkCore.Analyzers": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Caching.Memory": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyInjection": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157",
+          "Remotion.Linq": "2.2.0",
+          "System.Collections.Immutable": "1.5.0",
+          "System.ComponentModel.Annotations": "4.5.0",
+          "System.Diagnostics.DiagnosticSource": "4.5.0",
+          "System.Interactive.Async": "3.2.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Abstractions/2.2.0-preview2-35157": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Analyzers/2.2.0-preview2-35157": {},
+      "Microsoft.EntityFrameworkCore.Design/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.5.0",
+          "Microsoft.EntityFrameworkCore.Relational": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Design.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Relational/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Relational.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Sqlite/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Sqlite.Core": "2.2.0-preview2-35157",
+          "SQLitePCLRaw.bundle_green": "1.1.11"
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Sqlite.Core/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "2.2.0-preview2-35157",
+          "Microsoft.EntityFrameworkCore.Relational": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Sqlite.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Caching.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Caching.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Caching.Memory/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Caching.Memory.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Binder/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Configuration.Binder.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/2.2.0-preview2-35157": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyModel/2.1.0": {
+        "dependencies": {
+          "Microsoft.DotNet.PlatformAbstractions": "2.1.0",
+          "Newtonsoft.Json": "11.0.2",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Dynamic.Runtime": "4.3.0",
+          "System.Linq": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Microsoft.Extensions.DependencyModel.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Hosting.Abstractions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.FileProviders.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Identity.Core/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.KeyDerivation": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157",
+          "System.ComponentModel.Annotations": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Identity.Core.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Identity.Stores/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Identity.Core": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157",
+          "System.ComponentModel.Annotations": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Identity.Stores.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Binder": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/2.2.0-preview2-35157": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Configuration/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Configuration.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Console/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Configuration": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Console.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Debug/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Logging.Debug.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.ObjectPool/2.2.0-preview2-35157": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.ObjectPool.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157",
+          "System.ComponentModel.Annotations": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options.ConfigurationExtensions/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Configuration.Binder": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Options": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/2.2.0-preview2-35157": {
+        "dependencies": {
+          "System.Memory": "4.5.1",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.Net.Http.Headers/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "2.2.0-preview2-35157",
+          "System.Buffers": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Net.Http.Headers.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "2.2.0-preview2-35157",
+          "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "2.2.0-preview2-35157",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "2.2.0-preview2-35157",
+          "Newtonsoft.Json": "11.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/dotnet-aspnet-codegenerator-design.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.VisualStudio.Web.CodeGeneration.Core": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Razor.Language": "2.2.0-preview2-35157",
+          "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "2.8.0",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Contracts": "2.2.0-preview2-35157",
+          "Newtonsoft.Json": "11.0.2",
+          "NuGet.Frameworks": "4.7.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.2.0-preview2-35157": {
+        "dependencies": {
+          "Microsoft.VisualStudio.Web.CodeGeneration": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18248"
+          }
+        }
+      },
+      "Newtonsoft.Json/11.0.2": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.2.21924"
+          }
+        }
+      },
+      "NuGet.Frameworks/4.7.0": {
+        "runtime": {
+          "lib/netstandard1.6/NuGet.Frameworks.dll": {
+            "assemblyVersion": "4.7.0.5",
+            "fileVersion": "4.7.0.5148"
+          }
+        }
+      },
+      "Remotion.Linq/2.2.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Linq.Queryable": "4.0.1",
+          "System.ObjectModel": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/Remotion.Linq.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.30000"
+          }
+        }
+      },
+      "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.native.System/4.3.0": {},
+      "runtime.native.System.IO.Compression/4.3.0": {},
+      "runtime.native.System.Net.Http/4.3.0": {},
+      "runtime.native.System.Security.Cryptography.Apple/4.3.0": {
+        "dependencies": {
+          "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple": "4.3.0"
+        }
+      },
+      "runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+        "dependencies": {
+          "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+          "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
+        }
+      },
+      "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {},
+      "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
+      "SQLitePCLRaw.bundle_green/1.1.11": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "1.1.11",
+          "SQLitePCLRaw.lib.e_sqlite3.linux": "1.1.11",
+          "SQLitePCLRaw.lib.e_sqlite3.osx": "1.1.11",
+          "SQLitePCLRaw.lib.e_sqlite3.v110_xp": "1.1.11",
+          "SQLitePCLRaw.provider.e_sqlite3.netstandard11": "1.1.11"
+        },
+        "runtime": {
+          "lib/netcoreapp/SQLitePCLRaw.batteries_green.dll": {
+            "assemblyVersion": "1.1.11.121",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/netcoreapp/SQLitePCLRaw.batteries_v2.dll": {
+            "assemblyVersion": "1.1.11.121",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SQLitePCLRaw.core/1.1.11": {
+        "runtime": {
+          "lib/netstandard1.1/SQLitePCLRaw.core.dll": {
+            "assemblyVersion": "1.1.11.121",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3.linux/1.1.11": {
+        "native": {
+          "runtimes/linux-arm/native/libe_sqlite3.so": {
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3.osx/1.1.11": {},
+      "SQLitePCLRaw.lib.e_sqlite3.v110_xp/1.1.11": {},
+      "SQLitePCLRaw.provider.e_sqlite3.netstandard11/1.1.11": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "1.1.11"
+        },
+        "runtime": {
+          "lib/netstandard1.1/SQLitePCLRaw.provider.e_sqlite3.dll": {
+            "assemblyVersion": "1.1.11.121",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "System.AppContext/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Buffers/4.5.0": {},
+      "System.Collections/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Collections.Concurrent/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.Collections.Immutable/1.5.0": {},
+      "System.ComponentModel.Annotations/4.5.0": {},
+      "System.Composition/1.0.31": {
+        "dependencies": {
+          "System.Composition.AttributedModel": "1.0.31",
+          "System.Composition.Convention": "1.0.31",
+          "System.Composition.Hosting": "1.0.31",
+          "System.Composition.Runtime": "1.0.31",
+          "System.Composition.TypedParts": "1.0.31"
+        }
+      },
+      "System.Composition.AttributedModel/1.0.31": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Composition.AttributedModel.dll": {
+            "assemblyVersion": "1.0.31.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Composition.Convention/1.0.31": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Composition.AttributedModel": "1.0.31",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Composition.Convention.dll": {
+            "assemblyVersion": "1.0.31.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Composition.Hosting/1.0.31": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Composition.Runtime": "1.0.31",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.ObjectModel": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Composition.Hosting.dll": {
+            "assemblyVersion": "1.0.31.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Composition.Runtime/1.0.31": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Composition.Runtime.dll": {
+            "assemblyVersion": "1.0.31.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Composition.TypedParts/1.0.31": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Composition.AttributedModel": "1.0.31",
+          "System.Composition.Hosting": "1.0.31",
+          "System.Composition.Runtime": "1.0.31",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Composition.TypedParts.dll": {
+            "assemblyVersion": "1.0.31.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Console/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Text.Encoding": "4.3.0"
+        }
+      },
+      "System.Diagnostics.Contracts/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Diagnostics.Debug/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Diagnostics.DiagnosticSource/4.5.0": {},
+      "System.Diagnostics.FileVersionInfo/4.3.0": {
+        "dependencies": {
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Reflection.Metadata": "1.4.2",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0"
+        }
+      },
+      "System.Diagnostics.StackTrace/4.3.0": {
+        "dependencies": {
+          "System.IO.FileSystem": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Metadata": "1.4.2",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Diagnostics.Tools/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Diagnostics.Tracing/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Dynamic.Runtime/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.ObjectModel": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Reflection.TypeExtensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
+      "System.Globalization/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Globalization.Calendars/4.3.0": {
+        "dependencies": {
+          "System.Globalization": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Interactive.Async/3.2.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Interactive.Async.dll": {
+            "assemblyVersion": "3.2.0.0",
+            "fileVersion": "3.2.0.702"
+          }
+        }
+      },
+      "System.IO/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.IO.Compression/4.3.0": {
+        "dependencies": {
+          "System.Buffers": "4.5.0",
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0",
+          "runtime.native.System": "4.3.0",
+          "runtime.native.System.IO.Compression": "4.3.0"
+        }
+      },
+      "System.IO.FileSystem/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.IO.FileSystem.Primitives/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Linq/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
+        }
+      },
+      "System.Linq.Expressions/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.ObjectModel": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Emit.Lightweight": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Reflection.TypeExtensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
+      "System.Linq.Parallel/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Collections.Concurrent": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.Linq.Queryable/4.0.1": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Memory/4.5.1": {},
+      "System.ObjectModel/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
+      "System.Reflection/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Emit/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Emit.ILGeneration/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Emit.Lightweight/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Extensions/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Metadata/1.4.2": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Collections.Immutable": "1.5.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.Compression": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Text.Encoding.Extensions": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
+      "System.Reflection.Primitives/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.TypeExtensions/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Resources.ResourceManager/4.3.0": {
+        "dependencies": {
+          "System.Globalization": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Runtime/4.3.0": {},
+      "System.Runtime.CompilerServices.Unsafe/4.5.1": {
+        "runtime": {
+          "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "assemblyVersion": "4.0.4.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "System.Runtime.Extensions/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Runtime.Handles/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Runtime.InteropServices/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Handles": "4.3.0"
+        }
+      },
+      "System.Runtime.InteropServices.RuntimeInformation/4.0.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Threading": "4.3.0",
+          "runtime.native.System": "4.3.0"
+        }
+      },
+      "System.Runtime.Numerics/4.3.0": {
+        "dependencies": {
+          "System.Globalization": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.Algorithms/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.Numerics": "4.3.0",
+          "System.Security.Cryptography.Encoding": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+          "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.Cng/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Security.Cryptography.Algorithms": "4.3.0",
+          "System.Security.Cryptography.Encoding": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.Csp/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Security.Cryptography.Algorithms": "4.3.0",
+          "System.Security.Cryptography.Encoding": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.Encoding/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Collections.Concurrent": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.OpenSsl/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.Numerics": "4.3.0",
+          "System.Security.Cryptography.Algorithms": "4.3.0",
+          "System.Security.Cryptography.Encoding": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.Primitives/4.3.0": {
+        "dependencies": {
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.X509Certificates/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Globalization.Calendars": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Runtime.Numerics": "4.3.0",
+          "System.Security.Cryptography.Algorithms": "4.3.0",
+          "System.Security.Cryptography.Cng": "4.3.0",
+          "System.Security.Cryptography.Csp": "4.3.0",
+          "System.Security.Cryptography.Encoding": "4.3.0",
+          "System.Security.Cryptography.OpenSsl": "4.3.0",
+          "System.Security.Cryptography.Primitives": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0",
+          "runtime.native.System": "4.3.0",
+          "runtime.native.System.Net.Http": "4.3.0",
+          "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
+        }
+      },
+      "System.Text.Encoding/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Text.Encoding.CodePages/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0"
+        },
+        "runtime": {
+          "runtimes/unix/lib/netstandard1.3/System.Text.Encoding.CodePages.dll": {
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Text.Encoding.Extensions/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0",
+          "System.Text.Encoding": "4.3.0"
+        }
+      },
+      "System.Text.Encodings.Web/4.5.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Text.Encodings.Web.dll": {
+            "assemblyVersion": "4.0.3.0",
+            "fileVersion": "4.6.26515.6"
+          }
+        }
+      },
+      "System.Text.RegularExpressions/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Threading/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.Threading.Tasks/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Threading.Tasks.Extensions/4.5.1": {},
+      "System.Threading.Tasks.Parallel/4.3.0": {
+        "dependencies": {
+          "System.Collections.Concurrent": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.Threading.Thread/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.ValueTuple/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Xml.ReaderWriter/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Text.Encoding.Extensions": "4.3.0",
+          "System.Text.RegularExpressions": "4.3.0",
+          "System.Threading.Tasks": "4.3.0",
+          "System.Threading.Tasks.Extensions": "4.5.1"
+        }
+      },
+      "System.Xml.XDocument/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0"
+        }
+      },
+      "System.Xml.XmlDocument/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0"
+        }
+      },
+      "System.Xml.XPath/4.3.0": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0"
+        }
+      },
+      "System.Xml.XPath.XDocument/4.3.0": {
+        "dependencies": {
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0",
+          "System.Xml.XDocument": "4.3.0",
+          "System.Xml.XPath": "4.3.0"
+        }
+      },
+      "Automatica.Core.Base/0.2.0": {
+        "dependencies": {
+          "Automatica.Core.EF": "0.2.0",
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Identity.Core": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Identity.Stores": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Console": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Debug": "2.2.0-preview2-35157",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "Automatica.Core.Base.dll": {}
+        }
+      },
+      "Automatica.Core.Driver/0.2.0": {
+        "dependencies": {
+          "Automatica.Core.Base": "0.2.0",
+          "Automatica.Core.EF": "0.2.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Console": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Debug": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "Automatica.Core.Driver.dll": {}
+        }
+      },
+      "Automatica.Core.Driver.Utility/0.2.0": {
+        "dependencies": {
+          "Automatica.Core.Base": "0.2.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "Automatica.Core.Driver.Utility.dll": {}
+        }
+      },
+      "Automatica.Core.EF/0.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.KeyDerivation": "2.2.0-preview2-35157",
+          "Microsoft.EntityFrameworkCore": "2.2.0-preview2-35157",
+          "Microsoft.EntityFrameworkCore.Design": "2.2.0-preview2-35157",
+          "Microsoft.EntityFrameworkCore.Relational": "2.2.0-preview2-35157",
+          "Microsoft.EntityFrameworkCore.Sqlite": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Configuration": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Identity.Stores": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Abstractions": "2.2.0-preview2-35157",
+          "Microsoft.Extensions.Logging.Console": "2.2.0-preview2-35157",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.2.0-preview2-35157"
+        },
+        "runtime": {
+          "Automatica.Core.EF.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "P3.Driver.Constants/0.2.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.Authentication.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+9r6/rOg+tMMB9L2sif66wRoyleUahLWcKjePl6lOz/sYE8nFmzZBTFVmIGBOS3HcWsV/dewSQyC+ykuuSZmsQ==",
+      "path": "microsoft.aspnetcore.authentication.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.authentication.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Core/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5KAI6rkZ48prJYekKnWiuhhnB0+JChz1Q7oCTBucCXjsYU809Rkkh6AH74vlhCTiUzLq+q9oRKmbEUX2Xisfkw==",
+      "path": "microsoft.aspnetcore.authentication.core/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.authentication.core.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authorization/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Tb/VV4uk5ewRC5kRUNbbRrdsEA2ej/QSDY14E9/5Gifma1uUAr0UVhOhGe1m8m3QaFsxSn20lBwpWT6/XFoMRQ==",
+      "path": "microsoft.aspnetcore.authorization/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.authorization.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authorization.Policy/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-99+9HZIje802ObGLzrNXsFfOifarbOplXbh6T2Fn2zsA8YyEfvdO1eQsnIkhyyYSfglnacScIYlE6WUPXoC5LA==",
+      "path": "microsoft.aspnetcore.authorization.policy/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.authorization.policy.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Cryptography.Internal/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-roTlXYxCeQToYzduhOprWSiq9F3nirflWS9h9mp73a9NSzmf2dutH8b8dvUU7kF7M3DnI33pHu9YeNh68aKLhw==",
+      "path": "microsoft.aspnetcore.cryptography.internal/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.cryptography.internal.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Cryptography.KeyDerivation/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ORs94N3ABc9WnQSt10oo6bJtIzLAIFSkAuEARZXpJfgj3kwb8LDHLaxaWAvmXMfN5HkrF1bO/9JjG0+B71tPbg==",
+      "path": "microsoft.aspnetcore.cryptography.keyderivation/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.cryptography.keyderivation.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Hosting.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+CCDaSPQSWqDxMDylaYEhRUcKoLb9j2eb9C+pY0y2KkOcrzACUIwKd4rNSVLrwA5rKsXtNgNcIco1WJLHfsaaQ==",
+      "path": "microsoft.aspnetcore.hosting.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.hosting.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Hosting.Server.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VIJZe6um/W4HALzqsvgoMVgJuqHw2Q696p/xc2hwr2rsm9+INf7XmAXkWI/j6FeAE6Tn1WcYfhFEvkzOkIFggg==",
+      "path": "microsoft.aspnetcore.hosting.server.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.hosting.server.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pA3KtiwsuabFg/5OQliIlv2opQG1Ge1U4E743dNzfcGMlRBbVSIrzyNDB8nKPNCzhhdIMECclz3r0NmpQ9LDog==",
+      "path": "microsoft.aspnetcore.http/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.http.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Nsc1puZXHzD82I5JOQdv10mEyKW4voGCUNWgE4y3timBc2yMvZpHCxSTETus4HAaY5MJQnYX1CbqG0x7wjO5Eg==",
+      "path": "microsoft.aspnetcore.http.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.http.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Extensions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wCeGoJQdelpkXnHn3f//189dh/hnuQrLh/c0ARi0dwKgI70i3QLX27vVwbV89v40dEMBe/RNnE7UbhShOQTzBA==",
+      "path": "microsoft.aspnetcore.http.extensions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.http.extensions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Features/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-y+3DIrWsClSlOkm8qRYJ3QW1h4zG9WOSJ2DNoNC2as+hMuWwUy6eXkQVn8COiIQc5jlybcIs5QeuooNPfstJjg==",
+      "path": "microsoft.aspnetcore.http.features/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.http.features.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Mvc.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LORMsmt6cFVgfOtLXMmGXVgFCYJkAZ+FDzDNcwYlIuXVaXQCAEWWt8WWTN7eFgnpDN+54PY5xTmL7ZX56Ozu9w==",
+      "path": "microsoft.aspnetcore.mvc.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.mvc.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Mvc.Core/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g7Uq334CsrJjATHhQ+C1sYgqViID8lFDjUyzPJvQS2HTy3+AxTkMdHxm2FJTJD0UoI2tHMLIKiJg1Q4AzL8rmQ==",
+      "path": "microsoft.aspnetcore.mvc.core/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.mvc.core.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Razor.Language/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9N/8kyaHPuSK8Iw+qms2ojYQA1yJ0iu9nebtZOtJAFaVMvQlmEQItZ70kWvf64zoN7J7k2lAnbXRMwPn2qNpdA==",
+      "path": "microsoft.aspnetcore.razor.language/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.razor.language.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.ResponseCaching.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nGmPShc0zbNzgG/pJ4nAnLBG8ElBUck+pfZZTxgoCEH4Ujqr6ObtjuzlUxOCgIRaRwTSxBJcDWRZSw4OQve3cA==",
+      "path": "microsoft.aspnetcore.responsecaching.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.responsecaching.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Routing/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-urF32EVDkOBKaJntgkftSKwXrQSnQGtWto56+4BX7cAG50jwS7HZP8ibII2E+J+fRi7wGlGIfWWtoz3I4JNdew==",
+      "path": "microsoft.aspnetcore.routing/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.routing.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Routing.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mZV13XnU2hUkk7RtOyqbPwUqf599tUu7+AUqsLhA3pNdii92qAeSj1ljW2785SwIBW1J5PYHXjEDWtH0kONWtg==",
+      "path": "microsoft.aspnetcore.routing.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.routing.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.WebUtilities/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dnjxjht3wwGrqu5mfdEIKbpSNgBWTJNxaBB8BEQubMJIi0dteCPAlZjegP5S0ObzsYOLLbCZQFibzg0W96oYcw==",
+      "path": "microsoft.aspnetcore.webutilities/2.2.0-preview2-35157",
+      "hashPath": "microsoft.aspnetcore.webutilities.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.Analyzers/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8B3RAWCilhda4qNMeJckgx2u5ubm/1y4vjTwEiQdUZ6xubvK6E0d8iHw43GK92LOBMaC/Gb3kLuBnpzyEvzN5w==",
+      "path": "microsoft.codeanalysis.analyzers/1.1.0",
+      "hashPath": "microsoft.codeanalysis.analyzers.1.1.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.Common/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lYUBqh3OD3iEQqxt9KB472VzgOnEKoUVG4Lx5Xw4oJe9dZtITkHFtct+T73jH3FOASFI1NSzzP5MBM0c9zZspA==",
+      "path": "microsoft.codeanalysis.common/2.8.0",
+      "hashPath": "microsoft.codeanalysis.common.2.8.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.CSharp/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+4CHAwHMwLO5GRqPJ7Khv2Ny//omhukPKP3Ny/d2XDpt11bX35zb9pTziwZN0eNvxj6a46joIdHEYQ1JsekI3w==",
+      "path": "microsoft.codeanalysis.csharp/2.8.0",
+      "hashPath": "microsoft.codeanalysis.csharp.2.8.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hpSNX6kgb13ABbOmxAD2sj/7J7IN3HWz1AWcmEuouTZM+OeWLSHDmPGlN4eaUDPMCoe1DY7v16D3V0BY+q7BTw==",
+      "path": "microsoft.codeanalysis.csharp.workspaces/2.8.0",
+      "hashPath": "microsoft.codeanalysis.csharp.workspaces.2.8.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xt6VmGncJW14z3O0/k7+0cO8w9tB3O6CUL6sM6LesgGmD6zZPbWKY9KpRgV7RewA1flLuXBaUknRjwj0kLA6/g==",
+      "path": "microsoft.codeanalysis.workspaces.common/2.8.0",
+      "hashPath": "microsoft.codeanalysis.workspaces.common.2.8.0.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EGoBmf3Na2ppbhPePDE9PlX81r1HuOZH5twBrq7couJZiPTjUnD3648balerQJO6EJ8Sj+43+XuRwQ7r+3tE3w==",
+      "path": "microsoft.csharp/4.5.0",
+      "hashPath": "microsoft.csharp.4.5.0.nupkg.sha512"
+    },
+    "Microsoft.Data.Sqlite.Core/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-w3Y6VyJREzq8gXNnp3S/QkDciz3wVQD6nF/ryXIoq2UBu3wiOZ2i/xHjrWkQt6ut4J3XJBpyXOUavRdoaBZxEg==",
+      "path": "microsoft.data.sqlite.core/2.2.0-preview2-35157",
+      "hashPath": "microsoft.data.sqlite.core.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.DotNet.PlatformAbstractions/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wkCXkBS0q+5hsbeikjfsHCGP3nNe1L1MrDEBPCBKm+4UH8nXqHLxDZuBrTYaVY85CGIx2y1qW90nO6b+ORAfrA==",
+      "path": "microsoft.dotnet.platformabstractions/2.1.0",
+      "hashPath": "microsoft.dotnet.platformabstractions.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3rs6caZd9HsgXOG9e5H0Y+VMImcJ4stzE79jC4wzhkbLa6wO6S+HSDi+HSvbzMT5K6dHo//5YnsbNEnqi9xZ8w==",
+      "path": "microsoft.entityframeworkcore/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BNM92lhRLXKsmZoU/+r4+g7hjXlDQP5+9meN9bsfG1Dkr32N567OkUkcpMGuGFoo8Z8a4tkAoIqt0K8ZuUmb9g==",
+      "path": "microsoft.entityframeworkcore.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Analyzers/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ay7eHJS9fO8e0G0l5wyiW5ErRFujqo2KJeR2dLg7fs64nd+oAkvd4LnJ1cknkEXzfEuNwovNePVin3m3GlUYIQ==",
+      "path": "microsoft.entityframeworkcore.analyzers/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.analyzers.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Design/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cnow2039YgBLOzq7AHb2BVlmn2OisfhoXx0pp2goxDUJKkkuIWK1axPDJmrtN3ctKbBKUahx7bRTBCoiEVrfiA==",
+      "path": "microsoft.entityframeworkcore.design/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.design.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Relational/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Vec4ElPvKv79vEebiv+feDWlTMqcIhjgXm18d9kovt3nYUtLOxKTsJhJnvu5z9mESgb/TAiWW0T4azbAnVQtbw==",
+      "path": "microsoft.entityframeworkcore.relational/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.relational.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Sqlite/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NQxO1iLmdt9EiGwDh1ewS2ugVuq7rkLtucHa5KXLa96OpkQYBZJBTU8rRjP99geE+Faw9k4Z6Gwv+Dm7PcR0CQ==",
+      "path": "microsoft.entityframeworkcore.sqlite/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.sqlite.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Sqlite.Core/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rq+6etcj9/32oi05cUdxZDyGxKFsgpB47JJJdKMybcipIkWLYnWDIkBtBsK4Zg62GnH+nqowyr9yBDW9oCOf/Q==",
+      "path": "microsoft.entityframeworkcore.sqlite.core/2.2.0-preview2-35157",
+      "hashPath": "microsoft.entityframeworkcore.sqlite.core.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Caching.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p2SrwpxvT+lbgclfwJWAy7VAVjrWKwhGXhxxk7PxUX4BmYjzfvheOeMz3auQu8WckcXbKqSNXDgB/5CcMy02SQ==",
+      "path": "microsoft.extensions.caching.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.caching.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Caching.Memory/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xxaXAOrmKhTjuZPxhGM+ODmL0gXauaoHXvNcqSA3lj4oAgYJT31w4fSZKkC2A6xS+PKwyP9zcj53kiSEvHlhmA==",
+      "path": "microsoft.extensions.caching.memory/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.caching.memory.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-K2C2ydIwrIJsyKvIe4v9yv/JbXhYoJLm9QBDCFHNvhafzolheXGqBpTrA9wyIDUUf2yiRBb5EL1zPFYTACZeBw==",
+      "path": "microsoft.extensions.configuration/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.configuration.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RrKiMx2RSCB8dh+ZWMDRADBIbn3XrQRsTe9NmIGHV2uHWcf+aH0qngudKOpKYXQYsdiza8At4Rvoc6w2e2ZVEA==",
+      "path": "microsoft.extensions.configuration.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.configuration.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Binder/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZLT4BK1RiXc5dIxN9ynvIiq3obSsdXGGl60hhOQUTAsk6pSAlBQ4tIv68VoXNxe6jwCXyvxNqw4YAJBQh7zfSg==",
+      "path": "microsoft.extensions.configuration.binder/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.configuration.binder.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FtDYTAcbNJNiV9H6G/LULclZqWT7W7xO+4xUceuz5z1CmBkv9JV3fHsfCuiHgrknSRhMPmy/YuBpT0LTGcATfA==",
+      "path": "microsoft.extensions.dependencyinjection/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.dependencyinjection.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9vNXB9Ht5wzsa2vgT99nfmqK6E8/gZQWA9zokpvXZcQV+HJiQNCxZLrRwuK6NDIavloJNfoJFg/XiPpxGqXAmA==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyModel/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3KPT6CLH0VEGr2um9aG1rYTmqfMVlkRuueFpN6AxeIKpcMA4OVHf4aNpgYXZ6oF+x4uh9VhK/66FgPCd1mMlnQ==",
+      "path": "microsoft.extensions.dependencymodel/2.1.0",
+      "hashPath": "microsoft.extensions.dependencymodel.2.1.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-d1Rz52wBQYsCh/XoC/u1P1ccPIuermNdea+vWOp5m/RQcCVYPlkCHE6IM3h5BAc+hhSBfh2kmc8vVWbJlUlCLA==",
+      "path": "microsoft.extensions.fileproviders.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.fileproviders.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Hosting.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-J8s7IAt8qFERgpruRUOSLSmMuibvG2aMQmOZr+0WiaShFLi+kfr26NBHLf456Y5TeBRDa7HuKUhGKz/SxbeQfg==",
+      "path": "microsoft.extensions.hosting.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.hosting.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Identity.Core/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p2/sQqajbkk3TcafDKW1jGBRQfSL/XrFhZwUZDUXHFVOkG+ezNv+w+iL6EkFhEQZdu1dNBKX0VDysDGqwiO2eQ==",
+      "path": "microsoft.extensions.identity.core/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.identity.core.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Identity.Stores/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sjDMePFQ9Ib48hqrPcOqYcqlpHZ9qtWnZpcsnrxbgnmn0UPqMDoxofdvD7CTOZh/RoPCB2lDjsohtX0JDL6czQ==",
+      "path": "microsoft.extensions.identity.stores/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.identity.stores.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-B9ppZE7KryXN2GO3H/TqydYCRgQoSvT0mOuzcaEqR8yolU4BNBXADbdLrfYPZimYNam3hIPaZ7RwyG1l+f/mdQ==",
+      "path": "microsoft.extensions.logging/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.logging.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oIRauMxcDIgpdOTqjMHAgYbyb1MdLd3pTAKIe88dtKr84ktaOgOJeBpd8uAUmJ1LGbvnsxuR67TguKeqHba94g==",
+      "path": "microsoft.extensions.logging.abstractions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.logging.abstractions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Configuration/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e4O940XWT+6sb5Ew4FwpRYi/JAD7V2ZZmB5IJyYBTbbGtodm1Usgy4oz0SeEf16Sf7KwzpX6nUCowZyw2Wh9/g==",
+      "path": "microsoft.extensions.logging.configuration/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.logging.configuration.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Console/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qIBSGvVpRHM7fzISWcjt0CmdMcTAPDryCuRIQ7eTZbULvXiIK+pSMK97hzIOF072PJCHOH+6RzkTGhXl+HDtZA==",
+      "path": "microsoft.extensions.logging.console/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.logging.console.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Debug/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-K7ewVad0M9I521QBukihAUV+gFSBbQmXR+qaaLwOTVehY0ZY9OtiO6Yjz3wU3OcMnDJ0TCQSEX6Ns4+UCj//sg==",
+      "path": "microsoft.extensions.logging.debug/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.logging.debug.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.ObjectPool/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1hV9RPTZk22nQmfWiuwan6Jtfjz2CFmyaB6W6CsZgbsw5TpxGYJhN5VKgy2bGiev57D2XHKFi54cm6N/nMQgmg==",
+      "path": "microsoft.extensions.objectpool/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.objectpool.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5OTkUH84jyWE3y+AFWmFWt2tJpTyOXyAhyK1VoTbs8FnlICXGVMGDu4EvE07TMNmTqn3Vt17XWNbRjPeoXaZaA==",
+      "path": "microsoft.extensions.options/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.options.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options.ConfigurationExtensions/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xkYpJTLzTescP9M1M/qwle5dTgJb35QdCpGMN2qpLliEA4Zhxd3iDmfWdqobx9h9r62wTTtx4oW0aRtwAi4dGA==",
+      "path": "microsoft.extensions.options.configurationextensions/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.options.configurationextensions.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FdkPD24UWmeGWAL8LF9HTmjzxKRXjmElKMw4Em0FHwKtG5KcaSQ/7dU/XBelUGj3nRea1oeD0TllRkJ3Ce6/NQ==",
+      "path": "microsoft.extensions.primitives/2.2.0-preview2-35157",
+      "hashPath": "microsoft.extensions.primitives.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.Net.Http.Headers/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EjlNRgruw9+B0Ex2WT8MJoMi/mqa3lnsBbqwRHrbsp7beEMDvh1gM7k05wYlB1a6kcAugO6+bk2aEG1koC6yhg==",
+      "path": "microsoft.net.http.headers/2.2.0-preview2-35157",
+      "hashPath": "microsoft.net.http.headers.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g8+IXKvm3CGCOhlO97D3fsBvyOe9aozi6whu32cjiQnZOZIM/9k4g09M5LoB3ezJGnU0oaAOVHsPSXTnFMNN5w==",
+      "path": "microsoft.visualstudio.web.codegeneration/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lJUqsngpR9/XMwPsEFajyeET1jZMiffCk9yI4dSWdLSButzh2zNpWj88RgE8VcJI6rGHSCB5KGAqYvdzgdWflw==",
+      "path": "microsoft.visualstudio.web.codegeneration.contracts/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.contracts.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration.Core/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-461mwE1J8Q0lwk8jfnRBH07ABtjF7aQISbqjga7GDpz/cx7UMz8Vf5H/Z5/2LOHshimpsnmdjTdmwtljr0jgpA==",
+      "path": "microsoft.visualstudio.web.codegeneration.core/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.core.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration.Design/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y9IUJ6CdQw3DwEavx4lc34m1HClh+XaljQ490/pLNUwsmzMHrPWJqwRI9OCNg/jak4ZoYe1womJjXyRhkkrZRw==",
+      "path": "microsoft.visualstudio.web.codegeneration.design/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.design.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Xo/T5a4v5J9ncQD9hRf/kuzavLaSWXpVDp+VL76k9J3H8xRTusV2BLVWFRKqkmagO4WM5RJpT7vMYswcbkQRhA==",
+      "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.entityframeworkcore.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration.Templating/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tIyawCp8JBSfhsghNcXcCGWMyoNQ+PNvl9xt4rofAo7s/btGZNh2jWHYAsJQgBxSmw5Nrf+w31FD62Y2cbi2Ow==",
+      "path": "microsoft.visualstudio.web.codegeneration.templating/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.templating.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGeneration.Utils/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qBDrBp1/GOwn/YV70PPFrjGpGa4MAwwBXjfmtWLUBIrywiQ1R016BOQsmMdO0y8N4vD0Dg35mh0EwEM7daPjMA==",
+      "path": "microsoft.visualstudio.web.codegeneration.utils/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.utils.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/2.2.0-preview2-35157": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TI6U+87JUtWvwJOn0XTKsEyoVGVn8UnE0Yg2nkBTlO693dFGGWmvm2nTxBHtUxrPDbsaWwl+ydyvzHmB9kzyIw==",
+      "path": "microsoft.visualstudio.web.codegenerators.mvc/2.2.0-preview2-35157",
+      "hashPath": "microsoft.visualstudio.web.codegenerators.mvc.2.2.0-preview2-35157.nupkg.sha512"
+    },
+    "Newtonsoft.Json/11.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
+      "path": "newtonsoft.json/11.0.2",
+      "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+    },
+    "NuGet.Frameworks/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/VaEPsEgj3p5YPLLxbYc6rB8gYIPf+8wCWOAlAe3l/SP0DXcefZ58uJer1ToBKIpwbPN5LkgTXtvilze5UJoYQ==",
+      "path": "nuget.frameworks/4.7.0",
+      "hashPath": "nuget.frameworks.4.7.0.nupkg.sha512"
+    },
+    "Remotion.Linq/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fK/76UmpC0FXBlGDFVPLJHQlDLYnGC+XY3eoDgCgbtrhi0vzbXDQ3n/IYHhqSKqXQfGw/u04A1drWs7rFVkRjw==",
+      "path": "remotion.linq/2.2.0",
+      "hashPath": "remotion.linq.2.2.0.nupkg.sha512"
+    },
+    "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xKArtFcnyI3Q6x/DhCODkzd5CV3vj9VZ+b2SvfGns9S7NUfruDQmE8fziJPVB7hLemd3Ip23QbhV9J/fLaqjjA==",
+      "path": "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mgm4h6Ooo+Zg2Rom2qQZHsBzPG0z0C8jrg4XxIJNfYD4YIFFq4MZhZRM+RJ2D2AaTyPPOKnE46dEeO4Bsc2m/A==",
+      "path": "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2NeeX1ZmVINb9mQj+2/mFaUiUpTSEAG8t3y7o3+Ix5UbJ36PrquyO+pWcpRpIU4zpkZj7o6zbdfS2QmXjt77vw==",
+      "path": "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.native.System/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cLt7Jubuk3wHOvOnQWEqr+Y90EkFgHVtFX7cs5X9MEOF3cvamsIOmAVwuxVxpyGp6YcVYheTdNPAm4UxLHxlmA==",
+      "path": "runtime.native.system/4.3.0",
+      "hashPath": "runtime.native.system.4.3.0.nupkg.sha512"
+    },
+    "runtime.native.System.IO.Compression/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Kgp/lbm0gh77P/EhK6gFD3gRbDvuYr5NN5iIyu3h8KLtlf0441f5dSFELbQ/3E3lqWslAHeYnPdgz3l/E/ETyg==",
+      "path": "runtime.native.system.io.compression/4.3.0",
+      "hashPath": "runtime.native.system.io.compression.4.3.0.nupkg.sha512"
+    },
+    "runtime.native.System.Net.Http/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/4GfZ4GvrSS+gmx2cRtZ2Zn3CN00XrzgWyuTyXxTMyuaqDK2C/qRB1fBJEFo50F4iSaS4Gwe/ZYkLENuxywFcw==",
+      "path": "runtime.native.system.net.http/4.3.0",
+      "hashPath": "runtime.native.system.net.http.4.3.0.nupkg.sha512"
+    },
+    "runtime.native.System.Security.Cryptography.Apple/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IJV0cU2top9ZoZPOllosW0ILIcMyl5192yoVcTvnkr+lL6YOoYBuC9jyKyUssIENGydsHG/THhMTQNpi9i/T2A==",
+      "path": "runtime.native.system.security.cryptography.apple/4.3.0",
+      "hashPath": "runtime.native.system.security.cryptography.apple.4.3.0.nupkg.sha512"
+    },
+    "runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0kb9JzAinURi4O1HODHgc1xHAsJJDu4TzX/drGGpkOEecE2Yrs724IeAETafKGFJSxLOc0OsD+ByNSkrCOUgyQ==",
+      "path": "runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WSnAmE/yTRzwrd2lyPikj4ANPaqK/D1blvUbXm9LYxclFKkqiXjUXSX8DBQiM1g8XMIAgT3lsBPr17V3zt5j3Q==",
+      "path": "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.opensuse.13.2-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-neYyglxSRW5S+AogrNfoXKSPeFboUUPrxbl1hCS8gRx3AN42wc1vlx8WJjWQiGghZt4OrvH9e/5AHRdH9shb9w==",
+      "path": "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kNGqtsnCgbJrw/vcBWkSs2YANIlwzmMi9ce8AanFaVmklSBfqPT8L/nxmtjIKalb7V3ZYX/z8SYpPCrxEkDe5w==",
+      "path": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple/4.3.0",
+      "hashPath": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.apple.4.3.0.nupkg.sha512"
+    },
+    "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MiDA/KO3ZxuOh1itgriQAY8HtQDP5g06Ap+1HFGNW+hnp0GT/f/+XXwHr6TaEKMYqNxGX30t3TpI09mb0oyzWQ==",
+      "path": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.osx.10.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3DAY7qwkFt25x9iuSzwiOTfbb9xBohlGMiCjDdxpUOI+HK3Evl61d50D+1Mtch1o5fw2sQkYL1dc/MmC5TEgRQ==",
+      "path": "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NMzBVA1b/Sc3aSmc2EaazpB6htR8y6RjGtalwanwwAEbckmRjvZFH6Ylehz0OQ3lkIE49X3KAsaz1D4bpYD2xQ==",
+      "path": "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e6vxj1mSmAvsZRvLryxHDupT74DOhfBYV6eInPAYMAdMc/jIHn9RvSK5AZr4QXGn9pL5SM7BXOtTkWXV8g9d8g==",
+      "path": "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-swp6K6zbvXao9fzt6RCIDu9OxxaxBuZ4qbsWWWCvq+vJED8jrPbC71Ei2Yobt+qNkQmXb62753KulDOU8QsQBg==",
+      "path": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
+      "hashPath": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "SQLitePCLRaw.bundle_green/1.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Hqp8IF/RLjbypkLm+t+1RqAX8EKuWEkj7wkLXplfENQoPnE127cvTmaDvaQKtt7a5QsD/HNjFDr1z5f9q2wdPg==",
+      "path": "sqlitepclraw.bundle_green/1.1.11",
+      "hashPath": "sqlitepclraw.bundle_green.1.1.11.nupkg.sha512"
+    },
+    "SQLitePCLRaw.core/1.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QT17CyQAQIbTCu6pW5+uVA8BXqRzquiDI1tr5Un6c1YZcQydPmGPuYYng9xMs2UHUDYHbTu+JDkp55WR+qo9bQ==",
+      "path": "sqlitepclraw.core/1.1.11",
+      "hashPath": "sqlitepclraw.core.1.1.11.nupkg.sha512"
+    },
+    "SQLitePCLRaw.lib.e_sqlite3.linux/1.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yt79OujiYBueEUdhTQI+fIdmRpFEGcaMLziSCfhG2dsAERDvCQ+FB5tQgZBdFkB2kmVl0llskzBtwSbg3WEIdQ==",
+      "path": "sqlitepclraw.lib.e_sqlite3.linux/1.1.11",
+      "hashPath": "sqlitepclraw.lib.e_sqlite3.linux.1.1.11.nupkg.sha512"
+    },
+    "SQLitePCLRaw.lib.e_sqlite3.osx/1.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-o6rxxAFS5Hya6AXCA/eU+1QqwpGVHJBaJjIG+Mui3kIqcV6d+qz0zi46i1QNK6TAel8Sj4QlXO85wNPN70BMEg==",
+      "path": "sqlitepclraw.lib.e_sqlite3.osx/1.1.11",
+      "hashPath": "sqlitepclraw.lib.e_sqlite3.osx.1.1.11.nupkg.sha512"
+    },
+    "SQLitePCLRaw.lib.e_sqlite3.v110_xp/1.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-h1Jng85sdFV/IC+Lri+buN1r5Kd0kgh0lh/pc4jlHd3tljZhc2Si2GW1VD0hJc4p/P4oSVa2426hBAi1y6/goA==",
+      "path": "sqlitepclraw.lib.e_sqlite3.v110_xp/1.1.11",
+      "hashPath": "sqlitepclraw.lib.e_sqlite3.v110_xp.1.1.11.nupkg.sha512"
+    },
+    "SQLitePCLRaw.provider.e_sqlite3.netstandard11/1.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6q2qXc7GA11ZFh3ATFj9LjzF0HfMtlN1hDi8QATSoML4sR+inquXdionvyX8nUegutOAGXjKDp+8MziaUV5Pkg==",
+      "path": "sqlitepclraw.provider.e_sqlite3.netstandard11/1.1.11",
+      "hashPath": "sqlitepclraw.provider.e_sqlite3.netstandard11.1.1.11.nupkg.sha512"
+    },
+    "System.AppContext/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-k/BAzo0p0K8OVg0dTeP5uLi4uptafQ0PA8ThFqX7jOqOGuhhCvtJpK+laCiiiF6xpYKE6T53Fhsq5Frch+2buA==",
+      "path": "system.appcontext/4.3.0",
+      "hashPath": "system.appcontext.4.3.0.nupkg.sha512"
+    },
+    "System.Buffers/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xpHYjjtyTEpzMwtSQBWdVc3dPjLdQtvyUg6fBlBqcLl1r2Y7gDG/W/enAYOB98nG3oD3Q153Y2FBO8JDWd+0Xw==",
+      "path": "system.buffers/4.5.0",
+      "hashPath": "system.buffers.4.5.0.nupkg.sha512"
+    },
+    "System.Collections/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pJdPsYWj7lRH/GEjfu911GGd15Iu3am7Z3TIX4Q9tv4hipvgES9dHF/kQdHbd7HcUzuxSlbV3jdgFm3mvCuaZw==",
+      "path": "system.collections/4.3.0",
+      "hashPath": "system.collections.4.3.0.nupkg.sha512"
+    },
+    "System.Collections.Concurrent/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AQMmjSg4QHgIQwVAKzBZF/bvMA0rMLzER+wViZSgRLdo1vVtHeJ13CwYEi5PbTOKnE5np+jfDUU8AD2v4Yd+JQ==",
+      "path": "system.collections.concurrent/4.3.0",
+      "hashPath": "system.collections.concurrent.4.3.0.nupkg.sha512"
+    },
+    "System.Collections.Immutable/1.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RGxi2aQoXgZ5ge0zxrKqI4PU9LrYYoLC+cnEnWXKsSduCOUhE1GEAAoTexUVT8RZOILQyy1B27HC8Xw/XLGzdQ==",
+      "path": "system.collections.immutable/1.5.0",
+      "hashPath": "system.collections.immutable.1.5.0.nupkg.sha512"
+    },
+    "System.ComponentModel.Annotations/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IjDa643EO77A4CL9dhxfZ6zzGu+pM8Ar0NYPRMN3TvDiga4uGDzFHOj/ArpyNxxKyO5IFT2LZ0rK3kUog7g3jA==",
+      "path": "system.componentmodel.annotations/4.5.0",
+      "hashPath": "system.componentmodel.annotations.4.5.0.nupkg.sha512"
+    },
+    "System.Composition/1.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-I+D26qpYdoklyAVUdqwUBrEIckMNjAYnuPJy/h9dsQItpQwVREkDFs4b4tkBza0kT2Yk48Lcfsv2QQ9hWsh9Iw==",
+      "path": "system.composition/1.0.31",
+      "hashPath": "system.composition.1.0.31.nupkg.sha512"
+    },
+    "System.Composition.AttributedModel/1.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NHWhkM3ZkspmA0XJEsKdtTt1ViDYuojgSND3yHhTzwxepiwqZf+BCWuvCbjUt4fe0NxxQhUDGJ5km6sLjo9qnQ==",
+      "path": "system.composition.attributedmodel/1.0.31",
+      "hashPath": "system.composition.attributedmodel.1.0.31.nupkg.sha512"
+    },
+    "System.Composition.Convention/1.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GLjh2Ju71k6C0qxMMtl4efHa68NmWeIUYh4fkUI8xbjQrEBvFmRwMDFcylT8/PR9SQbeeL48IkFxU/+gd0nYEQ==",
+      "path": "system.composition.convention/1.0.31",
+      "hashPath": "system.composition.convention.1.0.31.nupkg.sha512"
+    },
+    "System.Composition.Hosting/1.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fN1bT4RX4vUqjbgoyuJFVUizAl2mYF5VAb+bVIxIYZSSc0BdnX+yGAxcavxJuDDCQ1K+/mdpgyEFc8e9ikjvrg==",
+      "path": "system.composition.hosting/1.0.31",
+      "hashPath": "system.composition.hosting.1.0.31.nupkg.sha512"
+    },
+    "System.Composition.Runtime/1.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0LEJN+2NVM89CE4SekDrrk5tHV5LeATltkp+9WNYrR+Huiyt0vaCqHbbHtVAjPyeLWIc8dOz/3kthRBj32wGQg==",
+      "path": "system.composition.runtime/1.0.31",
+      "hashPath": "system.composition.runtime.1.0.31.nupkg.sha512"
+    },
+    "System.Composition.TypedParts/1.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0Zae/FtzeFgDBBuILeIbC/T9HMYbW4olAmi8XqqAGosSOWvXfiQLfARZEhiGd0LVXaYgXr0NhxiU1LldRP1fpQ==",
+      "path": "system.composition.typedparts/1.0.31",
+      "hashPath": "system.composition.typedparts.1.0.31.nupkg.sha512"
+    },
+    "System.Console/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jAcQ88yLc2iw2pElLioLzvvDZDvc+CGGRtne+RyTu2S69ybeNMd2xb5IJFu3HkeD7bcPiUdUaqrFHA4rn7+MnQ==",
+      "path": "system.console/4.3.0",
+      "hashPath": "system.console.4.3.0.nupkg.sha512"
+    },
+    "System.Diagnostics.Contracts/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UbvMZgTVxa/344BxLeKR6bmyc7Pkl66ANUkVALrxKn74SWsw8oKPhrmISkJ62NVfvEdKtZAdw9Cn80jLIQdxIg==",
+      "path": "system.diagnostics.contracts/4.3.0",
+      "hashPath": "system.diagnostics.contracts.4.3.0.nupkg.sha512"
+    },
+    "System.Diagnostics.Debug/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-roZAHr8BI3G3hzUBl5TEBuSTiW+3YdRHKSvGiMQJdFGDv8Z7VaE6RInLUP9nFy6GAEFbQghHNBP5FcsYdZ7pRA==",
+      "path": "system.diagnostics.debug/4.3.0",
+      "hashPath": "system.diagnostics.debug.4.3.0.nupkg.sha512"
+    },
+    "System.Diagnostics.DiagnosticSource/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UumL3CJklk5WyEt0eImPmjeuyY1JgJ7Thmg2hAeZGKCv+9iuuAsoc2wcXjypdo3J8VNEmVCH2Bgn/kIw8NI2bA==",
+      "path": "system.diagnostics.diagnosticsource/4.5.0",
+      "hashPath": "system.diagnostics.diagnosticsource.4.5.0.nupkg.sha512"
+    },
+    "System.Diagnostics.FileVersionInfo/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-omCF64wzQ3Q2CeIqkD6lmmxeMZtGHUmzgFMPjfVaOsyqpR66p/JaZzManMw1s33osoAb5gqpncsjie67+yUPHQ==",
+      "path": "system.diagnostics.fileversioninfo/4.3.0",
+      "hashPath": "system.diagnostics.fileversioninfo.4.3.0.nupkg.sha512"
+    },
+    "System.Diagnostics.StackTrace/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BiHg0vgtd35/DM9jvtaC1eKRpWZxr0gcQd643ABG7GnvSlf5pOkY2uyd42mMOJoOmKvnpNj0F4tuoS1pacTwYw==",
+      "path": "system.diagnostics.stacktrace/4.3.0",
+      "hashPath": "system.diagnostics.stacktrace.4.3.0.nupkg.sha512"
+    },
+    "System.Diagnostics.Tools/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qWgA6sHZXdBL6rMfjQkY9I5wH+0rGZH32E9oKZugsesWNI6RA2s0pNxIwRKeTLuZ7su7Qq2EN2m6l6mcwubB3w==",
+      "path": "system.diagnostics.tools/4.3.0",
+      "hashPath": "system.diagnostics.tools.4.3.0.nupkg.sha512"
+    },
+    "System.Diagnostics.Tracing/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rY2M45FvhFFKwvcRxxhx9orLJ4t/658hDiHARxZyKcZyLq47b7gx8eh0W7/BapzgwCErtcvbMrgfUmaC5iP3KA==",
+      "path": "system.diagnostics.tracing/4.3.0",
+      "hashPath": "system.diagnostics.tracing.4.3.0.nupkg.sha512"
+    },
+    "System.Dynamic.Runtime/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BPF0TyQ57ADdD4d/dI8yxw3JcQRMI38w5nk0zxEudVE5prTL7JgfxQedF+H4YYrczmZ4UwaBZyYu04SFOMw0Lg==",
+      "path": "system.dynamic.runtime/4.3.0",
+      "hashPath": "system.dynamic.runtime.4.3.0.nupkg.sha512"
+    },
+    "System.Globalization/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-54ucSraUP4x8IKTWvlaZXpPtgoJ2yAcwP5fl/31rob2xXP/uATjsYO2O0Z/Q3b2/A8bJwkQ+2gzVkVmduJ1gBw==",
+      "path": "system.globalization/4.3.0",
+      "hashPath": "system.globalization.4.3.0.nupkg.sha512"
+    },
+    "System.Globalization.Calendars/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MZkEj92li6wTykUZ5wm2/bH3ZWCHJ/YD1vWWQE0DY6xxspVeXN9/82WqSZPM92u+MVXhPBZpjGPhe8zIxQLrlw==",
+      "path": "system.globalization.calendars/4.3.0",
+      "hashPath": "system.globalization.calendars.4.3.0.nupkg.sha512"
+    },
+    "System.Interactive.Async/3.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oaK7GqF8/ORnipYZck5ec+eKgvfZFShH64CWFlYB8Mpnr8/e99klLSk9SsmnaDzr9n2X672sUU8ZCLLrq8leDw==",
+      "path": "system.interactive.async/3.2.0",
+      "hashPath": "system.interactive.async.3.2.0.nupkg.sha512"
+    },
+    "System.IO/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-h0Z+eh0ZNNaU8Pp3fwwGuxCaPH+E4xIQ6wmjLhUdmDsj00TvsoOBZEjlRvqOctMS9kVZuikaZbCIg+u47QbPyQ==",
+      "path": "system.io/4.3.0",
+      "hashPath": "system.io.4.3.0.nupkg.sha512"
+    },
+    "System.IO.Compression/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SYi+6nR9MOcoBVS5k2nueH3t/RhvXBVx0S/mYepPT2y+WPSUeqgmX8LIHbwJEZFdo+k8lUsgwU5LIVhjOHbCOQ==",
+      "path": "system.io.compression/4.3.0",
+      "hashPath": "system.io.compression.4.3.0.nupkg.sha512"
+    },
+    "System.IO.FileSystem/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TPLKcb311wI9HKhD/nqA9/lN+8axrOlxCOHCdnx9ewju1otng2IgkXavInjrOoJoLUKETZ6j6AVu5cjMPnVPIQ==",
+      "path": "system.io.filesystem/4.3.0",
+      "hashPath": "system.io.filesystem.4.3.0.nupkg.sha512"
+    },
+    "System.IO.FileSystem.Primitives/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+vqqikTVJCsrYyjDuThj3Vepzz+QX0c9vZd2+dcpI3BDCE+i1uGwYKUytdmaILQb7gyf6g0Ln02+xakoGb0ijw==",
+      "path": "system.io.filesystem.primitives/4.3.0",
+      "hashPath": "system.io.filesystem.primitives.4.3.0.nupkg.sha512"
+    },
+    "System.Linq/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SL3JVo3mG+RRLm9KEDnUOZSJ+8GD/vLdQ235ud5BdlgetTBhd4eWKypKrM9oh0RPgiTkK8hJ7I8zcbdrlknrQQ==",
+      "path": "system.linq/4.3.0",
+      "hashPath": "system.linq.4.3.0.nupkg.sha512"
+    },
+    "System.Linq.Expressions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mrGhu6jPyR886x/Po1Q20iQtzZNRi4qjq7HX3zVKVGwlS6mKL3QtuvewwmE7EoprS6WOqvY/gAXmQ5DEIebjkg==",
+      "path": "system.linq.expressions/4.3.0",
+      "hashPath": "system.linq.expressions.4.3.0.nupkg.sha512"
+    },
+    "System.Linq.Parallel/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3EGdDSqjgbV6AExbAU7UInFCDJhJ75ehWXdYYcfIlBJwDnxCTsuWUGEGPXW+rutlkHGQjP/iZBPpFj3CaXfUeg==",
+      "path": "system.linq.parallel/4.3.0",
+      "hashPath": "system.linq.parallel.4.3.0.nupkg.sha512"
+    },
+    "System.Linq.Queryable/4.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
+      "path": "system.linq.queryable/4.0.1",
+      "hashPath": "system.linq.queryable.4.0.1.nupkg.sha512"
+    },
+    "System.Memory/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vcG3/MbfpxznMkkkaAblJi7RHOmuP7kawQMhDgLSuA1tRpRQYsFSCTxRSINDUgn2QNn2jWeLxv8er5BXbyACkw==",
+      "path": "system.memory/4.5.1",
+      "hashPath": "system.memory.4.5.1.nupkg.sha512"
+    },
+    "System.ObjectModel/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0LFnNoAfd5CgDBImaOWVOwg4TaK1qxwjfzAMNBBs4Wwa7wNF2kU2EzFKZraRPM1FlcOoc5FOcjOYcY2Psz5iqA==",
+      "path": "system.objectmodel/4.3.0",
+      "hashPath": "system.objectmodel.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/y1nIPrmhNlLFxL3mEPpFOkfUDJMeXhkXAaDUJgjMij5d8rvJQhZXoZSNasJzFmxoTHU5wVhTmhxPiMjR0XgWw==",
+      "path": "system.reflection/4.3.0",
+      "hashPath": "system.reflection.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Emit/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5HWhTWfE+a7GC9/JCQzkvjQV/lN977+ao51qFAtP/FSjZcZBvk16M8IQ3bZLXsZVLy2tR8djZN9AdNiIZa1E3w==",
+      "path": "system.reflection.emit/4.3.0",
+      "hashPath": "system.reflection.emit.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Emit.ILGeneration/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LwpGklWAssztErcJKB/o24KFG+7I4wVIASNZ6xaljbielYdtiv+f1h8UELO9wugWWAMnwfnouxNJ4EwFFyufmw==",
+      "path": "system.reflection.emit.ilgeneration/4.3.0",
+      "hashPath": "system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Emit.Lightweight/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nZrVNZ2zYJDpZZ1Kyvc23nRTXzUm8lsRSaOsUuEqibq/j4KBi4tHiUvjsLnA1J8UsUQ76xifKjGayXUSxUOZuA==",
+      "path": "system.reflection.emit.lightweight/4.3.0",
+      "hashPath": "system.reflection.emit.lightweight.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Extensions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-F/2LyiLLUFMWrDwHls/TUqvhGEgxf6/eAvTRhxgTfO8mkxT7w4MHviIsCqx1NSKthMXlZlG8upJ3/5OwP5haRw==",
+      "path": "system.reflection.extensions/4.3.0",
+      "hashPath": "system.reflection.extensions.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Metadata/1.4.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KYPNMDrLB2R+G5JJiJ2fjBpihtktKVIjsirmyyv+VDo5rQkIR9BWeCYM1wDSzbQatWNZ/NQfPsQyTB1Ui3qBfQ==",
+      "path": "system.reflection.metadata/1.4.2",
+      "hashPath": "system.reflection.metadata.1.4.2.nupkg.sha512"
+    },
+    "System.Reflection.Primitives/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7P85bMv5+VnxF+1DO7b6VgIHtWHDRD7AzJtrNYpVdXTq/0oM1HcZXBhncsTuFZjxRovZO1ir6sQw7fIKAvls1Q==",
+      "path": "system.reflection.primitives/4.3.0",
+      "hashPath": "system.reflection.primitives.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.TypeExtensions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zilgl675Q1hwOUWry1GTV9hMioYVrqgMpxDRGf/QwfwSYsF+VlVamNQuvNfdZ17t/gN+Nqsmoa9rdG010VelKw==",
+      "path": "system.reflection.typeextensions/4.3.0",
+      "hashPath": "system.reflection.typeextensions.4.3.0.nupkg.sha512"
+    },
+    "System.Resources.ResourceManager/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lqwRj8CMrabegIO0PBRZe5lDqmj1C+R48JLfv0wfVoUSaYHLvBVL/d8qXKOxP5WAN/7aJPvw8Sl+DIJLuIksYg==",
+      "path": "system.resources.resourcemanager/4.3.0",
+      "hashPath": "system.resources.resourcemanager.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5/8fTc82s0HDADUTlDqBt3WMrSQqCMKsm5iRoworwba4oyfttc+M0LMnkhSI5+SM4mr8/xFo9xw+3voq8AUNig==",
+      "path": "system.runtime/4.3.0",
+      "hashPath": "system.runtime.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qUJMNWhbm9oZ3XaMFiEMiYmRPszbnXIkRIi7+4b2Md2xZ6JUOepf0/kY3S85qistRohl9OdMe4PsO+RdG2kTIQ==",
+      "path": "system.runtime.compilerservices.unsafe/4.5.1",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512"
+    },
+    "System.Runtime.Extensions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1eBTCG84kb59foSw5AlsdzFVZcVIAgeCCA0/I/Ifj2MSaakBJkDQXHhCx3aPIKNCQ/C4R+YkBEBXRG+kYQjppw==",
+      "path": "system.runtime.extensions/4.3.0",
+      "hashPath": "system.runtime.extensions.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.Handles/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-v2n+WM4GaELWpBUWPDwxqUMokddnls3ckkq+iYvcnaATt24kBthiNI3lk4BYYFnHxj+yLP2YZeHCSRKtS20r4A==",
+      "path": "system.runtime.handles/4.3.0",
+      "hashPath": "system.runtime.handles.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.InteropServices/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PCll0IwSwh9bp31T+4yWRzgRvR7Ka66JQVSXEZJe8UfoTQodE1sO4vipdfU1Ha8Ky0cc84G2f19GU3U5f5fPsQ==",
+      "path": "system.runtime.interopservices/4.3.0",
+      "hashPath": "system.runtime.interopservices.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.InteropServices.RuntimeInformation/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hWPhJxc453RCa8Z29O91EmfGeZIHX1ZH2A8L6lYQVSaKzku2DfArSfMEb1/MYYzPQRJZeu0c9dmYeJKxW5Fgng==",
+      "path": "system.runtime.interopservices.runtimeinformation/4.0.0",
+      "hashPath": "system.runtime.interopservices.runtimeinformation.4.0.0.nupkg.sha512"
+    },
+    "System.Runtime.Numerics/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Lg/LFiVpvCpMhm1bT+t3asxUoGWBZpVAWIrvBThF5IlRqpvYjFUHaclzuoc7HLg+iV+uouHNnE3VZbxRk5//8A==",
+      "path": "system.runtime.numerics/4.3.0",
+      "hashPath": "system.runtime.numerics.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Algorithms/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-u5gc5lHLjaSr/Eqw1r/IyEAWF7MdOESQ6hMaOp9cPVkRuu7jRFWL2slcCy8OW77TSRfBI7flyRMwooi1B/qZlA==",
+      "path": "system.security.cryptography.algorithms/4.3.0",
+      "hashPath": "system.security.cryptography.algorithms.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Cng/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jcUu3UmdOPGiTbpkkpGQAep29Pjut9SwLrS5xJCfmdOzKpmOHDF+yTjK+a0uPE6dokzGAwD7wHebG88DeJjolA==",
+      "path": "system.security.cryptography.cng/4.3.0",
+      "hashPath": "system.security.cryptography.cng.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Csp/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-trhbucrwAZB9Ps4PmyevC7vO5ck0IkEDChExTnxe2FVI6NDDzXv8C8aq/TVjAfRPLu4a6JzVMD/fautiy6mZgw==",
+      "path": "system.security.cryptography.csp/4.3.0",
+      "hashPath": "system.security.cryptography.csp.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Encoding/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uJAuDEqDKif50Rt0TAOXDlcn2wcWFv+LOZh2NEaaWUmQYlbIOFT6+0BK8ttifY4mtOKptYSASDfPn//Ss4kN/Q==",
+      "path": "system.security.cryptography.encoding/4.3.0",
+      "hashPath": "system.security.cryptography.encoding.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.OpenSsl/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RTNiyYNGkwiBhyH9211CdCxyW84NDlyO2lCxy6pq32xMxEUz/ggWsMIMehiEpOj3BxzzILIZ3CuVlPubxqUkUg==",
+      "path": "system.security.cryptography.openssl/4.3.0",
+      "hashPath": "system.security.cryptography.openssl.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Primitives/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HwyS0RN/X1eErska0uLy3Bp9T7esHC+ozlV3BrLU516IKUHHsIMsxjSNuNaCQHDCQZJs3YKrZGrkJo25qyD6mg==",
+      "path": "system.security.cryptography.primitives/4.3.0",
+      "hashPath": "system.security.cryptography.primitives.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.X509Certificates/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-81uugyL59brj8vHZoGtXCgqgDDNm+RCUWracz6e0736gVp/MFa0Q2d6yTSplyT0FzEJ3no6SyHoHpkCUoN16+A==",
+      "path": "system.security.cryptography.x509certificates/4.3.0",
+      "hashPath": "system.security.cryptography.x509certificates.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encoding/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZS8cv5m3oOSdqIE2bAItx6p21rn7IGEf2zukOc3wzj5tniPsQuJXYZdxVZZd+7VnqOY6FzJ8sVsuAChWU0ZZow==",
+      "path": "system.text.encoding/4.3.0",
+      "hashPath": "system.text.encoding.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encoding.CodePages/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IRiEFUa5b/Gs5Egg8oqBVoywhtOeaO2KOx3j0RfcYY/raxqBuEK7NXRDgOwtYM8qbi+7S4RPXUbNt+ZxyY0/NQ==",
+      "path": "system.text.encoding.codepages/4.3.0",
+      "hashPath": "system.text.encoding.codepages.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encoding.Extensions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8drrFpT0HHh/n129S0+e7mlEAqr+GQ7/UaIJq15Rkvu+qTjps760Iuz6323jnahXSrWu9eBRbAKcJS52VNNr8g==",
+      "path": "system.text.encoding.extensions/4.3.0",
+      "hashPath": "system.text.encoding.extensions.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JF+wDdfFiRl3rz3dPMfR6aR568AW2J5CUMmhSflgHDz4zbVK4/00ax8UHnHyEMvblPewgNugjuA4oyoL8Pex2g==",
+      "path": "system.text.encodings.web/4.5.0",
+      "hashPath": "system.text.encodings.web.4.5.0.nupkg.sha512"
+    },
+    "System.Text.RegularExpressions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LEojunHOEEmMjBSWXGep/KD2J7CfsG+EefVTavOm02r5bV9Jbz07LWFm5ipuZ2dJ3Ta2J06glJx9llDiZUiiKg==",
+      "path": "system.text.regularexpressions/4.3.0",
+      "hashPath": "system.text.regularexpressions.4.3.0.nupkg.sha512"
+    },
+    "System.Threading/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8GRs8MWKq5bSx4OGmd5urj0rTtnjeOXj5DtekIDLahElPpCPyhLDhjS6GP/Zpb/cifL1mJoz6lv2YBXItUZkZw==",
+      "path": "system.threading/4.3.0",
+      "hashPath": "system.threading.4.3.0.nupkg.sha512"
+    },
+    "System.Threading.Tasks/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3V8TtuXRvkRQbMYmOYyOi/zezo8lZQIl0OLHxdD7fkhyuv+wCOJToxhd1XKN4QGmbHzaDmnB1OFZvHQBsr5Xrg==",
+      "path": "system.threading.tasks/4.3.0",
+      "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
+    },
+    "System.Threading.Tasks.Extensions/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rckdhLJtzQ3EI+0BGuq7dUVtCSnerqAoAmL3S6oMRZ4VMZTL3Rq9DS8IDW57c6PYVebA4O0NbSA1BDvyE18UMA==",
+      "path": "system.threading.tasks.extensions/4.5.1",
+      "hashPath": "system.threading.tasks.extensions.4.5.1.nupkg.sha512"
+    },
+    "System.Threading.Tasks.Parallel/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XWFUiLou0+mLxGo1gI7n7o5GvNr/WDuQol59KktF9o/5WEGavxNjcmA/oGNd84IzzPWjB99hnFDKUApf/h8jHw==",
+      "path": "system.threading.tasks.parallel/4.3.0",
+      "hashPath": "system.threading.tasks.parallel.4.3.0.nupkg.sha512"
+    },
+    "System.Threading.Thread/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-n5rIo9CFV1LySRT4qERb1tbse2PVBchoiaELpc1cHqR5CV65v0mwDBs7vB9FfVdaiBfqbMPLNIYYwW3KwxjGxg==",
+      "path": "system.threading.thread/4.3.0",
+      "hashPath": "system.threading.thread.4.3.0.nupkg.sha512"
+    },
+    "System.ValueTuple/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cNLEvBX3d6MMQRZe3SMFNukVbitDAEpVZO17qa0/2FHxZ7Y7PpFRpr6m2615XYM/tYYYf0B+WyHNujqIw8Luwg==",
+      "path": "system.valuetuple/4.3.0",
+      "hashPath": "system.valuetuple.4.3.0.nupkg.sha512"
+    },
+    "System.Xml.ReaderWriter/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UFxU2T1dgjYuSjxCu3e4XqEhwhFK8cV9gvD96pXNgFJJbnisDdW4eU6uzFxUYy9HlHPlqDW33tBxXcxwILZ0Wg==",
+      "path": "system.xml.readerwriter/4.3.0",
+      "hashPath": "system.xml.readerwriter.4.3.0.nupkg.sha512"
+    },
+    "System.Xml.XDocument/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AcO/UjPqNSpMEozpEJ6WoSVy5sEjixY5QQMyCz5cHyMB4q/vNkzbcDOuOg4WOtIZqXSIflMebItaWlhFjvJZSQ==",
+      "path": "system.xml.xdocument/4.3.0",
+      "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
+    },
+    "System.Xml.XmlDocument/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
+      "path": "system.xml.xmldocument/4.3.0",
+      "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "System.Xml.XPath/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-v1JQ5SETnQusqmS3RwStF7vwQ3L02imIzl++sewmt23VGygix04pEH+FCj1yWb+z4GDzKiljr1W7Wfvrx0YwgA==",
+      "path": "system.xml.xpath/4.3.0",
+      "hashPath": "system.xml.xpath.4.3.0.nupkg.sha512"
+    },
+    "System.Xml.XPath.XDocument/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jw9oHHEIVW53mHY9PgrQa98Xo2IZ0ZjrpdOTmtvk+Rvg4tq7dydmxdNqUvJ5YwjDqhn75mBXWttWjiKhWP53LQ==",
+      "path": "system.xml.xpath.xdocument/4.3.0",
+      "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
+    },
+    "Automatica.Core.Base/0.2.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Automatica.Core.Driver/0.2.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Automatica.Core.Driver.Utility/0.2.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Automatica.Core.EF/0.2.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

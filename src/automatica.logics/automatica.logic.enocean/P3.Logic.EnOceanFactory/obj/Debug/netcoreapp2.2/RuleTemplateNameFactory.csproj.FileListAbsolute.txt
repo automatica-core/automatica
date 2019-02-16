@@ -1,0 +1,9 @@
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\bin\Debug\netcoreapp2.2\RuleTemplateNameFactory.deps.json
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\bin\Debug\netcoreapp2.2\RuleTemplateNameFactory.dll
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\bin\Debug\netcoreapp2.2\RuleTemplateNameFactory.pdb
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\obj\Debug\netcoreapp2.2\RuleTemplateNameFactory.csprojAssemblyReference.cache
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\obj\Debug\netcoreapp2.2\RuleTemplateNameFactory.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\obj\Debug\netcoreapp2.2\RuleTemplateNameFactory.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\obj\Debug\netcoreapp2.2\RuleTemplateNameFactory.AssemblyInfo.cs
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\obj\Debug\netcoreapp2.2\RuleTemplateNameFactory.dll
+C:\dev\p3\automatica-rules\RuleTemplate\RuleTemplateNameFactory\obj\Debug\netcoreapp2.2\RuleTemplateNameFactory.pdb

@@ -1,0 +1,12 @@
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.csprojAssemblyReference.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.AssemblyInfo.cs
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.deps.json
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveAeon.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\bin\Debug\netcoreapp2.2\P3.Driver.ZWaveAeon.pdb
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.csproj.CopyComplete
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.dll
+C:\dev\p3\automatica-drivers\P3.Driver.ZWave\P3.Driver.ZWaveFactory\obj\Debug\netcoreapp2.2\P3.Driver.ZWaveFactory.pdb

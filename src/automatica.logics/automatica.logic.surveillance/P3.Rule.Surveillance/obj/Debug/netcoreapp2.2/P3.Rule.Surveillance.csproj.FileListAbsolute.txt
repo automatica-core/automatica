@@ -1,0 +1,9 @@
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\bin\Debug\netcoreapp2.2\P3.Rule.Surveillance.deps.json
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\bin\Debug\netcoreapp2.2\P3.Rule.Surveillance.dll
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\bin\Debug\netcoreapp2.2\P3.Rule.Surveillance.pdb
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\obj\Debug\netcoreapp2.2\P3.Rule.Surveillance.csprojAssemblyReference.cache
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\obj\Debug\netcoreapp2.2\P3.Rule.Surveillance.csproj.CoreCompileInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\obj\Debug\netcoreapp2.2\P3.Rule.Surveillance.AssemblyInfoInputs.cache
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\obj\Debug\netcoreapp2.2\P3.Rule.Surveillance.AssemblyInfo.cs
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\obj\Debug\netcoreapp2.2\P3.Rule.Surveillance.dll
+C:\dev\p3\automatica-rules\P3.Rule.Surveillance\P3.Rule.Surveillance\obj\Debug\netcoreapp2.2\P3.Rule.Surveillance.pdb
