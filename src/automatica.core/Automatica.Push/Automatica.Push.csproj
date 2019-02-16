@@ -7,7 +7,6 @@
     <ProjectGuid>54D90188-19AB-4FA3-8F25-878D11C92D4D</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
   </ItemGroup>
