@@ -1,0 +1,122 @@
+{
+    "VISU": {
+        "NAME": "Visualisation",
+        "ELEMENTS": "Elements",
+        "MOBILE": {
+            "NAME": "Mobile"
+        },
+        "AREA": {
+            "NAME": "Areas"
+        },
+        "CUSTOM": {
+            "NAME": "Custom"
+        },
+        "PAGE": {
+            "DEFAULT": {
+                "NAME": "Homepage",
+                "DESCRIPTION": ""
+            },
+            "NAME": "Page"
+        },
+        "OBJECT": {
+            "LABEL": {
+                "NAME": "Label",
+                "DESCRIPTION": "Label"
+            },
+            "LINK": {
+                "NAME": "Link",
+                "DESCRIPTION": "Link"
+            },
+            "SLIDER": {
+                "NAME": "Slider",
+                "DESCRIPTION": "Slider"
+            },
+            "TOGGLE_BUTTON": {
+                "NAME": "Toggle button",
+                "DESCRIPTION": ""
+            },
+            "NUMBER_BOX": {
+                "NAME": "Numberbox",
+                "DESCRIPTION": ""
+            },
+            "WINDOW_MONITOR": {
+                "NAME": "Window monitor (ALPHA)",
+                "DESCRIPTION": ""
+            }
+        },
+        "CATEGORY": {
+            "NAME": "Category",
+            "COMMON": {
+                "NAME": "Common"
+            },
+            "APPEARANCE": {
+                "NAME": "Appearance"
+            },
+            "TEXT": {
+                "NAME": "Text"
+            }
+        },
+        "APPEARANCE": {
+            "FOREGROUND": {
+                "NAME": "Foreground",
+                "DESCRIPTION": ""
+            },
+            "TEXT": {
+                "NAME": "Text",
+                "DESCRIPTION": ""
+            },
+            "BACKGROUND_COLOR": {
+                "NAME": "Background color",
+                "DESCRIPTION": ""
+            },
+            "NODE_VALUE": {
+                "NAME": "Value",
+                "DESCRIPTION": ""
+            },
+            "MAX": {
+                "NAME": "Max",
+                "DESCRIPTION": ""
+            },
+            "MIN": {
+                "NAME": "Min",
+                "DESCRIPTION": ""
+            },
+            "READONLY": {
+                "NAME": "Readonly",
+                "DESCRIPTION": ""
+            },
+            "TEXT_SIZE": {
+                "NAME": "Text size",
+                "DESCRIPTION": ""
+            },
+            "LINK": {
+                "NAME": "Link",
+                "DESCRIPTION": ""
+            },
+            "TEXT_BREAK": {
+                "NAME": "Break after text",
+                "DESCRIPTION": ""
+            },
+            "UNIT": {
+                "NAME": "Unit",
+                "DESCRIPTION": ""
+            },
+            "TOGGLE": {
+                "ON": {
+                    "NAME": "On text"
+                },
+                "OFF": {
+                    "NAME": "Off text"
+                }
+            },
+            "STEP": {
+                "NAME": "Step",
+                "DESCRIPTION":""
+            },
+            "AREA_LINK": {
+                "NAME": "Area",
+                "DESCRIPTION": ""
+            }
+        }
+    }
+}

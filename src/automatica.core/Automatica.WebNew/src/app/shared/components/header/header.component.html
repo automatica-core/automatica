@@ -1,0 +1,35 @@
+<header>
+    <dx-toolbar>
+        <dxi-item *ngIf="menuToggleEnabled" location="before" widget="dxButton" [options]="{
+                icon: 'menu',
+                stylingMode: 'text',
+                onClick: toggleMenu,
+                elementAttr: { class: 'menu-button' }
+            }">
+        </dxi-item>
+
+        <dxi-item location="before">
+        </dxi-item>
+
+        <dxi-item location="before" *ngIf="title">
+            <div *dxTemplate="let data of 'item'">
+                <span style="margin-left: 20px; font-size: 20px" translate>{{ title }}</span>
+            </div>
+        </dxi-item>
+
+        <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
+            <div *dxTemplate="let data of 'item'">
+                <dx-button *ngIf="!isAdminPage()" text="{{ 'COMMON.ADMIN' | translate }}" (click)="navigateToAdminPage($event)"></dx-button>
+                <dx-button *ngIf="isAdminPage()" text="{{ 'VISU.NAME' | translate }}" (click)="navigateToVisualization($event)"></dx-button>
+            </div>
+        </dxi-item>
+
+
+        <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
+            <div *dxTemplate="let data of 'item'">
+                <dx-button text="{{ 'COMMON.LOGOUT' | translate }}" (click)="logout($event)"></dx-button>
+            </div>
+        </dxi-item>
+
+    </dx-toolbar>
+</header>

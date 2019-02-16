@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>A07B806E-69D6-452D-BB29-7ED80501C39F</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
+    <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Visu\Automatica.Core.Visu.csproj" />
+    <ProjectReference Include="..\Automatica.Push\Automatica.Push.csproj" />
+  </ItemGroup>
+</Project>

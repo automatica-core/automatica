@@ -1,0 +1,33 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height">
+        <dx-tab-panel *ngIf="monitorInstances && monitorInstances.length > 0" [dataSource]="monitorInstances"
+            [(selectedItem)]="selectedMonitorInstance" [loop]="false" [animationEnabled]="false" [swipeEnabled]="false"
+            height="100%" (onSelectionChanged)="onTabSelectionChanged($event)">
+            <div *dxTemplate="let monitor of 'title'">
+                <span>{{monitor.DisplayName}}</span>
+            </div>
+            <div *dxTemplate="let monitor of 'item'">
+                <dx-data-grid *ngIf="monitor.Messages && monitor.Messages.length > 0" [dataSource]="monitor.Messages"
+                    [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" height="100%">
+                    <dxi-column dataType="datetime" sortOrder="desc" dataField="TimeStamp" caption="{{ 'COMMON.TIMESTAMP' | translate }}"></dxi-column>
+                    <dxi-column dataField="Direction" caption="{{ 'COMMON.DIRECTION' | translate }}"
+                        [calculateCellValue]="calculateDirectionValue"></dxi-column>
+                    <dxi-column dataField="SourceAddress" caption="{{ 'COMMON.SOURCE_ADDRESS' | translate }}"></dxi-column>
+                    <dxi-column dataField="TargetAddress" caption="{{ 'COMMON.TARGET_ADDRESS' | translate }}"></dxi-column>
+                    <dxi-column dataField="Data" caption="{{ 'COMMON.DATA' | translate }}"></dxi-column>
+                    <dxi-column dataField="AdditionalMessageString" caption="{{ 'COMMON.ADDITIONAL_DATA' | translate }}"></dxi-column>
+
+                    <dxo-filter-row [visible]="true"></dxo-filter-row>
+                    <dxo-header-filter [visible]="true"></dxo-header-filter>
+                    <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
+
+                    <dxo-export [enabled]="true" [fileName]="monitor.Name" [allowExportSelectedData]="true"></dxo-export>
+                </dx-data-grid>
+            </div>
+        </dx-tab-panel>
+
+        <ng-container *ngIf="!monitorInstances || monitorInstances.length == 0">
+            NO BUSMON FOUND
+        </ng-container>
+    </div>
+</div>

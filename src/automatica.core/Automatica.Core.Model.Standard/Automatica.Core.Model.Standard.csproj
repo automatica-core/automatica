@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.6.0.239</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Automatica.Core.Model\Models\User\Priviledge.cs" Link="Models\User\Priviledge.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\Priviledge2Role.cs" Link="Models\User\Priviledge2Role.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\Role.cs" Link="Models\User\Role.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\User.cs" Link="Models\User\User.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\User2Group.cs" Link="Models\User\User2Group.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\User2Role.cs" Link="Models\User\User2Role.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\UserGroup.cs" Link="Models\User\UserGroup.cs" />
+    <Compile Include="..\Automatica.Core.Model\Models\User\UserGroup2Role.cs" Link="Models\User\UserGroup2Role.cs" />
+    <Compile Include="..\Automatica.Core.Model\TypedObject.cs" Link="TypedObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\User\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+</Project>

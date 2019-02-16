@@ -1,0 +1,13 @@
+<dx-popup [showTitle]="false" [dragEnabled]="false" [closeOnOutsideClick]="false"
+  [(visible)]="popupVisible">
+  <div *dxTemplate="let data of 'content'">
+    <div class="starting-spinner server-loading">
+      <div class="rectangle1"></div>
+      <div class="rectangle2"></div>
+      <div class="rectangle3"></div>
+      <div class="rectangle4"></div>
+      <div class="rectangle5"></div>
+    </div>
+    <h1 class="text-pos" translate>COMMON.SERVER_STARTING</h1>
+  </div>
+</dx-popup>

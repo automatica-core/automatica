@@ -1,0 +1,168 @@
+/* You can add global styles to this file, and also import other style files */
+
+.draw2d_InputPort{
+  fill:red;
+  stroke:transparent;
+}
+.draw2d_OutputPort{
+  fill:green;
+  stroke:transparent;
+}
+
+.dx-swatch-additional .dx-toolbar .dx-toolbar-items-container {
+  height: 30px;
+  overflow: visible;
+}
+
+.dx-toolbar .dx-toolbar-items-container {
+  height: 30px;
+  overflow: visible;
+}
+
+.dx-datagrid-rowsview .dx-colorbox-input-container .dx-colorbox-input {
+  padding-left: 40px!important;
+}
+
+html, body {
+  margin: 0px;
+  min-height: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+@import "themes/generated/variables.base";
+
+.loading-spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.loading-spinner>div {
+  background-color: $base-accent;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.loading-spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.loading-spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.loading-spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.loading-spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+  
+@-webkit-keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    -webkit-transform: scaleY(0.4)
+  }
+  20% {
+    -webkit-transform: scaleY(1.0)
+  }
+}
+
+@keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+.app-loading {
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  margin-left: -40px;
+  background: transparent;
+  border-radius: 100% !important;
+  min-width: 100px;
+  min-height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+
+  h1 {
+    position: absolute;
+    margin-top: 150px;
+    margin-left: -25px;
+    color: $base-accent;
+    font-size: 36px !important;
+    font-weight: 600;
+  }
+}
+
+
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
+
+
+  .panel-height {
+    height: calc(100vh - 170px) !important;
+  }
+  .visu-height {
+    height: calc(100vh - 150px) !important;
+  }
+  .monitor-panel-height {
+    height: calc(100vh - 220px) !important;
+  }
+
+  .vertical-center {
+    height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    width: 100%; /* These two lines are counted as one :-)       */
+  
+    vertical-align: middle; 
+  }
+  
+  .visu-mobile-content {
+    float: left;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .isDirty {
+    color: red;
+  }
+

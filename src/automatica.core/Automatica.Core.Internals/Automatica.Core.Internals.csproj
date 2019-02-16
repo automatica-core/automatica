@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="pub.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="pub.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
+    <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Standard.Licensing" Version="1.1.5" />
+  </ItemGroup>
+</Project>

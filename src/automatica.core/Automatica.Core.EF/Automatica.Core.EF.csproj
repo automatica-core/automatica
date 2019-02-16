@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>CB99914A-2CF8-4047-8D63-8E760BA303A1</ProjectGuid>
+    <Authors>p3root</Authors>
+    <Company>p3software</Company>
+    <Product>Automatica.Core</Product>
+    <PackageProjectUrl>https://github.com/automatica-core</PackageProjectUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Copyright>p3root and automatica.core</Copyright>
+    <RepositoryUrl>https://github.com/automatica-core</RepositoryUrl>
+    <Description>Entity framework for Automatica.Core</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20181110094357_AddedPluginTable.cs" />
+    <Compile Remove="Migrations\20181110100523_RemovedVersionInformationTable.cs" />
+    <Compile Remove="Migrations\20181110100638_RemovedVersionInformationTable1.cs" />
+    <Compile Remove="Migrations\20181110101534_RemovedVersionInformationTable.cs" />
+    <Compile Remove="Migrations\20181110101847_AddedPluginGuidToPluginTable.cs" />
+    <Compile Remove="Migrations\20181223154212_AddedRuleInterfaceIsLinkableParamter.cs" />
+    <Compile Remove="Migrations\20181227091539_RemovedRequiredWhereNotNeeded.cs" />
+    <Compile Remove="Migrations\20181227150249_AddSortOrderToSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog" Version="2.8.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00771" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Model\Automatica.Core.Model.csproj" />
+  </ItemGroup>
+</Project>

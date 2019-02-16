@@ -1,0 +1,19 @@
+{
+    "PERMISSION": {
+        "USERS": "Benutzer",
+        "GROUPS": "Gruppen"
+    },
+    "ROLES": {
+        "ADMINISTRATOR": {
+            "NAME": "Admin",
+            "DESCRIPTION": "Administrator Rolle"
+        },
+        "VISUALISATION": {
+            "NAME": "Visu",
+            "DESCRIPTION": "Visu Benutzer Rolle"
+        }
+    },
+    "USER_GROUPS": {
+        "ALL": "Alle"
+    }
+}

@@ -1,0 +1,31 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height" style="padding: 20px">
+        <ng-container *ngIf="update">
+            <p translate>SYSTEM.UPDATE_AVAILABLE</p>
+            <span>
+                <div>
+                    <p>{{ 'COMMON.VERSION' | translate }}: {{ update.version }}</p>
+                </div>
+                <br />
+                <div>
+                    <div>
+                        <div class="progress-info" *ngIf="fileMax">
+                            {{ 'COMMON.DOWNLOADING' | translate }} {{downloadValue}}/{{downloadMaxValue}}
+                        </div>
+                        <dx-progress-bar *ngIf="fileMax" [min]="0" [max]="fileMax" [statusFormat]="format" [value]="fileCurrent"></dx-progress-bar>
+                    </div>
+                    <dx-button *ngIf="!alreadyDownloaded && !fileMax" text="{{ 'COMMON.DOWNLOAD' | translate }}"
+                        (onClick)="downloadClick($event)">
+                    </dx-button>
+                </div>
+
+                <dx-button *ngIf="alreadyDownloaded" text="{{ 'COMMON.INSTALL' | translate }}" (onClick)="installClick($event)">
+                </dx-button>
+            </span>
+        </ng-container>
+
+        <ng-container *ngIf="!update">
+            <p translate>SYSTEM.NO_UPDATE_AVAILABLE</p>
+        </ng-container>
+    </div>
+</div>

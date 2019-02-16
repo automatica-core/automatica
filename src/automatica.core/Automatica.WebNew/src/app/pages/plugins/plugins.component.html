@@ -1,0 +1,34 @@
+<div class="content-block">
+  <div class="dx-card wide-card panel-height">
+    <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true" orientation="horizontal"
+      submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)">
+    </dx-menu>
+
+    <dx-data-grid height="100%" [dataSource]="plugins" keyExpr="objId">
+      <dxo-paging [enabled]="false"></dxo-paging>
+      <dxo-selection mode="single"></dxo-selection>
+
+      <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
+      <dxi-column dataField="version" caption="{{ 'PLUGINS.VERSION' | translate }}"></dxi-column>
+      <dxi-column dataField="type" [groupIndex]="0" caption="{{ 'COMMON.TYPE' | translate }}"></dxi-column>
+      <dxi-column dataField="installedVersion" caption="{{ 'PLUGINS.INSTALLED_VERSION' | translate }}"></dxi-column>
+
+      <dxi-column cellTemplate="cellTemplate" caption="{{ 'PLUGINS.ACTION' | translate }}"></dxi-column>
+      <dxi-column cellTemplate="installTemplate" caption="{{ 'PLUGINS.PROGRESS' | translate }}"></dxi-column>
+
+      <div *dxTemplate="let data of 'installTemplate'" cellTemplate="installTemplate">
+        <dx-progress-bar *ngIf="data.data.downloadMax" [min]="0" [max]="data.data.downloadMax" [value]="data.data.downloadCurrent"></dx-progress-bar>
+      </div>
+
+      <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
+        <ng-container *ngIf="data.data.cloudIsNewer && data.data.isInstalled">
+          <dx-button text="Update" (onClick)="update($event, data.data)"></dx-button>
+        </ng-container>
+        <ng-container *ngIf="!data.data.isInstalled">
+          <dx-button text="Install" (onClick)="install($event, data.data)"></dx-button>
+        </ng-container>
+      </div>
+
+    </dx-data-grid>
+  </div>
+</div>

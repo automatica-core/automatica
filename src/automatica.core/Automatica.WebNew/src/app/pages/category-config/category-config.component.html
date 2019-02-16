@@ -1,0 +1,63 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height">
+        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)"
+            itemTemplate="items">
+            <div *dxTemplate="let item of 'items'">
+                <div *ngIf="item.color">
+                    <i class="dx-icon {{ item.Icon }}"></i>
+                    <span [ngClass]="{'isDirty': _isDirty}">{{item.label}}</span>
+                </div>
+                <div *ngIf="!item.color">
+                    <i class="dx-icon {{ item.Icon }}"></i>
+                    <span>{{item.label}}</span>
+                </div>
+            </div>
+        </dx-menu>
+
+        <as-split direction="horizontal">
+            <as-split-area [size]="30">
+                <p3-propertyeditor [item]="selectedNode"></p3-propertyeditor>
+            </as-split-area>
+            <as-split-area [size]="70">
+                <dx-data-grid [dataSource]="categories" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
+                    (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)" (onRowInserting)="onRowInserting($event)"
+                    (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
+                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translate }}" deleteRow="{{ 'COMMON.DELETE' | translate }}"
+                            cancelRowChanges="{{ 'COMMON.CANCEL' | translate }}"></dxo-texts>
+                    </dxo-editing>
+                    <dxo-selection mode="single"></dxo-selection>
+
+                    <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
+                    <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+
+                    <dxi-column dataField="This2CategoryGroup" caption="{{ 'COMMON.GROUP' | translate }}">
+                        <dxo-lookup [dataSource]="groups" displayExpr="DisplayName" valueExpr="ObjId">
+                        </dxo-lookup>
+                    </dxi-column>
+
+                    <dxi-column [showEditorAlways]="true" dataField="Color" caption="{{ 'COMMON.PROPERTY.COLOR.NAME' | translate }}"
+                        editCellTemplate="colorBoxTemplate">
+                    </dxi-column>
+
+                    <dxi-column dataField="Icon" caption="{{ 'COMMON.PROPERTY.AREA_ICON.NAME' | translate }}"
+                        cellTemplate="iconTemplate">
+                    </dxi-column>
+
+                    <div *dxTemplate="let data of 'iconTemplate'" cellTemplate="iconTemplate">
+                        <i class="{{ data.data.Icon }}"></i>
+                        <span id="{{ data.data.Id }}"> {{data.value}}</span>
+                    </div>
+
+                    <div *dxTemplate="let data of 'colorBoxTemplate'">
+                        <dx-color-box [(value)]="data.value" [editAlphaChannel]="true" (onValueChanged)="colorBoxOnValueChanged($event, data)"></dx-color-box>
+                    </div>
+                </dx-data-grid>
+            </as-split-area>
+        </as-split>
+    </div>
+</div>
+
+<router-outlet></router-outlet>

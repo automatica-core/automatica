@@ -1,0 +1,2 @@
+﻿# Extensions
+The extensions management.

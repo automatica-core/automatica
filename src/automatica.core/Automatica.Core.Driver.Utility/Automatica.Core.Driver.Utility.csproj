@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>8544FAAC-CC7F-4330-9C19-61A6FC91182C</ProjectGuid>
+    <LangVersion>7.3</LangVersion>
+    <Authors>p3root</Authors>
+    <Company>p3software</Company>
+    <Product>Automatica.Core</Product>
+    <PackageProjectUrl>https://github.com/automatica-core</PackageProjectUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>Utility classes for Automatica.Core.Drivers</Description>
+    <Copyright>p3root and automatica.core</Copyright>
+    <RepositoryUrl>https://github.com/automatica-core</RepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+  </ItemGroup>
+</Project>

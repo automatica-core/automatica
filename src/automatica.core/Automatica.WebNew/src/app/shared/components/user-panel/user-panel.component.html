@@ -1,0 +1,24 @@
+<div class="user-panel">
+    <div class="user-info">
+        <div class="image-container">
+            <img class="user-image" src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png">
+        </div>
+        <div class="user-name">Sandra Johnson</div>
+    </div>
+    <dx-context-menu
+        *ngIf="menuMode === 'context'"
+        cssClass="user-menu"
+        (onItemClick)="itemMenuClick($event)"
+        [items]="menuItems"
+        target=".user-button"
+        showEvent="dxclick"
+        width="170px"
+        [position]="{ my: 'top center', at: 'bottom center' }">
+    </dx-context-menu>
+    <dx-list
+        class="dx-toolbar-menu-action"
+        *ngIf="menuMode === 'list'"
+        (onItemClick)="itemMenuClick($event)"
+        [items]="menuItems">
+    </dx-list>
+</div>

@@ -1,0 +1,19 @@
+{
+    "PERMISSION": {
+        "USERS": "Users",
+        "GROUPS": "Groups"
+    },
+    "ROLES": {
+        "ADMINISTRATOR": {
+            "NAME": "Admin",
+            "DESCRIPTION": "Admin role"
+        },
+        "VISUALISATION": {
+            "NAME": "Visualisation",
+            "DESCRIPTION": "Visualisation user role"
+        }
+    },
+    "USER_GROUPS": {
+        "ALL": "All"
+    }
+}

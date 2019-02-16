@@ -1,0 +1,31 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height">
+        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)">
+        </dx-menu>
+
+        <as-split direction="horizontal">
+            <as-split-area [size]="30">
+                <p3-propertyeditor #propertyEditor [item]="selectedItem" [areaInstances]="areaInstances" [userGroups]="userGroups"></p3-propertyeditor>
+            </as-split-area>
+            <as-split-area [size]="70">
+                <dx-tab-panel #tabPanel [dataSource]="pages" height="99%" [selectedIndex]="0" [loop]="false"
+                    [animationEnabled]="false" [swipeEnabled]="false" (onTitleClick)="onTabClick($event)">
+
+                    <div *dxTemplate="let page of 'title'">
+                        <span>{{page.Name}}</span>
+                    </div>
+
+                    <div *dxTemplate="let page of 'item'">
+                        <ng-container *ngIf="page.This2VisuPageType == VisuPageTypes.PC">
+                            <!-- <p3-draw-container style="height:100%; width:100%;display:block;"></p3-draw-container> -->
+                        </ng-container>
+                        <ng-container *ngIf="page.This2VisuPageType == VisuPageTypes.Mobile">
+                            <mobile-container [page]="page" [(selectedItem)]="selectedVisuObject"></mobile-container>
+                        </ng-container>
+                    </div>
+                </dx-tab-panel>
+            </as-split-area>
+        </as-split>
+    </div>
+</div>

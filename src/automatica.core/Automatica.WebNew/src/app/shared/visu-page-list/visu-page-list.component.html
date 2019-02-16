@@ -1,0 +1,7 @@
+<dx-list height="100%" (onSelectionChanged)="onSelectionChanged($event)" keyExpr="ObjId" [(selectedItemKeys)]="selectedItemKeys" [(selectedItems)]="selectedItems" [selectionMode]="'single'"
+  [dataSource]="items" itemTemplate="listItem" [showSelectionControls]="true">
+  <div *dxTemplate="let item of 'listItem'">
+    <b>{{item.ObjId }} - </b>
+    <b>{{item.Name}}</b>
+  </div>
+</dx-list>

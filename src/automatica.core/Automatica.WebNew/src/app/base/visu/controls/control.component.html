@@ -1,0 +1,4 @@
+<div style="height: 100%; width: 100%">
+    <dx-load-indicator *ngIf="item.isLoading"  height="60" width="60"></dx-load-indicator>
+    <ng-container [ngComponentOutlet]="component" [ndcDynamicInputs]="inputs" [ndcDynamicOutputs]="outputs"></ng-container>
+</div>

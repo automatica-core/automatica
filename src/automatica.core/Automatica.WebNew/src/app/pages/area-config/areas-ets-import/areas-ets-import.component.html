@@ -1,0 +1,27 @@
+<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false" title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translate }}"
+  (onHiding)="onHiding($event)">
+  <div *dxTemplate="let data of 'content'">
+    <dx-file-uploader *ngIf="parentObjId" (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translate }}"
+      labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="instantly">
+    </dx-file-uploader>
+
+
+    <dx-tree-list [height]="'80%'" #tree itemsExpr="InverseThis2ParentNavigation" id="config" [dataSource]="instances" keyExpr="ObjId"
+      parentIdExpr="This2Parent" [showRowLines]="true" [columnAutoWidth]="true" [showColumnLines]="false" autoExpandAll="true"
+      [(selectedRowKeys)]="selectedRowKeys">
+      <dxo-selection mode="multiple" [recursive]="true"></dxo-selection>
+
+      <dxi-column dataField="Name" cellTemplate="cellTemplate" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
+      <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+
+      <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
+        <i class="{{ data.data.Icon }}"></i>
+        <span id="{{ data.data.Id }}"> {{data.value}}</span>
+      </div>
+    </dx-tree-list>
+
+
+    <dx-button style="margin-top:10px" text="{{ 'COMMON.SAVE' | translate }}" (onClick)="saveClick($event)"></dx-button>
+
+  </div>
+</dx-popup>

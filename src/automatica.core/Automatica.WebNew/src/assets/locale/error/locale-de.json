@@ -1,0 +1,5 @@
+{
+    "ERROR":{
+        "NODE_NOT_FOUND": "Das Element konnte im Server nicht gefunden werden. Ein Neustart des Servers kann dieses Problem beheben!"
+    }
+}

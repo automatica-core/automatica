@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>7EB1AA44-A1A3-4141-A15F-B1790E27B43E</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='DebugLocal'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="P3.Driver.Automatica.Remote-0.3.0.1.acpkg" />
+    <None Remove="P3.Driver.Automatica.Remote-0.5.0.28.acpkg" />
+    <None Remove="P3.Driver.HueBridgeSimulator.DriverFactory-0.3.0.1.acpkg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="2.5.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="OpenCover" Version="4.6.519">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="OpenCoverToCoberturaConverter" Version="0.3.4">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="P3.Driver.Automatica.Remote-0.3.0.1.acpkg" />
+    <EmbeddedResource Include="P3.Driver.Automatica.Remote-0.5.0.28.acpkg" />
+    <EmbeddedResource Include="P3.Driver.HueBridgeSimulator.DriverFactory-0.3.0.1.acpkg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Runtime\Automatica.Core.Runtime.csproj" />
+    <ProjectReference Include="..\Automatica.Core.UnitTests\Automatica.Core.UnitTests.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver.Utility\Automatica.Core.Driver.Utility.csproj" />
+  </ItemGroup>
+</Project>

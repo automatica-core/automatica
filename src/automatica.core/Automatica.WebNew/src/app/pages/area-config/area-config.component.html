@@ -1,0 +1,47 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height">
+        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)"
+            itemTemplate="items">
+            <div *dxTemplate="let item of 'items'">
+                <div *ngIf="item.color">
+                    <i class="dx-icon {{ item.Icon }}"></i>
+                    <span [ngClass]="{'isDirty': _isDirty}">{{item.label}}</span>
+                </div>
+                <div *ngIf="!item.color">
+                    <i class="dx-icon {{ item.Icon }}"></i>
+                    <span>{{item.label}}</span>
+                </div>
+            </div>
+        </dx-menu>
+
+        <as-split direction="horizontal">
+            <as-split-area [size]="30">
+                <p3-propertyeditor [item]="selectedNode"></p3-propertyeditor>
+            </as-split-area>
+            <as-split-area [size]="70">
+                <dx-tree-list #tree itemsExpr="InverseThis2ParentNavigation" id="config" [dataSource]="instances"
+                    keyExpr="ObjId" parentIdExpr="This2Parent" [showRowLines]="true" [columnAutoWidth]="true"
+                    [showColumnLines]="false" (onContextMenuPreparing)="onContextMenuPreparing($event)"
+                    (onSelectionChanged)="selectionChanged($event)">
+                    <dxo-selection mode="single"></dxo-selection>
+
+                    <dxi-column dataField="Name" cellTemplate="cellTemplate" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
+                    <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+
+                    <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaAreaInstances"></dxo-state-storing>
+
+                    <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
+                        <div [ngClass]="{'isDirty': data.data.isNewObject || data.data.isDirty}">
+                            <fa-icon [icon]="data.data.Icon"></fa-icon>
+                            <span id="{{ data.data.Id }}"> {{data.value}}</span>
+                        </div>
+                    </div>
+
+                </dx-tree-list>
+            </as-split-area>
+        </as-split>
+    </div>
+</div>
+
+<router-outlet></router-outlet>

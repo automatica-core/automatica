@@ -1,0 +1,10 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height">
+        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)">
+        </dx-menu>
+
+        <dx-text-area width="100%" height="100%" [(value)]="license"></dx-text-area>
+
+    </div>
+</div>

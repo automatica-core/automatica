@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>C7BD55D0-CF95-4410-BC9B-7AD6794B814F</ProjectGuid>
+    <Description>Base classes for unit tests</Description>
+    <PackageProjectUrl>https://github.com/automatica-core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/automatica-core</RepositoryUrl>
+    <Copyright>p3root and automatica.core</Copyright>
+    <Authors>p3root</Authors>
+    <Company>p3software</Company>
+    <Product>Automatica.Core</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
+    <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+  </ItemGroup>
+</Project>

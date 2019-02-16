@@ -1,0 +1,17 @@
+﻿apiRules: 
+  - exclude:
+      uidRegex: ^\.Program
+  - exclude:
+      uidRegex: ^\.Startup
+  - exclude:
+      uidRegex: ^Microsoft\.AspNetCore
+  - exclude:
+      uidRegex: ^System.Object  f
+  - exclude:
+      uidRegex: ^Drivers
+  - exclude:
+      uidRegex: ^Rules
+  - exclude:
+      uidRegex: ^Tests
+  - exclude:
+      uidRegex: ^Test

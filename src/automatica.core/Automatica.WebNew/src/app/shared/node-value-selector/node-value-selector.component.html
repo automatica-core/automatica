@@ -1,0 +1,9 @@
+<dx-box direction="row" width="100%">
+  <dxi-item class="rect demo-light" [ratio]="3">
+    <dx-text-box [(value)]="value"></dx-text-box>
+  </dxi-item>
+  <dxi-item class="rect demo-dark" [ratio]="1">
+    <dx-button text="{{ 'COMMON.SELECT' | translate }}" (click)="openClick($event)"></dx-button>
+  </dxi-item>
+</dx-box>
+

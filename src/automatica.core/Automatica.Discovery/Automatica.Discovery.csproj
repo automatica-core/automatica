@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>14F0A52F-4A52-456E-B3A6-D157ED90ED78</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Rssdp" Version="4.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.WebApi\Automatica.Core.WebApi.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver.Utility\Automatica.Core.Driver.Utility.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,4 @@
+<div style="font-size: 2vw;"  [style.background]="getPropertyValue('background_color')"
+  class="visu-mobile-content" [ngClass]="{ 'noselect': !editMode }">
+  <p [style.font-size]="getFontSize()" [style.color]="foregroundColor">{{ displayText }} <ng-container *ngIf="getPropertyValue('text_break')"><br/></ng-container> {{ displayValue }}{{ getPropertyValue("unit") }}</p>
+</div>

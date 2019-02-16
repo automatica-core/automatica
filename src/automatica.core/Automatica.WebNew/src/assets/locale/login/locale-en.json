@@ -1,0 +1,8 @@
+{
+    "LOGIN":{
+        "NAME": "Login",
+        "SIGN_IN": "Sign in...",
+        "USERNAME": "Username",
+        "PASSWORD": "Password"
+    }
+}

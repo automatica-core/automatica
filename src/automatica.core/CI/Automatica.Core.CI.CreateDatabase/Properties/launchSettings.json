@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Automatica.Core.CI.CreateDatabase": {
+      "commandName": "Project"
+    }
+  }
+}

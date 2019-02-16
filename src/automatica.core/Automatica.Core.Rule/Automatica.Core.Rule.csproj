@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.239</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>91142F5E-C914-4738-86FE-2BDA3D4B9509</ProjectGuid>
+    <Authors>p3oort</Authors>
+    <Company>p3software</Company>
+    <Product>Automatica.Core</Product>
+    <PackageProjectUrl>https://github.com/automatica-core</PackageProjectUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Copyright>p3root and automatica.core</Copyright>
+    <RepositoryUrl>https://github.com/automatica-core</RepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
+  </ItemGroup>
+</Project>

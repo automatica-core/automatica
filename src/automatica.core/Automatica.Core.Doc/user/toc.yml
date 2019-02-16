@@ -1,0 +1,48 @@
+- name: Introduction
+  href: intro.md
+
+- name: Drivers
+  items:
+  - name: KNX
+    href: drivers/knx/index.md
+
+- name: Logics
+  items:
+  - name: Math
+    href: logic/math/index.md
+  - name: Logic
+    href: logic/logic/index.md
+  - name: Time
+    href: logic/time/index.md
+  - name: Compare
+    href: logic/compare/index.md
+
+- name: HowTo
+  href: tutorials/index.md
+
+- name: Pages
+  items:
+    - name: Dashboard
+      href: pages/dashboard.md
+    - name: Config
+      href: pages/config.md
+    - name: Logic editor
+      href: pages/logic.md
+    - name: Visualisation
+      href: pages/visualisation.md
+    - name: Areas
+      href: pages/areas.md
+    - name: Categories
+      href: pages/categories.md
+    - name: Users
+      href: pages/users.md
+    - name: Groups
+      href: pages/groups.md
+    - name: Telegram Monitor
+      href: pages/telegramMonitor.md
+    - name: License
+      href: pages/license.md
+    - name: System
+      href: pages/system.md
+    - name: Extensions
+      href: pages/extensions.md

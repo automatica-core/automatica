@@ -1,0 +1,122 @@
+{
+    "VISU": {
+        "NAME": "Visualisierung",
+        "ELEMENTS": "Elemente",
+        "MOBILE": {
+            "NAME": "Mobil"
+        },
+        "AREA": {
+            "NAME": "Bereiche"
+        },
+        "CUSTOM": {
+            "NAME": "Custom"
+        },
+        "PAGE": {
+            "DEFAULT": {
+                "NAME": "Homepage",
+                "DESCRIPTION": ""
+            },
+            "NAME": "Seite"
+        },
+        "OBJECT": {
+            "LABEL": {
+                "NAME": "Label",
+                "DESCRIPTION": "Label"
+            },
+            "LINK": {
+                "NAME": "Link",
+                "DESCRIPTION": "Link"
+            },
+            "SLIDER": {
+                "NAME": "Slider",
+                "DESCRIPTION": "Slider"
+            },
+            "TOGGLE_BUTTON": {
+                "NAME": "Umschalter",
+                "DESCRIPTION": ""
+            },
+            "NUMBER_BOX": {
+                "NAME": "Zahleneingabe",
+                "DESCRIPTION": ""
+            },
+            "WINDOW_MONITOR": {
+                "NAME": "Fensterüberwachung (ALPHA)",
+                "DESCRIPTION": ""
+            }
+        },
+        "CATEGORY": {
+            "NAME": "Kategorien",
+            "COMMON": {
+                "NAME": "Allgemein"
+            },
+            "APPEARANCE": {
+                "NAME": "Aussehen"
+            },
+            "TEXT": {
+                "NAME": "Text"
+            }
+        },
+        "APPEARANCE": {
+            "FOREGROUND": {
+                "NAME": "Text Farbe",
+                "DESCRIPTION": ""
+            },
+            "TEXT": {
+                "NAME": "Text",
+                "DESCRIPTION": ""
+            },
+            "BACKGROUND_COLOR": {
+                "NAME": "Hintergrund Farbe",
+                "DESCRIPTION": ""
+            },
+            "NODE_VALUE": {
+                "NAME": "Wert",
+                "DESCRIPTION": ""
+            },
+            "MAX": {
+                "NAME": "Max",
+                "DESCRIPTION": ""
+            },
+            "MIN": {
+                "NAME": "Min",
+                "DESCRIPTION": ""
+            },
+            "READONLY": {
+                "NAME": "Nur lesbar",
+                "DESCRIPTION": ""
+            },
+            "TEXT_SIZE": {
+                "NAME": "Schriftgröße",
+                "DESCRIPTION": ""
+            },
+            "LINK": {
+                "NAME": "Link",
+                "DESCRIPTION": ""
+            },
+            "TEXT_BREAK":{
+                "NAME": "Umbruch nach Text",
+                "DESCRIPTION": ""
+            },
+            "UNIT":{
+                "NAME": "Einheit",
+                "DESCRIPTION": ""
+            },
+            "TOGGLE": {
+                "ON": {
+                    "NAME": "Ein Text"
+                },
+                "OFF": {
+                    "NAME": "Aus Text"
+                }
+            },
+            "STEP": {
+                "NAME": "Schritt",
+                "DESCRIPTION":""
+            },
+            "AREA_LINK": {
+                "NAME": "Bereich",
+                "DESCRIPTION": ""
+            }
+        }
+    }
+}
