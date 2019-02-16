@@ -1,0 +1,10 @@
+﻿{
+  "MACHINE_FLAGS": {
+    "NAME": "Merker Bus",
+    "DESCRIPTION": "Bietet eine Schnittstelle für mehrere Werte an",
+    "NODE": {
+      "NAME": "Merker",
+      "DESCRIPTION": "Merkt sich einen Wert"
+    }
+  }
+}

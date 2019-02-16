@@ -1,0 +1,18 @@
+{
+  "ENOCEAN_LOGIC": {
+    "NAME": "ENOCEAN",
+    "DESCRIPTION": "",
+    "WINDOW_HANDLE": {
+      "NAME": "Window handle",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "Input",
+        "DESCRIPTION": "Value of the window handle"
+      },
+      "OUTPUT": {
+        "NAME": "Output",
+        "DESCRIPTION": "The state of the window handle (0 = closed, 1 = tilt, 2 = open)"
+      }
+    }
+  }
+}

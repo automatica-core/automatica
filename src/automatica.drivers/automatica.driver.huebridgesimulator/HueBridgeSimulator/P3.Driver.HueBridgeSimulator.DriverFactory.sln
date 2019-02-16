@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28124.53
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.HueBridgeSimulator.DriverFactory", "P3.Driver.HueBridgeSimulatorDriverFactory\P3.Driver.HueBridgeSimulator.DriverFactory.csproj", "{8D987CBE-B3E6-463A-9E07-70B5707EE976}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.HueBridge", "P3.Driver.HueBridge\P3.Driver.HueBridge.csproj", "{88E675FB-AC73-45F0-9551-53003F5A70C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D987CBE-B3E6-463A-9E07-70B5707EE976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D987CBE-B3E6-463A-9E07-70B5707EE976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D987CBE-B3E6-463A-9E07-70B5707EE976}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
+		{8D987CBE-B3E6-463A-9E07-70B5707EE976}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{8D987CBE-B3E6-463A-9E07-70B5707EE976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D987CBE-B3E6-463A-9E07-70B5707EE976}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88E675FB-AC73-45F0-9551-53003F5A70C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88E675FB-AC73-45F0-9551-53003F5A70C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88E675FB-AC73-45F0-9551-53003F5A70C5}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
+		{88E675FB-AC73-45F0-9551-53003F5A70C5}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{88E675FB-AC73-45F0-9551-53003F5A70C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88E675FB-AC73-45F0-9551-53003F5A70C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {927A7858-97CE-4E5A-9495-54F78C7CF105}
+	EndGlobalSection
+EndGlobal

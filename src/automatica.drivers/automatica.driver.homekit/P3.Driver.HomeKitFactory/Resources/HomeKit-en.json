@@ -1,0 +1,58 @@
+{
+  "APPLE_HOMEKIT_SERVER": {
+    "NAME": "Apple Homekit Server",
+    "DESCRIPTION": "",
+    "BULB": {
+      "NAME": "Light",
+      "DESCRIPTION": "",
+      "SWITCH": {
+        "NAME": "On/Off",
+        "DESCRIPTION": ""
+      },
+      "BRIGHTNESS": {
+        "NAME": "Brightness",
+        "DESCRIPTION": ""
+      },
+      "HUE": {
+        "NAME": "Hue",
+        "DESCRIPTION": ""
+      }
+    },
+    "CONTACT_SENSOR": {
+      "NAME": "Door/Window contact",
+      "DESCRIPTION": "",
+      "CONTACT": {
+        "NAME": "Contact",
+        "DESCRIPTION": ""
+      }
+    },
+    "OUTLET": {
+      "NAME": "Outlet",
+      "DESCRIPTION": "",
+      "SWITCH": {
+        "NAME": "On/Off",
+        "DESCRIPTION": ""
+      }
+    },
+    "SWITCH": {
+      "NAME": "Switch",
+      "DESCRIPTION": "",
+      "SWITCH": {
+        "NAME": "On/Off",
+        "DESCRIPTION": ""
+      }
+    },
+    "TEMPERATURE_SENSOR": {
+      "NAME": "Temperaturesensor",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Temperature (°C)",
+        "DESCRIPTION": ""
+      }
+    },
+    "PAIRING_KEY": {
+      "NAME": "Code",
+      "DESCRIPTION": ""
+    }
+  }
+}

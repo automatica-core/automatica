@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.6.0.99</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>4AC5C115-5709-475D-97CB-2ECFC1F3636D</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\dev\p3\automatica\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win-x64\Drivers\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\Knx-de.json" />
+    <None Remove="Resources\Knx-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Knx-de.json" />
+    <EmbeddedResource Include="Resources\Knx-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Knx.Core.Driver\P3.Knx.Core.Driver.csproj" />
+    <ProjectReference Include="..\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj" />
+  </ItemGroup>
+</Project>
