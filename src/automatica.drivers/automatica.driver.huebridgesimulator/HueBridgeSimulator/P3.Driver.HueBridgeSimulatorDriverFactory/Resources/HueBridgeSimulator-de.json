@@ -1,0 +1,18 @@
+﻿{
+  "HUE_BRIDGE_SIMULATOR": {
+    "NAME": "Hue Bridge Simulator",
+    "DESCRIPTION": "",
+    "ON_OFF": {
+      "NAME": "Licht Ein/Aus",
+      "DESCRIPTION": "",
+      "SWITCH": {
+        "NAME": "Schalter",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "Status",
+        "DESCRIPTION":  ""
+      }
+    }
+  }
+}

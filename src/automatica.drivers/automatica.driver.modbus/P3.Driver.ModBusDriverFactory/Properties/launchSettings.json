@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "P3.Driver.ModBusDriverFactory": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\win-x64\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\win-x64\\"
+    }
+  }
+}

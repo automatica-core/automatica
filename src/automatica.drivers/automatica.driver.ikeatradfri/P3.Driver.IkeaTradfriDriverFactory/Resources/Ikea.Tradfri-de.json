@@ -1,0 +1,48 @@
+{
+  "IKEA": {
+    "TRADFRI": {
+      "NAME": "Ikea Tradfri",
+      "DESCRIPTION": "",
+      "SCAN": {
+        "NAME": "Suche Ikea Tradfri Gateways"
+      },
+      "GATEWAY": {
+        "NAME": "Tradfri Gateway",
+        "ID": {
+          "NAME": "Gateway Id"
+        },
+        "SECRET": {
+          "NAME": "Secret Key"
+        },
+        "SCAN": {
+          "NAME": "Geräte suchen"
+        }
+      },
+      "DEVICE": {
+        "ID": "ID"
+      },
+      "RELAY": {
+        "NAME": "Steckdose",
+        "VALUE": {
+          "NAME": "Status"
+        }
+      },
+      "LIGHT": {
+        "NAME": "Licht",
+        "DESCRIPTION": "",
+        "COLOR": {
+          "NAME": "Farbe",
+          "DESCRIPTION": ""
+        },
+        "DIMMER": {
+          "NAME": "Dimmer",
+          "DESCRIPTION": ""
+        },
+        "SWITCH": {
+          "NAME": "Schalter",
+          "DESCRIPTION": ""
+        }
+      }
+    }
+  }
+}

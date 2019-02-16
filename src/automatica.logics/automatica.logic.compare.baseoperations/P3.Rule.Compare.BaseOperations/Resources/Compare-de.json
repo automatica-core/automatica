@@ -1,0 +1,30 @@
+﻿{
+  "COMPARE": {
+    "NAME": "Vergleiche",
+    "DESCRIPTION":  "", 
+    "BIGGER": {
+      "NAME": "Größer",
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei größer und 0 bei kleiner auf den Ausgang"
+    },
+    "BIGGER_OR_EQUAL": {
+      "NAME": "Größer oder Gleich",
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei größer/gleich und 0 bei kleiner auf den Ausgang"
+    },
+    "EQUAL": {
+      "NAME": "Gleich",
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei gleich aus"
+    },
+    "UNEQUAL": {
+      "NAME": "Ungleich",
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei ungleich aus"
+    },
+    "SMALLER": {
+      "NAME": "Kleiner",
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei kleoiner und 0 bei größer auf den Ausgang"
+    },
+    "SMALLER_OR_EQUAL": {
+      "NAME": "Kleiner oder Gleich",
+      "DESCRIPTION": "Vergleicht zwei Werte und gibt 1 bei kleiner/gleich und 0 bei größer auf den Ausgang"
+    }
+  }
+}
