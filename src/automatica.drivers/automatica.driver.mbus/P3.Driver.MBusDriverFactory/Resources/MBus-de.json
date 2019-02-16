@@ -1,0 +1,152 @@
+﻿{
+  "MBUS": {
+    "DEVICE": {
+      "NAME": "MBus Gerät",
+      "DESCRIPTION": ""
+    },
+    "ATTRIBUTE": {
+      "NAME": "MBus Attribut",
+      "DESCRIPTION": ""
+    },
+    "SERIAL": {
+      "NAME": "MBus Serial",
+      "DESCRIPTION": "MBus über Serielle Kommunikation mit einem Pegelwandler"
+    },
+    "UDP": {
+      "NAME": "MBus UDP",
+      "DESCRIPTION": "MBus über UDP/IP mit einem MBus Master / Ethernet Konverter"
+    },
+    "CATEGORY": {
+      "DEVICE": "Gerät", 
+      "ATTRIBUTE":  "Attribut"  
+    },
+    "PROPERTY": {
+      "TIMEOUT": {
+        "NAME": "Timeout",
+        "DESCRIPTION": "Lese Timeout [ms]"
+      },
+      "DEVICE_ID": {
+        "NAME": "Geräte ID",
+        "DESCRIPTION": ""
+      },
+      "POLL_INTERVAL": {
+        "NAME": "Lese Interval",
+        "DESCRIPTION": "Lese interval [s]"
+      },
+      "RESET_BEFORE_POLL": {
+        "NAME": "Gerät zurücksetzen vor dem Lesen",
+        "DESCRIPTION": ""
+      },
+      "STORAGE_NUMBER": {
+        "NAME": "Speicher",
+        "DESCRIPTION": ""
+      },
+      "TARIFF": {
+        "NAME": "Tarif",
+        "DESCRIPTION": ""
+      }   
+    },
+    "ATTRIBUTES": {
+      "ENERGY_WATT": {
+        "NAME": "Energie in Watt",
+        "DESCRIPTION": ""
+      },
+      "ENERGY_JOULE": {
+        "NAME": "Energie in Joule",
+        "DESCRIPTION": ""
+      },
+      "VOLUME": {
+        "NAME": "Volumen",
+        "DESCRIPTION": ""
+      },
+      "MASS": {
+        "NAME": "Masse",
+        "DESCRIPTION": ""
+      },
+      "ON_TIME": {
+        "NAME": "Zeit",
+        "DESCRIPTION": ""
+      },
+      "OPERATING_TIME": {
+        "NAME": "Betriebsstunden",
+        "DESCRIPTION": ""
+      },
+      "POWER_WATT": {
+        "NAME": "Leistung in Watt",
+        "DESCRIPTION": ""
+      },
+      "POWER_JOULE_H": {
+        "NAME": "Leistung in Joule/h",
+        "DESCRIPTION": ""
+      },
+      "VOLUME_FLOW_HOURS": {
+        "NAME": "Volumenstrom pro Stunde",
+        "DESCRIPTION": ""
+      },
+      "VOLUME_FLOW_MINUTES": {
+        "NAME": "Volumenstrom pro Minute",
+        "DESCRIPTION": ""
+      },
+      "VOLUME_FLOW_SECONDS": {
+        "NAME": "Volumenstrom pro Sekunden",
+        "DESCRIPTION": ""
+      },
+      "MASS_FLOW": {
+        "NAME": "Massenstrom",
+        "DESCRIPTION": ""
+      },
+      "FLOW_TEMP": {
+        "NAME": "Vorlauftemperatur",
+        "DESCRIPTION": ""
+      },
+      "RETURN_TEMP": {
+        "NAME": "Rücklauftemperatur",
+        "DESCRIPTION": ""
+      },
+      "TEMP_DIFFERENCE": {
+        "NAME": "Temperatur Differenz",
+        "DESCRIPTION": ""
+      },
+      "EXTENERAL_TEMP": {
+        "NAME": "Externe Temperatur",
+        "DESCRIPTION": ""
+      },
+      "PRESSURE": {
+        "NAME": "Druck",
+        "DESCRIPTION": ""
+      },
+      "TIME_POINT": {
+        "NAME": "Zeitpunkt",
+        "DESCRIPTION": ""
+      },
+      "UNITS_FOR_HCA": {
+        "NAME": "Einheiten für HCA",
+        "DESCRIPTION": ""
+      },
+      "AVERAGING_DURATION": {
+        "NAME": "Durschnittsdauer",
+        "DESCRIPTION": ""
+      },
+      "ACTUALITY_DURATION": {
+        "NAME": "Aktuelle Dauer",
+        "DESCRIPTION": ""
+      },
+      "ENHANCED_ID": {
+        "NAME": "Erweiterte ID",
+        "DESCRIPTION": ""
+      },
+      "BUS_ADDRESS": {
+        "NAME": "Bus Adresse",
+        "DESCRIPTION": ""
+      },
+      "FABRICATION_NUMBER": {
+        "NAME": "Fabrikationsnummer",
+        "DESCRIPTION": ""
+      },
+      "MANUFACTURER_SPECIFIC": {
+        "NAME": "Hersteller Spezifisch",
+        "DESCRIPTION": ""
+      }
+    } 
+  }
+}

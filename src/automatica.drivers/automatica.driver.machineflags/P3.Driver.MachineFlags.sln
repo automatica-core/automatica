@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28124.53
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.MachineFlags", "P3.Driver.MachineFlags\P3.Driver.MachineFlags.csproj", "{933B3BDE-C515-4099-B57B-C89A95DB8C0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.MachineFlags.Tests", "Tests\P3.Driver.MachineFlags.Tests\P3.Driver.MachineFlags.Tests.csproj", "{69A63010-7D0B-473F-83EC-C6994FF18108}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{933B3BDE-C515-4099-B57B-C89A95DB8C0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933B3BDE-C515-4099-B57B-C89A95DB8C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933B3BDE-C515-4099-B57B-C89A95DB8C0D}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{933B3BDE-C515-4099-B57B-C89A95DB8C0D}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{933B3BDE-C515-4099-B57B-C89A95DB8C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933B3BDE-C515-4099-B57B-C89A95DB8C0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69A63010-7D0B-473F-83EC-C6994FF18108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69A63010-7D0B-473F-83EC-C6994FF18108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69A63010-7D0B-473F-83EC-C6994FF18108}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
+		{69A63010-7D0B-473F-83EC-C6994FF18108}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{69A63010-7D0B-473F-83EC-C6994FF18108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69A63010-7D0B-473F-83EC-C6994FF18108}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED15CCD1-FA49-4833-AEDA-55F849C2FAD1}
+	EndGlobalSection
+EndGlobal

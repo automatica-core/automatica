@@ -1,0 +1,14 @@
+﻿{
+  "WAKE_ON_LAN": {
+    "NAME": "Machine flags",
+    "DESCRIPTION": "",
+    "NODE": {
+      "NAME": "Device",
+      "DESCRIPTION": ""
+    },
+    "MAC": {
+      "NAME": "MAC Address",
+      "DESCRIPTION": ""
+    }
+  }
+}

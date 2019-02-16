@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.5.0</Version>
+    <ProjectGuid>{69B5C0DB-3568-4444-BED7-9D39743DCF3E}</ProjectGuid>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\MBus-de.json" />
+    <None Remove="Resources\MBus-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\MBus-de.json" />
+    <EmbeddedResource Include="Resources\MBus-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.MBus\P3.Driver.MBus.csproj" />
+  </ItemGroup>
+</Project>

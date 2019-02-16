@@ -1,0 +1,51 @@
+﻿{
+  "MBUS-OMS": {
+      "DEVICE": {
+        "NAME": "OMS Device",
+        "KEY": {
+          "NAME": "Schlüssel",
+          "DESCRIPTION": ""
+        },
+        "PORT": {
+          "NAME": "Port",
+          "DESCRIPTION": ""
+        },
+        "DATETIME": {
+          "NAME": "Date/Time",
+          "DESCRIPTION": ""
+        },
+        "ENERGY_A+": {
+          "NAME": "Energy A+",
+          "DESCRIPTION": "Wh"
+        },
+        "ENERGY_A-": {
+          "NAME": "Energy A-",
+          "DESCRIPTION": "Wh"
+        },
+        "ENERGY_R+": {
+          "NAME": "Energy R+",
+          "DESCRIPTION": "varh"
+        },
+        "ENERGY_R-": {
+          "NAME": "Energy R-",
+          "DESCRIPTION": "varh"
+        },
+        "POWER+": {
+          "NAME": "Power P+",
+          "DESCRIPTION": "W"
+        },
+        "POWER-": {
+          "NAME": "PowerP-",
+          "DESCRIPTION": "W"
+        },
+        "REACTIVE_POWER+": {
+          "NAME": "Reactive power Q+",
+          "DESCRIPTION": "var"
+        },
+        "REACTIVE_POWER-": {
+          "NAME": "Reactive power Q-",
+          "DESCRIPTION": "var"
+        }
+      }
+  }
+}

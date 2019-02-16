@@ -1,0 +1,25 @@
+﻿{
+  "TIME": {
+    "NAME": "Zeit",
+    "DELAYOFF": {
+      "NAME": "Delayed off",
+      "DESCRIPTION": ""
+    },
+    "DELAYON": {
+      "NAME": "Delayed on",
+      "DESCRIPTION": ""
+    },
+    "MONOFLOP": {
+      "NAME": "Monoflop",
+      "DESCRIPTION": ""
+    },
+    "DELAY": {
+      "NAME": "Delay [s]",
+      "DESCRIPTION": ""
+    },
+    "TIMER": {
+      "NAME": "Timer",
+      "DESCRIPTION": ""
+    }
+  }
+}

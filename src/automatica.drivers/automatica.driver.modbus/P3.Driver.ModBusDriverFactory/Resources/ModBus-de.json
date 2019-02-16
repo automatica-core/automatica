@@ -1,0 +1,87 @@
+﻿{
+  "MODBUS": {
+    "DEVICE": {
+      "NAME": "Modbus Gerät",
+      "DESCRIPTION": "Definiert ein ModBus Gerät",
+      "ID": "Geräte ID"
+    },
+    "CATEGORY": {
+      "DEVICE": "Gerät"
+    },
+    "PROPERTY": {
+      "BYTEORDER": "Byte Reihenfolge",
+      "TABLE": "Tabelle",
+      "REGISTER": "Register",
+      "IGNORE_DEVICE_ID": {
+        "NAME": "Ignoriere Geräte Addresse",
+        "DESCRIPTION": "Ignoriert die Geräte Adresse die der Master mitsendet (falls mehrere Geräte konfiguriert sind wird immer das Gerät an Adresse 1 verwendet)"
+      },
+      "POLL_INTERVAL": {
+        "NAME": "Polling intervall [ms]",
+        "DESCRIPTION":  "Polling intervall in ms" 
+      } 
+    },
+    "ATTRIBUTE": {
+      "INTEGER": {
+        "POS2BYTE": {
+          "NAME": "+2 Byte Ganzzahl",
+          "DESCRIPTION": ""
+        },
+        "NEG2BYTE": {
+          "NAME": "±2 Byte Ganzzahl",
+          "DESCRIPTION": ""
+        },
+        "POS4BYTE": {
+          "NAME": "+4 Byte Ganzzahl",
+          "DESCRIPTION": ""
+        },
+        "NEG4BYTE": {
+          "NAME": "±4 Byte Ganzzahl",
+          "DESCRIPTION": ""
+        },
+        "POS8BYTE": {
+          "NAME": "+8 Byte Ganzzahl",
+          "DESCRIPTION": ""
+        },
+        "NEG8BYTE": {
+          "NAME": "±8 Byte Ganzzahl",
+          "DESCRIPTION": ""
+        }
+      },
+      "FLOAT": {
+        "4BYTE": {
+          "NAME": "4 Byte Gleitkommazahl",
+          "DESCRIPTION": ""
+        },
+        "8BYTE": {
+          "NAME": "8 Byte Gleitkommazahl",
+          "DESCRIPTION": ""
+        }
+      },
+      "BINARY": {
+        "NAME": "Ja/Nein",
+        "DESCRIPTION": ""
+      }
+    },
+    "MASTER": {
+      "RTU": {
+        "NAME": "ModBus Master RTU",
+        "DESCRIPTION": ""
+      },
+      "TCP": {
+        "NAME": "ModBus Master TCP",
+        "DESCRIPTION": ""
+      }
+    },
+    "SLAVE": {
+      "RTU": {
+        "NAME": "ModBus Slave RTU",
+        "DESCRIPTION": ""
+      },
+      "TCP": {
+        "NAME": "ModBus Slave TCP",
+        "DESCRIPTION": ""
+      } 
+    } 
+  }
+}

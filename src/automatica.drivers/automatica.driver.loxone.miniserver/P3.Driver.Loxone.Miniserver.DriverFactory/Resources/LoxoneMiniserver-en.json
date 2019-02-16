@@ -1,0 +1,62 @@
+﻿{
+  "LOXONE": {
+    "MINISERVER": {
+      "NAME": "Loxone Miniserver",
+      "DESCRIPTION": "",
+      "CONNECTED": {
+        "NAME": "Connected",
+        "DESCRIPTION": ""
+      },
+      "PROPERTY": {
+        "IP": {
+          "NAME": "Address",
+          "DESCRIPTION": ""
+        },
+        "PORT": {
+          "NAME": "Port",
+          "DESCRIPTION": ""
+        },
+        "USER": {
+          "NAME": "Username",
+          "DESCRIPTION": ""
+        },
+        "PASSWORD": {
+          "NAME": "Password",
+          "DESCRIPTION": ""
+        },
+        "SCAN": {
+          "NAME": "Load from Miniserver",
+          "DESCRIPTION": ""
+        },
+        "UUID": {
+          "NAME": "Miniserver Uuid",
+          "DESCRIPTION": ""
+        }
+      },
+      "SWITCH": {
+        "NAME": "Switch",
+        "DESCRIPTION": ""
+      },
+      "DIMMER": {
+        "NAME": "Dimmer",
+        "DESCRIPTION": ""
+      },
+      "INFO_ONLY_ANALOG": {
+        "NAME": "Analog info",
+        "DESCRIPTION": ""
+      },
+      "INFO_ONLY_DIGITAL": {
+        "NAME": "Digital info",
+        "DESCRIPTION": ""
+      },
+      "PUSH_BUTTON": {
+        "NAME": "Push button",
+        "DESCRIPTION": ""
+      },
+      "FOLDER": {
+        "NAME": "Category",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

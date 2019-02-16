@@ -1,0 +1,33 @@
+﻿{
+  "CONSTANTS": {
+    "NAME": "Constants",
+    "DESCRIPTION": "Provides and interface for multiple constant values",
+    "NODE": {
+      "CONSTANT": {
+        "NAME": "Constant",
+        "DESCRIPTION": "Represents a fixed value"
+      },
+      "DOUBLE_PI": {
+        "NAME": "PI*2",
+        "DESCRIPION": "Represents double PI"
+      },
+      "HALF_PI": {
+        "NAME": "PI/2",
+        "DESCRIPION": "Represents half PI"
+      },
+      "PI": {
+        "NAME": "PI",
+        "DESCRIPION": "Represents PI"
+      }
+    },
+    "PROPERTY": {
+      "VALUE": {
+        "NAME": "Value",
+        "Description": "Defines the constant value"
+      }
+    },
+    "CATEGORY": {
+      "VALUE": "Value"
+    }
+  }
+}

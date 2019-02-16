@@ -1,0 +1,33 @@
+﻿{
+  "CONSTANTS": {
+    "NAME": "Konstanten",
+    "DESCRIPTION": "Bietet eine Schnittstelle für mehrere Konstante Werte",
+    "NODE": {
+      "CONSTANT": {
+        "NAME": "Konstante",
+        "DESCRIPTION": "Gibt einen Fixen Wert zurück"
+      },
+      "HALF_PI": {
+        "NAME": "PI/2",
+        "DESCRIPION": "Definiert Halb PI"
+      },
+      "DOUBLE_PI": {
+        "NAME": "PI*2",
+        "DESCRIPION": "Definiert Zweimal PI"
+      },
+      "PI": {
+        "NAME": "PI",
+        "DESCRIPION": "Definiert PI"
+      }
+    },
+    "PROPERTY": {
+      "VALUE": {
+        "NAME": "Wert",
+        "Description": "Definiert den Konstanten Wert"
+      }
+    },
+    "CATEGORY": {
+      "VALUE": "Wert"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "P3.Driver.Loxone.Miniserver.DriverFactory": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\win7-x64\\Automatica.Core.exe",
+      "commandLineArgs": "develop C:\\dev\\p3\\automatica-drivers\\P3.Driver.Loxone.Miniserver\\P3.Driver.Loxone.Miniserver.DriverFactory\\bin\\Debug\\netcoreapp2.2 *DriverFactory.dll",
+      "workingDirectory": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\"
+    }
+  }
+}

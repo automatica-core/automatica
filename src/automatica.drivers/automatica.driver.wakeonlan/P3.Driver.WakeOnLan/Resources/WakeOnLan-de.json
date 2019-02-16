@@ -1,0 +1,14 @@
+﻿{
+  "WAKE_ON_LAN": {
+    "NAME": "Wake on Lan",
+    "DESCRIPTION": "Bietet die Möglichgkeit Netzwerk Geräte mit WOL einzuschalten",
+    "NODE": {
+      "NAME": "Gerät",
+      "DESCRIPTION": ""
+    },
+    "MAC": {
+      "NAME": "MAC Adresse",
+      "DESCRIPTION":""
+    } 
+  }
+}
