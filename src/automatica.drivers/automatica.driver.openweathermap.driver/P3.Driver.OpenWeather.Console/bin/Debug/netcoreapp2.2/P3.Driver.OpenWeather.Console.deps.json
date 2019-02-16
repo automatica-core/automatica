@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.2",
+    "signature": "fa35650bc4e2700700fabbe1de51c31ece9e7a56"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.2": {
+      "P3.Driver.OpenWeather.Console/0.3.0": {
+        "dependencies": {
+          "OpenWeatherMap": "1.1.0"
+        },
+        "runtime": {
+          "P3.Driver.OpenWeather.Console.dll": {}
+        }
+      },
+      "OpenWeatherMap/1.1.0": {
+        "runtime": {
+          "lib/netstandard1.1/OpenWeatherMap.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "P3.Driver.OpenWeather.Console/0.3.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "OpenWeatherMap/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UDCEzK6xKflN2+K6QCvPUS39cT+FXK8gZpdwP3TVx4sY6TvHN8h/uYIBNpVNHsObS3zO3LbaredlhVmzSk7spA==",
+      "path": "openweathermap/1.1.0",
+      "hashPath": "openweathermap.1.1.0.nupkg.sha512"
+    }
+  }
+}

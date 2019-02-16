@@ -1,0 +1,18 @@
+{
+  "MESSENGER": {
+    "NAME": "Messengers",
+    "DESCRIPTION": "",
+    "CLOUD_EMAIL": {
+      "NAME": "Cloud Email Service",
+      "DESCRIPTION": "",
+      "TO": {
+        "NAME": "To",
+        "DESCRIPTION": ""
+      },
+      "SUBJECT": {
+        "NAME": "Subject",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

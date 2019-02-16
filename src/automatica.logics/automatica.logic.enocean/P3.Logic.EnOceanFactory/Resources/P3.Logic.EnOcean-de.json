@@ -1,0 +1,18 @@
+{
+  "ENOCEAN_LOGIC": {
+    "NAME": "ENOCEAN",
+    "DESCRIPTION": "",
+    "WINDOW_HANDLE": {
+      "NAME": "Fenstergriff",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "Input",
+        "DESCRIPTION": "Der Wert des Fenstergriff"
+      },
+      "OUTPUT": {
+        "NAME": "Output",
+        "DESCRIPTION": "Der Status des Fenstergriff (0 = Geschlossen, 1 = Gekiptt, 2 = Geöffnet)"
+      }
+    }
+  }
+}

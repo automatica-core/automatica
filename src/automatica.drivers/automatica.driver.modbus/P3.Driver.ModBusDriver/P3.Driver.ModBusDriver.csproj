@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.5.0</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>335DC61B-B5F8-402C-B3E1-320690E7B789</ProjectGuid>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Master\Rtu\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SerialPortStream" Version="2.1.4" />
+  </ItemGroup>
+</Project>

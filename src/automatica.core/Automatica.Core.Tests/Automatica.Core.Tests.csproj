@@ -36,7 +36,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="OpenCover" Version="4.6.519">
+    <PackageReference Include="OpenCover" Version="4.7.922">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="OpenCoverToCoberturaConverter" Version="0.3.4">

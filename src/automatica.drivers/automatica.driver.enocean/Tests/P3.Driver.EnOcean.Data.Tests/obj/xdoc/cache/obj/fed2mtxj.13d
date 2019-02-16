@@ -1,0 +1,2873 @@
+id: P3.Driver.EnOcean.Data.Tests
+language: CSharp
+name:
+  Default: P3.Driver.EnOcean.Data.Tests
+qualifiedName:
+  Default: P3.Driver.EnOcean.Data.Tests
+type: Assembly
+modifiers: {}
+items:
+- id: P3.Driver.EnOcean.Data.Tests
+  commentId: N:P3.Driver.EnOcean.Data.Tests
+  language: CSharp
+  name:
+    CSharp: P3.Driver.EnOcean.Data.Tests
+    VB: P3.Driver.EnOcean.Data.Tests
+  nameWithType:
+    CSharp: P3.Driver.EnOcean.Data.Tests
+    VB: P3.Driver.EnOcean.Data.Tests
+  qualifiedName:
+    CSharp: P3.Driver.EnOcean.Data.Tests
+    VB: P3.Driver.EnOcean.Data.Tests
+  type: Namespace
+  assemblies:
+  - P3.Driver.EnOcean.Data.Tests
+  modifiers: {}
+  items:
+  - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+    commentId: T:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+    language: CSharp
+    name:
+      CSharp: RorgA5DataTest
+      VB: RorgA5DataTest
+    nameWithType:
+      CSharp: RorgA5DataTest
+      VB: RorgA5DataTest
+    qualifiedName:
+      CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+      VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+    type: Class
+    assemblies:
+    - P3.Driver.EnOcean.Data.Tests
+    namespace: P3.Driver.EnOcean.Data.Tests
+    source:
+      remote:
+        path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        branch: develop
+        repo: https://p3root.visualstudio.com/automatica/_git/automatica
+      id: RorgA5DataTest
+      path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+      startLine: 13
+    syntax:
+      content:
+        CSharp: 'public class RorgA5DataTest : DriverFactoryTestBase<EnOceanDriverFactory>'
+        VB: >-
+          Public Class RorgA5DataTest
+
+              Inherits DriverFactoryTestBase(Of EnOceanDriverFactory)
+    inheritance:
+    - System.Object
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    inheritedMembers:
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Factory
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.DriverFactory
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateNodeInstance(System.Guid)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(System.Guid,System.Guid[])
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Init
+    - System.Object.Equals(System.Object)
+    - System.Object.Equals(System.Object,System.Object)
+    - System.Object.GetHashCode
+    - System.Object.GetType
+    - System.Object.MemberwiseClone
+    - System.Object.ReferenceEquals(System.Object,System.Object)
+    - System.Object.ToString
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataP1()
+        VB: TestA5_11_01_DataP1()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataP1()
+        VB: RorgA5DataTest.TestA5_11_01_DataP1()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataP1
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 53
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataP1()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataP1
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataP2()
+        VB: TestA5_11_01_DataP2()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataP2()
+        VB: RorgA5DataTest.TestA5_11_01_DataP2()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataP2
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 70
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataP2()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataP2
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataP3()
+        VB: TestA5_11_01_DataP3()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataP3()
+        VB: RorgA5DataTest.TestA5_11_01_DataP3()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataP3
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 87
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataP3()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataP3
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataPM()
+        VB: TestA5_11_01_DataPM()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataPM()
+        VB: RorgA5DataTest.TestA5_11_01_DataPM()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataPM
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 105
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataPM()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataPM
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataLRN()
+        VB: TestA5_11_01_DataLRN()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataLRN()
+        VB: RorgA5DataTest.TestA5_11_01_DataLRN()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataLRN
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 122
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataLRN()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataLRN
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataES()
+        VB: TestA5_11_01_DataES()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataES()
+        VB: RorgA5DataTest.TestA5_11_01_DataES()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataES
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 139
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataES()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataES
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF
+      language: CSharp
+      name:
+        CSharp: TestA5_11_01_DataOHF()
+        VB: TestA5_11_01_DataOHF()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_11_01_DataOHF()
+        VB: RorgA5DataTest.TestA5_11_01_DataOHF()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_11_01_DataOHF
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 157
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_11_01_DataOHF()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_11_01_DataOHF
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP
+      language: CSharp
+      name:
+        CSharp: TestA5_02_05_TMP()
+        VB: TestA5_02_05_TMP()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_05_TMP()
+        VB: RorgA5DataTest.TestA5_02_05_TMP()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_05_TMP
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 176
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_05_TMP()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_05_TMP
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2
+      language: CSharp
+      name:
+        CSharp: TestA5_02_05_TMP2()
+        VB: TestA5_02_05_TMP2()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_05_TMP2()
+        VB: RorgA5DataTest.TestA5_02_05_TMP2()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_05_TMP2
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 192
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_05_TMP2()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_05_TMP2
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min
+      language: CSharp
+      name:
+        CSharp: TestA5_02_05_TMP_Min()
+        VB: TestA5_02_05_TMP_Min()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_05_TMP_Min()
+        VB: RorgA5DataTest.TestA5_02_05_TMP_Min()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_05_TMP_Min
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 208
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_05_TMP_Min()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_05_TMP_Min
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max
+      language: CSharp
+      name:
+        CSharp: TestA5_02_05_TMP_Max()
+        VB: TestA5_02_05_TMP_Max()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_05_TMP_Max()
+        VB: RorgA5DataTest.TestA5_02_05_TMP_Max()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_05_TMP_Max
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 224
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_05_TMP_Max()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_05_TMP_Max
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP
+      language: CSharp
+      name:
+        CSharp: TestA5_02_20_TMP()
+        VB: TestA5_02_20_TMP()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_20_TMP()
+        VB: RorgA5DataTest.TestA5_02_20_TMP()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_20_TMP
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 241
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_20_TMP()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_20_TMP
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min
+      language: CSharp
+      name:
+        CSharp: TestA5_02_20_TMP_Min()
+        VB: TestA5_02_20_TMP_Min()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_20_TMP_Min()
+        VB: RorgA5DataTest.TestA5_02_20_TMP_Min()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_20_TMP_Min
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 258
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_20_TMP_Min()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_20_TMP_Min
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max
+      language: CSharp
+      name:
+        CSharp: TestA5_02_20_TMP_Max()
+        VB: TestA5_02_20_TMP_Max()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_20_TMP_Max()
+        VB: RorgA5DataTest.TestA5_02_20_TMP_Max()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_20_TMP_Max
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 275
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_20_TMP_Max()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_20_TMP_Max
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP
+      language: CSharp
+      name:
+        CSharp: TestA5_02_03_TMP()
+        VB: TestA5_02_03_TMP()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_03_TMP()
+        VB: RorgA5DataTest.TestA5_02_03_TMP()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_03_TMP
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 294
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_03_TMP()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_03_TMP
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min
+      language: CSharp
+      name:
+        CSharp: TestA5_02_03_TMP_Min()
+        VB: TestA5_02_03_TMP_Min()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_03_TMP_Min()
+        VB: RorgA5DataTest.TestA5_02_03_TMP_Min()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_03_TMP_Min
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 311
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_03_TMP_Min()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_03_TMP_Min
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max
+      language: CSharp
+      name:
+        CSharp: TestA5_02_03_TMP_Max()
+        VB: TestA5_02_03_TMP_Max()
+      nameWithType:
+        CSharp: RorgA5DataTest.TestA5_02_03_TMP_Max()
+        VB: RorgA5DataTest.TestA5_02_03_TMP_Max()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestA5_02_03_TMP_Max
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgA5DataTest.cs
+        startLine: 328
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestA5_02_03_TMP_Max()
+          VB: >-
+            <Fact>
+
+            Public Sub TestA5_02_03_TMP_Max
+      overload: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+  - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+    commentId: T:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+    language: CSharp
+    name:
+      CSharp: RorgD5DataTest
+      VB: RorgD5DataTest
+    nameWithType:
+      CSharp: RorgD5DataTest
+      VB: RorgD5DataTest
+    qualifiedName:
+      CSharp: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+      VB: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+    type: Class
+    assemblies:
+    - P3.Driver.EnOcean.Data.Tests
+    namespace: P3.Driver.EnOcean.Data.Tests
+    source:
+      remote:
+        path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+        branch: develop
+        repo: https://p3root.visualstudio.com/automatica/_git/automatica
+      id: RorgD5DataTest
+      path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+      startLine: 16
+    syntax:
+      content:
+        CSharp: 'public class RorgD5DataTest : DriverFactoryTestBase<EnOceanDriverFactory>'
+        VB: >-
+          Public Class RorgD5DataTest
+
+              Inherits DriverFactoryTestBase(Of EnOceanDriverFactory)
+    inheritance:
+    - System.Object
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    inheritedMembers:
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Factory
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.DriverFactory
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateNodeInstance(System.Guid)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(System.Guid,System.Guid[])
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Init
+    - System.Object.Equals(System.Object)
+    - System.Object.Equals(System.Object,System.Object)
+    - System.Object.GetHashCode
+    - System.Object.GetType
+    - System.Object.MemberwiseClone
+    - System.Object.ReferenceEquals(System.Object,System.Object)
+    - System.Object.ToString
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit
+      language: CSharp
+      name:
+        CSharp: TestCoBit()
+        VB: TestCoBit()
+      nameWithType:
+        CSharp: RorgD5DataTest.TestCoBit()
+        VB: RorgD5DataTest.TestCoBit()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestCoBit
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+        startLine: 53
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestCoBit()
+          VB: >-
+            <Fact>
+
+            Public Sub TestCoBit
+      overload: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False
+      language: CSharp
+      name:
+        CSharp: TestLrnBit_False()
+        VB: TestLrnBit_False()
+      nameWithType:
+        CSharp: RorgD5DataTest.TestLrnBit_False()
+        VB: RorgD5DataTest.TestLrnBit_False()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestLrnBit_False
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+        startLine: 70
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestLrnBit_False()
+          VB: >-
+            <Fact>
+
+            Public Sub TestLrnBit_False
+      overload: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True
+      language: CSharp
+      name:
+        CSharp: TestLrnBit_True()
+        VB: TestLrnBit_True()
+      nameWithType:
+        CSharp: RorgD5DataTest.TestLrnBit_True()
+        VB: RorgD5DataTest.TestLrnBit_True()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestLrnBit_True
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgD5DataTest.cs
+        startLine: 87
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestLrnBit_True()
+          VB: >-
+            <Fact>
+
+            Public Sub TestLrnBit_True
+      overload: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+  - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+    commentId: T:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+    language: CSharp
+    name:
+      CSharp: RorgF6DataTest
+      VB: RorgF6DataTest
+    nameWithType:
+      CSharp: RorgF6DataTest
+      VB: RorgF6DataTest
+    qualifiedName:
+      CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+      VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+    type: Class
+    assemblies:
+    - P3.Driver.EnOcean.Data.Tests
+    namespace: P3.Driver.EnOcean.Data.Tests
+    source:
+      remote:
+        path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        branch: develop
+        repo: https://p3root.visualstudio.com/automatica/_git/automatica
+      id: RorgF6DataTest
+      path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+      startLine: 13
+    syntax:
+      content:
+        CSharp: 'public class RorgF6DataTest : DriverFactoryTestBase<EnOceanDriverFactory>'
+        VB: >-
+          Public Class RorgF6DataTest
+
+              Inherits DriverFactoryTestBase(Of EnOceanDriverFactory)
+    inheritance:
+    - System.Object
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    inheritedMembers:
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Factory
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.DriverFactory
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateNodeInstance(System.Guid)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(System.Guid,System.Guid[])
+    - Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Init
+    - System.Object.Equals(System.Object)
+    - System.Object.Equals(System.Object,System.Object)
+    - System.Object.GetHashCode
+    - System.Object.GetType
+    - System.Object.MemberwiseClone
+    - System.Object.ReferenceEquals(System.Object,System.Object)
+    - System.Object.ToString
+    modifiers:
+      CSharp:
+      - public
+      - class
+      VB:
+      - Public
+      - Class
+    items:
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R1_AO()
+        VB: TestRockerSwitch_R1_AO()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R1_AO()
+        VB: RorgF6DataTest.TestRockerSwitch_R1_AO()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R1_AO
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 54
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R1_AO()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R1_AO
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R2_AO()
+        VB: TestRockerSwitch_R2_AO()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R2_AO()
+        VB: RorgF6DataTest.TestRockerSwitch_R2_AO()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R2_AO
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 73
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R2_AO()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R2_AO
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R1_AI()
+        VB: TestRockerSwitch_R1_AI()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R1_AI()
+        VB: RorgF6DataTest.TestRockerSwitch_R1_AI()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R1_AI
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 92
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R1_AI()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R1_AI
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R2_AI()
+        VB: TestRockerSwitch_R2_AI()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R2_AI()
+        VB: RorgF6DataTest.TestRockerSwitch_R2_AI()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R2_AI
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 111
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R2_AI()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R2_AI
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R1_BO()
+        VB: TestRockerSwitch_R1_BO()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R1_BO()
+        VB: RorgF6DataTest.TestRockerSwitch_R1_BO()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R1_BO
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 132
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R1_BO()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R1_BO
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R2_BO()
+        VB: TestRockerSwitch_R2_BO()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R2_BO()
+        VB: RorgF6DataTest.TestRockerSwitch_R2_BO()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R2_BO
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 151
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R2_BO()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R2_BO
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R1_BI()
+        VB: TestRockerSwitch_R1_BI()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R1_BI()
+        VB: RorgF6DataTest.TestRockerSwitch_R1_BI()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R1_BI
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 170
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R1_BI()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R1_BI
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+    - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI
+      commentId: M:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI
+      language: CSharp
+      name:
+        CSharp: TestRockerSwitch_R2_BI()
+        VB: TestRockerSwitch_R2_BI()
+      nameWithType:
+        CSharp: RorgF6DataTest.TestRockerSwitch_R2_BI()
+        VB: RorgF6DataTest.TestRockerSwitch_R2_BI()
+      qualifiedName:
+        CSharp: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI()
+        VB: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI()
+      type: Method
+      assemblies:
+      - P3.Driver.EnOcean.Data.Tests
+      namespace: P3.Driver.EnOcean.Data.Tests
+      source:
+        remote:
+          path: src/automatica.core/Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+          branch: develop
+          repo: https://p3root.visualstudio.com/automatica/_git/automatica
+        id: TestRockerSwitch_R2_BI
+        path: ../Drivers/EnOcean/Tests/P3.Driver.EnOcean.Data.Tests/RorgF6DataTest.cs
+        startLine: 189
+      syntax:
+        content:
+          CSharp: >-
+            [Fact]
+
+            public void TestRockerSwitch_R2_BI()
+          VB: >-
+            <Fact>
+
+            Public Sub TestRockerSwitch_R2_BI
+      overload: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI*
+      attributes:
+      - type: Xunit.FactAttribute
+        ctor: Xunit.FactAttribute.#ctor
+        arguments: []
+      modifiers:
+        CSharp:
+        - public
+        VB:
+        - Public
+references:
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1
+        name: DriverFactoryTestBase
+        nameWithType: DriverFactoryTestBase
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase
+      - name: <
+        nameWithType: <
+        qualifiedName: <
+      - name: T
+        nameWithType: T
+        qualifiedName: T
+      - name: '>'
+        nameWithType: '>'
+        qualifiedName: '>'
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1
+        name: DriverFactoryTestBase
+        nameWithType: DriverFactoryTestBase
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase
+      - name: '(Of '
+        nameWithType: '(Of '
+        qualifiedName: '(Of '
+      - name: T
+        nameWithType: T
+        qualifiedName: T
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: T:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1
+  Automatica.Core.UnitTests.Drivers:
+    name:
+      CSharp:
+      - name: Automatica.Core.UnitTests.Drivers
+        nameWithType: Automatica.Core.UnitTests.Drivers
+        qualifiedName: Automatica.Core.UnitTests.Drivers
+      VB:
+      - name: Automatica.Core.UnitTests.Drivers
+        nameWithType: Automatica.Core.UnitTests.Drivers
+        qualifiedName: Automatica.Core.UnitTests.Drivers
+    isDefinition: true
+    commentId: N:Automatica.Core.UnitTests.Drivers
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1
+        name: DriverFactoryTestBase
+        nameWithType: DriverFactoryTestBase
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase
+      - name: <
+        nameWithType: <
+        qualifiedName: <
+      - id: P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory
+        name: EnOceanDriverFactory
+        nameWithType: EnOceanDriverFactory
+        qualifiedName: P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory
+      - name: '>'
+        nameWithType: '>'
+        qualifiedName: '>'
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1
+        name: DriverFactoryTestBase
+        nameWithType: DriverFactoryTestBase
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase
+      - name: '(Of '
+        nameWithType: '(Of '
+        qualifiedName: '(Of '
+      - id: P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory
+        name: EnOceanDriverFactory
+        nameWithType: EnOceanDriverFactory
+        qualifiedName: P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1
+    parent: Automatica.Core.UnitTests.Drivers
+    commentId: T:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory
+        name: Factory
+        nameWithType: DriverFactoryTestBase<T>.Factory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.Factory
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory
+        name: Factory
+        nameWithType: DriverFactoryTestBase(Of T).Factory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).Factory
+    isDefinition: true
+    commentId: P:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Factory:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory
+        name: Factory
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.Factory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.Factory
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory
+        name: Factory
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).Factory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).Factory
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Factory
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: P:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Factory
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory
+        name: DriverFactory
+        nameWithType: DriverFactoryTestBase<T>.DriverFactory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.DriverFactory
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory
+        name: DriverFactory
+        nameWithType: DriverFactoryTestBase(Of T).DriverFactory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).DriverFactory
+    isDefinition: true
+    commentId: P:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.DriverFactory:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory
+        name: DriverFactory
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.DriverFactory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.DriverFactory
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory
+        name: DriverFactory
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).DriverFactory
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).DriverFactory
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.DriverFactory
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: P:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.DriverFactory
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid):
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid)
+        name: CreateNodeInstance
+        nameWithType: DriverFactoryTestBase<T>.CreateNodeInstance
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.CreateNodeInstance
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid)
+        name: CreateNodeInstance
+        nameWithType: DriverFactoryTestBase(Of T).CreateNodeInstance
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).CreateNodeInstance
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid)
+  ? Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateNodeInstance(System.Guid)
+  : name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid)
+        name: CreateNodeInstance
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.CreateNodeInstance
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.CreateNodeInstance
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid)
+        name: CreateNodeInstance
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).CreateNodeInstance
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).CreateNodeInstance
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateNodeInstance(System.Guid)
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateNodeInstance(System.Guid)
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance):
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver
+        nameWithType: DriverFactoryTestBase<T>.CreateDriver
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.CreateDriver
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver
+        nameWithType: DriverFactoryTestBase(Of T).CreateDriver
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).CreateDriver
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+  ? Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+  : name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.CreateDriver
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.CreateDriver
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).CreateDriver
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).CreateDriver
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver(Automatica.Core.EF.Models.NodeInstance)
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance):
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver<T2>
+        nameWithType: DriverFactoryTestBase<T>.CreateDriver<T2>
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.CreateDriver<T2>
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver(Of T2)
+        nameWithType: DriverFactoryTestBase(Of T).CreateDriver(Of T2)
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).CreateDriver(Of T2)
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+  ? Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+  : name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver<T2>
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.CreateDriver<T2>
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.CreateDriver<T2>
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+        name: CreateDriver(Of T2)
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).CreateDriver(Of T2)
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).CreateDriver(Of T2)
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance)
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[]):
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+        name: CreateDriver<T2>
+        nameWithType: DriverFactoryTestBase<T>.CreateDriver<T2>
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.CreateDriver<T2>
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: '[]'
+        nameWithType: '[]'
+        qualifiedName: '[]'
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+        name: CreateDriver(Of T2)
+        nameWithType: DriverFactoryTestBase(Of T).CreateDriver(Of T2)
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).CreateDriver(Of T2)
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ()
+        nameWithType: ()
+        qualifiedName: ()
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+  ? Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+  : name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+        name: CreateDriver<T2>
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.CreateDriver<T2>
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.CreateDriver<T2>
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: '[]'
+        nameWithType: '[]'
+        qualifiedName: '[]'
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+        name: CreateDriver(Of T2)
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).CreateDriver(Of T2)
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).CreateDriver(Of T2)
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: Automatica.Core.EF.Models.NodeInstance
+        name: NodeInstance
+        nameWithType: NodeInstance
+        qualifiedName: Automatica.Core.EF.Models.NodeInstance
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ()
+        nameWithType: ()
+        qualifiedName: ()
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(Automatica.Core.EF.Models.NodeInstance,System.Guid[])
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[]):
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[])
+        name: CreateDriver<T2>
+        nameWithType: DriverFactoryTestBase<T>.CreateDriver<T2>
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.CreateDriver<T2>
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: '[]'
+        nameWithType: '[]'
+        qualifiedName: '[]'
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[])
+        name: CreateDriver(Of T2)
+        nameWithType: DriverFactoryTestBase(Of T).CreateDriver(Of T2)
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).CreateDriver(Of T2)
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ()
+        nameWithType: ()
+        qualifiedName: ()
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[])
+  ? Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(System.Guid,System.Guid[])
+  : name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[])
+        name: CreateDriver<T2>
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.CreateDriver<T2>
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.CreateDriver<T2>
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: '[]'
+        nameWithType: '[]'
+        qualifiedName: '[]'
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[])
+        name: CreateDriver(Of T2)
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).CreateDriver(Of T2)
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).CreateDriver(Of T2)
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Guid
+        name: Guid
+        nameWithType: Guid
+        qualifiedName: System.Guid
+        isExternal: true
+      - name: ()
+        nameWithType: ()
+        qualifiedName: ()
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.CreateDriver``1(System.Guid,System.Guid[])
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.CreateDriver``1(System.Guid,System.Guid[])
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init
+        name: Init
+        nameWithType: DriverFactoryTestBase<T>.Init
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<T>.Init
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init
+        name: Init
+        nameWithType: DriverFactoryTestBase(Of T).Init
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of T).Init
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init
+  Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Init:
+    name:
+      CSharp:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init
+        name: Init
+        nameWithType: DriverFactoryTestBase<EnOceanDriverFactory>.Init
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase<P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory>.Init
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init
+        name: Init
+        nameWithType: DriverFactoryTestBase(Of EnOceanDriverFactory).Init
+        qualifiedName: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase(Of P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory).Init
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: false
+    definition: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase`1.Init
+    parent: Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}
+    commentId: M:Automatica.Core.UnitTests.Drivers.DriverFactoryTestBase{P3.Driver.EnOcean.DriverFactory.EnOceanDriverFactory}.Init
+  System:
+    name:
+      CSharp:
+      - name: System
+        nameWithType: System
+        qualifiedName: System
+        isExternal: true
+      VB:
+      - name: System
+        nameWithType: System
+        qualifiedName: System
+    isDefinition: true
+    commentId: N:System
+  System.Object:
+    name:
+      CSharp:
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      VB:
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+    isDefinition: true
+    parent: System
+    commentId: T:System.Object
+  System.Object.Equals(System.Object):
+    name:
+      CSharp:
+      - id: System.Object.Equals(System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.Equals(System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.Equals(System.Object)
+  System.Object.Equals(System.Object,System.Object):
+    name:
+      CSharp:
+      - id: System.Object.Equals(System.Object,System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.Equals(System.Object,System.Object)
+        name: Equals
+        nameWithType: Object.Equals
+        qualifiedName: System.Object.Equals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.Equals(System.Object,System.Object)
+  System.Object.GetHashCode:
+    name:
+      CSharp:
+      - id: System.Object.GetHashCode
+        name: GetHashCode
+        nameWithType: Object.GetHashCode
+        qualifiedName: System.Object.GetHashCode
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.GetHashCode
+        name: GetHashCode
+        nameWithType: Object.GetHashCode
+        qualifiedName: System.Object.GetHashCode
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.GetHashCode
+  System.Object.GetType:
+    name:
+      CSharp:
+      - id: System.Object.GetType
+        name: GetType
+        nameWithType: Object.GetType
+        qualifiedName: System.Object.GetType
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.GetType
+        name: GetType
+        nameWithType: Object.GetType
+        qualifiedName: System.Object.GetType
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.GetType
+  System.Object.MemberwiseClone:
+    name:
+      CSharp:
+      - id: System.Object.MemberwiseClone
+        name: MemberwiseClone
+        nameWithType: Object.MemberwiseClone
+        qualifiedName: System.Object.MemberwiseClone
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.MemberwiseClone
+        name: MemberwiseClone
+        nameWithType: Object.MemberwiseClone
+        qualifiedName: System.Object.MemberwiseClone
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.MemberwiseClone
+  System.Object.ReferenceEquals(System.Object,System.Object):
+    name:
+      CSharp:
+      - id: System.Object.ReferenceEquals(System.Object,System.Object)
+        name: ReferenceEquals
+        nameWithType: Object.ReferenceEquals
+        qualifiedName: System.Object.ReferenceEquals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.ReferenceEquals(System.Object,System.Object)
+        name: ReferenceEquals
+        nameWithType: Object.ReferenceEquals
+        qualifiedName: System.Object.ReferenceEquals
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: ', '
+        nameWithType: ', '
+        qualifiedName: ', '
+      - id: System.Object
+        name: Object
+        nameWithType: Object
+        qualifiedName: System.Object
+        isExternal: true
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  System.Object.ToString:
+    name:
+      CSharp:
+      - id: System.Object.ToString
+        name: ToString
+        nameWithType: Object.ToString
+        qualifiedName: System.Object.ToString
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: System.Object.ToString
+        name: ToString
+        nameWithType: Object.ToString
+        qualifiedName: System.Object.ToString
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: System.Object
+    commentId: M:System.Object.ToString
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1*
+        name: TestA5_11_01_DataP1
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataP1
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1*
+        name: TestA5_11_01_DataP1
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataP1
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP1
+  Xunit:
+    name:
+      CSharp:
+      - name: Xunit
+        nameWithType: Xunit
+        qualifiedName: Xunit
+        isExternal: true
+      VB:
+      - name: Xunit
+        nameWithType: Xunit
+        qualifiedName: Xunit
+    isDefinition: true
+    commentId: N:Xunit
+  Xunit.FactAttribute:
+    name:
+      CSharp:
+      - id: Xunit.FactAttribute
+        name: FactAttribute
+        nameWithType: FactAttribute
+        qualifiedName: Xunit.FactAttribute
+        isExternal: true
+      VB:
+      - id: Xunit.FactAttribute
+        name: FactAttribute
+        nameWithType: FactAttribute
+        qualifiedName: Xunit.FactAttribute
+        isExternal: true
+    isDefinition: true
+    parent: Xunit
+    commentId: T:Xunit.FactAttribute
+  Xunit.FactAttribute.#ctor:
+    name:
+      CSharp:
+      - id: Xunit.FactAttribute.#ctor
+        name: FactAttribute
+        nameWithType: FactAttribute.FactAttribute
+        qualifiedName: Xunit.FactAttribute.FactAttribute
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+      VB:
+      - id: Xunit.FactAttribute.#ctor
+        name: FactAttribute
+        nameWithType: FactAttribute.FactAttribute
+        qualifiedName: Xunit.FactAttribute.FactAttribute
+        isExternal: true
+      - name: (
+        nameWithType: (
+        qualifiedName: (
+      - name: )
+        nameWithType: )
+        qualifiedName: )
+    isDefinition: true
+    parent: Xunit.FactAttribute
+    commentId: M:Xunit.FactAttribute.#ctor
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2*
+        name: TestA5_11_01_DataP2
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataP2
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2*
+        name: TestA5_11_01_DataP2
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataP2
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP2
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3*
+        name: TestA5_11_01_DataP3
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataP3
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3*
+        name: TestA5_11_01_DataP3
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataP3
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataP3
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM*
+        name: TestA5_11_01_DataPM
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataPM
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM*
+        name: TestA5_11_01_DataPM
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataPM
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataPM
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN*
+        name: TestA5_11_01_DataLRN
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataLRN
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN*
+        name: TestA5_11_01_DataLRN
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataLRN
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataLRN
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES*
+        name: TestA5_11_01_DataES
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataES
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES*
+        name: TestA5_11_01_DataES
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataES
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataES
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF*
+        name: TestA5_11_01_DataOHF
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataOHF
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF*
+        name: TestA5_11_01_DataOHF
+        nameWithType: RorgA5DataTest.TestA5_11_01_DataOHF
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_11_01_DataOHF
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP*
+        name: TestA5_02_05_TMP
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP*
+        name: TestA5_02_05_TMP
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2*
+        name: TestA5_02_05_TMP2
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP2
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2*
+        name: TestA5_02_05_TMP2
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP2
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP2
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min*
+        name: TestA5_02_05_TMP_Min
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP_Min
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min*
+        name: TestA5_02_05_TMP_Min
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP_Min
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Min
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max*
+        name: TestA5_02_05_TMP_Max
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP_Max
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max*
+        name: TestA5_02_05_TMP_Max
+        nameWithType: RorgA5DataTest.TestA5_02_05_TMP_Max
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_05_TMP_Max
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP*
+        name: TestA5_02_20_TMP
+        nameWithType: RorgA5DataTest.TestA5_02_20_TMP
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP*
+        name: TestA5_02_20_TMP
+        nameWithType: RorgA5DataTest.TestA5_02_20_TMP
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min*
+        name: TestA5_02_20_TMP_Min
+        nameWithType: RorgA5DataTest.TestA5_02_20_TMP_Min
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min*
+        name: TestA5_02_20_TMP_Min
+        nameWithType: RorgA5DataTest.TestA5_02_20_TMP_Min
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Min
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max*
+        name: TestA5_02_20_TMP_Max
+        nameWithType: RorgA5DataTest.TestA5_02_20_TMP_Max
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max*
+        name: TestA5_02_20_TMP_Max
+        nameWithType: RorgA5DataTest.TestA5_02_20_TMP_Max
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_20_TMP_Max
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP*
+        name: TestA5_02_03_TMP
+        nameWithType: RorgA5DataTest.TestA5_02_03_TMP
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP*
+        name: TestA5_02_03_TMP
+        nameWithType: RorgA5DataTest.TestA5_02_03_TMP
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min*
+        name: TestA5_02_03_TMP_Min
+        nameWithType: RorgA5DataTest.TestA5_02_03_TMP_Min
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min*
+        name: TestA5_02_03_TMP_Min
+        nameWithType: RorgA5DataTest.TestA5_02_03_TMP_Min
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Min
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max*
+        name: TestA5_02_03_TMP_Max
+        nameWithType: RorgA5DataTest.TestA5_02_03_TMP_Max
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max*
+        name: TestA5_02_03_TMP_Max
+        nameWithType: RorgA5DataTest.TestA5_02_03_TMP_Max
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest.TestA5_02_03_TMP_Max
+  P3.Driver.EnOcean.Data.Tests.RorgA5DataTest:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+        name: RorgA5DataTest
+        nameWithType: RorgA5DataTest
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+        name: RorgA5DataTest
+        nameWithType: RorgA5DataTest
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+    isDefinition: true
+    commentId: T:P3.Driver.EnOcean.Data.Tests.RorgA5DataTest
+  P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit*
+        name: TestCoBit
+        nameWithType: RorgD5DataTest.TestCoBit
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit*
+        name: TestCoBit
+        nameWithType: RorgD5DataTest.TestCoBit
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestCoBit
+  P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False*
+        name: TestLrnBit_False
+        nameWithType: RorgD5DataTest.TestLrnBit_False
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False*
+        name: TestLrnBit_False
+        nameWithType: RorgD5DataTest.TestLrnBit_False
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_False
+  P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True*
+        name: TestLrnBit_True
+        nameWithType: RorgD5DataTest.TestLrnBit_True
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True*
+        name: TestLrnBit_True
+        nameWithType: RorgD5DataTest.TestLrnBit_True
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest.TestLrnBit_True
+  P3.Driver.EnOcean.Data.Tests.RorgD5DataTest:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+        name: RorgD5DataTest
+        nameWithType: RorgD5DataTest
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+        name: RorgD5DataTest
+        nameWithType: RorgD5DataTest
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+    isDefinition: true
+    commentId: T:P3.Driver.EnOcean.Data.Tests.RorgD5DataTest
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO*
+        name: TestRockerSwitch_R1_AO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_AO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO*
+        name: TestRockerSwitch_R1_AO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_AO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AO
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO*
+        name: TestRockerSwitch_R2_AO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_AO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO*
+        name: TestRockerSwitch_R2_AO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_AO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AO
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI*
+        name: TestRockerSwitch_R1_AI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_AI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI*
+        name: TestRockerSwitch_R1_AI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_AI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_AI
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI*
+        name: TestRockerSwitch_R2_AI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_AI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI*
+        name: TestRockerSwitch_R2_AI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_AI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_AI
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO*
+        name: TestRockerSwitch_R1_BO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_BO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO*
+        name: TestRockerSwitch_R1_BO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_BO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BO
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO*
+        name: TestRockerSwitch_R2_BO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_BO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO*
+        name: TestRockerSwitch_R2_BO
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_BO
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BO
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI*
+        name: TestRockerSwitch_R1_BI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_BI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI*
+        name: TestRockerSwitch_R1_BI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R1_BI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R1_BI
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI*:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI*
+        name: TestRockerSwitch_R2_BI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_BI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI*
+        name: TestRockerSwitch_R2_BI
+        nameWithType: RorgF6DataTest.TestRockerSwitch_R2_BI
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI
+    isDefinition: true
+    commentId: Overload:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest.TestRockerSwitch_R2_BI
+  P3.Driver.EnOcean.Data.Tests.RorgF6DataTest:
+    name:
+      CSharp:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+        name: RorgF6DataTest
+        nameWithType: RorgF6DataTest
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+      VB:
+      - id: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+        name: RorgF6DataTest
+        nameWithType: RorgF6DataTest
+        qualifiedName: P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+    isDefinition: true
+    commentId: T:P3.Driver.EnOcean.Data.Tests.RorgF6DataTest
+  P3.Driver.EnOcean.Data.Tests:
+    name:
+      CSharp:
+      - name: P3.Driver.EnOcean.Data.Tests
+        nameWithType: P3.Driver.EnOcean.Data.Tests
+        qualifiedName: P3.Driver.EnOcean.Data.Tests
+      VB:
+      - name: P3.Driver.EnOcean.Data.Tests
+        nameWithType: P3.Driver.EnOcean.Data.Tests
+        qualifiedName: P3.Driver.EnOcean.Data.Tests
+    isDefinition: true
+    commentId: N:P3.Driver.EnOcean.Data.Tests
