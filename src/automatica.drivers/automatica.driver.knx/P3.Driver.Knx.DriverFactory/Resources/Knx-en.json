@@ -1,0 +1,272 @@
+﻿{
+  "KNX": {
+    "LICENSE": {
+      "KNX-ETS-IMPORT": "ETS import license missing"
+    },
+    "GROUP": {
+      "DPT": "Datapoint type"
+    },
+    "GW_STATUS": {
+      "NAME": "Connected"
+    },
+    "GATEWAY": {
+      "NAME": "KNX IP Gateway",
+      "DESCRIPTION": ""
+    },
+    "SECURE_GATEWAY": {
+      "NAME": "KNX IP Secure Gateway",
+      "DESCRIPTION": ""
+    },
+    "GATEWAY_3_LEVEL": {
+      "NAME": "KNX 3 Level",
+      "DESCRIPTION": "",
+      "MAIN": {
+        "NAME": "Maingroup",
+        "DESCRIPTION": ""
+      },
+      "MIDDLE": {
+        "NAME": "Middlegroup",
+        "DESCRIPTION": ""
+      },
+      "GROUP": {
+        "NAME": "Groupaddress",
+        "DESCRIPTION": ""
+      }
+    },
+    "PROPERTIES": {
+      "ADDRESS": {
+        "NAME": "Address",
+        "DESCRIPTION": ""
+      },
+      "DPT": {
+        "NAME": "DPT",
+        "DESCRIPTION": ""
+      }
+    },
+    "DPT1": {
+      "NAME": "1.* 1-bit",
+      "DESCRIPTION": ""
+    },
+    "DPT2": {
+      "NAME": "2.* 1-bit controlled",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Value bit"
+      },
+      "CONTROL": {
+        "NAME": "Control bit"
+      }
+    },
+    "DPT3": {
+      "NAME": "3.* 3-bit controlled",
+      "DESCRIPTION": "",
+      "STEPCODE": {
+        "NAME": "Stepcode"
+      },
+      "CONTROL": {
+        "NAME": "Control bit"
+      }
+    },
+    "DPT4": {
+      "NAME": "4.* character",
+      "DESCRIPTION": ""
+    },
+    "DPT5": {
+      "NAME": "5.* 8-bit unsigned value",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "percentage (0..100%)"
+      },
+      "003": {
+        "NAME": "angle (degrees)"
+      },
+      "004": {
+        "NAME": "percentage (0..255%)"
+      },
+      "005": {
+        "NAME": "ratio (0..255)"
+      },
+      "006": {
+        "NAME": "tariff (0..255)"
+      },
+      "010": {
+        "NAME": "counter pulse (0...255)"
+      }
+    },
+    "DPT6": {
+      "NAME": "6.* 8-bit signed valued",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "percentage (-128..127%)"
+      },
+      "010": {
+        "NAME": "counter pulses (-128..127)"
+      },
+      "020": {
+        "NAME": "6.020 status with mode",
+        "DESCRIPTION": "",
+        "A": {
+          "NAME": "A"
+        },
+        "B": {
+          "NAME": "B"
+        },
+        "C": {
+          "NAME": "C"
+        },
+        "D": {
+          "NAME": "D"
+        },
+        "E": {
+          "NAME": "E"
+        },
+        "ACTIVE_MODE": {
+          "NAME": "Active mode"
+        }
+      }
+    },
+    "DPT7": {
+      "NAME": "7.* 2-byte unsigned value",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "pulse"
+      },
+      "002": {
+        "NAME": "time (ms)"
+      },
+      "003": {
+        "NAME": "time (10ms)"
+      },
+      "004": {
+        "NAME": "time (100ms)"
+      },
+      "005": {
+        "NAME": "time (s)"
+      },
+      "006": {
+        "NAME": "time (min)"
+      },
+      "007": {
+        "NAME": "time (h)"
+      },
+      "010": {
+        "NAME": "Property datatype"
+      },
+      "011": {
+        "NAME": "length (mm)"
+      },
+      "012": {
+        "NAME": "current (mA)"
+      },
+      "013": {
+        "NAME": "lux (lux)"
+      }
+    },
+    "DPT8": {
+      "NAME": "8.* 2-byte signed value",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "pulse difference"
+      },
+      "002": {
+        "NAME": "time lag (ms)"
+      },
+      "003": {
+        "NAME": "time lag (10ms)"
+      },
+      "004": {
+        "NAME": "time lag (100ms)"
+      },
+      "005": {
+        "NAME": "time lag (s)"
+      },
+      "006": {
+        "NAME": "time lag (min)"
+      },
+      "007": {
+        "NAME": "time lag (h)"
+      },
+      "010": {
+        "NAME": "percentage difference (%)"
+      },
+      "011": {
+        "NAME": "rotation angle (°)"
+      }
+    },
+    "DPT9": {
+      "NAME": "9.* 2-byte float value",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "temperature (°C)"
+      },
+      "002": {
+        "NAME": "temperature difference (K)"
+      },
+      "003": {
+        "NAME": "kelvin/hour (K/h)"
+      },
+      "004": {
+        "NAME": "lux (Lux)"
+      },
+      "005": {
+        "NAME": "speed (m/s)"
+      },
+      "006": {
+        "NAME": "pressure (Pa)"
+      },
+      "007": {
+        "NAME": "humidity (%)"
+      },
+      "008": {
+        "NAME": "parts/million (ppm)"
+      },
+      "010": {
+        "NAME": "air flow (m³/h)"
+      },
+      "011": {
+        "NAME": "time (s)"
+      },
+      "020": {
+        "NAME": "time (ms)"
+      },
+      "021": {
+        "NAME": "voltage (mV)"
+      },
+      "022": {
+        "NAME": "current (mA)"
+      },
+      "023": {
+        "NAME": "kelvin/percent (K/%)"
+      },
+      "024": {
+        "NAME": "power (kw)"
+      },
+      "025": {
+        "NAME": "volume flow (l/h)"
+      },
+      "026": {
+        "NAME": "rain amount (l/m²)"
+      },
+      "027": {
+        "NAME": "temperature (°F)"
+      },
+      "028": {
+        "NAME": "wind speed (km/h)"
+      }
+    },
+    "DPT10": {
+      "NAME": "10.* Time",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "time of day"
+      }
+    },
+    "DPT11": {
+      "NAME": "11.* Date",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "date"
+      }
+    }
+  }
+}

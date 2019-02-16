@@ -1,0 +1,272 @@
+﻿{
+  "KNX": {
+    "LICENSE": {
+      "KNX-ETS-IMPORT":  "ETS Import Lizenz fehlt" 
+    },
+    "GROUP": {
+      "DPT": "Datenpunkt Typ"
+    },
+    "GW_STATUS": {
+      "NAME": "Verbunden"
+    },
+    "GATEWAY": {
+      "NAME": "KNX IP Gateway",
+      "DESCRIPTION": ""
+    },
+    "SECURE_GATEWAY": {
+      "NAME": "KNX IP Secure Gateway",
+      "DESCRIPTION": ""
+    },
+    "GATEWAY_3_LEVEL": {
+      "NAME": "KNX 3 Level",
+      "DESCRIPTION": "",
+      "MAIN": {
+        "NAME": "Hauptgruppe",
+        "DESCRIPTION": ""
+      },
+      "MIDDLE": {
+        "NAME": "Mittelgruppe",
+        "DESCRIPTION": ""
+      },
+      "GROUP": {
+        "NAME": "Gruppenadresse",
+        "DESCRIPTION": ""
+      }
+    },
+    "PROPERTIES": {
+      "ADDRESS": {
+        "NAME": "Addresse",
+        "DESCRIPTION": ""
+      },
+      "DPT": {
+        "NAME": "DPT",
+        "DESCRIPTION": ""
+      }
+    },
+    "DPT1": {
+      "NAME": "1.* 1-Bit",
+      "DESCRIPTION": ""
+    },
+    "DPT2": {
+      "NAME": "2.* 1-Bit gesteuert",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Wert-Bit"
+      },
+      "CONTROL": {
+        "NAME": "Kontroll-Bit"
+      }
+    },
+    "DPT3": {
+      "NAME": "3.* 3-Bit gesteuert",
+      "DESCRIPTION": "",
+      "STEPCODE": {
+        "NAME": "Schrittwert"
+      },
+      "CONTROL": {
+        "NAME": "Kontroll-Bit"
+      }
+    },
+    "DPT4": {
+      "NAME": "4.* Zeichensatz",
+      "DESCRIPTION": ""
+    },
+    "DPT5": {
+      "NAME": "5.* 8-Bit vorzeichenlos",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Prozent (0..100%)"
+      },
+      "003": {
+        "NAME": "Winkel (degrees)"
+      },
+      "004": {
+        "NAME": "Prozent (0..255%)"
+      },
+      "005": {
+        "NAME": "Dezimalfaktor (0..255)"
+      },
+      "006": {
+        "NAME": "Tarif (0..255)"
+      },
+      "010": {
+        "NAME": "Zählimpulse (0...255)"
+      }
+    },
+    "DPT6": {
+      "NAME": "6.* 8-Bit vorzeichenbehaftet",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Prozent (-128..127%)"
+      },
+      "010": {
+        "NAME": "Zählimpulse (-128..127)"
+      },
+      "020": {
+        "NAME": "6.020 Status mit Modus",
+        "DESCRIPTION": "",
+        "A": {
+          "NAME": "A"
+        },
+        "B": {
+          "NAME": "B"
+        },
+        "C": {
+          "NAME": "C"
+        },
+        "D": {
+          "NAME": "D"
+        },
+        "E": {
+          "NAME": "E"
+        },
+        "ACTIVE_MODE": {
+          "NAME": "Aktiver Modus"
+        }
+      }
+    },
+    "DPT7": {
+      "NAME": "7.* 2-Byte vorzeichenlos",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Pulse"
+      },
+      "002": {
+        "NAME": "Zeit (ms)"
+      },
+      "003": {
+        "NAME": "Zeit (10ms)"
+      },
+      "004": {
+        "NAME": "Zeit (100ms)"
+      },
+      "005": {
+        "NAME": "Zeit (s)"
+      },
+      "006": {
+        "NAME": "Zeit (min)"
+      },
+      "007": {
+        "NAME": "Zeit (h)"
+      },
+      "010": {
+        "NAME": "Property Datentyp"
+      },
+      "011": {
+        "NAME": "Länge (mm)"
+      },
+      "012": {
+        "NAME": "Strom (mA)"
+      },
+      "013": {
+        "NAME": "Helligkeit (lux)"
+      }
+    },
+    "DPT8": {
+      "NAME": "8.* 2-Byte vorzeichenbehaftet",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Pulsdifferenz"
+      },
+      "002": {
+        "NAME": "Zeitdifferenz (ms)"
+      },
+      "003": {
+        "NAME": "Zeitdifferenz (10ms)"
+      },
+      "004": {
+        "NAME": "Zeitdifferenz (100ms)"
+      },
+      "005": {
+        "NAME": "Zeitdifferenz (s)"
+      },
+      "006": {
+        "NAME": "Zeitdifferenz (min)"
+      },
+      "007": {
+        "NAME": "Zeitdifferenz (h)"
+      },
+      "010": {
+        "NAME": "Prozentdifferenz (%)"
+      },
+      "011": {
+        "NAME": "Rotationswinkel (°)"
+      }
+    },
+    "DPT9": {
+      "NAME": "9.* 2-Byte Gleitkommawert",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Temperatur (°C)"
+      },
+      "002": {
+        "NAME": "Temperaturdifferenz (K)"
+      },
+      "003": {
+        "NAME": "Kelvin/Stunde (K/h)"
+      },
+      "004": {
+        "NAME": "Lux (Lux)"
+      },
+      "005": {
+        "NAME": "Geschwindigkeit (m/s)"
+      },
+      "006": {
+        "NAME": "Druck (Pa)"
+      },
+      "007": {
+        "NAME": "Feuchtigkeit (%)"
+      },
+      "008": {
+        "NAME": "Teile/Million (ppm)"
+      },
+      "010": {
+        "NAME": "Luftdurchsatz (m³/h)"
+      },
+      "011": {
+        "NAME": "Zeit (s)"
+      },
+      "020": {
+        "NAME": "Zeit (ms)"
+      },
+      "021": {
+        "NAME": "Spannung (mV)"
+      },
+      "022": {
+        "NAME": "Strom (mA)"
+      },
+      "023": {
+        "NAME": "Kelvin/Prozent (K/%)"
+      },
+      "024": {
+        "NAME": "Leistung (kw)"
+      },
+      "025": {
+        "NAME": "Durchflussmenge (l/h)"
+      },
+      "026": {
+        "NAME": "Regenmenge (l/m²)"
+      },
+      "027": {
+        "NAME": "Temperatur (°F)"
+      },
+      "028": {
+        "NAME": "Windgeschwindigkeit (km/h)"
+      }
+    },
+    "DPT10": {
+      "NAME": "10.* Zeit",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Tageszeit"
+      }
+    },
+    "DPT11": {
+      "NAME": "11.* Datum",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Datum"
+      }
+    }
+  }
+}

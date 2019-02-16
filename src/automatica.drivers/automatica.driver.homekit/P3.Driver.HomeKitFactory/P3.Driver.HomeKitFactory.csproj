@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.0.0.4</Version>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\HomeKit-de.json" />
+    <None Remove="Resources\HomeKit-en.json" />
+    <None Remove="Resources\P3.Driver.FroniusSymo-de.json" />
+    <None Remove="Resources\P3.Driver.FroniusSymo-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\HomeKit-de.json" />
+    <EmbeddedResource Include="Resources\HomeKit-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.HomeKit\P3.Driver.HomeKit.csproj" />
+  </ItemGroup>
+</Project>

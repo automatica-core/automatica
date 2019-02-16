@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.5.0</Version>
+    <ProjectGuid>933B3BDE-C515-4099-B57B-C89A95DB8C0D</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\MachineFlags-de.json" />
+    <None Remove="Resources\MachineFlags-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\MachineFlags-de.json" />
+    <EmbeddedResource Include="Resources\MachineFlags-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+  </ItemGroup>
+</Project>

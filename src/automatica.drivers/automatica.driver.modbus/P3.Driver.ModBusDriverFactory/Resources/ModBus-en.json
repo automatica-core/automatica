@@ -1,0 +1,87 @@
+﻿{
+  "MODBUS": {
+    "DEVICE": {
+      "NAME": "Modbus device",
+      "DESCRIPTION": "Represents a modbus device",
+      "ID": "Devcie ID"
+    },
+    "CATEGORY": {
+      "DEVICE": "Device"
+    },
+    "PROPERTY": {
+      "BYTEORDER": "Byte order",
+      "TABLE": "Table",
+      "REGISTER": "Register",
+      "IGNORE_DEVICE_ID": {
+        "NAME": "Ignore device id",
+        "DESCRIPTION": "Ignores the device id given from the master"
+      },
+      "POLL_INTERVAL": {
+        "NAME": "Polling interval [ms]",
+        "DESCRIPTION": "Polling interval in ms"
+      }
+    },
+    "ATTRIBUTE": {
+      "INTEGER": {
+        "POS2BYTE": {
+          "NAME": "+2 Byte Integer",
+          "DESCRIPTION": ""
+        },
+        "NEG2BYTE": {
+          "NAME": "±2 Byte Integer",
+          "DESCRIPTION": ""
+        },
+        "POS4BYTE": {
+          "NAME": "+4 Byte Integer",
+          "DESCRIPTION": ""
+        },
+        "NEG4BYTE": {
+          "NAME": "±4 Byte Integer",
+          "DESCRIPTION": ""
+        },
+        "POS8BYTE": {
+          "NAME": "+8 Byte Integer",
+          "DESCRIPTION": ""
+        },
+        "NEG8BYTE": {
+          "NAME": "±8 Byte Integer",
+          "DESCRIPTION": ""
+        }
+      },
+      "FLOAT": {
+        "4BYTE": {
+          "NAME": "4 Byte float",
+          "DESCRIPTION": ""
+        },
+        "8BYTE": {
+          "NAME": "8 Byte float",
+          "DESCRIPTION": ""
+        }
+      },
+      "BINARY": {
+        "NAME": "Yes/No",
+        "DESCRIPTION": ""
+      }
+    },
+    "MASTER": {
+      "RTU": {
+        "NAME": "ModBus Master RTU",
+        "DESCRIPTION": ""
+      },
+      "TCP": {
+        "NAME": "ModBus Master TCP",
+        "DESCRIPTION": ""
+      }
+    },
+    "SLAVE": {
+      "RTU": {
+        "NAME": "ModBus Slave RTU",
+        "DESCRIPTION": ""
+      },
+      "TCP": {
+        "NAME": "ModBus Slave TCP",
+        "DESCRIPTION": ""
+      }
+    }
+  } 
+}

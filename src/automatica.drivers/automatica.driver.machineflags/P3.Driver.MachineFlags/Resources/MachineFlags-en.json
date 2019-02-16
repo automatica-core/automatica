@@ -1,0 +1,10 @@
+﻿{
+  "MACHINE_FLAGS": {
+    "NAME": "Machine flags",
+    "DESCRIPTION": "",
+    "NODE": {
+      "NAME": "Flag",
+      "DESCRIPTION": ""
+    }
+  }
+}

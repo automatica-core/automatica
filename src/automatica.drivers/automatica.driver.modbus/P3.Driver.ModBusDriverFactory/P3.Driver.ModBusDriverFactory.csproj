@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>P3.Driver.ModBusDriverFactory</AssemblyName>
+    <RootNamespace>P3.Driver.ModBusDriverFactory</RootNamespace>
+    <Version>0.5.0</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>1384CF90-B3A1-483E-87DE-97FBD28D3AFC</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\dev\p3\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win-x64\Drivers\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\ModBus-de.json" />
+    <None Remove="Resources\ModBus-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\ModBus-de.json" />
+    <EmbeddedResource Include="Resources\ModBus-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj" />
+  </ItemGroup>
+</Project>
