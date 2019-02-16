@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>P3.Driver.MBus</AssemblyName>
+    <RootNamespace>P3.Driver.MBus</RootNamespace>
+    <Version>0.5.0</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SerialPortStream" Version="2.2.0" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+  </ItemGroup>
+</Project>

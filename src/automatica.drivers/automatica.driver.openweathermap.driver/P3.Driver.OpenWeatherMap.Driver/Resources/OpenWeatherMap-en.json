@@ -1,0 +1,49 @@
+﻿{
+  "OPENWEATHERMAP": {
+    "NAME": "OpenWeatherMap",
+    "APIKEY": {
+      "NAME": "API Key",
+      "DESCRIPTION": ""
+    },
+    "POLL_INTERVAL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": ""
+    },
+    "HUMIDITY": {
+      "NAME": "Humidity",
+      "DIRECTION": ""
+    },
+    "PRESSURE": {
+      "NAME": "Pressure",
+      "DIRECTION": ""
+    },
+    "SUNRISE": {
+      "NAME": "Sunrise",
+      "DIRECTION": ""
+    },
+    "SUNSET": {
+      "NAME": "Sunset",
+      "DIRECTION": ""
+    },
+    "TEMPERATURE": {
+      "NAME": "Temperature",
+      "DIRECTION": ""
+    },
+    "TEMPERATURE_MAX": {
+      "NAME": "Temperature max",
+      "DIRECTION": ""
+    },
+    "TEMPERATURE_MIN": {
+      "NAME": "Temperature min",
+      "DIRECTION": ""
+    },
+    "WIND_DIRECTION": {
+      "NAME": "Wind direction",
+      "DIRECTION": ""
+    },
+    "WIND_SPEED": {
+      "NAME": "Wind speed",
+      "DIRECTION": ""
+    }
+  }
+}

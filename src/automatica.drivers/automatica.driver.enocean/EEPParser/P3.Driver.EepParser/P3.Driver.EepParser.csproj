@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>A3C6FEF6-8776-4F17-92C6-61B20E47C120</ProjectGuid>
+    <Version>0.5.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\P3.Driver.EnOcean.DriverFactory\P3.Driver.EnOcean.DriverFactory.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="eep.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

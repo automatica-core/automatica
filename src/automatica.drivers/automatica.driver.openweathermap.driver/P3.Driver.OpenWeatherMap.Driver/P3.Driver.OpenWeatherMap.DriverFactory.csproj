@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.5.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\OpenWeatherMap-de.json" />
+    <None Remove="Resources\OpenWeatherMap-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\OpenWeatherMap-de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OpenWeatherMap-en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="OpenWeatherMap" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Ressources\OpenWeatherMap-de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Ressources\OpenWeatherMap-en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

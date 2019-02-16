@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.5.0</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>{BF9714A1-4CEF-43D2-8DAC-523EE537A9A6}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\Logic-de.json" />
+    <None Remove="Resources\Logic-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Logic-de.json" />
+    <EmbeddedResource Include="Resources\Logic-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Rule" Version="0.7.0.244" />
+  </ItemGroup>
+</Project>
