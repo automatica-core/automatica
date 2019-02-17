@@ -8,16 +8,22 @@ Automatica.Core Front-End
 
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine.
 
-# UI
-The frontend is developed in Angular using devextreme components.
+# Where to get
+I currently use the system on a Raspberry.PI3. It runs also on Windows and Mac, but I have only built a build system for the raspberry right now. If you need Automatica.Core for Windows/Mac just create an Issue.
 
-# For users
-Please go to the documentation [User Documentation](http://docu.automaticacore.com).
+## Raspberry.PI
+You can download the latest image [here...](https://automaticabinaries.blob.core.windows.net/automatica-pi-images/2018-12-21-Automatica.Core.Raspbian-lite.img)
 
-# For developers
-The main focus on writing Automatica.Core was an easy to use interface for both, users and developers. 
+# Screenshots
+![Configuration](/images/config.png) Configuration
 
-[more...](http://docu.automaticacore.com)
+![Logic-editor](/images/logic.png) Logic editor
+
+![Visualization](/images/visualization.png) Visualization
+
+
+# Documentation
+[Documentation...](http://docu.automaticacore.com)
 
 
 ... more to come ...
