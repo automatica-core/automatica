@@ -12,7 +12,13 @@ Automatica is a building management system thats runs on .NET Core and is built 
 I currently use the system on a Raspberry.PI3. It runs also on Windows and Mac, but I have only built a build system for the raspberry right now. If you need Automatica.Core for Windows/Mac just create an Issue.
 
 ## Raspberry.PI
-You can download the latest image [here...](https://automaticabinaries.blob.core.windows.net/automatica-pi-images/2018-12-21-Automatica.Core.Raspbian-lite.img)
+You can download the latest image [here...](https://github.com/automatica-core/automatica/releases)
+
+# Contribute
+Comming soon...
+
+# Online Demo
+Comming soo...
 
 # Screenshots
 ![Configuration](/images/config.png) Configuration
