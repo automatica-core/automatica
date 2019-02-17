@@ -8,12 +8,12 @@ Automatica.Core Front-End
 
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine.
 
-
 # Screenshots
-[config]: images/config.png "Configuration"
-[logic]: images/logic.png "Logic editor"
-[visualization]: images/visualization.png "Visualization"
+![Configuration](/images/config.png) Configuration
 
+![Logic-editor](/images/logic.png) Logic editor
+
+![Visualization](/images/visualization.png) Visualization
 
 
 # Documentation
