@@ -124,8 +124,10 @@ namespace Automatica.Core.Driver
                             {
                                 return;
                             }
-                            Enqueue(source, value);
-                            //driverNode.WriteValue(source, value);
+                            if (driverNode is DriverBase driverBase)
+                            {
+                                driverBase.Enqueue(source, value);
+                            }
                         });
 
                         ChildrensCreated += driverNode.ChildrensCreated;
