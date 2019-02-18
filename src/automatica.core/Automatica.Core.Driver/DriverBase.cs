@@ -274,7 +274,7 @@ namespace Automatica.Core.Driver
 
                     var writeData = _writeQueue.Dequeue();
 
-                    DriverContext.Logger.LogDebug($"Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
+                    DriverContext.Logger.LogDebug($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
                     await WriteValue(writeData.Item1, writeData.Item2);
                 }
