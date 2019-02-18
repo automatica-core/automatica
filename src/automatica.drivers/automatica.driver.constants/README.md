@@ -12,15 +12,15 @@ Automatica.Core.Constants driver is used to provide constant values as datapoint
  # How to use
  Constants can be added in the Virtual node.
 
- ![Constants1](/images/Screenshot_1.png)
+ ![Constants1](./images/Screenshot_1.png)
 
  After adding the Constants node you can add pre-defined constants or define your own constant.
 
- ![Constants2](/images/Screenshot_2.png)
+ ![Constants2](./images/Screenshot_2.png)
 
  After adding the Consant node you can define its value in the property grid on the left.
 
- ![Constants3](/images/Screenshot_3.png)
+ ![Constants3](./images/Screenshot_3.png)
 
 
 Save & reload your configuration and use your defined constants. Consants values will be dispatched every 10 second.

@@ -21,11 +21,11 @@ Comming soon...
 Comming soo...
 
 # Screenshots
-![Configuration](/images/config.png) Configuration
+![Configuration](./images/config.png) Configuration
 
-![Logic-editor](/images/logic.png) Logic editor
+![Logic-editor](./images/logic.png) Logic editor
 
-![Visualization](/images/visualization.png) Visualization
+![Visualization](./images/visualization.png) Visualization
 
 
 # Documentation
