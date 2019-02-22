@@ -1,1 +1,42 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"PluginGuid":"f8ecb72d-388f-46ec-b59f-c927fdb7eb30","Name":"P3.Driver.Loxone.Miniserver.DriverFactory","ComponentName":"Loxone","Type":"driver","Output":"P3.Driver.Loxone.Miniserver.DriverFactory.dll","Resources":[],"Dependencies":["PureWebSockets.dll","BouncyCastle.Crypto.dll","P3.Driver.Loxone.Miniserver.Driver.dll"],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+    "Automatica": {
+        "ProjectPage": "https://github.com/automatica-core/automatica.driver.loxone.miniserver",
+        "manifest-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "plugin-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "PluginGuid": "f8ecb72d-388f-46ec-b59f-c927fdb7eb30",
+        "Name": "P3.Driver.Loxone.Miniserver.DriverFactory",
+        "ComponentName": "Loxone",
+        "Type": "driver",
+        "Output": "P3.Driver.Loxone.Miniserver.DriverFactory.dll",
+        "Resources": [],
+        "Dependencies": [
+            "PureWebSockets.dll",
+            "BouncyCastle.Crypto.dll",
+            "P3.Driver.Loxone.Miniserver.Driver.dll"
+        ],
+        "MinCoreServerVersion": {
+            "Major": 0,
+            "Minor": 7,
+            "Build": 0,
+            "Revision": 244,
+            "MajorRevision": 0,
+            "MinorRevision": 244
+        },
+        "MandatoryLicenseFeatures": [],
+        "OptionalLicenseFeatures": []
+    }
+}

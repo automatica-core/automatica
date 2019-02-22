@@ -33,6 +33,8 @@ namespace Automatica.Core.Common.Update
 
         public List<string> Dependencies { get; set; }
 
+        public string ProjectPage { get; set; }
+
         [JsonProperty("MinCoreServerVersion")]
         public Version MinCoreServerVersion { get; set; }
 
