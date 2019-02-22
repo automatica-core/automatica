@@ -1,1 +1,38 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":5,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"PluginGuid":"4326f436-3b3b-42fc-9fc5-d5301b2fe8d3","Name":"P3.Driver.Automatica.Remote","ComponentName":"AutomaticaRemote","Type":"driver","Output":"P3.Driver.Automatica.Remote.dll","Resources":[],"Dependencies":[],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+    "Automatica": {
+        "ProjectPage": "https://github.com/automatica-core/automatica.driver.automatica.remote",
+        "manifest-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "plugin-version": {
+            "Major": 0,
+            "Minor": 5,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "PluginGuid": "4326f436-3b3b-42fc-9fc5-d5301b2fe8d3",
+        "Name": "P3.Driver.Automatica.Remote",
+        "ComponentName": "AutomaticaRemote",
+        "Type": "driver",
+        "Output": "P3.Driver.Automatica.Remote.dll",
+        "Resources": [],
+        "Dependencies": [],
+        "MinCoreServerVersion": {
+            "Major": 0,
+            "Minor": 7,
+            "Build": 0,
+            "Revision": 244,
+            "MajorRevision": 0,
+            "MinorRevision": 244
+        },
+        "MandatoryLicenseFeatures": [],
+        "OptionalLicenseFeatures": []
+    }
+}
