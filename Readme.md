@@ -29,7 +29,7 @@ Comming soo...
 
 
 # Documentation
-[Documentation...](http://docu.automaticacore.com)
+[Documentation...](https://docu.automaticacore.com)
 
 
 ... more to come ...
