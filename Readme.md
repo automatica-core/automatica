@@ -20,6 +20,42 @@ Comming soon...
 # Online Demo
 Comming soo...
 
+
+# Roadmap
+Things I want to implement in the near future - help is appreciated!
+
+## Core Features   
+* Automatica.Core Mobile
+* Alarms
+* Data Recording
+* Automatic editor - to generate time/trigger based actions
+* Scripting interface
+* Reporting
+* Metering    
+* ...
+
+## Cloud Features
+* Gateway to connect your server via the cloud
+* Backup
+* Insights (Repoting, ...)
+* ...
+
+## Drivers
+* KNX Weinzierl BAOS (Raspberry PI)
+* ZigBee
+* Z-Wave
+* Fronius Solar API
+* Sonos
+* MQTT
+* 1-Wire
+* Homematic
+* HTTP - JSON/XML
+* ...
+
+## Logics
+* P/PI/PID
+* ...
+
 # Screenshots
 ![Configuration](./images/config.png) Configuration
 
