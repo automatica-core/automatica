@@ -1,1 +1,38 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"PluginGuid":"f34f3dee-bad4-4d21-b66f-e987da08ff20","Name":"P3.Logic.Messenger","ComponentName":"Messenger","Type":"rule","Output":"P3.Logic.Messenger.dll","Resources":[],"Dependencies":[],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+    "Automatica": {
+        "ProjectPage": "https://github.com/automatica-core/automatica.logic.messenger",
+        "manifest-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "plugin-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "PluginGuid": "f34f3dee-bad4-4d21-b66f-e987da08ff20",
+        "Name": "P3.Logic.Messenger",
+        "ComponentName": "Messenger",
+        "Type": "rule",
+        "Output": "P3.Logic.Messenger.dll",
+        "Resources": [],
+        "Dependencies": [],
+        "MinCoreServerVersion": {
+            "Major": 0,
+            "Minor": 7,
+            "Build": 0,
+            "Revision": 244,
+            "MajorRevision": 0,
+            "MinorRevision": 244
+        },
+        "MandatoryLicenseFeatures": [],
+        "OptionalLicenseFeatures": []
+    }
+}

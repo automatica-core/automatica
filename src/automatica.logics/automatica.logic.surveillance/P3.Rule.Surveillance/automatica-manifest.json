@@ -1,1 +1,38 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"PluginGuid":"39b87ac5-6fcf-4f21-8bca-6f49e0dda33d","Name":"P3.Rule.Surveillance","ComponentName":"Surveillance","Type":"rule","Output":"P3.Rule.Surveillance.dll","Resources":[],"Dependencies":[],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+    "Automatica": {
+        "ProjectPage": "https://github.com/automatica-core/automatica.logic.surveilance",
+        "manifest-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "plugin-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "PluginGuid": "39b87ac5-6fcf-4f21-8bca-6f49e0dda33d",
+        "Name": "P3.Rule.Surveillance",
+        "ComponentName": "Surveillance",
+        "Type": "rule",
+        "Output": "P3.Rule.Surveillance.dll",
+        "Resources": [],
+        "Dependencies": [],
+        "MinCoreServerVersion": {
+            "Major": 0,
+            "Minor": 7,
+            "Build": 0,
+            "Revision": 244,
+            "MajorRevision": 0,
+            "MinorRevision": 244
+        },
+        "MandatoryLicenseFeatures": [],
+        "OptionalLicenseFeatures": []
+    }
+}

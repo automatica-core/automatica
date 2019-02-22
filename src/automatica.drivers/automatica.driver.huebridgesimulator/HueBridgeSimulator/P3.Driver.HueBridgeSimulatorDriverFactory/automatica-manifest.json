@@ -1,1 +1,41 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"PluginGuid":"6c319e0f-7c46-428a-81b9-269294197a3c","Name":"P3.Driver.HueBridgeSimulator.DriverFactory","ComponentName":"HueBridge","Type":"driver","Output":"P3.Driver.HueBridgeSimulator.DriverFactory.dll","Resources":[],"Dependencies":["P3.Driver.HueBridge.dll","Rssdp.dll"],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+    "Automatica": {
+        "ProjectPage": "https://github.com/automatica-core/automatica.driver.huebridgesimulator",
+        "manifest-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "plugin-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "PluginGuid": "6c319e0f-7c46-428a-81b9-269294197a3c",
+        "Name": "P3.Driver.HueBridgeSimulator.DriverFactory",
+        "ComponentName": "HueBridge",
+        "Type": "driver",
+        "Output": "P3.Driver.HueBridgeSimulator.DriverFactory.dll",
+        "Resources": [],
+        "Dependencies": [
+            "P3.Driver.HueBridge.dll",
+            "Rssdp.dll"
+        ],
+        "MinCoreServerVersion": {
+            "Major": 0,
+            "Minor": 7,
+            "Build": 0,
+            "Revision": 244,
+            "MajorRevision": 0,
+            "MinorRevision": 244
+        },
+        "MandatoryLicenseFeatures": [],
+        "OptionalLicenseFeatures": []
+    }
+}

@@ -1,1 +1,41 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"PluginGuid":"5d7ce818-83c5-47b8-a502-9bbf1603e844","Name":"P3.Rule.DigitalToAnalog","ComponentName":"DigitalToAnalog","Type":"rule","Output":"P3.Rule.DigitalToAnalog.dll","Resources":["Resources/DigitalToAnalog-de.json","Resources/DigitalToAnalog-en.json"],"Dependencies":[],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+    "Automatica": {
+        "ProjectPage": "https://github.com/automatica-core/automatica.logic.digitaltoanalog",
+        "manifest-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "plugin-version": {
+            "Major": 0,
+            "Minor": 1,
+            "Build": 0,
+            "Revision": 0,
+            "MajorRevision": 0,
+            "MinorRevision": 0
+        },
+        "PluginGuid": "5d7ce818-83c5-47b8-a502-9bbf1603e844",
+        "Name": "P3.Rule.DigitalToAnalog",
+        "ComponentName": "DigitalToAnalog",
+        "Type": "rule",
+        "Output": "P3.Rule.DigitalToAnalog.dll",
+        "Resources": [
+            "Resources/DigitalToAnalog-de.json",
+            "Resources/DigitalToAnalog-en.json"
+        ],
+        "Dependencies": [],
+        "MinCoreServerVersion": {
+            "Major": 0,
+            "Minor": 7,
+            "Build": 0,
+            "Revision": 244,
+            "MajorRevision": 0,
+            "MinorRevision": 244
+        },
+        "MandatoryLicenseFeatures": [],
+        "OptionalLicenseFeatures": []
+    }
+}
