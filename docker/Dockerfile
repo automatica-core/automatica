@@ -13,6 +13,7 @@ RUN git clone https://github.com/jcurl/serialportstream.git /src/serialportstrea
 RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
+ARG version
 
 FROM microsoft/dotnet:latest
 WORKDIR /app
