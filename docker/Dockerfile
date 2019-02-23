@@ -41,6 +41,7 @@ RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
 
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /app/automatica/appsettings.json
+RUN true
 COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
 RUN chmod 755 /src/docker/build-packages.sh
