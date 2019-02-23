@@ -23,9 +23,24 @@ namespace Automatica.Core.Bootloader
                     Directory.Delete(tmpPath, true);
                 }
 
-                Console.WriteLine($"Starting {appName}");
 
-                ProcessStartInfo processInfo = new ProcessStartInfo(appName);
+                ProcessStartInfo processInfo = null;
+                if (!File.Exists(appName))
+                {
+                    if(!File.Exists(appName+".dll"))
+                    {
+                        Console.Error.WriteLine($"Could not fine {appName} or {appName}.dll - exiting startup...");
+                        return;
+                    }
+                    //maybe we don't have built the app with correct environments? so start it with dotnet Automatica.Core.Watchdog dll
+                    Console.WriteLine($"Starting with dotnet {appName}.dll");
+                    processInfo = new ProcessStartInfo("dotnet", appName+".dll");
+                }
+                else
+                {
+                    processInfo = new ProcessStartInfo(appName);
+                }
+                Console.WriteLine($"Starting {appName}");
                 processInfo.WorkingDirectory = Environment.CurrentDirectory;
 
                 Process process = null;
