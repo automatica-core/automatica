@@ -460,11 +460,11 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogDebug("Searching instantiated drivers");
 
-            if(!_licenseContext.IsLicensed)
-            {
-                _logger.LogError("Can not configure drivers - license is invalid");
-                return;
-            }
+            //if(!_licenseContext.IsLicensed)
+            //{
+            //    _logger.LogError("Can not configure drivers - license is invalid");
+            //    return;
+            //}
             _configuredDrivers = 0;
 
             var root = _dbContext.NodeInstances.Single(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
