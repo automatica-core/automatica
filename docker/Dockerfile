@@ -13,8 +13,6 @@ RUN git clone https://github.com/jcurl/serialportstream.git /src/serialportstrea
 RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
-ARG version
-
 FROM microsoft/dotnet:latest
 WORKDIR /app
 
@@ -36,8 +34,6 @@ COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/li
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
 
-RUN ls -lah /usr/lib
-
 RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
 
@@ -46,6 +42,7 @@ RUN true
 COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
 RUN chmod 755 /src/docker/build-packages.sh
+RUN echo $version
 RUN /src/docker/build-packages.sh /src $version
 
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
