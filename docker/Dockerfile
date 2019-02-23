@@ -1,9 +1,6 @@
-ARG version
-
 #build libserialport
 FROM microsoft/dotnet:sdk AS libnserial
 WORKDIR /app
-ARG version
 
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install cmake build-essential
