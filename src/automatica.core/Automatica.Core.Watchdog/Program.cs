@@ -53,7 +53,22 @@ namespace Automatica.Core.Watchdog
                 File.Delete(Path.Combine(Path.GetTempPath(), ServerInfo.UpdateFileName));
             }
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(appName);
+            ProcessStartInfo processInfo;
+            if (!File.Exists(appName))
+            {
+                if (!File.Exists(appName + ".dll"))
+                {
+                    logger.LogError($"Could not fine {appName} or {appName}.dll - exiting startup...");
+                    return;
+                }
+                logger.LogInformation($"Starting with dotnet {appName}.dll");
+                processInfo = new ProcessStartInfo("dotnet", appName + ".dll");
+            }
+            else
+            {
+                processInfo = new ProcessStartInfo(appName);
+            }
+            
             processInfo.WorkingDirectory = Environment.CurrentDirectory;
 
             Process process = null;
