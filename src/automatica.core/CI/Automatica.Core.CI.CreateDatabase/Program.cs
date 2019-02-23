@@ -29,7 +29,7 @@ namespace Automatica.Core.CI.CreateDatabase
             Log.Logger.Information("Starting Automatica.Core.CI database tool");
 
             var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
                 .AddJsonFile("appsettings.json", true)
                 .Build();
 
