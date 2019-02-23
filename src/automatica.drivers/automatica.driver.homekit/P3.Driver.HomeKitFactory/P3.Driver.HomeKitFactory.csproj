@@ -6,7 +6,7 @@
     <Version>0.0.0.4</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win-x64\Drivers\HomeKit\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
@@ -21,7 +21,7 @@
     <EmbeddedResource Include="Resources\HomeKit-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.257" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit\P3.Driver.HomeKit.csproj" />
