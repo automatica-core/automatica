@@ -16,7 +16,9 @@ WORKDIR /app
 RUN apt-get update 
 RUN apt-get install zip -y
 
-ARG version
+ARG AUTOMATICA_VERSION
+ARG CLOUD_API_KEY
+ARG CLOUD_URL
 
 
 #install automatica-cli
@@ -30,17 +32,19 @@ COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/li
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
 
-#RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
-#RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
+RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
+RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
 
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /app/automatica/appsettings.json
 RUN true
 COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
-RUN echo $version
+RUN echo $AUTOMATICA_VERSION
 
-RUN chmod 755 /src/docker/automatica/build-packages.sh
-RUN /src/docker/automatica/build-packages.sh /src $version
+#RUN chmod 755 /src/docker/automatica/build-packages.sh
+#RUN /src/docker/automatica/build-packages.sh /src $version
+
+automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
