@@ -1,0 +1,18 @@
+version: '3'
+ 
+services:
+  app:
+    build:
+      context:  ../
+      dockerfile: docker/automatica/Dockerfile
+    expose:
+      - "5000"
+ 
+  proxy:
+    build:
+      context:  ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links:
+      - app
