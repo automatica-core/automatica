@@ -27,6 +27,9 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 # Copy everything else and build
 COPY . /src
 
+COPY ./docker/nginx-automatica-config "/etc/nginx/sites-available/automatica-app"
+RUN ln -s "/etc/nginx/sites-available/automatica-app" /etc/nginx/sites-enabled/automatica-app
+
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
