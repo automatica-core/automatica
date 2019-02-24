@@ -15,7 +15,6 @@ WORKDIR /app
 
 RUN apt-get update 
 RUN apt-get install zip -y
-RUN apt-get install nginx -y
 
 ARG version
 
@@ -27,23 +26,21 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 # Copy everything else and build
 COPY . /src
 
-COPY ./docker/nginx-automatica-config "/etc/nginx/sites-available/automatica-app"
-RUN ln -s "/etc/nginx/sites-available/automatica-app" /etc/nginx/sites-enabled/automatica-app
-
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
 
-RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
-RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
+#RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
+#RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
 
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /app/automatica/appsettings.json
 RUN true
 COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
-RUN chmod 755 /src/docker/build-packages.sh
 RUN echo $version
-RUN /src/docker/build-packages.sh /src $version
+
+RUN chmod 755 /src/docker/automatica/build-packages.sh
+RUN /src/docker/automatica/build-packages.sh /src $version
 
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
@@ -52,6 +49,8 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
+
+EXPOSE 5001
 
 # Build runtime image
 ENTRYPOINT ["dotnet", "/app/automatica.bootloader/Automatica.Core.Bootloader.dll"]
