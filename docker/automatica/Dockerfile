@@ -44,7 +44,7 @@ RUN echo $AUTOMATICA_VERSION
 #RUN chmod 755 /src/docker/automatica/build-packages.sh
 #RUN /src/docker/automatica/build-packages.sh /src $version
 
-automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
