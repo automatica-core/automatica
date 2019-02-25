@@ -16,6 +16,12 @@ WORKDIR /app
 RUN apt-get update 
 RUN apt-get install zip -y
 
+RUN apt-get update && \
+    apt-get install -y wget && \
+    apt-get install -y gnupg2 && \
+    wget -qO- https://deb.nodesource.com/setup_6.x | bash - && \
+    apt-get install -y build-essential nodejs
+
 ARG AUTOMATICA_VERSION
 ARG CLOUD_API_KEY
 ARG CLOUD_URL
@@ -50,6 +56,9 @@ RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
 
 RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
+
+RUN npm build /src/automatica.core/Automatica.WebNew
+RUN cp -avr /src/automatica.core/Automatica.Core/wwwroot /app/automatica/wwwroot
 
 RUN rm -rf /src
 RUN rm -rf /tmp/db 

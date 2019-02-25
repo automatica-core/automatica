@@ -6,7 +6,7 @@ services:
       context:  ../
       dockerfile: docker/automatica/Dockerfile
     expose:
-      - "5000"
+      - "5001"
  
   proxy:
     build:
