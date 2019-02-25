@@ -5,9 +5,6 @@ events { worker_connections 1024; }
 http {
     sendfile on;
  
-    upstream app_servers {
-        server app:5000;
-    }
 	server {
 		listen 80;
 		location / {
