@@ -10,23 +10,33 @@ RUN git clone https://github.com/jcurl/serialportstream.git /src/serialportstrea
 RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
+
+FROM node:8.11.2-alpine as node
+WORKDIR /src
+
+ARG FONTAWESOME_TOKEN
+
+
+# Copy everything else and build
+COPY ./src/automatica.core/Automatica.WebNew /src
+
+RUN ls -lah /src
+RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/ 
+RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN 
+
+RUN npm install
+RUN npm run build-docker
+
+
 FROM microsoft/dotnet:latest
 WORKDIR /app
 
 RUN apt-get update 
 RUN apt-get install zip -y
 
-RUN apt-get update && \
-    apt-get install -y wget && \
-    apt-get install -y gnupg2 && \
-    wget -qO- https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y build-essential nodejs
-
 ARG AUTOMATICA_VERSION
 ARG CLOUD_API_KEY
 ARG CLOUD_URL
-ARG FONTAWESOME_TOKEN
-
 
 #install automatica-cli
 RUN dotnet tool install --global automatica-cli
@@ -38,6 +48,9 @@ COPY . /src
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
+
+
+COPY --from=node /src/dist /apt/automatica/wwwroot
 
 RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
@@ -55,12 +68,6 @@ COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.
 
 RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 
-RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/ /src/src/automatica.core/Automatica.WebNew
-RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN /src/src/automatica.core/Automatica.WebNew
-
-RUN npm install /src/src/automatica.core/Automatica.WebNew
-RUN npm build /src/src/automatica.core/Automatica.WebNew
-RUN cp -avr /src/src/automatica.core/Automatica.Core/wwwroot /app/automatica/wwwroot
 
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
