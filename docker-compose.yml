@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+   nginx:
+    image: automaticacore/automaticacore_proxy:latest
+    restart: always
+   automatica:
+    image: automaticacore/automaticacore_app:latest
+    restart: always
+    depends_on:
+      - nginx
