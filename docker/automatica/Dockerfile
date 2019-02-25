@@ -50,7 +50,7 @@ COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/li
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
 
 
-COPY --from=node /src/dist /apt/automatica/wwwroot
+COPY --from=node /src/dist /app/automatica/wwwroot
 
 RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
