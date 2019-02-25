@@ -9,7 +9,7 @@ services:
     links:
       - automatica
    automatica:
-    image: automaticacore/automaticacore_app:latest
+    image: automaticacore/automaticacore:latest
     restart: always
     ports:
       - "5001"
