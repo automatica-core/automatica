@@ -1,6 +1,12 @@
 version: '3.3'
 
 services:
+   automatica:
+    image: automaticacore/automaticacore:latest
+    restart: always
+    ports:
+      - "5001:5001"
+      
    nginx:
     image: automaticacore/automaticacore_proxy:latest
     restart: always
@@ -8,8 +14,3 @@ services:
       - "80:80"
     links:
       - automatica
-   automatica:
-    image: automaticacore/automaticacore:latest
-    restart: always
-    ports:
-      - "5001"
