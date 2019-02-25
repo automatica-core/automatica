@@ -25,6 +25,7 @@ RUN apt-get update && \
 ARG AUTOMATICA_VERSION
 ARG CLOUD_API_KEY
 ARG CLOUD_URL
+ARG FONTAWESOME_TOKEN
 
 
 #install automatica-cli
@@ -47,9 +48,6 @@ COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
 RUN echo $AUTOMATICA_VERSION
 
-#RUN chmod 755 /src/docker/automatica/build-packages.sh
-#RUN /src/docker/automatica/build-packages.sh /src $version
-
 RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
@@ -57,6 +55,10 @@ COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.
 
 RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 
+RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/ /src/src/automatica.core/Automatica.WebNew
+RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN /src/src/automatica.core/Automatica.WebNew
+
+RUN npm install /src/src/automatica.core/Automatica.WebNew
 RUN npm build /src/src/automatica.core/Automatica.WebNew
 RUN cp -avr /src/src/automatica.core/Automatica.Core/wwwroot /app/automatica/wwwroot
 
