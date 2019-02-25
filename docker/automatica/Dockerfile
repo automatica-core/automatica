@@ -61,9 +61,9 @@ COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
 RUN echo $AUTOMATICA_VERSION
 
+RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
-RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
 
 RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
