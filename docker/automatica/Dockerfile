@@ -57,8 +57,8 @@ COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.
 
 RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 
-RUN npm build /src/automatica.core/Automatica.WebNew
-RUN cp -avr /src/automatica.core/Automatica.Core/wwwroot /app/automatica/wwwroot
+RUN npm build /src/src/automatica.core/Automatica.WebNew
+RUN cp -avr /src/src/automatica.core/Automatica.Core/wwwroot /app/automatica/wwwroot
 
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
