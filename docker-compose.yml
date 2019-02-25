@@ -4,8 +4,12 @@ services:
    nginx:
     image: automaticacore/automaticacore_proxy:latest
     restart: always
+    ports:
+      - "80:80"
+    links:
+      - automatica
    automatica:
     image: automaticacore/automaticacore_app:latest
     restart: always
-    depends_on:
-      - nginx
+    ports:
+      - "5001"
