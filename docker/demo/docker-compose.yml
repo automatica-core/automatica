@@ -10,7 +10,7 @@ services:
       - "5000:5000"
  
   nginx:
-    image: automaticacore/automaticacore_proxy:latest
+    image: automaticacore/automaticacore_proxy:develop-latest
     restart: always
     ports:
       - "80:80"
