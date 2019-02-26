@@ -72,7 +72,8 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
 
-EXPOSE 5001
+EXPOSE 5001/tcp	
+EXPOSE 5000/tcp 
 
 # Build runtime image
 ENTRYPOINT ["dotnet", "/app/automatica.bootloader/Automatica.Core.Bootloader.dll"]
