@@ -28,6 +28,28 @@ There is also a automaticacore_proxy image which represents an nginx reverse pro
 
 The automaticacore_demo is just for demonstration purpose - also for the online demo! 
 
+## Run in a docker image
+To just play around with automatica.core use this docker-compose configuration.
+
+~~~~
+version: '3.3'
+
+services:
+   automatica:
+    image: automaticacore/automaticacore:develop-latest
+    restart: always
+    ports:
+      - "5001:5001"
+      
+   nginx:
+    image: automaticacore/automaticacore_proxy:develop-latest
+    restart: always
+    ports:
+      - "80:80"
+    links:
+      - automatica
+~~~~
+
 # Roadmap
 Things I want to implement in the near future - help is appreciated!
 
