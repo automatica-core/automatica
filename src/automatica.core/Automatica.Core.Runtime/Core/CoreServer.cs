@@ -538,6 +538,8 @@ namespace Automatica.Core.Runtime.Core
 
                 var driverLoadingPath = Path.Combine(path, "Drivers");
 
+                _logger.LogInformation($"Searching for drivers in {driverLoadingPath}");
+
                 foreach(var plugin in _dbContext.Plugins)
                 {
                     plugin.Loaded = false;
@@ -564,8 +566,8 @@ namespace Automatica.Core.Runtime.Core
 
             try
             {
-                var ruleLoadingPath = Path.Combine(path, "Rules"); 
-
+                var ruleLoadingPath = Path.Combine(path, "Rules");
+                _logger.LogInformation($"Searching for logics in {ruleLoadingPath}");
                 foreach (var rule in RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode))
                 {
                     try
