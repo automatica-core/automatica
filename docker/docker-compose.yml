@@ -1,0 +1,22 @@
+version: '3'
+ 
+services:
+  automatica:
+    build:
+      context:  ../
+      dockerfile: docker/automatica/Dockerfile
+    ports:
+      - "5001:5001"
+      - "5000:5000"
+ 
+  proxy:
+    build:
+      context:  ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links:
+      - automatica
+      
+      
+      

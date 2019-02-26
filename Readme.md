@@ -18,8 +18,45 @@ You can download the latest image & binaries [here...](https://github.com/automa
 Comming soon...
 
 # Online Demo
-Comming soo...
+The online demo is available [here...](https://automatica-demo.azurewebsites.net/).
+The demo will be reseted daily! So now worry - try everything you want.
 
+~~~
+https://automatica-demo.azurewebsites.net
+
+Login
+User: sa
+Password: sa
+~~~
+
+# Docker Images
+Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
+
+There is also a automaticacore_proxy image which represents an nginx reverse proxy.
+
+The automaticacore_demo is just for demonstration purpose - also for the online demo! 
+
+## Run in a docker image
+To just play around with automatica.core use this docker-compose configuration.
+
+~~~~
+version: '3.3'
+
+services:
+   automatica:
+    image: automaticacore/automaticacore:develop-latest
+    restart: always
+    ports:
+      - "5001:5001"
+      
+   nginx:
+    image: automaticacore/automaticacore_proxy:develop-latest
+    restart: always
+    ports:
+      - "80:80"
+    links:
+      - automatica
+~~~~
 
 # Roadmap
 Things I want to implement in the near future - help is appreciated!
@@ -68,5 +105,5 @@ Things I want to implement in the near future - help is appreciated!
 [Documentation...](https://docu.automaticacore.com)
 
 
-... more to come ...
+... more to come - stay tuned ...
 
