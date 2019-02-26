@@ -21,6 +21,14 @@ Comming soon...
 The online demo is available [here...](https://automatica-demo.azurewebsites.net/).
 The demo will be reseted daily! So now worry - try everything you want.
 
+~~~
+https://automatica-demo.azurewebsites.net
+
+Login
+User: sa
+Password: sa
+~~~
+
 # Docker Images
 Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
 

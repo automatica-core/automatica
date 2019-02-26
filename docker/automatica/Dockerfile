@@ -49,7 +49,6 @@ COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/li
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1 /usr/lib
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so /usr/lib
 
-
 COPY --from=node /src/dist /app/automatica/wwwroot
 
 RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
@@ -63,6 +62,9 @@ RUN echo $AUTOMATICA_VERSION
 
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+
+#RUN chmod 755 /src/docker/automatica/build-packages.sh
+#RUN /src/docker/automatica/build-packages.sh /src $version
 
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
 
