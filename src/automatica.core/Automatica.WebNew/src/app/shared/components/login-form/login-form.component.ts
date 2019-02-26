@@ -13,17 +13,18 @@ import { AppService } from "src/app/services/app.service";
 export class LoginFormComponent implements OnInit {
     login = "";
     password = "";
+    isLoading = true;
 
     constructor(private loginService: LoginService, private router: Router, private appService: AppService) {
         localStorage.removeItem("jwt");
     }
 
     ngOnInit() {
-        this.appService.isLoading = false;
+        this.isLoading = false;
     }
 
     async onLoginClick(args) {
-        this.appService.isLoading = true;
+        this.isLoading = true;
         if (!args.validationGroup.validate().isValid) {
             return;
         }
@@ -38,7 +39,7 @@ export class LoginFormComponent implements OnInit {
 
         }
 
-        this.appService.isLoading = false;
+        this.isLoading = false;
     }
 }
 
