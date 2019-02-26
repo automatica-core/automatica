@@ -1,10 +1,14 @@
+ARG BRANCH
+
 FROM microsoft/dotnet:latest AS database
 WORKDIR /app
 
 COPY ./ /app
 RUN ls /app/*
 
-FROM automaticacore/automaticacore AS automatica
+ARG BRANCH
+
+FROM automaticacore/automaticacore:$BRANCH-latest AS automatica
 WORKDIR /app
 
 RUN cat /app/automatica/appsettings.json
