@@ -52,8 +52,9 @@ This project is a mono repository. The master & develop branch will be splitted 
 The Structure of the project is as follows.
 
     .
+    ├── automatica.build/        # Some build tools for the project (submodule repo)
     ├── bin/                     # Bin tools for splitting the repo
-    ├── build/                   # Some build tools for the project (alternatively `doc`)
+    ├── build/                   # Some build tools for the project 
     ├── docker/                  # Docker build files
     ├── images/                  # Image files displayed in the readme.md
     ├── src/                     # Source files
