@@ -1,31 +1,30 @@
 ﻿# Drivers
 
-* [KNX](drivers/knx/index.md)
-* ModBus
+* [KNX](knx/index.md)
+* [ModBus](modbus/index.md)
     * Master/Slave
     * TCP/UDP
-* EnOcean
+* [EnOcean](enocean/index.md)
     * Via a usb interface
-* MBus
+* [MBus](mbus/index.md)
     * TCP
     * Serial (Serial PWM converter)
-* OMS 
+* [OMS](mbus/index.md) 
     * Powermeter (eg. Siemens TD3511)
-* Loxone
+* [Loxone Miniserver](loxone/index.md)
     * WebSocket
-* OpenWeatherMap
+* [OpenWeatherMap](openweathermap/index.md)
     * Used to get local weather data
-* Automatica.Remote
+* [Automatica.Remote](automatica-remote/index.md)
     * To connect different Automatica.Core.Servers as slaves managed by one master
-* WakeOnLan
-* Times
+* [WakeOnLan](wakeonlan/index.md)
+* [Times](times/index.md)
     * Get date & time in different parts
-* Sun
+* [Sun](times/index.md)
     * Get calculated data of the sun (eg. sunrise, sunset, impulse on sunset - sunrise,...)
-* Machine flags
+* [Machine flags](machineflags/index.md)
     * Store any value from anywhere
-* Constants
+* [Constants](constants/index.md)
     * Define constants used anywhere or use a preset of constants (eg. PI, PI*2, PI/2,...)
-* HueBridge Simulator
+* [HueBridge Simulator](huebridge/index.md)
     * Configure Automatica.Core.Server to simulate a hue bridge and use it in different other automation system (eq. Amazon Alexa, Logitech Harmony,..)
-* Many more to come...

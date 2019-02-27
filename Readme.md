@@ -1,18 +1,46 @@
 # Automatica.Core
 
-Automatica.Core Server
+## Build status
+### Backend ###
 [![Build Status Core](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.core?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=12&branchName=develop)
 
-Automatica.Core Front-End
+### Frontend ###
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine. Try it as your smart home hub today.
 
+# Table of contents
+* [Automatica.Core](#automatica.core)
+   * [Build status](#build-status)
+      * [Backend](#backend)
+      * [Frontend](#frontend)
+* [Table of contents](#table-of-contents)
+* [Where to get](#where-to-get)
+   * [Raspberry.PI](#raspberry-pi)
+* [Implemented drivers/logics](#Implemented-drivers/logics)
+   * [Drivers](#drivers)   
+   * [Logics](#logics)
+* [Project structure](#project-structure)
+* [How to build](#how-to-build)
+   * [Frontend](#frontend)
+   * [Backend](#backend)
+* [Contribute](#contribute)
+* [Online Demo](#online-demo)
+* [Docker images](#docker-images)
+   * [Run in a docker image](#run-in-a-docker-image)
+* [Roadmap](#roadmap)
+   * [Roadmap core](#roadmap-core)   
+   * [Roadmap cloud](#roadmap-cloud)   
+   * [Roadmap drivers](#roadmap-drivers)   
+   * [Roadmap logics](#roadmap-logics)   
+* [Screenshots](#screenshots)
+* [Documentation](#documentation)
+
 # Where to get
 I currently use the system on a Raspberry.PI3. It runs also on Windows and Mac, but I have only built a build system for the raspberry right now. If you need Automatica.Core for Windows/Mac just create an Issue.
 
-## Raspberry.PI
-You can download the latest image & binaries [here...](https://github.com/automatica-core/automatica/releases)
+## Raspberry PI
+You can download the latest image & binaries [here](https://github.com/automatica-core/automatica/releases)
 
 # Implemented drivers/logics
 At the moment the following drivers & logics are implemented and ready to use, also all the drivers & logics bellow will be shipped by default.
@@ -56,6 +84,7 @@ The Structure of the project is as follows.
     ├── bin/                     # Bin tools for splitting the repo
     ├── build/                   # Some build tools for the project 
     ├── docker/                  # Docker build files
+    ├── documentation/           # docfx documentation source
     ├── images/                  # Image files displayed in the readme.md
     ├── src/                     # Source files
     |   ├── automatica.core      # The core system for automatica.core
@@ -85,7 +114,7 @@ dotnet build
 
 or open the src/automatica.core/automatica.core.sln with Visual Studio an hit F5.
 
-You can download the latest plugins with the automatica-cli. More [here...](https://github.com/automatica-core/automatica.core.cli) 
+You can download the latest plugins with the automatica-cli. More [here](https://github.com/automatica-core/automatica.core.cli) 
 
 
 # Contribute
@@ -103,7 +132,7 @@ Any help is appreciated!
 
 
 # Online Demo
-The online demo is available [here...](https://demo.automaticacore.com/).
+The online demo is available [here](https://demo.automaticacore.com/).
 The demo will be reseted daily! So now worry - try everything you want.
 
 ~~~
@@ -114,7 +143,7 @@ User: sa
 Password: sa
 ~~~
 
-# Docker Images
+# Docker images
 Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
 
 There is also a automaticacore_proxy image which represents an nginx reverse proxy.
@@ -146,7 +175,7 @@ services:
 # Roadmap
 Things I want to implement in the near future - help is appreciated!
 
-## Core Features   
+## Roadmap core   
 * Automatica.Core Mobile
 * Alarms
 * Data Recording
@@ -161,13 +190,13 @@ Things I want to implement in the near future - help is appreciated!
   * The building should know when are people at home and maybe in which room, therefore the building can detect automatically some enhancements for the configuration and be so more energy efficient.     
 * ...
 
-## Cloud Features
+## Roadmap cloud
 * Gateway to connect your server via the cloud
 * Backup
 * Insights (Repoting, ...)
 * ...
 
-## Drivers
+## Roadmap Drivers
 * KNX Weinzierl BAOS (Raspberry PI)
 * ZigBee
 * Z-Wave
@@ -179,7 +208,7 @@ Things I want to implement in the near future - help is appreciated!
 * HTTP - JSON/XML
 * ...
 
-## Logics
+## Roadmap Logics
 * P/PI/PID
 * ...
 
@@ -192,8 +221,5 @@ Things I want to implement in the near future - help is appreciated!
 
 
 # Documentation
-[Documentation...](https://docu.automaticacore.com)
-
-
-... more to come - stay tuned ...
+[Documentation](https://docu.automaticacore.com)
 
