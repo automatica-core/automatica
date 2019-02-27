@@ -25,13 +25,13 @@ Date/Time provides date and time in different formats.
 ## How to use
 Times can be added in the Virtual node.
 
-![DT1](./images/Screenshot_1.png)
+![DT1](https://github.com/automatica-core/automatica.driver.times/blob/master/images/Screenshot_1.png?raw=true)
 
-![DT2](./images/Screenshot_2.png)
+![DT2](https://github.com/automatica-core/automatica.driver.times/blob/master/images/Screenshot_2.png?raw=true)
 
 After adding the Date/Time node, you can see all the nodes which the driver provides for you. 
 Date/Time values are provides in local-time. The used timezone should be configured in your system.
-![DT3](./images/Screenshot_3.png)
+![DT3](https://github.com/automatica-core/automatica.driver.times/blob/master/images/Screenshot_3.png?raw=true)
 
 
 # Sun
@@ -54,9 +54,9 @@ Sun provides calculated data of the sun angle, sunrise & sunset.
 
 ## How to use
 
-![SUN4](./images/Screenshot_4.png)
+![SUN4](https://github.com/automatica-core/automatica.driver.times/blob/master/images/Screenshot_4.png?raw=true)
 
-![SUN5](./images/Screenshot_5.png)
+![SUN5](https://github.com/automatica-core/automatica.driver.times/blob/master/images/Screenshot_5.png?raw=true)
   
 
 Save & reload your configuration and use date/time in your Automatica.Core Server.  

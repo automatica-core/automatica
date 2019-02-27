@@ -1,10 +1,11 @@
 ﻿# Logics
 
-* [Math](logic/math/index.md)
+* [Math](math/index.md)
     * Base math operations
-* [Logic](logic/logic/index.md)
+* [Logic](logic/index.md)
     * Base logic operations
-* [Time](logic/time/index.md)
+* [Time](time/index.md)
     * Time based rules (Delayed off, delayed on,....)
 * Surveillance (pre-pre-pre-alpha)
-* [Compare](logic/compare/index.md)
+* [Compare](compare/index.md)
+* [Messenger](messenger/index.md)

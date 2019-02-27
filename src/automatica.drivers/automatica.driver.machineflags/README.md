@@ -10,14 +10,14 @@ If you want to save a value in a "variable" you can use the MachineFlags driver.
  # How to use
  MachineFlags can be added in the Virtual node.
 
- ![Flags1](./images/Screenshot_1.png)
+ ![Flags1](https://github.com/automatica-core/automatica.driver.machineflags/blob/master/images/Screenshot_1.png?raw=true)
 
  After adding the MachineFlags node you can add your flag nodes.
 
- ![Flags2](./images/Screenshot_2.png)
+ ![Flags2](https://github.com/automatica-core/automatica.driver.machineflags/blob/master/images/Screenshot_2.png?raw=true)
 
  After adding a Flag node you can set some values in the property grid on the left.
 
- ![Flags3](./images/Screenshot_3.png)
+ ![Flags3](https://github.com/automatica-core/automatica.driver.machineflags/blob/master/images/Screenshot_3.png?raw=true)
 
 Save & reload your configuration and use your defined flag. 

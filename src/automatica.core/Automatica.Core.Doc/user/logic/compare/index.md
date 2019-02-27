@@ -1,10 +1,1 @@
-# Automatica Math Logics
-Automatica.Core supports a couple of compare operations.
-
-## Logics
-* Bigger
-* BiggerOrEqual
-* Equal
-* Smaller
-* SmallerOrEqual
-* Unequal
+[!include[KNX](../../../../../automatica.logics/automatica.logic.compare.baseoperations/README.md)]   

@@ -1,11 +1,34 @@
 - name: Introduction
   href: intro.md
 
-- name: CLI
-  href: automatica-cli.md
+- name: Frontend
+  items:
+    - name: Introduction
+      href: frontend/intro.md
 
-- name: Drivers
-  href: drivers.md
+    - name: Architecture
+      href: frontend/architecture.md
 
-- name: Logics
-  href: logics.md
+    - name: Development
+      href: frontend/development.md
+
+- name: Backend
+  items:
+  - name: Introduction
+    href: backend/intro.md
+
+  - name: Architecture
+    href: backend/architecture.md
+
+  - name: Development
+    href: backend/development.md
+
+  - name: CLI
+    href: backend/automatica-cli.md
+
+  - name: Drivers
+    href: backend/drivers/drivers.md 
+
+  - name: Logics
+    href: backend/logics/logics.md
+    
