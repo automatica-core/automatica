@@ -7,5 +7,5 @@
 - name: Drivers
   href: drivers.md
 
-- name: Rules
-  href: rules.md
+- name: Logics
+  href: logics.md

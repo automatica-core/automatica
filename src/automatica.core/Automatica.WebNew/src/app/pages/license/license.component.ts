@@ -28,7 +28,7 @@ export class LicenseComponent extends BaseComponent implements OnInit {
   constructor(private licenseService: LicenseService, appService: AppService, translate: TranslationService, notify: NotifyService) {
     super(notify, translate);
 
-    appService.setAppTitle("LICENESE.NAME");
+    appService.setAppTitle("LICENSE.NAME");
 
     this.menuItems.push(this.menuSave);
     this.menuSave.label = translate.translate("COMMON.SAVE");
