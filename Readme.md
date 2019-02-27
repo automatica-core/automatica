@@ -14,8 +14,92 @@ I currently use the system on a Raspberry.PI3. It runs also on Windows and Mac, 
 ## Raspberry.PI
 You can download the latest image & binaries [here...](https://github.com/automatica-core/automatica/releases)
 
+# Implemented drivers/logics
+At the moment the following drivers & logics are implemented and ready to use, also all the drivers & logics bellow will be shipped by default.
+
+## Drivers
+* [Automatica.Remote](./automatica.driver.automatica.remote)
+* [Constants](./automatica.driver.constants)
+* [EnOcean](./automatica.driver.enocean)
+* [FroniusSymo](./automatica.driver.froniussymo)
+* [Apple HomeKit](./automatica.driver.homekit)
+* [Hue Bridge Simulator](./automatica.driver.huebridgesimulator)
+* [Ikea Tradfri](./automatica.driver.ikeatradfri)
+* [KNX](./automatica.driver.knx)
+* [Loxone Miniserver](./automatica.driver.loxone.miniserver)
+* [MachineFlags](./automatica.driver.machineflags)
+* [MBus](./automatica.driver.mbus)
+* [ModBus](./automatica.driver.modbus)
+* [OpenWeatherMap](./automatica.driver.openweathermap.driver)
+* [Times](./automatica.driver.times)
+* [WakeOnLan](./automatica.driver.wakeonlan)
+* [ZWave](./automatica.driver.zwave)
+
+## Logics
+* [Compare](./automatica.logic.compare.baseoperations)
+* [DigitalToAnalog](./automatica.logic.digitaltoanalog)
+* [EnOcean](./automatica.logic.enocean)
+* [Logic](./automatica.logic.logic.baseoperations)
+* [Math](./automatica.logic.math.basicoperations)
+* [Messenger](./automatica.logic.messenger)
+* [Surveillance](./automatica.logic.surveillance)
+* [Time](./automatica.logic.time)
+
+
+# Project structure
+This project is a mono repository. The master & develop branch will be splitted nightly.
+
+The Structure of the project is as follows.
+
+    .
+    ├── bin/                     # Bin tools for splitting the repo
+    ├── build/                   # Some build tools for the project (alternatively `doc`)
+    ├── docker/                  # Docker build files
+    ├── images/                  # Image files displayed in the readme.md
+    ├── src/                     # Source files
+    |   ├── automatica.core      # The core system for automatica.core
+    |   ├── automatica.drivers   # Automatica drivers - split repository
+    |   ├── automatica.logics    # Automatica logics - split repository
+    ├── LICENSE
+    └── README.md
+
+# How to build
+Make sure that you have built the frontend first.
+
+## Frontend
+~~~
+cd src/automatica.core/Automatica.WebNew
+npm install
+npm run start
+
+The angular dist folder is in src/automatica.core/Automatica.Core/wwwroot
+~~~
+
+## Backend
+~~~
+cd src/automatica.core
+dotnet restore
+dotnet build
+~~~
+
+or open the src/automatica.core/automatica.core.sln with Visual Studio an hit F5.
+
+You can download the latest plugins with the automatica-cli. More [here...](https://github.com/automatica-core/automatica.core.cli) 
+
+
 # Contribute
-Comming soon...
+Please refer to each project's style and contribution guidelines for submitting patches and additions. In general, we follow the "fork-and-pull" Git workflow.
+
+ 1. **Fork** the repo on GitHub
+ 2. **Clone** the project to your own machine
+ 3. **Commit** changes to your own branch
+ 4. **Push** your work back up to your fork
+ 5. Submit a **Pull request** so that we can review your changes
+
+NOTE: Be sure to merge the latest from "upstream" before making a pull request! Pull request must have no merge conflicts!
+
+Any help is appreciated!
+
 
 # Online Demo
 The online demo is available [here...](https://demo.automaticacore.com/).
