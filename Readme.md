@@ -14,7 +14,7 @@ I currently use the system on a Raspberry.PI3. It runs also on Windows and Mac, 
 ## Raspberry.PI
 You can download the latest image & binaries [here...](https://github.com/automatica-core/automatica/releases)
 
-# Implemnted drivers/logics
+# Implemented drivers/logics
 At the moment the following drivers & logics are implemented and ready to use, also all the drivers & logics bellow will be shipped by default.
 
 ## Drivers
