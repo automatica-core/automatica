@@ -37,10 +37,6 @@ export const navigation = [
         path: "telegram-monitor",
         icon: "tv"
     }, {
-        text: "COMMON.LICENSE",
-        path: "license",
-        icon: "folder"
-    }, {
         text: "COMMON.SYSTEM",
         path: "system",
         icon: "folder"
@@ -49,3 +45,9 @@ export const navigation = [
         path: "plugins",
         icon: "folder"
     }];
+
+    /*{
+        text: "COMMON.LICENSE",
+        path: "license",
+        icon: "folder"
+    } */
