@@ -65,10 +65,15 @@ Things I want to implement in the near future - help is appreciated!
 * Automatica.Core Mobile
 * Alarms
 * Data Recording
+  * Record data for reporting, AI,....
 * Automatic editor - to generate time/trigger based actions
+   * Simulate movement in the building when you are on vacation,etc...
 * Scripting interface
 * Reporting
-* Metering    
+* Metering
+   * Generate reports about your energy consumption and calculate the costs for your building/level/room,....
+* AI - Machine Learning
+  * The building should know when are people at home and maybe in which room, therefore the building can detect automatically some enhancements for the configuration and be so more energy efficient.     
 * ...
 
 ## Cloud Features
