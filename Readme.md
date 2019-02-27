@@ -18,11 +18,11 @@ You can download the latest image & binaries [here...](https://github.com/automa
 Comming soon...
 
 # Online Demo
-The online demo is available [here...](https://automatica-demo.azurewebsites.net/).
+The online demo is available [here...](https://demo.automaticacore.com/).
 The demo will be reseted daily! So now worry - try everything you want.
 
 ~~~
-https://automatica-demo.azurewebsites.net
+https://demo.automaticacore.com/
 
 Login
 User: sa
