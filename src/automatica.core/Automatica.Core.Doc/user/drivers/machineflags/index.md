@@ -1,0 +1,1 @@
+[!include[KNX](../../../../../automatica.drivers/automatica.driver.machineflags/README.md)]   

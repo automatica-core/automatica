@@ -28,17 +28,17 @@ OpenWeatherMap provides data from the OpenWeatherMap api.
  # How to use
 OpenWeatherMap can be added in the Virtual node.
 
- ![OWM1](./images/Screenshot_1.png)
+ ![OWM1](https://github.com/automatica-core/automatica.driver.openweathermap.driver/blob/master/images/Screenshot_1.png?raw=true)
 
- ![OWM2](./images/Screenshot_2.png)
+ ![OWM2](https://github.com/automatica-core/automatica.driver.openweathermap.driver/blob/master/images/Screenshot_2.png?raw=true)
 
  After adding the OpenWeatherMap node, you can see all the nodes which the driver provides for you. 
 
- ![OWM3](./images/Screenshot_3.png)
+ ![OWM3](https://github.com/automatica-core/automatica.driver.openweathermap.driver/blob/master/images/Screenshot_3.png?raw=true)
 
 You need to set an OpenWeatherMap api key to use the driver ([see here...](https://openweathermap.org/appid)).
 
- ![OWM4](./images/Screenshot_4.png)
+ ![OWM4](https://github.com/automatica-core/automatica.driver.openweathermap.driver/blob/master/images/Screenshot_4.png?raw=true)
  OpenWeatherMap uses the Latitude & Longitude settings provided from the settings. You can change your global settings if you click on the root node and change the value in the property grid to the left.
 
 
