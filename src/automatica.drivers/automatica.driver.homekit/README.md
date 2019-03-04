@@ -16,11 +16,11 @@ Several services are supported right now:
 HomeKit can be added in the Virtual node.
 
 
- ![Homekit1](./images/Screenshot_1.png)
+ ![Homekit1](https://github.com/automatica-core/automatica.driver.homekit/blob/master/images/Screenshot_1.png?raw=true)
 
  After adding the Apple HomeKit node you can add the implemented Apple HomeKit Services.
 
- ![Homekit2](./images/Screenshot_2.png)
+ ![Homekit2](https://github.com/automatica-core/automatica.driver.homekit/blob/master/images/Screenshot_2.png?raw=true)
 
 After adding your services and saving/reloading the config in your automatica.core server - the server will generate a code. This is used to connect your Apple HomeKit enabled device with your automatica.core server.
 

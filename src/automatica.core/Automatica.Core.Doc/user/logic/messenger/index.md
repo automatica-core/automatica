@@ -1,0 +1,1 @@
+[!include[KNX](../../../../../automatica.logics/automatica.logic.messenger/README.md)]
