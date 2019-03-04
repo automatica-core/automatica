@@ -10,22 +10,11 @@
             "**/Automatica.Core.Rule.csproj",
             "**/Automatica.Core.UnitTests.Base.csproj"
           ],
-          "src": "src/automatica.core/"
+          "src": "../"
         }
       ],
       "dest": "api",
       "filter": "filterConfig.yml"
-    },
-    {
-      "src": [
-        {
-          "files": [
-            "**/*.md"
-          ],
-          "src": "src/automatica.drivers/"
-        }
-      ],
-      "dest": "user/drivers"
     }
   ],
   "build": {
