@@ -6,6 +6,10 @@
   href: api/
   homepage: api/index.md
 
-- name: End-User Documentation
+- name: User Documentation
   href: user/
   homepage: user/intro.md
+
+- name: How-To
+  href: how-to/
+  homepage: how-to/intro.md

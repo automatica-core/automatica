@@ -1,6 +1,6 @@
 # End-User Documentation
 # How does Automatica.Core works?
-Automatica.Core works like a charm. But see more at [How-To](tutorials/index.md) 
+Just try it out! You can find some usefull use-cases in the [How-To](~/how-to/intro.md) section!
 
 ## Login
 The default credentials are
@@ -16,7 +16,7 @@ I would recommend to change this after the first login!
 There is a enormous set of prebuilt drivers and rules.
 
 ### Drivers
-[Drivers](drivers)
+[Drivers](drivers/index.md)
 
-### Rules
-[Rules](rules)
+### Logics
+[Logics](logic/index.md)

@@ -84,6 +84,7 @@ The Structure of the project is as follows.
     ├── bin/                     # Bin tools for splitting the repo
     ├── build/                   # Some build tools for the project 
     ├── docker/                  # Docker build files
+    ├── documentation/           # docfx documentation source
     ├── images/                  # Image files displayed in the readme.md
     ├── src/                     # Source files
     |   ├── automatica.core      # The core system for automatica.core

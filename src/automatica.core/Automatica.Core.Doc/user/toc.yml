@@ -1,26 +1,8 @@
 - name: Introduction
   href: intro.md
 
-- name: Drivers
-  items:
-  - name: KNX
-    href: drivers/knx/index.md
-
-- name: Logics
-  items:
-  - name: Math
-    href: logic/math/index.md
-  - name: Logic
-    href: logic/logic/index.md
-  - name: Time
-    href: logic/time/index.md
-  - name: Compare
-    href: logic/compare/index.md
-
-- name: HowTo
-  href: tutorials/index.md
-
 - name: Pages
+  href: pages/intro.md
   items:
     - name: Dashboard
       href: pages/dashboard.md
@@ -40,9 +22,56 @@
       href: pages/groups.md
     - name: Telegram Monitor
       href: pages/telegramMonitor.md
-    - name: License
-      href: pages/license.md
     - name: System
       href: pages/system.md
     - name: Extensions
       href: pages/extensions.md
+
+      
+- name: Drivers
+  href: drivers/index.md
+  items:
+  - name: KNX
+    href: drivers/knx/index.md
+  - name: Constants
+    href: drivers/constants/index.md
+  - name: Automatica Remote
+    href: drivers/automatica-remote/index.md
+  - name: EnOcean
+    href: drivers/enocean/index.md
+  - name: Fronius Symo
+    href: drivers/froniussymo/index.md
+  - name: Apple HomeKit
+    href: drivers/homekit/index.md
+  - name: Hue Bridge
+    href: drivers/huebridge/index.md
+  - name: Ikea Tradfri
+    href: drivers/ikeatradfri/index.md
+  - name: Loxone Miniserver
+    href: drivers/loxone/index.md
+  - name: Machine Flags
+    href: drivers/machineflags/index.md
+  - name: MBus
+    href: drivers/mbus/index.md
+  - name: ModBus
+    href: drivers/modbus/index.md
+  - name: Open Weather Map
+    href: drivers/openweathermap/index.md
+  - name: Times/Sun
+    href: drivers/times/index.md
+  - name: Wake on Lan
+    href: drivers/wakeonlan/index.md
+  - name: Z-Wave
+    href: drivers/zwave/index.md
+
+- name: Logics
+  href: logic/index.md
+  items:
+  - name: Math
+    href: logic/math/index.md
+  - name: Logic
+    href: logic/logic/index.md
+  - name: Time
+    href: logic/time/index.md
+  - name: Compare
+    href: logic/compare/index.md
