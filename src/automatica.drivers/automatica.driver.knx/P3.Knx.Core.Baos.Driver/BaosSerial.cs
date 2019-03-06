@@ -14,6 +14,8 @@ namespace P3.Knx.Core.Baos.Driver
         private readonly string _port;
         private SerialPortStream _stream;
         private bool _connected;
+        
+        private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
 
         public ILogger Logger { get; }
 
@@ -35,6 +37,7 @@ namespace P3.Knx.Core.Baos.Driver
                 _stream = new SerialPortStream(_port, 19200, 8, Parity.None,
                     StopBits.One);
 
+                _stream.DataReceived += _stream_DataReceived;
                 _stream.Open();
                 _connected = true;
 
@@ -48,9 +51,20 @@ namespace P3.Knx.Core.Baos.Driver
             return true;
         }
 
+        private async void _stream_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            var frame = await ReadFrameInternal();
+
+            if(frame != null)
+            {
+                Logger.LogTrace($"New frame received....");
+                Logger.LogHexIn(frame.ToByteFrame());
+            }
+        }
 
         private async Task<BaosFrame> ReadFrameInternal()
         {
+            await _waitSemaphore.WaitAsync();
             try
             {
                 int firstChar = _stream.ReadByte();
@@ -138,6 +152,10 @@ namespace P3.Knx.Core.Baos.Driver
             catch (Exception e)
             {
                 Logger.LogError($"Could not read frame {e}", e);
+            }
+            finally
+            {
+                _waitSemaphore.Release();
             }
             return null;
         }

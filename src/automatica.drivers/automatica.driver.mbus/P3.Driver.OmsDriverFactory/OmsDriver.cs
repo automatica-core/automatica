@@ -55,7 +55,7 @@ namespace P3.Driver.OmsDriverFactory
 
             if (!mbus)
             {
-                return Task.Factory.StartNew(() => false);
+                return Task.FromResult(false);
             }
 
             _timer.Start();

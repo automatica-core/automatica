@@ -57,10 +57,10 @@ namespace P3.Knx.Core.Baos.Driver
             if (FrameType == BaosFrameType.ShortFrame)
             {
                 byte[] data = new byte[4];
-                data[0] = BaosFrame.ShortFrameStart;
+                data[0] = ShortFrameStart;
                 data[1] = ControlField;
                 data[2] = CalculateChecksum();
-                data[3] = BaosFrame.FrameEndByte;
+                data[3] = FrameEndByte;
 
                 return data;
             }
@@ -68,15 +68,15 @@ namespace P3.Knx.Core.Baos.Driver
             {
                 byte[] data = new byte[7 + UserData.Length];
 
-                data[0] = BaosFrame.ControlFrameLongFrameStart;
+                data[0] = ControlFrameLongFrameStart;
                 data[1] = Convert.ToByte(3 + UserData.Length);
                 data[2] = Convert.ToByte(3 + UserData.Length);
-                data[3] = BaosFrame.ControlFrameLongFrameStart;
+                data[3] = ControlFrameLongFrameStart;
                 data[4] = ControlField;
                 Array.Copy(UserData.Span.ToArray(), 0, data, 5, UserData.Length);
 
                 data[7 + UserData.Length] = CalculateChecksum();
-                data[8 + UserData.Length] = BaosFrame.FrameEndByte;
+                data[8 + UserData.Length] = FrameEndByte;
                 return data;
 
             }

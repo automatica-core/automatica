@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28124.53
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28701.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Knx.DriverFactory", "P3.Driver.Knx.DriverFactory\P3.Driver.Knx.DriverFactory.csproj", "{4AC5C115-5709-475D-97CB-2ECFC1F3636D}"
 EndProject
@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Knx.Tests", "Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Knx.Core.Console", "Tests\P3.Knx.Core.Console\P3.Knx.Core.Console.csproj", "{459CEF01-B996-439F-96C7-45FBEB3ADE6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Knx.Core.Baos.Driver", "P3.Knx.Core.Baos.Driver\P3.Knx.Core.Baos.Driver.csproj", "{6161EB8C-4732-49C0-B629-A90635F733A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Knx.Core.Baos.Driver", "P3.Knx.Core.Baos.Driver\P3.Knx.Core.Baos.Driver.csproj", "{6161EB8C-4732-49C0-B629-A90635F733A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BB13B1D0-2882-43BB-9575-EE137C3A48F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Knx.Core.Baos.Console", "P3.Knx.Core.Baos.Console\P3.Knx.Core.Baos.Console.csproj", "{0DB5429A-F485-44E7-BC34-A6501014499C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,9 +62,20 @@ Global
 		{6161EB8C-4732-49C0-B629-A90635F733A5}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{6161EB8C-4732-49C0-B629-A90635F733A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6161EB8C-4732-49C0-B629-A90635F733A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB5429A-F485-44E7-BC34-A6501014499C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB5429A-F485-44E7-BC34-A6501014499C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB5429A-F485-44E7-BC34-A6501014499C}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB5429A-F485-44E7-BC34-A6501014499C}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{0DB5429A-F485-44E7-BC34-A6501014499C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB5429A-F485-44E7-BC34-A6501014499C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F1763E39-4D0D-4B08-84CE-7AD7B242DA57} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
+		{459CEF01-B996-439F-96C7-45FBEB3ADE6B} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
+		{0DB5429A-F485-44E7-BC34-A6501014499C} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8AC487B5-995F-43E4-B26E-3DBD97DFAA45}
