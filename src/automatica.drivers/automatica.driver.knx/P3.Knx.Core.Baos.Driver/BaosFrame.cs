@@ -75,8 +75,8 @@ namespace P3.Knx.Core.Baos.Driver
                 data[4] = ControlField;
                 Array.Copy(UserData.Span.ToArray(), 0, data, 5, UserData.Length);
 
-                data[7 + UserData.Length] = CalculateChecksum();
-                data[8 + UserData.Length] = FrameEndByte;
+                data[5 + UserData.Length] = CalculateChecksum();
+                data[6 + UserData.Length] = FrameEndByte;
                 return data;
 
             }

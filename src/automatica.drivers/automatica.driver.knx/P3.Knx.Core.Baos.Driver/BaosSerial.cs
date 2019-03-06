@@ -34,11 +34,12 @@ namespace P3.Knx.Core.Baos.Driver
         {
             try
             {
-                _stream = new SerialPortStream(_port, 19200, 8, Parity.None,
+                _stream = new SerialPortStream(_port, 19200, 8, Parity.Even,
                     StopBits.One);
 
                 _stream.DataReceived += _stream_DataReceived;
                 _stream.Open();
+                Logger.LogDebug($"Opneing serial interface {_port} 19200 8e1");
                 _connected = true;
 
             }
@@ -55,7 +56,7 @@ namespace P3.Knx.Core.Baos.Driver
         {
             var frame = await ReadFrameInternal();
 
-            if(frame != null)
+            if (frame != null)
             {
                 Logger.LogTrace($"New frame received....");
                 Logger.LogHexIn(frame.ToByteFrame());
@@ -69,6 +70,7 @@ namespace P3.Knx.Core.Baos.Driver
             {
                 int firstChar = _stream.ReadByte();
 
+                Logger.LogDebug($"First char is {firstChar}");
                 if (firstChar == BaosFrame.ShortFrameStart)
                 {
                     Logger.LogDebug("Start parsing short frame...");
@@ -136,7 +138,7 @@ namespace P3.Knx.Core.Baos.Driver
                             Logger.LogDebug("Invalid stop byte...");
                             return null; //invalid stop byte
                         }
-
+                        Logger.LogDebug($"Long frame in...");
                         return BaosFrame.FromSpan(BaosFrameType.LongFrame, Logger, headerBuffer.AsSpan(), dataMemory.Span);
                     }
                 }
