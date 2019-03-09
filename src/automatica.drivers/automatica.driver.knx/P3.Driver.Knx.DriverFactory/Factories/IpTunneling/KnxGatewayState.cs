@@ -1,6 +1,6 @@
 ﻿using Automatica.Core.Driver;
 
-namespace P3.Driver.Knx.DriverFactory
+namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
     public class KnxGatewayState : DriverBase
     {

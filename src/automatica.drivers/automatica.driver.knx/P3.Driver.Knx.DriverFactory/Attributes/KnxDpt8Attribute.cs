@@ -1,13 +1,14 @@
 ﻿using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
+using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.Driver;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt8Attribute : KnxGroupAddress
     {
-        public KnxDpt8Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxDpt8Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 

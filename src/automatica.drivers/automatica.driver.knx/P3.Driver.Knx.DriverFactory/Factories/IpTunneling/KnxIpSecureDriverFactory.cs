@@ -2,7 +2,7 @@
 //using Automatica.Core.Base.Templates;
 //using Automatica.Core.Driver;
 
-//namespace P3.Driver.Knx.DriverFactory
+//namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 //{
 //    public class KnxIpSecureDriverFactory : Automatica.Core.Driver.DriverFactory
 //    {
@@ -16,7 +16,7 @@
 
 //        public override void InitNodeTemplates(INodeTemplateFactory factory)
 //        {
-            
+
 //        }
 
 //        public override IDriver CreateDriver(IDriverContext config)

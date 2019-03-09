@@ -10,15 +10,16 @@ using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using Automatica.Core.Driver.Utility.Network;
 using P3.Knx.Core.Driver;
 using P3.Knx.Core.Driver.Tunneling;
+using P3.Knx.Core.Abstractions;
 
-namespace P3.Driver.Knx.DriverFactory
+namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
     public enum KnxLevel
     {
         ThreeLevel,
         TwoLevel
     }
-    public class KnxDriver : DriverBase
+    public class KnxDriver : DriverBase, IKnxDriver
     {
         private readonly bool _secureDriver;
         private readonly KnxLevel _level;
@@ -31,8 +32,6 @@ namespace P3.Driver.Knx.DriverFactory
 
 
         private readonly Dictionary<string, List<Action<KnxDatagram>>> _callbackMap = new Dictionary<string, List<Action<KnxDatagram>>>();
-
-        public KnxConnection Tunneling => _tunneling;
 
         public KnxDriver(IDriverContext driverContext, bool secureDriver, KnxLevel level=KnxLevel.ThreeLevel) : base(driverContext)
         {
@@ -84,11 +83,6 @@ namespace P3.Driver.Knx.DriverFactory
                 return false;
             }
             return true;
-        }
-
-        internal void Read(KnxGroupAddress ga)
-        {
-            _tunneling.Read(ga.GroupAddress);
         }
 
         public override Task<bool> Start()
@@ -191,6 +185,24 @@ namespace P3.Driver.Knx.DriverFactory
             }
 
             return null;
+        }
+
+        public void AddAddressNotifier(string address, Action<object> callback)
+        {
+            AddGroupAddress(address, callback);
+        }
+
+        public Task<bool> Read(string address)
+        {
+            _tunneling.Read(address);
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> Write(string address, ReadOnlyMemory<byte> data)
+        {
+            _tunneling.Write(address, data.ToArray());
+
+            return Task.FromResult(true);
         }
     }
 }

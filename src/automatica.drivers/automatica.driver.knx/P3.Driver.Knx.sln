@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Knx.Core.Baos.Driver", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BB13B1D0-2882-43BB-9575-EE137C3A48F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Knx.Core.Baos.Console", "P3.Knx.Core.Baos.Console\P3.Knx.Core.Baos.Console.csproj", "{0DB5429A-F485-44E7-BC34-A6501014499C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Knx.Core.Baos.Console", "P3.Knx.Core.Baos.Console\P3.Knx.Core.Baos.Console.csproj", "{0DB5429A-F485-44E7-BC34-A6501014499C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Knx.Core.Baos.Tests", "Tests\P3.Knx.Core.Baos.Tests\P3.Knx.Core.Baos.Tests.csproj", "{19CC19F3-F2A9-4BE3-8E76-715B31537F35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Knx.Core.Abstractions", "P3.Knx.Core.Abstractions\P3.Knx.Core.Abstractions.csproj", "{47A1690A-EF41-432A-A806-8BD86498A954}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +72,18 @@ Global
 		{0DB5429A-F485-44E7-BC34-A6501014499C}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{0DB5429A-F485-44E7-BC34-A6501014499C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DB5429A-F485-44E7-BC34-A6501014499C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A1690A-EF41-432A-A806-8BD86498A954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A1690A-EF41-432A-A806-8BD86498A954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A1690A-EF41-432A-A806-8BD86498A954}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A1690A-EF41-432A-A806-8BD86498A954}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{47A1690A-EF41-432A-A806-8BD86498A954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A1690A-EF41-432A-A806-8BD86498A954}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +92,7 @@ Global
 		{F1763E39-4D0D-4B08-84CE-7AD7B242DA57} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
 		{459CEF01-B996-439F-96C7-45FBEB3ADE6B} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
 		{0DB5429A-F485-44E7-BC34-A6501014499C} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
+		{19CC19F3-F2A9-4BE3-8E76-715B31537F35} = {BB13B1D0-2882-43BB-9575-EE137C3A48F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8AC487B5-995F-43E4-B26E-3DBD97DFAA45}

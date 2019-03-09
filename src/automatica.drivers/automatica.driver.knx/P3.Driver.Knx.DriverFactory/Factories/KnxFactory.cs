@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Base.Templates;
-using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using P3.Knx.Core.Driver;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
@@ -10,12 +9,10 @@ using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 [assembly: InternalsVisibleTo("P3.Driver.Knx.Tests")]
 
 
-namespace P3.Driver.Knx.DriverFactory
+namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
-    public class KnxIpDriverFactory : Automatica.Core.Driver.DriverFactory
+    public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override string DriverName => "P3.Driver.Knx";
-        public override Guid DriverGuid => KnxGatway;
         public override Version DriverVersion => new Version(0, 6, 1, 16);
 
         // interfaces
@@ -27,6 +24,7 @@ namespace P3.Driver.Knx.DriverFactory
 
         //node types
         internal static readonly Guid KnxGatway = new Guid("5754edc3-6eb5-4d77-91c8-278e4e6c8f96");
+        internal static readonly Guid KnxBaos = new Guid("569d4454-7973-4780-8b46-b3f3ae4c5733");
         internal static readonly Guid KnxSecureGatway = new Guid("ee218537-9b35-4e10-b929-418748dc1728");
 
         //state
@@ -59,24 +57,28 @@ namespace P3.Driver.Knx.DriverFactory
                 "knx-use-nat", PropertyTemplateType.Bool, KnxGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
                 3);
 
-      /*      factory.CreateNodeTemplate(KnxSecureGatway, "KNX.SECURE_GATEWAY.NAME", "KNX.SECURE_GATEWAY.DESCRIPTION", "knx-secure-gw",
-                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), KnxInterface, false, false, true, false, true,
-                NodeDataType.NoAttribute, int.MaxValue, false);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 1), "COMMON.PROPERTY.IP.NAME", "COMMON.PROPERTY.IP.DESCRIPTION",
-                "knx-ip", PropertyTemplateType.Ip, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
-                1);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 2), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION",
-                "knx-port", PropertyTemplateType.Range, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), "3671", 1,
-                2);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 3), "KNX.PROPERTIES.SECURE.MGMPW.NAME", "KNX.PROPERTIES.SECURE.MGMPW.DESCRIPTION",
-                "knx-mgm-pw", PropertyTemplateType.Text, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
-                3);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 4), "KNX.PROPERTIES.SECURE.AUTHPW.NAME", "KNX.PROPERTIES.SECURE.AUTHPW.DESCRIPTION",
-                "knx-auth-pw", PropertyTemplateType.Text, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
-                4);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 5), "COMMON.PROPERTY.USE_NAT.NAME", "COMMON.PROPERTY.USE_NAT.DESCRIPTION",
-                "knx-use-nat", PropertyTemplateType.Bool, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
-                5);*/
+            /*      factory.CreateNodeTemplate(KnxSecureGatway, "KNX.SECURE_GATEWAY.NAME", "KNX.SECURE_GATEWAY.DESCRIPTION", "knx-secure-gw",
+                      GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), KnxInterface, false, false, true, false, true,
+                      NodeDataType.NoAttribute, int.MaxValue, false);
+                  factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 1), "COMMON.PROPERTY.IP.NAME", "COMMON.PROPERTY.IP.DESCRIPTION",
+                      "knx-ip", PropertyTemplateType.Ip, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+                      1);
+                  factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 2), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION",
+                      "knx-port", PropertyTemplateType.Range, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), "3671", 1,
+                      2);
+                  factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 3), "KNX.PROPERTIES.SECURE.MGMPW.NAME", "KNX.PROPERTIES.SECURE.MGMPW.DESCRIPTION",
+                      "knx-mgm-pw", PropertyTemplateType.Text, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+                      3);
+                  factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 4), "KNX.PROPERTIES.SECURE.AUTHPW.NAME", "KNX.PROPERTIES.SECURE.AUTHPW.DESCRIPTION",
+                      "knx-auth-pw", PropertyTemplateType.Text, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+                      4);
+                  factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 5), "COMMON.PROPERTY.USE_NAT.NAME", "COMMON.PROPERTY.USE_NAT.DESCRIPTION",
+                      "knx-use-nat", PropertyTemplateType.Bool, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
+                      5);*/
+
+            factory.CreateNodeTemplate(KnxBaos, "KNX.BAOS.NAME", "KNX.BAOS.DESCRIPTION", 
+                "knx-baos", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Virtual), KnxInterface3LevelMiddle, false, false, true, false, true, 
+                NodeDataType.NoAttribute, 1, false);
    
             factory.CreateNodeTemplate(KnxGatwayStatus, "KNX.GW_STATUS.NAME", "KNX.GW_STATUS.DESCRITPION",
                 "knx-gw-state", KnxInterface, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
@@ -337,12 +339,6 @@ namespace P3.Driver.Knx.DriverFactory
             gu[gu.Length - 1] = (byte)(Convert.ToInt32(gu[gu.Length - 1]) + c);
 
             return new Guid(gu);
-        }
-
-
-        public override IDriver CreateDriver(IDriverContext config)
-        {
-            return new KnxDriver(config, false);
         }
     }
 }

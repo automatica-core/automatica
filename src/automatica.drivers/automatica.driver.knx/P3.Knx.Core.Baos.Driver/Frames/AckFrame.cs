@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Logging;
-
-namespace P3.Knx.Core.Baos.Driver.Frames
+﻿namespace P3.Knx.Core.Baos.Driver.Frames
 {
-    public class AckFrame : BaosFrame { 
-    
-  
+    public class AckFrame : BaosFrame
+    {
+
+        public AckFrame()
+        {
+            FrameType = BaosFrameType.SingleChar;
+        }
     }
 }

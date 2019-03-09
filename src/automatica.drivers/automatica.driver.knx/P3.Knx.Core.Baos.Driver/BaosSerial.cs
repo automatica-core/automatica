@@ -14,13 +14,17 @@ namespace P3.Knx.Core.Baos.Driver
         private readonly string _port;
         private SerialPortStream _stream;
         private bool _connected;
-        
+        private bool _eventHandling = true;
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
 
+        public IDatapointInd Driver { get; }
         public ILogger Logger { get; }
 
-        public BaosSerial(string port, ILogger logger)
+        internal static bool ControlValueIndicator { get; private set; }
+
+        public BaosSerial(IDatapointInd driver, string port, ILogger logger)
         {
+            Driver = driver;
             _port = port;
             Logger = logger;
         }
@@ -30,12 +34,43 @@ namespace P3.Knx.Core.Baos.Driver
             return Task.CompletedTask;
         }
 
+
+        internal async Task WriteFrame(BaosFrame frame)
+        {
+            await _waitSemaphore.WaitAsync();
+
+            try
+            {
+                _stream.DiscardOutBuffer();
+                var buffer = frame.ToByteFrame();
+                Logger.LogHexOut(buffer);
+                await _stream.WriteAsync(buffer);
+
+                if (frame is AckFrame)
+                {
+                    return;
+                }
+
+                ControlValueIndicator = !ControlValueIndicator;
+            }
+            catch (Exception e)
+            {
+                Logger.LogError($"Could not write frame {e}", e);
+            }
+            finally
+            {
+                _waitSemaphore.Release();
+            }
+        }
+
         public bool Open()
         {
             try
             {
                 _stream = new SerialPortStream(_port, 19200, 8, Parity.Even,
                     StopBits.One);
+
+                _stream.ReadTimeout = 500;
 
                 _stream.DataReceived += _stream_DataReceived;
                 _stream.Open();
@@ -52,28 +87,75 @@ namespace P3.Knx.Core.Baos.Driver
             return true;
         }
 
+        internal async Task SendAck()
+        {
+            await WriteFrame(new AckFrame());
+        }
+
+        internal async Task<BaosFrame> SendResetFrame()
+        {
+            await WriteFrame(ShortFrame.CreateResetFrame());
+            ControlValueIndicator = true;
+            return await ReadFrame();
+        }
+
+        internal void DisableEventHandler()
+        {
+            _eventHandling = false;
+        }
+
+        internal void EnableEventHandler()
+        {
+            _eventHandling = true;
+        }
+
         private async void _stream_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            var frame = await ReadFrameInternal();
+            if (!_eventHandling)
+            {
+                return;
+            }
+
+            var frame = await ReadFrame();
 
             if (frame != null)
             {
-                Logger.LogTrace($"New frame received....");
+
+                if (frame is LongFrame longFrame)
+                {
+                    if (frame.UserData.ToArray()[1] == 0xC1 || frame.UserData.ToArray()[1] == 0x85)
+                    {
+                        Logger.LogDebug($"DatapointValue.Ind");
+
+                        var data = BaosDriver.ParseDatapointValues(longFrame);
+                        await Driver.DatapointInd(data);
+                    }
+                }
+                else if (frame is ShortFrame)
+                {
+                    await SendResetFrame();
+                }
+
+                Logger.LogDebug($"End read frame from event handler...{frame.GetType()}");
                 Logger.LogHexIn(frame.ToByteFrame());
+            }
+            else
+            {
+                Logger.LogDebug($"End read frame from event handler...");
             }
         }
 
-        private async Task<BaosFrame> ReadFrameInternal()
+        internal async Task<BaosFrame> ReadFrame()
         {
             await _waitSemaphore.WaitAsync();
             try
             {
                 int firstChar = _stream.ReadByte();
 
-                Logger.LogDebug($"First char is {firstChar}");
+                // Logger.LogDebug($"First char is {firstChar}");
                 if (firstChar == BaosFrame.ShortFrameStart)
                 {
-                    Logger.LogDebug("Start parsing short frame...");
+                    // Logger.LogDebug("Start parsing short frame...");
                     Thread.Sleep(100);
                     byte[] shortFrame = new byte[5];
                     shortFrame[0] = (byte)firstChar;
@@ -84,8 +166,6 @@ namespace P3.Knx.Core.Baos.Driver
                         Logger.LogDebug($"Could not parse short frame (read bytes {bytesRead}/4)");
                         return null;
                     }
-
-                    Logger.LogDebug("Short frame in...");
                     Logger.LogHexIn(shortFrame);
 
                     var frame = BaosFrame.FromByteArray(BaosFrameType.ShortFrame, Logger, shortFrame);
@@ -94,13 +174,13 @@ namespace P3.Knx.Core.Baos.Driver
                 }
                 if (firstChar == BaosFrame.SingleCharFrame)
                 {
-                    Logger.LogDebug("Ack frame in...");
+                    Logger.LogHexIn(new byte[] { (byte)firstChar });
                     return new AckFrame();
                 }
 
                 if (firstChar == BaosFrame.ControlFrameLongFrameStart)
                 {
-                    Logger.LogDebug("Start parsing long frame...");
+                    //    Logger.LogDebug("Start parsing long frame...");
                     Thread.Sleep(200);
 
                     byte[] headerBuffer = new byte[4];
@@ -138,7 +218,7 @@ namespace P3.Knx.Core.Baos.Driver
                             Logger.LogDebug("Invalid stop byte...");
                             return null; //invalid stop byte
                         }
-                        Logger.LogDebug($"Long frame in...");
+
                         return BaosFrame.FromSpan(BaosFrameType.LongFrame, Logger, headerBuffer.AsSpan(), dataMemory.Span);
                     }
                 }

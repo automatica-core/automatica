@@ -30,6 +30,21 @@ namespace P3.Knx.Core.Baos.Driver
 
         public ReadOnlyMemory<byte> RawData { get; protected set; }
 
+        private static object _lock = new object();
+
+        internal static BaosFrame Create(in byte[] data)
+        {
+            lock (_lock)
+            {
+                var frame = FrameFactory.CreateFrame(BaosFrameType.LongFrame);
+                frame.UserData = data;
+
+                frame.ControlField = BaosSerial.ControlValueIndicator ? (byte)0x73 : (byte)0x53;
+
+                return frame;
+            }
+        }
+
         protected virtual void FromByteArray(in byte[] frame, ILogger logger)
         {
             Span<byte> spanFrame = frame;
@@ -69,8 +84,8 @@ namespace P3.Knx.Core.Baos.Driver
                 byte[] data = new byte[7 + UserData.Length];
 
                 data[0] = ControlFrameLongFrameStart;
-                data[1] = Convert.ToByte(3 + UserData.Length);
-                data[2] = Convert.ToByte(3 + UserData.Length);
+                data[1] = Convert.ToByte(1 + UserData.Length);
+                data[2] = Convert.ToByte(1 + UserData.Length);
                 data[3] = ControlFrameLongFrameStart;
                 data[4] = ControlField;
                 Array.Copy(UserData.Span.ToArray(), 0, data, 5, UserData.Length);
@@ -80,7 +95,11 @@ namespace P3.Knx.Core.Baos.Driver
                 return data;
 
             }
-
+            else if(FrameType == BaosFrameType.SingleChar)
+            {
+                byte[] data = { 0xE5 };
+                return data;
+            }
             return RawData;
         }
 

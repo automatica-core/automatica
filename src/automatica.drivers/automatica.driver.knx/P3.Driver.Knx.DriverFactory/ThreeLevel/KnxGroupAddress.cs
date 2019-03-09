@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.DPT;
 using P3.Knx.Core.Driver;
 
@@ -10,7 +11,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
         public string DptTypeString { get; private set; }
-        protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
+        protected KnxGroupAddress(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
         {
 
         }
@@ -29,7 +30,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             DptTypeString = GetDptString(DptType);
 
-            Driver.AddGroupAddress(GroupAddress, TelegramReceivedCallback);
+            Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
             return true;
         }
 
@@ -50,13 +51,13 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public override Task<bool> Read()
+        public override async Task<bool> Read()
         {
             if (DriverContext.NodeInstance.IsReadable)
             {
-                   Driver.Read(this);
+                return await Driver.Read(GroupAddress);
             }
-            return Task.FromResult(true);
+            return false;
         }
 
         internal override void ConnectionEstablished()
@@ -72,9 +73,12 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return DptTranslator.Instance.ToDataPoint(DptTypeString, value);
         }
 
-        private void TelegramReceivedCallback(KnxDatagram knxDatagram)
+        private void TelegramReceivedCallback(object data)
         {
-            ConvertFromBus(knxDatagram);
+            if (data is KnxDatagram knxDatagram)
+            {
+                ConvertFromBus(knxDatagram);
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
