@@ -1,1 +1,37 @@
-{"Automatica":{"manifest-version":{"Major":0,"Minor":1,"Build":0,"Revision":0,"MajorRevision":0,"MinorRevision":0},"plugin-version":{"Major":0,"Minor":5,"Build":0,"Revision":1,"MajorRevision":0,"MinorRevision":1},"PluginGuid":"f5184b86-b048-487f-be93-f3d9e5e4a3bd","Name":"P3.Driver.Knx.DriverFactory","ComponentName":"knx","Type":"driver","Output":"P3.Driver.Knx.DriverFactory.dll","Resources":[],"Dependencies":["P3.Knx.Core.Driver.dll","P3.Knx.Core.Ets.dll"],"MinCoreServerVersion":{"Major":0,"Minor":7,"Build":0,"Revision":244,"MajorRevision":0,"MinorRevision":244},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":["knx-ets-import"]}}
+{
+	"Automatica": {
+		"manifest-version": {
+			"Major": 0,
+			"Minor": 1,
+			"Build": 0,
+			"Revision": 0,
+			"MajorRevision": 0,
+			"MinorRevision": 0
+		},
+		"plugin-version": {
+			"Major": 0,
+			"Minor": 5,
+			"Build": 0,
+			"Revision": 1,
+			"MajorRevision": 0,
+			"MinorRevision": 1
+		},
+		"PluginGuid": "f5184b86-b048-487f-be93-f3d9e5e4a3bd",
+		"Name": "P3.Driver.Knx.DriverFactory",
+		"ComponentName": "knx",
+		"Type": "driver",
+		"Output": "P3.Driver.Knx.DriverFactory.dll",
+		"Resources": [],
+		"Dependencies": ["P3.Knx.Core.Driver.dll", "P3.Knx.Core.Ets.dll", "P3.Knx.Core.Baos.Driver"],
+		"MinCoreServerVersion": {
+			"Major": 0,
+			"Minor": 7,
+			"Build": 0,
+			"Revision": 244,
+			"MajorRevision": 0,
+			"MinorRevision": 244
+		},
+		"MandatoryLicenseFeatures": [],
+		"OptionalLicenseFeatures": ["knx-ets-import"]
+	}
+}
