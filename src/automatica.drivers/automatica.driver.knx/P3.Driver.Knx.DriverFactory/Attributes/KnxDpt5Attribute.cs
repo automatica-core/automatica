@@ -4,6 +4,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
+using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.Driver;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
@@ -12,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     {
         private int _value;
 
-        public KnxDpt5Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxDpt5Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
@@ -25,7 +26,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 DispatchValue(newValue);
                 _value = newValue;
 
-                Tunneling.Write(GroupAddress, ConvertToBus(newValue));
+                Driver.Write(GroupAddress, ConvertToBus(newValue));
             }
 
             return Task.CompletedTask;

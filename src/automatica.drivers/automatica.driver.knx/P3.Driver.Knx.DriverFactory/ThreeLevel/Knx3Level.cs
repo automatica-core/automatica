@@ -5,17 +5,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Exceptions;
+using P3.Knx.Core.Abstractions;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
     public class Knx3Level: DriverBase
     {
-        private readonly KnxDriver _driver;
+        private readonly IKnxDriver _driver;
         private readonly IList<KnxMainGroup> _mainGroups;
 
         internal const string EtsImportFeauterName = "knx-ets-import";
 
-        public Knx3Level(IDriverContext driverContext, KnxDriver driver) : base(driverContext)
+        public Knx3Level(IDriverContext driverContext, IKnxDriver driver) : base(driverContext)
         {
             _driver = driver;
             _mainGroups = new List<KnxMainGroup>();

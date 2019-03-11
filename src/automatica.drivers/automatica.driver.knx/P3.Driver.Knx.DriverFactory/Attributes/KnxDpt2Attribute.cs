@@ -7,6 +7,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
+using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.DPT;
 using P3.Knx.Core.Driver;
 
@@ -59,7 +60,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     public class KnxDpt2Attribute : KnxGroupAddress
     {
         private readonly List<KnxDpt2ValueAttribute> _children = new List<KnxDpt2ValueAttribute>();
-        public KnxDpt2Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxDpt2Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
@@ -78,7 +79,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             var dpt2Value = new Dpt2Value(controlValue, valueValue);
 
-            Tunneling.Write(GroupAddress, ConvertToBus(dpt2Value));
+            Driver.Write(GroupAddress, ConvertToBus(dpt2Value));
         }
 
         protected override void ConvertFromBus(KnxDatagram datagram)

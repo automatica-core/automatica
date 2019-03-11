@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.UnitTests.Drivers;
 using P3.Driver.Knx.DriverFactory;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Knx.Core.Ets;
 using System;
 using System.IO;
