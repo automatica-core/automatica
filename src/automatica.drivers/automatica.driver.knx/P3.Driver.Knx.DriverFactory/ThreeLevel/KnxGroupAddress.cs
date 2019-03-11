@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.DPT;
 using P3.Knx.Core.Driver;
@@ -20,15 +22,23 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             base.Init();
 
-            var mainAddress = ((KnxLevelBase)Parent.Parent).Address;
-            var middleAddress = ((KnxLevelBase)Parent).Address;
-            var group = Address;
-
-            GroupAddress = $"{mainAddress}/{middleAddress}/{group}";
+            if (Parent is KnxLevelBase parentLevel)
+            {
+                var mainAddress = ((KnxLevelBase)Parent.Parent).Address;
+                var middleAddress = ((KnxLevelBase)Parent).Address;
+                var group = Address;
+                GroupAddress = $"{mainAddress}/{middleAddress}/{group}";
+            }
+            else
+            {
+                GroupAddress = $"{Address}";
+            }
 
             DptType = GetPropertyValueInt("knx-dpt");
 
             DptTypeString = GetDptString(DptType);
+
+            DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType} - DptTypeString {DptTypeString}");
 
             Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
             return true;
@@ -39,6 +49,16 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         protected virtual void ConvertFromBus(KnxDatagram datagram)
         {
             var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Data);
+
+            if (ValueRead(value))
+            {
+                DispatchValue(value);
+            }
+        }
+
+        protected virtual void ConvertFromBus(ReadOnlyMemory<byte> data)
+        {
+            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, data);
 
             if (ValueRead(value))
             {
@@ -78,6 +98,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             if (data is KnxDatagram knxDatagram)
             {
                 ConvertFromBus(knxDatagram);
+            }
+            else if(data is ReadOnlyMemory<byte> memory)
+            {
+                ConvertFromBus(memory);
             }
         }
 

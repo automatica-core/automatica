@@ -153,9 +153,9 @@ namespace P3.Knx.Core.Baos.Driver
             try
             {
 
-
                 if (_serial.Open())
                 {
+                    _logger.LogInformation($"Opened {_port}");
                     var frame = await _serial.SendResetFrame();
 
                     if (frame == null || frame.GetType() != typeof(AckFrame))

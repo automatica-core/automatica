@@ -53,19 +53,19 @@ namespace P3.Knx.Core.DPT
             }
         }
 
-        public object FromDataPoint(string type, byte[] data)
+        public object FromDataPoint(string type, ReadOnlyMemory<byte> data)
         {
             try
             {
-                if (data == null)
+                if (data.Length == 0)
                 {
                     throw new FromDataPointException("data cannot be null");
                 }
                 if (_dataPoints.TryGetValue(type, out var dpt))
-                    return dpt.FromDataPoint(data);
+                    return dpt.FromDataPoint(data.ToArray());
 
                 if (_dataPoints.TryGetValue(type[0] + ".*", out var dpt2))
-                    return dpt2.FromDataPoint(data);
+                    return dpt2.FromDataPoint(data.ToArray());
             }
             catch (FromDataPointException)
             {

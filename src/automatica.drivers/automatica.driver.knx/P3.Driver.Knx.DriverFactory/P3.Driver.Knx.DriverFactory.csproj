@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.7.0.100</Version>
+    <Version>0.7.0.999</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>4AC5C115-5709-475D-97CB-2ECFC1F3636D</ProjectGuid>
   </PropertyGroup>

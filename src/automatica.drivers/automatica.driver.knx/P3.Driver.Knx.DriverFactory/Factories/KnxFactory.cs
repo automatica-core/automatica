@@ -13,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(0, 7, 1, 16);
+        public override Version DriverVersion => new Version(0, 7, 1, 19);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -43,6 +43,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             factory.CreateInterfaceType(KnxInterface3LevelMain, "KNX.GATEWAY_3_LEVEL.MAIN.NAME", "KNX.GATEWAY_3_LEVEL.MAIN.DESCRIPTION", 7, 31, false);
             factory.CreateInterfaceType(KnxInterface3LevelMiddle, "KNX.GATEWAY_3_LEVEL.MIDDLE.NAME", "KNX.GATEWAY_3_LEVEL.MIDDLE.DESCRIPTION", 255, 7, false);
             factory.CreateInterfaceType(KnxInterface3LevelValue, "KNX.GATEWAY_3_LEVEL.VALUE.NAME", "KNX.GATEWAY_3_LEVEL.VALUE.DESCRIPTION", 0, 255, false);
+
+            factory.CreateInterfaceType(KnxBaos, "KNX.BAOS.NAME", "KNX.BAOS.DESCRIPTION", 0, 1, true);
 
             factory.CreateNodeTemplate(KnxGatway, "KNX.GATEWAY.NAME", "KNX.GATEWAY.DESCRIPTION", "knx-gw",
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), KnxInterface, false, false, true, false, true,
@@ -76,10 +78,14 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                       "knx-use-nat", PropertyTemplateType.Bool, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
                       5);*/
 
-            factory.CreateNodeTemplate(KnxBaos, "KNX.BAOS.NAME", "KNX.BAOS.DESCRIPTION", 
-                "knx-baos", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Virtual), KnxInterface3LevelMiddle, false, false, true, false, true, 
+            factory.CreateNodeTemplate(KnxBaos, "KNX.BAOS.NAME", "KNX.BAOS.DESCRIPTION",
+                "knx-baos", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Virtual), KnxBaos, false, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
-   
+
+            factory.CreateNodeTemplate(new Guid("86db8e85-0770-47a0-9fa9-71558113a0db"), "KNX.BAOS.DATAPOINTS.NAME", "KNX.BAOS.DATAPOINTS.DESCRIPTION",
+                "knx-baos", KnxBaos, KnxInterface3LevelMiddle, true, false, true, false, true,
+                NodeDataType.NoAttribute, 1, false);
+
             factory.CreateNodeTemplate(KnxGatwayStatus, "KNX.GW_STATUS.NAME", "KNX.GW_STATUS.DESCRITPION",
                 "knx-gw-state", KnxInterface, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false, false);

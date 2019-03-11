@@ -16,7 +16,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
         private readonly BaosDriver _driver;
 
 
-        private readonly Dictionary<string, List<Action<DatapointValue>>> _callbackMap = new Dictionary<string, List<Action<DatapointValue>>>();
+        private readonly Dictionary<string, List<Action<object>>> _callbackMap = new Dictionary<string, List<Action<object>>>();
 
         public KnxBaosDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -30,18 +30,24 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
         public override async Task<bool> Start()
         {
-            return await _driver.Start();
+            if(await _driver.Start())
+            {
+                return await base.Start();
+            }
+            return false;
         }
 
         public override async Task<bool> Stop()
         {
-            return await _driver.Stop();
+            var ret = await _driver.Stop();
+            await base.Stop();
+
+            return ret;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            var node = KnxMiddleGroup.CreateDriverNode(ctx.NodeInstance.This2NodeTemplateNavigation.Key, ctx, this);
-            return node;
+            return new KnxBaosDatapoints(ctx, this);
         }
 
         public void AddAddressNotifier(string address, Action<object> callback)
@@ -49,7 +55,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
             DriverContext.Logger.LogDebug($"Register for value changes on GA {address}");
             if (!_callbackMap.ContainsKey(address))
             {
-                _callbackMap.Add(address, new List<Action<DatapointValue>>());
+                _callbackMap.Add(address, new List<Action<object>>());
             }
             _callbackMap[address].Add(callback);
         }
@@ -70,6 +76,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
         public async Task<bool> Write(string address, ReadOnlyMemory<byte> data)
         {
+            DriverContext.Logger.LogDebug($"Write value on address {address} data {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(data)}");
             return await _driver.SetDatapointValue(Convert.ToUInt16(address), data) != null;
         }
 
@@ -90,7 +97,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
                         try
                         {
                             DriverContext.Logger.LogDebug($"Datagram on {dpId} - dispatch to {ac}");
-                            ac.Invoke(value);
+                            ac.Invoke(value.Data);
                         }
                         catch (Exception e)
                         {
@@ -100,7 +107,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
                 }
                 else
                 {
-                    DriverContext.Logger.LogWarning($"Datagram on GA - not callback registered");
+                    DriverContext.Logger.LogWarning($"Datagram on GA - no callback registered");
                 }
             }
             return Task.CompletedTask;

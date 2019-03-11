@@ -1,7 +1,5 @@
 ﻿using Automatica.Core.Driver;
-using P3.Knx.Core.Driver;
 using System.Collections.Generic;
-using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Knx.Core.Abstractions;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
