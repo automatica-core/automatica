@@ -112,6 +112,7 @@ namespace Automatica.Core.Runtime.Core
         public static List<T> LoadSingle<T>(string file, ILogger logger, AutomaticaContext database, bool isInDevMode)
         {
             var list = new List<T>();
+            
             try
             {
                 var fileInfo = new FileInfo(file);
@@ -129,12 +130,28 @@ namespace Automatica.Core.Runtime.Core
 
                 }
 
-                AssemblyLoadContext.Default.Resolving += (context, name) =>
+                Func<AssemblyLoadContext, AssemblyName, Assembly> assemblyLoader = (context, name) =>
                 {
+                    logger.LogDebug($"Try to load assembly {name} for {file}");
                     // avoid loading *.resources dlls, because of: https://github.com/dotnet/coreclr/issues/8416
                     if (name.Name.EndsWith("resources"))
                     {
                         return null;
+                    }
+
+                    logger.LogDebug($"try to load assemably from {folder}");
+                    var foundDlls = Directory.GetFileSystemEntries(folder, name.Name + ".dll", SearchOption.AllDirectories);
+                    if (foundDlls.Any())
+                    {
+                        return context.LoadFromAssemblyPath(foundDlls[0]);
+                    }
+
+                    var secondPath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+                    logger.LogDebug($"try to load assemably from second path: {secondPath}");
+                    foundDlls = Directory.GetFileSystemEntries(secondPath, name.Name + ".dll", SearchOption.AllDirectories);
+                    if (foundDlls.Any())
+                    {
+                        return context.LoadFromAssemblyPath(foundDlls[0]);
                     }
 
                     var dependencies = DependencyContext.Default.RuntimeLibraries;
@@ -146,25 +163,24 @@ namespace Automatica.Core.Runtime.Core
                         }
                     }
 
-                    var foundDlls = Directory.GetFileSystemEntries(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, name.Name + ".dll", SearchOption.AllDirectories);
-                    if (foundDlls.Any())
-                    {
-                        return context.LoadFromAssemblyPath(foundDlls[0]);
-                    }
 
                     return context.LoadFromAssemblyName(name);
                 };
-
+                AssemblyLoadContext.Default.Resolving += assemblyLoader;
 
                 Assembly assembly;
                 try
                 {
                     assembly = Assembly.LoadFrom(file);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     logger.LogError(e, $"Could not load assembly");
                     return list;
+                }
+                finally
+                {
+                    AssemblyLoadContext.Default.Resolving -= assemblyLoader;
                 }
 
                 var resources = assembly.GetManifestResourceNames().SingleOrDefault(a => a.EndsWith("automatica-manifest.json"));
