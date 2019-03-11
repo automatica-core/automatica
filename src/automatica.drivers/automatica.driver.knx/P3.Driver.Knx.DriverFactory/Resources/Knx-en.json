@@ -1,5 +1,11 @@
 ﻿{
   "KNX": {
+    "BAOS": {
+      "NAME": "BAOS 830 kBerry",
+      "DATAPOINTS": {
+        "NAME": "Datapoints"
+      }
+    },
     "LICENSE": {
       "KNX-ETS-IMPORT": "ETS import license missing"
     },
