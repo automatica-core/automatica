@@ -95,10 +95,10 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             switch(ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "openweathermap-sunrise":
-                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Rise);
+                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Rise.ToLocalTime());
                     break;
                 case "openweathermap-sunset":
-                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Set);
+                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Set.ToLocalTime());
                     break;
                 case "openweathermap-humidity":
                     node = new OpenWeatherMapDriverNode(ctx, (x) => x.Humidity.Value);
