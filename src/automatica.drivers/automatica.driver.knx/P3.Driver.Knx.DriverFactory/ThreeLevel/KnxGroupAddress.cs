@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
+using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.DPT;
 using P3.Knx.Core.Driver;
 
@@ -10,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
         public string DptTypeString { get; private set; }
-        protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
+        protected KnxGroupAddress(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
         {
 
         }
@@ -19,17 +22,25 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             base.Init();
 
-            var mainAddress = ((KnxLevelBase)Parent.Parent).Address;
-            var middleAddress = ((KnxLevelBase)Parent).Address;
-            var group = Address;
-
-            GroupAddress = $"{mainAddress}/{middleAddress}/{group}";
+            if (Parent is KnxLevelBase parentLevel)
+            {
+                var mainAddress = ((KnxLevelBase)Parent.Parent).Address;
+                var middleAddress = ((KnxLevelBase)Parent).Address;
+                var group = Address;
+                GroupAddress = $"{mainAddress}/{middleAddress}/{group}";
+            }
+            else
+            {
+                GroupAddress = $"{Address}";
+            }
 
             DptType = GetPropertyValueInt("knx-dpt");
 
             DptTypeString = GetDptString(DptType);
 
-            Driver.AddGroupAddress(GroupAddress, TelegramReceivedCallback);
+            DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType} - DptTypeString {DptTypeString}");
+
+            Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
             return true;
         }
 
@@ -45,18 +56,28 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
+        protected virtual void ConvertFromBus(ReadOnlyMemory<byte> data)
+        {
+            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, data);
+
+            if (ValueRead(value))
+            {
+                DispatchValue(value);
+            }
+        }
+
         protected virtual bool ValueRead(object value)
         {
             return true;
         }
 
-        public override Task<bool> Read()
+        public override async Task<bool> Read()
         {
             if (DriverContext.NodeInstance.IsReadable)
             {
-                   Driver.Read(this);
+                return await Driver.Read(GroupAddress);
             }
-            return Task.FromResult(true);
+            return false;
         }
 
         internal override void ConnectionEstablished()
@@ -72,9 +93,16 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return DptTranslator.Instance.ToDataPoint(DptTypeString, value);
         }
 
-        private void TelegramReceivedCallback(KnxDatagram knxDatagram)
+        private void TelegramReceivedCallback(object data)
         {
-            ConvertFromBus(knxDatagram);
+            if (data is KnxDatagram knxDatagram)
+            {
+                ConvertFromBus(knxDatagram);
+            }
+            else if(data is ReadOnlyMemory<byte> memory)
+            {
+                ConvertFromBus(memory);
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

@@ -7,7 +7,7 @@
     <ProjectGuid>AF274AE7-266C-4ED5-B1F2-E2A1C852DAA9</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.263" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.263" />
   </ItemGroup>
 </Project>

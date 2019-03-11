@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.6.0.99</Version>
+    <Version>0.7.0.999</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>4AC5C115-5709-475D-97CB-2ECFC1F3636D</ProjectGuid>
   </PropertyGroup>
@@ -20,12 +20,14 @@
     <EmbeddedResource Include="Resources\Knx-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.EF" Version="0.7.0.263" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.263" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.263" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.263" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\P3.Knx.Core.Abstractions\P3.Knx.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\P3.Knx.Core.Baos.Driver\P3.Knx.Core.Baos.Driver.csproj" />
     <ProjectReference Include="..\P3.Knx.Core.Driver\P3.Knx.Core.Driver.csproj" />
     <ProjectReference Include="..\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj" />
   </ItemGroup>

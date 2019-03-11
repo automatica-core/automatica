@@ -344,6 +344,7 @@ namespace Automatica.Core.Runtime.Core
         {
             foreach (var nodeInstance in root.InverseThis2ParentNodeInstanceNavigation)
             {
+                _logger.LogDebug($"Working on {nodeInstance.Name}...");
                 _loadedNodeInstances.Add(nodeInstance.ObjId, nodeInstance);
                 if (!nodeInstance.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
                 {
@@ -355,7 +356,7 @@ namespace Automatica.Core.Runtime.Core
                     {
                         nodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogTrace($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogDebug($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                     ConfigureDriversRecursive(nodeInstance);
                     continue;
@@ -370,7 +371,7 @@ namespace Automatica.Core.Runtime.Core
                     {
                         nodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogTrace($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogDebug($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                     ConfigureDriversRecursive(nodeInstance);
                     continue;
