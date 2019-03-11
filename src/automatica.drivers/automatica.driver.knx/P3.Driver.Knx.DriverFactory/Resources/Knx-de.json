@@ -1,7 +1,13 @@
 ﻿{
   "KNX": {
+    "BAOS": {
+      "NAME": "BAOS 830 kBerry",
+      "DATAPOINTS": {
+        "NAME":  "Datenpunkte"
+      }
+    },
     "LICENSE": {
-      "KNX-ETS-IMPORT":  "ETS Import Lizenz fehlt" 
+      "KNX-ETS-IMPORT": "ETS Import Lizenz fehlt"
     },
     "GROUP": {
       "DPT": "Datenpunkt Typ"
