@@ -13,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(0, 6, 1, 16);
+        public override Version DriverVersion => new Version(0, 7, 1, 16);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
