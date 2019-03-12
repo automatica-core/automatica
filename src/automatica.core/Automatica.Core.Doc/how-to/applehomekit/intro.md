@@ -1,0 +1,1 @@
+[!include[AppleHomekit](../../../../automatica.drivers/automatica.driver.homekit/README.md)]   
