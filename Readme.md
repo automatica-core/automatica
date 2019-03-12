@@ -1,6 +1,6 @@
 # Automatica.Core
 
-## status
+## Status
 ### Backend Buid ###
 [![Build Status Core](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.core?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=12&branchName=develop)
 
