@@ -8,10 +8,10 @@
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
 ### Automatica.Demo Status ###
-![Demo Status](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)
+[![Demo Status](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)
 
 ### Develop Automatica.Core.Cloud Status ###
-![Demo Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
+[![Demo Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
 
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine. Try it as your smart home hub today.
 
