@@ -9,3 +9,15 @@
 
 - name: Date/Time & Sun Angle
   href: suntime/intro.md
+
+- name: KNX IP & KNX Baos
+  href: knx/intro.md
+
+- name: Consants
+  href: constants/intro.md
+
+- name: Apple HomeKit
+  href: applehomekit/intro.md
+
+- name: Machine flags
+  href: machineflags/intro.md

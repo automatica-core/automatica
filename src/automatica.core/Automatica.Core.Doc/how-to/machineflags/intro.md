@@ -1,0 +1,1 @@
+[!include[MachineFlags](../../../../automatica.drivers/automatica.driver.machineflags/README.md)]   
