@@ -17,3 +17,6 @@ RUN rm -f /app/automatica/automatica.core.init.db
 
 COPY --from=database /app/automatica.core.db /app/automatica/automatica.core.db
 COPY --from=database /app/automatica.core.db /app/automatica.core.db
+
+EXPOSE 5001/tcp
+EXPOSE 5000/tcp
