@@ -51,6 +51,8 @@ COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/li
 
 COPY --from=node /src/dist /app/automatica/wwwroot
 
+
+RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica.bootloader /src/src/automatica.core/Automatica.Core.Bootloader
 
