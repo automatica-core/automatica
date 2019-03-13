@@ -33,6 +33,7 @@ using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Templates;
+using Automatica.Core.Runtime.Trending;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -79,9 +80,11 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILearnMode _learnMode;
 
         private readonly AutomaticUpdate _automaticUpdate;
+        private readonly IList<ITrendingRecorder> _trendingRecorder = new List<ITrendingRecorder>();
 
         public IList<IDriverNode> DriverNodes => _driverNodes;
         public IDictionary<RuleInstance, IRule> Rules => _ruleInstances;
+
 
         public RunState RunState
         {
@@ -123,6 +126,9 @@ namespace Automatica.Core.Runtime.Core
 
             _automaticUpdate = new AutomaticUpdate(this, _config, _cloudApi);
             RunState = RunState.Constructed;
+
+            _trendingRecorder.Add(new DatabaseTrendingRecorder());
+            _trendingRecorder.Add(new CloudTrendingRecorder());
         }
 
         private void InitInternals()

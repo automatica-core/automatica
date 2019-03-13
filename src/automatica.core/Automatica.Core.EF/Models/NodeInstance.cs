@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
+using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Model.Models.User;
 using MessagePack;
 using Newtonsoft.Json;
@@ -54,6 +55,12 @@ namespace Automatica.Core.EF.Models
         public string StateTextValueFalse { get; set; }
         public string StateColorValueTrue { get; set; }
         public string StateColorValueFalse { get; set; }
+        
+        public bool Trending { get; set; }
+        public int TrendingInterval { get; set; }
+        public TrendingTypes TrendingType { get; set; }
+        public bool TrendingToCloud { get; set; }
+
 
         [JsonIgnore, IgnoreMember]
         public NodeInstance This2ParentNodeInstanceNavigation { get; set; }
