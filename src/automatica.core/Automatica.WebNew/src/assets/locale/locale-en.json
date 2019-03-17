@@ -96,7 +96,8 @@
             "USERGROUP2ROLE": "Roles",
             "IMPORT": "Import",
             "SETTING": "Settings",
-            "DISCOVERY": "Discovery"
+            "DISCOVERY": "Discovery",
+            "TRENDING": "Trendings"
         },
         "FACTOR": {
             "NAME": "Factor",
@@ -291,6 +292,18 @@
             },
             "CLOUDURL": {
                 "NAME": "Cloud Url",
+                "DESCRIPTION": ""
+            },
+            "TRENDING": {
+                "NAME": "Trending",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_TYPE":{
+                "NAME": "Type",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_INTERVAL": {
+                "NAME": "Interval [s]",
                 "DESCRIPTION": ""
             }
         },

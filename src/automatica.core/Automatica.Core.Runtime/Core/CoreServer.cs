@@ -33,7 +33,7 @@ using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Templates;
-using Automatica.Core.Runtime.Trending;
+using Automatica.Core.Runtime.Trendings;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -127,8 +127,8 @@ namespace Automatica.Core.Runtime.Core
             _automaticUpdate = new AutomaticUpdate(this, _config, _cloudApi);
             RunState = RunState.Constructed;
 
-            _trendingRecorder.Add(new DatabaseTrendingRecorder());
-            _trendingRecorder.Add(new CloudTrendingRecorder());
+            _trendingRecorder.Add(new DatabaseTrendingRecorder(_config, _dispatcher));
+            _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
         }
 
         private void InitInternals()
@@ -246,6 +246,12 @@ namespace Automatica.Core.Runtime.Core
                 }
             }
 
+            _logger.LogInformation("Starting recorders...");
+            foreach (var rec in _trendingRecorder)
+            {
+                await rec.Start();
+            }
+            _logger.LogInformation("Starting recorders...done");
             RunState = RunState.Started;
         }
 
@@ -334,6 +340,11 @@ namespace Automatica.Core.Runtime.Core
             _driverNodesMap.Clear();
             _loadedNodeInstances.Clear();
             _loadedPlugins.Clear();
+
+            foreach(var rec in _trendingRecorder)
+            {
+                await rec.Stop();
+            }
 
             _dbContext.Dispose();
             _ruleEngineDispatcher.Dispose();
@@ -510,6 +521,25 @@ namespace Automatica.Core.Runtime.Core
                     _ruleIdInstances.Add(ruleInstance.ObjId, rule);
                 }
             }
+
+
+            _logger.LogInformation($"Loading recorind datapoints...");
+            
+            using (var db = new AutomaticaContext(_config))
+            {
+                var nodeInstances = db.NodeInstances.Where(a => a.Trending).ToList();
+
+                foreach(var node in nodeInstances)
+                {
+                    foreach(var recorder in _trendingRecorder)
+                    {
+                        recorder.AddTrend(node.ObjId);
+                    }
+                }
+            }
+
+
+            _logger.LogInformation($"Loading recorind datapoints...done");
         }
         
         private void AddDriverRecurisve(IDriverNode driver)

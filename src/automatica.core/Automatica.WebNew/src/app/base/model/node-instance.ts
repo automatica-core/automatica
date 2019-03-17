@@ -23,7 +23,8 @@ import { ICategoryInstanceModel } from "./ICategoryInstanceModel";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
 import { VirtualGenericPropertyInstance } from "./virtual-props/virtual-generic-property-instance";
 import { NodeDataTypeEnum } from "./node-data-type";
-import { PropertyTemplateType } from "./property-template";
+import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-template";
+import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -86,6 +87,13 @@ export enum NodeInstanceState {
     UnknownError,
     Unloaded,
     Unknown
+}
+
+export enum TrendingTypes {
+    Average = 0,
+    Raw = 1,
+    Max = 2,
+    Min = 3
 }
 
 @Model()
@@ -221,6 +229,18 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
     @JsonProperty()
     VisuName: string;
+
+    @JsonProperty()
+    Trending: boolean;
+
+    @JsonProperty()
+    TrendingInterval: number;
+
+    @JsonProperty()
+    TrendingType: TrendingTypes;
+
+    @JsonProperty()
+    TrendingToCloud: boolean;
 
     private _ValidationOk: boolean = true;
     public get ValidationOk(): boolean {
@@ -385,6 +405,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_COLOR_TRUE", 8, this, () => this.StateColorValueTrue, (value) => this.StateColorValueTrue = value, false, PropertyTemplateType.Color, "COMMON.CATEGORY.VISU"));
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_COLOR_FALSE", 9, this, () => this.StateColorValueFalse, (value) => this.StateColorValueFalse = value, false, PropertyTemplateType.Color, "COMMON.CATEGORY.VISU"));
             }
+            this.Properties.push(new VirtualGenericPropertyInstance("TRENDING", 10, this, () => this.Trending, (value) => this.Trending = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.TRENDING"));
+            this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes)));
+            this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
+
         }
 
 
