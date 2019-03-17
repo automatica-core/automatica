@@ -8,6 +8,7 @@ using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using System;
 using Automatica.Core.Model.Models.User;
+using Automatica.Core.EF.Models.Trendings;
 
 namespace Automatica.Core.EF.Models
 {
@@ -61,6 +62,8 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<User2Role> User2Roles { get; set; }
         public virtual DbSet<UserGroup2Role> UserGroup2Roles { get; set; }
         public virtual DbSet<Plugin> Plugins { get; set; }
+
+        public virtual DbSet<Trending> Trendings { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -1321,6 +1324,19 @@ namespace Automatica.Core.EF.Models
                 entity.Property(e => e.Version)
                     .IsRequired()
                     .HasMaxLength(1024);
+            });
+
+            modelBuilder.Entity<Trending>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.Property(e => e.Source).HasMaxLength(1024);
+
+                entity.HasOne(d => d.This2NodeInstanceNavigation)
+                  .WithMany()
+                  .HasForeignKey(d => d.This2NodeInstance)
+                  .OnDelete(DeleteBehavior.Cascade);
+
             });
         }
     }

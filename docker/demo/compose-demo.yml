@@ -1,0 +1,20 @@
+version: '3'
+ 
+services:
+  automatica:
+    image: automaticacore/automaticacore_demo:develop-latest
+    restart: always
+    ports:
+      - "5001:5001"
+      - "5000:5000"
+ 
+  nginx:
+    image: automaticacore/automaticacore_proxy:develop-latest
+    restart: always
+    ports:
+      - "80:80"
+    links:
+      - automatica
+      
+      
+      

@@ -23,6 +23,14 @@
     <Compile Remove="Migrations\20181223154212_AddedRuleInterfaceIsLinkableParamter.cs" />
     <Compile Remove="Migrations\20181227091539_RemovedRequiredWhereNotNeeded.cs" />
     <Compile Remove="Migrations\20181227150249_AddSortOrderToSettings.cs" />
+    <Compile Remove="Migrations\20190313165023_AddedStatisticsProperties.cs" />
+    <Compile Remove="Migrations\20190313165023_AddedStatisticsProperties.Designer.cs" />
+    <Compile Remove="Migrations\20190313172347_AddedStatisticsProperties.cs" />
+    <Compile Remove="Migrations\20190313172347_AddedStatisticsProperties.Designer.cs" />
+    <Compile Remove="Migrations\20190313174134_AddedStatisticsProperties.cs" />
+    <Compile Remove="Migrations\20190313174134_AddedStatisticsProperties.Designer.cs" />
+    <Compile Remove="Migrations\20190313174225_AddedStatisticsProperties.cs" />
+    <Compile Remove="Migrations\20190313174225_AddedStatisticsProperties.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="1.7.3.4" />

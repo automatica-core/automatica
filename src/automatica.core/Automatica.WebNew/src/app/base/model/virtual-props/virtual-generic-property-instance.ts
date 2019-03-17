@@ -4,10 +4,10 @@ import { PropertyType } from "../property-type"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
 import { INameModel } from "../INameModel";
 
-export class VirtualGenericPropertyInstance extends VirtualPropertyInstance {
+export class VirtualGenericPropertyInstance<T> extends VirtualPropertyInstance {
 
-    constructor(name: string, order: number, private model: any, private get: () => string,
-        private set: (value: string) => void, isReadOnly = false, propertyType: PropertyTemplateType = PropertyTemplateType.Text, category: string = "COMMON.CATEGORY.MISC") {
+    constructor(name: string, order: number, private model: any, private get: () => T,
+        private set: (value: T) => void, isReadOnly = false, propertyType: PropertyTemplateType = PropertyTemplateType.Text, category: string = "COMMON.CATEGORY.MISC") {
         super(model);
 
         this.PropertyTemplate.Name = `COMMON.PROPERTY.${name}.NAME`;

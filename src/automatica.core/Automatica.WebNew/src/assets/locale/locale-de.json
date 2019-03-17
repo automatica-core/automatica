@@ -96,7 +96,8 @@
             "USERGROUP2ROLE": "Rollen",
             "IMPORT": "Import",
             "SETTING": "Einstellungen",
-            "DISCOVERY": "Suchen"
+            "DISCOVERY": "Suchen",
+            "TRENDING": "Datenaufzeichnung"
         },
         "FACTOR": {
             "NAME": "Faktor",
@@ -291,6 +292,18 @@
             },
             "CLOUDURL": {
                 "NAME": "Cloud Url",
+                "DESCRIPTION": ""
+            },
+            "TRENDING": {
+                "NAME": "Datenaufzeichnung",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_TYPE":{
+                "NAME": "Aufzeichnungstyp",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_INTERVAL": {
+                "NAME": "Intervall [s]",
                 "DESCRIPTION": ""
             }
         },
