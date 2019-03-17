@@ -1,18 +1,43 @@
 <div class="content-block">
     <div class="dx-card">
         <div class="card-header">
-            Automatica.Core (Version {{ version.Version }})
+            <h3>Automatica.Core <sub style="font-size: 70%;">(Version {{ version.Version }})</sub></h3>
         </div>
-        <div class="card-block">
-            <div class="row" class="panel-height">
-                <span>
-                    Welcome to Automatica.Core. Yet another building automation server.
-                    <br />
-                    <br /> For more information visit
-                    <a [routerLink]="" (click)="infoPageOnClick($event)">Automatica.Core</a>
+        <div class="card-block panel-dashboard">
+            <dx-scroll-view>
+                <div class="row">
+                    <img height="300px" src="/assets/images/Logo1.png" />
+                </div>
+                <div class="row">
+                    <span>
+                        Welcome to Automatica.Core. A modern way to automatica your life! A product from <a
+                            href="https://www.p3-software.eu" target="_blank">p3-software</a>.
+                        And available for the public via <a href="https://www.github.com/automatica-core"
+                            target="_blank">GitHub</a>
+                        <br />
+                        <br /> For more information visit
+                        <a href="https://www.automaticacore.com" target="_blank">Automatica.Core</a>
+                        or the documentaiton <a href="https://docu.automaticacore.com" target="_blank">here...</a>
 
-                </span>
-            </div>
+                    </span>
+                </div>
+
+                <div class="row">
+                    <h3>Special thanks to:</h3>
+
+                    <p><a href="https://www.p3-software.eu" target="_blank">Patrik Pfaffenbauer (p3root)</a></p>
+                    <p>For developing the main systems and a list of several drivers/logics.</p>
+                    <img height="320px" src="/assets/images/Logo_white.jpg" />
+                    <br />
+                    <br />
+                </div>
+
+                <div class="row">
+                    <h3>Disclaimer</h3>
+                    <p>Use at your own risk - p3-software or any other company/person assumes no liability or guarantee.
+                        See license <a href="https://opensource.org/licenses/LGPL-3.0" target="_blank">here...</a> </p>
+                </div>
+            </dx-scroll-view>
         </div>
 
     </div>

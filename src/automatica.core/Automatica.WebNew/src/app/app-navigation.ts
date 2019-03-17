@@ -2,7 +2,7 @@ export const navigation = [
     {
         text: "Home",
         path: "home",
-        icon: "home",
+        icon: "automatica-logo",
         default: true
     }, {
         text: "COMMON.CONFIGURATION",
