@@ -17,7 +17,9 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("7e4029d6-bf42-4354-82b6-e0ece388b94a")]
         WindowMonitor,
         [VisuMobileObjectTemplateType("a39fe74f-e7ae-444a-aef0-f997d56beb1e")]
-        Rgba
+        Rgba,
+        [VisuMobileObjectTemplateType("220da983-0f65-4852-b813-fcbeb331fb16")]
+        Chart
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

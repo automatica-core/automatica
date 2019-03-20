@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { TranslationService } from "angular-l10n";
+import { Trending } from "../base/model/trending/trending";
 
 @Injectable()
 export class DataService extends BaseService {
@@ -12,6 +13,10 @@ export class DataService extends BaseService {
     }
     public getCurrentNodeValues(): Promise<any> {
         return super.getJson("data/node/current");
+    }
+
+    public getTrendings(nodeId: string, startDate: Date, endDate: Date) {
+        return super.getMultiple<Trending>(`trend/${nodeId}/${startDate}/${endDate}/${startDate}/${endDate}`);
     }
 
 }
