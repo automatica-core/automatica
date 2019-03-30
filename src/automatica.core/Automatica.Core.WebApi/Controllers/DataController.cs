@@ -37,7 +37,7 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("trend/:id/:startVisible/:endVisible/:startBound/:endBound")]
+        [Route("trend/{id}/{startVisible}/{endVisible}/{startBound}/{endBound}")]
         public IList<Trending> GetTrendingValues(Guid id, DateTime startVisible, DateTime endVisible, DateTime startBound, DateTime endBound)
         {
             return DbContext.Trendings.Where(a => a.This2NodeInstance == id && a.Timestamp >= startBound && a.Timestamp <= endBound).ToList();

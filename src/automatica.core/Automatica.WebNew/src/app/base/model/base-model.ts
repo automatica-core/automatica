@@ -276,7 +276,8 @@ export abstract class BaseModel {
 
                 if (json.hasOwnProperty(value.name)) {
                     if (object[key] instanceof Date) {
-                        object[key] = new Date(json[value.name]);
+                        const val = json[value.name];
+                        object[key] = new Date(val);
                     } else if (json[value.name] && ob.hasOwnProperty("TypeInfo")) {
                         object[key] = BaseModel.getBaseModelFromJson(json[value.name], object, translate);
                     } else if (json[value.name] instanceof Array) {

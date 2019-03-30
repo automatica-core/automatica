@@ -16,7 +16,7 @@ export class DataService extends BaseService {
     }
 
     public getTrendings(nodeId: string, startDate: Date, endDate: Date) {
-        return super.getMultiple<Trending>(`trend/${nodeId}/${startDate}/${endDate}/${startDate}/${endDate}`);
+        return super.getMultiple<Trending>(`data/trend/${nodeId}/${startDate.toISOString()}/${endDate.toISOString()}/${startDate.toISOString()}/${endDate.toISOString()}`);
     }
 
 }

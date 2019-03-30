@@ -64,6 +64,14 @@ export abstract class BaseMobileComponent extends BaseComponent {
         return this.getPropertyValue("foreground_color");
     }
 
+    public get width() {
+        return this.parent.nativeElement.offsetWidth;
+    }
+
+    public get height() {
+        return this.parent.nativeElement.offsetHeight;
+    }
+
     public get displayText() {
         if (this.item.VisuName) {
             return this.item.VisuName;

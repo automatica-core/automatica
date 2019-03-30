@@ -1,4 +1,4 @@
-import { BaseModel, JsonFieldInfo, Model, JsonProperty } from "../base-model";
+import { BaseModel, JsonFieldInfo, Model, JsonProperty, JsonPropertyName } from "../base-model";
 
 @Model()
 export class Trending extends BaseModel {
@@ -13,7 +13,7 @@ export class Trending extends BaseModel {
     Value: number;
 
     @JsonProperty()
-    Timestamp: Date;
+    TimestampIso: Date = new Date();
 
     @JsonProperty()
     Source: string;

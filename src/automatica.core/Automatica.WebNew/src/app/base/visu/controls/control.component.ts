@@ -15,6 +15,7 @@ import { BaseComponent } from "../../base-component";
 import { VisuObjectMobileInstance } from "../../model/visu/visu-object-mobile-instance";
 import { BaseMobileComponent } from "../base-mobile-component";
 import { RgbComponent } from "./rgb/rgb.component";
+import { ChartsComponent } from "./charts/charts.component";
 
 @Component({
   selector: "visu-component",
@@ -84,6 +85,10 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
       }
       case "rgba": {
         this.component = RgbComponent;
+        break;
+      }
+      case "chart": {
+        this.component = ChartsComponent;
         break;
       }
       default: {

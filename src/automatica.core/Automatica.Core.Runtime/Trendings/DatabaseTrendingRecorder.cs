@@ -13,11 +13,13 @@ namespace Automatica.Core.Runtime.Trendings
 
         internal override void Save(Trending trend)
         {
-            Logger.LogInformation($"Save trend for {trend.This2NodeInstance} with value {trend.Value}...");
-            DbContext.Trendings.Add(trend);
+            lock (DbContext)
+            {
+                Logger.LogInformation($"Save trend for {trend.This2NodeInstance} with value {trend.Value}...");
+                DbContext.Trendings.Add(trend);
 
-            DbContext.SaveChanges();
-
+                DbContext.SaveChanges();
+            }
         }
     }
 }
