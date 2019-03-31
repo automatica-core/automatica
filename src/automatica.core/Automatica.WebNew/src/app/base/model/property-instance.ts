@@ -200,8 +200,10 @@ export class PropertyInstance extends BaseModel {
         pi.This2NodeInstance = void 0;
         pi.This2VisuObjectInstance = void 0;
         pi.ObjId = Guid.MakeNew().ToString();
-
-        pi.setPropertyValue(template.DefaultValue);
+        3
+        if (template.DefaultValue) {
+            pi.setPropertyValue(template.DefaultValue);
+        }
 
         pi.afterFromJson();
 
@@ -213,7 +215,7 @@ export class PropertyInstance extends BaseModel {
     }
 
     afterFromJson() {
-        if (this.PropertyTemplate && this.PropertyTemplate.PropertyConstraints.length > 0) {
+        if (this.PropertyTemplate && this.PropertyTemplate.PropertyConstraints && this.PropertyTemplate.PropertyConstraints.length > 0) {
             for (const x of this.PropertyTemplate.PropertyConstraints) {
                 if (x.ConstraintType === PropertyConstraintType.Visible) {
                     let property = void 0;
@@ -322,6 +324,12 @@ export class PropertyInstance extends BaseModel {
     }
 
     get Value(): any {
+
+        if (!this.PropertyTemplate.PropertyType) {
+            console.error("could not set property value", this);
+            return void 0;
+        }
+
         switch (this.PropertyTemplate.PropertyType.Type) {
             case PropertyTemplateType.Long:
                 return this.ValueLong;
@@ -369,6 +377,12 @@ export class PropertyInstance extends BaseModel {
 
 
     private setPropertyValue(value: any) {
+
+        if (!this.PropertyTemplate.PropertyType) {
+            console.error("could not set property value", value);
+            return;
+        }
+
         switch (this.PropertyTemplate.PropertyType.Type) {
             case PropertyTemplateType.Long:
                 this.ValueLong = value;

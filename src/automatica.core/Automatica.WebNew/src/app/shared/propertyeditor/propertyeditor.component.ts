@@ -417,6 +417,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
           if (hubData[3]) {
             learnNode.propertyInstances = BaseService.getValidBaseModels<PropertyInstance>(hubData[3], this.translate);
           }
+
           this.learnNodeInstance = [...this.learnNodeInstance, learnNode];
         }
       });

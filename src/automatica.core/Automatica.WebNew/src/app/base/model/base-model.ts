@@ -258,32 +258,38 @@ export abstract class BaseModel {
                 if (value.onlyToServer) {
                     continue;
                 }
-                const ob = json[value.name];
+                let ob = json[value.name];
+                let valueName = value.name;
 
-                // if (!ob) {
-                //     ob = json[this.lowerFirstLetter(value.name)];
-                // }
+                let typeInfoName = "TypeInfo";
 
-                if (!json.hasOwnProperty(value.name) && value.isMandatory) {
+
+                if (!ob) {
+                    ob = json[this.lowerFirstLetter(value.name)];
+                    valueName = this.lowerFirstLetter(value.name);
+                    typeInfoName = "typeInfo";
+                }
+
+                if (!json.hasOwnProperty(valueName) && value.isMandatory) {
                     if (value.setDefaultValueIfNotPresent) {
                         object[key] = this.inferType(value.jsonType);
-                        console.warn(`No value was provided for property ${value.name}. Using default value of type.`);
+                        console.warn(`No value was provided for property ${valueName}. Using default value of type.`);
                     }
-                    console.error("fromJson " + object.typeInfo() + " does not contain a value for " + value.name + " which is mandatory");
+                    console.error("fromJson " + object.typeInfo() + " does not contain a value for " + valueName + " which is mandatory");
                     console.log(json);
 
                 }
 
-                if (json.hasOwnProperty(value.name)) {
+                if (json.hasOwnProperty(valueName)) {
                     if (object[key] instanceof Date) {
-                        object[key] = new Date(json[value.name]);
-                    } else if (json[value.name] && ob.hasOwnProperty("TypeInfo")) {
-                        object[key] = BaseModel.getBaseModelFromJson(json[value.name], object, translate);
-                    } else if (json[value.name] instanceof Array) {
+                        object[key] = new Date(json[valueName]);
+                    } else if (json[valueName] && ob.hasOwnProperty(typeInfoName)) {
+                        object[key] = BaseModel.getBaseModelFromJson(json[valueName], object, translate);
+                    } else if (json[valueName] instanceof Array) {
                         object[key] = [];
 
-                        for (const obj of json[value.name]) {
-                            if (obj.hasOwnProperty("TypeInfo")) {
+                        for (const obj of json[valueName]) {
+                            if (obj.hasOwnProperty(typeInfoName)) {
                                 const model = BaseModel.getBaseModelFromJson(obj, object, translate);
                                 model._typeInfo = obj.typeInfo;
                                 object[key].push(model);
@@ -292,7 +298,7 @@ export abstract class BaseModel {
                             }
                         }
                     } else if (object[key] instanceof BaseModel) {
-                        const baseModel = json[value.name];
+                        const baseModel = json[valueName];
                         if (baseModel != null) {
                             object[key] = BaseModel.getBaseModelFromJson(baseModel, object, translate);
                         } else {

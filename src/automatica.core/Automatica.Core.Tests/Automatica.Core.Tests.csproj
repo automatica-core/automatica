@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <IsPackable>false</IsPackable>
-    <Version>0.8.0.268</Version>
+    <Version>0.8.0.271</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>7EB1AA44-A1A3-4141-A15F-B1790E27B43E</ProjectGuid>
   </PropertyGroup>

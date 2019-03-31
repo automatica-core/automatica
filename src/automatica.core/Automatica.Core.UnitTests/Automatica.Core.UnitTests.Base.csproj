@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.8.0.268</Version>
+    <Version>0.8.0.271</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>C7BD55D0-CF95-4410-BC9B-7AD6794B814F</ProjectGuid>
     <Description>Base classes for unit tests</Description>

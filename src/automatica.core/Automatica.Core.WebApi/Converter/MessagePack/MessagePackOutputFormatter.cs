@@ -28,13 +28,19 @@ namespace Automatica.Core.WebApi.Converter.MessagePack
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            
-            SystemLogger.Instance.LogDebug($"Serialize {context.Object}...");
-            MessagePackSerializer.NonGeneric.Serialize(context.ObjectType, context.HttpContext.Response.Body, context.Object, _options.FormatterResolver);
-            SystemLogger.Instance.LogDebug($"Serialize {context.Object}...done");
-            //SystemLogger.Instance.LogDebug($"Serialize ToBase64 {context.Object}...done");
+            try
+            {
+                SystemLogger.Instance.LogDebug($"Serialize {context.Object}...");
+                MessagePackSerializer.NonGeneric.Serialize(context.ObjectType, context.HttpContext.Response.Body, context.Object, _options.FormatterResolver);
+                SystemLogger.Instance.LogDebug($"Serialize {context.Object}...done");
+                //SystemLogger.Instance.LogDebug($"Serialize ToBase64 {context.Object}...done");
 
-            //await context.HttpContext.Response.WriteAsync(body);
+                //await context.HttpContext.Response.WriteAsync(body);
+            }
+            catch(Exception e)
+            {
+                SystemLogger.Instance.LogError(e, $"Serialize {context.Object}...failed");
+            }
             return Task.CompletedTask;
         }
     }

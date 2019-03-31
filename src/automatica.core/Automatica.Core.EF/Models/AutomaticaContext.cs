@@ -90,7 +90,7 @@ namespace Automatica.Core.EF.Models
                 }
 
                 optionsBuilder.UseSqlite(conString);
-                //    optionsBuilder.UseLoggerFactory(new DatabaseLoggerFactory());
+                optionsBuilder.UseLoggerFactory(new DatabaseLoggerFactory());
             }
 
             optionsBuilder.EnableSensitiveDataLogging();

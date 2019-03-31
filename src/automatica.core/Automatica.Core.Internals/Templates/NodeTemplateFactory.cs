@@ -41,12 +41,14 @@ namespace Automatica.Core.Internals.Templates
 
         public ICollection<NodeTemplate> GetNodeTemplates(params Guid[] key)
         {
-            return Db.NodeTemplates
+            var templates = Db.NodeTemplates
                 .Include(a => a.This2NodeDataTypeNavigation)
                 .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
                 .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
                 .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
                 .Where(a => key.Contains(a.ObjId)).ToList();
+
+            return templates;
         }
 
         public NodeInstance CreateNodeInstanceByKey(string key)

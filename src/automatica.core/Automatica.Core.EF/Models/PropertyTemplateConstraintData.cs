@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Automatica.Core.Model;
 using MessagePack;
 using Newtonsoft.Json;
