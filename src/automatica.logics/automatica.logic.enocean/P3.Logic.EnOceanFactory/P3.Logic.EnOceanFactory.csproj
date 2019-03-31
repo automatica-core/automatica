@@ -7,9 +7,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\P3.Logic.EnOcean-de.json" />
+    <None Remove="Resources\P3.Logic.EnOcean-en.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\P3.Logic.EnOcean-de.json" />
+    <EmbeddedResource Include="Resources\P3.Logic.EnOcean-en.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Rule" Version="0.7.0.244" />
