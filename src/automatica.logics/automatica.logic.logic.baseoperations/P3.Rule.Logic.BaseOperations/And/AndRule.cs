@@ -30,12 +30,12 @@ namespace P3.Rule.Logic.BaseOperations.And
             {
                 if (instance.This2RuleInterfaceTemplate == AndRuleFactory.RuleInput1)
                 {
-                    _i1 = Convert.ToInt32(value);
+                    _i1 = Helper.ConvertValueToInt(value);
                 }
 
                 if (instance.This2RuleInterfaceTemplate == AndRuleFactory.RuleInput2)
                 {
-                    _i2 = Convert.ToInt32(value);
+                    _i2 = Helper.ConvertValueToInt(value);
                 }
             }
 

@@ -6,6 +6,9 @@
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>{BF9714A1-4CEF-43D2-8DAC-523EE537A9A6}</ProjectGuid>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\Rules\Logic</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\Logic-de.json" />

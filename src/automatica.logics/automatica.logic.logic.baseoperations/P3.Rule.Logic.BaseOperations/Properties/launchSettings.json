@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "P3.Rule.Logic.BaseOperations": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\Automatica.Core.dll",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2"
+    }
+  }
+}

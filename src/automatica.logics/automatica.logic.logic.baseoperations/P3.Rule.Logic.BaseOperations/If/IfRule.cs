@@ -78,15 +78,7 @@ namespace P3.Rule.Logic.BaseOperations.If
 
         private int ConvertToInt(object value)
         {
-            if (value is int intValue)
-            {
-                return Convert.ToInt32(value);
-            }
-            if (value is bool boolValue2)
-            {
-                return Convert.ToBoolean(value) ? 1 : 0;
-            }
-            throw new NotImplementedException();
+            return Helper.ConvertValueToInt(value);
         }
 
     }

@@ -2,6 +2,7 @@
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Automatica.Core.Runtime.Trendings
 {
@@ -15,8 +16,14 @@ namespace Automatica.Core.Runtime.Trendings
         {
             Logger.LogInformation($"Save trend for {trend.This2NodeInstance} with value {trend.Value}...");
             DbContext.Trendings.Add(trend);
-
-            DbContext.SaveChanges();
+            try
+            {
+                DbContext.SaveChanges();
+            }
+            catch(Exception)
+            {
+                //ingore for now
+            }
 
         }
     }
