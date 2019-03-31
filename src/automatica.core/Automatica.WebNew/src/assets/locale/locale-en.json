@@ -90,7 +90,7 @@
             "TRANSFORM": "Transform",
             "MISC": "Common",
             "PARAMETERS": "Parameters",
-            "VISU": "Visu",
+            "VISU": "Visualization",
             "USER2GROUP": "Usergroups",
             "USER2ROLE": "Roles",
             "USERGROUP2ROLE": "Roles",

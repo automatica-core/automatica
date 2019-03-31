@@ -261,13 +261,12 @@ export abstract class BaseModel {
                 let ob = json[value.name];
                 let valueName = value.name;
 
-                let typeInfoName = "TypeInfo";
 
 
-                if (!ob) {
+                if (ob === void 0 || ob === null) {
                     ob = json[this.lowerFirstLetter(value.name)];
                     valueName = this.lowerFirstLetter(value.name);
-                    typeInfoName = "typeInfo";
+
                 }
 
                 if (!json.hasOwnProperty(valueName) && value.isMandatory) {
@@ -283,13 +282,15 @@ export abstract class BaseModel {
                 if (json.hasOwnProperty(valueName)) {
                     if (object[key] instanceof Date) {
                         object[key] = new Date(json[valueName]);
-                    } else if (json[valueName] && ob.hasOwnProperty(typeInfoName)) {
-                        object[key] = BaseModel.getBaseModelFromJson(json[valueName], object, translate);
+                    } else if (json[valueName] && json[valueName].constructor === {}.constructor) {
+                        if (ob.hasOwnProperty("TypeInfo") || ob.hasOwnProperty("typeInfo")) {
+                            object[key] = BaseModel.getBaseModelFromJson(json[valueName], object, translate);
+                        }
                     } else if (json[valueName] instanceof Array) {
                         object[key] = [];
 
                         for (const obj of json[valueName]) {
-                            if (obj.hasOwnProperty(typeInfoName)) {
+                            if (obj.hasOwnProperty("TypeInfo") || obj.hasOwnProperty("typeInfo")) {
                                 const model = BaseModel.getBaseModelFromJson(obj, object, translate);
                                 model._typeInfo = obj.typeInfo;
                                 object[key].push(model);
