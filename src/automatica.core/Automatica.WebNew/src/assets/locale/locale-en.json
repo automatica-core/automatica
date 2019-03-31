@@ -85,8 +85,8 @@
             "MAX_CHILDS_REACHED": "Max instances of node reached."
         },
         "CATEGORY": {
-            "ADDRESS": "Adress",
-            "ADRESS": "Adress",
+            "ADDRESS": "Address",
+            "ADRESS": "Address",
             "TRANSFORM": "Transform",
             "MISC": "Common",
             "PARAMETERS": "Parameters",
