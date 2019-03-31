@@ -40,10 +40,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         public override async Task<IList<NodeInstance>> Import(string fileName)
         {
-            if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeauterName))
-            {
-                throw new LicenseInvalidException($"KNX.LICENSE.{EtsImportFeauterName.ToUpper()}");
-            }
+            //if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeauterName))
+            //{
+            //    throw new LicenseInvalidException($"KNX.LICENSE.{EtsImportFeauterName.ToUpper()}");
+            //}
 
             var file = Path.Combine(Path.GetTempPath(), fileName);
             if (!File.Exists(file))
