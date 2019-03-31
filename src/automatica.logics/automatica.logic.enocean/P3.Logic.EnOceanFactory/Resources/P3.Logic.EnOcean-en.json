@@ -11,7 +11,7 @@
       },
       "OUTPUT": {
         "NAME": "Output",
-        "DESCRIPTION": "The state of the window handle (0 = closed, 1 = tilt, 2 = open)"
+        "DESCRIPTION": "The state of the window handle (0 = closed, 1 = open, 2 = tilt)"
       }
     }
   }

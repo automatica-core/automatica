@@ -5,6 +5,9 @@
     <AssemblyName>P3.Logic.EnOcean</AssemblyName>
     <Version>0.5.0</Version>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\Rules\EnOcean\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\P3.Logic.EnOcean-de.json" />
