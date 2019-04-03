@@ -38,27 +38,27 @@ namespace Automatica.Push.Helper
 
         public async Task Download()
         {
-            var webClient = new WebClient();
-            var automaticaPluginUpdateFile = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
+            using (var webClient = new WebClient())
+            {
+                var automaticaPluginUpdateFile = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
 
-            try
-            {
-                webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
-                await webClient.DownloadFileTaskAsync(_plugin.AzureUrl, automaticaPluginUpdateFile);
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine($"Could not download file {e}");
-                File.Delete(automaticaPluginUpdateFile);
-            }
-            finally
-            {
-                webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                webClient.DownloadFileCompleted -= WebClient_DownloadFileCompleted;
-            }
-
-           
+                try
+                {
+                    webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+                    webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                    await webClient.DownloadFileTaskAsync(_plugin.AzureUrl, automaticaPluginUpdateFile);
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine($"Could not download file {e}");
+                    File.Delete(automaticaPluginUpdateFile);
+                }
+                finally
+                {
+                    webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
+                    webClient.DownloadFileCompleted -= WebClient_DownloadFileCompleted;
+                }
+            }   
         }
 
         private async void WebClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

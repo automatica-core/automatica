@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -23,7 +23,7 @@
     <PackageReference Include="Automatica.Core.EF" Version="0.7.0.263" />
     <PackageReference Include="Automatica.Core.Base" Version="0.7.0.263" />
     <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.263" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.263" />
+    <PackageReference Include="Automatica.Core.Driver.Uti ty" Version="0.7.0.263" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Knx.Core.Abstractions\P3.Knx.Core.Abstractions.csproj" />

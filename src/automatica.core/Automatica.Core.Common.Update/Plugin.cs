@@ -15,29 +15,30 @@ namespace Automatica.Core.Common.Update
     {
         public static async Task<bool> DownloadForUpdate(string downloadUrl, string fileName)
         {
-            var webClient = new WebClient();
+            using (var webClient = new WebClient())
+            {
+                var automaticaPluginUpdateDir = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
+                if (!Directory.Exists(automaticaPluginUpdateDir))
+                {
+                    Directory.CreateDirectory(automaticaPluginUpdateDir);
+                }
 
-            var automaticaPluginUpdateDir = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
-            if (!Directory.Exists(automaticaPluginUpdateDir))
-            {
-                Directory.CreateDirectory(automaticaPluginUpdateDir);
+                var tmpFile = Path.GetTempFileName();
+                try
+                {
+                    await webClient.DownloadFileTaskAsync(downloadUrl, Path.Combine(automaticaPluginUpdateDir, fileName));
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine($"Could not download file {e}");
+                }
+                finally
+                {
+                    File.Delete(tmpFile);
+                }
+                return false;
             }
-
-            var tmpFile = Path.GetTempFileName();
-            try
-            {
-                await webClient.DownloadFileTaskAsync(downloadUrl, Path.Combine(automaticaPluginUpdateDir, fileName));
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine($"Could not download file {e}");
-            }
-            finally
-            {
-                File.Delete(tmpFile);
-            }
-            return false;
         }
 
         public static void InstallPlugin(string pluginFile, string installDirectory)

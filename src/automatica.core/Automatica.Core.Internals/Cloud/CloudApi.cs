@@ -212,21 +212,23 @@ namespace Automatica.Core.Internals.Cloud
 
         public async Task<byte[]> DownloadFile(string url)
         {
-            var webClient = new WebClient();
-
-            webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-
-            try
+            using (var webClient = new WebClient())
             {
-                var download = await webClient.DownloadDataTaskAsync(url);
-                webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                DownloadUpdateFinished?.Invoke(this, EventArgs.Empty);
-                return download;
-            }
-            catch(Exception e)
-            {
-                DownloadUpdateFailed?.Invoke(this, new AsyncCompletedEventArgs(e, false, null));
-                return new byte[0];
+
+                webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+
+                try
+                {
+                    var download = await webClient.DownloadDataTaskAsync(url);
+                    webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
+                    DownloadUpdateFinished?.Invoke(this, EventArgs.Empty);
+                    return download;
+                }
+                catch (Exception e)
+                {
+                    DownloadUpdateFailed?.Invoke(this, new AsyncCompletedEventArgs(e, false, null));
+                    return new byte[0];
+                }
             }
         }
 
