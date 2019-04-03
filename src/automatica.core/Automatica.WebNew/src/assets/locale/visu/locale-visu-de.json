@@ -42,6 +42,10 @@
             "WINDOW_MONITOR": {
                 "NAME": "Fensterüberwachung (ALPHA)",
                 "DESCRIPTION": ""
+            },
+            "CHART": {
+                "NAME": "Diagramm",
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY": {

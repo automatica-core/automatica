@@ -17,6 +17,7 @@ import { AreaInstance, AreaTemplate, AreaType } from "../base/model/areas";
 import { CategoryGroup, CategoryInstance } from "../base/model/categories";
 import { AutomaticVisualizationData } from "../base/model/automatic-visualization-data";
 import { Link } from "../base/model/link";
+import { Trending } from "../base/model/trending/trending";
 
 @Injectable()
 export class ModelDecoratorService {
@@ -49,6 +50,8 @@ export class ModelDecoratorService {
         new WebApiException();
         new Setting();
         new AutomaticVisualizationData();
+
+        new Trending();
 
 
         // tslint:enable:no-unused-expression

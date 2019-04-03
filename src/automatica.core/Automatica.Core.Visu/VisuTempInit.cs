@@ -59,6 +59,22 @@ namespace Automatica.Core.Visu
 
             AddWindowMonitor(factory);
             AddRgbControl(factory);
+
+            AddChartControl(factory);
+        }
+
+        private void AddChartControl(VisuMobileTemplateFactory factory)
+        {
+            var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Chart);
+            factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.CHART.NAME", "VISU.OBJECT.CHART.DESCRIPTION", "chart",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.CreatePropertyTemplate(new Guid("6c3f4a8c-4fe1-48cc-af1a-1b5a23d0bdb3"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, chart, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
+
+            AddCommonProperty(chart, factory);
+            AddTextProperty(chart, factory);
         }
 
         private void AddRgbControl(VisuMobileTemplateFactory factory)

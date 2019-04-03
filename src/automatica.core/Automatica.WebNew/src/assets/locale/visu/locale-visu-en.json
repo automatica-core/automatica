@@ -42,6 +42,10 @@
             "WINDOW_MONITOR": {
                 "NAME": "Window monitor (ALPHA)",
                 "DESCRIPTION": ""
+            },
+            "CHART": {
+                "NAME": "Chart",
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY": {
