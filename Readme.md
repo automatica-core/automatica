@@ -35,6 +35,7 @@ Automatica is a building management system thats runs on .NET Core and is built 
 * [Docker images](#docker-images)
    * [Run in a docker image](#run-in-a-docker-image)
 * [Roadmap](#roadmap)
+   * [Core 2.0](#core-2.0)
    * [Roadmap core](#roadmap-core)   
    * [Roadmap cloud](#roadmap-cloud)   
    * [Roadmap drivers](#roadmap-drivers)   
@@ -181,9 +182,9 @@ services:
 # Roadmap
 Things I want to implement in the near future - help is appreciated!
 
-## 2.0
+## Core 2.0
 * Dockerize Plugins & Core
-** All plugins and the core should run in several docker containers orchestrated by the core system.
+    * All plugins and the core should run in several docker containers orchestrated by the core system.
 
 ## Roadmap core   
 * Automatica.Core Mobile
