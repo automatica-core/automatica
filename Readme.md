@@ -181,6 +181,10 @@ services:
 # Roadmap
 Things I want to implement in the near future - help is appreciated!
 
+## 2.0
+* Dockerize Plugins & Core
+** All plugins and the core should run in several docker containers orchestrated by the core system.
+
 ## Roadmap core   
 * Automatica.Core Mobile
 * Alarms
