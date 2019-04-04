@@ -7,7 +7,7 @@ namespace Automatica.Core.Driver
     /// <summary>
     /// The interface for providing a driver factory
     /// </summary>
-    public interface IDriverFactory
+    public interface IDriverFactory : IFactory<INodeTemplateFactory>
     {
         /// <summary>
         /// The driverName is mainly used for logging

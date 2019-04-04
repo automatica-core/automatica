@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MQTTnet" Version="2.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+    <ProjectReference Include="..\Automatica.Core.WebApi\Automatica.Core.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>

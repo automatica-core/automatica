@@ -6,7 +6,7 @@ namespace Automatica.Core.Rule
     /// <summary>
     /// Interface for the 
     /// </summary>
-    public interface IRuleFactory
+    public interface IRuleFactory : IFactory<IRuleTemplateFactory>
     {
         /// <summary>
         /// The driverName is mainly used for logging
@@ -28,12 +28,6 @@ namespace Automatica.Core.Rule
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(IRuleTemplateFactory)"/> method will be called on every start
         /// </summary>
         bool InDevelopmentMode { get; }
-
-        /// <summary>
-        /// Init method for the factory
-        /// </summary>
-        /// <param name="factory"></param>
-        void InitTemplates(IRuleTemplateFactory factory);
 
         /// <summary>
         /// Returns a new instance of the <see cref="IRule"/>

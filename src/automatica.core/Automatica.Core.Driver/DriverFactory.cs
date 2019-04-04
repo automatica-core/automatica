@@ -17,11 +17,13 @@ namespace Automatica.Core.Driver
         public abstract  Guid DriverGuid { get; }
         public abstract Version DriverVersion { get; }
 
+        public Guid FactoryGuid => DriverGuid;
 
         /// <summary>
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(INodeTemplateFactory)"/> method will be called on every start
         /// </summary>
         public virtual bool InDevelopmentMode => false;
+
 
         /// <summary>
         /// The entry point to set your driver definition
@@ -57,6 +59,11 @@ namespace Automatica.Core.Driver
         public virtual void Scan(NodeInstance instance)
         {
             //empty base impl
+        }
+
+        public void InitTemplates(INodeTemplateFactory factory)
+        {
+            InitNodeTemplates(factory);
         }
     }
 }

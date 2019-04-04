@@ -34,6 +34,11 @@ using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Trendings;
+using MQTTnet;
+using MQTTnet.Server;
+using Newtonsoft.Json;
+using System.Text;
+using Automatica.Core.Internals.Docker;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -82,6 +87,9 @@ namespace Automatica.Core.Runtime.Core
         private readonly AutomaticUpdate _automaticUpdate;
         private readonly IList<ITrendingRecorder> _trendingRecorder = new List<ITrendingRecorder>();
 
+
+        private readonly IMqttServer _mqttServer;
+
         public IList<IDriverNode> DriverNodes => _driverNodes;
         public IDictionary<RuleInstance, IRule> Rules => _ruleInstances;
 
@@ -129,6 +137,8 @@ namespace Automatica.Core.Runtime.Core
 
             _trendingRecorder.Add(new DatabaseTrendingRecorder(_config, _dispatcher));
             _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
+
+            _mqttServer = new MqttFactory().CreateMqttServer();
         }
 
         private void InitInternals()
@@ -152,6 +162,13 @@ namespace Automatica.Core.Runtime.Core
             
             await Task.Run(async () =>
             {
+                var options = new MqttServerOptionsBuilder().Build();
+
+
+                await _mqttServer.StartAsync(options);
+
+                _mqttServer.ApplicationMessageReceived += _mqttServer_ApplicationMessageReceived;
+
                 CheckAndInstallPluginUpdates();
 
                 _automaticUpdate.Init();
@@ -160,6 +177,16 @@ namespace Automatica.Core.Runtime.Core
                 Load(ServerInfo.DriverDirectoy, ServerInfo.DriverPattern);
                 await ConfigureAndStart();
             }, cancellationToken);
+        }
+
+        private void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
+        {
+            if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, "nodeTemplateFactory/#"))
+            {
+                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                var dto = JsonConvert.DeserializeObject<RemoteNodeTemplatesFactoryDto>(json);
+
+            }
         }
 
         private async Task ConfigureAndStart()

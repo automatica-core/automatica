@@ -17,6 +17,7 @@ namespace Automatica.Core.Rule
         /// Rule Guid needs to be unique across the system
         /// </summary>
         public abstract Guid RuleGuid { get; }
+        public Guid FactoryGuid => RuleGuid;
 
         /// <summary>
         /// Rule version indicates if something changed in the <see cref="EF.Models.RuleInterfaceTemplate"/> definition. Increment to define that the <see cref="EF.Models.RuleInterfaceTemplate"/> will be updated
@@ -27,6 +28,7 @@ namespace Automatica.Core.Rule
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(IRuleTemplateFactory)"/> method will be called on every start
         /// </summary>
         public virtual bool InDevelopmentMode => false;
+
 
         /// <summary>
         /// Init method for the factory
