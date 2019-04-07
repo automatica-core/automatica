@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Extensions;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -281,5 +282,8 @@ namespace Automatica.Core.Internals.Templates
             Db.SaveChanges();
             return CreateTemplateCode.Updated;
         }
+
+
+ 
     }
 }

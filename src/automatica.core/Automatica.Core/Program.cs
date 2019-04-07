@@ -18,6 +18,7 @@ using Serilog;
 using Serilog.Filters;
 using Automatica.Core.Internals;
 using MessagePack;
+using MQTTnet.AspNetCore;
 
 namespace Automatica.Core
 {
@@ -89,7 +90,10 @@ namespace Automatica.Core
             ServerInfo.WebPort = port;
 
             var webHost = WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>()
+                .UseStartup<Startup>().UseKestrel(o => {
+                    o.ListenAnyIP(1883, l => l.UseMqtt()); 
+                    o.ListenAnyIP(Convert.ToInt32(port)); 
+                })
                 //.UseElectron(new string[])
                 .UseUrls($"http://*:{port}/")
                 .UseSerilog()

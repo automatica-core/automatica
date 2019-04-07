@@ -12,7 +12,7 @@ namespace Automatica.Core.Tests
         private readonly IDispatcher _dispatcher;
         public DispatcherTest()
         {
-            _dispatcher = new Runtime.IO.Dispatcher(null);
+            _dispatcher = new Runtime.IO.Dispatcher(null, null);
         }
 
         [Fact]

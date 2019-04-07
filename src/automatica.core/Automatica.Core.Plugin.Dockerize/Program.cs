@@ -1,10 +1,16 @@
-﻿using Automatica.Core.Base.Templates;
+﻿using Automatica.Core.Base.Localization;
 using Automatica.Core.Driver;
+using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Mqtt;
+using Automatica.Core.Plugin.Dockerize.Dispatcher;
 using Automatica.Core.Plugin.Dockerize.Factories;
 using Microsoft.Extensions.Logging.Abstractions;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Server;
+using Newtonsoft.Json;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.Plugin.Dockerize
@@ -15,10 +21,14 @@ namespace Automatica.Core.Plugin.Dockerize
         {
             Console.WriteLine("Run plugin dockerized");
 
-            var factories = await Dockerize.Init<DriverFactory>(args[0], NullLogger.Instance);
+            var localization = new LocalizationProvider(NullLogger.Instance);
+            var factories = await Dockerize.Init<DriverFactory>(args[0], NullLogger.Instance, localization);
+
+            await Task.Delay(TimeSpan.FromSeconds(10));
 
             foreach(var factory in factories)
             {
+                var ndFactory = new RemoteNodeTemplatesFactory();
                 var options = new MqttClientOptionsBuilder()
                     .WithClientId(factory.FactoryGuid.ToString())
                     .WithTcpServer("localhost")
@@ -27,8 +37,48 @@ namespace Automatica.Core.Plugin.Dockerize
 
                 var client = new MqttFactory().CreateMqttClient();
                 await client.ConnectAsync(options);
+                await client.SubscribeAsync(new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.CONFIG_TOPIC}/{factory.DriverGuid}").WithExactlyOnceQoS().Build(),
+                    new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.DISPATCHER_TOPIC}/#").WithAtLeastOnceQoS().Build());
 
-                await Dockerize.InitDriverFactory(client, factory, new RemoteNodeTemplatesFactory());
+                var dispatcher = new MqttDispatcher(client);
+
+                client.ApplicationMessageReceived += async (sender, e) =>
+                {
+                    Console.WriteLine($"received topic {e.ApplicationMessage.Topic}...");
+
+                    if (e.ApplicationMessage.Topic == $"{MqttTopicConstants.CONFIG_TOPIC}/{factory.DriverGuid}")
+                    {
+                        var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
+
+                        var context = new DriverContext(dto, dispatcher, ndFactory, null, null, NullLogger.Instance, null, null, null, false);
+                        var driver = factory.CreateDriver(context);
+
+                        if (driver.BeforeInit())
+                        {
+                           // _driverInstances.Add(driver);
+                           // nodeInstance.State = NodeInstanceState.Initialized;
+                            driver.Configure();
+                            await driver.Start(); 
+                        }
+                        else
+                        {
+                          //  nodeInstance.State = NodeInstanceState.UnknownError;
+                        }
+                    }
+                    else if(MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+                    {
+                        dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
+                    }
+                };
+
+                await Dockerize.InitDriverFactory(client, factory, ndFactory);
+                await client.PublishAsync(new MqttApplicationMessage()
+                {
+                    Topic = $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/{factory.FactoryGuid}",
+                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                    Payload = Encoding.UTF8.GetBytes(localization.ToJson())
+                });
             }
 
             Console.ReadLine();

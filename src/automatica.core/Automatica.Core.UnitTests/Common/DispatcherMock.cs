@@ -126,7 +126,7 @@ namespace Automatica.Core.UnitTests.Common
             return Task.Run(() => dis(self, value));
         }
 
-        public void RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
+        public Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
         {
             if (!_registrationMap.ContainsKey(type))
             {
@@ -138,6 +138,7 @@ namespace Automatica.Core.UnitTests.Common
             }
 
             _registrationMap[type][id].Add(callback);
+            return Task.CompletedTask;
         }
 
         public void Clear()
@@ -145,9 +146,10 @@ namespace Automatica.Core.UnitTests.Common
             NodeValues.Clear();
         }
 
-        public void ClearRegistrations()
+        public Task ClearRegistrations()
         {
             _registrationMap.Clear();
+            return Task.CompletedTask;
         }
     }
 }

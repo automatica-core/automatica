@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Docker;
-using Automatica.Core.WebApi.Converter.MessagePack;
-using MessagePack;
+using Automatica.Core.Internals.Mqtt;
 using MQTTnet.Client;
 using Newtonsoft.Json;
 
@@ -43,13 +41,12 @@ namespace Automatica.Core.Plugin.Dockerize.Factories
             };
 
             var json = JsonConvert.SerializeObject(remoteDto);
-            Console.WriteLine($"Sending {json}");
 
             await client.PublishAsync(new MQTTnet.MqttApplicationMessage()
             {
                 Payload = Encoding.UTF8.GetBytes(json),
                 QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                Topic = $"nodeTemplateFactory/{factoryGuid}"
+                Topic = $"{MqttTopicConstants.NODETEMPLATES_TOPIC}/{factoryGuid}"
             });
         }
 

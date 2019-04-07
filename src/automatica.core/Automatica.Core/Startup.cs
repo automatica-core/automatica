@@ -50,6 +50,7 @@ using Automatica.Core.Model.Models.User;
 using Automatica.Push.LearnMode;
 using Automatica.Core.WebApi.Converter.MessagePack;
 using Microsoft.AspNetCore.ResponseCompression;
+using MQTTnet.AspNetCore;
 
 namespace Automatica.Core
 {
@@ -65,6 +66,10 @@ namespace Automatica.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHostedMqttServer(b => b.WithDefaultEndpoint());
+            services.AddMqttTcpServerAdapter();
+            services.AddMqttWebSocketServerAdapter();
+
             services.AddDbContext<AutomaticaContext>();
             services.AddResponseCompression(options =>
             {
@@ -209,6 +214,7 @@ namespace Automatica.Core
         {
             app.UseCors("CorsPolicy");
             app.UseResponseCompression();
+
 
             var port = ServerInfo.WebPort;
 

@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Base.Templates;
+﻿using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Plugin.Dockerize.Factories;
 using Microsoft.Extensions.Logging;
@@ -28,7 +29,7 @@ namespace Automatica.Core.Plugin.Dockerize
             await templateFactory.SubmitFactoryData(factory.FactoryGuid, client);
         }
 
-        internal static Task<IList<T>> Init<T>(string workingDir, ILogger logger)
+        internal static Task<IList<T>> Init<T>(string workingDir, ILogger logger, ILocalizationProvider localizationProvider)
         {
             IList<T> retT = new List<T>();
             foreach (var file in Directory.GetFiles(workingDir, "*.dll"))
@@ -68,6 +69,8 @@ namespace Automatica.Core.Plugin.Dockerize
                         }
                     }
                 }
+
+                localizationProvider.LoadFromAssembly(assembly);
             }
 
             return Task.FromResult(retT);

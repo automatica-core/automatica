@@ -39,6 +39,9 @@ using MQTTnet.Server;
 using Newtonsoft.Json;
 using System.Text;
 using Automatica.Core.Internals.Docker;
+using Automatica.Core.EF.Extensions;
+using Newtonsoft.Json.Linq;
+using Automatica.Core.Internals.Mqtt;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -62,6 +65,11 @@ namespace Automatica.Core.Runtime.Core
         private int _configuredDrivers;
 
         private readonly IDictionary<Guid, IDriverFactory> _driverFactories;
+
+        private readonly IList<Guid> _remoteDriverFactories = new List<Guid>();
+        private readonly IList<string> _connectedMqttClients = new List<string>();
+        private readonly IDictionary<string, NodeInstance> _mqttNodes = new Dictionary<string, NodeInstance>();
+
         private readonly IList<IDriver> _driverInstances = new List<IDriver>();
         private readonly IList<IDriverNode> _driverNodes = new List<IDriverNode>();
         private readonly IDictionary<Guid, IDriverNode> _driverNodesMap = new Dictionary<Guid, IDriverNode>();
@@ -138,7 +146,21 @@ namespace Automatica.Core.Runtime.Core
             _trendingRecorder.Add(new DatabaseTrendingRecorder(_config, _dispatcher));
             _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
 
-            _mqttServer = new MqttFactory().CreateMqttServer();
+            _mqttServer = services.GetRequiredService<IMqttServer>();
+            
+        }
+
+        private async void _mqttServer_ClientSubscribedTopic(object sender, MqttClientSubscribedTopicEventArgs e)
+        {
+            _logger.LogDebug($"Client {e.ClientId} subscribed to {e.TopicFilter}");
+
+            //if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.CONFIG_TOPIC}/#"))
+            //{
+            //    if (_mqttNodes.ContainsKey(e.ClientId))
+            //    {
+            //        await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+            //    }
+            //}
         }
 
         private void InitInternals()
@@ -162,29 +184,112 @@ namespace Automatica.Core.Runtime.Core
             
             await Task.Run(async () =>
             {
-                var options = new MqttServerOptionsBuilder().Build();
+                try
+                {
+                    var options = new MqttServerOptionsBuilder().Build();
 
+                    _mqttServer.ApplicationMessageReceived += _mqttServer_ApplicationMessageReceived;
+                    _mqttServer.ClientConnected += _mqttServer_ClientConnected;
+                    _mqttServer.ClientSubscribedTopic += _mqttServer_ClientSubscribedTopic;
 
-                await _mqttServer.StartAsync(options);
+                    CheckAndInstallPluginUpdates();
 
-                _mqttServer.ApplicationMessageReceived += _mqttServer_ApplicationMessageReceived;
+                    _automaticUpdate.Init();
 
-                CheckAndInstallPluginUpdates();
-
-                _automaticUpdate.Init();
-
-                RunState = RunState.Loading;
-                Load(ServerInfo.DriverDirectoy, ServerInfo.DriverPattern);
-                await ConfigureAndStart();
+                    RunState = RunState.Loading;
+                    Load(ServerInfo.DriverDirectoy, ServerInfo.DriverPattern);
+                    await ConfigureAndStart();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Could not startup...");
+                }
             }, cancellationToken);
+        }
+
+        private async void _mqttServer_ClientConnected(object sender, MqttClientConnectedEventArgs e)
+        {
+            _connectedMqttClients.Add(e.ClientId);
+            _logger.LogDebug($"Client {e.ClientId} connected...");
+
+            if (_mqttNodes.ContainsKey(e.ClientId))
+            {
+                await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+            }
+        }
+
+        private async Task PublishConfig(string clientId, NodeInstance nodeInstance)
+        {
+            _logger.LogDebug($"Publish to config/{clientId}");
+            await _mqttServer.PublishAsync(new MqttApplicationMessage()
+            {
+                Topic = $"{MqttTopicConstants.CONFIG_TOPIC}/{clientId}",
+                QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
+                Retain = true
+            });
         }
 
         private void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, "nodeTemplateFactory/#"))
+            try
             {
-                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                var dto = JsonConvert.DeserializeObject<RemoteNodeTemplatesFactoryDto>(json);
+                if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.NODETEMPLATES_TOPIC}/#"))
+                {
+                    var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                    var dto = JsonConvert.DeserializeObject<RemoteNodeTemplatesFactoryDto>(json);
+
+                    _remoteDriverFactories.Add(new Guid(e.ApplicationMessage.Topic.Split("/", StringSplitOptions.RemoveEmptyEntries)[1]));
+
+                    using (var db = new AutomaticaContext(_config))
+                    {
+                        foreach (var entity in dto.InterfaceTypes)
+                        {
+                            db.AddOrUpdate(entity, (x) => x.Type);
+                        }
+
+                        foreach (var entity in dto.Settings)
+                        {
+                            db.AddOrUpdate(entity, (x) => x.ObjId);
+                        }
+
+                        foreach (var entity in dto.NodeTemplates)
+                        {
+                            db.AddOrUpdate(entity, (x) => x.ObjId);
+                        }
+
+                        foreach (var entity in dto.PropertyTemplates)
+                        {
+                            db.AddOrUpdate(entity, (x) => x.ObjId);
+                        }
+
+                        foreach (var entity in dto.PropertyTemplateConstraints)
+                        {
+                            db.AddOrUpdate(entity, (x) => x.ObjId);
+                        }
+
+                        foreach (var entity in dto.PropertyTemplateConstraintData)
+                        {
+                            db.AddOrUpdate(entity, (x) => x.ObjId);
+                        }
+
+                        db.SaveChanges();
+                    }
+                }
+                else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/#"))
+                {
+                    var data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+
+                    var localization = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(data);
+                    _localizationProvider.AppendDictionary(localization);
+                }
+                else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+                {
+                    _dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
+                }
+            }
+            catch (Exception ex)
+            {
 
             }
         }
@@ -215,7 +320,7 @@ namespace Automatica.Core.Runtime.Core
 #pragma warning restore 4014
            
 
-            Configure();
+            await Configure();
 
             RunState = RunState.Starting;
 
@@ -384,7 +489,7 @@ namespace Automatica.Core.Runtime.Core
         }
 
 
-        private void ConfigureDriversRecursive(NodeInstance root)
+        private async Task ConfigureDriversRecursive(NodeInstance root)
         {
             foreach (var nodeInstance in root.InverseThis2ParentNodeInstanceNavigation)
             {
@@ -402,7 +507,7 @@ namespace Automatica.Core.Runtime.Core
                     }
                     _logger.LogDebug($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
-                    ConfigureDriversRecursive(nodeInstance);
+                    await ConfigureDriversRecursive(nodeInstance);
                     continue;
                 }
                 if (nodeInstance.This2NodeTemplateNavigation.IsAdapterInterface != null && nodeInstance.This2NodeTemplateNavigation.IsAdapterInterface.Value)
@@ -417,14 +522,18 @@ namespace Automatica.Core.Runtime.Core
                     }
                     _logger.LogDebug($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
-                    ConfigureDriversRecursive(nodeInstance);
+                    await ConfigureDriversRecursive(nodeInstance);
                     continue;
                 }
 
                 if (!_driverFactories.ContainsKey(nodeInstance.This2NodeTemplateNavigation.ObjId))
                 {
+                    var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
+                    await PublishConfig(nodeId, nodeInstance);
+
+                    _mqttNodes.Add(nodeId, nodeInstance);
                     nodeInstance.State = NodeInstanceState.UnknownError;
-                    _logger.LogDebug($"Could not find factory for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogDebug($"Could not find factory for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key} - preserve config for mqtt client");
                     continue;
                 }
 
@@ -501,7 +610,7 @@ namespace Automatica.Core.Runtime.Core
         }
 
 
-        private void Configure()
+        private async Task Configure()
         {
             _logger.LogDebug("Searching instantiated drivers");
 
@@ -517,7 +626,7 @@ namespace Automatica.Core.Runtime.Core
             root.InverseThis2ParentNodeInstanceNavigation.Add(NodeInstanceHelper.RecursiveLoad(root, _dbContext));
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstances.Add(root.ObjId, root);
-            ConfigureDriversRecursive(root);
+            await ConfigureDriversRecursive(root);
 
 
             var rules = _dbContext.RuleInstances.Include(a => a.RuleInterfaceInstance)
@@ -560,7 +669,7 @@ namespace Automatica.Core.Runtime.Core
                 {
                     foreach(var recorder in _trendingRecorder)
                     {
-                        recorder.AddTrend(node.ObjId);
+                        await recorder.AddTrend(node.ObjId);
                     }
                 }
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
@@ -10,13 +9,16 @@ using Automatica.Push.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
-using Automatica.Core.Base.Extensions;
+using MQTTnet.Server;
+using Automatica.Core.Internals.Mqtt;
+using Automatica.Core.Internals.Serialization;
 
 namespace Automatica.Core.Runtime.IO
 {
     public class Dispatcher : IDispatcher
     {
         private readonly IHubContext<DataHub> _dataHub;
+        private readonly IMqttServer _mqttServer;
         private readonly ILogger _logger;
         private readonly object _lock = new object();
 
@@ -25,9 +27,12 @@ namespace Automatica.Core.Runtime.IO
 
         private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>>();
         private readonly Timer _notifyTimer = new Timer();
-        public Dispatcher(IHubContext<DataHub> dataHub)
+
+        public Dispatcher(IHubContext<DataHub> dataHub, IMqttServer mqttServer)
         {
             _dataHub = dataHub;
+            _mqttServer = mqttServer;
+
             _logger = SystemLogger.DispatcherLogger;
 
             _notifyTimer.Elapsed += _notifyTimer_Elapsed;
@@ -111,10 +116,8 @@ namespace Automatica.Core.Runtime.IO
                 {
                     try
                     {
-                        var cts = new CancellationTokenSource();
-                        cts.CancelAfter(TimeSpan.FromSeconds(10));
-                        
-                        await DispatchValueInternal(self, value, dis).WithCancellation(cts.Token);
+
+                        await DispatchValueInternal(self, value, dis);
                     }
                     catch (Exception e)
                     {
@@ -123,8 +126,22 @@ namespace Automatica.Core.Runtime.IO
                     }
                 }
             }
+            else if(self.Source != DispatchableSource.Mqtt)
+            {
+                _logger.LogInformation($"Dispatch value via mqtt dispatcher");
+
+                var topic = $"{MqttTopicConstants.DISPATCHER_TOPIC}/{self.Type}/{self.Id}";
+                await _mqttServer.PublishAsync(new MQTTnet.MqttApplicationMessage()
+                {
+                    Topic = topic,
+                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce,
+                    Payload = BinarySerializer.Serialize(value),
+                    Retain = true
+                });
+            }
 
             _dataHub?.Clients.Group("All").SendAsync("dispatchValue", self.Type, self.Id, value);
+
         }
 
         private Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
@@ -132,7 +149,7 @@ namespace Automatica.Core.Runtime.IO
             return Task.Run(() => dis(self, value));
         }
 
-        public void RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
+        public virtual Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
         {
             if (!_registrationMap.ContainsKey(type))
             {
@@ -144,11 +161,13 @@ namespace Automatica.Core.Runtime.IO
             }
 
             _registrationMap[type][id].Add(callback);
+            return Task.CompletedTask;
         }
 
-        public void ClearRegistrations()
+        public virtual Task ClearRegistrations()
         {
             _registrationMap.Clear();
+            return Task.CompletedTask;
         }
     }
 }
