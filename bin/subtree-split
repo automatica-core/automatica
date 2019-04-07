@@ -79,7 +79,6 @@ remote automatica.logic.time git@github.com:automatica-core/automatica.logic.tim
 # core repos
 split src/automatica.core.slave automatica.core.slave
 
-
 # drivers
 split src/automatica.drivers/automatica.driver.automatica.remote automatica.driver.automatica.remote
 split src/automatica.drivers/automatica.driver.constants automatica.driver.constants
