@@ -13,6 +13,7 @@ using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -28,8 +29,6 @@ namespace Automatica.Core.Runtime.Database
 
             bool dbCreated = !context.BoardTypes.Any();
 
-          
-
             if (dbCreated)
             {
                 context.Database.ExecuteSqlCommand($@"	       
@@ -39,10 +38,7 @@ namespace Automatica.Core.Runtime.Database
 		                (2, 'Output', 'Output', 'O'),
 		                (3, 'Parameter', 'Parameter', 'P');
 
-	                INSERT INTO Settings (ObjId, ValueKey, ValueInt, Type) VALUES (1, 'ConfigVersion', 0, 0);
-
-		        
-		        INSERT INTO RulePageTypes (ObjId, Name, Description, Key) VALUES 
+	           INSERT INTO RulePageTypes (ObjId, Name, Description, Key) VALUES 
 		        (1, 'Rules', 'Rules', 'rules');
 
 
@@ -52,6 +48,27 @@ namespace Automatica.Core.Runtime.Database
 
 		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
 		        (2, 'Mobile', 'Mobile', 'mobile')");
+
+                context.Slaves.Add(new Slave()
+                {
+                    ObjId = new Guid(ServerInfo.SelfSlaveId),
+                    Name = "local",
+                    Description = "this is me",
+                    ClientId = "",
+                    ClientKey = ""
+                });
+
+
+                context.Settings.Add(new Setting
+                {
+                    ObjId = 1,
+                    ValueKey = "ConfigVersion",
+                    Type = (long)PropertyTemplateType.Numeric,
+                    Value = 0,
+                    Group = "ConfigVersion",
+                    IsVisible = false,
+                    Order = 10
+                });
                 context.SaveChanges();
             }
 

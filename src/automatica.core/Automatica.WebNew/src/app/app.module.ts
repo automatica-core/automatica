@@ -35,6 +35,8 @@ import { MobileModule } from "./visualization/mobile/mobile.module";
 import { HasRoleGuard } from "./services/login.service";
 import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
+import { SlavesService } from "./services/slaves.services";
+import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
 
 export class CustomDragDropConfig extends DragDropConfig {
   public onDragStartClass: string = "dnd-drag-start";
@@ -117,7 +119,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     LicenseComponent,
     SystemComponent,
     PluginsComponent,
-    AreasEtsImportComponent
+    AreasEtsImportComponent,
+    SlaveConfigComponent
   ]
 })
 export class AppModule {

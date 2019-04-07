@@ -46,6 +46,7 @@ export enum PropertyTemplateType {
     User2Roles = 201,
     UserGroup2Roles = 202,
     UserGroup = 203,
+    Slave = 204,
 
     Invalid = 2147483647
 }

@@ -75,11 +75,17 @@ export class NodeTemplate extends BaseModel {
     public get DisplayName() {
         return this.translationService.translate(this.Name);
     }
-    
+
     public static ValueInterfaceId(): string {
         return "00000000-0000-0000-0000-000000000001";
     }
 
+    public isDriverNode() {
+        if (this.ProvidesInterface && this.ProvidesInterface.IsDriverInterface) {
+            return true;
+        }
+        return false;
+    }
 
     protected useBaseModelInstanceForJson(baseModel: BaseModel): boolean {
 

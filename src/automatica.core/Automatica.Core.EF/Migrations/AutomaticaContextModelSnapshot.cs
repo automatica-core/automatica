@@ -374,6 +374,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<Guid?>("This2ParentNodeInstance");
 
+                    b.Property<Guid?>("This2Slave");
+
                     b.Property<Guid?>("This2UserGroup");
 
                     b.Property<bool>("Trending");
@@ -399,6 +401,8 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("This2NodeTemplate");
 
                     b.HasIndex("This2ParentNodeInstance");
+
+                    b.HasIndex("This2Slave");
 
                     b.HasIndex("This2UserGroup");
 
@@ -573,6 +577,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<Guid?>("ValueRulePage");
 
+                    b.Property<Guid?>("ValueSlave");
+
                     b.Property<string>("ValueString")
                         .HasColumnType("text");
 
@@ -593,6 +599,8 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("ValueNodeInstance");
 
                     b.HasIndex("ValueRulePage");
+
+                    b.HasIndex("ValueSlave");
 
                     b.HasIndex("ValueVisuPage");
 
@@ -1015,6 +1023,24 @@ namespace Automatica.Core.EF.Migrations
                     b.HasKey("ObjId");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Slave", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClientId");
+
+                    b.Property<string>("ClientKey");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ObjId");
+
+                    b.ToTable("Slaves");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>
@@ -1499,6 +1525,11 @@ namespace Automatica.Core.EF.Migrations
                         .HasConstraintName("NodeInstance_ibfk_3")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Automatica.Core.EF.Models.Slave", "This2SlaveNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2Slave")
+                        .HasConstraintName("NodeInstance_This2Slave");
+
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
@@ -1585,6 +1616,11 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("ValueRulePage")
                         .HasConstraintName("PropertyInstance_RulePage_ValueRulePage")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Automatica.Core.EF.Models.Slave", "ValueSlaveNavigation")
+                        .WithMany()
+                        .HasForeignKey("ValueSlave")
+                        .HasConstraintName("PropertyInstance_Slave_ValueSlave");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuPage", "ValueVisuPageNavigation")
                         .WithMany()

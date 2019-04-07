@@ -44,6 +44,10 @@ export const navigation = [
         text: "COMMON.PLUGINS",
         path: "plugins",
         icon: "folder"
+    }, {
+        text: "COMMON.SLAVES",
+        path: "slaves",
+        icon: "folder"
     }];
 
     /*{

@@ -42,6 +42,7 @@ using Automatica.Core.Internals.Docker;
 using Automatica.Core.EF.Extensions;
 using Newtonsoft.Json.Linq;
 using Automatica.Core.Internals.Mqtt;
+using MQTTnet.Protocol;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -150,7 +151,7 @@ namespace Automatica.Core.Runtime.Core
             
         }
 
-        private async void _mqttServer_ClientSubscribedTopic(object sender, MqttClientSubscribedTopicEventArgs e)
+        private void _mqttServer_ClientSubscribedTopic(object sender, MqttClientSubscribedTopicEventArgs e)
         {
             _logger.LogDebug($"Client {e.ClientId} subscribed to {e.TopicFilter}");
 
@@ -170,6 +171,22 @@ namespace Automatica.Core.Runtime.Core
             _ruleEngineDispatcher = new RuleEngineDispatcher(_dbContext, this, _dispatcher);
         }
 
+        public static void ValidateConnection(MqttConnectionValidatorContext context, IConfiguration config, ILogger logger)
+        {
+            logger.LogDebug($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, passwort: {context.Password}");
+            using (var db = new AutomaticaContext(config))
+            {
+                if(db.Slaves.Any(a => a.ClientId == context.ClientId && a.ClientId == context.Username && a.ClientKey == context.Password))
+                {
+                    context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
+                }
+                else
+                {
+                    context.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
+                }
+            }
+        }
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var settings = _dbContext.Settings.SingleOrDefault(a => a.ValueKey == ServerInfo.DbConfigVersionKey);
@@ -186,8 +203,6 @@ namespace Automatica.Core.Runtime.Core
             {
                 try
                 {
-                    var options = new MqttServerOptionsBuilder().Build();
-
                     _mqttServer.ApplicationMessageReceived += _mqttServer_ApplicationMessageReceived;
                     _mqttServer.ClientConnected += _mqttServer_ClientConnected;
                     _mqttServer.ClientSubscribedTopic += _mqttServer_ClientSubscribedTopic;
@@ -528,13 +543,19 @@ namespace Automatica.Core.Runtime.Core
 
                 if (!_driverFactories.ContainsKey(nodeInstance.This2NodeTemplateNavigation.ObjId))
                 {
-                    var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
-                    await PublishConfig(nodeId, nodeInstance);
-
-                    _mqttNodes.Add(nodeId, nodeInstance);
-                    nodeInstance.State = NodeInstanceState.UnknownError;
-                    _logger.LogDebug($"Could not find factory for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key} - preserve config for mqtt client");
-                    continue;
+                    if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
+                    {
+                        var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
+                        await PublishConfig(nodeId, nodeInstance);
+                        _mqttNodes.Add(nodeId, nodeInstance);
+                    }
+                    else
+                    {
+                        //if not a local driver - start new docker instance
+                        nodeInstance.State = NodeInstanceState.UnknownError;
+                        _logger.LogDebug($"Could not find factory for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key} - preserve config for mqtt client");
+                        continue;
+                    }
                 }
 
                 try

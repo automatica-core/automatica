@@ -18,6 +18,7 @@ import { CategoryGroup, CategoryInstance } from "../base/model/categories";
 import { AutomaticVisualizationData } from "../base/model/automatic-visualization-data";
 import { Link } from "../base/model/link";
 import { Trending } from "../base/model/trending/trending";
+import { Slave } from "../base/model/slaves/slave";
 
 @Injectable()
 export class ModelDecoratorService {
@@ -52,7 +53,7 @@ export class ModelDecoratorService {
         new AutomaticVisualizationData();
 
         new Trending();
-
+        new Slave();
 
         // tslint:enable:no-unused-expression
     }

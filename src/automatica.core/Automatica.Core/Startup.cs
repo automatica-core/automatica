@@ -66,7 +66,7 @@ namespace Automatica.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHostedMqttServer(b => b.WithDefaultEndpoint());
+          
             services.AddMqttTcpServerAdapter();
             services.AddMqttWebSocketServerAdapter();
 
@@ -206,6 +206,9 @@ namespace Automatica.Core
                 options.EnableDetailedErrors = true;
             }).AddJsonProtocol(options => {
             }); ;
+
+
+            services.AddHostedMqttServer(b => b.WithDefaultEndpoint().WithConnectionValidator(a => CoreServer.ValidateConnection(a, Configuration, SystemLogger.Instance)));
 
         }
 

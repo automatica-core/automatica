@@ -21,6 +21,12 @@ namespace Automatica.Core.Base.Common
 
         public const int ExitCodeUpdateInstall = 2;
         public const int ExitCodePluginUpdateInstall = 3;
+
+
+        public const string SelfSlaveId = "172bb906-b584-4d5d-85e8-b6d881498534";
+
+        public static Guid SelfSlaveGuid => new Guid(SelfSlaveId);
+
         /// <summary>
         /// Gets the loaded config version (increment after every save)
         /// </summary>

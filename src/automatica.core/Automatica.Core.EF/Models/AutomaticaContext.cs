@@ -64,6 +64,7 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<Plugin> Plugins { get; set; }
 
         public virtual DbSet<Trending> Trendings { get; set; }
+        public virtual DbSet<Slave> Slaves { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -342,6 +343,12 @@ namespace Automatica.Core.EF.Models
                     .HasForeignKey(d => d.This2UserGroup)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("NodeInstance_This2UserGroup");
+
+                entity.HasOne(d => d.This2SlaveNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.This2Slave)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("NodeInstance_This2Slave");
             });
 
             modelBuilder.Entity<NodeInstance2RulePage>(entity =>
@@ -512,6 +519,13 @@ namespace Automatica.Core.EF.Models
                  .HasForeignKey(d => d.ValueCategoryInstance)
                  .OnDelete(DeleteBehavior.Cascade)
                  .HasConstraintName("PropertyInstance_CategoryInstance_ValueCategoryInstance");
+
+                entity.HasOne(d => d.ValueSlaveNavigation)
+                 .WithMany()
+                 .HasForeignKey(d => d.ValueSlave)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("PropertyInstance_Slave_ValueSlave");
+
 
                 entity.HasOne(d => d.This2PropertyTemplateNavigation)
                     .WithMany()
@@ -1337,6 +1351,18 @@ namespace Automatica.Core.EF.Models
                   .HasForeignKey(d => d.This2NodeInstance)
                   .OnDelete(DeleteBehavior.Cascade);
 
+            });
+
+            modelBuilder.Entity<Slave>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name);
+                entity.Property(e => e.Description);
+
+                entity.Property(e => e.ClientId);
+                entity.Property(e => e.ClientKey);
             });
         }
     }

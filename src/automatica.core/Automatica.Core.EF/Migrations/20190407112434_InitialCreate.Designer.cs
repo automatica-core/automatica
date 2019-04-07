@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
-    [Migration("20181223154250_AddedRuleInterfaceIsLinkableParameter")]
-    partial class AddedRuleInterfaceIsLinkableParameter
+    [Migration("20190407112434_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
@@ -376,7 +376,17 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<Guid?>("This2ParentNodeInstance");
 
+                    b.Property<Guid?>("This2Slave");
+
                     b.Property<Guid?>("This2UserGroup");
+
+                    b.Property<bool>("Trending");
+
+                    b.Property<int>("TrendingInterval");
+
+                    b.Property<bool>("TrendingToCloud");
+
+                    b.Property<int>("TrendingType");
 
                     b.Property<bool>("UseInVisu")
                         .ValueGeneratedOnAdd()
@@ -393,6 +403,8 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("This2NodeTemplate");
 
                     b.HasIndex("This2ParentNodeInstance");
+
+                    b.HasIndex("This2Slave");
 
                     b.HasIndex("This2UserGroup");
 
@@ -567,6 +579,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<Guid?>("ValueRulePage");
 
+                    b.Property<Guid?>("ValueSlave");
+
                     b.Property<string>("ValueString")
                         .HasColumnType("text");
 
@@ -587,6 +601,8 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("ValueNodeInstance");
 
                     b.HasIndex("ValueRulePage");
+
+                    b.HasIndex("ValueSlave");
 
                     b.HasIndex("ValueVisuPage");
 
@@ -982,9 +998,13 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("varchar(1024)")
                         .HasDefaultValue("System");
 
+                    b.Property<bool>("IsReadonly");
+
                     b.Property<bool>("IsVisible")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
+
+                    b.Property<int>("Order");
 
                     b.Property<long>("Type")
                         .HasColumnType("int");
@@ -1005,6 +1025,45 @@ namespace Automatica.Core.EF.Migrations
                     b.HasKey("ObjId");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Slave", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClientId");
+
+                    b.Property<string>("ClientKey");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ObjId");
+
+                    b.ToTable("Slaves");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>
+                {
+                    b.Property<Guid>("ObjId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(1024);
+
+                    b.Property<Guid>("This2NodeInstance");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.Property<double>("Value");
+
+                    b.HasKey("ObjId");
+
+                    b.HasIndex("This2NodeInstance");
+
+                    b.ToTable("Trendings");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VersionInformation", b =>
@@ -1468,6 +1527,11 @@ namespace Automatica.Core.EF.Migrations
                         .HasConstraintName("NodeInstance_ibfk_3")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Automatica.Core.EF.Models.Slave", "This2SlaveNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2Slave")
+                        .HasConstraintName("NodeInstance_This2Slave");
+
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
@@ -1554,6 +1618,11 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("ValueRulePage")
                         .HasConstraintName("PropertyInstance_RulePage_ValueRulePage")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Automatica.Core.EF.Models.Slave", "ValueSlaveNavigation")
+                        .WithMany()
+                        .HasForeignKey("ValueSlave")
+                        .HasConstraintName("PropertyInstance_Slave_ValueSlave");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuPage", "ValueVisuPageNavigation")
                         .WithMany()
@@ -1672,6 +1741,14 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("This2DefaultMobileVisuTemplate")
                         .HasConstraintName("RuleTemplate_DefaultVisuMobileTemplate")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>
+                {
+                    b.HasOne("Automatica.Core.EF.Models.NodeInstance", "This2NodeInstanceNavigation")
+                        .WithMany()
+                        .HasForeignKey("This2NodeInstance")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectInstance", b =>

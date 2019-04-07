@@ -77,6 +77,29 @@ namespace Automatica.Core.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Plugins",
+                columns: table => new
+                {
+                    ObjId = table.Column<Guid>(nullable: false),
+                    PluginGuid = table.Column<Guid>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    ComponentName = table.Column<string>(nullable: true),
+                    Version = table.Column<string>(nullable: true),
+                    PluginType = table.Column<int>(nullable: false),
+                    Publisher = table.Column<string>(nullable: true),
+                    MinCoreServerVersion = table.Column<string>(nullable: true),
+                    AzureUrl = table.Column<string>(nullable: true),
+                    AzureFileName = table.Column<string>(nullable: true),
+                    IsPublic = table.Column<bool>(nullable: true),
+                    IsPrerelease = table.Column<bool>(nullable: true),
+                    Loaded = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Plugins", x => x.ObjId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Priviledges",
                 columns: table => new
                 {
@@ -159,11 +182,28 @@ namespace Automatica.Core.EF.Migrations
                     ValueDouble = table.Column<double>(type: "double", nullable: true),
                     Group = table.Column<string>(type: "varchar(1024)", nullable: true, defaultValue: "System"),
                     Type = table.Column<long>(type: "int", nullable: false),
-                    IsVisible = table.Column<bool>(nullable: false, defaultValue: false)
+                    IsVisible = table.Column<bool>(nullable: false, defaultValue: false),
+                    Order = table.Column<int>(nullable: false),
+                    IsReadonly = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Settings", x => x.ObjId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Slaves",
+                columns: table => new
+                {
+                    ObjId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    ClientId = table.Column<string>(nullable: true),
+                    ClientKey = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Slaves", x => x.ObjId);
                 });
 
             migrationBuilder.CreateTable(
@@ -294,8 +334,8 @@ namespace Automatica.Core.EF.Migrations
                 name: "Priviledge2Roles",
                 columns: table => new
                 {
-                    This2Priviledge = table.Column<Guid>(nullable: false),
-                    This2Role = table.Column<Guid>(nullable: false)
+                    This2Role = table.Column<Guid>(nullable: false),
+                    This2Priviledge = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -670,8 +710,13 @@ namespace Automatica.Core.EF.Migrations
                     This2CategoryInstance = table.Column<Guid>(nullable: true),
                     StateTextValueTrue = table.Column<string>(nullable: true, defaultValue: "1"),
                     StateTextValueFalse = table.Column<string>(nullable: true, defaultValue: "0"),
-                    StateColorValueTrue = table.Column<string>(nullable: true, defaultValue: "rgba(0, 0, 0, 255)"),
-                    StateColorValueFalse = table.Column<string>(nullable: true, defaultValue: "rgba(0, 0, 0, 255)")
+                    StateColorValueTrue = table.Column<string>(nullable: true, defaultValue: "rgba(0, 0, 0, 1)"),
+                    StateColorValueFalse = table.Column<string>(nullable: true, defaultValue: "rgba(0, 0, 0, 1)"),
+                    Trending = table.Column<bool>(nullable: false),
+                    TrendingInterval = table.Column<int>(nullable: false),
+                    TrendingType = table.Column<int>(nullable: false),
+                    TrendingToCloud = table.Column<bool>(nullable: false),
+                    This2Slave = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -700,6 +745,12 @@ namespace Automatica.Core.EF.Migrations
                         principalTable: "NodeInstances",
                         principalColumn: "ObjId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "NodeInstance_This2Slave",
+                        column: x => x.This2Slave,
+                        principalTable: "Slaves",
+                        principalColumn: "ObjId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "NodeInstance_This2UserGroup",
                         column: x => x.This2UserGroup,
@@ -816,7 +867,8 @@ namespace Automatica.Core.EF.Migrations
                     MaxLinks = table.Column<int>(type: "int(11)", nullable: false),
                     ParameterDataType = table.Column<int>(type: "int(11)", nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
-                    DefaultValue = table.Column<string>(type: "varchar(64)", nullable: true)
+                    DefaultValue = table.Column<string>(type: "varchar(64)", nullable: true),
+                    IsLinkableParameter = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -864,6 +916,27 @@ namespace Automatica.Core.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Trendings",
+                columns: table => new
+                {
+                    ObjId = table.Column<Guid>(nullable: false),
+                    This2NodeInstance = table.Column<Guid>(nullable: false),
+                    Value = table.Column<double>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false),
+                    Source = table.Column<string>(maxLength: 1024, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trendings", x => x.ObjId);
+                    table.ForeignKey(
+                        name: "FK_Trendings_NodeInstances_This2NodeInstance",
+                        column: x => x.This2NodeInstance,
+                        principalTable: "NodeInstances",
+                        principalColumn: "ObjId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PropertyInstances",
                 columns: table => new
                 {
@@ -881,6 +954,7 @@ namespace Automatica.Core.EF.Migrations
                     ValueVisuPage = table.Column<Guid>(nullable: true),
                     ValueAreaInstance = table.Column<Guid>(nullable: true),
                     ValueCategoryInstance = table.Column<Guid>(nullable: true),
+                    ValueSlave = table.Column<Guid>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -928,6 +1002,12 @@ namespace Automatica.Core.EF.Migrations
                         principalTable: "RulePages",
                         principalColumn: "ObjId",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "PropertyInstance_Slave_ValueSlave",
+                        column: x => x.ValueSlave,
+                        principalTable: "Slaves",
+                        principalColumn: "ObjId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "PropertyInstance_VisuPage_ValueVisuPage",
                         column: x => x.ValueVisuPage,
@@ -1162,6 +1242,11 @@ namespace Automatica.Core.EF.Migrations
                 column: "This2ParentNodeInstance");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NodeInstances_This2Slave",
+                table: "NodeInstances",
+                column: "This2Slave");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_NodeInstances_This2UserGroup",
                 table: "NodeInstances",
                 column: "This2UserGroup");
@@ -1220,6 +1305,11 @@ namespace Automatica.Core.EF.Migrations
                 name: "IX_PropertyInstances_ValueRulePage",
                 table: "PropertyInstances",
                 column: "ValueRulePage");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PropertyInstances_ValueSlave",
+                table: "PropertyInstances",
+                column: "ValueSlave");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PropertyInstances_ValueVisuPage",
@@ -1307,6 +1397,11 @@ namespace Automatica.Core.EF.Migrations
                 column: "This2DefaultMobileVisuTemplate");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Trendings_This2NodeInstance",
+                table: "Trendings",
+                column: "This2NodeInstance");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User2Groups_This2UserGroup",
                 table: "User2Groups",
                 column: "This2UserGroup");
@@ -1366,6 +1461,9 @@ namespace Automatica.Core.EF.Migrations
                 name: "Links");
 
             migrationBuilder.DropTable(
+                name: "Plugins");
+
+            migrationBuilder.DropTable(
                 name: "Priviledge2Roles");
 
             migrationBuilder.DropTable(
@@ -1376,6 +1474,9 @@ namespace Automatica.Core.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "Trendings");
 
             migrationBuilder.DropTable(
                 name: "User2Groups");
@@ -1427,6 +1528,9 @@ namespace Automatica.Core.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "PropertyTemplates");
+
+            migrationBuilder.DropTable(
+                name: "Slaves");
 
             migrationBuilder.DropTable(
                 name: "AreaInstances");

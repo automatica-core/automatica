@@ -178,6 +178,15 @@ export class PropertyInstance extends BaseModel {
         this._ValueAreaInstance = v;
     }
 
+    private _ValueSlave: string;
+    @JsonProperty()
+    public get ValueSlave(): string {
+        return this._ValueSlave;
+    }
+    public set ValueSlave(v: string) {
+        this._ValueSlave = v;
+    }
+
 
     private _ValueLong: number;
     @JsonProperty()
@@ -355,6 +364,8 @@ export class PropertyInstance extends BaseModel {
                 return this.ValueVisuPage;
             case PropertyTemplateType.AreaInstanceLink:
                 return this.ValueAreaInstance;
+            case PropertyTemplateType.Slave:
+                return this.ValueSlave;
             case PropertyTemplateType.Bool:
                 return this.ValueBool;
             case PropertyTemplateType.Stopbits:
@@ -416,6 +427,9 @@ export class PropertyInstance extends BaseModel {
                 break;
             case PropertyTemplateType.AreaInstanceLink:
                 this.ValueAreaInstance = value;
+                break;
+            case PropertyTemplateType.Slave:
+                this.ValueSlave = value;
                 break;
             case PropertyTemplateType.Bool:
                 if (typeof (value) === "boolean") {

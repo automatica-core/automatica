@@ -13,8 +13,6 @@ import { VirtualPropertyInstance } from "./virtual-props/virtual-property-instan
 import { MetaHelper } from "../base/meta-helper";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
 import { Guid } from "../utils/Guid";
-import { CategoryInstance } from "./categories/category-instance";
-import { AreaInstance } from "./areas/area-instance";
 import { VirtualUseInVisuPropertyInstance } from "./virtual-props/virtual-use-in-visu-property-instance";
 import { VirtualAreaPropertyInstance } from "./virtual-props/virtual-area-property-instance";
 import { VirtualCategoryPropertyInstance } from "./virtual-props/virtual-category-property-instance";
@@ -25,6 +23,7 @@ import { VirtualGenericPropertyInstance } from "./virtual-props/virtual-generic-
 import { NodeDataTypeEnum } from "./node-data-type";
 import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-template";
 import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
+import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -217,6 +216,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     @JsonProperty()
     This2UserGroup: string;
 
+    @JsonProperty()
+    This2Slave: string;
+
 
     @JsonProperty()
     StateTextValueTrue: string;
@@ -267,6 +269,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         instance.IsReadable = template.IsReadable;
         instance.IsWriteable = template.IsWriteable;
         instance.IsFavorite = false;
+
+        if (template.isDriverNode()) {
+            instance.This2Slave = "172bb906-b584-4d5d-85e8-b6d881498534";
+        }
 
         for (const p of template.Properties) {
             const prop: PropertyInstance = PropertyInstance.createFromTemplate(instance, p);
@@ -386,6 +392,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
 
+        if (this.isDriverNode()) {
+            this.Properties.push(new VirtualSlavePropertyInstance(this));
+        }
+
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
             this.Properties.push(new VirtualWriteablePropertyInstance(this));
@@ -415,11 +425,18 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.updateDisplayName();
 
         for (const x of this.Properties) {
-            x.propertyChanged.subscribe((property) => {
+            x.propertyChanged.subscribe(() => {
                 this.updateDisplayName();
                 this.notifyChange("Properties");
             });
         }
+    }
+
+    private isDriverNode() {
+        if (this.NodeTemplate && this.NodeTemplate.ProvidesInterface && this.NodeTemplate.ProvidesInterface.IsDriverInterface) {
+            return true;
+        }
+        return false;
     }
 
     public setParent(parent: ITreeNode) {

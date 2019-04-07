@@ -31,6 +31,7 @@ namespace Automatica.Core.EF.Models
         public Guid? ValueVisuPage { get; set; }
         public Guid? ValueAreaInstance { get; set; }
         public Guid? ValueCategoryInstance { get; set; }
+        public Guid? ValueSlave { get; set; }
 
         public bool IsDeleted { get; set; }
 
@@ -49,6 +50,8 @@ namespace Automatica.Core.EF.Models
         public AreaInstance ValueAreaInstanceNavigation { get; set; }
 
         public CategoryInstance ValueCategoryInstanceNavigation { get; set; }
+
+        public Slave ValueSlaveNavigation { get; set; }
 
         [JsonIgnore, IgnoreMember]
         public VisuObjectInstance This2VisuObjectInstanceNavigation { get; set; }
