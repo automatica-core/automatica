@@ -26,12 +26,20 @@ namespace Automatica.Core.Plugin.Dockerize
 
             await Task.Delay(TimeSpan.FromSeconds(10));
 
+            var masterAddress = "localhost";
+
+            var masterEnv = Environment.GetEnvironmentVariable("master");
+            if (!string.IsNullOrEmpty(masterEnv))
+            {
+                masterAddress = masterEnv;
+            }
+
             foreach(var factory in factories)
             {
                 var ndFactory = new RemoteNodeTemplatesFactory();
                 var options = new MqttClientOptionsBuilder()
                     .WithClientId(factory.FactoryGuid.ToString())
-                    .WithTcpServer("localhost")
+                    .WithTcpServer(masterAddress)
                     .WithCleanSession()
                     .Build();
 

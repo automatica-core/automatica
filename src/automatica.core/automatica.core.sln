@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Model", "Au
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Docker", "01 Docker", "{0E8F2789-3E5E-4A2B-B2AA-C82C55E1EDBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Plugin.Dockerize", "Automatica.Core.Plugin.Dockerize\Automatica.Core.Plugin.Dockerize.csproj", "{06ED557C-412F-45EA-8782-74C65B326B12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Plugin.Standalone", "Automatica.Core.Plugin.Standalone\Automatica.Core.Plugin.Standalone.csproj", "{06ED557C-412F-45EA-8782-74C65B326B12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -607,30 +607,6 @@ Global
 		{06ED557C-412F-45EA-8782-74C65B326B12}.Release|x64.Build.0 = Release|Any CPU
 		{06ED557C-412F-45EA-8782-74C65B326B12}.Release|x86.ActiveCfg = Release|Any CPU
 		{06ED557C-412F-45EA-8782-74C65B326B12}.Release|x86.Build.0 = Release|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Debug|x64.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Debug|x86.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugLocal|x64.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugLocal|x64.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugLocal|x86.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugLocal|x86.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugTests|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugTests|Any CPU.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugTests|x64.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugTests|x64.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugTests|x86.ActiveCfg = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.DebugTests|x86.Build.0 = Debug|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Release|x64.ActiveCfg = Release|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Release|x64.Build.0 = Release|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Release|x86.ActiveCfg = Release|Any CPU
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -659,7 +635,6 @@ Global
 		{476563EE-BA0F-4775-B82F-B4583CBD0758} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 		{4234F78C-3F64-4233-80C5-913F74579DCA} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 		{06ED557C-412F-45EA-8782-74C65B326B12} = {0E8F2789-3E5E-4A2B-B2AA-C82C55E1EDBE}
-		{1E106889-064A-4C44-ACFE-6CBF216FFC36} = {0E1F4521-2547-47CE-8B43-5789774ED127}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FBBCDCF-EF03-4621-9894-35C829FA855F}

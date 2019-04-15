@@ -12,6 +12,7 @@ namespace Automatica.Core.Base.Common
         private static DateTime? _startupTimePrivate;
         public const string DbConfigVersionKey = "ConfigVersion";
         public const string ServerExecutable = "Automatica.Core";
+        public const string SlaveExceuteable = "Automatica.Core.Plugin.Dockerize";
         public const string WatchdogExecutable = "Automatica.Core.Watchdog";
         public const string BootloderExecutable = "Automatica.Core.Bootloader";
         public const string UpdateFileName = "Automatica.Core.Update.zip";

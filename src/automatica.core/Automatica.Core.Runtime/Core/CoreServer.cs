@@ -552,6 +552,8 @@ namespace Automatica.Core.Runtime.Core
                     else
                     {
                         //if not a local driver - start new docker instance
+
+
                         nodeInstance.State = NodeInstanceState.UnknownError;
                         _logger.LogDebug($"Could not find factory for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key} - preserve config for mqtt client");
                         continue;
