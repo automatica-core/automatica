@@ -70,6 +70,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly IList<Guid> _remoteDriverFactories = new List<Guid>();
         private readonly IList<string> _connectedMqttClients = new List<string>();
         private readonly IDictionary<string, NodeInstance> _mqttNodes = new Dictionary<string, NodeInstance>();
+        private readonly IDictionary<string, IList<IDriverFactory>> _mqttSlaves = new Dictionary<string, IList<IDriverFactory>>();
 
         private readonly IList<IDriver> _driverInstances = new List<IDriver>();
         private readonly IList<IDriverNode> _driverNodes = new List<IDriverNode>();
@@ -227,9 +228,38 @@ namespace Automatica.Core.Runtime.Core
             _connectedMqttClients.Add(e.ClientId);
             _logger.LogDebug($"Client {e.ClientId} connected...");
 
-            if (_mqttNodes.ContainsKey(e.ClientId))
+            if (_mqttSlaves.ContainsKey(e.ClientId))
             {
                 await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+            }
+        }
+
+        private async Task StartInstances(string clientId, IList<IDriverFactory> nodeInstances)
+        {
+            try
+            {
+                foreach (var node in nodeInstances)
+                {
+                    _logger.LogDebug($"Publish to slave/{clientId}/action/start");
+
+                    var actionRequest = new ActionRequest()
+                    {
+                        Action = Internals.Mqtt.SlaveAction.Start,
+                        ImageSource = "http://hub.docker.com"
+                    };
+
+                    await _mqttServer.PublishAsync(new MqttApplicationMessage()
+                    {
+                        Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}/{MqttTopicConstants.SLAVE_TOPIC_START}",
+                        QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                        Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstances)),
+                        Retain = true
+                    });
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Could not send start instances message...");
             }
         }
 
@@ -553,8 +583,14 @@ namespace Automatica.Core.Runtime.Core
                     if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
                     {
                         var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
-                        await PublishConfig(nodeId, nodeInstance);
+                        //await PublishConfig(nodeId, nodeInstance);
                         _mqttNodes.Add(nodeId, nodeInstance);
+
+                        if (!_mqttSlaves.ContainsKey(nodeInstance.This2SlaveNavigation.ClientId))
+                        {
+                            _mqttSlaves.Add(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>());
+                        }
+                        _mqttSlaves[nodeInstance.This2SlaveNavigation.ClientId].Add(_driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId]);
                     }
                     else
                     {

@@ -1,5 +1,4 @@
 ﻿using System;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 
@@ -23,6 +22,12 @@ namespace Automatica.Core.Driver
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(INodeTemplateFactory)"/> method will be called on every start
         /// </summary>
         public virtual bool InDevelopmentMode => false;
+
+        public virtual string ImageSource => "https://hub.docker.com";
+
+        public virtual string ImageName => DriverName;
+
+        public virtual string Tag => "latest";
 
 
         /// <summary>
