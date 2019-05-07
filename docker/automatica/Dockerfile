@@ -78,6 +78,7 @@ RUN rm -rf /tmp/db
 
 EXPOSE 5001/tcp	
 EXPOSE 5000/tcp 
+EXPOSE 1883/tcp 
 
 # Build runtime image
 ENTRYPOINT ["dotnet", "/app/automatica.bootloader/Automatica.Core.Bootloader.dll"]

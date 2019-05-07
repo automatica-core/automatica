@@ -27,15 +27,21 @@ namespace Automatica.Core.Slave.Runtime
 
         private string _slaveId;
 
+        private readonly string _masterAddress;
+        private readonly string _clientKey;
+
         public SlaveRuntime(IServiceProvider services)
         {
             var config = services.GetRequiredService<IConfiguration>();
 
+            _masterAddress = config["server:master"];
+            _clientKey = config["server:clientKey"];
+
             _slaveId = config["server:clientId"];
             _options = new MqttClientOptionsBuilder()
                    .WithClientId(_slaveId)
-                   .WithTcpServer(config["server:master"])
-                   .WithCredentials(_slaveId, config["server:clientKey"])
+                   .WithTcpServer(_masterAddress)
+                   .WithCredentials(_slaveId, _clientKey)
                    .WithCleanSession()
                    .Build();
 
@@ -59,33 +65,38 @@ namespace Automatica.Core.Slave.Runtime
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            _localImages = await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
+
             await _mqttClient.ConnectAsync(_options);
 
-            var topic = $"slave/{_slaveId}/action/#";
+            var topic = $"slave/{_slaveId}/action";
             await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
 
 
-            _mqttClient.ApplicationMessageReceived += (sender, e) =>
+            _mqttClient.ApplicationMessageReceived += async (sender, e) =>
             {
                 if(MqttTopicFilterComparer.IsMatch(topic, e.ApplicationMessage.Topic))
                 {
                     var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                     var action = JsonConvert.DeserializeObject<ActionRequest>(json);
 
+                    await ExecuteAction(action);
                 }
             };
 
-            _localImages = await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
 
         }
 
         private ImagesListResponse FindImage(string imageName, string imageTag)
         {
-            foreach(var image in _localImages)
+            if (_localImages != null)
             {
-                if(image.RepoTags.Contains($"{imageName}:{imageTag}"))
+                foreach (var image in _localImages)
                 {
-                    return image;
+                    if (image.RepoTags.Contains($"{imageName}:{imageTag}"))
+                    {
+                        return image;
+                    }
                 }
             }
 
@@ -102,12 +113,38 @@ namespace Automatica.Core.Slave.Runtime
             }
         }
 
+        public static string Arch
+        {
+            get
+            {
+                var arch = "";
+
+                switch (RuntimeInformation.OSArchitecture)
+                {
+                    case Architecture.Arm:
+                        arch += "arm";
+                        break;
+                    case Architecture.Arm64:
+                        arch += "arm64";
+                        break;
+                    case Architecture.X64:
+                        arch += "x64";
+                        break;
+                    case Architecture.X86:
+                        arch += "x86";
+                        break;
+                }
+
+                return arch;
+            }
+        }
+
         private async Task StartImage(string imageSource, string imageName, string imageTag)
         {
+            var imageFullName = $"{imageName}:{imageTag}-{Arch}";
+            var image = FindImage(imageName, $"{imageTag}-{Arch}");
 
-            var image = FindImage(imageName, imageTag);
-
-            if(image == null)
+            if (image == null)
             {
                 var imageCreateParams = new ImagesCreateParameters()
                 {
@@ -115,7 +152,7 @@ namespace Automatica.Core.Slave.Runtime
                     Tag = imageTag
                 };
 
-                if(!String.IsNullOrEmpty(imageSource))
+                if (!String.IsNullOrEmpty(imageSource))
                 {
                     imageCreateParams.FromSrc = imageSource;
                 }
@@ -131,10 +168,36 @@ namespace Automatica.Core.Slave.Runtime
                 }
             }
 
-            await _dockerClient.Containers.StartWithConfigContainerExecAsync(image.ID, new ContainerExecStartParameters()
+            try
             {
-                
-            });
+                var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
+                {
+                    Image = $"{imageFullName}",
+                    AttachStderr = false,
+                    AttachStdin = false,
+                    AttachStdout = false,
+                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER=host.docker.internal", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
+                    HostConfig = new HostConfig
+                    {
+                        PortBindings = new Dictionary<string, IList<PortBinding>> {
+                            {
+                                "1833", new List<PortBinding> {
+                                    new PortBinding { HostPort = "1833" }
+                                }
+                            }
+                        },
+                        NetworkMode = "host"
+                    }
+                });
+
+
+                await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters { });
+
+            }
+            catch (Exception e)
+            {
+
+            }
          
         }
 

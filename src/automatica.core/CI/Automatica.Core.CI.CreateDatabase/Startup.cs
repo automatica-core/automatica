@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MQTTnet.Server;
 
 namespace Automatica.Core.CI.CreateDatabase
 {
@@ -28,6 +29,7 @@ namespace Automatica.Core.CI.CreateDatabase
             services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ILearnMode, EmptyLearnMode>();
+            services.AddSingleton<IMqttServer, EmptyMqttServer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

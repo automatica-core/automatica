@@ -1,0 +1,8 @@
+docker testing data
+
+
+docker-compose -f docker/docker-compose.yml -p automaticacore build --build-arg AUTOMATICA_VERSION=0.9.0.2705 --build-arg CLOUD_API_KEY=9B4771F9-411F-4D63-BE4F-AE592A9EB251 --build-arg CLOUD_URL=https://automatica-core-cloud.azurewebsites.net --build-arg FONTAWESOME_TOKEN=7A461519-1F87-4A2D-AE11-DEFDF684AAD4
+
+docker tag automaticacore_automatica automaticacore/automaticacore:dockerize-latest
+
+docker run automaticacore/automaticacore:dockerize-latest

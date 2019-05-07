@@ -45,6 +45,7 @@ namespace Automatica.Core.EF.Helper
                 .ThenInclude(a => a.ConstraintData)
                 .Include(a => a.This2AreaInstanceNavigation)
                 .Include(a => a.This2CategoryInstanceNavigation)
+                .Include(a => a.This2SlaveNavigation)
                 .SingleOrDefault(a => a.ObjId == parent.ObjId && !a.IsDeleted);
 
 

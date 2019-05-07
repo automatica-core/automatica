@@ -43,6 +43,8 @@ namespace Automatica.Core.Plugin.Dockerize
                     var user = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_USER");
                     var password = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_PASSWORD");
 
+                    Console.WriteLine($"Trying to connect to {masterAddress} with user {user}");
+
                     foreach (var factory in factories)
                     {
                         var ndFactory = new RemoteNodeTemplatesFactory();

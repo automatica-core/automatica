@@ -230,29 +230,31 @@ namespace Automatica.Core.Runtime.Core
 
             if (_mqttSlaves.ContainsKey(e.ClientId))
             {
-                await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+                await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
             }
         }
 
-        private async Task StartInstances(string clientId, IList<IDriverFactory> nodeInstances)
+        private async Task StartInstances(string clientId, IList<IDriverFactory> driverFactories)
         {
             try
             {
-                foreach (var node in nodeInstances)
+                foreach (var driver in driverFactories)
                 {
-                    _logger.LogDebug($"Publish to slave/{clientId}/action/start");
+                    _logger.LogDebug($"Publish to slave/{clientId}/action");
 
                     var actionRequest = new ActionRequest()
                     {
                         Action = Internals.Mqtt.SlaveAction.Start,
-                        ImageSource = "http://hub.docker.com"
+                        ImageSource = driver.ImageSource,
+                        ImageName = driver.ImageName,
+                        Tag = driver.Tag
                     };
 
                     await _mqttServer.PublishAsync(new MqttApplicationMessage()
                     {
-                        Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}/{MqttTopicConstants.SLAVE_TOPIC_START}",
+                        Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}",
                         QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                        Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstances)),
+                        Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
                         Retain = true
                     });
                 }
@@ -578,30 +580,21 @@ namespace Automatica.Core.Runtime.Core
                     continue;
                 }
 
-                if (!_driverFactories.ContainsKey(nodeInstance.This2NodeTemplateNavigation.ObjId))
+
+                if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
                 {
-                    if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
+                    var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
+                    //await PublishConfig(nodeId, nodeInstance);
+                    _mqttNodes.Add(nodeId, nodeInstance);
+
+                    if (!_mqttSlaves.ContainsKey(nodeInstance.This2SlaveNavigation.ClientId))
                     {
-                        var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
-                        //await PublishConfig(nodeId, nodeInstance);
-                        _mqttNodes.Add(nodeId, nodeInstance);
-
-                        if (!_mqttSlaves.ContainsKey(nodeInstance.This2SlaveNavigation.ClientId))
-                        {
-                            _mqttSlaves.Add(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>());
-                        }
-                        _mqttSlaves[nodeInstance.This2SlaveNavigation.ClientId].Add(_driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId]);
+                        _mqttSlaves.Add(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>());
                     }
-                    else
-                    {
-                        //if not a local driver - start new docker instance
-
-
-                        nodeInstance.State = NodeInstanceState.UnknownError;
-                        _logger.LogDebug($"Could not find factory for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key} - preserve config for mqtt client");
-                        continue;
-                    }
+                    _mqttSlaves[nodeInstance.This2SlaveNavigation.ClientId].Add(_driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId]);
+                    continue;
                 }
+
 
                 try
                 {
