@@ -235,14 +235,21 @@ namespace Automatica.Core.Runtime.Core
 
         private async Task PublishConfig(string clientId, NodeInstance nodeInstance)
         {
-            _logger.LogDebug($"Publish to config/{clientId}");
-            await _mqttServer.PublishAsync(new MqttApplicationMessage()
+            try
             {
-                Topic = $"{MqttTopicConstants.CONFIG_TOPIC}/{clientId}",
-                QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
-                Retain = true
-            });
+                _logger.LogDebug($"Publish to config/{clientId}");
+                await _mqttServer.PublishAsync(new MqttApplicationMessage()
+                {
+                    Topic = $"{MqttTopicConstants.CONFIG_TOPIC}/{clientId}",
+                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
+                    Retain = true
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not publish config...");
+            }
         }
 
         private void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)

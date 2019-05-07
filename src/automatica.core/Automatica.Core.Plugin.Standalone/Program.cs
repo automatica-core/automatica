@@ -19,77 +19,94 @@ namespace Automatica.Core.Plugin.Dockerize
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Run plugin dockerized");
 
-            var localization = new LocalizationProvider(NullLogger.Instance);
-            var factories = await Dockerize.Init<DriverFactory>(args[0], NullLogger.Instance, localization);
-
-            await Task.Delay(TimeSpan.FromSeconds(10));
-
-            var masterAddress = "localhost";
-
-            var masterEnv = Environment.GetEnvironmentVariable("master");
-            if (!string.IsNullOrEmpty(masterEnv))
+            while (true)
             {
-                masterAddress = masterEnv;
-            }
-
-            foreach(var factory in factories)
-            {
-                var ndFactory = new RemoteNodeTemplatesFactory();
-                var options = new MqttClientOptionsBuilder()
-                    .WithClientId(factory.FactoryGuid.ToString())
-                    .WithTcpServer(masterAddress)
-                    .WithCleanSession()
-                    .Build();
-
-                var client = new MqttFactory().CreateMqttClient();
-                await client.ConnectAsync(options);
-                await client.SubscribeAsync(new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.CONFIG_TOPIC}/{factory.DriverGuid}").WithExactlyOnceQoS().Build(),
-                    new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.DISPATCHER_TOPIC}/#").WithAtLeastOnceQoS().Build());
-
-                var dispatcher = new MqttDispatcher(client);
-
-                client.ApplicationMessageReceived += async (sender, e) =>
+                try
                 {
-                    Console.WriteLine($"received topic {e.ApplicationMessage.Topic}...");
+                    Console.WriteLine("Run plugin dockerized");
+                    Console.WriteLine(string.Join(Environment.NewLine, Environment.GetEnvironmentVariables()));
 
-                    if (e.ApplicationMessage.Topic == $"{MqttTopicConstants.CONFIG_TOPIC}/{factory.DriverGuid}")
+                    var localization = new LocalizationProvider(NullLogger.Instance);
+                    var factories = await Dockerize.Init<DriverFactory>(args[0], NullLogger.Instance, localization);
+
+                    await Task.Delay(TimeSpan.FromSeconds(10));
+
+                    var masterAddress = "localhost";
+
+                    var masterEnv = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_MASTER");
+                    if (!string.IsNullOrEmpty(masterEnv))
                     {
-                        var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                        var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
-
-                        var context = new DriverContext(dto, dispatcher, ndFactory, null, null, NullLogger.Instance, null, null, null, false);
-                        var driver = factory.CreateDriver(context);
-
-                        if (driver.BeforeInit())
-                        {
-                           // _driverInstances.Add(driver);
-                           // nodeInstance.State = NodeInstanceState.Initialized;
-                            driver.Configure();
-                            await driver.Start(); 
-                        }
-                        else
-                        {
-                          //  nodeInstance.State = NodeInstanceState.UnknownError;
-                        }
+                        masterAddress = masterEnv;
                     }
-                    else if(MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+
+                    var user = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_USER");
+                    var password = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_PASSWORD");
+
+                    foreach (var factory in factories)
                     {
-                        dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
-                    }
-                };
+                        var ndFactory = new RemoteNodeTemplatesFactory();
+                        var options = new MqttClientOptionsBuilder()
+                            .WithClientId(factory.FactoryGuid.ToString())
+                            .WithTcpServer(masterAddress)
+                            .WithCredentials(user, password)
+                            .WithCleanSession()
+                            .Build();
 
-                await Dockerize.InitDriverFactory(client, factory, ndFactory);
-                await client.PublishAsync(new MqttApplicationMessage()
+                        var client = new MqttFactory().CreateMqttClient();
+                        await client.ConnectAsync(options);
+                        await client.SubscribeAsync(new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.CONFIG_TOPIC}/{factory.DriverGuid}").WithExactlyOnceQoS().Build(),
+                            new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.DISPATCHER_TOPIC}/#").WithAtLeastOnceQoS().Build());
+
+                        var dispatcher = new MqttDispatcher(client);
+
+                        client.ApplicationMessageReceived += async (sender, e) =>
+                        {
+                            Console.WriteLine($"received topic {e.ApplicationMessage.Topic}...");
+
+                            if (e.ApplicationMessage.Topic == $"{MqttTopicConstants.CONFIG_TOPIC}/{factory.DriverGuid}")
+                            {
+                                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                                var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
+
+                                var context = new DriverContext(dto, dispatcher, ndFactory, null, null, NullLogger.Instance, null, null, null, false);
+                                var driver = factory.CreateDriver(context);
+
+                                if (driver.BeforeInit())
+                                {
+                                // _driverInstances.Add(driver);
+                                // nodeInstance.State = NodeInstanceState.Initialized;
+                                    driver.Configure();
+                                    await driver.Start();
+                                }
+                                else
+                                {
+                                //  nodeInstance.State = NodeInstanceState.UnknownError;
+                            }
+                            }
+                            else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+                            {
+                                dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
+                            }
+                        };
+
+                        await Dockerize.InitDriverFactory(client, factory, ndFactory);
+                        await client.PublishAsync(new MqttApplicationMessage()
+                        {
+                            Topic = $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/{factory.FactoryGuid}",
+                            QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                            Payload = Encoding.UTF8.GetBytes(localization.ToJson())
+                        });
+
+
+                    }
+                }
+                catch (Exception e)
                 {
-                    Topic = $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/{factory.FactoryGuid}",
-                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(localization.ToJson())
-                });
+                    Console.Error.WriteLine($"Error occured, retry in 10 sec\n{e}");
+                    await Task.Delay(10000);
+                }
             }
-
-            Console.ReadLine();
         }
     }
 }
