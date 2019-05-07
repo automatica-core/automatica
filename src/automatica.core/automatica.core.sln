@@ -59,10 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Common.Upda
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Model", "Automatica.Core.Model\Automatica.Core.Model.csproj", "{4234F78C-3F64-4233-80C5-913F74579DCA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Docker", "01 Docker", "{0E8F2789-3E5E-4A2B-B2AA-C82C55E1EDBE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Plugin.Standalone", "Automatica.Core.Plugin.Standalone\Automatica.Core.Plugin.Standalone.csproj", "{06ED557C-412F-45EA-8782-74C65B326B12}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -634,7 +631,6 @@ Global
 		{955D49EB-643A-4237-99A4-DF5CB90CECB1} = {35512787-AF95-4631-B520-B1D589AFD231}
 		{476563EE-BA0F-4775-B82F-B4583CBD0758} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 		{4234F78C-3F64-4233-80C5-913F74579DCA} = {AB29E770-A012-4773-823B-51F696E3B4F6}
-		{06ED557C-412F-45EA-8782-74C65B326B12} = {0E8F2789-3E5E-4A2B-B2AA-C82C55E1EDBE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FBBCDCF-EF03-4621-9894-35C829FA855F}
