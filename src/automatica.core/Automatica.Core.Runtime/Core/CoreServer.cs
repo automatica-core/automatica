@@ -43,6 +43,8 @@ using Automatica.Core.EF.Extensions;
 using Newtonsoft.Json.Linq;
 using Automatica.Core.Internals.Mqtt;
 using MQTTnet.Protocol;
+using MQTTnet.Diagnostics;
+using Automatica.Core.Runtime.Mqtt;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -149,10 +151,13 @@ namespace Automatica.Core.Runtime.Core
             _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
 
             _mqttServer = services.GetRequiredService<IMqttServer>();
-            
+            _mqttServer.ClientConnectedHandler = new ClientConnectedHandler(this);
+            _mqttServer.ClientSubscribedTopicHandler = new ClientSubscribedHandler(this);
+            _mqttServer.ApplicationMessageReceivedHandler = new ApplicationMessageHandler(this);
+            _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
         }
 
-        private void _mqttServer_ClientSubscribedTopic(object sender, MqttClientSubscribedTopicEventArgs e)
+        internal Task MqttServerClientSubscribedTopic(MqttServerClientSubscribedTopicEventArgs e)
         {
             _logger.LogDebug($"Client {e.ClientId} subscribed to {e.TopicFilter}");
 
@@ -163,6 +168,8 @@ namespace Automatica.Core.Runtime.Core
             //        await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
             //    }
             //}
+
+            return Task.CompletedTask;
         }
 
         private void InitInternals()
@@ -204,10 +211,6 @@ namespace Automatica.Core.Runtime.Core
             {
                 try
                 {
-                    _mqttServer.ApplicationMessageReceived += _mqttServer_ApplicationMessageReceived;
-                    _mqttServer.ClientConnected += _mqttServer_ClientConnected;
-                    _mqttServer.ClientSubscribedTopic += _mqttServer_ClientSubscribedTopic;
-
                     CheckAndInstallPluginUpdates();
 
                     _automaticUpdate.Init();
@@ -223,7 +226,7 @@ namespace Automatica.Core.Runtime.Core
             }, cancellationToken);
         }
 
-        private async void _mqttServer_ClientConnected(object sender, MqttClientConnectedEventArgs e)
+        internal async Task MqttServerClientConnected(MqttServerClientConnectedEventArgs e)
         {
             _connectedMqttClients.Add(e.ClientId);
             _logger.LogDebug($"Client {e.ClientId} connected...");
@@ -284,7 +287,7 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
+        internal Task MqttServerApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs e)
         {
             try
             {
@@ -346,6 +349,7 @@ namespace Automatica.Core.Runtime.Core
             {
 
             }
+            return Task.CompletedTask;
         }
 
         private async Task ConfigureAndStart()

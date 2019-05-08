@@ -1,73 +1,71 @@
 ﻿using MQTTnet;
+using MQTTnet.Client.Publishing;
+using MQTTnet.Client.Receiving;
 using MQTTnet.Server;
+using MQTTnet.Server.Status;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.CI.CreateDatabase
 {
     internal class EmptyMqttServer : IMqttServer
     {
-        public IMqttServerOptions Options => throw new NotImplementedException();
+        public IMqttServerStartedHandler StartedHandler { get; set; }
+        public IMqttServerStoppedHandler StoppedHandler { get; set; }
+        public IMqttServerClientConnectedHandler ClientConnectedHandler { get; set; }
+        public IMqttServerClientDisconnectedHandler ClientDisconnectedHandler { get; set; }
+        public IMqttServerClientSubscribedTopicHandler ClientSubscribedTopicHandler { get; set; }
+        public IMqttServerClientUnsubscribedTopicHandler ClientUnsubscribedTopicHandler { get; set; }
 
-        public event EventHandler Started;
-        public event EventHandler Stopped;
-        public event EventHandler<MqttClientConnectedEventArgs> ClientConnected;
-        public event EventHandler<MqttClientDisconnectedEventArgs> ClientDisconnected;
-        public event EventHandler<MqttClientSubscribedTopicEventArgs> ClientSubscribedTopic;
-        public event EventHandler<MqttClientUnsubscribedTopicEventArgs> ClientUnsubscribedTopic;
-        public event EventHandler<MqttApplicationMessageReceivedEventArgs> ApplicationMessageReceived;
+        public IMqttServerOptions Options => null;
 
-        public Task ClearRetainedMessagesAsync()
+        public IMqttApplicationMessageReceivedHandler ApplicationMessageReceivedHandler { get; set; }
+
+        public Task ClearRetainedApplicationMessagesAsync()
         {
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
-        public IList<IMqttClientSessionStatus> GetClientSessionsStatus()
+        public Task<IList<IMqttClientStatus>> GetClientStatusAsync()
         {
-            return new List<IMqttClientSessionStatus>();
+            throw new NotImplementedException();
         }
 
-        public Task<IList<IMqttClientSessionStatus>> GetClientSessionsStatusAsync()
+        public Task<IList<MqttApplicationMessage>> GetRetainedApplicationMessagesAsync()
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        public IList<MqttApplicationMessage> GetRetainedMessages()
+        public Task<IList<IMqttSessionStatus>> GetSessionStatusAsync()
         {
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public Task PublishAsync(MqttApplicationMessage applicationMessage)
+        public Task<MqttClientPublishResult> PublishAsync(MqttApplicationMessage applicationMessage, CancellationToken cancellationToken)
         {
-
-            return null;
+            throw new NotImplementedException();
         }
 
         public Task StartAsync(IMqttServerOptions options)
         {
-
-            return null;
+            throw new NotImplementedException();
         }
 
         public Task StopAsync()
         {
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public Task SubscribeAsync(string clientId, IList<TopicFilter> topicFilters)
+        public Task SubscribeAsync(string clientId, ICollection<TopicFilter> topicFilters)
         {
-
-            return null;
+            throw new NotImplementedException();
         }
 
-        public Task UnsubscribeAsync(string clientId, IList<string> topicFilters)
+        public Task UnsubscribeAsync(string clientId, ICollection<string> topicFilters)
         {
-
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

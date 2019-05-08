@@ -5,4 +5,5 @@ docker-compose -f docker/docker-compose.yml -p automaticacore build --build-arg 
 
 docker tag automaticacore_automatica automaticacore/automaticacore:dockerize-latest
 
-docker run automaticacore/automaticacore:dockerize-latest
+C:\Users\patri>docker run -p 5001:5001 -p 1883:1883 --network local automaticacore/automaticacore:dockerize-latest
+

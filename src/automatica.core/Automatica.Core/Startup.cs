@@ -51,6 +51,8 @@ using Automatica.Push.LearnMode;
 using Automatica.Core.WebApi.Converter.MessagePack;
 using Microsoft.AspNetCore.ResponseCompression;
 using MQTTnet.AspNetCore;
+using System.Net;
+using MQTTnet.Server;
 
 namespace Automatica.Core
 {
@@ -66,9 +68,7 @@ namespace Automatica.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          
             services.AddMqttTcpServerAdapter();
-            services.AddMqttWebSocketServerAdapter();
 
             services.AddDbContext<AutomaticaContext>();
             services.AddResponseCompression(options =>
@@ -109,13 +109,13 @@ namespace Automatica.Core
                         {
                             var accessToken = context.Request.Query["access_token"];
 
-                        // If the request is for our hub...
-                        var path = context.HttpContext.Request.Path;
+                            // If the request is for our hub...
+                            var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
                                 (path.StartsWithSegments("/signalr")))
                             {
-                            // Read the token out of the query string
-                            context.Token = accessToken;
+                                // Read the token out of the query string
+                                context.Token = accessToken;
                             }
                             return Task.CompletedTask;
                         }
@@ -136,17 +136,19 @@ namespace Automatica.Core
             services.AddMvcCore(config =>
             {
                 config.Filters.Add(new AuthorizeFilter());
-                
+
             }).AddAuthorization(options =>
             {
                 options.AddPolicy(Role.AdminRole, policy => policy.RequireRole(Role.AdminRole));
                 options.AddPolicy(Role.ViewerRole, policy => policy.RequireRole(Role.ViewerRole, Role.AdminRole, Role.VisuRole));
                 options.AddPolicy(Role.VisuRole, policy => policy.RequireRole(Role.VisuRole));
-            }).AddApplicationPart(typeof(BaseController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options => {
+            }).AddApplicationPart(typeof(BaseController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new ByteArrayToLongConverter());
-            }).AddApplicationPart(typeof(DiscoveryDeviceDescriptionController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options => {
+            }).AddApplicationPart(typeof(DiscoveryDeviceDescriptionController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new ByteArrayToLongConverter());
@@ -173,7 +175,7 @@ namespace Automatica.Core
             services.AddSingleton<ILicenseContext, LicenseContext>();
             services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();
-     
+
 
             if (!HybridSupport.IsElectronActive)
             {
@@ -193,7 +195,7 @@ namespace Automatica.Core
             var builder = new ConfigurationBuilder()
                 .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
                 .AddJsonFile("appsettings.json");
-           
+
             Configuration = builder.Build();
 
             services.TryAddTransient<CorsAuthorizationFilter, CorsAuthorizationFilter>();
@@ -204,11 +206,22 @@ namespace Automatica.Core
             services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
-            }).AddJsonProtocol(options => {
+            }).AddJsonProtocol(options =>
+            {
             }); ;
 
+            var mqttServerOptions = new MqttServerOptions()
+            {
+                ConnectionValidator = new MqttServerConnectionValidatorDelegate(a => CoreServer.ValidateConnection(a, Configuration, SystemLogger.Instance))
+            };
 
-            services.AddHostedMqttServer(b => b.WithDefaultEndpoint().WithConnectionValidator(a => CoreServer.ValidateConnection(a, Configuration, SystemLogger.Instance)));
+            mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkAddress = IPAddress.Any;
+            mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkV6Address = IPAddress.None;
+            mqttServerOptions.DefaultEndpointOptions.IsEnabled = true;
+            mqttServerOptions.DefaultEndpointOptions.Port = 1883;
+            mqttServerOptions.DefaultEndpointOptions.ConnectionBacklog = 1000;
+
+            services.AddHostedMqttServer(mqttServerOptions);
 
         }
 

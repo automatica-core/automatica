@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Diagnostics;
 using MQTTnet.Server;
 using Newtonsoft.Json;
 using System;
@@ -40,10 +41,22 @@ namespace Automatica.Core.Slave.Runtime
             _slaveId = config["server:clientId"];
             _options = new MqttClientOptionsBuilder()
                    .WithClientId(_slaveId)
-                   .WithTcpServer(_masterAddress)
+                //   .WithWebSocketServer("localhost:5001/mqtt")
+                   .WithTcpServer(_masterAddress, 1883)
                    .WithCredentials(_slaveId, _clientKey)
                    .WithCleanSession()
                    .Build();
+
+            MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
+            {
+                var trace = $">> [{e.TraceMessage.Timestamp:O}] [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
+                if (e.TraceMessage.Exception != null)
+                {
+                    trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
+                }
+
+                Console.WriteLine(trace);
+            };
 
             _mqttClient = new MqttFactory().CreateMqttClient();
 
@@ -176,7 +189,7 @@ namespace Automatica.Core.Slave.Runtime
                     AttachStderr = false,
                     AttachStdin = false,
                     AttachStdout = false,
-                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER=host.docker.internal", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
+                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER=172.20.0.2", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
                     HostConfig = new HostConfig
                     {
                         PortBindings = new Dictionary<string, IList<PortBinding>> {
@@ -204,7 +217,7 @@ namespace Automatica.Core.Slave.Runtime
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }
