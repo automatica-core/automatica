@@ -174,6 +174,8 @@ namespace Automatica.Core.Runtime.Core
 
         private void InitInternals()
         {
+            _mqttNodes.Clear();
+            _mqttSlaves.Clear();
             _telegramMonitor?.Clear();
             _dbContext = new AutomaticaContext(_config);
             _ruleEngineDispatcher = new RuleEngineDispatcher(_dbContext, this, _dispatcher);
@@ -235,6 +237,10 @@ namespace Automatica.Core.Runtime.Core
             {
                 await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
             }
+            else if(_mqttNodes.ContainsKey(e.ClientId))
+            {
+                await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+            }
         }
 
         private async Task StartInstances(string clientId, IList<IDriverFactory> driverFactories)
@@ -253,16 +259,53 @@ namespace Automatica.Core.Runtime.Core
                         Tag = driver.Tag
                     };
 
-                    await _mqttServer.PublishAsync(new MqttApplicationMessage()
-                    {
-                        Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}",
-                        QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                        Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
-                        Retain = true
-                    });
+                    await SendAction(clientId, actionRequest);
                 }
             }
             catch(Exception e)
+            {
+                _logger.LogError(e, "Could not send start instances message...");
+            }
+        }
+
+        private async Task SendAction(string clientId, ActionRequest actionRequest)
+        {
+            try
+            {
+                await _mqttServer.PublishAsync(new MqttApplicationMessage()
+                {
+                    Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}",
+                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
+                    Retain = true
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Could not send action", e);
+            }
+        }
+
+        private async Task StopInstances(string clientId, IList<IDriverFactory> driverFactories)
+        {
+            try
+            {
+                foreach (var driver in driverFactories)
+                {
+                    _logger.LogDebug($"Publish to slave/{clientId}/action");
+
+                    var actionRequest = new ActionRequest()
+                    {
+                        Action = Internals.Mqtt.SlaveAction.Stop,
+                        ImageSource = driver.ImageSource,
+                        ImageName = driver.ImageName,
+                        Tag = driver.Tag
+                    };
+
+                    await SendAction(clientId, actionRequest);
+                }
+            }
+            catch (Exception e)
             {
                 _logger.LogError(e, "Could not send start instances message...");
             }
@@ -276,7 +319,7 @@ namespace Automatica.Core.Runtime.Core
                 await _mqttServer.PublishAsync(new MqttApplicationMessage()
                 {
                     Topic = $"{MqttTopicConstants.CONFIG_TOPIC}/{clientId}",
-                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
                     Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
                     Retain = true
                 });
@@ -291,56 +334,56 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.NODETEMPLATES_TOPIC}/#"))
-                {
-                    var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                    var dto = JsonConvert.DeserializeObject<RemoteNodeTemplatesFactoryDto>(json);
+                //if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.NODETEMPLATES_TOPIC}/#"))
+                //{
+                //    var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                //    var dto = JsonConvert.DeserializeObject<RemoteNodeTemplatesFactoryDto>(json);
 
-                    _remoteDriverFactories.Add(new Guid(e.ApplicationMessage.Topic.Split("/", StringSplitOptions.RemoveEmptyEntries)[1]));
+                //    _remoteDriverFactories.Add(new Guid(e.ApplicationMessage.Topic.Split("/", StringSplitOptions.RemoveEmptyEntries)[1]));
 
-                    using (var db = new AutomaticaContext(_config))
-                    {
-                        foreach (var entity in dto.InterfaceTypes)
-                        {
-                            db.AddOrUpdate(entity, (x) => x.Type);
-                        }
+                //    using (var db = new AutomaticaContext(_config))
+                //    {
+                //        foreach (var entity in dto.InterfaceTypes)
+                //        {
+                //            db.AddOrUpdate(entity, (x) => x.Type);
+                //        }
 
-                        foreach (var entity in dto.Settings)
-                        {
-                            db.AddOrUpdate(entity, (x) => x.ObjId);
-                        }
+                //        foreach (var entity in dto.Settings)
+                //        {
+                //            db.AddOrUpdate(entity, (x) => x.ObjId);
+                //        }
 
-                        foreach (var entity in dto.NodeTemplates)
-                        {
-                            db.AddOrUpdate(entity, (x) => x.ObjId);
-                        }
+                //        foreach (var entity in dto.NodeTemplates)
+                //        {
+                //            db.AddOrUpdate(entity, (x) => x.ObjId);
+                //        }
 
-                        foreach (var entity in dto.PropertyTemplates)
-                        {
-                            db.AddOrUpdate(entity, (x) => x.ObjId);
-                        }
+                //        foreach (var entity in dto.PropertyTemplates)
+                //        {
+                //            db.AddOrUpdate(entity, (x) => x.ObjId);
+                //        }
 
-                        foreach (var entity in dto.PropertyTemplateConstraints)
-                        {
-                            db.AddOrUpdate(entity, (x) => x.ObjId);
-                        }
+                //        foreach (var entity in dto.PropertyTemplateConstraints)
+                //        {
+                //            db.AddOrUpdate(entity, (x) => x.ObjId);
+                //        }
 
-                        foreach (var entity in dto.PropertyTemplateConstraintData)
-                        {
-                            db.AddOrUpdate(entity, (x) => x.ObjId);
-                        }
+                //        foreach (var entity in dto.PropertyTemplateConstraintData)
+                //        {
+                //            db.AddOrUpdate(entity, (x) => x.ObjId);
+                //        }
 
-                        db.SaveChanges();
-                    }
-                }
-                else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/#"))
-                {
-                    var data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                //        db.SaveChanges();
+                //    }
+                //}
+                //else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/#"))
+                //{
+                //    var data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
-                    var localization = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(data);
-                    _localizationProvider.AppendDictionary(localization);
-                }
-                else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+                //    var localization = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(data);
+                //    _localizationProvider.AppendDictionary(localization);
+                //}
+                if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
                 {
                     _dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
                 }
@@ -589,13 +632,19 @@ namespace Automatica.Core.Runtime.Core
                 {
                     var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
                     //await PublishConfig(nodeId, nodeInstance);
-                    _mqttNodes.Add(nodeId, nodeInstance);
+                    _mqttNodes.Add(nodeInstance.This2NodeTemplateNavigation.ObjId.ToString(), nodeInstance);
 
                     if (!_mqttSlaves.ContainsKey(nodeInstance.This2SlaveNavigation.ClientId))
                     {
                         _mqttSlaves.Add(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>());
                     }
                     _mqttSlaves[nodeInstance.This2SlaveNavigation.ClientId].Add(_driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId]);
+
+                    //start instance right now if already connected
+                    if(_connectedMqttClients.Contains(nodeInstance.This2SlaveNavigation.ClientId))
+                    {
+                        await StartInstances(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>() { _driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId] });
+                    }
                     continue;
                 }
 
@@ -1043,6 +1092,11 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task Reinit()
         {
+            foreach(var slave in _mqttSlaves.Keys)
+            {
+                await StopInstances(slave, _mqttSlaves[slave]);
+            }
+
             foreach (var driver in _driverNodesMap.Values)
             {
                 await driver.OnReinit();

@@ -92,13 +92,13 @@ namespace Automatica.Core.Plugin.Dockerize
                             }
                         };
 
-                        await Dockerize.InitDriverFactory(client, factory, ndFactory);
-                        await client.PublishAsync(new MqttApplicationMessage()
-                        {
-                            Topic = $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/{factory.FactoryGuid}",
-                            QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                            Payload = Encoding.UTF8.GetBytes(localization.ToJson())
-                        });
+                        //await Dockerize.InitDriverFactory(client, factory, ndFactory);
+                        //await client.PublishAsync(new MqttApplicationMessage()
+                        //{
+                        //    Topic = $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/{factory.FactoryGuid}",
+                        //    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                        //    Payload = Encoding.UTF8.GetBytes(localization.ToJson())
+                        //});
 
 
                     }

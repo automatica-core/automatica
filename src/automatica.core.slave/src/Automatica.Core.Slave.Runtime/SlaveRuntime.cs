@@ -25,6 +25,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly DockerClient _dockerClient;
 
         private IList<ImagesListResponse> _localImages;
+        private readonly IDictionary<string, string> _runningImages = new Dictionary<string, string>();
 
         private string _slaveId;
 
@@ -92,8 +93,14 @@ namespace Automatica.Core.Slave.Runtime
                 {
                     var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                     var action = JsonConvert.DeserializeObject<ActionRequest>(json);
-
-                    await ExecuteAction(action);
+                    try
+                    {
+                        await ExecuteAction(action);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine($"Could not execute request {ex}");
+                    }
                 }
             };
 
@@ -122,6 +129,9 @@ namespace Automatica.Core.Slave.Runtime
             {
                 case SlaveAction.Start:
                     await StartImage(action.ImageSource, action.ImageName, action.Tag);
+                    break;
+                case SlaveAction.Stop:
+                    await StopImage(action.ImageSource, action.ImageName, action.Tag);
                     break;
             }
         }
@@ -152,9 +162,22 @@ namespace Automatica.Core.Slave.Runtime
             }
         }
 
+        private async Task StopImage(string imageSource, string imageName, string imageTag)
+        {
+            var imageFullName = $"{imageName}:{imageTag}-{Arch}";
+            Console.WriteLine($"Stop Image {imageFullName}");
+
+            if(_runningImages.ContainsKey(imageFullName))
+            {
+                await _dockerClient.Containers.StopContainerAsync(_runningImages[imageFullName], new ContainerStopParameters());
+                _runningImages.Remove(imageFullName);
+            }
+        }
+
         private async Task StartImage(string imageSource, string imageName, string imageTag)
         {
             var imageFullName = $"{imageName}:{imageTag}-{Arch}";
+            Console.WriteLine($"Start Image {imageFullName}");
             var image = FindImage(imageName, $"{imageTag}-{Arch}");
 
             if (image == null)
@@ -189,7 +212,7 @@ namespace Automatica.Core.Slave.Runtime
                     AttachStderr = false,
                     AttachStdin = false,
                     AttachStdout = false,
-                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER=172.20.0.2", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
+                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER=localhost", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
                     HostConfig = new HostConfig
                     {
                         PortBindings = new Dictionary<string, IList<PortBinding>> {
@@ -204,20 +227,24 @@ namespace Automatica.Core.Slave.Runtime
                 });
 
 
+                _runningImages.Add(imageFullName, response.ID);
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters { });
 
             }
             catch (Exception e)
             {
-
+                Console.WriteLine($"{e}");
             }
          
         }
 
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            foreach(var id in _runningImages)
+            {
+                await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
+            }
         }
     }
 }
