@@ -1,6 +1,5 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Automatica.Core.Base.Localization
@@ -11,5 +10,6 @@ namespace Automatica.Core.Base.Localization
     public interface ILocalizationProvider
     {
         void LoadFromAssembly(Assembly assembly);
+        void AppendDictionary(Dictionary<string, JObject> data);
     }
 }

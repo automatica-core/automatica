@@ -21,6 +21,8 @@ import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { VirtualAreaPropertyInstance } from "src/app/base/model/virtual-props";
 import { ConfigTreeComponent } from "../config-tree/config-tree.component";
+import { Slave } from "src/app/base/model/slaves/slave";
+import { SlavesService } from "src/app/services/slaves.services";
 
 function sortByOrder(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -234,6 +236,19 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this._roles = v;
   }
 
+
+
+  private _slaves: Slave[];
+
+  @Input()
+  public get slaves(): Slave[] {
+    return this._slaves;
+  }
+  public set slaves(v: Slave[]) {
+    this._slaves = v;
+  }
+
+
   get uploadHeader() {
     return { "Authorization": "Bearer " + localStorage.getItem("jwt") };
   }
@@ -251,12 +266,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private config: ConfigService,
     translate: TranslationService,
     private dataHub: DataHubService,
-    private notify: NotifyService) {
+    private notify: NotifyService,
+    private slaveService: SlavesService) {
     super(notify, translate);
   }
 
-  ngOnInit() {
-
+  async ngOnInit() {
+    this.slaves = await this.slaveService.getSlaves();
   }
 
   flattenAraInit() {

@@ -46,6 +46,21 @@ namespace Automatica.Core.Base.Localization
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
         }
 
+        public void AppendDictionary(Dictionary<string, JObject> data)
+        {
+            foreach(var key in data.Keys)
+            {
+                if (!_localizationStreams.ContainsKey(key))
+                {
+                    _localizationStreams.Add(key, data[key]);
+                }
+                else
+                {
+                    _localizationStreams[key] = data[key];
+                }
+            }
+        }
+
         public void LoadFromAssembly(Assembly assembly)
         {
             if(_loadedAssemblies.Contains(assembly))
@@ -82,6 +97,11 @@ namespace Automatica.Core.Base.Localization
                 return json;
             }
             return JsonConvert.SerializeObject(_localizationStreams[locale]);
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(_localizationStreams);
         }
     }
 }

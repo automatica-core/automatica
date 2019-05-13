@@ -18,7 +18,8 @@ namespace Automatica.Core.Base.IO
     {
         NodeInstance,
         RuleInstance,
-        Visualisation
+        Visualisation,
+        Mqtt
     }
 
     /// <summary>

@@ -9,12 +9,12 @@ namespace Automatica.Core.Base.IO
     {
         Task DispatchValue(IDispatchable self, object value);
 
-        void RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback);
+        Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback);
 
         IDictionary<Guid, object> GetValues(DispatchableType type);
 
         object GetValue(DispatchableType type, Guid id);
 
-        void ClearRegistrations();
+        Task ClearRegistrations();
     }
 }

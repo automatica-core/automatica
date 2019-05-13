@@ -7,7 +7,7 @@ namespace Automatica.Core.Driver
     /// <summary>
     /// The interface for providing a driver factory
     /// </summary>
-    public interface IDriverFactory
+    public interface IDriverFactory : IFactory<INodeTemplateFactory>
     {
         /// <summary>
         /// The driverName is mainly used for logging
@@ -48,5 +48,22 @@ namespace Automatica.Core.Driver
         /// </summary>
         /// <param name="instance"><see cref="NodeInstance"/> instance to scan</param>
         void Scan(NodeInstance instance);
+
+
+        /// <summary>
+        /// Deterimnes where to get the image
+        /// </summary>
+        string ImageSource { get; }
+
+        /// <summary>
+        /// Deterimnes the image name
+        /// </summary>
+        string ImageName { get; }
+
+
+        /// <summary>
+        /// Deterimnes the image tag - default "latest"
+        /// </summary>
+        string Tag { get; }
     }
 }

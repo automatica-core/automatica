@@ -102,6 +102,8 @@ namespace Automatica.Core.EF.Models
         UserGroup2Roles = 202,
         [PropertyTemplateType("UserGroup")]
         UserGroup = 203,
+        [PropertyTemplateType("Slave")]
+        Slave = 204,
 
         [PropertyTemplateType("CustomAction")]
         CustomAction = 500,
@@ -169,6 +171,8 @@ namespace Automatica.Core.EF.Models
                         return ValueAreaInstance;
                     case PropertyTemplateType.CategoryInstanceLink:
                         return ValueCategoryInstance;
+                    case PropertyTemplateType.Slave:
+                        return ValueSlave;
 
                     case PropertyTemplateType.Scan:
                     case PropertyTemplateType.ImportData:
@@ -251,6 +255,16 @@ namespace Automatica.Core.EF.Models
                         else
                         {
                             ValueCategoryInstance = null;
+                        }
+                        break;
+                    case PropertyTemplateType.Slave:
+                        if (Guid.TryParse(value.ToString(), out Guid lResult5))
+                        {
+                            ValueSlave = lResult5;
+                        }
+                        else
+                        {
+                            ValueSlave = null;
                         }
                         break;
                     case PropertyTemplateType.DropDown:

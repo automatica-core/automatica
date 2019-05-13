@@ -3,7 +3,7 @@ FROM microsoft/dotnet:sdk AS libnserial
 WORKDIR /app
 
 RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get -y install cmake build-essential
+RUN apt-get -y install cmake build-essential 
 
 RUN mkdir /src
 RUN git clone https://github.com/jcurl/serialportstream.git /src/serialportstream
@@ -32,7 +32,7 @@ FROM microsoft/dotnet:latest
 WORKDIR /app
 
 RUN apt-get update 
-RUN apt-get install zip -y
+RUN apt-get install zip net-tools -y
 
 ARG AUTOMATICA_VERSION
 ARG CLOUD_API_KEY
@@ -76,8 +76,8 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
 
+EXPOSE 1883/tcp
 EXPOSE 5001/tcp	
-EXPOSE 5000/tcp 
 
 # Build runtime image
-ENTRYPOINT ["dotnet", "/app/automatica.bootloader/Automatica.Core.Bootloader.dll"]
+ENTRYPOINT ["dotnet", "/app/automatica/Automatica.Core.dll"]

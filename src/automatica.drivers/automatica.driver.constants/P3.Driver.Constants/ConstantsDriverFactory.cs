@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -28,6 +24,9 @@ namespace P3.Driver.Constants
         public override string DriverName => "consts";
         public override Guid DriverGuid => BusId;
         public override Version DriverVersion => new Version(0, 1, 0, 1);
+
+        public override string ImageName => "automaticacore/plugin-p3.driver.constants";
+
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
             factory.CreateInterfaceType(InterfaceId, "CONSTANTS.NAME", "CONSTANTS.DESCRIPTION", int.MaxValue, 1, true);

@@ -110,7 +110,7 @@ namespace Automatica.Core.Driver
                         driverNode.Parent = this;
                         Children.Add(driverNode);
 
-                        if (ChildrensCreated >= DriverContext.LicenseState.MaxDatapoints)
+                        if (DriverContext.LicenseState != null && ChildrensCreated >= DriverContext.LicenseState.MaxDatapoints)
                         {
                             node.State = NodeInstanceState.OutOfDatapoits;
                             DriverContext.Logger.LogError("Cannot instantiate more datapoints, license exceeded");

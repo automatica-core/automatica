@@ -8,12 +8,12 @@ CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
 function split()
 {
     
-	#split_new_repo $1 $2
+	# split_new_repo $1 $2
 	
     SHA1=`./bin/splitsh-lite --prefix=$1`
     
 	echo $SHA1
-	git push $2 "$SHA1:$CURRENT_BRANCH" -f
+	git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH" -f
 
     # Use this to split a new branch
     #git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH"
@@ -48,6 +48,8 @@ function remote()
     git remote add $1 $2 || true
 }
 
+remote automatica.core.slave git@github.com:automatica-core/automatica.core.slave.git
+
 remote automatica.driver.automatica.remote git@github.com:automatica-core/automatica.driver.automatica.remote.git
 remote automatica.driver.constants git@github.com:automatica-core/automatica.driver.constants.git
 remote automatica.driver.enocean git@github.com:automatica-core/automatica.driver.enocean.git
@@ -74,7 +76,10 @@ remote automatica.logic.messenger git@github.com:automatica-core/automatica.logi
 remote automatica.logic.surveillance git@github.com:automatica-core/automatica.logic.surveillance.git
 remote automatica.logic.time git@github.com:automatica-core/automatica.logic.time.git
 
+# core repos
+split src/automatica.core.slave automatica.core.slave
 
+# drivers
 split src/automatica.drivers/automatica.driver.automatica.remote automatica.driver.automatica.remote
 split src/automatica.drivers/automatica.driver.constants automatica.driver.constants
 split src/automatica.drivers/automatica.driver.enocean automatica.driver.enocean
@@ -92,6 +97,7 @@ split src/automatica.drivers/automatica.driver.times automatica.driver.times
 split src/automatica.drivers/automatica.driver.wakeonlan automatica.driver.wakeonlan
 split src/automatica.drivers/automatica.driver.zwave automatica.driver.zwave
 
+# logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
 split src/automatica.logics/automatica.logic.digitaltoanalog automatica.logic.digitaltoanalog
 split src/automatica.logics/automatica.logic.enocean automatica.logic.enocean

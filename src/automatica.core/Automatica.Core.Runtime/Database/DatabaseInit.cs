@@ -13,6 +13,7 @@ using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -28,30 +29,73 @@ namespace Automatica.Core.Runtime.Database
 
             bool dbCreated = !context.BoardTypes.Any();
 
-          
-
             if (dbCreated)
             {
-                context.Database.ExecuteSqlCommand($@"	       
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 1,
+                    Name = "Input",
+                    Description = "Input",
+                    Key = "I"
+                });
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 2,
+                    Name = "Output",
+                    Description = "Output",
+                    Key = "O"
+                });
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 3,
+                    Name = "Parameter",
+                    Description = "Parameter",
+                    Key = "P"
+                });
 
-		            INSERT INTO RuleInterfaceDirections (ObjId, Name, Description, Key) VALUES 
-		                (1, 'Input', 'Input', 'I'),
-		                (2, 'Output', 'Output', 'O'),
-		                (3, 'Parameter', 'Parameter', 'P');
+                context.RulePageTypes.Add(new RulePageType()
+                {
+                    ObjId = 1,
+                    Name = "Rules",
+                    Description = "Rules",
+                    Key = "rules"
+                });
+                context.VisuPageTypes.Add(new VisuPageType()
+                {
+                    ObjId = 1,
+                    Name = "PC",
+                    Description = "PC",
+                    Key = "pc"
+                });
+                context.VisuPageTypes.Add(new VisuPageType()
+                {
+                    ObjId = 2,
+                    Name = "Mobile",
+                    Description = "Mobile",
+                    Key = "mobile"
+                });
+                context.SaveChanges();
 
-	                INSERT INTO Settings (ObjId, ValueKey, ValueInt, Type) VALUES (1, 'ConfigVersion', 0, 0);
+                context.Slaves.Add(new Slave()
+                {
+                    ObjId = new Guid(ServerInfo.SelfSlaveId),
+                    Name = "local",
+                    Description = "this is me",
+                    ClientId = "",
+                    ClientKey = ""
+                });
 
-		        
-		        INSERT INTO RulePageTypes (ObjId, Name, Description, Key) VALUES 
-		        (1, 'Rules', 'Rules', 'rules');
 
-
-		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
-		        (1, 'PC', 'PC', 'pc');
-
-
-		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
-		        (2, 'Mobile', 'Mobile', 'mobile')");
+                context.Settings.Add(new Setting
+                {
+                    ObjId = 1,
+                    ValueKey = "ConfigVersion",
+                    Type = (long)PropertyTemplateType.Numeric,
+                    Value = 0,
+                    Group = "ConfigVersion",
+                    IsVisible = false,
+                    Order = 10
+                });
                 context.SaveChanges();
             }
 
@@ -191,7 +235,7 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var propertyType in propertyTypes)
             {
-                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == (int) propertyType);
+                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(propertyType));
                 var isNewObject = false;
                 if (propertyTypeDb == null)
                 {
@@ -230,7 +274,7 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var nodeDataType in nodeDataTypes)
             {
-                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == (int)nodeDataType);
+                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(nodeDataType));
                 var isNewObject = false;
                 if (nodeDataTypeDb == null)
                 {

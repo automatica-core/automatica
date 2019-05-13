@@ -12,6 +12,7 @@ namespace Automatica.Core.Base.Common
         private static DateTime? _startupTimePrivate;
         public const string DbConfigVersionKey = "ConfigVersion";
         public const string ServerExecutable = "Automatica.Core";
+        public const string SlaveExceuteable = "Automatica.Core.Plugin.Dockerize";
         public const string WatchdogExecutable = "Automatica.Core.Watchdog";
         public const string BootloderExecutable = "Automatica.Core.Bootloader";
         public const string UpdateFileName = "Automatica.Core.Update.zip";
@@ -21,6 +22,12 @@ namespace Automatica.Core.Base.Common
 
         public const int ExitCodeUpdateInstall = 2;
         public const int ExitCodePluginUpdateInstall = 3;
+
+
+        public const string SelfSlaveId = "172bb906-b584-4d5d-85e8-b6d881498534";
+
+        public static Guid SelfSlaveGuid => new Guid(SelfSlaveId);
+
         /// <summary>
         /// Gets the loaded config version (increment after every save)
         /// </summary>

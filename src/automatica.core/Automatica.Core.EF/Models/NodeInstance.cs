@@ -62,9 +62,15 @@ namespace Automatica.Core.EF.Models
         public bool TrendingToCloud { get; set; }
 
 
+        public Guid? This2Slave { get; set; }
+
         [JsonIgnore, IgnoreMember]
         public NodeInstance This2ParentNodeInstanceNavigation { get; set; }
         public List<NodeInstance> InverseThis2ParentNodeInstanceNavigation { get; set; }
+
+
+        [JsonIgnore, IgnoreMember]
+        public Slave This2SlaveNavigation { get; set; }
 
         [JsonIgnore, IgnoreMember]
         public List<NodeInstance2RulePage> NodeInstance2RulePage { get; set; }

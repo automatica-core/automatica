@@ -20,6 +20,9 @@ export class InterfaceType extends BaseModel {
     @JsonProperty()
     CanProvideBoardType: boolean;
 
+    @JsonProperty()
+    IsDriverInterface: boolean;
+
 
     protected getJsonProperty(): Map<string, JsonFieldInfo> {
         return void 0;

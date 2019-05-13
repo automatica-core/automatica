@@ -15,33 +15,17 @@
     <Description>Entity framework for Automatica.Core</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Migrations\20181110094357_AddedPluginTable.cs" />
-    <Compile Remove="Migrations\20181110100523_RemovedVersionInformationTable.cs" />
-    <Compile Remove="Migrations\20181110100638_RemovedVersionInformationTable1.cs" />
-    <Compile Remove="Migrations\20181110101534_RemovedVersionInformationTable.cs" />
-    <Compile Remove="Migrations\20181110101847_AddedPluginGuidToPluginTable.cs" />
-    <Compile Remove="Migrations\20181223154212_AddedRuleInterfaceIsLinkableParamter.cs" />
-    <Compile Remove="Migrations\20181227091539_RemovedRequiredWhereNotNeeded.cs" />
-    <Compile Remove="Migrations\20181227150249_AddSortOrderToSettings.cs" />
-    <Compile Remove="Migrations\20190313165023_AddedStatisticsProperties.cs" />
-    <Compile Remove="Migrations\20190313165023_AddedStatisticsProperties.Designer.cs" />
-    <Compile Remove="Migrations\20190313172347_AddedStatisticsProperties.cs" />
-    <Compile Remove="Migrations\20190313172347_AddedStatisticsProperties.Designer.cs" />
-    <Compile Remove="Migrations\20190313174134_AddedStatisticsProperties.cs" />
-    <Compile Remove="Migrations\20190313174134_AddedStatisticsProperties.Designer.cs" />
-    <Compile Remove="Migrations\20190313174225_AddedStatisticsProperties.cs" />
-    <Compile Remove="Migrations\20190313174225_AddedStatisticsProperties.Designer.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="MessagePack" Version="1.7.3.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="Serilog" Version="2.8.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00771" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
@@ -49,7 +33,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.2.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />

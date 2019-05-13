@@ -18,6 +18,8 @@ using Serilog;
 using Serilog.Filters;
 using Automatica.Core.Internals;
 using MessagePack;
+using MQTTnet.AspNetCore;
+using MQTTnet.Diagnostics;
 
 namespace Automatica.Core
 {
@@ -25,8 +27,6 @@ namespace Automatica.Core
     {
         static void Main(string[] args)
         {
-
-
             var config = new ConfigurationBuilder()
                 .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
                 .AddJsonFile("appsettings.json", true)
@@ -38,6 +38,20 @@ namespace Automatica.Core
               .MinimumLevel.Verbose();
 
             Log.Logger = logBuild.CreateLogger();
+
+            var logger = SystemLogger.Instance;
+            logger.LogInformation($"Binding mqtt logger...");
+
+            MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
+            {
+                var trace = $"mqtt >> [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
+                if (e.TraceMessage.Exception != null)
+                {
+                    trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
+                }
+
+                logger.LogDebug(trace);
+            };
 
             var webHost = BuildWebHost(config["server:port"]);
 
@@ -51,11 +65,13 @@ namespace Automatica.Core
             {
                 ServerInfo.DriverDirectoy = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
             }
-            var logger = SystemLogger.Instance;
+
             logger.LogInformation($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
 
             var db = webHost.Services.GetRequiredService<AutomaticaContext>();
             DatabaseInit.EnusreDatabaseCreated(webHost.Services);
+
+          
 
             var serverId = db.Settings.SingleOrDefault(a => a.ValueKey == "ServerUID");
 
@@ -89,9 +105,10 @@ namespace Automatica.Core
             ServerInfo.WebPort = port;
 
             var webHost = WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>()
+                .UseStartup<Startup>().UseKestrel(o => {
+                    o.ListenAnyIP(Convert.ToInt32(port)); 
+                })
                 //.UseElectron(new string[])
-                .UseUrls($"http://*:{port}/")
                 .UseSerilog()
                 .ConfigureLogging(logging => {
                     logging.AddFilter("Microsoft.AspNetCore.SignalR", LogLevel.Trace);
