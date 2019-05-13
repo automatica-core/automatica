@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Automatica.Core.EF.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,8 +54,8 @@ namespace Automatica.Core.EF.Migrations
                     Type = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
-                    MaxChilds = table.Column<int>(type: "int(11)", nullable: false),
-                    MaxInstances = table.Column<int>(type: "int(11)", nullable: false),
+                    MaxChilds = table.Column<int>(nullable: false),
+                    MaxInstances = table.Column<int>(nullable: false),
                     IsDriverInterface = table.Column<bool>(nullable: false, defaultValue: false),
                     CanProvideBoardType = table.Column<bool>(nullable: false, defaultValue: false)
                 },
@@ -67,7 +68,7 @@ namespace Automatica.Core.EF.Migrations
                 name: "NodeDataTypes",
                 columns: table => new
                 {
-                    Type = table.Column<long>(type: "bigint(20)", nullable: false),
+                    Type = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: "")
                 },
@@ -117,7 +118,7 @@ namespace Automatica.Core.EF.Migrations
                 name: "PropertyTypes",
                 columns: table => new
                 {
-                    Type = table.Column<long>(type: "bigint(20)", nullable: false),
+                    Type = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
                     Meta = table.Column<string>(maxLength: 1024, nullable: true)
@@ -146,7 +147,7 @@ namespace Automatica.Core.EF.Migrations
                 name: "RuleInterfaceDirections",
                 columns: table => new
                 {
-                    ObjId = table.Column<long>(type: "bigint(20)", nullable: false),
+                    ObjId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
                     Key = table.Column<string>(maxLength: 1024, nullable: false)
@@ -160,7 +161,7 @@ namespace Automatica.Core.EF.Migrations
                 name: "RulePageTypes",
                 columns: table => new
                 {
-                    ObjId = table.Column<long>(type: "bigint(20)", nullable: false),
+                    ObjId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
                     Key = table.Column<string>(maxLength: 1024, nullable: false)
@@ -175,13 +176,13 @@ namespace Automatica.Core.EF.Migrations
                 columns: table => new
                 {
                     ObjId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ValueKey = table.Column<string>(type: "varchar(254)", nullable: false),
-                    ValueText = table.Column<string>(type: "text", nullable: true),
-                    ValueInt = table.Column<int>(type: "int", nullable: true),
-                    ValueDouble = table.Column<double>(type: "double", nullable: true),
-                    Group = table.Column<string>(type: "varchar(1024)", nullable: true, defaultValue: "System"),
-                    Type = table.Column<long>(type: "int", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ValueKey = table.Column<string>(nullable: false),
+                    ValueText = table.Column<string>(nullable: true),
+                    ValueInt = table.Column<int>(nullable: true),
+                    ValueDouble = table.Column<double>(nullable: true),
+                    Group = table.Column<string>(nullable: true, defaultValue: "System"),
+                    Type = table.Column<long>(nullable: false),
                     IsVisible = table.Column<bool>(nullable: false, defaultValue: false),
                     Order = table.Column<int>(nullable: false),
                     IsReadonly = table.Column<bool>(nullable: false)
@@ -241,11 +242,11 @@ namespace Automatica.Core.EF.Migrations
                 columns: table => new
                 {
                     ObjId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     DriverGuid = table.Column<Guid>(maxLength: 36, nullable: true),
                     RuleGuid = table.Column<Guid>(maxLength: 36, nullable: false),
                     Version = table.Column<string>(maxLength: 1024, nullable: false),
-                    Name = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
+                    Name = table.Column<string>(maxLength: 1024, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,7 +257,7 @@ namespace Automatica.Core.EF.Migrations
                 name: "VisuPageTypes",
                 columns: table => new
                 {
-                    ObjId = table.Column<long>(type: "bigint(20)", nullable: false),
+                    ObjId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
                     Key = table.Column<string>(maxLength: 1024, nullable: false)
@@ -276,7 +277,7 @@ namespace Automatica.Core.EF.Migrations
                     This2AreaType = table.Column<Guid>(nullable: false),
                     ProvidesThis2AreayType = table.Column<Guid>(nullable: false),
                     NeedsThis2AreaType = table.Column<Guid>(nullable: false),
-                    Icon = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    Icon = table.Column<string>(nullable: false),
                     IsDeleteable = table.Column<bool>(nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -362,7 +363,7 @@ namespace Automatica.Core.EF.Migrations
                     ObjId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
-                    This2RulePageType = table.Column<long>(type: "bigint(20)", nullable: false),
+                    This2RulePageType = table.Column<long>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -401,7 +402,7 @@ namespace Automatica.Core.EF.Migrations
                         principalColumn: "ObjId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "NodeInstance_This2UserGroup",
+                        name: "FK_CategoryInstance_This2UserGroup",
                         column: x => x.This2UserGroup,
                         principalTable: "UserGroups",
                         principalColumn: "ObjId",
@@ -491,7 +492,7 @@ namespace Automatica.Core.EF.Migrations
                     Group = table.Column<string>(maxLength: 1024, nullable: false),
                     Width = table.Column<float>(nullable: false),
                     Height = table.Column<float>(nullable: false),
-                    This2VisuPageType = table.Column<long>(type: "bigint(20)", nullable: false),
+                    This2VisuPageType = table.Column<long>(nullable: false),
                     IsVisibleForUser = table.Column<bool>(nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -512,8 +513,8 @@ namespace Automatica.Core.EF.Migrations
                     ObjId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
-                    This2VisuPageType = table.Column<long>(type: "bigint(20)", nullable: false),
-                    DefaultPage = table.Column<bool>(type: "bit(1)", nullable: false),
+                    This2VisuPageType = table.Column<long>(nullable: false),
+                    DefaultPage = table.Column<bool>(nullable: false),
                     Height = table.Column<double>(nullable: false, defaultValue: 4.0),
                     Width = table.Column<double>(nullable: false, defaultValue: 6.0),
                     This2UserGroup = table.Column<Guid>(nullable: true),
@@ -546,7 +547,7 @@ namespace Automatica.Core.EF.Migrations
                     This2Parent = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
-                    Icon = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    Icon = table.Column<string>(nullable: false),
                     This2UserGroup = table.Column<Guid>(nullable: true),
                     IsFavorite = table.Column<bool>(nullable: false),
                     Rating = table.Column<int>(nullable: false)
@@ -567,7 +568,7 @@ namespace Automatica.Core.EF.Migrations
                         principalColumn: "ObjId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "NodeInstance_This2UserGroup",
+                        name: "FK_AreaInstance_This2UserGroup",
                         column: x => x.This2UserGroup,
                         principalTable: "UserGroups",
                         principalColumn: "ObjId",
@@ -590,10 +591,10 @@ namespace Automatica.Core.EF.Migrations
                     IsReadableFixed = table.Column<bool>(nullable: false, defaultValue: false),
                     IsWriteable = table.Column<bool>(nullable: false, defaultValue: false),
                     IsWriteableFixed = table.Column<bool>(nullable: false, defaultValue: false),
-                    This2NodeDataType = table.Column<long>(type: "bigint(20)", nullable: false),
-                    MaxInstances = table.Column<int>(type: "int(11)", nullable: false),
+                    This2NodeDataType = table.Column<long>(nullable: false),
+                    MaxInstances = table.Column<int>(nullable: false),
                     IsAdapterInterface = table.Column<bool>(nullable: true, defaultValue: false),
-                    NameMeta = table.Column<string>(type: "varchar(1024)", nullable: true),
+                    NameMeta = table.Column<string>(nullable: true),
                     This2DefaultMobileVisuTemplate = table.Column<Guid>(nullable: false, defaultValue: new Guid("16780dfd-887a-4a0a-9b2a-4d62ccc32c93"))
                 },
                 constraints: table =>
@@ -767,7 +768,7 @@ namespace Automatica.Core.EF.Migrations
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
                     Key = table.Column<string>(maxLength: 1024, nullable: false),
-                    This2PropertyType = table.Column<long>(type: "bigint(20)", nullable: false),
+                    This2PropertyType = table.Column<long>(nullable: false),
                     This2NodeTemplate = table.Column<Guid>(nullable: true),
                     This2VisuObjectTemplate = table.Column<Guid>(nullable: true),
                     Group = table.Column<string>(maxLength: 1024, nullable: false),
@@ -775,10 +776,8 @@ namespace Automatica.Core.EF.Migrations
                     IsReadonly = table.Column<bool>(nullable: false, defaultValue: false),
                     Meta = table.Column<string>(nullable: false),
                     DefaultValue = table.Column<string>(maxLength: 1024, nullable: true),
-                    GroupOrder = table.Column<int>(type: "int(8)", nullable: false, defaultValueSql: "1")
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Order = table.Column<int>(type: "int(8)", nullable: false, defaultValueSql: "1")
-                        .Annotation("Sqlite:Autoincrement", true)
+                    GroupOrder = table.Column<int>(nullable: false, defaultValueSql: "1"),
+                    Order = table.Column<int>(nullable: false, defaultValueSql: "1")
                 },
                 constraints: table =>
                 {
@@ -863,11 +862,11 @@ namespace Automatica.Core.EF.Migrations
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
                     This2RuleTemplate = table.Column<Guid>(nullable: false),
-                    This2RuleInterfaceDirection = table.Column<long>(type: "bigint(20)", nullable: false),
-                    MaxLinks = table.Column<int>(type: "int(11)", nullable: false),
-                    ParameterDataType = table.Column<int>(type: "int(11)", nullable: false),
+                    This2RuleInterfaceDirection = table.Column<long>(nullable: false),
+                    MaxLinks = table.Column<int>(nullable: false),
+                    ParameterDataType = table.Column<int>(nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
-                    DefaultValue = table.Column<string>(type: "varchar(64)", nullable: true),
+                    DefaultValue = table.Column<string>(nullable: true),
                     IsLinkableParameter = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -944,11 +943,11 @@ namespace Automatica.Core.EF.Migrations
                     This2PropertyTemplate = table.Column<Guid>(nullable: false),
                     This2NodeInstance = table.Column<Guid>(nullable: true),
                     This2VisuObjectInstance = table.Column<Guid>(nullable: true),
-                    ValueString = table.Column<string>(type: "text", nullable: true),
-                    ValueInt = table.Column<int>(type: "int(11)", nullable: true),
+                    ValueString = table.Column<string>(nullable: true),
+                    ValueInt = table.Column<int>(nullable: true),
                     ValueBool = table.Column<bool>(nullable: true, defaultValue: false),
                     ValueDouble = table.Column<double>(nullable: true),
-                    ValueLong = table.Column<long>(type: "bigint(64)", nullable: true),
+                    ValueLong = table.Column<long>(nullable: true),
                     ValueNodeInstance = table.Column<Guid>(nullable: true),
                     ValueRulePage = table.Column<Guid>(nullable: true),
                     ValueVisuPage = table.Column<Guid>(nullable: true),
@@ -1023,8 +1022,8 @@ namespace Automatica.Core.EF.Migrations
                     ObjId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 1024, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: false, defaultValue: ""),
-                    ConstraintType = table.Column<long>(type: "int(20)", nullable: false),
-                    ConstraintLevel = table.Column<long>(type: "int(20)", nullable: false),
+                    ConstraintType = table.Column<long>(nullable: false),
+                    ConstraintLevel = table.Column<long>(nullable: false),
                     This2PropertyTemplate = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -1072,11 +1071,11 @@ namespace Automatica.Core.EF.Migrations
                 columns: table => new
                 {
                     ObjId = table.Column<Guid>(nullable: false),
-                    Factor = table.Column<double>(type: "double", nullable: false, defaultValue: 1.0),
-                    Offset = table.Column<double>(type: "double", nullable: false, defaultValue: 0.0),
-                    PropertyKey = table.Column<string>(type: "varchar(1024)", nullable: true),
+                    Factor = table.Column<double>(nullable: false, defaultValue: 1.0),
+                    Offset = table.Column<double>(nullable: false, defaultValue: 0.0),
+                    PropertyKey = table.Column<string>(nullable: true),
                     This2PropertyTemplateConstraint = table.Column<Guid>(nullable: false),
-                    ConditionType = table.Column<long>(type: "int(20)", nullable: false)
+                    ConditionType = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1317,7 +1316,7 @@ namespace Automatica.Core.EF.Migrations
                 column: "ValueVisuPage");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstraint",
+                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai~",
                 table: "PropertyTemplateConstraintData",
                 column: "This2PropertyTemplateConstraint");
 

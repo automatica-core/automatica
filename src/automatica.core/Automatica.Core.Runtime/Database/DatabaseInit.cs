@@ -31,23 +31,50 @@ namespace Automatica.Core.Runtime.Database
 
             if (dbCreated)
             {
-                context.Database.ExecuteSqlCommand($@"	       
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 1,
+                    Name = "Input",
+                    Description = "Input",
+                    Key = "I"
+                });
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 2,
+                    Name = "Output",
+                    Description = "Output",
+                    Key = "O"
+                });
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 3,
+                    Name = "Parameter",
+                    Description = "Parameter",
+                    Key = "P"
+                });
 
-		            INSERT INTO RuleInterfaceDirections (ObjId, Name, Description, Key) VALUES 
-		                (1, 'Input', 'Input', 'I'),
-		                (2, 'Output', 'Output', 'O'),
-		                (3, 'Parameter', 'Parameter', 'P');
-
-	           INSERT INTO RulePageTypes (ObjId, Name, Description, Key) VALUES 
-		        (1, 'Rules', 'Rules', 'rules');
-
-
-		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
-		        (1, 'PC', 'PC', 'pc');
-
-
-		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
-		        (2, 'Mobile', 'Mobile', 'mobile')");
+                context.RulePageTypes.Add(new RulePageType()
+                {
+                    ObjId = 1,
+                    Name = "Rules",
+                    Description = "Rules",
+                    Key = "rules"
+                });
+                context.VisuPageTypes.Add(new VisuPageType()
+                {
+                    ObjId = 1,
+                    Name = "PC",
+                    Description = "PC",
+                    Key = "pc"
+                });
+                context.VisuPageTypes.Add(new VisuPageType()
+                {
+                    ObjId = 2,
+                    Name = "Mobile",
+                    Description = "Mobile",
+                    Key = "mobile"
+                });
+                context.SaveChanges();
 
                 context.Slaves.Add(new Slave()
                 {
@@ -208,7 +235,7 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var propertyType in propertyTypes)
             {
-                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == (int) propertyType);
+                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(propertyType));
                 var isNewObject = false;
                 if (propertyTypeDb == null)
                 {
@@ -247,7 +274,7 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var nodeDataType in nodeDataTypes)
             {
-                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == (int)nodeDataType);
+                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(nodeDataType));
                 var isNewObject = false;
                 if (nodeDataTypeDb == null)
                 {

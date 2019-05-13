@@ -186,7 +186,7 @@ namespace Automatica.Core.Runtime.Core
             logger.LogDebug($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, passwort: {context.Password}");
             using (var db = new AutomaticaContext(config))
             {
-                if(db.Slaves.Any(a => a.ClientId == context.ClientId && a.ClientId == context.Username && a.ClientKey == context.Password))
+                if(db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
                 {
                     context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
                 }
