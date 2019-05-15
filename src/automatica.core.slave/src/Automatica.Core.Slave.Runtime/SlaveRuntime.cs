@@ -136,35 +136,9 @@ namespace Automatica.Core.Slave.Runtime
             }
         }
 
-        public static string Arch
-        {
-            get
-            {
-                var arch = "";
-
-                switch (RuntimeInformation.OSArchitecture)
-                {
-                    case Architecture.Arm:
-                        arch += "arm";
-                        break;
-                    case Architecture.Arm64:
-                        arch += "arm64";
-                        break;
-                    case Architecture.X64:
-                        arch += "x64";
-                        break;
-                    case Architecture.X86:
-                        arch += "x86";
-                        break;
-                }
-
-                return arch;
-            }
-        }
-
         private async Task StopImage(string imageSource, string imageName, string imageTag)
         {
-            var imageFullName = $"{imageName}:{imageTag}-{Arch}";
+            var imageFullName = $"{imageName}:{imageTag}-{NetStandardUtils.Platform.Arch}";
             Console.WriteLine($"Stop Image {imageFullName}");
 
             if(_runningImages.ContainsKey(imageFullName))
@@ -176,9 +150,9 @@ namespace Automatica.Core.Slave.Runtime
 
         private async Task StartImage(string imageSource, string imageName, string imageTag)
         {
-            var imageFullName = $"{imageName}:{imageTag}-{Arch}";
+            var imageFullName = $"{imageName}:{imageTag}-{NetStandardUtils.Platform.Arch}";
             Console.WriteLine($"Start Image {imageFullName}");
-            var image = FindImage(imageName, $"{imageTag}-{Arch}");
+            var image = FindImage(imageName, $"{imageTag}-{NetStandardUtils.Platform.Arch}");
 
             if (image == null)
             {
