@@ -49,17 +49,27 @@ namespace Automatica.Core.Supervisor.Runtime
         {
             _logger = logger;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            var dockerSocket = config["DOCKER_SOCKET"];
+
+            if (String.IsNullOrEmpty(dockerSocket))
             {
-                _dockerClient = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                _dockerClient = new DockerClientConfiguration(new Uri("npipe://./pipe/docker_engine")).CreateClient();
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    _dockerClient = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient();
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    _dockerClient = new DockerClientConfiguration(new Uri("npipe://./pipe/docker_engine")).CreateClient();
+                }
+                else
+                {
+                    throw new PlatformNotSupportedException();
+                }
             }
             else
             {
-                throw new PlatformNotSupportedException();
+                _logger.LogInformation($"Using provided docker socker {dockerSocket}");
+                _dockerClient = new DockerClientConfiguration(new Uri(dockerSocket)).CreateClient();
             }
 
             _supervisorImage = config["image"];
@@ -147,8 +157,8 @@ namespace Automatica.Core.Supervisor.Runtime
 
         public async Task Stop()
         {
-            _checkForNewImageTimer.Dispose();
-            _checkContainerStatusTimer.Dispose();
+            _checkForNewImageTimer?.Dispose();
+            _checkContainerStatusTimer?.Dispose();
 
             await StopContainer(_runningContainer);
         }

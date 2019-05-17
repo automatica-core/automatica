@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 
@@ -11,6 +13,14 @@ namespace Automatica.Core.Supervisor
     {
         public static void Main(string[] args)
         {
+            var envVariables = Environment.GetEnvironmentVariables();
+
+            foreach(var env in envVariables)
+            {
+                var entry = (DictionaryEntry)env;
+                Console.WriteLine($"{entry.Key} == {entry.Value}");
+            }
+
             var config = new ConfigurationBuilder()
               .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
               .AddJsonFile("appsettings.json", true)
