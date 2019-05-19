@@ -20,4 +20,4 @@ RUN rm -rf /src
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
 WORKDIR /app/supervisor
 COPY --from=build /app/supervisor ./
-ENTRYPOINT ["Automatica.Core.Supervisor"]
+ENTRYPOINT ["/app/supervisor/Automatica.Core.Supervisor"]
