@@ -40,6 +40,6 @@ namespace Automatica.Core.Supervisor
 
         public static IWebHostBuilder CreateWebHostBuilder(string port) =>
             WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>().UseUrls($"https://*:{port}/").UseSerilog();
+                .UseStartup<Startup>().UseUrls($"http://*:8080/").UseSerilog();
     }
 }
