@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch-arm32v7 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 WORKDIR /app
 
 ARG VERSION
@@ -16,4 +16,7 @@ RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor
 RUN cp /src/Automatica.Core.Supervisor/Automatica.Core.Supervisor/appsettings.json /app/supervisor/appsettings.json
 RUN rm -rf /src
 
-ENTRYPOINT ["dotnet", "/app/supervisor/Automatica.Core.Supervisor.dll"]
+FROM microsoft/dotnet:2.2-runtime-stretch-slim-arm32v7 AS runtime
+WORKDIR /app/supervisor
+COPY --from=build /app/supervisor ./
+ENTRYPOINT ["dotnet", "Automatica.Core.Supervisor.dll"]
