@@ -19,5 +19,8 @@ RUN rm -rf /src
 
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
 WORKDIR /app/supervisor
+
+RUN dotnet dev-certs https --trust
+
 COPY --from=build /app/supervisor ./
 ENTRYPOINT ["/app/supervisor/Automatica.Core.Supervisor"]
