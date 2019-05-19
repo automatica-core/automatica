@@ -11,12 +11,12 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 COPY . /src
 
 RUN automatica-cli setversion $VERSION -W /src/Automatica.Core.Supervisor/
-RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor/
+RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor/ -r linux-arm
 
 RUN cp /src/Automatica.Core.Supervisor/Automatica.Core.Supervisor/appsettings.json /app/supervisor/appsettings.json
 RUN rm -rf /src
 
-FROM microsoft/dotnet:2.2-runtime-stretch-slim-arm32v7 AS runtime
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2-stretch-slim-arm32v7 AS runtime
 WORKDIR /app/supervisor
 COPY --from=build /app/supervisor ./
-ENTRYPOINT ["dotnet", "Automatica.Core.Supervisor.dll"]
+ENTRYPOINT ["Automatica.Core.Supervisor"]
