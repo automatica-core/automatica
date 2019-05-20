@@ -23,17 +23,9 @@ RUN automatica-cli pack -W $MANIFEST_DIR -V $VERSION -C $CONFIG -o /build/ -U fa
 
 RUN for file in /build/*.acpkg; do mv $file /build/pluginFile.acpkg; break; done
 
-RUN ls /build
-
 RUN automatica-cli InstallPlugin -p /build/pluginFile.acpkg -I /plugin
 
-
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS runtime
+FROM automaticacore/automatica-cli-tools:arm-develop-latest AS runtime
 COPY --from=build /plugin /plugin
-
-RUN dotnet tool install automatica-plugin-standalone --global
-ENV PATH="${PATH}:/root/.dotnet/tools"
-
-RUN ls /plugin
 
 ENTRYPOINT ["automatica-plugin-standalone", "/plugin"]

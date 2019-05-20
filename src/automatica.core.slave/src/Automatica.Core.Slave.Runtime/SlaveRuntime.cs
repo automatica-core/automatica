@@ -178,9 +178,9 @@ namespace Automatica.Core.Slave.Runtime
 
         private async Task StartImage(string imageSource, string imageName, string imageTag)
         {
-            var imageFullName = $"{imageName}:{imageTag}-{NetStandardUtils.Platform.Arch}";
+            var imageFullName = $"{imageName}:{imageTag}";
             _logger.LogInformation($"Start Image {imageFullName}");
-            var image = FindImage(imageName, $"{imageTag}-{NetStandardUtils.Platform.Arch}");
+            var image = FindImage(imageName, $"{imageTag}");
 
             if (image == null)
             {
