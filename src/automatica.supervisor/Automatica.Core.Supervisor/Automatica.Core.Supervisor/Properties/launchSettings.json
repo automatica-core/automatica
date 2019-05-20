@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Automatica.Core.Supervisor": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOCKER_SOCKET": "tcp://localhost:2375"
+      }
+    }
+  }
+}

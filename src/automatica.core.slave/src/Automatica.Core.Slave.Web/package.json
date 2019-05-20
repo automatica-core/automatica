@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "build-docker": "ng build --output-path ./dist",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

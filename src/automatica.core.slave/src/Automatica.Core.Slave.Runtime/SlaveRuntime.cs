@@ -4,6 +4,7 @@ using Docker.DotNet.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Diagnostics;
@@ -11,6 +12,8 @@ using MQTTnet.Server;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -31,10 +34,13 @@ namespace Automatica.Core.Slave.Runtime
 
         private readonly string _masterAddress;
         private readonly string _clientKey;
+        private readonly ILogger _logger;
 
-        public SlaveRuntime(IServiceProvider services)
+        public SlaveRuntime(IServiceProvider services, ILogger<SlaveRuntime> logger)
         {
             var config = services.GetRequiredService<IConfiguration>();
+
+            _logger = logger;
 
             _masterAddress = config["server:master"];
             _clientKey = config["server:clientKey"];
@@ -56,55 +62,77 @@ namespace Automatica.Core.Slave.Runtime
                     trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
                 }
 
-                Console.WriteLine(trace);
+                _logger.LogTrace(trace);
             };
 
             _mqttClient = new MqttFactory().CreateMqttClient();
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            try
             {
-                _dockerClient = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient();
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    _dockerClient = new DockerClientConfiguration(new Uri("unix:///var/run/docker.sock")).CreateClient();
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    _dockerClient = new DockerClientConfiguration(new Uri("npipe://./pipe/docker_engine")).CreateClient();
+                }
+                else
+                {
+                    throw new PlatformNotSupportedException();
+                }
             }
-            else if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            catch(PlatformNotSupportedException)
             {
-                _dockerClient = new DockerClientConfiguration(new Uri("npipe://./pipe/docker_engine")).CreateClient();
+                throw;
             }
-            else
+            catch(Exception e)
             {
-                throw new PlatformNotSupportedException();
+               _logger.LogError(e, $"Could not connect do docker daemon!");
             }
-                
+
+            
         }
 
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _localImages = await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
-
-            await _mqttClient.ConnectAsync(_options);
-
-            var topic = $"slave/{_slaveId}/action";
-            await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
-
-
-            _mqttClient.ApplicationMessageReceived += async (sender, e) =>
+            try
             {
-                if(MqttTopicFilterComparer.IsMatch(topic, e.ApplicationMessage.Topic))
+                _localImages = await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
+
+                await _mqttClient.ConnectAsync(_options);
+
+                var topic = $"slave/{_slaveId}/action";
+                await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
+
+
+                _mqttClient.ApplicationMessageReceived += async (sender, e) =>
                 {
-                    var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                    var action = JsonConvert.DeserializeObject<ActionRequest>(json);
-                    try
+                    if (MqttTopicFilterComparer.IsMatch(topic, e.ApplicationMessage.Topic))
                     {
-                        await ExecuteAction(action);
+                        var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        var action = JsonConvert.DeserializeObject<ActionRequest>(json);
+                        try
+                        {
+                            await ExecuteAction(action);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, $"Could not execute request");
+                        }
                     }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine($"Could not execute request {ex}");
-                    }
-                }
-            };
+                };
 
-
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, $"Error connecting to docker process...");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error starting slave process...");
+            }
         }
 
         private ImagesListResponse FindImage(string imageName, string imageTag)
@@ -139,7 +167,7 @@ namespace Automatica.Core.Slave.Runtime
         private async Task StopImage(string imageSource, string imageName, string imageTag)
         {
             var imageFullName = $"{imageName}:{imageTag}-{NetStandardUtils.Platform.Arch}";
-            Console.WriteLine($"Stop Image {imageFullName}");
+            _logger.LogInformation($"Stop Image {imageFullName}");
 
             if(_runningImages.ContainsKey(imageFullName))
             {
@@ -151,7 +179,7 @@ namespace Automatica.Core.Slave.Runtime
         private async Task StartImage(string imageSource, string imageName, string imageTag)
         {
             var imageFullName = $"{imageName}:{imageTag}-{NetStandardUtils.Platform.Arch}";
-            Console.WriteLine($"Start Image {imageFullName}");
+            _logger.LogInformation($"Start Image {imageFullName}");
             var image = FindImage(imageName, $"{imageTag}-{NetStandardUtils.Platform.Arch}");
 
             if (image == null)
@@ -207,7 +235,7 @@ namespace Automatica.Core.Slave.Runtime
             }
             catch (Exception e)
             {
-                Console.WriteLine($"{e}");
+                _logger.LogError(e, "error starting image...");
             }
          
         }

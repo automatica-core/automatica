@@ -5,5 +5,16 @@ docker-compose -f docker/docker-compose.yml -p automaticacore build --build-arg 
 
 docker tag automaticacore_automatica automaticacore/automaticacore:dockerize-latest
 
-C:\Users\patri>docker run -p 5001:5001 -p 1883:1883 automaticacore/automaticacore:dockerize-latest
+docker run -p 5001:5001 -p 1883:1883 automaticacore/automaticacore:dockerize-latest
 
+
+
+# docker supervisor
+docker run -it -v //./pipe/docker_engine:/var/run/docker.sock automatica/automatica.supervisor:latest
+
+
+docker run -it -v /var/run/docker.sock:/var/run/docker.sock automaticacore/automatica.supervisor:develop-latest-arm32
+
+
+
+docker run -it -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 automaticacore/automatica.slave

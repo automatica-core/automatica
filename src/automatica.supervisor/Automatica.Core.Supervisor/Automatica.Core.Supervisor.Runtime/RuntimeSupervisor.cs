@@ -44,6 +44,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private readonly ILogger _logger;
         private string _runningContainer = null;
+        private bool _isPullingImage = false;
 
         public RuntimeSupervisor(IConfiguration config, ILogger<RuntimeSupervisor> logger)
         {
@@ -305,15 +306,21 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private async Task PullLatestImage()
         {
-            _logger.LogInformation($"Pull latest image.");
-
-
-            _logger.LogInformation($"Pulling image");
-            await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+            if (_isPullingImage)
             {
-                Tag = _supervisorImageTag,
-                FromImage = _supervisorImage
-            }, null, new Progress(_logger));
+                _isPullingImage = true;
+                _logger.LogInformation($"Pull latest image.");
+
+
+                _logger.LogInformation($"Pulling image");
+                await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+                {
+                    Tag = _supervisorImageTag,
+                    FromImage = _supervisorImage
+                }, null, new Progress(_logger));
+
+                _isPullingImage = false;
+            }
         }
 
         private bool IsArchitectureCompatible(string arch)
