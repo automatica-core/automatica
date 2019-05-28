@@ -7,9 +7,6 @@
 ### Frontend Build ###
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
-### Automatica.Demo Status ###
-[![Demo Status](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)
-
 ### Develop Automatica.Core.Cloud Status ###
 [![Demo Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
 
@@ -139,16 +136,7 @@ Any help is appreciated!
 
 
 # Online Demo
-The online demo is available [here](https://demo.automaticacore.com/).
-The demo will be reseted daily! So now worry - try everything you want.
-
-~~~
-https://demo.automaticacore.com/
-
-Login
-User: sa
-Password: sa
-~~~
+The demo is currently not available!
 
 # Docker images
 Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
