@@ -73,7 +73,7 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2-stretch-slim-arm32v7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
