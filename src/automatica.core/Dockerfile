@@ -5,7 +5,7 @@ ARG FONTAWESOME_TOKEN
 
 
 # Copy everything else and build
-COPY ./Automatica.WebNew /src
+COPY ./src/automatica.core/Automatica.WebNew /src
 
 RUN ls -lah /src
 RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/ 
@@ -35,11 +35,11 @@ COPY . /src
 COPY --from=node /src/dist /app/automatica/wwwroot
 
 
-RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/
-RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-x64
+RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/src/automatica.core/
+RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/ -r linux-x64
 
-COPY ./Automatica.Core/appsettings.json /app/automatica/appsettings.json
-COPY ./Automatica.Core/appsettings.json .
+COPY ./src/automatica.core/Automatica.Core/appsettings.json /app/automatica/appsettings.json
+COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
 RUN echo $AUTOMATICA_VERSION
 RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
