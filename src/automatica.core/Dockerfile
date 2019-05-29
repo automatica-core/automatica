@@ -39,6 +39,7 @@ RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/src/automatica.core/
 RUN dotnet publish -c Release -o /app/automatica /src/src/automatica.core/ -r linux-x64
 
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /app/automatica/appsettings.json
+RUN echo docker has some strange errors sometimes
 COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
 RUN echo $AUTOMATICA_VERSION
