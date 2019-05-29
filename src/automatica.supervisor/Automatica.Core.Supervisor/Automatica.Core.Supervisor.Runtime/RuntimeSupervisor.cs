@@ -152,7 +152,11 @@ namespace Automatica.Core.Supervisor.Runtime
         private async Task CreateAndStartContainer()
         {
             _runningContainer = await CreateContainer();
-            await StartContainer(_runningContainer);
+
+            if (!string.IsNullOrEmpty(_runningContainer))
+            {
+                await StartContainer(_runningContainer);
+            }
         }
 
 
@@ -249,16 +253,18 @@ namespace Automatica.Core.Supervisor.Runtime
         private async Task<string> CreateContainer()
         {
             _logger.LogInformation($"Preparing container");
+            try
+            {
 
-            var portBindings = new Dictionary<string, IList<PortBinding>>();
-            portBindings.Add("5001/tcp", new List<PortBinding>()
+                var portBindings = new Dictionary<string, IList<PortBinding>>();
+                portBindings.Add("5001/tcp", new List<PortBinding>()
             {
                 new PortBinding()
                 {
                     HostPort = "5001"
                 }
             });
-            portBindings.Add("1883/tcp", new List<PortBinding>()
+                portBindings.Add("1883/tcp", new List<PortBinding>()
             {
                 new PortBinding()
                 {
@@ -266,19 +272,25 @@ namespace Automatica.Core.Supervisor.Runtime
                 }
             });
 
-            var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
-            {
-                Image = $"{_supervisorImage}:{_supervisorImageTag}",
-                AttachStderr = false,
-                AttachStdin = false,
-                AttachStdout = false,
-                HostConfig = new HostConfig
+                var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
                 {
-                    PortBindings = portBindings
-                }
-            });
+                    Image = $"{_supervisorImage}:{_supervisorImageTag}",
+                    AttachStderr = false,
+                    AttachStdin = false,
+                    AttachStdout = false,
+                    HostConfig = new HostConfig
+                    {
+                        PortBindings = portBindings
+                    }
+                });
 
-            return response.ID;
+                return response.ID;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not create image..");
+            }
+            return null;
         }
 
         private async Task<bool> CheckForNewerImage()
@@ -306,7 +318,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private async Task PullLatestImage()
         {
-            if (_isPullingImage)
+            if (!_isPullingImage)
             {
                 _isPullingImage = true;
                 _logger.LogInformation($"Pull latest image.");
