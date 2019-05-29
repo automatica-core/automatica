@@ -54,7 +54,7 @@ namespace Automatica.Core.EF.Models
 
 
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Model.Models.User.User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<Priviledge> Priviledges { get; set; }
         public virtual DbSet<User2Group> User2Groups { get; set; }
@@ -72,30 +72,37 @@ namespace Automatica.Core.EF.Models
         public AutomaticaContext(IConfiguration configuration)
         {
             Configuration = configuration;
-
-
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-
                 var logger = new DatabaseLoggerFactory();
                 string dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
+                var envDbType = Environment.GetEnvironmentVariable($"DATABASE_TYPE");
+                var loggerInstance = logger.CreateLogger("database");
+
+                if (!string.IsNullOrEmpty(envDbType))
+                {
+                    dbType = envDbType;
+                    loggerInstance.LogWarning($"Using databasetype from appsettings, environment variable \"DATABASE_TYPE\" is not set");
+                }
 
                 switch(dbType.ToLower())
                 {
                     case "sqlite":
-                        ConfigureSqLiteDatabase(optionsBuilder);
+                        ConfigureSqLiteDatabase(optionsBuilder, loggerInstance);
                         break;
                     case "mariadb":
-                        ConfigureMariaDatabase(optionsBuilder);
+                        ConfigureMariaDatabase(optionsBuilder, loggerInstance);
                         break;
                     case "memory":
                         optionsBuilder.UseInMemoryDatabase("automatica");
+                        loggerInstance.LogInformation($"Using MemoryDatabase provider...");
                         break;
                     default:
-                        logger.CreateLogger("Configuration").LogCritical($"No or invalid database provider configured {dbType.ToLower()}\nSupported are sqlite, mariadb, memory");
+                        loggerInstance.LogCritical($"No or invalid database provider configured {dbType.ToLower()}\nSupported are sqlite, mariadb, memory");
                         break;
                 }
 
@@ -106,13 +113,25 @@ namespace Automatica.Core.EF.Models
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
-        private void ConfigureMariaDatabase(DbContextOptionsBuilder optionsBuilder)
+        private void ConfigureMariaDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
         {
-            optionsBuilder.UseMySql(Configuration.GetConnectionString("AutomaticaDatabaseMaria"));
+            logger.LogInformation($"Using MariaDB database engine...");
+
+            var mariaDbConString = $"Server={Environment.GetEnvironmentVariable("MARIADB_HOST")};User Id={Environment.GetEnvironmentVariable("MARIADB_USER")};Password={Environment.GetEnvironmentVariable("MARIADB_PASSWORD")};Database=automatica";
+
+            if(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MARIADB_HOST")))
+            {
+                mariaDbConString = Configuration.GetConnectionString($"AutomaticaDatabaseMaria");
+                logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
+            }
+
+            optionsBuilder.UseMySql(mariaDbConString);
         }
 
-        private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder)
+        private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
         {
+
+            logger.LogInformation($"Using SQLite database engine...");
             string conString = Configuration.GetConnectionString("AutomaticaDatabaseSqlite");
             var sqliteConBuilder = new SqliteConnectionStringBuilder(conString);
 

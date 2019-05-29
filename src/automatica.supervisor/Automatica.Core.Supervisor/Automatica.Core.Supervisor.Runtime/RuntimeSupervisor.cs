@@ -258,22 +258,24 @@ namespace Automatica.Core.Supervisor.Runtime
 
                 var portBindings = new Dictionary<string, IList<PortBinding>>();
                 portBindings.Add("5001/tcp", new List<PortBinding>()
-            {
-                new PortBinding()
                 {
-                    HostPort = "5001"
-                }
-            });
+                    new PortBinding()
+                    {
+                        HostPort = "5001"
+                    }
+                });
                 portBindings.Add("1883/tcp", new List<PortBinding>()
-            {
-                new PortBinding()
                 {
-                    HostPort = "1883"
-                }
-            });
+                    new PortBinding()
+                    {
+                        HostPort = "1883"
+                    }
+                });
 
+                var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
                 var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
                 {
+                    Name = imgName,
                     Image = $"{_supervisorImage}:{_supervisorImageTag}",
                     AttachStderr = false,
                     AttachStdin = false,
