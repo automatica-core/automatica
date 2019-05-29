@@ -284,6 +284,9 @@ namespace Automatica.Core.Supervisor.Runtime
                 }
 
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
+
+                await _dockerClient.Containers.RemoveContainerAsync($"{imgName}", new ContainerRemoveParameters() { Force = true });
+
                 var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
                 {
                     Name = imgName,
