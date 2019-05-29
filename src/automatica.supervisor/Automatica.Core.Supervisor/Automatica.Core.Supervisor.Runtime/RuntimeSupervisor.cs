@@ -327,17 +327,17 @@ namespace Automatica.Core.Supervisor.Runtime
                 createContainerParams.HostConfig.Mounts = new List<Mount>();
 
                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
+               {
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Source = $"/var/lib/{imgName}",
-                        Target = $"/app/{imgName}/config",
+                        Target= $"/var/lib/{imgName}",
+                        Source = $"/app/{imgName}/config",
                         Type = "bind"
                     });
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Source = $"/var/logs/{imgName}",
-                        Target = $"/app/{imgName}/logs",
+                        Target = $"/var/logs/{imgName}",
+                        Source = $"/app/{imgName}/logs",
                         Type = "bind"
                     });
                 }
