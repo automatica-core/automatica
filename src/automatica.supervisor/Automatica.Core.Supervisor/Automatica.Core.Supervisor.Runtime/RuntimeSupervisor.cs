@@ -285,6 +285,12 @@ namespace Automatica.Core.Supervisor.Runtime
 
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
 
+                if(imgName.Contains("."))
+                {
+                    var splitPoint = imgName.Split(".", StringSplitOptions.RemoveEmptyEntries);
+                    imgName = splitPoint[splitPoint.Length - 1];
+                }
+
                 try
                 {
                     await _dockerClient.Containers.RemoveContainerAsync($"{imgName}", new ContainerRemoveParameters() { Force = true });
@@ -309,6 +315,24 @@ namespace Automatica.Core.Supervisor.Runtime
                     Env = envVariables
                 };
 
+                
+                createContainerParams.HostConfig.Mounts = new List<Mount>();
+
+               if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    createContainerParams.HostConfig.Mounts.Add(new Mount()
+                    {
+                        Source = $"/var/lib/{imgName}",
+                        Target = $"/app/{imgName}/config",
+                        Type = "bind"
+                    });
+                    createContainerParams.HostConfig.Mounts.Add(new Mount()
+                    {
+                        Source = $"/var/logs/{imgName}",
+                        Target = $"/app/{imgName}/logs",
+                        Type = "bind"
+                    });
+                }
                 var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
 
                 if(!String.IsNullOrEmpty(networkMode))

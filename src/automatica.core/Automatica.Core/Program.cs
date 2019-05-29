@@ -25,8 +25,15 @@ namespace Automatica.Core
     {
         static void Main(string[] args)
         {
+            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+
+            if(Directory.Exists(Path.Combine(configDir, "config")))
+            {
+                configDir = Path.Combine(configDir, "config");
+            }
+
             var config = new ConfigurationBuilder()
-                .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
+                .SetBasePath(configDir)
                 .AddJsonFile("appsettings.json", true)
                 .AddEnvironmentVariables()
                 .Build();
