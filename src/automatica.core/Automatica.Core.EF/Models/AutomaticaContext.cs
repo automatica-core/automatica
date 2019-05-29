@@ -83,7 +83,7 @@ namespace Automatica.Core.EF.Models
                 var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
                 var loggerInstance = logger.CreateLogger("database");
 
-                if (!string.IsNullOrEmpty(envDbType))
+                if (string.IsNullOrEmpty(envDbType))
                 {
                     dbType = envDbType;
                     loggerInstance.LogWarning($"Using databasetype from appsettings, environment variable \"DATABASE_TYPE\" is not set");
