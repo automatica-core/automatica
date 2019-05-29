@@ -285,7 +285,14 @@ namespace Automatica.Core.Supervisor.Runtime
 
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
 
-                await _dockerClient.Containers.RemoveContainerAsync($"{imgName}", new ContainerRemoveParameters() { Force = true });
+                try
+                {
+                    await _dockerClient.Containers.RemoveContainerAsync($"{imgName}", new ContainerRemoveParameters() { Force = true });
+                }
+                catch(Exception e)
+                {
+                    _logger.LogWarning($"Could not delete old image - maybe no image has been created!");
+                }
 
                 var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
                 {
