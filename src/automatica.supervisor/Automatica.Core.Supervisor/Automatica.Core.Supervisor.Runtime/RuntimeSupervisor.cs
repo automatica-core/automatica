@@ -330,15 +330,13 @@ namespace Automatica.Core.Supervisor.Runtime
                {
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Target= $"/var/lib/{imgName}",
-                        Source = $"/app/{imgName}/config",
-                        Type = "bind"
+                        Source= $"/var/lib/{imgName}",
+                        Target = $"/app/{imgName}/config"
                     });
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Target = $"/var/logs/{imgName}",
-                        Source = $"/app/{imgName}/logs",
-                        Type = "bind"
+                        Source= $"/var/logs/{imgName}",
+                        Target = $"/app/{imgName}/logs"
                     });
                 }
                 var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
