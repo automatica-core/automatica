@@ -106,8 +106,11 @@ namespace Automatica.Core.EF.Models
                         break;
                 }
 
-               
-                optionsBuilder.UseLoggerFactory(logger);
+
+                if (!string.IsNullOrEmpty($"DATABASE_LOGS"))
+                {
+                    optionsBuilder.UseLoggerFactory(logger);
+                }
             }
 
             optionsBuilder.EnableSensitiveDataLogging();
