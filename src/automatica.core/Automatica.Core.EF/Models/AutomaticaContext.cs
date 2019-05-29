@@ -80,7 +80,7 @@ namespace Automatica.Core.EF.Models
             {
                 var logger = new DatabaseLoggerFactory();
                 string dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
-                var envDbType = Environment.GetEnvironmentVariable($"DATABASE_TYPE");
+                var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
                 var loggerInstance = logger.CreateLogger("database");
 
                 if (!string.IsNullOrEmpty(envDbType))

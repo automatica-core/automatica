@@ -15,11 +15,9 @@ using System.Reflection;
 using System.Runtime.Versioning;
 using Automatica.Core.Runtime.Database;
 using Serilog;
-using Serilog.Filters;
 using Automatica.Core.Internals;
-using MessagePack;
-using MQTTnet.AspNetCore;
 using MQTTnet.Diagnostics;
+using System.Collections;
 
 namespace Automatica.Core
 {
@@ -30,6 +28,7 @@ namespace Automatica.Core
             var config = new ConfigurationBuilder()
                 .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
                 .AddJsonFile("appsettings.json", true)
+                .AddEnvironmentVariables()
                 .Build();
 
             var logBuild = new LoggerConfiguration()
@@ -38,6 +37,14 @@ namespace Automatica.Core
               .MinimumLevel.Verbose();
 
             Log.Logger = logBuild.CreateLogger();
+
+            foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+            {
+                var envVar = $"{env.Key}={env.Value}";
+
+
+                Log.Logger.Debug($"Using env variable: {envVar}");
+            }
 
             var logger = SystemLogger.Instance;
             logger.LogInformation($"Binding mqtt logger...");
