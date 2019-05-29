@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -272,6 +273,16 @@ namespace Automatica.Core.Supervisor.Runtime
                     }
                 });
 
+                var envVariables = new List<string>();
+
+                foreach(DictionaryEntry env in Environment.GetEnvironmentVariables())
+                {
+                    var envVar = $"{env.Key}={env.Value}";
+                    envVariables.Add(envVar);
+
+                    _logger.LogDebug($"Using env variable: {envVar}");
+                }
+
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
                 var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
                 {
@@ -283,7 +294,8 @@ namespace Automatica.Core.Supervisor.Runtime
                     HostConfig = new HostConfig
                     {
                         PortBindings = portBindings
-                    }
+                    },
+                    Env = envVariables
                 });
 
                 return response.ID;
