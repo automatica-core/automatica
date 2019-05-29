@@ -253,7 +253,15 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private async Task<string> CreateContainer()
         {
+            if(_isPullingImage)
+            {
+                _logger.LogInformation($"Downloading newer image - do not start right now!");
+                return null;
+            }
+
             _logger.LogInformation($"Preparing container");
+
+
             try
             {
 
