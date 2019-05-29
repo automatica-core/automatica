@@ -294,9 +294,10 @@ namespace Automatica.Core.Supervisor.Runtime
                     _logger.LogWarning($"Could not delete old image - maybe no image has been created!");
                 }
 
-                var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
+                var createContainerParams = new CreateContainerParameters()
                 {
                     Name = imgName,
+                    Hostname = imgName,
                     Image = $"{_supervisorImage}:{_supervisorImageTag}",
                     AttachStderr = false,
                     AttachStdin = false,
@@ -306,7 +307,16 @@ namespace Automatica.Core.Supervisor.Runtime
                         PortBindings = portBindings
                     },
                     Env = envVariables
-                });
+                };
+
+                var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
+
+                if(!String.IsNullOrEmpty(networkMode))
+                {
+                    createContainerParams.HostConfig.NetworkMode = networkMode;
+                }
+
+                var response = await _dockerClient.Containers.CreateContainerAsync(createContainerParams);
 
                 return response.ID;
             }
