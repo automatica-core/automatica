@@ -389,18 +389,28 @@ namespace Automatica.Core.Supervisor.Runtime
         {
             if (!_isPullingImage)
             {
-                _isPullingImage = true;
-                _logger.LogInformation($"Pull latest image.");
-
-
-                _logger.LogInformation($"Pulling image");
-                await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+                try
                 {
-                    Tag = _supervisorImageTag,
-                    FromImage = _supervisorImage
-                }, null, new Progress(_logger));
+                    _isPullingImage = true;
+                    _logger.LogInformation($"Pull latest image.");
 
-                _isPullingImage = false;
+
+                    _logger.LogInformation($"Pulling image");
+                    await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+                    {
+                        Tag = _supervisorImageTag,
+                        FromImage = _supervisorImage
+                    }, null, new Progress(_logger));
+
+                }
+                catch (Exception e)
+                {
+                    _logger.LogInformation(e, "Could not pull image..");
+                }
+                finally
+                {
+                    _isPullingImage = false;
+                }
             }
         }
 
