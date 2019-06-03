@@ -323,10 +323,6 @@ namespace Automatica.Core.Supervisor.Runtime
                     Env = envVariables
                 };
 
-                createContainerParams.Entrypoint = new List<string>();
-                createContainerParams.Entrypoint.Add("/bin/bash");
-
-
                 createContainerParams.HostConfig.Mounts = new List<Mount>();
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -339,7 +335,7 @@ namespace Automatica.Core.Supervisor.Runtime
                     });
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Source = $"/var/logs/{imgName}/",
+                        Source = $"/var/log/{imgName}/",
                         Target = $"/app/{imgName}/logs/ ",
                         Type = "bind"
                     });
