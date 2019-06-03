@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Automatica.Core.Base.Common
 {
@@ -122,6 +123,18 @@ namespace Automatica.Core.Base.Common
         public static string GetServerVersion()
         {
             return Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        }
+
+        public static string GetConfigDirectory() 
+        {
+            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+
+            if(Directory.Exists(Path.Combine(configDir, "config")))
+            {
+                configDir = Path.Combine(configDir, "config");
+            }
+            
+            return configDir;
         }
     }
 }

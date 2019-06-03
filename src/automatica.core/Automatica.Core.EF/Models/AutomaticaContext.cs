@@ -79,17 +79,27 @@ namespace Automatica.Core.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
                 var logger = new DatabaseLoggerFactory();
-                string dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
+                var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
                 var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
                 var loggerInstance = logger.CreateLogger("database");
 
+                string useDbType = envDbType;
+
                 if (string.IsNullOrEmpty(envDbType))
                 {
-                    dbType = envDbType;
+                    useDbType = dbType;
                     loggerInstance.LogWarning($"Using databasetype from appsettings, environment variable \"DATABASE_TYPE\" is not set");
                 }
 
-                switch(dbType.ToLower())
+                if (string.IsNullOrEmpty(dbType))
+                {
+                    loggerInstance.LogError($"No DatabaseType is set! Using sqlite database driver!");
+                    useDbType = "sqlite";
+                }
+
+                
+
+                switch(useDbType.ToLower())
                 {
                     case "sqlite":
                         ConfigureSqLiteDatabase(optionsBuilder, loggerInstance);

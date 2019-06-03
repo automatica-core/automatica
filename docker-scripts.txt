@@ -23,3 +23,10 @@ docker run -it -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 automat
 
 # build plugin
 build -f Dockerfile -t automaticacore/plugin-p3.driver.constants:0.9.0.90-arm -t automaticacore/plugin-p3.driver.constants:latest-arm . --build-arg MANIFEST_DIR=./P3.Driver.Constants/ --build-arg VERSION=0.9.0.90 --build-arg CONFIG=Release --build-arg CLOUD_API_KEY=9B4771F9-411F-4D63-BE4F-AE592A9EB251 --build-arg CLOUD_URL=https://automatica-core-cloud.azurewebsites.net
+
+
+docker build -f src/automatica.core/Dockerfile -t automaticacore/automatica:amd64-develop-latest -t automaticacore/automatica:amd64-develop-0.9.0 . --build-arg VERSION=0.9.0.3150 --build-arg AUTOMATICA_VERSION=0.9.0.3150 --build-arg CLOUD_API_KEY=9B4771F9-411F-4D63-BE4F-AE592A9EB251 --build-arg CLOUD_URL=https://automatica-core-cloud.azurewebsites.net --build-arg FONTAWESOME_TOKEN=7A461519-1F87-4A2D-AE11-DEFDF684AAD4
+
+
+docker run -it --mount type=bind,source="/var/lib/automatica",target="/app/automatica/config" automaticacore/automatica:amd64-develop-latest
+

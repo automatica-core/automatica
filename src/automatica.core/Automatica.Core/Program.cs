@@ -25,16 +25,10 @@ namespace Automatica.Core
     {
         static void Main(string[] args)
         {
-            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
-
-            if(Directory.Exists(Path.Combine(configDir, "config")))
-            {
-                configDir = Path.Combine(configDir, "config");
-            }
-
+           
             var config = new ConfigurationBuilder()
-                .SetBasePath(configDir)
-                .AddJsonFile("appsettings.json", true)
+                .SetBasePath(ServerInfo.GetConfigDirectory())
+                .AddJsonFile("appsettings.json", false)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -48,13 +42,14 @@ namespace Automatica.Core
             foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
             {
                 var envVar = $"{env.Key}={env.Value}";
-
-
                 Log.Logger.Debug($"Using env variable: {envVar}");
             }
 
             var logger = SystemLogger.Instance;
-            logger.LogInformation($"Binding mqtt logger...");
+
+            if(!File.Exists(Path.Combine(ServerInfo.GetConfigDirectory(), "appsettings.json"))) {
+                logger.LogError($"Could not find appsettings.json in {ServerInfo.GetConfigDirectory()}");
+            }
 
             MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
             {
@@ -127,6 +122,11 @@ namespace Automatica.Core
                 .ConfigureLogging(logging => {
                     logging.AddFilter("Microsoft.AspNetCore.SignalR", LogLevel.Trace);
                     logging.AddFilter("Microsoft.AspNetCore.Http.Connections", LogLevel.Trace);
+                }).ConfigureAppConfiguration((AutomaticaContext, config) => {
+                    config
+                        .SetBasePath(ServerInfo.GetConfigDirectory())
+                        .AddJsonFile("appsettings.json", false)
+                        .AddEnvironmentVariables();
                 });
 
             if (HybridSupport.IsElectronActive)

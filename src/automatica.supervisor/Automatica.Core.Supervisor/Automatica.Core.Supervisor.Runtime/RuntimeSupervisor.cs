@@ -115,7 +115,7 @@ namespace Automatica.Core.Supervisor.Runtime
                             await CreateAndStartContainer();
                         }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         _logger.LogError(e, "Could not check for container updates");
                     }
@@ -141,7 +141,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
             var containerInstance = await GetRunningContainerInstance();
 
-            if(containerInstance == null)
+            if (containerInstance == null)
             {
                 _logger.LogError($"Container seems to be not running, starting it again");
                 await StartInternal();
@@ -183,7 +183,7 @@ namespace Automatica.Core.Supervisor.Runtime
         {
             _logger.LogInformation($"Starting container  {containerId}");
             await _dockerClient.Containers.StartContainerAsync(containerId, new ContainerStartParameters { });
-            
+
         }
 
         internal static HttpClient CreateClient()
@@ -239,7 +239,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private async Task StopContainer(string containerId)
         {
-            if(string.IsNullOrEmpty(_runningContainer))
+            if (string.IsNullOrEmpty(_runningContainer))
             {
                 _logger.LogError("Cannot stop container because I have no clue which one");
                 return;
@@ -253,7 +253,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private async Task<string> CreateContainer()
         {
-            if(_isPullingImage)
+            if (_isPullingImage)
             {
                 _logger.LogInformation($"Downloading newer image - do not start right now!");
                 return null;
@@ -283,7 +283,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
                 var envVariables = new List<string>();
 
-                foreach(DictionaryEntry env in Environment.GetEnvironmentVariables())
+                foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
                 {
                     var envVar = $"{env.Key}={env.Value}";
                     envVariables.Add(envVar);
@@ -293,7 +293,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
 
-                if(imgName.Contains("."))
+                if (imgName.Contains("."))
                 {
                     var splitPoint = imgName.Split(".", StringSplitOptions.RemoveEmptyEntries);
                     imgName = splitPoint[splitPoint.Length - 1];
@@ -303,7 +303,7 @@ namespace Automatica.Core.Supervisor.Runtime
                 {
                     await _dockerClient.Containers.RemoveContainerAsync($"{imgName}", new ContainerRemoveParameters() { Force = true });
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     _logger.LogWarning($"Could not delete old image - maybe no image has been created!");
                 }
@@ -323,25 +323,30 @@ namespace Automatica.Core.Supervisor.Runtime
                     Env = envVariables
                 };
 
-                
+                createContainerParams.Entrypoint = new List<string>();
+                createContainerParams.Entrypoint.Add("/bin/bash");
+
+
                 createContainerParams.HostConfig.Mounts = new List<Mount>();
 
-               if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-               {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Source= $"/var/lib/{imgName}",
-                        Target = $"/app/{imgName}/config"
+                        Source = $"/var/lib/{imgName}/",
+                        Target = $"/app/{imgName}/config/",
+                        Type = "bind"
                     });
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
-                        Source= $"/var/logs/{imgName}",
-                        Target = $"/app/{imgName}/logs"
+                        Source = $"/var/logs/{imgName}/",
+                        Target = $"/app/{imgName}/logs/ ",
+                        Type = "bind"
                     });
                 }
                 var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
 
-                if(!String.IsNullOrEmpty(networkMode))
+                if (!String.IsNullOrEmpty(networkMode))
                 {
                     createContainerParams.HostConfig.NetworkMode = networkMode;
                 }
@@ -363,7 +368,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
             var currentImage = await GetRunningContainerInstance();
 
-            if(currentImage == null)
+            if (currentImage == null)
             {
                 return true;
             }

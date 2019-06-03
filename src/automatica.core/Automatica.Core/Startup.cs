@@ -193,7 +193,7 @@ namespace Automatica.Core
             services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
 
             var builder = new ConfigurationBuilder()
-                .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
+                .SetBasePath(ServerInfo.GetConfigDirectory())
                 .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();

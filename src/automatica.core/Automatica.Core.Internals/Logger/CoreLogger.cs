@@ -45,7 +45,7 @@ namespace Automatica.Core.Internals.Logger
             {
                 logBuild.WriteTo.RollingFile(Path.Combine("framework", "logs", $"{facility}.log"), fileSizeLimitBytes: 31457280,
                     retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30));
+                    flushToDiskInterval: TimeSpan.FromSeconds(30)).WriteTo.Console();
             }
 
             switch (_level)
