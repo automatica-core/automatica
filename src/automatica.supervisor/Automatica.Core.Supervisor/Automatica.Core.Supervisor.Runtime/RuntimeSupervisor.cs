@@ -339,6 +339,14 @@ namespace Automatica.Core.Supervisor.Runtime
                         Target = $"/app/{imgName}/logs/ ",
                         Type = "bind"
                     });
+
+
+                    createContainerParams.HostConfig.Mounts.Add(new Mount()
+                    {
+                        Source = $"/var/run/docker.sock",
+                        Target = $"/var/run/docker.sock",
+                        Type = "bind"
+                    });
                 }
                 var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
 
