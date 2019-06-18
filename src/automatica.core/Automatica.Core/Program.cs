@@ -117,6 +117,18 @@ namespace Automatica.Core
                 .UseStartup<Startup>().UseKestrel(o => {
                     o.ListenAnyIP(Convert.ToInt32(port)); 
                 })
+                .ConfigureAppConfiguration(a =>
+                {
+                    var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+                    if (Directory.Exists(Path.Combine(configDir, "config")))
+                    {
+                        configDir = Path.Combine(configDir, "config");
+                    }
+
+                    a.SetBasePath(configDir);
+                    a.AddEnvironmentVariables();
+                    a.AddJsonFile("appsettings.json", true);
+                })
                 //.UseElectron(new string[])
                 .UseSerilog()
                 .ConfigureLogging(logging => {
