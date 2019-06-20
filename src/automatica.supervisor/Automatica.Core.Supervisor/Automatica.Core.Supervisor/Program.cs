@@ -37,8 +37,24 @@ namespace Automatica.Core.Supervisor
             CreateWebHostBuilder(config["server:port"]).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string port) =>
-            WebHost.CreateDefaultBuilder()
+        public static IWebHostBuilder CreateWebHostBuilder(string port)
+        {
+            return WebHost.CreateDefaultBuilder()
+                .ConfigureAppConfiguration(a =>
+                {
+
+                    var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+                    if (Directory.Exists(Path.Combine(configDir, "config")))
+                    {
+                        configDir = Path.Combine(configDir, "config");
+                    }
+
+                    a.SetBasePath(configDir);
+                    a.AddEnvironmentVariables();
+                    a.AddJsonFile("appsettings.json", true);
+
+                })
                 .UseStartup<Startup>().UseUrls($"http://*:8080/").UseSerilog();
+        }
     }
 }

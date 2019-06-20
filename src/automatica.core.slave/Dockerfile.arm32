@@ -19,7 +19,7 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 COPY . /src
 
 RUN automatica-cli setversion $VERSION -W /src/src
-RUN dotnet publish -c Release -o /app/slave /src/src/ -r linux-x64
+RUN dotnet publish -c Release -o /app/slave /src/src/ -r linux-arm
 
 FROM mcr.microsoft.com/dotnet/core/runtime:2.2-stretch-slim-arm32v7 AS runtime
 WORKDIR /app/slave
