@@ -141,7 +141,7 @@ namespace Automatica.Core.Slave.Runtime
             {
                 foreach (var image in _localImages)
                 {
-                    if (image.RepoTags.Contains($"{imageName}:{imageTag}"))
+                    if (image.RepoTags != null && image.RepoTags.Contains($"{imageName}:{imageTag}"))
                     {
                         return image;
                     }
