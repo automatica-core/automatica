@@ -38,6 +38,7 @@ using MQTTnet;
 using MQTTnet.Server;
 using Newtonsoft.Json;
 using System.Text;
+using Automatica.Core.Base.Mqtt;
 using Automatica.Core.Internals.Docker;
 using Automatica.Core.EF.Extensions;
 using Newtonsoft.Json.Linq;

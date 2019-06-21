@@ -1,10 +1,8 @@
-﻿using Automatica.Core.Base.IO;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Serialization;
 
-namespace Automatica.Core.Internals.Mqtt
+namespace Automatica.Core.Base.Mqtt
 {
     internal class MqttDispatchable : IDispatchable
     {

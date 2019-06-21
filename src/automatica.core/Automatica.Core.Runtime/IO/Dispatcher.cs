@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Mqtt;
 using Automatica.Core.Base.Serialization;
 using Automatica.Core.Internals;
 using Automatica.Push.Hubs;

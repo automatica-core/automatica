@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Automatica.Core.Internals.Mqtt
+﻿namespace Automatica.Core.Base.Mqtt
 {
     public enum SlaveAction
     {

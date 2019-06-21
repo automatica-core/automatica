@@ -1,4 +1,4 @@
-﻿namespace Automatica.Core.Internals.Mqtt
+﻿namespace Automatica.Core.Base.Mqtt
 {
     public static class MqttTopicConstants
     {
