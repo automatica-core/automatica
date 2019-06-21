@@ -13,8 +13,6 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 # Copy everything else and build
 COPY . /src
 
-COPY --from=node /src/dist /app/automatica/wwwroot
-
 RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/src/automatica.core.plugin.standalone/
 RUN dotnet publish -c Release -o /app/plugin /src/src/automatica.core.plugin.standalone/ -r linux-arm
 
