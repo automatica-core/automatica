@@ -49,6 +49,7 @@ function remote()
 }
 remote automatica.core.slave git@github.com:automatica-core/automatica.core.slave.git
 remote automatica.supervisor git@github.com:automatica-core/automatica.supervisor.git
+remote automatica.core.plugin.standalone git@github.com:automatica-core/automatica.core.plugin.standalone.git
 
 remote automatica.driver.automatica.remote git@github.com:automatica-core/automatica.driver.automatica.remote.git
 remote automatica.driver.constants git@github.com:automatica-core/automatica.driver.constants.git
@@ -79,6 +80,7 @@ remote automatica.logic.time git@github.com:automatica-core/automatica.logic.tim
 # core repos
 split src/automatica.core.slave automatica.core.slave
 split src/automatica.supervisor automatica.supervisor
+split src/automatica.core.plugin.standalone automatica.core.plugin.standalone
 
 # drivers
 split src/automatica.drivers/automatica.driver.automatica.remote automatica.driver.automatica.remote
