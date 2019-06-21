@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Automatica.Core.Internals.Serialization
+namespace Automatica.Core.Base.Serialization
 {
     public static class BinarySerializer
     {
@@ -9,8 +9,8 @@ namespace Automatica.Core.Internals.Serialization
         {
             if (obj == null)
                 return null;
-            BinaryFormatter bf = new BinaryFormatter();
-            using (MemoryStream ms = new MemoryStream())
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream())
             {
                 bf.Serialize(ms, obj);
                 return ms.ToArray();
@@ -20,8 +20,8 @@ namespace Automatica.Core.Internals.Serialization
         {
             if (obj == null)
                 return null;
-            BinaryFormatter bf = new BinaryFormatter();
-            using (MemoryStream ms = new MemoryStream())
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream())
             {
                 ms.Write(obj);
                 ms.Position = 0;

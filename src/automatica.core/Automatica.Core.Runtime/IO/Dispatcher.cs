@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Serialization;
 using Automatica.Core.Internals;
 using Automatica.Push.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 using MQTTnet.Server;
 using Automatica.Core.Internals.Mqtt;
-using Automatica.Core.Internals.Serialization;
 
 namespace Automatica.Core.Runtime.IO
 {

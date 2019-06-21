@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Automatica.Core.Plugin.Dockerize": {
-      "commandName": "Project",
-      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\_Drivers\\Constants"
-    }
-  }
-}

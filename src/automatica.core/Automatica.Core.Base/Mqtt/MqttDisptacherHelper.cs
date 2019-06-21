@@ -1,8 +1,8 @@
 ﻿using Automatica.Core.Base.IO;
-using Automatica.Core.Internals.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Automatica.Core.Base.Serialization;
 
 namespace Automatica.Core.Internals.Mqtt
 {
