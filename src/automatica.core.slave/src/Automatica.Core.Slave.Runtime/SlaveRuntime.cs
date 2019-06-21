@@ -166,7 +166,7 @@ namespace Automatica.Core.Slave.Runtime
 
         private async Task StopImage(string imageSource, string imageName, string imageTag)
         {
-            var imageFullName = $"{imageName}:{imageTag}-{NetStandardUtils.Platform.Arch}";
+            var imageFullName = $"{imageName}:{imageTag}";
             _logger.LogInformation($"Stop Image {imageFullName}");
 
             if(_runningImages.ContainsKey(imageFullName))
@@ -229,6 +229,10 @@ namespace Automatica.Core.Slave.Runtime
                 });
 
 
+                if (_runningImages.ContainsKey(imageFullName))
+                {
+                    _runningImages.Remove(imageFullName);
+                }
                 _runningImages.Add(imageFullName, response.ID);
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters { });
 
