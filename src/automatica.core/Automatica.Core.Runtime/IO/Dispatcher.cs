@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 using MQTTnet.Server;
-using Automatica.Core.Internals.Mqtt;
 
 namespace Automatica.Core.Runtime.IO
 {

@@ -42,10 +42,10 @@ using Automatica.Core.Base.Mqtt;
 using Automatica.Core.Internals.Docker;
 using Automatica.Core.EF.Extensions;
 using Newtonsoft.Json.Linq;
-using Automatica.Core.Internals.Mqtt;
 using MQTTnet.Protocol;
 using MQTTnet.Diagnostics;
 using Automatica.Core.Runtime.Mqtt;
+using SlaveAction = Automatica.Core.Base.Mqtt.SlaveAction;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -254,7 +254,7 @@ namespace Automatica.Core.Runtime.Core
 
                     var actionRequest = new ActionRequest()
                     {
-                        Action = Internals.Mqtt.SlaveAction.Start,
+                        Action = SlaveAction.Start,
                         ImageSource = driver.ImageSource,
                         ImageName = driver.ImageName,
                         Tag = driver.Tag
@@ -297,7 +297,7 @@ namespace Automatica.Core.Runtime.Core
 
                     var actionRequest = new ActionRequest()
                     {
-                        Action = Internals.Mqtt.SlaveAction.Stop,
+                        Action = SlaveAction.Stop,
                         ImageSource = driver.ImageSource,
                         ImageName = driver.ImageName,
                         Tag = driver.Tag
