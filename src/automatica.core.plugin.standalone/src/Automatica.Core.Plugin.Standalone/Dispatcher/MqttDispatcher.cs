@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Mqtt;
 using Automatica.Core.Base.Serialization;
-using Automatica.Core.Internals.Mqtt;
 using MQTTnet.Client;
 
 namespace Automatica.Core.Plugin.Standalone.Dispatcher
