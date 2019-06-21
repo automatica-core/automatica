@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals.Mqtt;
-using MQTTnet.Client;
-using Newtonsoft.Json;
 
 namespace Automatica.Core.Plugin.Standalone.Factories
 {
 
-    internal class RemoteNodeTemplatesFactory : INodeTemplateFactory, IRemoteFactory
+    internal class RemoteNodeTemplatesFactory : INodeTemplateFactory
     {
         private Dictionary<string, Setting> _settings = new Dictionary<string, Setting>();
 
@@ -25,28 +20,6 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         public RemoteNodeTemplatesFactory()
         {
 
-        }
-
-        public async Task SubmitFactoryData(Guid factoryGuid, IMqttClient client)
-        {
-            var remoteDto = new RemoteNodeTemplatesFactoryDto()
-            {
-                InterfaceTypes = _interfaceTypes.Values,
-                NodeTemplates = _nodeTemplates.Values,
-                PropertyTemplateConstraintData = _propertyConstraintDataTemplates.Values,
-                PropertyTemplateConstraints = _propertyConstraintTemplates.Values,
-                PropertyTemplates = _propertyTemplates.Values,
-                Settings = _settings.Values
-            };
-
-            var json = JsonConvert.SerializeObject(remoteDto);
-
-            await client.PublishAsync(new MQTTnet.MqttApplicationMessage()
-            {
-                Payload = Encoding.UTF8.GetBytes(json),
-                QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
-                Topic = $"{MqttTopicConstants.NODETEMPLATES_TOPIC}/{factoryGuid}"
-            });
         }
 
         public void AddSettingsEntry(string key, object value, string group, PropertyTemplateType type, bool isVisible)
