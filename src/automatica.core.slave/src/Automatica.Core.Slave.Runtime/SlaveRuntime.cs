@@ -172,6 +172,7 @@ namespace Automatica.Core.Slave.Runtime
             if(_runningImages.ContainsKey(imageFullName))
             {
                 await _dockerClient.Containers.StopContainerAsync(_runningImages[imageFullName], new ContainerStopParameters());
+                await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters());
                 _runningImages.Remove(imageFullName);
             }
         }
