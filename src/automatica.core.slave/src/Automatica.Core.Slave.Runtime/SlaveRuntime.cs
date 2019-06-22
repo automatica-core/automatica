@@ -48,7 +48,7 @@ namespace Automatica.Core.Slave.Runtime
             _slaveId = config["server:clientId"];
             _options = new MqttClientOptionsBuilder()
                    .WithClientId(_slaveId)
-                //   .WithWebSocketServer("localhost:5001/mqtt")
+                   //   .WithWebSocketServer("localhost:5001/mqtt")
                    .WithTcpServer(_masterAddress, 1883)
                    .WithCredentials(_slaveId, _clientKey)
                    .WithCleanSession()
@@ -82,16 +82,16 @@ namespace Automatica.Core.Slave.Runtime
                     throw new PlatformNotSupportedException();
                 }
             }
-            catch(PlatformNotSupportedException)
+            catch (PlatformNotSupportedException)
             {
                 throw;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               _logger.LogError(e, $"Could not connect do docker daemon!");
+                _logger.LogError(e, $"Could not connect do docker daemon!");
             }
 
-            
+
         }
 
 
@@ -135,22 +135,6 @@ namespace Automatica.Core.Slave.Runtime
             }
         }
 
-        private ImagesListResponse FindImage(string imageName, string imageTag)
-        {
-            if (_localImages != null)
-            {
-                foreach (var image in _localImages)
-                {
-                    if (image.RepoTags != null && image.RepoTags.Contains($"{imageName}:{imageTag}"))
-                    {
-                        return image;
-                    }
-                }
-            }
-
-            return null;
-        }
-
         private async Task ExecuteAction(ActionRequest action)
         {
             switch (action.Action)
@@ -169,7 +153,7 @@ namespace Automatica.Core.Slave.Runtime
             var imageFullName = $"{imageName}:{imageTag}";
             _logger.LogInformation($"Stop Image {imageFullName}");
 
-            if(_runningImages.ContainsKey(imageFullName))
+            if (_runningImages.ContainsKey(imageFullName))
             {
                 await _dockerClient.Containers.StopContainerAsync(_runningImages[imageFullName], new ContainerStopParameters());
                 try
@@ -192,31 +176,20 @@ namespace Automatica.Core.Slave.Runtime
         {
             var imageFullName = $"{imageName}:{imageTag}";
             _logger.LogInformation($"Start Image {imageFullName}");
-            var image = FindImage(imageName, $"{imageTag}");
 
-            if (image == null)
+            var imageCreateParams = new ImagesCreateParameters()
             {
-                var imageCreateParams = new ImagesCreateParameters()
-                {
-                    FromImage = imageName,
-                    Tag = imageTag
-                };
+                FromImage = imageName,
+                Tag = imageTag
+            };
 
-                if (!String.IsNullOrEmpty(imageSource))
-                {
-                    imageCreateParams.FromSrc = imageSource;
-                }
-
-                await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(), new ImageProgress());
-
-
-                image = FindImage(imageName, imageTag);
-
-                if (image == null)
-                {
-                    throw new OperationCanceledException();
-                }
+            if (!String.IsNullOrEmpty(imageSource))
+            {
+                imageCreateParams.FromSrc = imageSource;
             }
+
+            await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(), new ImageProgress());
+
 
             try
             {
@@ -253,13 +226,13 @@ namespace Automatica.Core.Slave.Runtime
             {
                 _logger.LogError(e, "error starting image...");
             }
-         
+
         }
 
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            foreach(var id in _runningImages)
+            foreach (var id in _runningImages)
             {
                 await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
             }
