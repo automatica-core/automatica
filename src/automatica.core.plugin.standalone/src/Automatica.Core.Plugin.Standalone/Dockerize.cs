@@ -37,10 +37,11 @@ namespace Automatica.Core.Plugin.Standalone
                 Assembly assembly;
                 try
                 {
-                    assembly = Assembly.LoadFrom(file);
+                    assembly = Assembly.LoadFile(file);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    logger.LogError(e, $"Could not load assembly {file}");
                     continue;
                 }
                 finally
