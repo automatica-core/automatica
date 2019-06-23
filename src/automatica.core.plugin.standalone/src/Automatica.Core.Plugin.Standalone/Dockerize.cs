@@ -68,6 +68,7 @@ namespace Automatica.Core.Plugin.Standalone
                 try
                 {
                     AssemblyLoadContext.Default.Resolving += AssemblyLoader;
+                    logger.LogInformation($"Loading file {file}");
                     assembly = Assembly.LoadFrom(file);
                 }
                 catch (Exception e)

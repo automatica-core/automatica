@@ -13,11 +13,32 @@ using MQTTnet.Client;
 using MQTTnet.Server;
 using Newtonsoft.Json;
 using NetStandardUtils;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Plugin.Standalone
 {
+    internal class ConsoleLogger : ILogger
+    {
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            return null;
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            return true;
+        }
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            var msg = formatter(state, exception);
+            Console.WriteLine(msg);   
+        }
+    }
+
     class Program
     {
+
         static async Task Main(string[] args)
         {
 
@@ -25,11 +46,15 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 try
                 {
+                    var logger = new ConsoleLogger();
                     Console.WriteLine($"Run plugin dockerized ({NetStandardUtils.Version.GetAssemblyVersion()})");
-                    Console.WriteLine(string.Join(Environment.NewLine, Environment.GetEnvironmentVariables()));
+                  
+                    var localization = new LocalizationProvider(logger);
+                    var factories = await Dockerize.Init<DriverFactory>(args[0], logger, localization);
 
-                    var localization = new LocalizationProvider(NullLogger.Instance);
-                    var factories = await Dockerize.Init<DriverFactory>(args[0], NullLogger.Instance, localization);
+                    foreach(var factory in factories) {
+                        logger.LogDebug($"Loaded {factory}");
+                    }
 
                     await Task.Delay(TimeSpan.FromSeconds(10));
 
