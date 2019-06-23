@@ -15,6 +15,53 @@ using MQTTnet.Client;
 
 namespace Automatica.Core.Plugin.Standalone
 {
+    public class AssemblyLoader : AssemblyLoadContext
+    {
+        private readonly string _currentAssemblyPath;
+        private readonly string[] _path;
+
+        public AssemblyLoader(string currentAssemblyPath, params string[] path)
+        {
+            _currentAssemblyPath = currentAssemblyPath;
+            _path = path;
+        }
+        public Assembly LoadAssembly(AssemblyName assemblyName)
+        {
+            return Load(assemblyName);
+        }
+
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
+            var deps = DependencyContext.Default;
+            var res = deps.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
+            var name = res.FirstOrDefault();
+
+            foreach (var path in _path)
+            {
+                var pathFileName = Path.Combine(path, $"{assemblyName.Name}.dll");
+
+                if (File.Exists(pathFileName))
+                {
+                    if (path == _currentAssemblyPath)
+                    {
+                        return LoadFromAssemblyPath(pathFileName);
+                    }
+                    return Default.LoadFromAssemblyPath(pathFileName);
+                }
+            }
+
+            string corePath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+            var fileName = Path.Combine(corePath, $"{assemblyName.Name}.dll");
+
+            if (File.Exists(fileName))
+            {
+                return Default.LoadFromAssemblyPath(fileName);
+            }
+
+            return Default.LoadFromAssemblyName(assemblyName);
+        }
+    }
+
     internal static class Dockerize
     {
         internal static async Task InitFactory<T, T2>(IMqttClient client, T factory, T2 templateFactory) where T : IFactory<T2> where T2 : IPropertyTemplateFactory, IRemoteFactory
@@ -37,6 +84,8 @@ namespace Automatica.Core.Plugin.Standalone
             IList<T> retT = new List<T>();
             foreach (var file in Directory.GetFiles(workingDir, "*.dll"))
             {
+
+                var loader = new AssemblyLoader(workingDir, workingDir);
                 Assembly AssemblyLoader(AssemblyLoadContext context, AssemblyName name)
                 {
                     logger.LogDebug($"Try to load assembly {name} for {file}");
@@ -69,7 +118,7 @@ namespace Automatica.Core.Plugin.Standalone
                 {
                     AssemblyLoadContext.Default.Resolving += AssemblyLoader;
                     logger.LogInformation($"Loading file {file}");
-                    assembly = Assembly.LoadFrom(file);
+                    assembly = loader.LoadFromAssemblyPath(file);
                 }
                 catch (Exception e)
                 {
