@@ -80,7 +80,7 @@ namespace Automatica.Core.Plugin.Standalone
 
         internal static Task<IList<T>> Init<T>(string workingDir, ILogger logger, ILocalizationProvider localizationProvider)
         {
-
+            
             IList<T> retT = new List<T>();
             foreach (var file in Directory.GetFiles(workingDir, "*.dll"))
             {
@@ -88,14 +88,14 @@ namespace Automatica.Core.Plugin.Standalone
                 var loader = new AssemblyLoader(workingDir, workingDir);
                 Assembly AssemblyLoader(AssemblyLoadContext context, AssemblyName name)
                 {
-                    logger.LogDebug($"Try to load assembly {name} for {file}");
+                    logger.LogInformation($"Try to load assembly {name} for {file}");
                     // avoid loading *.resources dlls, because of: https://github.com/dotnet/coreclr/issues/8416
                     if (name.Name.EndsWith("resources"))
                     {
                         return null;
                     }
 
-                    logger.LogDebug($"try to load assembly from {workingDir}");
+                    logger.LogInformation($"try to load assembly from {workingDir}");
                     var foundDlls = Directory.GetFileSystemEntries(workingDir, name.Name + ".dll", SearchOption.AllDirectories);
                     if (foundDlls.Any())
                     {
