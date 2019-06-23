@@ -199,7 +199,7 @@ namespace Automatica.Core.Slave.Runtime
                     AttachStderr = false,
                     AttachStdin = false,
                     AttachStdout = false,
-                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER=localhost", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
+                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
                     HostConfig = new HostConfig
                     {
                         PortBindings = new Dictionary<string, IList<PortBinding>> {
