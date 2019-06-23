@@ -12,6 +12,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Server;
 using Newtonsoft.Json;
+using NetStandardUtils;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -24,7 +25,7 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 try
                 {
-                    Console.WriteLine("Run plugin dockerized");
+                    Console.WriteLine($"Run plugin dockerized ({NetStandardUtils.Version.GetAssemblyVersion()})");
                     Console.WriteLine(string.Join(Environment.NewLine, Environment.GetEnvironmentVariables()));
 
                     var localization = new LocalizationProvider(NullLogger.Instance);

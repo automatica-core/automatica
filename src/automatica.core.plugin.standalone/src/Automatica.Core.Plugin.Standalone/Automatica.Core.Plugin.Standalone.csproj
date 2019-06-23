@@ -23,6 +23,7 @@
     <PackageReference Include="Automatica.Core.Rule" Version="0.9.0.432" />
     <PackageReference Include="MQTTnet" Version="2.8.5" />
     <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="2.8.5" />
+    <PackageReference Include="NetStandardUtils" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
