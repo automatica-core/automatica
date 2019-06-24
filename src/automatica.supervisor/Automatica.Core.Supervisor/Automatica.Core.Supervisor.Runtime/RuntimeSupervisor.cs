@@ -22,7 +22,7 @@ namespace Automatica.Core.Supervisor.Runtime
 
         public Progress(ILogger logger)
         {
-            this._logger = logger;
+            _logger = logger;
         }
 
         public void Report(JSONMessage value)
@@ -43,12 +43,14 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private Timer _checkContainerStatusTimer;
 
+        private readonly IConfiguration _config;
         private readonly ILogger _logger;
-        private string _runningContainer = null;
-        private bool _isPullingImage = false;
+        private string _runningContainer;
+        private bool _isPullingImage;
 
         public RuntimeSupervisor(IConfiguration config, ILogger<RuntimeSupervisor> logger)
         {
+            _config = config;
             _logger = logger;
 
             var dockerSocket = config["DOCKER_SOCKET"];
@@ -101,12 +103,12 @@ namespace Automatica.Core.Supervisor.Runtime
                     await StartInternal();
                 }
 
-                _checkContainerStatusTimer = new Timer(new TimerCallback(async (a) =>
+                _checkContainerStatusTimer = new Timer(async (a) =>
                 {
                     await CheckContainerStatus();
-                }), null, 0, (int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+                }, null, 0, (int)TimeSpan.FromSeconds(10).TotalMilliseconds);
 
-                _checkForNewImageTimer = new Timer(new TimerCallback(async (a) =>
+                _checkForNewImageTimer = new Timer(async (a) =>
                 {
                     try
                     {
@@ -120,7 +122,7 @@ namespace Automatica.Core.Supervisor.Runtime
                         _logger.LogError(e, "Could not check for container updates");
                     }
 
-                }), null, 0, (int)TimeSpan.FromMinutes(_pollIntervalMinutes).TotalMilliseconds);
+                }, null, 0, (int)TimeSpan.FromMinutes(_pollIntervalMinutes).TotalMilliseconds);
 
             }
             catch (Exception e)
@@ -182,7 +184,7 @@ namespace Automatica.Core.Supervisor.Runtime
         private async Task StartContainer(string containerId)
         {
             _logger.LogInformation($"Starting container  {containerId}");
-            await _dockerClient.Containers.StartContainerAsync(containerId, new ContainerStartParameters { });
+            await _dockerClient.Containers.StartContainerAsync(containerId, new ContainerStartParameters());
 
         }
 
@@ -244,7 +246,7 @@ namespace Automatica.Core.Supervisor.Runtime
                 _logger.LogError("Cannot stop container because I have no clue which one");
                 return;
             }
-            _logger.LogInformation($"Stoping container {containerId}");
+            _logger.LogInformation($"Stopping container {containerId}");
             await _dockerClient.Containers.StopContainerAsync(containerId, new ContainerStopParameters()
             {
                 WaitBeforeKillSeconds = 60
@@ -303,7 +305,7 @@ namespace Automatica.Core.Supervisor.Runtime
                 {
                     await _dockerClient.Containers.RemoveContainerAsync($"{imgName}", new ContainerRemoveParameters() { Force = true });
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     _logger.LogWarning($"Could not delete old image - maybe no image has been created!");
                 }
@@ -327,19 +329,19 @@ namespace Automatica.Core.Supervisor.Runtime
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    createContainerParams.HostConfig.Mounts.Add(new Mount()
+                    var mounts = _config.GetSection("mounts").GetChildren().ToArray().Select(c => c.Value).ToArray();
+                    
+                    foreach (var mount in mounts)
                     {
-                        Source = $"/var/lib/{imgName}/",
-                        Target = $"/app/{imgName}/config/",
-                        Type = "bind"
-                    });
-                    createContainerParams.HostConfig.Mounts.Add(new Mount()
-                    {
-                        Source = $"/var/log/{imgName}/",
-                        Target = $"/app/{imgName}/logs/ ",
-                        Type = "bind"
-                    });
-
+                        var mountSplit = mount.Split(":", StringSplitOptions.RemoveEmptyEntries);
+                        
+                        createContainerParams.HostConfig.Mounts.Add(new Mount()
+                        {
+                            Source = mountSplit[0],
+                            Target = mountSplit[1],
+                            Type = "bind"
+                        });
+                    }
 
                     createContainerParams.HostConfig.Mounts.Add(new Mount()
                     {
@@ -380,7 +382,7 @@ namespace Automatica.Core.Supervisor.Runtime
             var image = await GetImageInformation<ImageInformation>(_dockerRepositoryUrl, _supervisorImage, _supervisorImageTag, _logger);
 
             //repository image is newer - pull it!
-            if (currentImage != null && image.LastUpdated > currentImage.Created && image.Images.Any(a => IsArchitectureCompatible(a.Architecture)))
+            if (image.LastUpdated > currentImage.Created && image.Images.Any(a => IsArchitectureCompatible(a.Architecture)))
             {
                 _logger.LogInformation($"New image found {image.Name} at {image.LastUpdated}\nCurrent local image {currentImage?.Labels.FirstOrDefault()} {currentImage?.Created}");
                 await _dockerClient.Images.DeleteImageAsync($"{_supervisorImage}:{_supervisorImageTag}", new ImageDeleteParameters() { Force = true });

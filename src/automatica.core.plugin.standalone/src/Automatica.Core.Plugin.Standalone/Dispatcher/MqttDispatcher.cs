@@ -53,7 +53,7 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
                     }
                     catch (Exception e)
                     {
-                        //_logger.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
+                        //./    _logger.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
 
                     }
                 }

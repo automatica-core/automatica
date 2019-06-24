@@ -42,8 +42,9 @@ COPY ./src/automatica.core/Automatica.Core/appsettings.json /app/automatica/apps
 RUN echo docker has some strange errors sometimes
 COPY ./src/automatica.core/Automatica.Core/appsettings.json .
 
+RUN mkdir -p /app/plugins
 RUN echo $AUTOMATICA_VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
 RUN rm -rf /src
 
