@@ -596,6 +596,13 @@ namespace Automatica.Core.Runtime.Core
             foreach (var nodeInstance in root.InverseThis2ParentNodeInstanceNavigation)
             {
                 _logger.LogDebug($"Working on {nodeInstance.Name}...");
+
+                if (!_driverFactories.ContainsKey(nodeInstance.This2NodeTemplateNavigation.ObjId))
+                {
+                    _logger.LogError($"Could not find driver factory for {nodeInstance.This2NodeTemplateNavigation.Name}");
+                    continue;
+                }
+
                 _loadedNodeInstances.Add(nodeInstance.ObjId, nodeInstance);
                 if (!nodeInstance.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
                 {
