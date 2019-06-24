@@ -19,10 +19,10 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.7.0.244" />
-    <PackageReference Include="coverlet.msbuild" Version="2.5.1">
+    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.432" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.432" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.9.0.432" />
+    <PackageReference Include="coverlet.msbuild" Version="2.6.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
