@@ -87,7 +87,7 @@ namespace Automatica.Core.Plugin.Standalone
                 var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
 
-                var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory, null, null, _logger, null, null, null, false);
+                var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory, new RemoteTelegramMonitor(), new RemoteLicenseState(), _logger, new RemoteLearnMode(), new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
                 var driver = _factory.CreateDriver(context);
 
                 if (driver.BeforeInit())

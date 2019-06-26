@@ -6,6 +6,7 @@
       "environmentVariables": {
         "AUTOMATICA_SLAVE_MASTER": "192.168.8.111",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
+        "MQTT_LOG_VERBOSE": "asdf",
         "AUTOMATICA_SLAVE_USER": "rm1"
       }
     }

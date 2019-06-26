@@ -26,7 +26,7 @@ namespace Automatica.Core.Base.Mqtt
                 var id = new Guid(split[2]);
 
 
-                var mqttDispatch = new MqttDispatchable()
+                var mqttDispatch = new MqttDispatchable
                 {
                     Id = id,
                     Type = enu,

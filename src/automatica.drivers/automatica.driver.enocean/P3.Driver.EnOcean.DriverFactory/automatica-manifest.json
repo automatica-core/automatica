@@ -23,9 +23,10 @@
         "Type": "driver",
         "Output": "P3.Driver.EnOcean.DriverFactory.dll",
         "Resources": [],
-        "Dependencies": [
-            "P3.Driver.EnOcean.dll"
-        ],
+      "Dependencies": [
+        "P3.Driver.EnOcean.dll",
+        "RJCP.SerialPortStream.dll"
+      ],
         "MinCoreServerVersion": {
             "Major": 0,
             "Minor": 7,
