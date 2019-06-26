@@ -55,6 +55,8 @@ namespace Automatica.Core.Plugin.Standalone
                 _mqttClient.ApplicationMessageReceived += OnMqttClientOnApplicationMessageReceived;
 
                 await _mqttClient.ConnectAsync(options);
+
+                _logger.LogInformation($"Connected to mqtt broker {_host}");
                 await _mqttClient.SubscribeAsync(
                     new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.CONFIG_TOPIC}/{_factory.DriverGuid}")
                         .WithExactlyOnceQoS().Build(),
@@ -78,7 +80,7 @@ namespace Automatica.Core.Plugin.Standalone
 
         private async void OnMqttClientOnApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            Console.WriteLine($"received topic {e.ApplicationMessage.Topic}...");
+            _logger.LogDebug($"received topic {e.ApplicationMessage.Topic}...");
 
             if (e.ApplicationMessage.Topic == $"{MqttTopicConstants.CONFIG_TOPIC}/{_factory.DriverGuid}")
             {

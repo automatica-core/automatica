@@ -154,19 +154,24 @@ namespace Automatica.Core.Runtime.Core
             _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
         }
 
-        internal Task MqttServerClientSubscribedTopic(MqttServerClientSubscribedTopicEventArgs e)
+        internal async Task MqttServerClientSubscribedTopic(MqttServerClientSubscribedTopicEventArgs e)
         {
             _logger.LogDebug($"Client {e.ClientId} subscribed to {e.TopicFilter}");
 
-            //if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.CONFIG_TOPIC}/#"))
-            //{
-            //    if (_mqttNodes.ContainsKey(e.ClientId))
-            //    {
-            //        await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
-            //    }
-            //}
-
-            return Task.CompletedTask;
+            if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.CONFIG_TOPIC}/#"))
+            {
+                if (_mqttNodes.ContainsKey(e.ClientId))
+                {
+                    await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+                }
+            }
+            else if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.SLAVE_TOPIC}/#"))
+            {
+                if (_mqttSlaves.ContainsKey(e.ClientId))
+                {
+                    await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
+                }
+            }
         }
 
         private void InitInternals()
@@ -230,14 +235,14 @@ namespace Automatica.Core.Runtime.Core
             _connectedMqttClients.Add(e.ClientId);
             _logger.LogDebug($"Client {e.ClientId} connected...");
 
-            if (_mqttSlaves.ContainsKey(e.ClientId))
-            {
-                await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
-            }
-            else if(_mqttNodes.ContainsKey(e.ClientId))
-            {
-                await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
-            }
+            //if (_mqttSlaves.ContainsKey(e.ClientId))
+            //{
+            //    await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
+            //}
+            //else if(_mqttNodes.ContainsKey(e.ClientId))
+            //{
+            //    await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
+            //}
         }
 
         private async Task StartInstances(string clientId, IList<IDriverFactory> driverFactories)
