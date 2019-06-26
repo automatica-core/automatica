@@ -113,6 +113,8 @@ namespace Automatica.Core.Slave.Runtime
 
                 _mqttClient.ApplicationMessageReceived += async (sender, e) =>
                 {
+                    _logger.LogDebug($"Mqtt message received for topic {e.ApplicationMessage.Topic}");
+
                     if (MqttTopicFilterComparer.IsMatch(topic, e.ApplicationMessage.Topic))
                     {
                         var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
@@ -163,12 +165,12 @@ namespace Automatica.Core.Slave.Runtime
                     await StartImage(action.ImageSource, action.ImageName, action.Tag);
                     break;
                 case SlaveAction.Stop:
-                    await StopImage(action.ImageSource, action.ImageName, action.Tag);
+                    await StopImage(action.ImageName, action.Tag);
                     break;
             }
         }
 
-        private async Task StopImage(string imageSource, string imageName, string imageTag)
+        private async Task StopImage(string imageName, string imageTag)
         {
             var imageFullName = $"{imageName}:{imageTag}";
             _logger.LogInformation($"Stop Image {imageFullName}");
@@ -189,6 +191,10 @@ namespace Automatica.Core.Slave.Runtime
                 }
 
                 _runningImages.Remove(imageFullName);
+            }
+            else
+            {
+                _logger.LogError($"Could not stop image, image {imageName}{imageTag} not found");
             }
         }
 
@@ -256,6 +262,8 @@ namespace Automatica.Core.Slave.Runtime
             {
                 await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters(), cancellationToken);
             }
+
+            _runningImages.Clear();
         }
     }
 }
