@@ -19,7 +19,7 @@ RUN dotnet publish -c Release -o /app/plugin /src/src/Automatica.Core.Plugin.Sta
 RUN echo $AUTOMATICA_VERSION
 RUN rm -rf /src
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
