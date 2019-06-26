@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -24,13 +23,12 @@ namespace Automatica.Core.Slave.Runtime
     public class SlaveRuntime : IHostedService
     {
         private readonly IMqttClientOptions _options;
-        private IMqttClient _mqttClient;
+        private readonly IMqttClient _mqttClient;
         private readonly DockerClient _dockerClient;
 
-        private IList<ImagesListResponse> _localImages;
         private readonly IDictionary<string, string> _runningImages = new Dictionary<string, string>();
 
-        private string _slaveId;
+        private readonly string _slaveId;
 
         private readonly string _masterAddress;
         private readonly string _clientKey;
@@ -103,7 +101,7 @@ namespace Automatica.Core.Slave.Runtime
         {
             try
             {
-                _localImages = await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
+                await _dockerClient.Images.ListImagesAsync(new ImagesListParameters(), cancellationToken);
 
                 await _mqttClient.ConnectAsync(_options);
 
@@ -192,7 +190,7 @@ namespace Automatica.Core.Slave.Runtime
                 imageCreateParams.FromSrc = imageSource;
             }
 
-            await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(), new ImageProgress());
+            await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(), new ImageProgress(_logger));
 
 
             try
@@ -223,7 +221,7 @@ namespace Automatica.Core.Slave.Runtime
                     _runningImages.Remove(imageFullName);
                 }
                 _runningImages.Add(imageFullName, response.ID);
-                await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters { });
+                await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
 
             }
             catch (Exception e)
@@ -238,7 +236,7 @@ namespace Automatica.Core.Slave.Runtime
         {
             foreach (var id in _runningImages)
             {
-                await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
+                await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters(), cancellationToken);
             }
         }
     }
