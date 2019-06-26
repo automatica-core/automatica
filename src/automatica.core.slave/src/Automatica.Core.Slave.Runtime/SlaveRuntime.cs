@@ -106,6 +106,8 @@ namespace Automatica.Core.Slave.Runtime
                 await _mqttClient.ConnectAsync(_options);
 
                 var topic = $"slave/{_slaveId}/action";
+                var topics = $"slave/{_slaveId}/actions";
+
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
 
 
@@ -118,6 +120,22 @@ namespace Automatica.Core.Slave.Runtime
                         try
                         {
                             await ExecuteAction(action);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, $"Could not execute request");
+                        }
+                    }
+                    else if (MqttTopicFilterComparer.IsMatch(topics, e.ApplicationMessage.Topic))
+                    {
+                        var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        var actions = JsonConvert.DeserializeObject<ActionRequest[]>(json);
+                        try
+                        {
+                            foreach (var action in actions)
+                            {
+                                await ExecuteAction(action);
+                            }
                         }
                         catch (Exception ex)
                         {

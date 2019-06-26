@@ -6,6 +6,7 @@
         public const string SLAVE_TOPIC = "slave";
         public const string SLAVE_TOPIC_START = "start";
         public const string ACTION_TOPIC_START = "action";
+        public const string ACTIONS_TOPIC_START = "actions";
         public const string LOCALIZATIN_TOPIC = "localization";
         public const string DISPATCHER_TOPIC = "dispatcher";
         public const string NODETEMPLATES_TOPIC = "nodeTemplateFactory";

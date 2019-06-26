@@ -39,11 +39,7 @@ using MQTTnet.Server;
 using Newtonsoft.Json;
 using System.Text;
 using Automatica.Core.Base.Mqtt;
-using Automatica.Core.Internals.Docker;
-using Automatica.Core.EF.Extensions;
-using Newtonsoft.Json.Linq;
 using MQTTnet.Protocol;
-using MQTTnet.Diagnostics;
 using Automatica.Core.Runtime.Mqtt;
 using SlaveAction = Automatica.Core.Base.Mqtt.SlaveAction;
 
@@ -248,11 +244,12 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
+                var actionRequests = new List<ActionRequest>();
                 foreach (var driver in driverFactories)
                 {
-                    _logger.LogDebug($"Publish to slave/{clientId}/action");
+                    _logger.LogDebug($"Publish to slave/{clientId}/actions (Start {driver.ImageName}:{driver.Tag})");
 
-                    var actionRequest = new ActionRequest()
+                    var actionRequest = new ActionRequest
                     {
                         Action = SlaveAction.Start,
                         ImageSource = driver.ImageSource,
@@ -260,8 +257,9 @@ namespace Automatica.Core.Runtime.Core
                         Tag = driver.Tag
                     };
 
-                    await SendAction(clientId, actionRequest);
+                    actionRequests.Add(actionRequest);
                 }
+                await SendActions(clientId, actionRequests.ToArray());
             }
             catch(Exception e)
             {
@@ -269,14 +267,32 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
+        private async Task SendActions(string clientId, params ActionRequest[] actionRequests)
+        {
+            try
+            {
+                await _mqttServer.PublishAsync(new MqttApplicationMessage
+                {
+                    Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTIONS_TOPIC_START}",
+                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
+                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequests)),
+                    Retain = true
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Could not send action", e);
+            }
+        }
+
         private async Task SendAction(string clientId, ActionRequest actionRequest)
         {
             try
             {
-                await _mqttServer.PublishAsync(new MqttApplicationMessage()
+                await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}",
-                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce,
+                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
                     Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
                     Retain = true
                 });
