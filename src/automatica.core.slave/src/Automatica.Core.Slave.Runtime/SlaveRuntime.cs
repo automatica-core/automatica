@@ -109,6 +109,7 @@ namespace Automatica.Core.Slave.Runtime
                 var topics = $"slave/{_slaveId}/actions";
 
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
+                await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topics).WithExactlyOnceQoS().Build());
 
 
                 _mqttClient.ApplicationMessageReceived += async (sender, e) =>
