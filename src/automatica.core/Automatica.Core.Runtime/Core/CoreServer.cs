@@ -165,7 +165,7 @@ namespace Automatica.Core.Runtime.Core
                     await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
                 }
             }
-            else if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.SLAVE_TOPIC}/#"))
+            else if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.SLAVE_TOPIC}/+/actions"))
             {
                 if (_mqttSlaves.ContainsKey(e.ClientId))
                 {
