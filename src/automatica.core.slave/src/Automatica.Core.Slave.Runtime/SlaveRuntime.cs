@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Timer = System.Timers.Timer;
 
 namespace Automatica.Core.Slave.Runtime
 {
@@ -33,6 +34,9 @@ namespace Automatica.Core.Slave.Runtime
         private readonly string _masterAddress;
         private readonly string _clientKey;
         private readonly ILogger _logger;
+
+
+        private readonly Timer _timer = new Timer(5000);
 
         public SlaveRuntime(IServiceProvider services, ILogger<SlaveRuntime> logger)
         {
@@ -94,14 +98,30 @@ namespace Automatica.Core.Slave.Runtime
             }
 
 
+            _timer.Elapsed += _timer_Elapsed;
+
         }
 
+        private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (!_mqttClient.IsConnected)
+            {
+                await StopInternal();
+                await StartInternal();
+            }
+        }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            await StartInternal();
+            _timer.Start();
+        }
+
+        private async Task StartInternal()
+        {
             try
             {
-                await _dockerClient.Images.ListImagesAsync(new ImagesListParameters(), cancellationToken);
+                await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
 
                 await _mqttClient.ConnectAsync(_options);
 
@@ -256,15 +276,31 @@ namespace Automatica.Core.Slave.Runtime
 
         }
 
+        private async Task StopInternal()
+        {
+            try
+            {
+                foreach (var id in _runningImages)
+                {
+                    await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
+                }
+
+                _runningImages.Clear();
+                await _mqttClient.DisconnectAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error stopping connection...");
+            }
+        }
+
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            foreach (var id in _runningImages)
-            {
-                await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters(), cancellationToken);
-            }
+            await StopInternal();
 
-            _runningImages.Clear();
+
+            _timer.Elapsed -= _timer_Elapsed;
         }
     }
 }
