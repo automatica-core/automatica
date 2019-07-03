@@ -50,9 +50,12 @@
     "msgpack-lite": "^0.1.26",
     "ng-dynamic-component": "^5.0.0",
     "ngx-cookie-service": "^2.2.0",
-    "p3root-angular-dnd": "^8.0.1",
+    "p3root-angular-dnd": "^8.0.2",
     "rxjs": "~6.5.2",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "webpack": "~4.34.0",
+    "webpack-cli": "3.3.4",
+    "acorn": "^6.1.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.801.0",
@@ -75,6 +78,6 @@
     "protractor": "^5.4.2",
     "ts-node": "~8.3.0",
     "tslint": "^5.18.0",
-    "typescript": "~3.5.0"
+    "typescript": "~3.4.0"
   }
 }

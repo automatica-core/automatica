@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MobileContainerComponent } from "./mobile-container/mobile-container.component";
 import { GridsterModule } from "angular-gridster2";
-import { DndModule } from "ngx-dnd";
+import { DndModule } from "p3root-angular-dnd";
 
 import { Routes, RouterModule } from "@angular/router";
 import { MobileModule } from "./mobile.module";

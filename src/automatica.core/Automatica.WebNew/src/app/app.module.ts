@@ -29,7 +29,7 @@ import { SharedModule } from "./shared/shared.module";
 import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxScrollViewModule } from "devextreme-angular";
 import { AutomaticaCommunicationModule } from "./base/communication/automatica-communication.module";
 import { AngularSplitModule } from "angular-split";
-import { DndModule, DragDropConfig, DataTransferEffect, DragImage } from "ngx-dnd";
+import { DndModule, DragDropConfig, DataTransferEffect, DragImage } from "p3root-angular-dnd";
 import { AreasEtsImportComponent } from "./pages/area-config/areas-ets-import/areas-ets-import.component";
 import { MobileModule } from "./visualization/mobile/mobile.module";
 import { HasRoleGuard } from "./services/login.service";

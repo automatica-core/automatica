@@ -20,8 +20,6 @@ export class SideNavigationMenuComponent implements OnInit {
     }
     public set menu(v: DxTreeViewComponent) {
         this._menu = v;
-
-        this.setDefaultItem();
     }
 
     @Output()
@@ -35,14 +33,12 @@ export class SideNavigationMenuComponent implements OnInit {
     }
     public set items(v: any[]) {
         this._items = v;
-
-        this.setDefaultItem();
     }
 
 
     @Input()
     set selectedItem(value: String) {
-        if (this.menu.instance) {
+        if (this.menu && this.menu.instance) {
             this.menu.instance.selectItem(value);
         }
     }
@@ -54,7 +50,7 @@ export class SideNavigationMenuComponent implements OnInit {
     }
     set compactMode(val) {
         this._compactMode = val;
-        if (val && this.menu.instance) {
+        if (val && this.menu && this.menu.instance) {
             this.menu.instance.collapseAll();
         }
     }
@@ -62,7 +58,7 @@ export class SideNavigationMenuComponent implements OnInit {
     constructor(private router: Router) { }
 
     ngOnInit() {
-        this.setDefaultItem();
+        
     }
 
     setDefaultItem() {
@@ -70,7 +66,7 @@ export class SideNavigationMenuComponent implements OnInit {
             return;
         }
         const defaultItem = this.findDefaultItemRecursive(this.items);
-        if (this.menu.instance && defaultItem) {
+        if (this.menu && this.menu.instance && defaultItem) {
             this.menu.instance.selectItem(defaultItem);
         }
     }
@@ -110,6 +106,8 @@ export class SideNavigationMenuComponent implements OnInit {
 
             selectedNode = selectedNode.parentElement;
         }
+
+        this.setDefaultItem();
     }
 
     onItemClick(event) {
