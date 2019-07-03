@@ -14,7 +14,7 @@ export class SideNavigationMenuComponent implements OnInit {
 
     private _menu: DxTreeViewComponent;
 
-    @ViewChild(DxTreeViewComponent)
+    @ViewChild(DxTreeViewComponent, {static: false})
     public get menu(): DxTreeViewComponent {
         return this._menu;
     }

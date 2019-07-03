@@ -14,7 +14,7 @@ import { ConfigService } from "src/app/services/config.service";
 })
 export class SliderComponent extends BaseMobileComponent implements OnInit, OnDestroy {
 
-  @ViewChild("slider")
+  @ViewChild("slider", {static: false})
   slider: DxSliderComponent;
 
   text: string = void 0;

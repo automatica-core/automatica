@@ -16,7 +16,7 @@ import { PropertyInstance } from "src/app/base/model/property-instance";
 })
 export class ChartsComponent extends BaseMobileComponent implements OnInit {
 
-  @ViewChild("chart") chart: DxChartComponent;
+  @ViewChild("chart", {static: false}) chart: DxChartComponent;
 
   private _visualRange: any = {};
   HALFDAY: number = 43200000;

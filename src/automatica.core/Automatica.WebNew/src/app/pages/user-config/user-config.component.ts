@@ -20,7 +20,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 export class UserConfigComponent extends BaseComponent implements OnInit {
 
 
-  @ViewChild("grid")
+  @ViewChild("grid", {static: false})
   grid: DxDataGridComponent;
 
   users: User[] = [];
