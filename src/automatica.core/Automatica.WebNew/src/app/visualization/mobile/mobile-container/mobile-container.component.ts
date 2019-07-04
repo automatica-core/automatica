@@ -46,7 +46,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   @Output()
   selectedItemChange = new EventEmitter<VisuObjectMobileInstance>();
 
-  @ViewChild("gridster")
+  @ViewChild("gridster", {static: false})
   gridster: GridsterComponent;
 
   version: any;

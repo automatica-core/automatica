@@ -60,7 +60,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Input()
   nodeTemplates: NodeTemplate[];
 
-  @ViewChild("tree") tree: DxTreeListComponent;
+  @ViewChild("tree", {static: false}) tree: DxTreeListComponent;
 
   @Output() onNodeSelect = new EventEmitter<ITreeNode>();
   @Output() onNodeDrag: EventEmitter<any> = new EventEmitter();

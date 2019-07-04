@@ -19,7 +19,7 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
 
   instances: AreaInstance[] = [];
 
-  @ViewChild("tree")
+  @ViewChild("tree", {static: false})
   dxTree: DxTreeListComponent;
 
 

@@ -7,7 +7,7 @@ import { RuleEditorComponent } from "./ruleeditor/ruleeditor.component";
 import { PropertyEditorComponent } from "./propertyeditor/propertyeditor.component";
 import { ConfigMenuComponent } from "./config-menu/config-menu.component";
 import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule } from "devextreme-angular";
-import { DndModule } from "ngx-dnd";
+import { DndModule } from "p3root-angular-dnd";
 import { TranslationModule } from "angular-l10n";
 import { NodeValueSelectorComponent } from "./node-value-selector/node-value-selector.component";
 import { VisuPageSelectorComponent } from "./visu-page-selector/visu-page-selector.component";

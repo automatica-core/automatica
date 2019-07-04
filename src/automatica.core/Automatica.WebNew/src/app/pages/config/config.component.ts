@@ -27,7 +27,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   nodeTemplates: NodeTemplate[];
 
-  @ViewChild("configTree")
+  @ViewChild("configTree", {static: false})
   configTree: ConfigTreeComponent;
 
   deletedConfig: number[] = [];

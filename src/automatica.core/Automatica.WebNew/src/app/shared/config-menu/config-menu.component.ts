@@ -22,7 +22,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 
 export class ConfigMenuComponent implements OnInit {
 
-  @ViewChild("menu")
+  @ViewChild("menu", {static: false})
   menu: DxMenuComponent;
 
 
