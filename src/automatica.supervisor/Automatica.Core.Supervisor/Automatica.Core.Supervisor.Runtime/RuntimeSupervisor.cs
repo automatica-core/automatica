@@ -335,7 +335,7 @@ namespace Automatica.Core.Supervisor.Runtime
                     {
                         var mountSplit = mount.Split(":", StringSplitOptions.RemoveEmptyEntries);
                         
-                        createContainerParams.HostConfig.Mounts.Add(new Mount()
+                        createContainerParams.HostConfig.Mounts.Add(new Mount
                         {
                             Source = mountSplit[0],
                             Target = mountSplit[1],
@@ -343,10 +343,19 @@ namespace Automatica.Core.Supervisor.Runtime
                         });
                     }
 
-                    createContainerParams.HostConfig.Mounts.Add(new Mount()
+                    createContainerParams.HostConfig.Mounts.Add(new Mount
                     {
                         Source = $"/var/run/docker.sock",
                         Target = $"/var/run/docker.sock",
+                        Type = "bind"
+                    });
+
+                    createContainerParams.HostConfig.Privileged = true;
+
+                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    {
+                        Source = "/dev",
+                        Target = "/dev",
                         Type = "bind"
                     });
                 }
