@@ -1,4 +1,4 @@
-FROM node:8.11.2-alpine as node
+FROM node:12-alpine as node
 WORKDIR /src
 
 ARG FONTAWESOME_TOKEN
@@ -48,7 +48,7 @@ RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $AUTOMATICA_VERSION -
 
 RUN rm -rf /src
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
