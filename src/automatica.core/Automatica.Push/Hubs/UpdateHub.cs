@@ -1,6 +1,4 @@
-﻿using Automatica.Core.Base.Common;
-
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Cloud.Model;
@@ -10,8 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.Plugins;
 
 namespace Automatica.Push.Hubs
 {
@@ -21,12 +19,14 @@ namespace Automatica.Push.Hubs
         private readonly ICloudApi _api;
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
+        private readonly IPluginLoader _loader;
 
-        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer)
+        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader)
         {
             _api = api;
             _updateHub = updateHub;
             _coreServer = coreServer;
+            _loader = loader;
         }
         public Task StartUpdateDownload(ServerVersion version)
         {
@@ -60,7 +60,7 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-            var pluginDownloader = new PluginDownloader(plugin, install, _api, _updateHub, _coreServer);
+            var pluginDownloader = new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader);
 
                 await pluginDownloader.Download();
             });
@@ -81,7 +81,7 @@ namespace Automatica.Push.Hubs
             foreach (var plug in plugins) {
                 Task.Run(async () =>
                 {
-                    var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer, false);
+                    var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer, _loader,  false);
 
                     await pluginDownloader.Download();
                 });

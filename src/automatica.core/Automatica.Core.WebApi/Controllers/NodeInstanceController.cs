@@ -50,13 +50,13 @@ namespace Automatica.Core.WebApi.Controllers
     public class NodeInstanceController : BaseController
     {
         private readonly INotifyDriver _notifyDriver;
-        private readonly ICoreServer _coreServer;
-
-        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, ICoreServer coreServer)
+        private readonly INodeInstanceStateHandler _nodeInstanceStateHandler;
+        
+        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceStateHandler nodeInstanceStateHandler)
             : base(db)
         {
             _notifyDriver = notifyDriver;
-            _coreServer = coreServer;
+            _nodeInstanceStateHandler = nodeInstanceStateHandler;
         }
 
         [HttpGet]
@@ -143,7 +143,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         private void GetNodeInstanceStateRec(NodeInstance node)
         {
-            node.State = _coreServer.GetNodeInstanceState(node.ObjId);
+            node.State = _nodeInstanceStateHandler.GetNodeInstanceState(node.ObjId);
 
             if (node.InverseThis2ParentNodeInstanceNavigation != null &&
                 node.InverseThis2ParentNodeInstanceNavigation.Count > 0)

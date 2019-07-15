@@ -6,6 +6,7 @@ using Automatica.Core.Base.IO;
 
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Core;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,12 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("rules")]
     public class RulesController : BaseController
     {
-        private readonly IRuleVisualisation visuRuleProvider;
+        private readonly IRuleDataHandler _ruleDataHandler;
 
-        public RulesController(AutomaticaContext db, IRuleVisualisation visuRuleProvider)
+        public RulesController(AutomaticaContext db, IRuleDataHandler ruleDataHandler)
             : base(db)
         {
-            this.visuRuleProvider = visuRuleProvider;
+            _ruleDataHandler = ruleDataHandler;
         }
 
         [HttpPost]
@@ -258,7 +259,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.VisuRole)]
         public object GetInstanceData(Guid id)
         {
-            return visuRuleProvider.GetDataForRuleInstance(id);
+            return _ruleDataHandler.GetDataForRuleInstance(id);
         }
     }
 }

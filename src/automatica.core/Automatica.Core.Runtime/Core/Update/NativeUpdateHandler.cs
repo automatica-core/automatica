@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
-using Automatica.Core.Internals.Core;
+using Automatica.Core.Runtime.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Runtime.Core
+namespace Automatica.Core.Runtime.Core.Update
 {
-    public class AutomaticUpdate
+    public class NativeUpdateHandler : IUpdateHandler
     {
-        private readonly ICoreServer _server;
         private readonly IConfiguration _config;
         private readonly ICloudApi _api;
 
         private readonly Timer _timer = new Timer();
 
 
-        public AutomaticUpdate(ICoreServer server, IConfiguration config, ICloudApi api)
+        public NativeUpdateHandler(IConfiguration config, ICloudApi api)
         {
-            _server = server;
             _config = config;
             _api = api;
 
@@ -42,13 +40,18 @@ namespace Automatica.Core.Runtime.Core
                 SystemLogger.Instance.LogInformation("Download update");
                 await _api.DownloadUpdate(update);
                 SystemLogger.Instance.LogInformation("Install update");
-                _server.Update();
             }
 
-            Init();
+            await Init();
         }
 
-        public void Init()
+        public Task Update()
+        {
+            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
+            return Task.CompletedTask;
+        }
+
+        public Task Init()
         {
             _timer.Stop();
             using (var context = new AutomaticaContext(_config))
@@ -77,6 +80,12 @@ namespace Automatica.Core.Runtime.Core
                     SystemLogger.Instance.LogInformation("Auto update seems to be disabled");
                 }
             }
+            return Task.CompletedTask;
+        }
+
+        public Task ReInitialize()
+        {
+            return Init();
         }
     }
 }

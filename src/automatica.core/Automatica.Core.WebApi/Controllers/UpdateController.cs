@@ -20,12 +20,14 @@ namespace Automatica.Core.WebApi.Controllers
     public class UpdateController : BaseController
     {
         private readonly ICloudApi api;
+        private readonly IAutoUpdateHandler _updateHandler;
 
         public ICoreServer CoreServer { get; }
 
-        public UpdateController(AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer) : base(dbContext)
+        public UpdateController(AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler) : base(dbContext)
         {
             this.api = api;
+            _updateHandler = updateHandler;
             CoreServer = coreServer;
         }
 
@@ -47,13 +49,13 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpPost, Route("install")]
-        public Task<ResultDto> Install()
+        public async Task<ResultDto> Install()
         {
-            CoreServer.Update();
-            return Task.FromResult(new ResultDto
+            await _updateHandler.Update();
+            return new ResultDto
             {
                 Result = true
-            });
+            };
         }
 
         [HttpPost, Route("download")]

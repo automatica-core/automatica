@@ -14,7 +14,7 @@ namespace Automatica.Core.Driver
         }
 
         /// <summary>
-        /// Generic list of Childrens
+        /// Generic list of Children
         /// </summary>
         public IList<T> ChildrenT { get; set; }
 

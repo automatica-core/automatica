@@ -4,6 +4,7 @@ using System.Reflection;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using Automatica.Core.Runtime.Core.Plugins;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Core

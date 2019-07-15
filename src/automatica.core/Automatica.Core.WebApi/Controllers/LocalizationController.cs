@@ -13,9 +13,9 @@ namespace Automatica.Core.WebApi.Controllers
     [AllowAnonymous]
     public class LocalizationController : BaseController
     {
-        private readonly LocalizationProvider _provider;
+        private readonly ILocalizationProvider _provider;
 
-        public LocalizationController(LocalizationProvider provider, AutomaticaContext db)
+        public LocalizationController(ILocalizationProvider provider, AutomaticaContext db)
             : base(db)
         {
             _provider = provider;

@@ -4,6 +4,8 @@ using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
 using Automatica.Core.Runtime.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -11,18 +13,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.IO
 {
-    public class RuleEngineDispatcher : IDisposable
+    internal class RuleEngineDispatcher : IDisposable
     {
         private readonly AutomaticaContext _dbContext;
         private readonly CoreServer _coreServer;
         private readonly IDispatcher _dispatcher;
+        private readonly ILogicInstancesStore _logicInstancesStore;
+        private readonly IDriverNodesStore _driverNodesStore;
         private readonly object _lock = new object();
 
-        public RuleEngineDispatcher(AutomaticaContext dbContext, CoreServer coreServer, IDispatcher dispatcher)
+        public RuleEngineDispatcher(AutomaticaContext dbContext, CoreServer coreServer, IDispatcher dispatcher, ILogicInstancesStore logicInstancesStore, IDriverNodesStore driverNodesStore)
         {
             _dbContext = dbContext;
             _coreServer = coreServer;
             _dispatcher = dispatcher;
+            _logicInstancesStore = logicInstancesStore;
+            _driverNodesStore = driverNodesStore;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -139,7 +145,7 @@ namespace Automatica.Core.Runtime.IO
         {
             lock (_lock)
             {
-                foreach (var rule in _coreServer.Rules)
+                foreach (var rule in _logicInstancesStore.Dictionary())
                 {
                     if (rule.Key.ObjId == toRule)
                     {
@@ -157,7 +163,7 @@ namespace Automatica.Core.Runtime.IO
 
         private void ValueDispatched(IDispatchable dispatchable, object o, Guid to)
         {
-            foreach (var node in _coreServer.DriverNodes)
+            foreach (var node in _driverNodesStore.All())
             {
                 if (node.Id == to)
                 {

@@ -7,7 +7,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
     {
         public bool IsLicensed => true;
 
-        public int MaxDatapoints => int.MaxValue;
+        public int MaxDataPoints => int.MaxValue;
 
         public int MaxUsers => int.MaxValue;
 

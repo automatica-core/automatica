@@ -19,7 +19,7 @@ namespace Automatica.Core.Internals.License
 
         public bool IsLicensed { get; private set; }
 
-        public int MaxDatapoints { get; private set; }
+        public int MaxDataPoints { get; private set; }
 
         public int MaxUsers { get; private set; }
 
@@ -65,12 +65,12 @@ namespace Automatica.Core.Internals.License
 
             if(IsLicensed)
             {
-                MaxDatapoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
+                MaxDataPoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
                 MaxUsers = Convert.ToInt32(_license.ProductFeatures.Get("MaxUsers"));
             }
             else
             {
-                MaxDatapoints = int.MaxValue;
+                MaxDataPoints = int.MaxValue;
                 MaxUsers = int.MaxValue;
             }
             return IsLicensed;

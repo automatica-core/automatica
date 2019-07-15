@@ -6,9 +6,9 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Runtime.Core
+namespace Automatica.Core.Runtime.Core.Plugins
 {
-    public static class DriverLoader
+    public static class PluginLoader
     {
         public static IList<DriverFactory> LoadSingle(ILogger logger, Plugin plugin, AutomaticaContext database)
         {
@@ -22,13 +22,13 @@ namespace Automatica.Core.Runtime.Core
         {
             var fileInfo = new FileInfo(path);
             string dir = fileInfo.DirectoryName;
-            if(fileInfo.Attributes == FileAttributes.Directory)
+            if (fileInfo.Attributes == FileAttributes.Directory)
             {
                 dir = path;
             }
             var driverPath = Path.Combine(dir, ServerInfo.DriversDirectory);
 
-            if(!Directory.Exists(driverPath))
+            if (!Directory.Exists(driverPath))
             {
                 driverPath = dir;
             }

@@ -11,5 +11,8 @@ namespace Automatica.Core.Base.Localization
     {
         void LoadFromAssembly(Assembly assembly);
         void AppendDictionary(Dictionary<string, JObject> data);
+
+        object ToJson(string locale);
+        string ToJson();
     }
 }

@@ -52,6 +52,7 @@ using Automatica.Core.WebApi.Converter.MessagePack;
 using Microsoft.AspNetCore.ResponseCompression;
 using MQTTnet.AspNetCore;
 using System.Net;
+using Automatica.Core.Runtime;
 using MQTTnet.Server;
 
 namespace Automatica.Core
@@ -165,29 +166,13 @@ namespace Automatica.Core
                 x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
             });
 
-            services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));
-
             services.AddSingleton<DiscoveryService>();
-            services.AddSingleton<IVisualisationFactory, VisuTempInit>();
-            services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
-            services.AddSingleton<IServerCloudApi, CloudApi>();
-            services.AddSingleton<ICloudApi, CloudApi>();
-            services.AddSingleton<ILicenseContext, LicenseContext>();
-            services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
-            services.AddSingleton<ILearnMode, LearnMode>();
-
-
             if (!HybridSupport.IsElectronActive)
             {
                 services.AddSingleton<IHostedService>(provider => provider.GetService<DiscoveryService>());
-
-                services.AddSingleton<CoreServer, CoreServer>();
-                services.AddSingleton<IHostedService>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<INotifyDriver>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<IRuleVisualisation>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<ICoreServer>(provider => provider.GetService<CoreServer>());
             }
-            services.AddSingleton<IDispatcher, Dispatcher>();
+
+            services.AddAutomaticaCoreService(Configuration, HybridSupport.IsElectronActive);
 
             services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
             services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
@@ -208,21 +193,7 @@ namespace Automatica.Core
                 options.EnableDetailedErrors = true;
             }).AddJsonProtocol(options =>
             {
-            }); ;
-
-            var mqttServerOptions = new MqttServerOptions()
-            {
-                ConnectionValidator = new MqttServerConnectionValidatorDelegate(a => CoreServer.ValidateConnection(a, Configuration, SystemLogger.Instance))
-            };
-
-            mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkAddress = IPAddress.Any;
-            mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkV6Address = IPAddress.None;
-            mqttServerOptions.DefaultEndpointOptions.IsEnabled = true;
-            mqttServerOptions.DefaultEndpointOptions.Port = 1883;
-            mqttServerOptions.DefaultEndpointOptions.ConnectionBacklog = 1000;
-
-            services.AddHostedMqttServer(mqttServerOptions);
-
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

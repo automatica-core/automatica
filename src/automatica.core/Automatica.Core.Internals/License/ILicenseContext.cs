@@ -13,7 +13,7 @@ namespace Automatica.Core.Internals.License
 
         bool IsLicensed { get; }
 
-        int MaxDatapoints { get; }
+        int MaxDataPoints { get; }
         int MaxUsers { get; }
 
         Task<string> GetLicense();

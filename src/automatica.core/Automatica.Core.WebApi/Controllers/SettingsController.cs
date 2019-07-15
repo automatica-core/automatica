@@ -10,11 +10,11 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("settings")]
     public class SettingsController : BaseController
     {
-        private readonly ICoreServer _coreServer;
+        private readonly IAutoUpdateHandler _updateHandler;
 
-        public SettingsController(AutomaticaContext dbContext, ICoreServer coreServer) : base(dbContext)
+        public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler) : base(dbContext)
         {
-            _coreServer = coreServer;
+            _updateHandler = updateHandler;
         }
 
         [HttpGet]
@@ -58,7 +58,7 @@ namespace Automatica.Core.WebApi.Controllers
 
 
             DbContext.SaveChanges();
-            _coreServer.ReinitAutomaticUpdate();
+            _updateHandler.ReInitialize();
 
             return LoadSettings();
         }

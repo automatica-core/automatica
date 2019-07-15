@@ -8,11 +8,10 @@ using Automatica.Push.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.Plugins;
 
 namespace Automatica.Push.Helper
 {
@@ -23,16 +22,18 @@ namespace Automatica.Push.Helper
         private readonly ICloudApi _api;
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
+        private readonly IPluginLoader _pluginLoader;
         private readonly bool _restartOnUpdate;
         private int previousState;
 
-        public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, bool restartOnUpdate = true)
+        public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader pluginLoader, bool restartOnUpdate = true)
         {
             _plugin = plugin;
             _install = install;
             _api = cloudApi;
             _updateHub = updateHub;
             _coreServer = coreServer;
+            _pluginLoader = pluginLoader;
             _restartOnUpdate = restartOnUpdate;
         }
 
@@ -70,7 +71,7 @@ namespace Automatica.Push.Helper
                 if (_install)
                 {
                     await _api.InstallPlugin(_plugin, automaticaPluginUpdateFile);
-                    _coreServer.LoadPlugin(_plugin);
+                    await _pluginLoader.LoadPlugin(_plugin);
                 }
                 else
                 {

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
@@ -18,7 +17,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Driver.Monitor;
-using Automatica.Core.Runtime.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Automatica.Push.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -27,21 +25,16 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Extensions;
-using Automatica.Core.Common.Update;
-using System.Reflection;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Templates;
+using Automatica.Core.Runtime.Abstraction;
+using Automatica.Core.Runtime.Abstraction.Plugins;
+using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.Trendings;
-using MQTTnet;
-using MQTTnet.Server;
-using Newtonsoft.Json;
-using System.Text;
-using Automatica.Core.Base.Mqtt;
-using MQTTnet.Protocol;
-using Automatica.Core.Runtime.Mqtt;
-using SlaveAction = Automatica.Core.Base.Mqtt.SlaveAction;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -56,7 +49,7 @@ namespace Automatica.Core.Runtime.Core
         Started,
         Stopped
     }
-    public class CoreServer : INotifyDriver, IRuleVisualisation, IHostedService, ICoreServer
+    public class CoreServer : IHostedService, ICoreServer
     {
         private AutomaticaContext _dbContext;
         private readonly IConfiguration _config;
@@ -64,24 +57,6 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILogger _logger;
         private int _configuredDrivers;
 
-        private readonly IDictionary<Guid, IDriverFactory> _driverFactories;
-
-        private readonly IList<Guid> _remoteDriverFactories = new List<Guid>();
-        private readonly IList<string> _connectedMqttClients = new List<string>();
-        private readonly IDictionary<string, NodeInstance> _mqttNodes = new Dictionary<string, NodeInstance>();
-        private readonly IDictionary<string, IList<IDriverFactory>> _mqttSlaves = new Dictionary<string, IList<IDriverFactory>>();
-
-        private readonly IList<IDriver> _driverInstances = new List<IDriver>();
-        private readonly IList<IDriverNode> _driverNodes = new List<IDriverNode>();
-        private readonly IDictionary<Guid, IDriverNode> _driverNodesMap = new Dictionary<Guid, IDriverNode>();
-        
-        private readonly IDictionary<Guid, NodeInstance> _loadedNodeInstances = new Dictionary<Guid, NodeInstance>();
-        
-        private readonly IDictionary<Guid, IRuleFactory> _ruleFactories = new Dictionary<Guid, IRuleFactory>();
-        private readonly IDictionary<RuleInstance, IRule> _ruleInstances = new Dictionary<RuleInstance, IRule>();
-        private readonly IDictionary<Guid, IRule> _ruleIdInstances = new Dictionary<Guid, IRule>();
-
-        private readonly IDictionary<Guid, PluginManifest> _loadedPlugins = new Dictionary<Guid, PluginManifest>();
 
         private readonly IDispatcher _dispatcher;
         private readonly ICloudApi _cloudApi;
@@ -93,14 +68,24 @@ namespace Automatica.Core.Runtime.Core
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
         private readonly ILearnMode _learnMode;
 
-        private readonly AutomaticUpdate _automaticUpdate;
+        private readonly IUpdateHandler _updateHandler;
         private readonly IList<ITrendingRecorder> _trendingRecorder = new List<ITrendingRecorder>();
 
+        private readonly IMqttServerHandler _mqttServerHandler;
 
-        private readonly IMqttServer _mqttServer;
+        private readonly IPluginHandler _pluginHandler;
+        private readonly IDriverFactoryStore _driverFactoryStore;
+        private readonly ILogicFactoryStore _logicFactoryStore;
+        private readonly ILoadedStore _store;
 
-        public IList<IDriverNode> DriverNodes => _driverNodes;
-        public IDictionary<RuleInstance, IRule> Rules => _ruleInstances;
+        private readonly IDriverLoader _driverLoader;
+        private readonly ILogicLoader _logicLoader;
+
+        private readonly IDriverStore _driverStore;
+        private readonly ILogicStore _logicStore;
+        private readonly ILoadedNodeInstancesStore _loadedNodeInstancesStore;
+        private readonly IDriverNodesStore _driverNodesStore;
+        private readonly ILogicInstancesStore _logicInstanceStore;
 
 
         public RunState RunState
@@ -122,81 +107,54 @@ namespace Automatica.Core.Runtime.Core
 
             _dataHub = services.GetService<IHubContext<DataHub>>();
             _dispatcher = services.GetService<IDispatcher>();
-
             _cloudApi = services.GetService<ICloudApi>();
-
             _licenseContext = services.GetService<ILicenseContext>();
 
-            InitInternals();
+
             _logger = SystemLogger.Instance;
-            _driverFactories = new Dictionary<Guid, IDriverFactory>();
             
-
             _telegramMonitor = services.GetService<ITelegramMonitor>();
-
-            
-            _ruleInstanceVisuNotify = new RuleInstanceVisuNotifier(_dataHub);
-
+            _ruleInstanceVisuNotify = services.GetRequiredService<IRuleInstanceVisuNotify>();
             _localizationProvider = services.GetService(typeof(LocalizationProvider)) as LocalizationProvider;
 
             _learnMode = services.GetRequiredService<ILearnMode>();
 
-            _automaticUpdate = new AutomaticUpdate(this, _config, _cloudApi);
+            _mqttServerHandler = services.GetRequiredService<IMqttServerHandler>();
+            
+            _pluginHandler = services.GetRequiredService<IPluginHandler>();
+            _updateHandler = services.GetRequiredService<IUpdateHandler>();
+
+            _driverFactoryStore = services.GetRequiredService<IDriverFactoryStore>();
+            _logicFactoryStore = services.GetRequiredService<ILogicFactoryStore>();
+            _store = services.GetRequiredService<ILoadedStore>();
+
+            _driverLoader = services.GetRequiredService<IDriverLoader>();
+            _logicLoader = services.GetRequiredService<ILogicLoader>();
+
+            _driverStore = services.GetRequiredService<IDriverStore>();
+            _logicStore = services.GetRequiredService<ILogicStore>();
+
+            _driverNodesStore = services.GetRequiredService<IDriverNodesStore>();
+            _logicInstanceStore = services.GetRequiredService<ILogicInstancesStore>();
+
+            _loadedNodeInstancesStore = services.GetRequiredService<ILoadedNodeInstancesStore>();
+
             RunState = RunState.Constructed;
 
             _trendingRecorder.Add(new DatabaseTrendingRecorder(_config, _dispatcher));
             _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
 
-            _mqttServer = services.GetRequiredService<IMqttServer>();
-            _mqttServer.ClientConnectedHandler = new ClientConnectedHandler(this);
-            _mqttServer.ClientSubscribedTopicHandler = new ClientSubscribedHandler(this);
-            _mqttServer.ApplicationMessageReceivedHandler = new ApplicationMessageHandler(this);
-            _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
-        }
 
-        internal async Task MqttServerClientSubscribedTopic(MqttServerClientSubscribedTopicEventArgs e)
-        {
-            _logger.LogDebug($"Client {e.ClientId} subscribed to {e.TopicFilter}");
-
-            if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.CONFIG_TOPIC}/#"))
-            {
-                if (_mqttNodes.ContainsKey(e.ClientId))
-                {
-                    await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
-                }
-            }
-            else if (MqttTopicFilterComparer.IsMatch(e.TopicFilter.Topic, $"{MqttTopicConstants.SLAVE_TOPIC}/+/actions"))
-            {
-                if (_mqttSlaves.ContainsKey(e.ClientId))
-                {
-                    await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
-                }
-            }
+            InitInternals();
         }
 
         private void InitInternals()
         {
-            _mqttNodes.Clear();
-            _mqttSlaves.Clear();
+            _mqttServerHandler.Init();
+
             _telegramMonitor?.Clear();
             _dbContext = new AutomaticaContext(_config);
-            _ruleEngineDispatcher = new RuleEngineDispatcher(_dbContext, this, _dispatcher);
-        }
-
-        public static void ValidateConnection(MqttConnectionValidatorContext context, IConfiguration config, ILogger logger)
-        {
-            logger.LogDebug($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, passwort: {context.Password}");
-            using (var db = new AutomaticaContext(config))
-            {
-                if(db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
-                {
-                    context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
-                }
-                else
-                {
-                    context.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
-                }
-            }
+            _ruleEngineDispatcher = new RuleEngineDispatcher(_dbContext, this, _dispatcher, _logicInstanceStore, _driverNodesStore);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -215,12 +173,11 @@ namespace Automatica.Core.Runtime.Core
             {
                 try
                 {
-                    CheckAndInstallPluginUpdates();
-
-                    _automaticUpdate.Init();
+                    await _pluginHandler.CheckAndInstallPluginUpdates();
+                    await _updateHandler.Init();
 
                     RunState = RunState.Loading;
-                    Load(ServerInfo.DriverDirectoy, ServerInfo.DriverPattern);
+                    await Load(ServerInfo.DriverDirectoy, ServerInfo.DriverPattern);
                     await ConfigureAndStart();
                 }
                 catch (Exception e)
@@ -230,192 +187,6 @@ namespace Automatica.Core.Runtime.Core
             }, cancellationToken);
         }
 
-        internal async Task MqttServerClientConnected(MqttServerClientConnectedEventArgs e)
-        {
-            _connectedMqttClients.Add(e.ClientId);
-            _logger.LogDebug($"Client {e.ClientId} connected...");
-
-            //if (_mqttSlaves.ContainsKey(e.ClientId))
-            //{
-            //    await StartInstances(e.ClientId, _mqttSlaves[e.ClientId]);
-            //}
-            //else if(_mqttNodes.ContainsKey(e.ClientId))
-            //{
-            //    await PublishConfig(e.ClientId, _mqttNodes[e.ClientId]);
-            //}
-        }
-
-        private async Task StartInstances(string clientId, IList<IDriverFactory> driverFactories)
-        {
-            try
-            {
-                var actionRequests = new List<ActionRequest>();
-                foreach (var driver in driverFactories)
-                {
-                    _logger.LogDebug($"Publish to slave/{clientId}/actions (Start {driver.ImageName}:{driver.Tag})");
-
-                    var actionRequest = new ActionRequest
-                    {
-                        Action = SlaveAction.Start,
-                        ImageSource = driver.ImageSource,
-                        ImageName = driver.ImageName,
-                        Tag = driver.Tag
-                    };
-
-                    actionRequests.Add(actionRequest);
-                }
-                await SendActions(clientId, actionRequests.ToArray());
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e, "Could not send start instances message...");
-            }
-        }
-
-        private async Task SendActions(string clientId, params ActionRequest[] actionRequests)
-        {
-            try
-            {
-                await _mqttServer.PublishAsync(new MqttApplicationMessage
-                {
-                    Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTIONS_TOPIC_START}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequests)),
-                    Retain = true
-                });
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Could not send action", e);
-            }
-        }
-
-        private async Task SendAction(string clientId, ActionRequest actionRequest)
-        {
-            try
-            {
-                await _mqttServer.PublishAsync(new MqttApplicationMessage
-                {
-                    Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
-                    Retain = true
-                });
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Could not send action", e);
-            }
-        }
-
-        private async Task StopInstances(string clientId, IList<IDriverFactory> driverFactories)
-        {
-            try
-            {
-                foreach (var driver in driverFactories)
-                {
-                    _logger.LogDebug($"Publish to slave/{clientId}/action");
-
-                    var actionRequest = new ActionRequest()
-                    {
-                        Action = SlaveAction.Stop,
-                        ImageSource = driver.ImageSource,
-                        ImageName = driver.ImageName,
-                        Tag = driver.Tag
-                    };
-
-                    await SendAction(clientId, actionRequest);
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not send start instances message...");
-            }
-        }
-
-        private async Task PublishConfig(string clientId, NodeInstance nodeInstance)
-        {
-            try
-            {
-                _logger.LogDebug($"Publish to config/{clientId}");
-                await _mqttServer.PublishAsync(new MqttApplicationMessage()
-                {
-                    Topic = $"{MqttTopicConstants.CONFIG_TOPIC}/{clientId}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
-                    Retain = true
-                });
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not publish config...");
-            }
-        }
-
-        internal Task MqttServerApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs e)
-        {
-            try
-            {
-                //if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.NODETEMPLATES_TOPIC}/#"))
-                //{
-                //    var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                //    var dto = JsonConvert.DeserializeObject<RemoteNodeTemplatesFactoryDto>(json);
-
-                //    _remoteDriverFactories.Add(new Guid(e.ApplicationMessage.Topic.Split("/", StringSplitOptions.RemoveEmptyEntries)[1]));
-
-                //    using (var db = new AutomaticaContext(_config))
-                //    {
-                //        foreach (var entity in dto.InterfaceTypes)
-                //        {
-                //            db.AddOrUpdate(entity, (x) => x.Type);
-                //        }
-
-                //        foreach (var entity in dto.Settings)
-                //        {
-                //            db.AddOrUpdate(entity, (x) => x.ObjId);
-                //        }
-
-                //        foreach (var entity in dto.NodeTemplates)
-                //        {
-                //            db.AddOrUpdate(entity, (x) => x.ObjId);
-                //        }
-
-                //        foreach (var entity in dto.PropertyTemplates)
-                //        {
-                //            db.AddOrUpdate(entity, (x) => x.ObjId);
-                //        }
-
-                //        foreach (var entity in dto.PropertyTemplateConstraints)
-                //        {
-                //            db.AddOrUpdate(entity, (x) => x.ObjId);
-                //        }
-
-                //        foreach (var entity in dto.PropertyTemplateConstraintData)
-                //        {
-                //            db.AddOrUpdate(entity, (x) => x.ObjId);
-                //        }
-
-                //        db.SaveChanges();
-                //    }
-                //}
-                //else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.LOCALIZATIN_TOPIC}/#"))
-                //{
-                //    var data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-
-                //    var localization = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(data);
-                //    _localizationProvider.AppendDictionary(localization);
-                //}
-                if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
-                {
-                    _dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return Task.CompletedTask;
-        }
 
         private async Task ConfigureAndStart()
         {
@@ -447,7 +218,7 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Starting;
 
-            foreach (var driver in _driverInstances)
+            foreach (var driver in _driverStore.All())
             {
                 _logger.LogInformation($"Starting driver {driver.Name}...");
                 try
@@ -487,7 +258,7 @@ namespace Automatica.Core.Runtime.Core
             _ruleEngineDispatcher.Load();
             _logger.LogInformation("Loading logic engine connections...done");
 
-            foreach (var rule in _ruleInstances)
+            foreach (var rule in _logicStore.Dictionary())
             {
                 _logger.LogInformation($"Starting logic {rule.Key.Name}...");
 
@@ -510,78 +281,34 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Started;
         }
 
-        private void CheckAndInstallPluginUpdates()
-        {
-            var updateDirectory = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
-            if (!Directory.Exists(updateDirectory))
-            {
-                Directory.CreateDirectory(updateDirectory);
-                return;
-            }
-
-            var files = Directory.GetFiles(updateDirectory);
-
-            foreach(var f in files)
-            {
-                try
-                {
-                    var tmp = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
-                    var manifest = Common.Update.Plugin.GetPluginManifest(_logger, f, tmp);
-
-                    Directory.Delete(tmp, true);
-                    if (manifest == null)
-                    {
-                        _logger.LogWarning($"Could no update plugin with file from {f}");
-
-                        File.Delete(f);
-                        continue;
-                    }
-
-                    var assemblyDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
-                    var pluginType = manifest.Automatica.Type == "driver" ? ServerInfo.DriversDirectory : ServerInfo.LogicsDirectory;
-                    var pluginDir = Path.Combine(assemblyDir, pluginType);
-                    var componentDir = Path.Combine(pluginDir, manifest.Automatica.ComponentName);
-
-                    if (Directory.Exists(componentDir))
-                    {
-                        Directory.Delete(componentDir, true);
-                    }
-                    Common.Update.Plugin.InstallPlugin(f, pluginDir);
-                }
-                catch(Exception e)
-                {
-                    _logger.LogError(e, "Could not install plugin");
-                }
-                File.Delete(f);
-            }
-        }
-
         private async Task Stop()
         {
-            foreach (var driver in _driverInstances)
+            await _mqttServerHandler.Stop();
+
+            foreach (var driver in _driverStore.All())
             {
-                _logger.LogInformation($"Stoping driver {driver.Name}...");
+                _logger.LogInformation($"Stopping driver {driver.Name}...");
                 if (await driver.Stop())
                 {
-                    _logger.LogInformation($"Stoping driver {driver.Name}...success");
+                    _logger.LogInformation($"Stopping driver {driver.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Stoping driver {driver.Name}...error");
+                    _logger.LogError($"Stopping driver {driver.Name}...error");
                 }
             }
 
-            foreach (var rule in _ruleInstances)
+            foreach (var rule in _logicStore.Dictionary())
             {
-                _logger.LogInformation($"Stoping logic {rule.Key.Name}...");
+                _logger.LogInformation($"Stopping logic {rule.Key.Name}...");
 
                 if (await rule.Value.Stop())
                 {
-                    _logger.LogInformation($"Stoping logic {rule.Key.Name}...success");
+                    _logger.LogInformation($"Stopping logic {rule.Key.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Stoping logic {rule.Key.Name}...error");
+                    _logger.LogError($"Stopping logic {rule.Key.Name}...error");
                 }
             }
 
@@ -589,12 +316,14 @@ namespace Automatica.Core.Runtime.Core
             _logger.LogInformation("CoreServer stopping...");
             IsRunning = false;
 
-            _driverInstances.Clear();
-            _ruleInstances.Clear();
-            _ruleIdInstances.Clear();
-            _driverNodesMap.Clear();
-            _loadedNodeInstances.Clear();
-            _loadedPlugins.Clear();
+            _driverStore.Clear();
+            _logicStore.Clear();
+            
+            _driverNodesStore.Clear();
+            _loadedNodeInstancesStore.Clear();
+            _logicInstanceStore.Clear();
+
+            _store.Clear();
 
             foreach(var rec in _trendingRecorder)
             {
@@ -618,8 +347,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 _logger.LogDebug($"Working on {nodeInstance.Name}...");
 
-               
-                _loadedNodeInstances.Add(nodeInstance.ObjId, nodeInstance);
+                _loadedNodeInstancesStore.Add(nodeInstance.ObjId, nodeInstance);
                 if (!nodeInstance.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
                 {
                     if (LicenseExceeded())
@@ -651,7 +379,7 @@ namespace Automatica.Core.Runtime.Core
                     continue;
                 }
 
-                if (!_driverFactories.ContainsKey(nodeInstance.This2NodeTemplateNavigation.ObjId))
+                if (!_driverFactoryStore.Contains(nodeInstance.This2NodeTemplateNavigation.ObjId))
                 {
                     _logger.LogError($"Could not find driver factory for {nodeInstance.This2NodeTemplateNavigation.Name}");
                     continue;
@@ -660,21 +388,9 @@ namespace Automatica.Core.Runtime.Core
 
                 if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
                 {
-                    var nodeId = nodeInstance.This2NodeTemplateNavigation.ObjId.ToString();
-                    //await PublishConfig(nodeId, nodeInstance);
-                    _mqttNodes.Add(nodeInstance.This2NodeTemplateNavigation.ObjId.ToString(), nodeInstance);
+                   await _mqttServerHandler.AddMqttNode(nodeInstance.This2NodeTemplateNavigation.ObjId.ToString(), nodeInstance);
+                   await _mqttServerHandler.AddMqttSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId));
 
-                    if (!_mqttSlaves.ContainsKey(nodeInstance.This2SlaveNavigation.ClientId))
-                    {
-                        _mqttSlaves.Add(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>());
-                    }
-                    _mqttSlaves[nodeInstance.This2SlaveNavigation.ClientId].Add(_driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId]);
-
-                    //start instance right now if already connected
-                    if(_connectedMqttClients.Contains(nodeInstance.This2SlaveNavigation.ClientId))
-                    {
-                        await StartInstances(nodeInstance.This2SlaveNavigation.ClientId, new List<IDriverFactory>() { _driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId] });
-                    }
                     continue;
                 }
 
@@ -683,13 +399,13 @@ namespace Automatica.Core.Runtime.Core
                 {
                     if (LicenseExceeded())
                     {
-                        _logger.LogError($"Cannot instantiate more datapoints for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}, license exceeded");
+                        _logger.LogError($"Cannot instantiate more data points for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}, license exceeded");
                     }
                     else
                     {
                         _logger.LogDebug($"Creating instance for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
-                        var factory = _driverFactories[nodeInstance.This2NodeTemplateNavigation.ObjId];
+                        var factory = _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId);
                         var config = new DriverContext(NodeInstanceHelper.RecursiveLoad(nodeInstance, _dbContext),
                         _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
                         var driver = factory.CreateDriver(config);
@@ -697,7 +413,7 @@ namespace Automatica.Core.Runtime.Core
                         nodeInstance.State = NodeInstanceState.Loaded;
                         if (driver.BeforeInit())
                         {
-                            _driverInstances.Add(driver);
+                            _driverStore.Add(driver.Id, driver);
                             nodeInstance.State = NodeInstanceState.Initialized;
                             driver.Configure();
                         }
@@ -706,11 +422,10 @@ namespace Automatica.Core.Runtime.Core
                             nodeInstance.State = NodeInstanceState.UnknownError;
                         }
 
-                        _driverNodes.Add(driver);
-                        _driverNodesMap.Add(driver.Id, driver);
+                        _driverNodesStore.Add(driver.Id, driver);
                         _configuredDrivers += 1 + driver.ChildrensCreated;
 
-                        AddDriverRecurisve(driver);
+                        AddDriverRecursive(driver);
                     }
 
                     AddNodeInstancesRecursive(nodeInstance);
@@ -722,11 +437,11 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private bool LicenseExceeded() => _configuredDrivers >= _licenseContext.MaxDatapoints;
+        private bool LicenseExceeded() => _configuredDrivers >= _licenseContext.MaxDataPoints;
 
         private void AddNodeInstancesRecursive(NodeInstance nodeInstance)
         {
-            if (_configuredDrivers >= _licenseContext.MaxDatapoints)
+            if (_configuredDrivers >= _licenseContext.MaxDataPoints)
             {
                 nodeInstance.State = NodeInstanceState.OutOfDatapoits;
             }
@@ -734,10 +449,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 nodeInstance.State = NodeInstanceState.UnknownError;
             }
-            if (!_loadedNodeInstances.ContainsKey(nodeInstance.ObjId))
-            {
-                _loadedNodeInstances.Add(nodeInstance.ObjId, nodeInstance);
-            }
+            _loadedNodeInstancesStore.Add(nodeInstance.ObjId, nodeInstance);
 
             if (nodeInstance.InverseThis2ParentNodeInstanceNavigation == null)
             {
@@ -756,18 +468,18 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogDebug("Searching instantiated drivers");
 
-            //if(!_licenseContext.IsLicensed)
-            //{
-            //    _logger.LogError("Can not configure drivers - license is invalid");
-            //    return;
-            //}
+            if (!_licenseContext.IsLicensed)
+            {
+                _logger.LogError("Can not configure drivers - license is invalid");
+                return;
+            }
             _configuredDrivers = 0;
 
             var root = _dbContext.NodeInstances.Single(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
 
             root.InverseThis2ParentNodeInstanceNavigation.Add(NodeInstanceHelper.RecursiveLoad(root, _dbContext));
             root.State = NodeInstanceState.InUse;
-            _loadedNodeInstances.Add(root.ObjId, root);
+            _loadedNodeInstancesStore.Add(root.ObjId, root);
             await ConfigureDriversRecursive(root);
 
 
@@ -776,7 +488,7 @@ namespace Automatica.Core.Runtime.Core
 
             foreach (var ruleInstance in rules)
             {
-                if (!_ruleFactories.ContainsKey(ruleInstance.This2RuleTemplate))
+                if (!_logicFactoryStore.Contains(ruleInstance.This2RuleTemplate))
                 {
                     _logger.LogWarning($"Could not find RuleFactory for guid {ruleInstance.This2RuleTemplate}");
                     continue;
@@ -789,19 +501,18 @@ namespace Automatica.Core.Runtime.Core
                     _dbContext.Entry(inter).Reload();
                 }
 
-                var factory = _ruleFactories[ruleInstance.This2RuleTemplate];
+                var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
                 var ruleContext = new RuleContext(ruleInstance, _dispatcher, _ruleInstanceVisuNotify, CoreLoggerFactory.GetLogger(factory.RuleName), _cloudApi, _licenseContext);
                 var rule = factory.CreateRuleInstance(ruleContext);
 
                 if (rule != null)
                 {
-                    _ruleInstances.Add(ruleInstance, rule);
-                    _ruleIdInstances.Add(ruleInstance.ObjId, rule);
+                    _logicInstanceStore.Add(ruleInstance, rule);
                 }
             }
 
 
-            _logger.LogInformation($"Loading recorind datapoints...");
+            _logger.LogInformation($"Loading recording data-points...");
             
             using (var db = new AutomaticaContext(_config))
             {
@@ -817,10 +528,10 @@ namespace Automatica.Core.Runtime.Core
             }
 
 
-            _logger.LogInformation($"Loading recorind datapoints...done");
+            _logger.LogInformation($"Loading recording data-points...done");
         }
         
-        private void AddDriverRecurisve(IDriverNode driver)
+        private void AddDriverRecursive(IDriverNode driver)
         {
             if (driver.Children == null)
             {
@@ -828,28 +539,26 @@ namespace Automatica.Core.Runtime.Core
             }
             foreach (var dr in driver.Children)
             {
-                _driverNodes.Add(dr);
-                if (!_driverNodesMap.ContainsKey(dr.Id))
-                    _driverNodesMap.Add(dr.Id, dr);
-
+                _driverNodesStore.Add(dr.Id, dr);
+                
                 _configuredDrivers++;
 
-                if (_configuredDrivers >= _licenseContext.MaxDatapoints)
+                if (_configuredDrivers >= _licenseContext.MaxDataPoints)
                 {
-                    _logger.LogError("Cannot instantiate more datapoints, license exceeded");
+                    _logger.LogError("Cannot instantiate more data-points, license exceeded");
                     return;
                 }
 
-                AddDriverRecurisve(dr);
+                AddDriverRecursive(dr);
             }
         }
 
-        internal void Load(string path, string searchPattern)
+        internal async Task Load(string path, string searchPattern)
         {
             try
             {
-                _driverFactories.Clear();
-                _ruleFactories.Clear();
+                _driverFactoryStore.Clear();
+                _logicFactoryStore.Clear();
 
                 var driverLoadingPath = Path.Combine(path, "Drivers");
 
@@ -862,12 +571,12 @@ namespace Automatica.Core.Runtime.Core
                 }
                 _dbContext.SaveChanges();
               
-                var foundDrivers = DriverLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode);
+                var foundDrivers = PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode);
                 foreach (var driver in foundDrivers)
                 {
                     try
                     {
-                        InitDriverFactory(driver);
+                        await _driverLoader.Load(driver);
                     }
                     catch (NoManifestFoundException)
                     {
@@ -882,12 +591,12 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 var ruleLoadingPath = Path.Combine(path, "Rules");
-                _logger.LogInformation($"Searching for logics in {ruleLoadingPath}");
+                _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
                 foreach (var rule in RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode))
                 {
                     try
                     {
-                        InitRuleFactory(rule);
+                        await _logicLoader.Load(rule);
                     }
                     catch (NoManifestFoundException)
                     {
@@ -901,302 +610,17 @@ namespace Automatica.Core.Runtime.Core
             _dbContext.SaveChanges(true);
         }
 
-        private void InitDriverFactory(IDriverFactory driver)
-        {
-            try
-            {
-                var manifest = Common.Update.Plugin.GetEmbeddedPluginManifest(_logger, driver.GetType().Assembly);
-
-                if (manifest == null)
-                {
-                    throw new NoManifestFoundException();
-                }
-                if (!_loadedPlugins.ContainsKey(manifest.Automatica.PluginGuid))
-                {
-                    _loadedPlugins.Add(manifest.Automatica.PluginGuid, manifest);
-                }
-                
-                _driverFactories.Add(driver.DriverGuid, driver);
-                _logger.LogDebug($"Init driver {driver.DriverName} {driver.DriverVersion}...");
-
-                var driverDbVersion =
-                    _dbContext.VersionInformations.SingleOrDefault(a => a.DriverGuid == driver.DriverGuid);
-                var initNodeTemplates = false;
-
-                if (driverDbVersion == null)
-                {
-                    driverDbVersion = new VersionInformation
-                    {
-                        Name = driver.DriverName,
-                        Version = driver.DriverVersion.ToString(),
-                        DriverGuid = driver.DriverGuid
-                    };
-                    initNodeTemplates = true;
-                    _dbContext.VersionInformations.Add(driverDbVersion);
-                }
-                else if (driver.DriverVersion > driverDbVersion.VersionData)
-                {
-                    initNodeTemplates = true;
-                    driverDbVersion.Name = driver.DriverName;
-                    driverDbVersion.Version = driver.DriverVersion.ToString();
-                }
-
-                _localizationProvider.LoadFromAssembly(driver.GetType().Assembly);
-                if (initNodeTemplates || driver.InDevelopmentMode)
-                {
-                    _logger.LogDebug($"InitNodeTemplates for {driver.DriverName}...");
-                    using (var db = new AutomaticaContext(_config))
-                    {
-                        driver.InitNodeTemplates(new NodeTemplateFactory(db, _config));
-                        db.SaveChanges();
-                    }
-                    _logger.LogDebug($"InitNodeTemplates for {driver.DriverName}...done");
-                }
-                else
-                {
-                    driver.InitNodeTemplates(new DoNothingNodeTemplateFactory());
-                }
-                _logger.LogDebug($"Init driver {driver.DriverName} {driver.DriverVersion}...done");
-
-                _dbContext.SaveChanges();
-
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Could not load driver {driver.DriverName} {e}", e);
-            }
-        }
-
-        private void InitRuleFactory(IRuleFactory rule)
-        {
-            try
-            {
-                var manifest = Common.Update.Plugin.GetEmbeddedPluginManifest(_logger, rule.GetType().Assembly);
-
-                if (manifest == null)
-                {
-                    throw new NoManifestFoundException();
-                }
-
-                if (!_loadedPlugins.ContainsKey(manifest.Automatica.PluginGuid))
-                {
-                    _loadedPlugins.Add(manifest.Automatica.PluginGuid, manifest);
-                }
-
-                _ruleFactories.Add(rule.RuleGuid, rule);
-                _logger.LogDebug($"Init logic {rule.RuleName} {rule.RuleVersion}...");
-
-                var driverDbVersion =
-                    _dbContext.VersionInformations.SingleOrDefault(a => a.RuleGuid == rule.RuleGuid);
-                var initNodeTemplates = false;
-
-                if (driverDbVersion == null)
-                {
-                    driverDbVersion = new VersionInformation
-                    {
-                        Name = rule.RuleName,
-                        Version = rule.RuleVersion.ToString(),
-                        RuleGuid = rule.RuleGuid
-                    };
-                    initNodeTemplates = true;
-                    _dbContext.VersionInformations.Add(driverDbVersion);
-                }
-                else if (rule.RuleVersion > driverDbVersion.VersionData)
-                {
-                    initNodeTemplates = true;
-                    driverDbVersion.Name = rule.RuleName;
-                    driverDbVersion.Version = rule.RuleVersion.ToString();
-                }
-
-                _localizationProvider.LoadFromAssembly(rule.GetType().Assembly);
-                if (initNodeTemplates || rule.InDevelopmentMode)
-                {
-                    _logger.LogDebug($"InitRuleTemplates for {rule.RuleName}...");
-                    
-                    using (var db = new AutomaticaContext(_config))
-                    {
-                        rule.InitTemplates(new RuleTemplateFactory(db, _config));
-                        db.SaveChanges();
-                    }
-                    _logger.LogDebug($"InitRuleTemplates for {rule.RuleName}...done");
-                }
-
-                _dbContext.SaveChanges(true);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Could not load Rule {rule.RuleName} {e}", e);
-            }
-        }
-
-        public Task NotifySave(NodeInstance node)
-        {
-
-            try
-            {
-                if (_driverNodesMap.ContainsKey(node.ObjId))
-                {
-                    return _driverNodesMap[node.ObjId].OnSave(node);
-
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Could not notify save {e}");
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task NotifyDeleted(NodeInstance node)
-        {
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].OnDelete(node);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task<IList<NodeInstance>> ScanBus(NodeInstance node)
-        {
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].Scan();
-            }
-
-            throw new NodeNotFoundException();
-        }
-
-        public Task<IList<NodeInstance>> CustomAction(NodeInstance node, string actionName)
-        {
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].CustomAction(actionName);
-            }
-
-            throw new NodeNotFoundException();
-        }
-
-        public Task<bool> EnableLearnMode(NodeInstance node)
-        {
-            _logger.LogDebug($"Enable learn mode for {node.Name}");
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].EnableLearnMode();
-            }
-
-            throw new NodeNotFoundException();
-        }
-
-        public Task<bool> DisableLearnMode(NodeInstance node)
-        {
-            _logger.LogDebug($"Disable learn mode for {node.Name}");
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].DisableLearnMode();
-            }
-
-            throw new NodeNotFoundException();
-        }
-
-        public Task<bool> Read(NodeInstance node)
-        {
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].Read();
-            }
-
-            throw new NodeNotFoundException();
-
-        }
-
-        public Task<IList<NodeInstance>> Import(NodeInstance node, string fileName)
-        {
-            if (_driverNodesMap.ContainsKey(node.ObjId))
-            {
-                return _driverNodesMap[node.ObjId].Import(fileName);
-            }
-            throw new NodeNotFoundException();
-        }
-
         public async Task Reinit()
         {
-            foreach(var slave in _mqttSlaves.Keys)
-            {
-                await StopInstances(slave, _mqttSlaves[slave]);
-            }
-
-            foreach (var driver in _driverNodesMap.Values)
-            {
-                await driver.OnReinit();
-            }
+            await _driverNodesStore.ReInitialize();
 
             await Stop();
 
             InitInternals();
 
             await ConfigureAndStart();
-            _logger.LogInformation("Reinit done...");
+            _logger.LogInformation("ReInit done...");
 
-        }
-
-        public object GetDataForRuleInstance(Guid id)
-        {
-            if (_ruleIdInstances.ContainsKey(id))
-            {
-                return _ruleIdInstances[id].GetDataForVisu();
-            }
-            throw new RuleNotFoundException();
-        }
-
-        public void Update()
-        {
-            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
-        }
-
-        public void ReinitAutomaticUpdate()
-        {
-            _automaticUpdate.Init();
-        }
-
-        public NodeInstanceState GetNodeInstanceState(Guid id)
-        {
-            if (_loadedNodeInstances.ContainsKey(id))
-            {
-                return _loadedNodeInstances[id].State;
-            }
-            return NodeInstanceState.Unknown;
-        }
-
-        public IList<PluginManifest> GetLoadedPlugins()
-        {
-            return _loadedPlugins.Values.ToList();
-        }
-
-        public void LoadPlugin(EF.Models.Plugin plugin)
-        {
-            lock (_cloudApi)
-            {
-                if (plugin.PluginType == PluginType.Driver)
-                {
-                    var factories = DriverLoader.LoadSingle(_logger, plugin, _dbContext);
-
-                    foreach (var factory in factories)
-                    {
-                        InitDriverFactory(factory);
-                    }
-                }
-                else if (plugin.PluginType == PluginType.Logic)
-                {
-                    var factories = RuleLoader.LoadSingle(_logger, plugin, _dbContext);
-
-                    foreach (var factory in factories)
-                    {
-                        InitRuleFactory(factory);
-                    }
-                }
-            }
         }
 
         public void Restart()

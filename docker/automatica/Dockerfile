@@ -11,7 +11,7 @@ RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
 
-FROM node:8.11.2-alpine as node
+FROM node:12-alpine as node
 WORKDIR /src
 
 ARG FONTAWESOME_TOKEN
