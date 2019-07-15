@@ -47,6 +47,8 @@ function remote()
 {
     git remote add $1 $2 || true
 }
+
+remote automatica.core git@github.com:automatica-core/automatica.core.git
 remote automatica.core.slave git@github.com:automatica-core/automatica.core.slave.git
 remote automatica.supervisor git@github.com:automatica-core/automatica.supervisor.git
 remote automatica.core.plugin.standalone git@github.com:automatica-core/automatica.core.plugin.standalone.git
@@ -78,6 +80,7 @@ remote automatica.logic.surveillance git@github.com:automatica-core/automatica.l
 remote automatica.logic.time git@github.com:automatica-core/automatica.logic.time.git
 
 # core repos
+split src/automatica.core automatica.core
 split src/automatica.core.slave automatica.core.slave
 split src/automatica.supervisor automatica.supervisor
 split src/automatica.core.plugin.standalone automatica.core.plugin.standalone
