@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -22,8 +22,8 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-    <PackageReference Include="MQTTnet" Version="3.0.0" />
-    <PackageReference Include="MQTTnet.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="MQTTnet" Version="3.0.5" />
+    <PackageReference Include="MQTTnet.AspNetCore" Version="3.0.5" />
     <PackageReference Include="PureWebSockets" Version="2.4.4" />
     <PackageReference Include="SerialPortStream" Version="2.2.0" />
     <PackageReference Include="Serilog" Version="2.8.0" />
