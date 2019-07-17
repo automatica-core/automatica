@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -7,10 +7,11 @@
     <ProjectGuid>A07B806E-69D6-452D-BB29-7ED80501C39F</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Connections" Version="1.1.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.1.0" />
-    <PackageReference Include="MQTTnet" Version="3.0.0" />
-    <PackageReference Include="MQTTnet.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="MQTTnet" Version="3.0.6-beta1" />
+    <PackageReference Include="MQTTnet.AspNetCore" Version="3.0.6-beta1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
