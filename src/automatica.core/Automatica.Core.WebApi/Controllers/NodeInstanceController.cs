@@ -70,10 +70,10 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<NodeInstance> Get()
         {
-            SystemLogger.Instance.LogTrace($"Begin NodeInstance load...");
+            SystemLogger.Instance.LogDebug($"Begin NodeInstance load...");
             var items = _nodeInstanceCache.All();
 
-            SystemLogger.Instance.LogTrace($"Begin NodeInstance load...done");
+            SystemLogger.Instance.LogDebug($"Begin NodeInstance load...done");
 
             return items;
         }
@@ -159,28 +159,28 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<NodeInstance>> Save([FromBody]List<NodeInstance> nodeInstances)
         {
-            SystemLogger.Instance.LogTrace($"Begin NodeInstance save...");
+            SystemLogger.Instance.LogDebug($"Begin NodeInstance save...");
             var transaction = DbContext.Database.BeginTransaction();
             try
             {
-                SystemLogger.Instance.LogTrace("Start checking node instances...");
+                SystemLogger.Instance.LogDebug("Start checking node instances...");
                 var dbEntries = DbContext.NodeInstances.AsNoTracking();
                 foreach (var node in nodeInstances)
                 {
                     node.This2ParentNodeInstance = null; //set root parent always to null -> if we are a slave server the parentid could be set
                     var state = await SetNodeInstanceState(node, null, dbEntries.ToDictionary(a => a.ObjId, a => a));
-                    SystemLogger.Instance.LogTrace($"NodeInstance State Added Nodes {state.AddedNodeInstances.Count}, UpdatedNodes {state.UpdatedNodeInstances.Count}. AddedProperties: {state.AddedPropertyInstances.Count}, UpdatedProperties: {state.UpdatedPropertyInstances.Count}");
-                    SystemLogger.Instance.LogTrace("Start add/updating entites...done");
+                    SystemLogger.Instance.LogDebug($"NodeInstance State Added Nodes {state.AddedNodeInstances.Count}, UpdatedNodes {state.UpdatedNodeInstances.Count}. AddedProperties: {state.AddedPropertyInstances.Count}, UpdatedProperties: {state.UpdatedPropertyInstances.Count}");
+                    SystemLogger.Instance.LogDebug("Start add/updating entities...done");
                     DbContext.NodeInstances.AddRange(state.AddedNodeInstances);
                     DbContext.NodeInstances.UpdateRange(state.UpdatedNodeInstances);
                     DbContext.PropertyInstances.AddRange(state.AddedPropertyInstances);
                     DbContext.PropertyInstances.UpdateRange(state.UpdatedPropertyInstances);
 
-                    SystemLogger.Instance.LogTrace("Start add/updating entites...done");
+                    SystemLogger.Instance.LogDebug("Start add/updating entities...done");
 
                 }
-                SystemLogger.Instance.LogTrace("Start checking node instances...done");
-                SystemLogger.Instance.LogTrace("Start checking deleted items...");
+                SystemLogger.Instance.LogDebug("Start checking node instances...done");
+                SystemLogger.Instance.LogDebug("Start checking deleted items...");
 
                 var flatList = nodeInstances.Flatten(a => a.InverseThis2ParentNodeInstanceNavigation).ToList();
 
@@ -196,9 +196,9 @@ namespace Automatica.Core.WebApi.Controllers
                     }
                 }
 
-                SystemLogger.Instance.LogTrace($"Found {removedNodes.Count} items to delete...");
+                SystemLogger.Instance.LogDebug($"Found {removedNodes.Count} items to delete...");
                 DbContext.RemoveRange(removedNodes);
-                SystemLogger.Instance.LogTrace("Start checking deleted items...done");
+                SystemLogger.Instance.LogDebug("Start checking deleted items...done");
 
                 var settings = DbContext.Settings.SingleOrDefault(a => a.ValueKey == ServerInfo.DbConfigVersionKey);
                 if (settings != null)
@@ -208,11 +208,11 @@ namespace Automatica.Core.WebApi.Controllers
 
                     DbContext.Settings.Update(settings);
                 }
-                SystemLogger.Instance.LogTrace("Save and Commit changes");
+                SystemLogger.Instance.LogDebug("Save and Commit changes");
                 DbContext.SaveChanges();
                 transaction.Commit();
                 _nodeInstanceCache.Clear();
-                SystemLogger.Instance.LogTrace("Save and Commit changes...done");
+                SystemLogger.Instance.LogDebug("Save and Commit changes...done");
             }
             catch (Exception e)
             {
@@ -220,7 +220,7 @@ namespace Automatica.Core.WebApi.Controllers
                 SystemLogger.Instance.LogError(e, "Could not save nodeInstances", e);
             }
 
-            SystemLogger.Instance.LogTrace($"Begin NodeInstance save...done");
+            SystemLogger.Instance.LogDebug($"Begin NodeInstance save...done");
             return Get();
         }
 
