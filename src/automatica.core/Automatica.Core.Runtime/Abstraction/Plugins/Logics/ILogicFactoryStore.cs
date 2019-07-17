@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Rule;
+﻿using Automatica.Core.Base.Cache;
+using Automatica.Core.Rule;
 
 namespace Automatica.Core.Runtime.Abstraction.Plugins.Logics
 {

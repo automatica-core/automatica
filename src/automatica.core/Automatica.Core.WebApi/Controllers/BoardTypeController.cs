@@ -20,7 +20,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public BoardType Get()
         {
-            var boardType =  DbContext.BoardTypes.Include(a => a.BoardInterface).ThenInclude(b => b.This2InterfaceTypeNavigation).FirstOrDefault();
+            var boardType =  DbContext.BoardTypes.Include(a => a.BoardInterface).ThenInclude(b => b.This2InterfaceTypeNavigation).AsNoTracking().FirstOrDefault();
             return boardType;
         }
     }

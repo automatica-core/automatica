@@ -25,7 +25,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<CategoryGroup> GetTemplates()
         {
-            return DbContext.CategoryGroups;
+            return DbContext.CategoryGroups.AsNoTracking();
         }
 
         [HttpGet]

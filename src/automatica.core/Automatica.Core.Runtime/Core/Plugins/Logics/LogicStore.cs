@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;

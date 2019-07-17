@@ -23,42 +23,42 @@ namespace Automatica.Core.Runtime.Core
 
         public Task NotifySave(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _.OnSave(node));
+            return ExecuteAction(node, _ => _?.OnSave(node));
         }
 
         public Task NotifyDeleted(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _.OnDelete(node));
+            return ExecuteAction(node, _ => _?.OnDelete(node));
         }
 
         public Task<IList<NodeInstance>> ScanBus(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _.Scan());
+            return ExecuteAction(node, _ => _?.Scan());
         }
 
         public Task<IList<NodeInstance>> CustomAction(NodeInstance node, string actionName)
         {
-            return ExecuteAction(node, _ => _.CustomAction(actionName));
+            return ExecuteAction(node, _ => _?.CustomAction(actionName));
         }
 
         public Task<bool> EnableLearnMode(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _.EnableLearnMode());
+            return ExecuteAction(node, _ => _?.EnableLearnMode());
         }
 
         public Task<bool> DisableLearnMode(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _.DisableLearnMode());
+            return ExecuteAction(node, _ => _?.DisableLearnMode());
         }
 
         public Task<bool> Read(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _.Read());
+            return ExecuteAction(node, _ => _?.Read());
         }
 
         public Task<IList<NodeInstance>> Import(NodeInstance node, string fileName)
         {
-            return ExecuteAction(node, _ => _.Import(fileName));
+            return ExecuteAction(node, _ => _?.Import(fileName));
         }
 
         private Task<T> ExecuteAction<T>(NodeInstance node, Func<IDriverNode, Task<T>> action)

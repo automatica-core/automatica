@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Automatica.Core.Runtime.Abstraction.Plugins;
+using Automatica.Core.Model;
 
-namespace Automatica.Core.Runtime.Core.Plugins
+namespace Automatica.Core.Base.Cache
 {
-    internal class GuidStoreBase<T> : StoreBase<Guid, T>
+    public abstract class GuidStoreBase<T> : StoreBase<Guid, T> 
     {
 
     }
 
-    internal class StoreBase<T1, T2> : IStore<T1, T2>
+    public abstract class StoreBase<T1, T2> : IStore<T1, T2> 
     {
         private readonly IDictionary<T1, T2> _store = new ConcurrentDictionary<T1, T2>();
 
@@ -29,10 +29,14 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         public T2 Get(T1 key)
         {
-            return _store[key];
+            if (Contains(key))
+            {
+                return _store[key];
+            }
+            return default(T2);
         }
 
-        public ICollection<T2> All()
+        public virtual ICollection<T2> All()
         {
             return _store.Values;
         }

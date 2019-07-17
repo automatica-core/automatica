@@ -219,7 +219,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<RulePage> GetPages()
         {
-            return DbContext.RulePages.Include(a => a.This2RulePageTypeNavigation)
+            return DbContext.RulePages.AsNoTracking().Include(a => a.This2RulePageTypeNavigation)
                     .Include(a => a.Link).ThenInclude(a => a.This2NodeInstance2RulePageInputNavigation)
                     .Include(a => a.Link).ThenInclude(a => a.This2NodeInstance2RulePageOutputNavigation)
                     .Include(a => a.Link).ThenInclude(a => a.This2RuleInterfaceInstanceInputNavigation).ThenInclude(a => a.This2RuleInstanceNavigation)
@@ -249,7 +249,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<RuleTemplate> GetRuleTemplates()
         {
-            return DbContext.RuleTemplates
+            return DbContext.RuleTemplates.AsNoTracking()
                 .Include(a => a.RuleInterfaceTemplate).ThenInclude(b => b.This2RuleInterfaceDirectionNavigation);
         }
 

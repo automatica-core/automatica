@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Internals.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -20,7 +21,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         public IList<Setting> LoadSettings()
         {
-            var settings = DbContext.Settings.Where(a => a.IsVisible).OrderBy(a => a.Order).ToList();
+            var settings = DbContext.Settings.AsNoTracking().Where(a => a.IsVisible).OrderBy(a => a.Order).ToList();
 
 
             settings.Add(new Setting

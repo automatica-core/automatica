@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
-using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
@@ -108,6 +104,9 @@ namespace Automatica.Core.Runtime
             mqttServerOptions.DefaultEndpointOptions.ConnectionBacklog = 1000;
 
             services.AddHostedMqttServer(mqttServerOptions);
+
+            services.AddAutomaticaVisualization(configuration);
+            services.AddInternals(configuration);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<Slave> GetSlaves()
         {
-            return DbContext.Slaves;
+            return DbContext.Slaves.AsNoTracking();
         }
 
         [HttpPost]

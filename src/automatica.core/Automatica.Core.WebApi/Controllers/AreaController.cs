@@ -30,7 +30,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<AreaTemplate> GetTemplates()
         {
-            return DbContext.AreaTemplates;
+            return DbContext.AreaTemplates.AsNoTracking();
         }
 
         [HttpPost]

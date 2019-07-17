@@ -1,4 +1,5 @@
-﻿using Automatica.Core.EF.Models;
+﻿using Automatica.Core.Base.Cache;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Rule;
 

@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -36,7 +37,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var plugins = await _api.GetLatestPlugins();
             var ret = new List<PluginState>();
-            var loadedPlugins = DbContext.Plugins.Where(a => a.Loaded).ToList();
+            var loadedPlugins = DbContext.Plugins.AsNoTracking().Where(a => a.Loaded).ToList();
 
             foreach (var cloudPlugin in plugins)
             {

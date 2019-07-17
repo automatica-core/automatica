@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Automatica.Core.Runtime.Abstraction.Plugins
+namespace Automatica.Core.Base.Cache
 {
-    internal interface IStore<T1, T2>
+    public interface IStore<T1, T2>
     {
         void Add(T1 key, T2 value);
         bool Contains(T1 key);
@@ -16,7 +16,7 @@ namespace Automatica.Core.Runtime.Abstraction.Plugins
         IDictionary<T1, T2> Dictionary();
     }
 
-    internal interface IStore<T> : IStore<Guid, T>
+    public interface IStore<T> : IStore<Guid, T>
     {
       
     }

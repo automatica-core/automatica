@@ -24,7 +24,7 @@ namespace Automatica.Push.Helper
         private readonly ICoreServer _coreServer;
         private readonly IPluginLoader _pluginLoader;
         private readonly bool _restartOnUpdate;
-        private int previousState;
+        private int _previousState;
 
         public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader pluginLoader, bool restartOnUpdate = true)
         {
@@ -85,9 +85,9 @@ namespace Automatica.Push.Helper
 
         private async void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            if (previousState != e.ProgressPercentage)
+            if (_previousState != e.ProgressPercentage)
             {
-                previousState = e.ProgressPercentage;
+                _previousState = e.ProgressPercentage;
                 await _updateHub.Clients.All.SendAsync("PluginDownloadProgressChanged", new object[] { _plugin.PluginGuid, e.BytesReceived, e.TotalBytesToReceive });
                 SystemLogger.Instance.LogInformation($"Downloading plugin {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
             }

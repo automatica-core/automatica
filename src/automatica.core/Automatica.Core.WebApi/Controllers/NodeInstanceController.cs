@@ -6,10 +6,9 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.LinqExtensions;
 using Automatica.Core.Base.Templates;
-using Automatica.Core.EF.Helper;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
-using Automatica.Core.Internals.Core;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,13 +49,13 @@ namespace Automatica.Core.WebApi.Controllers
     public class NodeInstanceController : BaseController
     {
         private readonly INotifyDriver _notifyDriver;
-        private readonly INodeInstanceStateHandler _nodeInstanceStateHandler;
-        
-        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceStateHandler nodeInstanceStateHandler)
+        private readonly INodeInstanceCache _nodeInstanceCache;
+
+        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache)
             : base(db)
         {
             _notifyDriver = notifyDriver;
-            _nodeInstanceStateHandler = nodeInstanceStateHandler;
+            _nodeInstanceCache = nodeInstanceCache;
         }
 
         [HttpGet]
@@ -64,34 +63,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public NodeInstance GetSingle(Guid guid)
         {
-            var item = DbContext.NodeInstances.Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .Include(a => a.PropertyInstance)
-                .Include(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                .ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                    a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                    a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                .ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                .ThenInclude(a => a.ConstraintData)
-                .Include(a => a.This2AreaInstanceNavigation)
-                .Include(a => a.This2CategoryInstanceNavigation)
-                .Include(a => a.This2NodeTemplateNavigation).ThenInclude(b => b.This2NodeDataTypeNavigation)
-                .SingleOrDefault(a => a.ObjId == guid);
-
-            return item;
+            return _nodeInstanceCache.Get(guid);
         }
 
         [HttpGet]
@@ -99,60 +71,11 @@ namespace Automatica.Core.WebApi.Controllers
         public IEnumerable<NodeInstance> Get()
         {
             SystemLogger.Instance.LogTrace($"Begin NodeInstance load...");
-            var rootItem = DbContext.NodeInstances.First(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
-            var allItems = DbContext.NodeInstances.Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .Include(a => a.PropertyInstance)
-                .Include(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                .ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                    a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                    a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                .ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                .ThenInclude(a => a.ConstraintData)
-                .Include(a => a.This2AreaInstanceNavigation)
-                .Include(a => a.This2CategoryInstanceNavigation).ToList();
-            rootItem.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(allItems, rootItem.ObjId);
-
-            SystemLogger.Instance.LogTrace($"Begin NodeInstance load...set state");
-
-            var items = new List<NodeInstance>();
-            items.Add(rootItem);
-
-            foreach (var item in items)
-            {
-                GetNodeInstanceStateRec(item);
-            }
+            var items = _nodeInstanceCache.All();
 
             SystemLogger.Instance.LogTrace($"Begin NodeInstance load...done");
 
             return items;
-        }
-
-        private void GetNodeInstanceStateRec(NodeInstance node)
-        {
-            node.State = _nodeInstanceStateHandler.GetNodeInstanceState(node.ObjId);
-
-            if (node.InverseThis2ParentNodeInstanceNavigation != null &&
-                node.InverseThis2ParentNodeInstanceNavigation.Count > 0)
-            {
-                foreach (var child in node.InverseThis2ParentNodeInstanceNavigation)
-                {
-                    GetNodeInstanceStateRec(child);
-                }
-            }
         }
 
         private async Task<NodeStates> SetNodeInstanceState(NodeInstance node, Guid? parent, Dictionary<Guid, NodeInstance> dbEntries)
@@ -228,7 +151,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<NodeInstance> GetLinkableNodes()
         {
-            return DbContext.NodeInstances.Include(a => a.This2NodeTemplateNavigation).Where(a =>
+            return DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation).Where(a =>
                 a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceType == GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value)).Where(a => IsUserInGroup(a.This2UserGroup)).ToList();
         }
 
@@ -288,6 +211,7 @@ namespace Automatica.Core.WebApi.Controllers
                 SystemLogger.Instance.LogTrace("Save and Commit changes");
                 DbContext.SaveChanges();
                 transaction.Commit();
+                _nodeInstanceCache.Clear();
                 SystemLogger.Instance.LogTrace("Save and Commit changes...done");
             }
             catch (Exception e)

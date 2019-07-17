@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
@@ -17,14 +18,16 @@ namespace Automatica.Core.Runtime.Core.Plugins
         private readonly AutomaticaContext _dbContext;
         private readonly IDriverLoader _driverLoader;
         private readonly ILogicLoader _logicLoader;
+        private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly object _lock = new object();
 
-        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader)
+        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader, INodeTemplateCache nodeTemplateCache)
         {
             _logger = logger;
             _dbContext = dbContext;
             _driverLoader = driverLoader;
             _logicLoader = logicLoader;
+            _nodeTemplateCache = nodeTemplateCache;
         }
 
         public Task CheckAndInstallPluginUpdates()
@@ -76,7 +79,6 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         public async Task LoadPlugin(Plugin plugin)
         {
-
             if (plugin.PluginType == PluginType.Driver)
             {
                 var factories = PluginLoader.LoadSingle(_logger, plugin, _dbContext);
@@ -95,6 +97,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     await _logicLoader.Load(factory);
                 }
             }
+
+            _nodeTemplateCache.Clear();
 
         }
 

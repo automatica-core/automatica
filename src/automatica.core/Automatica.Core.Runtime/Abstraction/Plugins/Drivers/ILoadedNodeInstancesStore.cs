@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
 
