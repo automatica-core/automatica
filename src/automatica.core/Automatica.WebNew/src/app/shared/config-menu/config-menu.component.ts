@@ -344,7 +344,7 @@ export class ConfigMenuComponent implements OnInit {
     } else if (data instanceof NodeInstance) {
       const ni: NodeInstance = data as NodeInstance;
 
-      if (ni.NodeTemplate.IsDeleteable) {
+      if (ni.NodeTemplate && ni.NodeTemplate.IsDeleteable) {
         this.menuDelete.disabled = false;
         this.export.disabled = false;
       } else {
