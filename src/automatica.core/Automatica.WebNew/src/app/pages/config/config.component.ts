@@ -27,7 +27,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   nodeTemplates: NodeTemplate[];
 
-  @ViewChild("configTree", {static: false})
+  @ViewChild("configTree", { static: false })
   configTree: ConfigTreeComponent;
 
   deletedConfig: number[] = [];
@@ -47,18 +47,22 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     try {
       this.appService.isLoading = true;
 
-      this.userGroups = await this.userGroupsService.getUserGroups();
-
-      const templates = await this.configService.getNodeTemplates();
+      const [userGroups, templates, configTree, areaInstances, categoryInstances] = await Promise.all(
+        [
+          this.userGroupsService.getUserGroups(),
+          this.configService.getNodeTemplates(),
+          this.configTree.loadTree(),
+          this.areaService.getAreaInstances(),
+          this.categoryService.getCategoryInstances()
+        ])
+      this.userGroups = userGroups;
 
       this.nodeTemplates = templates;
 
-      await this.configTree.loadTree();
-
       await this.dataHub.subscribe("All");
 
-      this.areaInstances = await this.areaService.getAreaInstances();
-      this.categoryInstances = await this.categoryService.getCategoryInstances();
+      this.areaInstances = areaInstances;
+      this.categoryInstances = categoryInstances;
 
 
     } catch (error) {

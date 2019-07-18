@@ -56,7 +56,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   nodeTemplates: NodeTemplate[];
 
-  @ViewChild("configTree", {static: false})
+  @ViewChild("configTree", { static: false })
   configTree: ConfigTreeComponent;
 
   areaInstances: AreaInstance[] = [];
@@ -96,16 +96,28 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   async loadData() {
     try {
       this.appService.isLoading = true;
-      this.pages = await this.ruleEngineService.getPages();
+
+      const [pages, ruleTemplates, linkableNodes, templates, areaInstances, categoryInstances, userGroups, tree] = await Promise.all(
+        [
+          this.ruleEngineService.getPages(),
+          this.ruleEngineService.getRuleTemplates(),
+          this.configService.getLinkableNodes(),
+          this.configService.getNodeTemplates(),
+          this.areaService.getAreaInstances(),
+          this.categoryService.getCategoryInstances(),
+          this.userGroupsService.getUserGroups(),
+          this.configTree.loadTree()
+        ]);
+
+      this.pages = pages;
       this.initPages();
 
-      this.ruleTemplates = await this.ruleEngineService.getRuleTemplates();
-      this.linkableNodes = await this.configService.getLinkableNodes();
-      const templates = await this.configService.getNodeTemplates();
+      this.ruleTemplates = ruleTemplates;
+      this.linkableNodes = linkableNodes;
 
-      this.areaInstances = await this.areaService.getAreaInstances();
-      this.categoryInstances = await this.categoryService.getCategoryInstances();
-      this.userGroups = await this.userGroupsService.getUserGroups();
+      this.areaInstances = areaInstances;
+      this.categoryInstances = categoryInstances;
+      this.userGroups = userGroups;
 
       this.nodeTemplates = templates;
 
