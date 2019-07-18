@@ -192,7 +192,14 @@ namespace Automatica.Core.WebApi.Controllers
                 {
                     foreach (var removed in removedNodes)
                     {
-                        await _notifyDriver.NotifyDeleted(removed);
+                        try
+                        {
+                            await _notifyDriver.NotifyDeleted(removed);
+                        }
+                        catch (Exception e)
+                        {
+                            SystemLogger.Instance.LogError(e, "Could not call notify save");
+                        }
                     }
                 }
 
