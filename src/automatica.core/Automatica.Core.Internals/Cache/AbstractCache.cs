@@ -28,6 +28,8 @@ namespace Automatica.Core.Internals.Cache
                         Add(GetKey(item), item);
                     }
                 }
+
+                _initialized = true;
             }
             return base.All();
         }
