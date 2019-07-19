@@ -52,6 +52,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.onNodeSelect.emit(v);
   }
 
+  selectedRowKeys: any[] = [];
+
 
   popoverVisible: boolean = false;
 
@@ -60,7 +62,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Input()
   nodeTemplates: NodeTemplate[];
 
-  @ViewChild("tree", {static: false}) tree: DxTreeListComponent;
+  @ViewChild("tree", { static: false }) tree: DxTreeListComponent;
 
   @Output() onNodeSelect = new EventEmitter<ITreeNode>();
   @Output() onNodeDrag: EventEmitter<any> = new EventEmitter();
@@ -307,21 +309,36 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   selectionChanged($event) {
-    this.selectedNode = $event.selectedRowsData[0];
+    // this.selectedNode = $event.selectedRowsData[0];
+    // console.log($event);
+    // const node = this.mapList.get($event.selectedRowsData[0].ObjId)
+
+    // console.log(node);
+    // this.selectNode(node);
   }
 
+
+  onRowClicked($event) {
+    const item = this.mapList.get($event.data.ObjId);
+    this.selectNode(item);
+  }
+  
   selectNode(node: ITreeNode) {
     if (!node) {
-      this.tree.instance.selectRows([], false);
+      this.selectedRowKeys = [];
+      // this.tree.instance.selectRows([], false);
       this.selectedNode = void 0;
       return;
     }
 
     if (!this.selectedNode || this.selectedNode.Id !== node.Id) {
-      this.tree.instance.selectRows([node.Id], false);
+      // this.tree.instance.selectRows([node.Id], false);
+      this.selectedRowKeys = [node.Id];
       this.selectedNode = node;
       // this.expandedRowKeys = this.getExpandedRowKeys(node.Id, this.expandedRowKeys);
     }
+
+    this.tree.instance.repaint();
   }
 
   selectNodeById(id: any) {
@@ -577,7 +594,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     const treeNode: ITreeNode = $event.row.data;
     const model: ITreeNode = this.mapList.get(treeNode.Id);
 
-    this.selectNode(this.mapList.get(treeNode.Id));
+    this.selectNode(model);
 
     const addMenu = [];
     $event.items = [];
@@ -640,10 +657,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       this.tree.instance.refresh();
     }
-  }
-
-  onRowClicked($event) {
-
   }
 
   saveLearnNodeInstances(nodeInstance: NodeInstance, learnedNodes: LearnNodeInstance[]) {

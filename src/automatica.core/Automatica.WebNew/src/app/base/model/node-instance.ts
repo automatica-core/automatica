@@ -356,6 +356,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         if (node instanceof NodeInstance) {
             const ni: NodeInstance = node as NodeInstance;
 
+            if (!ni.NodeTemplate) {
+                return void 0;
+            }
+
             if (node.Children.length >= ni.NodeTemplate.ProvidesInterface.MaxChilds) {
                 return void 0;
             }
