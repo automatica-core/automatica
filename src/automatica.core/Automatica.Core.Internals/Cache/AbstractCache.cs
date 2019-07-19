@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Internals.Cache
 {
-    public abstract class AbstractCache<T> : GuidStoreBase<T>
+    public abstract class AbstractCache<T1, T2> : StoreBase<T1, T2>
     {
         private readonly IConfiguration _configuration;
         private bool _initialized = false;
@@ -17,7 +17,7 @@ namespace Automatica.Core.Internals.Cache
             _configuration = configuration;
         }
 
-        public override ICollection<T> All()
+        public override ICollection<T2> All()
         {
             if (!_initialized)
             {
@@ -34,13 +34,20 @@ namespace Automatica.Core.Internals.Cache
             return base.All();
         }
 
-        protected abstract IQueryable<T> GetAll(AutomaticaContext context);
-        protected abstract Guid GetKey(T obj);
+        protected abstract IQueryable<T2> GetAll(AutomaticaContext context);
+        protected abstract T1 GetKey(T2 obj);
 
         public override void Clear()
         {
             _initialized = false;
             base.Clear();
+        }
+    }
+
+    public abstract class AbstractCache<T> : AbstractCache<Guid, T>
+    {
+        protected AbstractCache(IConfiguration configuration) : base(configuration)
+        {
         }
     }
 }

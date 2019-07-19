@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using Automatica.Core.Base.Common;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Core;
-using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -12,35 +11,22 @@ namespace Automatica.Core.WebApi.Controllers
     public class SettingsController : BaseController
     {
         private readonly IAutoUpdateHandler _updateHandler;
+        private readonly ISettingsCache _settingsCache;
 
-        public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler) : base(dbContext)
+        public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler, ISettingsCache settingsCache) : base(dbContext)
         {
             _updateHandler = updateHandler;
+            this._settingsCache = settingsCache;
         }
 
         [HttpGet]
-        public IList<Setting> LoadSettings()
+        public ICollection<Setting> LoadSettings()
         {
-            var settings = DbContext.Settings.AsNoTracking().Where(a => a.IsVisible).OrderBy(a => a.Order).ToList();
-
-
-            settings.Add(new Setting
-            {
-                ValueKey = "ServerUid",
-                Order = -1,
-                Type = (long)PropertyTemplateType.Text,
-                Value = ServerInfo.ServerUid,
-                Group = "SERVER.COMMON",
-                IsReadonly = true,
-                IsVisible = true,
-                ObjId = -5000
-            });
-
-            return settings.OrderBy(a => a.Order).ToList();
+            return _settingsCache.All();
         }
 
         [HttpPost]
-        public IList<Setting> SaveSettings([FromBody]IList<Setting> settings)
+        public ICollection<Setting> SaveSettings([FromBody]IList<Setting> settings)
         {
             foreach(var s in settings)
             {
@@ -60,6 +46,7 @@ namespace Automatica.Core.WebApi.Controllers
 
             DbContext.SaveChanges();
             _updateHandler.ReInitialize();
+            _settingsCache.Clear();
 
             return LoadSettings();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
@@ -17,21 +18,26 @@ namespace Automatica.Core.WebApi.Controllers
     [Authorize(Policy = Role.AdminRole)]
     public class UserManagementController : BaseController
     {
-        public UserManagementController(AutomaticaContext dbContext) : base(dbContext)
+        private readonly IUserCache _userCache;
+        private readonly IUserGroupsCache _userGroupsCache;
+
+        public UserManagementController(AutomaticaContext dbContext, IUserCache userCache, IUserGroupsCache userGroupsCache) : base(dbContext)
         {
+            _userCache = userCache;
+            _userGroupsCache = userGroupsCache;
         }
 
 
         [HttpGet]
         [Route("usergroups")]
-        public IList<UserGroup> GetUserGroups()
+        public ICollection<UserGroup> GetUserGroups()
         {
-            return DbContext.UserGroups.Include(a => a.InverseThis2Roles).Include(a => a.InverseThis2Users).ToList();
+            return _userGroupsCache.All();
         }
 
         [HttpPost]
         [Route("usergroups")]
-        public IList<UserGroup> SaveUserGroups([FromBody]IList<UserGroup> instances)
+        public ICollection<UserGroup> SaveUserGroups([FromBody]IList<UserGroup> instances)
         {
             var transaction = DbContext.Database.BeginTransaction();
             try
@@ -70,8 +76,8 @@ namespace Automatica.Core.WebApi.Controllers
                                                where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
                                                select c;
 
-                        var emovedUserRolesList = removedUserRoles.ToList();
-                        DbContext.RemoveRange(emovedUserRolesList);
+                        var removedUserRolesList = removedUserRoles.ToList();
+                        DbContext.RemoveRange(removedUserRolesList);
                     }
                 }
 
@@ -83,6 +89,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 DbContext.SaveChanges();
                 transaction.Commit();
+                _userGroupsCache.Clear();
             }
             catch (Exception e)
             {
@@ -95,29 +102,21 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpGet]
         [Route("users")]
-        public IList<User> GetUsers()
+        public ICollection<User> GetUsers()
         {
-            var data = DbContext.Users.Include(a => a.InverseThis2Roles).Include(a => a.InverseThis2UserGroups).ToList();
-
-            data.ForEach(a =>
-            {
-                a.Password = null;
-                a.PasswordConfirm = null;
-            });
-
-            return data;
+            return _userCache.All();
         }
 
         [HttpGet]
         [Route("roles")]
         public IList<Role> GetRoles()
         {
-            return DbContext.Roles.ToList();
+            return DbContext.Roles.AsNoTracking().ToList();
         }
 
         [HttpPost]
         [Route("users")]
-        public IList<UserGroup> SaveUsers([FromBody]IList<User> users)
+        public ICollection<UserGroup> SaveUsers([FromBody]IList<User> users)
         {
             var transaction = DbContext.Database.BeginTransaction();
             try
@@ -210,6 +209,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 DbContext.SaveChanges();
                 transaction.Commit();
+                _userCache.Clear();
             }
             catch (Exception e)
             {

@@ -19,6 +19,8 @@ namespace Automatica.Core.Internals.Cache.Driver
             _nodeInstanceStateHandler = nodeInstanceStateHandler;
         }
 
+
+
         protected override IQueryable<NodeInstance> GetAll(AutomaticaContext context)
         {
             var rootItem = context.NodeInstances.AsNoTracking().First(a => a.This2ParentNodeInstance == null && !a.IsDeleted);

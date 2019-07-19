@@ -16,7 +16,7 @@ namespace Automatica.Core.Base.Cache
 
         public virtual void Add(T1 key, T2 value)
         {
-            if (!Contains(key))
+            if (!_store.ContainsKey(key))
             {
                 _store.Add(key, value);
             }
