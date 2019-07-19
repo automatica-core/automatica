@@ -66,7 +66,12 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 var driverNode = _mapper.Get(node.ObjId);
-                return action(driverNode);
+                if (driverNode != null)
+                {
+                    return action(driverNode);
+                }
+
+                return null;
             }
             catch (NodeNotFoundException)
             {
@@ -85,7 +90,10 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 var driverNode = _mapper.Get(node.ObjId);
-                return action(driverNode);
+                if (driverNode != null)
+                {
+                    return action(driverNode);
+                }
             }
             catch (NodeNotFoundException)
             {
