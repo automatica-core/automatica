@@ -322,7 +322,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     const item = this.mapList.get($event.data.ObjId);
     this.selectNode(item);
   }
-  
+
   selectNode(node: ITreeNode) {
     if (!node) {
       this.selectedRowKeys = [];

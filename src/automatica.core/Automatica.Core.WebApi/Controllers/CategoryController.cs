@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Categories;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,13 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("categories")]
     public class CategoryController : BaseController
     {
-        public CategoryController(AutomaticaContext dbContext) : base(dbContext)
+        private readonly ICategoryCache _categoryCache;
+        private readonly ICategoryGroupCache _categoryGroupCache;
+
+        public CategoryController(AutomaticaContext dbContext, ICategoryCache categoryCache, ICategoryGroupCache categoryGroupCache) : base(dbContext)
         {
+            _categoryCache = categoryCache;
+            _categoryGroupCache = categoryGroupCache;
         }
 
         [HttpGet]
@@ -25,14 +31,14 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<CategoryGroup> GetTemplates()
         {
-            return DbContext.CategoryGroups.AsNoTracking();
+            return _categoryGroupCache.All();
         }
 
         [HttpGet]
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<CategoryInstance> GetInstances()
         {
-            return DbContext.CategoryInstances.Where(a => IsUserInGroup(a.This2UserGroup));
+            return _categoryCache.All().Where(a => IsUserInGroup(a.This2UserGroup));
         }
 
         [HttpPost]
@@ -65,6 +71,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 await DbContext.SaveChangesAsync();
                 transaction.Commit();
+                _categoryCache.Clear();
             }
             catch (Exception e)
             {

@@ -39,11 +39,18 @@ export class VisualizationComponent implements OnInit {
     this.serverStateService.start();
     await this.hubService.init();
 
-    this.areas = await this.areaService.getAreaInstances();
+    const [areas, visuPages, categories] = await Promise.all(
+      [
+        this.areaService.getAreaInstances(),
+        this.visuService.getVisuPages(),
+        this.catService.getCategoryInstances()
+      ]);
 
-    this.visuPages = await this.visuService.getVisuPages();
+    this.areas = areas;
 
-    this.categories = await this.catService.getCategoryInstances();
+    this.visuPages = visuPages;
+
+    this.categories = categories;
 
 
     const menu = [];

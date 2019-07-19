@@ -21,7 +21,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
   _isDirty: boolean = false;
 
-  @ViewChild("tree", {static: false})
+  @ViewChild("tree", { static: false })
   tree: DxTreeListComponent;
 
   private mapList: Map<any, AreaInstance> = new Map<any, AreaInstance>();
@@ -113,9 +113,13 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   async loadConfig() {
     this.appService.isLoading = true;
     try {
-      this.templates = await this.areasService.getAreaTemplates();
+      const [templates, instances] = await Promise.all(
+        [
+          this.areasService.getAreaTemplates(),
+          this.areasService.getAreaInstances()
+        ]);
 
-      const instances = await this.areasService.getAreaInstances();
+      this.templates = templates;
 
       this.instances = [];
 

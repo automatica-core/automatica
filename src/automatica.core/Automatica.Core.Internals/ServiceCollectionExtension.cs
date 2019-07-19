@@ -16,6 +16,13 @@ namespace Automatica.Core.Internals
 
             services.AddSingleton<IUserCache, UserCache>();
             services.AddSingleton<IUserGroupsCache, UserGroupsCache>();
+
+
+            services.AddSingleton<ICategoryCache, CategoryCache>();
+            services.AddSingleton<ICategoryGroupCache, CategoryGroupCache>();
+
+            services.AddSingleton<IAreaCache, AreaCache>();
+            services.AddSingleton<IAreaTemplateCache, AreaTemplateCache>();
             //services.AddSingleton<IVisualizationCache, VisualizationCache>();
         }
     }

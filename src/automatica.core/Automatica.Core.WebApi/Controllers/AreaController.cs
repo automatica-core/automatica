@@ -8,6 +8,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Areas;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +22,13 @@ namespace Automatica.Core.WebApi.Controllers
 
     public class AreaController : BaseController
     {
-        public AreaController(AutomaticaContext dbContext) : base(dbContext)
+        private readonly IAreaCache _areaCache;
+        private readonly IAreaTemplateCache _areaTemplateCache;
+
+        public AreaController(AutomaticaContext dbContext, IAreaCache areaCache, IAreaTemplateCache areaTemplateCache) : base(dbContext)
         {
+            _areaCache = areaCache;
+            _areaTemplateCache = areaTemplateCache;
         }
 
         [HttpGet]
@@ -30,7 +36,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<AreaTemplate> GetTemplates()
         {
-            return DbContext.AreaTemplates.AsNoTracking();
+            return _areaTemplateCache.All();
         }
 
         [HttpPost]
@@ -162,6 +168,7 @@ namespace Automatica.Core.WebApi.Controllers
                 }
 
                 await DbContext.SaveChangesAsync();
+                _areaCache.Clear();
             }
             finally
             {
@@ -175,15 +182,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<AreaInstance> GetInstances()
         {
-            var rootItems = DbContext.AreaInstances.Where(a => a.This2Parent == null).Where(a => IsUserInGroup(a.This2UserGroup));
-            var items = new List<AreaInstance>();
-
-            foreach (var root in rootItems)
-            {
-                items.Add(RecursiveLoad(root, DbContext));
-            }
-
-            return items;
+            return _areaCache.All().Where(a => IsUserInGroup(a.This2UserGroup));
         }
 
         private async Task SaveAreaInstanceRec(AreaInstance instance)
@@ -234,6 +233,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 await DbContext.SaveChangesAsync(true);
                 transaction.Commit();
+                _areaCache.Clear();
             }
             catch (Exception e)
             {
@@ -244,30 +244,6 @@ namespace Automatica.Core.WebApi.Controllers
             return GetInstances();
         }
 
-        private static AreaInstance RecursiveLoad(AreaInstance parent, AutomaticaContext dbContext)
-        {
-            var loaded = dbContext.AreaInstances
-                .Include(a => a.InverseThis2ParentNavigation)
-                .Include(a => a.This2AreaTemplateNavigation)
-                .ThenInclude(a => a.This2AreaTypeNavigation)
-                .Include(a => a.This2AreaTemplateNavigation)
-                .ThenInclude(a => a.NeedsThis2AreaTypeNavigation)
-                .Include(a => a.This2AreaTemplateNavigation)
-                .ThenInclude(a => a.ProvidesThis2AreayTypeNavigation).SingleOrDefault(a => a.ObjId == parent.ObjId);
-
-            var newChilds = new List<AreaInstance>();
-            if (loaded == null)
-            {
-                return null;
-            }
-
-            foreach (var child in loaded.InverseThis2ParentNavigation)
-            {
-                newChilds.Add(RecursiveLoad(child, dbContext));
-            }
-
-            loaded.InverseThis2ParentNavigation = newChilds;
-            return loaded;
-        }
+       
     }
 }
