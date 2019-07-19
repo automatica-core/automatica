@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -6,7 +7,7 @@ namespace Automatica.Core.Internals.Logger
 {
     public class CoreLoggerFactory : ILoggerFactory
     {
-        private static readonly Dictionary<string, ILogger> _loggerInstances = new Dictionary<string, ILogger>();
+        private static readonly IDictionary<string, ILogger> _loggerInstances = new ConcurrentDictionary<string, ILogger>();
 
         public static ILogger GetLogger(string name)
         {

@@ -26,6 +26,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             var rootItem = context.NodeInstances.AsNoTracking().First(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
             var allItems = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
                 .Include(a => a.PropertyInstance)
+                .ThenInclude(a => a.This2PropertyTemplateNavigation)
                 .Include(a => a.This2NodeTemplateNavigation)
                 .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
                 .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
