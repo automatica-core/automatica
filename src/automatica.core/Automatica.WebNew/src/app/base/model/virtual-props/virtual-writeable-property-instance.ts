@@ -1,14 +1,12 @@
-import { PropertyInstance } from "../property-instance"
-import { PropertyTemplate, PropertyTemplateType } from "../property-template"
-import { PropertyType } from "../property-type"
-import { NodeInstance } from "../node-instance"
+import { PropertyTemplateType } from "../property-template"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
+import { INodeInstance } from "../INodeInstance";
 
 export class VirtualWriteablePropertyInstance extends VirtualPropertyInstance {
     /**
      *
      */
-    constructor(private nodeInstance: NodeInstance) {
+    constructor(private nodeInstance: INodeInstance) {
         super(nodeInstance);
 
         this.PropertyTemplate.Name = "COMMON.PROPERTY.ISWRITEABLE.NAME";

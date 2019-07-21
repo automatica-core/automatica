@@ -1,7 +1,7 @@
 import { VirtualPropertyInstance } from "../virtual-property-instance"
-import { UserGroup } from "../../user/user-group";
 import { UserGroup2Role } from "../../user/usergroup2role";
 import { PropertyTemplateType } from "../../property-template";
+import { IUserGroup } from "../../user/iuser-group";
 
 export class UserGroupToRolesProperty extends VirtualPropertyInstance {
     private _dropDownOpened: boolean;
@@ -9,7 +9,7 @@ export class UserGroupToRolesProperty extends VirtualPropertyInstance {
     private _valueIds: string[] = [];
     private _gridBoxValue: string[] = [];
 
-    constructor(private userGroup: UserGroup) {
+    constructor(private userGroup: IUserGroup) {
         super(userGroup);
 
         this.PropertyTemplate.Name = "COMMON.PROPERTY.USERGROUP2ROLE.NAME";

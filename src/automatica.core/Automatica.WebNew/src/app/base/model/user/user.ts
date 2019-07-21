@@ -7,9 +7,10 @@ import { PropertyTemplateType } from "../property-template";
 import { User2Group } from "./user2group";
 import { UserToGroupProperty } from "../virtual-props/user/user-to-groups-property";
 import { UserToRolesProperty } from "../virtual-props/user/user-to-roles-property";
+import { IUser } from "./iuser";
 
 @Model()
-export class User extends BaseModel implements IPropertyModel {
+export class User extends BaseModel implements IPropertyModel, IUser {
 
     Properties: PropertyInstance[] = [];
 

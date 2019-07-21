@@ -1,9 +1,9 @@
 import { VirtualGenericPropertyInstance } from "../virtual-generic-property-instance";
 import { PropertyTemplateType, ListExtendedPropertyTemplate, EnumExtendedPropertyTemplate } from "../../property-template";
-import { NodeInstance } from "../../node-instance";
+import { INodeInstance } from "../../INodeInstance";
 
 export class VirtualGenericTrendingPropertyInstance<T> extends VirtualGenericPropertyInstance<T> {
-    constructor(private nodeInstance: NodeInstance, name: string, order: number, model: any, get: () => T,
+    constructor(private nodeInstance: INodeInstance, name: string, order: number, model: any, get: () => T,
         set: (value: T) => void, isReadOnly = false, propertyType: PropertyTemplateType = PropertyTemplateType.Text, metaData: string = void 0, category: string = "COMMON.CATEGORY.TRENDING") {
         super(name, order, model, get, set, isReadOnly, propertyType, category);
 

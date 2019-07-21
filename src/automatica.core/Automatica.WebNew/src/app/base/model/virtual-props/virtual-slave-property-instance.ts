@@ -1,12 +1,12 @@
 import { PropertyTemplateType } from "../property-template"
 import { VirtualPropertyInstance } from "./virtual-property-instance";
-import { NodeInstance } from "../node-instance";
+import { INodeInstance } from "../INodeInstance";
 
 export class VirtualSlavePropertyInstance extends VirtualPropertyInstance {
     /**
      *
      */
-    constructor(private instance: NodeInstance) {
+    constructor(private instance: INodeInstance) {
         super(instance);
 
         this.PropertyTemplate.Name = "COMMON.PROPERTY.SLAVE.NAME";

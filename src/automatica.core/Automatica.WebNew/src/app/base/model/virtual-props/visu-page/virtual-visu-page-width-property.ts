@@ -1,12 +1,10 @@
-import { PropertyInstance } from "../../property-instance"
-import { PropertyTemplate, PropertyTemplateType } from "../../property-template"
-import { PropertyType } from "../../property-type"
+import { PropertyTemplateType } from "../../property-template"
 import { VirtualPropertyInstance } from "../virtual-property-instance"
-import { VisuPage } from "../../visu-page";
+import { IVisuPage } from "../../visu";
 
 export class VirtualVisuPageWidthProperty extends VirtualPropertyInstance {
 
-    constructor(private visupage: VisuPage) {
+    constructor(private visupage: IVisuPage) {
         super(visupage);
 
         this.PropertyTemplate.Name = "COMMON.PROPERTY.WIDTH.NAME";

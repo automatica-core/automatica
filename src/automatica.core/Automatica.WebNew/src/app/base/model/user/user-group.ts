@@ -6,9 +6,10 @@ import { INameModel } from "../INameModel";
 import { UserGroup2Role } from "./usergroup2role";
 import { UserGroupToRolesProperty } from "../virtual-props/usergroup/usergroup-to-roles-property";
 import { IDescriptionModel } from "../IDescriptionModel";
+import { IUserGroup } from "./iuser-group";
 
 @Model()
-export class UserGroup extends BaseModel implements IPropertyModel, INameModel, IDescriptionModel {
+export class UserGroup extends BaseModel implements IPropertyModel, INameModel, IDescriptionModel, IUserGroup {
 
     public get DisplayDescription(): string {
         return this.Description;

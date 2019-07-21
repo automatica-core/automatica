@@ -24,6 +24,7 @@ import { NodeDataTypeEnum } from "./node-data-type";
 import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-template";
 import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
 import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
+import { INodeInstance } from "./INodeInstance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -96,7 +97,7 @@ export enum TrendingTypes {
 }
 
 @Model()
-export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel {
+export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel, INodeInstance {
 
     @JsonProperty()
     ObjId: string;
