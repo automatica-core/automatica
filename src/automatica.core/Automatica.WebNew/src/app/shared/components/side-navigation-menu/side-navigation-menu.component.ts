@@ -14,7 +14,7 @@ export class SideNavigationMenuComponent implements OnInit {
 
     private _menu: DxTreeViewComponent;
 
-    @ViewChild(DxTreeViewComponent, {static: false})
+    @ViewChild(DxTreeViewComponent, { static: true })
     public get menu(): DxTreeViewComponent {
         return this._menu;
     }
@@ -35,12 +35,18 @@ export class SideNavigationMenuComponent implements OnInit {
         this._items = v;
     }
 
+    _selectedItem: string;
 
     @Input()
-    set selectedItem(value: String) {
+    set selectedItem(value: string) {
         if (this.menu && this.menu.instance) {
+            this._selectedItem = value;
             this.menu.instance.selectItem(value);
+            this.setDefaultItem();
         }
+    }
+    get selectedItem(): string {
+        return this._selectedItem;
     }
 
     private _compactMode = false;
@@ -55,10 +61,11 @@ export class SideNavigationMenuComponent implements OnInit {
         }
     }
 
+
     constructor(private router: Router) { }
 
     ngOnInit() {
-        
+        // this.setDefaultItem();
     }
 
     setDefaultItem() {
@@ -93,7 +100,7 @@ export class SideNavigationMenuComponent implements OnInit {
         const leafNodeClass = "dx-treeview-node-is-leaf";
         const element: HTMLElement = event.element;
 
-        const rootNodes = element.querySelectorAll(`.${nodeClass}:not(.${leafNodeClass}`);
+        const rootNodes = element.querySelectorAll(`.${nodeClass}:not(.${leafNodeClass})`);
         Array.from(rootNodes).forEach(node => {
             node.classList.remove(selectedClass);
         });
@@ -106,18 +113,15 @@ export class SideNavigationMenuComponent implements OnInit {
 
             selectedNode = selectedNode.parentElement;
         }
-
-        this.setDefaultItem();
     }
 
     onItemClick(event) {
         this.selectedItemChanged.emit(event);
+        this._selectedItem = event.itemData.path;
     }
 
     onMenuInitialized(event) {
         event.component.option("deferRendering", false);
-
-        this.setDefaultItem();
     }
 }
 
