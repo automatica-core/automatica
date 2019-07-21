@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
@@ -19,6 +20,8 @@ namespace Automatica.Core.Visu.Cache
         private readonly IAreaCache _areaCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
 
+        private readonly IDictionary<long, VisuPage> _defaultPages = new ConcurrentDictionary<long, VisuPage>();
+
         public VisualizationPageCache(IConfiguration config, INodeInstanceCache nodeInstanceCache, ICategoryCache categoryCache, IAreaCache areaCache, ILogicInstanceCache logicInstanceCache) : base(config)
         {
             _nodeInstanceCache = nodeInstanceCache;
@@ -34,7 +37,20 @@ namespace Automatica.Core.Visu.Cache
             var ret = new List<VisuPage>();
             foreach (var page in pages)
             {
-                ret.Add(LoadPage(context, page.ObjId));
+                var loadedPage = LoadPage(context, page.ObjId);
+                ret.Add(loadedPage);
+
+                if (loadedPage.DefaultPage)
+                {
+                    if (!_defaultPages.ContainsKey(loadedPage.This2VisuPageType))
+                    {
+                        _defaultPages.Add(loadedPage.This2VisuPageType, loadedPage);
+                    }
+                    else
+                    {
+                        _defaultPages[loadedPage.This2VisuPageType] = loadedPage;
+                    }
+                }
             }
 
             return ret.AsQueryable();
@@ -85,6 +101,16 @@ namespace Automatica.Core.Visu.Cache
                 NodeInstances = _nodeInstanceCache.ByArea(areaInstance),
                 RuleInstances = _logicInstanceCache.ByArea(areaInstance)
             };
+        }
+
+        public VisuPage GetDefaultPage(long pageTypeId)
+        {
+            if (_defaultPages.ContainsKey(pageTypeId))
+            {
+                return _defaultPages[pageTypeId];
+            }
+
+            throw new IndexOutOfRangeException();
         }
 
         public object ByPage(Guid id)

@@ -43,14 +43,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public object LoadDefaultPage(long pageType)
         {
-            var defaultPages = _cache.PageCache.All().Where(a => a.This2VisuPageType == pageType && a.DefaultPage).Where(a => IsUserInGroup(a.This2UserGroup)).ToList();
-
-            if (defaultPages.Count > 0)
-            {
-                return GetPage(defaultPages[0].ObjId);
-            }
-
-            throw new ArgumentException("could not find a default page");
+            return _cache.PageCache.GetDefaultPage(pageType);
         }
 
         [HttpGet]
