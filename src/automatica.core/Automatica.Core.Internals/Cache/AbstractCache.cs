@@ -11,6 +11,7 @@ namespace Automatica.Core.Internals.Cache
     {
         private readonly IConfiguration _configuration;
         private bool _initialized = false;
+        private readonly object _lock = new object();
 
         protected AbstractCache(IConfiguration configuration)
         {
@@ -19,18 +20,22 @@ namespace Automatica.Core.Internals.Cache
 
         public override ICollection<T2> All()
         {
-            if (!_initialized)
+            lock (_lock)
             {
-                using (var db = new AutomaticaContext(_configuration))
+                if (!_initialized)
                 {
-                    foreach (var item in GetAll(db))
+                    using (var db = new AutomaticaContext(_configuration))
                     {
-                        Add(GetKey(item), item);
+                        foreach (var item in GetAll(db))
+                        {
+                            Add(GetKey(item), item);
+                        }
                     }
-                }
 
-                _initialized = true;
+                    _initialized = true;
+                }
             }
+
             return base.All();
         }
 
@@ -39,8 +44,11 @@ namespace Automatica.Core.Internals.Cache
 
         public override void Clear()
         {
-            _initialized = false;
-            base.Clear();
+            lock (_lock)
+            {
+                _initialized = false;
+                base.Clear();
+            }
         }
     }
 
