@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
-
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
@@ -19,11 +18,13 @@ namespace Automatica.Core.WebApi.Controllers
     public class RulesController : BaseController
     {
         private readonly IRuleDataHandler _ruleDataHandler;
+        private readonly ILogicCacheFacade _logicCacheFacade;
 
-        public RulesController(AutomaticaContext db, IRuleDataHandler ruleDataHandler)
+        public RulesController(AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade)
             : base(db)
         {
             _ruleDataHandler = ruleDataHandler;
+            _logicCacheFacade = logicCacheFacade;
         }
 
         [HttpPost]
@@ -204,6 +205,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 await DbContext.SaveChangesAsync(true);
                 transaction.Commit();
+                _logicCacheFacade.ClearInstances();
             }
             catch (Exception e)
             {
@@ -219,22 +221,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<RulePage> GetPages()
         {
-            return DbContext.RulePages.AsNoTracking().Include(a => a.This2RulePageTypeNavigation)
-                    .Include(a => a.Link).ThenInclude(a => a.This2NodeInstance2RulePageInputNavigation)
-                    .Include(a => a.Link).ThenInclude(a => a.This2NodeInstance2RulePageOutputNavigation)
-                    .Include(a => a.Link).ThenInclude(a => a.This2RuleInterfaceInstanceInputNavigation).ThenInclude(a => a.This2RuleInstanceNavigation)
-                    .Include(a => a.Link).ThenInclude(a => a.This2RuleInterfaceInstanceOutputNavigation).ThenInclude(a => a.This2RuleInstanceNavigation)
-                    .Include(a => a.NodeInstance2RulePage).ThenInclude(b => b.This2NodeInstanceNavigation)
-                    .ThenInclude(x => x.PropertyInstance)
-                    .Include(a => a.NodeInstance2RulePage).ThenInclude(b => b.This2NodeInstanceNavigation)
-                    .ThenInclude(b => b.This2NodeTemplateNavigation)
-                    .Include(a => a.RuleInstance).ThenInclude(a => a.This2RuleTemplateNavigation)
-                    .ThenInclude(a => a.RuleInterfaceTemplate)
-                    .Include(a => a.RuleInstance).ThenInclude(a => a.RuleInterfaceInstance)
-                    .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
-                    .ThenInclude(a => a.This2RuleInterfaceDirectionNavigation)
-                    .Include(a => a.RuleInstance).ThenInclude(a => a.This2AreaInstanceNavigation)
-                    .Include(a => a.RuleInstance).ThenInclude(a => a.This2CategoryInstanceNavigation);
+            return _logicCacheFacade.PageCache.All();
         }
 
         [HttpGet]
@@ -242,15 +229,15 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public RulePage GetRulePage(Guid id)
         {
-            return GetPages().FirstOrDefault(r => r.ObjId == id);
+            return _logicCacheFacade.PageCache.Get(id);
         }
+
         [HttpGet]
         [Route("templates")]
         [Authorize(Policy = Role.AdminRole)]
-        public IEnumerable<RuleTemplate> GetRuleTemplates()
+        public ICollection<RuleTemplate> GetRuleTemplates()
         {
-            return DbContext.RuleTemplates.AsNoTracking()
-                .Include(a => a.RuleInterfaceTemplate).ThenInclude(b => b.This2RuleInterfaceDirectionNavigation);
+            return _logicCacheFacade.TemplateCache.All();
         }
 
 

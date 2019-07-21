@@ -42,6 +42,17 @@ namespace Automatica.Core.Internals.Cache
         protected abstract IQueryable<T2> GetAll(AutomaticaContext context);
         protected abstract T1 GetKey(T2 obj);
 
+        protected void Initialize()
+        {
+            lock (_lock)
+            {
+                if (!_initialized)
+                {
+                    All();
+                }
+            }
+        }
+
         public override void Clear()
         {
             lock (_lock)

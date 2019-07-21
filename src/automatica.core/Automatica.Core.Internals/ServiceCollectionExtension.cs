@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Cache.Logic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +24,11 @@ namespace Automatica.Core.Internals
 
             services.AddSingleton<IAreaCache, AreaCache>();
             services.AddSingleton<IAreaTemplateCache, AreaTemplateCache>();
-            //services.AddSingleton<IVisualizationCache, VisualizationCache>();
+
+            services.AddSingleton<ILogicInstanceCache, LogicInstanceCache>();
+            services.AddSingleton<ILogicPageCache, LogicPageCache>();
+            services.AddSingleton<ILogicTemplateCache, LogicTemplateCache>();
+            services.AddSingleton<ILogicCacheFacade, LogicCacheFacade>();
         }
     }
 }

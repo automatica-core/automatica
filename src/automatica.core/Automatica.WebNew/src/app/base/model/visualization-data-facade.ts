@@ -3,7 +3,7 @@ import { RuleInstance } from "./rule-instance";
 import { NodeInstance } from "./node-instance";
 
 @Model()
-export class AutomaticVisualizationData extends BaseModel {
+export class VisualizationDataFacade extends BaseModel {
 
     private _ruleInstances: RuleInstance[] = [];
     private _nodeInstances: NodeInstance[] = [];
@@ -13,7 +13,7 @@ export class AutomaticVisualizationData extends BaseModel {
     }
 
     public typeInfo(): string {
-        return "AutomaticVisualizationData";
+        return "VisualizationDataFacade";
     }
 
     @JsonProperty()

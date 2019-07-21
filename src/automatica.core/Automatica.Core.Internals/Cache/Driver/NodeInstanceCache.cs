@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Helper;
@@ -6,7 +7,6 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Cache.Driver
 {
@@ -14,12 +14,13 @@ namespace Automatica.Core.Internals.Cache.Driver
     {
         private readonly INodeInstanceStateHandler _nodeInstanceStateHandler;
 
+        private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
+        private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
+
         public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler) : base(configuration)
         {
             _nodeInstanceStateHandler = nodeInstanceStateHandler;
         }
-
-
 
         protected override IQueryable<NodeInstance> GetAll(AutomaticaContext context)
         {
@@ -60,6 +61,29 @@ namespace Automatica.Core.Internals.Cache.Driver
                 GetNodeInstanceStateRec(item);
             }
 
+            foreach (var item in allItems)
+            {
+                if (item.This2AreaInstance.HasValue)
+                {
+                    if (!_areaCache.ContainsKey(item.This2AreaInstance.Value))
+                    {
+                        _areaCache.Add(item.This2AreaInstance.Value, new List<NodeInstance>());
+                    }
+
+                    _areaCache[item.This2AreaInstance.Value].Add(item);
+                }
+
+                if (item.This2CategoryInstance.HasValue)
+                {
+                    if (!_categoryCache.ContainsKey(item.This2CategoryInstance.Value))
+                    {
+                        _categoryCache.Add(item.This2CategoryInstance.Value, new List<NodeInstance>());
+                    }
+
+                    _categoryCache[item.This2CategoryInstance.Value].Add(item);
+                }
+            }
+
 
             return items.AsQueryable();
         }
@@ -81,6 +105,36 @@ namespace Automatica.Core.Internals.Cache.Driver
         protected override Guid GetKey(NodeInstance obj)
         {
             return obj.ObjId;
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            _areaCache.Clear();
+            _categoryCache.Clear();
+        }
+
+        public IList<NodeInstance> ByCategory(Guid category)
+        {
+            Initialize();
+
+            if (_categoryCache.ContainsKey(category))
+            {
+                return _categoryCache[category];
+            }
+            return new List<NodeInstance>();
+        }
+
+        public IList<NodeInstance> ByArea(Guid category)
+        {
+            Initialize();
+
+            if (_areaCache.ContainsKey(category))
+            {
+                return _areaCache[category];
+            }
+            return new List<NodeInstance>();
         }
     }
 }

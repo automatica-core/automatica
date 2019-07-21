@@ -24,5 +24,7 @@ namespace Automatica.Core.Visu.Cache
         {
             return obj.ObjId;
         }
+
+
     }
 }

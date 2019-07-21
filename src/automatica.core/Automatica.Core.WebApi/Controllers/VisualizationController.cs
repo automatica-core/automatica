@@ -4,7 +4,6 @@ using System.Linq;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Visualization;
-using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +12,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    public class AutomaticVisualizationData : TypedObject
-    {
-        public IList<RuleInstance> RuleInstances { get; set; }
-        public IList<NodeInstance> NodeInstances { get; set; }
-    }
-
     [Route("visualization")]
     public class VisualizationController : BaseController
     {
@@ -63,98 +56,17 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("categoryLinked/{areaInstance}")]
         [Authorize(Policy = Role.ViewerRole)]
-        public AutomaticVisualizationData GetAllByCategory(Guid categoryInstance)
+        public VisualizationDataFacade GetAllByCategory(Guid categoryInstance)
         {
-            var data = new AutomaticVisualizationData();
-            var nodeInstances = DbContext.NodeInstances.AsNoTracking()
-                     .Include(a => a.PropertyInstance)
-                     .Include(a => a.This2NodeTemplateNavigation)
-                     .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                     .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                     .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                     .ThenInclude(b => b.This2PropertyTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                         a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                         a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                     .ThenInclude(b => b.This2PropertyTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                     .ThenInclude(a => a.ConstraintData)
-                     .Include(a => a.This2AreaInstanceNavigation)
-                     .Include(a => a.This2CategoryInstanceNavigation)
-                     .Where(a => a.This2CategoryInstance == categoryInstance && a.UseInVisu).Where(a => IsUserInGroup(a.This2UserGroup));
-
-            data.NodeInstances = nodeInstances.ToList();
-
-            var ruleInstances = DbContext.RuleInstances.AsNoTracking()
-                    .Include(a => a.This2RuleTemplateNavigation)
-                    .ThenInclude(a => a.RuleInterfaceTemplate)
-                    .Include(a => a.RuleInterfaceInstance)
-                    .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
-                    .ThenInclude(a => a.This2RuleInterfaceDirectionNavigation)
-                    .Include(a => a.This2AreaInstanceNavigation)
-                    .Include(a => a.This2CategoryInstanceNavigation)
-                    .Where(a => a.This2CategoryInstance == categoryInstance && a.UseInVisu).Where(a => IsUserInGroup(a.This2UserGroup));
-
-            data.RuleInstances = ruleInstances.ToList();
-            return data;
+            return _cache.PageCache.AllByCategory(categoryInstance);
         }
 
         [HttpGet]
         [Route("areaLinked/{areaInstance}")]
         [Authorize(Policy = Role.ViewerRole)]
-        public AutomaticVisualizationData GetAllByArea(Guid areaInstance)
+        public VisualizationDataFacade GetAllByArea(Guid areaInstance)
         {
-            var data = new AutomaticVisualizationData();
-
-            var nodeInstances = DbContext.NodeInstances.AsNoTracking()
-                     .Include(a => a.PropertyInstance)
-                     .Include(a => a.This2NodeTemplateNavigation)
-                     .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                     .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                     .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                     .ThenInclude(b => b.This2PropertyTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                         a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                         a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                     .ThenInclude(b => b.This2PropertyTypeNavigation)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                     .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                     .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                     .ThenInclude(a => a.ConstraintData)
-                     .Include(a => a.This2AreaInstanceNavigation)
-                     .Include(a => a.This2CategoryInstanceNavigation)
-                     .Where(a => a.This2AreaInstance == areaInstance && a.UseInVisu).Where(a => IsUserInGroup(a.This2UserGroup));
-
-            data.NodeInstances = nodeInstances.ToList();
-
-            var ruleInstances = DbContext.RuleInstances.AsNoTracking()
-                    .Include(a => a.This2RuleTemplateNavigation)
-                    .ThenInclude(a => a.RuleInterfaceTemplate)
-                    .Include(a => a.RuleInterfaceInstance)
-                    .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
-                    .ThenInclude(a => a.This2RuleInterfaceDirectionNavigation)
-                    .Include(a => a.This2AreaInstanceNavigation)
-                    .Include(a => a.This2CategoryInstanceNavigation)
-                    .Where(a => a.This2AreaInstance == areaInstance && a.UseInVisu).Where(a => IsUserInGroup(a.This2UserGroup));
-
-            data.RuleInstances = ruleInstances.ToList();
-            return data;
+            return _cache.PageCache.AllByArea(areaInstance);
         }
 
         [HttpGet]
@@ -162,22 +74,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public object GetPage(Guid pageId)
         {
-            var isArea = DbContext.AreaInstances.AsNoTracking().SingleOrDefault(a => a.ObjId == pageId) != null;
-            if(isArea)
-            {
-                return GetAllByArea(pageId);
-            }
-
-            var isCategory = DbContext.CategoryInstances.AsNoTracking().SingleOrDefault(a => a.ObjId == pageId) != null;
-
-            if(isCategory)
-            {
-                return GetAllByCategory(pageId);
-            }
-
-            var x = _cache.PageCache.Get(pageId);
-
-            return x;
+            return _cache.PageCache.ByPage(pageId);
         }
 
 

@@ -16,8 +16,8 @@ import { BaseModel } from "src/app/base/model/base-model";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
 import { RuleInstance } from "src/app/base/model/rule-instance";
-import { AutomaticVisualizationData } from "src/app/base/model/automatic-visualization-data";
 import { NodeDataType, NodeDataTypeEnum } from "src/app/base/model/node-data-type";
+import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
 
 @Component({
   selector: "mobile-container",
@@ -105,7 +105,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
             const data = await this.visuService.getVisuPage(id);
 
-            if (data instanceof AutomaticVisualizationData) {
+            if (data instanceof VisualizationDataFacade) {
               this.page = new VisuPage();
               this.page.Height = 3;
               this.page.Width = 5;
