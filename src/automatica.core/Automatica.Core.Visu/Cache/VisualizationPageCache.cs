@@ -105,6 +105,7 @@ namespace Automatica.Core.Visu.Cache
 
         public VisuPage GetDefaultPage(long pageTypeId)
         {
+            Initialize();
             if (_defaultPages.ContainsKey(pageTypeId))
             {
                 return _defaultPages[pageTypeId];
