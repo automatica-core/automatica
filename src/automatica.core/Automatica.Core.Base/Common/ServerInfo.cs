@@ -125,16 +125,28 @@ namespace Automatica.Core.Base.Common
             return Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         }
 
-        public static string GetConfigDirectory() 
+        public static string GetBasePath()
         {
-            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+            return new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+        }
 
-            if(Directory.Exists(Path.Combine(configDir, "config")))
+        public static string GetConfigDirectory()
+        {
+            var configDir = GetBasePath();
+
+            if (Directory.Exists(Path.Combine(configDir, "config")))
             {
                 configDir = Path.Combine(configDir, "config");
             }
-            
+
             return configDir;
+        }
+
+        public static string GetLogDirectory()
+        {
+            var logDirectory = GetBasePath();
+            logDirectory = Path.Combine(logDirectory, "logs");
+            return logDirectory;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -34,18 +35,18 @@ namespace Automatica.Core.Internals.Logger
 
             var logBuild = new LoggerConfiguration();
 
-            if (!isFrameworkLog)
-            {
-                logBuild.WriteTo.RollingFile(Path.Combine("logs", $"{facility}.log"), fileSizeLimitBytes: 31457280,
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(level),
-                        flushToDiskInterval: TimeSpan.FromSeconds(30))
-                    .WriteTo.Console();
+            if (isFrameworkLog)
+            { 
+                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
+                    retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(level),
+                    flushToDiskInterval: TimeSpan.FromSeconds(30)).WriteTo.Console();
             }
             else
             {
-                logBuild.WriteTo.RollingFile(Path.Combine("framework", "logs", $"{facility}.log"), fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30)).WriteTo.Console();
+                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"), fileSizeLimitBytes: 31457280,
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(level),
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.Console();
             }
 
             switch (_level)
