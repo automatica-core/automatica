@@ -358,6 +358,13 @@ namespace Automatica.Core.Supervisor.Runtime
                         Target = "/dev",
                         Type = "bind"
                     });
+
+                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    {
+                        Source = "/tmp",
+                        Target = "/tmp",
+                        Type = "bind"
+                    });
                 }
                 var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
 
