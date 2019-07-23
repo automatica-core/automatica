@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Driver.Frames;
 
 namespace P3.Knx.Core.Driver
@@ -65,6 +66,7 @@ namespace P3.Knx.Core.Driver
         }
         public virtual void Start()
         {
+            KnxHelper.Logger.LogInformation($"Try to connect to {Host}:{Port}...");
             Connect();
 
             Sender = CreateSender();
