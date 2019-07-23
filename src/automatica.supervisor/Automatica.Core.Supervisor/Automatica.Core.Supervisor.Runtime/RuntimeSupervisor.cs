@@ -366,12 +366,9 @@ namespace Automatica.Core.Supervisor.Runtime
                         Type = "bind"
                     });
                 }
-                var networkMode = Environment.GetEnvironmentVariable($"NETWORK_MODE");
 
-                if (!String.IsNullOrEmpty(networkMode))
-                {
-                    createContainerParams.HostConfig.NetworkMode = networkMode;
-                }
+                //use networkMode host because we need to manage an unknown amount of ports
+                createContainerParams.HostConfig.NetworkMode = "host";
 
                 var response = await _dockerClient.Containers.CreateContainerAsync(createContainerParams);
 
