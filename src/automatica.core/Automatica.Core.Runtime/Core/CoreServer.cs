@@ -9,10 +9,8 @@ using System;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Localization;
-using Automatica.Core.EF.Helper;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.IO;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Runtime.CompilerServices;
@@ -27,6 +25,9 @@ using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Extensions;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Common;
+using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction;
@@ -87,6 +88,10 @@ namespace Automatica.Core.Runtime.Core
         private readonly IDriverNodesStore _driverNodesStore;
         private readonly ILogicInstancesStore _logicInstanceStore;
 
+        private readonly ISettingsCache _settingsCache;
+        private readonly INodeInstanceCache _nodeInstanceCache;
+        private readonly ILogicInstanceCache _logicInstanceCache;
+
 
         public RunState RunState
         {
@@ -137,6 +142,10 @@ namespace Automatica.Core.Runtime.Core
             _driverNodesStore = services.GetRequiredService<IDriverNodesStore>();
             _logicInstanceStore = services.GetRequiredService<ILogicInstancesStore>();
 
+            _settingsCache = services.GetRequiredService<ISettingsCache>();
+            _nodeInstanceCache = services.GetRequiredService<INodeInstanceCache>();
+            _logicInstanceCache = services.GetRequiredService<ILogicInstanceCache>();
+
             _loadedNodeInstancesStore = services.GetRequiredService<ILoadedNodeInstancesStore>();
 
             RunState = RunState.Constructed;
@@ -159,7 +168,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var settings = _dbContext.Settings.SingleOrDefault(a => a.ValueKey == ServerInfo.DbConfigVersionKey);
+            var settings = _settingsCache.All().SingleOrDefault(a => a.ValueKey == ServerInfo.DbConfigVersionKey);
 
             if (settings != null)
             {
@@ -406,7 +415,7 @@ namespace Automatica.Core.Runtime.Core
                         _logger.LogDebug($"Creating instance for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                         var factory = _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId);
-                        var config = new DriverContext(NodeInstanceHelper.RecursiveLoad(nodeInstance, _dbContext),
+                        var config = new DriverContext(nodeInstance,
                         _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
                         var driver = factory.CreateDriver(config);
 
@@ -475,16 +484,14 @@ namespace Automatica.Core.Runtime.Core
             }
             _configuredDrivers = 0;
 
-            var root = _dbContext.NodeInstances.Single(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
-
-            root.InverseThis2ParentNodeInstanceNavigation.Add(NodeInstanceHelper.RecursiveLoad(root, _dbContext));
+            
+            var root = _nodeInstanceCache.All().Single(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstancesStore.Add(root.ObjId, root);
             await ConfigureDriversRecursive(root);
 
 
-            var rules = _dbContext.RuleInstances.Include(a => a.RuleInterfaceInstance)
-                .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation).Include(a => a.This2RuleTemplateNavigation);
+            var rules = _logicInstanceCache.All();
 
             foreach (var ruleInstance in rules)
             {
@@ -492,13 +499,6 @@ namespace Automatica.Core.Runtime.Core
                 {
                     _logger.LogWarning($"Could not find RuleFactory for guid {ruleInstance.This2RuleTemplate}");
                     continue;
-                }
-
-                _dbContext.Entry(ruleInstance).Reload();
-
-                foreach (var inter in ruleInstance.RuleInterfaceInstance)
-                {
-                    _dbContext.Entry(inter).Reload();
                 }
 
                 var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
