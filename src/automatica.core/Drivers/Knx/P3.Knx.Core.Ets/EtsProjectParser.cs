@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
+using Automatica.Core.Base.Common;
 
 namespace P3.Knx.Core.Ets
 {
@@ -65,7 +66,7 @@ namespace P3.Knx.Core.Ets
             {
                 using (ZipArchive s = ZipFile.OpenRead(file))
                 {
-                    var tmpPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                    var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
                     s.ExtractToDirectory(tmpPath);
 
                     if (IsPasswordProtected(tmpPath))

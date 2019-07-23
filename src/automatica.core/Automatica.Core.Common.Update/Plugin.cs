@@ -17,7 +17,7 @@ namespace Automatica.Core.Common.Update
         {
             using (var webClient = new WebClient())
             {
-                var automaticaPluginUpdateDir = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
+                var automaticaPluginUpdateDir = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
                 if (!Directory.Exists(automaticaPluginUpdateDir))
                 {
                     Directory.CreateDirectory(automaticaPluginUpdateDir);
@@ -59,7 +59,7 @@ namespace Automatica.Core.Common.Update
         }
         public static bool CheckPluginFile(ILogger logger, string fileName, bool checkVersion)
         {
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var tempPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
             var check = CheckPluginFileInternal(logger, tempPath, fileName, checkVersion);
 
             if (Directory.Exists(tempPath))

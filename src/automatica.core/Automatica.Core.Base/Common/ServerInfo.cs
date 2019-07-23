@@ -130,6 +130,11 @@ namespace Automatica.Core.Base.Common
             return new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
         }
 
+        public static string GetTempPath()
+        {
+            return Path.GetTempPath();
+        }
+
         public static string GetConfigDirectory()
         {
             var configDir = GetBasePath();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.LinqExtensions;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Areas;
@@ -52,7 +53,7 @@ namespace Automatica.Core.WebApi.Controllers
                 return new List<AreaInstance>(); //TODO error handling
             }
             var myFile = Request.Form.Files[0];
-            var targetLocation = Path.GetTempPath();
+            var targetLocation = ServerInfo.GetTempPath();
 
             try
             {

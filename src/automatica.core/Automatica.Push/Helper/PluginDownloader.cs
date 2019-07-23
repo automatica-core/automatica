@@ -41,7 +41,7 @@ namespace Automatica.Push.Helper
         {
             using (var webClient = new WebClient())
             {
-                var automaticaPluginUpdateFile = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
+                var automaticaPluginUpdateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
 
                 try
                 {
@@ -64,7 +64,7 @@ namespace Automatica.Push.Helper
 
         private async void WebClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            var automaticaPluginUpdateFile = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
+            var automaticaPluginUpdateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
             if (e.Error == null && !e.Cancelled)
             {
                 await _updateHub.Clients.All.SendAsync("PluginFinished", new object[] { _plugin.PluginGuid });

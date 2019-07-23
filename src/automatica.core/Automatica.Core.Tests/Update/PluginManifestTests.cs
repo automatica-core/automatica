@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -14,7 +15,7 @@ namespace Automatica.Core.Tests.Update
         [Fact]
         public async Task TestManifestParsing()
         {
-            var tmpPath = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", "")));
+            var tmpPath = Directory.CreateDirectory(Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", "")));
             var tmpFile = Path.GetTempFileName();
             using (var fileStream = new StreamWriter(tmpFile))
             {
@@ -41,7 +42,7 @@ namespace Automatica.Core.Tests.Update
         [Fact]
         public async Task TestManifestParsing2()
         {
-            var tmpPath = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", "")));
+            var tmpPath = Directory.CreateDirectory(Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", "")));
             var tmpFile = Path.GetTempFileName();
             using (var fileStream = new StreamWriter(tmpFile))
             {
@@ -82,7 +83,7 @@ namespace Automatica.Core.Tests.Update
         [Fact]
         public async Task TestManifestParsingAndChecking()
         {
-            var tmpPath = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", "")));
+            var tmpPath = Directory.CreateDirectory(Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", "")));
             var tmpFile = Path.GetTempFileName();
             using (var fileStream = new StreamWriter(tmpFile))
             {

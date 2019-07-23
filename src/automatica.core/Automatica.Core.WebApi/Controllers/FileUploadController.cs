@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             // full path to file in temp location
             var myFile = Request.Form.Files[0];
-            var targetLocation = Path.GetTempPath();
+            var targetLocation = ServerInfo.GetTempPath();
 
             try
             {

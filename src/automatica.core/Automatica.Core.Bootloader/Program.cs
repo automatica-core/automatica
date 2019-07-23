@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.Bootloader
 {
@@ -16,7 +17,7 @@ namespace Automatica.Core.Bootloader
                 var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
 
                 var appName = Path.Combine(fi.DirectoryName, "..", "automatica", "Automatica.Core.Watchdog");
-                var tmpPath = Path.Combine(Path.GetTempPath(), $"Automatica.Core.Update");
+                var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
 
                 if (Directory.Exists(tmpPath))
                 {
@@ -73,7 +74,7 @@ namespace Automatica.Core.Bootloader
 
                             Console.WriteLine("Starting update...");
 
-                            var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
+                            var tmpDirectory = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
 
                             Console.WriteLine("Back up current binaries...");
                             CopyDirectory(targetDir, tmpDirectory);

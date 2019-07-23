@@ -183,13 +183,13 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<bool> UpdateAlreadyDownloaded()
         {
-            var fileExists = File.Exists(Path.Combine(Path.GetTempPath(), UpdateFileName));
+            var fileExists = File.Exists(Path.Combine(ServerInfo.GetTempPath(), UpdateFileName));
             return Task.FromResult(fileExists);
         }
 
         public void DeleteUpdate()
         {
-            var updateFile = Path.Combine(Path.GetTempPath(), UpdateFileName);
+            var updateFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
 
             if(File.Exists(updateFile))
             {
@@ -201,7 +201,7 @@ namespace Automatica.Core.Internals.Cloud
         {
             var file = await DownloadFile(update.AzureUrl);
 
-            var tmpFile = Path.Combine(Path.GetTempPath(), UpdateFileName);
+            var tmpFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
             using(var stream = new FileStream(tmpFile, FileMode.OpenOrCreate))
             {
                 stream.Write(file);

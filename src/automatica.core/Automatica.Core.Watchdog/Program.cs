@@ -41,16 +41,16 @@ namespace Automatica.Core.Watchdog
             //    process.Kill();
             //}
 
-            var tmpPath = Path.Combine(Path.GetTempPath(), $"Automatica.Core.Update");
+            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
 
             if (Directory.Exists(tmpPath))
             {
                 Directory.Delete(tmpPath, true);
             }
 
-            if(File.Exists(Path.Combine(Path.GetTempPath(), ServerInfo.UpdateFileName)))
+            if(File.Exists(Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName)))
             {
-                File.Delete(Path.Combine(Path.GetTempPath(), ServerInfo.UpdateFileName));
+                File.Delete(Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName));
             }
 
             ProcessStartInfo processInfo;
@@ -93,7 +93,7 @@ namespace Automatica.Core.Watchdog
                             Directory.Delete(tmpPath, true);
                         }
 
-                        var updateFile = Path.Combine(Path.GetTempPath(), ServerInfo.UpdateFileName);
+                        var updateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName);
 
                         if (!File.Exists(updateFile))
                         {

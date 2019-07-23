@@ -32,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         public Task CheckAndInstallPluginUpdates()
         {
-            var updateDirectory = Path.Combine(Path.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
+            var updateDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
             if (!Directory.Exists(updateDirectory))
             {
                 Directory.CreateDirectory(updateDirectory);
@@ -45,7 +45,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             {
                 try
                 {
-                    var tmp = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
+                    var tmp = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
                     var manifest = Common.Update.Plugin.GetPluginManifest(_logger, f, tmp);
 
                     Directory.Delete(tmp, true);
@@ -57,9 +57,9 @@ namespace Automatica.Core.Runtime.Core.Plugins
                         continue;
                     }
 
-                    var assemblyDir = new FileInfo(GetEntryAssemblyPath()).DirectoryName;
+                    var baseDir = ServerInfo.GetBasePath();
                     var pluginType = manifest.Automatica.Type == "driver" ? ServerInfo.DriversDirectory : ServerInfo.LogicsDirectory;
-                    var pluginDir = Path.Combine(assemblyDir, pluginType);
+                    var pluginDir = Path.Combine(baseDir, pluginType);
                     var componentDir = Path.Combine(pluginDir, manifest.Automatica.ComponentName);
 
                     if (Directory.Exists(componentDir))
