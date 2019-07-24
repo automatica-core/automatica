@@ -130,12 +130,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     const that = this;
     return (dragData: NodeInstance) => {
 
-      if (dragData && dragData.NodeTemplate && dragData.NodeTemplate.ProvidesInterface) {
-        if (dragData.NodeTemplate.ProvidesInterface.Type === "00000000-0000-0000-0000-000000000001") {
-          return true;
-        }
-      }
-      return false;
+      return true;
     }
   };
 
@@ -144,15 +139,33 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     const point = this.workplace.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
 
     if ($event.dragData instanceof NodeInstance) {
-      const nodeInstance = $event.dragData;
 
-      const node = NodeInstance2RulePage.createFromNodeInstance(nodeInstance, this.page);
-      this.page.NodeInstances.push(node);
+      const nodeInstance: NodeInstance = $event.dragData;
+      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
 
-      node.X = point.getX();
-      node.Y = point.getY();
-      this.addNode(node, this.page);
+        for (const child of nodeInstance.Children) {
+          if (this.addNodeInstanceToPage(child, point)) {
+            point.y += 35;
+          }
+        }
+      } else {
+        this.addNodeInstanceToPage(nodeInstance, point);
+      }
     }
+  }
+
+  addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
+    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
+      return false;
+    }
+
+    const node = NodeInstance2RulePage.createFromNodeInstance(nodeInstance, this.page);
+    this.page.NodeInstances.push(node);
+
+    node.X = point.getX();
+    node.Y = point.getY();
+    this.addNode(node, this.page);
+    return true;
   }
 
   init(): any {
