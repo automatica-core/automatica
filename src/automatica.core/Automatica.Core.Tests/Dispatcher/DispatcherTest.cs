@@ -1,7 +1,8 @@
 ﻿using Automatica.Core.Base.IO;
-using Automatica.Core.UnitTests.Common;
 using System;
 using System.Threading.Tasks;
+using Automatica.Core.Driver;
+using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;
 using Xunit;
 
@@ -15,8 +16,8 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task WriteDirect()
         {
-            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName");
-            var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2");
+            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
+            var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2", DispatcherMock.Instance);
 
             await driverMock.WriteValue(driverMock2, true);
 
@@ -26,8 +27,8 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task WriteDispatcher()
         {
-            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName");
-            var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2");
+            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
+            var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2", DispatcherMock.Instance);
 
             await DispatcherMock.Instance.RegisterDispatch(DispatchableType.NodeInstance, driverMock.Id, (a, b) =>
             {
@@ -35,6 +36,7 @@ namespace Automatica.Core.Tests.Dispatcher
             });
 
             await DispatcherMock.Instance.DispatchValue(driverMock, true);
+            await Task.Delay(200);
 
             Assert.True(((DriverNodeMock)driverMock2.Children[0]).WriteReceived);
         }
@@ -42,7 +44,7 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TryGetValue()
         {
-            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName");
+            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
             await DispatcherMock.Instance.DispatchValue(driverMock, true);
 
             var value = DispatcherMock.Instance.GetValue(DispatchableType.NodeInstance, driverMock.Id);
@@ -55,7 +57,7 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TryGetValues()
         {
-            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName");
+            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
             await DispatcherMock.Instance.DispatchValue(driverMock, true);
 
             var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
@@ -66,8 +68,8 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestDispatcherClear()
         {
-            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName");
-            var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2");
+            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
+            var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2", DispatcherMock.Instance);
 
             await DispatcherMock.Instance.RegisterDispatch(DispatchableType.NodeInstance, DispatchableMock.Instance.Id, (a, b) =>
             {

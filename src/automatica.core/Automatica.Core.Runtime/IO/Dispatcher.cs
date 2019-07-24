@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
@@ -84,7 +85,7 @@ namespace Automatica.Core.Runtime.IO
             }
         }
 
-        public virtual async Task DispatchValue(IDispatchable self, object value)
+        private void StoreValue(IDispatchable self, object value)
         {
             lock (_lock)
             {
@@ -106,6 +107,11 @@ namespace Automatica.Core.Runtime.IO
                     NodeValues[self.Type][self.Id] = value;
                 }
             }
+        }
+
+        private async Task Dispatch(IDispatchable self, object value, Action<IDispatchable, object, Action<IDispatchable, object>> dispatchAction)
+        {
+            StoreValue(self, value);
 
             _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value}");
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
@@ -116,8 +122,14 @@ namespace Automatica.Core.Runtime.IO
                 {
                     try
                     {
+                        //if (self.HopCountExceeded())
+                        //{
+                        //    throw new LockRecursionException($"Recursion detected while dispatching ${self.Name}");
+                        //}
+                        //self.IncrementHopCount();
+                        dispatchAction.Invoke(self, value, dis);
+                        //self.ResetHopCount();
 
-                        await DispatchValueInternal(self, value, dis);
                     }
                     catch (Exception e)
                     {
@@ -126,7 +138,7 @@ namespace Automatica.Core.Runtime.IO
                     }
                 }
             }
-            else if(self.Source != DispatchableSource.Mqtt)
+            else if (self.Source != DispatchableSource.Mqtt)
             {
                 _logger.LogInformation($"Dispatch value via mqtt dispatcher");
 
@@ -141,10 +153,15 @@ namespace Automatica.Core.Runtime.IO
             }
 
             _dataHub?.Clients?.Group("All").SendAsync("dispatchValue", self.Type, self.Id, value);
-
         }
 
-        private Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
+        public virtual async Task DispatchValue(IDispatchable self, object value)
+        {
+            await Dispatch(self, value, async (a, b, c) => { await DispatchValueInternal(self, value, c); });
+        }
+
+
+        protected virtual Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
         {
             return Task.Run(() => dis(self, value));
         }

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Runtime.IO;
-using Automatica.Core.UnitTests.Common;
+using Automatica.Core.UnitTests.Base.Common;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 

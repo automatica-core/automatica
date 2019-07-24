@@ -2,73 +2,26 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.EF.Models;
-using Automatica.Core.Internals.Cache.Common;
-using Automatica.Core.Internals.Cache.Driver;
-using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Driver;
 using Automatica.Core.Rule;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
-using Automatica.Core.Runtime.Core.Plugins.Drivers;
-using Automatica.Core.Runtime.Core.Plugins.Logics;
-using Automatica.Core.Runtime.IO;
+using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;
-using Automatica.Core.UnitTests.Base.Model;
-using Automatica.Core.UnitTests.Drivers;
-using Automatica.Core.UnitTests.Rules;
 using Xunit;
 
 namespace Automatica.Core.Tests.Dispatcher
 {
-    public class RuleEngineDispatcherTests
+    public class RuleEngineDispatcherTests : BaseDispatcherTest
     {
-        private readonly ILinkCache _linkCache;
-        private readonly IDispatcher _dispatcher;
-        private readonly ILogicInstancesStore _logicInstancesStore;
-        private readonly IDriverNodesStore _driverNodesStore;
-        private readonly INodeInstanceCache _nodeInstanceCache;
-        private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
-
-        private readonly IRuleEngineDispatcher _ruleEngineDispatcher;
-
-        public RuleEngineDispatcherTests()
+    
+        public RuleEngineDispatcherTests() : base(DispatcherMock.Instance)
         {
-            _linkCache = new LinkCacheMock();
-
-            _dispatcher = DispatcherMock.Instance;
-
-            _logicInstancesStore = new LogicInstanceStore();
-            _driverNodesStore = new DriverNodeStore();
-            _nodeInstanceCache = new NodeInstanceCacheMock();
-            _logicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
-
-
-            _ruleEngineDispatcher = new RuleEngineDispatcher(_linkCache, _dispatcher, _logicInstancesStore,
-                _driverNodesStore, _nodeInstanceCache, _logicInterfaceInstanceCache);
-        }
-
-        ~RuleEngineDispatcherTests()
-        {
-            _ruleEngineDispatcher.Dispose();
-        }
-
-        private void CreateLink(Action<Link> action)
-        {
-            var link = new Link
-            {
-                ObjId = Guid.NewGuid()
-            };
-
-            action.Invoke(link);
-
-            _linkCache.Add(link.ObjId, link);
         }
 
         [Fact]
         public async Task TestNode2NodeDispatch()
         {
-            var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", _nodeInstanceCache, _driverNodesStore);
-            var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", _nodeInstanceCache, _driverNodesStore);
+            var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", Dispatcher, NodeInstanceCache, DriverNodesStore);
+            var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", Dispatcher, NodeInstanceCache, DriverNodesStore);
 
             CreateLink(a =>
             {
@@ -77,12 +30,13 @@ namespace Automatica.Core.Tests.Dispatcher
 
             });
 
-            _ruleEngineDispatcher.Load();
+            RuleEngineDispatcher.Load();
 
-            await DispatcherMock.Instance.DispatchValue(source.Children[0], true);
+            await Dispatcher.DispatchValue(source.Children[0], true);
+            await Task.Delay(200);
 
             Assert.True(((DriverNodeMock)target.Children[0]).WriteReceived);
-            var value = DispatcherMock.Instance.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
 
             Assert.IsType<bool>(value);
             Assert.True((bool)value);
@@ -91,8 +45,8 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestNode2RuleDispatch()
         {
-            var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", _nodeInstanceCache, _driverNodesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", null, _logicInterfaceInstanceCache, _logicInstancesStore);
+            var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", Dispatcher, NodeInstanceCache, DriverNodesStore);
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
 
             CreateLink(a =>
             {
@@ -100,12 +54,13 @@ namespace Automatica.Core.Tests.Dispatcher
                 a.This2NodeInstance2RulePageOutput = source.Children[0].DriverContext.NodeInstance.ObjId;
             });
 
-            _ruleEngineDispatcher.Load();
+            RuleEngineDispatcher.Load();
 
-            await DispatcherMock.Instance.DispatchValue(source.Children[0], true);
+            await Dispatcher.DispatchValue(source.Children[0], true);
+            await Task.Delay(200);
 
             Assert.True(target.WriteReceived);
-            var value = DispatcherMock.Instance.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
 
             Assert.IsType<bool>(value);
             Assert.True((bool)value);
@@ -114,8 +69,8 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2RuleDispatch()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", null, _logicInterfaceInstanceCache, _logicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", null, _logicInterfaceInstanceCache, _logicInstancesStore);
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
                 .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Output");
@@ -128,12 +83,13 @@ namespace Automatica.Core.Tests.Dispatcher
                 a.This2RuleInterfaceInstanceOutput = outputInterface.ObjId;
             });
 
-            _ruleEngineDispatcher.Load();
+            RuleEngineDispatcher.Load();
 
-            await DispatcherMock.Instance.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
+            await Dispatcher.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
+            await Task.Delay(200);
 
             Assert.True(target.WriteReceived);
-            var value = DispatcherMock.Instance.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
+            var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
 
             Assert.IsType<bool>(value);
             Assert.True((bool)value);
@@ -143,8 +99,8 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2NodeDispatch()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", null, _logicInterfaceInstanceCache, _logicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", _nodeInstanceCache, _driverNodesStore);
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", Dispatcher, NodeInstanceCache, DriverNodesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
                 .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Output");
@@ -155,15 +111,17 @@ namespace Automatica.Core.Tests.Dispatcher
                 a.This2RuleInterfaceInstanceOutput = outputInterface.ObjId;
             });
 
-            _ruleEngineDispatcher.Load();
+            RuleEngineDispatcher.Load();
 
-            await DispatcherMock.Instance.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
+            await Dispatcher.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
+            await Task.Delay(200);
 
             Assert.True(((DriverNodeMock)target.Children[0]).WriteReceived);
-            var value = DispatcherMock.Instance.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
+            var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
 
             Assert.IsType<bool>(value);
             Assert.True((bool)value);
         }
+
     }
 }

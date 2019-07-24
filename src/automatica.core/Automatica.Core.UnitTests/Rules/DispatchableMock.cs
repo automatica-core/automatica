@@ -1,7 +1,7 @@
-﻿using Automatica.Core.Base.IO;
-using System;
+﻿using System;
+using Automatica.Core.Base.IO;
 
-namespace Automatica.Core.UnitTests.Rules
+namespace Automatica.Core.UnitTests.Base.Rules
 {
     public class DispatchableMock : IDispatchable
     {

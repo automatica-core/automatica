@@ -9,11 +9,12 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.UnitTests.Base.Drivers;
+using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Drivers;
 using Automatica.Core.UnitTests.Rules;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Automatica.Core.Tests.Dispatcher
+namespace Automatica.Core.Tests.Dispatcher.Utils
 {
     public class DriverNodeMock : DriverBase
     {
@@ -26,7 +27,10 @@ namespace Automatica.Core.Tests.Dispatcher
         public override Task WriteValue(IDispatchable source, object value)
         {
             WriteReceived = true;
-            return base.WriteValue(source, value);
+
+            DispatchValue(value);
+
+            return Task.CompletedTask;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -49,14 +53,14 @@ namespace Automatica.Core.Tests.Dispatcher
     }
     internal static class DispatcherHelperUtils
     {
-        public static async Task<DriverNodeMock> CreateNodeMock(Guid guid, string name, INodeInstanceCache cache=null, IDriverNodesStore store = null)
+        public static async Task<DriverNodeMock> CreateNodeMock(Guid guid, string name, IDispatcher dispatcher, INodeInstanceCache cache=null, IDriverNodesStore store = null)
         {
-            var mockNode = new EF.Models.NodeInstance
+            var mockNode = new NodeInstance
             {
                 ObjId = Guid.NewGuid(),
                 Name = name + "Parent"
             };
-            var mockNodeChild = new EF.Models.NodeInstance
+            var mockNodeChild = new NodeInstance
             {
                 ObjId = guid,
                 Name = name
@@ -66,7 +70,7 @@ namespace Automatica.Core.Tests.Dispatcher
             cache?.Add(mockNodeChild.ObjId, mockNodeChild);
 
             mockNode.InverseThis2ParentNodeInstanceNavigation.Add(mockNodeChild);
-            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new NodeTemplateFactoryMock()));
+            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new NodeTemplateFactoryMock(), dispatcher));
 
             mock.Configure();
             await mock.Start();
@@ -79,6 +83,7 @@ namespace Automatica.Core.Tests.Dispatcher
 
         public static async Task<LogicMock> CreateLogicMock(
             string name, 
+            IDispatcher dispatcher,
             ILogicInstanceCache instanceCache, 
             ILogicInterfaceInstanceCache interfaceInstanceCache,
             ILogicInstancesStore logicInstances)
@@ -126,7 +131,7 @@ namespace Automatica.Core.Tests.Dispatcher
             ruleInstance.RuleInterfaceInstance.Add(input);
             ruleInstance.RuleInterfaceInstance.Add(output);
 
-            var mock = new LogicMock(new RuleContextMock(ruleInstance));
+            var mock = new LogicMock(new RuleContextMock(ruleInstance, dispatcher));
 
             await mock.Start();
 

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using Automatica.Core.Base.IO;
 
-namespace Automatica.Core.UnitTests.Common
+namespace Automatica.Core.UnitTests.Base.Common
 {
     public class DispatchableMock : IDispatchable
     {

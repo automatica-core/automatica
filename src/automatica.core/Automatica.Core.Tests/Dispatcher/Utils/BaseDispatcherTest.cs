@@ -1,0 +1,61 @@
+﻿using System;
+using Automatica.Core.Base.IO;
+using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Common;
+using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Core.Plugins.Drivers;
+using Automatica.Core.Runtime.Core.Plugins.Logics;
+using Automatica.Core.Runtime.IO;
+using Automatica.Core.UnitTests.Base.Model;
+
+namespace Automatica.Core.Tests.Dispatcher.Utils
+{
+    public abstract class BaseDispatcherTest
+    {
+        protected ILinkCache LinkCache { get; set; }
+        protected virtual IDispatcher Dispatcher { get; }
+        protected ILogicInstancesStore LogicInstancesStore { get; set; }
+        protected IDriverNodesStore DriverNodesStore { get; set; }
+        protected INodeInstanceCache NodeInstanceCache { get; set; }
+        protected ILogicInterfaceInstanceCache LogicInterfaceInstanceCache { get; set; }
+
+        protected IRuleEngineDispatcher RuleEngineDispatcher { get; set; }
+
+        protected BaseDispatcherTest(IDispatcher dispatcher)
+        {
+            LinkCache = new LinkCacheMock();
+
+            Dispatcher = dispatcher;
+
+            LogicInstancesStore = new LogicInstanceStore();
+            DriverNodesStore = new DriverNodeStore();
+            NodeInstanceCache = new NodeInstanceCacheMock();
+            LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
+
+
+            RuleEngineDispatcher = new RuleEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
+                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache);
+        }
+
+
+        ~BaseDispatcherTest()
+        {
+            RuleEngineDispatcher.Dispose();
+        }
+
+        protected void CreateLink(Action<Link> action)
+        {
+            var link = new Link
+            {
+                ObjId = Guid.NewGuid()
+            };
+
+            action.Invoke(link);
+
+            LinkCache.Add(link.ObjId, link);
+        }
+    }
+}
