@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Automatica.Core.EF.Helper;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;

@@ -27,7 +27,7 @@ namespace Automatica.Core.Base.Cache
             return _store.ContainsKey(key);
         }
 
-        public T2 Get(T1 key)
+        public virtual T2 Get(T1 key)
         {
             if (Contains(key))
             {

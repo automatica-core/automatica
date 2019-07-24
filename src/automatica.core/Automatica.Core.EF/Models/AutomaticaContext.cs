@@ -15,6 +15,7 @@ namespace Automatica.Core.EF.Models
 {
     public class AutomaticaContext : DbContext
     {
+        private readonly bool _extendedLogs;
         public virtual DbSet<BoardInterface> BoardInterfaces { get; set; }
         public virtual DbSet<BoardType> BoardTypes { get; set; }
         public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
@@ -73,6 +74,10 @@ namespace Automatica.Core.EF.Models
         {
             Configuration = configuration;
         }
+        public AutomaticaContext(IConfiguration configuration, bool extendedLogs) : this(configuration)
+        {
+            _extendedLogs = extendedLogs;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -117,7 +122,7 @@ namespace Automatica.Core.EF.Models
                 }
 
 
-                if (!string.IsNullOrEmpty($"DATABASE_LOGS"))
+                if (_extendedLogs || !string.IsNullOrEmpty($"DATABASE_LOGS"))
                 {
                     optionsBuilder.UseLoggerFactory(logger);
                 }

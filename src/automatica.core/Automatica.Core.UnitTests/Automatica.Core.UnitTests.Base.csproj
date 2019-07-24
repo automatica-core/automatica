@@ -14,9 +14,13 @@
     <Product>Automatica.Core</Product>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Moq" Version="4.12.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
     <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Runtime\Automatica.Core.Runtime.csproj" />
   </ItemGroup>
 </Project>

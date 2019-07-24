@@ -34,6 +34,7 @@ COPY . /src
 
 COPY --from=node /src/dist /app/automatica/wwwroot
 
+RUN dotnet test /src/
 
 RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/
 RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-arm

@@ -29,6 +29,9 @@ namespace Automatica.Core.Internals
             services.AddSingleton<ILogicPageCache, LogicPageCache>();
             services.AddSingleton<ILogicTemplateCache, LogicTemplateCache>();
             services.AddSingleton<ILogicCacheFacade, LogicCacheFacade>();
+            services.AddSingleton<ILogicInterfaceInstanceCache, LogicInterfaceInstanceCache>();
+
+            services.AddSingleton<ILinkCache, LinkCache>();
         }
     }
 }

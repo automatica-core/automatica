@@ -78,7 +78,7 @@ namespace Automatica.Core.Runtime.IO
                     {
                         var self = rnode.Key;
                         var value = rnode.Value;
-                        _dataHub?.Clients.Group(self.ToString()).SendAsync("dispatchValue", node.Key, self, value);
+                        _dataHub?.Clients?.Group(self.ToString()).SendAsync("dispatchValue", node.Key, self, value);
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace Automatica.Core.Runtime.IO
                 });
             }
 
-            _dataHub?.Clients.Group("All").SendAsync("dispatchValue", self.Type, self.Id, value);
+            _dataHub?.Clients?.Group("All").SendAsync("dispatchValue", self.Type, self.Id, value);
 
         }
 

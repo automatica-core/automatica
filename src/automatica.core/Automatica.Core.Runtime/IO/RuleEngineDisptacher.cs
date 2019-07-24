@@ -1,34 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Common;
+using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
-using Automatica.Core.Runtime.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
+
+[assembly: InternalsVisibleTo("Automatica.Core.Tests")]
 
 namespace Automatica.Core.Runtime.IO
 {
-    internal class RuleEngineDispatcher : IDisposable
+    internal class RuleEngineDispatcher : IRuleEngineDispatcher
     {
-        private readonly AutomaticaContext _dbContext;
-        private readonly CoreServer _coreServer;
+        private readonly ILinkCache _linkCache;
         private readonly IDispatcher _dispatcher;
         private readonly ILogicInstancesStore _logicInstancesStore;
         private readonly IDriverNodesStore _driverNodesStore;
+        private readonly INodeInstanceCache _nodeInstanceCache;
+        private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
         private readonly object _lock = new object();
 
-        public RuleEngineDispatcher(AutomaticaContext dbContext, CoreServer coreServer, IDispatcher dispatcher, ILogicInstancesStore logicInstancesStore, IDriverNodesStore driverNodesStore)
+        public RuleEngineDispatcher(ILinkCache linkCache, 
+            IDispatcher dispatcher, 
+            ILogicInstancesStore logicInstancesStore, 
+            IDriverNodesStore driverNodesStore,
+            INodeInstanceCache nodeInstanceCache,
+            ILogicInterfaceInstanceCache logicInterfaceInstanceCache)
         {
-            _dbContext = dbContext;
-            _coreServer = coreServer;
+            _linkCache = linkCache;
             _dispatcher = dispatcher;
             _logicInstancesStore = logicInstancesStore;
             _driverNodesStore = driverNodesStore;
+            _nodeInstanceCache = nodeInstanceCache;
+            _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -47,44 +56,40 @@ namespace Automatica.Core.Runtime.IO
             list.Add(node.Name);
             GetFullName(node, list);
             list.Reverse();
-            return list.Join("-");
+            return String.Join("-", list);
         }
 
         public bool Load()
         {
-            var data = _dbContext.Links.ToList();
+            var data = _linkCache.All();
 
             foreach (var entry in data)
             {
                 if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 node
                 {
-                    var sourceNode = _dbContext.NodeInstance2RulePages.Include(a => a.This2NodeInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2NodeInstance2RulePageOutput.Value);
+                    var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutput.Value);
+                    var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInput.Value);
 
-                    var targetNode = _dbContext.NodeInstance2RulePages.Include(a => a.This2NodeInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2NodeInstance2RulePageInput.Value);
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} && {nameof(targetNode)} is empty - invalid configuration ");
+                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
                     }
 
-                    var inputId = sourceNode.This2NodeInstance;
-                    SystemLogger.Instance.LogInformation($"Node2Node - \"{GetFullName(sourceNode.This2NodeInstanceNavigation)}\" is mapped to \"{GetFullName(targetNode.This2NodeInstanceNavigation)}\"");
-                    _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, inputId, (dispatchable, o) =>
+                    var inputId = sourceNode;
+                    SystemLogger.Instance.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
+                    _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
-                        ValueDispatched(dispatchable, o, targetNode.This2NodeInstance);
+                        ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
                 {
-                    var targetNode = _dbContext.RuleInterfaceInstances.Include(a => a.This2RuleInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2RuleInterfaceInstanceInput.Value);
+                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
+                    var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
 
-                    var sourceNode = _dbContext.RuleInterfaceInstances.Include(a => a.This2RuleInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2RuleInterfaceInstanceOutput.Value);
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} && {nameof(targetNode)} is empty - invalid configuration ");
+                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
                     }
 
                     var inputId = entry.This2RuleInterfaceInstanceOutput.Value;
@@ -96,42 +101,37 @@ namespace Automatica.Core.Runtime.IO
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
                 {
-                    var targetNode = _dbContext.RuleInterfaceInstances.Include(a => a.This2RuleInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2RuleInterfaceInstanceInput.Value);
+                    var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutput.Value);
+                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
 
-                    var sourceNode = _dbContext.NodeInstance2RulePages.Include(a => a.This2NodeInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2NodeInstance2RulePageOutput.Value);
+
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} && {nameof(targetNode)} is empty - invalid configuration ");
+                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
                     }
 
-                    var inputId = sourceNode.This2NodeInstance;
-                    SystemLogger.Instance.LogInformation($"Node2Rule - \"{GetFullName(sourceNode.This2NodeInstanceNavigation)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
-                    _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, inputId, (dispatchable, o) =>
+                    SystemLogger.Instance.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                    _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
                         ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
                     });
                 }
                 else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
                 {
+                    var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInput.Value);
+                    var sourceNode= _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
 
-                    var targetNode = _dbContext.NodeInstance2RulePages.Include(a => a.This2NodeInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2NodeInstance2RulePageInput.Value);
-
-                    var sourceNode = _dbContext.RuleInterfaceInstances.Include(a => a.This2RuleInstanceNavigation).SingleOrDefault(a =>
-                        a.ObjId == entry.This2RuleInterfaceInstanceOutput.Value);
 
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} && {nameof(targetNode)} is empty - invalid configuration ");
+                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
                     }
 
                     var inputId = entry.This2RuleInterfaceInstanceOutput.Value;
-                    SystemLogger.Instance.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode.This2NodeInstanceNavigation)}\"");
+                    SystemLogger.Instance.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
                     _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
-                        ValueDispatched(dispatchable, o, targetNode.This2NodeInstance);
+                        ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });
                 }
             }

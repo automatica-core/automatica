@@ -14,6 +14,7 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
+using Org.BouncyCastle.Crypto.Tls;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -314,6 +315,8 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
             CreateInterfaceTypes(context);
+            context.SaveChanges();
+
             AddSystemTemplates(context);
             AddRaspberryPi3Board(context);
             AddAreaData(context);
@@ -647,7 +650,9 @@ namespace Automatica.Core.Runtime.Database
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbIr.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbIr);
+                context.SaveChanges();
             }
+
             
             var usbrs485 = new NodeTemplate
             {
@@ -672,7 +677,9 @@ namespace Automatica.Core.Runtime.Database
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs485.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbrs485);
+                context.SaveChanges();
             }
+
             var usbrs232 = new NodeTemplate
             {
                 ObjId = new Guid("09d3b6b4391847e091aa5a540a7bd67f"),
@@ -695,7 +702,9 @@ namespace Automatica.Core.Runtime.Database
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs232.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbrs232);
+                context.SaveChanges();
             }
+
         }
 
         private static void AddRaspberryPi3Board(AutomaticaContext context)

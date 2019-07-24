@@ -63,7 +63,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ICloudApi _cloudApi;
         private readonly ILicenseContext _licenseContext;
         private readonly ITelegramMonitor _telegramMonitor;
-        private RuleEngineDispatcher _ruleEngineDispatcher;
+        private readonly IRuleEngineDispatcher _ruleEngineDispatcher;
         private RunState _runState;
         private readonly ILocalizationProvider _localizationProvider;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
@@ -153,6 +153,7 @@ namespace Automatica.Core.Runtime.Core
             _trendingRecorder.Add(new DatabaseTrendingRecorder(_config, _dispatcher));
             _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
 
+            _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
 
             InitInternals();
         }
@@ -163,7 +164,6 @@ namespace Automatica.Core.Runtime.Core
 
             _telegramMonitor?.Clear();
             _dbContext = new AutomaticaContext(_config);
-            _ruleEngineDispatcher = new RuleEngineDispatcher(_dbContext, this, _dispatcher, _logicInstanceStore, _driverNodesStore);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

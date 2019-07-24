@@ -89,6 +89,8 @@ namespace Automatica.Core.Runtime
 
                 services.AddSingleton<INotifyDriver, NotifyDriverHandler>();
                 services.AddSingleton<IDispatcher, Dispatcher>();
+
+                services.AddSingleton<IRuleEngineDispatcher, RuleEngineDispatcher>();
             }
 
 

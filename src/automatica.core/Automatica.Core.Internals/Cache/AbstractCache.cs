@@ -39,6 +39,13 @@ namespace Automatica.Core.Internals.Cache
             return base.All();
         }
 
+        public override T2 Get(T1 key)
+        {
+            Initialize();
+
+            return base.Get(key);
+        }
+
         protected abstract IQueryable<T2> GetAll(AutomaticaContext context);
         protected abstract T1 GetKey(T2 obj);
 
