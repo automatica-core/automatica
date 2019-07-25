@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -41,14 +42,19 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
     public class LogicMock : Rule.Rule
     {
         public bool WriteReceived { get; set; }
+        public RuleInterfaceInstance Output { get; set; }
         public LogicMock(IRuleContext ruleContext) : base(ruleContext)
         {
+            Output = ruleContext.RuleInstance.RuleInterfaceInstance.Single(a =>
+                a.This2RuleInterfaceTemplateNavigation.Name == "Output");
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
+            IDispatchable source, object value)
         {
             WriteReceived = true;
-            return base.InputValueChanged(instance, source, value);
+
+            return new List<IRuleOutputChanged>() {new RuleOutputChanged(Output, true)};
         }
     }
     internal static class DispatcherHelperUtils

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Driver;
 using Automatica.Core.Rule;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;

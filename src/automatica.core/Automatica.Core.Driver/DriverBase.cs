@@ -118,8 +118,9 @@ namespace Automatica.Core.Driver
 
                         driverNode.Configure();
 
-                        DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) => {
-                            if(source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
+                        DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
+                        {
+                            if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
                             {
                                 return;
                             }

@@ -29,6 +29,8 @@ namespace Automatica.Core.Runtime.IO
         private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>>();
         private readonly Timer _notifyTimer = new Timer();
 
+        private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>>();
+
         public Dispatcher(IHubContext<DataHub> dataHub, IMqttServer mqttServer)
         {
             _dataHub = dataHub;
@@ -106,12 +108,18 @@ namespace Automatica.Core.Runtime.IO
                     }
                     NodeValues[self.Type][self.Id] = value;
                 }
+
             }
         }
 
         private async Task Dispatch(IDispatchable self, object value, Action<IDispatchable, object, Action<IDispatchable, object>> dispatchAction)
         {
             StoreValue(self, value);
+
+            if (!_hopCounts.ContainsKey(self.Id))
+            {
+                _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, object>, int>());
+            }
 
             _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value}");
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
@@ -120,16 +128,29 @@ namespace Automatica.Core.Runtime.IO
 
                 foreach (var dis in dispatch)
                 {
+
+                    if (!_hopCounts[self.Id].ContainsKey(dis))
+                    {
+                        _hopCounts[self.Id].Add(dis, 0);
+                    }
+
                     try
                     {
-                        //if (self.HopCountExceeded())
-                        //{
-                        //    throw new LockRecursionException($"Recursion detected while dispatching ${self.Name}");
-                        //}
-                        //self.IncrementHopCount();
-                        dispatchAction.Invoke(self, value, dis);
-                        //self.ResetHopCount();
+                        if (_hopCounts[self.Id][dis] > 10)
+                        {
+                            _hopCounts.Clear();
+                            throw new DispatchLoopDetectedException(self);
+                        }
 
+                        IncrementHopCount(self, dis);
+                        dispatchAction.Invoke(self, value, dis);
+
+                        ResetHopCount(self, dis);
+                    }
+                    catch (DispatchLoopDetectedException dlde)
+                    {
+                        _logger.LogError(dlde, $"Detected a dispatch loop while dispatching {dlde.Dispatchable.Id}-{dlde.Dispatchable.Name}");
+                        throw;
                     }
                     catch (Exception e)
                     {
@@ -153,6 +174,38 @@ namespace Automatica.Core.Runtime.IO
             }
 
             _dataHub?.Clients?.Group("All").SendAsync("dispatchValue", self.Type, self.Id, value);
+        }
+
+        private void ResetHopCount(IDispatchable self, Action<IDispatchable, object> action)
+        {
+            if (!_hopCounts.ContainsKey(self.Id))
+            {
+                return;
+            }
+
+            if (!_hopCounts[self.Id].ContainsKey(action))
+            {
+                return;
+            }
+
+
+            _hopCounts[self.Id][action] = 0;
+        }
+
+        private void IncrementHopCount(IDispatchable self, Action<IDispatchable, object> action)
+        {
+            if (!_hopCounts.ContainsKey(self.Id))
+            {
+                return;
+            }
+
+            if (!_hopCounts[self.Id].ContainsKey(action))
+            {
+                return;
+            }
+
+
+            _hopCounts[self.Id][action]++;
         }
 
         public virtual async Task DispatchValue(IDispatchable self, object value)
@@ -184,6 +237,7 @@ namespace Automatica.Core.Runtime.IO
         public virtual Task ClearRegistrations()
         {
             _registrationMap.Clear();
+            _hopCounts.Clear();
             return Task.CompletedTask;
         }
     }
