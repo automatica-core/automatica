@@ -100,6 +100,7 @@ namespace Automatica.Core.EF.Models
                 {
                     loggerInstance.LogError($"No DatabaseType is set! Using sqlite database driver!");
                     useDbType = "sqlite";
+                    dbType = useDbType;
                 }
 
                 

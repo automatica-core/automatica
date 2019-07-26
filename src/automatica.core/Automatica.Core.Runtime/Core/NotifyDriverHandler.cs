@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Exceptions;
 using Microsoft.Extensions.Logging;
 
@@ -71,7 +70,7 @@ namespace Automatica.Core.Runtime.Core
                     return action(driverNode);
                 }
 
-                return null;
+                return Task.FromResult(default(T));
             }
             catch (NodeNotFoundException)
             {

@@ -51,21 +51,22 @@ namespace Automatica.Core.Runtime.RemoteNode
             return Task.FromResult(true);
         }
 
-        public Task<IList<NodeInstance>> Scan()
+        public async Task<IList<NodeInstance>> Scan()
         {
-            return null;
+            await Task.Delay(0);
+            return new List<NodeInstance>();
         }
 
-        public Task<IList<NodeInstance>> Import(string fileName)
+        public async Task<IList<NodeInstance>> Import(string fileName)
         {
-
-            return null;
+            await Task.Delay(0);
+            return new List<NodeInstance>();
         }
 
-        public Task<IList<NodeInstance>> CustomAction(string actionName)
+        public async Task<IList<NodeInstance>> CustomAction(string actionName)
         {
-
-            return null;
+            await Task.Delay(0);
+            return new List<NodeInstance>();
         }
 
         public Task WriteValue(IDispatchable source, object value)
