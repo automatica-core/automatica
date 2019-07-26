@@ -228,5 +228,15 @@ namespace Automatica.Core.Base.IO
             _hopCounts.Clear();
             return Task.CompletedTask;
         }
+
+        public Task ClearValues()
+        {
+            lock (_lock)
+            {
+                NodeValues.Clear();
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

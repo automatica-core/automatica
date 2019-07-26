@@ -16,5 +16,6 @@ namespace Automatica.Core.Base.IO
         object GetValue(DispatchableType type, Guid id);
 
         Task ClearRegistrations();
+        Task ClearValues();
     }
 }
