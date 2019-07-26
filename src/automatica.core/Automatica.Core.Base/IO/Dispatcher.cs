@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Serialization;
-using Automatica.Core.Internals;
-using Automatica.Push.Hubs;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
-using MQTTnet.Server;
 
-namespace Automatica.Core.Runtime.IO
+namespace Automatica.Core.Base.IO
 {
     public class Dispatcher : IDispatcher
     {
-        private readonly IHubContext<DataHub> _dataHub;
-        private readonly IMqttServer _mqttServer;
+        private readonly IDataBroadcast _dataBroadcast;
+        private readonly IRemoteSender _remoteSender;
         private readonly ILogger _logger;
         private readonly object _lock = new object();
 
@@ -31,12 +25,12 @@ namespace Automatica.Core.Runtime.IO
 
         private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>>();
 
-        public Dispatcher(IHubContext<DataHub> dataHub, IMqttServer mqttServer)
+        public Dispatcher(ILogger<Dispatcher> logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender)
         {
-            _dataHub = dataHub;
-            _mqttServer = mqttServer;
+            _dataBroadcast = dataBroadcast;
+            _remoteSender = remoteSender;
 
-            _logger = SystemLogger.DispatcherLogger;
+            _logger = logger;
 
             _notifyTimer.Elapsed += _notifyTimer_Elapsed;
             _notifyTimer.Interval = 1000;
@@ -67,22 +61,20 @@ namespace Automatica.Core.Runtime.IO
             return null;
         }
 
-        private void _notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void _notifyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            lock (_lock)
+            foreach (var node in NodeValues)
             {
-                foreach (var node in NodeValues)
+                if (node.Key == DispatchableType.RuleInstance)
                 {
-                    if (node.Key == DispatchableType.RuleInstance)
-                    {
-                        continue;
-                    }
-                    foreach (var rnode in node.Value)
-                    {
-                        var self = rnode.Key;
-                        var value = rnode.Value;
-                        _dataHub?.Clients?.Group(self.ToString()).SendAsync("dispatchValue", node.Key, self, value);
-                    }
+                    continue;
+                }
+
+                foreach (var rnode in node.Value)
+                {
+                    var self = rnode.Key;
+                    var value = rnode.Value;
+                    await _dataBroadcast.DispatchValue(node.Key, self, value);
                 }
             }
         }
@@ -163,17 +155,10 @@ namespace Automatica.Core.Runtime.IO
             {
                 _logger.LogInformation($"Dispatch value via mqtt dispatcher");
 
-                var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{self.Type}/{self.Id}";
-                await _mqttServer.PublishAsync(new MQTTnet.MqttApplicationMessage()
-                {
-                    Topic = topic,
-                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce,
-                    Payload = BinarySerializer.Serialize(value),
-                    Retain = true
-                });
+                await _remoteSender.DispatchValue(self, value);
             }
 
-            _dataHub?.Clients?.Group("All").SendAsync("dispatchValue", self.Type, self.Id, value);
+            await _dataBroadcast.DispatchValue(self.Type, self.Id, value);
         }
 
         private void ResetHopCount(IDispatchable self, Action<IDispatchable, object> action)

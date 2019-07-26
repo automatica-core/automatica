@@ -1,8 +1,9 @@
 ﻿using System.Threading;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Runtime.IO;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.UnitTests.Base.Common;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 using Xunit;
 
 namespace Automatica.Core.Tests
@@ -12,7 +13,7 @@ namespace Automatica.Core.Tests
         private readonly IDispatcher _dispatcher;
         public DispatcherTest()
         {
-            _dispatcher = new Runtime.IO.Dispatcher(null, null);
+            _dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object);
         }
 
         [Fact]

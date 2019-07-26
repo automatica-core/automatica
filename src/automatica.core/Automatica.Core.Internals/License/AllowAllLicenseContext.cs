@@ -23,7 +23,7 @@ namespace Automatica.Core.Internals.License
         public int MaxUsers => int.MaxValue;
         public bool DriverLicenseCountExceeded()
         {
-            return true;
+            return false;
         }
 
         public void IncrementDriverCount()

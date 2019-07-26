@@ -8,7 +8,7 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.IO;
-using Automatica.Core.UnitTests.Base.Model;
+using Automatica.Core.Tests.Model;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
 {

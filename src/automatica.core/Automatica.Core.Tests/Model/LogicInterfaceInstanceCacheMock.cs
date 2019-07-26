@@ -2,7 +2,7 @@
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Logic;
 
-namespace Automatica.Core.UnitTests.Base.Model
+namespace Automatica.Core.Tests.Model
 {
     public class LogicInterfaceInstanceCacheMock : GuidStoreBase<RuleInterfaceInstance>, ILogicInterfaceInstanceCache
     {

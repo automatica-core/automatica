@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
-using Automatica.Core.Runtime.IO;
-using Automatica.Push.Hubs;
-using Microsoft.AspNetCore.SignalR;
+﻿using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Remote;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using MQTTnet.Server;
 
 namespace Automatica.Core.UnitTests.Base.Common
 {
@@ -13,7 +9,7 @@ namespace Automatica.Core.UnitTests.Base.Common
     {
         public static DispatcherMock Instance { get; } = new DispatcherMock();
 
-        public DispatcherMock() : base(new Mock<IHubContext<DataHub>>().Object, new Mock<IMqttServer>().Object)
+        public DispatcherMock() : base(NullLogger<Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object)
         {
         }
 

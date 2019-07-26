@@ -55,6 +55,5 @@ namespace Automatica.Push.Hubs
             var dispatchable = new DispatchableInstance(DispatchableType.NodeInstance, $"Web", nodeInstance, DispatchableSource.Visualization);
             _dispatcher.DispatchValue(dispatchable, value);
         }
-
     }
 }

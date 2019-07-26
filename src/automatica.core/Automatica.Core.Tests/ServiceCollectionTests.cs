@@ -188,7 +188,7 @@ namespace Automatica.Core.Tests
             AssertImplementationType<ICoreServer, CoreServer>(moq);
 
             AssertImplementationType<INotifyDriver, NotifyDriverHandler>(moq);
-            AssertImplementationType<IDispatcher, Runtime.IO.Dispatcher>(moq);
+            AssertImplementationType<IDispatcher, Base.IO.Dispatcher>(moq);
             AssertImplementationType<IRuleEngineDispatcher, RuleEngineDispatcher>(moq);
         }
 

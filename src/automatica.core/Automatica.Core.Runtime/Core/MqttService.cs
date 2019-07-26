@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
+using Automatica.Core.Base.Serialization;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;

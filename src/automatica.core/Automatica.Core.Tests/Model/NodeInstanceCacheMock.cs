@@ -4,7 +4,7 @@ using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 
-namespace Automatica.Core.UnitTests.Base.Model
+namespace Automatica.Core.Tests.Model
 {
     public class NodeInstanceCacheMock : GuidStoreBase<NodeInstance>, INodeInstanceCache
     {

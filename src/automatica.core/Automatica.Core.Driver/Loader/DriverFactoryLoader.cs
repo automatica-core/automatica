@@ -43,7 +43,6 @@ namespace Automatica.Core.Driver.Loader
 
 
             AddDriverRecursive(driver);
-
             return Task.CompletedTask;
         }
 
@@ -59,7 +58,7 @@ namespace Automatica.Core.Driver.Loader
 
                 _licenseContract.IncrementDriverCount();
 
-                if (!_licenseContract.DriverLicenseCountExceeded())
+                if (_licenseContract.DriverLicenseCountExceeded())
                 {
                     _logger.LogError("Cannot instantiate more data-points, license exceeded");
                     return;

@@ -1,7 +1,6 @@
 ﻿using System;
-using Automatica.Core.Base.IO;
 
-namespace Automatica.Core.Runtime.IO
+namespace Automatica.Core.Base.IO
 {
     public class DispatchLoopDetectedException : Exception
     {

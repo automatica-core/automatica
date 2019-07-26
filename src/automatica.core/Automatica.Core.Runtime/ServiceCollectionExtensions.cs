@@ -1,7 +1,9 @@
 ﻿using System.Net;
+using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
@@ -23,6 +25,7 @@ using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Visu;
+using Automatica.Push.Hubs;
 using Automatica.Push.LearnMode;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +40,7 @@ namespace Automatica.Core.Runtime
         public static void AddAutomaticaCoreService(this IServiceCollection services, IConfiguration configuration, bool isElectronActive)
         {
             services.AddAutomaticaDrivers();
+            services.AddDispatcher();
 
             services.AddSingleton<ILocalizationProvider>(new LocalizationProvider(SystemLogger.Instance));
 
@@ -76,7 +80,8 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<MqttService, MqttService>();
                 services.AddSingleton<IRemoteHandler>(provider => provider.GetService<MqttService>());
                 services.AddSingleton<IRemoteServerHandler>(provider => provider.GetService<MqttService>());
-
+                services.AddSingleton<IRemoteSender, MqttPublishService>();
+                
 
                 services.AddSingleton<PluginHandler, PluginHandler>();
                 services.AddSingleton<IPluginHandler>(a => a.GetService<PluginHandler>());
@@ -92,6 +97,8 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<IDispatcher, Dispatcher>();
 
                 services.AddSingleton<IRuleEngineDispatcher, RuleEngineDispatcher>();
+
+                services.AddSingleton<IDataBroadcast, DataBroadcastService>();
             }
 
 
