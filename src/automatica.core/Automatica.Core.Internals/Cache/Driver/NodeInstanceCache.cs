@@ -50,6 +50,7 @@ namespace Automatica.Core.Internals.Cache.Driver
                 .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
                 .ThenInclude(a => a.ConstraintData)
                 .Include(a => a.This2AreaInstanceNavigation)
+                .Include(a => a.This2SlaveNavigation)
                 .Include(a => a.This2CategoryInstanceNavigation).ToList();
             rootItem.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(allItems, rootItem.ObjId);
 
