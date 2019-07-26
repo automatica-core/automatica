@@ -1,5 +1,7 @@
 ﻿    
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.EnOcean.Data.Packets;
@@ -11,10 +13,6 @@ namespace P3.Driver.EnOcean.Data.Tests
 {
     public class RorgA5DataTest : DriverFactoryTestBase<EnOceanDriverFactory>
     {
-        public RorgA5DataTest(IDispatcher dispatcher) : base(dispatcher)
-        {
-        }
-
         private RadioErp1Packet CreatePacket(string data)
         {
             var byteData = Automatica.Core.Driver.Utility.Utils.StringToByteArray(data);
@@ -54,16 +52,16 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_11_01_DataP1()
+        public async Task TestA5_11_01_DataP1()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_P1_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -72,7 +70,7 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_11_01_Data_TeachIn()
+        public void  TestA5_11_01_Data_TeachIn()
         {
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             
@@ -88,16 +86,16 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_11_01_DataP2()
+        public async Task  TestA5_11_01_DataP2()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_P2_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -105,16 +103,16 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(0, values.First().Value);
         }
         [Fact]
-        public void TestA5_11_01_DataP3()
+        public async Task  TestA5_11_01_DataP3()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_P3_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -123,16 +121,16 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_11_01_DataPM()
+        public async Task  TestA5_11_01_DataPM()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_PM_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -140,16 +138,16 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(0, values.First().Value);
         }
         [Fact]
-        public void TestA5_11_01_DataLRN()
+        public async Task  TestA5_11_01_DataLRN()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_LRNB_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -157,16 +155,16 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.False((bool)values.First().Value);
         }
         [Fact]
-        public void TestA5_11_01_DataES()
+        public async Task  TestA5_11_01_DataES()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_ES_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -175,16 +173,16 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_11_01_DataOHF()
+        public async Task  TestA5_11_01_DataOHF()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("FFA8AB00",
                 EnOceanRorgA5Data.DataFieldA5_11_04_4_OHF_Guid);
 
             var telegram = CreatePacket("55000A0701EBA500008E48FFA8AB000001FFFFFFFF560073");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -194,15 +192,15 @@ namespace P3.Driver.EnOcean.Data.Tests
 
 
         [Fact]
-        public void TestA5_02_05_TMP()
+        public async Task  TestA5_02_05_TMP()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_05_5_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000055080181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -210,15 +208,15 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(26.7, Math.Round((double)values.First().Value, 1));
         }
         [Fact]
-        public void TestA5_02_05_TMP2()
+        public async Task  TestA5_02_05_TMP2()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0185E268", EnOceanRorgA5Data.DataFieldA5_02_05_5_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000077080185E2680001FFFFFFFF44004C");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -226,15 +224,15 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(21.3, Math.Round((double)values.First().Value, 1));
         }
         [Fact]
-        public void TestA5_02_05_TMP_Min()
+        public async Task  TestA5_02_05_TMP_Min()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_05_5_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5FFFFFFFF0181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -242,15 +240,15 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(0.0, Math.Round((double)values.First().Value, 1));
         }
         [Fact]
-        public void TestA5_02_05_TMP_Max()
+        public async Task  TestA5_02_05_TMP_Max()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_05_5_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000000000181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -259,15 +257,15 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_02_20_TMP()
+        public async Task  TestA5_02_20_TMP()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_20_24_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000055080181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -276,15 +274,15 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_02_20_TMP_Min()
+        public async Task  TestA5_02_20_TMP_Min()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_20_24_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5FFFFFFFF0181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -293,15 +291,15 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_02_20_TMP_Max()
+        public async Task  TestA5_02_20_TMP_Max()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_20_24_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000000000181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -312,15 +310,15 @@ namespace P3.Driver.EnOcean.Data.Tests
 
 
         [Fact]
-        public void TestA5_02_03_TMP()
+        public async Task  TestA5_02_03_TMP()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_03_3_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000055080181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -329,15 +327,15 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_02_03_TMP_Min()
+        public async Task  TestA5_02_03_TMP_Min()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_03_3_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5FFFFFFFF0181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -346,15 +344,15 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestA5_02_03_TMP_Max()
+        public async Task  TestA5_02_03_TMP_Max()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_03_3_TMP_Guid);
 
             var telegram = CreatePacket("55000A0701EBA5000000000181B7440001FFFFFFFF2D0075");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 

@@ -20,9 +20,9 @@
     <EmbeddedResource Include="Resources\EnOcean-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.537" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.537" />
-    <PackageReference Include="Automatica.Core.EF" Version="0.9.0.537" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.EF" Version="0.9.0.540" />
     <ProjectReference Include="..\P3.Driver.EnOcean\P3.Driver.EnOcean.csproj" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
 ﻿
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.UnitTests.Common;
-using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory;
 using P3.Driver.EnOcean.DriverFactory.Driver;
@@ -53,9 +53,9 @@ namespace P3.Driver.EnOcean.Data.Tests
 
 
         [Fact]
-        public void TestRockerSwitch_R1_AO() 
+        public async Task TestRockerSwitch_R1_AO() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
@@ -64,7 +64,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -72,9 +72,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R2_AO()
+        public async Task TestRockerSwitch_R2_AO()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
@@ -83,7 +83,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -91,9 +91,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R2_TeachIn()
+        public async Task TestRockerSwitch_R2_TeachIn()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
@@ -104,9 +104,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R1_AI() 
+        public async Task TestRockerSwitch_R1_AI() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
@@ -115,7 +115,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -123,9 +123,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R2_AI() 
+        public async Task TestRockerSwitch_R2_AI() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
@@ -134,7 +134,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -144,9 +144,9 @@ namespace P3.Driver.EnOcean.Data.Tests
 
 
         [Fact]
-        public void TestRockerSwitch_R1_BO() 
+        public async Task TestRockerSwitch_R1_BO() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
@@ -155,7 +155,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -163,9 +163,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R2_BO() 
+        public async Task TestRockerSwitch_R2_BO() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
@@ -174,7 +174,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -182,9 +182,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R1_BI() 
+        public async Task TestRockerSwitch_R1_BI() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
@@ -193,7 +193,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -201,9 +201,9 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestRockerSwitch_R2_BI() 
+        public async Task TestRockerSwitch_R2_BI() 
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
@@ -212,7 +212,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal("FEF7D96E", telegram.SenderIdString);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
