@@ -49,7 +49,7 @@ namespace Automatica.Core.Runtime.Trendings
 
                 _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
             }
-            Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
+            await Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
         }
 
 

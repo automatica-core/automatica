@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Driver;
@@ -9,6 +10,8 @@ using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
+[assembly: InternalsVisibleTo("Automatica.Core.Tests")]
 
 namespace Automatica.Core.Runtime.Core.Plugins.Drivers
 {
