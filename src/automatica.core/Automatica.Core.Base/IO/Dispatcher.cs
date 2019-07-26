@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.Remote;
-using Automatica.Core.Base.Serialization;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 
+[assembly: InternalsVisibleTo("Automatica.Core.Tests")]
+[assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
+
 namespace Automatica.Core.Base.IO
 {
-    public class Dispatcher : IDispatcher
+    internal class Dispatcher : IDispatcher
     {
         private readonly IDataBroadcast _dataBroadcast;
         private readonly IRemoteSender _remoteSender;

@@ -1,11 +1,15 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System.Runtime.CompilerServices;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
+[assembly: InternalsVisibleTo("Automatica.Core.Tests")]
+
 namespace Automatica.Core.UnitTests.Base.Common
 {
-    public class DispatcherMock : Dispatcher
+
+    internal class DispatcherMock : Dispatcher
     {
         public static DispatcherMock Instance { get; } = new DispatcherMock();
 
