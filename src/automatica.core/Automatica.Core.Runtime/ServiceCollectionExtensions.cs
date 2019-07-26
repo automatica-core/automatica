@@ -3,6 +3,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Visu;
+using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.Internals;
@@ -14,6 +15,7 @@ using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core;
 using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.Core.Plugins.Drivers;
@@ -34,6 +36,8 @@ namespace Automatica.Core.Runtime
     {
         public static void AddAutomaticaCoreService(this IServiceCollection services, IConfiguration configuration, bool isElectronActive)
         {
+            services.AddAutomaticaDrivers();
+
             services.AddSingleton<ILocalizationProvider>(new LocalizationProvider(SystemLogger.Instance));
 
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
@@ -46,11 +50,8 @@ namespace Automatica.Core.Runtime
 
             if (!isElectronActive)
             {
+                services.AddSingleton<IDriverNodesStoreInternal, DriverNodesStoreInternal>();
                 services.AddSingleton<INodeInstanceStore, NodeInstanceStore>();
-                services.AddSingleton<IDriverStore, DriverStore>();
-                
-
-                services.AddSingleton<IDriverNodesStore, DriverNodeStore>();
                 services.AddSingleton<ILogicInstancesStore, LogicInstanceStore>();
 
                 services.AddSingleton<LogicStore, LogicStore>();
@@ -73,8 +74,8 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<ILogicLoader, LogicLoader>();
 
                 services.AddSingleton<MqttService, MqttService>();
-                services.AddSingleton<IMqttHandler>(provider => provider.GetService<MqttService>());
-                services.AddSingleton<IMqttServerHandler>(provider => provider.GetService<MqttService>());
+                services.AddSingleton<IRemoteHandler>(provider => provider.GetService<MqttService>());
+                services.AddSingleton<IRemoteServerHandler>(provider => provider.GetService<MqttService>());
 
 
                 services.AddSingleton<PluginHandler, PluginHandler>();

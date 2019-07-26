@@ -18,7 +18,7 @@ namespace Automatica.Core.UnitTests.Base.Rules
             Name = name;
         }
 
-        public DispatchableSource Source => DispatchableSource.Visualisation;
+        public DispatchableSource Source => DispatchableSource.Visualization;
 
         public DispatchableType Type => DispatchableType.RuleInstance;
 

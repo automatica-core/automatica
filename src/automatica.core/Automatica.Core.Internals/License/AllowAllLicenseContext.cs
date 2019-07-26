@@ -21,6 +21,16 @@ namespace Automatica.Core.Internals.License
         public bool IsLicensed => true;
         public int MaxDataPoints => int.MaxValue;
         public int MaxUsers => int.MaxValue;
+        public bool DriverLicenseCountExceeded()
+        {
+            return true;
+        }
+
+        public void IncrementDriverCount()
+        {
+            
+        }
+
         public Task<string> GetLicense()
         {
             return Task.FromResult("All Allowed");

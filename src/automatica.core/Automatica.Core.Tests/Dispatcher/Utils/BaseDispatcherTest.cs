@@ -1,12 +1,11 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
-using Automatica.Core.Runtime.Core.Plugins.Drivers;
 using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.UnitTests.Base.Model;
@@ -31,7 +30,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             Dispatcher = dispatcher;
 
             LogicInstancesStore = new LogicInstanceStore();
-            DriverNodesStore = new DriverNodeStore();
+            DriverNodesStore = new DriverNodesStore();
             NodeInstanceCache = new NodeInstanceCacheMock();
             LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
 

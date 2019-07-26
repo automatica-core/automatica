@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Mqtt;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.Driver;
+using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Core;
-using Automatica.Core.Runtime.Abstraction;
+using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Mqtt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,7 @@ using Newtonsoft.Json;
 
 namespace Automatica.Core.Runtime.Core
 {
-    internal class MqttService : IMqttHandler, IMqttServerHandler
+    internal class MqttService : IRemoteHandler, IRemoteServerHandler
     {
         private readonly ILogger _logger;
 
@@ -30,6 +31,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly IList<string> _connectedMqttClients = new List<string>();
         private readonly IMqttServer _mqttServer;
         private readonly IDispatcher _dispatcher;
+        private readonly ILearnMode _learnModeHandler;
 
         public MqttService(IServiceProvider services)
         {
@@ -41,6 +43,8 @@ namespace Automatica.Core.Runtime.Core
             _mqttServer.ApplicationMessageReceivedHandler = new ApplicationMessageHandler(this);
             _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
 
+
+            _learnModeHandler = services.GetRequiredService<ILearnMode>();
             _dispatcher = services.GetRequiredService<IDispatcher>();
         }
 
@@ -51,51 +55,84 @@ namespace Automatica.Core.Runtime.Core
             {
                 if (db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
                 {
+                    //leave for compatibility reasons
+#pragma warning disable 618
                     context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
+#pragma warning restore 618
+                    context.ReasonCode = MqttConnectReasonCode.Success;
                 }
                 else
                 {
+                    //leave for compatibility reasons
+#pragma warning disable 618
                     context.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
+#pragma warning restore 618
+
+                    context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
                 }
             }
         }
 
-        public Task MqttServerClientConnected(MqttServerClientConnectedEventArgs mqttServerClientConnectedEventArgs)
+        public Task ClientConnected(RemoteConnectedEvent connectedEvent)
         {
-            _logger.LogDebug($"Client {mqttServerClientConnectedEventArgs.ClientId} connected...");
-            _connectedMqttClients.Add(mqttServerClientConnectedEventArgs.ClientId);
+            _logger.LogDebug($"Client {connectedEvent.ClientId} connected...");
+            _connectedMqttClients.Add(connectedEvent.ClientId);
 
             return Task.CompletedTask;
         }
 
-        public async Task MqttServerClientSubscribedTopic(MqttServerClientSubscribedTopicEventArgs mqttServerClientSubscribedTopicEventArgs)
+        public async Task ClientSubscribedTopic(RemoteSubscribedEvent subscribedEvent)
         {
-            _logger.LogDebug($"Client {mqttServerClientSubscribedTopicEventArgs.ClientId} subscribed to {mqttServerClientSubscribedTopicEventArgs.TopicFilter}");
+            _logger.LogDebug($"Client {subscribedEvent.ClientId} subscribed to {subscribedEvent.Topic}");
 
-            if (MqttTopicFilterComparer.IsMatch(mqttServerClientSubscribedTopicEventArgs.TopicFilter.Topic, $"{MqttTopicConstants.CONFIG_TOPIC}/#"))
+            if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.CONFIG_TOPIC}/#"))
             {
-                if (_mqttNodes.ContainsKey(mqttServerClientSubscribedTopicEventArgs.ClientId))
+                if (_mqttNodes.ContainsKey(subscribedEvent.ClientId))
                 {
-                    await PublishConfig(mqttServerClientSubscribedTopicEventArgs.ClientId, _mqttNodes[mqttServerClientSubscribedTopicEventArgs.ClientId]);
+                    await PublishConfig(subscribedEvent.ClientId, _mqttNodes[subscribedEvent.ClientId]);
                 }
             }
-            else if (MqttTopicFilterComparer.IsMatch(mqttServerClientSubscribedTopicEventArgs.TopicFilter.Topic, $"{MqttTopicConstants.SLAVE_TOPIC}/+/actions"))
+            else if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/+/actions"))
             {
-                if (_mqttSlaves.ContainsKey(mqttServerClientSubscribedTopicEventArgs.ClientId))
+                if (_mqttSlaves.ContainsKey(subscribedEvent.ClientId))
                 {
-                    await StartInstances(mqttServerClientSubscribedTopicEventArgs.ClientId, _mqttSlaves[mqttServerClientSubscribedTopicEventArgs.ClientId]);
+                    await StartInstances(subscribedEvent.ClientId, _mqttSlaves[subscribedEvent.ClientId]);
                 }
             }
         }
 
-        public Task MqttServerApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs mqttApplicationMessageReceivedEventArgs)
+        public async Task MessageReceived(RemoteMessageEvent messageEvent)
         {
-            if (MqttTopicFilterComparer.IsMatch(mqttApplicationMessageReceivedEventArgs.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+            if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
-                _dispatcher.MqttDispatch(mqttApplicationMessageReceivedEventArgs.ApplicationMessage.Topic, mqttApplicationMessageReceivedEventArgs.ApplicationMessage.Payload);
+                _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
+            }
+            else if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic,
+                $"{RemoteTopicConstants.ACTIONS_TOPIC_START}/+/NOTIFY_LEARN_MODE"))
+            {
+                var learnModeDtoJson = messageEvent.Message;
+                var learnModeDto = JsonConvert.DeserializeObject<LearnModeDto>(learnModeDtoJson);
+
+                await _learnModeHandler.NotifyLearnNode(learnModeDto.Name, learnModeDto.Description, learnModeDto.Self,
+                    learnModeDto.Templates, learnModeDto.PropertyInstances);
+            }
+        }
+
+        public async Task SendAction(Guid client, DriverNodeRemoteAction action, object data)
+        {
+            var msg = new MqttApplicationMessage
+            {
+                Topic = $"{RemoteTopicConstants.ACTION_TOPIC_START}/{client}/{action}",
+                QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
+                Retain = true
+            };
+
+            if (data != null)
+            {
+                msg.Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
             }
 
-            return Task.CompletedTask;
+            await _mqttServer.PublishAsync(msg);
         }
 
         public Task Init()
@@ -106,14 +143,14 @@ namespace Automatica.Core.Runtime.Core
             return Task.CompletedTask;
         }
 
-        public Task AddMqttNode(string id, NodeInstance node)
+        public Task AddNode(string id, NodeInstance node)
         {
             _mqttNodes.Add(id, node);
 
             return Task.CompletedTask;
         }
 
-        public async Task AddMqttSlave(string id, IDriverFactory factory)
+        public async Task AddSlave(string id, IDriverFactory factory)
         {
             if (!_mqttSlaves.ContainsKey(id))
             {
@@ -143,7 +180,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
-                    Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTIONS_TOPIC_START}",
+                    Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTIONS_TOPIC_START}",
                     QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
                     Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequests)),
                     Retain = true
@@ -161,7 +198,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
-                    Topic = $"{MqttTopicConstants.SLAVE_TOPIC}/{clientId}/{MqttTopicConstants.ACTION_TOPIC_START}",
+                    Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTION_TOPIC_START}",
                     QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
                     Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
                     Retain = true
@@ -180,7 +217,7 @@ namespace Automatica.Core.Runtime.Core
                 _logger.LogDebug($"Publish to config/{clientId}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage()
                 {
-                    Topic = $"{MqttTopicConstants.CONFIG_TOPIC}/{clientId}",
+                    Topic = $"{RemoteTopicConstants.CONFIG_TOPIC}/{clientId}",
                     QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
                     Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
                     Retain = true

@@ -1,4 +1,4 @@
-﻿namespace Automatica.Core.Base.Mqtt
+﻿namespace Automatica.Core.Base.Remote
 {
     public enum SlaveAction
     {

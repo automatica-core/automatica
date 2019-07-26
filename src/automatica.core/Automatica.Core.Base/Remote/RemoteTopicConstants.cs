@@ -1,6 +1,6 @@
-﻿namespace Automatica.Core.Base.Mqtt
+﻿namespace Automatica.Core.Base.Remote
 {
-    public static class MqttTopicConstants
+    public static class RemoteTopicConstants
     {
         public const string CONFIG_TOPIC = "config";
         public const string SLAVE_TOPIC = "slave";
@@ -10,5 +10,7 @@
         public const string LOCALIZATIN_TOPIC = "localization";
         public const string DISPATCHER_TOPIC = "dispatcher";
         public const string NODETEMPLATES_TOPIC = "nodeTemplateFactory";
+
+        public const string NOTIFY_LEARN_MODE = "notifyLearnMode";
     }
 }

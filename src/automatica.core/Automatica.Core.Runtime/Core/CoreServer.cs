@@ -24,6 +24,7 @@ using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Extensions;
 using Automatica.Core.Driver.LeanMode;
+using Automatica.Core.Driver.Loader;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
@@ -34,7 +35,9 @@ using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
+using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Runtime.Trendings;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
@@ -72,7 +75,8 @@ namespace Automatica.Core.Runtime.Core
         private readonly IUpdateHandler _updateHandler;
         private readonly IList<ITrendingRecorder> _trendingRecorder = new List<ITrendingRecorder>();
 
-        private readonly IMqttServerHandler _mqttServerHandler;
+        private readonly IRemoteServerHandler _remoteServerHandler;
+        private readonly IRemoteHandler _remoteHandler;
 
         private readonly IPluginHandler _pluginHandler;
         private readonly IDriverFactoryStore _driverFactoryStore;
@@ -85,12 +89,13 @@ namespace Automatica.Core.Runtime.Core
         private readonly IDriverStore _driverStore;
         private readonly ILogicStore _logicStore;
         private readonly ILoadedNodeInstancesStore _loadedNodeInstancesStore;
-        private readonly IDriverNodesStore _driverNodesStore;
+        private readonly IDriverNodesStoreInternal _driverNodesStore;
         private readonly ILogicInstancesStore _logicInstanceStore;
 
         private readonly ISettingsCache _settingsCache;
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
+        private readonly IDriverFactoryLoader _driverFactoryLoader;
 
 
         public RunState RunState
@@ -124,11 +129,13 @@ namespace Automatica.Core.Runtime.Core
 
             _learnMode = services.GetRequiredService<ILearnMode>();
 
-            _mqttServerHandler = services.GetRequiredService<IMqttServerHandler>();
-            
+            _remoteServerHandler = services.GetRequiredService<IRemoteServerHandler>();
+            _remoteHandler = services.GetRequiredService<IRemoteHandler>();
+
             _pluginHandler = services.GetRequiredService<IPluginHandler>();
             _updateHandler = services.GetRequiredService<IUpdateHandler>();
 
+            _driverFactoryLoader = services.GetRequiredService<IDriverFactoryLoader>();
             _driverFactoryStore = services.GetRequiredService<IDriverFactoryStore>();
             _logicFactoryStore = services.GetRequiredService<ILogicFactoryStore>();
             _store = services.GetRequiredService<ILoadedStore>();
@@ -139,7 +146,7 @@ namespace Automatica.Core.Runtime.Core
             _driverStore = services.GetRequiredService<IDriverStore>();
             _logicStore = services.GetRequiredService<ILogicStore>();
 
-            _driverNodesStore = services.GetRequiredService<IDriverNodesStore>();
+            _driverNodesStore = services.GetRequiredService<IDriverNodesStoreInternal>();
             _logicInstanceStore = services.GetRequiredService<ILogicInstancesStore>();
 
             _settingsCache = services.GetRequiredService<ISettingsCache>();
@@ -160,7 +167,7 @@ namespace Automatica.Core.Runtime.Core
 
         private void InitInternals()
         {
-            _mqttServerHandler.Init();
+            _remoteServerHandler.Init();
 
             _telegramMonitor?.Clear();
             _dbContext = new AutomaticaContext(_config);
@@ -292,7 +299,7 @@ namespace Automatica.Core.Runtime.Core
 
         private async Task Stop()
         {
-            await _mqttServerHandler.Stop();
+            await _remoteServerHandler.Stop();
 
             foreach (var driver in _driverStore.All())
             {
@@ -397,9 +404,13 @@ namespace Automatica.Core.Runtime.Core
 
                 if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
                 {
-                   await _mqttServerHandler.AddMqttNode(nodeInstance.This2NodeTemplateNavigation.ObjId.ToString(), nodeInstance);
-                   await _mqttServerHandler.AddMqttSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId));
+                   await _remoteServerHandler.AddNode(nodeInstance.This2NodeTemplateNavigation.ObjId.ToString(), nodeInstance);
+                   await _remoteServerHandler.AddSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId));
 
+
+                   _driverNodesStore.Add(new RemoteNodeInstance(nodeInstance.ObjId, nodeInstance, _remoteHandler));
+
+                    AddRemoteDriverRecursive(nodeInstance.ObjId, nodeInstance);
                     continue;
                 }
 
@@ -417,24 +428,8 @@ namespace Automatica.Core.Runtime.Core
                         var factory = _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId);
                         var config = new DriverContext(nodeInstance,
                         _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
-                        var driver = factory.CreateDriver(config);
 
-                        nodeInstance.State = NodeInstanceState.Loaded;
-                        if (driver.BeforeInit())
-                        {
-                            _driverStore.Add(driver.Id, driver);
-                            nodeInstance.State = NodeInstanceState.Initialized;
-                            driver.Configure();
-                        }
-                        else
-                        {
-                            nodeInstance.State = NodeInstanceState.UnknownError;
-                        }
-
-                        _driverNodesStore.Add(driver.Id, driver);
-                        _configuredDrivers += 1 + driver.ChildrensCreated;
-
-                        AddDriverRecursive(driver);
+                        await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
                     }
 
                     AddNodeInstancesRecursive(nodeInstance);
@@ -443,6 +438,29 @@ namespace Automatica.Core.Runtime.Core
                 {
                     _logger.LogDebug($"Could not load driver {e}");
                 }
+            }
+        }
+
+        private void AddRemoteDriverRecursive(Guid driverInstanceGuid, NodeInstance driver)
+        {
+            if (driver.InverseThis2ParentNodeInstanceNavigation == null)
+            {
+                return;
+            }
+            foreach (var dr in driver.InverseThis2ParentNodeInstanceNavigation)
+            {
+                _driverNodesStore.Add(new RemoteNodeInstance(driverInstanceGuid, dr, _remoteHandler));
+
+                _configuredDrivers++;
+
+                //TODO!
+                if (_configuredDrivers >= _licenseContext.MaxDataPoints)
+                {
+                    _logger.LogError("Cannot instantiate more data-points, license exceeded");
+                //    return;
+                }
+
+                AddRemoteDriverRecursive(driverInstanceGuid, dr);
             }
         }
 
@@ -531,27 +549,7 @@ namespace Automatica.Core.Runtime.Core
             _logger.LogInformation($"Loading recording data-points...done");
         }
         
-        private void AddDriverRecursive(IDriverNode driver)
-        {
-            if (driver.Children == null)
-            {
-                return;
-            }
-            foreach (var dr in driver.Children)
-            {
-                _driverNodesStore.Add(dr.Id, dr);
-                
-                _configuredDrivers++;
-
-                if (_configuredDrivers >= _licenseContext.MaxDataPoints)
-                {
-                    _logger.LogError("Cannot instantiate more data-points, license exceeded");
-                    return;
-                }
-
-                AddDriverRecursive(dr);
-            }
-        }
+      
 
         internal async Task Load(string path, string searchPattern)
         {

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Mqtt;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Serialization;
 using Automatica.Core.Internals;
 using Automatica.Push.Hubs;
@@ -159,11 +159,11 @@ namespace Automatica.Core.Runtime.IO
                     }
                 }
             }
-            else if (self.Source != DispatchableSource.Mqtt)
+            else if (self.Source != DispatchableSource.Remote)
             {
                 _logger.LogInformation($"Dispatch value via mqtt dispatcher");
 
-                var topic = $"{MqttTopicConstants.DISPATCHER_TOPIC}/{self.Type}/{self.Id}";
+                var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{self.Type}/{self.Id}";
                 await _mqttServer.PublishAsync(new MQTTnet.MqttApplicationMessage()
                 {
                     Topic = topic,

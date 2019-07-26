@@ -12,7 +12,6 @@ namespace Automatica.Core.Internals.License
         IList<IValidationFailure> ValidationErrors { get; }
 
         bool IsLicensed { get; }
-
         int MaxDataPoints { get; }
         int MaxUsers { get; }
 

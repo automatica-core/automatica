@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Text;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Serialization;
 
-namespace Automatica.Core.Base.Mqtt
+namespace Automatica.Core.Base.Remote
 {
-    internal class MqttDispatchable : IDispatchable
+    internal class RemoteDispatchable : IDispatchable
     {
-        public DispatchableSource Source => DispatchableSource.Mqtt;
+        public DispatchableSource Source => DispatchableSource.Remote;
 
         public DispatchableType Type { get; internal set; }
 
@@ -15,9 +16,9 @@ namespace Automatica.Core.Base.Mqtt
         public Guid Id { get; internal set; }
     }
 
-    public static class MqttDisptacherHelper
+    public static class RemoteDispatchHelper
     {
-        public static void MqttDispatch(this IDispatcher self, string topic, byte[] data)
+        public static void MqttDispatch(this IDispatcher self, string topic, string data)
         {
             var split = topic.Split("/");
 
@@ -26,14 +27,14 @@ namespace Automatica.Core.Base.Mqtt
                 var id = new Guid(split[2]);
 
 
-                var mqttDispatch = new MqttDispatchable
+                var remoteDispatch = new RemoteDispatchable
                 {
                     Id = id,
                     Type = enu,
-                    Name = "MqttUnknown"
+                    Name = "RemoteUnknown"
                 };
 
-                self.DispatchValue(mqttDispatch, BinarySerializer.Deserialize(data));
+                self.DispatchValue(remoteDispatch, BinarySerializer.Deserialize(Encoding.UTF8.GetBytes(data)));
             }
         }
     }

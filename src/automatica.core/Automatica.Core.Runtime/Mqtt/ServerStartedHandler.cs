@@ -16,7 +16,7 @@ namespace Automatica.Core.Runtime.Mqtt
 
         public Task HandleServerStartedAsync(EventArgs eventArgs)
         {
-            _logger.LogInformation($"Mqtt Server started...");
+            _logger.LogInformation($"Remote Server started...");
             return Task.CompletedTask;
         }
     }

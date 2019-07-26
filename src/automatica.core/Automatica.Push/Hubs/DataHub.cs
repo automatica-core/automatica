@@ -52,7 +52,7 @@ namespace Automatica.Push.Hubs
 
         public void SetValue(Guid nodeInstance, object value)
         {
-            var dispatchable = new DispatchableInstance(DispatchableType.NodeInstance, $"Web", nodeInstance, DispatchableSource.Visualisation);
+            var dispatchable = new DispatchableInstance(DispatchableType.NodeInstance, $"Web", nodeInstance, DispatchableSource.Visualization);
             _dispatcher.DispatchValue(dispatchable, value);
         }
 

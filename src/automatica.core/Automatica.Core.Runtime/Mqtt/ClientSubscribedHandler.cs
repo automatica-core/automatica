@@ -1,21 +1,20 @@
-﻿using Automatica.Core.Runtime.Core;
-using MQTTnet.Server;
+﻿using MQTTnet.Server;
 using System.Threading.Tasks;
-using Automatica.Core.Runtime.Abstraction;
+using Automatica.Core.Runtime.Abstraction.Remote;
 
 namespace Automatica.Core.Runtime.Mqtt
 {
     internal class ClientSubscribedHandler : IMqttServerClientSubscribedTopicHandler
     {
-        private readonly IMqttHandler _handlerInstance;
+        private readonly IRemoteHandler _handlerInstance;
 
-        public ClientSubscribedHandler(IMqttHandler handler)
+        public ClientSubscribedHandler(IRemoteHandler handler)
         {
             _handlerInstance = handler;
         }
         public Task HandleClientSubscribedTopicAsync(MqttServerClientSubscribedTopicEventArgs eventArgs)
         {
-            return _handlerInstance.MqttServerClientSubscribedTopic(eventArgs);
+            return _handlerInstance.ClientSubscribedTopic(new RemoteSubscribedEvent(eventArgs.ClientId, eventArgs.TopicFilter.Topic));
         }
     }
 }

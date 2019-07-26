@@ -4,12 +4,12 @@ using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Internals.Core
 {
-    public interface IMqttServerHandler
+    public interface IRemoteServerHandler
     {
         Task Init();
 
-        Task AddMqttNode(string id, NodeInstance node);
-        Task AddMqttSlave(string id, IDriverFactory factory);
+        Task AddNode(string id, NodeInstance node);
+        Task AddSlave(string id, IDriverFactory factory);
 
         Task Stop();
     }

@@ -11,5 +11,15 @@ namespace Automatica.Core.UnitTests.Base.Common
         {
             return true;
         }
+
+        public bool DriverLicenseCountExceeded()
+        {
+            return true;
+        }
+
+        public void IncrementDriverCount()
+        {
+            
+        }
     }
 }

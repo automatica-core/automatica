@@ -3,6 +3,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Visu;
+using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
@@ -14,6 +15,7 @@ using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core;
 using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.Core.Plugins.Drivers;
@@ -27,6 +29,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
 
@@ -52,6 +55,7 @@ namespace Automatica.Core.Tests
             moq.AddSingleton(CreateHubContextMock<TelegramHub>());
             moq.AddSingleton(CreateHubContextMock<DataHub>());
             moq.AddSingleton(new AutomaticaContext(mockConfiguration.Object));
+            moq.AddSingleton<ILogger>(a => NullLogger.Instance);
 
             moq.AddLogging(a => { a.AddConsole(); });
 
@@ -109,8 +113,8 @@ namespace Automatica.Core.Tests
 
 
             AssertLifecycle<MqttService>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<IMqttHandler>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<IMqttServerHandler>(moq, ServiceLifetime.Singleton);
+            AssertLifecycle<IRemoteHandler>(moq, ServiceLifetime.Singleton);
+            AssertLifecycle<IRemoteServerHandler>(moq, ServiceLifetime.Singleton);
             
             AssertLifecycle<PluginHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IPluginHandler>(moq, ServiceLifetime.Singleton);
@@ -147,7 +151,7 @@ namespace Automatica.Core.Tests
             AssertImplementationType<INodeInstanceStore, NodeInstanceStore>(moq);
             AssertImplementationType<IDriverStore, DriverStore>(moq);
 
-            AssertImplementationType<IDriverNodesStore, DriverNodeStore>(moq);
+            AssertImplementationType<IDriverNodesStore, DriverNodesStore>(moq);
             AssertImplementationType<ILogicInstancesStore, LogicInstanceStore>(moq);
 
             AssertImplementationType<LogicStore, LogicStore>(moq);
@@ -171,8 +175,8 @@ namespace Automatica.Core.Tests
 
 
             AssertImplementationType<MqttService, MqttService>(moq);
-            AssertImplementationType<IMqttHandler, MqttService>(moq);
-            AssertImplementationType<IMqttServerHandler, MqttService>(moq);
+            AssertImplementationType<IRemoteHandler, MqttService>(moq);
+            AssertImplementationType<IRemoteServerHandler, MqttService>(moq);
 
             AssertImplementationType<PluginHandler, PluginHandler>(moq);
             AssertImplementationType<IPluginHandler, PluginHandler>(moq);
