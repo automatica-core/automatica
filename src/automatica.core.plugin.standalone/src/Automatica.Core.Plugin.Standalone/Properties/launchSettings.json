@@ -4,7 +4,7 @@
       "commandName": "Project",
       "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\_Drivers\\EnOcean",
       "environmentVariables": {
-        "AUTOMATICA_SLAVE_MASTER": "192.168.8.111",
+        "AUTOMATICA_SLAVE_MASTER": "localhost",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
         "MQTT_LOG_VERBOSE": "asdf",
         "AUTOMATICA_SLAVE_USER": "rm1"

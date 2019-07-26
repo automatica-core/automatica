@@ -7,23 +7,33 @@ namespace Automatica.Core.Internals.Logger
 {
     public class CoreLoggerFactory : ILoggerFactory
     {
+        private static readonly object _lock = new object();
         private static readonly IDictionary<string, ILogger> _loggerInstances = new ConcurrentDictionary<string, ILogger>();
 
         public static ILogger GetLogger(string name)
         {
-            if (!_loggerInstances.ContainsKey(name))
+            lock (_lock)
             {
-                _loggerInstances.Add(name, new CoreLogger(name));
+                if (!_loggerInstances.ContainsKey(name))
+                {
+                    _loggerInstances.Add(name, new CoreLogger(name));
+                }
+
+                return _loggerInstances[name];
+
             }
-            return _loggerInstances[name];
         }
         public static ILogger GetLogger(string name, LogLevel level, bool isFrameworkLog)
         {
-            if (!_loggerInstances.ContainsKey(name))
+            lock (_lock)
             {
-                _loggerInstances.Add(name, new CoreLogger(name, level, isFrameworkLog));
+                if (!_loggerInstances.ContainsKey(name))
+                {
+                    _loggerInstances.Add(name, new CoreLogger(name, level, isFrameworkLog));
+                }
+
+                return _loggerInstances[name];
             }
-            return _loggerInstances[name];
         }
 
         public void Dispose()

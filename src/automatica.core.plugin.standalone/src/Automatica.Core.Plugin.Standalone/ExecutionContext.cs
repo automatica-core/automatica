@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Driver;
+using Automatica.Core.Plugin.Standalone.Abstraction;
+using Automatica.Core.Plugin.Standalone.Factories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -17,13 +21,21 @@ namespace Automatica.Core.Plugin.Standalone
         private readonly string _masterAddress = "localhost";
         private readonly string _user;
         private readonly string _password;
+        private readonly IServiceProvider _serviceProvider;
 
-        private readonly List<MqttConnection> _connections = new List<MqttConnection>();
+        private readonly List<IDriverConnection> _connections = new List<IDriverConnection>();
 
         public ExecutionContext(ILogger logger, string pluginDir)
         {
             _logger = logger;
             _pluginDir = pluginDir;
+
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddAutomaticaDrivers();
+            serviceCollection.AddSingleton<ILogger>(a => NullLogger.Instance);
+            serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
 
 
             var masterEnv = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_MASTER");
@@ -62,7 +74,7 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 foreach (var factory in _factories)
                 {
-                    var connection = new MqttConnection(_logger, _masterAddress, _user, _password, factory);
+                    var connection = new MqttConnection(_logger, _masterAddress, _user, _password, factory, _serviceProvider);
                     if (!await connection.Start())
                     {
                         return false;

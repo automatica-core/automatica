@@ -8,5 +8,15 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         {
             return true;
         }
+
+        public bool DriverLicenseCountExceeded()
+        {
+            return false;
+        }
+
+        public void IncrementDriverCount()
+        {
+            
+        }
     }
 }

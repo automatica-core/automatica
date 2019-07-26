@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -19,10 +19,10 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.461" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.461" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.9.0.461" />
-    <PackageReference Include="coverlet.msbuild" Version="2.6.2">
+    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.537" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.537" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.9.0.537" />
+    <PackageReference Include="coverlet.msbuild" Version="2.6.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

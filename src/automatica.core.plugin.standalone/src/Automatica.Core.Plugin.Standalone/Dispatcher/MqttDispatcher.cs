@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Mqtt;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Serialization;
 using MQTTnet.Client;
 
@@ -59,9 +59,9 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
                 }
             }
 
-            if (self.Source != DispatchableSource.Mqtt)
+            if (self.Source != DispatchableSource.Remote)
             {
-                var topic = $"{MqttTopicConstants.DISPATCHER_TOPIC}/{self.Type}/{self.Id}";
+                var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{self.Type}/{self.Id}";
                 await _mqttClient.PublishAsync(new MQTTnet.MqttApplicationMessage()
                 {
                     Topic = topic,
@@ -100,7 +100,7 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
 
         public async Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
         {
-            var topic = $"{MqttTopicConstants.DISPATCHER_TOPIC}/{type}/{id}";
+            var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{type}/{id}";
             _subscriptions.Add(topic);
 
             await _mqttClient.SubscribeAsync(topic, MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce);

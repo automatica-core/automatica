@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28124.53
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.EnOcean", "P3.Driver.EnOcean\P3.Driver.EnOcean.csproj", "{A39642E9-A6D8-420F-8B37-937283A776AF}"
 EndProject
@@ -28,8 +28,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A39642E9-A6D8-420F-8B37-937283A776AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A39642E9-A6D8-420F-8B37-937283A776AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A39642E9-A6D8-420F-8B37-937283A776AF}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
-		{A39642E9-A6D8-420F-8B37-937283A776AF}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{A39642E9-A6D8-420F-8B37-937283A776AF}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39642E9-A6D8-420F-8B37-937283A776AF}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{A39642E9-A6D8-420F-8B37-937283A776AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A39642E9-A6D8-420F-8B37-937283A776AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A3C6FEF6-8776-4F17-92C6-61B20E47C120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -40,8 +40,8 @@ Global
 		{A3C6FEF6-8776-4F17-92C6-61B20E47C120}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
-		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57F8324A-6E74-4C26-90FF-BBBEAAB9C1A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

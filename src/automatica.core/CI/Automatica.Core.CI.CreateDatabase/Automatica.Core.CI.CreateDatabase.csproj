@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>285604C0-3A87-49EF-9A06-A4EE0B17D63A</ProjectGuid>
-    <Version>0.9.0.9999</Version>
+    <Version>0.9.0.537</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />

@@ -20,8 +20,9 @@ namespace P3.Driver.EnOcean.Console
             var logger = new ConsoleLogger("EnOnean", (s, level) => true, false);
             Logger.Logger.Instance = logger;
 
-            var driver = new Driver("COM3");
+            var driver = new Driver("COM4");
             await driver.Open();
+             driver.Close();
 
             var telegram = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0 }));
             var rec = await driver.SendTelegram(telegram);

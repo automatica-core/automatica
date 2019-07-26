@@ -1,9 +1,7 @@
 ﻿    
 using System;
-using System.Linq;
 using Automatica.Core.Base.IO;
-using Automatica.Core.UnitTests.Common;
-using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory;
 using P3.Driver.EnOcean.DriverFactory.Driver;
@@ -13,6 +11,10 @@ namespace P3.Driver.EnOcean.Data.Tests
 {
     public class RorgA5DataTest : DriverFactoryTestBase<EnOceanDriverFactory>
     {
+        public RorgA5DataTest(IDispatcher dispatcher) : base(dispatcher)
+        {
+        }
+
         private RadioErp1Packet CreatePacket(string data)
         {
             var byteData = Automatica.Core.Driver.Utility.Utils.StringToByteArray(data);

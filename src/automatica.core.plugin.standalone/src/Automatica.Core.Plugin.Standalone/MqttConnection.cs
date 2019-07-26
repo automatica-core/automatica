@@ -2,53 +2,76 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Mqtt;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.Driver;
+using Automatica.Core.Driver.Loader;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Plugin.Standalone.Abstraction;
 using Automatica.Core.Plugin.Standalone.Dispatcher;
 using Automatica.Core.Plugin.Standalone.Factories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Protocol;
 using MQTTnet.Server;
 using Newtonsoft.Json;
 using MqttClientDisconnectedEventArgs = MQTTnet.Client.MqttClientDisconnectedEventArgs;
 
 namespace Automatica.Core.Plugin.Standalone
 {
-    internal class MqttConnection
+    internal class IdObject
     {
-        private readonly ILogger _logger;
-        private readonly string _host;
-        private readonly string _username;
-        private readonly string _password;
-        private readonly IDriverFactory _factory;
+        public Guid Id { get; set; }
+    }
+
+    internal class MqttConnection : IDriverConnection
+    {
+        private readonly IServiceProvider _serviceProvider;
+        public string MasterAddress { get; }
+        public string Username { get; }
+        public string Password { get; }
+        public ILogger Logger { get; }
 
         private readonly RemoteNodeTemplatesFactory _remoteNodeTemplatesFactory = new RemoteNodeTemplatesFactory();
         private readonly MqttDispatcher _dispatcher;
         private readonly IMqttClient _mqttClient;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(0);
 
-        public MqttConnection(ILogger logger, string host, string username, string password, IDriverFactory factory)
+        private readonly IDriverFactoryLoader _loader;
+        private readonly IDriverNodesStore _nodeStore;
+
+        private IDriver _driverInstance;
+        private readonly IDriverStore _driverStore;
+
+        public MqttConnection(ILogger logger, string host, string username, string password, IDriverFactory factory,
+            IServiceProvider serviceProvider)
         {
-            _logger = logger;
-            _host = host;
-            _username = username;
-            _password = password;
-            _factory = factory;
+            _serviceProvider = serviceProvider;
+            Logger = logger;
+            MasterAddress = host;
+            Username = username;
+            Password = password;
+            Factory = factory;
+
+            _loader = _serviceProvider.GetRequiredService<IDriverFactoryLoader>();
+            _nodeStore = serviceProvider.GetRequiredService<IDriverNodesStore>();
+            _driverStore = serviceProvider.GetRequiredService<IDriverStore>();
 
             _mqttClient = new MqttFactory().CreateMqttClient();
             _dispatcher = new MqttDispatcher(_mqttClient);
         }
+
+        public IDriverFactory Factory { get; }
 
         public async Task<bool> Start()
         {
             try
             {
                 var options = new MqttClientOptionsBuilder()
-                    .WithClientId(_factory.FactoryGuid.ToString())
-                    .WithTcpServer(_host)
-                    .WithCredentials(_username, _password)
+                    .WithClientId(Factory.FactoryGuid.ToString())
+                    .WithTcpServer(MasterAddress)
+                    .WithCredentials(Username, Password)
                     .WithCleanSession()
                     .Build();
                 _mqttClient.Disconnected += OnClientDisconnected;
@@ -56,16 +79,17 @@ namespace Automatica.Core.Plugin.Standalone
 
                 await _mqttClient.ConnectAsync(options);
 
-                _logger.LogInformation($"Connected to mqtt broker {_host}");
+                Logger.LogInformation($"Connected to mqtt broker {MasterAddress}");
                 await _mqttClient.SubscribeAsync(
-                    new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.CONFIG_TOPIC}/{_factory.DriverGuid}")
+                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{Factory.DriverGuid}")
                         .WithExactlyOnceQoS().Build(),
-                    new TopicFilterBuilder().WithTopic($"{MqttTopicConstants.DISPATCHER_TOPIC}/#")
+                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#")
                         .WithAtLeastOnceQoS().Build());
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not connect to broker");
+
+                Logger.LogError(e, "Could not connect to broker");
                 return false;
             }
 
@@ -77,28 +101,79 @@ namespace Automatica.Core.Plugin.Standalone
             return _semaphoreSlim.WaitAsync();
         }
 
+        public async Task<bool> Send(string topic, object data)
+        {
+            if (_driverInstance == null)
+            {
+                return false;
+            }
+
+            var jsonMessage = JsonConvert.SerializeObject(data);
+
+            var mqttMessage = new MqttApplicationMessage
+            {
+                Topic = $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/{topic}",
+                Payload = Encoding.UTF8.GetBytes(jsonMessage),
+                QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce
+
+            };
+
+            await _mqttClient.PublishAsync(mqttMessage);
+
+            return true;
+        }
+
 
         private async void OnMqttClientOnApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            _logger.LogDebug($"received topic {e.ApplicationMessage.Topic}...");
+            Logger.LogDebug($"received topic {e.ApplicationMessage.Topic}...");
 
-            if (e.ApplicationMessage.Topic == $"{MqttTopicConstants.CONFIG_TOPIC}/{_factory.DriverGuid}")
+            if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{Factory.DriverGuid}")
             {
                 var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
 
-                var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory, new RemoteTelegramMonitor(), new RemoteLicenseState(), _logger, new RemoteLearnMode(), new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
-                var driver = _factory.CreateDriver(context);
+                var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory,
+                    new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(this),
+                    new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
+                _driverInstance = Factory.CreateDriver(context);
 
-                if (driver.BeforeInit())
+                await _loader.LoadDriverFactory(dto, Factory, context);
+
+                foreach (var driver in _driverStore.All())
                 {
-                    driver.Configure();
                     await driver.Start();
                 }
+
+                await _mqttClient.SubscribeAsync(new TopicFilterBuilder()
+                        .WithTopic($"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/+")
+                        .WithExactlyOnceQoS().Build());
+
             }
-            else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{MqttTopicConstants.DISPATCHER_TOPIC}/#"))
+            else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
-                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic, e.ApplicationMessage.Payload);
+                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic,  Encoding.UTF8.GetString(e.ApplicationMessage.Payload));
+            }
+            else if (_driverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/#"))
+            {
+                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                var idObject = JsonConvert.DeserializeObject<IdObject>(json);
+
+                var node = _nodeStore.Get(idObject.Id);
+
+                if (node == null)
+                {
+                    return;
+                }
+
+                if (e.ApplicationMessage.Topic.EndsWith(DriverNodeRemoteAction.StartLearnMode.ToString()))
+                {
+                    await node.EnableLearnMode();
+                }
+                else if (e.ApplicationMessage.Topic.EndsWith(DriverNodeRemoteAction.StopLearnMode.ToString()))
+                {
+                    await node.DisableLearnMode();
+                }
             }
         }
 
@@ -107,14 +182,15 @@ namespace Automatica.Core.Plugin.Standalone
             _mqttClient.Disconnected -= OnClientDisconnected;
             _mqttClient.ApplicationMessageReceived -= OnMqttClientOnApplicationMessageReceived;
 
-            _logger.LogWarning(e.Exception, "Mqtt client disconnected");
+            Logger.LogWarning(e.Exception, "Mqtt client disconnected");
             _semaphoreSlim.Release(1);
         }
 
-        public Task Stop()
+        public Task<bool> Stop()
         {
             _semaphoreSlim.Release(1);
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
     }
 }
+
