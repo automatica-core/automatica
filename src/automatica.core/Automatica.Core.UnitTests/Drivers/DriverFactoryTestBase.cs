@@ -2,19 +2,20 @@
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Drivers;
 
 namespace Automatica.Core.UnitTests.Base.Drivers
 {
     public abstract class DriverFactoryTestBase<T> where T : IDriverFactory
     {
-        private readonly IDispatcher _dispatcher;
+        public IDispatcher Dispatcher { get; }
         protected NodeTemplateFactoryMock Factory { get; }
         protected T DriverFactory { get; }
         
-        protected DriverFactoryTestBase(IDispatcher dispatcher)
+        protected DriverFactoryTestBase()
         {
-            _dispatcher = dispatcher;
+            Dispatcher = DispatcherMock.Instance;
             Factory = new NodeTemplateFactoryMock();
 
             DriverFactory = (T)Activator.CreateInstance(typeof(T));
@@ -31,7 +32,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
 
         protected IDriver CreateDriver(NodeInstance node)
         {
-            var driverContext = new DriverContextMock(node, Factory, _dispatcher);
+            var driverContext = new DriverContextMock(node, Factory, Dispatcher);
             var driver = DriverFactory.CreateDriver(driverContext);
 
             driver.Configure();
