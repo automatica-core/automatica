@@ -37,19 +37,10 @@ namespace P3.Driver.ZWaveAeon.Channel
             _semaphore = new SemaphoreSlim(1, 1);
         }
 
-#if NET || WINDOWS_UWP || NETCOREAPP2_0 || NETSTANDARD2_0
         public ZWaveChannel(string portName)
              : this(new SerialPort(portName))
         {
         }
-#endif
-
-#if WINDOWS_UWP
-        public ZWaveChannel(ushort vendorId, ushort productId)
-             : this(new SerialPort(vendorId, productId))
-        {
-        }
-#endif
 
         protected virtual void OnError(ErrorEventArgs e)
         {
