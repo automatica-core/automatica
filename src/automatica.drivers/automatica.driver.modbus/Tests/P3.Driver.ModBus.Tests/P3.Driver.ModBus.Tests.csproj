@@ -29,8 +29,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.244" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.9.0.540" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.ModBusDriverFactory\P3.Driver.ModBusDriverFactory.csproj" />

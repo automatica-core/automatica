@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28124.53
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.MBus", "P3.Driver.MBus\P3.Driver.MBus.csproj", "{72081B47-C56D-454B-8D60-63EC756EB31E}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.MBus.Tests", "Tests\P3.Driver.MBus.Tests\P3.Driver.MBus.Tests.csproj", "{3E703B9A-D5E9-46DC-B996-DD99651D3DB1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Oms.MBus.Tests", "Tests\P3.Driver.Oms.MBus.Tests\P3.Driver.Oms.MBus.Tests.csproj", "{F5B1C5C2-5D6B-41CA-8052-C6AF2DCF3E06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 Core", "00 Core", "{237840FB-2F00-4A88-9422-406527B824C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 Tests", "99 Tests", "{955A1222-8966-43E3-A9D2-D07936E128B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72081B47-C56D-454B-8D60-63EC756EB31E} = {237840FB-2F00-4A88-9422-406527B824C6}
+		{69B5C0DB-3568-4444-BED7-9D39743DCF3E} = {237840FB-2F00-4A88-9422-406527B824C6}
+		{52BC64FB-89A8-4192-BCAE-134411C7B6B6} = {237840FB-2F00-4A88-9422-406527B824C6}
+		{DFF3A848-D126-4747-AA3D-CE989EF1C189} = {955A1222-8966-43E3-A9D2-D07936E128B9}
+		{3E703B9A-D5E9-46DC-B996-DD99651D3DB1} = {955A1222-8966-43E3-A9D2-D07936E128B9}
+		{F5B1C5C2-5D6B-41CA-8052-C6AF2DCF3E06} = {955A1222-8966-43E3-A9D2-D07936E128B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B57AEC90-9554-4481-ABD2-161F4338F6EA}

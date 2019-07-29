@@ -1,6 +1,6 @@
 using System.Linq;
-using Automatica.Core.UnitTests.Common;
-using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Base.Common;
+using Automatica.Core.UnitTests.Base.Drivers;
 using Xunit;
 
 namespace P3.Driver.WakeOnLan.Tests
@@ -40,7 +40,7 @@ namespace P3.Driver.WakeOnLan.Tests
             con.WriteValue(DispatchableMock.Instance, 100);
 
 
-            var value = DispatcherMock.Instance.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
+            var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
 
             Assert.Equal("AABBCCDDEEFF", value);
 

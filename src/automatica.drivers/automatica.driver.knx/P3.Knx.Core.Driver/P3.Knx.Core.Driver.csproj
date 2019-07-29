@@ -12,8 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="P3.Elliptic.Curve25519" Version="1.0.0" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.9.0.489" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.489" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.540" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

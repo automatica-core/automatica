@@ -1,14 +1,12 @@
-﻿using System;
-using Automatica.Core.Base.IO;
+﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Driver.Exceptions;
 using Automatica.Core.EF.Exceptions;
-using Automatica.Core.UnitTests.Common;
+using Automatica.Core.UnitTests.Base.Common;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Exceptions;
 using P3.Driver.ModBusDriver.Slave;
 using P3.Driver.ModBusDriver.Slave.Tcp;
 using P3.Driver.ModBusDriverFactory;
-using P3.Driver.ModBusDriverFactory.Slave;
 using Xunit;
 
 namespace P3.Driver.ModBus.Tests
@@ -36,7 +34,7 @@ namespace P3.Driver.ModBus.Tests
             Assert.True(attribute.Driver.GetHoldingRegister(0, 0) == 0);
             Assert.True(attribute.Driver.GetHoldingRegister(0, 1) == 123);
 
-            Assert.True(DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance).Count > 0);
+            Assert.True(Dispatcher.GetValues(DispatchableType.NodeInstance).Count > 0);
         }
 
         [Fact]
