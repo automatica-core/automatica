@@ -82,7 +82,11 @@ namespace Automatica.Core.Plugin.Standalone
 
                 await _mqttClient.ConnectAsync(options);
 
-                Logger.LogInformation($"Connected to mqtt broker {MasterAddress}");
+                Logger.LogInformation($"Connected to mqtt broker {MasterAddress} with clientId {NodeId}");
+
+                Logger.LogDebug($"Subscribe to {RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}");
+                Logger.LogDebug($"Subscribe to {RemoteTopicConstants.DISPATCHER_TOPIC}/#");
+
                 await _mqttClient.SubscribeAsync(
                     new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
                         .WithExactlyOnceQoS().Build(),
@@ -133,11 +137,12 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 return;
             }
-            Logger.LogDebug($"received topic {e.ApplicationMessage.Topic}...");
+
+            var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+            Logger.LogDebug($"received topic {e.ApplicationMessage.Topic} with data {json}...");
 
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
             {
-                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
 
                 var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory,
@@ -159,12 +164,10 @@ namespace Automatica.Core.Plugin.Standalone
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
-                var data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic,  data);
+                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic,  json);
             }
             else if (_driverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/#"))
             {
-                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                 var idObject = JsonConvert.DeserializeObject<IdObject>(json);
 
                 var node = _nodeStore.Get(idObject.Id);

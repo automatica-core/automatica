@@ -71,7 +71,7 @@ namespace Automatica.Core.Plugin.Standalone
 
         private async Task<bool> StartMqtt()
         {
-            Console.WriteLine($"Trying to connect to {_masterAddress} with user {_user}");
+            Console.WriteLine($"Trying to connect to {_masterAddress} with user {_user} and clientId {_nodeId}");
             try
             {
                 foreach (var factory in _factories)
