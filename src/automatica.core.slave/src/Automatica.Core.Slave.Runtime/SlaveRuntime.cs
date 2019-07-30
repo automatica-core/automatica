@@ -262,6 +262,7 @@ namespace Automatica.Core.Slave.Runtime
                     Env = new[] { $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
                 };
 
+                createContainerParams.HostConfig.Mounts = new List<Mount>();
                 createContainerParams.HostConfig.NetworkMode = "host";
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
