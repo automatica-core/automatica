@@ -7,7 +7,8 @@
         "AUTOMATICA_SLAVE_MASTER": "localhost",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
         "MQTT_LOG_VERBOSE": "asdf",
-        "AUTOMATICA_SLAVE_USER": "rm1"
+        "AUTOMATICA_SLAVE_USER": "rm1",
+        "AUTOMATICA_NODE_ID": "1cc1256b-1b16-d5ba-364a-ea84eda80b9e"
       }
     }
   }

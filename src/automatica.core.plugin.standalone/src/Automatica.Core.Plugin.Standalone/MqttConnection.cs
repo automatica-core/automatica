@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Loader;
@@ -133,10 +134,6 @@ namespace Automatica.Core.Plugin.Standalone
 
         private async void OnMqttClientOnApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            if (e.ClientId == _mqttClient.Options.ClientId)
-            {
-                return;
-            }
 
             var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
             Logger.LogDebug($"received topic {e.ApplicationMessage.Topic} with data {json}...");

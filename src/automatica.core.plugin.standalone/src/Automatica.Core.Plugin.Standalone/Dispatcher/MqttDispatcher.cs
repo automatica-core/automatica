@@ -48,8 +48,34 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             return Task.Run(() => dis(self, value));
         }
 
+        private void StoreValue(IDispatchable self, object value)
+        {
+            lock (_lock)
+            {
+                if (!NodeValues.ContainsKey(self.Type))
+                {
+                    NodeValues.Add(self.Type, new ConcurrentDictionary<Guid, object>());
+                }
+
+                if (!NodeValues[self.Type].ContainsKey(self.Id))
+                {
+                    NodeValues[self.Type].Add(self.Id, value);
+                }
+                else
+                {
+                    if (NodeValues[self.Type][self.Id] == value) // value did not change
+                    {
+                        return;
+                    }
+                    NodeValues[self.Type][self.Id] = value;
+                }
+
+            }
+        }
+
         public async Task DispatchValue(IDispatchable self, object value)
         {
+            StoreValue(self, value);
 
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
             {
@@ -67,6 +93,15 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
                         //.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
 
                     }
+                }
+            }
+
+            lock (_lock)
+            {
+                if (NodeValues.ContainsKey(self.Type) && NodeValues[self.Type].ContainsKey(self.Id) &&
+                    NodeValues[self.Type][self.Id] == value)
+                {
+                    return;
                 }
             }
 
