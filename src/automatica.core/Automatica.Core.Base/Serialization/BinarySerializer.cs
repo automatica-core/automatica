@@ -1,32 +1,32 @@
-﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using System;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.Base.Serialization
 {
+    internal class SerializedObject
+    {
+        public Type Type { get; set; }
+        public object Value { get; set; }
+    }
+
     public static class BinarySerializer
     {
         public static byte[] Serialize(object obj)
         {
-            if (obj == null)
-                return null;
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
+            var serializedObject = new SerializedObject
             {
-                bf.Serialize(ms, obj);
-                return ms.ToArray();
-            }
+                Type = obj.GetType(),
+                Value = obj
+            };
+
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(serializedObject));
         }
         public static object Deserialize(byte[] obj)
         {
-            if (obj == null)
-                return null;
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                ms.Write(obj);
-                ms.Position = 0;
-                return bf.Deserialize(ms);
-            }
+            var strValue = Encoding.UTF8.GetString(obj);
+            var deserialized = JsonConvert.DeserializeObject<SerializedObject>(strValue);
+            return deserialized.Value;
         }
     }
 }

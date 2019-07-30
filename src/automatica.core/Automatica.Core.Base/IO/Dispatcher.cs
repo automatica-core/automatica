@@ -28,7 +28,7 @@ namespace Automatica.Core.Base.IO
 
         private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>>();
 
-        public Dispatcher(ILogger<Dispatcher> logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender)
+        public Dispatcher(ILogger logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender)
         {
             _dataBroadcast = dataBroadcast;
             _remoteSender = remoteSender;

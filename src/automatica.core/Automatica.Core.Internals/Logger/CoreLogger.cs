@@ -13,7 +13,7 @@ namespace Automatica.Core.Internals.Logger
         private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
 
-        public CoreLogger() : this(null)
+        public CoreLogger() : this("core")
         {
 
         }

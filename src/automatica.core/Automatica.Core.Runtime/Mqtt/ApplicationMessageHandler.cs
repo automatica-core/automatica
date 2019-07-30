@@ -2,7 +2,6 @@
 using MQTTnet;
 using MQTTnet.Client.Receiving;
 using System.Threading.Tasks;
-using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Remote;
 
 namespace Automatica.Core.Runtime.Mqtt
