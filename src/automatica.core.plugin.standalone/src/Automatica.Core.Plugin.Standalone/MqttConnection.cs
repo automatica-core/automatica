@@ -126,6 +126,10 @@ namespace Automatica.Core.Plugin.Standalone
 
         private async void OnMqttClientOnApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
+            if (e.ClientId == _mqttClient.Options.ClientId)
+            {
+                return;
+            }
             Logger.LogDebug($"received topic {e.ApplicationMessage.Topic}...");
 
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{Factory.DriverGuid}")
@@ -152,7 +156,8 @@ namespace Automatica.Core.Plugin.Standalone
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
-                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic,  Encoding.UTF8.GetString(e.ApplicationMessage.Payload));
+                var data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic,  data);
             }
             else if (_driverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/#"))
             {

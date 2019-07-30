@@ -2,7 +2,7 @@
   "profiles": {
     "Automatica.Core.Plugin.Dockerize": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\_Drivers\\EnOcean",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\_Drivers\\MachineFlags",
       "environmentVariables": {
         "AUTOMATICA_SLAVE_MASTER": "localhost",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
