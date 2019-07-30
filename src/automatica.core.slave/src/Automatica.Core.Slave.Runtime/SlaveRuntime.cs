@@ -222,6 +222,11 @@ namespace Automatica.Core.Slave.Runtime
         private async Task StartImage(string imageSource, string imageName, string imageTag)
         {
             var imageFullName = $"{imageName}:{imageTag}";
+            if (_runningImages.ContainsKey(imageFullName))
+            {
+                _logger.LogWarning($"Image {imageFullName} already running, ignore now!");
+                return;
+            }
             _logger.LogInformation($"Start Image {imageFullName}");
 
             var imageCreateParams = new ImagesCreateParameters()
