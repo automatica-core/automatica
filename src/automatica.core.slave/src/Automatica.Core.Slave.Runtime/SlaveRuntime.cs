@@ -240,25 +240,51 @@ namespace Automatica.Core.Slave.Runtime
 
             try
             {
-                var response = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
+                var portBindings = new Dictionary<string, IList<PortBinding>>();
+                portBindings.Add("1883/tcp", new List<PortBinding>()
                 {
-                    Image = $"{imageFullName}",
+                    new PortBinding()
+                    {
+                        HostPort = "1883"
+                    }
+                });
+
+                var createContainerParams = new CreateContainerParameters()
+                {
+                    Image = imageFullName,
                     AttachStderr = false,
                     AttachStdin = false,
                     AttachStdout = false,
-                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
                     HostConfig = new HostConfig
                     {
-                        PortBindings = new Dictionary<string, IList<PortBinding>> {
-                            {
-                                "1833", new List<PortBinding> {
-                                    new PortBinding { HostPort = "1833" }
-                                }
-                            }
-                        },
-                        NetworkMode = "host"
-                    }
-                });
+                        PortBindings = portBindings
+                    },
+                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
+                };
+
+                createContainerParams.HostConfig.NetworkMode = "host";
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+                    RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    createContainerParams.HostConfig.Privileged = true;
+
+                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    {
+                        Source = "/dev",
+                        Target = "/dev",
+                        Type = "bind"
+                    });
+
+                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    {
+                        Source = "/tmp",
+                        Target = "/tmp",
+                        Type = "bind"
+                    });
+                }
+
+                var response = await _dockerClient.Containers.CreateContainerAsync(createContainerParams);
 
 
                 if (_runningImages.ContainsKey(imageFullName))
