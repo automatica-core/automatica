@@ -34,7 +34,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly string _masterAddress;
         private readonly string _clientKey;
         private readonly ILogger _logger;
-
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         private readonly Timer _timer = new Timer(5000);
 
@@ -55,9 +55,9 @@ namespace Automatica.Core.Slave.Runtime
                    .WithCredentials(_slaveId, _clientKey)
                    .WithCleanSession()
                    .Build();
+
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {
-
                 MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
                 {
                     var trace =
@@ -183,22 +183,22 @@ namespace Automatica.Core.Slave.Runtime
             switch (action.Action)
             {
                 case SlaveAction.Start:
-                    await StartImage(action.ImageSource, action.ImageName, action.Tag);
+                    await StartImage(action);
                     break;
                 case SlaveAction.Stop:
-                    await StopImage(action.ImageName, action.Tag);
+                    await StopImage(action);
                     break;
             }
         }
 
-        private async Task StopImage(string imageName, string imageTag)
+        private async Task StopImage(ActionRequest request)
         {
-            var imageFullName = $"{imageName}:{imageTag}";
+            var imageFullName = $"{request.ImageName}:{request.Tag}";
             _logger.LogInformation($"Stop Image {imageFullName}");
 
-            if (_runningImages.ContainsKey(imageFullName))
+            if (_runningImages.ContainsKey(request.Id.ToString()))
             {
-                await _dockerClient.Containers.StopContainerAsync(_runningImages[imageFullName], new ContainerStopParameters());
+                await _dockerClient.Containers.StopContainerAsync(_runningImages[request.Id.ToString()], new ContainerStopParameters());
                 try
                 {
                     await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters
@@ -211,40 +211,45 @@ namespace Automatica.Core.Slave.Runtime
                     _logger.LogError(e, $"Could not delete image");
                 }
 
-                _runningImages.Remove(imageFullName);
+                _runningImages.Remove(request.Id.ToString());
             }
             else
             {
-                _logger.LogError($"Could not stop image, image {imageName}{imageTag} not found");
+                _logger.LogError($"Could not stop image, image {imageFullName} not found");
             }
         }
 
-        private async Task StartImage(string imageSource, string imageName, string imageTag)
+        private async Task StartImage(ActionRequest request)
         {
-            var imageFullName = $"{imageName}:{imageTag}";
-            if (_runningImages.ContainsKey(imageFullName))
-            {
-                _logger.LogWarning($"Image {imageFullName} already running, ignore now!");
-                return;
-            }
-            _logger.LogInformation($"Start Image {imageFullName}");
+            await _semaphore.WaitAsync();
 
-            var imageCreateParams = new ImagesCreateParameters()
-            {
-                FromImage = imageName,
-                Tag = imageTag
-            };
-
-            if (!String.IsNullOrEmpty(imageSource))
-            {
-                imageCreateParams.FromSrc = imageSource;
-            }
-
-            await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(), new ImageProgress(_logger));
-
+            var imageFullName = $"{request.ImageName}:{request.Tag}";
 
             try
             {
+                if (_runningImages.ContainsKey(request.Id.ToString()))
+                {
+                    _logger.LogWarning($"Image id {request.Id.ToString()} with image {imageFullName} already running, ignore now!");
+                    return;
+                }
+
+                _logger.LogInformation($"Start Image {imageFullName}");
+
+                var imageCreateParams = new ImagesCreateParameters()
+                {
+                    FromImage = request.ImageName,
+                    Tag = request.Tag
+                };
+
+                if (!String.IsNullOrEmpty(request.ImageSource))
+                {
+                    imageCreateParams.FromSrc = request.ImageSource;
+                }
+
+                await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(),
+                    new ImageProgress(_logger));
+
+
                 var portBindings = new Dictionary<string, IList<PortBinding>>();
                 portBindings.Add("1883/tcp", new List<PortBinding>()
                 {
@@ -264,7 +269,11 @@ namespace Automatica.Core.Slave.Runtime
                     {
                         PortBindings = portBindings
                     },
-                    Env = new[] { $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}", $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}" },
+                    Env = new[]
+                    {
+                        $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}",
+                        $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id.ToString()}"
+                    },
                 };
 
                 createContainerParams.HostConfig.Mounts = new List<Mount>();
@@ -292,18 +301,17 @@ namespace Automatica.Core.Slave.Runtime
 
                 var response = await _dockerClient.Containers.CreateContainerAsync(createContainerParams);
 
-
-                if (_runningImages.ContainsKey(imageFullName))
-                {
-                    _runningImages.Remove(imageFullName);
-                }
-                _runningImages.Add(imageFullName, response.ID);
+                _runningImages.Add(request.Id.ToString(), response.ID);
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
 
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "error starting image...");
+            }
+            finally
+            {
+                _semaphore.Release(1);
             }
 
         }

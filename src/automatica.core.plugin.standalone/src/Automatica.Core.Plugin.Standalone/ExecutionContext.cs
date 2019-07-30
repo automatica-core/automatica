@@ -21,6 +21,7 @@ namespace Automatica.Core.Plugin.Standalone
         private readonly string _masterAddress = "localhost";
         private readonly string _user;
         private readonly string _password;
+        private readonly string _nodeId;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly List<IDriverConnection> _connections = new List<IDriverConnection>();
@@ -46,6 +47,7 @@ namespace Automatica.Core.Plugin.Standalone
 
             _user = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_USER");
             _password = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_PASSWORD");
+            _nodeId = Environment.GetEnvironmentVariable("AUTOMATICA_NODE_ID");
         }
 
         public async Task<bool> Start()
@@ -74,7 +76,7 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 foreach (var factory in _factories)
                 {
-                    var connection = new MqttConnection(_logger, _masterAddress, _user, _password, factory, _serviceProvider);
+                    var connection = new MqttConnection(_logger, _masterAddress, _nodeId, _user, _password, factory, _serviceProvider);
                     if (!await connection.Start())
                     {
                         return false;

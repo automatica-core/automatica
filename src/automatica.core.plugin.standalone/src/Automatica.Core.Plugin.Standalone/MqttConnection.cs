@@ -29,6 +29,7 @@ namespace Automatica.Core.Plugin.Standalone
     {
         private readonly IServiceProvider _serviceProvider;
         public string MasterAddress { get; }
+        public string NodeId { get; }
         public string Username { get; }
         public string Password { get; }
         public ILogger Logger { get; }
@@ -44,12 +45,14 @@ namespace Automatica.Core.Plugin.Standalone
         private IDriver _driverInstance;
         private readonly IDriverStore _driverStore;
 
-        public MqttConnection(ILogger logger, string host, string username, string password, IDriverFactory factory,
+        public MqttConnection(ILogger logger, string host, string nodeId, string username, string password,
+            IDriverFactory factory,
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             Logger = logger;
             MasterAddress = host;
+            NodeId = nodeId;
             Username = username;
             Password = password;
             Factory = factory;
@@ -69,7 +72,7 @@ namespace Automatica.Core.Plugin.Standalone
             try
             {
                 var options = new MqttClientOptionsBuilder()
-                    .WithClientId(Factory.FactoryGuid.ToString())
+                    .WithClientId(NodeId)
                     .WithTcpServer(MasterAddress)
                     .WithCredentials(Username, Password)
                     .WithCleanSession()
@@ -81,7 +84,7 @@ namespace Automatica.Core.Plugin.Standalone
 
                 Logger.LogInformation($"Connected to mqtt broker {MasterAddress}");
                 await _mqttClient.SubscribeAsync(
-                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{Factory.DriverGuid}")
+                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
                         .WithExactlyOnceQoS().Build(),
                     new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#")
                         .WithAtLeastOnceQoS().Build());
@@ -132,7 +135,7 @@ namespace Automatica.Core.Plugin.Standalone
             }
             Logger.LogDebug($"received topic {e.ApplicationMessage.Topic}...");
 
-            if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{Factory.DriverGuid}")
+            if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
             {
                 var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);

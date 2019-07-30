@@ -1,4 +1,6 @@
-﻿namespace Automatica.Core.Slave.Abstraction
+﻿using System;
+
+namespace Automatica.Core.Slave.Abstraction
 {
     public enum SlaveAction
     {
@@ -14,5 +16,7 @@
         public string ImageName { get; set; }
         public string Tag { get; set; }
         public string ImageSource { get; set; }
+
+        public Guid Id { get; set; }
     }
 }
