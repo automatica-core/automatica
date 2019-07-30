@@ -9,7 +9,7 @@ namespace Automatica.Core.Internals.Core
         Task Init();
 
         Task AddNode(string id, NodeInstance node);
-        Task AddSlave(string id, IDriverFactory factory);
+        Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance);
 
         Task Stop();
     }

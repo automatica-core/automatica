@@ -28,7 +28,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILogger _logger;
 
         private readonly IDictionary<string, NodeInstance> _mqttNodes = new Dictionary<string, NodeInstance>();
-        private readonly IDictionary<string, IList<IDriverFactory>> _mqttSlaves = new Dictionary<string, IList<IDriverFactory>>();
+        private readonly IDictionary<string, IDictionary<NodeInstance, IDriverFactory>> _mqttSlaves = new Dictionary<string, IDictionary<NodeInstance, IDriverFactory>>();
         private readonly IList<string> _connectedMqttClients = new List<string>();
         private readonly IMqttServer _mqttServer;
         private readonly IDispatcher _dispatcher;
@@ -97,7 +97,11 @@ namespace Automatica.Core.Runtime.Core
             {
                 if (_mqttSlaves.ContainsKey(subscribedEvent.ClientId))
                 {
-                    await StartInstances(subscribedEvent.ClientId, _mqttSlaves[subscribedEvent.ClientId]);
+                    var factoryNode = _mqttSlaves[subscribedEvent.ClientId];
+                    foreach (var node in factoryNode)
+                    {
+                        await StartInstance(subscribedEvent.ClientId, node.Value, node.Key);
+                    }
                 }
             }
         }
@@ -151,27 +155,30 @@ namespace Automatica.Core.Runtime.Core
             return Task.CompletedTask;
         }
 
-        public async Task AddSlave(string id, IDriverFactory factory)
+        public async Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance)
         {
             if (!_mqttSlaves.ContainsKey(id))
             {
-                _mqttSlaves.Add(id, new List<IDriverFactory>());
+                _mqttSlaves.Add(id, new Dictionary<NodeInstance, IDriverFactory>());
             }
-            _mqttSlaves[id].Add(factory);
+            _mqttSlaves[id].Add(nodeInstance, factory);
 
             // start instance asap
             if (_connectedMqttClients.Contains(id))
             {
-                await StartInstances(id, new List<IDriverFactory> { factory });
+                await StartInstance(id, factory, nodeInstance);
             }
 
         }
 
         public async Task Stop()
         {
-            foreach (var slave in _mqttSlaves.Keys)
+            foreach (var slave in _mqttSlaves)
             {
-                await StopInstances(slave, _mqttSlaves[slave]);
+                foreach (var node in slave.Value)
+                {
+                    await StopInstance(slave.Key, node.Value, node.Key);
+                }
             }
         }
 
@@ -230,26 +237,25 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StartInstances(string clientId, IList<IDriverFactory> driverFactories)
+        private async Task StartInstance(string clientId, IDriverFactory factory, NodeInstance nodeInstance)
         {
             try
             {
                 var actionRequests = new List<ActionRequest>();
-                foreach (var driver in driverFactories)
-                {
-                    _logger.LogDebug($"Publish to slave/{clientId}/actions (Start {driver.ImageName}:{driver.Tag})");
+                    _logger.LogDebug($"Publish to slave/{clientId}/actions (Start {factory.ImageName}:{factory.Tag})");
 
                     var actionRequest = new ActionRequest
                     {
                         Action = SlaveAction.Start,
-                        ImageSource = driver.ImageSource,
-                        ImageName = driver.ImageName,
-                        Tag = driver.Tag
+                        ImageSource = factory.ImageSource,
+                        ImageName = factory.ImageName,
+                        Tag = factory.Tag,
+                        Id = nodeInstance.ObjId
                     };
 
                     actionRequests.Add(actionRequest);
-                }
-                await SendActions(clientId, actionRequests.ToArray());
+               
+                await SendAction(clientId, actionRequest);
             }
             catch (Exception e)
             {
@@ -259,24 +265,23 @@ namespace Automatica.Core.Runtime.Core
 
 
 
-        private async Task StopInstances(string clientId, IList<IDriverFactory> driverFactories)
+        private async Task StopInstance(string clientId, IDriverFactory factory, NodeInstance nodeInstance)
         {
             try
             {
-                foreach (var driver in driverFactories)
+                _logger.LogDebug($"Publish to slave/{clientId}/action");
+
+                var actionRequest = new ActionRequest()
                 {
-                    _logger.LogDebug($"Publish to slave/{clientId}/action");
+                    Action = SlaveAction.Stop,
+                    ImageSource = factory.ImageSource,
+                    ImageName = factory.ImageName,
+                    Tag = factory.Tag,
+                    Id = nodeInstance.ObjId
+                };
 
-                    var actionRequest = new ActionRequest()
-                    {
-                        Action = SlaveAction.Stop,
-                        ImageSource = driver.ImageSource,
-                        ImageName = driver.ImageName,
-                        Tag = driver.Tag
-                    };
+                await SendAction(clientId, actionRequest);
 
-                    await SendAction(clientId, actionRequest);
-                }
             }
             catch (Exception e)
             {
