@@ -9,6 +9,7 @@ using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Tests.Model;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
 {
@@ -36,7 +37,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 
 
             RuleEngineDispatcher = new RuleEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
-                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache);
+                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<RuleEngineDispatcher>.Instance);
         }
 
 

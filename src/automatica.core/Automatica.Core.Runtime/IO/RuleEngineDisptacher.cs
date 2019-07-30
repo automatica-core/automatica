@@ -8,7 +8,6 @@ using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
 using Microsoft.Extensions.Logging;
 
@@ -24,6 +23,7 @@ namespace Automatica.Core.Runtime.IO
         private readonly IDriverNodesStore _driverNodesStore;
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
+        private readonly ILogger<RuleEngineDispatcher> _logger;
         private readonly object _lock = new object();
 
         public RuleEngineDispatcher(ILinkCache linkCache, 
@@ -31,7 +31,8 @@ namespace Automatica.Core.Runtime.IO
             ILogicInstancesStore logicInstancesStore, 
             IDriverNodesStore driverNodesStore,
             INodeInstanceCache nodeInstanceCache,
-            ILogicInterfaceInstanceCache logicInterfaceInstanceCache)
+            ILogicInterfaceInstanceCache logicInterfaceInstanceCache,
+            ILogger<RuleEngineDispatcher> logger)
         {
             _linkCache = linkCache;
             _dispatcher = dispatcher;
@@ -39,6 +40,7 @@ namespace Automatica.Core.Runtime.IO
             _driverNodesStore = driverNodesStore;
             _nodeInstanceCache = nodeInstanceCache;
             _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
+            _logger = logger;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -73,7 +75,8 @@ namespace Automatica.Core.Runtime.IO
 
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
+                        _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2NodeInstance2RulePageInput}) is empty - invalid configuration ");
+                        continue;
                     }
 
                     var inputId = sourceNode;
@@ -90,7 +93,8 @@ namespace Automatica.Core.Runtime.IO
 
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
+                        _logger.LogError($"{nameof(sourceNode)} - ({entry.This2RuleInterfaceInstanceOutput}) || {nameof(targetNode)} - ({entry.This2RuleInterfaceInstanceInput}) is empty - invalid configuration ");
+                        continue;
                     }
 
                     var inputId = entry.This2RuleInterfaceInstanceOutput.Value;
@@ -108,7 +112,8 @@ namespace Automatica.Core.Runtime.IO
 
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
+                        _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2RuleInterfaceInstanceInput}) is empty - invalid configuration ");
+                        continue;
                     }
 
                     SystemLogger.Instance.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
@@ -125,7 +130,8 @@ namespace Automatica.Core.Runtime.IO
 
                     if (sourceNode == null || targetNode == null)
                     {
-                        throw new ArgumentException($"{nameof(sourceNode)} || {nameof(targetNode)} is empty - invalid configuration ");
+                        _logger.LogError($"{nameof(sourceNode)} - ({entry.This2RuleInterfaceInstanceOutput}) || {nameof(targetNode)} - ({entry.This2NodeInstance2RulePageInput}) is empty - invalid configuration ");
+                        continue;
                     }
 
                     var inputId = entry.This2RuleInterfaceInstanceOutput.Value;
