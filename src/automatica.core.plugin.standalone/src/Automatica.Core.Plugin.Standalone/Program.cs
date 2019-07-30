@@ -31,6 +31,12 @@ namespace Automatica.Core.Plugin.Standalone
         static async Task Main(string[] args)
         {
 
+            // this calls are only that the we get all of our needed - i know it is a dirty workaround but necessary
+            var dbName = EF.Helper.DatabaseConstants.DatabaseInitName;
+            Console.WriteLine($"{dbName}");
+            var bitValue = Driver.Utility.Utils.BitValue(1, 1);
+            Console.WriteLine($"{bitValue}");
+
             var logger = new ConsoleLogger();
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {

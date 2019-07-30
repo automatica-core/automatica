@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Serialization;
+using Docker.DotNet.Models;
 using MQTTnet.Client;
 
 namespace Automatica.Core.Plugin.Standalone.Dispatcher
@@ -32,6 +33,16 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             _registrationMap.Clear();
         }
 
+        public Task ClearValues()
+        {
+            lock (_lock)
+            {
+                NodeValues.Clear();
+            }
+
+            return Task.CompletedTask;
+        }
+
         private Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
         {
             return Task.Run(() => dis(self, value));
@@ -53,7 +64,7 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
                     }
                     catch (Exception e)
                     {
-                        //./    _logger.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
+                        //.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
 
                     }
                 }
