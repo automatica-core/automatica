@@ -46,6 +46,8 @@ namespace Automatica.Core.Plugin.Standalone
         private IDriver _driverInstance;
         private readonly IDriverStore _driverStore;
 
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+
         public MqttConnection(ILogger logger, string host, string nodeId, string username, string password,
             IDriverFactory factory,
             IServiceProvider serviceProvider)
@@ -140,6 +142,12 @@ namespace Automatica.Core.Plugin.Standalone
 
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
             {
+                if (!await _semaphore.WaitAsync(1000))
+                {
+                    Logger.LogWarning($"Instance already running, ignoring second call...");
+                    return;
+                }
+
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
 
                 var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory,
