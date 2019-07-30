@@ -222,8 +222,8 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogDebug($"Publish to config/{clientId}");
-                await _mqttServer.PublishAsync(new MqttApplicationMessage()
+                _logger.LogDebug($"Publish to {RemoteTopicConstants.CONFIG_TOPIC}/{clientId}");
+                await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.CONFIG_TOPIC}/{clientId}",
                     QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
