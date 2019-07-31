@@ -113,7 +113,7 @@ namespace Automatica.Core.Runtime.Core
                 _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
             }
             else if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic,
-                $"{RemoteTopicConstants.ACTION_TOPIC_START}/+/NOTIFY_LEARN_MODE"))
+                $"{RemoteTopicConstants.ACTION_TOPIC_START}/+/{RemoteTopicConstants.NOTIFY_LEARN_MODE}"))
             {
                 var learnModeDtoJson = messageEvent.Message;
                 var learnModeDto = JsonConvert.DeserializeObject<LearnModeDto>(learnModeDtoJson);
