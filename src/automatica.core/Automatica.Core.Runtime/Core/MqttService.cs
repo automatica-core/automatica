@@ -108,6 +108,8 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task MessageReceived(RemoteMessageEvent messageEvent)
         {
+            _logger.LogDebug($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}");
+
             if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
                 _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
