@@ -9,13 +9,13 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
     internal class RemoteNodeTemplatesFactory : INodeTemplateFactory
     {
-        private Dictionary<string, Setting> _settings = new Dictionary<string, Setting>();
+        private readonly Dictionary<string, Setting> _settings = new Dictionary<string, Setting>();
 
-        private Dictionary<Guid, NodeTemplate> _nodeTemplates = new Dictionary<Guid, NodeTemplate>();
-        private Dictionary<Guid, PropertyTemplate> _propertyTemplates = new Dictionary<Guid, PropertyTemplate>();
-        private Dictionary<Guid, PropertyTemplateConstraint> _propertyConstraintTemplates = new Dictionary<Guid, PropertyTemplateConstraint>();
-        private Dictionary<Guid, PropertyTemplateConstraintData> _propertyConstraintDataTemplates = new Dictionary<Guid, PropertyTemplateConstraintData>();
-        private Dictionary<Guid, InterfaceType> _interfaceTypes = new Dictionary<Guid, InterfaceType>();
+        private readonly Dictionary<Guid, NodeTemplate> _nodeTemplates = new Dictionary<Guid, NodeTemplate>();
+        private readonly Dictionary<Guid, PropertyTemplate> _propertyTemplates = new Dictionary<Guid, PropertyTemplate>();
+        private readonly Dictionary<Guid, PropertyTemplateConstraint> _propertyConstraintTemplates = new Dictionary<Guid, PropertyTemplateConstraint>();
+        private readonly Dictionary<Guid, PropertyTemplateConstraintData> _propertyConstraintDataTemplates = new Dictionary<Guid, PropertyTemplateConstraintData>();
+        private readonly Dictionary<Guid, InterfaceType> _interfaceTypes = new Dictionary<Guid, InterfaceType>();
 
         public RemoteNodeTemplatesFactory()
         {
@@ -24,15 +24,15 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
         public void AddSettingsEntry(string key, object value, string group, PropertyTemplateType type, bool isVisible)
         {
-           var settings = new Setting
-                {
-                    ValueKey = key,
-                    Value = value
-                };
-             
-            settings.Type = (long)type;
-            settings.IsVisible = isVisible;
-            settings.Group = group;
+            var settings = new Setting
+            {
+                ValueKey = key,
+                Value = value,
+                Type = (long) type,
+                IsVisible = isVisible,
+                Group = @group
+            };
+
 
             _settings.Add(key, settings);
         }
@@ -55,14 +55,16 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
         public CreateTemplateCode CreateInterfaceType(Guid uid, string name, string description, int maxChilds, int maxInstances, bool isDriverInterface)
         {
-            var interfaceType = new InterfaceType();
-            interfaceType.Type = uid;
+            var interfaceType = new InterfaceType
+            {
+                Type = uid,
+                Name = name,
+                Description = description,
+                MaxChilds = maxChilds,
+                MaxInstances = maxInstances,
+                IsDriverInterface = isDriverInterface
+            };
 
-            interfaceType.Name = name;
-            interfaceType.Description = description;
-            interfaceType.MaxChilds = maxChilds;
-            interfaceType.MaxInstances = maxInstances;
-            interfaceType.IsDriverInterface = isDriverInterface;
 
             _interfaceTypes.Add(uid, interfaceType);
 
@@ -112,24 +114,27 @@ namespace Automatica.Core.Plugin.Standalone.Factories
             bool defaultCreated, bool isReadable, bool isReadableFixed, bool isWriteable, bool isWriteableFixed, Base.Templates.NodeDataType dataType,
             int maxInstances, bool isAdapterInterface, bool deleteAble)
         {
-            var nodeTemplate = new NodeTemplate();
-            nodeTemplate.ObjId = uid;
+            var nodeTemplate = new NodeTemplate
+            {
+                ObjId = uid,
+                Name = name,
+                Description = description,
+                Key = key,
+                This2DefaultMobileVisuTemplate =
+                    VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                NeedsInterface2InterfacesType = needsInterface,
+                ProvidesInterface2InterfaceType = providesInterface,
+                DefaultCreated = defaultCreated,
+                IsReadable = isReadable,
+                IsReadableFixed = isReadableFixed,
+                IsWriteable = isWriteable,
+                IsWriteableFixed = isWriteableFixed,
+                This2NodeDataType = (long) dataType,
+                MaxInstances = maxInstances,
+                IsAdapterInterface = isAdapterInterface,
+                IsDeleteable = deleteAble
+            };
 
-            nodeTemplate.Name = name;
-            nodeTemplate.Description = description;
-            nodeTemplate.Key = key;
-            nodeTemplate.This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label);
-            nodeTemplate.NeedsInterface2InterfacesType = needsInterface;
-            nodeTemplate.ProvidesInterface2InterfaceType = providesInterface;
-            nodeTemplate.DefaultCreated = defaultCreated;
-            nodeTemplate.IsReadable = isReadable;
-            nodeTemplate.IsReadableFixed = isReadableFixed;
-            nodeTemplate.IsWriteable = isWriteable;
-            nodeTemplate.IsWriteableFixed = isWriteableFixed;
-            nodeTemplate.This2NodeDataType = (long)dataType;
-            nodeTemplate.MaxInstances = maxInstances;
-            nodeTemplate.IsAdapterInterface = isAdapterInterface;
-            nodeTemplate.IsDeleteable = deleteAble;
 
 
             _nodeTemplates.Add(uid, nodeTemplate);
@@ -138,14 +143,16 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
         public CreateTemplateCode CreatePropertyConstraint(Guid constraintId, string name, string descrption, PropertyConstraint constraintType, PropertyConstraintLevel level, Guid propertyTemplate)
         {
-            var constraint = new PropertyTemplateConstraint();
-            constraint.ObjId = constraintId;
+            var constraint = new PropertyTemplateConstraint
+            {
+                ObjId = constraintId,
+                Name = name,
+                Description = descrption,
+                ConstraintType = (long) constraintType,
+                This2PropertyTemplate = propertyTemplate,
+                ConstraintLevel = (long) level
+            };
 
-            constraint.Name = name;
-            constraint.Description = descrption;
-            constraint.ConstraintType = (long)constraintType;
-            constraint.This2PropertyTemplate = propertyTemplate;
-            constraint.ConstraintLevel = (long)level;
 
 
             _propertyConstraintTemplates.Add(constraintId, constraint);
@@ -156,14 +163,16 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         public CreateTemplateCode CreatePropertyConstraintData(Guid constraintData, double factor, double offset, Guid propertyTemplateConstraint,
             string propertyKey, PropertyConstraintConditionType conditionType)
         {
-            var constraint = new PropertyTemplateConstraintData();
-            constraint.ObjId = constraintData;
+            var constraint = new PropertyTemplateConstraintData
+            {
+                ObjId = constraintData,
+                Factor = factor,
+                Offset = offset,
+                This2PropertyTemplateConstraint = propertyTemplateConstraint,
+                PropertyKey = propertyKey,
+                ConditionType = (long) conditionType
+            };
 
-            constraint.Factor = factor;
-            constraint.Offset = offset;
-            constraint.This2PropertyTemplateConstraint = propertyTemplateConstraint;
-            constraint.PropertyKey = propertyKey;
-            constraint.ConditionType = (long)conditionType;
 
             _propertyConstraintDataTemplates.Add(constraintData, constraint);
 
@@ -173,23 +182,25 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         public CreateTemplateCode CreatePropertyTemplate(Guid uid, string name, string description, string key, PropertyTemplateType propertyType, Guid objectRef, 
             string group, bool isVisible, bool isReadonly, string meta, object defaultValue, int groupOrder, int order)
         {
-            var propertyTemplate = new PropertyTemplate();
-            propertyTemplate.ObjId = uid;
+            var propertyTemplate = new PropertyTemplate
+            {
+                ObjId = uid,
+                Name = name,
+                Description = description,
+                Key = key,
+                This2PropertyType = (long) propertyType,
+                This2NodeTemplate = objectRef,
+                Group = @group,
+                IsVisible = isVisible,
+                IsReadonly = isReadonly,
+                Meta = String.IsNullOrEmpty(meta) ? "" : meta,
+                DefaultValue = defaultValue == null ? "" : defaultValue.ToString(),
+                GroupOrder = groupOrder,
+                Order = order
+            };
 
-            propertyTemplate.Name = name;
-            propertyTemplate.Description = description;
-            propertyTemplate.Key = key;
-            propertyTemplate.This2PropertyType = (long)propertyType;
 
-            propertyTemplate.This2NodeTemplate = objectRef;
 
-            propertyTemplate.Group = group;
-            propertyTemplate.IsVisible = isVisible;
-            propertyTemplate.IsReadonly = isReadonly;
-            propertyTemplate.Meta = String.IsNullOrEmpty(meta) ? "" : meta;
-            propertyTemplate.DefaultValue = defaultValue == null ? "" : defaultValue.ToString();
-            propertyTemplate.GroupOrder = groupOrder;
-            propertyTemplate.Order = order;
 
             _propertyTemplates.Add(uid, propertyTemplate);
 
@@ -203,7 +214,7 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
         public CreateTemplateCode SetPropertyValue(Guid uid, object value)
         {
-            throw new NotImplementedException();
+            return CreateTemplateCode.Created;
         }
     }
 }

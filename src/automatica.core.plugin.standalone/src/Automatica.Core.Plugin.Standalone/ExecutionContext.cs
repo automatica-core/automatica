@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Plugin.Standalone.Abstraction;
 using Automatica.Core.Plugin.Standalone.Factories;
@@ -26,6 +27,7 @@ namespace Automatica.Core.Plugin.Standalone
 
         private readonly List<IDriverConnection> _connections = new List<IDriverConnection>();
 
+
         public ExecutionContext(ILogger logger, string pluginDir)
         {
             _logger = logger;
@@ -35,6 +37,7 @@ namespace Automatica.Core.Plugin.Standalone
             serviceCollection.AddAutomaticaDrivers();
             serviceCollection.AddSingleton<ILogger>(a => NullLogger.Instance);
             serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
+            serviceCollection.AddSingleton<INodeTemplateFactory, RemoteNodeTemplatesFactory>();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -100,10 +103,12 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 var localization = new LocalizationProvider(_logger);
                 _factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
+                var templateFactory = _serviceProvider.GetRequiredService<INodeTemplateFactory>();
 
                 foreach (var factory in _factories)
                 {
                     _logger.LogDebug($"Loaded {factory}");
+                    Dockerize.InitDriverFactory(factory, templateFactory);
                 }
 
                 return true;

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Loader;
 using Automatica.Core.EF.Models;
@@ -29,13 +30,13 @@ namespace Automatica.Core.Plugin.Standalone
     internal class MqttConnection : IDriverConnection
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly INodeTemplateFactory _nodeTemplateFactory;
         public string MasterAddress { get; }
         public string NodeId { get; }
         public string Username { get; }
         public string Password { get; }
         public ILogger Logger { get; }
 
-        private readonly RemoteNodeTemplatesFactory _remoteNodeTemplatesFactory = new RemoteNodeTemplatesFactory();
         private readonly MqttDispatcher _dispatcher;
         private readonly IMqttClient _mqttClient;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(0);
@@ -53,6 +54,7 @@ namespace Automatica.Core.Plugin.Standalone
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
+            
             Logger = logger;
             MasterAddress = host;
             NodeId = nodeId;
@@ -60,6 +62,7 @@ namespace Automatica.Core.Plugin.Standalone
             Password = password;
             Factory = factory;
 
+            _nodeTemplateFactory = serviceProvider.GetRequiredService<INodeTemplateFactory>();
             _loader = _serviceProvider.GetRequiredService<IDriverFactoryLoader>();
             _nodeStore = serviceProvider.GetRequiredService<IDriverNodesStore>();
             _driverStore = serviceProvider.GetRequiredService<IDriverStore>();
@@ -150,7 +153,7 @@ namespace Automatica.Core.Plugin.Standalone
 
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
 
-                var context = new DriverContext(dto, _dispatcher, _remoteNodeTemplatesFactory,
+                var context = new DriverContext(dto, _dispatcher, _nodeTemplateFactory,
                     new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(this),
                     new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
                 _driverInstance = Factory.CreateDriver(context);

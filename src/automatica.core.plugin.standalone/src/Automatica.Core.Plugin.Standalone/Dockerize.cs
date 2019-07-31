@@ -64,18 +64,14 @@ namespace Automatica.Core.Plugin.Standalone
 
     internal static class Dockerize
     {
-        internal static async Task InitFactory<T, T2>(IMqttClient client, T factory, T2 templateFactory) where T : IFactory<T2> where T2 : IPropertyTemplateFactory, IRemoteFactory
+        internal static void InitFactory<T, T2>(T factory, T2 templateFactory) where T : IFactory<T2> where T2 : IPropertyTemplateFactory, IRemoteFactory
         {
             factory.InitTemplates(templateFactory);
-
-            await templateFactory.SubmitFactoryData(factory.FactoryGuid, client);
         }
 
-        internal static async Task InitDriverFactory<T2>(IMqttClient client, DriverFactory factory, T2 templateFactory) where T2 : INodeTemplateFactory, IRemoteFactory
+        internal static void InitDriverFactory<T2>(DriverFactory factory, T2 templateFactory) where T2 : INodeTemplateFactory
         {
             factory.InitTemplates(templateFactory);
-
-            await templateFactory.SubmitFactoryData(factory.FactoryGuid, client);
         }
 
         internal static Task<IList<T>> Init<T>(string workingDir, ILogger logger, ILocalizationProvider localizationProvider)
