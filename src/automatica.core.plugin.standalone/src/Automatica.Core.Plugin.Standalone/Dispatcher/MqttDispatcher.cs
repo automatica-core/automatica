@@ -75,7 +75,6 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
 
         public async Task DispatchValue(IDispatchable self, object value)
         {
-            StoreValue(self, value);
 
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
             {
@@ -103,6 +102,8 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
                 {
                     return;
                 }
+
+                StoreValue(self, value);
             }
 
             if (self.Source != DispatchableSource.Remote)

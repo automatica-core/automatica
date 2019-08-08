@@ -2,13 +2,13 @@
   "profiles": {
     "Automatica.Core.Plugin.Dockerize": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\_Drivers\\MachineFlags",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\_Drivers\\EnOcean",
       "environmentVariables": {
         "AUTOMATICA_SLAVE_MASTER": "localhost",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
         "MQTT_LOG_VERBOSE": "asdf",
         "AUTOMATICA_SLAVE_USER": "rm1",
-        "AUTOMATICA_NODE_ID": "1cc1256b-1b16-d5ba-364a-ea84eda80b9e"
+        "AUTOMATICA_NODE_ID": "7b38aa91-88e8-37ed-4986-6b6095140f00"
       }
     }
   }

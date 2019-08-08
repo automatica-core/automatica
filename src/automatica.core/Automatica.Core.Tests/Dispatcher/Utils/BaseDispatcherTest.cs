@@ -5,7 +5,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Tests.Model;

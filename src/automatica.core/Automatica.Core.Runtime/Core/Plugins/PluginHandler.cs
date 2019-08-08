@@ -6,8 +6,8 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Core.Plugins

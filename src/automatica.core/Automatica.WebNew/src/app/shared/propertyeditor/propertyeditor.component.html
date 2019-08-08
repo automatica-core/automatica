@@ -341,7 +341,7 @@
                     <dxo-drop-down-options height="300px"></dxo-drop-down-options>
                     <div *dxTemplate="let contet of 'content'">
                         <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain"
-                            keyExpr="ProvidesInterface2InterfaceType" parentIdExpr="NeedsInterface2InterfacesType"
+                            keyExpr="Id" parentIdExpr="ParentId"
                             selectionMode="single" displayExpr="DisplayName" [selectByClick]="true"
                             (onItemClick)="nodeTemplateSelectItem($event, data.data)">
 

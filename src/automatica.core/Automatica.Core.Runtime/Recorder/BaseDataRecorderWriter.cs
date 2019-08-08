@@ -1,54 +1,48 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Logger;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Automatica.Core.Runtime.Trendings
+namespace Automatica.Core.Runtime.Recorder
 {
-    internal abstract class BaseTrendingRecorder : ITrendingRecorder
+    internal abstract class BaseDataRecorderWriter : IDataRecorderWriter
     {
-        private readonly IConfiguration config;
+        private readonly INodeInstanceCache _nodeCache;
 
-        private readonly Dictionary<Guid, List<TrendingValueRecorder>> _recorders = new Dictionary<Guid, List<TrendingValueRecorder>>();
+        private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
 
-        public BaseTrendingRecorder(string recorderName, IConfiguration config, IDispatcher dispatcher)
+        internal BaseDataRecorderWriter(string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher)
         {
             Logger = CoreLoggerFactory.GetLogger(recorderName);
-            this.config = config;
+            _nodeCache = nodeCache;
             Dispatcher = dispatcher;
-            DbContext = new AutomaticaContext(config);
         }
 
         public ILogger Logger { get; }
-        public AutomaticaContext DbContext { get; }
         public IDispatcher Dispatcher { get; }
 
         public async Task AddTrend(Guid nodeInstance)
         {
-            using (var dbContext = new AutomaticaContext(config))
+            var node = _nodeCache.Get(nodeInstance);
+
+            if (node == null)
             {
-                var node = await dbContext.NodeInstances.SingleOrDefaultAsync(a => a.ObjId == nodeInstance);
-
-                if(node == null)
-                {
-                    Logger.LogWarning($"Could not create recorder for {nodeInstance} - not found");
-                    return;
-                }
-
-                if(!_recorders.ContainsKey(nodeInstance))
-                {
-                    _recorders.Add(nodeInstance, new List<TrendingValueRecorder>());
-                }
-
-                _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
+                Logger.LogWarning($"Could not create recorderWriter for {nodeInstance} - not found");
+                return;
             }
+
+            if (!_recorders.ContainsKey(nodeInstance))
+            {
+                _recorders.Add(nodeInstance, new List<IDataRecorder>());
+            }
+
+            _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
+
             await Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
         }
 
@@ -67,11 +61,13 @@ namespace Automatica.Core.Runtime.Trendings
 
         internal void SaveValue(NodeInstance instance, double value, string source)
         {
-            var trending = new Trending();
-            trending.This2NodeInstance = instance.ObjId;
-            trending.Value = (double)value;
-            trending.Timestamp = DateTime.UtcNow;
-            trending.Source = source;
+            var trending = new Trending
+            {
+                This2NodeInstance = instance.ObjId,
+                Value = value,
+                Timestamp = DateTime.UtcNow,
+                Source = source
+            };
             trending.Source = source;
 
             Save(trending);
@@ -85,17 +81,16 @@ namespace Automatica.Core.Runtime.Trendings
             return Task.CompletedTask;
         }
 
-        public Task RemoveTrend(Guid nodeInstance)
+        public async Task RemoveTrend(Guid nodeInstance)
         {
             var recorders = _recorders[nodeInstance];
 
             foreach (var rec in recorders)
             {
-                rec.Stop();
+                await rec.Stop();
             }
 
             _recorders.Remove(nodeInstance);
-            return Task.CompletedTask;
         }
 
         public async Task Start()

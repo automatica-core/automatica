@@ -59,8 +59,14 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   nextId: number;
 
+
+  @Output()
+  nodeTemplatesChange = new EventEmitter<any>();
+
   @Input()
-  nodeTemplates: NodeTemplate[];
+  nodeTemplates: NodeTemplate[] = [];
+  nodeTemplatesMap = new Map<string, NodeTemplate>();
+
 
   @ViewChild("tree", { static: false }) tree: DxTreeListComponent;
 
@@ -122,6 +128,12 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   async loadTree() {
     this.nodeTemplates = await this.configService.getNodeTemplates();
+    this.nodeTemplatesChange.emit(this.nodeTemplates);
+
+    this.nodeTemplatesMap = new Map<string, NodeTemplate>();
+    for (const nodeTemplate of this.nodeTemplates) {
+      this.nodeTemplatesMap.set(nodeTemplate.ObjId, nodeTemplate);
+    }
 
     await this.loadConfig();
 
@@ -132,6 +144,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         if (this.mapList.has(id)) {
           const treeNode = this.mapList.get(id);
           treeNode.Value = data[2];
+          console.log(treeNode, data[2]);
         }
       }
     });
@@ -660,22 +673,24 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   saveLearnNodeInstances(nodeInstance: NodeInstance, learnedNodes: LearnNodeInstance[]) {
-    for (const x of learnedNodes) {
-      let existingNode = this.getNodeInstanceByNeedsInterface(nodeInstance, x.nodeTemplateInstance.NeedsInterface2InterfacesType);
+    for (const learnNode of learnedNodes) {
+      let existingNode = this.getNodeInstanceByNeedsInterface(nodeInstance, learnNode.nodeTemplateInstance.nodeTemplate.NeedsInterface2InterfacesType);
 
       let created = void 0;
       if (!existingNode) {
-        created = this.createFromNodeTemplate(nodeInstance, x.nodeTemplateInstance, x.propertyInstances);
+        created = this.createFromNodeTemplate(nodeInstance, learnNode.nodeTemplateInstance.nodeTemplate, learnNode.propertyInstances);
+
         existingNode = created.node;
+
 
         this.createNodeInstanceChildren(existingNode, existingNode.NodeTemplate);
 
       } else {
-        created = this.createFromNodeTemplate(existingNode, x.nodeTemplateInstance, x.propertyInstances);
+        created = this.createFromNodeTemplate(existingNode, learnNode.nodeTemplateInstance.nodeTemplate, learnNode.propertyInstances);
       }
 
-      created.node.Name = x.name;
-      created.node.Description = x.description;
+      created.node.Name = learnNode.name;
+      created.node.Description = learnNode.description;
 
       for (const newNode of created.created) {
         this.prepareNewItem(newNode, newNode.Parent, false, true);
@@ -685,12 +700,15 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   private createFromNodeTemplate(baseNode: NodeInstance, nodeTemplate: NodeTemplate, propertyInstances: PropertyInstance[]): { node: NodeInstance, created: NodeInstance[] } {
-    const node = NodeInstance.createForNodeInstanceFromTemplate(nodeTemplate, void 0);
+    const cachedNodeTemplate = this.nodeTemplatesMap.get(nodeTemplate.ObjId);
+    const node = NodeInstance.createForNodeInstanceFromTemplate(cachedNodeTemplate, void 0);
     let created = [node];
 
     if (node) {
       for (const prop of propertyInstances) {
         const nodeProp = node.Properties.find(a => a.PropertyTemplate.Key === prop.PropertyTemplate.Key);
+
+        console.log(nodeProp);
 
         if (nodeProp) {
           nodeProp.Value = prop.Value;
@@ -707,7 +725,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (!parent) {
       const nextTemplate = this.nodeTemplates.find(a => a.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType);
+
       const newNode = this.createFromNodeTemplate(baseNode, nextTemplate, propertyInstances);
+
       if (newNode) {
         parent = newNode.node;
         created = [...created, ...newNode.created];

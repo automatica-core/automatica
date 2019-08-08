@@ -47,17 +47,14 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     try {
       this.appService.isLoading = true;
 
-      const [userGroups, templates, configTree, areaInstances, categoryInstances] = await Promise.all(
+      const [userGroups,  configTree, areaInstances, categoryInstances] = await Promise.all(
         [
           this.userGroupsService.getUserGroups(),
-          this.configService.getNodeTemplates(),
           this.configTree.loadTree(),
           this.areaService.getAreaInstances(),
           this.categoryService.getCategoryInstances()
         ])
       this.userGroups = userGroups;
-
-      this.nodeTemplates = templates;
 
       await this.dataHub.subscribe("All");
 

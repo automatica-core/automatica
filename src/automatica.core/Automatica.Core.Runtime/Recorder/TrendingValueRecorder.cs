@@ -1,26 +1,26 @@
-﻿using Automatica.Core.EF.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.EF.Models;
 
-namespace Automatica.Core.Runtime.Trendings
+namespace Automatica.Core.Runtime.Recorder
 {
-    internal class TrendingValueRecorder
+    internal class TrendingValueRecorder : IDataRecorder
     {
-        private readonly BaseTrendingRecorder _recorder;
+        private readonly BaseDataRecorderWriter _recorderWriter;
         private readonly List<double> _values = new List<double>();
 
-        private double? _lastValue = null;
+        private double? _lastValue;
 
-        private Timer _timer = new Timer();
+        private readonly Timer _timer = new Timer();
         private readonly object _lock = new object();
 
         private string _lastSource = "";
-        public TrendingValueRecorder(NodeInstance instance, BaseTrendingRecorder recorder)
+        public TrendingValueRecorder(NodeInstance instance, BaseDataRecorderWriter recorderWriter)
         {
             Instance = instance;
-            _recorder = recorder;
+            _recorderWriter = recorderWriter;
 
 
         }
@@ -45,13 +45,13 @@ namespace Automatica.Core.Runtime.Trendings
                 {
                     return;
                 }
-                _recorder.SaveValue(Instance, _lastValue.Value, _lastSource);
+                _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
                 _lastValue = null;
                 _values.Clear();
             }
         }
 
-        internal void ValueChanged(object value, string source)
+        public void ValueChanged(object value, string source)
         {
             lock (_lock)
             {

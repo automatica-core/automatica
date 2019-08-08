@@ -108,6 +108,8 @@ namespace Automatica.Core.Plugin.Standalone
                 foreach (var factory in _factories)
                 {
                     _logger.LogDebug($"Loaded {factory}");
+
+                    _logger.LogDebug($"Init templates for {factory}");
                     Dockerize.InitDriverFactory(factory, templateFactory);
                 }
 

@@ -12,7 +12,7 @@
                     [categoryInstances]="categoryInstances" (saveLearnedNodes)="saveLearnedNodes($event)"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="70">
-                <p3-config-tree #configTree [nodeTemplates]="nodeTemplates" (onNodeSelect)="nodeSelect($event)"></p3-config-tree>
+                <p3-config-tree #configTree [(nodeTemplates)]="nodeTemplates" (onNodeSelect)="nodeSelect($event)"></p3-config-tree>
             </as-split-area>
         </as-split>
     </div>

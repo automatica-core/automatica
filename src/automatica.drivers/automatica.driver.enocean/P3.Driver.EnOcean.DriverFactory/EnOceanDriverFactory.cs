@@ -57,10 +57,10 @@ namespace P3.Driver.EnOcean.DriverFactory
             EnOceanRorgD2Data.AddRorgD2Templates(factory, _enoceanFactory);
             EnOceanRorgF6Data.AddRorgF6Templates(factory, _enoceanFactory);
 
-            AddWriteableDatapoints(factory);
+            AddWriteAbleDataPoints(factory);
         }
 
-        private void AddWriteableDatapoints(INodeTemplateFactory factory)
+        private void AddWriteAbleDataPoints(INodeTemplateFactory factory)
         {
             var simulatedRelayGuid = new Guid("4a0c8c59-e8c5-4098-8420-15e886f4648f");
             factory.CreateInterfaceType(simulatedRelayGuid, "ENOCEAN.SIMULATED.RELAY.NAME", "ENOCEAN.SIMULATED.RELAY.DESCRIPTION", 1, Int32.MaxValue, false);

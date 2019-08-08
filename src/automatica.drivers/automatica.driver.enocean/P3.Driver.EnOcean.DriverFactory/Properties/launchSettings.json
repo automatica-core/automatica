@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "P3.Driver.EnOcean.DriverFactory": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core.plugin.standalone\\src\\Automatica.Core.Plugin.Standalone\\bin\\Debug\\netcoreapp2.2\\win-x64\\publish\\automatica-plugin-standalone.exe",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.drivers\\automatica.driver.enocean\\P3.Driver.EnOcean.DriverFactory\\bin\\Debug\\netcoreapp2.2",
+      "environmentVariables": {
+        "AUTOMATICA_SLAVE_PASSWORD": "rm1",
+        "MQTT_LOG_VERBOSE": "asdf",
+        "AUTOMATICA_SLAVE_USER": "rm1",
+        "AUTOMATICA_NODE_ID": "7b38aa91-88e8-37ed-4986-6b6095140f00"
+      }
+    }
+  }
+}

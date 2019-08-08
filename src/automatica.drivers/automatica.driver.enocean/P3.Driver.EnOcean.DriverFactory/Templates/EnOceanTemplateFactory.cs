@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automatica.Core.EF.Models;
 using P3.Driver.EnOcean.Data.Packets;
 
 namespace P3.Driver.EnOcean.DriverFactory.Templates

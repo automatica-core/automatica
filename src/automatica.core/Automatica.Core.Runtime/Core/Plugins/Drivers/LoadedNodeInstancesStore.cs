@@ -1,7 +1,7 @@
 ﻿using System;
 using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 
 namespace Automatica.Core.Runtime.Core.Plugins.Drivers
 {

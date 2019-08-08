@@ -6,7 +6,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Abstraction.Plugins;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

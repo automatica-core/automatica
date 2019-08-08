@@ -33,12 +33,13 @@ using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
+using Automatica.Core.Runtime.Database;
+using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
-using Automatica.Core.Runtime.Trendings;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 
@@ -73,7 +74,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILearnMode _learnMode;
 
         private readonly IUpdateHandler _updateHandler;
-        private readonly IList<ITrendingRecorder> _trendingRecorder = new List<ITrendingRecorder>();
+        private readonly IList<IDataRecorderWriter> _trendingRecorder = new List<IDataRecorderWriter>();
 
         private readonly IRemoteServerHandler _remoteServerHandler;
         private readonly IRemoteHandler _remoteHandler;
@@ -157,8 +158,8 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Constructed;
 
-            _trendingRecorder.Add(new DatabaseTrendingRecorder(_config, _dispatcher));
-            _trendingRecorder.Add(new CloudTrendingRecorder(_config, _dispatcher));
+            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_dbContext, _logger)));
+            _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher));
 
             _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
 

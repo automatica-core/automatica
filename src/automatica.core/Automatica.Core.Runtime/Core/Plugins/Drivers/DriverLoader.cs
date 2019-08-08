@@ -7,7 +7,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction.Plugins;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

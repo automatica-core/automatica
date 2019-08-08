@@ -15,14 +15,15 @@ using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Plugins;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core;
 using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.Core.Plugins.Drivers;
 using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Update;
+using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Visu;
 using Automatica.Push.Hubs;
@@ -97,6 +98,8 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<IRuleEngineDispatcher, RuleEngineDispatcher>();
 
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
+
+                services.AddSingleton<DatabaseTrendingValueStore, DatabaseTrendingValueStore>();
             }
 
 

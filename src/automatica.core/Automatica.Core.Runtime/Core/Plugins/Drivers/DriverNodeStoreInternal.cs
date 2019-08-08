@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Core.Runtime.Abstraction.Plugins.Drivers;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 
 namespace Automatica.Core.Runtime.Core.Plugins.Drivers
 {

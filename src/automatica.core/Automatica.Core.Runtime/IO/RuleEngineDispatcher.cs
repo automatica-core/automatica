@@ -8,7 +8,7 @@ using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Runtime.Abstraction.Plugins.Logics;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Automatica.Core.Tests")]

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Automatica.Core.Runtime.Trendings
+namespace Automatica.Core.Runtime.Recorder
 {
-    public interface ITrendingRecorder
+    public interface IDataRecorderWriter
     {
         Task Start();
         Task Stop();
