@@ -22,14 +22,20 @@ namespace P3.Driver.EnOcean.Console
 
             var driver = new Driver("COM4");
             await driver.Open();
-             driver.Close();
+             
+             driver.StartTeachInMode();
 
             var telegram = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0 }));
             var rec = await driver.SendTelegram(telegram);
 
             driver.TelegramReceived += Driver_TelegramReceived;
-
+            driver.TeachInReceived += Driver_TeachInReceived;
             System.Console.WriteLine("rec...");
+        }
+
+        private static void Driver_TeachInReceived(object sender, Data.PacketReceivedEventArgs e)
+        {
+            
         }
 
         private static void Driver_TelegramReceived(object sender, Data.PacketReceivedEventArgs e)

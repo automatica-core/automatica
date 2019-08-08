@@ -416,6 +416,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   async onLearnClick($event, data: PropertyInstance) {
     if (data.Parent instanceof NodeInstance) {
+      const currentNode: NodeInstance = data.Parent;
+
       await this.dataHub.enableLearnMode(data.Parent);
       this.learnedNodeInstances = [];
       this.learnModeVisible = true;
@@ -434,7 +436,11 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
             learnNode.nodeTemplates.push(new LearnModeNodeTemplate(nodeTemplate));
           }
 
-          learnNode.nodeTemplates[learnNode.nodeTemplates.length - 1].ParentId = void 0;
+          const rootElements = learnNode.nodeTemplates.filter(a => a.nodeTemplate.NeedsInterface2InterfacesType === currentNode.NodeTemplate.ProvidesInterface2InterfaceType);
+
+          for (const rootEl of rootElements) {
+            rootEl.ParentId = void 0;
+          }
 
           if (hubData[3]) {
             learnNode.propertyInstances = BaseService.getValidBaseModels<PropertyInstance>(hubData[3], this.translate);
