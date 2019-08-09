@@ -275,7 +275,7 @@ namespace Automatica.Core.Runtime.Core
             _ruleEngineDispatcher.Load();
             _logger.LogInformation("Loading logic engine connections...done");
 
-            foreach (var rule in _logicStore.Dictionary())
+            foreach (var rule in _logicInstanceStore.Dictionary())
             {
                 _logger.LogInformation($"Starting logic {rule.Key.Name}...");
 
@@ -315,7 +315,7 @@ namespace Automatica.Core.Runtime.Core
                 }
             }
 
-            foreach (var rule in _logicStore.Dictionary())
+            foreach (var rule in _logicInstanceStore.Dictionary())
             {
                 _logger.LogInformation($"Stopping logic {rule.Key.Name}...");
 
