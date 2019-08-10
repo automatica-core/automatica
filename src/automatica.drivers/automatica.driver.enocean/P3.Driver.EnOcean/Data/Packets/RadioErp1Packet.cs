@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.EnOcean.Data.Packets
@@ -87,7 +88,7 @@ namespace P3.Driver.EnOcean.Data.Packets
                 case Rorg.Rps:
                     return true;
                 case Rorg.OneBs:
-                    return (radio.Data.ToArray()[0] & 0x16) > 0;
+                    return !Utils.IsBitSet(radio.Data.ToArray()[0], 3);
                 case Rorg.FourBs:
                     return (radio.Data.ToArray()[3] & 0x16) > 0;
             }
