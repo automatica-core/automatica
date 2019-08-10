@@ -28,11 +28,10 @@ export class BaseService {
     }
 
 
-
     private headers(): HttpHeaders {
         let headers = new HttpHeaders();
-        headers = headers.append("Content-Type", "application/x-msgpack");
-        headers = headers.append("Accept", "application/x-msgpack");
+        headers = headers.append("Content-Type", "application/json");
+        headers = headers.append("Accept", "application/json");
         headers = headers.append("Access-Control-Allow-Origin", "*");
 
         const jwt = localStorage.getItem("jwt");
@@ -57,16 +56,17 @@ export class BaseService {
     async get<T extends BaseModel>(url: string): Promise<T> {
         try {
             const data = await this.httpService.get(this.getS1Server() + "/" + url,
-                { headers: this.headers(), withCredentials: true, responseType: "arraybuffer" }).toPromise();
+                { headers: this.headers(), withCredentials: true }).toPromise();
 
             if (!data) {
                 return void 0;
             }
 
-            const json = this.decode(url, data);
-            if (json == null) {
-                return;
-            }
+            // const json = this.decode(url, data);
+            // if (json == null) {
+            //     return;
+            // }
+            const json = data;
             const model = BaseModel.getBaseModelFromJson<T>(json, void 0, this.translationService);
             console.log(url, "data is", model);
             return model;
@@ -79,25 +79,26 @@ export class BaseService {
 
     async getAbsoluteJson(url: string): Promise<any> {
         const data = await this.httpService.get(this.getS1Server() + "/" + url,
-            { headers: this.headers(), withCredentials: true, responseType: "arraybuffer" }).toPromise();
+            { headers: this.headers(), withCredentials: true }).toPromise();
         if (!data) {
             return void 0;
         }
+        // return data;
 
-        const json = this.decode(url, data);
-        return json;
+        // const json = this.decode(url, data);
+        // return json;
     }
 
 
     async getMultiple<T extends BaseModel>(url: string): Promise<Array<T>> {
         try {
             const data = await this.httpService.get(this.getS1Server() + "/" + url,
-                { headers: this.headers(), withCredentials: true, responseType: "arraybuffer" }).toPromise();
+                { headers: this.headers(), withCredentials: true }).toPromise();
             if (!data) {
                 return void 0;
             }
 
-            const json = this.decode(url, data);
+            const json = data; // this.decode(url, data);
             if (!(json instanceof Array)) {
                 console.error("array expected at response: ", data);
                 observableThrowError("array expected at response");
@@ -116,12 +117,12 @@ export class BaseService {
     async getJson(url: string): Promise<any> {
         try {
             const data = await this.httpService.get(this.getS1Server() + "/" + url,
-                { headers: this.headers(), withCredentials: true, responseType: "arraybuffer" }).toPromise();
+                { headers: this.headers(), withCredentials: true }).toPromise();
 
             if (!data) {
                 return void 0;
             }
-            const json = this.decode(url, data);
+            const json = data; // this.decode(url, data);
             return json;
 
         } catch (error) {
@@ -138,6 +139,7 @@ export class BaseService {
     }
 
     private encode(url: string, data: any): any {
+        return data;
         if (!environment.production) {
             console.log(url, "encoded json", data);
         }
@@ -148,13 +150,13 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers(), responseType: "arraybuffer" }).toPromise();
+                { withCredentials: withCredentials, headers: this.headers()}).toPromise();
 
             if (!response) {
                 return void 0;
             }
 
-            const json = this.decode(url, response);
+            const json = response; // this.decode(url, response);
             return BaseModel.getBaseModelFromJson<T>(json, void 0, this.translationService);
 
         } catch (error) {
@@ -165,13 +167,13 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers(), responseType: "arraybuffer" }).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             if (!data) {
                 return void 0;
             }
 
-            const jsonArr = this.decode(url, response);
+            const jsonArr = response; // this.decode(url, response);
 
             if (!(jsonArr instanceof Array)) {
                 console.error("array expected at response: ", response);
@@ -189,13 +191,13 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers(), responseType: "arraybuffer" }).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             if (!data) {
                 return void 0;
             }
 
-            const json = this.decode(url, response);
+            const json = response; // this.decode(url, response);
             return json;
 
         } catch (error) {
