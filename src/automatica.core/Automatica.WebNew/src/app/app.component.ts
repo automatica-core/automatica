@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { library, IconDefinition } from "@fortawesome/fontawesome-svg-core";
 // import { fas } from "@fortawesome/free-solid-svg-icons";
-import { fas } from "@fortawesome/pro-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
+import { far} from "@fortawesome/free-regular-svg-icons";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
 import { TranslationService } from "angular-l10n";

@@ -20,7 +20,7 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     super.registerEvent(this.appService.isStartingChanged, async (v) => {
-      this.popupVisible = v;
+      // this.popupVisible = v;
 
       if (!v) {
         await this.translate.init();
