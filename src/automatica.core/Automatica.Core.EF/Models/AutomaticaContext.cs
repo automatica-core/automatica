@@ -10,6 +10,7 @@ using System;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.EF.Models
 {
@@ -86,7 +87,7 @@ namespace Automatica.Core.EF.Models
                 var logger = new DatabaseLoggerFactory();
                 var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
                 var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
-                var loggerInstance = logger.CreateLogger("database");
+                var loggerInstance = NullLogger.Instance; // logger.CreateLogger("database");
 
                 string useDbType = envDbType;
 
