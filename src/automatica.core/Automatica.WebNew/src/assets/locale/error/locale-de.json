@@ -1,5 +1,6 @@
 {
     "ERROR":{
-        "NODE_NOT_FOUND": "Das Element konnte im Server nicht gefunden werden. Ein Neustart des Servers kann dieses Problem beheben!"
+        "NODE_NOT_FOUND": "Das Element konnte im Server nicht gefunden werden. Ein Neustart des Servers kann dieses Problem beheben!",
+        "CLOUD_CONNECTION_INVALID": "Die Cloud Verbindung ist ungültig. Du musst einen API Schlüssel eintragen!"
     }
 }

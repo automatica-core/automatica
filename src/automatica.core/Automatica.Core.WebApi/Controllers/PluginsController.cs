@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -36,9 +37,16 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<IList<PluginState>> GetPlugins()
         {
             var plugins = await _api.GetLatestPlugins();
+
+            if (plugins == null)
+            {
+                throw new WebApiException("CLOUD_CONNECTION_INVALID", ExceptionSeverity.Warning);
+            }
+
             var ret = new List<PluginState>();
             var loadedPlugins = DbContext.Plugins.AsNoTracking().Where(a => a.Loaded).ToList();
 
+            
             foreach (var cloudPlugin in plugins)
             {
                 var loadedPlugin = loadedPlugins.SingleOrDefault(a => a.PluginGuid == cloudPlugin.PluginGuid);
