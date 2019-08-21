@@ -12,8 +12,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
     {
         public static IList<DriverFactory> LoadSingle(ILogger logger, Plugin plugin, AutomaticaContext database)
         {
-            var fileInfo = new FileInfo(Assembly.GetEntryAssembly().Location);
-            var dir = Path.Combine(fileInfo.DirectoryName, ServerInfo.DriversDirectory, plugin.ComponentName);
+            var dir = Path.Combine(ServerInfo.GetBasePath(), ServerInfo.DriversDirectory, plugin.ComponentName);
 
             return Loader.Load<DriverFactory>(dir, "*.dll", logger, database, false);
         }
@@ -30,7 +29,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
             if (!Directory.Exists(driverPath))
             {
-                driverPath = dir;
+                Directory.CreateDirectory(driverPath);
+                dir = driverPath;
             }
 
             return Loader.Load<DriverFactory>(dir, searchPattern, logger, database, isInDevMode);
