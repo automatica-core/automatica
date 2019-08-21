@@ -9,6 +9,7 @@ using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Exceptions;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -34,7 +35,12 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet, Route("checkForUpdate")]
         public async Task<ServerVersion> CheckForUpdate()
         {
-            return await api.CheckForUpdates();
+            var update = await api.CheckForUpdates();
+            if (update == null)
+            {
+                throw new WebApiException("CLOUD_CONNECTION_INVALID", ExceptionSeverity.Warning);
+            }
+            return update;
         }
 
         [HttpGet, Route("alreadyDownloaded")]
