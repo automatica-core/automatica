@@ -101,6 +101,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 DriverContext.Logger.LogInformation($"Could not find gateway with id {_id}");
                 return false;
             }
+            DriverContext.Logger.LogInformation($"Connecting to tradfri with ip {gw.Item2}");
 
             await Task.Run(() =>
             {
