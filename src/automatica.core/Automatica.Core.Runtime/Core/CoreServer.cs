@@ -278,14 +278,20 @@ namespace Automatica.Core.Runtime.Core
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
                 _logger.LogInformation($"Starting logic {rule.Key.Name}...");
-
-                if (await rule.Value.Start())
+                try
                 {
-                    _logger.LogInformation($"Starting logic {rule.Key.Name}...success");
+                    if (await rule.Value.Start())
+                    {
+                        _logger.LogInformation($"Starting logic {rule.Key.Name}...success");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Starting logic {rule.Key.Name}...error");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    _logger.LogError($"Starting logic {rule.Key.Name}...error");
+                    _logger.LogError($"Starting logic {rule.Key.Name}...error {e}");
                 }
             }
 
