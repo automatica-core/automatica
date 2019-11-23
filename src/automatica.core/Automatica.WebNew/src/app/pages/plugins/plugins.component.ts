@@ -9,31 +9,31 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 
 
 function versionCompare(v1: Version, v2: Version) {
-  if (v1.Major !== v2.Major) {
-    if (v1.Major > v2.Major) {
+  if (v1.major !== v2.major) {
+    if (v1.major > v2.major) {
       return 1;
     } else {
     } return -1;
   }
 
-  if (v1.Minor !== v2.Minor) {
-    if (v1.Minor > v2.Minor) {
+  if (v1.minor !== v2.minor) {
+    if (v1.minor > v2.minor) {
       return 1;
     } else {
       return -1;
     }
   }
 
-  if (v1.Build !== v2.Build) {
-    if (v1.Build > v2.Build) {
+  if (v1.build !== v2.build) {
+    if (v1.build > v2.build) {
       return 1;
     } else {
       return -1;
     }
   }
 
-  if (v1.Revision !== v2.Revision) {
-    if (v1.Revision > v2.Revision) {
+  if (v1.revision !== v2.revision) {
+    if (v1.revision > v2.revision) {
       return 1;
     } else {
       return -1;
@@ -44,7 +44,7 @@ function versionCompare(v1: Version, v2: Version) {
 }
 
 function versionToString(v: Version) {
-  return `${v.Major}.${v.Minor}.${v.Build}.${v.Revision}`;
+  return `${v.major}.${v.minor}.${v.build}.${v.revision}`;
 }
 
 function versionParse(v: string): Version {
@@ -55,34 +55,34 @@ function versionParse(v: string): Version {
   }
   if (split.length === 1) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: 0,
-      Build: 0,
-      Revision: 0
+      major: parseInt(split[0], 10),
+      minor: 0,
+      build: 0,
+      revision: 0
     };
   }
   if (split.length === 2) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: parseInt(split[1], 10),
-      Build: 0,
-      Revision: 0
+      major: parseInt(split[0], 10),
+      minor: parseInt(split[1], 10),
+      build: 0,
+      revision: 0
     };
   }
   if (split.length === 3) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: parseInt(split[1], 10),
-      Build: parseInt(split[2], 10),
-      Revision: 0
+      major: parseInt(split[0], 10),
+      minor: parseInt(split[1], 10),
+      build: parseInt(split[2], 10),
+      revision: 0
     };
   }
   if (split.length === 4) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: parseInt(split[1], 10),
-      Build: parseInt(split[2], 10),
-      Revision: parseInt(split[3], 10)
+      major: parseInt(split[0], 10),
+      minor: parseInt(split[1], 10),
+      build: parseInt(split[2], 10),
+      revision: parseInt(split[3], 10)
     };
   }
 }
@@ -102,30 +102,32 @@ class PluginStateInstance {
   private corePluginVersion: Version;
 
   constructor(public instance: PluginState) {
-    this.cloudVersion = versionParse(instance.CloudPlugin.Version);
-    if (instance.LoadedPlugin) {
-      this.corePluginVersion = versionParse(instance.LoadedPlugin.Version);
+    if (instance.cloudPlugin) {
+      this.cloudVersion = versionParse(instance.cloudPlugin.version);
+    }
+    if (instance.loadedPlugin) {
+      this.corePluginVersion = versionParse(instance.loadedPlugin.version);
     }
   }
 
   get objId() {
-    return this.instance.CloudPlugin.PluginGuid;
+    return this.instance.cloudPlugin.pluginGuid;
   }
 
   get name() {
-    return this.instance.CloudPlugin.Name;
+    return this.instance.cloudPlugin.name;
   }
 
   get version() {
-    return this.instance.CloudPlugin.Version;
+    return this.instance.cloudPlugin.version;
   }
 
   get type() {
-    return this.instance.CloudPlugin.PluginType === PluginType.Driver ? "Driver" : "Logic";
+    return this.instance.cloudPlugin.pluginType === PluginType.Driver ? "Driver" : "Logic";
   }
 
   get isInstalled(): boolean {
-    if (this.instance.LoadedPlugin) {
+    if (this.instance.loadedPlugin) {
       return true;
     }
     return false;
@@ -247,9 +249,13 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
       for (const p of plugins) {
-        const instance = new PluginStateInstance(p);
-        this.plugins.push(instance);
-        this.pluginsMap.set(p.CloudPlugin.PluginGuid, instance);
+        try {
+          const instance = new PluginStateInstance(p);
+          this.plugins.push(instance);
+          this.pluginsMap.set(p.cloudPlugin.pluginGuid, instance);
+        } catch (error) {
+          console.log(p, error);
+        }
       }
 
       super.registerEvent(this.updateHubService.PluginDownloadProgressChanged, (a) => {
@@ -277,10 +283,10 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   async install($event, data: PluginStateInstance) {
-    await this.updateHubService.installPlugin(data.instance.CloudPlugin);
+    await this.updateHubService.installPlugin(data.instance.cloudPlugin);
   }
   async update($event, data: PluginStateInstance) {
-    await this.updateHubService.updatePlugin(data.instance.CloudPlugin);
+    await this.updateHubService.updatePlugin(data.instance.cloudPlugin);
   }
 
   async updateAll() {
@@ -291,7 +297,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
     const data = [];
     for (const x of items) {
-      data.push(x.instance.CloudPlugin);
+      data.push(x.instance.cloudPlugin);
     }
     await this.updateHubService.updateAllPlugins(data);
   }
