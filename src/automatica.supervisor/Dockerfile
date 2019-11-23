@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:latest AS build
+FROM  mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 WORKDIR /app
 
 ARG VERSION
@@ -17,7 +17,7 @@ RUN cp /src/Automatica.Core.Supervisor/Automatica.Core.Supervisor/appsettings.js
 RUN rm -rf /src
 
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+FROM mcr.microsoft.com/dotnet/core/runtime:3.0 AS runtime
 WORKDIR /app/supervisor
 
 COPY --from=build /app/supervisor ./

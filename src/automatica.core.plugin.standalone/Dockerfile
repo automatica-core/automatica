@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:latest AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 WORKDIR /app
 
 RUN apt-get update 
