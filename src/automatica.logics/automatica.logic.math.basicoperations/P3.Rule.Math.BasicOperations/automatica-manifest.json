@@ -26,11 +26,11 @@
         "Dependencies": [],
         "MinCoreServerVersion": {
             "Major": 0,
-            "Minor": 7,
+            "Minor": 10,
             "Build": 0,
-            "Revision": 244,
+            "Revision": 0,
             "MajorRevision": 0,
-            "MinorRevision": 244
+            "MinorRevision": 0
         },
         "MandatoryLicenseFeatures": [],
         "OptionalLicenseFeatures": []

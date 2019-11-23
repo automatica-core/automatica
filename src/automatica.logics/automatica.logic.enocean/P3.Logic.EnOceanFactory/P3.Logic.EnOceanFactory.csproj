@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>P3.Logic.EnOcean</AssemblyName>
     <Version>0.5.0</Version>
   </PropertyGroup>
@@ -19,6 +19,6 @@
     <EmbeddedResource Include="Resources\P3.Logic.EnOcean-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="0.7.0.244" />
+    <PackageReference Include="Automatica.Core.Rule" Version="0.10.0.581" />
   </ItemGroup>
 </Project>
