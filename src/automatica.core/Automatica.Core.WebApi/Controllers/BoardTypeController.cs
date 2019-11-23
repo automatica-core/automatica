@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("boardType")]
+    [Route("webapi/boardType")]
     public class BoardTypeController : BaseController
     {
         public BoardTypeController(AutomaticaContext db)

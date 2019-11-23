@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Base.Exceptions;
+﻿using System;
+using Automatica.Core.Base.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace Automatica.Core.WebApi.Exceptions
             {
                 await _next.Invoke(context);
             }
-            catch(WebApiException webApiEx)
+            catch (WebApiException webApiEx)
             {
                 _logger.LogError(webApiEx, "An error occured while invoking an webapi call");
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -32,6 +33,10 @@ namespace Automatica.Core.WebApi.Exceptions
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync(webApiEx.ToJson());
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An unknown error occured!");
             }
 
         }

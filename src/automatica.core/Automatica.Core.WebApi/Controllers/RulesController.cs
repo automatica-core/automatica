@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("rules")]
+    [Route("webapi/rules")]
     public class RulesController : BaseController
     {
         private readonly IRuleDataHandler _ruleDataHandler;

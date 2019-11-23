@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("nodeTemplates")]
+    [Route("webapi/nodeTemplates")]
     [Authorize(Roles = Role.AdminRole)]
     public class NodeTemplatesController : BaseController
     {

@@ -12,7 +12,7 @@ namespace Automatica.Core.WebApi.Controllers
         public RunState Status { get; set; }
     }
 
-    [Route("server")]
+    [Route("webapi/server")]
     public class ServerController : BaseController
     {
         private readonly CoreServer _coreServer;

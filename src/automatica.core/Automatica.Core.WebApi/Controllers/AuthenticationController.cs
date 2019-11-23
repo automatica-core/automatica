@@ -32,7 +32,7 @@ namespace Automatica.Core.WebApi.Controllers
         public string Password { get; set; }
     }
 
-    [Route("auth")]
+    [Route("webapi/auth")]
     [AllowAnonymous]
     public class AuthenticationController : BaseController
     {

@@ -21,7 +21,7 @@ namespace Automatica.Core.WebApi.Controllers
         public EF.Models.Plugin CloudPlugin { get; set; }
     }
 
-    [Route("plugins")]
+    [Route("webapi/plugins")]
     public class PluginsController : BaseController
     {
         private readonly ICloudApi _api;

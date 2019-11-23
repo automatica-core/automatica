@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("visualization")]
+    [Route("webapi/visualization")]
     public class VisualizationController : BaseController
     {
         private readonly IVisualizationCache _cache;

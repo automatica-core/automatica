@@ -13,7 +13,7 @@ namespace Automatica.Core.WebApi.Controllers
         public string License { get; set; }
     }
 
-    [Route("license")]
+    [Route("webapi/license")]
     [Authorize(Roles = Role.AdminRole)]
     public class LicenseController : BaseController
     {

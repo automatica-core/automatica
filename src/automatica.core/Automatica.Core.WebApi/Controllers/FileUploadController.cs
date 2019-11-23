@@ -11,7 +11,7 @@ using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("FileUpload")]
+    [Route("webapi/FileUpload")]
     public class FileUploadController: BaseController
     {
         public FileUploadController(AutomaticaContext dbContext) : base(dbContext)

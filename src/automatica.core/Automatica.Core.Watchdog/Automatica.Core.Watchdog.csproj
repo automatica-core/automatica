@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <Version>0.9.0.537</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>78F9C09E-3660-4EDA-8FA7-19AC110D78D3</ProjectGuid>
@@ -22,10 +22,10 @@
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.8.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.2-dev-00028" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00779" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.0.1-dev-00798" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00771" />
   </ItemGroup>
   <ItemGroup>

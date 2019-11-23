@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("localization")]
+    [Route("webapi/localization")]
     [AllowAnonymous]
     public class LocalizationController : BaseController
     {

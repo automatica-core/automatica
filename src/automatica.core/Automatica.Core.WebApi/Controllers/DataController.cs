@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("data")]
+    [Route("webapi/data")]
     public class DataController : BaseController
     {
         private readonly IDispatcher _disptacher;

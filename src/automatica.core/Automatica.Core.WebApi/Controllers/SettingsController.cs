@@ -7,7 +7,7 @@ using Automatica.Core.Internals.Core;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("settings")]
+    [Route("webapi/settings")]
     public class SettingsController : BaseController
     {
         private readonly IAutoUpdateHandler _updateHandler;

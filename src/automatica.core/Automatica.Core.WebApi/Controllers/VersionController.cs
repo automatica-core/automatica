@@ -10,7 +10,7 @@ namespace Automatica.Core.WebApi.Controllers
         public string Version { get; set; }
     }
 
-    [Route("version")]
+    [Route("webapi/version")]
     [AllowAnonymous]
     public class VersionController
     {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("Ping")]
+    [Route("webapi/Ping")]
     public class PingController : BaseController
     {
         public PingController(AutomaticaContext dbContext) : base(dbContext)

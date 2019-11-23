@@ -19,7 +19,7 @@ using P3.Knx.Core.Ets;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("areas")]
+    [Route("webapi/areas")]
 
     public class AreaController : BaseController
     {

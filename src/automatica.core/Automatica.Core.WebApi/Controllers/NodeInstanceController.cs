@@ -45,7 +45,7 @@ namespace Automatica.Core.WebApi.Controllers
 
     }
 
-    [Route("nodeInstances")]
+    [Route("webapi/nodeInstances")]
     public class NodeInstanceController : BaseController
     {
         private readonly INotifyDriver _notifyDriver;
@@ -151,8 +151,11 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<NodeInstance> GetLinkableNodes()
         {
-            return DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation).Where(a =>
-                a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceType == GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value)).Where(a => IsUserInGroup(a.This2UserGroup)).ToList();
+            return DbContext.NodeInstances.AsNoTracking()
+                .Include(a => a.This2NodeTemplateNavigation).ToList()
+                .Where(a =>
+                    a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceType == GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value))
+                .Where(a => IsUserInGroup(a.This2UserGroup)).ToList();
         }
 
         [HttpPost]

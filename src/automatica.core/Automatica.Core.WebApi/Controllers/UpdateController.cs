@@ -17,7 +17,7 @@ namespace Automatica.Core.WebApi.Controllers
     {
         public bool Result { get; set; }
     }
-    [Route("update")]
+    [Route("webapi/update")]
     public class UpdateController : BaseController
     {
         private readonly ICloudApi api;

@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.WebApi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Automatica.Core.Driver.Utility.Network;
 using Rssdp;
 
 namespace Automatica.Discovery
 {
-    [Route("discovery")]
+    [Route("webapi/discovery")]
     [AllowAnonymous]
     public class DiscoveryDeviceDescriptionController : BaseController
     {

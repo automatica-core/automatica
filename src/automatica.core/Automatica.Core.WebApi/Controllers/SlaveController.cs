@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("slave")]
+    [Route("webapi/slave")]
     public class SlaveController : BaseController
     {
         public SlaveController(AutomaticaContext dbContext) : base(dbContext)

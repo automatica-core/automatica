@@ -14,7 +14,7 @@ using User = Automatica.Core.Model.Models.User.User;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("usermgm")]
+    [Route("webapi/usermgm")]
     [Authorize(Policy = Role.AdminRole)]
     public class UserManagementController : BaseController
     {

@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("categories")]
+    [Route("webapi/categories")]
     public class CategoryController : BaseController
     {
         private readonly ICategoryCache _categoryCache;
