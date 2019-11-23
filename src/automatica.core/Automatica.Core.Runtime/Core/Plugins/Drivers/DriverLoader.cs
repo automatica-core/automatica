@@ -81,16 +81,22 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                         factory.InitNodeTemplates(new NodeTemplateFactory(db, _config));
                         db.SaveChanges();
                     }
+
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...done");
                 }
                 else
                 {
                     factory.InitNodeTemplates(new DoNothingNodeTemplateFactory());
                 }
+
                 _logger.LogDebug($"Init driver {factory.DriverName} {factory.DriverVersion}...done");
 
                 _dbContext.SaveChanges();
 
+            }
+            catch (NoManifestFoundException)
+            {
+                // ignore
             }
             catch (Exception e)
             {

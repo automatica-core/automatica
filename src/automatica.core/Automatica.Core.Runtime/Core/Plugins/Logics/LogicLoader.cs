@@ -85,6 +85,10 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
 
                 _dbContext.SaveChanges(true);
             }
+            catch (NoManifestFoundException)
+            {
+                // ignore
+            }
             catch (Exception e)
             {
                 _logger.LogError($"Could not load Rule {factory.RuleName} {e}", e);
