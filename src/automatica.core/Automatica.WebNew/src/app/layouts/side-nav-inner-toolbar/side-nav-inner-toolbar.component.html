@@ -1,6 +1,6 @@
 <div class="layout" [ngClass]="sizeClasses">
     <dx-drawer class="drawer" [closeOnOutsideClick]="true" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
-        [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened">
+        [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
 
         <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute" class="dx-swatch-additional"
             *dxTemplate="let dataMenu of 'panel'" (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick()">

@@ -5,6 +5,10 @@
     background-color: darken($base-bg, 5.00);
 }
 
+::ng-deep .dx-drawer-panel-content {  
+    height: 100%!important;  
+  }
+
 .container {
     flex-direction: column;
     display: flex;
