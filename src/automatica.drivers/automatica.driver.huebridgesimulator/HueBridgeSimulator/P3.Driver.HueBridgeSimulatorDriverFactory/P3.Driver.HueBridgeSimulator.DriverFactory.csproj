@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <Version>0.5.0</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>8D987CBE-B3E6-463A-9E07-70B5707EE976</ProjectGuid>
@@ -22,9 +22,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Automatica.Core.EF" Version="0.9.0.540" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.9.0.540" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.EF" Version="0.10.0.581" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.10.0.581" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.10.0.581" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HueBridge\P3.Driver.HueBridge.csproj" />

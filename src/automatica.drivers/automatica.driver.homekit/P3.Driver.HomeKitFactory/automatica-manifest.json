@@ -32,7 +32,7 @@
         ],
         "MinCoreServerVersion": {
             "Major": 0,
-            "Minor": 7,
+            "Minor": 10,
             "Build": 0,
             "Revision": 244,
             "MajorRevision": 0,

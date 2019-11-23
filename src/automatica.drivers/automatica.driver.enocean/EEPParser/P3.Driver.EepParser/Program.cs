@@ -119,7 +119,7 @@ namespace P3.Driver.EepParser
                                 {
                                     if (range != null)
                                     {
-                                        dataFieldModel.Range = new Range();
+                                        dataFieldModel.Range = new P3.Driver.EepParser.Model.Range();;
 
                                         var minEl = range.Element("min");
                                         var maxEl = range.Element("max");

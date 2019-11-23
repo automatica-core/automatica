@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging.Console;
 using P3.Driver.EnOcean.Data.Packets;
 using Serilog.Events;
@@ -17,7 +18,7 @@ namespace P3.Driver.EnOcean.Console
 
         static async void Run()
         {
-            var logger = new ConsoleLogger("EnOnean", (s, level) => true, false);
+            var logger = NullLogger.Instance; // new ConsoleLogger("EnOnean", (s, level) => true, false);
             Logger.Logger.Instance = logger;
 
             var driver = new Driver("COM4");

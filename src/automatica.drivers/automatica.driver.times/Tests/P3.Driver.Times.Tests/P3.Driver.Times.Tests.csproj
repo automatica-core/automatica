@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>B58486A1-6905-4A9E-ABB1-6053E795F529</ProjectGuid>
@@ -19,7 +19,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="2.5.1">
+    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -29,9 +29,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.9.0.540" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.540" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.10.0.581" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.10.0.581" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.10.0.581" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.Times.DriverFactory\P3.Driver.Times.DriverFactory.csproj" />
