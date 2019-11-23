@@ -1,0 +1,2 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.101 AS build
+WORKDIR /src

@@ -1,0 +1,21 @@
+﻿{
+  "BLOCKCHAIN_TICKER": {
+    "NAME": "BlockchainTicker",
+    "POLL_INTERVAL": {
+      "NAME": "Abfrage Interval [s]",
+      "DESCRIPTION": ""
+    },
+    "BTC": {
+      "NAME": "Bitcoin",
+      "DIRECTION": "",
+      "EUR": {
+        "NAME": "Preis in EUR",
+        "DIRECTION": ""
+      },
+      "USD": {
+        "NAME": "Preis in USD",
+        "DIRECTION": ""
+      }
+    }
+  }
+}

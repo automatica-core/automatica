@@ -69,6 +69,7 @@ remote automatica.driver.openweathermap.driver git@github.com:automatica-core/au
 remote automatica.driver.times git@github.com:automatica-core/automatica.driver.times.git
 remote automatica.driver.wakeonlan git@github.com:automatica-core/automatica.driver.wakeonlan.git
 remote automatica.driver.zwave git@github.com:automatica-core/automatica.driver.zwave.git
+remote automatica.driver.blockchain.ticker git@github.com:automatica-core/automatica.driver.blockchain.ticker.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -104,6 +105,7 @@ split src/automatica.drivers/automatica.driver.openweathermap.driver automatica.
 split src/automatica.drivers/automatica.driver.times automatica.driver.times
 split src/automatica.drivers/automatica.driver.wakeonlan automatica.driver.wakeonlan
 split src/automatica.drivers/automatica.driver.zwave automatica.driver.zwave
+split src/automatica.drivers/automatica.driver.blockchain.ticker automatica.driver.blockchain.ticker
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
