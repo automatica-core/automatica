@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging.Abstractions;
 using P3.Knx.Core.DPT;
 
 namespace P3.Knx.Core
@@ -16,7 +16,7 @@ namespace P3.Knx.Core
         {
             Console.WriteLine("Hello World!");
 
-            KnxHelper.Logger = new ConsoleLoggerProvider((s, level) => true, true).CreateLogger("test");
+            KnxHelper.Logger = NullLogger.Instance;
 
             var connection = new KnxConnectionTunneling(IPAddress.Parse("192.168.8.3"), 3671, IPAddress.Parse(NetworkHelper.GetActiveIp()));
             connection.UseNat = false;

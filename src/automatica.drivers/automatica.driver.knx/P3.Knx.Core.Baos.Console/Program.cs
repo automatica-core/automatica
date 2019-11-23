@@ -4,6 +4,7 @@ using P3.Knx.Core.Baos.Driver;
 using P3.Knx.Core.Baos.Driver.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace P3.Knx.Core.Baos.Console
 {
@@ -13,7 +14,7 @@ namespace P3.Knx.Core.Baos.Console
         {
             System.Console.WriteLine("Hello World!");
 
-            var logger = new ConsoleLoggerProvider((s, level) => true, true).CreateLogger("test");
+            var logger = NullLogger.Instance; //new ConsoleLoggerProvider((s, level) => true, true).CreateLogger("test");
 
             var driver = new BaosDriver("/dev/ttyAMA0", logger, new DataReceiver(logger));
 
