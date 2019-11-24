@@ -6,7 +6,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Automatica.Core.Common.Update
 {
-    public class PluginVersion 
+    public class AutomaticaVersion 
     {
         public int Minor { get; set; }
         public int Major { get; set; }
@@ -18,13 +18,13 @@ namespace Automatica.Core.Common.Update
             return new Version(Major, Minor, Build, Revision);
         }
 
-        public static PluginVersion FromVersion(Version version)
+        public static AutomaticaVersion FromVersion(Version version)
         {
             if (version == null)
             {
                 return null;
             }
-            return new PluginVersion()
+            return new AutomaticaVersion()
             {
                 Major = version.Major,
                 Minor = version.Minor,
@@ -46,9 +46,9 @@ namespace Automatica.Core.Common.Update
         }
 
         [JsonProperty("manifest-version")]
-        public PluginVersion InternManifestVersion
+        public AutomaticaVersion InternManifestVersion
         {
-            get => Common.Update.PluginVersion.FromVersion(ManifestVersion);
+            get => Common.Update.AutomaticaVersion.FromVersion(ManifestVersion);
             set => ManifestVersion = value.ToVersion();
         }
 
@@ -56,9 +56,9 @@ namespace Automatica.Core.Common.Update
         public Version ManifestVersion { get; set; }
 
         [JsonProperty("plugin-version")]
-        public PluginVersion InternPluginVersion
+        public AutomaticaVersion InternPluginVersion
         {
-            get => Common.Update.PluginVersion.FromVersion(PluginVersion);
+            get => Common.Update.AutomaticaVersion.FromVersion(PluginVersion);
             set => PluginVersion = value.ToVersion();
         }
 
@@ -80,9 +80,9 @@ namespace Automatica.Core.Common.Update
         public string ProjectPage { get; set; }
 
         [JsonProperty("MinCoreServerVersion")]
-        public PluginVersion InternMinCoreServerVersion
+        public AutomaticaVersion InternMinCoreServerVersion
         {
-            get => Common.Update.PluginVersion.FromVersion(MinCoreServerVersion);
+            get => Common.Update.AutomaticaVersion.FromVersion(MinCoreServerVersion);
             set => MinCoreServerVersion = value.ToVersion();
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Runtime.Serialization;
+using Automatica.Core.Common.Update;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.Internals.Cloud.Model
@@ -29,13 +30,20 @@ namespace Automatica.Core.Internals.Cloud.Model
     /// Gets or Sets VersionObj
     /// </summary>
     [DataMember(Name="versionObj", EmitDefaultValue=false)]
-    [JsonProperty(PropertyName = "versionObj")]
-    public Version VersionObj { get; set; }
+    [JsonIgnore]
+     public Version VersionObj { get; set; }
 
-    /// <summary>
-    /// Gets or Sets AzureUrl
-    /// </summary>
-    [DataMember(Name="azureUrl", EmitDefaultValue=false)]
+    [JsonProperty(PropertyName = "versionObj")]
+    public AutomaticaVersion InternVersionObj
+    {
+        get => AutomaticaVersion.FromVersion(VersionObj);
+        set => VersionObj = value.ToVersion();
+    }
+
+        /// <summary>
+        /// Gets or Sets AzureUrl
+        /// </summary>
+        [DataMember(Name="azureUrl", EmitDefaultValue=false)]
     [JsonProperty(PropertyName = "azureUrl")]
     public string AzureUrl { get; set; }
 

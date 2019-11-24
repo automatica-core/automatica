@@ -607,7 +607,6 @@ namespace Automatica.Core.Runtime.Core
             {
                 _logger.LogError($"Could not load rules {e}", e);
             }
-            await context.SaveChangesAsync(true);
         }
 
         public async Task Reinit()
