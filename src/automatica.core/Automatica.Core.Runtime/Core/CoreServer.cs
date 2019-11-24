@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.IO;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,7 +68,6 @@ namespace Automatica.Core.Runtime.Core
         private readonly ITelegramMonitor _telegramMonitor;
         private readonly IRuleEngineDispatcher _ruleEngineDispatcher;
         private RunState _runState;
-        private readonly ILocalizationProvider _localizationProvider;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
         private readonly ILearnMode _learnMode;
 
@@ -126,7 +124,6 @@ namespace Automatica.Core.Runtime.Core
             
             _telegramMonitor = services.GetService<ITelegramMonitor>();
             _ruleInstanceVisuNotify = services.GetRequiredService<IRuleInstanceVisuNotify>();
-            _localizationProvider = services.GetService(typeof(LocalizationProvider)) as LocalizationProvider;
 
             _learnMode = services.GetRequiredService<ILearnMode>();
 
@@ -576,7 +573,7 @@ namespace Automatica.Core.Runtime.Core
                 }
                 _dbContext.SaveChanges();
               
-                var foundDrivers = await PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode);
+                var foundDrivers = await PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode);
                 foreach (var driver in foundDrivers)
                 {
                     try
@@ -597,7 +594,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 var ruleLoadingPath = Path.Combine(path, "Rules");
                 _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
-                foreach (var rule in await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode))
+                foreach (var rule in await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode))
                 {
                     try
                     {

@@ -8,6 +8,7 @@ using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Core.Plugins
@@ -19,15 +20,17 @@ namespace Automatica.Core.Runtime.Core.Plugins
         private readonly IDriverLoader _driverLoader;
         private readonly ILogicLoader _logicLoader;
         private readonly INodeTemplateCache _nodeTemplateCache;
+        private readonly IConfiguration _config;
         private readonly object _lock = new object();
 
-        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader, INodeTemplateCache nodeTemplateCache)
+        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader, INodeTemplateCache nodeTemplateCache, IConfiguration config)
         {
             _logger = logger;
             _dbContext = dbContext;
             _driverLoader = driverLoader;
             _logicLoader = logicLoader;
             _nodeTemplateCache = nodeTemplateCache;
+            _config = config;
         }
 
         public Task CheckAndInstallPluginUpdates()
@@ -81,7 +84,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
         {
             if (plugin.PluginType == PluginType.Driver)
             {
-                var factories = PluginLoader.LoadSingle(_logger, plugin, _dbContext);
+                var factories = PluginLoader.LoadSingle(_logger, plugin, _config);
 
                 foreach (var factory in await factories)
                 {
@@ -90,7 +93,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             }
             else if (plugin.PluginType == PluginType.Logic)
             {
-                var factories = RuleLoader.LoadSingle(_logger, plugin, _dbContext);
+                var factories = RuleLoader.LoadSingle(_logger, plugin, _config);
 
                 foreach (var factory in await factories)
                 {

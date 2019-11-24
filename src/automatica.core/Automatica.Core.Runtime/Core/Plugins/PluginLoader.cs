@@ -5,20 +5,21 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Core.Plugins
 {
     public static class PluginLoader
     {
-        public static Task<IList<DriverFactory>> LoadSingle(ILogger logger, Plugin plugin, AutomaticaContext database)
+        public static Task<IList<DriverFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
         {
             var dir = Path.Combine(ServerInfo.GetBasePath(), ServerInfo.DriversDirectory, plugin.ComponentName);
 
-            return Loader.Load<DriverFactory>(dir, "*.dll", logger, database, false);
+            return Loader.Load<DriverFactory>(dir, "*.dll", logger, config, false);
         }
 
-        public static Task<IList<DriverFactory>> GetDriverFactories(ILogger logger, string path, string searchPattern, AutomaticaContext database, bool isInDevMode)
+        public static Task<IList<DriverFactory>> GetDriverFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)
         {
             var fileInfo = new FileInfo(path);
             string dir = fileInfo.DirectoryName;
@@ -34,7 +35,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 dir = driverPath;
             }
 
-            return Loader.Load<DriverFactory>(dir, searchPattern, logger, database, isInDevMode);
+            return Loader.Load<DriverFactory>(dir, searchPattern, logger, config, isInDevMode);
         }
     }
 }
