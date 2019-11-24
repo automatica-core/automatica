@@ -83,7 +83,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             {
                 var factories = PluginLoader.LoadSingle(_logger, plugin, _dbContext);
 
-                foreach (var factory in factories)
+                foreach (var factory in await factories)
                 {
                     await _driverLoader.Load(factory);
                 }
@@ -92,7 +92,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             {
                 var factories = RuleLoader.LoadSingle(_logger, plugin, _dbContext);
 
-                foreach (var factory in factories)
+                foreach (var factory in await factories)
                 {
                     await _logicLoader.Load(factory);
                 }

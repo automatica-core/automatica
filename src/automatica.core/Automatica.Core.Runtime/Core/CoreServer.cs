@@ -576,7 +576,7 @@ namespace Automatica.Core.Runtime.Core
                 }
                 _dbContext.SaveChanges();
               
-                var foundDrivers = PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode);
+                var foundDrivers = await PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode);
                 foreach (var driver in foundDrivers)
                 {
                     try
@@ -597,7 +597,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 var ruleLoadingPath = Path.Combine(path, "Rules");
                 _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
-                foreach (var rule in RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode))
+                foreach (var rule in await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _dbContext, ServerInfo.IsInDevelopmentMode))
                 {
                     try
                     {

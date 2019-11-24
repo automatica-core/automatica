@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
+using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
@@ -32,10 +33,9 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            var deps = DependencyContext.Default;
-            var res = deps.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
-            var name = res.FirstOrDefault();
-
+            var dependencies = DependencyContext.Default;
+            var res = dependencies.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
+            
             foreach (var path in _path)
             {
                 var pathFileName = Path.Combine(path, $"{assemblyName.Name}.dll");
@@ -63,19 +63,19 @@ namespace Automatica.Core.Runtime.Core.Plugins
     }
     public static class Loader
     {
-        public static IList<T> Load<T>(string folder, string searchPattern, ILogger logger, AutomaticaContext database, bool isInDevMode)
+        public static async Task<IList<T>> Load<T>(string folder, string searchPattern, ILogger logger, AutomaticaContext database, bool isInDevMode)
         {
             logger.LogDebug($"Loading files from {folder}");
             var folders = Directory.GetDirectories(folder);
-            var rootItems = LoadFromFolder<T>(folder, searchPattern, logger,database, isInDevMode);
+            var rootItems = await LoadFromFolder<T>(folder, searchPattern, logger,database, isInDevMode);
 
-            var items = LoadFolders<T>(folders, searchPattern, 1, logger, database, isInDevMode);
+            var items = await LoadFolders<T>(folders, searchPattern, 1, logger, database, isInDevMode);
 
             items.AddRange(rootItems);
             return items;
         }
 
-        private static List<T> LoadFolders<T>(string[] folders, string searchPattern, int recCount, ILogger logger, AutomaticaContext database, bool isInDevMode)
+        private static async Task<List<T>> LoadFolders<T>(string[] folders, string searchPattern, int recCount, ILogger logger, AutomaticaContext database, bool isInDevMode)
         {
             var list = new List<T>();
             if (recCount == 10)
@@ -86,14 +86,14 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
             foreach (var folder in folders)
             {
-                var items = LoadFromFolder<T>(folder, searchPattern, logger, database, isInDevMode);
+                var items = await LoadFromFolder<T>(folder, searchPattern, logger, database, isInDevMode);
                 if (items.Count > 0)
                 {
                     list.AddRange(items);
                 }
 
                 var subFolders = Directory.GetDirectories(folder);
-                var loaded = LoadFolders<T>(subFolders, searchPattern, recCount++, logger, database, isInDevMode);
+                var loaded = await LoadFolders<T>(subFolders, searchPattern, recCount++, logger, database, isInDevMode);
 
                 if (loaded != null && loaded.Count > 0)
                 {
@@ -109,10 +109,10 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
         }
 
-        public static List<T> LoadSingle<T>(string file, ILogger logger, AutomaticaContext database, bool isInDevMode)
+        public static async Task<List<T>> LoadSingle<T>(string file, ILogger logger, AutomaticaContext database, bool isInDevMode)
         {
             var list = new List<T>();
-            
+
             try
             {
                 var fileInfo = new FileInfo(file);
@@ -122,7 +122,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 AssemblyLoader loader;
                 if (isInDevMode)
                 {
-                    loader = new AssemblyLoader(folder, new FileInfo(Assembly.GetCallingAssembly().Location).DirectoryName, folder);
+                    loader = new AssemblyLoader(folder,
+                        new FileInfo(Assembly.GetCallingAssembly().Location).DirectoryName, folder);
                 }
                 else
                 {
@@ -139,19 +140,21 @@ namespace Automatica.Core.Runtime.Core.Plugins
                         return null;
                     }
 
-                    logger.LogDebug($"try to load assemably from {folder}");
-                    var foundDlls = Directory.GetFileSystemEntries(folder, name.Name + ".dll", SearchOption.AllDirectories);
-                    if (foundDlls.Any())
+                    logger.LogDebug($"try to load assembly from {folder}");
+                    var foundDll =
+                        Directory.GetFileSystemEntries(folder, name.Name + ".dll", SearchOption.AllDirectories);
+                    if (foundDll.Any())
                     {
-                        return context.LoadFromAssemblyPath(foundDlls[0]);
+                        return context.LoadFromAssemblyPath(foundDll[0]);
                     }
 
                     var secondPath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
-                    logger.LogDebug($"try to load assemably from second path: {secondPath}");
-                    foundDlls = Directory.GetFileSystemEntries(secondPath, name.Name + ".dll", SearchOption.AllDirectories);
-                    if (foundDlls.Any())
+                    logger.LogDebug($"try to load assembly from second path: {secondPath}");
+                    foundDll = Directory.GetFileSystemEntries(secondPath, name.Name + ".dll",
+                        SearchOption.AllDirectories);
+                    if (foundDll.Any())
                     {
-                        return context.LoadFromAssemblyPath(foundDlls[0]);
+                        return context.LoadFromAssemblyPath(foundDll[0]);
                     }
 
                     var dependencies = DependencyContext.Default.RuntimeLibraries;
@@ -175,7 +178,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, $"Could not load assembly");
+                    logger.LogError(e, "Could not load assembly");
                     return list;
                 }
                 finally
@@ -183,7 +186,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     AssemblyLoadContext.Default.Resolving -= assemblyLoader;
                 }
 
-                var resources = assembly.GetManifestResourceNames().SingleOrDefault(a => a.EndsWith("automatica-manifest.json"));
+                var resources = assembly.GetManifestResourceNames()
+                    .SingleOrDefault(a => a.EndsWith("automatica-manifest.json"));
 
                 if (resources == null)
                 {
@@ -213,7 +217,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     plugin.Loaded = true;
                     database.Plugins.Update(plugin);
                 }
-                database.SaveChanges();
+
+                await database.SaveChangesAsync();
 
                 foreach (var ti in assembly.ExportedTypes)
                 {
@@ -223,6 +228,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                         {
                             continue;
                         }
+
                         if (assembly.CreateInstance(ti.FullName) is T factory)
                         {
                             logger.LogDebug($"Found {typeof(T)} in {ti}...");
@@ -238,7 +244,12 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 {
                     builder.Append($"{ex}");
                 }
+
                 logger.LogError(e.InnerException, $"Could not load {typeof(T)} from {file}...{builder}\n");
+            }
+            catch (NoManifestFoundException)
+            {
+                // ignore
             }
             catch (Exception e)
             {
@@ -247,7 +258,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             return list;
         }
 
-        private static List<T> LoadFromFolder<T>(string folder, string searchPattern, ILogger logger, AutomaticaContext database, bool isInDevMode)
+        private static async Task<List<T>> LoadFromFolder<T>(string folder, string searchPattern, ILogger logger, AutomaticaContext database, bool isInDevMode)
         {
             logger.LogDebug($"Loading files from {folder} and check for {typeof(T)}");
             var list = new List<T>();
@@ -255,11 +266,11 @@ namespace Automatica.Core.Runtime.Core.Plugins
             {
                 try
                 {
-                    list.AddRange(LoadSingle<T>(file, logger, database, isInDevMode));
+                    list.AddRange(await LoadSingle<T>(file, logger, database, isInDevMode));
                 }
                 catch (NoManifestFoundException)
                 {
-                    continue;
+                    
                 }
             }
 
