@@ -59,16 +59,17 @@ namespace Automatica.Core.Visu.Cache
 
         private VisuPage LoadPage(AutomaticaContext context, Guid pageId)
         {
-            return context.VisuPages.AsNoTracking()
+            return context.VisuPages
+                .AsNoTracking()
                 .Include(a => a.VisuObjectInstances)
                 .ThenInclude(b => b.PropertyInstance)
                 .ThenInclude(c => c.This2PropertyTemplateNavigation)
                 .ThenInclude(c => c.Constraints)
-                .ThenInclude(c => c.ConstraintData)
-                .Include(a => a.VisuObjectInstances).ThenInclude(a => a.This2VisuObjectTemplateNavigation)
+                .ThenInclude(c => c.ConstraintData).Include(a => a.VisuObjectInstances)
+                .ThenInclude(a => a.This2VisuObjectTemplateNavigation)
                 .Include(a => a.VisuObjectInstances)
-                .ThenInclude(b => b.PropertyInstance)
-                .ThenInclude(c => c.This2PropertyTemplateNavigation).ThenInclude(d => d.This2PropertyTypeNavigation)
+                .ThenInclude(b => b.PropertyInstance).ThenInclude(c => c.This2PropertyTemplateNavigation)
+                .ThenInclude(d => d.This2PropertyTypeNavigation)
                 .Include(a => a.VisuObjectInstances)
                 .ThenInclude(b => b.PropertyInstance)
                 .ThenInclude(b => b.ValueNodeInstanceNavigation)
@@ -78,10 +79,9 @@ namespace Automatica.Core.Visu.Cache
                 .ThenInclude(b => b.ValueRulePageNavigation)
                 .Include(a => a.VisuObjectInstances)
                 .ThenInclude(b => b.PropertyInstance)
-                .ThenInclude(b => b.ValueVisuPageNavigation)
-                .Include(a => a.VisuObjectInstances).ThenInclude(a => a.PropertyInstance)
-                .ThenInclude(a => a.ValueAreaInstanceNavigation)
-                .SingleOrDefault(a => a.ObjId == pageId);
+                .ThenInclude(b => b.ValueVisuPageNavigation).Include(a => a.VisuObjectInstances)
+                .ThenInclude(a => a.PropertyInstance)
+                .ThenInclude(a => a.ValueAreaInstanceNavigation).Single(a => a.ObjId == pageId);
         }
 
 
