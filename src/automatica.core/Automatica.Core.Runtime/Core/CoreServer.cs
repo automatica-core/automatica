@@ -55,7 +55,6 @@ namespace Automatica.Core.Runtime.Core
     }
     public class CoreServer : IHostedService, ICoreServer
     {
-        private AutomaticaContext _dbContext;
         private readonly IConfiguration _config;
         private readonly IHubContext<DataHub> _dataHub;
         private readonly ILogger _logger;
@@ -155,7 +154,7 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Constructed;
 
-            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_dbContext, _logger)));
+            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, _logger)));
             _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher));
 
             _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
@@ -168,7 +167,6 @@ namespace Automatica.Core.Runtime.Core
             _remoteServerHandler.Init();
 
             _telegramMonitor?.Clear();
-            _dbContext = new AutomaticaContext(_config);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -350,7 +348,6 @@ namespace Automatica.Core.Runtime.Core
                 await rec.Stop();
             }
 
-            _dbContext.Dispose();
             _ruleEngineDispatcher.Dispose();
         }
 
@@ -557,6 +554,7 @@ namespace Automatica.Core.Runtime.Core
 
         internal async Task Load(string path, string searchPattern)
         {
+            using var context = new AutomaticaContext(_config);
             try
             {
                 _driverFactoryStore.Clear();
@@ -566,12 +564,12 @@ namespace Automatica.Core.Runtime.Core
 
                 _logger.LogInformation($"Searching for drivers in {driverLoadingPath}");
 
-                foreach(var plugin in _dbContext.Plugins)
+                foreach(var plugin in context.Plugins)
                 {
                     plugin.Loaded = false;
-                    _dbContext.Update(plugin);
+                    context.Update(plugin);
                 }
-                _dbContext.SaveChanges();
+                await context.SaveChangesAsync();
               
                 var foundDrivers = await PluginLoader.GetDriverFactories(_logger, driverLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode);
                 foreach (var driver in foundDrivers)
@@ -609,7 +607,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 _logger.LogError($"Could not load rules {e}", e);
             }
-            _dbContext.SaveChanges(true);
+            await context.SaveChangesAsync(true);
         }
 
         public async Task Reinit()
