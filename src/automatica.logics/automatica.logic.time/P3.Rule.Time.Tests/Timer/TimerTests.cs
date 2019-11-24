@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
+using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Time.Timer;
 using Xunit;
@@ -14,7 +15,8 @@ namespace P3.Rule.Time.Tests.Timer
         [Fact]
         public async void TestTimerRule()
         {
-            Context.Dispatcher.Clear();
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
             await Rule.Stop();
 
             var paramDelay = GetRuleInterfaceByTemplate(TimerRuleFactory.RuleTimerParameter);
@@ -48,7 +50,8 @@ namespace P3.Rule.Time.Tests.Timer
         [Fact]
         public async void TestTimerRule2()
         {
-            Context.Dispatcher.Clear();
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
             await Rule.Stop();
 
             var paramDelay = GetRuleInterfaceByTemplate(TimerRuleFactory.RuleTimerParameter);

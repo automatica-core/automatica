@@ -1,15 +1,14 @@
 using System.Linq;
 using System.Threading;
 using Automatica.Core.Base.IO;
-using Automatica.Core.UnitTests.Common;
 using Automatica.Core.UnitTests.Rules;
 using P3.Rule.DigitalToAnalog.StateToImpuls;
 using Xunit;
 
 namespace P3.Rule.DigitalToAnalog.Test.StateToImpuls
 {
-    public class StateToImpulsTests : RuleTest<StateToImpulsRuleFactory>
-    {
+   // public class StateToImpulsTests : RuleTest<StateToImpulsRuleFactory>
+    //{
         //[Fact]
         //public void TestRule()
         //{
@@ -45,5 +44,5 @@ namespace P3.Rule.DigitalToAnalog.Test.StateToImpuls
 
 
         //}
-    }
+  //  }
 }
