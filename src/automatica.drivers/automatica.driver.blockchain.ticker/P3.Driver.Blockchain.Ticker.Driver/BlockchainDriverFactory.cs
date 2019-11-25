@@ -37,8 +37,8 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             var btcGuid = new Guid("14e2dfca-40a3-4e0b-b44b-e52ef1ca2e00");
             factory.CreateInterfaceType(btcGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.BTC.DESCRIPTION", int.MaxValue, 1, true);
 
-            factory.CreateNodeTemplate(new Guid("f728a20d-b805-4abd-9965-0e3c299a242c"), "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-btc", btcGuid,
-                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
+            factory.CreateNodeTemplate(new Guid("f728a20d-b805-4abd-9965-0e3c299a242c"), "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-btc", DriverGuid,
+                btcGuid, true, true, true, false, true, NodeDataType.Date, 1, false);
 
             factory.CreateNodeTemplate(new Guid("c2131e7a-501e-4216-b854-cba3d693103b"), "BLOCKCHAIN_TICKER.BTC.USD.NAME", "BLOCKCHAIN_TICKER.BTC.USD.DESCRIPTION", "blockchain-btc-usd", btcGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
