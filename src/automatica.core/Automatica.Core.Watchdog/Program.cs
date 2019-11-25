@@ -9,6 +9,8 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.Logger;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Automatica.Core.Watchdog
 {
@@ -24,7 +26,7 @@ namespace Automatica.Core.Watchdog
               .Filter.ByExcluding(Matching.FromSource("Microsoft"))
               .CreateLogger();
 
-            var logger = SystemLogger.Instance;
+            var logger = CoreLoggerFactory.GetLogger("Watchdog");
             logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
 
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
@@ -77,7 +79,6 @@ namespace Automatica.Core.Watchdog
 
                 while (true)
                 {
-
                     logger.LogInformation($"Starting {appName}");
                     
                     process = Process.Start(processInfo);
@@ -85,39 +86,10 @@ namespace Automatica.Core.Watchdog
                     process.WaitForExit();
 
                     var exitCode = process.ExitCode;
+                    logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
-                    if (exitCode == ServerInfo.ExitCodeUpdateInstall)
+                    if (PrepareUpdateIfExists(logger))
                     {
-                        if (Directory.Exists(tmpPath))
-                        {
-                            Directory.Delete(tmpPath, true);
-                        }
-
-                        var updateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName);
-
-                        if (!File.Exists(updateFile))
-                        {
-                            logger.LogError("no update file found...");
-                            continue;
-                        }
-
-                        try
-                        {
-                            var manifest = Common.Update.Update.GetUpdateManifest(logger, updateFile, tmpPath);
-                            if (manifest == null)
-                            {
-                                logger.LogError("Invalid update package");
-                                File.Delete(updateFile);
-                                continue;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            logger.LogError(e, "Could not unpack update package");
-                            File.Delete(updateFile);
-                            continue;
-                        }
-
                         Environment.Exit(2); //restart
                         return;
                     }
@@ -134,6 +106,47 @@ namespace Automatica.Core.Watchdog
 
             Console.ReadLine();
             //cancelToken.Cancel();
+        }
+
+        private static bool PrepareUpdateIfExists(ILogger logger)
+        {
+            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
+            logger.LogInformation($"See if we have an update pending...");
+
+            if (Directory.Exists(tmpPath))
+            {
+                Directory.Delete(tmpPath, true);
+            }
+
+            var updateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName);
+
+            if (!File.Exists(updateFile))
+            {
+                logger.LogError("no update file found...");
+                return false;
+            }
+            logger.LogInformation($"Update file found, prepare it...");
+
+            try
+            {
+                var manifest = Common.Update.Update.GetUpdateManifest(logger, updateFile, tmpPath);
+                if (manifest == null)
+                {
+                    logger.LogError("Invalid update package");
+                    File.Delete(updateFile);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Could not unpack update package");
+                File.Delete(updateFile);
+                return false;
+            }
+
+            logger.LogInformation($"Updated prepared, restarting to install it");
+
+            return true;
         }
     }
 }

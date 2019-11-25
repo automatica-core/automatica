@@ -17,14 +17,7 @@ namespace Automatica.Core.Bootloader
                 var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
 
                 var appName = Path.Combine(fi.DirectoryName, "..", "automatica", "Automatica.Core.Watchdog");
-                var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
-
-                if (Directory.Exists(tmpPath))
-                {
-                    Directory.Delete(tmpPath, true);
-                }
-
-
+              
                 ProcessStartInfo processInfo = null;
                 if (!File.Exists(appName))
                 {
@@ -50,57 +43,10 @@ namespace Automatica.Core.Bootloader
 
                     while (true)
                     {
+                        CheckForUpdateAndInstall();
+
                         process = Process.Start(processInfo);
-
                         process.WaitForExit();
-
-                        var exitCode = process.ExitCode;
-
-                        if (exitCode == 2)
-                        {
-                            var sourceDir = tmpPath;
-                            var targetDir = Path.Combine(fi.DirectoryName, "..", "automatica");
-
-                            if (!Directory.Exists(sourceDir))
-                            {
-                                Console.Error.WriteLine($"Source directory does not exist ({sourceDir})...");
-                                return;
-                            }
-                            if (!Directory.Exists(targetDir))
-                            {
-                                Console.Error.WriteLine($"Target directory does not exist ({targetDir})...");
-                                return;
-                            }
-
-                            Console.WriteLine("Starting update...");
-
-                            var tmpDirectory = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
-
-                            Console.WriteLine("Back up current binaries...");
-                            CopyDirectory(targetDir, tmpDirectory);
-
-                            // DeleteAllFilesInDirectory(targetDir);
-
-                            Console.WriteLine("Copy new binaries...");
-                            if (!CopyDirectory(sourceDir, targetDir))
-                            {
-                                Console.WriteLine("Copy failed...restore old binaries");
-                                Directory.Delete(targetDir, true);
-                                CopyDirectory(tmpDirectory, targetDir);
-                                Directory.Delete(tmpDirectory, true);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Copy success...remove old binaries");
-                                Directory.Delete(tmpDirectory, true);
-                                Directory.Delete(sourceDir, true);
-                            }
-
-
-                            Console.WriteLine("Starting update...done");
-                        }
-
-                        process = null;
 
                         Thread.Sleep(500);
                     }
@@ -114,6 +60,58 @@ namespace Automatica.Core.Bootloader
             {
                 Console.Error.WriteLine($"{e}");
             }
+        }
+
+        private static void CheckForUpdateAndInstall()
+        {
+            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
+            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
+
+            var sourceDir = tmpPath;
+            var targetDir = Path.Combine(fi.DirectoryName, "..", "automatica");
+
+            if (!Directory.Exists(sourceDir))
+            {
+                Console.Error.WriteLine($"Source directory does not exist ({sourceDir})...");
+                return;
+            }
+            if (!Directory.Exists(targetDir))
+            {
+                Console.Error.WriteLine($"Target directory does not exist ({targetDir})...");
+                return;
+            }
+
+            Console.WriteLine("Starting update...");
+
+            var tmpDirectory = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
+
+            Console.WriteLine("Back up current binaries...");
+            CopyDirectory(targetDir, tmpDirectory);
+
+            // DeleteAllFilesInDirectory(targetDir);
+
+            Console.WriteLine("Copy new binaries...");
+            if (!CopyDirectory(sourceDir, targetDir))
+            {
+                Console.WriteLine("Copy failed...restore old binaries");
+                Directory.Delete(targetDir, true);
+                CopyDirectory(tmpDirectory, targetDir);
+                Directory.Delete(tmpDirectory, true);
+            }
+            else
+            {
+                Console.WriteLine("Copy success...remove old binaries");
+                Directory.Delete(tmpDirectory, true);
+                Directory.Delete(sourceDir, true);
+            }
+
+
+            if (Directory.Exists(tmpPath))
+            {
+                Directory.Delete(tmpPath, true);
+            }
+
+            Console.WriteLine("Starting update...done");
         }
 
         private static void DeleteAllFilesInDirectory(string directory)
