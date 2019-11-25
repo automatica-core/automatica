@@ -518,8 +518,8 @@ namespace Automatica.Core.Runtime.Core
             }
             _configuredDrivers = 0;
 
-            
-            var root = _nodeInstanceCache.All().Single(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
+         
+            var root = _nodeInstanceCache.Root;
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstancesStore.Add(root.ObjId, root);
             await ConfigureDriversRecursive(root);

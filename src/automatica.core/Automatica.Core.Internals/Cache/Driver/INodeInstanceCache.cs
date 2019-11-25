@@ -9,5 +9,7 @@ namespace Automatica.Core.Internals.Cache.Driver
     {
         IList<NodeInstance> ByCategory(Guid category);
         IList<NodeInstance> ByArea(Guid category);
+
+        NodeInstance Root { get; }
     }
 }

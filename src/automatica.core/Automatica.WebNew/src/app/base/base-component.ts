@@ -38,6 +38,8 @@ export class BaseComponent {
         } else {
             this.notifyService.notifyError(error);
         }
+
+        console.log(error);
     }
 
     protected baseOnDestroy() {

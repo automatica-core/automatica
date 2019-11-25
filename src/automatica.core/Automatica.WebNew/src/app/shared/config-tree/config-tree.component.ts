@@ -144,7 +144,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         if (this.mapList.has(id)) {
           const treeNode = this.mapList.get(id);
           treeNode.Value = data[2];
-          console.log(treeNode, data[2]);
         }
       }
     });

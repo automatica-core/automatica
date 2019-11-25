@@ -70,8 +70,8 @@ namespace Automatica.Core.Runtime.IO
             {
                 if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 node
                 {
-                    var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutput.Value);
-                    var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInput.Value);
+                    var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutputNavigation.This2NodeInstance);
+                    var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.This2NodeInstance);
 
                     if (sourceNode == null || targetNode == null)
                     {
@@ -88,8 +88,8 @@ namespace Automatica.Core.Runtime.IO
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
                 {
-                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
-                    var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
+                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
+                    var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
 
                     if (sourceNode == null || targetNode == null)
                     {
@@ -106,11 +106,11 @@ namespace Automatica.Core.Runtime.IO
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
                 {
-                    var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutput.Value);
-                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
+                    var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutputNavigation.This2NodeInstance);
+                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
 
 
-                    if (sourceNode == null || targetNode == null)
+                    if (sourceNode == null || targetNode == null)   
                     {
                         _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2RuleInterfaceInstanceInput}) is empty - invalid configuration ");
                         continue;
@@ -124,8 +124,8 @@ namespace Automatica.Core.Runtime.IO
                 }
                 else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
                 {
-                    var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInput.Value);
-                    var sourceNode= _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
+                    var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.This2NodeInstance);
+                    var sourceNode= _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
 
 
                     if (sourceNode == null || targetNode == null)

@@ -14,7 +14,12 @@ namespace Automatica.Core.Internals.Cache.Common
 
         protected override IQueryable<Link> GetAll(AutomaticaContext context)
         {
-            return context.Links.AsNoTracking();
+            return context.Links
+                .Include(a => a.This2NodeInstance2RulePageInputNavigation)
+                .Include(a => a.This2NodeInstance2RulePageOutputNavigation)
+                .Include(a => a.This2RuleInterfaceInstanceInputNavigation)
+                .Include(a => a.This2RuleInterfaceInstanceOutputNavigation)
+                .AsNoTracking();
         }
 
         protected override Guid GetKey(Link obj)

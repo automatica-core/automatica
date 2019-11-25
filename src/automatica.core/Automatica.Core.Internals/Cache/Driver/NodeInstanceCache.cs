@@ -17,6 +17,8 @@ namespace Automatica.Core.Internals.Cache.Driver
 
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
+        private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
+        private NodeInstance _root;
 
         public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler) : base(configuration)
         {
@@ -26,6 +28,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         protected override IQueryable<NodeInstance> GetAll(AutomaticaContext context)
         {
             var rootItem = context.NodeInstances.AsNoTracking().First(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
+
             var allItems = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
                 .Include(a => a.PropertyInstance)
                 .ThenInclude(a => a.This2PropertyTemplateNavigation)
@@ -52,16 +55,20 @@ namespace Automatica.Core.Internals.Cache.Driver
                 .ThenInclude(a => a.ConstraintData)
                 .Include(a => a.This2AreaInstanceNavigation)
                 .Include(a => a.This2SlaveNavigation)
-                .Include(a => a.This2CategoryInstanceNavigation).ToList();
+                .Include(a => a.This2CategoryInstanceNavigation)
+                .Where(a => !a.IsDeleted && a.This2ParentNodeInstance != null).ToList();
             rootItem.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(allItems, rootItem.ObjId);
 
-            
+            Root = rootItem;
+            rootItem.State = NodeInstanceState.Loaded;
+            GetNodeInstanceStateRec(rootItem);
+
             var items = new List<NodeInstance>();
             items.Add(rootItem);
 
-            foreach (var item in items)
+            foreach (var item in allItems)
             {
-                GetNodeInstanceStateRec(item);
+                _allCache.Add(item.ObjId, item);
             }
 
             foreach (var item in allItems)
@@ -105,6 +112,15 @@ namespace Automatica.Core.Internals.Cache.Driver
             }
         }
 
+        public override NodeInstance Get(Guid key)
+        {
+            if (_allCache.ContainsKey(key))
+            {
+                return _allCache[key];
+            }
+            return null;
+        }
+
         protected override Guid GetKey(NodeInstance obj)
         {
             return obj.ObjId;
@@ -113,6 +129,8 @@ namespace Automatica.Core.Internals.Cache.Driver
         public override void Clear()
         {
             base.Clear();
+
+            _allCache.Clear();
 
             _areaCache.Clear();
             _categoryCache.Clear();
@@ -138,6 +156,17 @@ namespace Automatica.Core.Internals.Cache.Driver
                 return _areaCache[category];
             }
             return new List<NodeInstance>();
+        }
+
+        public NodeInstance Root
+        {
+            get
+            {
+                Initialize();
+                return _root;
+
+            }
+            private set => _root = value;
         }
     }
 }
