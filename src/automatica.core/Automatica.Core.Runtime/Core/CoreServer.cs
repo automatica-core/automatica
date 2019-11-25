@@ -305,28 +305,43 @@ namespace Automatica.Core.Runtime.Core
 
             foreach (var driver in _driverStore.All())
             {
-                _logger.LogInformation($"Stopping driver {driver.Name}...");
-                if (await driver.Stop())
+                try
                 {
-                    _logger.LogInformation($"Stopping driver {driver.Name}...success");
+                    _logger.LogInformation($"Stopping driver {driver.Name}...");
+
+                    if (await driver.Stop())
+                    {
+                        _logger.LogInformation($"Stopping driver {driver.Name}...success");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Stopping driver {driver.Name}...error");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    _logger.LogError($"Stopping driver {driver.Name}...error");
+                    _logger.LogError(e, $"Stopping driver {driver.Name}...error");
                 }
             }
 
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
-                _logger.LogInformation($"Stopping logic {rule.Key.Name}...");
+                try
+                {
+                    _logger.LogInformation($"Stopping logic {rule.Key.Name}...");
 
-                if (await rule.Value.Stop())
-                {
-                    _logger.LogInformation($"Stopping logic {rule.Key.Name}...success");
+                    if (await rule.Value.Stop())
+                    {
+                        _logger.LogInformation($"Stopping logic {rule.Key.Name}...success");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Stopping logic {rule.Key.Name}...error");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    _logger.LogError($"Stopping logic {rule.Key.Name}...error");
+                    _logger.LogError(e, $"Stopping logic {rule.Key.Name}...error");
                 }
             }
 
