@@ -29,7 +29,11 @@ namespace Automatica.Core.EF.Models
             get => _this2RuleInterfaceInstanceInputNavigation;
             set
             {
-                This2RuleInterfaceInstanceInput = value?.ObjId;
+                if (value != null)
+                {
+                    This2RuleInterfaceInstanceInput = value.ObjId;
+                }
+
                 _this2RuleInterfaceInstanceInputNavigation = value;
             }
         }
@@ -37,9 +41,13 @@ namespace Automatica.Core.EF.Models
         public RuleInterfaceInstance This2RuleInterfaceInstanceOutputNavigation
         {
             get => _this2RuleInterfaceInstanceOutputNavigation;
-            set { 
+            set {
 
-                This2RuleInterfaceInstanceOutput = value?.ObjId;
+                if (value != null)
+                {
+                    This2RuleInterfaceInstanceOutput = value.ObjId;
+                }
+
                 _this2RuleInterfaceInstanceOutputNavigation = value;
             }
         }
@@ -49,7 +57,11 @@ namespace Automatica.Core.EF.Models
             get => _this2NodeInstance2RulePageInputNavigation;
             set
             {
-                This2NodeInstance2RulePageInput = value?.ObjId;
+                if (value != null)
+                {
+                    This2NodeInstance2RulePageInput = value.ObjId;
+                }
+
                 _this2NodeInstance2RulePageInputNavigation = value;
             }
         }
@@ -59,7 +71,11 @@ namespace Automatica.Core.EF.Models
             get => _this2NodeInstance2RulePageOutputNavigation;
             set
             {
-                This2NodeInstance2RulePageOutput = value?.ObjId;
+                if (value != null)
+                {
+                    This2NodeInstance2RulePageOutput = value.ObjId;
+                }
+
                 _this2NodeInstance2RulePageOutputNavigation = value;
             }
         }
