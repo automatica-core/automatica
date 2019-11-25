@@ -17,5 +17,7 @@ namespace Automatica.Core.Tests.Model
         {
             throw new NotImplementedException();
         }
+
+        public NodeInstance Root => null;
     }
 }

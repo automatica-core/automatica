@@ -97,7 +97,7 @@ namespace Automatica.Core.Runtime.IO
                         continue;
                     }
 
-                    var inputId = entry.This2RuleInterfaceInstanceOutput.Value;
+                    var inputId = sourceNode.ObjId;
                     SystemLogger.Instance.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                     _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
@@ -134,7 +134,7 @@ namespace Automatica.Core.Runtime.IO
                         continue;
                     }
 
-                    var inputId = entry.This2RuleInterfaceInstanceOutput.Value;
+                    var inputId = sourceNode.ObjId;
                     SystemLogger.Instance.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
                     _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {

@@ -204,7 +204,10 @@ namespace Automatica.Core.Base.IO
 
         protected virtual Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
         {
-            return Task.Run(() => dis(self, value));
+            return Task.Run(() =>
+            {
+                dis(self, value);
+            });
         }
 
         public virtual Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)

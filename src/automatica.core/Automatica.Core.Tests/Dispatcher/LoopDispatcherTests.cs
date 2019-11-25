@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Xunit;
@@ -26,21 +27,46 @@ namespace Automatica.Core.Tests.Dispatcher
 
             CreateLink(a =>
             {
-                a.This2NodeInstance2RulePageInput = target.Children[0].DriverContext.NodeInstance.ObjId;
-                a.This2NodeInstance2RulePageOutput = source.Children[0].DriverContext.NodeInstance.ObjId;
+                a.This2NodeInstance2RulePageInputNavigation = new NodeInstance2RulePage
+                    {
+                        This2NodeInstance =
+                            target.Children[0].DriverContext.NodeInstance.ObjId
+                    }
+                    ;
+                a.This2NodeInstance2RulePageOutputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance =
+                        source.Children[0].DriverContext.NodeInstance.ObjId
+                };
 
             });
 
             CreateLink(a =>
             {
-                a.This2NodeInstance2RulePageInput = target2.Children[0].DriverContext.NodeInstance.ObjId;
-                a.This2NodeInstance2RulePageOutput = target.Children[0].DriverContext.NodeInstance.ObjId;
+                a.This2NodeInstance2RulePageInputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance =
+                        target2.Children[0].DriverContext.NodeInstance.ObjId
+                };
+                a.This2NodeInstance2RulePageOutputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance =
+                        target.Children[0].DriverContext.NodeInstance.ObjId
+                };
 
             });
             CreateLink(a =>
             {
-                a.This2NodeInstance2RulePageInput = source.Children[0].DriverContext.NodeInstance.ObjId;
-                a.This2NodeInstance2RulePageOutput = target2.Children[0].DriverContext.NodeInstance.ObjId;
+                a.This2NodeInstance2RulePageInputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance =
+                        source.Children[0].DriverContext.NodeInstance.ObjId
+                };
+                a.This2NodeInstance2RulePageOutputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance =
+                        target2.Children[0].DriverContext.NodeInstance.ObjId
+                };
 
             });
 
@@ -73,20 +99,38 @@ namespace Automatica.Core.Tests.Dispatcher
 
             CreateLink(a =>
             {
-                a.This2RuleInterfaceInstanceInput = inputInterface.ObjId;
-                a.This2RuleInterfaceInstanceOutput = outputInterface.ObjId;
+                a.This2RuleInterfaceInstanceInputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = inputInterface.ObjId
+                };
+                a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = outputInterface.ObjId
+                };
             });
 
             CreateLink(a =>
             {
-                a.This2RuleInterfaceInstanceInput = inputInterfaceLoop.ObjId;
-                a.This2RuleInterfaceInstanceOutput = outputInterface2.ObjId;
+                a.This2RuleInterfaceInstanceInputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = inputInterfaceLoop.ObjId
+                };
+                a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = outputInterface2.ObjId
+                };
             });
 
             CreateLink(a =>
             {
-                a.This2RuleInterfaceInstanceInput = inputInterfaceSource.ObjId;
-                a.This2RuleInterfaceInstanceOutput = outputInterfaceLoop.ObjId;
+                a.This2RuleInterfaceInstanceInputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = inputInterfaceSource.ObjId
+                };
+                a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = outputInterfaceLoop.ObjId
+                };
             });
 
             RuleEngineDispatcher.Load();
@@ -102,14 +146,27 @@ namespace Automatica.Core.Tests.Dispatcher
 
             CreateLink(a =>
             {
-                a.This2RuleInterfaceInstanceInput = target.Context.RuleInstance.RuleInterfaceInstance.Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Input").ObjId;
-                a.This2NodeInstance2RulePageOutput = source.Children[0].DriverContext.NodeInstance.ObjId;
+                a.This2RuleInterfaceInstanceInputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = target.Context.RuleInstance.RuleInterfaceInstance.Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Input").ObjId
+                };
+                a.This2NodeInstance2RulePageOutputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance = source.Children[0].DriverContext.NodeInstance.ObjId
+                };
             });
 
             CreateLink(a =>
             {
-                a.This2RuleInterfaceInstanceOutput= target.Context.RuleInstance.RuleInterfaceInstance.Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Output").ObjId;
-                a.This2NodeInstance2RulePageInput = source.Children[0].DriverContext.NodeInstance.ObjId;
+                a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = target.Context.RuleInstance.RuleInterfaceInstance
+                        .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Output").ObjId
+                };
+                a.This2NodeInstance2RulePageInputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance = source.Children[0].DriverContext.NodeInstance.ObjId
+                };
             });
 
             RuleEngineDispatcher.Load();
@@ -132,13 +189,25 @@ namespace Automatica.Core.Tests.Dispatcher
 
             CreateLink(a =>
             {
-                a.This2NodeInstance2RulePageInput = target.Children[0].Id;
-                a.This2RuleInterfaceInstanceOutput = outputInterface.ObjId;
+                a.This2NodeInstance2RulePageInputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance = target.Children[0].Id
+                };
+                a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = outputInterface.ObjId
+                };
             });
             CreateLink(a =>
             {
-                a.This2NodeInstance2RulePageOutput = target.Children[0].Id;
-                a.This2RuleInterfaceInstanceInput = inputInterface.ObjId;
+                a.This2NodeInstance2RulePageOutputNavigation = new NodeInstance2RulePage
+                {
+                    This2NodeInstance = target.Children[0].Id
+                };
+                a.This2RuleInterfaceInstanceInputNavigation = new RuleInterfaceInstance
+                {
+                    This2RuleInstance = inputInterface.ObjId
+                };
             });
 
             RuleEngineDispatcher.Load();
