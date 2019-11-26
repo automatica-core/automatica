@@ -273,6 +273,16 @@
       "001": {
         "NAME": "date"
       }
+    },
+    "DPT16": {
+      "NAME": "16.* String",
+      "DESCRIPTION": "",
+      "000": {
+        "NAME": "ASCII String"
+      },
+      "001": {
+        "NAME": "8859-1 String"
+      }
     }
   }
 }

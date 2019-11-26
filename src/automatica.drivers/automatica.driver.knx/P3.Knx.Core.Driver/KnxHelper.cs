@@ -143,6 +143,14 @@ namespace P3.Knx.Core.Driver
         Dpt9_028 = 28,
     }
 
+    public enum Dpt16Type
+    {
+        [EnumName("KNX.DPT16.000.NAME", "16.000")]
+        Dpt16_000 = 1,
+        [EnumName("KNX.DPT16.001.NAME", "16.001")]
+        Dpt16_001 = 2
+    }
+
     public enum DptType
     {
         [EnumName("KNX.DPT1.NAME", "1")]

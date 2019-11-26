@@ -122,7 +122,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             AddDpt10Nodes(factory, KnxInterface3LevelMiddle);
             AddDpt11Nodes(factory, KnxInterface3LevelMiddle);
+
+
+            AddDpt16Nodes(factory, KnxInterface3LevelMiddle);
         }
+
 
         private void AddDpt1Nodes(INodeTemplateFactory factory, Guid parentNode)
         {
@@ -311,6 +315,23 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             InitDptType((int)DptType.Dpt11, dpt11Guid, factory);
         }
+
+        private void AddDpt16Nodes(INodeTemplateFactory factory, Guid parentNode)
+        {
+            var dpt16Guid = new Guid("bd222553-42f9-4cdf-afd6-f5a5fda6a53b");
+            factory.CreateNodeTemplate(dpt16Guid, "KNX.DPT16.NAME", "KNX.DPT16.DESCRIPTION", "knx-dpt16",
+                parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
+                NodeDataType.String, int.MaxValue, false);
+           
+            AddAddressProperty(dpt16Guid, factory);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(dpt16Guid, 2), "KNX.PROPERTIES.DPT.NAME",
+                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt16Guid,
+                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt16Type)), (int)Dpt16Type.Dpt16_000, 0, 0);
+
+
+        }
+
 
         private void AddAddressProperty(Guid node, INodeTemplateFactory factory)
         {
