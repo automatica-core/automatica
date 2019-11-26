@@ -6,14 +6,14 @@ namespace P3.Knx.Core.Driver.Frames
     {
         private readonly byte[] _data;
         private readonly string _ia;
-        private WriteStatusFrame(KnxConnection knx, string ia, byte[] value)
+        private WriteStatusFrame(IKnxConnection knx, string ia, byte[] value)
             : base(knx, KnxHelper.ServiceType.TunnellingRequest)
         {
             _ia = ia;
             _data = value;
         }
 
-        internal static WriteStatusFrame CreateFrame(KnxConnection knx, string ia, byte[] value)
+        internal static WriteStatusFrame CreateFrame(IKnxConnection knx, string ia, byte[] value)
         {
             return new WriteStatusFrame(knx, ia, value);
         }

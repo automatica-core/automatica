@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Automatica.Core.Base.Templates;
 using P3.Knx.Core.DPT;
@@ -24,9 +25,10 @@ namespace P3.Driver.Knx.Tests.DPT
             Assert.Equal(shouldBe, value);
 
             var busValue = DptTranslator.Instance.ToDataPoint(
-                PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_000).EnumValue, value).ToList();
+                PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_000).EnumValue, value).AsSpan().Slice(1, 14).ToArray();
             
-            Assert.Equal(input, busValue.ToArray());
+            Assert.Equal(14, busValue.Length);
+            Assert.Equal(input, busValue);
         }
 
         [Fact]
@@ -69,9 +71,9 @@ namespace P3.Driver.Knx.Tests.DPT
 
             var busValue = DptTranslator.Instance.ToDataPoint(
                     PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_001).EnumValue,
-                    "this_string_is_to_long")
-                .ToList();
-            Assert.Equal(14, busValue.ToArray().Length);
+                    "this_string_is_to_long").AsSpan().Slice(1, 14).ToArray();
+
+            Assert.Equal(14, busValue.Length);
 
         }
 
@@ -89,8 +91,9 @@ namespace P3.Driver.Knx.Tests.DPT
             Assert.Equal(shouldBe, value);
 
             var busValue = DptTranslator.Instance.ToDataPoint(
-                PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_001).EnumValue, value).ToList();
-            Assert.Equal(input, busValue.ToArray());
+                PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_001).EnumValue, value).AsSpan().Slice(1, 14).ToArray();
+            Assert.Equal(14, busValue.Length);
+            Assert.Equal(input, busValue);
         }
     }
 }

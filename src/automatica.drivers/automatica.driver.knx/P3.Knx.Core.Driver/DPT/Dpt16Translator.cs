@@ -30,13 +30,13 @@ namespace P3.Knx.Core.Driver.DPT
                     str = str.Substring(0, 14);
                 }
 
-                var ret = new byte[14];
+                var ret = new byte[15];
                 Array.Fill(ret, (byte)0);
 
                 var encoding = GetEncoding();
                 var encoded = encoding.GetBytes(str);
 
-                Array.Copy(encoded, ret, encoded.Length);
+                Array.Copy(encoded,0, ret, 1, encoded.Length);
 
                 return ret;
             }
