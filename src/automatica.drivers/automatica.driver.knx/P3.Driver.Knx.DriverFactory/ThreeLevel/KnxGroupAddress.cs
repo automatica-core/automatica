@@ -90,7 +90,16 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         protected virtual byte[] ConvertToBus(object value)
         {
-            return DptTranslator.Instance.ToDataPoint(DptTypeString, value);
+            try
+            {
+                return DptTranslator.Instance.ToDataPoint(DptTypeString, value);
+            }
+            catch (Exception e)
+            { 
+                DriverContext.Logger.LogError(e,$"Could not convert {value} to bus type");
+            }
+
+            return new byte[0];
         }
 
         private void TelegramReceivedCallback(object data)

@@ -5,6 +5,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using P3.Knx.Core.Abstractions;
+using P3.Knx.Core.Driver;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
@@ -49,8 +50,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override string GetDptString(int dpt)
         {
-            var dpt11 = P3.Knx.Core.Driver.DptType.Dpt11;
-            return PropertyHelper.GetNameAttributeFromEnumValue(dpt11).EnumValue;
+            return PropertyHelper.GetNameAttributeFromEnumValue((Dpt16Type)dpt).EnumValue;
         }
 
         
