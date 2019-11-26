@@ -29,6 +29,8 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             _timer.Elapsed += _timer_Elapsed;
             _timer.Interval = pollTime * 1000;
 
+            _logger.LogInformation($"Start polling every {pollTime}s");
+
 
             return base.Init();
         }
@@ -57,6 +59,8 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         private async Task ReadValues()
         {
+            _logger.LogDebug($"Poll values...");
+
             foreach (var node in _nodes)
             {
                 await node.Refresh();
