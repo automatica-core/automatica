@@ -25,8 +25,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
         public override bool Init()
         {
             var pollTime = GetPropertyValueInt("poll");
-            var apiKey = GetPropertyValueString("api-key");
-
+       
             _timer.Elapsed += _timer_Elapsed;
             _timer.Interval = pollTime * 1000;
 

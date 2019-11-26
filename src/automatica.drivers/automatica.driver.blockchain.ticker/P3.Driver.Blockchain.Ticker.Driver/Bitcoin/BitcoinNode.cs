@@ -65,6 +65,12 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
                 case "blockchain-btc-eur":
                     node = new BitcoinValueNode(ctx, "EUR");
                     break;
+                case "blockchain-btc-usd-with-symbol":
+                    node = new BitcoinValueNode(ctx, "USD", true);
+                    break;
+                case "blockchain-btc-eur-with-symbol":
+                    node = new BitcoinValueNode(ctx, "EUR", true);
+                    break;
             }
 
             AddNode(node);

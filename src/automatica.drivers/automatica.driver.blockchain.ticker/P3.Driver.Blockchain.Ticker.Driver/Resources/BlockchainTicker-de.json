@@ -15,6 +15,14 @@
       "USD": {
         "NAME": "Preis in USD",
         "DIRECTION": ""
+      },
+      "EUR_WITH_SYMBOL": {
+        "NAME": "Preis in EUR mit Symbol",
+        "DIRECTION": ""
+      },
+      "USD_WITH_SYMBOL": {
+        "NAME": "Preis in USD mit Symbol",
+        "DIRECTION": ""
       }
     }
   }
