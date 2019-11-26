@@ -25,7 +25,19 @@ namespace P3.Driver.Knx.Tests.DPT
 
             var busValue = DptTranslator.Instance.ToDataPoint(
                 PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_000).EnumValue, value).ToList();
+            
             Assert.Equal(input, busValue.ToArray());
+        }
+
+        [Fact]
+        public void TestDpt16_000_11()
+        {
+            var input = new byte[] {0x37, 0x31, 0x34, 0x31, 0x2E, 0x36, 0x31, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            var value = DptTranslator.Instance.FromDataPoint(
+                PropertyHelper.GetNameAttributeFromEnumValue(Dpt16Type.Dpt16_000).EnumValue, input);
+
+            Assert.Equal("7141.61$", value);
+
         }
 
         [Fact]

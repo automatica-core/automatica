@@ -18,7 +18,7 @@ namespace Automatica.Core.Internals.Logger
 
         }
 
-        public CoreLogger(string facility) : this(facility, LogLevel.Debug)
+        public CoreLogger(string facility) : this(facility, LogLevel.Trace)
         {
             
         }

@@ -110,6 +110,16 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         ]);
 
       this.pages = pages;
+      this.pages = this.pages.sort((n1, n2) => {
+        if (n1.Name > n2.Name) {
+          return 1;
+        }
+        if (n1.Name < n2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
       this.initPages();
 
       this.ruleTemplates = ruleTemplates;
