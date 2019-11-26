@@ -13,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(0, 7, 1, 19);
+        public override Version DriverVersion => new Version(0, 7, 2, 19);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -328,8 +328,6 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             factory.CreatePropertyTemplate(GenerateNewGuid(dpt16Guid, 2), "KNX.PROPERTIES.DPT.NAME",
                 "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt16Guid,
                 "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt16Type)), (int)Dpt16Type.Dpt16_000, 0, 0);
-
-
         }
 
 

@@ -48,8 +48,9 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 case "knx-dpt11":
                     attribute = new KnxDpt11Attribute(ctx, driver);
                     break;
-                default:
-                    return null;
+                case "knx-dpt16":
+                    attribute = new KnxDpt16Attribute(ctx, driver);
+                    break;
             }
 
             return attribute;
