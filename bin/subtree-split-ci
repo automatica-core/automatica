@@ -79,6 +79,7 @@ remote automatica.logic.math.basicoperations git@github.com:automatica-core/auto
 remote automatica.logic.messenger git@github.com:automatica-core/automatica.logic.messenger.git
 remote automatica.logic.surveillance git@github.com:automatica-core/automatica.logic.surveillance.git
 remote automatica.logic.time git@github.com:automatica-core/automatica.logic.time.git
+remote automatica.logic.string.baseoperations git@github.com:automatica-core/automatica.logic.string.baseoperations.git
 
 # core repos
 split src/automatica.core automatica.core
@@ -114,6 +115,8 @@ split src/automatica.logics/automatica.logic.math.basicoperations automatica.log
 split src/automatica.logics/automatica.logic.messenger automatica.logic.messenger
 split src/automatica.logics/automatica.logic.surveillance automatica.logic.surveillance
 split src/automatica.logics/automatica.logic.time automatica.logic.time
+split src/automatica.logics/automatica.logic.string.baseoperations automatica.logic.string.baseoperations
+
 
 
 
