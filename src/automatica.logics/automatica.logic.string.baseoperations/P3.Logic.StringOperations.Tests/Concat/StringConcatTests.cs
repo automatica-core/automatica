@@ -16,7 +16,7 @@ namespace P3.Logic.StringOperations.Tests.Concat
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(StringConcatFactory.RuleInput1), Dispatchable, "0")[0].Value.ToString() == "010110");
 
 
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(StringConcatFactory.RuleInput1), Dispatchable, null)[0].Value.ToString() == "010110");
+            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(StringConcatFactory.RuleInput1), Dispatchable, null)[0].Value.ToString() == "10110");
 
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(StringConcatFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == StringConcatFactory.RuleOutput);
 
