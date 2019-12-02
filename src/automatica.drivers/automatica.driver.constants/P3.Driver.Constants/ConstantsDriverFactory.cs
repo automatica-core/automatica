@@ -13,18 +13,22 @@ namespace P3.Driver.Constants
 
         public static readonly Guid BusId = new Guid("2ba2fdfe-3df0-4986-80c1-d0f695d64fdc");
         public static readonly Guid ValueId = new Guid("d46b8d4d-29e6-45bd-ba62-9463692bcbd7");
+        public static readonly Guid PropertyValueId = new Guid("5d5c0c1f-50e2-4946-94c0-842cfc51a478");
 
         public static readonly Guid PiId = new Guid("36a0da8a-2735-4f83-91ef-9af90262de32");
         public static readonly Guid HalfPiId = new Guid("bde14ed8-24b3-476b-9c8a-751da617a50b");
         public static readonly Guid DoublePiId = new Guid("82e579a7-935e-463b-9d26-c75b31113553");
 
 
-        public static readonly Guid PropertyValueId = new Guid("5d5c0c1f-50e2-4946-94c0-842cfc51a478");
+        public static readonly Guid StringValueId = new Guid("9d3f1898-288a-48a4-b8a5-8ae3b3876784");
+        public static readonly Guid StringPropertyValueId = new Guid("eef0348b-9b68-4998-a126-7a99af1d5aa0");
+
+
 
         public override string DriverName => "consts";
         public override Guid DriverGuid => BusId;
 
-        public override Version DriverVersion => new Version(0, 1, 0, 1);
+        public override Version DriverVersion => new Version(0, 2, 0, 2);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.constants";
         
@@ -52,7 +56,12 @@ namespace P3.Driver.Constants
 
             factory.CreateNodeTemplate(DoublePiId, "CONSTANTS.NODE.DOUBLE_PI.NAME", "CONSTANTS.NODE.DOUBLE_PI.DESCRIPTION", "const_doublepi", InterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true, NodeDataType.Double, Int32.MaxValue, false);
-
+            
+            
+            factory.CreateNodeTemplate(StringValueId, "CONSTANTS.NODE.STRING.NAME", "CONSTANTS.NODE.STRING.DESCRIPTION", "const_string", InterfaceId,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true, NodeDataType.String, Int32.MaxValue, false);
+            factory.CreatePropertyTemplate(StringPropertyValueId, "CONSTANTS.PROPERTY.VALUE.NAME", "CONSTANTS.PROPERTY.VALUE.DESCRIPTION", "const_value", PropertyTemplateType.Text,
+                StringValueId, "CONSTANTS.CATEGORY.VALUE", true, false, "", "", 1, 1);
         }
 
         public override IDriver CreateDriver(IDriverContext config)
