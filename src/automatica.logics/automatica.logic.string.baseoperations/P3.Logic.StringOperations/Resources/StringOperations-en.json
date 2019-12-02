@@ -1,6 +1,8 @@
 {
-  "STRINGOPERATIONS": {
-    "NAME": "STRINGOPERATIONS",
-    "DESCRIPTION":  ""
+  "STRING_OPERATIONS": {
+    "CONCAT": {
+      "NAME": "String concatenation",
+      "DESCRIPTION": ""
+    }
   }
 }
