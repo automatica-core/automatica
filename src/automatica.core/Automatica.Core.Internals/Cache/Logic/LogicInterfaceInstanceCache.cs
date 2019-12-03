@@ -14,7 +14,10 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         protected override IQueryable<RuleInterfaceInstance> GetAll(AutomaticaContext context)
         {
-            return context.RuleInterfaceInstances.Include(a => a.This2RuleInstanceNavigation).AsNoTracking();
+            return context.RuleInterfaceInstances
+                .Include(a => a.This2RuleInstanceNavigation)
+                .Include(a => a.This2RuleInterfaceTemplateNavigation)
+                .AsNoTracking();
         }
 
         protected override Guid GetKey(RuleInterfaceInstance obj)

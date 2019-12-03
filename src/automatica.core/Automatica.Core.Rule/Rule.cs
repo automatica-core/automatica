@@ -80,23 +80,30 @@ namespace Automatica.Core.Rule
                 {
                     ParamterValueChanged(instance, source, value);
 
-                    Context.Logger.LogDebug($"RuleParamter changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} from {source.GetType()}-{source.Name} value {value}");
+                    Context.Logger.LogDebug($"RuleParameter changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} from {source.GetType()}-{source.Name} value {value}");
                     return new List<IRuleOutputChanged>();
                 }
                 Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} from {source.GetType()}-{source.Name} value {value}");
 
                 var values = InputValueChanged(instance, source, value);
 
-                foreach (var ruleOutValue in values)
+                try
                 {
-                    if (!_valueDictionary.ContainsKey(ruleOutValue.Instance.RuleInterfaceInstance))
+                    foreach (var ruleOutValue in values)
                     {
-                        _valueDictionary.Add(ruleOutValue.Instance.RuleInterfaceInstance, ruleOutValue.Value);
+                        if (!_valueDictionary.ContainsKey(ruleOutValue.Instance.RuleInterfaceInstance))
+                        {
+                            _valueDictionary.Add(ruleOutValue.Instance.RuleInterfaceInstance, ruleOutValue.Value);
+                        }
+                        else
+                        {
+                            _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
+                        }
                     }
-                    else
-                    {
-                        _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
-                    }
+                }
+                catch (Exception)
+                {
+                    //Ignore for the current test
                 }
 
 

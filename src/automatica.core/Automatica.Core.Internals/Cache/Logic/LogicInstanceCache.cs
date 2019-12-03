@@ -19,7 +19,10 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         protected override IQueryable<RuleInstance> GetAll(AutomaticaContext context)
         {
-            var all = context.RuleInstances.AsNoTracking();
+            var all = context.RuleInstances
+                .Include(a => a.RuleInterfaceInstance)
+                    .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
+                .AsNoTracking();
 
             foreach (var item in all)
             {
