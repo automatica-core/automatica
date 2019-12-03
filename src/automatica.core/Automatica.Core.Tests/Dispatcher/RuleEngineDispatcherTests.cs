@@ -62,8 +62,10 @@ namespace Automatica.Core.Tests.Dispatcher
             {
                 a.This2RuleInterfaceInstanceInputNavigation = new RuleInterfaceInstance()
                 {
+                    ObjId = target.Context.RuleInstance.RuleInterfaceInstance
+                        .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Input").ObjId,
                     This2RuleInstance = target.Context.RuleInstance.RuleInterfaceInstance
-                        .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Input").ObjId
+                            .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Input").This2RuleInstance
                 };
                 a.This2NodeInstance2RulePageOutputNavigation = new NodeInstance2RulePage
                 {
@@ -140,7 +142,10 @@ namespace Automatica.Core.Tests.Dispatcher
                 };
                 a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance()
                 {
-                    This2RuleInstance = outputInterface.ObjId
+                    ObjId = source.Context.RuleInstance.RuleInterfaceInstance
+                        .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Output").ObjId,
+                    This2RuleInstance = source.Context.RuleInstance.RuleInterfaceInstance
+                        .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Output").This2RuleInstance
                 };
             });
 
