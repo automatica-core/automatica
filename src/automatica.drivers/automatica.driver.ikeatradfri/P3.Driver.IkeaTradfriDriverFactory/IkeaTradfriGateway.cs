@@ -94,7 +94,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
             }
 
             var scan = await IkeaTradfriDriver.Discover();
-            var gw = new Tuple<string, string>(_id, "192.168.8.101");//scan.Single(a => a.Item1 == _id.ToLowerInvariant());
+            var gw = scan.Single(a => a.Item1 == _id.ToLowerInvariant());
 
             if (gw == null)
             {
