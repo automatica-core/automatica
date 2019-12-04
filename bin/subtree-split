@@ -56,7 +56,7 @@ remote automatica.core.plugin.standalone git@github.com:automatica-core/automati
 remote automatica.driver.automatica.remote git@github.com:automatica-core/automatica.driver.automatica.remote.git
 remote automatica.driver.constants git@github.com:automatica-core/automatica.driver.constants.git
 remote automatica.driver.enocean git@github.com:automatica-core/automatica.driver.enocean.git
-remote automatica.driver.froniussymo git@github.com:automatica-core/automatica.driver.froniussymo.git
+remote automatica.driver.froniussolar git@github.com:automatica-core/automatica.driver.froniussolar.git
 remote automatica.driver.homekit git@github.com:automatica-core/automatica.driver.homekit.git
 remote automatica.driver.huebridgesimulator git@github.com:automatica-core/automatica.driver.huebridgesimulator.git
 remote automatica.driver.ikeatradfri git@github.com:automatica-core/automatica.driver.ikeatradfri.git
@@ -93,7 +93,7 @@ split src/automatica.core.plugin.standalone automatica.core.plugin.standalone
 split src/automatica.drivers/automatica.driver.automatica.remote automatica.driver.automatica.remote
 split src/automatica.drivers/automatica.driver.constants automatica.driver.constants
 split src/automatica.drivers/automatica.driver.enocean automatica.driver.enocean
-split src/automatica.drivers/automatica.driver.froniussymo automatica.driver.froniussymo
+split src/automatica.drivers/automatica.driver.froniussolar automatica.driver.froniussolar
 split src/automatica.drivers/automatica.driver.homekit automatica.driver.homekit
 split src/automatica.drivers/automatica.driver.huebridgesimulator automatica.driver.huebridgesimulator
 split src/automatica.drivers/automatica.driver.ikeatradfri automatica.driver.ikeatradfri
