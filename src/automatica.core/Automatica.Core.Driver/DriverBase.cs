@@ -281,7 +281,14 @@ namespace Automatica.Core.Driver
                     var cts = new CancellationTokenSource();
                     cts.CancelAfter(TimeSpan.FromSeconds(30));
 
-                    await WriteValue(writeData.Item1, writeData.Item2).WithCancellation(cts.Token);
+                    try
+                    {
+                        await WriteValue(writeData.Item1, writeData.Item2).WithCancellation(cts.Token);
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                    }
                 }
             }
             catch(TaskCanceledException)
