@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Extensions;
@@ -236,10 +237,9 @@ namespace Automatica.Core.Driver
         {
             _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
 
-            foreach (var node in Children)
-            {
+            Parallel.ForEach(Children, async node => {
                 var cts = new CancellationTokenSource();
-                cts.CancelAfter(TimeSpan.FromSeconds(30));
+                cts.CancelAfter(TimeSpan.FromMinutes(2));
                 try
                 {
                     var driverStart = await node.Start().WithCancellation(cts.Token);
@@ -257,12 +257,12 @@ namespace Automatica.Core.Driver
                         }
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
                     DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
                 }
-            }
+            });
             
             return true;
         }

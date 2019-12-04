@@ -76,16 +76,17 @@ namespace Automatica.Core.Runtime.Core.Plugins
             return items;
         }
 
-        private static async Task<List<T>> LoadFolders<T>(string[] folders, string searchPattern, int recCount, ILogger logger, IConfiguration config, bool isInDevMode)
+        private static async Task<List<T>> LoadFolders<T>(string[] folders, string searchPattern, int recCount,
+            ILogger logger, IConfiguration config, bool isInDevMode)
         {
             var list = new List<T>();
             if (recCount == 10)
             {
                 return new List<T>();
             }
-            
 
-            foreach (var folder in folders)
+
+            Parallel.ForEach(folders, async folder =>
             {
                 var items = await LoadFromFolder<T>(folder, searchPattern, logger, config, isInDevMode);
                 if (items.Count > 0)
@@ -94,13 +95,17 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
 
                 var subFolders = Directory.GetDirectories(folder);
-                var loaded = await LoadFolders<T>(subFolders, searchPattern, recCount++, logger, config, isInDevMode);
+                var loaded = await LoadFolders<T>(subFolders, searchPattern, recCount++, logger, config,
+                    isInDevMode);
 
                 if (loaded != null && loaded.Count > 0)
                 {
                     list.AddRange(loaded);
                 }
-            }
+            });
+
+
+
             return list;
         }
 

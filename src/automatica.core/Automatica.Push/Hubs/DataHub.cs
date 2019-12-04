@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
@@ -50,10 +51,39 @@ namespace Automatica.Push.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, name);
         }
 
-        public void SetValue(Guid nodeInstance, object value)
+        public void SetValue(Guid nodeInstance, JsonElement value)
         {
+            object convertedValue = null;
+
+            switch (value.ValueKind)
+            {
+                case JsonValueKind.Undefined:
+                    break;
+                case JsonValueKind.Object:
+                    throw new NotImplementedException();
+                case JsonValueKind.Array:
+                    throw new NotImplementedException();
+                case JsonValueKind.String:
+                    convertedValue = value.GetString();
+                    break;
+                case JsonValueKind.Number:
+                    convertedValue = value.GetString();
+                    break;
+                case JsonValueKind.True:
+                    convertedValue = true;
+                    break;
+                case JsonValueKind.False:
+                    convertedValue = false;
+                    break;
+                case JsonValueKind.Null:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+
             var dispatchable = new DispatchableInstance(DispatchableType.NodeInstance, $"Web", nodeInstance, DispatchableSource.Visualization);
-            _dispatcher.DispatchValue(dispatchable, value);
+            _dispatcher.DispatchValue(dispatchable, convertedValue);
         }
     }
 }
