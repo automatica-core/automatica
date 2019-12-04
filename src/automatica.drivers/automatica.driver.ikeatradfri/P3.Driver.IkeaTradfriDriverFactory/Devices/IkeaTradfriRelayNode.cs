@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using P3.Driver.IkeaTradfri.Models;
 
@@ -25,20 +26,25 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public override Task WriteValue(IDispatchable source, object value)
         {
-            var bValue = Convert.ToBoolean(value);
-
-            _value = bValue;
-
-            if (bValue)
+            return Task.Run(() =>
             {
-                Container.Gateway.Driver.SwitchOn(Container.DeviceId);
-            }
-            else
-            {
-                Container.Gateway.Driver.SwitchOff(Container.DeviceId);
-            }
+                var bValue = Convert.ToBoolean(value);
 
-            return base.WriteValue(source, value);
+                _value = bValue;
+
+                DriverContext.Logger.LogDebug($"Start write {DriverContext.NodeInstance.Name}");
+                if (bValue)
+                {
+                    Container.Gateway.Driver.SwitchOn(Container.DeviceId);
+                }
+                else
+                {
+                    Container.Gateway.Driver.SwitchOff(Container.DeviceId);
+                }
+                DriverContext.Logger.LogDebug($"Done write {DriverContext.NodeInstance.Name}");
+
+                return base.WriteValue(source, value);
+            });
         }
 
         protected override void Update(JToken device)
