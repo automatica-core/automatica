@@ -1,10 +1,10 @@
 using Automatica.Core.Driver;
 
-namespace P3.Driver.FroniusSymoFactory
+namespace P3.Driver.FroniusSolarFactory
 {
-    public class FroniusSymoDriver : DriverBase
+    public class FroniusSolarDriver : DriverBase
     {
-        public FroniusSymoDriver(IDriverContext driverContext) : base(driverContext)
+        public FroniusSolarDriver(IDriverContext driverContext) : base(driverContext)
         {
         }
 

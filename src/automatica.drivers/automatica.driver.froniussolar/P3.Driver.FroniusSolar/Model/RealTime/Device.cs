@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace P3.Driver.FroniusSymo.Model.RealTime
+﻿namespace P3.Driver.FroniusSolar.Model.RealTime
 {
     class Device
     {
