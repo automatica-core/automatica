@@ -30,7 +30,7 @@ namespace Automatica.Core.Tests
 
             _dispatcher.DispatchValue(DispatchableMock.Instance, 100);
 
-            Assert.True(autoResetEvent.WaitOne(2000));
+            Assert.True(autoResetEvent.WaitOne(5000));
         }
     }
 }
