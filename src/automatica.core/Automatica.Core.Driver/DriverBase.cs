@@ -278,7 +278,10 @@ namespace Automatica.Core.Driver
 
                     DriverContext.Logger.LogDebug($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
-                    await WriteValue(writeData.Item1, writeData.Item2);
+                    var cts = new CancellationTokenSource();
+                    cts.CancelAfter(TimeSpan.FromSeconds(30));
+
+                    await WriteValue(writeData.Item1, writeData.Item2).WithCancellation(cts.Token);
                 }
             }
             catch(TaskCanceledException)
