@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\FroniusSymo-de.json" />
+    <None Remove="Resources\FroniusSymo-en.json" />
+    <None Remove="Resources\P3.Driver.FroniusSymo-de.json" />
+    <None Remove="Resources\P3.Driver.FroniusSymo-en.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\FroniusSymo-de.json" />
+    <EmbeddedResource Include="Resources\FroniusSymo-en.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.540" />
+  </ItemGroup>
+
+</Project>

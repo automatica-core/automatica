@@ -14,11 +14,13 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
             Console.WriteLine("Hello World!");
 
 
-            var gateways = await IkeaTradfriDriver.Discover();
+//            var gateways = await IkeaTradfriDriver.Discover();
 
-            var appName = $"45df1d511";
+            var appName = Guid.NewGuid().ToString();
+
+            var key = IkeaTradfriDriver.GeneratePsk("192.168.8.101", appName, "Ej3Ta2AzrePZ9jcJ");
             
-            var con = new IkeaTradfriDriver("192.168.8.105", appName, "xAWniaZm74vIhEdZ");
+            var con = new IkeaTradfriDriver("192.168.8.101", appName, key.PSK);
             con.Connect();
 
             Console.WriteLine("Conncted");
@@ -31,6 +33,10 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
 
                 if (dev.ApplicationType == DeviceType.PowerOutlet)
                 {
+
+                    con.SwitchOn(dev.Id);
+                    con.SwitchOff(dev.Id);
+                    con.SwitchOn(dev.Id);
                     continue;
                 }
                 else if (dev.ApplicationType == DeviceType.Remote || dev.ApplicationType == DeviceType.Unknown)
@@ -41,6 +47,7 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
                 {
                     Console.WriteLine($"Item {dev.Name} sent {token}");
 
+
                     if (token is JArray array)
                     {
                         var valueProp = ((int)TradfriConstAttribute.LightColorHex).ToString();
@@ -50,6 +57,7 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
                         
                     }
                 }, deviceType, dev.Id);
+
             }
 
             Console.ReadLine();
