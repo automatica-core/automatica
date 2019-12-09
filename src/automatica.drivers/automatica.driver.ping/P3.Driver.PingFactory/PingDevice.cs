@@ -81,6 +81,8 @@ namespace P3.Driver.PingFactory
             {
                 PingReply reply = pingSender.Send(_ip, _timeout, _buffer.ToArray(), options);
 
+                DriverContext.Logger.LogDebug($"Ping reply for {_ip} is {reply.Status}");
+
                 if (reply?.Status == IPStatus.Success)
                 {
                     
@@ -104,6 +106,7 @@ namespace P3.Driver.PingFactory
             }
             catch (Exception)
             {
+                DriverContext.Logger.LogDebug($"Ping reply for {_ip} failed");
                 CurrentSuccess = 0;
                 Value = false;
                 DispatchValue(false);
