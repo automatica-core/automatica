@@ -21,7 +21,7 @@
     "Name": "P3.Driver.Ping",
     "ComponentName": "ping",
     "Type": "driver",
-    "Output": "P3.Driver.Ping.dll",
+    "Output": "P3.Driver.PingFactory.dll",
     "Resources": [],
     "Dependencies": [],
     "MinCoreServerVersion": {
