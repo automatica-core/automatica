@@ -18,9 +18,9 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
 
             var appName = Guid.NewGuid().ToString();
 
-            var key = IkeaTradfriDriver.GeneratePsk("192.168.8.101", appName, "Ej3Ta2AzrePZ9jcJ");
+            var key = IkeaTradfriDriver.GeneratePsk("192.168.8.100", appName, "Ej3Ta2AzrePZ9jcJ");
             
-            var con = new IkeaTradfriDriver("192.168.8.101", appName, key.PSK);
+            var con = new IkeaTradfriDriver("192.168.8.100", appName, key.PSK);
             con.Connect();
 
             Console.WriteLine("Conncted");

@@ -1,11 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.10.0.581" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\P3.Driver.EBus\P3.Driver.EBus.csproj" />
   </ItemGroup>
 
 </Project>
