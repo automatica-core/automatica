@@ -1,0 +1,38 @@
+{
+  "Automatica": {
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.ping",
+    "manifest-version": {
+      "Major": 0,
+      "Minor": 1,
+      "Build": 0,
+      "Revision": 0,
+      "MajorRevision": 0,
+      "MinorRevision": 0
+    },
+    "plugin-version": {
+      "Major": 0,
+      "Minor": 1,
+      "Build": 0,
+      "Revision": 0,
+      "MajorRevision": 0,
+      "MinorRevision": 0
+    },
+    "PluginGuid": "5c2cccd2-fd61-4ec1-a187-eab62e290664",
+    "Name": "P3.Driver.Ping",
+    "ComponentName": "ping",
+    "Type": "driver",
+    "Output": "P3.Driver.Ping.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "MinCoreServerVersion": {
+      "Major": 0,
+      "Minor": 7,
+      "Build": 0,
+      "Revision": 244,
+      "MajorRevision": 0,
+      "MinorRevision": 244
+    },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

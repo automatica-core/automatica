@@ -71,6 +71,7 @@ remote automatica.driver.wakeonlan git@github.com:automatica-core/automatica.dri
 remote automatica.driver.zwave git@github.com:automatica-core/automatica.driver.zwave.git
 remote automatica.driver.blockchain.ticker git@github.com:automatica-core/automatica.driver.blockchain.ticker.git
 remote automatica.driver.ebus git@github.com:automatica-core/automatica.driver.ebus.git
+remote automatica.driver.ping git@github.com:automatica-core/automatica.driver.ping.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -107,6 +108,7 @@ split src/automatica.drivers/automatica.driver.wakeonlan automatica.driver.wakeo
 split src/automatica.drivers/automatica.driver.zwave automatica.driver.zwave
 split src/automatica.drivers/automatica.driver.blockchain.ticker automatica.driver.blockchain.ticker
 split src/automatica.drivers/automatica.driver.ebus automatica.driver.ebus
+split src/automatica.drivers/automatica.driver.ping automatica.driver.ping
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations

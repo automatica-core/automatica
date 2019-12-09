@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.PingFactory", "P3.Driver.PingFactory\P3.Driver.PingFactory.csproj", "{4D9A5074-1617-4E64-87A1-071FE59E0302}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.PingTests", "P3.Driver.PingTests\P3.Driver.PingTests.csproj", "{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1383AFEC-D64B-48FA-9FA3-70859B90AB49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B60AC37E-67D6-4A77-9009-CF254B55B730}
+	EndGlobalSection
+EndGlobal
