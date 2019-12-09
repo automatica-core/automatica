@@ -2,7 +2,6 @@
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Timer = System.Threading.Timer;
@@ -85,31 +84,46 @@ namespace P3.Driver.PingFactory
 
                 if (reply?.Status == IPStatus.Success)
                 {
-                    
-                    if (CurrentSuccess >= _minSuccess)
-                    {
-                        Value = true;
-                        DispatchValue(true);
-                    }
-                    else
-                    {
-                        CurrentSuccess++;
-                    }
+                    Increment();
                 }
                 else
                 {
-                    CurrentSuccess = 0;
-
-                    Value = false;
-                    DispatchValue(false);
+                    Decrement();
                 }
             }
             catch (Exception)
             {
                 DriverContext.Logger.LogDebug($"Ping reply for {_ip} failed");
+                Decrement();
+            }
+        }
+
+        private void Decrement()
+        {
+            if (CurrentSuccess <= 0)
+            {
                 CurrentSuccess = 0;
                 Value = false;
                 DispatchValue(false);
+            }
+            else
+            {
+                CurrentSuccess--;
+            }
+
+        }
+
+        private void Increment()
+        {
+
+            if (CurrentSuccess >= _minSuccess)
+            {
+                Value = true;
+                DispatchValue(true);
+            }
+            else
+            {
+                CurrentSuccess++;
             }
         }
 
