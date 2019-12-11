@@ -219,7 +219,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.appService.isLoading = true;
 
     try {
-      // await this.configTree.save(false);
+      await this.configTree.save(false);
       await this.ruleEngineService.saveAll(this.pages);
       this.initPages();
 
