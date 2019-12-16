@@ -8,7 +8,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.EBus", "P3.Driver
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6FE0974E-703F-419D-BFDD-DB0A2DDD3FAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.EBus.ConsoleApp", "Tests\P3.Driver.EBus.ConsoleApp\P3.Driver.EBus.ConsoleApp.csproj", "{B6F4FD89-84DC-410B-9828-247D0F040336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.EBus.ConsoleApp", "Tests\P3.Driver.EBus.ConsoleApp\P3.Driver.EBus.ConsoleApp.csproj", "{B6F4FD89-84DC-410B-9828-247D0F040336}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.EBus.Tests", "Tests\P3.Driver.EBus.Tests\P3.Driver.EBus.Tests.csproj", "{7E1FC73B-0E0F-45A7-91F6-ED9A41B925A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,12 +30,17 @@ Global
 		{B6F4FD89-84DC-410B-9828-247D0F040336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6F4FD89-84DC-410B-9828-247D0F040336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6F4FD89-84DC-410B-9828-247D0F040336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E1FC73B-0E0F-45A7-91F6-ED9A41B925A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E1FC73B-0E0F-45A7-91F6-ED9A41B925A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E1FC73B-0E0F-45A7-91F6-ED9A41B925A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E1FC73B-0E0F-45A7-91F6-ED9A41B925A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B6F4FD89-84DC-410B-9828-247D0F040336} = {6FE0974E-703F-419D-BFDD-DB0A2DDD3FAD}
+		{7E1FC73B-0E0F-45A7-91F6-ED9A41B925A1} = {6FE0974E-703F-419D-BFDD-DB0A2DDD3FAD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B60AC37E-67D6-4A77-9009-CF254B55B730}

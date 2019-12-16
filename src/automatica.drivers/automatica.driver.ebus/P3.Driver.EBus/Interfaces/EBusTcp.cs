@@ -14,6 +14,8 @@ namespace P3.Driver.EBus.Interfaces
         private readonly IEBusIpConfig _config;
         private readonly TcpClient _tcpClient;
 
+        private byte[] _buffer = new byte[1024];
+
 
         public EBusTcp(IEBusIpConfig config) : base(config)
         {
@@ -21,23 +23,10 @@ namespace P3.Driver.EBus.Interfaces
             _tcpClient = new TcpClient();
         }
 
-        protected override async Task<byte[]> Receive()
+        protected override Task<byte[]> Receive()
         {
-            byte[] header = new byte[5];
-
             var value = _tcpClient.GetStream().ReadByte();
-
-            if (value == Constants.SYN_BYTE)
-            {
-                Console.WriteLine("SYN rec");
-                return new byte[0];
-            }
-
-            await _tcpClient.GetStream().ReadAsync(header);
-            Console.WriteLine(Utils.ByteArrayToString(in header));
-
-            await Task.Delay(100);
-            return header;
+            return Task.FromResult(Add((byte)value));
         }
 
         protected override async Task StartReceive()
