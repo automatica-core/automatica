@@ -183,8 +183,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       return;
     }
     this.options = {
-      gridType: "fit",
-      mobileBreakpoint: 0,
+      gridType: "verticalFixed",
+      mobileBreakpoint: 640,
       itemChangeCallback: this.itemChange,
       itemResizeCallback: this.itemResize,
       maxRows: this.page.Height,

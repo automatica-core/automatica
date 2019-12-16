@@ -25,6 +25,8 @@ export class SideNavigationMenuComponent implements OnInit {
     @Output()
     selectedItemChanged = new EventEmitter<string>();
 
+    @Input()
+    menuOpened: boolean = false;
 
     private _items: any[];
     @Input()

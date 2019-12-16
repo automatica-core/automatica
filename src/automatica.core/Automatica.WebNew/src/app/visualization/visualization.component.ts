@@ -56,8 +56,8 @@ export class VisualizationComponent implements OnInit {
     const menu = [];
     menu.push({
       text: "COMMON.PAGES",
-      icon: "eye",
-      seperator: true
+      icon: "images",
+      path: "/visualization",
     });
 
     for (const x of this.visuPages) {
@@ -72,8 +72,8 @@ export class VisualizationComponent implements OnInit {
 
     const categoriesItem = {
       text: "CATEGORIES.NAME",
-      icon: "eye",
-      seperator: true,
+      icon: "th",
+      seperator: false,
       items: []
     };
 
@@ -88,8 +88,7 @@ export class VisualizationComponent implements OnInit {
 
     const areasItem = {
       text: "AREAS.NAME",
-      icon: "eye",
-      seperator: true,
+      icon: "layer-group",
       items: []
     };
 

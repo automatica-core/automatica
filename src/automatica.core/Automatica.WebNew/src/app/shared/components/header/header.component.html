@@ -17,7 +17,7 @@
             </div>
         </dxi-item>
 
-        <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
+        <dxi-item location="after" locateInMenu="auto">
             <div *dxTemplate="let data of 'item'">
                 <dx-button *ngIf="!isAdminPage()" text="{{ 'COMMON.ADMIN' | translate }}" (click)="navigateToAdminPage($event)"></dx-button>
                 <dx-button *ngIf="isAdminPage()" text="{{ 'VISU.NAME' | translate }}" (click)="navigateToVisualization($event)"></dx-button>
@@ -25,7 +25,7 @@
         </dxi-item>
 
 
-        <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
+        <dxi-item location="after" locateInMenu="auto">
             <div *dxTemplate="let data of 'item'">
                 <dx-button text="{{ 'COMMON.LOGOUT' | translate }}" (click)="logout($event)"></dx-button>
             </div>

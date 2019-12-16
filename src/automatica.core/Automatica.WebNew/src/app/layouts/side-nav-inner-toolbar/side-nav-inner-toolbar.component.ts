@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, NgModule, Input, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
 import { DxScrollViewModule } from "devextreme-angular/ui/scroll-view";
@@ -23,8 +23,20 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     @Input()
     menuItems: any[];
 
+    private _menuOpened: boolean;
+
     @Input()
-    menuOpened: boolean = false;
+    public get menuOpened(): boolean {
+        return this._menuOpened;
+    }
+    public set menuOpened(v: boolean) {
+        this._menuOpened = v;
+        this.menuOpenedChanged.emit(v);
+    }
+
+
+    @Output()
+    menuOpenedChanged = new EventEmitter<any>();
 
     @Input()
     title: string;
