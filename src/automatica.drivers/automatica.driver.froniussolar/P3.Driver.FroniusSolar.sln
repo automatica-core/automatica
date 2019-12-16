@@ -6,6 +6,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.FroniusSolarFacto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.FroniusSolar", "P3.Driver.FroniusSolar\P3.Driver.FroniusSolar.csproj", "{4D3E8786-99A3-4B21-A503-1B140BFDCD6C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4775D7B5-C084-4AE6-A751-44EE490B363F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FroniusSolarConsoleTest", "Tests\FroniusSolarConsoleTest\FroniusSolarConsoleTest.csproj", "{8001BF70-DBA4-4595-8C42-F8631A77C1BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +24,16 @@ Global
 		{4D3E8786-99A3-4B21-A503-1B140BFDCD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3E8786-99A3-4B21-A503-1B140BFDCD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3E8786-99A3-4B21-A503-1B140BFDCD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8001BF70-DBA4-4595-8C42-F8631A77C1BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8001BF70-DBA4-4595-8C42-F8631A77C1BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8001BF70-DBA4-4595-8C42-F8631A77C1BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8001BF70-DBA4-4595-8C42-F8631A77C1BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8001BF70-DBA4-4595-8C42-F8631A77C1BC} = {4775D7B5-C084-4AE6-A751-44EE490B363F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B60AC37E-67D6-4A77-9009-CF254B55B730}

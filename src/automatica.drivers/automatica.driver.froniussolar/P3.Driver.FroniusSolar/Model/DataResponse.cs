@@ -1,7 +1,9 @@
 ﻿namespace P3.Driver.FroniusSolar.Model
 {
-    public partial class DataResponse<T> 
+    public class DataResponse<T> 
     {
+        public Head Head { get; set; }
 
+        public Body<T> Body { get; set; }
     }
 }
