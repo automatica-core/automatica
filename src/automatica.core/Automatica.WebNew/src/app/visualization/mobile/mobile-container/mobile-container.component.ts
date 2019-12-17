@@ -18,6 +18,9 @@ import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeDataType, NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
+import { DeviceDetectorService } from "ngx-device-detector";
+import { DeviceService, Orientation } from "src/app/services/device/device.service";
+import { gridTypes } from "angular-gridster2/lib/gridsterConfig.interface";
 
 @Component({
   selector: "mobile-container",
@@ -28,6 +31,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
   options: GridsterConfig;
   private _selectedItem: VisuObjectMobileInstance;
+  orientationSub: any;
 
   @Input()
   public get selectedItem(): VisuObjectMobileInstance {
@@ -46,7 +50,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   @Output()
   selectedItemChange = new EventEmitter<VisuObjectMobileInstance>();
 
-  @ViewChild("gridster", {static: false})
+  @ViewChild("gridster", { static: false })
   gridster: GridsterComponent;
 
   version: any;
@@ -61,7 +65,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     private configService: ConfigService,
     private router: Router,
     private login: LoginService,
-    private appService: AppService) {
+    private appService: AppService,
+    private deviceService: DeviceService) {
 
     super(notify, translate);
   }
@@ -78,6 +83,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   }
 
   async ngOnInit() {
+
+    this.registerEvent(this.deviceService.orientationChange, () => {
+      this.initGridster();
+    });
+
 
     this.appService.isLoading = true;
     this.visuTemplates = await this.visuService.getVisuTemplates();
@@ -178,19 +188,51 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
   initGridster() {
 
+    let maxRows = this.page.Height;
+    let maxColumns = this.page.Width;
+    let minRows = this.page.Height;
+    let minColumns = this.page.Width;
+    let keepFixedHeightInMobile = false;
+    let keepFixedWidthInMobile = false;
+
+    const gridType: gridTypes = "fixed";
+
+    if (this.deviceService.isMobile()) {
+      keepFixedHeightInMobile = true;
+      keepFixedWidthInMobile = true;
+
+      if (this.deviceService.orientation === Orientation.Portrait) {
+        maxRows = this.page.Width;
+        minRows = this.page.Width;
+
+        maxColumns = this.page.Height;
+        minColumns = this.page.Width;
+      } else {
+        maxRows = this.page.Height;
+        minRows = this.page.Height;
+
+        maxColumns = this.page.Width;
+        minColumns = this.page.Width;
+      }
+    }
+
+    console.log("height:", maxRows, "width", maxColumns);
+
     if (!this.page) {
       console.error("cannot init grid because no page has been loaded so far");
       return;
     }
     this.options = {
-      gridType: "verticalFixed",
-      mobileBreakpoint: 640,
+      gridType: gridType,
+      mobileBreakpoint: 0,
       itemChangeCallback: this.itemChange,
       itemResizeCallback: this.itemResize,
-      maxRows: this.page.Height,
-      maxCols: this.page.Width,
-      minRows: this.page.Height,
-      minCols: this.page.Width,
+      keepFixedHeightInMobile: keepFixedHeightInMobile,
+      keepFixedWidthInMobile: keepFixedWidthInMobile,
+      maxRows: maxRows,
+      maxCols: maxColumns,
+      // minRows: minRows,
+      // minCols: minColumns,
       enableEmptyCellDrop: true,
       resizable: {
         enabled: true

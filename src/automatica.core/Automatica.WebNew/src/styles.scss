@@ -145,9 +145,17 @@ html, body {
   .panel-dashboard {
     height: calc(100vh - 270px) !important;
   }
+
   .visu-height {
-    height: calc(100vh - 150px) !important;
+    height: calc(100vh - 70px) !important;
   }
+  
+  @media only screen and (min-width: 600px) and (min-height: 400px) {
+    .visu-height {
+      height: calc(100vh - 150px) !important;
+    }
+  }
+
   .monitor-panel-height {
     height: calc(100vh - 220px) !important;
   }

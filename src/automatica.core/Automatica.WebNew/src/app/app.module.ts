@@ -37,6 +37,8 @@ import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
 import { SlavesService } from "./services/slaves.services";
 import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
+import { DeviceDetectorModule } from 'ngx-device-detector';
+import { DeviceService } from "./services/device/device.service";
 
 export class CustomDragDropConfig extends DragDropConfig {
   public onDragStartClass: string = "dnd-drag-start";
@@ -88,7 +90,9 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     VisualizationModule,
     DxScrollViewModule,
     MobileModule,
-    StartingOverlayModule
+    StartingOverlayModule,
+
+    DeviceDetectorModule.forRoot()
   ],
   providers: [
     {
@@ -100,7 +104,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     TranslationConfigService,
     CustomDragDropConfig,
     { provide: DragDropConfig, useValue: new CustomDragDropConfig() },
-    HasRoleGuard
+    HasRoleGuard,
+    DeviceService
   ],
   bootstrap: [
     AppComponent

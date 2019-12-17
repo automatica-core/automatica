@@ -30,7 +30,7 @@
                     <ng-content select="app-footer"></ng-content>
                 </div>
             </dx-scroll-view>
-            <app-footer></app-footer>
+            <app-footer *ngIf="!isMobile"></app-footer>
         </div>
     </dx-drawer>
 </div>

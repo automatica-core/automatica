@@ -11,6 +11,7 @@ import { SideNavigationMenuModule } from "src/app/shared/components/side-navigat
 import { HeaderModule } from "src/app/shared/components/header/header.component";
 import { FooterModule } from "src/app/shared/components/footer/footer.component";
 import { Subscription } from "rxjs";
+import { DeviceService } from "src/app/services/device/device.service";
 
 @Component({
     selector: "app-side-nav-inner-toolbar",
@@ -47,7 +48,14 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     shaderEnabled = true;
     routerSub: Subscription;
 
-    constructor(private breakpointObserver: BreakpointObserver, private router: Router, private activatedRoute: ActivatedRoute) { }
+    public get isMobile() {
+        return this.deviceService.isMobile();
+    }
+
+    constructor(private breakpointObserver: BreakpointObserver,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private deviceService: DeviceService) { }
 
     ngOnInit() {
         this.selectedRoute = "";
