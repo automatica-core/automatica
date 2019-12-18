@@ -27,7 +27,7 @@ namespace P3.Driver.Constants.Tests
             var con = driver.Children[0] as Constant;
 
             Assert.NotNull(con);
-            Assert.Equal(100, con.Value);
+            Assert.Equal(100d, con.Value);
         }
 
         [Fact]
