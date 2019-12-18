@@ -109,13 +109,13 @@ namespace P3.Driver.PingFactory
             else
             {
                 CurrentSuccess--;
+                DriverContext.Logger.LogDebug($"Decrement count to {CurrentSuccess}");
             }
 
         }
 
         private void Increment()
         {
-
             if (CurrentSuccess >= _minSuccess)
             {
                 Value = true;
@@ -124,6 +124,7 @@ namespace P3.Driver.PingFactory
             else
             {
                 CurrentSuccess++;
+                DriverContext.Logger.LogDebug($"Increment count to {CurrentSuccess}");
             }
         }
 
