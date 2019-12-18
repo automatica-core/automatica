@@ -2,19 +2,21 @@
 
 
 <div class="menu-container">
-    <dx-tree-view expandEvent="click" [items]="items" (onInitialized)="onMenuInitialized($event)"
-        (onItemClick)="onItemClick($event)" (onContentReady)="updateSelection($event)"
-        (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single" keyExpr="path">
-        <div *dxTemplate="let data of 'item'">
-            
-            <ng-container *ngIf="data.seperator">
-                {{data.text | translate}}
-            </ng-container>
+    <dx-scroll-view height="100vh">
+        <dx-tree-view expandEvent="click" [items]="items" (onInitialized)="onMenuInitialized($event)"
+            (onItemClick)="onItemClick($event)" (onContentReady)="updateSelection($event)"
+            (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single" keyExpr="path"  [style.padding-bottom]="'120px'">
+            <div *dxTemplate="let data of 'item'">
 
-            <ng-container *ngIf="!data.seperator">
-                <fa-icon [icon]="['fas', data.icon]"></fa-icon>
-                <span class="nav-padding">{{data.text | translate}}</span>
-            </ng-container>
-        </div>
-    </dx-tree-view>
+                <ng-container *ngIf="data.seperator">
+                    {{data.text | translate}}
+                </ng-container>
+
+                <ng-container *ngIf="!data.seperator">
+                    <fa-icon [icon]="['fas', data.icon]"></fa-icon>
+                    <span class="nav-padding">{{data.text | translate}}</span>
+                </ng-container>
+            </div>
+        </dx-tree-view>
+    </dx-scroll-view>
 </div>

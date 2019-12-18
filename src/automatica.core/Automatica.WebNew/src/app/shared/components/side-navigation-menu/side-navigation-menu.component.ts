@@ -4,6 +4,7 @@ import { TranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
+import { DxScrollViewModule } from "devextreme-angular";
 
 @Component({
     selector: "app-side-navigation-menu",
@@ -128,7 +129,7 @@ export class SideNavigationMenuComponent implements OnInit {
 }
 
 @NgModule({
-    imports: [CommonModule, DxTreeViewModule, TranslationModule, FontAwesomeModule],
+    imports: [CommonModule, DxTreeViewModule, TranslationModule, FontAwesomeModule, DxScrollViewModule],
     declarations: [SideNavigationMenuComponent],
     exports: [SideNavigationMenuComponent]
 })
