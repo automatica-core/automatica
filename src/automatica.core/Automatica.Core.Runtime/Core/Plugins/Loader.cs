@@ -34,9 +34,6 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            var dependencies = DependencyContext.Default;
-            var res = dependencies.CompileLibraries.Where(d => d.Name.Contains(assemblyName.Name)).ToList();
-            
             foreach (var path in _path)
             {
                 var pathFileName = Path.Combine(path, $"{assemblyName.Name}.dll");
@@ -76,13 +73,13 @@ namespace Automatica.Core.Runtime.Core.Plugins
             return items;
         }
 
-        private static async Task<List<T>> LoadFolders<T>(string[] folders, string searchPattern, int recCount,
+        private static Task<List<T>> LoadFolders<T>(string[] folders, string searchPattern, int recCount,
             ILogger logger, IConfiguration config, bool isInDevMode)
         {
             var list = new List<T>();
             if (recCount == 10)
             {
-                return new List<T>();
+                return Task.FromResult(new List<T>());
             }
 
 
@@ -106,7 +103,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
 
 
-            return list;
+            return Task.FromResult(list);
         }
 
         private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
@@ -237,7 +234,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                             continue;
                         }
 
-                        if (assembly.CreateInstance(ti.FullName) is T factory)
+                        if (assembly.CreateInstance(ti.FullName ?? throw new InvalidOperationException()) is T factory)
                         {
                             logger.LogDebug($"Found {typeof(T)} in {ti}...");
                             list.Add(factory);

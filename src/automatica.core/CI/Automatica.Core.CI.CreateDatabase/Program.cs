@@ -1,24 +1,19 @@
-﻿
-using Automatica.Core.Base.Visu;
-using Automatica.Core.EF.Helper;
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Helper;
 using Automatica.Core.Runtime.Core;
 using Automatica.Core.Runtime.Database;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace Automatica.Core.CI.CreateDatabase
 {
     static class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
@@ -38,9 +33,10 @@ namespace Automatica.Core.CI.CreateDatabase
             {
                 File.Delete(Path.Combine(fi.DirectoryName, DatabaseConstants.DatabaseInitName));
             }
-            
-            var webHost = BuildWebHost(args);
 
+            var hostBuilder = new HostBuilder().Build();
+
+         
             string loadDirectory = "";
 
             if (args.Length > 0)
@@ -52,24 +48,14 @@ namespace Automatica.Core.CI.CreateDatabase
                 loadDirectory = fi.DirectoryName;
             }
 
-            DatabaseInit.EnusreDatabaseCreated(webHost.Services);
+            DatabaseInit.EnusreDatabaseCreated(hostBuilder.Services);
 
-            var server = new CoreServer(webHost.Services);
-            server.Load(loadDirectory, "*.dll");
+            var server = new CoreServer(hostBuilder.Services);
+            await server.Load(loadDirectory, "*.dll");
 
 
             Console.WriteLine($"Done....");
             Environment.Exit(0);
-        }
-
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            var webHost = WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>()
-                .UseUrls($"http://*:9999/")
-                .UseSerilog();
-
-            return webHost.Build();
         }
     }
 }
