@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using P3.Driver.IkeaTradfri.Models;
 using P3.Driver.IkeaTradfriDriverFactory.Devices.Light;
@@ -13,6 +14,12 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
         public IkeaTradfriContainerNode(IDriverContext driverContext, IkeaTradfriGateway gateway) : base(driverContext)
         {
             Gateway = gateway;
+        }
+
+        public async Task Reconnect()
+        {
+            await Gateway.Stop();
+            await Gateway.Start();
         }
 
         public override bool Init()

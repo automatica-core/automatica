@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using P3.Driver.IkeaTradfri.Models;
 
@@ -26,25 +28,35 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public override Task WriteValue(IDispatchable source, object value)
         {
-            return Task.Run(() =>
+            var cancellation = new CancellationTokenSource(5000);
+            return Task.Run(async () =>
             {
-                var bValue = Convert.ToBoolean(value);
-
-                _value = bValue;
-
-                DriverContext.Logger.LogDebug($"Start write {DriverContext.NodeInstance.Name}");
-                if (bValue)
+                try
                 {
-                    Container.Gateway.Driver.SwitchOn(Container.DeviceId);
+                    var bValue = Convert.ToBoolean(value);
+
+                    _value = bValue;
+
+                    DriverContext.Logger.LogDebug($"Start write {DriverContext.NodeInstance.Name}");
+                    if (bValue)
+                    {
+                        Container.Gateway.Driver.SwitchOn(Container.DeviceId);
+                    }
+                    else
+                    {
+                        Container.Gateway.Driver.SwitchOff(Container.DeviceId);
+                    }
+
+                    DriverContext.Logger.LogDebug($"Done write {DriverContext.NodeInstance.Name}");
+
                 }
-                else
+                catch (TaskCanceledException)
                 {
-                    Container.Gateway.Driver.SwitchOff(Container.DeviceId);
+                    await Container.Reconnect();
                 }
-                DriverContext.Logger.LogDebug($"Done write {DriverContext.NodeInstance.Name}");
 
                 return base.WriteValue(source, value);
-            });
+            }, cancellation.Token);
         }
 
         protected override void Update(JToken device)
