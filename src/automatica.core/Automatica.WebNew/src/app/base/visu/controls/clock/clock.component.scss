@@ -1,0 +1,87 @@
+// Options
+$black: #1b1e23;
+$size: 90%;
+$white: #1b1e23;
+$feature : #90C225;
+
+.control-center {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  color: white;
+}
+
+.clock {
+  height: $size;
+  width: $size;
+  border-radius: #{$size / 2};
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  &__second,
+  &__minute,
+  &__hour, &__indicator {
+    position: absolute;
+    left: calc(50% - 1px);
+    width: 2px;
+    background: $white;
+    transform-origin: bottom center;
+    z-index: 2;
+    border-radius: 1px;
+  }
+  &__second {
+    height: #{($size / 2) - 10};
+    margin-top: 20px;
+    background: $feature;
+    animation: time 60s infinite steps(60);
+    z-index: 3;
+  }
+  &__minute {
+    height: #{($size / 2) - 20};
+    margin-top: 42px;
+    opacity: 0.75;
+    animation: time 3600s linear infinite;
+  }
+  &__hour {
+    height: #{($size / 2) - 30};
+    margin-top: 63px;
+    animation: time 43200s linear infinite;
+  }
+  &__indicator {
+    height: #{($size / 2) - 2};
+    border-top: 2px solid $feature;
+    background: none;
+  }
+  &__indicator:nth-of-type(5n) {
+    opacity: 1;
+    // height: #{($size / 2) - 7};
+    border-top: 7px solid $white;
+  }
+  &__axis {
+    background: $feature;
+    width: 5px;
+    height: 5px;
+    border-radius: 3px;
+    position: absolute;
+    z-index: 4;
+    top: #{$size / 2 - 3};
+    
+  }
+}
+
+@for $i from 1 through 60 {
+  section:nth-of-type(#{$i}) {
+    transform: rotateZ(calc(6deg * #{$i}));
+  }
+}
+
+@keyframes time {
+  to {
+    transform: rotateZ(360deg);
+  }
+}

@@ -61,6 +61,32 @@ namespace Automatica.Core.Visu
             AddRgbControl(factory);
 
             AddChartControl(factory);
+            AddGaugeControl(factory);
+
+            AddClockControl(factory);
+        }
+
+        private void AddClockControl(VisuMobileTemplateFactory factory)
+        {
+            var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Clock);
+            factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.CLOCK.NAME", "VISU.OBJECT.CLOCK.DESCRIPTION", "clock",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            AddCommonProperty(chart, factory);
+        }
+
+        private void AddGaugeControl(VisuMobileTemplateFactory factory)
+        {
+            var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Gauge);
+            factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.GAUGE.NAME", "VISU.OBJECT.GAUGE.DESCRIPTION", "gauge",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.CreatePropertyTemplate(new Guid("85e6e721-d45b-479c-ab44-6672d2f772dc"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, chart, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
+
+            AddCommonProperty(chart, factory);
+            AddTextProperty(chart, factory);
         }
 
         private void AddChartControl(VisuMobileTemplateFactory factory)
@@ -177,7 +203,7 @@ namespace Automatica.Core.Visu
         {
             byte[] gu = guid.ToByteArray();
 
-            gu[gu.Length - index] = (byte)(Convert.ToInt32(gu[gu.Length - index]) + c);
+            gu[^index] = (byte)(Convert.ToInt32(gu[^index]) + c);
 
             return new Guid(gu);
         }

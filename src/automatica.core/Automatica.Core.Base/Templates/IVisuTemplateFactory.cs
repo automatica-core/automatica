@@ -19,7 +19,11 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("a39fe74f-e7ae-444a-aef0-f997d56beb1e")]
         Rgba,
         [VisuMobileObjectTemplateType("220da983-0f65-4852-b813-fcbeb331fb16")]
-        Chart
+        Chart,
+        [VisuMobileObjectTemplateType("0e742e37-5d83-4476-910c-726677b4477f")]
+        Gauge,
+        [VisuMobileObjectTemplateType("e3936850-7a0e-4651-9b01-0034e6dabeda")]
+        Clock
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

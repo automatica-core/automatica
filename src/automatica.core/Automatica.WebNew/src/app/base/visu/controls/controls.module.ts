@@ -7,7 +7,7 @@ import { ClockComponent } from "./clock/clock.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
 import { SliderComponent } from "./slider/slider.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxCircularGaugeModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { NumberBoxComponent } from "./number-box/number-box.component";
 import { WindowMonitorComponent } from "./window-monitor/window-monitor.component";
@@ -15,7 +15,8 @@ import { RgbComponent } from "./rgb/rgb.component";
 
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
-import { ChartsComponent } from './charts/charts.component';
+import { ChartsComponent } from "./charts/charts.component";
+import { GaugeComponent } from "./gauge/gauge.component";
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { ChartsComponent } from './charts/charts.component';
     DxColorBoxModule,
     NgColorModule,
     DxChartModule,
+    DxCircularGaugeModule,
     DynamicModule.withComponents([
       LabelComponent,
       ClockComponent,
@@ -39,7 +41,8 @@ import { ChartsComponent } from './charts/charts.component';
       NumberBoxComponent,
       WindowMonitorComponent,
       RgbComponent,
-      ChartsComponent
+      ChartsComponent,
+      GaugeComponent
     ])
   ],
   declarations: [
@@ -53,7 +56,8 @@ import { ChartsComponent } from './charts/charts.component';
     NumberBoxComponent,
     WindowMonitorComponent,
     RgbComponent,
-    ChartsComponent
+    ChartsComponent,
+    GaugeComponent
   ],
   exports: [
     ControlComponent
