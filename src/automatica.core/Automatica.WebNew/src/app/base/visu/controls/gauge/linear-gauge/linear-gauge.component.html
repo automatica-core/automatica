@@ -1,9 +1,11 @@
-<dx-linear-gauge id="gauge" [value]="4.3" #ref>
-    <dxo-scale [startValue]="0" [endValue]="5" [tickInterval]="2.5" [minorTickInterval]="0.625">
-        <dxo-minor-tick [visible]="true"></dxo-minor-tick>
+<dx-linear-gauge #gauge [value]="ref.value">
+    <dxo-scale [startValue]="scaleStart" [endValue]="scaleEnd" [tickInterval]="tickInterval">
     </dxo-scale>
-    <dxo-export [enabled]="true"></dxo-export>
-    <dxo-title text="TV Show Rating">
-        <dxo-font [size]="28"></dxo-font>
+    <dxo-title [text]="ref.displayText">
+        <dxo-font [size]="ref.fontSize"></dxo-font>
     </dxo-title>
+
+    
+    <dxo-size [height]="ref.actualHeight" [width]="ref.actualWidth">
+    </dxo-size>
 </dx-linear-gauge>
