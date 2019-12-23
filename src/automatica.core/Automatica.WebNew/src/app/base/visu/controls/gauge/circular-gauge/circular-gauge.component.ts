@@ -32,7 +32,7 @@ export class CircularGaugeComponent extends BaseGaugeComponent<DxCircularGaugeCo
       return arg.valueText;
     }
 
-    return arg.valueText + " " + this.ref.getPropertyValue("unit");
+    return arg.valueText + this.ref.getPropertyValue("unit");
   }
 
   constructor(notifyService: NotifyService, translate: TranslationService) {
