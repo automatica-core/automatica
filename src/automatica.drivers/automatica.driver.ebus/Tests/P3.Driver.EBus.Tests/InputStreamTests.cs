@@ -49,5 +49,19 @@ namespace P3.Driver.EBus.Tests
 
             Assert.Null(recv);
         }
+
+        [Fact]
+        public void TestEscaped()
+        {
+            var frame = new byte[] { 0x10, 0xfe, 0xb5, 0x05, 0x04, 0x27, 0xa9, 0x00, 0x15, 0xa9, 0x01 };
+
+            var wrapFrame = new byte[frame.Length + 10];
+            Array.Fill(wrapFrame, (byte)0xBB, 0, wrapFrame.Length);
+            Array.Copy(frame, 0, wrapFrame, 0, frame.Length);
+
+
+            var ebus = new EBusMoq(null);
+            var recv = ebus.Write(wrapFrame);
+        }
     }
 }

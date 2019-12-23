@@ -1,10 +1,15 @@
 ﻿using System;
-using Microsoft.CodeAnalysis.CodeRefactorings;
 
 namespace P3.Driver.EBus
 {
     internal class Message
     {
+
+        public const byte EscapeByte = 0xA9;
+        public const byte SyncByte = 0xAA;
+        public const byte AckByte = 0x00;
+        public const byte NackByte = 0xFF;
+        public const byte BrodcastByte = 0xFE;
 
         public byte Source { get; private set; }
         public byte Target { get; private set; }
@@ -39,11 +44,12 @@ namespace P3.Driver.EBus
                 throw new ArgumentException("Package is invalid");
             }
 
-            msg.Data = new Memory<byte>(buffer.Slice(5, dataLen).ToArray());
+            msg.Data = new Memory<byte>(buffer.Slice(5, dataLen-1).ToArray());
 
-            msg.Crc16 = buffer[5 + dataLen];
+            msg.Crc16 = buffer[4 + dataLen];
 
-            if (CalculateChecksum(buffer.Slice(0, dataLen+5)) != msg.Crc16)
+            var cc = CalculateChecksum(buffer);
+            if (CalculateChecksum(buffer.Slice(0, dataLen+4)) != msg.Crc16)
             {
                 throw new ArgumentException("Invalid CRC");
             }
@@ -54,7 +60,26 @@ namespace P3.Driver.EBus
 
         public static byte CalculateChecksum(ReadOnlySpan<byte> data)
         {
-            return Crc.Crc8(data);
+            byte crc = 0;
+            foreach(var value in data)
+            {
+                switch (value)
+                {
+                    case EscapeByte:
+                        crc = Crc.Crc8(crc, EscapeByte);
+                        crc = Crc.Crc8(crc, 0x00);
+                        break;
+                    case SyncByte:
+                        crc = Crc.Crc8(crc, EscapeByte);
+                        crc = Crc.Crc8(crc, 0x01);
+                        break;
+                    default:
+                        crc = Crc.Crc8(crc, value);
+                        break;
+                }
+            }
+
+            return crc;
         }
     }
 }

@@ -8,10 +8,11 @@ namespace P3.Driver.EBus
 {
     public abstract class EBus : IEBus
     {
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
-        private byte[] _buffer = new byte[1024];
+        private readonly byte[] _buffer = new byte[1024];
         private int _pos = 0;
+        private bool _inEscape = false;
 
         protected EBus(IEBusConfig config)
         {
@@ -24,7 +25,45 @@ namespace P3.Driver.EBus
 
         protected byte[] Add(byte b)
         {
-            lock (_lock) {
+            if (_inEscape)
+            {
+                if (b == 0x00)
+                {
+                    _inEscape = false;
+                    return AddByteToBuffer(Message.EscapeByte);
+
+                }
+                else if (b == 0x01)
+                {
+                    _inEscape = false;
+                    return AddByteToBuffer(Message.SyncByte);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            if (b == Message.EscapeByte)
+            {
+                _inEscape = true;
+            }
+            else if (b == Message.SyncByte)
+            {
+                return AddByteToBuffer(b);  // invalid escape sequence
+            }
+            else
+            {
+                return AddByteToBuffer(b);
+            }
+
+            return null;
+        }
+
+        private byte[] AddByteToBuffer(byte b)
+        {
+            lock (_lock)
+            {
                 if (_pos == _buffer.Length)
                 {
                     _pos = 0;
@@ -40,7 +79,7 @@ namespace P3.Driver.EBus
         private byte[] CheckForMessages()
         {
             int pos = 0;
-            while((pos = Array.IndexOf(_buffer, (byte)0xAA))>= 0)
+            while((pos = Array.IndexOf(_buffer, Message.SyncByte))>= 0)
             {
                 var localBuf = new byte[pos+1];
                 Array.Copy(_buffer, 0, localBuf, 0, pos+1);
