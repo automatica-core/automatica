@@ -120,6 +120,22 @@
             "AREA_LINK": {
                 "NAME": "Bereich",
                 "DESCRIPTION": ""
+            },
+            "SCALE_START": {
+                "NAME": "Start",
+                "DESCRIPTION": ""
+            },
+            "SCALE_END": {
+                "NAME": "Ende",
+                "DESCRIPTION": ""
+            },
+            "TICKS": {
+                "NAME": "Ticks",
+                "DESCRIPTION": ""
+            },
+            "GAUGE_TYPE": {
+                "NAME": "Rundelementart",
+                "DESCRIPTION": ""
             }
         }
     }

@@ -92,6 +92,11 @@ export abstract class BaseMobileComponent extends BaseComponent {
     getFontSize() {
         return this.getPropertyValue("text_size") + "px";
     }
+
+    public get fontSize() {
+        return this.getPropertyValue("text_size");
+    }
+
     getForegroundColor() {
         return this.getPropertyValue("foreground_color");
     }

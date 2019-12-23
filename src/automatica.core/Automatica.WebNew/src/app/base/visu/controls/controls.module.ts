@@ -17,6 +17,7 @@ import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
 import { ChartsComponent } from "./charts/charts.component";
 import { GaugeComponent } from "./gauge/gauge.component";
+import { GaugeModule } from "./gauge/gauge.module";
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { GaugeComponent } from "./gauge/gauge.component";
     DxColorBoxModule,
     NgColorModule,
     DxChartModule,
-    DxCircularGaugeModule,
+    GaugeModule,
     DynamicModule.withComponents([
       LabelComponent,
       ClockComponent,
@@ -56,8 +57,7 @@ import { GaugeComponent } from "./gauge/gauge.component";
     NumberBoxComponent,
     WindowMonitorComponent,
     RgbComponent,
-    ChartsComponent,
-    GaugeComponent
+    ChartsComponent
   ],
   exports: [
     ControlComponent

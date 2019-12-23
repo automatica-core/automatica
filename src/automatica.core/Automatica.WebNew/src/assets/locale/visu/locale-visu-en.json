@@ -120,6 +120,22 @@
             "AREA_LINK": {
                 "NAME": "Area",
                 "DESCRIPTION": ""
+            },
+            "SCALE_START": {
+                "NAME": "Start",
+                "DESCRIPTION": ""
+            },
+            "SCALE_END": {
+                "NAME": "End",
+                "DESCRIPTION": ""
+            },
+            "TICKS": {
+                "NAME": "Ticks",
+                "DESCRIPTION": ""
+            },
+            "GAUGE_TYPE": {
+                "NAME": "Gauge type",
+                "DESCRIPTION": ""
             }
         }
     }

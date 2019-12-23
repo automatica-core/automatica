@@ -1,3 +1,12 @@
-<ng-container *ngIf="nodeProperty && nodeProperty.Value">
-  
-</ng-container>
+<div style="font-size: 2vw;" [style.background]="getPropertyValue('background_color')"
+    [ngClass]="{ 'noselect': !editMode }">
+
+    <ng-container *ngIf="gaugeType === 0">
+        <app-linear-gauge [ref]="self"></app-linear-gauge>
+    </ng-container>
+
+    <ng-container *ngIf="gaugeType === 1">
+        <app-circular-gauge [ref]="self"></app-circular-gauge>
+
+    </ng-container>
+</div>

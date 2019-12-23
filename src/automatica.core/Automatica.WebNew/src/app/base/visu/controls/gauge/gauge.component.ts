@@ -4,8 +4,6 @@ import { DataHubService } from "src/app/base/communication/hubs/data-hub.service
 import { NotifyService } from "src/app/services/notify.service";
 import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
-import { DxChartComponent } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
 import { DataService } from "src/app/services/data.service";
 import { PropertyInstance } from "src/app/base/model/property-instance";
 
@@ -33,6 +31,12 @@ export class GaugeComponent extends BaseMobileComponent implements OnInit {
     this._nodeProperty = v;
   }
 
+  public get self() {
+    return this;
+  }
+
+  gaugeType: number = 1;
+
   constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService, private dataService: DataService) {
     super(dataHub, notify, translate, configService);
 
@@ -41,6 +45,8 @@ export class GaugeComponent extends BaseMobileComponent implements OnInit {
   ngOnInit() {
     this.baseOnInit();
     this.propertyChanged();
+
+    this.gaugeType = this.getPropertyValue("gauge_type");
   }
 
   public onItemResized() {

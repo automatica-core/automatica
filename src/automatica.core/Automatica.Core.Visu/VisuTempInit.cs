@@ -75,6 +75,12 @@ namespace Automatica.Core.Visu
             AddCommonProperty(chart, factory);
         }
 
+        private enum GaugeType
+        {
+            Linear = 0,
+            Circular = 1
+        }
+
         private void AddGaugeControl(VisuMobileTemplateFactory factory)
         {
             var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Gauge);
@@ -83,6 +89,28 @@ namespace Automatica.Core.Visu
 
             factory.CreatePropertyTemplate(new Guid("85e6e721-d45b-479c-ab44-6672d2f772dc"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
                 PropertyTemplateType.NodeInstance, chart, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
+            factory.CreatePropertyTemplate(new Guid("258fad47-e750-4e3e-9620-9d1afabfef1a"), "VISU.APPEARANCE.GAUGE_TYPE.NAME",
+                "VISU.APPEARANCE.GAUGE_TYPE.DESCRIPTION", "gauge_type", PropertyTemplateType.Enum, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, PropertyHelper.CreateEnumMetaString(typeof(GaugeType)),
+                (int)GaugeType.Circular, 0, 0);
+
+
+            factory.CreatePropertyTemplate(new Guid("da0c1047-bfd0-4095-b0ac-781a3808e162"), "VISU.APPEARANCE.SCALE_START.NAME",
+                "VISU.APPEARANCE.SCALE_START.DESCRIPTION", "scale_start", PropertyTemplateType.Integer, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, null,
+                0, 0, 10);
+
+            factory.CreatePropertyTemplate(new Guid("d1d5ce5f-94e2-48c1-a065-89557f12dca4"), "VISU.APPEARANCE.SCALE_END.NAME",
+                "VISU.APPEARANCE.SCALE_END.DESCRIPTION", "scale_end", PropertyTemplateType.Integer, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, null,
+                100, 0, 11);
+
+            factory.CreatePropertyTemplate(new Guid("81bbbbc1-2b14-4e44-9f6d-ee7ebacc6dcf"), "VISU.APPEARANCE.TICKS.NAME",
+                "VISU.APPEARANCE.TICKS.DESCRIPTION", "ticks", PropertyTemplateType.Numeric, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, null,
+                1, 0, 12);
+
 
 
             AddCommonProperty(chart, factory);
