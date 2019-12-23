@@ -46,7 +46,6 @@ export class GaugeComponent extends BaseMobileComponent implements OnInit {
     this.baseOnInit();
     this.propertyChanged();
 
-    this.gaugeType = this.getPropertyValue("gauge_type");
   }
 
   public onItemResized() {
@@ -55,6 +54,8 @@ export class GaugeComponent extends BaseMobileComponent implements OnInit {
 
 
   protected propertyChanged() {
+
+    this.gaugeType = this.getPropertyValue("gauge_type");
 
     const nodeProperty = this.getProperty("nodeInstance");
 
