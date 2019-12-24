@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using P3.Driver.IkeaTradfri.Models;
 
@@ -26,10 +25,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             return Task.FromResult(true);
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        public override async Task WriteValue(IDispatchable source, object value)
         {
             var cancellation = new CancellationTokenSource(5000);
-            return Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 try
                 {
