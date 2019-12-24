@@ -189,8 +189,9 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     let minColumns = this.page.Width;
     let keepFixedHeightInMobile = false;
     let keepFixedWidthInMobile = false;
+    let fixedSize = (window.innerWidth / 2) - 35;
 
-    const gridType: gridTypes = "fixed";
+    const gridType: gridTypes = "fitToGridOptions";
 
     if (this.deviceService.isMobile()) {
       keepFixedHeightInMobile = true;
@@ -208,6 +209,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
         maxColumns = this.page.Width;
         minColumns = this.page.Width;
+
+        fixedSize = (window.innerHeight / 2) - 65;
       }
     }
 
@@ -217,6 +220,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       console.error("cannot init grid because no page has been loaded so far");
       return;
     }
+
     this.options = {
       gridType: gridType,
       mobileBreakpoint: 0,
@@ -224,6 +228,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       itemResizeCallback: this.itemResize,
       keepFixedHeightInMobile: keepFixedHeightInMobile,
       keepFixedWidthInMobile: keepFixedWidthInMobile,
+      fixedColWidth: fixedSize,
+      fixedRowHeight: fixedSize,
       maxRows: maxRows,
       maxCols: maxColumns,
       minRows: minRows,
@@ -248,6 +254,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     }
     if (this.gridster) {
       this.gridster.resize();
+      this.options.api.optionsChanged();
     }
   }
 

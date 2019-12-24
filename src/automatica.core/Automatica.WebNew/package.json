@@ -49,7 +49,7 @@
     "ng-dynamic-component": "^5.0.0",
     "ngx-cookie-service": "^2.2.0",
     "ngx-device-detector": "^1.3.20",
-    "ngx-gridster": "^8.3.8",
+    "ngx-gridster": "^8.3.9",
     "p3root-angular-dnd": "^8.0.2",
     "rxjs": "^6.5.3",
     "webpack": "^4.41.4",

@@ -51,6 +51,7 @@ export class DeviceService {
     }
 
     isMobile() {
+        return true;
         return this.deviceServiceDetector.isMobile();
     }
 }
