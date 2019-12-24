@@ -27,7 +27,6 @@ export class ClockComponent extends BaseMobileComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log(this.second.nativeElement.css);
 
     const currentSec = this.getSecondsToday();
 
@@ -54,7 +53,7 @@ export class ClockComponent extends BaseMobileComponent implements OnInit {
 
     const diff = <any>now - <any>today;
     const round = Math.round(diff / 1000);
-    console.log(round)
+
     return round;
   }
 
