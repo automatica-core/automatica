@@ -1,10 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from "@angular/core";
-import { GridsterConfig, GridsterItem, GridsterComponent } from "angular-gridster2";
+import { GridsterConfig, GridsterComponent } from "ngx-gridster";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslationService } from "angular-l10n";
 import { ConfigService } from "../../../services/config.service";
 import { LoginService } from "../../../services/login.service";
-import { BaseService } from "src/app/services/base-service";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { NotifyService } from "src/app/services/notify.service";
 import { VisuService } from "src/app/services/visu.service";
@@ -12,15 +11,11 @@ import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { VisuPage, VisuPageType } from "src/app/base/model/visu-page";
 import { VisuObjectTemplate } from "src/app/base/model/visu-object-template";
-import { BaseModel } from "src/app/base/model/base-model";
-import { NodeInstance } from "src/app/base/model/node-instance";
 import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
-import { RuleInstance } from "src/app/base/model/rule-instance";
-import { NodeDataType, NodeDataTypeEnum } from "src/app/base/model/node-data-type";
+import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
-import { DeviceDetectorService } from "ngx-device-detector";
 import { DeviceService, Orientation } from "src/app/services/device/device.service";
-import { gridTypes } from "angular-gridster2/lib/gridsterConfig.interface";
+import { gridTypes } from "ngx-gridster/lib/gridsterConfig.interface";
 
 @Component({
   selector: "mobile-container",
@@ -71,11 +66,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     super(notify, translate);
   }
 
-  itemChange(item, itemComponent) {
+  itemChange() {
     // console.log("itemChanged", item, itemComponent);
   }
 
-  itemResize(item: VisuObjectMobileInstance, itemComponent) {
+  itemResize(item: VisuObjectMobileInstance) {
     // console.log("itemResized", item, itemComponent);
     if (item.itemResized) {
       item.itemResized.emit();
@@ -176,6 +171,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       console.error(error);
     }
 
+    console.log(this.page);
+
     this.appService.isLoading = false;
   }
 
@@ -231,8 +228,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       keepFixedWidthInMobile: keepFixedWidthInMobile,
       maxRows: maxRows,
       maxCols: maxColumns,
-      // minRows: minRows,
-      // minCols: minColumns,
+      minRows: minRows,
+      minCols: minColumns,
       enableEmptyCellDrop: true,
       resizable: {
         enabled: true
@@ -275,11 +272,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
     this.page.VisuObjectInstances.push(instance);
 
-    this.onMouseDown(void 0, instance);
+    this.onMouseDown(instance);
   }
 
 
-  onMouseDown($event, item) {
+  onMouseDown(item) {
     if (!this.selectionEnabled) {
       return;
     }
@@ -290,7 +287,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     this.selectedItem.isSelected = true;
   }
 
-  async logoutClicked($event) {
+  async logoutClicked() {
     await this.login.logout();
     this.router.navigateByUrl("/login");
   }

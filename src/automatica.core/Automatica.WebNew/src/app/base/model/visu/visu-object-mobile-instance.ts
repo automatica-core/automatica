@@ -15,32 +15,39 @@ export class VisuObjectMobileInstance extends VisuObjectInstance implements IGri
     public static CreateFromTemplate(template: VisuObjectTemplate): VisuObjectMobileInstance {
         const instance = new VisuObjectMobileInstance();
 
-        return super.FillNewInstance(instance, template);
+        instance.x = instance.X;
+        instance.y = instance.Y;
+        instance.cols = instance.Width;
+        instance.rows = instance.Height;
+
+        super.FillNewInstance(instance, template);
+
+        return instance;
     }
 
 
-    get x(): number {
+    public get x(): number {
         return this.X;
     }
-    set x(v: number) {
+    public set x(v: number) {
         this.X = v;
     }
-    get y(): number {
+    public get y(): number {
         return this.Y;
     }
-    set y(v: number) {
+    public set y(v: number) {
         this.Y = v;
     }
-    get rows(): number {
+    public get rows(): number {
         return this.Height;
     }
-    set rows(v: number) {
+    public set rows(v: number) {
         this.Height = v;
     }
-    get cols(): number {
+    public get cols(): number {
         return this.Width;
     }
-    set cols(v: number) {
+    public set cols(v: number) {
         this.Width = v;
     }
 
