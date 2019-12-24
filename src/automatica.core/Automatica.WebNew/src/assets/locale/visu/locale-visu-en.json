@@ -46,6 +46,18 @@
             "CHART": {
                 "NAME": "Chart",
                 "DESCRIPTION": ""
+            },
+            "GAUGE": {
+                "NAME": "Gauge",
+                "DESCRIPTION": ""
+            },
+            "CLOCK": {
+                "NAME": "Clock",
+                "DESCRIPTION": ""
+            },
+            "RGBA": {
+                "NAME": "RGBA",
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY": {

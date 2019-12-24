@@ -46,6 +46,18 @@
             "CHART": {
                 "NAME": "Diagramm",
                 "DESCRIPTION": ""
+            },
+            "GAUGE": {
+                "NAME": "Messinstrument",
+                "DESCRIPTION": ""
+            },
+            "CLOCK": {
+                "NAME": "Uhr",
+                "DESCRIPTION": ""
+            },
+            "RGBA": {
+                "NAME": "RGBA",
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY": {
