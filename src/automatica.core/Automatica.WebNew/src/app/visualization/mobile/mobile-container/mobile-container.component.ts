@@ -170,7 +170,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       this.notifyService.notifyError(error);
       console.error(error);
     }
-    
+
     this.appService.isLoading = false;
   }
 
