@@ -272,11 +272,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
     this.page.VisuObjectInstances.push(instance);
 
-    this.onMouseDown(instance);
+    this.onMouseDown(void 0, instance);
   }
 
 
-  onMouseDown(item) {
+  onMouseDown($event, item) {
     if (!this.selectionEnabled) {
       return;
     }

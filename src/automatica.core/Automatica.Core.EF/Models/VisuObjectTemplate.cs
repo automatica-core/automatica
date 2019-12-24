@@ -18,6 +18,13 @@ namespace Automatica.Core.EF.Models
         public string Group { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
+
+        public float? MaxWidth { get; set; }
+        public float? MaxHeight { get; set; }
+
+        public float? MinWidth { get; set; }
+        public float? MinHeight { get; set; }
+
         public long This2VisuPageType { get; set; }
 
         public bool IsVisibleForUser { get; set; }

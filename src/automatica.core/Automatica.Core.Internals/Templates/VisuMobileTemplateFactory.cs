@@ -8,12 +8,14 @@ namespace Automatica.Core.Internals.Templates
 {
     public class VisuMobileTemplateFactory : PropertyTemplateFactory, IVisuTemplateFactory
     {
-        public VisuMobileTemplateFactory(AutomaticaContext database, IConfiguration config) : base(database, config, (template, guid) => template.This2VisuObjectTemplate = guid)
+        public VisuMobileTemplateFactory(AutomaticaContext database, IConfiguration config) : base(database, config,
+            (template, guid) => template.This2VisuObjectTemplate = guid)
         {
-           
+
         }
 
-        public CreateTemplateCode CreateVisuMobileTemplate(Guid uid, string name, string description, string key, string group, int height, int width, bool isVisibleForUser)
+        public CreateTemplateCode CreateVisuMobileTemplate(Guid uid, string name, string description, string key,
+            string group, int height, int width, bool isVisibleForUser)
         {
             var visuObjectTemplate = Db.VisuObjectTemplates.SingleOrDefault(a => a.ObjId == uid);
             var retValue = CreateTemplateCode.Updated;
@@ -34,7 +36,7 @@ namespace Automatica.Core.Internals.Templates
             visuObjectTemplate.Width = width;
             visuObjectTemplate.IsVisibleForUser = isVisibleForUser;
 
-            visuObjectTemplate.This2VisuPageType = (int)VisuPageTypeEnumeration.Mobile;
+            visuObjectTemplate.This2VisuPageType = (int) VisuPageTypeEnumeration.Mobile;
 
             if (isNewObject)
             {
@@ -47,6 +49,26 @@ namespace Automatica.Core.Internals.Templates
 
             Db.SaveChanges(true);
             return retValue;
+        }
+
+        public CreateTemplateCode UpdateMaxMinValues(Guid uid, float? maxHeight, float? maxWidth, float? minHeight, float? minWidth)
+        {
+            var visuObjectTemplate = Db.VisuObjectTemplates.SingleOrDefault(a => a.ObjId == uid);
+
+            if (visuObjectTemplate == null)
+            {
+                return CreateTemplateCode.Error;
+            }
+
+            visuObjectTemplate.MaxHeight = maxHeight;
+            visuObjectTemplate.MaxWidth = maxWidth;
+            visuObjectTemplate.MinWidth = minWidth;
+            visuObjectTemplate.MinHeight = minHeight;
+
+            Db.VisuObjectTemplates.Update(visuObjectTemplate);
+            Db.SaveChanges(true);
+
+            return CreateTemplateCode.Updated;
         }
     }
 }

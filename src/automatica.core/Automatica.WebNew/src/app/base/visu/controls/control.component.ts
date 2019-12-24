@@ -6,8 +6,6 @@ import { LinkComponent } from "./link/link.component";
 import { SliderComponent } from "./slider/slider.component";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { NumberBoxComponent } from "./number-box/number-box.component";
-import { PropertyInstance } from "../../model/property-instance";
-import { DataHubService } from "../../communication/hubs/data-hub.service";
 import { TranslationService } from "angular-l10n";
 import { WindowMonitorComponent } from "./window-monitor/window-monitor.component";
 import { NotifyService } from "src/app/services/notify.service";

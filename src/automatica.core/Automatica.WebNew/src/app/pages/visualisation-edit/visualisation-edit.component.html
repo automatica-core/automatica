@@ -17,10 +17,10 @@
                     </div>
 
                     <div *dxTemplate="let page of 'item'">
-                        <ng-container *ngIf="page.This2VisuPageType == VisuPageTypes.PC">
+                        <ng-container *ngIf="page.This2VisuPageType === VisuPageTypes.PC">
                             <!-- <p3-draw-container style="height:100%; width:100%;display:block;"></p3-draw-container> -->
                         </ng-container>
-                        <ng-container *ngIf="page.This2VisuPageType == VisuPageTypes.Mobile">
+                        <ng-container *ngIf="page.This2VisuPageType === VisuPageTypes.Mobile">
                             <mobile-container [page]="page" [(selectedItem)]="selectedVisuObject"></mobile-container>
                         </ng-container>
                     </div>

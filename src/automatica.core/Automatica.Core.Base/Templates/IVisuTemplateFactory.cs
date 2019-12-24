@@ -29,6 +29,7 @@ namespace Automatica.Core.Base.Templates
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory
     {
         CreateTemplateCode CreateVisuMobileTemplate(Guid uid, string name, string description, string key, string group, int height, int width, bool isVisibleForUser);
+        CreateTemplateCode UpdateMaxMinValues(Guid uid, float? maxHeight, float? maxWidth, float? minHeight, float? minWidth);
     }
 
     public class VisuMobileObjectTemplateTypeAttribute : Attribute

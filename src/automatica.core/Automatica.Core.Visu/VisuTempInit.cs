@@ -68,11 +68,12 @@ namespace Automatica.Core.Visu
 
         private void AddClockControl(VisuMobileTemplateFactory factory)
         {
-            var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Clock);
-            factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.CLOCK.NAME", "VISU.OBJECT.CLOCK.DESCRIPTION", "clock",
+            var clock = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Clock);
+            factory.CreateVisuMobileTemplate(clock, "VISU.OBJECT.CLOCK.NAME", "VISU.OBJECT.CLOCK.DESCRIPTION", "clock",
                 "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
-            AddCommonProperty(chart, factory);
+            factory.UpdateMaxMinValues(clock, 1, 1, 1, 1);
+            AddCommonProperty(clock, factory);
         }
 
         private enum GaugeType
