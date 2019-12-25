@@ -189,7 +189,7 @@ namespace Automatica.Core.Runtime.Core
                     await _updateHandler.Init();
 
                     RunState = RunState.Loading;
-                    await Load(ServerInfo.DriverDirectoy, ServerInfo.DriverPattern);
+                    await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
                     await ConfigureAndStart();
                 }
                 catch (Exception e)

@@ -70,13 +70,21 @@ namespace Automatica.Core
 
             if (args.Length > 0 && args[0] == "develop")
             {
-                ServerInfo.DriverDirectoy = args[1];
-                ServerInfo.DriverPattern= args[2];
+                ServerInfo.PluginDirectory = args[1];
+                ServerInfo.PluginFilePattern= args[2];
                 ServerInfo.IsInDevelopmentMode = true;
             }
             else
             {
-                ServerInfo.DriverDirectoy = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+                var pluginDir = Environment.GetEnvironmentVariable("AUTOMATICA_PLUGIN_DIR");
+                if (!String.IsNullOrEmpty(pluginDir))
+                {
+                    ServerInfo.PluginDirectory = pluginDir;
+                }
+                else
+                {
+                    ServerInfo.PluginDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+                }
             }
 
             logger.LogInformation($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");

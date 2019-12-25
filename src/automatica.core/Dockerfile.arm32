@@ -42,7 +42,7 @@ RUN echo docker has some strange errors sometimes
 COPY ./Automatica.Core/appsettings.json .
 
 RUN echo $AUTOMATICA_VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
 RUN rm -rf /src
 
@@ -50,9 +50,11 @@ FROM automaticacore/automatica-plugin-runtime:arm32v7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
+VOLUME /app/plugins
 
 EXPOSE 1883/tcp
-EXPOSE 5001/tcp	
+EXPOSE 5001/tcp
+ENV AUTOMATICA_PLUGIN_DIR=/app/plugins
 
 # Build runtime image
 ENTRYPOINT ["/app/automatica/Automatica.Core"]

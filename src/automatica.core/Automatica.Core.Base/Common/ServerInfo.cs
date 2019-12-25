@@ -47,12 +47,12 @@ namespace Automatica.Core.Base.Common
         /// <summary>
         /// Directory where the drivers are searched
         /// </summary>
-        public static string DriverDirectoy { get; set; }
+        public static string PluginDirectory { get; set; }
 
         /// <summary>
         /// Driver search pattern, used for development mode
         /// </summary>
-        public static string DriverPattern { get; set; } = "*.dll";
+        public static string PluginFilePattern { get; set; } = "*.dll";
 
         /// <summary>
         /// Indicates if the server runs in development mode
