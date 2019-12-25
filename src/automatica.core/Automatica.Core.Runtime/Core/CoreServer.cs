@@ -575,7 +575,7 @@ namespace Automatica.Core.Runtime.Core
                 _driverFactoryStore.Clear();
                 _logicFactoryStore.Clear();
 
-                var driverLoadingPath = Path.Combine(path, "Drivers");
+                var driverLoadingPath = Path.Combine(path, ServerInfo.DriversDirectory);
 
                 _logger.LogInformation($"Searching for drivers in {driverLoadingPath}");
 
@@ -605,7 +605,7 @@ namespace Automatica.Core.Runtime.Core
 
             try
             {
-                var ruleLoadingPath = Path.Combine(path, "Rules");
+                var ruleLoadingPath = Path.Combine(path, ServerInfo.LogicsDirectory);
                 _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
                 foreach (var rule in await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode))
                 {

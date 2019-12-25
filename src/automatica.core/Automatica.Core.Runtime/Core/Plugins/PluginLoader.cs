@@ -27,7 +27,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             {
                 dir = path;
             }
-            var driverPath = Path.Combine(dir, ServerInfo.DriversDirectory);
+            var driverPath = dir;
 
             if (!Directory.Exists(driverPath))
             {
