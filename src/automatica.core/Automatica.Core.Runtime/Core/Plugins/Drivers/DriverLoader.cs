@@ -9,6 +9,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -73,8 +74,15 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                     driverDbVersion.Version = factory.DriverVersion.ToString();
                 }
 
+                if (!UsesInterface(boardType, factory))
+                {
+                    _logger.LogInformation(
+                        $"Ignore {factory.DriverName} because we do not support any of the given interfaces");
+                    return Task.CompletedTask;
+                }
+
                 _localizationProvider.LoadFromAssembly(factory.GetType().Assembly);
-                if ((UsesInterface(boardType, factory) && initNodeTemplates) || factory.InDevelopmentMode)
+                if (initNodeTemplates || factory.InDevelopmentMode)
                 {
 
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");

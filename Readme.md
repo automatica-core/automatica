@@ -12,9 +12,6 @@ Donate DogeCoin: DPVz6RSAJrXZqTF4sGXpS1dqwvU36hSaAQ
 ### Frontend Build ###
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
-### Automatica.Demo Status ###
-[![Demo Status](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)](https://img.shields.io/uptimerobot/status/m782134177-5fe595279760b26ea5fdf09f.svg)
-
 ### Develop Automatica.Core.Cloud Status ###
 [![Demo Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
 
@@ -42,6 +39,10 @@ Automatica is a building management system thats runs on .NET Core and is built 
 * [Online Demo](#online-demo)
 * [Docker images](#docker-images)
    * [Run in a docker image](#run-in-a-docker-image)
+   * [How to use this image](#how-to-use-this-image)
+		* [Database](#database)
+			* [SQLite](#sqlite)
+			* [MySQL](#mysql)
 * [Roadmap](#roadmap)
    * [Roadmap core](#roadmap-core)   
    * [Roadmap cloud](#roadmap-cloud)   
@@ -144,25 +145,45 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request! 
 
 Any help is appreciated!
 
-
-# Online Demo
-The online demo is available [here](https://demo.automaticacore.com/).
-The demo will be reseted daily! So now worry - try everything you want.
-
-~~~
-https://demo.automaticacore.com/
-
-Login
-User: sa
-Password: sa
-~~~
-
 # Docker images
 Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
 
 There is also a automaticacore_proxy image which represents an nginx reverse proxy.
 
-The automaticacore_demo is just for demonstration purpose - also for the online demo! 
+
+## How to use this image
+```console
+docker run -it -p 5001:5001 automaticacore/automatica:latest-develop --name automatica
+```
+
+## Database
+Automatica works with different database systems. Currently we support MySQL and SQlite.
+
+The first startup can takeup some time, because the database needs to be initialized.
+
+### SQLite
+```console
+$ docker run -it \
+    -p 5001:5001 \
+    --mount type=bind,source=~/database,target=/app/database \
+    -e DATABASE_TYPE="sqlite" \
+    -e ConnectionStrings:"AutomaticaDatabaseSqlite=Data Source=/app/database/automatica.core.db" \
+    --name automaticacore \
+    automaticacore/automatica:latest-develop
+```
+
+### MySQL
+You need to provide a maria-db server and enter the credentials in the environment variable in the docker run command:
+
+```console
+$ docker run -it \
+    -p 5001:5001 \
+    -e DATABASE_TYPE="mysql" \
+    -e ConnectionStrings:"AutomaticaDatabaseMaria=Server=<server>;User Id=<username>;Password=<password>;Database=<db-name>" \
+    --name automaticacore \
+    automaticacore/automatica:latest-develop
+```
+
 
 ## Run in a docker image
 To just play around with automatica.core use this docker-compose configuration.
