@@ -25,6 +25,8 @@ namespace P3.Driver.EnOcean.DriverFactory
         public override string ImageName => "automaticacore/plugin-p3.driver.enocean";
         public override string Tag => "latest-develop";
 
+        public override InterfaceTypeEnum[] UsesInterfaces => new[] {InterfaceTypeEnum.Usb};
+
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
             var gwguid = new Guid("2ca34b3f-1c29-4ab1-99d2-ecfbf2683dd5"); 
