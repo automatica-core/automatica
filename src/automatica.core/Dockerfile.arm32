@@ -8,8 +8,6 @@ ARG FONTAWESOME_TOKEN
 COPY ./Automatica.WebNew /src
 
 RUN ls -lah /src
-RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/ 
-RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN 
 
 RUN npm install
 RUN npm run build-docker
