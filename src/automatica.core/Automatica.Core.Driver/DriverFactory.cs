@@ -16,7 +16,7 @@ namespace Automatica.Core.Driver
         public abstract string DriverName { get; }
         public abstract  Guid DriverGuid { get; }
         public abstract Version DriverVersion { get; }
-        public InterfaceTypeEnum[] UsesInterfaces { get; }
+        public virtual InterfaceTypeEnum[] UsesInterfaces { get; }
 
         public Guid FactoryGuid => DriverGuid;
 
@@ -29,7 +29,7 @@ namespace Automatica.Core.Driver
                 usesInterfaces.Add((InterfaceTypeEnum) enu);
             }
 
-            UsesInterfaces = usesInterfaces.ToArray();
+            UsesInterfaces = usesInterfaces.ToArray();  
         }
 
         /// <summary>
