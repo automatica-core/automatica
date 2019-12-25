@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 
@@ -15,8 +16,21 @@ namespace Automatica.Core.Driver
         public abstract string DriverName { get; }
         public abstract  Guid DriverGuid { get; }
         public abstract Version DriverVersion { get; }
+        public InterfaceTypeEnum[] UsesInterfaces { get; }
 
         public Guid FactoryGuid => DriverGuid;
+
+        protected DriverFactory()
+        {
+            var usesInterfaces = new List<InterfaceTypeEnum>();
+
+            foreach (var enu in Enum.GetValues(typeof(InterfaceTypeEnum)))
+            {
+                usesInterfaces.Add((InterfaceTypeEnum) enu);
+            }
+
+            UsesInterfaces = usesInterfaces.ToArray();
+        }
 
         /// <summary>
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(INodeTemplateFactory)"/> method will be called on every start

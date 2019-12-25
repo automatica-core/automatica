@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
@@ -31,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             _logicFactoryStore = logicFactoryStore;
         }
 
-        public Task Load(IRuleFactory factory)
+        public Task Load(IRuleFactory factory, IBoardType boardType)
         {
             try
             {

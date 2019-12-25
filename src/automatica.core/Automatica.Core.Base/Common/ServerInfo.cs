@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
+using Automatica.Core.Base.BoardType;
 
 namespace Automatica.Core.Base.Common
 {
@@ -114,6 +115,8 @@ namespace Automatica.Core.Base.Common
         /// Gets the web port
         /// </summary>
         public static string WebPort { get; set; }
+
+        public static IBoardType BoardType { get; set; }
 
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Areas;
@@ -25,7 +26,6 @@ namespace Automatica.Core.Runtime.Database
     {
         public static void EnusreDatabaseCreated(IServiceProvider services)
         {
-
             var context = services.GetRequiredService<AutomaticaContext>();
             var visuInitFactory = services.GetRequiredService<IVisualisationFactory>();
             var config = services.GetRequiredService<IConfiguration>();
@@ -322,7 +322,7 @@ namespace Automatica.Core.Runtime.Database
 
             AddSystemTemplates(context);
 
-            IBoardType boardType = null;
+            IDatabaseBoardType boardType = null;
             
             if (BoardTypes.Docker.Docker.InDocker)
             {
@@ -333,6 +333,7 @@ namespace Automatica.Core.Runtime.Database
                 boardType = new RaspberryPi();
             }
 
+            ServerInfo.BoardType = boardType;
 
             AddBoard(context, boardType);
 
@@ -724,7 +725,7 @@ namespace Automatica.Core.Runtime.Database
 
         }
 
-        private static void AddBoard(AutomaticaContext context, IBoardType boardType)
+        private static void AddBoard(AutomaticaContext context, IDatabaseBoardType boardType)
         {
             var board = context.BoardTypes.SingleOrDefault(a => a.Type == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
             var boardNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == board.Type);

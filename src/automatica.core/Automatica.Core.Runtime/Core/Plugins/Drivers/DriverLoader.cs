@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -34,7 +35,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             _driverFactoryStore = driverFactoryStore;
         }
 
-        public Task Load(IDriverFactory factory)
+        public Task Load(IDriverFactory factory, IBoardType boardType)
         {
             try
             {
@@ -73,8 +74,9 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 }
 
                 _localizationProvider.LoadFromAssembly(factory.GetType().Assembly);
-                if (initNodeTemplates || factory.InDevelopmentMode)
+                if ((UsesInterface(boardType, factory) && initNodeTemplates) || factory.InDevelopmentMode)
                 {
+
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
                     using (var db = new AutomaticaContext(_config))
                     {
@@ -104,6 +106,19 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             }
 
             return Task.CompletedTask;
+        }
+
+        private bool UsesInterface(IBoardType boardType, IDriverFactory factory)
+        {
+            foreach (var t in boardType.ProvidesInterfaceTypes)
+            {
+                if (factory.UsesInterfaces.Contains(t))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

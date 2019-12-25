@@ -5,11 +5,12 @@ using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Runtime.BoardTypes.Docker
 {
-    public sealed class Docker : IBoardType
+    public sealed class Docker : IDatabaseBoardType
     {
         public BoardTypeEnum BoardType => BoardTypeEnum.Docker;
+        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual};
 
-        internal static bool InDocker { get { return Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true"; } }
+        internal static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
 
         public IList<BoardInterface> GetBoardInterfaces()
@@ -22,7 +23,7 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
             {
                 ObjId = new Guid("840e94cfa86b483b87a47226d0494c99"),
                 This2BoardType = this2BoardType,
-                This2InterfaceType = new Guid("177a91443f074fd2a71d51db61c51ad5"),
+                This2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Virtual),
                 Name = "Virtual",
                 Description = "Virtual",
                 Meta = "virt://"
@@ -33,7 +34,7 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
             {
                 ObjId = new Guid("6a210ef8a7e646058d1b1eb5752e6080"),
                 This2BoardType = this2BoardType,
-                This2InterfaceType = new Guid("c45eda9672464fa092399ebb52e7ed66"),
+                This2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet),
                 Name = "Ethernet",
                 Description = "Ethernet",
                 Meta = "eth://"

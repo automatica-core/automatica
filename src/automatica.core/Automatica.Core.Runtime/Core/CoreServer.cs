@@ -591,7 +591,7 @@ namespace Automatica.Core.Runtime.Core
                 {
                     try
                     {
-                        await _driverLoader.Load(driver);
+                        await _driverLoader.Load(driver, ServerInfo.BoardType);
                     }
                     catch (NoManifestFoundException)
                     {
@@ -611,7 +611,7 @@ namespace Automatica.Core.Runtime.Core
                 {
                     try
                     {
-                        await _logicLoader.Load(rule);
+                        await _logicLoader.Load(rule, ServerInfo.BoardType);
                     }
                     catch (NoManifestFoundException)
                     {

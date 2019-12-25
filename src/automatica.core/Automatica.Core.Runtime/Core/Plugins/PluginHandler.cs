@@ -88,7 +88,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                 foreach (var factory in await factories)
                 {
-                    await _driverLoader.Load(factory);
+                    await _driverLoader.Load(factory, ServerInfo.BoardType);
                 }
             }
             else if (plugin.PluginType == PluginType.Logic)
@@ -97,7 +97,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                 foreach (var factory in await factories)
                 {
-                    await _logicLoader.Load(factory);
+                    await _logicLoader.Load(factory, ServerInfo.BoardType);
                 }
             }
 

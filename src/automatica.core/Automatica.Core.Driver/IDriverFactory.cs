@@ -25,6 +25,11 @@ namespace Automatica.Core.Driver
         Version DriverVersion { get; }
 
         /// <summary>
+        /// Indicates which interface types are used by the driver
+        /// </summary>
+        InterfaceTypeEnum[] UsesInterfaces { get; }
+
+        /// <summary>
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(INodeTemplateFactory)"/> method will be called on every start
         /// </summary>
         bool InDevelopmentMode { get; }
