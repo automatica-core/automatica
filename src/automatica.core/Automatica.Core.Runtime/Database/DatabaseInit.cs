@@ -14,7 +14,10 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Runtime.BoardTypes;
+using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using Org.BouncyCastle.Crypto.Tls;
+using Docker = Automatica.Core.Runtime.BoardTypes.Docker.Docker;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -318,7 +321,21 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
             AddSystemTemplates(context);
-            AddRaspberryPi3Board(context);
+
+            IBoardType boardType = null;
+            
+            if (BoardTypes.Docker.Docker.InDocker)
+            {
+                boardType = new BoardTypes.Docker.Docker();
+            }
+            else
+            {
+                boardType = new RaspberryPi();
+            }
+
+
+            AddBoard(context, boardType);
+
             AddAreaData(context);
             CategoryGroup.GenerateDefault(context);
             context.SaveChanges();
@@ -343,10 +360,10 @@ namespace Automatica.Core.Runtime.Database
 
             if(dbCreated)
             {
-                var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(BoardTypeEnum.RaspberryPi3));
+                var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
                 var rootNode = NodeInstanceFactory.CreateNodeInstanceFromTemplate(rootNodeTemplate);
 
-                rootNode.Name = "Raspberry PI 3";
+                rootNode.Name = boardType.Name;
                 rootNode.Description = "";
 
                 context.NodeInstances.Add(rootNode);
@@ -707,16 +724,14 @@ namespace Automatica.Core.Runtime.Database
 
         }
 
-        private static void AddRaspberryPi3Board(AutomaticaContext context)
+        private static void AddBoard(AutomaticaContext context, IBoardType boardType)
         {
-            var rsp3Board = new BoardTypes.RaspberryPi3.RaspberryPi3();
-
-            var board = context.BoardTypes.SingleOrDefault(a => a.Type == GuidTemplateTypeAttribute.GetFromEnum(rsp3Board.BoardType));
+            var board = context.BoardTypes.SingleOrDefault(a => a.Type == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
             var boardNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == board.Type);
 
             var boardInterfaceType = context.InterfaceTypes.SingleOrDefault(a => a.Type == board.Type);
 
-            if(boardInterfaceType == null)
+            if (boardInterfaceType == null)
             {
                 boardInterfaceType = new InterfaceType
                 {
@@ -732,7 +747,7 @@ namespace Automatica.Core.Runtime.Database
                 context.InterfaceTypes.Add(boardInterfaceType);
             }
 
-            if(boardNodeTemplate == null)
+            if (boardNodeTemplate == null)
             {
                 boardNodeTemplate = new NodeTemplate
                 {
@@ -759,7 +774,7 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
 
-            foreach (var boardInterface in rsp3Board.GetBoardInterfaces())
+            foreach (var boardInterface in boardType.GetBoardInterfaces())
             {
                 var boardInt = context.BoardInterfaces.SingleOrDefault(a => a.ObjId == boardInterface.ObjId);
                 if (boardInt == null)

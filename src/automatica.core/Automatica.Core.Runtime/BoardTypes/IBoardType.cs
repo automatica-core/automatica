@@ -1,8 +1,6 @@
 ﻿using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Automatica.Core.Runtime.BoardTypes
 {
@@ -10,5 +8,7 @@ namespace Automatica.Core.Runtime.BoardTypes
     {
         BoardTypeEnum BoardType { get; }
         IList<BoardInterface> GetBoardInterfaces();
+
+        string Name { get; }
     }
 }

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 
-namespace Automatica.Core.Runtime.BoardTypes.RaspberryPi3
+namespace Automatica.Core.Runtime.BoardTypes.RaspberryPi
 {
-    public sealed class RaspberryPi3 : IBoardType
+    public sealed class RaspberryPi : IBoardType
     {
         public BoardTypeEnum BoardType => BoardTypeEnum.RaspberryPi3;
+        public string Name => "RaspberryPi";
 
         public IList<BoardInterface> GetBoardInterfaces()
         {
