@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Version>0.10.0.581</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
-    <ProjectGuid>AF274AE7-266C-4ED5-B1F2-E2A1C852DAA9</ProjectGuid>
+    <ProjectGuid>AF274AE7-266C-4ED5-B1F2-E2A1C852DABB</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Automatica.Core.Base\Automatica.Core.Base.csproj" />

@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.CI.CreateDa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Watchdog", "Automatica.Core.Watchdog\Automatica.Core.Watchdog.csproj", "{78F9C09E-3660-4EDA-8FA7-19AC110D78D3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Knx.Core.Ets", "Drivers\Knx\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj", "{AF274AE7-266C-4ED5-B1F2-E2A1C852DAA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Knx.Core.Ets.Internal", "Drivers\Knx\P3.Knx.Core.Ets\P3.Knx.Core.Ets.Internal.csproj", "{AF274AE7-266C-4ED5-B1F2-E2A1C852DAA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Internals", "Automatica.Core.Internals\Automatica.Core.Internals.csproj", "{50941279-838E-4EDB-BF56-19667FD05DD0}"
 EndProject

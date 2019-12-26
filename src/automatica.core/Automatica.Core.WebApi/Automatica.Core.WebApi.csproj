@@ -19,6 +19,6 @@
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
     <ProjectReference Include="..\Automatica.Core.Runtime\Automatica.Core.Runtime.csproj" />
     <ProjectReference Include="..\Automatica.Push\Automatica.Push.csproj" />
-    <ProjectReference Include="..\Drivers\Knx\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj" />
+    <ProjectReference Include="..\Drivers\Knx\P3.Knx.Core.Ets\P3.Knx.Core.Ets.Internal.csproj" />
   </ItemGroup>
 </Project>
