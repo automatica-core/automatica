@@ -95,16 +95,19 @@ This project is a mono repository. The master & develop branch will be splitted 
 The Structure of the project is as follows.
 
     .
-    ├── automatica.build/        # Some build tools for the project (submodule repo)
-    ├── bin/                     # Bin tools for splitting the repo
-    ├── build/                   # Some build tools for the project 
-    ├── docker/                  # Docker build files
-    ├── documentation/           # docfx documentation source
-    ├── images/                  # Image files displayed in the readme.md
-    ├── src/                     # Source files
-    |   ├── automatica.core      # The core system for automatica.core
-    |   ├── automatica.drivers   # Automatica drivers - split repository
-    |   ├── automatica.logics    # Automatica logics - split repository
+    ├── automatica.build/                          # Some build tools for the project (submodule repo)
+    ├── bin/                                       # Bin tools for spliting the repo
+    ├── build/                                     # Some build tools for the project 
+    ├── docker/                                    # Docker build files
+    ├── documentation/                             # docfx documentation source
+    ├── images/                                    # Image files displayed in the readme.md
+    ├── src/                                       # Source files
+    |   ├── automatica.core.plugin.standalone      # Standalone plugins - split repository
+    |   ├── automatica.core.slave                  # Automatica slave - split repository
+    |   ├── automatica.core                        # The core system for automatica.core  - split repository
+    |   ├── automatica.drivers                     # Automatica drivers - split repository
+    |   ├── automatica.logics                      # Automatica logics - split repository
+    |   ├── automatica.supervisor                  # Automatica supervisor - split repository
     ├── LICENSE
     └── README.md
 
