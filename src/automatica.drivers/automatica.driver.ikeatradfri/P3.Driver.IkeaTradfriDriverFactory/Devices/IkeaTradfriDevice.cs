@@ -25,6 +25,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             {
                 try
                 {
+                    if (a == null)
+                    {
+                        return;
+                    }
                     Update(a);
                 }
                 catch (Exception e)

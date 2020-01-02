@@ -7,11 +7,6 @@ using Zeroconf;
 
 namespace P3.Driver.IkeaTradfri
 {
-    public class DeviceStateChangedEventArgs
-    {
-        public long Id { get; set; }
-        public object Value { get; set; }
-    }
     public class IkeaTradfriDriver : IIkeaTradfriDriver
     {
         private readonly string _gatewayIp;
@@ -59,11 +54,11 @@ namespace P3.Driver.IkeaTradfri
             return ret;
         }
 
-        public static TradfriAuth GeneratePsk(string gatwayIp, string appName, string secret)
+        public static TradfriAuth GeneratePsk(string gatewayIp, string appName, string secret)
         {
             try
             {
-                var controller = new TradfriController(appName, gatwayIp);
+                var controller = new TradfriController(appName, gatewayIp);
                 return controller.GenerateAppSecret(secret, appName);
             }
             catch (Exception e)
@@ -107,7 +102,5 @@ namespace P3.Driver.IkeaTradfri
 
             return true;
         }
-
-        public GatewayInfo GatewayInfo { get; set; }
     }
 }
