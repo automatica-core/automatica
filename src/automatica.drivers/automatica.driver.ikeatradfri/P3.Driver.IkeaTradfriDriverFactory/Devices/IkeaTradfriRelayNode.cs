@@ -82,14 +82,28 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         protected override void Update(TradfriDevice device)
         {
-            if(device?.Control == null || device.Control.Count == 0)
+            if (DeviceType == DeviceType.ControlOutlet)
             {
-                DriverContext.Logger.LogDebug($"Invalid device received, no control outlet found");
-                return;
-            }
+                if (device?.Control == null || device.Control.Count == 0)
+                {
+                    DriverContext.Logger.LogDebug($"Invalid device received, no control outlet found");
+                    return;
+                }
 
-            _value = device.Control[0].State == Bool.True;
-            DispatchValue(_value);
+                _value = device.Control[0].State == Bool.True;
+                DispatchValue(_value);
+            }
+            else if(DeviceType == DeviceType.Light)
+            {
+                if (device?.LightControl == null || device.LightControl.Count == 0)
+                {
+                    DriverContext.Logger.LogDebug($"Invalid device received, no control outlet found");
+                    return;
+                }
+
+                _value = device.LightControl[0].State == Bool.True;
+                DispatchValue(_value);
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

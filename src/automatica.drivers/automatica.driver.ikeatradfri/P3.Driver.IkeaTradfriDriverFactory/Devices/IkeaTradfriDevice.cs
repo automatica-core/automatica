@@ -9,12 +9,12 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
     public abstract class IkeaTradfriDevice : DriverBase
     {
-        private readonly DeviceType _deviceType;
+        internal DeviceType DeviceType { get; }
         internal IkeaTradfriContainerNode Container { get; }
         
         protected IkeaTradfriDevice(IDriverContext driverContext, IkeaTradfriContainerNode container, DeviceType deviceType) : base(driverContext)
         {
-            _deviceType = deviceType;
+            DeviceType = deviceType;
             Container = container;
         }
 
@@ -37,7 +37,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                     DriverContext.Logger.LogError(e, "Could not update tradfri device state");
                 }
 
-            }, _deviceType, Container.DeviceId);
+            }, DeviceType, Container.DeviceId);
 
             var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
             DriverContext.Logger.LogDebug($"{FullName}: {JsonConvert.SerializeObject(device)}");
