@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Com.AugustCellars.CoAP" Version="1.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Tomidix.CSharpTradFriLibrary" Version="1.2.2.35" />
     <PackageReference Include="Zeroconf" Version="3.3.2" />
   </ItemGroup>
 

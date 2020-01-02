@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Models;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfri
 {
@@ -15,10 +14,11 @@ namespace P3.Driver.IkeaTradfri
 
         Task<bool> SetColor(long id, string color);
 
-        List<TradfriDevice> LoadDevices();
+        Task<List<TradfriDevice>> LoadDevices();
 
-        void Connect();
-
-        void RegisterChange(Action<JToken> changeAction, TradfriDeviceType deviceType, long id);
+        Task Connect();
+        Task Disconnect();
+        Task RegisterChange(Action<TradfriDevice> changeAction, DeviceType deviceType, long id);
+        Task<TradfriDevice> GetDevice(long containerDeviceId);
     }
 }

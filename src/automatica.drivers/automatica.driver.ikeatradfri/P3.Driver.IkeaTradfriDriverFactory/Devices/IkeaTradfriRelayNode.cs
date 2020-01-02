@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Extensions;
@@ -7,7 +6,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Models;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
@@ -21,7 +20,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public int WriteTimeout { get; internal set; } = 5000;
 
-        public IkeaTradfriRelayNode(IDriverContext driverContext, IkeaTradfriContainerNode container, TradfriDeviceType deviceType) : base(driverContext, container, deviceType)
+        public IkeaTradfriRelayNode(IDriverContext driverContext, IkeaTradfriContainerNode container, DeviceType deviceType) : base(driverContext, container, deviceType)
         {
         }
         
@@ -81,20 +80,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             }
         }
 
-        protected override void Update(JToken device)
+        protected override void Update(TradfriDevice device)
         {
-            if (device is JArray array)
-            {
-                var valueProp = ((int) TradfriConstAttribute.LightState).ToString();
-
-                var boolValue = Convert.ToBoolean(array.First()[valueProp]);
-
-                if (boolValue != _value)
-                {
-                    _value = boolValue;
-                    DispatchValue(_value);
-                }
-            }
+            _value = device.Control[0].State == Bool.True;
+            DispatchValue(_value);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

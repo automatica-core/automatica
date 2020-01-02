@@ -2,34 +2,26 @@
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Models;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
     public abstract class IkeaTradfriDevice : DriverBase
     {
-        private readonly TradfriDeviceType _deviceType;
+        private readonly DeviceType _deviceType;
         internal IkeaTradfriContainerNode Container { get; }
         
-        protected IkeaTradfriDevice(IDriverContext driverContext, IkeaTradfriContainerNode container, TradfriDeviceType deviceType) : base(driverContext)
+        protected IkeaTradfriDevice(IDriverContext driverContext, IkeaTradfriContainerNode container, DeviceType deviceType) : base(driverContext)
         {
             _deviceType = deviceType;
             Container = container;
         }
 
-        protected abstract void Update(JToken device);
+        protected abstract void Update(TradfriDevice device);
 
-        public override bool Init()
+        public override async Task<bool> Start()
         {
-         
-            return base.Init();
-        }
-
-
-        public override Task<bool> Start()
-        {
-            Container.Gateway.Driver.RegisterChange(a =>
+            await Container.Gateway.Driver.RegisterChange(a =>
             {
                 try
                 {
@@ -41,7 +33,11 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                 }
 
             }, _deviceType, Container.DeviceId);
-            return base.Start();
+
+            var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
+            Update(device);
+            
+            return true;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

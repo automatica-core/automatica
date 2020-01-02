@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Com.AugustCellars.CoAP;
-using Com.AugustCellars.CoAP.DTLS;
-using Com.AugustCellars.COSE;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Controllers;
-using P3.Driver.IkeaTradfri.Models;
-using PeterO.Cbor;
+using Tomidix.NetStandard.Tradfri;
+using Tomidix.NetStandard.Tradfri.Models;
 using Zeroconf;
 
 namespace P3.Driver.IkeaTradfri
@@ -23,95 +16,35 @@ namespace P3.Driver.IkeaTradfri
     {
         private readonly string _gatewayIp;
         private readonly string _name;
-        private CoapClient _client;
+        private readonly string _appKey;
 
-        internal CoapClient Client => _client;
         
-        public string Psk { get; set; }
+        private TradfriController _tradfri;
 
-        private readonly Dictionary<TradfriDeviceType, Dictionary<long, IList<Action<JToken>>>> _observers =
-            new Dictionary<TradfriDeviceType, Dictionary<long, IList<Action<JToken>>>>();
-
-        public IkeaTradfriDriver(string gatewayIp, string name, string psk)
+        public IkeaTradfriDriver(string gatewayIp, string name, string appKey)
         {
-            Psk = psk;
             _gatewayIp = gatewayIp;
             _name = name;
+            _appKey = appKey;
         }
 
-        public void Connect()
+        public Task Connect()
         {
-            OneKey authKey = new OneKey();
-            authKey.Add(CoseKeyKeys.KeyType, GeneralValues.KeyType_Octet);
-            authKey.Add(CoseKeyParameterKeys.Octet_k, CBORObject.FromObject(Encoding.UTF8.GetBytes(Psk)));
-            authKey.Add(CoseKeyKeys.KeyIdentifier, CBORObject.FromObject(Encoding.UTF8.GetBytes(_name)));
+            _tradfri = new TradfriController(_name, _gatewayIp);
+            _tradfri.ConnectAppKey(_appKey, _name);
 
-            DTLSClientEndPoint ep = new DTLSClientEndPoint(authKey);
-            CoapClient cc = new CoapClient(new Uri($"coaps://{_gatewayIp}"))
-            {
-                EndPoint = ep
-            };
-
-            ep.Start();
-
-            GatewayController gc = new GatewayController(cc);
-            GatewayInfo = gc.GetGatewayInfo();
-            _client = cc;
-            cc.Timeout = 2000;
+            return Task.CompletedTask;
         }
 
-        public void RegisterChange(Action<JToken> changeAction, TradfriDeviceType deviceType, long id)
+        public Task Disconnect()
         {
-            lock (_observers)
-            {
-                if (!_observers.ContainsKey(deviceType))
-                {
-                    _observers.Add(deviceType, new Dictionary<long, IList<Action<JToken>>>());
-                }
-
-                if (!_observers[deviceType].ContainsKey(id))
-                {
-                    _observers[deviceType].Add(id, new List<Action<JToken>>());
-                }
-
-                _observers[deviceType][id].Add(changeAction);
-            }
+            return Task.CompletedTask;
         }
 
-        internal void HandleObserveResponse(Response obj)
+        public async Task RegisterChange(Action<TradfriDevice> changeAction, DeviceType deviceType, long id)
         {
-            try
-            {
-                var idProp = ((int) TradfriConstAttribute.ID).ToString();
-                var jObject = JsonConvert.DeserializeObject<JObject>(obj.PayloadString);
-                Console.WriteLine(obj.PayloadString);
-                foreach (var value in Enum.GetValues(typeof(TradfriDeviceType)))
-                {
-                    var intValue = (int) value;
-                    if (jObject.ContainsKey(intValue.ToString()) && jObject.ContainsKey(idProp))
-                    {
-                        var tradfriDevice = jObject[intValue.ToString()];
-                        var id = Convert.ToInt64(jObject[idProp]);
-
-                        lock (_observers)
-                        {
-                            if (_observers.ContainsKey((TradfriDeviceType) value) &&
-                                _observers[(TradfriDeviceType) value].ContainsKey(id))
-                            {
-                                foreach (var action in _observers[(TradfriDeviceType) value][id])
-                                {
-                                    action.Invoke(tradfriDevice);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                //Thread.Sleep(1000);
-                //Observe(HandleObserveResponse);
-            }
+            var device = await _tradfri.DeviceController.GetTradfriDevice(id);
+            _tradfri.DeviceController.ObserveDevice(device, changeAction); 
         }
 
         public static async Task<IEnumerable<Tuple<string, string>>> Discover()
@@ -130,81 +63,49 @@ namespace P3.Driver.IkeaTradfri
         {
             try
             {
-                var authKey = new OneKey();
-                authKey.Add(CoseKeyKeys.KeyType, GeneralValues.KeyType_Octet);
-                authKey.Add(CoseKeyParameterKeys.Octet_k, CBORObject.FromObject(Encoding.UTF8.GetBytes(secret)));
-                authKey.Add(CoseKeyKeys.KeyIdentifier, CBORObject.FromObject(Encoding.UTF8.GetBytes("Client_identity")));
-                var ep = new DTLSClientEndPoint(authKey);
-                ep.Start();
-
-                var request = new Request(Method.POST);
-                request.SetUri($"coaps://{gatwayIp}" + $"/{(int)TradfriConstRoot.Gateway}/{(int)TradfriConstAttribute.Auth}/");
-                request.EndPoint = ep;
-                request.AckTimeout = 5000;
-                request.SetPayload($@"{{""{(int)TradfriConstAttribute.Identity}"":""{appName}""}}");
-
-                request.Send();
-                var resp = request.WaitForResponse(5000);
-                if (resp == null)
-                {
-                    return null;
-                }
-
-                return JsonConvert.DeserializeObject<TradfriAuth>(resp.PayloadString);
+                var controller = new TradfriController(appName, gatwayIp);
+                return controller.GenerateAppSecret(secret, appName);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
         }
         
-        public List<TradfriDevice> LoadDevices()
+        public async Task<List<TradfriDevice>> LoadDevices()
         {
-            var ret = new List<TradfriDevice>();
-            GatewayController gwc = new GatewayController(_client);
-            foreach (long deviceId in gwc.GetDevices())
-            {
-                DeviceController dc = new DeviceController(deviceId, this);
-                TradfriDevice device = dc.GetTradFriDevice();
-                ret.Add(device);
-            }
-
-            return ret;
+            return await _tradfri.GatewayController.GetDeviceObjects();
         }
 
-        public TradfriDevice GetDevice(long id)
+        public Task<TradfriDevice> GetDevice(long id)
         {
-            return new DeviceController(id, this).GetTradFriDevice(true);
+            return _tradfri.DeviceController.GetTradfriDevice(id);
         }
 
-        public Task<bool> SwitchOn(long id)
+        public async Task<bool> SwitchOn(long id)
         {
-            DeviceController dc = new DeviceController(id, this);
-            var response = dc.TurnOn();
+            await _tradfri.DeviceController.SetOutlet(id, true);
 
-            return Task.FromResult(response.IsAcknowledged);
+            return true;
         }
-        public Task<bool> SwitchOff(long id)
+        public async Task<bool> SwitchOff(long id)
         {
-            DeviceController dc = new DeviceController(id, this);
-            var response = dc.TurnOff();
+            await _tradfri.DeviceController.SetOutlet(id, false);
 
-            return Task.FromResult(response.IsAcknowledged);
+            return true;
         }
 
-        public Task<bool> SetColor(long id, string color)
+        public async Task<bool> SetColor(long id, string color)
         {
-            DeviceController dc = new DeviceController(id, this);
-            var response = dc.SetColor(color);
+            await _tradfri.DeviceController.SetColor(id, color);
 
-            return Task.FromResult(response.IsAcknowledged);
+            return true;
         }
-        public Task<bool> SetDimmer(long id, int dimmer)
+        public async Task<bool> SetDimmer(long id, int dimmer)
         {
-            DeviceController dc = new DeviceController(id, this);
-            var response = dc.SetDimmer(dimmer);
+            await _tradfri.DeviceController.SetDimmer(id, dimmer);
 
-            return Task.FromResult(response.IsAcknowledged);
+            return true;
         }
 
         public GatewayInfo GatewayInfo { get; set; }

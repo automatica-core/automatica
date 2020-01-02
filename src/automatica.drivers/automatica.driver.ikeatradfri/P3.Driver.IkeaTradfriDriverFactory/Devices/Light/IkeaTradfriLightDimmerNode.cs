@@ -4,31 +4,21 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Models;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
 {
     public class IkeaTradfriLightDimmerNode : IkeaTradfriDevice
     {
-        private int _value;
-        public IkeaTradfriLightDimmerNode(IDriverContext driverContext, IkeaTradfriContainerNode container) : base(driverContext, container, TradfriDeviceType.LightControl)
+        private long _value;
+        public IkeaTradfriLightDimmerNode(IDriverContext driverContext, IkeaTradfriContainerNode container) : base(driverContext, container, DeviceType.Light)
         {
         }
 
-        protected override void Update(JToken device)
+        protected override void Update(TradfriDevice device)
         {
-            if (device is JArray array)
-            {
-                var valueProp = ((int)TradfriConstAttribute.LightDimmer).ToString();
-
-                var value = Convert.ToInt32(array.First()[valueProp]);
-
-                if (value != _value)
-                {
-                    _value = value;
-                    DispatchValue(_value);
-                }
-            }
+            _value = device.LightControl[0].Dimmer;
+            DispatchValue(_value);
         }
         public override Task<bool> Read()
         {

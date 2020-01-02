@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using P3.Driver.IkeaTradfri.Models;
 using P3.Driver.IkeaTradfriDriverFactory.Devices.Light;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
@@ -36,7 +36,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             IkeaTradfriDevice tradfriDevice = null;
             if (ctx.NodeInstance.This2NodeTemplate == IkeaTradfriFactory.RelayGuid)
             {
-                tradfriDevice = new IkeaTradfriRelayNode(ctx, this, TradfriDeviceType.SwitchPlug);
+                tradfriDevice = new IkeaTradfriRelayNode(ctx, this, DeviceType.ControlOutlet);
             }
             else if (ctx.NodeInstance.This2NodeTemplate == IkeaTradfriFactory.LightGuid)
             {
