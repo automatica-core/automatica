@@ -34,7 +34,8 @@
         "Zeroconf.dll",
         "System.Reactive.dll",
         "ApiLibs.dll",
-        "Tomidix.NetStandard.Tradfri.dll"
+        "Tomidix.NetStandard.Tradfri.dll",
+        "RestSharp.dll"
       ],
       "MinCoreServerVersion": {
         "Major": 0,
