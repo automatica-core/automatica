@@ -42,7 +42,8 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
             DriverContext.Logger.LogDebug($"{FullName}: {JsonConvert.SerializeObject(device)}");
             Update(device);
-            
+
+            await base.Start();
             return true;
         }
 
