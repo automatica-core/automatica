@@ -8,10 +8,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
     public class IkeaTradfriContainerNode : DriverBase
     {
-        internal IkeaTradfriGateway Gateway { get; }
+        internal IIkeaTradfriGateway Gateway { get; }
         public long DeviceId { get; private set; }
 
-        public IkeaTradfriContainerNode(IDriverContext driverContext, IkeaTradfriGateway gateway) : base(driverContext)
+        public IkeaTradfriContainerNode(IDriverContext driverContext, IIkeaTradfriGateway gateway) : base(driverContext)
         {
             Gateway = gateway;
         }

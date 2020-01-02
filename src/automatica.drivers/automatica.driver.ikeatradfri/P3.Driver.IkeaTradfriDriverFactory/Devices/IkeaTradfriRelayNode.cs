@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
     public class IkeaTradfriRelayNode : IkeaTradfriDevice
     {
         private bool _value;
+
+        public bool Value => _value;
+
+        public int WriteTimeout { get; internal set; } = 5000;
 
         public IkeaTradfriRelayNode(IDriverContext driverContext, IkeaTradfriContainerNode container, TradfriDeviceType deviceType) : base(driverContext, container, deviceType)
         {
@@ -27,35 +32,33 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public override async Task WriteValue(IDispatchable source, object value)
         {
-            var cancellation = new CancellationTokenSource(5000);
-            await Task.Run(async () =>
+            var cancellation = new CancellationTokenSource(WriteTimeout);
+            try
             {
-                try
+                await Task.Run(async () =>
                 {
                     var bValue = Convert.ToBoolean(value);
 
                     _value = bValue;
 
-                    DriverContext.Logger.LogDebug($"Start write {DriverContext.NodeInstance.Name}");
+                    DriverContext.Logger.LogDebug($"Start write {bValue} to {DriverContext.NodeInstance.Name}...");
                     if (bValue)
                     {
-                        Container.Gateway.Driver.SwitchOn(Container.DeviceId);
+                        await Container.Gateway.Driver.SwitchOn(Container.DeviceId);
                     }
                     else
                     {
-                        Container.Gateway.Driver.SwitchOff(Container.DeviceId);
+                        await Container.Gateway.Driver.SwitchOff(Container.DeviceId);
                     }
 
                     DriverContext.Logger.LogDebug($"Done write {DriverContext.NodeInstance.Name}");
 
-                }
-                catch (TaskCanceledException)
-                {
-                    await Container.Reconnect();
-                }
-
-                return base.WriteValue(source, value);
-            }, cancellation.Token);
+                }, cancellation.Token).WithCancellation(cancellation.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                await Container.Reconnect();
+            }
         }
 
         protected override void Update(JToken device)

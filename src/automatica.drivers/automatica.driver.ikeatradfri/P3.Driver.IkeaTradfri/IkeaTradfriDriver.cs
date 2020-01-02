@@ -19,7 +19,7 @@ namespace P3.Driver.IkeaTradfri
         public long Id { get; set; }
         public object Value { get; set; }
     }
-    public class IkeaTradfriDriver
+    public class IkeaTradfriDriver : IIkeaTradfriDriver
     {
         private readonly string _gatewayIp;
         private readonly string _name;
@@ -176,26 +176,30 @@ namespace P3.Driver.IkeaTradfri
             return new DeviceController(id, this).GetTradFriDevice(true);
         }
 
-        public void SwitchOn(long id)
+        public Task SwitchOn(long id)
         {
             DeviceController dc = new DeviceController(id, this);
             dc.TurnOn();
+            return Task.CompletedTask;
         }
-        public void SwitchOff(long id)
+        public Task SwitchOff(long id)
         {
             DeviceController dc = new DeviceController(id, this);
             dc.TurnOff();
+            return Task.CompletedTask;
         }
 
-        public void SetColor(long id, string color)
+        public Task SetColor(long id, string color)
         {
             DeviceController dc = new DeviceController(id, this);
             dc.SetColor(color);
+            return Task.CompletedTask;
         }
-        public void SetDimmer(long id, int dimmer)
+        public Task SetDimmer(long id, int dimmer)
         {
             DeviceController dc = new DeviceController(id, this);
             dc.SetDimmer(dimmer);
+            return Task.CompletedTask;
         }
 
         public GatewayInfo GatewayInfo { get; set; }

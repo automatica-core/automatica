@@ -8,6 +8,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
 {
     public class IkeaTradfriFactory : DriverFactory
     {
+        public static Guid GatewayContainerGuid = new Guid("e4335f3f-721a-40f1-bb61-2c1aec9e936c");
         public static Guid GatewayGuid = new Guid("c357e6fd-5cfc-4064-9936-1ae356d2a226");
 
         public static Guid RelayContainerGuid = new Guid("d0b074df-a658-4041-909e-53d4e3d4aeb5");
@@ -28,8 +29,9 @@ namespace P3.Driver.IkeaTradfriDriverFactory
 
         public override string DriverName => "Ikea.Tradfri";
 
-        public override Guid DriverGuid => new Guid("e4335f3f-721a-40f1-bb61-2c1aec9e936c");
-        
+        public override Guid DriverGuid => GatewayContainerGuid;
+
+
         public override Version DriverVersion => new Version(0, 6, 0, 15);
 
         public override bool InDevelopmentMode => false;

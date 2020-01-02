@@ -11,15 +11,15 @@ using P3.Driver.IkeaTradfriDriverFactory.Devices;
 
 namespace P3.Driver.IkeaTradfriDriverFactory
 {
-    public class IkeaTradfriGateway : DriverBase
+    public class IkeaTradfriGateway : DriverBase, IIkeaTradfriGateway
     {
         private string _id;
         private string _secret;
         private string _appKey;
 
-        internal IkeaTradfriDriver Driver { get; private set; }
 
-        internal List<IkeaTradfriDevice> Devices { get; } = new List<IkeaTradfriDevice>();
+        public IIkeaTradfriDriver Driver { get; set; }
+        public List<IkeaTradfriDevice> Devices { get; } = new List<IkeaTradfriDevice>();
 
         public IkeaTradfriGateway(IDriverContext driverContext) : base(driverContext)
         {
@@ -85,8 +85,14 @@ namespace P3.Driver.IkeaTradfriDriverFactory
             return Task.FromResult(ret);
         }
 
+
         public override async Task<bool> Start()
         {
+            if (DriverContext.IsTest)
+            {
+                return true;
+            }
+
             if (String.IsNullOrEmpty(_id))
             {
                 DriverContext.Logger.LogInformation("Could not start driver, the gateway id is invalid");
