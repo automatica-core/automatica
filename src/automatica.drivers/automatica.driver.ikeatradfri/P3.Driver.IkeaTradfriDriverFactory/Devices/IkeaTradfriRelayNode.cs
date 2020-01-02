@@ -57,6 +57,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             }
             catch (OperationCanceledException)
             {
+                DriverContext.Logger.LogDebug($"Operation cancelled, will try to reconnect");
                 await Container.Reconnect();
             }
         }

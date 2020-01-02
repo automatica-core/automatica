@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.IkeaTradfri.Models;
 using P3.Driver.IkeaTradfriDriverFactory.Devices.Light;
 
@@ -18,6 +19,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public async Task Reconnect()
         {
+            DriverContext.Logger.LogInformation($"Reconnect to tradfri gateway!");
             await Gateway.Stop();
             await Gateway.Start();
         }
