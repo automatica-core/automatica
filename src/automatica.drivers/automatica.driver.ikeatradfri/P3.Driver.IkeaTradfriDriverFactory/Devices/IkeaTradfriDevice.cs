@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices
@@ -39,6 +40,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             }, _deviceType, Container.DeviceId);
 
             var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
+            DriverContext.Logger.LogDebug($"{FullName}: {JsonConvert.SerializeObject(device)}");
             Update(device);
             
             return true;

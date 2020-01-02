@@ -82,6 +82,12 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         protected override void Update(TradfriDevice device)
         {
+            if(device?.Control == null || device.Control.Count == 0)
+            {
+                DriverContext.Logger.LogDebug($"Invalid device received, no control outlet found");
+                return;
+            }
+
             _value = device.Control[0].State == Bool.True;
             DispatchValue(_value);
         }
