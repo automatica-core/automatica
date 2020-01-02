@@ -23,8 +23,6 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public async Task Reconnect()
         {
-
-            var cancellation = new CancellationTokenSource(10000);
             if (!await _semaphore.WaitAsync(10))
             {
                 return;
@@ -34,6 +32,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             await Gateway.Stop();
             try
             {
+                var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(20));
                 await Gateway.Start().WithCancellation(cancellation.Token);
             }
             catch (Exception e)
