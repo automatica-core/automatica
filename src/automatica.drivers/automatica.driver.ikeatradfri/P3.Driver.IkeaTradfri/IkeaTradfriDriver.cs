@@ -176,30 +176,34 @@ namespace P3.Driver.IkeaTradfri
             return new DeviceController(id, this).GetTradFriDevice(true);
         }
 
-        public Task SwitchOn(long id)
+        public Task<bool> SwitchOn(long id)
         {
             DeviceController dc = new DeviceController(id, this);
-            dc.TurnOn();
-            return Task.CompletedTask;
+            var response = dc.TurnOn();
+
+            return Task.FromResult(response.IsAcknowledged);
         }
-        public Task SwitchOff(long id)
+        public Task<bool> SwitchOff(long id)
         {
             DeviceController dc = new DeviceController(id, this);
-            dc.TurnOff();
-            return Task.CompletedTask;
+            var response = dc.TurnOff();
+
+            return Task.FromResult(response.IsAcknowledged);
         }
 
-        public Task SetColor(long id, string color)
+        public Task<bool> SetColor(long id, string color)
         {
             DeviceController dc = new DeviceController(id, this);
-            dc.SetColor(color);
-            return Task.CompletedTask;
+            var response = dc.SetColor(color);
+
+            return Task.FromResult(response.IsAcknowledged);
         }
-        public Task SetDimmer(long id, int dimmer)
+        public Task<bool> SetDimmer(long id, int dimmer)
         {
             DeviceController dc = new DeviceController(id, this);
-            dc.SetDimmer(dimmer);
-            return Task.CompletedTask;
+            var response = dc.SetDimmer(dimmer);
+
+            return Task.FromResult(response.IsAcknowledged);
         }
 
         public GatewayInfo GatewayInfo { get; set; }

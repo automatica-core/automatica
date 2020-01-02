@@ -12,18 +12,83 @@ namespace P3.Driver.IkeaTradfri.Tests
     public class RelayNodeTests : DriverFactoryTestBase<IkeaTradfriFactory>
     {
         [Fact]
-        public async Task TestWrite()
+        public async Task TestWriteTimeout()
+        {
+            var gateway = SetupGateway();
+            Assert.NotNull(gateway);
+
+            gateway.Driver = CreateMoq(async () => {
+                await Task.Delay(200);
+                return true;
+            });
+
+            var relayNode = gateway.Children[0].Children[0] as IkeaTradfriRelayNode;
+
+            Assert.NotNull(relayNode);
+
+            relayNode.WriteTimeout = 100;
+            await relayNode.WriteValue(new DispatchableMock(), true);
+
+            Assert.False(relayNode.LastWriteState);
+
+        }
+        [Fact]
+        public async Task TestWriteOk()
+        {
+            var gateway = SetupGateway();
+            Assert.NotNull(gateway);
+
+            gateway.Driver = CreateMoq(async () =>
+            {
+                await Task.Delay(1);
+                return true;
+            });
+
+            var relayNode = gateway.Children[0].Children[0] as IkeaTradfriRelayNode;
+
+            Assert.NotNull(relayNode);
+
+            relayNode.WriteTimeout = 100;
+            await relayNode.WriteValue(new DispatchableMock(), true);
+
+            Assert.True(relayNode.LastWriteState);
+
+        }
+        [Fact]
+        public async Task TestWriteFail()
+        {
+            var gateway = SetupGateway();
+            Assert.NotNull(gateway);
+
+            gateway.Driver = CreateMoq(async () =>
+            {
+                await Task.Delay(1);
+                return false;
+            });
+
+            var relayNode = gateway.Children[0].Children[0] as IkeaTradfriRelayNode;
+
+            Assert.NotNull(relayNode);
+
+            relayNode.WriteTimeout = 100;
+            await relayNode.WriteValue(new DispatchableMock(), true);
+
+            Assert.False(relayNode.LastWriteState);
+
+        }
+
+        private IkeaTradfriGateway SetupGateway()
         {
             var root = CreateNodeInstance(IkeaTradfriFactory.GatewayContainerGuid);
 
             var gw = CreateNodeInstance(IkeaTradfriFactory.GatewayGuid);
-                
+
             root.SetProperty(IkeaTradfriFactory.IdAddressPropertyKey, "id");
             root.SetProperty(IkeaTradfriFactory.SecretPropertyKey, "secret");
 
             var relay = CreateNodeInstance(IkeaTradfriFactory.RelayContainerGuid);
             var relayState = CreateNodeInstance(IkeaTradfriFactory.RelayGuid);
-            
+
             root.InverseThis2ParentNodeInstanceNavigation.Add(gw);
             gw.InverseThis2ParentNodeInstanceNavigation.Add(relay);
             relay.InverseThis2ParentNodeInstanceNavigation.Add(relayState);
@@ -31,30 +96,14 @@ namespace P3.Driver.IkeaTradfri.Tests
             var driver = CreateDriver<IkeaTradfriDriverFactory.IkeaTradfri>(root);
 
             var gateway = driver.Children[0] as IkeaTradfriGateway;
-
-            Assert.NotNull(gateway);
-
-            gateway.Driver = CreateMoq();
-
-            var relayNode = driver.Children[0].Children[0].Children[0] as IkeaTradfriRelayNode;
-
-            Assert.NotNull(relayNode);
-
-            relayNode.WriteTimeout = 100;
-            await relayNode.WriteValue(new DispatchableMock(), true);
-
-            Assert.True(relayNode.Value);
-
+            return gateway;
         }
 
-        private IIkeaTradfriDriver CreateMoq()
+        private IIkeaTradfriDriver CreateMoq(Func<Task<bool>> returns)
         {
             var tradfriMoq = new Mock<IIkeaTradfriDriver>();
 
-            tradfriMoq.Setup(a => a.SwitchOn(0)).Returns(async () =>
-            {
-                await Task.Delay(200);
-            });
+            tradfriMoq.Setup(a => a.SwitchOn(0)).Returns(returns);
 
             var tradfri = tradfriMoq.Object;
 

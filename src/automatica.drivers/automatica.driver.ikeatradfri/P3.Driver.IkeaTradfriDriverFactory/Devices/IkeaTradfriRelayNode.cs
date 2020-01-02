@@ -17,6 +17,8 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public bool Value => _value;
 
+        public bool LastWriteState { get; set; }
+
         public int WriteTimeout { get; internal set; } = 5000;
 
         public IkeaTradfriRelayNode(IDriverContext driverContext, IkeaTradfriContainerNode container, TradfriDeviceType deviceType) : base(driverContext, container, deviceType)
@@ -44,21 +46,38 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                     DriverContext.Logger.LogDebug($"Start write {bValue} to {DriverContext.NodeInstance.Name}...");
                     if (bValue)
                     {
-                        await Container.Gateway.Driver.SwitchOn(Container.DeviceId);
+                        if (!await Container.Gateway.Driver.SwitchOn(Container.DeviceId))
+                        {
+                            throw new InvalidOperationException("Return code not successful");
+                        }
                     }
                     else
                     {
-                        await Container.Gateway.Driver.SwitchOff(Container.DeviceId);
+                        if (!await Container.Gateway.Driver.SwitchOff(Container.DeviceId))
+                        {
+                            throw new InvalidOperationException("Return code not successful");
+                        }
                     }
 
                     DriverContext.Logger.LogDebug($"Done write {DriverContext.NodeInstance.Name}");
+                    LastWriteState = true;
 
                 }, cancellation.Token).WithCancellation(cancellation.Token);
             }
             catch (OperationCanceledException)
             {
+                LastWriteState = false;
+                
                 DriverContext.Logger.LogDebug($"Operation cancelled, will try to reconnect");
                 await Container.Reconnect();
+            }
+            catch (InvalidOperationException)
+            {
+                LastWriteState = false;
+
+                DriverContext.Logger.LogDebug($"Lost connection, will try to reconnect");
+                await Container.Reconnect();
+
             }
         }
 

@@ -18,14 +18,21 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
 
             var appName = Guid.NewGuid().ToString();
 
-            var key = IkeaTradfriDriver.GeneratePsk("192.168.8.100", appName, "Ej3Ta2AzrePZ9jcJ");
+            var key = IkeaTradfriDriver.GeneratePsk("192.168.8.103", appName, "Ej3Ta2AzrePZ9jcJ");
             
-            var con = new IkeaTradfriDriver("192.168.8.100", appName, key.PSK);
+            var con = new IkeaTradfriDriver("192.168.8.103", appName, key.PSK);
             con.Connect();
 
             Console.WriteLine("Conncted");
 
             var devices = con.LoadDevices();
+
+            while (true)
+            {
+                await con.SwitchOff(65539);
+                await Task.Delay(1000);
+
+            }
 
             foreach (var dev in devices)
             {
@@ -34,9 +41,9 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
                 if (dev.ApplicationType == DeviceType.PowerOutlet)
                 {
 
-                    con.SwitchOn(dev.Id);
-                    con.SwitchOff(dev.Id);
-                    con.SwitchOn(dev.Id);
+                    await con.SwitchOn(dev.Id);
+                    await con.SwitchOff(dev.Id);
+                    await con.SwitchOn(dev.Id);
                     continue;
                 }
                 else if (dev.ApplicationType == DeviceType.Remote || dev.ApplicationType == DeviceType.Unknown)

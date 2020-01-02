@@ -8,12 +8,12 @@ namespace P3.Driver.IkeaTradfri
 {
     public interface IIkeaTradfriDriver
     {
-        Task SwitchOn(long id);
-        Task SwitchOff(long id);
+        Task<bool> SwitchOn(long id);
+        Task<bool> SwitchOff(long id);
 
-        Task SetDimmer(long id, int dimmer);
+        Task<bool> SetDimmer(long id, int dimmer);
 
-        Task SetColor(long id, string color);
+        Task<bool> SetColor(long id, string color);
 
         List<TradfriDevice> LoadDevices();
 
