@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,8 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
         internal IIkeaTradfriGateway Gateway { get; }
         public long DeviceId { get; private set; }
 
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+
         public IkeaTradfriContainerNode(IDriverContext driverContext, IIkeaTradfriGateway gateway) : base(driverContext)
         {
             Gateway = gateway;
@@ -19,9 +22,15 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public async Task Reconnect()
         {
+            if (!await _semaphore.WaitAsync(10))
+            {
+                return;
+            }
             DriverContext.Logger.LogInformation($"Reconnect to tradfri gateway!");
             await Gateway.Stop();
             await Gateway.Start();
+
+            _semaphore.Release(1);
         }
 
         public override bool Init()
