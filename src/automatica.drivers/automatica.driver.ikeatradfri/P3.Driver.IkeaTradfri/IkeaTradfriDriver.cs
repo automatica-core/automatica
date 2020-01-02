@@ -57,6 +57,7 @@ namespace P3.Driver.IkeaTradfri
             GatewayController gc = new GatewayController(cc);
             GatewayInfo = gc.GetGatewayInfo();
             _client = cc;
+            cc.Timeout = 2000;
         }
 
         public void RegisterChange(Action<JToken> changeAction, TradfriDeviceType deviceType, long id)
