@@ -16,10 +16,10 @@ namespace P3.Rule.DigitalToAnalog.Trigger
         public static readonly Guid DelayParameter = new Guid("62e4a6c7-9748-4339-b085-59b7c8969ca2");
         public static readonly Guid ValueParameter = new Guid("95af86b8-cff1-4039-8849-bed814fdf468");
 
-        public override Version RuleVersion => new Version(1, 0, 0, 2);
+        public override Version RuleVersion => new Version(1, 0, 0, 3);
 
         public override string RuleName => "Trigger";
-        public override Guid RuleGuid => new Guid("088dfa08-6487-4f5e-8d77-2ce4402ba661");
+        public override Guid RuleGuid => new Guid("94a9071e-f0b1-4e83-86d2-ea0a0b565e22");
 
         public override void InitTemplates(IRuleTemplateFactory factory)
         {
