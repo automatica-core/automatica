@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { NgModule, APP_INITIALIZER, Injectable } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 
@@ -37,9 +37,10 @@ import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
 import { SlavesService } from "./services/slaves.services";
 import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
-import { DeviceDetectorModule } from 'ngx-device-detector';
+import { DeviceDetectorModule } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 
+@Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
   public onDragStartClass: string = "dnd-drag-start";
   public onDragEnterClass: string = "dnd-drag-enter";
