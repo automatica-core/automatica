@@ -1,6 +1,48 @@
 ﻿{
   "SONOS": {
     "NAME": "Sonos",
-    "DESCRIPTION": ""
+    "DESCRIPTION": "",
+
+    "DEVICE": {
+      "NAME": "Sonos Gerät",
+      "DESCRIPTION": "",
+      "ID": {
+        "NAME": "ID",
+        "DESCRIPTION": ""
+      },
+      "IP": {
+        "NAME": "IP",
+        "DESCRIPTION": ""
+      },
+      "USE_FIXED_IP": {
+        "NAME": "FIxe IP verwenden",
+        "DESCRIPTION": ""
+      }
+    },
+
+    "PLAY": {
+      "NAME": "Play",
+      "DESCRIPTION": ""
+    },
+    "PAUSE": {
+      "NAME": "Pause",
+      "DESCRIPTION": ""
+    },
+    "SET_VOLUME": {
+      "NAME": "Lautstärke",
+      "DESCRIPTION": ""
+    },
+    "NEXT": {
+      "NAME": "Nächstes",
+      "DESCRIPTION": ""
+    },
+    "SET_TUNE_IN": {
+      "NAME": "Radio",
+      "DESCRIPTION": ""
+    },
+    "SET_TUNE_IN_PLAY": {
+      "NAME": "Radio & Play",
+      "DESCRIPTION": ""
+    }
   }
 }
