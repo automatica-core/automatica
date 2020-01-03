@@ -67,7 +67,7 @@ namespace Automatica.Push.Hubs
                     convertedValue = value.GetString();
                     break;
                 case JsonValueKind.Number:
-                    convertedValue = value.GetString();
+                    convertedValue = value.GetDouble();
                     break;
                 case JsonValueKind.True:
                     convertedValue = true;
