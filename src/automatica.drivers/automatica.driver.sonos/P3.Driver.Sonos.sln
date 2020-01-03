@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.SonosDriverFactory", "P3.Driver.SonosDriverFactory\P3.Driver.SonosDriverFactory.csproj", "{42B32C71-399D-499A-BA0C-72F46A498EDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.Sonos", "P3.Driver.Sonos\P3.Driver.Sonos.csproj", "{B7D1F7D9-DEEC-42F9-9152-085A3718758D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.Sonos.Upnp", "P3.Driver.Sonos.Upnp\P3.Driver.Sonos.Upnp.csproj", "{98DE9B78-0AC5-4581-A0FD-AB71866D4358}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CB6E8B9C-D8D1-435D-97B4-5493EA64F8A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.Sonos.ConsoleApp", "Tests\P3.Driver.Sonos.Console\P3.Driver.Sonos.ConsoleApp.csproj", "{2AF624DE-719B-45AB-B956-84D9971E5ED7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D1F7D9-DEEC-42F9-9152-085A3718758D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D1F7D9-DEEC-42F9-9152-085A3718758D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D1F7D9-DEEC-42F9-9152-085A3718758D}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D1F7D9-DEEC-42F9-9152-085A3718758D}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{B7D1F7D9-DEEC-42F9-9152-085A3718758D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D1F7D9-DEEC-42F9-9152-085A3718758D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98DE9B78-0AC5-4581-A0FD-AB71866D4358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98DE9B78-0AC5-4581-A0FD-AB71866D4358}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98DE9B78-0AC5-4581-A0FD-AB71866D4358}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{98DE9B78-0AC5-4581-A0FD-AB71866D4358}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{98DE9B78-0AC5-4581-A0FD-AB71866D4358}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98DE9B78-0AC5-4581-A0FD-AB71866D4358}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2AF624DE-719B-45AB-B956-84D9971E5ED7} = {CB6E8B9C-D8D1-435D-97B4-5493EA64F8A8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FABB2FA3-09C8-4AEB-BE53-C71D97F875B8}
+	EndGlobalSection
+EndGlobal

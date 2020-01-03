@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Version>1.0.0.0</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>42B32C71-399D-499A-BA0C-72F46A498EDE</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp3.0\Drivers\Sonos\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugLocal|AnyCPU'">
+    <OutputPath>bin\DebugLocal</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\Sonos-de.json" />
+    <None Remove="Resources\Sonos-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Sonos-de.json" />
+    <EmbeddedResource Include="Resources\Sonos-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Base" Version="0.10.0.580" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.10.0.580" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.10.0.580" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.Sonos.Upnp\P3.Driver.Sonos.Upnp.csproj" />
+    <ProjectReference Include="..\P3.Driver.Sonos\P3.Driver.Sonos.csproj" />
+  </ItemGroup>
+</Project>
