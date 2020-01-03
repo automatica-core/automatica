@@ -23,9 +23,9 @@
     <EmbeddedResource Include="Resources\Sonos-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="0.10.0.580" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.10.0.580" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.10.0.580" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.11.0.642" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.11.0.642" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.11.0.642" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.Sonos.Upnp\P3.Driver.Sonos.Upnp.csproj" />
