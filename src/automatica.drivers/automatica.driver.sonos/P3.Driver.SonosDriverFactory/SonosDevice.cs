@@ -109,7 +109,9 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
-                    await _controller.SetRadio((int)o);
+                    var value = Convert.ToInt32(o);
+
+                    await _controller.SetRadio(value);
                     await _controller.PlayAsync();
                 });
             }
