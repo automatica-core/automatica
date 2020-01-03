@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.Templates;
-using Automatica.Core.EF.Extensions;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +51,18 @@ namespace Automatica.Core.Internals.Templates
             return templates;
         }
 
+        private ICollection<NodeTemplate> GetDefaultChildNodeTemplates(NodeTemplate nodeTemplate)
+        {
+            var templates = Db.NodeTemplates
+                .Include(a => a.This2NodeDataTypeNavigation)
+                .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
+                .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
+                .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
+                .Where(a => a.DefaultCreated & a.NeedsInterface2InterfacesType == nodeTemplate.ProvidesInterface2InterfaceType).ToList();
+
+            return templates;
+        }
+
         public NodeInstance CreateNodeInstanceByKey(string key)
         {
             return CreateNodeInstance(GetNodeTemplateByKey(key));
@@ -59,7 +70,16 @@ namespace Automatica.Core.Internals.Templates
 
         public NodeInstance CreateNodeInstance(NodeTemplate template)
         {
-            return NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
+            var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
+
+            var childrens = GetDefaultChildNodeTemplates(template);
+
+            foreach (var child in childrens)
+            {
+                node.InverseThis2ParentNodeInstanceNavigation.Add(CreateNodeInstance(child));
+            }
+
+            return node;
         }
 
         public NodeInstance CreateNodeInstance(Guid template)
