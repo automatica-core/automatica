@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using Microsoft.AspNetCore.Routing.Internal;
 
 namespace P3.Rule.DigitalToAnalog.Trigger
 {
@@ -46,7 +48,7 @@ namespace P3.Rule.DigitalToAnalog.Trigger
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.This2RuleInterfaceTemplate == TriggerRuleFactory.RuleInput)
+            if (value != null && instance.This2RuleInterfaceTemplate == TriggerRuleFactory.RuleInput && Boolean.TryParse(value.ToString(), out bool bValue) && bValue)
             {
                 var change = new RuleOutputChanged(_output1, _outputValue);
                 if (Delay > 0)
