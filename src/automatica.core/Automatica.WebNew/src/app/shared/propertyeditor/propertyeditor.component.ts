@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
 import { TranslationService, Language } from "angular-l10n";
@@ -111,7 +111,9 @@ export class LearnNodeInstance {
 @Component({
   selector: "p3-propertyeditor",
   templateUrl: "./propertyeditor.component.html",
-  styleUrls: ["./propertyeditor.component.sass"]
+  styleUrls: ["./propertyeditor.component.sass"],
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {
@@ -180,7 +182,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   }
 
   @ViewChild("dataTable", { static: false })
-  dataTable: DxDataGridComponent;
+  private dataTable: DxDataGridComponent;
 
   @Output()
   validate = new EventEmitter<any>();
@@ -262,6 +264,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   @ViewChild("endDateValidator", { static: false })
   endDateValidator: DxValidatorComponent;
+
+  @Input()
+  isLoading: boolean;
 
   constructor(
     private config: ConfigService,

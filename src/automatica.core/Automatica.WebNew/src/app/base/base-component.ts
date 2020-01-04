@@ -7,6 +7,7 @@ import { NotifyService } from "../services/notify.service";
 export class BaseComponent {
 
     private subscriptions: Subscription[] = [];
+    private intervals: NodeJS.Timeout[] = [];
 
     // gutterH = `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");`;
 
@@ -67,5 +68,15 @@ export class BaseComponent {
             sub.unsubscribe();
         });
         this.subscriptions = [];
+
+        this.intervals.forEach(sub => {
+            clearInterval(sub);
+        });
+        this.intervals = [];
+    }
+
+    protected registerInterval(callback: (any), intervalInMs) {
+        const interval = setInterval(callback, intervalInMs);
+        this.intervals.push(interval);
     }
 }

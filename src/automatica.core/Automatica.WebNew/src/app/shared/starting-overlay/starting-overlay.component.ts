@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { AppService } from "src/app/services/app.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { TranslationService } from "angular-l10n";
@@ -14,13 +14,15 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
 
   popupVisible: boolean = false;
 
-  constructor(private appService: AppService, notify: NotifyService, translation: TranslationService) {
+  constructor(private appService: AppService, notify: NotifyService, translation: TranslationService, private ngZone: NgZone) {
     super(notify, translation);
   }
 
   ngOnInit() {
     super.registerEvent(this.appService.isStartingChanged, async (v) => {
-       this.popupVisible = v;
+      this.ngZone.runOutsideAngular(() => {
+        this.popupVisible = v;
+      });
 
       if (!v) {
         await this.translate.init();

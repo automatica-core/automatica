@@ -16,7 +16,7 @@ namespace Automatica.Core.Runtime.Core
         }
         public async Task DispatchValue(DispatchableType type, Guid id, object value)
         {
-            await _dataHub.Clients.All.SendAsync("dispatchValue", type, id, value);
+            await _dataHub.Clients.Group("All").SendAsync("dispatchValue", type, id, value);
             await _dataHub.Clients.Group(id.ToString()).SendAsync("dispatchValue", type, id, value);
         }
     }

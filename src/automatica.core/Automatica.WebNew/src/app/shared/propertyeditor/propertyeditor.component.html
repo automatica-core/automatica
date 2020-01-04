@@ -214,8 +214,8 @@
 
             <ng-container *ngSwitchCase="PropertyTemplateType.Slave">
                 <dx-select-box [dataSource]="slaves" (onValueChanged)="valueChanged($event, data)"
-                    [placeholder]="'USER_GROUPS.ALL' | translate:lang" 
-                    valueExpr="ObjId" [(value)]="data.data.Value" displayExpr="DisplayName" [showClearButton]="false ">
+                    [placeholder]="'USER_GROUPS.ALL' | translate:lang" valueExpr="ObjId" [(value)]="data.data.Value"
+                    displayExpr="DisplayName" [showClearButton]="false ">
                 </dx-select-box>
             </ng-container>
 
@@ -299,8 +299,7 @@
     <div *dxTemplate="let data of 'content'">
         <dx-button [disabled]="!selectedNodeInstance" text="{{ 'COMMON.SELECT' | translate:lang }}"
             (click)="useSelectedNode($event)"></dx-button>
-        <p3-config-tree style="display: block; height: 100%" [loadOnInit]="true" [showLoadingPanel]="true"
-            [(isLoading)]="nodeSelectorTreeLoading" [showLoadingPanel]="true" #configTree
+        <p3-config-tree style="display: block; height: 100%" [showLoadingPanel]="true" #configTree
             (onNodeSelect)="nodeSelect($event)"></p3-config-tree>
     </div>
 </dx-popup>
@@ -340,10 +339,9 @@
                     placeholder="Select a value..." [dataSource]="data.data.nodeTemplates">
                     <dxo-drop-down-options height="300px"></dxo-drop-down-options>
                     <div *dxTemplate="let contet of 'content'">
-                        <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain"
-                            keyExpr="Id" parentIdExpr="ParentId"
-                            selectionMode="single" displayExpr="DisplayName" [selectByClick]="true"
-                            (onItemClick)="nodeTemplateSelectItem($event, data.data)">
+                        <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain" keyExpr="Id"
+                            parentIdExpr="ParentId" selectionMode="single" displayExpr="DisplayName"
+                            [selectByClick]="true" (onItemClick)="nodeTemplateSelectItem($event, data.data)">
 
                         </dx-tree-view>
                     </div>

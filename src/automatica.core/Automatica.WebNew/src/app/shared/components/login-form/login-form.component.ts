@@ -32,6 +32,7 @@ export class LoginFormComponent implements OnInit {
         try {
             const value = await this.loginService.login(this.login, this.password);
             this.loginService.saveToLocalStorage(value);
+
             if (value) {
                 this.router.navigate(["/"]);
             }

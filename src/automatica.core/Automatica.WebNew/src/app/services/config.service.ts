@@ -11,8 +11,13 @@ import { BoardType } from "../base/model/board-type";
 @Injectable()
 export class ConfigService extends BaseService {
 
+
     constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designData: DesignTimeDataService) {
         super(http, pRouter, translationService);
+    }
+
+    async loadConfiguration() {
+        
     }
 
     getSingleNodeInstance(id: string): Promise<NodeInstance> {

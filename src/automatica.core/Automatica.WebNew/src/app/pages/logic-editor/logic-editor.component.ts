@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { RulePage } from "src/app/base/model/rule-page";
-import { ConfigMenuComponent } from "src/app/shared/config-menu/config-menu.component";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
-import { PropertyEditorComponent } from "src/app/shared/propertyeditor/propertyeditor.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
 import { ConfigService } from "src/app/services/config.service";
@@ -23,11 +21,13 @@ import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 @Component({
   selector: "app-logic-editor",
   templateUrl: "./logic-editor.component.html",
-  styleUrls: ["./logic-editor.component.scss"]
+  styleUrls: ["./logic-editor.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LogicEditorComponent extends BaseComponent implements OnInit, OnDestroy {
 
@@ -49,7 +49,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     id: "save",
     icon: "fa-save",
     items: undefined,
-    command: (event) => { this.save(); }
+    command: () => { this.save(); }
   }
 
   selectedItem: NodeInstance | RulePage | NodeInstance2RulePage | RuleInstance;
@@ -64,9 +64,29 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   userGroups: UserGroup[] = [];
 
 
+  private _isLoading: boolean;
+  public get isLoading(): boolean {
+    return this._isLoading;
+  }
+  public set isLoading(v: boolean) {
+    this._isLoading = v;
 
-  constructor(private ruleEngineService: RuleEngineService, private configService: ConfigService, private notify: NotifyService, translate: TranslationService,
-    private areaService: AreaService, private categoryService: CategoryService, private userGroupsService: GroupsService, private appService: AppService, private dataHub: DataHubService) {
+    this.appService.isLoading = v;
+  }
+
+
+
+  constructor(private ruleEngineService: RuleEngineService,
+    private configService: ConfigService,
+    private notify: NotifyService,
+    translate: TranslationService,
+    private areaService: AreaService,
+    private categoryService: CategoryService,
+    private userGroupsService: GroupsService,
+    private appService: AppService,
+    private dataHub: DataHubService,
+    private nodeInstanceService: NodeInstanceService,
+    private changeRef: ChangeDetectorRef) {
     super(notify, translate);
 
     appService.setAppTitle("RULEENGINE.NAME");
@@ -88,16 +108,16 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  ngOnDestroy(): void {
+  async ngOnDestroy() {
     super.baseOnDestroy();
+    await this.dataHub.unSubscribeForAll();
   }
-
 
   async loadData() {
     try {
-      this.appService.isLoading = true;
+      this.isLoading = true;
 
-      const [pages, ruleTemplates, linkableNodes, templates, areaInstances, categoryInstances, userGroups, tree] = await Promise.all(
+      const [pages, ruleTemplates, linkableNodes, templates, areaInstances, categoryInstances, userGroups] = await Promise.all(
         [
           this.ruleEngineService.getPages(),
           this.ruleEngineService.getRuleTemplates(),
@@ -106,7 +126,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
           this.areaService.getAreaInstances(),
           this.categoryService.getCategoryInstances(),
           this.userGroupsService.getUserGroups(),
-          this.configTree.loadTree()
+          this.nodeInstanceService.load()
         ]);
 
       this.pages = pages;
@@ -131,15 +151,14 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
       this.nodeTemplates = templates;
 
-      await this.configTree.loadTree();
-
-      await this.dataHub.subscribeForAll();
+      // await this.dataHub.subscribeForAll();
 
     } catch (error) {
       super.handleError(error);
     }
 
-    this.appService.isLoading = false;
+    this.isLoading = false;
+    this.changeRef.detectChanges();
   }
 
   validate($event) {
@@ -157,7 +176,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         id: "add-" + temp.Key,
         label: temp.Name,
         icon: "fa-plus",
-        command: (event) => { this.add(temp, this.pages[this.selectedPageIndex]); }
+        command: () => { this.add(temp, this.pages[this.selectedPageIndex]); }
       };
 
       this.menuItemNew.items.push(menuItem);
@@ -168,7 +187,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         id: "add-node-" + temp.Id,
         label: temp.Name,
         icon: "fa-plus",
-        command: (event) => { this.add(temp, this.pages[this.selectedPageIndex]); }
+        command: () => { this.add(temp, this.pages[this.selectedPageIndex]); }
       };
 
       this.menuItemNew.items.push(menuItem);
@@ -216,7 +235,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async save() {
-    this.appService.isLoading = true;
+    this.isLoading = true;
 
     try {
       await this.configTree.save(false);
@@ -229,10 +248,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.notify.notifyError(error);
       throw error;
     }
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
-  delete(e) {
+  delete() {
     if (this.selectedItem instanceof NodeInstance2RulePage) {
       const selectedPage = this.pages[this.selectedPageIndex];
       selectedPage.NodeInstances = selectedPage.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
@@ -265,12 +284,12 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async fileUploaded($event) {
-    this.appService.isLoading = true;
+    this.isLoading = true;
     await this.configTree.fileUploaded($event.item, $event.file.name);
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
-  async onReinit($event) {
+  async onReinit() {
     await this.configService.reInitServer();
   }
 
@@ -283,7 +302,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  addRulePage($event) {
+  addRulePage() {
     const rulePage = new RulePage();
     rulePage.ObjId = Guid.MakeNew().ToString();
     rulePage.Name = "Page " + (this.pages.length + 1);

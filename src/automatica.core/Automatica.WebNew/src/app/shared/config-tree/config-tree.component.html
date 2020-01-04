@@ -1,6 +1,6 @@
-<dx-tree-list height="100%" #tree itemsExpr="Children" id="config" [dataSource]="config" keyExpr="Id"
+<dx-tree-list height="100%" #tree itemsExpr="Children" id="config" [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id"
     parentIdExpr="ParentId" [showRowLines]="true" [columnAutoWidth]="true" [expandedRowKeys]="expandedRowKeys"
-    (onSelectionChanged)="selectionChanged($event)" (onContextMenuPreparing)="onContextMenuPreparing($event)"
+    (onContextMenuPreparing)="onContextMenuPreparing($event)"
     [showColumnLines]="false" [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)">
     <dxo-selection mode="single"></dxo-selection>
     <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>

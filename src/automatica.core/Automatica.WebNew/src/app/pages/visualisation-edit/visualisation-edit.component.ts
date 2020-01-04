@@ -154,7 +154,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
   onTabClick($event) {
     this.selectedVisuObject = void 0;
-    this.changeRef.detectChanges();
+    // this.changeRef.detectChanges();
 
     this.selectedItem = $event.itemData;
     this.selectedVisuPage = $event.itemData;

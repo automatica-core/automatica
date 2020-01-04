@@ -15,6 +15,7 @@ import { NodeTemplate } from "src/app/base/model/node-template";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 @Component({
   selector: "app-config",
@@ -25,8 +26,6 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   selectedItem: NodeInstance;
 
-  nodeTemplates: NodeTemplate[];
-
   @ViewChild("configTree", { static: false })
   configTree: ConfigTreeComponent;
 
@@ -36,8 +35,15 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   categoryInstances: CategoryInstance[] = [];
   userGroups: UserGroup[] = [];
 
-  constructor(private configService: ConfigService, private dataHub: DataHubService, private notify: NotifyService,
-    private areaService: AreaService, private categoryService: CategoryService, translate: TranslationService, private userGroupsService: GroupsService, private appService: AppService) {
+  constructor(private configService: ConfigService,
+    private dataHub: DataHubService,
+    private notify: NotifyService,
+    private areaService: AreaService,
+    private categoryService: CategoryService,
+    translate: TranslationService,
+    private userGroupsService: GroupsService,
+    private appService: AppService,
+    private nodeInstanceService: NodeInstanceService) {
     super(notify, translate);
 
     appService.setAppTitle("CONFIGURATION.NAME");
@@ -47,20 +53,17 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     try {
       this.appService.isLoading = true;
 
-      const [userGroups,  configTree, areaInstances, categoryInstances] = await Promise.all(
+      const [userGroups, areaInstances, categoryInstances] = await Promise.all(
         [
           this.userGroupsService.getUserGroups(),
-          this.configTree.loadTree(),
           this.areaService.getAreaInstances(),
-          this.categoryService.getCategoryInstances()
-        ])
+          this.categoryService.getCategoryInstances(),
+          this.nodeInstanceService.load()
+        ]);
+
       this.userGroups = userGroups;
-
-      await this.dataHub.subscribe("All");
-
       this.areaInstances = areaInstances;
       this.categoryInstances = categoryInstances;
-
 
     } catch (error) {
       super.handleError(error);
@@ -111,7 +114,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   async ngOnDestroy() {
-    await this.dataHub.unsubscribe("All");
+    await this.dataHub.unSubscribeForAll();
   }
 
   onImportData($event) {

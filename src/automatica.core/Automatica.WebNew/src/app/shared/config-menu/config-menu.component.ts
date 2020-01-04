@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/@types/jszip/index.d.ts" />
 
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { TranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";
 import * as JSZip from "jszip";
@@ -13,16 +13,18 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeTemplate } from "src/app/base/model/node-template";
 import { RuleTemplate } from "src/app/base/model/rule-template";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
+import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 
 @Component({
   selector: "p3-config-menu",
   templateUrl: "./config-menu.component.html",
-  styleUrls: ["./config-menu.component.scss"]
+  styleUrls: ["./config-menu.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ConfigMenuComponent implements OnInit {
 
-  @ViewChild("menu", {static: false})
+  @ViewChild("menu", { static: false })
   menu: DxMenuComponent;
 
 
@@ -37,9 +39,6 @@ export class ConfigMenuComponent implements OnInit {
     this._selectedItem = v;
   }
 
-
-  @Input() nodeTemplates: NodeTemplate[];
-
   @Output() onAddItem = new EventEmitter<NodeTemplate>();
   @Output() onSave = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
@@ -50,6 +49,17 @@ export class ConfigMenuComponent implements OnInit {
 
   @Input()
   showRuleMenu: boolean = false;
+
+  private _isLoading: boolean;
+  @Input()
+  public get isLoading(): boolean {
+    return this._isLoading;
+  }
+  public set isLoading(v: boolean) {
+    this._isLoading  = v;
+    this.changeRef.detectChanges();
+  }
+
 
   @Input()
   ruleTemplates: RuleTemplate[];
@@ -127,12 +137,15 @@ export class ConfigMenuComponent implements OnInit {
     command: (event) => { this.importNode(); }
   };
 
-  constructor(private translate: TranslationService, private changeRef: ChangeDetectorRef, private notify: NotifyService) {
+  constructor(private translate: TranslationService,
+    private notify: NotifyService,
+    private designTimeDataService: DesignTimeDataService,
+    private changeRef: ChangeDetectorRef) {
     this.menuItems = [];
 
 
-    this.menuItems.push(this.menuItemNew);
-    this.menuItems.push(this.menuDelete);
+    // this.menuItems.push(this.menuItemNew);
+    // this.menuItems.push(this.menuDelete);
     this.menuItems.push(this.menuSave);
     this.menuItems.push(this.reinit);
 
@@ -201,8 +214,8 @@ export class ConfigMenuComponent implements OnInit {
           return;
         }
 
-        const targetNodeTemplate = that.getNodeTemplate(that.selectedItem.This2NodeTemplate);
-        const sourceNodeTemplate = that.getNodeTemplate(node.This2NodeTemplate);
+        const targetNodeTemplate = that.designTimeDataService.getNodeTemplate(that.selectedItem.This2NodeTemplate);
+        const sourceNodeTemplate = that.designTimeDataService.getNodeTemplate(node.This2NodeTemplate);
 
         if (targetNodeTemplate.ProvidesInterface2InterfaceType !== sourceNodeTemplate.NeedsInterface2InterfacesType) {
           that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.UNSUPPORTED_NODE"));
@@ -221,7 +234,7 @@ export class ConfigMenuComponent implements OnInit {
   }
 
   private importRecursive(nodeInstance: NodeInstance, parent: NodeInstance): NodeInstance {
-    const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
+    const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
     newNodeInstance.Name = nodeInstance.Name;
     newNodeInstance.Description = nodeInstance.Description;
 
@@ -238,9 +251,6 @@ export class ConfigMenuComponent implements OnInit {
     return newNodeInstance;
   }
 
-  private getNodeTemplate(id: string): NodeTemplate {
-    return this.nodeTemplates.find(a => a.ObjId === id);
-  }
 
   importNode() {
     const fileSelector = document.createElement("input");
@@ -356,20 +366,20 @@ export class ConfigMenuComponent implements OnInit {
       this.import.disabled = false;
 
 
-      const nodeTemplates: NodeTemplate[] = NodeInstance.getSupportedTypes(data, this.nodeTemplates);
-      this.addSupportedItems(nodeTemplates);
+      // const nodeTemplates: NodeTemplate[] = NodeInstance.getSupportedTypes(data, this.nodeTemplates);
+      // this.addSupportedItems(nodeTemplates);
 
-      if (this.addItemsMenu.length === 0) {
-        this.menuItemNew.disabled = true;
-      } else {
-        this.menuItemNew.disabled = false;
-      }
-      this.menuItemNew.items = this.addItemsMenu;
+      // if (this.addItemsMenu.length === 0) {
+      //   this.menuItemNew.disabled = true;
+      // } else {
+      //   this.menuItemNew.disabled = false;
+      // }
+      // this.menuItemNew.items = this.addItemsMenu;
 
       const menuItems = this.menuItems;
-      this.menuItems = [];
-      this.changeRef.detectChanges();
       this.menuItems = menuItems;
+
+
     }
   }
 

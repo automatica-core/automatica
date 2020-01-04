@@ -1,11 +1,9 @@
-import { Component, OnInit, NgModule, Input, OnDestroy, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, NgModule, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
 import { DxScrollViewModule } from "devextreme-angular/ui/scroll-view";
 import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { CommonModule } from "@angular/common";
-
-import { navigation } from "../../app-navigation";
 import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 import { SideNavigationMenuModule } from "src/app/shared/components/side-navigation-menu/side-navigation-menu.component";
 import { HeaderModule } from "src/app/shared/components/header/header.component";
@@ -16,7 +14,8 @@ import { DeviceService } from "src/app/services/device/device.service";
 @Component({
     selector: "app-side-nav-inner-toolbar",
     templateUrl: "./side-nav-inner-toolbar.component.html",
-    styleUrls: ["./side-nav-inner-toolbar.component.scss"]
+    styleUrls: ["./side-nav-inner-toolbar.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     selectedRoute = "";

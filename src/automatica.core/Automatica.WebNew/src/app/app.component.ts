@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, NgZone } from "@angular/core";
 // import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -14,14 +14,16 @@ import { FontAwesomeModule, FaIconLibrary } from "@fortawesome/angular-fontaweso
   styleUrls: ["./app.component.scss"]
 })
 export class AppComponent extends BaseComponent implements OnInit {
+
   title = "automatica-web";
-  private _isLoading: string;
+  private _isLoading: boolean = true;
 
   constructor(private appService: AppService,
     notify: NotifyService,
     translate: TranslationService,
     private changeDet: ChangeDetectorRef,
-    library: FaIconLibrary) {
+    library: FaIconLibrary,
+    private ngZone: NgZone) {
     super(notify, translate);
 
     const automaticaLogo = {
@@ -41,16 +43,17 @@ export class AppComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
-      this.isLoading = v;
-      this.changeDet.detectChanges();
+      this.ngZone.runOutsideAngular(() => {
+        this._isLoading = v;
+      });
     });
   }
 
 
-  public get isLoading(): string {
+  public get isLoading(): boolean {
     return this._isLoading;
   }
-  public set isLoading(v: string) {
+  public set isLoading(v: boolean) {
     this._isLoading = v;
   }
 

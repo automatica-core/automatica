@@ -203,7 +203,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     const menuItems = this.menuItems;
     this.menuItems = [];
-    this.changeRef.detectChanges();
+    // this.changeRef.detectChanges();
     this.menuItems = menuItems;
   }
 

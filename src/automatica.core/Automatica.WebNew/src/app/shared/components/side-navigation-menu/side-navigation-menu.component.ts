@@ -1,4 +1,4 @@
-import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit } from "@angular/core";
+import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { DxTreeViewModule, DxTreeViewComponent } from "devextreme-angular/ui/tree-view";
 import { TranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -9,7 +9,8 @@ import { DxScrollViewModule } from "devextreme-angular";
 @Component({
     selector: "app-side-navigation-menu",
     templateUrl: "./side-navigation-menu.component.html",
-    styleUrls: ["./side-navigation-menu.component.scss"]
+    styleUrls: ["./side-navigation-menu.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideNavigationMenuComponent implements OnInit {
 

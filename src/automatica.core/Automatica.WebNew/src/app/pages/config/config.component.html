@@ -1,18 +1,20 @@
 <div class="content-block">
     <div class="dx-card wide-card panel-height">
         <p3-config-menu #configMenu (onSave)="save($event)" (onAddItem)="addItem($event)" (onDelete)="delete($event)"
-            (onReinitServer)="onReinit($event)" [nodeTemplates]="nodeTemplates" (onImportData)="onImportData($event)"
-            [(selectedItem)]="selectedItem">
+            (onReinitServer)="onReinit($event)" (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem"
+            [isLoading]="isLoading">
         </p3-config-menu>
 
         <as-split direction="horizontal">
             <as-split-area [size]="30">
                 <p3-propertyeditor #propertyEditor (validate)="validate($event)" (fileUploaded)="fileUploaded($event)"
-                    (scan)="scan($event)" [userGroups]="userGroups" [item]="selectedItem" [areaInstances]="areaInstances"
-                    [categoryInstances]="categoryInstances" (saveLearnedNodes)="saveLearnedNodes($event)"></p3-propertyeditor>
+                    (scan)="scan($event)" [userGroups]="userGroups" [item]="selectedItem"
+                    [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
+                    (saveLearnedNodes)="saveLearnedNodes($event)" [isLoading]="isLoading"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="70">
-                <p3-config-tree #configTree [(nodeTemplates)]="nodeTemplates" (onNodeSelect)="nodeSelect($event)"></p3-config-tree>
+                <p3-config-tree #configTree (onNodeSelect)="nodeSelect($event)" [isLoading]="isLoading">
+                </p3-config-tree>
             </as-split-area>
         </as-split>
     </div>
