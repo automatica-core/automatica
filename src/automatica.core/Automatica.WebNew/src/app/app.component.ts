@@ -43,9 +43,8 @@ export class AppComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
-      this.ngZone.runOutsideAngular(() => {
         this._isLoading = v;
-      });
+        console.log("isloading changed", v);
     });
   }
 
