@@ -3,14 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <Version>1.0.0.0</Version>
-    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <ProjectGuid>42B32C71-399D-499A-BA0C-72F46A498EDE</ProjectGuid>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp3.0\Drivers\Sonos\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugLocal|AnyCPU'">
-    <OutputPath>bin\DebugLocal</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />

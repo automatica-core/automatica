@@ -22,7 +22,12 @@
 		"Type": "driver",
 		"Output": "P3.Driver.SonosDriverFactory.dll",
 		"Resources": [],
-		"Dependencies": [ "P3.Driver.Sonos.dll" ],
+		"Dependencies": [
+			"P3.Driver.Sonos.dll",
+			"P3.Driver.Sonos.Upnp.dll",
+			"Rssdp.dll"
+
+		],
 		"MinCoreServerVersion": {
 			"Major": 0,
 			"Minor": 10,
