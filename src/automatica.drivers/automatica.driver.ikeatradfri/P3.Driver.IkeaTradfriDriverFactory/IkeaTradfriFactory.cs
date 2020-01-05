@@ -32,7 +32,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         public override Guid DriverGuid => GatewayContainerGuid;
 
 
-        public override Version DriverVersion => new Version(0, 6, 0, 15);
+        public override Version DriverVersion => new Version(0, 7, 0, 15);
 
         public override bool InDevelopmentMode => false;
 
