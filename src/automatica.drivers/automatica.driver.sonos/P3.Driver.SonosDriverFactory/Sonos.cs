@@ -24,7 +24,14 @@ namespace P3.Driver.SonosDriverFactory
 
         public override Task WriteValue(IDispatchable source, object value)
         {
-            _writeAction.Invoke(value);
+            try
+            {
+                _writeAction.Invoke(value);
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, "Error write value to sonos...");
+            }
 
             return Task.CompletedTask;
         }

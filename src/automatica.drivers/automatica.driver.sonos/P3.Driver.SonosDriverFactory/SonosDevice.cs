@@ -73,6 +73,7 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+                    DriverContext.Logger.LogDebug($"Sonos play...");
                     await _controller.PlayAsync();
                 });
             }
@@ -80,6 +81,7 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+                    DriverContext.Logger.LogDebug($"Sonos pause...");
                     await _controller.PauseAsync();
                 });
             }
@@ -87,6 +89,8 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+
+                    DriverContext.Logger.LogDebug($"Sonos next track...");
                     await _controller.NextTrackAsync();
                 });
             }
@@ -94,6 +98,8 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+
+                    DriverContext.Logger.LogDebug($"Sonos set volume to {o}...");
                     var volume = Convert.ToInt32(o);
                     await _controller.SetVolumeAsync(new SonosVolume(volume));
                 });
@@ -102,6 +108,7 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+                    DriverContext.Logger.LogDebug($"Sonos set radio to {o}...");
                     await _controller.SetRadio((int)o);
                 });
             }
@@ -109,6 +116,8 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+
+                    DriverContext.Logger.LogDebug($"Sonos set radio and play to {o}...");
                     var value = Convert.ToInt32(o);
 
                     await _controller.SetRadio(value);
