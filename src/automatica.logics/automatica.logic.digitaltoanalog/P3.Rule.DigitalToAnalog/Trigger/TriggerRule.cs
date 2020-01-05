@@ -57,6 +57,7 @@ namespace P3.Rule.DigitalToAnalog.Trigger
             if (value != null && instance.This2RuleInterfaceTemplate == TriggerRuleFactory.RuleInput && Boolean.TryParse(value.ToString(), out bool bValue) && bValue)
             {
                 var change = new RuleOutputChanged(_output1, _outputValue);
+                Context.Logger.LogDebug($"Change output value to {_outputValue}");
                 if (Delay > 0)
                 {
                     Task.Run(async () =>
