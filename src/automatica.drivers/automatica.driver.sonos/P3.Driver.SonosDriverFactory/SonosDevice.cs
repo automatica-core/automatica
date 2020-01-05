@@ -98,30 +98,49 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
-
-                    DriverContext.Logger.LogDebug($"Sonos set volume to {o}...");
-                    var volume = Convert.ToInt32(o);
-                    await _controller.SetVolumeAsync(new SonosVolume(volume));
+                    try
+                    {
+                        DriverContext.Logger.LogDebug($"Sonos set volume to {o}...");
+                        var volume = Convert.ToInt32(o);
+                        await _controller.SetVolumeAsync(new SonosVolume(volume));
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogError(e, "Could not set volume...");
+                    }
                 });
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadio)
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
-                    DriverContext.Logger.LogDebug($"Sonos set radio to {o}...");
-                    await _controller.SetRadio((int)o);
+                    try
+                    {
+                        DriverContext.Logger.LogDebug($"Sonos set radio to {o}...");
+                        await _controller.SetRadio((int) o);
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogError(e, "Could not set radio...");
+                    }
                 });
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadioAndPlay)
             {
                 return new Sonos(ctx, this, null, async o =>
                 {
+                    try
+                    {
+                        DriverContext.Logger.LogDebug($"Sonos set radio and play to {o}...");
+                        var value = Convert.ToInt32(o);
 
-                    DriverContext.Logger.LogDebug($"Sonos set radio and play to {o}...");
-                    var value = Convert.ToInt32(o);
-
-                    await _controller.SetRadio(value);
-                    await _controller.PlayAsync();
+                        await _controller.SetRadio(value);
+                        await _controller.PlayAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogError(e, "Could not set radio and play...");
+                    }
                 });
             }
 
