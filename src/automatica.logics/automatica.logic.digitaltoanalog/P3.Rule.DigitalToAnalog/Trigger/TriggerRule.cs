@@ -51,13 +51,13 @@ namespace P3.Rule.DigitalToAnalog.Trigger
         {
             if (_outputValue == null)
             {
-                Context.Logger.LogError($"OutputValue is {null}, we ignore any incoming value..");
+                Context.Logger.LogError($"{Context.RuleInstance.Name} OutputValue is {null}, we ignore any incoming value..");
                 return new List<IRuleOutputChanged>();
             }
             if (value != null && instance.This2RuleInterfaceTemplate == TriggerRuleFactory.RuleInput && Boolean.TryParse(value.ToString(), out bool bValue) && bValue)
             {
                 var change = new RuleOutputChanged(_output1, _outputValue);
-                Context.Logger.LogDebug($"Change output value to {_outputValue}");
+                Context.Logger.LogDebug($"{Context.RuleInstance.Name} Change output value to {_outputValue}");
                 if (Delay > 0)
                 {
                     Task.Run(async () =>
@@ -73,6 +73,7 @@ namespace P3.Rule.DigitalToAnalog.Trigger
             }
             else if (instance.This2RuleInterfaceTemplate == TriggerRuleFactory.RuleValueInput)
             {
+                Context.Logger.LogDebug($"{Context.RuleInstance.Name} Change value param to {_outputValue}");
                 _outputValue = value;
             }
 
