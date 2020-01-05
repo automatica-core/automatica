@@ -11,6 +11,7 @@ namespace P3.Driver.Sonos
         private readonly IAvTransportService _avTransportService;
         private readonly IRenderingControlService _renderingControlService;
         private readonly IContentDirectoryService _contentDirectoryService;
+        public const string TuneInMediaUrl = "x-sonosapi-stream:s{0}?sid=254&amp;flags=32";
 
         public SonosController(IAvTransportService avTransportService,
             IRenderingControlService renderingControlService,
@@ -176,7 +177,16 @@ namespace P3.Driver.Sonos
         {
             await _avTransportService.SetTuneInRadio(radioId);
         }
+        public async Task SetMediaUrl(string url)
+        {
+            await _avTransportService.SetMediaUrl(url);
+        }
 
+
+        public Task<GetMediaInfoResponse> GetMediaInfoAsync()
+        {
+            return _avTransportService.GetMediaInfoAsync();
+        }
         #endregion
     }
 }

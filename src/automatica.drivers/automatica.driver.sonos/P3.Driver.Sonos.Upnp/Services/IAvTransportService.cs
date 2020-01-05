@@ -41,5 +41,6 @@ namespace P3.Driver.Sonos.Upnp.Services
         Task<GetTransportSettingsResponse> GetTransportSettingsAsync();
 
         Task SetTuneInRadio(int radioId);
+        Task SetMediaUrl(string url);
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.Sonos;
 using P3.Driver.Sonos.Discovery;
 using P3.Driver.Sonos.Models;
+using P3.Driver.SonosDriverFactory.Attributes;
 
 namespace P3.Driver.SonosDriverFactory
 {
@@ -17,7 +18,8 @@ namespace P3.Driver.SonosDriverFactory
 
         private readonly SonosControllerFactory _sonosControllerFactory;
         private SonosController _controller;
-        
+
+        public SonosController Controller => _controller;
 
         public SonosDevice(IDriverContext driverContext) : base(driverContext)
         {
@@ -71,7 +73,7 @@ namespace P3.Driver.SonosDriverFactory
 
             if (nodeId == SonosDriverFactory.PlayGuid)
             {
-                return new Sonos(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, null, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos play...");
                     await _controller.PlayAsync();
@@ -79,7 +81,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.PauseGuid)
             {
-                return new Sonos(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, null, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos pause...");
                     await _controller.PauseAsync();
@@ -87,7 +89,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.NextTrack)
             {
-                return new Sonos(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, null, async o =>
                 {
 
                     DriverContext.Logger.LogDebug($"Sonos next track...");
@@ -96,7 +98,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.SetVolumeGuid)
             {
-                return new Sonos(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, null, async o =>
                 {
                     try
                     {
@@ -112,36 +114,11 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadio)
             {
-                return new Sonos(ctx, this, null, async o =>
-                {
-                    try
-                    {
-                        DriverContext.Logger.LogDebug($"Sonos set radio to {o}...");
-                        await _controller.SetRadio((int) o);
-                    }
-                    catch (Exception e)
-                    {
-                        DriverContext.Logger.LogError(e, "Could not set radio...");
-                    }
-                });
+                return new SonosSetRadioAttribute(ctx, this);
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadioAndPlay)
             {
-                return new Sonos(ctx, this, null, async o =>
-                {
-                    try
-                    {
-                        DriverContext.Logger.LogDebug($"Sonos set radio and play to {o}...");
-                        var value = Convert.ToInt32(o);
-
-                        await _controller.SetRadio(value);
-                        await _controller.PlayAsync();
-                    }
-                    catch (Exception e)
-                    {
-                        DriverContext.Logger.LogError(e, "Could not set radio and play...");
-                    }
-                });
+                return new SonosSetRadioAndPlayAttribute(ctx, this);
             }
 
             return null;

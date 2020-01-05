@@ -11,6 +11,10 @@ namespace P3.Driver.Sonos.ConsoleApp
             Console.WriteLine("Hello World!");
 
             var discover = await SonosDiscovery.DiscoverSonos();
+
+            var controller = new SonosControllerFactory().Create("192.168.8.105");
+
+            var data = await controller.GetMediaInfoAsync();
         }
     }
 }

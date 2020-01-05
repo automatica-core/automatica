@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.SonosDriverFactory
 {
-    public class Sonos : DriverBase
+    public class SonosAttribute : DriverBase
     {
         private readonly SonosDevice _device;
         private readonly Func<Task<object>> _readAction;
         private readonly Action<object> _writeAction;
 
-
-        public Sonos(IDriverContext ctx, SonosDevice device, Func<Task<object>> readAction, Action<object> writeAction) : base(ctx)
+        
+        public SonosAttribute(IDriverContext ctx, SonosDevice device, Func<Task<object>> readAction, Action<object> writeAction) : base(ctx)
         {
             _device = device;
             _readAction = readAction;

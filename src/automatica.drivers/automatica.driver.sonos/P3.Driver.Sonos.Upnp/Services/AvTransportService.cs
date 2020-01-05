@@ -177,6 +177,14 @@ namespace P3.Driver.Sonos.Upnp.Services
             return metadata;
         }
 
+        public async Task SetMediaUrl(string url)
+        {
+            var uriMetadata = new UpnpArgument("CurrentURIMetaData", GetRadioMetadata("", "65031_"));
+            var xml = await _upnpClient.InvokeFuncWithResultAsync("SetAVTransportURI",
+                new List<UpnpArgument>()
+                    {new UpnpArgument("InstanceID", 0), new UpnpArgument("CurrentURI", url), uriMetadata});
+        }
+
         /// <summary>
         /// Plays a radio on the Sonos
         /// </summary>
