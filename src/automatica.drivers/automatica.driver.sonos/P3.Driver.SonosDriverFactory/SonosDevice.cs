@@ -73,7 +73,11 @@ namespace P3.Driver.SonosDriverFactory
 
             if (nodeId == SonosDriverFactory.PlayGuid)
             {
-                return new SonosAttribute(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, async () =>
+                {
+                    var value = await _controller.GetIsPlayingAsync();
+                    return value;
+                }, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos play...");
                     await _controller.PlayAsync();
@@ -81,7 +85,11 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.PauseGuid)
             {
-                return new SonosAttribute(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, async () =>
+                {
+                    var value = await _controller.GetIsPlayingAsync();
+                    return !value;
+                }, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos pause...");
                     await _controller.PauseAsync();
@@ -91,14 +99,17 @@ namespace P3.Driver.SonosDriverFactory
             {
                 return new SonosAttribute(ctx, this, null, async o =>
                 {
-
                     DriverContext.Logger.LogDebug($"Sonos next track...");
                     await _controller.NextTrackAsync();
                 });
             }
-            if (nodeId == SonosDriverFactory.SetVolumeGuid)
+            if (nodeId == SonosDriverFactory.VolumeGuid)
             {
-                return new SonosAttribute(ctx, this, null, async o =>
+                return new SonosAttribute(ctx, this, async () =>
+                {
+                    var value = await _controller.GetVolumeAsync();
+                    return value.Value;
+                }, async o =>
                 {
                     try
                     {

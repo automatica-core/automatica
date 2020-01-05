@@ -17,6 +17,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
         {
             try
             {
+                DriverContext.Logger.LogDebug($"Sonos play...");
                 await base.WriteValue(source, value);
                 await Device.Controller.PlayAsync();
             }

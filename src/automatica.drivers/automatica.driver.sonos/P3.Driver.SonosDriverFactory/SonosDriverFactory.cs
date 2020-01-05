@@ -15,7 +15,7 @@ namespace P3.Driver.SonosDriverFactory
 
         public static Guid PlayGuid = new Guid("6a482ed1-33ed-47de-b58e-d850652d4e40");
         public static Guid PauseGuid = new Guid("48b1eeba-13e5-4300-bea3-e26836c64cb8");
-        public static Guid SetVolumeGuid = new Guid("5285e217-7793-4aef-91d2-230bbe61b5c7");
+        public static Guid VolumeGuid = new Guid("5285e217-7793-4aef-91d2-230bbe61b5c7");
         public static Guid NextTrack = new Guid("3e22c6b8-c557-4be7-b671-cd627855b05d");
         public static Guid SetTuneInRadio = new Guid("77947332-cd89-4765-b79b-b64ce4fa23cf");
         public static Guid SetTuneInRadioAndPlay = new Guid("fc5c92c1-8011-4e8d-96fb-25e2accf10b9");
@@ -60,7 +60,7 @@ namespace P3.Driver.SonosDriverFactory
 
             CreateAction(factory, PlayGuid, "play", true, true, NodeDataType.Boolean);
             CreateAction(factory, PauseGuid, "pause", true, true, NodeDataType.Boolean);
-            CreateAction(factory, SetVolumeGuid, "set_volume", true, true, NodeDataType.Integer);
+            CreateAction(factory, VolumeGuid, "set_volume", true, true, NodeDataType.Integer);
             CreateAction(factory, NextTrack, "next", true, true, NodeDataType.Boolean);
 
             CreateAction(factory, SetTuneInRadio, "set_tune_in", true, true, NodeDataType.Integer);

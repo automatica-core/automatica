@@ -11,7 +11,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
     public class SonosSetRadioAttribute : DriverBase
     {
         protected SonosDevice Device { get; }
-        private readonly System.Timers.Timer _readTimer = new System.Timers.Timer();
+        private readonly Timer _readTimer = new Timer();
 
         private string _currentMediaUrl = String.Empty;
 
@@ -39,6 +39,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
         public override Task<bool> Stop()
         {
             _readTimer.Elapsed += ReadTimerOnElapsed;
+            _readTimer.Stop();
             return base.Stop();
         }
 
