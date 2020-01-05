@@ -104,10 +104,12 @@ namespace Automatica.Core.Tests.Dispatcher
                 {
                     This2RuleInstance = inputInterface.ObjId
                 };
+                a.This2RuleInterfaceInstanceInput = inputInterface.ObjId;
                 a.This2RuleInterfaceInstanceOutputNavigation = new RuleInterfaceInstance()
                 {
                     This2RuleInstance = outputInterface.ObjId
                 };
+                a.This2RuleInterfaceInstanceOutput = outputInterface.ObjId;
             });
 
             RuleEngineDispatcher.Load();

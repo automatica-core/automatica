@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Logic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -8,8 +9,11 @@ namespace Automatica.Core.Internals.Cache.Common
 {
     internal class LinkCache : AbstractCache<Link>, ILinkCache
     {
-        public LinkCache(IConfiguration configuration) : base(configuration)
+        private readonly ILogicInterfaceInstanceCache _logicInterfaceCache;
+
+        public LinkCache(IConfiguration configuration, ILogicInterfaceInstanceCache logicInterfaceCache) : base(configuration)
         {
+            _logicInterfaceCache = logicInterfaceCache;
         }
 
         protected override IQueryable<Link> GetAll(AutomaticaContext context)
@@ -25,6 +29,12 @@ namespace Automatica.Core.Internals.Cache.Common
         protected override Guid GetKey(Link obj)
         {
             return obj.ObjId;
+        }
+
+        public override void Clear()
+        {
+            _logicInterfaceCache.Clear();
+            base.Clear();
         }
     }
 }

@@ -88,8 +88,8 @@ namespace Automatica.Core.Runtime.IO
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
                 {
-                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
-                    var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
+                    var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
+                    var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
 
                     if (sourceNode == null || targetNode == null)
                     {
