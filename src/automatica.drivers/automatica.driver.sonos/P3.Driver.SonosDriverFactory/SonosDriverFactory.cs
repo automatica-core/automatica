@@ -28,7 +28,7 @@ namespace P3.Driver.SonosDriverFactory
         public override string DriverName => "sonos";
         public override Guid DriverGuid => BusId;
 
-        public override Version DriverVersion => new Version(0, 3, 0, 3);
+        public override Version DriverVersion => new Version(0, 3, 0, 4);
 
         
         public override void InitNodeTemplates(INodeTemplateFactory factory)
