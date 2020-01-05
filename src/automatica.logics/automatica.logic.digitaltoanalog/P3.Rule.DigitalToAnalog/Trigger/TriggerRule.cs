@@ -6,6 +6,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 using Microsoft.AspNetCore.Routing.Internal;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Rule.DigitalToAnalog.Trigger
 {
@@ -48,6 +49,11 @@ namespace P3.Rule.DigitalToAnalog.Trigger
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
+            if (_outputValue == null)
+            {
+                Context.Logger.LogError($"OutputValue is {null}, we ignore any incoming value..");
+                return new List<IRuleOutputChanged>();
+            }
             if (value != null && instance.This2RuleInterfaceTemplate == TriggerRuleFactory.RuleInput && Boolean.TryParse(value.ToString(), out bool bValue) && bValue)
             {
                 var change = new RuleOutputChanged(_output1, _outputValue);
