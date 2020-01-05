@@ -91,6 +91,8 @@ namespace Automatica.Core.Rule
                 {
                     foreach (var ruleOutValue in values)
                     {
+                        Context.Logger.LogDebug($"RuleOutput changed {ruleOutValue.Instance.Name} value {ruleOutValue.Value}");
+
                         if (!_valueDictionary.ContainsKey(ruleOutValue.Instance.RuleInterfaceInstance))
                         {
                             _valueDictionary.Add(ruleOutValue.Instance.RuleInterfaceInstance, ruleOutValue.Value);
