@@ -45,6 +45,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
         this._isLoading = v;
         console.log("isloading changed", v);
+        this.changeDet.detectChanges();
     });
   }
 

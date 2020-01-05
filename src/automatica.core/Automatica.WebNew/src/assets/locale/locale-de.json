@@ -305,6 +305,10 @@
             "TRENDING_INTERVAL": {
                 "NAME": "Intervall [s]",
                 "DESCRIPTION": ""
+            },
+            "OBJID":{
+                "NAME": "ID",
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY_INSTANCE": {

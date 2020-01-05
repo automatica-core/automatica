@@ -25,6 +25,7 @@ import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-t
 import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
 import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
 import { INodeInstance } from "./INodeInstance";
+import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -396,6 +397,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     private addVirtualProperties() {
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
+        this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         if (this.isDriverNode()) {
             this.Properties.push(new VirtualSlavePropertyInstance(this));
