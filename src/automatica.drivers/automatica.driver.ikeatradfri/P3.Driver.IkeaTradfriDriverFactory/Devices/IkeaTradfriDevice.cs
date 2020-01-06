@@ -22,22 +22,30 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
         public override async Task<bool> Start()
         {
-            await Container.Gateway.Driver.RegisterChange(a =>
+            try
             {
-                try
+                await Container.Gateway.Driver.RegisterChange(a =>
                 {
-                    if (a == null)
+                    try
                     {
-                        return;
-                    }
-                    Update(a);
-                }
-                catch (Exception e)
-                {
-                    DriverContext.Logger.LogError(e, "Could not update tradfri device state");
-                }
+                        if (a == null)
+                        {
+                            return;
+                        }
 
-            }, DeviceType, Container.DeviceId);
+                        Update(a);
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogError(e, "Could not update tradfri device state");
+                    }
+
+                }, DeviceType, Container.DeviceId);
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, "Error register change handler...");
+            }
 
             var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
             DriverContext.Logger.LogDebug($"{FullName}: {JsonConvert.SerializeObject(device)}");
