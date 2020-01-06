@@ -35,6 +35,10 @@
                 "NAME": "Umschalter",
                 "DESCRIPTION": ""
             },
+            "PUSH_BUTTON": {
+                "NAME": "Taster",
+                "DESCRIPTION": ""
+            },
             "NUMBER_BOX": {
                 "NAME": "Zahleneingabe",
                 "DESCRIPTION": ""
@@ -109,11 +113,11 @@
                 "NAME": "Link",
                 "DESCRIPTION": ""
             },
-            "TEXT_BREAK":{
+            "TEXT_BREAK": {
                 "NAME": "Umbruch nach Text",
                 "DESCRIPTION": ""
             },
-            "UNIT":{
+            "UNIT": {
                 "NAME": "Einheit",
                 "DESCRIPTION": ""
             },
@@ -127,7 +131,7 @@
             },
             "STEP": {
                 "NAME": "Schritt",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "AREA_LINK": {
                 "NAME": "Bereich",
@@ -148,6 +152,18 @@
             "GAUGE_TYPE": {
                 "NAME": "Rundelementart",
                 "DESCRIPTION": ""
+            },
+            "NODE_STATE_VALUE": {
+                "NAME": "Status Element",
+                "DESCRIPTION":""
+            },
+            "BEHAVIOUR": {
+                "NAME": "Verhalten",
+                "DESCRIPTION": ""
+            }, 
+            "SEND_VALUE": {
+                "NAME": "Wert senden",
+                "DESCRIPTION":""
             }
         }
     }

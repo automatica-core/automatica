@@ -20,6 +20,8 @@ export abstract class BaseMobileComponent extends BaseComponent {
     @Input()
     public parent: ElementRef;
 
+    private subscribedNodeInstances: Map<string, NodeInstance> = new Map<string, NodeInstance>();
+    _primaryNodeInstance: any;
     nodeInstanceModel: NodeInstance;
 
     public get isLoading(): boolean {
@@ -28,9 +30,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
     public set isLoading(v: boolean) {
         this.item.isLoading = v;
     }
-
-
-    private _nodeInstance: string;
 
     protected _value: any;
 
@@ -139,37 +138,57 @@ export abstract class BaseMobileComponent extends BaseComponent {
 
     public async registerForItemValues(nodeProperty: PropertyInstance) {
         super.registerEvent(nodeProperty.propertyChanged, async (value) => {
-            await this.registerForNodeValues();
+            const nodeId = this.getPropertyValue("nodeInstance");
+            await this.registerForNodeValues(nodeId);
+            this._primaryNodeInstance = nodeId;
         });
 
-        super.registerEvent(this.dataHub.dispatchValue, (args) => {
-            if (args[1] === this._nodeInstance && args[0] === 0) { // check if node instance and dispatchable type is correct
-                this.value = args[2];
+        super.registerEvent(this.dataHub.dispatchValue, async (args) => {
+            const nodeId = args[1];
+            if (this.subscribedNodeInstances.has(nodeId) && args[0] === 0) { // check if node instance and dispatchable type is correct
+
+                if (this._primaryNodeInstance === nodeId) {
+                    this.value = args[2];
+                }
+                await this.nodeValueReceived(nodeId, args[2]);
             }
         });
 
         if (nodeProperty.Value) {
-            await this.registerForNodeValues();
+            const nodeId = this.getPropertyValue("nodeInstance");
+            this.nodeInstanceModel = await this.registerForNodeValues(nodeId);
+            this._primaryNodeInstance = nodeId;
         }
     }
 
-    private async unregisterForNodeValues() {
-        if (this._nodeInstance) {
-            await this.dataHub.unsubscribe(this._nodeInstance);
+    protected nodeValueReceived(nodeId: string, value: any): Promise<void> {
+        return Promise.resolve();
+    }
+
+    private async unregisterForNodeValues(nodeId: string) {
+        if (nodeId) {
+            await this.dataHub.unsubscribe(nodeId);
+
+            if (this.subscribedNodeInstances.has(nodeId)) {
+                this.subscribedNodeInstances.delete(nodeId);
+            }
         }
 
     }
-    private async registerForNodeValues() {
 
-        this.unregisterForNodeValues();
-        const nodeProperty = this.getPropertyValue("nodeInstance");
+    protected async registerForNodeValues(nodeId: string) {
+        this.unregisterForNodeValues(nodeId);
 
-        if (nodeProperty) {
-            this.nodeInstanceModel = await this.configService.getSingleNodeInstance(nodeProperty);
+        if (nodeId) {
+            const node = await this.configService.getSingleNodeInstance(nodeId);
 
-            await this.dataHub.subscribe(nodeProperty);
-            this._nodeInstance = nodeProperty;
+            this.subscribedNodeInstances.set(nodeId, node);
+
+            await this.dataHub.subscribe(nodeId);
+
+            return node;
         }
+        return void 0;
     }
 
 

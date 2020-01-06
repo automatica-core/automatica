@@ -64,6 +64,8 @@ namespace Automatica.Core.Visu
             AddGaugeControl(factory);
 
             AddClockControl(factory);
+
+            AddPushButton(factory);
         }
 
         private void AddClockControl(VisuMobileTemplateFactory factory)
@@ -165,6 +167,9 @@ namespace Automatica.Core.Visu
             factory.CreatePropertyTemplate(new Guid("8238bcc7-4396-464a-ae8b-d615582fb97b"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
                 PropertyTemplateType.NodeInstance, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
 
+            factory.CreatePropertyTemplate(new Guid("85d1ccd7-36e6-4129-b34b-f0e9100ac1ee"), "VISU.APPEARANCE.NODE_STATE_VALUE.NAME", "VISU.APPEARANCE.NODE_STATE_VALUE.DESCRIPTION", "nodeInstanceState",
+                PropertyTemplateType.NodeInstance, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
             factory.CreatePropertyTemplate(new Guid("3eef3ccb-34f9-4e2c-b804-0236ee32d184"), "VISU.APPEARANCE.READONLY.NAME", "VISU.APPEARANCE.READONLY.DESCRIPTION", "readonly",
                 PropertyTemplateType.Bool, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", false, 1, 2);
 
@@ -176,6 +181,41 @@ namespace Automatica.Core.Visu
 
             AddCommonProperty(toggleButton, factory);
             AddTextProperty(toggleButton, factory);
+        }
+
+        enum PushButtonBehaviour
+        {
+            SendValue = 0,
+            Switch = 1,
+            SendTrue = 2,
+            SendFalse = 3
+        }
+        private void AddPushButton(VisuMobileTemplateFactory factory)
+        {
+            var pushButton = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.PushButton);
+            factory.CreateVisuMobileTemplate(pushButton, "VISU.OBJECT.PUSH_BUTTON.NAME", "VISU.OBJECT.PUSH_BUTTON.DESCRIPTION", "push-button",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.CreatePropertyTemplate(new Guid("a4339ad8-09bc-46e7-a395-0e1e79bbeab7"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
+            factory.CreatePropertyTemplate(new Guid("e2509320-c72f-410b-bda0-6bd9459cb50f"), "VISU.APPEARANCE.READONLY.NAME", "VISU.APPEARANCE.READONLY.DESCRIPTION", "readonly",
+                PropertyTemplateType.Bool, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", false, 1, 2);
+
+            factory.CreatePropertyTemplate(new Guid("9c1f9103-f580-47ba-ad30-b21f0a93ac5a"), "VISU.APPEARANCE.TOGGLE.ON.NAME", "VISU.APPEARANCE.TOGGLE.ON.DESCRIPTION", "toggle_on_text",
+                PropertyTemplateType.Text, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "On", 1, 3);
+
+            factory.CreatePropertyTemplate(new Guid("1dba9926-dba7-4cd1-a7c3-5cf9b9197bf0"), "VISU.APPEARANCE.TOGGLE.OFF.NAME", "VISU.APPEARANCE.TOGGLE.OFF.DESCRIPTION", "toggle_off_text",
+                PropertyTemplateType.Text, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "Off", 1, 4);
+
+            factory.CreatePropertyTemplate(new Guid("2c05f69d-dff1-4110-9a4f-7b6aa886c00d"), "VISU.APPEARANCE.BEHAVIOUR.NAME", "VISU.APPEARANCE.BEHAVIOUR.DESCRIPTION", "behaviour",
+                PropertyTemplateType.Enum, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, PropertyHelper.CreateEnumMetaString(typeof(PushButtonBehaviour)), PushButtonBehaviour.SendTrue, 1, 5);
+
+            factory.CreatePropertyTemplate(new Guid("90461b81-8c04-409f-928a-37bb7eb4e1ea"), "VISU.APPEARANCE.SEND_VALUE.NAME", "VISU.APPEARANCE.SEND_VALUE.DESCRIPTION", "send_value",
+                PropertyTemplateType.Text, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", true, 1, 6);
+
+            AddCommonProperty(pushButton, factory);
+            AddTextProperty(pushButton, factory);
         }
 
         private void AddNumberBox(VisuMobileTemplateFactory factory)

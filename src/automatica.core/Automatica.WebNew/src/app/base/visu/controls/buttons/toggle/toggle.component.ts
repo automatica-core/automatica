@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { PropertyInstance } from "../../../../model/property-instance";
 import { DataHubService } from "../../../../communication/hubs/data-hub.service";
 import { TranslationService } from "angular-l10n";
@@ -31,6 +31,8 @@ export class ToggleComponent extends BaseMobileComponent implements OnInit, OnDe
     this._nodeProperty = v;
   }
 
+  private nodeInstanceState: string;
+
   public get toggle_on_text(): any {
     if (this.item.StateTextValueTrue) {
       return this.item.StateTextValueTrue;
@@ -47,25 +49,45 @@ export class ToggleComponent extends BaseMobileComponent implements OnInit, OnDe
   }
 
 
+  private _toggleValue: any;
+  public get toggleValue(): any {
+
+    return this._toggleValue;
+  }
+
+  public set toggleValue(value: any) {
+    this._toggleValue = value;
+  }
+
   public onItemResized() {
 
   }
 
-  constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService) {
+  constructor(
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    private changeRef: ChangeDetectorRef) {
     super(dataHub, notify, translate, configService);
   }
 
-  protected propertyChanged() {
+  protected async propertyChanged() {
     this.readOnly = super.getPropertyValue("readonly");
 
     if (this.editMode) {
       this.readOnly = true;
-    } const nodeProperty = this.getProperty("nodeInstance");
+    }
+
+    const nodeProperty = this.getProperty("nodeInstance");
 
     if (!nodeProperty) {
       return;
     }
     this.nodeProperty = nodeProperty;
+
+    this.nodeInstanceState = this.getPropertyValue("nodeInstanceState");
+    await this.registerForNodeValues(this.nodeInstanceState)
 
     super.propertyChanged();
   }
@@ -78,12 +100,24 @@ export class ToggleComponent extends BaseMobileComponent implements OnInit, OnDe
     this.baseOnDestroy();
   }
 
-  async onValueChanged($event) {
+  async onToggleValueChanged($event) {
     if ($event.event && this.nodeProperty.Value) {
       const value = $event.value;
-
+      this.toggleValue = value;
       await this.dataHub.setValue(this.nodeProperty.Value, value);
     }
   }
+
+  protected nodeValueReceived(nodeId: string, value: any): Promise<void> {
+    if (this.nodeInstanceState && nodeId === this.nodeInstanceState) {
+      this.toggleValue = value;
+    }
+    if (!this.nodeInstanceState && nodeId === this._primaryNodeInstance) {
+      this.toggleValue = value;
+    }
+
+    return Promise.resolve();
+  }
+
 
 }

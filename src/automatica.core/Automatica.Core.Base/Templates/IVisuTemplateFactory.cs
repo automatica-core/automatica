@@ -12,6 +12,8 @@ namespace Automatica.Core.Base.Templates
         Slider,
         [VisuMobileObjectTemplateType("c279ff28-8ad6-4803-a0a9-4846357e2e59")]
         ToggleButton,
+        [VisuMobileObjectTemplateType("9c4d673f-6415-402b-b04d-506fdd35e1ac")]
+        PushButton,
         [VisuMobileObjectTemplateType("481da4c5-9a3a-4c1d-a7b4-eb599b244aeb")]
         NumberBox,
         [VisuMobileObjectTemplateType("7e4029d6-bf42-4354-82b6-e0ece388b94a")]

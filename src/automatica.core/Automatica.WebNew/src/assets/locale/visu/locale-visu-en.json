@@ -35,6 +35,10 @@
                 "NAME": "Toggle button",
                 "DESCRIPTION": ""
             },
+            "PUSH_BUTTON": {
+                "NAME": "Push button",
+                "DESCRIPTION": ""
+            },
             "NUMBER_BOX": {
                 "NAME": "Numberbox",
                 "DESCRIPTION": ""
@@ -127,7 +131,7 @@
             },
             "STEP": {
                 "NAME": "Step",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "AREA_LINK": {
                 "NAME": "Area",
@@ -148,6 +152,18 @@
             "GAUGE_TYPE": {
                 "NAME": "Gauge type",
                 "DESCRIPTION": ""
+            },
+            "NODE_STATE_VALUE": {
+                "NAME": "State",
+                "DESCRIPTION":""
+            },
+            "BEHAVIOUR": {
+                "NAME": "Behaviour",
+                "DESCRIPTION": ""
+            }, 
+            "SEND_VALUE": {
+                "NAME": "Value to send",
+                "DESCRIPTION":""
             }
         }
     }

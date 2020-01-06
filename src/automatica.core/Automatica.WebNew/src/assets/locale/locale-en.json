@@ -309,6 +309,10 @@
             "OBJID":{
                 "NAME": "ID",
                 "DESCRIPTION": ""
+            },
+            "SLAVE": {
+                "NAME": "Slave",
+                "DESCRIPTION":""
             }
         },
         "CATEGORY_INSTANCE": {
