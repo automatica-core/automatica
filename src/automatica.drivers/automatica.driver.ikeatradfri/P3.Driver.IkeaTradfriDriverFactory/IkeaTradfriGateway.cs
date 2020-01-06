@@ -38,8 +38,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory
             var devices = await Driver.LoadDevices();
             IList<NodeInstance> ret = new List<NodeInstance>();
 
+            DriverContext.Logger.LogDebug($"Found {devices.Count} devices");
             foreach (var device in devices)
             {
+                DriverContext.Logger.LogDebug($"Working on device {device.ID}, {device.Name} with Type {device.DeviceType}");
                 if (Devices.Any(a => a.Container.DeviceId == device.ID))
                 {
                     continue;
