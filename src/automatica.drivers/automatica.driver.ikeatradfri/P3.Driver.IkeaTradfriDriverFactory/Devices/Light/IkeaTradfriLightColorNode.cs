@@ -6,7 +6,7 @@ using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
 {
-    public class IkeaTradfriLightColorNode : IkeaTradfriDevice
+    public class IkeaTradfriLightColorNode : IkeaTradfriAttribute
     {
         private string _value;
 
@@ -14,7 +14,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
         {
         }
 
-        protected override void Update(TradfriDevice device)
+        internal override void Update(TradfriDevice device)
         {
             _value = device.LightControl[0].ColorHex;
             DispatchValue(_value);

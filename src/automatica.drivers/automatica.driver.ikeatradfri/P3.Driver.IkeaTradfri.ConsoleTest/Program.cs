@@ -30,7 +30,7 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
                 Console.WriteLine($"Item {token.Name} sent {token} {token.Control[0].State}");
 
 
-            }, DeviceType.ControlOutlet, 65539);
+            }, 65539);
 
             while (true)
             {
@@ -60,7 +60,7 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
                     Console.WriteLine($"Item {dev.Name} sent {token}");
 
 
-                }, deviceType, dev.ID);
+                }, dev.ID);
 
             }
 

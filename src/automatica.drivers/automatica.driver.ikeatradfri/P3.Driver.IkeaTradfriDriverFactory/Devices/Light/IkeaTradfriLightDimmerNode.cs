@@ -8,14 +8,14 @@ using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
 {
-    public class IkeaTradfriLightDimmerNode : IkeaTradfriDevice
+    public class IkeaTradfriLightDimmerNode : IkeaTradfriAttribute
     {
         private long _value;
         public IkeaTradfriLightDimmerNode(IDriverContext driverContext, IkeaTradfriContainerNode container) : base(driverContext, container, DeviceType.Light)
         {
         }
 
-        protected override void Update(TradfriDevice device)
+        internal override void Update(TradfriDevice device)
         {
             _value = device.LightControl[0].Dimmer;
             DispatchValue(_value);

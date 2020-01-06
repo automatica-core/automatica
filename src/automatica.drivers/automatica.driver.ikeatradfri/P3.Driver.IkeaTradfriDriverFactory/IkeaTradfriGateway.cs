@@ -19,7 +19,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
 
 
         public IIkeaTradfriDriver Driver { get; set; }
-        public List<IkeaTradfriDevice> Devices { get; } = new List<IkeaTradfriDevice>();
+        public List<IkeaTradfriAttribute> Devices { get; } = new List<IkeaTradfriAttribute>();
 
         public IkeaTradfriGateway(IDriverContext driverContext) : base(driverContext)
         {

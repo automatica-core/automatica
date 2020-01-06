@@ -18,7 +18,7 @@ namespace P3.Driver.IkeaTradfri
 
         Task Connect();
         Task Disconnect();
-        Task RegisterChange(Action<TradfriDevice> changeAction, DeviceType deviceType, long id);
+        Task RegisterChange(Action<TradfriDevice> changeAction, long id);
         Task<TradfriDevice> GetDevice(long containerDeviceId);
     }
 }

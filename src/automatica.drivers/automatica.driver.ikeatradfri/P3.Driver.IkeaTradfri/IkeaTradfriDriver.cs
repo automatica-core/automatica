@@ -36,7 +36,7 @@ namespace P3.Driver.IkeaTradfri
             return Task.CompletedTask;
         }
 
-        public async Task RegisterChange(Action<TradfriDevice> changeAction, DeviceType deviceType, long id)
+        public async Task RegisterChange(Action<TradfriDevice> changeAction, long id)
         {
             var device = await _tradfri.DeviceController.GetTradfriDevice(id);
             _tradfri.DeviceController.ObserveDevice(device, changeAction); 

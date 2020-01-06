@@ -10,7 +10,7 @@ using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
-    public class IkeaTradfriRelayNode : IkeaTradfriDevice
+    public class IkeaTradfriRelayNode : IkeaTradfriAttribute
     {
         private bool _value;
 
@@ -80,7 +80,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             }
         }
 
-        protected override void Update(TradfriDevice device)
+        internal override void Update(TradfriDevice device)
         {
             if (DeviceType == DeviceType.ControlOutlet)
             {

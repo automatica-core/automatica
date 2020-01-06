@@ -15,6 +15,6 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         Task<bool> Start();
         Task<bool> Stop();
 
-        List<IkeaTradfriDevice> Devices { get; }
+        List<IkeaTradfriAttribute> Devices { get; }
     }
 }
