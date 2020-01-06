@@ -58,17 +58,9 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                         var lightNode = DriverContext.NodeTemplateFactory.CreateNodeInstance(IkeaTradfriFactory.LightGuid);
                         node.InverseThis2ParentNodeInstanceNavigation.Add(lightNode);
 
-                        var lighColorNode = DriverContext.NodeTemplateFactory.CreateNodeInstance(IkeaTradfriFactory.LightColorGuid);
-                        node.InverseThis2ParentNodeInstanceNavigation.Add(lighColorNode);
-
-                        var lightDimmerNode = DriverContext.NodeTemplateFactory.CreateNodeInstance(IkeaTradfriFactory.LightDimmerGuid);
-                        node.InverseThis2ParentNodeInstanceNavigation.Add(lightDimmerNode);
                         break;
                     case DeviceType.ControlOutlet:
                         node = DriverContext.NodeTemplateFactory.CreateNodeInstance(IkeaTradfriFactory.RelayContainerGuid);
-
-                        var stateNode = DriverContext.NodeTemplateFactory.CreateNodeInstance(IkeaTradfriFactory.RelayGuid);
-                        node.InverseThis2ParentNodeInstanceNavigation.Add(stateNode);
                         break;
                 }
 
