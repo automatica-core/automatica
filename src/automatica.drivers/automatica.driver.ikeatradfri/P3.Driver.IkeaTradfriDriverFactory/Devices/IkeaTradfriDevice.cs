@@ -41,17 +41,19 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                     }
 
                 }, DeviceType, Container.DeviceId);
+
+                var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
+                DriverContext.Logger.LogDebug($"{FullName}: {JsonConvert.SerializeObject(device)}");
+                Update(device);
+
+                await base.Start();
+
             }
             catch (Exception e)
             {
                 DriverContext.Logger.LogError(e, "Error register change handler...");
             }
 
-            var device = await Container.Gateway.Driver.GetDevice(Container.DeviceId);
-            DriverContext.Logger.LogDebug($"{FullName}: {JsonConvert.SerializeObject(device)}");
-            Update(device);
-
-            await base.Start();
             return true;
         }
 
