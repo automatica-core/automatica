@@ -24,10 +24,17 @@ namespace P3.Driver.SonosDriverFactory.Attributes
 
         private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            var currentMediaInfo = await Device.Controller.GetMediaInfoAsync();
-            _currentMediaUrl = currentMediaInfo.CurrentUri;
+            try
+            {
+                var currentMediaInfo = await Device.Controller.GetMediaInfoAsync();
+                _currentMediaUrl = currentMediaInfo.CurrentUri;
 
-            DriverContext.Logger.LogDebug($"Current media url is {_currentMediaUrl}");
+                DriverContext.Logger.LogDebug($"Current media url is {_currentMediaUrl}");
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, "Error read current media url...");
+            }
         }
 
         public override Task<bool> Start()
