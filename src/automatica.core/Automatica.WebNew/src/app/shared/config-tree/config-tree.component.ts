@@ -152,6 +152,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     } catch (error) {
       super.handleError(error);
     }
+    this.changeRef.detectChanges();
     this.appService.isLoading = false;
   }
 
@@ -163,6 +164,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     } catch (error) {
       super.handleError(error);
     }
+    this.changeRef.detectChanges();
     this.appService.isLoading = false;
   }
 
@@ -513,6 +515,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   async readNode(node: NodeInstance) {
     try {
       await this.configService.read(node);
+      this.changeRef.detectChanges();
     } catch (error) {
       super.handleError(error);
     }
