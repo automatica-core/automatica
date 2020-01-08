@@ -117,9 +117,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         });
       });
 
-      super.registerInterval(() => {
-        // this.changeRef.detectChanges();
-      }, 2000);
+      super.registerEvent(this.appService.isLoadingChanged, (isLoading) => {
+        this.changeRef.detectChanges();
+      });
 
     } catch (error) {
       super.handleError(error);
