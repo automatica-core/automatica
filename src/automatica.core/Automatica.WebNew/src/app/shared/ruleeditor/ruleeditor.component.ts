@@ -19,7 +19,7 @@ declare var draw2d: any;
 @Component({
   selector: "p3-ruleeditor",
   templateUrl: "./ruleeditor.component.html",
-  styleUrls: ["./ruleeditor.component.sass"],
+  styleUrls: ["./ruleeditor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {

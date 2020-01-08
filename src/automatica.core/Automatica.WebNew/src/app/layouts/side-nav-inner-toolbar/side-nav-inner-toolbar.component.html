@@ -2,8 +2,9 @@
     <dx-drawer class="drawer" [closeOnOutsideClick]="true" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
         [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
 
-        <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute" class="dx-swatch-additional"
-            *dxTemplate="let dataMenu of 'panel'" (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick()" [(menuOpened)]="menuOpened">
+        <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute"
+            class="dx-swatch-additional" *dxTemplate="let dataMenu of 'panel'"
+            (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick()" [(menuOpened)]="menuOpened">
             <dx-toolbar id="navigation-header">
                 <dxi-item *ngIf="minMenuSize !== 0" location="before" widget="dxButton" [options]="{
                             icon: 'menu',
@@ -21,16 +22,16 @@
             <app-header [menuToggleEnabled]="minMenuSize === 0" (menuToggle)="menuOpened = !menuOpened;">
             </app-header>
 
-            <dx-scroll-view class="scroll-view">
-                <div class="content">
-                    <ng-content></ng-content>
-                </div>
 
-                <div class="footer">
-                    <ng-content select="app-footer"></ng-content>
-                </div>
-            </dx-scroll-view>
-            <app-footer *ngIf="!isMobile"></app-footer>
+            <div class="content">
+                <ng-content></ng-content>
+            </div>
+
+            <div class="footer">
+                <ng-content select="app-footer"></ng-content>
+            </div>
+
+            <app-footer></app-footer>
         </div>
     </dx-drawer>
 </div>

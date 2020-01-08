@@ -1,7 +1,8 @@
 <div class="content-block">
     <div class="dx-card wide-card panel-height">
         <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)">
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false"
+            (onItemClick)="itemClick($event)">
         </dx-menu>
 
         <as-split direction="horizontal">
@@ -9,20 +10,25 @@
                 <p3-propertyeditor [item]="selectedNode" [roles]="roles"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="70">
-                <dx-data-grid #grid [dataSource]="groups" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-                    (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)" (onRowInserting)="onRowInserting($event)"
-                    (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translate }}" deleteRow="{{ 'COMMON.DELETE' | translate }}"
-                            cancelRowChanges="{{ 'COMMON.CANCEL' | translate }}"></dxo-texts>
-                    </dxo-editing>
-                    <dxo-selection mode="single"></dxo-selection>
+                <div style="padding-bottom: 100px;">
+                    <dx-data-grid #grid [dataSource]="groups" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
+                        (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
+                        (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
+                        (onInitialized)="onInitialized($event)">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
+                            <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translate }}"
+                                deleteRow="{{ 'COMMON.DELETE' | translate }}"
+                                cancelRowChanges="{{ 'COMMON.CANCEL' | translate }}"></dxo-texts>
+                        </dxo-editing>
+                        <dxo-selection mode="single"></dxo-selection>
 
-                    <dxi-column dataField="Name" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-                    <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+                        <dxi-column dataField="Name" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
+                        <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translate }}">
+                        </dxi-column>
 
-                </dx-data-grid>
+                    </dx-data-grid>
+                </div>
             </as-split-area>
         </as-split>
     </div>

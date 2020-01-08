@@ -1,61 +1,63 @@
-<dx-tree-list height="100%" #tree itemsExpr="Children" id="config" [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id"
-    parentIdExpr="ParentId" [showRowLines]="true" [columnAutoWidth]="true" [expandedRowKeys]="expandedRowKeys"
-    (onContextMenuPreparing)="onContextMenuPreparing($event)"
-    [showColumnLines]="false" [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)">
-    <dxo-selection mode="single"></dxo-selection>
-    <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>
-    <dxi-column dataField="Value" dataType="string" cellTemplate="valueTemplate"></dxi-column>
-    <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaConfigTree"></dxo-state-storing>
+<div class="config-tree">
+    <dx-tree-list height="100%" #tree itemsExpr="Children" id="config"
+        [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
+        [columnAutoWidth]="true" [expandedRowKeys]="expandedRowKeys"
+        (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false"
+        [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)">
+        <dxo-selection mode="single"></dxo-selection>
+        <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>
+        <dxi-column dataField="Value" dataType="string" cellTemplate="valueTemplate"></dxi-column>
+        <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaConfigTree"></dxo-state-storing>
 
-    <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
-        <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
-            <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
-                <fa-icon [icon]="['fas', 'exclamation']" *ngIf="!data.data.ValidationOk"></fa-icon>
+        <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
+            <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
+                <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
+                    <fa-icon [icon]="['fas', 'exclamation']" *ngIf="!data.data.ValidationOk"></fa-icon>
 
-                <span id="{{ data.data.Id }}">
-                    <ng-container [ngSwitch]="data.data.State">
-                        <ng-container *ngSwitchCase="NodeInstanceState.New">
-                            <fa-icon [icon]="['fas', 'file']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.Saved">
-                            <fa-icon [icon]="['fas', 'save']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.Loaded">
-                            <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.Initialized">
-                            <fa-icon [icon]="['fas', 'tint']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.InUse">
-                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.OutOfDatapoits">
-                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.UnknownError">
-                            <fa-icon [icon]="['fas', 'question-circle']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.Unloaded">
-                            <fa-icon [icon]="['fas', 'redo']"></fa-icon>
-                        </ng-container>
-                        <ng-container *ngSwitchCase="NodeInstanceState.Unknown">
-                            <fa-icon [icon]="['fas', 'question']"></fa-icon>
-                        </ng-container>
-                    </ng-container> {{data.value}}
-                </span>
+                    <span id="{{ data.data.Id }}">
+                        <ng-container [ngSwitch]="data.data.State">
+                            <ng-container *ngSwitchCase="NodeInstanceState.New">
+                                <fa-icon [icon]="['fas', 'file']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.Saved">
+                                <fa-icon [icon]="['fas', 'save']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.Loaded">
+                                <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.Initialized">
+                                <fa-icon [icon]="['fas', 'tint']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.InUse">
+                                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.OutOfDatapoits">
+                                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.UnknownError">
+                                <fa-icon [icon]="['fas', 'question-circle']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.Unloaded">
+                                <fa-icon [icon]="['fas', 'redo']"></fa-icon>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="NodeInstanceState.Unknown">
+                                <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                            </ng-container>
+                        </ng-container> {{data.value}}
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div *dxTemplate="let data of 'valueTemplate'" cellTemplate="valueTemplate">
-        <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
-            <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
-                <span id="{{ data.data.Id }}">{{data.value}}</span>
+        <div *dxTemplate="let data of 'valueTemplate'" cellTemplate="valueTemplate">
+            <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
+                <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
+                    <span id="{{ data.data.Id }}">{{data.value}}</span>
+                </div>
             </div>
         </div>
-    </div>
-</dx-tree-list>
-
+    </dx-tree-list>
+</div>
 <!-- <dx-load-panel #loadPanel *ngIf="showLoadingPanel" shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#main' }"
     [(visible)]="isLoading" [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel> -->

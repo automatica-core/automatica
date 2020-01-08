@@ -3,29 +3,36 @@
         <p3-config-menu *ngIf="ruleTemplates" #configMenu (onSave)="save($event)" (onAddItem)="addItem($event)"
             (onDelete)="delete($event)" [showRuleMenu]="true" (onReinitServer)="onReinit($event)"
             [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)" (onAddRulePage)="addRulePage($event)"
-            (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" [isLoading]="isLoading"></p3-config-menu>
+            (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" [isLoading]="isLoading">
+        </p3-config-menu>
 
         <as-split direction="horizontal">
             <as-split-area [size]="20">
-                <p3-propertyeditor #propertyEditor (validate)="validate($event)" (scan)="scan($event)" (fileUploaded)="fileUploaded($event)"
-                    [userGroups]="userGroups" [item]="selectedItem" [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
+                <p3-propertyeditor #propertyEditor (validate)="validate($event)" (scan)="scan($event)"
+                    (fileUploaded)="fileUploaded($event)" [userGroups]="userGroups" [item]="selectedItem"
+                    [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
                     (saveLearnedNodes)="saveLearnedNodes($event)" [isLoading]="isLoading"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="20">
-                <p3-config-tree #configTree (onNodeSelect)="nodeSelect($event)" [isLoading]="isLoading"></p3-config-tree>
+                <p3-config-tree #configTree (onNodeSelect)="nodeSelect($event)" [isLoading]="isLoading">
+                </p3-config-tree>
             </as-split-area>
             <as-split-area [size]="60">
-                <dx-tab-panel #tabPanel [dataSource]="pages" [(selectedIndex)]="selectedPageIndex" [loop]="false"
-                    [animationEnabled]="false" [swipeEnabled]="false" (onSelectionChanged)="onTabSelectionChanged($event)">
-                    <div *dxTemplate="let page of 'title'">
-                        <span>{{page.Name}}</span>
-                    </div>
-                    <div *dxTemplate="let page of 'item'">
-                        <p3-ruleeditor (selectedItemsChanged)="onSelectedItemsChanged($event)"
-                            [page]="page" id="{{page.ObjId}}" name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
-                    </div>
-                </dx-tab-panel>
+                <div class="logic-tab-panel">
+                    <dx-tab-panel #tabPanel height="100%" [dataSource]="pages" [(selectedIndex)]="selectedPageIndex" [loop]="false"
+                        [animationEnabled]="false" [swipeEnabled]="false"
+                        (onSelectionChanged)="onTabSelectionChanged($event)">
+                        <div *dxTemplate="let page of 'title'">
+                            <span>{{page.Name}}</span>
+                        </div>
+                        <div *dxTemplate="let page of 'item'">
+                            <p3-ruleeditor (selectedItemsChanged)="onSelectedItemsChanged($event)" [page]="page"
+                                id="{{page.ObjId}}" name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
+                        </div>
+                    </dx-tab-panel>
+                </div>
             </as-split-area>
+
         </as-split>
     </div>
 </div>
