@@ -34,7 +34,12 @@ namespace Automatica.Core.CI.CreateDatabase
                 File.Delete(Path.Combine(fi.DirectoryName, DatabaseConstants.DatabaseInitName));
             }
 
-            var hostBuilder = new HostBuilder().Build();
+            var hostBuilder = new HostBuilder().ConfigureServices((hostContext, services) =>
+                {
+                    var startup = new Startup(config);
+                    startup.ConfigureServices(services);
+                }
+            ).Build();
 
          
             string loadDirectory = "";

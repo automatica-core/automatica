@@ -3,11 +3,14 @@ using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Runtime;
 using Automatica.Core.Visu;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MQTTnet.Server;
 
 namespace Automatica.Core.CI.CreateDatabase
@@ -26,10 +29,18 @@ namespace Automatica.Core.CI.CreateDatabase
         {
             services.AddDbContext<AutomaticaContext>();
 
+            services.AddSingleton<IConfiguration>(Configuration);
+
             services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ILearnMode, EmptyLearnMode>();
             services.AddSingleton<IMqttServer, EmptyMqttServer>();
+
+            services.AddAutomaticaCoreService(Configuration, false);
+
+            services.AddSingleton<ILogger>(NullLogger.Instance);
+
+            services.AddSignalRCore();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
