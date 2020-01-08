@@ -95,6 +95,8 @@ namespace P3.Driver.HomeKit.Bonjour
                                 || (a.AddressFamily == AddressFamily.InterNetworkV6));
                 foreach (var address in addreses)
                 {
+                    _logger.LogDebug($"IPAddress {address}");
+
                     var localEndpoint = new IPEndPoint(address, MulticastPort);
                     var sender = new UdpClient(address.AddressFamily);
                     try
