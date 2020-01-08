@@ -181,7 +181,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, "Could not load assembly");
+                    logger.LogError(e, $"Could not load assembly {file}");
                     return list;
                 }
                 finally

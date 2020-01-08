@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Areas;
@@ -17,8 +16,6 @@ using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
-using Org.BouncyCastle.Crypto.Tls;
-using Docker = Automatica.Core.Runtime.BoardTypes.Docker.Docker;
 
 namespace Automatica.Core.Runtime.Database
 {
