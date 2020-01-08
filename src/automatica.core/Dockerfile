@@ -59,4 +59,4 @@ EXPOSE 5001/tcp
 ENV AUTOMATICA_PLUGIN_DIR=/app/plugins
 
 # Build runtime image
-ENTRYPOINT ["/app/automatica/Automatica.Core"]
+ENTRYPOINT ["/app/automatica/Automatica.Core.Watchdog"]
