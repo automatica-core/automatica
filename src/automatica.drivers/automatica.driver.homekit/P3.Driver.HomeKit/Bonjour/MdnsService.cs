@@ -95,7 +95,7 @@ namespace P3.Driver.HomeKit.Bonjour
                                 || (a.AddressFamily == AddressFamily.InterNetworkV6));
                 foreach (var address in addreses)
                 {
-                    _logger.LogDebug($"IPAddress {address}");
+                    _logger.LogDebug($"IPAddress {address} on address familiy {address.AddressFamily}");
 
                     var localEndpoint = new IPEndPoint(address, MulticastPort);
                     var sender = new UdpClient(address.AddressFamily);
@@ -141,6 +141,7 @@ namespace P3.Driver.HomeKit.Bonjour
                     }
                     catch (Exception e)
                     {
+                        _logger.LogError(e, "Error binding multicast");
                         sender.Dispose();
                     }
                 }
