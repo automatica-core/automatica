@@ -228,7 +228,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
         private void Listen(Socket socket)
         {
-            _logger.LogDebug($"Listen on socket {socket.LocalEndPoint}");
+            _logger.LogDebug($"Listen on socket {socket.LocalEndPoint} {socket.AddressFamily}");
 
             var ipAddress = NetworkHelper.GetActiveIp();
             var ip6Address = NetworkHelper.GetActiveIp6();
