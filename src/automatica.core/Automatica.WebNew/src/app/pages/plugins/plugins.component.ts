@@ -219,6 +219,13 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     items: undefined,
     command: (event) => { this.updateAll(); }
   }
+  menuInstall: CustomMenuItem = {
+    id: "save",
+    label: "Install all",
+    icon: "fa-download",
+    items: undefined,
+    command: (event) => { this.installAll(); }
+  }
   menuRestart: CustomMenuItem = {
     id: "restart",
     label: "Restart",
@@ -234,9 +241,11 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     super(notify, translationService);
 
     this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
+    this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
     this.menuRestart.label = translationService.translate("COMMON.RESTART");
 
     this.menuItems.push(this.menuUpdate);
+    this.menuItems.push(this.menuInstall);
     this.menuItems.push(this.menuRestart);
 
     appService.setAppTitle("PLUGINS.NAME");
@@ -294,12 +303,23 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     alert(this.translate.translate("PLUGINS.RESTART_AFTER_INSTALL"));
 
     const items = this.plugins.filter(a => a.cloudIsNewer && a.isInstalled);
+    const data = this.preparePluginList(items);
+    await this.updateHubService.updateAllPlugins(data);
+  }
 
+  async installAll() {
+    const items = this.plugins.filter(a => !a.isInstalled);
+    const data = this.preparePluginList(items);
+    await this.updateHubService.installAllPlugins(data);
+
+  }
+
+  preparePluginList(plugins: PluginStateInstance[]) {
     const data = [];
-    for (const x of items) {
+    for (const x of plugins) {
       data.push(x.instance.cloudPlugin);
     }
-    await this.updateHubService.updateAllPlugins(data);
+    return data;
   }
 
   async restart() {

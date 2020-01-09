@@ -92,7 +92,6 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     DxScrollViewModule,
     MobileModule,
     StartingOverlayModule,
-
     DeviceDetectorModule.forRoot()
   ],
   providers: [

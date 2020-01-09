@@ -65,21 +65,30 @@ namespace Automatica.Push.Helper
         private async void WebClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             var automaticaPluginUpdateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
-            if (e.Error == null && !e.Cancelled)
+            try
             {
-                await _updateHub.Clients.All.SendAsync("PluginFinished", new object[] { _plugin.PluginGuid });
-                if (_install)
+                if (e.Error == null && !e.Cancelled)
                 {
-                    await _api.InstallPlugin(_plugin, automaticaPluginUpdateFile);
-                    await _pluginLoader.LoadPlugin(_plugin);
-                }
-                else
-                {
-                    if (_restartOnUpdate)
+                    await _updateHub.Clients.All.SendAsync("PluginFinished", new object[] {_plugin.PluginGuid});
+                    if (_install)
                     {
-                        _coreServer.Restart();
+                        if(await _api.InstallPlugin(_plugin, automaticaPluginUpdateFile))
+                        {
+                            await _pluginLoader.LoadPlugin(_plugin);
+                        }
+                    }
+                    else
+                    {
+                        if (_restartOnUpdate)
+                        {
+                            _coreServer.Restart();
+                        }
                     }
                 }
+            }
+            finally
+            {
+                File.Delete(automaticaPluginUpdateFile);
             }
         }
 

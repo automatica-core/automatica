@@ -289,11 +289,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = false;
   }
 
-  async onReinit() {
-    await this.configService.reInitServer();
-  }
-
-
   itemClick($event) {
     const item: CustomMenuItem = $event.itemData;
 

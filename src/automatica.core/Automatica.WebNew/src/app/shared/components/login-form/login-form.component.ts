@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from "@angular/core";
 
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
+import { DxValidationGroupComponent } from "devextreme-angular";
 
 
 @Component({
@@ -13,19 +14,30 @@ import { AppService } from "src/app/services/app.service";
 export class LoginFormComponent implements OnInit {
     login = "";
     password = "";
-    isLoading = true;
 
-    constructor(private loginService: LoginService, private router: Router, private appService: AppService) {
+    @ViewChild("validationGroup", { static: true })
+    validationGroup: DxValidationGroupComponent;
+
+    constructor(private loginService: LoginService,
+        private router: Router,
+        private appService: AppService,
+        private changeRef: ChangeDetectorRef) {
         localStorage.removeItem("jwt");
     }
 
     ngOnInit() {
-        this.isLoading = false;
+        this.appService.isLoading = true;
+        this.changeRef.detectChanges();
+        this.appService.isLoading = false;
+    }
+
+    async onEnterPressed($event) {
+        await this.onLoginClick($event);
     }
 
     async onLoginClick(args) {
-        this.isLoading = true;
-        if (!args.validationGroup.validate().isValid) {
+        this.appService.isLoading = true;
+        if (!this.validationGroup.instance.validate().isValid) {
             return;
         }
 
@@ -40,7 +52,7 @@ export class LoginFormComponent implements OnInit {
 
         }
 
-        this.isLoading = false;
+        this.appService.isLoading = false;
     }
 }
 

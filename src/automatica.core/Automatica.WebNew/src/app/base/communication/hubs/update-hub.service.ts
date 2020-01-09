@@ -46,6 +46,10 @@ export class UpdateHubService extends BaseHub {
         return super.callHubProxyWithParam("UpdateAllPlugin", plugin);
     }
 
+    public installAllPlugins(plugin: any[]) {
+        return super.callHubProxyWithParam("InstallAllPlugin", plugin);
+    }
+
     public installPlugin(plugin: any) {
         return super.callHubProxyWithParam("startPluginInstall", plugin);
     }

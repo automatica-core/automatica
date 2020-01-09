@@ -471,6 +471,7 @@
         "ACTION": "Aktionen",
         "PROGRESS": "Status",
         "UPDATE_ALL": "Alle Updaten",
+        "INSTALL_ALL": "Alle Installieren",
         "RESTART_AFTER_INSTALL": "Nachdem alle Erweiterungen heruntergeladen sind, muss ein Neustart derzeit manuell ausgelöst werden!"
     },
     "VALIDATION": {

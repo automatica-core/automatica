@@ -44,7 +44,6 @@ export class ConfigMenuComponent implements OnInit {
   @Output() onDelete = new EventEmitter<any>();
   @Output() onAddRule = new EventEmitter<RuleTemplate>();
   @Output() onAddRulePage = new EventEmitter<void>();
-  @Output() onReinitServer = new EventEmitter<void>();
   @Output() onImportData = new EventEmitter<NodeInstance>();
 
   @Input()
@@ -56,7 +55,7 @@ export class ConfigMenuComponent implements OnInit {
     return this._isLoading;
   }
   public set isLoading(v: boolean) {
-    this._isLoading  = v;
+    this._isLoading = v;
     this.changeRef.detectChanges();
   }
 
@@ -113,14 +112,6 @@ export class ConfigMenuComponent implements OnInit {
     }]
   };
 
-  reinit: CustomMenuItem = {
-    id: "reInit",
-    label: "ReInit",
-    icon: "fa-reload",
-    disabled: false,
-    command: (event) => { this.reinitServer(); }
-  };
-
   export: CustomMenuItem = {
     id: "export",
     label: "Export",
@@ -147,10 +138,8 @@ export class ConfigMenuComponent implements OnInit {
     // this.menuItems.push(this.menuItemNew);
     // this.menuItems.push(this.menuDelete);
     this.menuItems.push(this.menuSave);
-    this.menuItems.push(this.reinit);
 
     this.menuItemNew.label = translate.translate("COMMON.NEW");
-    this.reinit.label = translate.translate("COMMON.REINIT");
     this.export.label = translate.translate("COMMON.EXPORT");
     this.import.label = translate.translate("COMMON.IMPORT");
     this.menuSave.label = translate.translate("COMMON.SAVE");
@@ -165,10 +154,6 @@ export class ConfigMenuComponent implements OnInit {
 
   save() {
     this.onSave.emit();
-  }
-
-  reinitServer() {
-    this.onReinitServer.emit();
   }
 
   delete() {

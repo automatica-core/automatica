@@ -5,16 +5,18 @@
     <dx-scroll-view height="100vh">
         <dx-tree-view expandEvent="click" [items]="items" (onInitialized)="onMenuInitialized($event)"
             (onItemClick)="onItemClick($event)" (onContentReady)="updateSelection($event)"
-            (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single" keyExpr="path"  [style.padding-bottom]="'120px'">
+            (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single" keyExpr="path"
+            [style.padding-bottom]="'120px'">
             <div *dxTemplate="let data of 'item'">
 
                 <ng-container *ngIf="data.seperator">
-                    {{data.text | translate}}
+                    <span title="{{data.text | translate}}">{{data.text | translate}}</span>
                 </ng-container>
 
                 <ng-container *ngIf="!data.seperator">
-                    <fa-icon [icon]="['fas', data.icon]"></fa-icon>
-                    <span class="nav-padding">{{data.text | translate}}</span>
+                    <fa-icon title="{{data.text | translate}}" [fixedWidth]="true" [icon]="['fas', data.icon]">
+                    </fa-icon>
+                    <span title="{{data.text | translate}}" class="nav-padding">{{data.text | translate}}</span>
                 </ng-container>
             </div>
         </dx-tree-view>

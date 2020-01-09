@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Internals.Plugins;
+using Automatica.Push.Concurrency;
 
 namespace Automatica.Push.Hubs
 {
@@ -20,38 +21,56 @@ namespace Automatica.Push.Hubs
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
         private readonly IPluginLoader _loader;
+        private readonly IHubSemaphore _semaphore;
 
-        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader)
+        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader, IHubSemaphoreFactory semaphoreFactory)
         {
             _api = api;
             _updateHub = updateHub;
             _coreServer = coreServer;
             _loader = loader;
+
+            
+            _semaphore = semaphoreFactory.GetSemaphore(nameof(UpdateHub));
         }
         public Task StartUpdateDownload(ServerVersion version)
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                var previousState = 0;
-                _api.DownloadUpdateProgressChanged += (sender, e) =>
+                if (!await _semaphore.WaitAsync(10))
                 {
-                    if (previousState != e.ProgressPercentage)
+                    return;
+                }
+
+                try
+                {
+                    var previousState = 0;
+                    _api.DownloadUpdateProgressChanged += (sender, e) =>
                     {
-                        previousState = e.ProgressPercentage;
-                        _updateHub.Clients.All.SendAsync("UpdateDownloadProgressChanged", new object[] { e.BytesReceived, e.TotalBytesToReceive });
-                        SystemLogger.Instance.LogInformation($"Downloading update {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
-                    }
-                    
-                };
-                _api.DownloadUpdateFinished += (sender, e) =>
+                        if (previousState != e.ProgressPercentage)
+                        {
+                            previousState = e.ProgressPercentage;
+                            _updateHub.Clients.All.SendAsync("UpdateDownloadProgressChanged",
+                                new object[] {e.BytesReceived, e.TotalBytesToReceive});
+                            SystemLogger.Instance.LogInformation(
+                                $"Downloading update {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
+                        }
+
+                    };
+                    _api.DownloadUpdateFinished += (sender, e) =>
+                    {
+                        _updateHub.Clients.All.SendAsync("UpdateFinished");
+                    };
+                    _api.DownloadUpdateFailed += (sender, e) =>
+                    {
+                        _updateHub.Clients.All.SendAsync("UpdateFailed", new object[] {e.Error});
+                    };
+                    await _api.DownloadUpdate(version);
+                }
+                finally
                 {
-                    _updateHub.Clients.All.SendAsync("UpdateFinished");
-                };
-                _api.DownloadUpdateFailed += (sender, e) =>
-                {
-                    _updateHub.Clients.All.SendAsync("UpdateFailed", new object[] { e.Error });
-                };
-                _api.DownloadUpdate(version);
+                    _semaphore.Release();
+                }
             });
             return Task.CompletedTask;
         }
@@ -60,9 +79,22 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-            var pluginDownloader = new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader);
+                if (!await _semaphore.WaitAsync(10))
+                {
+                    return;
+                }
 
-                await pluginDownloader.Download();
+                try
+                {
+                    var pluginDownloader =
+                        new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader);
+
+                    await pluginDownloader.Download();
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             });
             return Task.CompletedTask;
         }
@@ -78,13 +110,52 @@ namespace Automatica.Push.Hubs
 
         public Task UpdateAllPlugin(IList<Plugin> plugins)
         {
-            foreach (var plug in plugins) {
-                Task.Run(async () =>
-                {
-                    var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer, _loader,  false);
 
-                    await pluginDownloader.Download();
-                });
+            if (_semaphore.Wait(100))
+            {
+                try
+                {
+                    foreach (var plug in plugins)
+                    {
+                        Task.Run(async () =>
+                        {
+                            var pluginDownloader =
+                                new PluginDownloader(plug, false, _api, _updateHub, _coreServer, _loader, false);
+
+                            await pluginDownloader.Download();
+                        });
+                    }
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task InstallAllPlugin(IList<Plugin> plugins)
+        {
+            if (_semaphore.Wait(100))
+            {
+                try
+                {
+                    foreach (var plug in plugins)
+                    {
+                        Task.Run(async () =>
+                        {
+                            var pluginDownloader = new PluginDownloader(plug, true, _api, _updateHub, _coreServer,
+                                _loader, false);
+
+                            await pluginDownloader.Download();
+                        });
+                    }
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
 
             return Task.CompletedTask;

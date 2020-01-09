@@ -22,7 +22,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
         public static Task<IList<DriverFactory>> GetDriverFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)
         {
             var fileInfo = new FileInfo(path);
-            string dir = fileInfo.DirectoryName;
+            string dir = fileInfo.FullName;
             if (fileInfo.Attributes == FileAttributes.Directory)
             {
                 dir = path;

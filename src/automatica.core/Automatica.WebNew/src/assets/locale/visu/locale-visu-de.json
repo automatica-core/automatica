@@ -74,6 +74,9 @@
             },
             "TEXT": {
                 "NAME": "Text"
+            },
+            "VALUE": {
+                "NAME": "Value"
             }
         },
         "APPEARANCE": {

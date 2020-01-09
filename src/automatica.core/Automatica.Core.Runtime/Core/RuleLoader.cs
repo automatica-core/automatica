@@ -14,7 +14,7 @@ namespace Automatica.Core.Runtime.Core
     {
         public static Task<IList<RuleFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
         {
-            var dir = Path.Combine(ServerInfo.GetBasePath(), ServerInfo.DriversDirectory, plugin.ComponentName);
+            var dir = Path.Combine(ServerInfo.GetBasePath(), ServerInfo.LogicsDirectory, plugin.ComponentName);
 
             return Loader.Load<RuleFactory>(dir, "*.dll", logger, config, false);
         }
@@ -22,7 +22,7 @@ namespace Automatica.Core.Runtime.Core
         public static Task<IList<RuleFactory>> GetRuleFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)
         {
             var fileInfo = new FileInfo(path);
-            string dir = fileInfo.DirectoryName;
+            string dir = fileInfo.FullName;
             if (fileInfo.Attributes == FileAttributes.Directory)
             {
                 dir = path;

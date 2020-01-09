@@ -10,6 +10,7 @@ import { HeaderModule } from "src/app/shared/components/header/header.component"
 import { FooterModule } from "src/app/shared/components/footer/footer.component";
 import { Subscription } from "rxjs";
 import { DeviceService } from "src/app/services/device/device.service";
+import { DxTooltipModule } from "devextreme-angular";
 
 @Component({
     selector: "app-side-nav-inner-toolbar",
@@ -142,7 +143,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
 }
 
 @NgModule({
-    imports: [SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, FooterModule],
+    imports: [SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, FooterModule, DxTooltipModule],
     exports: [SideNavInnerToolbarComponent],
     declarations: [SideNavInnerToolbarComponent]
 })

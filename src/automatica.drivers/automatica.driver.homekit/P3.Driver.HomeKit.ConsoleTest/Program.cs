@@ -14,6 +14,8 @@ namespace P3.Driver.HomeKit.ConsoleTest
         {
             Console.WriteLine("Hello World!");
 
+
+            
             HomeKitServer.Init();
 
             var logger = new ConsoleLogger("mylogger", (s, level) => true, false);

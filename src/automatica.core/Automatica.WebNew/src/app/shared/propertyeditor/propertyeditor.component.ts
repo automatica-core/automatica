@@ -25,7 +25,7 @@ import { Slave } from "src/app/base/model/slaves/slave";
 import { SlavesService } from "src/app/services/slaves.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 
-function sortByOrder(a: PropertyInstance, b: PropertyInstance) {
+function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
     return -1;
   }
@@ -33,21 +33,17 @@ function sortByOrder(a: PropertyInstance, b: PropertyInstance) {
     return 1;
   }
 
-  return 0;
-
-}
-
-function sortByGroupOrder(a: PropertyInstance, b: PropertyInstance) {
-  if (a.PropertyTemplate.GroupOrder < b.PropertyTemplate.GroupOrder) {
+  if (a.Name < b.Name) {
     return -1;
   }
-  if (a.PropertyTemplate.GroupOrder > b.PropertyTemplate.GroupOrder) {
+  if (a.Name > b.Name) {
     return 1;
   }
 
   return 0;
 
 }
+
 
 export class LearnNodeInstance {
   nodeTemplateInstance: LearnModeNodeTemplate;
@@ -164,7 +160,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this._item = value;
 
     if (this.item && this.item.Properties) {
-      this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortByGroupOrder).sort(sortByOrder);
+      this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortProperties);
     }
     if (!value) {
       this._properties = [];

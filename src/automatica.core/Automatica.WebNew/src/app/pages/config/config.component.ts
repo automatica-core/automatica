@@ -99,10 +99,6 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     this.selectedItem = event;
   }
 
-  async onReinit($event) {
-    await this.configService.reInitServer();
-  }
-
   scan(nodeInstance: NodeInstance) {
     this.configTree.scan(nodeInstance);
   }

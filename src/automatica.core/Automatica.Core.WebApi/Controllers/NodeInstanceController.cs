@@ -9,6 +9,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Core;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,12 +51,14 @@ namespace Automatica.Core.WebApi.Controllers
     {
         private readonly INotifyDriver _notifyDriver;
         private readonly INodeInstanceCache _nodeInstanceCache;
+        private readonly ICoreServer _server;
 
-        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache)
+        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer server)
             : base(db)
         {
             _notifyDriver = notifyDriver;
             _nodeInstanceCache = nodeInstanceCache;
+            _server = server;
         }
 
         [HttpGet]
@@ -231,6 +234,11 @@ namespace Automatica.Core.WebApi.Controllers
             }
 
             SystemLogger.Instance.LogDebug($"Begin NodeInstance save...done");
+
+
+            SystemLogger.Instance.LogDebug($"Begin NodeInstance re-init...");
+            await _server.ReInit();
+            SystemLogger.Instance.LogDebug($"Begin NodeInstance re-init...done");
             return Get();
         }
 
@@ -257,7 +265,14 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IList<NodeInstance>> Import([FromBody] ImportData instance)
         {
-            return await _notifyDriver.Import(instance.Node, instance.FileName);
+            var data = await _notifyDriver.Import(instance.Node, instance.FileName);
+
+            if (System.IO.File.Exists(instance.FileName))
+            {
+                System.IO.File.Delete(instance.FileName);
+            }
+
+            return data;
         }
 
 

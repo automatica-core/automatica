@@ -299,8 +299,10 @@
     <div *dxTemplate="let data of 'content'">
         <dx-button [disabled]="!selectedNodeInstance" text="{{ 'COMMON.SELECT' | translate:lang }}"
             (click)="useSelectedNode($event)"></dx-button>
-        <p3-config-tree style="display: block; height: 100%" [showLoadingPanel]="true" #configTree
-            (onNodeSelect)="nodeSelect($event)"></p3-config-tree>
+        <dx-scroll-view>
+            <p3-config-tree style="display: block; height: 100%" [showLoadingPanel]="true" #configTree
+                (onNodeSelect)="nodeSelect($event)"></p3-config-tree>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
@@ -310,7 +312,10 @@
     <div *dxTemplate="let data of 'content'">
         <dx-button [disabled]="!selectedVisuPage" text="{{ 'COMMON.SELECT' | translate:lang }}"
             (click)="useSelectedVisuPage($event)"></dx-button>
-        <visu-page-list *ngIf="visuPageSelectorVisible" (onItemSelected)="onVisuPageSelected($event)"></visu-page-list>
+        <dx-scroll-view>
+            <visu-page-list *ngIf="visuPageSelectorVisible" (onItemSelected)="onVisuPageSelected($event)">
+            </visu-page-list>
+        </dx-scroll-view>
     </div>
 </dx-popup>
 
@@ -319,34 +324,36 @@
     (onHiding)="onLearnModeClosing($event)">
     <div *dxTemplate="let data of 'content'">
         <dx-button text="{{ 'COMMON.ADD' | translate:lang }}" (click)="saveLearnNodes($event)"></dx-button>
-        <dx-data-grid keyExpr="key" [dataSource]="learnNodeInstance">
+        <dx-scroll-view>
+            <dx-data-grid keyExpr="key" [dataSource]="learnNodeInstance">
 
-            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-            <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                <dxo-paging [enabled]="false"></dxo-paging>
 
-            <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translate:lang }}">
-                <dxi-validation-rule type="required"></dxi-validation-rule>
-            </dxi-column>
-            <dxi-column dataField="description" caption="{{ 'COMMON.DESCRIPTION' | translate:lang }}"></dxi-column>
-            <dxi-column [showEditorAlways]="true" dataField="nodeTemplate"
-                caption="{{ 'COMMON.TEMPLATE' | translate:lang }}" editCellTemplate="nodeTemplateEditCell">
-                <dxi-validation-rule type="required"></dxi-validation-rule>
-            </dxi-column>
+                <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translate:lang }}">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="description" caption="{{ 'COMMON.DESCRIPTION' | translate:lang }}"></dxi-column>
+                <dxi-column [showEditorAlways]="true" dataField="nodeTemplate"
+                    caption="{{ 'COMMON.TEMPLATE' | translate:lang }}" editCellTemplate="nodeTemplateEditCell">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
 
-            <div *dxTemplate="let data of 'nodeTemplateEditCell'">
+                <div *dxTemplate="let data of 'nodeTemplateEditCell'">
 
-                <dx-drop-down-box [value]="data.data.nodeTemplate" valueExpr="ObjId" displayExpr="DisplayName"
-                    placeholder="Select a value..." [dataSource]="data.data.nodeTemplates">
-                    <dxo-drop-down-options height="300px"></dxo-drop-down-options>
-                    <div *dxTemplate="let contet of 'content'">
-                        <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain" keyExpr="Id"
-                            parentIdExpr="ParentId" selectionMode="single" displayExpr="DisplayName"
-                            [selectByClick]="true" (onItemClick)="nodeTemplateSelectItem($event, data.data)">
+                    <dx-drop-down-box [value]="data.data.nodeTemplate" valueExpr="ObjId" displayExpr="DisplayName"
+                        placeholder="Select a value..." [dataSource]="data.data.nodeTemplates">
+                        <dxo-drop-down-options height="300px"></dxo-drop-down-options>
+                        <div *dxTemplate="let contet of 'content'">
+                            <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain" keyExpr="Id"
+                                parentIdExpr="ParentId" selectionMode="single" displayExpr="DisplayName"
+                                [selectByClick]="true" (onItemClick)="nodeTemplateSelectItem($event, data.data)">
 
-                        </dx-tree-view>
-                    </div>
-                </dx-drop-down-box>
-            </div>
-        </dx-data-grid>
+                            </dx-tree-view>
+                        </div>
+                    </dx-drop-down-box>
+                </div>
+            </dx-data-grid>
+        </dx-scroll-view>
     </div>
 </dx-popup>

@@ -39,15 +39,15 @@ export const navigation = [
     }, {
         text: "COMMON.SYSTEM",
         path: "system",
-        icon: "folder"
+        icon: "code-branch"
     }, {
         text: "COMMON.PLUGINS",
         path: "plugins",
-        icon: "folder"
+        icon: "plug"
     }, {
         text: "COMMON.SLAVES",
         path: "slaves",
-        icon: "folder"
+        icon: "satellite-dish"
     }];
 
     /*{

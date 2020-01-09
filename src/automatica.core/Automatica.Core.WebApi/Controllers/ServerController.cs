@@ -1,9 +1,6 @@
 ﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Runtime.Core;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Automatica.Core.Model.Models.User;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -29,15 +26,6 @@ namespace Automatica.Core.WebApi.Controllers
             var statusObj = new ServerStateObject {Status = _coreServer.RunState};
 
             return statusObj;
-        }
-
-        [HttpPost]
-        [Authorize(Policy = Role.AdminRole)]
-        public async Task<bool> Reload()
-        {
-            await _coreServer.Reinit();
-
-            return true;
         }
     }
 }

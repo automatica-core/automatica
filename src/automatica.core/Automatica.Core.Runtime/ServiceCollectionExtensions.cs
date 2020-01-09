@@ -26,6 +26,8 @@ using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Visu;
+using Automatica.Push;
+using Automatica.Push.Concurrency;
 using Automatica.Push.Hubs;
 using Automatica.Push.LearnMode;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +54,7 @@ namespace Automatica.Core.Runtime
             services.AddSingleton<ILicenseContext, AllowAllLicenseContext>();
             services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();
+            services.AddAutomaticaPushServices(configuration, isElectronActive);
 
             if (!isElectronActive)
             {
@@ -100,6 +103,7 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
 
                 services.AddSingleton<DatabaseTrendingValueStore, DatabaseTrendingValueStore>();
+
             }
 
 

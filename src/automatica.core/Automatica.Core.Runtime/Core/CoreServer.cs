@@ -624,7 +624,7 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        public async Task Reinit()
+        public async Task ReInit()
         {
             await _driverNodesStore.ReInitialize();
 

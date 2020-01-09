@@ -7,7 +7,7 @@
     <ProjectGuid>4AC5C115-5709-475D-97CB-2ECFC1F3636D</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\dev\p3\automatica\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\win-x64\Drivers\</OutputPath>
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp3.0\Drivers\KNX\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />

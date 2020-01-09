@@ -236,22 +236,41 @@ namespace Automatica.Core.Internals.Cloud
         {
             DownloadUpdateProgressChanged?.Invoke(this, e);
         }
-        
 
-        public async Task<bool> InstallPlugin(Plugin plugin, string fileName)
+
+        public Task<bool> InstallPlugin(Plugin plugin, string fileName)
         {
-            return await Task.Run(() =>
-            {
-                var assemblyInfo = new FileInfo(Assembly.GetEntryAssembly().Location);
-                var directory = Path.Combine(assemblyInfo.DirectoryName, plugin.PluginType == PluginType.Driver ? ServerInfo.DriversDirectory : ServerInfo.LogicsDirectory);
+            var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
-                if (!Directory.Exists(Path.Combine(directory, plugin.ComponentName)))
+            try
+            {
+                Directory.CreateDirectory(tmpDirectory);
+
+                var installDir = Path.Combine(ServerInfo.PluginDirectory,
+                    plugin.PluginType == PluginType.Driver
+                        ? ServerInfo.DriversDirectory
+                        : ServerInfo.LogicsDirectory, plugin.ComponentName);
+
+                if (Directory.Exists(installDir))
                 {
-                    Common.Update.Plugin.InstallPlugin(fileName, directory);
-                    return true;
+                    Directory.Delete(installDir);
                 }
-                return false;
-            });
+
+
+                Common.Update.Plugin.InstallPlugin(fileName, tmpDirectory);
+                Directory.Move(Path.Combine(tmpDirectory, plugin.ComponentName), installDir);
+                return Task.FromResult(true);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not install plugin...");
+            }
+            finally
+            {
+                Directory.Delete(tmpDirectory);
+            }
+
+            return Task.FromResult(false);
         }
 
 
