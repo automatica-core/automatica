@@ -57,33 +57,48 @@ namespace P3.Driver.HomeKit.Bonjour
             {
                 _cancel = new CancellationTokenSource();
                 var ipAddress = NetworkHelper.GetActiveIp();
-
-
+              
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
                 {
                     EnableBroadcast = true,
                     ExclusiveAddressUse = false,
                     MulticastLoopback = true
                 };
-                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
-                    new MulticastOption(MulticastAddressIp4, IPAddress.Parse(ipAddress)));
-                _socket.Bind(new IPEndPoint(IPAddress.Any, MulticastPort));
-                _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastLoopback, true);
+                try
+                {
+                   
+                    _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                    _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership,
+                        new MulticastOption(MulticastAddressIp4, IPAddress.Parse(ipAddress)));
+                    _socket.Bind(new IPEndPoint(IPAddress.Any, MulticastPort));
+                    _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastLoopback, true);
 
-                _logger.LogDebug($"Create IPv4 Socket for multicast on {MulticastAddressIp4}");
-
+                    _logger.LogDebug($"Create IPv4 Socket for multicast on {MulticastAddressIp4}");
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error binding multicast IPv4 socket...");
+                    _socket = null;
+                }
                 _socket6 = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp)
                 {
                     EnableBroadcast = true,
                     ExclusiveAddressUse = false
                 };
-                _socket6.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _socket6.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.AddMembership,
-                    new IPv6MulticastOption(MulticastAddressIp6));
-                _socket6.Bind(new IPEndPoint(IPAddress.IPv6Any, MulticastPort));
-              //  _socket6.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.MulticastLoopback, true);
-
+                try
+                {
+                  
+                    _socket6.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                    _socket6.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.AddMembership,
+                        new IPv6MulticastOption(MulticastAddressIp6));
+                    _socket6.Bind(new IPEndPoint(IPAddress.IPv6Any, MulticastPort));
+                    //  _socket6.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.MulticastLoopback, true);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error binding multicast IPv6 socket...");
+                    _socket6 = null;
+                }
 
                 _logger.LogDebug($"Create IPv4 Socket for multicast on {MulticastAddressIp6}");
 
@@ -146,9 +161,15 @@ namespace P3.Driver.HomeKit.Bonjour
                     }
                 }
 
+                if (_socket != null)
+                {
+                    Task.Run(() => Listen(_socket), _cancel.Token);
+                }
 
-                Task.Run(() => Listen(_socket), _cancel.Token);
-                Task.Run(() => Listen(_socket6), _cancel.Token);
+                if (_socket6 != null)
+                {
+                    Task.Run(() => Listen(_socket6), _cancel.Token);
+                }
 
             }
             catch (Exception exp)
@@ -207,6 +228,8 @@ namespace P3.Driver.HomeKit.Bonjour
 
         private void Listen(Socket socket)
         {
+            _logger.LogDebug($"Listen on socket {socket.LocalEndPoint}");
+
             var ipAddress = NetworkHelper.GetActiveIp();
             var ip6Address = NetworkHelper.GetActiveIp6();
 
