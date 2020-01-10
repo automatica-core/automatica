@@ -51,7 +51,7 @@ namespace Automatica.Push.Helper
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine($"Could not download file {e}");
+                    SystemLogger.Instance.LogError(e, $"Could not download file for {_plugin.ComponentName}");
                     File.Delete(automaticaPluginUpdateFile);
                 }
                 finally
@@ -88,7 +88,11 @@ namespace Automatica.Push.Helper
             }
             finally
             {
-                File.Delete(automaticaPluginUpdateFile);
+                if (_install && File.Exists(automaticaPluginUpdateFile))
+                {
+                    File.Delete(automaticaPluginUpdateFile);
+                    SystemLogger.Instance.LogDebug($"Remove update file for {_plugin.ComponentName}: {automaticaPluginUpdateFile}");
+                }
             }
         }
 
@@ -98,7 +102,7 @@ namespace Automatica.Push.Helper
             {
                 _previousState = e.ProgressPercentage;
                 await _updateHub.Clients.All.SendAsync("PluginDownloadProgressChanged", new object[] { _plugin.PluginGuid, e.BytesReceived, e.TotalBytesToReceive });
-                SystemLogger.Instance.LogInformation($"Downloading plugin {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
+                SystemLogger.Instance.LogInformation($"Downloading plugin {_plugin.ComponentName} {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
             }
         }
     }
