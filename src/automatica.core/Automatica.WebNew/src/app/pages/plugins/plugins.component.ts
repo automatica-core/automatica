@@ -226,12 +226,12 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     items: undefined,
     command: (event) => { this.installAll(); }
   }
-  menuRestart: CustomMenuItem = {
+  menuInstallUpdate: CustomMenuItem = {
     id: "restart",
-    label: "Restart",
+    label: "Install update all",
     icon: "fa-download",
     items: undefined,
-    command: (event) => { this.restart(); }
+    command: (event) => { this.installUpdateAll(); }
   }
 
   plugins: PluginStateInstance[] = [];
@@ -242,11 +242,11 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
     this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
     this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
-    this.menuRestart.label = translationService.translate("COMMON.RESTART");
+    this.menuInstallUpdate.label = translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
 
     this.menuItems.push(this.menuUpdate);
     this.menuItems.push(this.menuInstall);
-    this.menuItems.push(this.menuRestart);
+    this.menuItems.push(this.menuInstallUpdate);
 
     appService.setAppTitle("PLUGINS.NAME");
   }
@@ -299,21 +299,29 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   async updateAll() {
-
-    alert(this.translate.translate("PLUGINS.RESTART_AFTER_INSTALL"));
-
     const items = this.plugins.filter(a => a.cloudIsNewer && a.isInstalled);
     const data = this.preparePluginList(items);
     await this.updateHubService.updateAllPlugins(data);
+
+    this.appService.isStartingChanged.emit(true);
   }
 
   async installAll() {
-    alert(this.translate.translate("PLUGINS.RESTART_AFTER_INSTALL"));
-
     const items = this.plugins.filter(a => !a.isInstalled);
     const data = this.preparePluginList(items);
     await this.updateHubService.installAllPlugins(data);
 
+    this.appService.isStartingChanged.emit(true);
+  }
+
+  async installUpdateAll() {
+    const updateItems = this.plugins.filter(a => a.cloudIsNewer && a.isInstalled);
+    const installItems = this.plugins.filter(a => !a.isInstalled);
+    const items = [...updateItems, ...installItems];
+    const data = this.preparePluginList(items);
+    await this.updateHubService.installUpdateAllPlugins(data);
+
+    this.appService.isStartingChanged.emit(true);
   }
 
   preparePluginList(plugins: PluginStateInstance[]) {
@@ -322,11 +330,6 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
       data.push(x.instance.cloudPlugin);
     }
     return data;
-  }
-
-  async restart() {
-    await this.updateHubService.restart();
-    this.appService.isLoading = true;
   }
 
   itemClick($event) {

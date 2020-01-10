@@ -470,9 +470,9 @@
         "INSTALLED_VERSION": "Installierte Version",
         "ACTION": "Aktionen",
         "PROGRESS": "Status",
-        "UPDATE_ALL": "Alle Updaten",
-        "INSTALL_ALL": "Alle Installieren",
-        "RESTART_AFTER_INSTALL": "Nachdem alle Erweiterungen heruntergeladen sind, muss ein Neustart derzeit manuell ausgelöst werden!"
+        "UPDATE_ALL": "Alle aktualisieren",
+        "INSTALL_ALL": "Alle installieren",
+        "INSTALL_UPDATE_ALL": "Alle updaten & installieren"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddatum darf nicht vor dem Startdatum sein",

@@ -110,47 +110,35 @@ namespace Automatica.Push.Hubs
 
         public Task UpdateAllPlugin(IList<Plugin> plugins)
         {
-
-            if (_semaphore.Wait(100))
-            {
-                try
-                {
-                    foreach (var plug in plugins)
-                    {
-                        Task.Run(async () =>
-                        {
-                            var pluginDownloader =
-                                new PluginDownloader(plug, false, _api, _updateHub, _coreServer, _loader, false);
-
-                            await pluginDownloader.Download();
-                        });
-                    }
-                }
-                finally
-                {
-                    _semaphore.Release();
-                }
-            }
-
-            return Task.CompletedTask;
+            return InstallOrUpdatePlugins(plugins);
         }
 
         public Task InstallAllPlugin(IList<Plugin> plugins)
         {
+            return InstallOrUpdatePlugins(plugins);
+        }
+        public Task InstallUpdateAllPlugin(IList<Plugin> plugins)
+        {
+            return InstallOrUpdatePlugins(plugins);
+        }
+
+        private async Task InstallOrUpdatePlugins(IList<Plugin> plugins)
+        {
             if (_semaphore.Wait(100))
             {
                 try
                 {
+                    var tasks = new List<Task>();
                     foreach (var plug in plugins)
                     {
-                        Task.Run(async () =>
-                        {
-                            var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
-                                _loader, false);
+                        var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
+                            _loader, false);
 
-                            await pluginDownloader.Download();
-                        });
+                        tasks.Add(pluginDownloader.Download());
                     }
+
+                    await Task.WhenAll(tasks.ToArray());
+                    _coreServer.Restart();
                 }
                 finally
                 {
@@ -158,12 +146,7 @@ namespace Automatica.Push.Hubs
                 }
             }
 
-            return Task.CompletedTask;
         }
 
-        public void Restart()
-        {
-            _coreServer.Restart();
-        }
     }
 }

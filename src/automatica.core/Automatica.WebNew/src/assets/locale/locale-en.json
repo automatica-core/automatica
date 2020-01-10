@@ -472,7 +472,7 @@
         "PROGRESS": "Progress",
         "UPDATE_ALL": "Update all",
         "INSTALL_ALL": "Install all",
-        "RESTART_AFTER_INSTALL": "After the plugins were downloaded, a manuel restart must be triggered!"
+        "INSTALL_UPDATE_ALL": "Update & install all"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddate must be after startdate",
