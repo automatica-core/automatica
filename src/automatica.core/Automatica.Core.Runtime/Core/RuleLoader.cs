@@ -12,11 +12,19 @@ namespace Automatica.Core.Runtime.Core
 {
     public static class RuleLoader
     {
-        public static Task<IList<RuleFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
+        public static async Task<IList<RuleFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
         {
-            var dir = Path.Combine(ServerInfo.GetBasePath(), ServerInfo.LogicsDirectory, plugin.ComponentName);
+            var dir = Path.Combine(ServerInfo.PluginDirectory, ServerInfo.LogicsDirectory, plugin.ComponentName);
 
-            return Loader.Load<RuleFactory>(dir, "*.dll", logger, config, false);
+            logger.LogDebug($"Try to load logics from directory {dir}");
+
+            if (!Directory.Exists(dir))
+            {
+                logger.LogError($"Could not find logic directory: {dir}");
+                return new List<RuleFactory>();
+            }
+
+            return await Loader.Load<RuleFactory>(dir, "*.dll", logger, config, false);
         }
 
         public static Task<IList<RuleFactory>> GetRuleFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)

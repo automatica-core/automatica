@@ -70,6 +70,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                 if (!Directory.Exists(installDir))
                 {
+                    _logger.LogDebug($"Create target directory {installDir}");
                     Directory.CreateDirectory(installDir);
                 }
 

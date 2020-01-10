@@ -170,7 +170,7 @@ $ docker run -it \
     -p 5001:5001 \
     --mount type=bind,source=~/database,target=/app/database \
     -e DATABASE_TYPE="sqlite" \
-    -e ConnectionStrings:"AutomaticaDatabaseSqlite=Data Source=/app/database/automatica.core.db" \
+    -e "ConnectionStrings:AutomaticaDatabaseSqlite=Data Source=/app/database/automatica.core.db" \
     --name automaticacore \
     automaticacore/automatica:latest-develop
 ```

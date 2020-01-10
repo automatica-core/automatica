@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Driver;
@@ -12,11 +11,19 @@ namespace Automatica.Core.Runtime.Core.Plugins
 {
     public static class PluginLoader
     {
-        public static Task<IList<DriverFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
+        public static async Task<IList<DriverFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
         {
-            var dir = Path.Combine(ServerInfo.GetBasePath(), ServerInfo.DriversDirectory, plugin.ComponentName);
+            var dir = Path.Combine(ServerInfo.PluginDirectory, ServerInfo.DriversDirectory, plugin.ComponentName);
 
-            return Loader.Load<DriverFactory>(dir, "*.dll", logger, config, false);
+            logger.LogDebug($"Try to load drivers from directory {dir}");
+
+            if (!Directory.Exists(dir))
+            {
+                logger.LogError($"Could not find driver directory: {dir}");
+                return new List<DriverFactory>();
+            }
+
+            return await Loader.Load<DriverFactory>(dir, "*.dll", logger, config, false);
         }
 
         public static Task<IList<DriverFactory>> GetDriverFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)
