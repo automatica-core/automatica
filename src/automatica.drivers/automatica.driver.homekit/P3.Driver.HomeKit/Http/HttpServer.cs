@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -61,7 +62,7 @@ namespace P3.Driver.HomeKit.Http
                         _logger.LogDebug($"Accepting tcp connection");
                         var tcpClient = await _listener.AcceptTcpClientAsync();
 
-                        _logger.LogDebug($"New tcp connection from {tcpClient.Client.LocalEndPoint}");
+                        _logger.LogDebug($"New tcp connection from {((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address}");
                         await HandleClient(tcpClient, ctsConnection);
                     }
                 }
@@ -217,6 +218,7 @@ namespace P3.Driver.HomeKit.Http
                 }
                 catch (Exception e)
                 {
+                    _logger.LogError(e, "Error occured in http server");
                     _middleware.TerminateSession(session);
                 }
             }, token.Token);

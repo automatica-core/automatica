@@ -63,6 +63,7 @@ namespace P3.Driver.HomeKit.Hap
 
         private Tuple<string, byte[]> ReturnError(int state, ErrorCodes error)
         {
+            _logger.LogDebug($"Return error code: {error} state {state}");
             var tlvData = new Tlv();
             tlvData.AddType(Constants.State, state++);
             tlvData.AddType(Constants.Error, error);
@@ -100,6 +101,7 @@ namespace P3.Driver.HomeKit.Hap
 
                         if (url.EndsWith("pair-setup"))
                         {
+                            _logger.LogDebug($"Working on pair-setup request");
                             if (_pairController != null && state == 1)
                             {
                                 return ReturnError(state, ErrorCodes.Busy);
@@ -109,6 +111,12 @@ namespace P3.Driver.HomeKit.Hap
                             {
                                 _pairController =
                                     new PairSetupController(_logger, _pairCode); //Todo: change code to param
+                            }
+
+                            if (_pairController == null)
+                            {
+                                _logger.LogError($"Something is wrong here, closing tcp connection");
+                                throw new ArgumentException($"Something is wrong here, closing tcp connection");
                             }
 
                             var data = _pairController.Post(parts);
@@ -131,6 +139,7 @@ namespace P3.Driver.HomeKit.Hap
 
                         if (url.EndsWith("pair-verify"))
                         {
+                            _logger.LogDebug($"Working on pair-verify request");
                             if (string.IsNullOrEmpty(HapControllerServer.HapControllerLtsk))
                             {
 
@@ -151,6 +160,7 @@ namespace P3.Driver.HomeKit.Hap
 
                         if (url.EndsWith("pairings"))
                         {
+                            _logger.LogDebug($"Working on pairings");
                             var pair = new PairingController(_logger);
                             var data = pair.Post(parts);
 
@@ -170,6 +180,7 @@ namespace P3.Driver.HomeKit.Hap
                     {
                         if (url.EndsWith("characteristics"))
                         {
+                            _logger.LogDebug($"Working on characteristics");
                             var c = new CharacteristicsController(_logger);
                             var data = c.Put(inputData, _sessions[connectionId], _homeKitServer);
 
@@ -187,20 +198,29 @@ namespace P3.Driver.HomeKit.Hap
                     {
                         if (url.EndsWith("accessories"))
                         {
+                            _logger.LogDebug($"Working on accessories");
+
                             var accessoryController = new AccesoriesController();
                             var accessories = accessoryController.Get(_homeKitServer, queryString);
                             var strValue = JsonConvert.SerializeObject(accessories, JsonSettings);
+
+                            _logger.LogDebug($"Sending {strValue}");
 
                             return new Tuple<string, byte[]>("application/hap+json", Encoding.UTF8.GetBytes(strValue));
                         }
 
                         if (url.EndsWith("characteristics"))
                         {
+                            _logger.LogDebug($"Working on characteristics");
+
                             var ids = queryString["id"].Split(",");
                             var c = new CharacteristicsController(_logger);
                             var data = c.Get(ids, _homeKitServer);
+                            var strValue = JsonConvert.SerializeObject(data, JsonSettings);
 
-                            return new Tuple<string, byte[]>(data.ContentType, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data, JsonSettings)));
+                            _logger.LogDebug($"Sending {strValue}");
+
+                            return new Tuple<string, byte[]>(data.ContentType, Encoding.UTF8.GetBytes(strValue));
 
                         }
                     }

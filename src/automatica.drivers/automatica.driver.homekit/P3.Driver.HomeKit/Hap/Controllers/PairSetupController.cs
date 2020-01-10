@@ -49,6 +49,9 @@ namespace P3.Driver.HomeKit.Hap.Controllers
             var customParams = SrpParameters.Create3072<SHA512>();
 
             var state = parts.GetTypeAsInt(Constants.State);
+
+            _logger.LogDebug($"State is {state}");
+
             if (state == 1) //srp sign up
             {
                 var rnd = new Random();
@@ -68,6 +71,8 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 responseTlv.AddType(Constants.State, 2);
                 responseTlv.AddType(Constants.PublicKey, StringToByteArray(_serverEphemeral.Public));
                 responseTlv.AddType(Constants.Salt, _salt);
+
+                _logger.LogDebug($"return salt {_salt}, pub {_serverEphemeral.Public} and state 2");
 
                 return new PairSetupReturn
                 {
@@ -99,6 +104,9 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     _logger.LogInformation("Verification was successful. Generating Server Proof (M2)");
 
                     responseTlv.AddType(Constants.Proof, StringToByteArray(_serverSession.Proof));
+
+
+                    _logger.LogDebug($"return proof {_serverSession.Proof}, secret {_serverEphemeral.Secret} and state 4");
                 }
                 catch(Exception)
                 {
