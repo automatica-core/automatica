@@ -212,6 +212,12 @@ namespace P3.Driver.HomeKit.Bonjour
                 .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
                 .Select(u => u.Address);
         }
+        public static IEnumerable<UnicastIPAddressInformation> GetUnicastAddresses()
+        {
+            return GetNetworkInterfaces()
+                .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
+                .Select(u => u);
+        }
 
         IEnumerable<IPAddress> GetNetworkInterfaceLocalAddresses(NetworkInterface nic)
         {
@@ -245,8 +251,7 @@ namespace P3.Driver.HomeKit.Bonjour
         {
             _logger.LogDebug($"Listen on socket {socket.LocalEndPoint} {socket.AddressFamily}");
 
-            BroadcastDns(socket.AddressFamily);
-
+      
             while (_isRunning)
             {
                 try
@@ -264,23 +269,28 @@ namespace P3.Driver.HomeKit.Bonjour
                     var buffer = new byte[2048];
                     int numberOfbytesReceived = socket.ReceiveFrom(buffer, ref senderRemote);
 
-                    var content = new byte[numberOfbytesReceived];
-                    Array.Copy(buffer, 0, content, 0, numberOfbytesReceived);
-
-                    ByteArrayToStringDump(content);
-
-                    if (content[2] != 0x00)
+                    if (senderRemote is IPEndPoint senderRemoteIp)
                     {
-                        //Console.WriteLine("Not a query. Ignoring.");
-                        continue;
+                        _logger.LogDebug($"Received request from {senderRemoteIp.Address}")
+                            ;
+                        var content = new byte[numberOfbytesReceived];
+                        Array.Copy(buffer, 0, content, 0, numberOfbytesReceived);
+
+                        ByteArrayToStringDump(content);
+
+                        if (content[2] != 0x00)
+                        {
+                            //Console.WriteLine("Not a query. Ignoring.");
+                            continue;
+                        }
+
+                        // Build the header that indicates this is a response.
+                        //
+
+                        var outputBuffer = GenerateDnsRecord(socket.AddressFamily, senderRemoteIp);
+                        var bytesSent = socket.SendTo(outputBuffer, 0, outputBuffer.Length, SocketFlags.None,
+                            senderRemote);
                     }
-
-                    // Build the header that indicates this is a response.
-                    //
-
-                    var outputBuffer = GenerateDnsRecord(socket.AddressFamily);
-                    var bytesSent = socket.SendTo(outputBuffer, 0, outputBuffer.Length, SocketFlags.None,
-                        senderRemote);
                 }
                 catch (TaskCanceledException)
                 {
@@ -293,32 +303,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
         }
 
-        private void BroadcastDns(AddressFamily addressFamily)
-        {
-            try
-            {
-                var socket = new Socket(addressFamily, SocketType.Dgram, ProtocolType.Udp);
-                var ip = addressFamily == AddressFamily.InterNetworkV6 ? MulticastAddressIp6 : MulticastAddressIp4;
-
-                socket.SetSocketOption(SocketOptionLevel.IP,
-                    SocketOptionName.AddMembership, new MulticastOption(ip));
-                socket.SetSocketOption(SocketOptionLevel.IP,
-                    SocketOptionName.MulticastTimeToLive, 2);
-
-                var ipep = new IPEndPoint(ip, 4567);
-                socket.Connect(ipep);
-
-                var dns = GenerateDnsRecord(addressFamily);
-                socket.Send(dns.AsSpan());
-            }
-            catch (Exception e)
-            {
-                
-                _logger.LogError(e, "Error sending multicast...");
-            }
-        }
-
-        private byte[] GenerateDnsRecord(AddressFamily addressFamily)
+        private byte[] GenerateDnsRecord(AddressFamily addressFamily, IPEndPoint senderRemote)
         {
             var outputBuffer = new byte[0];
 
@@ -373,24 +358,27 @@ namespace P3.Driver.HomeKit.Bonjour
                 $"{_name}.local");
 
 
-            var ipAddresses = GetIPAddresses();
+            var ipAddresses = GetUnicastAddresses();
 
             if (addressFamily == AddressFamily.InterNetworkV6)
             {
-                ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetworkV6);
+                ipAddresses = ipAddresses.Where(a => a.Address.AddressFamily == AddressFamily.InterNetworkV6);
             }
             else
             {
-                ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
+                ipAddresses = ipAddresses.Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork);
             }
 
-            outputBuffer = AddARecord(outputBuffer, $"{_name}.local", NetworkHelper.GetActiveIp(), false);
+            outputBuffer = AddARecord(outputBuffer, $"{_name}.local", senderRemote.Address.ToString(), false);
 
             foreach (var address in ipAddresses)
             {
-                var ip = address.ToString();
-                //outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip,
-                  //  addressFamily == AddressFamily.InterNetworkV6);
+                var ip = address.Address.ToString();
+
+                if (address.Address.IsInSameSubnet(senderRemote.Address, address.IPv4Mask))
+                {
+                    outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip, addressFamily == AddressFamily.InterNetworkV6);
+                }
             }
 
             ByteArrayToStringDump(outputBuffer);

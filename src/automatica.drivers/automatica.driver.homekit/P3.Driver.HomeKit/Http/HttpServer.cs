@@ -110,7 +110,7 @@ namespace P3.Driver.HomeKit.Http
                                 if (bytesRead == 0)
                                 {
                                     _logger.LogDebug(
-                                        "**************************** REQUEST RECEIVED but not data available *************************");
+                                        "**************************** REQUEST RECEIVED but no data available *************************");
 
                                     tcpClient.Close();
                                     break;
