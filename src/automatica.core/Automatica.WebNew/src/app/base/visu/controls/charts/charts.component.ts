@@ -8,6 +8,7 @@ import { DxChartComponent } from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import { DataService } from "src/app/services/data.service";
 import { PropertyInstance } from "src/app/base/model/property-instance";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "app-charts",
@@ -16,7 +17,7 @@ import { PropertyInstance } from "src/app/base/model/property-instance";
 })
 export class ChartsComponent extends BaseMobileComponent implements OnInit {
 
-  @ViewChild("chart", {static: false}) chart: DxChartComponent;
+  @ViewChild("chart", { static: false }) chart: DxChartComponent;
 
   private _visualRange: any = {};
   HALFDAY: number = 43200000;
@@ -34,8 +35,14 @@ export class ChartsComponent extends BaseMobileComponent implements OnInit {
     this._nodeProperty = v;
   }
 
-  constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService, private dataService: DataService) {
-    super(dataHub, notify, translate, configService);
+  constructor(
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    private dataService: DataService,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
 
     this.chartDataSource = new DataSource({
       store: [],

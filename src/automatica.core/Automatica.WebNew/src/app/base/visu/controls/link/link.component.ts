@@ -8,6 +8,7 @@ import { BaseMobileComponent } from "../../base-mobile-component";
 import { VisuService } from "src/app/services/visu.service";
 import { VisuPage } from "src/app/base/model/visu-page";
 import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -23,8 +24,16 @@ export class LinkComponent extends BaseMobileComponent implements OnInit, OnDest
   private _areaLinkProperty: PropertyInstance;
   private _textProperty: PropertyInstance;
 
-  constructor(private router: Router, private route: ActivatedRoute, dataHub: DataHubService, notify: NotifyService, translate: TranslationService, private visuService: VisuService, configService: ConfigService) {
-    super(dataHub, notify, translate, configService);
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    private visuService: VisuService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
   }
 
   public onItemResized() {

@@ -236,9 +236,13 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
   plugins: PluginStateInstance[] = [];
   pluginsMap = new Map<string, PluginStateInstance>();
-  constructor(private pluginsService: PluginsService, private updateHubService: UpdateHubService,
-    notify: NotifyService, translationService: TranslationService, private appService: AppService) {
-    super(notify, translationService);
+  constructor(
+    private pluginsService: PluginsService,
+    private updateHubService: UpdateHubService,
+    notify: NotifyService,
+    translationService: TranslationService,
+    appService: AppService) {
+    super(notify, translationService, appService);
 
     this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
     this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
@@ -251,9 +255,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     appService.setAppTitle("PLUGINS.NAME");
   }
 
-  async ngOnInit() {
-
-    this.appService.isLoading = true;
+  async load() {
     try {
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
@@ -266,6 +268,19 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
           console.log(p, error);
         }
       }
+
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async ngOnInit() {
+
+    this.baseOnInit();
+
+    this.appService.isLoading = true;
+    try {
+      await this.load();
 
       super.registerEvent(this.updateHubService.PluginDownloadProgressChanged, (a) => {
         const instance = this.pluginsMap.get(a[0][0]);

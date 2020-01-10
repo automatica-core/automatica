@@ -6,6 +6,7 @@ import { TranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-slider",
@@ -14,7 +15,7 @@ import { ConfigService } from "src/app/services/config.service";
 })
 export class SliderComponent extends BaseMobileComponent implements OnInit, OnDestroy {
 
-  @ViewChild("slider", {static: false})
+  @ViewChild("slider", { static: false })
   slider: DxSliderComponent;
 
   text: string = void 0;
@@ -27,8 +28,13 @@ export class SliderComponent extends BaseMobileComponent implements OnInit, OnDe
 
   nodeProperty: PropertyInstance;
 
-  constructor(private dataHubService: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService) {
-    super(dataHubService, notify, translate, configService);
+  constructor(
+    private dataHubService: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHubService, notify, translate, configService, appService);
   }
 
   ngOnInit() {

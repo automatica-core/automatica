@@ -29,8 +29,12 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     command: (event) => { this.save(); }
   }
 
-  constructor(private catService: CategoryService, translate: TranslationService, private notify: NotifyService, private appService: AppService) {
-    super(notify, translate);
+  constructor(
+    private catService: CategoryService,
+    translate: TranslationService,
+    private notify: NotifyService,
+    appService: AppService) {
+    super(notify, translate, appService);
     appService.setAppTitle("CATEGORIES.NAME");
 
 

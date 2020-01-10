@@ -3,21 +3,32 @@ import { Observable, Subscription } from "rxjs";
 import { TranslationService } from "angular-l10n";
 import { WebApiException, ExceptionSeverity } from "./model/web-api-exception";
 import { NotifyService } from "../services/notify.service";
+import { AppService } from "../services/app.service";
 
 export class BaseComponent {
 
     private subscriptions: Subscription[] = [];
     private intervals: NodeJS.Timeout[] = [];
-
+    private lastState: boolean = false;
     // gutterH = `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");`;
 
-    constructor(protected notifyService: NotifyService, protected translate: TranslationService) {
+    constructor(protected notifyService: NotifyService, protected translate: TranslationService, protected appService: AppService) {
 
 
     }
 
     protected baseOnInit() {
+        this.registerEvent(this.appService.isStartingChanged, async (v) => {
 
+            if (!v && this.lastState !== v) {
+                await this.load();
+            }
+            this.lastState = v;
+        });
+    }
+
+    protected load(): Promise<any> {
+        return Promise.resolve();
     }
 
     protected handleError(error) {

@@ -5,6 +5,7 @@ import { TranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-toggle",
@@ -68,8 +69,9 @@ export class ToggleComponent extends BaseMobileComponent implements OnInit, OnDe
     notify: NotifyService,
     translate: TranslationService,
     configService: ConfigService,
-    private changeRef: ChangeDetectorRef) {
-    super(dataHub, notify, translate, configService);
+    private changeRef: ChangeDetectorRef,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
   }
 
   protected async propertyChanged() {

@@ -7,6 +7,7 @@ import { NotifyService } from "src/app/services/notify.service";
 import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
+import { AppService } from "src/app/services/app.service";
 
 export abstract class BaseMobileComponent extends BaseComponent {
     @HostBinding("class.mobile-control") true;
@@ -78,8 +79,13 @@ export abstract class BaseMobileComponent extends BaseComponent {
         return this.getPropertyValue("text");
     }
 
-    constructor(protected dataHub: DataHubService, notify: NotifyService, translate: TranslationService, private configService: ConfigService) {
-        super(notify, translate);
+    constructor(
+        protected dataHub: DataHubService,
+        notify: NotifyService,
+        translate: TranslationService,
+        private configService: ConfigService,
+        appService: AppService) {
+        super(notify, translate, appService);
 
     }
 

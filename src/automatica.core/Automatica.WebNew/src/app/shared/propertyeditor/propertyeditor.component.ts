@@ -24,6 +24,7 @@ import { ConfigTreeComponent } from "../config-tree/config-tree.component";
 import { Slave } from "src/app/base/model/slaves/slave";
 import { SlavesService } from "src/app/services/slaves.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
+import { AppService } from "src/app/services/app.service";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -269,8 +270,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     translate: TranslationService,
     private dataHub: DataHubService,
     private notify: NotifyService,
-    private slaveService: SlavesService) {
-    super(notify, translate);
+    private slaveService: SlavesService,
+    appService: AppService) {
+    super(notify, translate, appService);
   }
 
   async ngOnInit() {

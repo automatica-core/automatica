@@ -30,10 +30,14 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
     command: (event) => { this.save(); }
   }
 
-  constructor(private catService: SlavesService, translate: TranslationService, private notify: NotifyService, private appService: AppService) {
-    super(notify, translate);
-    appService.setAppTitle("CATEGORIES.NAME");
+  constructor(
+    private catService: SlavesService,
+    translate: TranslationService,
+    private notify: NotifyService,
+    appService: AppService) {
+    super(notify, translate, appService);
 
+    appService.setAppTitle("CATEGORIES.NAME");
 
     this.menuItems.push(this.menuSave);
     this.menuSave.label = translate.translate("COMMON.SAVE");

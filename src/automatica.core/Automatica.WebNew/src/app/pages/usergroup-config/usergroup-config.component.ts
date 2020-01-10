@@ -17,9 +17,9 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 })
 export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
-  @ViewChild("grid", {static: false})
+  @ViewChild("grid", { static: false })
   grid: DxDataGridComponent;
-  
+
   groups: UserGroup[] = [];
   roles: Role[] = [];
   selectedNode: UserGroup = void 0;
@@ -34,8 +34,12 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     command: (event) => { this.save(); }
   }
 
-  constructor(private catService: GroupsService, translate: TranslationService, private notify: NotifyService, private appService: AppService) {
-    super(notify, translate);
+  constructor(
+    private catService: GroupsService,
+    translate: TranslationService,
+    private notify: NotifyService,
+    appService: AppService) {
+    super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
     this.menuSave.label = translate.translate("COMMON.SAVE");
 

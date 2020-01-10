@@ -91,11 +91,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     private notify: NotifyService,
     private hub: DataHubService,
     private settingsService: SettingsService,
-    private appService: AppService,
+    appService: AppService,
     private changeRef: ChangeDetectorRef,
     private ngZone: NgZone) {
 
-    super(notify, translate);
+    super(notify, translate, appService);
     this.useContextMenu = true;
     this.nextId = 0;
   }

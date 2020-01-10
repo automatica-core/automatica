@@ -15,6 +15,7 @@ import { BaseMobileComponent } from "../base-mobile-component";
 import { RgbComponent } from "./rgb/rgb.component";
 import { ChartsComponent } from "./charts/charts.component";
 import { GaugeComponent } from "./gauge/gauge.component";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-component",
@@ -40,8 +41,12 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
 
   component: Type<BaseMobileComponent>;
 
-  constructor(private elementRef: ElementRef, notify: NotifyService, translate: TranslationService) {
-    super(notify, translate);
+  constructor(
+    private elementRef: ElementRef,
+    notify: NotifyService,
+    translate: TranslationService,
+    appService: AppService) {
+    super(notify, translate, appService);
   }
 
   ngOnInit() {

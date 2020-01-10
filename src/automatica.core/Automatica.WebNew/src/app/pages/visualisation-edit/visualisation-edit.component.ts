@@ -103,9 +103,9 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
     private notify: NotifyService,
     private areaService: AreaService,
     private userGroupsService: GroupsService,
-    private appService: AppService,
+    appService: AppService,
     private nodeInstanceService: NodeInstanceService) {
-    super(notify, translate);
+    super(notify, translate, appService);
 
     appService.setAppTitle("VISU.NAME");
   }

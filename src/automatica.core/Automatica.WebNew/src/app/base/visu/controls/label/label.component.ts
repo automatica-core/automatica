@@ -7,6 +7,7 @@ import { BaseMobileComponent } from "../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import * as moment from "moment";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-label",
@@ -37,8 +38,13 @@ export class LabelComponent extends BaseMobileComponent implements OnInit, OnDes
     return this.value;
   }
 
-  constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService) {
-    super(dataHub, notify, translate, configService);
+  constructor(
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
   }
 
   async ngOnInit() {

@@ -27,8 +27,8 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
     private updateHubService: UpdateHubService,
     notifyService: NotifyService,
     translate: TranslationService,
-    private appService: AppService) {
-    super(notifyService, translate);
+    appService: AppService) {
+    super(notifyService, translate, appService);
 
     appService.setAppTitle("SYSTEM.NAME");
   }

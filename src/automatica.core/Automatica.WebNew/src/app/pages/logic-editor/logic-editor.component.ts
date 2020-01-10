@@ -83,13 +83,17 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     private areaService: AreaService,
     private categoryService: CategoryService,
     private userGroupsService: GroupsService,
-    private appService: AppService,
+    appService: AppService,
     private dataHub: DataHubService,
     private nodeInstanceService: NodeInstanceService,
     private changeRef: ChangeDetectorRef) {
-    super(notify, translate);
+    super(notify, translate, appService);
 
     appService.setAppTitle("RULEENGINE.NAME");
+  }
+
+  async load() {
+    await this.loadData();
   }
 
 
@@ -195,6 +199,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     this.menuItems.push(this.menuItemNew);
     this.menuItems.push(this.menuSave);
+
+    this.baseOnInit();
 
   }
 

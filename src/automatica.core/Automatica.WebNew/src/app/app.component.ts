@@ -18,13 +18,13 @@ export class AppComponent extends BaseComponent implements OnInit {
   title = "automatica-web";
   private _isLoading: boolean = true;
 
-  constructor(private appService: AppService,
+  constructor(appService: AppService,
     notify: NotifyService,
     translate: TranslationService,
     private changeDet: ChangeDetectorRef,
     library: FaIconLibrary,
     private ngZone: NgZone) {
-    super(notify, translate);
+    super(notify, translate, appService);
 
     const automaticaLogo = {
       prefix: "fas",

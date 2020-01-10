@@ -6,6 +6,7 @@ import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
 import { ColorOutput } from "src/app/base/color";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-rgb",
@@ -43,8 +44,13 @@ export class RgbComponent extends BaseMobileComponent implements OnInit, OnDestr
   public onItemResized() {
   }
 
-  constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService) {
-    super(dataHub, notify, translate, configService);
+  constructor(
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
   }
 
   protected propertyChanged() {

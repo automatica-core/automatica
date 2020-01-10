@@ -13,6 +13,7 @@ import { LogicShapes } from "./shapes/logic-shape";
 import { LogicLocators } from "./shapes/logic-locators";
 import { LogicLables } from "./shapes/logic-label";
 import { LinkService } from "./link.service";
+import { AppService } from "src/app/services/app.service";
 
 declare var draw2d: any;
 
@@ -72,8 +73,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     private dataHub: DataHubService,
     notify: NotifyService,
     translate: TranslationService,
-    private changeRef: ChangeDetectorRef) {
-    super(notify, translate);
+    private changeRef: ChangeDetectorRef,
+    appService: AppService) {
+    super(notify, translate, appService);
   }
 
   async ngOnInit() {

@@ -71,8 +71,8 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     private notify: NotifyService,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private appService: AppService) {
-    super(notify, translationService);
+    appService: AppService) {
+    super(notify, translationService, appService);
     this.menuItems = [];
 
 

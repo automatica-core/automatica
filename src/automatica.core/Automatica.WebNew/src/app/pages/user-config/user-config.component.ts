@@ -44,9 +44,9 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     translate: TranslationService,
     private notify: NotifyService,
     private userGroupService: GroupsService,
-    private appService: AppService) {
+    appService: AppService) {
 
-    super(notify, translate);
+    super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
     this.menuSave.label = translate.translate("COMMON.SAVE");
 

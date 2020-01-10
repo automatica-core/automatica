@@ -5,6 +5,7 @@ import { TranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-clock",
@@ -17,8 +18,13 @@ export class ClockComponent extends BaseMobileComponent implements OnInit {
   @ViewChild("minute", { static: true }) minute: ElementRef;
   @ViewChild("hour", { static: true }) hour: ElementRef;
 
-  constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService) {
-    super(dataHub, notify, translate, configService);
+  constructor(
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
   }
 
   public onItemResized() {

@@ -42,14 +42,14 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     private categoryService: CategoryService,
     translate: TranslationService,
     private userGroupsService: GroupsService,
-    private appService: AppService,
+    appService: AppService,
     private nodeInstanceService: NodeInstanceService) {
-    super(notify, translate);
+    super(notify, translate, appService);
 
     appService.setAppTitle("CONFIGURATION.NAME");
   }
 
-  async ngOnInit() {
+  async load() {
     try {
       this.appService.isLoading = true;
 
@@ -70,6 +70,11 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     }
 
     this.appService.isLoading = false;
+  }
+
+  async ngOnInit() {
+    await this.load();
+    this.baseOnInit();
   }
 
   delete(e) {

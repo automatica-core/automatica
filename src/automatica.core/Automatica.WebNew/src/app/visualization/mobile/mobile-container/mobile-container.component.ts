@@ -60,10 +60,10 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     private configService: ConfigService,
     private router: Router,
     private login: LoginService,
-    private appService: AppService,
+    appService: AppService,
     private deviceService: DeviceService) {
 
-    super(notify, translate);
+    super(notify, translate, appService);
   }
 
   itemChange() {
@@ -76,7 +76,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       item.itemResized.emit();
     }
   }
-
+  
   async ngOnInit() {
 
     this.registerEvent(this.deviceService.orientationChange, () => {

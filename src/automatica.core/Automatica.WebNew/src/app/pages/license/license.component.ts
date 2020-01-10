@@ -25,8 +25,12 @@ export class LicenseComponent extends BaseComponent implements OnInit {
 
 
   license: string = "";
-  constructor(private licenseService: LicenseService, appService: AppService, translate: TranslationService, notify: NotifyService) {
-    super(notify, translate);
+  constructor(
+    private licenseService: LicenseService,
+    appService: AppService,
+    translate: TranslationService,
+    notify: NotifyService) {
+    super(notify, translate, appService);
 
     appService.setAppTitle("LICENSE.NAME");
 

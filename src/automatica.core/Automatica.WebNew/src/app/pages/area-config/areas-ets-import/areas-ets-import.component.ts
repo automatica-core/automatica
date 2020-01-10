@@ -7,6 +7,7 @@ import { AreaService } from "src/app/services/areas.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { AreaInstance } from "src/app/base/model/areas";
 import { BaseModel } from "src/app/base/model/base-model";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "app-areas-ets-import",
@@ -19,7 +20,7 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
 
   instances: AreaInstance[] = [];
 
-  @ViewChild("tree", {static: false})
+  @ViewChild("tree", { static: false })
   dxTree: DxTreeListComponent;
 
 
@@ -48,8 +49,9 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
     private router: Router,
     private notify: NotifyService,
     private activatedRoute: ActivatedRoute,
-    private areaService: AreaService) {
-    super(notify, translationService);
+    private areaService: AreaService,
+    appService: AppService) {
+    super(notify, translationService, appService);
   }
 
   ngOnInit() {

@@ -14,8 +14,12 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
 
   popupVisible: boolean = false;
 
-  constructor(private appService: AppService, notify: NotifyService, translation: TranslationService, private ngZone: NgZone) {
-    super(notify, translation);
+  constructor(
+    appService: AppService,
+    notify: NotifyService,
+    translation: TranslationService,
+    private ngZone: NgZone) {
+    super(notify, translation, appService);
   }
 
   ngOnInit() {
