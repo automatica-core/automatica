@@ -145,7 +145,7 @@ namespace Automatica.Push.Hubs
                     {
                         Task.Run(async () =>
                         {
-                            var pluginDownloader = new PluginDownloader(plug, true, _api, _updateHub, _coreServer,
+                            var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
                                 _loader, false);
 
                             await pluginDownloader.Download();

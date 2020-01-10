@@ -308,6 +308,8 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   async installAll() {
+    alert(this.translate.translate("PLUGINS.RESTART_AFTER_INSTALL"));
+    
     const items = this.plugins.filter(a => !a.isInstalled);
     const data = this.preparePluginList(items);
     await this.updateHubService.installAllPlugins(data);
