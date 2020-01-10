@@ -245,9 +245,6 @@ namespace P3.Driver.HomeKit.Bonjour
         {
             _logger.LogDebug($"Listen on socket {socket.LocalEndPoint} {socket.AddressFamily}");
 
-            var ipAddress = NetworkHelper.GetActiveIp();
-            var ip6Address = NetworkHelper.GetActiveIp6();
-
             while (_isRunning)
             {
                 try
@@ -331,13 +328,23 @@ namespace P3.Driver.HomeKit.Bonjour
                         $"{_name}.local");
 
 
-                    var ip = ipAddress;
+                    var ipAddresses = GetIPAddresses();
 
                     if (socket.AddressFamily == AddressFamily.InterNetworkV6)
                     {
-                        ip = ip6Address;
+                        ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetworkV6);
                     }
-                    outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip, socket.AddressFamily == AddressFamily.InterNetworkV6);
+                    else
+                    {
+                        ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
+                    }
+
+                    foreach (var address in ipAddresses)
+                    {
+                        var ip = address.ToString();
+                        outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip,
+                            socket.AddressFamily == AddressFamily.InterNetworkV6);
+                    }
 
                     ByteArrayToStringDump(outputBuffer);
 
