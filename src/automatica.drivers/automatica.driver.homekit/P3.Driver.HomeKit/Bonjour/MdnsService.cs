@@ -196,7 +196,7 @@ namespace P3.Driver.HomeKit.Bonjour
         public static IEnumerable<NetworkInterface> GetNetworkInterfaces()
         {
             return NetworkInterface.GetAllNetworkInterfaces()
-                .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
+                .Where(nic => nic.OperationalStatus == OperationalStatus.Up || nic.OperationalStatus == OperationalStatus.Unknown)
                 .Where(nic => nic.NetworkInterfaceType != NetworkInterfaceType.Loopback);
         }
 
