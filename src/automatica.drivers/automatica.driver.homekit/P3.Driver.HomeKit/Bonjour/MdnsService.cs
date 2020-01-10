@@ -107,15 +107,15 @@ namespace P3.Driver.HomeKit.Bonjour
 
                 foreach (var nic in allNics)
                 {
-                    _logger.LogDebug($"Interface {nic.Name} has addresses");
+                    _logger.LogDebug($"Interface {nic.Name} has addresses Type: {nic.NetworkInterfaceType} | Status: {nic.OperationalStatus}");
 
                     foreach (var ip in nic.GetIPProperties().UnicastAddresses)
                     {
-                        _logger.LogDebug($"UnicastAddress {ip.Address} {ip.Address.AddressFamily}");
+                        _logger.LogDebug($"UnicastAddress: {ip.Address} {ip.Address.AddressFamily}");
                     }
                     foreach (var ip in nic.GetIPProperties().MulticastAddresses)
                     {
-                        _logger.LogDebug($"MulticastAddress {ip.Address} {ip.Address.AddressFamily}");
+                        _logger.LogDebug($"MulticastAddress: {ip.Address} {ip.Address.AddressFamily}");
                     }
                 }
 
