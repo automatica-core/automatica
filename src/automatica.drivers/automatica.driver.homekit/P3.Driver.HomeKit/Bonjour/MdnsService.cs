@@ -271,8 +271,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
                     if (senderRemote is IPEndPoint senderRemoteIp)
                     {
-                        _logger.LogDebug($"Received request from {senderRemoteIp.Address}")
-                            ;
+                       // _logger.LogDebug($"Received request from {senderRemoteIp.Address}");
                         var content = new byte[numberOfbytesReceived];
                         Array.Copy(buffer, 0, content, 0, numberOfbytesReceived);
 
@@ -374,7 +373,7 @@ namespace P3.Driver.HomeKit.Bonjour
                 if (address.Address.IsInSameSubnet(senderRemote.Address, address.IPv4Mask))
                 {
                     var ip = address.Address.ToString();
-                    _logger.LogDebug($"Set A record to value: {ip}");
+                  //  _logger.LogDebug($"Set A record to value: {ip}");
                     outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip, addressFamily == AddressFamily.InterNetworkV6);
                 }
             }
