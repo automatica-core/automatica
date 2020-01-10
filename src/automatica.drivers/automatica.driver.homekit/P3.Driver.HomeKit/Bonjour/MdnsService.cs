@@ -212,10 +212,13 @@ namespace P3.Driver.HomeKit.Bonjour
                 {
                     Socket s = new Socket(AddressFamily.InterNetwork,
                         SocketType.Dgram, ProtocolType.Udp);
+
                     s.SetSocketOption(SocketOptionLevel.IP,
                         SocketOptionName.AddMembership, new MulticastOption(MulticastAddressIp4));
+                    
                     s.SetSocketOption(SocketOptionLevel.IP,
                         SocketOptionName.MulticastTimeToLive, 2);
+                    
                     s.Connect(MulticastAddressIp4, MulticastPort);
                     var ipInterfaces = GetUnicastAddresses()
                         .Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork);
@@ -224,7 +227,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
                     foreach (var ip in ipInterfaces)
                     {
-                        var dns = GenerateDnsRecord(ip.Address.AddressFamily, new IPEndPoint(ip.Address, 0));
+                        var dns = GenerateDnsRecord(ip.Address.AddressFamily, false);
 
                         s.Send(dns);
 
@@ -332,7 +335,7 @@ namespace P3.Driver.HomeKit.Bonjour
                         // Build the header that indicates this is a response.
                         //
 
-                        var outputBuffer = GenerateDnsRecord(socket.AddressFamily, senderRemoteIp);
+                        var outputBuffer = GenerateDnsRecord(socket.AddressFamily, true);
                         var bytesSent = socket.SendTo(outputBuffer, 0, outputBuffer.Length, SocketFlags.None,
                             senderRemote);
                     }
@@ -348,7 +351,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
         }
 
-        private byte[] GenerateDnsRecord(AddressFamily addressFamily, IPEndPoint senderRemote)
+        private byte[] GenerateDnsRecord(AddressFamily addressFamily, bool isQuestionReturn)
         {
             var outputBuffer = new byte[0];
 
@@ -358,7 +361,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
             // We're using 15 and 10 since the endianness of this bytes is reversed :)
             //
-            bitArray.Set(15, true); // QR
+            bitArray.Set(15, isQuestionReturn); // QR
             bitArray.Set(10, true); // AA
 
             bitArray.CopyTo(flags, 0);
@@ -416,12 +419,12 @@ namespace P3.Driver.HomeKit.Bonjour
 
             foreach (var address in ipAddresses)
             {
-                if (address.Address.IsInSameSubnet(senderRemote.Address, address.IPv4Mask))
-                {
+                //if (address.Address.IsInSameSubnet(senderRemote.Address, address.IPv4Mask))
+                //{
                     var ip = address.Address.ToString();
                   //  _logger.LogDebug($"Set A record to value: {ip}");
                     outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip, addressFamily == AddressFamily.InterNetworkV6);
-                }
+                //}
             }
 
             ByteArrayToStringDump(outputBuffer);
