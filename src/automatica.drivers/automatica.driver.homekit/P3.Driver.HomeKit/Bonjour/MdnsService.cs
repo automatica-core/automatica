@@ -103,6 +103,21 @@ namespace P3.Driver.HomeKit.Bonjour
                 _logger.LogDebug($"Create IPv4 Socket for multicast on {MulticastAddressIp6}");
 
                 var currentNics = GetNetworkInterfaces().ToList();
+                var allNics = NetworkInterface.GetAllNetworkInterfaces();
+
+                foreach (var nic in allNics)
+                {
+                    _logger.LogDebug($"Interface {nic.Name} has addresses");
+
+                    foreach (var ip in nic.GetIPProperties().UnicastAddresses)
+                    {
+                        _logger.LogDebug($"UnicastAddress {ip.Address} {ip.Address.AddressFamily}");
+                    }
+                    foreach (var ip in nic.GetIPProperties().MulticastAddresses)
+                    {
+                        _logger.LogDebug($"MulticastAddress {ip.Address} {ip.Address.AddressFamily}");
+                    }
+                }
 
                 var addreses = currentNics
                     .SelectMany(GetNetworkInterfaceLocalAddresses)
