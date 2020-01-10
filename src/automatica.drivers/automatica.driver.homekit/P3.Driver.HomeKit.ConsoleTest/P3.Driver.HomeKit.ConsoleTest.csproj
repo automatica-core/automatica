@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.540" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.11.0.642" />
   </ItemGroup>
 
   <ItemGroup>

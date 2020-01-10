@@ -3,22 +3,37 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using P3.Driver.HomeKit.Hap.Model;
 
 namespace P3.Driver.HomeKit.ConsoleTest
 {
+    class ConsoleLogger : ILogger
+    {
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            Console.WriteLine(formatter.Invoke(state, exception));
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            return true;
+        }
+
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            return null;
+        }
+    }
     class Program
     {
         static async Task Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-
-
-            
             HomeKitServer.Init();
 
-            var logger = new ConsoleLogger("mylogger", (s, level) => true, false);
+            var logger = new ConsoleLogger();
 
             string ltpk = null;
             if (File.Exists("LTPK"))

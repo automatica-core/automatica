@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using Automatica.Core.Base.Common;
-
 using Automatica.Core.EF.Models;
 using Automatica.Discovery;
 using ElectronNET.API;
