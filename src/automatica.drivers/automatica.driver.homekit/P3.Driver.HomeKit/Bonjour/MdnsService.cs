@@ -223,17 +223,22 @@ namespace P3.Driver.HomeKit.Bonjour
                     var ipInterfaces = GetUnicastAddresses()
                         .Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork);
 
-                    IPEndPoint remote = new IPEndPoint(MulticastAddressIp4, MulticastPort);
-
                     foreach (var ip in ipInterfaces)
                     {
-                        var dns = GenerateDnsRecord(ip.Address.AddressFamily, false);
+                        var dns = GenerateAnnouncement(ip.Address.AddressFamily);
 
                         s.Send(dns);
 
                     }
 
                     s.Close();
+
+                    _timer.Interval = _timer.Interval * 2;
+
+                    if (_timer.Interval >= 60000)
+                    {
+                        _timer.Interval = 60000;
+                    }
 
                 }
                 catch (Exception ex)
@@ -335,7 +340,7 @@ namespace P3.Driver.HomeKit.Bonjour
                         // Build the header that indicates this is a response.
                         //
 
-                        var outputBuffer = GenerateDnsRecord(socket.AddressFamily, true);
+                        var outputBuffer = GenerateDnsRecord(socket.AddressFamily);
                         var bytesSent = socket.SendTo(outputBuffer, 0, outputBuffer.Length, SocketFlags.None,
                             senderRemote);
                     }
@@ -351,7 +356,52 @@ namespace P3.Driver.HomeKit.Bonjour
             }
         }
 
-        private byte[] GenerateDnsRecord(AddressFamily addressFamily, bool isQuestionReturn)
+        private byte[] GenerateAnnouncement(AddressFamily addressFamily)
+        {
+            var outputBuffer = new byte[0];
+
+            var flags = new byte[2];
+
+            var bitArray = new BitArray(flags);
+
+            bitArray.CopyTo(flags, 0);
+
+            var questionCount = BitConverter.GetBytes((short)1).Reverse().ToArray();
+            var answerCount = BitConverter.GetBytes((short)0).Reverse().ToArray();
+            var additionalCounts = BitConverter.GetBytes((short)0).Reverse().ToArray();
+            var otherCounts = BitConverter.GetBytes((short)0).Reverse().ToArray();
+
+
+            // Add the header to the output buffer.
+            //
+            outputBuffer = outputBuffer.Concat(otherCounts).Concat(flags.Reverse()).Concat(questionCount)
+                .Concat(answerCount).Concat(otherCounts).Concat(additionalCounts).ToArray();
+
+
+            var nodeName = GetName($"{_name}._hap._tcp.local");
+
+            outputBuffer = outputBuffer.Concat(nodeName).ToArray();
+
+            var typeBytes = BitConverter.GetBytes((short)255).Reverse().ToArray(); // PTR
+
+            outputBuffer = outputBuffer.Concat(typeBytes).ToArray();
+
+            var @class = BitConverter.GetBytes((short)1).Reverse().ToArray(); // Internet
+
+            @class[0] = 0x80;
+            outputBuffer = outputBuffer.Concat(@class).ToArray();
+
+           // outputBuffer = AddPtr(outputBuffer, "_services._dns-sd._udp.local", "_hap._tcp.local");
+           // outputBuffer = AddPtr(outputBuffer, "_hap._tcp.local", $"{_name}._hap._tcp.local");
+            //outputBuffer = AddSrv(outputBuffer, $"{_name}._hap._tcp.local", 0, 0, _hapPort,
+              //  $"{_name}.local");
+
+
+            Thread.Sleep(50);
+            return outputBuffer;
+        }
+
+        private byte[] GenerateDnsRecord(AddressFamily addressFamily)
         {
             var outputBuffer = new byte[0];
 
@@ -361,7 +411,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
             // We're using 15 and 10 since the endianness of this bytes is reversed :)
             //
-            bitArray.Set(15, isQuestionReturn); // QR
+            bitArray.Set(15, true); // QR
             bitArray.Set(10, true); // AA
 
             bitArray.CopyTo(flags, 0);
