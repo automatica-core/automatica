@@ -48,6 +48,8 @@ namespace Automatica.Core.Bootloader
                         process = Process.Start(processInfo);
                         process.WaitForExit();
 
+                        Console.WriteLine($"Process exited with code {process.ExitCode}");
+
                         Thread.Sleep(500);
                     }
                 }
@@ -156,11 +158,18 @@ namespace Automatica.Core.Bootloader
                 try
                 {
                     var fileInfo = new FileInfo(newPath);
-                    if(fileInfo.Name == "Automatica.Core.Bootloader")
+                    if(fileInfo.Name == "Automatica.Core.Bootloader" )
                     {
                         Console.WriteLine($"Ignore update of Automatica.Core.Bootloader");
                         continue;
                     }
+
+                    if (fileInfo.Name.EndsWith(".log"))
+                    {
+                        Console.WriteLine($"Ignore log file...");
+                        continue;
+                    }
+
                     var newFile = newPath.Replace(source, destination);
                     Console.WriteLine($"Copy {newPath} to {newFile}");
                     File.Copy(newPath, newFile, true); 
