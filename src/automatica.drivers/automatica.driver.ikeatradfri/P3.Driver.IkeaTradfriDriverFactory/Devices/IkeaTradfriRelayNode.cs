@@ -63,20 +63,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
                 }, cancellation.Token).WithCancellation(cancellation.Token);
             }
-            catch (OperationCanceledException)
+            catch (Exception e)
             {
+                DriverContext.Logger.LogError(e, "Error write state");
                 LastWriteState = false;
-                
-                DriverContext.Logger.LogDebug($"Operation cancelled, will try to reconnect");
-                await Container.Reconnect();
-            }
-            catch (InvalidOperationException)
-            {
-                LastWriteState = false;
-
-                DriverContext.Logger.LogDebug($"Lost connection, will try to reconnect");
-                await Container.Reconnect();
-
             }
         }
 

@@ -72,31 +72,6 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                 att.Update(device);
             }
         }
-
-        public async Task Reconnect()
-        {
-            if (!await _semaphore.WaitAsync(10))
-            {
-                return;
-            }
-            DriverContext.Logger.LogInformation($"Reconnect to tradfri gateway!");
-            
-            await Gateway.Stop();
-            try
-            {
-                var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(20));
-                await Gateway.Start().WithCancellation(cancellation.Token);
-            }
-            catch (Exception e)
-            {
-                DriverContext.Logger.LogInformation($"Could not reconnect to gateway...{e}");
-            }
-            finally
-            {
-                _semaphore.Release(1);
-            }
-        }
-
         public override bool Init()
         {
             DeviceId = Convert.ToInt64(DriverContext.NodeInstance.GetPropertyValueDouble(IkeaTradfriFactory.DeviceIdPropertyKey));
