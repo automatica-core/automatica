@@ -90,7 +90,7 @@ namespace P3.Driver.HomeKit.Http
 
                 connectionSession.Socket = tcpClient.Client;
 
-                tcpClient.ReceiveTimeout = TimeSpan.FromSeconds(1).Milliseconds;
+                tcpClient.ReceiveTimeout = Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds);
                 try
                 {
                     using (var networkStream = tcpClient.GetStream())

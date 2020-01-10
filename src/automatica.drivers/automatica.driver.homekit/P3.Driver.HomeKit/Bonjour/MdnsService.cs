@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Automatica.Core.Driver.Utility;
 using Automatica.Core.Driver.Utility.Network;
 using Microsoft.Extensions.Logging;
@@ -34,17 +35,25 @@ namespace P3.Driver.HomeKit.Bonjour
         static readonly IPEndPoint MdnsEndpointIp6 = new IPEndPoint(MulticastAddressIp6, MulticastPort);
         static readonly IPEndPoint MdnsEndpointIp4 = new IPEndPoint(MulticastAddressIp4, MulticastPort);
 
+        private System.Timers.Timer _timer = new System.Timers.Timer();
+
 
         public MdnsService(ILogger logger, int hapPort, string name)
         {
             _logger = logger;
             _hapPort = hapPort;
             _name = name;
+
+            _timer.Interval = 1000;
         }
+
 
 
         public void Stop()
         {
+            _timer.Elapsed -= TimerOnElapsed;
+            _timer.Stop();
+
             _cancel.Cancel();
             _isRunning = false;
             _socket.Close();
@@ -55,6 +64,8 @@ namespace P3.Driver.HomeKit.Bonjour
         {
             try
             {
+                _timer.Elapsed += TimerOnElapsed;
+                _timer.Start();
                 _cancel = new CancellationTokenSource();
                 var ipAddress = NetworkHelper.GetActiveIp();
               
@@ -193,6 +204,42 @@ namespace P3.Driver.HomeKit.Bonjour
             }
         }
 
+        private void TimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            lock (_timer)
+            {
+                try
+                {
+                    Socket s = new Socket(AddressFamily.InterNetwork,
+                        SocketType.Dgram, ProtocolType.Udp);
+                    s.SetSocketOption(SocketOptionLevel.IP,
+                        SocketOptionName.AddMembership, new MulticastOption(MulticastAddressIp4));
+                    s.SetSocketOption(SocketOptionLevel.IP,
+                        SocketOptionName.MulticastTimeToLive, 2);
+                    s.Connect(MulticastAddressIp4, MulticastPort);
+                    var ipInterfaces = GetUnicastAddresses()
+                        .Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork);
+
+                    IPEndPoint remote = new IPEndPoint(MulticastAddressIp4, MulticastPort);
+
+                    foreach (var ip in ipInterfaces)
+                    {
+                        var dns = GenerateDnsRecord(ip.Address.AddressFamily, new IPEndPoint(ip.Address, 0));
+
+                        s.Send(dns);
+
+                    }
+
+                    s.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Error sending announcement...");
+                }
+            }
+        }
+
         public static IEnumerable<NetworkInterface> GetNetworkInterfaces()
         {
             return NetworkInterface.GetAllNetworkInterfaces()
@@ -250,8 +297,7 @@ namespace P3.Driver.HomeKit.Bonjour
         private void Listen(Socket socket)
         {
             _logger.LogDebug($"Listen on socket {socket.LocalEndPoint} {socket.AddressFamily}");
-
-      
+        
             while (_isRunning)
             {
                 try
