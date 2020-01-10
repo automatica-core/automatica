@@ -44,7 +44,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception exp)
             {
-                Console.WriteLine(exp.Message);
+                _logger.LogError(exp, "Error in mdsn service...");
             }
 
             return Task.FromResult(true);

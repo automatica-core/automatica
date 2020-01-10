@@ -359,7 +359,7 @@ namespace P3.Driver.HomeKit.Bonjour
                 }
                 catch (Exception exp)
                 {
-                    _logger.LogError(exp.Message, "Error processing data");
+                    _logger.LogError(exp, "Error processing data");
                 }
             }
         }
@@ -548,7 +548,8 @@ namespace P3.Driver.HomeKit.Bonjour
 
         private void ByteArrayToStringDump(byte[] ba)
         {
-          //  _logger.LogHexOut(ba);
+            _logger.LogDebug($"Send mDNS Response");
+            _logger.LogHexOut(ba);
         }
 
         private byte[] GetName(string v)
