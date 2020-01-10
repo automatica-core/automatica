@@ -369,14 +369,12 @@ namespace P3.Driver.HomeKit.Bonjour
                 ipAddresses = ipAddresses.Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork);
             }
 
-            outputBuffer = AddARecord(outputBuffer, $"{_name}.local", senderRemote.Address.ToString(), false);
-
             foreach (var address in ipAddresses)
             {
-                var ip = address.Address.ToString();
-
                 if (address.Address.IsInSameSubnet(senderRemote.Address, address.IPv4Mask))
                 {
+                    var ip = address.Address.ToString();
+                    _logger.LogDebug($"Set A record to value: {ip}");
                     outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip, addressFamily == AddressFamily.InterNetworkV6);
                 }
             }
