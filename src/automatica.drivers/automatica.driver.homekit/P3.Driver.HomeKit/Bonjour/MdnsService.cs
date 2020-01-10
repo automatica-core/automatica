@@ -245,6 +245,8 @@ namespace P3.Driver.HomeKit.Bonjour
         {
             _logger.LogDebug($"Listen on socket {socket.LocalEndPoint} {socket.AddressFamily}");
 
+            BroadcastDns(socket.AddressFamily);
+
             while (_isRunning)
             {
                 try
@@ -275,81 +277,8 @@ namespace P3.Driver.HomeKit.Bonjour
 
                     // Build the header that indicates this is a response.
                     //
-                    var outputBuffer = new byte[0];
 
-                    var flags = new byte[2];
-
-                    var bitArray = new BitArray(flags);
-
-                    // We're using 15 and 10 since the endianness of this bytes is reversed :)
-                    //
-                    bitArray.Set(15, true); // QR
-                    bitArray.Set(10, true); // AA
-
-                    bitArray.CopyTo(flags, 0);
-
-                    var questionCount = BitConverter.GetBytes((short)1).Reverse().ToArray();
-                    var answerCount = BitConverter.GetBytes((short)4).Reverse().ToArray();
-                    var additionalCounts = BitConverter.GetBytes((short)1).Reverse().ToArray();
-                    var otherCounts = BitConverter.GetBytes((short)0).Reverse().ToArray();
-
-                    // Add the header to the output buffer.
-                    //
-                    outputBuffer = outputBuffer.Concat(otherCounts).Concat(flags.Reverse()).Concat(questionCount)
-                        .Concat(answerCount).Concat(otherCounts).Concat(additionalCounts).ToArray();
-
-                    int endOfHeaderBufferLength = outputBuffer.Length;
-
-                    var nodeName = GetName("_services._dns-sd._udp.local");
-
-                    outputBuffer = outputBuffer.Concat(nodeName).ToArray();
-
-                    var typeBytes = BitConverter.GetBytes((short)12).Reverse().ToArray(); // PTR
-
-                    outputBuffer = outputBuffer.Concat(typeBytes).ToArray();
-
-                    var @class = BitConverter.GetBytes((short)1).Reverse().ToArray(); // Internet
-
-                    outputBuffer = outputBuffer.Concat(@class).ToArray();
-
-                    Dictionary<string, string> values = new Dictionary<string, string>();
-                    values.Add("sf", "1");
-                    values.Add("ff", "0x00");
-                    values.Add("ci", "2");
-                    values.Add("id", HapControllerServer.HapControllerId);
-                    values.Add("md", _name);
-                    values.Add("s#", "1");
-                    values.Add("c#", $"{HapControllerServer.ConfigVersion}");
-
-                    outputBuffer = AddTxt(outputBuffer, $"{_name}._hap._tcp.local", values);
-                    outputBuffer = AddPtr(outputBuffer, "_services._dns-sd._udp.local", "_hap._tcp.local");
-                    outputBuffer = AddPtr(outputBuffer, "_hap._tcp.local", $"{_name}._hap._tcp.local");
-                    outputBuffer = AddSrv(outputBuffer, $"{_name}._hap._tcp.local", 0, 0, _hapPort,
-                        $"{_name}.local");
-
-
-                    var ipAddresses = GetIPAddresses();
-
-                    if (socket.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetworkV6);
-                    }
-                    else
-                    {
-                        ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
-                    }
-
-                    foreach (var address in ipAddresses)
-                    {
-                        var ip = address.ToString();
-                        outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip,
-                            socket.AddressFamily == AddressFamily.InterNetworkV6);
-                    }
-
-                    ByteArrayToStringDump(outputBuffer);
-
-                    Thread.Sleep(50);
-
+                    var outputBuffer = GenerateDnsRecord(socket.AddressFamily);
                     var bytesSent = socket.SendTo(outputBuffer, 0, outputBuffer.Length, SocketFlags.None,
                         senderRemote);
                 }
@@ -362,6 +291,112 @@ namespace P3.Driver.HomeKit.Bonjour
                     _logger.LogError(exp, "Error processing data");
                 }
             }
+        }
+
+        private void BroadcastDns(AddressFamily addressFamily)
+        {
+            try
+            {
+                var socket = new Socket(addressFamily, SocketType.Dgram, ProtocolType.Udp);
+                var ip = addressFamily == AddressFamily.InterNetworkV6 ? MulticastAddressIp6 : MulticastAddressIp4;
+
+                socket.SetSocketOption(SocketOptionLevel.IP,
+                    SocketOptionName.AddMembership, new MulticastOption(ip));
+                socket.SetSocketOption(SocketOptionLevel.IP,
+                    SocketOptionName.MulticastTimeToLive, 2);
+
+                var ipep = new IPEndPoint(ip, 4567);
+                socket.Connect(ipep);
+
+                var dns = GenerateDnsRecord(addressFamily);
+                socket.Send(dns.AsSpan());
+            }
+            catch (Exception e)
+            {
+                
+                _logger.LogError(e, "Error sending multicast...");
+            }
+        }
+
+        private byte[] GenerateDnsRecord(AddressFamily addressFamily)
+        {
+            var outputBuffer = new byte[0];
+
+            var flags = new byte[2];
+
+            var bitArray = new BitArray(flags);
+
+            // We're using 15 and 10 since the endianness of this bytes is reversed :)
+            //
+            bitArray.Set(15, true); // QR
+            bitArray.Set(10, true); // AA
+
+            bitArray.CopyTo(flags, 0);
+
+            var questionCount = BitConverter.GetBytes((short)1).Reverse().ToArray();
+            var answerCount = BitConverter.GetBytes((short)4).Reverse().ToArray();
+            var additionalCounts = BitConverter.GetBytes((short)1).Reverse().ToArray();
+            var otherCounts = BitConverter.GetBytes((short)0).Reverse().ToArray();
+
+            // Add the header to the output buffer.
+            //
+            outputBuffer = outputBuffer.Concat(otherCounts).Concat(flags.Reverse()).Concat(questionCount)
+                .Concat(answerCount).Concat(otherCounts).Concat(additionalCounts).ToArray();
+
+            int endOfHeaderBufferLength = outputBuffer.Length;
+
+            var nodeName = GetName("_services._dns-sd._udp.local");
+
+            outputBuffer = outputBuffer.Concat(nodeName).ToArray();
+
+            var typeBytes = BitConverter.GetBytes((short)12).Reverse().ToArray(); // PTR
+
+            outputBuffer = outputBuffer.Concat(typeBytes).ToArray();
+
+            var @class = BitConverter.GetBytes((short)1).Reverse().ToArray(); // Internet
+
+            outputBuffer = outputBuffer.Concat(@class).ToArray();
+
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            values.Add("sf", "1");
+            values.Add("ff", "0x00");
+            values.Add("ci", "2");
+            values.Add("id", HapControllerServer.HapControllerId);
+            values.Add("md", _name);
+            values.Add("s#", "1");
+            values.Add("c#", $"{HapControllerServer.ConfigVersion}");
+
+            outputBuffer = AddTxt(outputBuffer, $"{_name}._hap._tcp.local", values);
+            outputBuffer = AddPtr(outputBuffer, "_services._dns-sd._udp.local", "_hap._tcp.local");
+            outputBuffer = AddPtr(outputBuffer, "_hap._tcp.local", $"{_name}._hap._tcp.local");
+            outputBuffer = AddSrv(outputBuffer, $"{_name}._hap._tcp.local", 0, 0, _hapPort,
+                $"{_name}.local");
+
+
+            var ipAddresses = GetIPAddresses();
+
+            if (addressFamily == AddressFamily.InterNetworkV6)
+            {
+                ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetworkV6);
+            }
+            else
+            {
+                ipAddresses = ipAddresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
+            }
+
+            outputBuffer = AddARecord(outputBuffer, $"{_name}.local", NetworkHelper.GetActiveIp(), false);
+
+            foreach (var address in ipAddresses)
+            {
+                var ip = address.ToString();
+                //outputBuffer = AddARecord(outputBuffer, $"{_name}.local", ip,
+                  //  addressFamily == AddressFamily.InterNetworkV6);
+            }
+
+            ByteArrayToStringDump(outputBuffer);
+
+            Thread.Sleep(50);
+            return outputBuffer;
         }
 
         private byte[] AddARecord(byte[] outputBuffer, string hostName, string ipAddress, bool isIPv6)
@@ -548,8 +583,8 @@ namespace P3.Driver.HomeKit.Bonjour
 
         private void ByteArrayToStringDump(byte[] ba)
         {
-            _logger.LogDebug($"Send mDNS Response");
-            _logger.LogHexOut(ba);
+            //_logger.LogDebug($"Send mDNS Response");
+            //_logger.LogHexOut(ba);
         }
 
         private byte[] GetName(string v)
