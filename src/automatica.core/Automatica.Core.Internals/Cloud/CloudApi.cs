@@ -16,6 +16,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.Plugins;
 
 namespace Automatica.Core.Internals.Cloud
 {
@@ -29,6 +30,7 @@ namespace Automatica.Core.Internals.Cloud
     public class CloudApi : ICloudApi
     {
         private readonly IConfiguration _config;
+        private readonly IPluginInstaller _pluginInstaller;
         private const string UpdateFileName = "Automatica.Core.Update.zip";
 
         public event EventHandler<DownloadProgressChangedEventArgs> DownloadUpdateProgressChanged;
@@ -37,9 +39,10 @@ namespace Automatica.Core.Internals.Cloud
 
         private const string WebApiVersion = "v2";
         
-        public CloudApi(IConfiguration config)
+        public CloudApi(IConfiguration config, IPluginInstaller pluginInstaller)
         {
             _config = config;
+            _pluginInstaller = pluginInstaller;
         }
 
         private string GetUrl()
@@ -240,37 +243,7 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<bool> InstallPlugin(Plugin plugin, string fileName)
         {
-            var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            try
-            {
-                Directory.CreateDirectory(tmpDirectory);
-
-                var installDir = Path.Combine(ServerInfo.PluginDirectory,
-                    plugin.PluginType == PluginType.Driver
-                        ? ServerInfo.DriversDirectory
-                        : ServerInfo.LogicsDirectory, plugin.ComponentName);
-
-                if (Directory.Exists(installDir))
-                {
-                    Directory.Delete(installDir);
-                }
-
-
-                Common.Update.Plugin.InstallPlugin(fileName, tmpDirectory);
-                Directory.Move(Path.Combine(tmpDirectory, plugin.ComponentName), installDir);
-                return Task.FromResult(true);
-            }
-            catch (Exception e)
-            {
-                SystemLogger.Instance.LogError(e, "Could not install plugin...");
-            }
-            finally
-            {
-                Directory.Delete(tmpDirectory);
-            }
-
-            return Task.FromResult(false);
+            return _pluginInstaller.InstallPlugin(plugin, fileName);
         }
 
 

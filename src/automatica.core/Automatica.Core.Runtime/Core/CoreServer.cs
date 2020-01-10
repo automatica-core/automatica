@@ -169,7 +169,7 @@ namespace Automatica.Core.Runtime.Core
             _telegramMonitor?.Clear();
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             var settings = _settingsCache.All().SingleOrDefault(a => a.ValueKey == ServerInfo.DbConfigVersionKey);
 
@@ -181,7 +181,7 @@ namespace Automatica.Core.Runtime.Core
             
             ServerInfo.LoadedConfigVersion = ServerInfo.DbConfigVersion;
             
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 try
                 {
@@ -197,6 +197,8 @@ namespace Automatica.Core.Runtime.Core
                     _logger.LogError(e, $"Could not startup...");
                 }
             }, cancellationToken);
+
+            return Task.CompletedTask;
         }
 
 

@@ -27,8 +27,6 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Visu;
 using Automatica.Push;
-using Automatica.Push.Concurrency;
-using Automatica.Push.Hubs;
 using Automatica.Push.LearnMode;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,6 +53,8 @@ namespace Automatica.Core.Runtime
             services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();
             services.AddAutomaticaPushServices(configuration, isElectronActive);
+
+            services.AddSingleton<IPluginInstaller, PluginInstaller>();
 
             if (!isElectronActive)
             {

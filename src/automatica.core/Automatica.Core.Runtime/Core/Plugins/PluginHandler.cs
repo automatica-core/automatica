@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
@@ -21,9 +22,10 @@ namespace Automatica.Core.Runtime.Core.Plugins
         private readonly ILogicLoader _logicLoader;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly IConfiguration _config;
+        private readonly IPluginInstaller _pluginInstaller;
         private readonly object _lock = new object();
 
-        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader, INodeTemplateCache nodeTemplateCache, IConfiguration config)
+        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader, INodeTemplateCache nodeTemplateCache, IConfiguration config, IPluginInstaller pluginInstaller)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -31,53 +33,38 @@ namespace Automatica.Core.Runtime.Core.Plugins
             _logicLoader = logicLoader;
             _nodeTemplateCache = nodeTemplateCache;
             _config = config;
+            _pluginInstaller = pluginInstaller;
         }
 
-        public Task CheckAndInstallPluginUpdates()
+        public async Task CheckAndInstallPluginUpdates()
         {
             var updateDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
             if (!Directory.Exists(updateDirectory))
             {
                 Directory.CreateDirectory(updateDirectory);
-                return Task.CompletedTask;
+                return;
             }
 
             var files = Directory.GetFiles(updateDirectory);
 
             foreach (var f in files)
             {
+                var tmp = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
                 try
                 {
-                    var tmp = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
                     var manifest = Common.Update.Plugin.GetPluginManifest(_logger, f, tmp);
-
-                    Directory.Delete(tmp, true);
-                    if (manifest == null)
-                    {
-                        _logger.LogWarning($"Could no update plugin with file from {f}");
-
-                        File.Delete(f);
-                        continue;
-                    }
-
-                    var baseDir = ServerInfo.GetBasePath();
-                    var pluginType = manifest.Automatica.Type == "driver" ? ServerInfo.DriversDirectory : ServerInfo.LogicsDirectory;
-                    var pluginDir = Path.Combine(baseDir, pluginType);
-                    var componentDir = Path.Combine(pluginDir, manifest.Automatica.ComponentName);
-
-                    if (Directory.Exists(componentDir))
-                    {
-                        Directory.Delete(componentDir, true);
-                    }
-                    Common.Update.Plugin.InstallPlugin(f, pluginDir);
+                    await _pluginInstaller.InstallPlugin(manifest, f);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not install plugin");
                 }
+                finally
+                {
+                    Directory.Delete(tmp, true);
+                }
                 File.Delete(f);
             }
-            return Task.CompletedTask;
         }
 
         public async Task LoadPlugin(Plugin plugin)
