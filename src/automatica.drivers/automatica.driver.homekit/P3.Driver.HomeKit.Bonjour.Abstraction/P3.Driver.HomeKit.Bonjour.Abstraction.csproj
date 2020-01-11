@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2</TargetFrameworks>
+    <AssemblyName>P3.Driver.HomeKit.Bonjour.Abstraction</AssemblyName>
+    <RootNamespace>P3.Driver.HomeKit.Bonjour.Abstraction</RootNamespace>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleBase" Version="1.3.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19351-01" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resolving/RootHints" />
+  </ItemGroup>
+
+</Project>

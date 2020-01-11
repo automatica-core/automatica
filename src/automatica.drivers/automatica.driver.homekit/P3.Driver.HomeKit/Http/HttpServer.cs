@@ -74,7 +74,7 @@ namespace P3.Driver.HomeKit.Http
                 catch (Exception e)
                 {
                     _listener.Stop();
-                    _logger.LogDebug(e, "Could not accept client");
+                    _logger.LogError(e, "Could not accept client");
                 }
             }, _cts.Token);
 

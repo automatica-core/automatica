@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>P3.Driver.HomeKit.Bonjour</AssemblyName>
+    <RootNamespace>P3.Driver.HomeKit.Bonjour</RootNamespace>
+    <DebugType>full</DebugType>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    
+    </PropertyGroup>
+
+  
+  <ItemGroup>
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="IPNetwork2" Version="2.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.1" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.HomeKit.Bonjour.Abstraction\P3.Driver.HomeKit.Bonjour.Abstraction.csproj" />
+  </ItemGroup>
+</Project>

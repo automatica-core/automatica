@@ -39,4 +39,8 @@
     <PackageReference Include="srp" Version="1.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.HomeKit.Bonjour\P3.Driver.HomeKit.Bonjour.csproj" />
+  </ItemGroup>
+
 </Project>

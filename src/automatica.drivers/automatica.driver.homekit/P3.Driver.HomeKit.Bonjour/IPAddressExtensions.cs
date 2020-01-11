@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 
 namespace P3.Driver.HomeKit.Bonjour
 {
-    public static class IPAddressExtensions
+    public static class IpAddressExtensions
     {
         public static IPAddress GetBroadcastAddress(this IPAddress address, IPAddress subnetMask)
         {
