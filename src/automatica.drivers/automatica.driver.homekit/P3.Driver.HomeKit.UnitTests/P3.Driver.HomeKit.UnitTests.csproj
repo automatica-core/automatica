@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.11.0.642" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.11.0.674" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit\P3.Driver.HomeKit.csproj" />

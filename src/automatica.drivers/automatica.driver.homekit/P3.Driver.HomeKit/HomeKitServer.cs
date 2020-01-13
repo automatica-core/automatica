@@ -60,7 +60,8 @@ namespace P3.Driver.HomeKit
             var corePath = new FileInfo(Assembly.GetExecutingAssembly().Location);
 
             var rid = ServerInfo.Rid.Replace("-", "_");
-            var embeddedResource = Assembly.GetExecutingAssembly().GetManifestResourceNames()
+            var resources = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+            var embeddedResource = resources
                 .SingleOrDefault(a => a.Contains(rid));
 
             if (string.IsNullOrEmpty(embeddedResource))

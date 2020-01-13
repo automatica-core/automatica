@@ -169,14 +169,11 @@ namespace P3.Driver.HomeKit.Bonjour
 
         private void _mdns_QueryReceived(object sender, MessageEventArgs e)
         {
-            if (e.Message.IsQuery && e.Message.Questions.Any(a => a.Name.Labels.Contains(HapName)))
+            if (e.Message.IsQuery && 
+            (e.Message.Questions.Any(a => a.Name.Labels.Contains(HapName))) || 
+            e.Message.Questions.Any(a => a.Name == ServiceDiscovery.ServiceName))
             {
                 var localAddresses = MulticastService.GetIpAddresses().ToList();
-                if (localAddresses.Any(a => Equals(a, e.RemoteEndPoint.Address)))
-                {
-                    return;
-                }
-
                 var dnsMessage = GenerateQueryResponseMessage();
 
                 foreach (var localAddress in localAddresses)
