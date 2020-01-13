@@ -90,6 +90,9 @@ namespace Automatica.Core.Base.Common
                 {
                     rid = "win-";
                 }
+                else if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                    rid = "osx-";
+                }
 
                 switch (RuntimeInformation.OSArchitecture)
                 {
