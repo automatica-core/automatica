@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Version>0.11.0.642</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>78F9C09E-3660-4EDA-8FA7-19AC110D78D3</ProjectGuid>

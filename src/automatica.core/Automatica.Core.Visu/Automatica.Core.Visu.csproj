@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Version>0.11.0.642</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>5255E1AB-7DEE-423D-9538-8B087D3B0ECC</ProjectGuid>
