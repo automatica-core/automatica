@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Options;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
 using Newtonsoft.Json;
@@ -30,6 +31,8 @@ namespace Automatica.Core.Plugin.Standalone
     internal class MqttConnection : IDriverConnection
     {
         private readonly IServiceProvider _serviceProvider;
+
+        public INodeTemplateFactory NodeTemplateFactory => _nodeTemplateFactory;
         private readonly INodeTemplateFactory _nodeTemplateFactory;
         public string MasterAddress { get; }
         public string NodeId { get; }
@@ -37,14 +40,27 @@ namespace Automatica.Core.Plugin.Standalone
         public string Password { get; }
         public ILogger Logger { get; }
 
+        internal MqttDispatcher Dispatcher => _dispatcher;
         private readonly MqttDispatcher _dispatcher;
+
+        public IMqttClient MqttClient => _mqttClient;
         private readonly IMqttClient _mqttClient;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(0);
 
+        public IDriverFactoryLoader Loader => _loader;
         private readonly IDriverFactoryLoader _loader;
+
+        public IDriverNodesStore NodeStore => _nodeStore;
         private readonly IDriverNodesStore _nodeStore;
 
+        internal IDriver DriverInstance
+        {
+            get { return _driverInstance; }
+            set { _driverInstance = value; }
+        }
         private IDriver _driverInstance;
+
+        public IDriverStore DriverStore => _driverStore;
         private readonly IDriverStore _driverStore;
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
@@ -84,7 +100,6 @@ namespace Automatica.Core.Plugin.Standalone
                     .WithCleanSession()
                     .Build();
                 _mqttClient.Disconnected += OnClientDisconnected;
-                _mqttClient.ApplicationMessageReceived += OnMqttClientOnApplicationMessageReceived;
 
                 await _mqttClient.ConnectAsync(options);
 
@@ -140,60 +155,7 @@ namespace Automatica.Core.Plugin.Standalone
         private async void OnMqttClientOnApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
 
-            var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-            Logger.LogDebug($"received topic {e.ApplicationMessage.Topic} with data {json}...");
-
-            if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
-            {
-                if (!await _semaphore.WaitAsync(1000))
-                {
-                    Logger.LogWarning($"Instance already running, ignoring second call...");
-                    return;
-                }
-
-                var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
-
-                var context = new DriverContext(dto, _dispatcher, _nodeTemplateFactory,
-                    new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(this),
-                    new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
-                _driverInstance = Factory.CreateDriver(context);
-
-                await _loader.LoadDriverFactory(dto, Factory, context);
-
-                foreach (var driver in _driverStore.All())
-                {
-                    await driver.Start();
-                }
-
-                await _mqttClient.SubscribeAsync(new TopicFilterBuilder()
-                        .WithTopic($"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/+")
-                        .WithExactlyOnceQoS().Build());
-
-            }
-            else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
-            {
-                _dispatcher.MqttDispatch(e.ApplicationMessage.Topic,  json);
-            }
-            else if (_driverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_driverInstance.Id}/#"))
-            {
-                var idObject = JsonConvert.DeserializeObject<IdObject>(json);
-
-                var node = _nodeStore.Get(idObject.Id);
-
-                if (node == null)
-                {
-                    return;
-                }
-
-                if (e.ApplicationMessage.Topic.EndsWith(DriverNodeRemoteAction.StartLearnMode.ToString()))
-                {
-                    await node.EnableLearnMode();
-                }
-                else if (e.ApplicationMessage.Topic.EndsWith(DriverNodeRemoteAction.StopLearnMode.ToString()))
-                {
-                    await node.DisableLearnMode();
-                }
-            }
+          
         }
 
         private void OnClientDisconnected(object sender, MqttClientDisconnectedEventArgs e)

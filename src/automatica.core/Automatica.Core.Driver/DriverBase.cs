@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Driver

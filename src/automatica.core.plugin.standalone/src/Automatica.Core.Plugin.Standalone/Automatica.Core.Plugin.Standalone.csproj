@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <AssemblyName>automatica-plugin-standalone</AssemblyName>
 
@@ -18,14 +18,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="0.9.0.545" />
-    <PackageReference Include="Automatica.Core.Common.Update" Version="0.9.0.545" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.9.0.545" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.9.0.545" />
-    <PackageReference Include="Automatica.Core.EF" Version="0.9.0.545" />
-    <PackageReference Include="Automatica.Core.Rule" Version="0.9.0.545" />
-    <PackageReference Include="MQTTnet" Version="2.8.5" />
-    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="2.8.5" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Common.Update" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Driver" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.EF" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Rule" Version="0.12.0.678" />
+    <PackageReference Include="MQTTnet" Version="3.0.9-rc1" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.0.9-rc1" />
     <PackageReference Include="NetStandardUtils" Version="1.0.0" />
   </ItemGroup>
 

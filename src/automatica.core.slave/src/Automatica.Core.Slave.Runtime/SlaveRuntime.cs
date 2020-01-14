@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MQTTnet.Client.Options;
 using Timer = System.Timers.Timer;
 
 namespace Automatica.Core.Slave.Runtime
@@ -29,6 +30,7 @@ namespace Automatica.Core.Slave.Runtime
 
         private readonly IDictionary<string, string> _runningImages = new Dictionary<string, string>();
 
+        public string SlaveId => _slaveId;
         private readonly string _slaveId;
 
         private readonly string _masterAddress;
@@ -72,6 +74,7 @@ namespace Automatica.Core.Slave.Runtime
             }
 
             _mqttClient = new MqttFactory().CreateMqttClient();
+            _mqttClient.ApplicationMessageReceivedHandler = new ApplicationMessageReceivedHandler(this, _logger);
 
             try
             {
@@ -132,41 +135,7 @@ namespace Automatica.Core.Slave.Runtime
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topics).WithExactlyOnceQoS().Build());
 
 
-                _mqttClient.ApplicationMessageReceived += async (sender, e) =>
-                {
-                    _logger.LogDebug($"Mqtt message received for topic {e.ApplicationMessage.Topic}");
-
-                    if (MqttTopicFilterComparer.IsMatch(topic, e.ApplicationMessage.Topic))
-                    {
-                        var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                        var action = JsonConvert.DeserializeObject<ActionRequest>(json);
-                        try
-                        {
-                            await ExecuteAction(action);
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, $"Could not execute request");
-                        }
-                    }
-                    else if (MqttTopicFilterComparer.IsMatch(topics, e.ApplicationMessage.Topic))
-                    {
-                        var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                        var actions = JsonConvert.DeserializeObject<ActionRequest[]>(json);
-                        try
-                        {
-                            foreach (var action in actions)
-                            {
-                                await ExecuteAction(action);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogError(ex, $"Could not execute request");
-                        }
-                    }
-                };
-
+                
             }
             catch (HttpRequestException e)
             {
@@ -178,7 +147,7 @@ namespace Automatica.Core.Slave.Runtime
             }
         }
 
-        private async Task ExecuteAction(ActionRequest action)
+        internal async Task ExecuteAction(ActionRequest action)
         {
             switch (action.Action)
             {
