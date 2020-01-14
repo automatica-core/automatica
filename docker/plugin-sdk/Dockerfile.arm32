@@ -1,2 +1,2 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.101 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100-buster-arm32v7
 WORKDIR /src
