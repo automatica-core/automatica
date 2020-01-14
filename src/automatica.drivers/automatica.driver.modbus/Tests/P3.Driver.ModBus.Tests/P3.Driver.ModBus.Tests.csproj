@@ -19,7 +19,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+    <PackageReference Include="coverlet.msbuild" Version="2.8.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -29,8 +29,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.10.0.581" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.10.0.581" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.12.0.678" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.ModBusDriverFactory\P3.Driver.ModBusDriverFactory.csproj" />

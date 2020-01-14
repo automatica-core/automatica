@@ -96,9 +96,9 @@ namespace P3.Driver.HomeKit.Bonjour.Abstraction
 
             var salt = reader.ReadString();
             if (salt != "-")
-                Salt = Base16.Decode(salt);
+                Salt = Base16.Decode(salt).ToArray();
 
-            NextHashedOwnerName = Base32.ExtendedHex.Decode(reader.ReadString());
+            NextHashedOwnerName = Base32.ExtendedHex.Decode(reader.ReadString()).ToArray();
 
             while (!reader.IsEndOfLine())
             {

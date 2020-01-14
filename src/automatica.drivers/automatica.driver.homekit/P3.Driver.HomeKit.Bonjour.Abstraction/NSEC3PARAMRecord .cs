@@ -73,7 +73,7 @@ namespace P3.Driver.HomeKit.Bonjour.Abstraction
 
             var salt = reader.ReadString();
             if (salt != "-")
-                Salt = Base16.Decode(salt);
+                Salt = Base16.Decode(salt).ToArray();
         }
 
         /// <inheritdoc />

@@ -257,7 +257,7 @@ namespace P3.Driver.HomeKit.Bonjour.Abstraction
             // Convert hex string into byte array.
             try
             {
-                return Base16.Decode(sb.ToString());
+                return Base16.Decode(sb.ToString()).ToArray();
             }
             catch (InvalidOperationException e)
             {

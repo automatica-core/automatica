@@ -11,9 +11,9 @@
     <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="P3.Elliptic.Curve25519" Version="1.0.0" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.10.0.580" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.10.0.580" />
+    <PackageReference Include="P3.Elliptic.Curve25519" Version="3.0.0" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

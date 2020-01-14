@@ -129,7 +129,7 @@ namespace P3.Driver.HomeKit.Bonjour.Abstraction
             {
                 sb.Append(reader.ReadString());
             }
-            Digest = Base16.Decode(sb.ToString());
+            Digest = Base16.Decode(sb.ToString()).ToArray();
         }
 
         /// <inheritdoc />
