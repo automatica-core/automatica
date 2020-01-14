@@ -13,7 +13,7 @@ RUN npm install
 RUN npm run build-docker
 
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100 AS build
 WORKDIR /app
 
 RUN apt-get update 
