@@ -34,7 +34,7 @@ namespace Automatica.Core.Driver
                 var list = new List<string>();
                 GetFullNameRecursive(DriverContext.NodeInstance, ref list);
                 list.Reverse();
-                return list.Join("-");
+                return String.Join("-", list);
             }
         }
 
@@ -233,7 +233,7 @@ namespace Automatica.Core.Driver
             return Task.CompletedTask;
         }
 
-        public virtual async Task<bool> Start()
+        public virtual Task<bool> Start()
         {
             _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
 
@@ -264,7 +264,7 @@ namespace Automatica.Core.Driver
                 }
             });
             
-            return true;
+            return Task.FromResult(true);
         }
 
         private async Task WriteTask()
