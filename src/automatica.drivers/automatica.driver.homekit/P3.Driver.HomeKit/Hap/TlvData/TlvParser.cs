@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using P3.Driver.HomeKit.Hap.TlvData.Exceptions;
 
-namespace P3.Driver.HomeKit.Hap.Data
+namespace P3.Driver.HomeKit.Hap.TlvData
 {
     public class TlvParser
     {
@@ -34,7 +35,7 @@ namespace P3.Driver.HomeKit.Hap.Data
             return result;
         }
 
-        public static byte[] Serialise(Tlv item)
+        public static byte[] Serialize(Tlv item)
         {
             using (MemoryStream ms = new MemoryStream())
             {

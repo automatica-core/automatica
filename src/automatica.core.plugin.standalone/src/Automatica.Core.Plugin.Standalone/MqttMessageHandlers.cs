@@ -12,6 +12,7 @@ using MQTTnet;
 using MQTTnet.Client.Receiving;
 using MQTTnet.Server;
 using Newtonsoft.Json;
+using MQTTnet.Client;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -55,8 +56,9 @@ namespace Automatica.Core.Plugin.Standalone
                 }
 
                 await _connection.MqttClient.SubscribeAsync(new TopicFilterBuilder()
-                        .WithTopic($"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/+")
-                        .WithExactlyOnceQoS().Build());
+                    .WithTopic($"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/+")
+                    .WithExactlyOnceQoS()
+                    .Build());
 
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))

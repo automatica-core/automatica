@@ -76,7 +76,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       item.itemResized.emit();
     }
   }
-  
+
   async ngOnInit() {
 
     this.registerEvent(this.deviceService.orientationChange, () => {

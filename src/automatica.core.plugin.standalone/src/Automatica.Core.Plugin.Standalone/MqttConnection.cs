@@ -2,24 +2,20 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Loader;
-using Automatica.Core.EF.Models;
 using Automatica.Core.Plugin.Standalone.Abstraction;
 using Automatica.Core.Plugin.Standalone.Dispatcher;
-using Automatica.Core.Plugin.Standalone.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
 using MQTTnet.Protocol;
-using MQTTnet.Server;
 using Newtonsoft.Json;
-using MqttClientDisconnectedEventArgs = MQTTnet.Client.MqttClientDisconnectedEventArgs;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -32,36 +28,32 @@ namespace Automatica.Core.Plugin.Standalone
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public INodeTemplateFactory NodeTemplateFactory => _nodeTemplateFactory;
-        private readonly INodeTemplateFactory _nodeTemplateFactory;
+        public INodeTemplateFactory NodeTemplateFactory { get; }
+
         public string MasterAddress { get; }
         public string NodeId { get; }
         public string Username { get; }
         public string Password { get; }
         public ILogger Logger { get; }
 
-        internal MqttDispatcher Dispatcher => _dispatcher;
-        private readonly MqttDispatcher _dispatcher;
+        internal MqttDispatcher Dispatcher { get; }
 
         public IMqttClient MqttClient => _mqttClient;
         private readonly IMqttClient _mqttClient;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(0);
 
-        public IDriverFactoryLoader Loader => _loader;
-        private readonly IDriverFactoryLoader _loader;
+        public IDriverFactoryLoader Loader { get; }
 
-        public IDriverNodesStore NodeStore => _nodeStore;
-        private readonly IDriverNodesStore _nodeStore;
+        public IDriverNodesStore NodeStore { get; }
 
         internal IDriver DriverInstance
         {
-            get { return _driverInstance; }
-            set { _driverInstance = value; }
+            get => _driverInstance;
+            set => _driverInstance = value;
         }
         private IDriver _driverInstance;
 
-        public IDriverStore DriverStore => _driverStore;
-        private readonly IDriverStore _driverStore;
+        public IDriverStore DriverStore { get; }
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
@@ -78,13 +70,13 @@ namespace Automatica.Core.Plugin.Standalone
             Password = password;
             Factory = factory;
 
-            _nodeTemplateFactory = serviceProvider.GetRequiredService<INodeTemplateFactory>();
-            _loader = _serviceProvider.GetRequiredService<IDriverFactoryLoader>();
-            _nodeStore = serviceProvider.GetRequiredService<IDriverNodesStore>();
-            _driverStore = serviceProvider.GetRequiredService<IDriverStore>();
+            NodeTemplateFactory = serviceProvider.GetRequiredService<INodeTemplateFactory>();
+            Loader = _serviceProvider.GetRequiredService<IDriverFactoryLoader>();
+            NodeStore = serviceProvider.GetRequiredService<IDriverNodesStore>();
+            DriverStore = serviceProvider.GetRequiredService<IDriverStore>();
 
             _mqttClient = new MqttFactory().CreateMqttClient();
-            _dispatcher = new MqttDispatcher(_mqttClient);
+            Dispatcher = new MqttDispatcher(_mqttClient);
         }
 
         public IDriverFactory Factory { get; }
@@ -99,7 +91,7 @@ namespace Automatica.Core.Plugin.Standalone
                     .WithCredentials(Username, Password)
                     .WithCleanSession()
                     .Build();
-                _mqttClient.Disconnected += OnClientDisconnected;
+                _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
 
                 await _mqttClient.ConnectAsync(options);
 
@@ -151,18 +143,9 @@ namespace Automatica.Core.Plugin.Standalone
             return true;
         }
 
-
-        private async void OnMqttClientOnApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
+        internal void OnClientDisconnected(MqttClientDisconnectedEventArgs e)
         {
-
           
-        }
-
-        private void OnClientDisconnected(object sender, MqttClientDisconnectedEventArgs e)
-        {
-            _mqttClient.Disconnected -= OnClientDisconnected;
-            _mqttClient.ApplicationMessageReceived -= OnMqttClientOnApplicationMessageReceived;
-
             Logger.LogWarning(e.Exception, "Mqtt client disconnected");
             _semaphoreSlim.Release(1);
         }

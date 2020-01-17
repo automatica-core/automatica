@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
-using P3.Driver.HomeKit.Hap.Data;
+using P3.Driver.HomeKit.Hap.TlvData;
 using P3.Elliptic;
 using Ed25519 = Chaos.NaCl.Ed25519;
 
@@ -62,7 +62,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var encoder = new Tlv();
                 encoder.AddType(Constants.Identifier, serverUsername);
                 encoder.AddType(Constants.Signature, proof);
-                var plaintext = TlvParser.Serialise(encoder);
+                var plaintext = TlvParser.Serialize(encoder);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
                 var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg02"));

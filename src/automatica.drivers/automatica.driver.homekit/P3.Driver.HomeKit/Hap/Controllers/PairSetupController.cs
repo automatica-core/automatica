@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
-using P3.Driver.HomeKit.Hap.Data;
+using P3.Driver.HomeKit.Hap.TlvData;
 using SecureRemotePassword;
 
 namespace P3.Driver.HomeKit.Hap.Controllers
@@ -207,7 +207,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     encoder.AddType(Constants.PublicKey, accessoryLtpk);
                     encoder.AddType(Constants.Signature, signature);
 
-                    var plaintext = TlvParser.Serialise(encoder);
+                    var plaintext = TlvParser.Serialize(encoder);
 
                     var nonce6 = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg06"));
 

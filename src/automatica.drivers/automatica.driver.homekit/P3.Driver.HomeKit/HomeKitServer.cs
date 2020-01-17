@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,8 @@ using P3.Driver.HomeKit.Bonjour;
 using P3.Driver.HomeKit.Hap;
 using P3.Driver.HomeKit.Hap.EventArgs;
 using P3.Driver.HomeKit.Hap.Model;
+
+[assembly:InternalsVisibleTo("P3.Driver.HomeKit.UnitTests")]
 
 namespace P3.Driver.HomeKit
 {
@@ -30,6 +33,11 @@ namespace P3.Driver.HomeKit
 
         public HomeKitServer(ILogger logger, int port, string name, string ltsk, string ltpk, string deviceId, string pairCode, string manufacturer, string bridgeName)
         {
+            if (!HomeKitSetup.IsSetupCodeValid(pairCode))
+            {
+                throw new ArgumentException($"{nameof(pairCode)} is not valid...");
+            }
+
             Manufacturer = manufacturer;
             BridgeName = bridgeName;
             var hapPort = port;

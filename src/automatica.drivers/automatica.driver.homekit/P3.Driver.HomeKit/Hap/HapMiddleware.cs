@@ -7,7 +7,7 @@ using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using P3.Driver.HomeKit.Hap.Controllers;
-using P3.Driver.HomeKit.Hap.Data;
+using P3.Driver.HomeKit.Hap.TlvData;
 
 namespace P3.Driver.HomeKit.Hap
 {
@@ -67,7 +67,7 @@ namespace P3.Driver.HomeKit.Hap
             var tlvData = new Tlv();
             tlvData.AddType(Constants.State, state++);
             tlvData.AddType(Constants.Error, error);
-            byte[] output = TlvParser.Serialise(tlvData);
+            byte[] output = TlvParser.Serialize(tlvData);
 
             return new Tuple<string, byte[]>("application/pairing+tlv8", output);    
         }
@@ -121,7 +121,7 @@ namespace P3.Driver.HomeKit.Hap
 
                             var data = _pairController.Post(parts);
 
-                            var raw = TlvParser.Serialise(data.TlvData);
+                            var raw = TlvParser.Serialize(data.TlvData);
 
                             if (!data.Ok)
                             {
@@ -154,7 +154,7 @@ namespace P3.Driver.HomeKit.Hap
                                 _sessions[connectionId] = data.HapSession;
                             }
 
-                            var raw = TlvParser.Serialise(data.TlvData);
+                            var raw = TlvParser.Serialize(data.TlvData);
                             return new Tuple<string, byte[]>(data.ContentType, raw);
                         }
 
@@ -164,7 +164,7 @@ namespace P3.Driver.HomeKit.Hap
                             var pair = new PairingController(_logger);
                             var data = pair.Post(parts);
 
-                            var raw = TlvParser.Serialise(data.TlvData);
+                            var raw = TlvParser.Serialize(data.TlvData);
                             return new Tuple<string, byte[]>(data.ContentType, raw);
                         }
 

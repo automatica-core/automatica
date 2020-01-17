@@ -14,6 +14,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.HomeKit.Bonjour",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.HomeKit.Bonjour.Abstraction", "P3.Driver.HomeKit.Bonjour.Abstraction\P3.Driver.HomeKit.Bonjour.Abstraction.csproj", "{5260D88C-25AF-469C-B1BE-C23CD68A614F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 Core", "00 Core", "{EBFE063B-D792-42BD-8882-5D6FD8157356}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 Tests", "99 Tests", "{9406F8BD-56AD-470A-9354-36E8724C902F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4D9A5074-1617-4E64-87A1-071FE59E0302} = {EBFE063B-D792-42BD-8882-5D6FD8157356}
+		{CCB1A2F7-747A-458F-AE94-E06A16514394} = {EBFE063B-D792-42BD-8882-5D6FD8157356}
+		{DB9F5D26-BCF3-49EF-A479-584EB1EA004A} = {9406F8BD-56AD-470A-9354-36E8724C902F}
+		{76A6734C-DB54-4332-A3BF-788D73336D45} = {9406F8BD-56AD-470A-9354-36E8724C902F}
+		{0E7580BC-7C6B-4D2E-9D86-6DE5D943EDED} = {EBFE063B-D792-42BD-8882-5D6FD8157356}
+		{5260D88C-25AF-469C-B1BE-C23CD68A614F} = {EBFE063B-D792-42BD-8882-5D6FD8157356}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B60AC37E-67D6-4A77-9009-CF254B55B730}
