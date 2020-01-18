@@ -38,13 +38,13 @@ namespace P3.Driver.HomeKit.ConsoleTest
             string ltpk = null;
             if (File.Exists("LTPK"))
             {
-                ltpk = File.ReadAllText("LTPK");
+                //ltpk = File.ReadAllText("LTPK");
             }
 
             string ltsk = null;
             if (File.Exists("LTSK"))
             {
-                ltsk = File.ReadAllText("LTSK");
+              //  ltsk = File.ReadAllText("LTSK");
             }
 
             ServerInfo.ServerUid = Guid.NewGuid();

@@ -11,13 +11,16 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
         {
             var tlv = TlvParser.Parse(TlvTestData.PairSetupM1);
 
-
             Assert.Equal(2, tlv.Values.Count);
             Assert.True(tlv.Values.ContainsKey(Constants.Method));
             Assert.True(tlv.Values.ContainsKey(Constants.State));
 
             Assert.Equal(tlv.GetType(Constants.Method), new byte[] { 0 });
             Assert.Equal(tlv.GetType(Constants.State), new byte[] { 1 });
+
+            var serialized = TlvParser.Serialize(tlv);
+
+            Assert.Equal(TlvTestData.PairSetupM1, serialized);
         }
 
         [Fact]
@@ -74,6 +77,10 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                                                            0xf3, 0x15, 0x56, 0x08, 0xda, 0x57, 0x19, 0xd8, 0x10, 0x78,
                                                            0xd3, 0x89, 0xe1, 0x97, 0xa4, 0x0f, 0x77, 0x48, 0xae, 0x10,
                                                            0xf0, 0xcd, 0xd3, 0xb2, 0x71, 0xdb, 0x84, 0x23, 0x8f });
+
+            var serialized = TlvParser.Serialize(tlv);
+
+            Assert.Equal(TlvTestData.PairSetupM2, serialized);
         }
 
         [Fact]
@@ -138,6 +145,10 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                 0x67, 0x51, 0xa0, 0xa8, 0x5b, 0x1d, 0x62, 0x75,
                 0xbd, 0x40, 0x19, 0x92, 0xa6, 0x44, 0xa6, 0x5f,
                 0x69, 0xbe, 0xd2, 0xc2, 0x03, 0x4e, 0x69, 0x74 });
+
+
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.PairSetupM3, serialized);
         }
 
         [Fact]
@@ -159,6 +170,9 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                 0x2f, 0x0d, 0x08, 0x89, 0xb7, 0x70, 0x0a, 0xf8,
                 0x1c, 0x46, 0xb6, 0x31, 0x83, 0x3f, 0x57, 0xf9 });
 
+
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.PairSetupM4, serialized);
         }
 
         [Fact]
@@ -194,6 +208,8 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                     0x7a
                 });
 
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.PairSetupM5, serialized);
         }
 
         [Fact]
@@ -227,6 +243,9 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                     0x87, 0x83, 0xa1, 0x67, 0x29, 0xe7, 0x05, 0x5b, 0x8f,
                     0x73, 0x1c, 0x57, 0x2f, 0xea, 0xec, 0x33, 0xbe, 0xd5
                 });
+
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.PairSetupM6, serialized);
         }
 
         [Fact]
@@ -264,6 +283,9 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                                                            0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef, 0xf0,
                                                            0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa,
                                                            0xfb, 0xfc, 0xfd, 0xfe, 0xff });
+
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.BorderCaseLength255, serialized);
         }
 
         [Fact]
@@ -274,6 +296,9 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
             Assert.True(tlv.Values.ContainsKey(Constants.Method));
 
             Assert.Equal(tlv.GetType(Constants.Method), new byte[] { });
+
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.BorderCaseLength0, serialized);
         }
 
         [Fact]
@@ -394,6 +419,9 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
                 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa,
                 0xfb, 0xfc, 0xfd, 0xfe, 0xff
             });
+
+            var serialized = TlvParser.Serialize(tlv);
+            Assert.Equal(TlvTestData.BorderVeryLongTlv, serialized);
         }
 
         [Fact]
