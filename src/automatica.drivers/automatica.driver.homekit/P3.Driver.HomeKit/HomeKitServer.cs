@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,8 @@ namespace P3.Driver.HomeKit
 {
     public class HomeKitServer : IHomeKitServer
     {
+
+        internal const string Libsodium = "libsodium";
         public string Manufacturer { get; }
         public string BridgeName { get; }
 
@@ -60,7 +63,13 @@ namespace P3.Driver.HomeKit
             HapControllerServer.ConfigVersion = version;
         }
 
-        public static void Init()
+        [DllImport(Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int sodium_library_version_major();
+
+        [DllImport(Libsodium, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int sodium_library_version_minor();
+
+        public static void Init(ILogger logger)
         {
             //extract libsodium dll
 
@@ -95,6 +104,8 @@ namespace P3.Driver.HomeKit
                     stream.CopyTo(file);
                 }
             }
+
+            logger.LogInformation($"Loading sodium version {sodium_library_version_major()}.{sodium_library_version_minor()}");
         }
 
         internal List<Accessory> GetAccessories()

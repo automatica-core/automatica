@@ -228,7 +228,7 @@ namespace P3.Driver.HomeKit.Hap
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error occured while processing request");
+                _logger.LogError(e, $"{e}: Error occured while processing request");
                 _pairController = null;
             }
             

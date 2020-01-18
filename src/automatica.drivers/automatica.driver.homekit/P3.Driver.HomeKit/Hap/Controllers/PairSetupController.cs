@@ -228,7 +228,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Could not exchange request");
+                    _logger.LogError(e, $"{e}, Could not exchange request");
                     throw;
                 }
             }

@@ -119,7 +119,8 @@ namespace P3.Driver.HomeKit.Bonjour
              startMessage.AuthorityRecords.Add(new SRVRecord
              {
                  Name = $"{_name}.{DnsHapDomain}",
-                 Port = _port
+                 Port = _port,
+                 Target = $"{Dns.GetHostName()}.local"
              });
 
              var q = new Question

@@ -31,10 +31,10 @@ namespace P3.Driver.HomeKit.ConsoleTest
         static async Task Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            HomeKitServer.Init();
-
             var logger = new ConsoleLogger();
+            HomeKitServer.Init(logger);
 
+            
             string ltpk = null;
             if (File.Exists("LTPK"))
             {
@@ -57,7 +57,7 @@ namespace P3.Driver.HomeKit.ConsoleTest
             var homekitId =
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
-            var homekit = new HomeKitServer(logger, 52634, "HomeKitB", ltsk, ltpk, homekitId,
+            var homekit = new HomeKitServer(logger, 52634, "HomeKit1", ltsk, ltpk, homekitId,
                 code, "demo", "demo"+homekitId);
 
             homekit.SetConfigVersion(5);

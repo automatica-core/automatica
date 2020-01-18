@@ -30,7 +30,7 @@ namespace P3.Driver.HomeKit.Http
 
 
 
-        internal void HandleClient()
+        internal void HandleClient()    
         {
             Task.Run(async () => {
                 var session = Guid.NewGuid().ToString();

@@ -12,7 +12,6 @@ namespace P3.Driver.HomeKitFactory
     {
         public HomeKitFactory()
         {
-            HomeKitServer.Init();
         }
         public override string DriverName => "AppleHomeKitServer";
 
@@ -24,6 +23,7 @@ namespace P3.Driver.HomeKitFactory
 
         public override IDriver CreateDriver(IDriverContext config)
         {
+            HomeKitServer.Init(config.Logger);
             return new HomeKitDriver(config);
         }
 
