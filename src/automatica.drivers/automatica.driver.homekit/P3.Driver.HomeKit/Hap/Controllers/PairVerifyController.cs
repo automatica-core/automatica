@@ -53,7 +53,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var material = publicKey.Concat(serverUsername).Concat(clientPublicKey).ToArray();
                 var accessoryLtsk = StringToByteArray(HapControllerServer.HapControllerLtsk);
 
-                var proof = Ed25519.Sign(material, accessoryLtsk);
+                var proof = Chaos.NaCl.Ed25519.Sign(material, accessoryLtsk);
 
                 var hdkf = new HkdfSha512();
                 var hkdfEncKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), Encoding.UTF8.GetBytes("Pair-Verify-Encrypt-Salt"),
@@ -131,7 +131,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var clientPublicKey = StringToByteArray(HapControllerServer.HapControllerLtpk);
                 var material = session.ClientPublicKey.Concat(clientUserName).Concat(session.PublicKey).ToArray();
               
-                if (!Ed25519.Verify(signature, material, clientPublicKey))
+                if (!Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
                 {
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.State, 4);

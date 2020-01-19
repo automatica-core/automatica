@@ -19,6 +19,7 @@ namespace P3.Driver.HomeKit.Http
         private readonly TcpClient _client;
         private readonly CancellationTokenSource _token;
         private Thread _thread;
+        private readonly ConnectionSession _session = new ConnectionSession();
 
         public HttpServerConnection(HapMiddleware middleware, ILogger logger, TcpClient client, CancellationTokenSource token)
         {
@@ -132,7 +133,7 @@ namespace P3.Driver.HomeKit.Http
                                 var data = content.AsSpan(datLen - contentLenght, contentLenght).ToArray();
 
 
-                                var result = _middleware.Invoke(session, url, method, data);
+                                var result = _middleware.Invoke(session, url, method, data, _session);
                                 var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2);
 
                                 _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");

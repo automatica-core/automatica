@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using P3.Driver.HomeKit.Hap.Controllers;
 using P3.Driver.HomeKit.Hap.TlvData;
+using P3.Driver.HomeKit.Http;
 
 namespace P3.Driver.HomeKit.Hap
 {
@@ -72,7 +73,8 @@ namespace P3.Driver.HomeKit.Hap
             return new Tuple<string, byte[]>("application/pairing+tlv8", output);    
         }
 
-        public Tuple<string, byte[]> Invoke(string connectionId, string url, string method, byte[] inputData)
+        public Tuple<string, byte[]> Invoke(string connectionId, string url, string method, byte[] inputData,
+            ConnectionSession session)
         {
             if (!_sessions.ContainsKey(connectionId))
             {
@@ -110,7 +112,7 @@ namespace P3.Driver.HomeKit.Hap
                             if (state == 1 && _pairController == null)
                             {
                                 _pairController =
-                                    new PairSetupController(_logger, _pairCode); //Todo: change code to param
+                                    new PairSetupController(_logger, _pairCode);
                             }
 
                             if (_pairController == null)
@@ -119,7 +121,7 @@ namespace P3.Driver.HomeKit.Hap
                                 throw new ArgumentException($"Something is wrong here, closing tcp connection");
                             }
 
-                            var data = _pairController.Post(parts);
+                            var data = _pairController.Post(parts, session);
 
                             var raw = TlvParser.Serialize(data.TlvData);
 

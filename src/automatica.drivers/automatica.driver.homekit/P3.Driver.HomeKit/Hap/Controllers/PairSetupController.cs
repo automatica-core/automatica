@@ -6,7 +6,10 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
+using P3.Driver.HomeKit.Hap.Controllers.Ed25519;
+using P3.Driver.HomeKit.Hap.Controllers.Srp;
 using P3.Driver.HomeKit.Hap.TlvData;
+using P3.Driver.HomeKit.Http;
 using SecureRemotePassword;
 
 namespace P3.Driver.HomeKit.Hap.Controllers
@@ -27,14 +30,9 @@ namespace P3.Driver.HomeKit.Hap.Controllers
     {
         private readonly ILogger _logger; //todo: log more data
         private static string _code;
-        private static byte[] _salt;
 
-        private string _verifier;
-        private string _privateKey;
-        private SrpEphemeral _serverEphemeral;
-        private SrpInteger _saltInt;
-        private SrpServer _server;
-        private SrpSession _serverSession;
+        public ISrpGenerator SrpGenerator { get; internal set; } = new SrpGenerator(SrpParameters.Create3072<SHA512>());
+        public IEd25519KeyGenerator KeyGenerator { get; internal set; } = new Ed25519KeyGenerator();
 
         private const string Username = "Pair-Setup";
 
@@ -44,35 +42,33 @@ namespace P3.Driver.HomeKit.Hap.Controllers
             _code = code;
         }
 
-        public PairSetupReturn Post(Tlv parts)
+        public PairSetupReturn Post(Tlv parts, ConnectionSession session)
         {
-            var customParams = SrpParameters.Create3072<SHA512>();
 
             var state = parts.GetTypeAsInt(Constants.State);
+
+            if (session.Salt == null)
+            {
+                session.Salt = SrpGenerator.GenerateSalt(16);
+            }
 
             _logger.LogDebug($"State is {state}");
 
             if (state == 1) //srp sign up
             {
-                var rnd = new Random();
-                _salt = new byte[16];
-                rnd.NextBytes(_salt);
-
-                _saltInt = SrpInteger.FromByteArray(_salt);
+                var saltInt = SrpInteger.FromByteArray(session.Salt);
                 
-                var srp = new SrpClient(customParams);
-                _privateKey = srp.DerivePrivateKey(_saltInt.ToHex(), Username, _code);
-                _verifier = srp.DeriveVerifier(_privateKey);
+                var privateKey = SrpGenerator.DerivePrivateKey(saltInt.ToHex(), Username, _code);
+                session.Verifier = SrpGenerator.DeriveVerifier(privateKey);
 
-                _server = new SrpServer(customParams);
-                _serverEphemeral  = _server.GenerateEphemeral(_verifier);
+                session.ServerEphemeral = SrpGenerator.GenerateServerEphemeral(session.Verifier);
                
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 2);
-                responseTlv.AddType(Constants.PublicKey, StringToByteArray(_serverEphemeral.Public));
-                responseTlv.AddType(Constants.Salt, _salt);
+                responseTlv.AddType(Constants.PublicKey, StringToByteArray(session.ServerEphemeral.Public));
+                responseTlv.AddType(Constants.Salt, session.Salt);
 
-                _logger.LogDebug($"return salt {_salt}, pub {_serverEphemeral.Public} and state 2");
+                _logger.LogDebug($"return salt {saltInt.ToHex()}, pub {session.ServerEphemeral.Public} and state 2");
 
                 return new PairSetupReturn
                 {
@@ -99,19 +95,19 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var ok = true;
                 try
                 {
-                    _serverSession = _server.DeriveSession(_serverEphemeral.Secret, iOsPublicKey.ToHex(), _saltInt.ToHex(), Username, _verifier,
+                    session.ServerSession = SrpGenerator.DeriveServerSession(session.ServerEphemeral.Secret, iOsPublicKey.ToHex(), SrpInteger.FromByteArray(session.Salt).ToHex(), Username, session.Verifier,
                         iOsProof.ToHex());
                     _logger.LogInformation("Verification was successful. Generating Server Proof (M2)");
 
-                    responseTlv.AddType(Constants.Proof, StringToByteArray(_serverSession.Proof));
+                    responseTlv.AddType(Constants.Proof, StringToByteArray(session.ServerSession.Proof));
 
 
-                    _logger.LogDebug($"return proof {_serverSession.Proof}, secret {_serverEphemeral.Secret} and state 4");
+                    _logger.LogDebug($"return proof {session.ServerSession.Proof}, secret {session.ServerEphemeral.Secret} and state 4");
                 }
-                catch(Exception)
+                catch(Exception e)
                 {
                     ok = false;
-                    _logger.LogError("Verification failed as iOS provided code was incorrect");
+                    _logger.LogError(e,"Verification failed as iOS provided code was incorrect");
                     responseTlv.AddType(Constants.Error, ErrorCodes.Authentication);
                 }
                 return new PairSetupReturn
@@ -125,116 +121,126 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
             if (state == 5)
             {
-                _logger.LogDebug("Pair Setup Step 5/6");
-                _logger.LogDebug("Exchange Response");
-
-                try
-                {
-
-                    var iOsEncryptedData = parts.GetType(Constants.EncryptedData).AsSpan(); // A 
-                    var zeros = new byte[] {0, 0, 0, 0};
-                    var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg05"));
-                    var hdkf = new HkdfSha512();
-                    var hkdfEncKey = hdkf.DeriveBytes(
-                        SharedSecret.Import(SrpInteger.FromHex(_serverSession.Key).ToByteArray()),
-                        Encoding.UTF8.GetBytes("Pair-Setup-Encrypt-Salt"),
-                        Encoding.UTF8.GetBytes("Pair-Setup-Encrypt-Info"), 32);
-
-
-                    var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(
-                        Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce,
-                        new byte[0], iOsEncryptedData, out var output);
-                    var responseTlv = new Tlv();
-                    responseTlv.AddType(Constants.State, 6);
-                    if (!decrypt)
-                    {
-                        responseTlv.AddType(Constants.Error, ErrorCodes.Authentication);
-                        return new PairSetupReturn
-                        {
-                            State = 5,
-                            TlvData = responseTlv,
-                            Ok = false
-                        };
-                    }
-
-                    var subData = TlvParser.Parse(output);
-
-                    byte[] username = subData.GetType(Constants.Identifier);
-                    byte[] ltpk = subData.GetType(Constants.PublicKey);
-                    byte[] proof = subData.GetType(Constants.Signature);
-
-
-                    var okm = hdkf.DeriveBytes(
-                        SharedSecret.Import(SrpInteger.FromHex(_serverSession.Key).ToByteArray()),
-                        Encoding.UTF8.GetBytes("Pair-Setup-Controller-Sign-Salt"),
-                        Encoding.UTF8.GetBytes("Pair-Setup-Controller-Sign-Info"), 32);
-
-                    var completeData = okm.Concat(username).Concat(ltpk).ToArray();
-
-
-                    if (!SignatureAlgorithm.Ed25519.Verify(
-                        PublicKey.Import(SignatureAlgorithm.Ed25519, ltpk, KeyBlobFormat.RawPublicKey), completeData,
-                        proof))
-                    {
-                        var errorTlv = new Tlv();
-                        errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
-                        return new PairSetupReturn
-                        {
-                            State = 5,
-                            TlvData = errorTlv,
-                            Ok = false
-                        };
-                    }
-
-                    var accessory = hdkf.DeriveBytes(
-                        SharedSecret.Import(SrpInteger.FromHex(_serverSession.Key).ToByteArray()),
-                        Encoding.UTF8.GetBytes("Pair-Setup-Accessory-Sign-Salt"),
-                        Encoding.UTF8.GetBytes("Pair-Setup-Accessory-Sign-Info"), 32);
-
-
-                    var seed = new byte[32];
-                    RandomNumberGenerator.Create().GetBytes(seed);
-                    Chaos.NaCl.Ed25519.KeyPairFromSeed(out var accessoryLtpk, out var accessoryLtsk, seed);
-
-                    var serverUsername = Encoding.UTF8.GetBytes(HapControllerServer.HapControllerId);
-                    var material = accessory.Concat(serverUsername).Concat(accessoryLtpk).ToArray();
-
-                    var signature = Chaos.NaCl.Ed25519.Sign(material, accessoryLtsk);
-
-
-                    var encoder = new Tlv();
-                    encoder.AddType(Constants.Identifier, serverUsername);
-                    encoder.AddType(Constants.PublicKey, accessoryLtpk);
-                    encoder.AddType(Constants.Signature, signature);
-
-                    var plaintext = TlvParser.Serialize(encoder);
-
-                    var nonce6 = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg06"));
-
-                    var encryptedOutput = AeadAlgorithm.ChaCha20Poly1305.Encrypt(
-                        Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce6,
-                        new byte[0], plaintext);
-
-                    responseTlv.AddType(Constants.EncryptedData, encryptedOutput);
-
-                    return new PairSetupReturn
-                    {
-                        State = 5,
-                        TlvData = responseTlv,
-                        Ok = true,
-                        Ltsk = ByteArrayToString(accessoryLtsk),
-                        Ltpk = ByteArrayToString(ltpk)
-                    };
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"{e}, Could not exchange request");
-                    throw;
-                }
+                return HandlePairSetupM5(parts, session);
             }
 
             return null;
         }
 
+        internal Tlv HandlePairSetupM5Raw(ConnectionSession session, out KeyPair keyPair)
+        {
+            var hdkf = new HkdfSha512();
+            var accessory = hdkf.DeriveBytes(
+                SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray()),
+                Encoding.UTF8.GetBytes("Pair-Setup-Accessory-Sign-Salt"),
+                Encoding.UTF8.GetBytes("Pair-Setup-Accessory-Sign-Info"), 32);
+
+            keyPair = KeyGenerator.GenerateNewPair();
+
+            var serverUsername = Encoding.UTF8.GetBytes(HapControllerServer.HapControllerId);
+            var material = accessory.Concat(serverUsername).Concat(keyPair.PublicKey).ToArray();
+
+            var signature = Chaos.NaCl.Ed25519.Sign(material, keyPair.PrivateKey);
+
+
+            var encoder = new Tlv();
+            encoder.AddType(Constants.Identifier, serverUsername);
+            encoder.AddType(Constants.PublicKey, keyPair.PublicKey);
+            encoder.AddType(Constants.Signature, signature);
+
+            return encoder;
+        }
+
+        internal PairSetupReturn HandlePairSetupM5(Tlv parts, ConnectionSession session)
+        {
+            _logger.LogDebug("Pair Setup Step 5/6");
+            _logger.LogDebug("Exchange Response");
+
+            try
+            {
+                var iOsEncryptedData = parts.GetType(Constants.EncryptedData).AsSpan(); // A 
+                var zeros = new byte[] { 0, 0, 0, 0 };
+                var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg05"));
+                var hdkf = new HkdfSha512();
+                var hkdfEncKey = hdkf.DeriveBytes(
+                    SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray()),
+                    Encoding.UTF8.GetBytes("Pair-Setup-Encrypt-Salt"),
+                    Encoding.UTF8.GetBytes("Pair-Setup-Encrypt-Info"), 32);
+
+
+                var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(
+                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce,
+                    new byte[0], iOsEncryptedData, out var output);
+                var responseTlv = new Tlv();
+                responseTlv.AddType(Constants.State, 6);
+                if (!decrypt)
+                {
+                    responseTlv.AddType(Constants.Error, ErrorCodes.Authentication);
+                    return new PairSetupReturn
+                    {
+                        State = 5,
+                        TlvData = responseTlv,
+                        Ok = false
+                    };
+                }
+
+                var subData = TlvParser.Parse(output);
+
+                byte[] username = subData.GetType(Constants.Identifier);
+                byte[] ltpk = subData.GetType(Constants.PublicKey);
+                byte[] proof = subData.GetType(Constants.Signature);
+
+
+                var okm = hdkf.DeriveBytes(
+                    SharedSecret.Import(SrpInteger.FromHex(session.ServerSession.Key).ToByteArray()),
+                    Encoding.UTF8.GetBytes("Pair-Setup-Controller-Sign-Salt"),
+                    Encoding.UTF8.GetBytes("Pair-Setup-Controller-Sign-Info"), 32);
+
+                var completeData = okm.Concat(username).Concat(ltpk).ToArray();
+
+
+                if (!SignatureAlgorithm.Ed25519.Verify(
+                    PublicKey.Import(SignatureAlgorithm.Ed25519, ltpk, KeyBlobFormat.RawPublicKey), completeData,
+                    proof))
+                {
+                    var errorTlv = new Tlv();
+                    errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
+                    return new PairSetupReturn
+                    {
+                        State = 5,
+                        TlvData = errorTlv,
+                        Ok = false
+                    };
+                }
+
+                var m5Response = HandlePairSetupM5Raw(session, out var keyPair);
+                var plaintext = TlvParser.Serialize(m5Response);
+
+                _logger.LogDebug($"Decrypted payload {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(plaintext.AsSpan())}");
+
+
+                var nonce6 = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg06"));
+
+                var encryptedOutput = AeadAlgorithm.ChaCha20Poly1305.Encrypt(
+                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce6,
+                    new byte[0], plaintext);
+
+                responseTlv.AddType(Constants.EncryptedData, encryptedOutput);
+
+                return new PairSetupReturn
+                {
+                    State = 5,
+                    TlvData = responseTlv,
+                    Ok = true,
+                    Ltsk = ByteArrayToString(keyPair.PrivateKey),
+                    Ltpk = ByteArrayToString(ltpk)
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"{e}, Could not exchange request");
+                throw;
+            }
+        }
     }
 }
