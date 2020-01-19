@@ -44,7 +44,7 @@ namespace P3.Driver.HomeKit
             Manufacturer = manufacturer;
             BridgeName = bridgeName;
             var hapPort = port;
-            _bonjour = new BonjourService(logger, Convert.ToUInt16(hapPort), name, "192.168.8.114");
+            _bonjour = new BonjourService(logger, Convert.ToUInt16(hapPort), name, deviceId);
             _hapServer = new HapControllerServer(logger, this, hapPort, ltsk, ltpk, deviceId, pairCode);
 
             _hapServer.PairingCompleted += HapServerOnPairingCompleted;

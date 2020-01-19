@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,8 @@ namespace P3.Driver.HomeKit.ConsoleTest
     {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            Console.WriteLine(formatter.Invoke(state, exception));
+            var exceptionMessage = exception != null ? $"Exception occured: {exception}.{Environment.NewLine}" : String.Empty;
+             Console.WriteLine($"[Th: {Thread.CurrentThread.ManagedThreadId}] {exceptionMessage}{formatter.Invoke(state, exception)}");
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -49,15 +51,16 @@ namespace P3.Driver.HomeKit.ConsoleTest
 
             ServerInfo.ServerUid = Guid.NewGuid();
 
-            var objId = Guid.NewGuid().ToString().Replace("-", "");
+            var objId = new Guid("e00b1712-a2bf-4420-b3e5-c9b9a0c4a5f2").ToString().Replace("-", "");
             string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
+            code = "111-23-222";
 
             Console.WriteLine($"Code is {code}");
 
             var homekitId =
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
-            var homekit = new HomeKitServer(logger, 52634, "HomeKit1", ltsk, ltpk, homekitId,
+            var homekit = new HomeKitServer(logger, 54321, "HomeKitA", null, null, homekitId,
                 code, "demo", "demo"+homekitId);
 
             homekit.SetConfigVersion(5);

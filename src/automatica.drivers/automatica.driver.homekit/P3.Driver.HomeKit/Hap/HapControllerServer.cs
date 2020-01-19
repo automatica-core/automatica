@@ -35,7 +35,7 @@ namespace P3.Driver.HomeKit.Hap
             HapControllerId = controllerId;
             _pairCode = pairCode;
 
-            _httpServer = new HttpServer(logger, homeKitServer, port, controllerId, pairCode);
+            _httpServer = new HttpServer(logger, homeKitServer, port, pairCode);
             HapMiddleware.PairingCompleted += PairingCompletedEvent;
         }
         public async Task<bool> Start()

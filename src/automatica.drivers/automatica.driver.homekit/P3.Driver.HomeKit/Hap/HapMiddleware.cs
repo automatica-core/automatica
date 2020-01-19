@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace P3.Driver.HomeKit.Hap
 
         public static event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
 
-        private readonly Dictionary<string, HapSession> _sessions = new Dictionary<string, HapSession>();
+        private readonly ConcurrentDictionary<string, HapSession> _sessions = new ConcurrentDictionary<string, HapSession>();
         internal static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.None,
@@ -56,7 +57,7 @@ namespace P3.Driver.HomeKit.Hap
         {
             if (!_sessions.ContainsKey(connectionId))
             {
-                _sessions.Add(connectionId, new HapSession());
+                _sessions.TryAdd(connectionId, new HapSession());
             }
 
             return _sessions[connectionId];
@@ -78,7 +79,7 @@ namespace P3.Driver.HomeKit.Hap
         {
             if (!_sessions.ContainsKey(connectionId))
             {
-                _sessions.Add(connectionId, new HapSession());
+                _sessions.TryAdd(connectionId, new HapSession());
             }
 
             var queryString = new NameValueCollection();
@@ -128,7 +129,7 @@ namespace P3.Driver.HomeKit.Hap
                             if (!data.Ok)
                             {
                                 _pairController = null;
-                                _sessions.Remove(connectionId);
+                                _sessions.TryRemove(connectionId, out var _);
                             }
                             else if (data.State == 5)
                             {
@@ -136,7 +137,7 @@ namespace P3.Driver.HomeKit.Hap
                                 _pairController = null;
                             }
 
-                            return new Tuple<string, byte[]>(data.ContentType, raw);
+                            return new Tuple<string, byte[]>(PairSetupReturn.ContentType, raw);
                         }
 
                         if (url.EndsWith("pair-verify"))
@@ -239,7 +240,7 @@ namespace P3.Driver.HomeKit.Hap
 
         public void TerminateSession(string session)
         {
-            _sessions.Remove(session);
+            _sessions.TryRemove(session, out var _);
         }
     }
 }

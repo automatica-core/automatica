@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
@@ -17,163 +18,165 @@ namespace P3.Driver.HomeKit.Http
         private readonly HapMiddleware _middleware;
         private readonly ILogger _logger;
         private readonly TcpClient _client;
-        private readonly CancellationTokenSource _token;
-        private Thread _thread;
+        private readonly HttpServer _httpServer;
         private readonly ConnectionSession _session = new ConnectionSession();
+        private EndPoint _remoteEndPoint;
 
-        public HttpServerConnection(HapMiddleware middleware, ILogger logger, TcpClient client, CancellationTokenSource token)
+        public HttpServerConnection(HapMiddleware middleware, ILogger logger, TcpClient client, HttpServer httpServer)
         {
             _middleware = middleware;
             _logger = logger;
             _client = client;
-            _token = token;
+            _httpServer = httpServer;
         }
 
-
-
-        internal void HandleClient()    
+        internal Task HandleClient()
         {
-            Task.Run(async () => {
-                var session = Guid.NewGuid().ToString();
-                var connectionSession = _middleware.GetSession(session);
+            _remoteEndPoint = _client.Client.RemoteEndPoint;
+            _logger.LogDebug($"Start client socket on port {_remoteEndPoint}");
 
-                connectionSession.Socket = _client.Client;
+            var session = Guid.NewGuid().ToString();
+            var connectionSession = _middleware.GetSession(session);
 
-                _client.ReceiveTimeout = Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds);
-                try
+            connectionSession.Socket = _client.Client;
+
+            _client.ReceiveTimeout = Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds);
+            try
+            {
+                using (var networkStream = _client.GetStream())
                 {
-                    using (var networkStream = _client.GetStream())
+                    byte[] receiveBuffer = new byte[_client.ReceiveBufferSize];
+
+                    while (_client.Connected)
                     {
-                        byte[] receiveBuffer = new byte[_client.ReceiveBufferSize];
+                        _logger.LogDebug("Waiting for more data from the client....");
 
-                        while (true)
+                        // This is blocking and will wait for data to come from the client.
+                        //
+                        var bytesRead = networkStream.Read(receiveBuffer, 0, _client.ReceiveBufferSize);;
+
+                        lock (connectionSession)
                         {
-                            _logger.LogDebug("Waiting for more data from the client....");
-
-                            // This is blocking and will wait for data to come from the client.
-                            //
-                            var bytesRead =
-                                await networkStream.ReadAsync(receiveBuffer, 0, _client.ReceiveBufferSize);
-
-                            lock (connectionSession)
+                            if (bytesRead == 0)
                             {
-                                if (bytesRead == 0)
-                                {
-                                    _logger.LogDebug(
-                                        "**************************** REQUEST RECEIVED but no data available *************************");
+                                _logger.LogDebug(
+                                    "**************************** REQUEST RECEIVED but no data available *************************");
+                                break;
+                            }
 
-                                    _client.Close();
+                            var content = receiveBuffer.AsSpan(0, bytesRead).ToArray();
+
+                            if (connectionSession.IsVerified)
+                            {
+                                _logger.LogDebug("Already in a verified state..");
+
+                                var encryptionResult = DecryptData(content, connectionSession);
+                                content = encryptionResult;
+                            }
+
+
+                            //_logger.LogTrace($"Read {Encoding.UTF8.GetString(content)}");
+
+                            var ms = new MemoryStream(content);
+                            var sr = new StreamReader(ms);
+
+                            var request = sr.ReadLine();
+                            var tokens = request.Split(' ');
+                            if (tokens.Length != 3)
+                            {
+                                _middleware.TerminateSession(session);
+                                throw new Exception("Invalid HTTP request line");
+                            }
+
+                            var method = tokens[0].ToUpper();
+                            var url = tokens[1].Trim('/');
+
+                            _logger.LogDebug($"Request {method} on path {url}");
+
+                            string line;
+
+                            Dictionary<string, string> httpHeaders = new Dictionary<string, string>();
+
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                if (String.IsNullOrEmpty(line))
+                                {
                                     break;
                                 }
 
-                                var content = receiveBuffer.AsSpan(0, bytesRead).ToArray();
+                                var lineSplit = line.Split(":", StringSplitOptions.RemoveEmptyEntries);
 
-                                if (connectionSession.IsVerified)
+                                if (lineSplit.Length != 2)
                                 {
-                                    _logger.LogDebug("Already in a verified state..");
-
-                                    var encryptionResult = DecryptData(content, connectionSession);
-                                    content = encryptionResult;
+                                    _logger.LogWarning($"Invalid header format in {line}");
+                                    continue;
                                 }
 
-
-                                _logger.LogTrace($"Read {Encoding.UTF8.GetString(content)}");
-
-                                var ms = new MemoryStream(content);
-                                var sr = new StreamReader(ms);
-
-                                var request = sr.ReadLine();
-                                var tokens = request.Split(' ');
-                                if (tokens.Length != 3)
-                                {
-                                    _middleware.TerminateSession(session);
-                                    throw new Exception("Invalid HTTP request line");
-                                }
-
-                                var method = tokens[0].ToUpper();
-                                var url = tokens[1].Trim('/');
-                                var version = tokens[2];
-
-                                string line;
-
-                                Dictionary<string, string> httpHeaders = new Dictionary<string, string>();
-
-                                while ((line = sr.ReadLine()) != null)
-                                {
-                                    if (String.IsNullOrEmpty(line))
-                                    {
-                                        break;
-                                    }
-
-                                    var lineSplit = line.Split(":", StringSplitOptions.RemoveEmptyEntries);
-
-                                    if (lineSplit.Length != 2)
-                                    {
-                                        _logger.LogWarning($"Invalid header format in {line}");
-                                        continue;
-                                    }
-
-                                    httpHeaders.Add(lineSplit[0].ToLower(), lineSplit[1]);
-                                }
-
-
-                                var contentLengthHeader =
-                                    httpHeaders.ContainsKey("content-length");
-
-                                var contentLenght = 0;
-
-                                if (contentLengthHeader)
-                                {
-                                    contentLenght =
-                                        Convert.ToInt32(
-                                            httpHeaders.Single(a => a.Key == "content-length").Value);
-                                }
-
-                                var datLen = content.Length;
-                                var data = content.AsSpan(datLen - contentLenght, contentLenght).ToArray();
-
-
-                                var result = _middleware.Invoke(session, url, method, data, _session);
-                                var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2);
-
-                                _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
-
-                                if (connectionSession.IsVerified && !connectionSession.SkipFirstEncryption)
-                                {
-                                    response = EncryptData(response, connectionSession);
-
-                                    networkStream.Write(response, 0, response.Length);
-                                    networkStream.Flush();
-                                }
-                                else
-                                {
-                                    networkStream.Write(response, 0, response.Length);
-                                    networkStream.Flush();
-
-                                    if (connectionSession.SkipFirstEncryption)
-                                    {
-                                        connectionSession.SkipFirstEncryption = false;
-                                    }
-                                }
-
-
-                                _logger.LogDebug(
-                                    "**************************** REQUEST DONE *************************");
+                                httpHeaders.Add(lineSplit[0].ToLower(), lineSplit[1]);
                             }
-                        }
 
-                        _middleware.TerminateSession(session);
+
+                            var contentLengthHeader =
+                                httpHeaders.ContainsKey("content-length");
+
+                            var contentLenght = 0;
+
+                            if (contentLengthHeader)
+                            {
+                                contentLenght =
+                                    Convert.ToInt32(
+                                        httpHeaders.Single(a => a.Key == "content-length").Value);
+                            }
+
+                            var datLen = content.Length;
+                            var data = content.AsSpan(datLen - contentLenght, contentLenght).ToArray();
+
+
+                            var result = _middleware.Invoke(session, url, method, data, _session);
+                            var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2, DateTime.Now);
+
+                            //    _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
+
+                            if (connectionSession.IsVerified && !connectionSession.SkipFirstEncryption)
+                            {
+                                response = EncryptData(response, connectionSession);
+
+                                networkStream.Write(response, 0, response.Length);
+                                networkStream.Flush();
+                            }
+                            else
+                            {
+                                networkStream.Write(response, 0, response.Length);
+                                networkStream.Flush();
+
+                                if (connectionSession.SkipFirstEncryption)
+                                {
+                                    connectionSession.SkipFirstEncryption = false;
+                                }
+                            }
+
+
+                            _logger.LogDebug(
+                                "**************************** REQUEST DONE *************************");
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error occured in http server");
+
                     _middleware.TerminateSession(session);
+                    _client.Close();
+                    _client.Dispose();
+                    _httpServer.ConnectionClosed(this);
                 }
-            }, _token.Token);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error occured in http server");
+                _middleware.TerminateSession(session);
+            }
+
+            return Task.CompletedTask;
         }
 
-        internal static byte[] GetHttpResponse(string header, string contentType, byte[] data)
+        internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date)
         {
             var response = new byte[0];
             var returnChars = new byte[2];
@@ -190,15 +193,38 @@ namespace P3.Driver.HomeKit.Http
             }
             else
             {
-                response = response.Concat(Encoding.ASCII.GetBytes($"{header} 200 OK")).Concat(returnChars).ToArray();
-                response = response.Concat(Encoding.ASCII.GetBytes(contentLength)).Concat(returnChars).ToArray();
-                response = response.Concat(Encoding.ASCII.GetBytes($"Content-Type: {contentType}")).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"{header} 200 OK")).Concat(returnChars).ToArray();
+            //    response = response.Concat(Encoding.UTF8.GetBytes(contentLength)).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"Content-Type: {contentType}")).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"Date: {date.ToUniversalTime().ToString("r", CultureInfo.InvariantCulture)}")).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"Connection: keep-alive")).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"Transfer-Encoding: chunked")).Concat(returnChars).ToArray();
             }
 
+            var length = BitConverter.GetBytes(data.Length).ToList();
+            length.Reverse();
+            length.RemoveAll(b => b == 0);
+
+            var lengthInHex = RemoveLeadingZero(Automatica.Core.Driver.Utility.Utils.ByteArrayToString(length.ToArray().AsSpan()).Replace(" ", "").ToLower());
+            response = response.Concat(returnChars).Concat(Encoding.UTF8.GetBytes(lengthInHex)).ToArray();
             response = response.Concat(returnChars).ToArray();
-            response = response.Concat(data).ToArray();
+            response = response.Concat(data).Concat(returnChars).ToArray();
+            response = response.Concat(Encoding.UTF8.GetBytes(new char[] { '0' })).ToArray();
+            response = response.Concat(returnChars).ToArray();
+            response = response.Concat(returnChars).ToArray();
 
             return response;
+        }
+
+        private static string RemoveLeadingZero(string input)
+        {
+            if (input.StartsWith("0"))
+            {
+                var newStr = input.Substring(1, input.Length - 1);
+                return RemoveLeadingZero(newStr);
+            }
+
+            return input;
         }
 
         internal static byte[] EncryptData(byte[] plainData, HapSession session)
@@ -265,6 +291,24 @@ namespace P3.Driver.HomeKit.Http
             }
 
             return encryptionResult;
+        }
+
+        public void Close()
+        {
+            try
+            {
+                _client.Close();
+                _client.Dispose();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+        }
+
+        public EndPoint GetRemoteEndpoint()
+        {
+            return _remoteEndPoint;
         }
     }
 }

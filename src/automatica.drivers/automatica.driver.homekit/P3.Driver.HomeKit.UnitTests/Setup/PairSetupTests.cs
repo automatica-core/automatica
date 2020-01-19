@@ -30,11 +30,11 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
         };
 
         public const string ExpectedM2Proof =
-            "c915cc83e4b1e67151edcb03ab5cbcfa7bb8c6e4866472e2f13fb0b6e13b15a1209c4271bba964858ca799c16005489cecd49d8704e67949069de6016a832966";
+            "847786bbdb27e466f3533fa2016f5eaff57ffddc99c55d97d8cc634bcbd95c9c2ba0167e717ecd9fc19aa8b03987a9b0a1b3b676b8e33ce8d097a05bffbd4a24";
 
         public const string ExpectedClientProof =
-            "83709658ff56231a1b18cc5471996da7fa32a0b75b89234cb85e142b04725cdf00e44025f75fde79e19af3fe40252219a5d12cb9b357194600f7a7393304fbbe";
-        public const string ExpectedClientPubKey = "e62a359cc393882a48266619348ecdde3e7bba8d4094477d62cfe289574d1603424dd2fe61234226058472f05c5e47a79f821145c857862aeed353de5c13a1b71c6291ed85a817c223374ceb450c82f20360b8bee85a6b09beff5e9c015a5ebeb465b11cc9de4b8c9f117dae9fd80b4fde39d8f4c30620f3b2ac466bf617882ac566abe45c52f415ee25d32c45723395d68050928dc39dc55c7981d95c07427b3d58e4f3c48623e289b5d7119f00fcd056eeb0e9b3a99c7d218beecc7b49ca7ac54af2afc7dbcfc9b557169baaa863b63e7ef08ed45b3162c4d4e68e318d615139c1ff410ad54116f75753393e07e08148bae370e7c2866666ac004a0d58c49eac8101c38bc2b6b60874a3092c073a98fe68b4bf025c0d8500be93aadd9cb79ea0bbe657d711d8926f911e1163bc62bb5da36c3cafddcabdee5b3a5cc4bf702d3f2227ff5e28d3c98faa998c2e9e862fa6833e0695abcf699ae73dc00d1e3151db3653fbe5ad1c196e64e817b05701750e9fd7f3f2e021ebe3b6dcb8611679a1";
+            "cd09aaf139460ef72317848478c1bee19464b149f3145ecf67a07a6f8829443c3a13d1c5ea4e45cfba291fd7a8d1c8fdc088d709b87882947a3b6dee5738409d";
+        public const string ExpectedClientPubKey = "a080de13894d7d0f183472a4ac1ac1be4efeea83685bd9e318e7e33516ee2637469e35cb3695d2885b9d000a053d8ebac30fb82348915f941e54b4386b2d6e4d7b99b91b94ca937a2026651f9d28b59596e7d5078b220050dc22e4962462f5d59b801c1854ea0238cfecbc3521580597d5abf5035bddf295caf55d528898e1c835d624f3d3e12a62f9ff1363c86b0e5d28cfdd16aed5bb6d13d93c6ab5985f0d5f5325a6c3d22db574e060694d6a373a98335ee0e72c036a413ec2374e7d235e1cb71953bf89ba9712a07d5598323ece6d64f7032add9d7f8787dce3abdadd06d2cad3b6df6376f0dc617c421fc918ad04277f91c722f92e264f2cea5d4af18bfa268350586190f3cf58f97ea5153970aa3ab48c636ddf043966a3183bc0514616f03bd5e9559cee68208c8e87a5ee5a223f9ad69fa96034053444dfc09280a0068995659007b0ffe0428c833a69c089d1299608575b6c5dc1a0b10c422b6b39574dfa7206f6222d99d822785efa2b6f597377b96107ac59c6722dfdb6f20861";
 
         private readonly ISrpGenerator _srpGenerator = new SrpGenerator(SrpParameters.Create3072<SHA512>());
         public byte[] GenerateSalt(int length)
@@ -80,8 +80,8 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
     {
         public KeyPair GenerateNewPair()
         {
-            return new KeyPair(Automatica.Core.Driver.Utility.Utils.StringToByteArray("5dd92eb7ce51dbb500a572b2f1508a5b95a566ea0210fc50bc6d47dd8337e8ff"),
-                Automatica.Core.Driver.Utility.Utils.StringToByteArray("3f3c5ad7a5d971aabae3c355007cbde4d4fa05983881c7413d09b6e85cefef225dd92eb7ce51dbb500a572b2f1508a5b95a566ea0210fc50bc6d47dd8337e8ff"));
+            return new KeyPair(Automatica.Core.Driver.Utility.Utils.StringToByteArray("83e6d70e7064effd0c6df6d19451b1ded53f7e2d0dd86e33d4aa1993f5e9cded"),
+                Automatica.Core.Driver.Utility.Utils.StringToByteArray("3ae86e1ed4720fe49137f19d301d06f0c49e3436770a87a08beeb413dda556ff83e6d70e7064effd0c6df6d19451b1ded53f7e2d0dd86e33d4aa1993f5e9cded"));
         }
     }
 
@@ -89,7 +89,7 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
     {
         public PairSetupTests()
         {
-            HapControllerServer.HapControllerId = "BC:22:3D:E3:CE:F2";
+            HapControllerServer.HapControllerId = "FC:22:3D:E3:CE:F2";
         }
 
         [Fact]
@@ -124,9 +124,9 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
         {
             var fixedSrpGenerator = new FixedSaltGenerator();
             var expectedTlvHexReponse =
-                "0601040440c915cc83e4b1e67151edcb03ab5cbcfa7bb8c6e4866472e2f13fb0b6e13b15a1209c4271bba964858ca799c16005489cecd49d8704e67949069de6016a832966";
+                "0601040440847786bbdb27e466f3533fa2016f5eaff57ffddc99c55d97d8cc634bcbd95c9c2ba0167e717ecd9fc19aa8b03987a9b0a1b3b676b8e33ce8d097a05bffbd4a24";
             var inputData =
-                "06010303ffe62a359cc393882a48266619348ecdde3e7bba8d4094477d62cfe289574d1603424dd2fe61234226058472f05c5e47a79f821145c857862aeed353de5c13a1b71c6291ed85a817c223374ceb450c82f20360b8bee85a6b09beff5e9c015a5ebeb465b11cc9de4b8c9f117dae9fd80b4fde39d8f4c30620f3b2ac466bf617882ac566abe45c52f415ee25d32c45723395d68050928dc39dc55c7981d95c07427b3d58e4f3c48623e289b5d7119f00fcd056eeb0e9b3a99c7d218beecc7b49ca7ac54af2afc7dbcfc9b557169baaa863b63e7ef08ed45b3162c4d4e68e318d615139c1ff410ad54116f75753393e07e08148bae370e7c2866666ac004a0d58c403819eac8101c38bc2b6b60874a3092c073a98fe68b4bf025c0d8500be93aadd9cb79ea0bbe657d711d8926f911e1163bc62bb5da36c3cafddcabdee5b3a5cc4bf702d3f2227ff5e28d3c98faa998c2e9e862fa6833e0695abcf699ae73dc00d1e3151db3653fbe5ad1c196e64e817b05701750e9fd7f3f2e021ebe3b6dcb8611679a1044083709658ff56231a1b18cc5471996da7fa32a0b75b89234cb85e142b04725cdf00e44025f75fde79e19af3fe40252219a5d12cb9b357194600f7a7393304fbbe";
+                "06010303ffa080de13894d7d0f183472a4ac1ac1be4efeea83685bd9e318e7e33516ee2637469e35cb3695d2885b9d000a053d8ebac30fb82348915f941e54b4386b2d6e4d7b99b91b94ca937a2026651f9d28b59596e7d5078b220050dc22e4962462f5d59b801c1854ea0238cfecbc3521580597d5abf5035bddf295caf55d528898e1c835d624f3d3e12a62f9ff1363c86b0e5d28cfdd16aed5bb6d13d93c6ab5985f0d5f5325a6c3d22db574e060694d6a373a98335ee0e72c036a413ec2374e7d235e1cb71953bf89ba9712a07d5598323ece6d64f7032add9d7f8787dce3abdadd06d2cad3b6df6376f0dc617c421fc918ad04277f91c722f92e264f2cea5d4af103818bfa268350586190f3cf58f97ea5153970aa3ab48c636ddf043966a3183bc0514616f03bd5e9559cee68208c8e87a5ee5a223f9ad69fa96034053444dfc09280a0068995659007b0ffe0428c833a69c089d1299608575b6c5dc1a0b10c422b6b39574dfa7206f6222d99d822785efa2b6f597377b96107ac59c6722dfdb6f208610440cd09aaf139460ef72317848478c1bee19464b149f3145ecf67a07a6f8829443c3a13d1c5ea4e45cfba291fd7a8d1c8fdc088d709b87882947a3b6dee5738409d";
             var tlv = TlvParser.Parse(Automatica.Core.Driver.Utility.Utils.StringToByteArray(inputData));
 
             var session = new ConnectionSession
@@ -156,10 +156,9 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
             var clientPubKey = FixedSaltGenerator.ExpectedClientPubKey;
             var clientProof = FixedSaltGenerator.ExpectedClientProof;
             var inputData =
-                "059af9b2e85eeadbe6f1fad04fba763d23761ca239a87e7de936edc058cf1e4c515cf05a5bc15667f2022eeb3115c3a1a106cfe551dc85bba72bbba934fb5ad11e2ab52962fe147e265bc07a03918c41916a27699b6c9615603511fc7a1122c10b5dc591eb2a478f5a3d45272d465ca5cd77b51ec399277499499ba89c332049f72b427ae57124b13aec77d5702a88fb3f45afd7eac571675ae7f4fe060105";
+                "059ac2e1aa3fef6c4bc067cd9d26a05b53fa6ad29f953af80c90968757a18fcb270118987a5c26e50f2f8e274750584929d5d5a176a62af5ef0d4002ed6333ee75b0f75d0ee4dbef345f6ae15345cfdcb97e3300d18bf8f827701f6dfcc6cc213dff5ae1cffa03235853df30d8eb6ceec068dc64e9ef8049ce3d9396bbd32c7b2e329005023cf06ed8a60e3e51491b7f7193a807f1f244369a5ee9fd060105";
             var expectedTlvHexReponse =
-                "060106058794579cfbde9949880df9722e0c47dcaaff9a295e6b45d4722b843ce14bfe1c23d4e9f292d990dc4a1384114cf91da47270496d4154d5e0b67cbce2814660afe158f5ae449c80437ea3acc92d14b2bf90eaabd79296fab0e636ad12a78b4c7d45edb01f3deb18ffbcc75af4141ef3dcc1687e9b546d400389fe4efdd6bab24dd8f9cb89261868b4";
-
+                "0601060587b0e4a7aa382866e824db4159cc0ecd24900136be360fd6ae64481bf799b1ecc918ecb887285a8dcd5b6f90aa410253451fd1bc638cae716cbab166f763108633555a6bfa311662986ea2d1eb83b76d195724b9bbddf7902dfd3a16e1bbd5bb8e5a5a6e3a56e8eec21c3f06ed2cce21ea17426407d0a1b35c9d692f5a5ee15ecb7ac662ade25ab7";
 
             var tlv = TlvParser.Parse(Automatica.Core.Driver.Utility.Utils.StringToByteArray(inputData));
 
@@ -184,7 +183,7 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
                 TlvParser.Parse(Automatica.Core.Driver.Utility.Utils.StringToByteArray(expectedTlvHexReponse));
 
             var decryptedPayload = TlvParser.Parse(Automatica.Core.Driver.Utility.Utils.StringToByteArray(
-                "011142433a32323a33443a45333a43453a463203205dd92eb7ce51dbb500a572b2f1508a5b95a566ea0210fc50bc6d47dd8337e8ff0a40e3cef76c54ae51533f02a42e86e244cc4632e9bc906bb186388870f31948f0306d6216ab426df7837afa24adcf533e95acf766223ceac48fb873f928bce54500"));
+                "011146433a32323a33443a45333a43453a4632032083e6d70e7064effd0c6df6d19451b1ded53f7e2d0dd86e33d4aa1993f5e9cded0a402ac3063b1d193c4d365c546019c51cac8299a23a99c9f8eb2348c46af24b185a53f1f75a92d57193bdeb4dfbc47ccadccc4f9f4e3dc8191eef364d15cd921207"));
             var raw = setupController.HandlePairSetupM5Raw(session, out _);
 
             Assert.Equal(decryptedPayload.GetType(Constants.Identifier), raw.GetType(Constants.Identifier));
@@ -197,9 +196,19 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
                 Automatica.Core.Driver.Utility.Utils.ByteArrayToString(ret.TlvData.GetType(Constants.EncryptedData).AsSpan());
 
             Assert.Equal(expectedEncryptedData, retEncryptedData);
-
             Assert.Equal(expectedTlvResponse.GetType(Constants.State), ret.TlvData.GetType(Constants.State));
             Assert.Equal(expectedTlvResponse.GetType(Constants.EncryptedData), ret.TlvData.GetType(Constants.EncryptedData));
-        }
+
+            var expectedHttpResponse =
+                "485454502f312e3120323030204f4b0d0a436f6e74656e742d547970653a206170706c69636174696f6e2f70616972696e672b746c76380d0a446174653a2053756e2c203139204a616e20323032302031353a33313a313320474d540d0a436f6e6e656374696f6e3a206b6565702d616c6976650d0a5472616e736665722d456e636f64696e673a206368756e6b65640d0a0d0a38630d0a0601060587b0e4a7aa382866e824db4159cc0ecd24900136be360fd6ae64481bf799b1ecc918ecb887285a8dcd5b6f90aa410253451fd1bc638cae716cbab166f763108633555a6bfa311662986ea2d1eb83b76d195724b9bbddf7902dfd3a16e1bbd5bb8e5a5a6e3a56e8eec21c3f06ed2cce21ea17426407d0a1b35c9d692f5a5ee15ecb7ac662ade25ab70d0a300d0a0d0a";
+            var expectedHttpResponseArray =
+                Automatica.Core.Driver.Utility.Utils.StringToByteArray(expectedHttpResponse);
+
+            var requestTime = new DateTime(2020, 01, 19, 15, 31, 13, DateTimeKind.Utc);
+            var httpResponse =
+                HttpServerConnection.GetHttpResponse("HTTP/1.1", PairSetupReturn.ContentType, TlvParser.Serialize(ret.TlvData), requestTime);
+
+            Assert.Equal(expectedHttpResponseArray, httpResponse);
+        } 
     }
 }

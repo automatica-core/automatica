@@ -19,7 +19,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         public Tlv TlvData { get; set; }
         public int State { get; set; }
         public bool Ok { get; set; } = false;
-        public string ContentType { get; set; } = "application/pairing+tlv8";
+        public const string ContentType = "application/pairing+tlv8";
 
         public string Ltsk { get; set; }
         public string Ltpk { get; set; }
@@ -80,7 +80,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
             if (state == 3) //srp authenticate
             {
-                _logger.LogDebug("Pair Setup Step 3/6");
+                _logger.LogDebug("Pair Setup Step 3/5");
                 _logger.LogDebug("SRP Verify Request");
 
                 var pubKey = parts.GetType(Constants.PublicKey);
@@ -153,7 +153,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
         internal PairSetupReturn HandlePairSetupM5(Tlv parts, ConnectionSession session)
         {
-            _logger.LogDebug("Pair Setup Step 5/6");
+            _logger.LogDebug("Pair Setup Step 5/5");
             _logger.LogDebug("Exchange Response");
 
             try

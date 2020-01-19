@@ -197,7 +197,6 @@ namespace P3.Driver.HomeKit.Bonjour
         public static IEnumerable<NetworkInterface> GetNetworkInterfaces()
         {
             var nics = NetworkInterface.GetAllNetworkInterfaces()
-                .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
                 .Where(nic => nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                 .ToArray();
             if (nics.Length > 0)
@@ -221,6 +220,7 @@ namespace P3.Driver.HomeKit.Bonjour
         public static IEnumerable<IPAddress> GetIpAddresses()
         {
             return GetNetworkInterfaces()
+                .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
                 .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
                 .Select(u => u.Address);
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using P3.Driver.HomeKit.Bonjour.Abstraction;
 using Microsoft.Extensions.Logging;
@@ -23,18 +23,18 @@ namespace P3.Driver.HomeKit.Bonjour
         private readonly ILogger _logger;
         private readonly ushort _port;
         private readonly string _name;
-        private readonly string _localIpAddress;
+        private readonly string _hapId;
         private readonly MulticastService _mdns;
 
         internal const string HapName = "_hap";
         internal static readonly string DnsHapDomain = $"{HapName}._tcp.local";
 
-        public BonjourService(ILogger logger, ushort port, string name, string localIpAddress)
+        public BonjourService(ILogger logger, ushort port, string name, string hapId)
         {
             _logger = logger;
             _port = port;
             _name = name;
-            _localIpAddress = localIpAddress;
+            _hapId = hapId;
             _mdns = new MulticastService();
 
         }
@@ -54,7 +54,7 @@ namespace P3.Driver.HomeKit.Bonjour
             txtList.AddProperty("s#", "1");
             txtList.AddProperty("md", _name);
             txtList.AddProperty("ff", "00");
-            txtList.AddProperty("id", "be:09:ea:3e:24:aa");
+            txtList.AddProperty("id", _hapId);
             txtList.AddProperty("ci", "2");
             txtList.AddProperty("pv", "1.1");
 
@@ -86,7 +86,7 @@ namespace P3.Driver.HomeKit.Bonjour
             {
                 Name = $"{_name}.{DnsHapDomain}", 
                 Port = _port, 
-                Target = $"{Dns.GetHostName()}.local", 
+                Target = $"{_hapId.Replace(":", "_")}.local", 
                 Weight = 0, 
                 Class = DnsClass.IN, 
                 Type = DnsType.SRV,
@@ -120,7 +120,7 @@ namespace P3.Driver.HomeKit.Bonjour
              {
                  Name = $"{_name}.{DnsHapDomain}",
                  Port = _port,
-                 Target = $"{Dns.GetHostName()}.local"
+                 Target = $"{_hapId.Replace(":", "_")}.local"
              });
 
              var q = new Question
@@ -174,19 +174,33 @@ namespace P3.Driver.HomeKit.Bonjour
             (e.Message.Questions.Any(a => a.Name.Labels.Contains(HapName))) || 
             e.Message.Questions.Any(a => a.Name == ServiceDiscovery.ServiceName))
             {
-                var localAddresses = MulticastService.GetIpAddresses().ToList();
+                var localAddresses = MulticastService.GetIpAddresses();
                 var dnsMessage = GenerateQueryResponseMessage();
 
                 foreach (var localAddress in localAddresses)
                 {
-                    dnsMessage.AdditionalRecords.Add(new ARecord
+                    if (localAddress.AddressFamily == AddressFamily.InterNetwork)
                     {
-                        Name = $"{Dns.GetHostName()}.local",
-                        Address = localAddress,
-                        Class = DnsClass.IN,
-                        Type = DnsType.A,
-                        TTL = TimeSpan.FromMinutes(2)
-                    });
+                        dnsMessage.Answers.Add(new ARecord
+                        {
+                            Name = $"{_hapId.Replace(":", "_")}.local",
+                            Address = localAddress,
+                            Class = DnsClass.IN,
+                            Type = DnsType.A,
+                            TTL = TimeSpan.FromMinutes(2)
+                        });
+                    }
+                    else if (localAddress.AddressFamily == AddressFamily.InterNetworkV6)
+                    {
+                        dnsMessage.Answers.Add(new AAAARecord
+                        {
+                            Name = $"{_hapId.Replace(":", "_")}.local",
+                            Address = localAddress,
+                            Class = DnsClass.IN,
+                            Type = DnsType.AAAA,
+                            TTL = TimeSpan.FromMinutes(2)
+                        });
+                    }
                 }
 
                 _mdns.SendAnswer(dnsMessage, e);

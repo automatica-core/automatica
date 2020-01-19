@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -9,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NSec.Cryptography;
 using P3.Driver.HomeKit.Hap;
 using P3.Driver.HomeKit.Hap.Controllers;
 using P3.Driver.HomeKit.Hap.Model;
@@ -19,10 +16,7 @@ namespace P3.Driver.HomeKit.Http
     internal class HttpServer
     {
         private readonly ILogger _logger;
-        private readonly HomeKitServer _homeKitServer;
         private readonly int _port;
-        private readonly string _name;
-        private readonly string _pairCode;
 
         private TcpListener _listener;
 
@@ -30,26 +24,24 @@ namespace P3.Driver.HomeKit.Http
 
         private readonly HapMiddleware _middleware;
 
-        public HttpServer(ILogger logger, HomeKitServer homeKitServer, int port, string name, string pairCode)
+        private readonly List<HttpServerConnection> _connections = new List<HttpServerConnection>();
+
+        public HttpServer(ILogger logger, HomeKitServer homeKitServer, int port, string pairCode)
         {
             _logger = logger;
-            _homeKitServer = homeKitServer;
             _port = port;
-            _name = name;
-            _pairCode = pairCode;
-            
-            _middleware = new HapMiddleware(logger, _pairCode, homeKitServer);
+
+            _middleware = new HapMiddleware(logger, pairCode, homeKitServer);
         }
 
 
-        public Task<bool> Start()
+        public async Task<bool> Start()
         {
             _logger.LogDebug($"Starting http listener on port {_port}");
             _cts = new CancellationTokenSource();
-            Task.Run(async () =>
+            await Task.Run(async () =>
             {
-                CancellationTokenSource ctsConnection = null;
-
+                
                 try
                 {
                     _listener = TcpListener.Create(_port);
@@ -58,38 +50,47 @@ namespace P3.Driver.HomeKit.Http
 
                     while (true)
                     {
-                        ctsConnection = new CancellationTokenSource();
-                        _logger.LogDebug($"Waiting for new tcp connection");
+                        _logger.LogDebug("Waiting for new tcp connection");
                         var tcpClient = await _listener.AcceptTcpClientAsync();
 
                         _logger.LogDebug($"New tcp connection from {((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address}");
 
-                        var connection = new HttpServerConnection(_middleware, _logger, tcpClient, ctsConnection);
-
-                        await Task.Run(connection.HandleClient).ConfigureAwait(false);
-                        _logger.LogDebug($"Started handler for the new tcp connection...");
+                        ThreadPool.QueueUserWorkItem(async state =>
+                        {
+                            var connection = new HttpServerConnection(_middleware, _logger, (TcpClient)state, this);
+                            _connections.Add(connection);
+                            await connection.HandleClient().ConfigureAwait(false);
+                        }, tcpClient);
                     }
                 }
                 catch (TaskCanceledException)
                 {
                     _listener.Stop();
-                    ctsConnection?.Cancel();
                 }
                 catch (Exception e)
                 {
                     _listener.Stop();
                     _logger.LogError(e, "Could not accept client");
                 }
-            }, _cts.Token);
+            }, _cts.Token).ConfigureAwait(false);
 
 
-            return Task.FromResult(true);
+            return true;
         }
 
-      
+        internal void ConnectionClosed(HttpServerConnection connection)
+        {
+            _logger.LogDebug($"Closed connection from {connection.GetRemoteEndpoint()}");
+            _connections.Remove(connection);
+        }
 
         public Task<bool> Stop()
         {
+            foreach (var con in _connections)
+            {
+                con.Close();
+            }
+
             _cts.Cancel();
 
             _listener?.Stop();
@@ -111,7 +112,7 @@ namespace P3.Driver.HomeKit.Http
             };
 
             var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(charReturn, HapMiddleware.JsonSettings));
-            var response = HttpServerConnection.GetHttpResponse("EVENT/1.0", "application/hap+json", data);
+            var response = HttpServerConnection.GetHttpResponse("EVENT/1.0", "application/hap+json", data, DateTime.Now);
 
 
             _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
