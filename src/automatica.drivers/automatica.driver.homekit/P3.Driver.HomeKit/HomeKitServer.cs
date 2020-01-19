@@ -19,8 +19,8 @@ namespace P3.Driver.HomeKit
 {
     public class HomeKitServer : IHomeKitServer
     {
-
         internal const string Libsodium = "libsodium";
+
         public string Manufacturer { get; }
         public string BridgeName { get; }
 
@@ -29,23 +29,30 @@ namespace P3.Driver.HomeKit
         public event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
         public event EventHandler<CharactersiticValueChangedEventArgs> ValueChanged;
         
-
         private readonly AccessoryData _accessory = new AccessoryData();
 
-        private readonly Dictionary<Characteristic, List<HapSession>> _eventBasedNotifications = new Dictionary<Characteristic, List<HapSession>>();
+        private readonly Dictionary<string, List<Characteristic>> _eventBasedNotifications =
+            new Dictionary<string, List<Characteristic>>();
 
-        public HomeKitServer(ILogger logger, int port, string name, string ltsk, string ltpk, string deviceId, string pairCode, string manufacturer, string bridgeName)
+        public HomeKitServer(ILogger logger, int port, string name, string ltsk, string ltpk, string deviceId, string pairCode, string manufacturer, string bridgeName, int configVersion)
         {
             if (!HomeKitSetup.IsSetupCodeValid(pairCode))
             {
                 throw new ArgumentException($"{nameof(pairCode)} is not valid...");
             }
 
+            if (configVersion <= 0)
+            {
+                configVersion = 1;
+            }
+
             Manufacturer = manufacturer;
             BridgeName = bridgeName;
             var hapPort = port;
-            _bonjour = new BonjourService(logger, Convert.ToUInt16(hapPort), name, deviceId);
+            _bonjour = new BonjourService(logger, Convert.ToUInt16(hapPort), name, deviceId, configVersion);
             _hapServer = new HapControllerServer(logger, this, hapPort, ltsk, ltpk, deviceId, pairCode);
+
+            _bonjour.AlreadyPaired = !string.IsNullOrEmpty(ltpk);
 
             _hapServer.PairingCompleted += HapServerOnPairingCompleted;
 
@@ -92,7 +99,7 @@ namespace P3.Driver.HomeKit
             {
                 using (var file = new FileStream(Path.Combine(myPath.DirectoryName, fileName), FileMode.Create, FileAccess.Write))
                 {
-                    stream.CopyTo(file);
+                    stream?.CopyTo(file);
                 }
             }
 
@@ -101,7 +108,7 @@ namespace P3.Driver.HomeKit
                 using (var file = new FileStream(Path.Combine(corePath.DirectoryName, fileName), FileMode.Create,
                     FileAccess.Write))
                 {
-                    stream.CopyTo(file);
+                    stream?.CopyTo(file);
                 }
             }
 
@@ -117,14 +124,14 @@ namespace P3.Driver.HomeKit
         {
             lock (_eventBasedNotifications)
             {
-                if (!_eventBasedNotifications.ContainsKey(characteristic))
+                if (!_eventBasedNotifications.ContainsKey(session.ClientUsername))
                 {
-                    _eventBasedNotifications.Add(characteristic, new List<HapSession>());
+                    _eventBasedNotifications.Add(session.ClientUsername, new List<Characteristic>());
                 }
 
-                if (!_eventBasedNotifications[characteristic].Contains(session))
+                if (!_eventBasedNotifications[session.ClientUsername].Contains(characteristic))
                 {
-                    _eventBasedNotifications[characteristic].Add(session);
+                    _eventBasedNotifications[session.ClientUsername].Add(characteristic);
                 }
             }
         }
@@ -132,6 +139,7 @@ namespace P3.Driver.HomeKit
         private void HapServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
             PairingCompleted?.Invoke(sender, e);
+            _bonjour.AlreadyPaired = true;
         }
 
         public async Task<bool> Start()
@@ -164,11 +172,13 @@ namespace P3.Driver.HomeKit
                             {
                                 c.Value = value;
 
-                                if (_eventBasedNotifications.ContainsKey(characteristic))
-                                {
-                                    _hapServer.SendNotificiation(characteristic,
-                                        _eventBasedNotifications[characteristic]);
+                                foreach(var sessions in _eventBasedNotifications) {
+                                    if (sessions.Value.Contains(characteristic))
+                                    {
+                                        _hapServer.SendNotification(characteristic, _hapServer.GetClientSession(sessions.Key));
+                                    }
                                 }
+
                             }
                         }
                     }
@@ -190,5 +200,6 @@ namespace P3.Driver.HomeKit
         {
             ValueChanged?.Invoke(this, new CharactersiticValueChangedEventArgs(characteristic, characteristic.Value));
         }
+
     }
 }

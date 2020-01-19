@@ -15,7 +15,7 @@ namespace P3.Driver.HomeKit.ConsoleTest
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             var exceptionMessage = exception != null ? $"Exception occured: {exception}.{Environment.NewLine}" : String.Empty;
-             Console.WriteLine($"[Th: {Thread.CurrentThread.ManagedThreadId}] {exceptionMessage}{formatter.Invoke(state, exception)}");
+             Console.WriteLine($"{DateTime.Now:o}: [Th: {Thread.CurrentThread.ManagedThreadId}] {exceptionMessage}{formatter.Invoke(state, exception)}");
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -40,13 +40,13 @@ namespace P3.Driver.HomeKit.ConsoleTest
             string ltpk = null;
             if (File.Exists("LTPK"))
             {
-                //ltpk = File.ReadAllText("LTPK");
+                ltpk = File.ReadAllText("LTPK");
             }
 
             string ltsk = null;
             if (File.Exists("LTSK"))
             {
-              //  ltsk = File.ReadAllText("LTSK");
+                ltsk = File.ReadAllText("LTSK");
             }
 
             ServerInfo.ServerUid = Guid.NewGuid();
@@ -60,8 +60,8 @@ namespace P3.Driver.HomeKit.ConsoleTest
             var homekitId =
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
-            var homekit = new HomeKitServer(logger, 54321, "HomeKitA", null, null, homekitId,
-                code, "demo", "demo"+homekitId);
+            var homekit = new HomeKitServer(logger, 54321, "HomeKitA", ltsk, ltpk, homekitId,
+                code, "demo", "demo"+homekitId, 2);
 
             homekit.SetConfigVersion(5);
 
@@ -88,10 +88,19 @@ namespace P3.Driver.HomeKit.ConsoleTest
 
             await homekit.Start();
 
-            Console.ReadLine();
 
-            var onoff = lightAccessory.Services[1].Characteristics.SingleOrDefault(a => a.Id == 8);
-            homekit.SetCharacteristicValue(onoff, true);
+            ThreadPool.QueueUserWorkItem(async state =>
+            {
+                var value = true;
+                while (true)
+                {
+                    var onoff = lightAccessory.Services[1].Characteristics.SingleOrDefault(a => a.Id == 8);
+                    homekit.SetCharacteristicValue(onoff, value);
+
+                    value = !value;
+                    await Task.Delay(1000);
+                }
+            });
 
             Console.ReadLine();
 

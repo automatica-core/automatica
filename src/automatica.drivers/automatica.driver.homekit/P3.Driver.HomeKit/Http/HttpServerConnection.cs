@@ -21,6 +21,9 @@ namespace P3.Driver.HomeKit.Http
         private readonly HttpServer _httpServer;
         private readonly ConnectionSession _session = new ConnectionSession();
         private EndPoint _remoteEndPoint;
+        private HapSession _connectionSession;
+
+        public HapSession Session => _connectionSession;
 
         public HttpServerConnection(HapMiddleware middleware, ILogger logger, TcpClient client, HttpServer httpServer)
         {
@@ -36,11 +39,11 @@ namespace P3.Driver.HomeKit.Http
             _logger.LogDebug($"Start client socket on port {_remoteEndPoint}");
 
             var session = Guid.NewGuid().ToString();
-            var connectionSession = _middleware.GetSession(session);
+            _connectionSession = _middleware.GetSession(session);
 
-            connectionSession.Socket = _client.Client;
+            _connectionSession.Client = _client;
 
-            _client.ReceiveTimeout = Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds);
+            _client.ReceiveTimeout = 0;
             try
             {
                 using (var networkStream = _client.GetStream())
@@ -55,7 +58,7 @@ namespace P3.Driver.HomeKit.Http
                         //
                         var bytesRead = networkStream.Read(receiveBuffer, 0, _client.ReceiveBufferSize);;
 
-                        lock (connectionSession)
+                        lock (_connectionSession)
                         {
                             if (bytesRead == 0)
                             {
@@ -66,11 +69,11 @@ namespace P3.Driver.HomeKit.Http
 
                             var content = receiveBuffer.AsSpan(0, bytesRead).ToArray();
 
-                            if (connectionSession.IsVerified)
+                            if (_connectionSession.IsVerified)
                             {
                                 _logger.LogDebug("Already in a verified state..");
 
-                                var encryptionResult = DecryptData(content, connectionSession);
+                                var encryptionResult = DecryptData(content, _connectionSession);
                                 content = encryptionResult;
                             }
 
@@ -137,9 +140,9 @@ namespace P3.Driver.HomeKit.Http
 
                             //    _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
 
-                            if (connectionSession.IsVerified && !connectionSession.SkipFirstEncryption)
+                            if (_connectionSession.IsVerified && !_connectionSession.SkipFirstEncryption)
                             {
-                                response = EncryptData(response, connectionSession);
+                                response = EncryptData(response, _connectionSession);
 
                                 networkStream.Write(response, 0, response.Length);
                                 networkStream.Flush();
@@ -149,9 +152,9 @@ namespace P3.Driver.HomeKit.Http
                                 networkStream.Write(response, 0, response.Length);
                                 networkStream.Flush();
 
-                                if (connectionSession.SkipFirstEncryption)
+                                if (_connectionSession.SkipFirstEncryption)
                                 {
-                                    connectionSession.SkipFirstEncryption = false;
+                                    _connectionSession.SkipFirstEncryption = false;
                                 }
                             }
 

@@ -2,7 +2,6 @@ using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using P3.Driver.HomeKit;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
@@ -17,7 +16,7 @@ namespace P3.Driver.HomeKitFactory
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
-        public override Version DriverVersion => new Version(0, 0, 0, 3);
+        public override Version DriverVersion => new Version(0, 1, 0, 3);
 
         public override bool InDevelopmentMode => true;
 
@@ -25,6 +24,11 @@ namespace P3.Driver.HomeKitFactory
         {
             HomeKitServer.Init(config.Logger);
             return new HomeKitDriver(config);
+        }
+
+        public override void AfterSave(NodeInstance instance)
+        {
+            base.AfterSave(instance);
         }
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)

@@ -82,6 +82,8 @@ namespace P3.Driver.HomeKit.Hap
                 _sessions.TryAdd(connectionId, new HapSession());
             }
 
+
+            _logger.LogDebug($"Working on request {url}");
             var queryString = new NameValueCollection();
 
             if (url.Contains("?"))
@@ -203,7 +205,7 @@ namespace P3.Driver.HomeKit.Hap
                         {
                             _logger.LogDebug($"Working on accessories");
 
-                            var accessoryController = new AccesoriesController();
+                            var accessoryController = new AccesoriesController(_logger);
                             var accessories = accessoryController.Get(_homeKitServer, queryString);
                             var strValue = JsonConvert.SerializeObject(accessories, JsonSettings);
 

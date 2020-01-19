@@ -34,6 +34,9 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         internal CharacteristicReturn<Characteristic> Put(byte[] v, HapSession session, HomeKitServer server)
         {
             var json = Encoding.UTF8.GetString(v);
+
+            _logger.LogTrace($"Read {json}");
+
             var characteristics = JsonConvert.DeserializeObject<CharacteristicReturn<SentCharacteristic>>(json);
             var all = server.GetAccessories();
             var retCharactersitcs = new List<Characteristic>();
@@ -71,6 +74,10 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 }
 
                 if (sendCharacteristic.EventBasedNotification.HasValue && sendCharacteristic.EventBasedNotification.Value)
+                {
+                    server.RegisterNotifications(characteristic, session);
+                }
+                else
                 {
                     server.RegisterNotifications(characteristic, session);
                 }

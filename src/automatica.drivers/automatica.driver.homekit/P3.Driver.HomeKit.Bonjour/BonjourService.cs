@@ -24,33 +24,31 @@ namespace P3.Driver.HomeKit.Bonjour
         private readonly ushort _port;
         private readonly string _name;
         private readonly string _hapId;
+        private readonly int _configVersion;
         private readonly MulticastService _mdns;
 
         internal const string HapName = "_hap";
         internal static readonly string DnsHapDomain = $"{HapName}._tcp.local";
 
-        public BonjourService(ILogger logger, ushort port, string name, string hapId)
+        public bool AlreadyPaired { get; set; }
+
+        public BonjourService(ILogger logger, ushort port, string name, string hapId, int configVersion)
         {
             _logger = logger;
             _port = port;
             _name = name;
             _hapId = hapId;
+            _configVersion = configVersion;
             _mdns = new MulticastService();
-
         }
 
         private Message GenerateQueryResponseMessage()
         {
-            var message = new Message();
-            message.QR = true;
-
-            //message.Questions.Add(new Question()
-            //    {Name = DnsHapDomain, QU = false, Class = DnsClass.IN, Type = DnsType.PTR});
-
+            var message = new Message {QR = true};
 
             var txtList = new List<string>();
-            txtList.AddProperty("sf", "1");
-            txtList.AddProperty("c#", "1");
+            txtList.AddProperty("sf", AlreadyPaired ? "0" : "1");
+            txtList.AddProperty("c#", _configVersion.ToString());
             txtList.AddProperty("s#", "1");
             txtList.AddProperty("md", _name);
             txtList.AddProperty("ff", "00");
@@ -93,27 +91,12 @@ namespace P3.Driver.HomeKit.Bonjour
                 TTL = TimeSpan.FromMinutes(2)
             });
 
-
             return message;
         }
 
-
-        public async Task Start()
+        public Task Start()
         {
               _mdns.QueryReceived += _mdns_QueryReceived;
-
-             //var serviceProvider = new ServiceDiscovery(_logger, _mdns);
-
-             //var serviceProfile = new ServiceProfile(_name, "_hap._tcp", _port);
-             //serviceProfile.AddProperty("sf", "1");
-             //serviceProfile.AddProperty("ff", "0x00");
-             //serviceProfile.AddProperty("ci", "2");
-             //serviceProfile.AddProperty("id", "be:09:ea:3e:24:aa");
-             //serviceProfile.AddProperty("md", _name);
-             //serviceProfile.AddProperty("s#", "1");
-             //serviceProfile.AddProperty("c#", "0");
-
-             //serviceProvider.Advertise(serviceProfile);
 
              var startMessage = new Message();
              startMessage.AuthorityRecords.Add(new SRVRecord
@@ -134,16 +117,19 @@ namespace P3.Driver.HomeKit.Bonjour
 
              _mdns.Start();
 
-             _mdns.SendQuery(startMessage);
-             await Task.Delay(1000);
-             q.QU = false;
-             _mdns.SendQuery(startMessage);
-             await Task.Delay(1000);
-             _mdns.SendQuery(startMessage);
-             await Task.Delay(1000);
-
-
-
+#pragma warning disable 4014
+             Task.Run(async () =>
+             {
+                 _mdns.SendQuery(startMessage);
+                 await Task.Delay(1000);
+                 q.QU = false;
+                 _mdns.SendQuery(startMessage);
+                 await Task.Delay(1000);
+                 _mdns.SendQuery(startMessage);
+                 await Task.Delay(1000);
+             }).ConfigureAwait(false);
+#pragma warning restore 4014
+            return Task.CompletedTask;
         }
 
         public async Task Stop()
@@ -165,7 +151,6 @@ namespace P3.Driver.HomeKit.Bonjour
             _mdns.Send(message, false);
 
             _mdns.Stop();
-
         }
 
         private void _mdns_QueryReceived(object sender, MessageEventArgs e)

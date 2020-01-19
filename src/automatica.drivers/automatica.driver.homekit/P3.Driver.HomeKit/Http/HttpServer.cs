@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -35,11 +36,18 @@ namespace P3.Driver.HomeKit.Http
         }
 
 
-        public async Task<bool> Start()
+        public HapSession GetClientSession(string clientUserName)
+        {
+            var connections = _connections.Where(a => a.Session != null &&  a.Session.ClientUsername == clientUserName);
+            var session = connections.FirstOrDefault(a => a.Session != null && a.Session.Client.Connected);
+            return session?.Session;
+        }
+        public Task<bool> Start()
         {
             _logger.LogDebug($"Starting http listener on port {_port}");
             _cts = new CancellationTokenSource();
-            await Task.Run(async () =>
+#pragma warning disable 4014
+            Task.Run(async () =>
             {
                 
                 try
@@ -73,9 +81,9 @@ namespace P3.Driver.HomeKit.Http
                     _logger.LogError(e, "Could not accept client");
                 }
             }, _cts.Token).ConfigureAwait(false);
+#pragma warning restore 4014
 
-
-            return true;
+            return Task.FromResult(true);
         }
 
         internal void ConnectionClosed(HttpServerConnection connection)
@@ -97,7 +105,7 @@ namespace P3.Driver.HomeKit.Http
             return Task.FromResult(true);
         }
 
-        public void SendNotification(Characteristic characteristic, List<HapSession> eventBasedNotification)
+        public bool SendNotification(Characteristic characteristic, HapSession session)
         {
             var baseChar = new CharacteristicBase(characteristic.DefaultType)
             {
@@ -112,26 +120,27 @@ namespace P3.Driver.HomeKit.Http
             };
 
             var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(charReturn, HapMiddleware.JsonSettings));
-            var response = HttpServerConnection.GetHttpResponse("EVENT/1.0", "application/hap+json", data, DateTime.Now);
-
+            var response =
+                HttpServerConnection.GetHttpResponse("EVENT/1.0", "application/hap+json", data, DateTime.Now);
 
             _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
 
-            foreach (var session in eventBasedNotification)
+            lock (session)
             {
-                lock (session)
+                try
                 {
-                    try
-                    {
-                        var encrypted = HttpServerConnection.EncryptData(response, session);
-                        session.Socket.Send(encrypted);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, "Could not set value");
-                    }
+                    var encrypted = HttpServerConnection.EncryptData(response, session);
+                    session.Client.Client.Send(encrypted);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not set value");
                 }
             }
+
+            return false;
         }
+
     }
 }

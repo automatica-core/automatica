@@ -130,6 +130,8 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 var clientPublicKey = StringToByteArray(HapControllerServer.HapControllerLtpk);
                 var material = session.ClientPublicKey.Concat(clientUserName).Concat(session.PublicKey).ToArray();
+
+                session.ClientUsername = Automatica.Core.Driver.Utility.Utils.ByteArrayToString(in clientUserName);
               
                 if (!Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
                 {

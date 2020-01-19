@@ -39,9 +39,7 @@ namespace P3.Driver.HomeKitFactory
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
             string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
-            _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"), DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
-                code, "AutomaticaCore", "AutomaticaCore"+homekitId);
-
+          
             var configProperty = GetPropertyValueInt("config-version");
 
             if(configProperty <= 0)
@@ -51,6 +49,9 @@ namespace P3.Driver.HomeKitFactory
             _server.SetConfigVersion(configProperty);
 
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty + 1);
+
+            _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"), DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
+                code, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty);
 
             _pairingNode.DispatchValue(code);
 
