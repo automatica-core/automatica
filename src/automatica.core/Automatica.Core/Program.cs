@@ -17,6 +17,7 @@ using Serilog;
 using Automatica.Core.Internals;
 using MQTTnet.Diagnostics;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Automatica.Core
 {
@@ -31,10 +32,7 @@ namespace Automatica.Core
                 .AddEnvironmentVariables()
                 .Build();
 
-            var logBuild = new LoggerConfiguration()
-              .WriteTo.Console()
-              .WriteTo.RollingFile(Path.Combine("logs", "dotnet.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 30)
-              .MinimumLevel.Verbose();
+            var logBuild = LogConfiguration.ConfigureLogger();
 
             Log.Logger = logBuild.CreateLogger();
 

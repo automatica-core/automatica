@@ -10,7 +10,7 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
         public BoardTypeEnum BoardType => BoardTypeEnum.Docker;
         public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual};
 
-        internal static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+        public static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
 
         public IList<BoardInterface> GetBoardInterfaces()
@@ -28,7 +28,6 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
                 Description = "Virtual",
                 Meta = "virt://"
             };
-
 
             var eth = new BoardInterface
             {
