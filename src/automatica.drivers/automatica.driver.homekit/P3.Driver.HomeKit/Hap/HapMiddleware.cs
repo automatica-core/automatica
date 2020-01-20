@@ -189,11 +189,8 @@ namespace P3.Driver.HomeKit.Hap
                             var c = new CharacteristicsController(_logger);
                             var data = c.Put(inputData, _sessions[connectionId], _homeKitServer);
 
-                            if (data.Characteristics.Count == 0)
-                            {
-                                return new Tuple<string, byte[]>(data.ContentType, new byte[0]);
-                            }
-                            return new Tuple<string, byte[]>(data.ContentType, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)));
+                            // response with no data if the call was successful - errors need to be implemented
+                            return new Tuple<string, byte[]>(data.ContentType, new byte[0]);
                         }
                     }
                 }

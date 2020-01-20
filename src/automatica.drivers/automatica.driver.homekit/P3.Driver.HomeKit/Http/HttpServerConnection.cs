@@ -138,7 +138,7 @@ namespace P3.Driver.HomeKit.Http
                             var result = _middleware.Invoke(session, url, method, data, _session);
                             var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2, DateTime.Now);
 
-                            //    _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
+                                _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
 
                             if (_connectionSession.IsVerified && !_connectionSession.SkipFirstEncryption)
                             {
@@ -197,24 +197,16 @@ namespace P3.Driver.HomeKit.Http
             else
             {
                 response = response.Concat(Encoding.UTF8.GetBytes($"{header} 200 OK")).Concat(returnChars).ToArray();
-            //    response = response.Concat(Encoding.UTF8.GetBytes(contentLength)).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes(contentLength)).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Content-Type: {contentType}")).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Date: {date.ToUniversalTime().ToString("r", CultureInfo.InvariantCulture)}")).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Connection: keep-alive")).Concat(returnChars).ToArray();
-                response = response.Concat(Encoding.UTF8.GetBytes($"Transfer-Encoding: chunked")).Concat(returnChars).ToArray();
+                //response = response.Concat(Encoding.UTF8.GetBytes($"Transfer-Encoding: chunked")).Concat(returnChars).ToArray();
+
             }
 
-            var length = BitConverter.GetBytes(data.Length).ToList();
-            length.Reverse();
-            length.RemoveAll(b => b == 0);
-
-            var lengthInHex = RemoveLeadingZero(Automatica.Core.Driver.Utility.Utils.ByteArrayToString(length.ToArray().AsSpan()).Replace(" ", "").ToLower());
-            response = response.Concat(returnChars).Concat(Encoding.UTF8.GetBytes(lengthInHex)).ToArray();
             response = response.Concat(returnChars).ToArray();
-            response = response.Concat(data).Concat(returnChars).ToArray();
-            response = response.Concat(Encoding.UTF8.GetBytes(new char[] { '0' })).ToArray();
-            response = response.Concat(returnChars).ToArray();
-            response = response.Concat(returnChars).ToArray();
+            response = response.Concat(data).ToArray();
 
             return response;
         }

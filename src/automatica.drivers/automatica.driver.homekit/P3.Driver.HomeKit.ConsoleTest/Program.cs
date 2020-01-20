@@ -95,7 +95,7 @@ namespace P3.Driver.HomeKit.ConsoleTest
                 while (true)
                 {
                     var onoff = lightAccessory.Services[1].Characteristics.SingleOrDefault(a => a.Id == 8);
-                    homekit.SetCharacteristicValue(onoff, value);
+                    //homekit.SetCharacteristicValue(onoff, value);
 
                     value = !value;
                     await Task.Delay(1000);
