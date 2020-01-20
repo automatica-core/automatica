@@ -156,12 +156,20 @@ namespace Automatica.Core.Runtime.IO
                 {
                     if (rule.Key.ObjId == toRule)
                     {
-                        SystemLogger.Instance.LogDebug($"ValueDispatchToRule: {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
-                        var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
-
-                        foreach (var result in ruleResults)
+                        try
                         {
-                            _dispatcher.DispatchValue(result.Instance, result.Value);
+                            SystemLogger.Instance.LogDebug(
+                                $"ValueDispatchToRule: {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
+                            var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
+
+                            foreach (var result in ruleResults)
+                            {
+                                _dispatcher.DispatchValue(result.Instance, result.Value);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            SystemLogger.Instance.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
                         }
                     }
                 }
@@ -174,8 +182,16 @@ namespace Automatica.Core.Runtime.IO
             {
                 if (node.Id == to)
                 {
-                    SystemLogger.Instance.LogDebug($"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
-                    node.WriteValue(dispatchable, o);
+                    try
+                    {
+                        SystemLogger.Instance.LogDebug(
+                            $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
+                        node.WriteValue(dispatchable, o);
+                    }
+                    catch(Exception e)
+                    {
+                        SystemLogger.Instance.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+                    }
                 }
             }
         }
