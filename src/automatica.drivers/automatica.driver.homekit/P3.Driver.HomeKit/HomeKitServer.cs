@@ -65,10 +65,6 @@ namespace P3.Driver.HomeKit
 
         }
 
-        public void SetConfigVersion(int version)
-        {
-            HapControllerServer.ConfigVersion = version;
-        }
 
         [DllImport(Libsodium, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int sodium_library_version_major();

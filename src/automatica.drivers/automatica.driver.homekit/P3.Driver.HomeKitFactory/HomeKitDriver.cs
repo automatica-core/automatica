@@ -46,7 +46,6 @@ namespace P3.Driver.HomeKitFactory
             {
                 configProperty = 1;
             }
-            _server.SetConfigVersion(configProperty);
 
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty + 1);
 

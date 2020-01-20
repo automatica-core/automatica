@@ -61,7 +61,7 @@ namespace P3.Driver.HomeKit.ConsoleTest
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
             var homekit = new HomeKitServer(logger, 54321, "HomeKitA", ltsk, ltpk, homekitId,
-                code, "demo", "demo"+homekitId, 2);
+                code, "demo", "demo"+homekitId, 3);
 
             homekit.SetConfigVersion(5);
 
@@ -71,11 +71,13 @@ namespace P3.Driver.HomeKit.ConsoleTest
             var outletAccessory = AccessoryFactory.CreateOutletAccessory("Outlet", "AutomaticaCore", "123456", false);
             var switchAccessory = AccessoryFactory.CreateSwitchAccessory("Switch1", "AutomaticaCore", "123456", false);
             var contactSensorAcceessory = AccessoryFactory.CreateContactSensorAccessory("Contact1", "AutomaticaCore", "123456", 0);
+            var contactSensorAcceessory2 = AccessoryFactory.CreateContactSensorAccessory("Contact2", "AutomaticaCore", "123456", 0);
 
             homekit.AddAccessory(lightAccessory);
             homekit.AddAccessory(outletAccessory);
             homekit.AddAccessory(switchAccessory);
             homekit.AddAccessory(contactSensorAcceessory);
+            homekit.AddAccessory(contactSensorAcceessory2);
             homekit.AddAccessory(AccessoryFactory.CreateTemperatureSensorAccessory("Temperature1", "AutomaticaCore", "asdfasdf", 22.9));
 
             homekit.ValueChanged += (sender, eventArgs) =>
@@ -94,8 +96,8 @@ namespace P3.Driver.HomeKit.ConsoleTest
                 var value = true;
                 while (true)
                 {
-                    var onoff = lightAccessory.Services[1].Characteristics.SingleOrDefault(a => a.Id == 8);
-                    //homekit.SetCharacteristicValue(onoff, value);
+                    var onoff = contactSensorAcceessory.Services[1].Characteristics.SingleOrDefault(a => a.Id == 8);
+                    homekit.SetCharacteristicValue(onoff, value);
 
                     value = !value;
                     await Task.Delay(1000);
