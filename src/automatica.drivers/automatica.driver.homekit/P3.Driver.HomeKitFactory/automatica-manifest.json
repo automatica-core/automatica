@@ -23,13 +23,15 @@
         "Type": "driver",
         "Output": "P3.Driver.HomeKitFactory.dll",
         "Resources": [],
-        "Dependencies": [
-            "P3.Driver.HomeKit.dll",
-            "Chaos.NaCl.Core.dll",
-            "P3.Curve25519.Core.dll",
-            "NSec.Cryptography.dll",
-            "srp.dll"
-        ],
+      "Dependencies": [
+        "P3.Driver.HomeKit.dll",
+        "P3.Driver.HomeKit.Bonjour.dll",
+        "P3.Driver.HomeKit.Bonjour.Abstraction.dll",
+        "Chaos.NaCl.Core.dll",
+        "P3.Curve25519.Core.dll",
+        "NSec.Cryptography.dll",
+        "srp.dll"
+      ],
         "MinCoreServerVersion": {
             "Major": 0,
             "Minor": 10,
