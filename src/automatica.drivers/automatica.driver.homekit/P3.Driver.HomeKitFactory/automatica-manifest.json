@@ -11,7 +11,7 @@
         },
         "plugin-version": {
             "Major": 0,
-            "Minor": 0,
+            "Minor": 1,
             "Build": 0,
             "Revision": 4,
             "MajorRevision": 0,
@@ -30,15 +30,16 @@
         "Chaos.NaCl.Core.dll",
         "P3.Curve25519.Core.dll",
         "NSec.Cryptography.dll",
-        "srp.dll"
+        "srp.dll",
+        "SimpleBase.dll"
       ],
         "MinCoreServerVersion": {
             "Major": 0,
-            "Minor": 10,
+            "Minor": 12,
             "Build": 0,
-            "Revision": 244,
+            "Revision": 0,
             "MajorRevision": 0,
-            "MinorRevision": 244
+            "MinorRevision": 0
         },
         "MandatoryLicenseFeatures": [],
         "OptionalLicenseFeatures": []

@@ -63,8 +63,6 @@ namespace P3.Driver.HomeKit.ConsoleTest
             var homekit = new HomeKitServer(logger, 54321, "HomeKitA", ltsk, ltpk, homekitId,
                 code, "demo", "demo"+homekitId, 3);
 
-            homekit.SetConfigVersion(5);
-
             homekit.PairingCompleted += Homekit_PairingCompleted;
 
             var lightAccessory = AccessoryFactory.CreateLightBulbAccessory("Light1", "AutomaticaCore", "123456", false);

@@ -7,7 +7,8 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using P3.Driver.HomeKit.Bonjour.Abstraction;
 
 namespace P3.Driver.HomeKit.Bonjour
@@ -31,8 +32,7 @@ namespace P3.Driver.HomeKit.Bonjour
         const int MaxDatagramSize = Message.MaxLength;
 
         static readonly TimeSpan MaxLegacyUnicastTtl = TimeSpan.FromSeconds(10);
-        static readonly ILog Log = LogManager.GetLogger(typeof(MulticastService));
-        static readonly IPNetwork[] LinkLocalNetworks = new[] { IPNetwork.Parse("169.254.0.0/16"), IPNetwork.Parse("fe80::/10") };
+        static readonly ILogger Log = NullLogger.Instance;
 
         private List<NetworkInterface> _knownNics = new List<NetworkInterface>();
         private int _maxPacketSize;
@@ -287,7 +287,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
         void FindNetworkInterfaces()
         {
-            Log.Debug("Finding network interfaces");
+            Log.LogDebug("Finding network interfaces");
 
             try
             {
@@ -299,21 +299,13 @@ namespace P3.Driver.HomeKit.Bonjour
                 foreach (var nic in _knownNics.Where(k => !currentNics.Any(n => k.Id == n.Id)))
                 {
                     oldNics.Add(nic);
-
-                    if (Log.IsDebugEnabled)
-                    {
-                        Log.Debug($"Removed nic '{nic.Name}'.");
-                    }
+                    Log.LogDebug($"Removed nic '{nic.Name}'.");
                 }
 
                 foreach (var nic in currentNics.Where(nic => !_knownNics.Any(k => k.Id == nic.Id)))
                 {
                     newNics.Add(nic);
-
-                    if (Log.IsDebugEnabled)
-                    {
-                        Log.Debug($"Found nic '{nic.Name}'.");
-                    }
+                    Log.LogDebug($"Found nic '{nic.Name}'.");
                 }
 
                 _knownNics = currentNics;
@@ -354,7 +346,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception e)
             {
-                Log.Error("FindNics failed", e);
+                Log.LogError("FindNics failed", e);
             }
         }
 
@@ -669,7 +661,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception e)
             {
-                Log.Warn("Received malformed message", e);
+                Log.LogWarning("Received malformed message", e);
                 MalformedMessage?.Invoke(this, result.Buffer);
                 return; // eat the exception
             }
@@ -693,7 +685,7 @@ namespace P3.Driver.HomeKit.Bonjour
             }
             catch (Exception e)
             {
-                Log.Error("Receive handler failed", e);
+                Log.LogError("Receive handler failed", e);
                 // eat the exception
             }
         }

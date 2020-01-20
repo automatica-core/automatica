@@ -6,7 +6,8 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace P3.Driver.HomeKit.Bonjour
 {
@@ -16,7 +17,7 @@ namespace P3.Driver.HomeKit.Bonjour
     /// </summary>
     class MulticastClient : IDisposable
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(MulticastClient));
+        private static readonly ILogger Log = NullLogger.Instance;
 
         /// <summary>
         ///   The port number assigned to Multicast DNS.
@@ -95,7 +96,7 @@ namespace P3.Driver.HomeKit.Bonjour
                             throw new NotSupportedException($"Address family {address.AddressFamily}.");
                     }
 
-                    Log.Debug($"Will send via {localEndpoint}");
+                    Log.LogDebug($"Will send via {localEndpoint}");
                     if (!_senders.TryAdd(address, sender)) // Should not fail
                     {
                         sender.Dispose();
@@ -108,7 +109,7 @@ namespace P3.Driver.HomeKit.Bonjour
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Cannot setup send socket for {address}: {e.Message}");
+                    Log.LogError(e, $"Cannot setup send socket for {address}: {e.Message}");
                     sender.Dispose();
                 }
             }
@@ -134,7 +135,7 @@ namespace P3.Driver.HomeKit.Bonjour
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Sender {sender.Key} failure: {e.Message}");
+                    Log.LogError(e, $"Sender {sender.Key} failure: {e.Message}");
                     // eat it.
                 }
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using SimpleBase;
 
@@ -169,7 +168,7 @@ namespace P3.Driver.HomeKit.Bonjour.Abstraction
         /// </param>
         public void WriteBase16String(byte[] value, bool appendSpace = true)
         {
-            WriteString(Base16.EncodeLower(value), appendSpace);
+            WriteString(Base16.LowerCase.Encode(value), appendSpace);
         }
 
         /// <summary>
