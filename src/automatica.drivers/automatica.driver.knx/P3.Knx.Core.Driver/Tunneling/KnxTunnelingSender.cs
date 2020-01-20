@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Driver.Frames;
@@ -19,10 +20,19 @@ namespace P3.Knx.Core.Driver.Tunneling
 
             KnxHelper.Logger.LogTrace($"Writing {frame}");
             KnxHelper.Logger.LogHexOut(byteFrame);
-            
-            var length = _client?.Send(byteFrame, byteFrame.Length);
 
-            return length == byteFrame.Length;
+            try
+            {
+                var length = _client?.Send(byteFrame, byteFrame.Length);
+
+                return length == byteFrame.Length;
+            }
+            catch (Exception e)
+            {
+                KnxHelper.Logger.LogError(e, "Error writing value...");
+            }
+
+            return false;
         }
 
         internal override void Start()
