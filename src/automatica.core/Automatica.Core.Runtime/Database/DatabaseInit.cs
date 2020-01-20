@@ -21,7 +21,7 @@ namespace Automatica.Core.Runtime.Database
 {
     public static class DatabaseInit
     {
-        public static void EnusreDatabaseCreated(IServiceProvider services)
+        public static void EnsureDatabaseCreated(IServiceProvider services)
         {
             var context = services.GetRequiredService<AutomaticaContext>();
             var visuInitFactory = services.GetRequiredService<IVisualisationFactory>();

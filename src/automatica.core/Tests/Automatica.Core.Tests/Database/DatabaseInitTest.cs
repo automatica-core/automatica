@@ -35,7 +35,7 @@ namespace Automatica.Core.Tests.Database
 
             try
             {
-                DatabaseInit.EnusreDatabaseCreated(serviceProviderMock.Object);
+                DatabaseInit.EnsureDatabaseCreated(serviceProviderMock.Object);
                 Assert.True(true);
             }
             catch (Exception e)

@@ -41,6 +41,7 @@ using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
+[assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
 
 namespace Automatica.Core.Runtime.Core
 {

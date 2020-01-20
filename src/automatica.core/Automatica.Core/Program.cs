@@ -87,7 +87,7 @@ namespace Automatica.Core
             logger.LogInformation($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
 
             var db = webHost.Services.GetRequiredService<AutomaticaContext>();
-            DatabaseInit.EnusreDatabaseCreated(webHost.Services);
+            DatabaseInit.EnsureDatabaseCreated(webHost.Services);
 
           
 

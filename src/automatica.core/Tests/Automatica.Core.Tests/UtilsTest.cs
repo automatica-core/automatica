@@ -31,7 +31,7 @@ namespace Automatica.Core.Tests
         [Fact]
         public void TestByteAraryToString()
         {
-            Assert.Equal("80", Utils.ByteArrayToString(new byte[] {0x80}));
+            Assert.Equal("80", Utils.ByteArrayToString(new byte[] {0x80}.AsSpan()));
         }
 
 

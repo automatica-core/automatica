@@ -1,7 +1,6 @@
 ﻿using Automatica.Core.Base.IO;
 using System;
 using System.Threading.Tasks;
-using Automatica.Core.Driver;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;
 using Xunit;
@@ -68,7 +67,6 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestDispatcherClear()
         {
-            var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
             var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2", DispatcherMock.Instance);
 
             await DispatcherMock.Instance.RegisterDispatch(DispatchableType.NodeInstance, DispatchableMock.Instance.Id, (a, b) =>

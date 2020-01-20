@@ -53,7 +53,7 @@ namespace Automatica.Core.CI.CreateDatabase
                 loadDirectory = fi.DirectoryName;
             }
 
-            DatabaseInit.EnusreDatabaseCreated(hostBuilder.Services);
+            DatabaseInit.EnsureDatabaseCreated(hostBuilder.Services);
 
             var server = new CoreServer(hostBuilder.Services);
             await server.Load(loadDirectory, "*.dll");

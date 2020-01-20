@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="OpenCover" Version="4.7.922">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="OpenCoverToCoberturaConverter" Version="0.3.4">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
+    <ProjectReference Include="..\..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\..\Automatica.Core.Runtime\Automatica.Core.Runtime.csproj" />
+    <ProjectReference Include="..\..\Automatica.Core.UnitTests\Automatica.Core.UnitTests.Base.csproj" />
+    <ProjectReference Include="..\..\Automatica.Core.Driver.Utility\Automatica.Core.Driver.Utility.csproj" />
+    <ProjectReference Include="..\..\Automatica.Core.WebApi\Automatica.Core.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>
