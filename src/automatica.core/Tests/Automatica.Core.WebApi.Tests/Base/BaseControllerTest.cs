@@ -50,9 +50,7 @@ namespace Automatica.Core.WebApi.Tests.Base
 
             DatabaseInit.EnsureDatabaseCreated(ServiceProvider);
 
-            var controllerMock = new Mock<T> {CallBase = true};
-            Controller = controllerMock.Object;
-            
+            Controller = ServiceProvider.GetRequiredService<T>();
         }
 
         public void Dispose()

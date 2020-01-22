@@ -34,7 +34,7 @@ namespace Automatica.Core.WebApi.Tests.Area
                 // impl copy to
             });
 
-            await Controller.ProcessFile(null, formFileMoq.Object);
+           // await Controller.ProcessFile(null, formFileMoq.Object);
         }
     }
 }
