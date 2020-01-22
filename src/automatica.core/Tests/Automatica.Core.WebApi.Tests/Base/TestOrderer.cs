@@ -6,7 +6,7 @@ using Xunit.Sdk;
 
 namespace Automatica.Core.WebApi.Tests.Base
 {
-    public class PriorityOrderer : ITestCaseOrderer
+    public class TestOrderer : ITestCaseOrderer
     {
         public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases) where TTestCase : ITestCase
         {
@@ -16,7 +16,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             {
                 int priority = 0;
 
-                foreach (IAttributeInfo attr in testCase.TestMethod.Method.GetCustomAttributes((typeof(TestPriorityAttribute).AssemblyQualifiedName)))
+                foreach (IAttributeInfo attr in testCase.TestMethod.Method.GetCustomAttributes((typeof(TestOrderAttribute).AssemblyQualifiedName)))
                     priority = attr.GetNamedArgument<int>("Priority");
 
                 GetOrCreate(sortedMethods, priority).Add(testCase);

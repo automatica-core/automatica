@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.LinqExtensions;
@@ -12,10 +14,13 @@ using Automatica.Core.Internals.Areas;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Ets;
+
+[assembly:InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -45,51 +50,53 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<IEnumerable<AreaInstance>> Post(Guid parentObjId)
         {
             // full path to file in temp location
-
             var parentInstance = await DbContext.AreaInstances.SingleOrDefaultAsync(a => a.ObjId == parentObjId);
 
             if (parentInstance == null)
             {
-                return new List<AreaInstance>(); //TODO error handling
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new List<AreaInstance>(); 
             }
-            var myFile = Request.Form.Files[0];
-            var targetLocation = ServerInfo.GetTempPath();
+            var myFile = Request.Form.Files[0]; 
 
             try
             {
-                var path = Path.Combine(targetLocation, myFile.FileName);
-
-                // Uncomment to save the file
-                using (var fileStream = System.IO.File.Create(path))
-                {
-                    myFile.CopyTo(fileStream);
-                }
-
-
-                var etsProject = new EtsProjectParser().ParseEtsFile(path, GroupAddressStyle.ThreeLevel);
-
-                foreach (var b in etsProject.Buildings)
-                {
-                    var bInstance = CreateAreaInstance(parentInstance, b);
-
-                    parentInstance.InverseThis2ParentNavigation.Add(bInstance);
-                }
-
-                return new List<AreaInstance>
-                {
-                    parentInstance
-                };
-
-
+                await ProcessFile(parentInstance, myFile);
             }
             catch
             {
-                Response.StatusCode = 400;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
 
             return new List<AreaInstance>();
         }
 
+        internal async Task<IEnumerable<AreaInstance>> ProcessFile(AreaInstance parentInstance, IFormFile formFile)
+        {
+            var targetLocation = ServerInfo.GetTempPath();
+            var path = Path.Combine(targetLocation, formFile.FileName);
+
+            // Uncomment to save the file
+            await using (var fileStream = System.IO.File.Create(path))
+            {
+                formFile.CopyTo(fileStream);
+            }
+
+
+            var etsProject = new EtsProjectParser().ParseEtsFile(path, GroupAddressStyle.ThreeLevel);
+
+            foreach (var b in etsProject.Buildings)
+            {
+                var bInstance = CreateAreaInstance(parentInstance, b);
+
+                parentInstance.InverseThis2ParentNavigation.Add(bInstance);
+            }
+
+            return new List<AreaInstance>
+            {
+                parentInstance
+            };
+        }
 
         private AreaInstance CreateAreaInstance(AreaInstance parent, EtsBuildingPart building)
         {

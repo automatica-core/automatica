@@ -3,9 +3,9 @@
 namespace Automatica.Core.WebApi.Tests.Base
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class TestPriorityAttribute : Attribute
+    public class TestOrderAttribute : Attribute
     {
-        public TestPriorityAttribute(int priority)
+        public TestOrderAttribute(int priority)
         {
             Priority = priority;
         }
