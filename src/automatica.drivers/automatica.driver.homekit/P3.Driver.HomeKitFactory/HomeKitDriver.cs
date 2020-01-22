@@ -22,7 +22,7 @@ namespace P3.Driver.HomeKitFactory
 
         private readonly List<Accessory> _accessories = new List<Accessory>();
 
-        private readonly Dictionary<Characteristic, BaseNode> _characteristicNodeMap = new Dictionary<Characteristic, BaseNode>();
+        private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new Dictionary<Characteristic, List<BaseNode>>();
 
         public HomeKitDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -71,7 +71,7 @@ namespace P3.Driver.HomeKitFactory
         {
             if (_characteristicNodeMap.ContainsKey(e.Characteristic))
             {
-                _characteristicNodeMap[e.Characteristic].SetValue(e.Value);
+                _characteristicNodeMap[e.Characteristic].ForEach(a => a.SetValue(e.Value));
             }
         }
 
@@ -106,8 +106,9 @@ namespace P3.Driver.HomeKitFactory
         {
             if (!_characteristicNodeMap.ContainsKey(c))
             {
-                _characteristicNodeMap.Add(c, node);
+                _characteristicNodeMap.Add(c, new List<BaseNode>());
             }
+            _characteristicNodeMap[c].Add(node);
         }
 
         internal void WriteCharacteristic(Characteristic c)
