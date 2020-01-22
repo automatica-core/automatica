@@ -9,6 +9,10 @@
         "NAME": "On/Off",
         "DESCRIPTION": ""
       },
+      "STATUS": {
+        "NAME": "State",
+        "DESCRIPTION": ""
+      },
       "BRIGHTNESS": {
         "NAME": "Brightness",
         "DESCRIPTION": ""
@@ -32,6 +36,10 @@
       "SWITCH": {
         "NAME": "On/Off",
         "DESCRIPTION": ""
+      },
+      "STATUS": {
+        "NAME": "State",
+        "DESCRIPTION": ""
       }
     },
     "SWITCH": {
@@ -39,6 +47,10 @@
       "DESCRIPTION": "",
       "SWITCH": {
         "NAME": "On/Off",
+        "DESCRIPTION": ""
+      },
+      "STATUS": {
+        "NAME": "State",
         "DESCRIPTION": ""
       }
     },

@@ -16,7 +16,7 @@ namespace P3.Driver.HomeKitFactory
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
-        public override Version DriverVersion => new Version(0, 1, 0, 3);
+        public override Version DriverVersion => new Version(0, 2, 0, 3);
 
         public override bool InDevelopmentMode => true;
 
@@ -24,11 +24,6 @@ namespace P3.Driver.HomeKitFactory
         {
             HomeKitServer.Init(config.Logger);
             return new HomeKitDriver(config);
-        }
-
-        public override void AfterSave(NodeInstance instance)
-        {
-            base.AfterSave(instance);
         }
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -73,8 +68,12 @@ namespace P3.Driver.HomeKitFactory
                 "APPLE_HOMEKIT_SERVER.BULB.SWITCH.DESCRIPTION", "light-bulb-switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
                 true, true, false, NodeDataType.Boolean, 1, false);
 
+            factory.CreateNodeTemplate(new Guid("a0c1a70f-ca76-40e5-b7a1-74ff62edfd19"), "APPLE_HOMEKIT_SERVER.BULB.STATUS.NAME",
+                "APPLE_HOMEKIT_SERVER.BULB.STATUS.DESCRIPTION", "light-bulb-status", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
+                true, false, false, NodeDataType.Boolean, 1, false);
+
             factory.CreateNodeTemplate(new Guid("79e7c522-3eaa-49af-8985-44b345e30473"), "APPLE_HOMEKIT_SERVER.BULB.BRIGHTNESS.NAME",
-                "APPLE_HOMEKIT_SERVER.BULB.BRIGHTNESS.DESCRIPTION", "light-bulb-brightness", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true,
+                "APPLE_HOMEKIT_SERVER.BULB.BRIGHTNESS.DESCRIPTION", "light-bulb-brightness", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, false,
                 true, true, false, NodeDataType.Integer, 1, false);
 
             factory.CreateNodeTemplate(new Guid("515b3a15-9bc5-4121-9f89-36abbb7108c8"), "APPLE_HOMEKIT_SERVER.BULB.HUE.NAME",
@@ -93,8 +92,13 @@ namespace P3.Driver.HomeKitFactory
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
 
             factory.CreateNodeTemplate(new Guid("123fb63d-943e-4c8c-8c59-1586eb79b961"), "APPLE_HOMEKIT_SERVER.OUTLET.SWITCH.NAME",
-                "APPLE_HOMEKIT_SERVER.OUTLET.SWITCH.DESCRIPTION", "power-outlet-switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
+                "APPLE_HOMEKIT_SERVER.OUTLET.SWITCH.DESCRIPTION", "power-outlet-switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false,
                 true, true, false, NodeDataType.Boolean, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("4d20d8dc-9331-42d7-b1eb-4eab01b26472"), "APPLE_HOMEKIT_SERVER.STATE.NAME",
+                "APPLE_HOMEKIT_SERVER.STATE.DESCRIPTION", "power-outlet-folder", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
+                true, false, true, NodeDataType.Boolean, 1, false);
+
         }
         private void CreateContactSensor(INodeTemplateFactory factory)
         {
@@ -122,8 +126,14 @@ namespace P3.Driver.HomeKitFactory
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
 
             factory.CreateNodeTemplate(new Guid("6e6cd234-b1b6-466f-8bea-2bffba36592f"), "APPLE_HOMEKIT_SERVER.SWITCH.SWITCH.NAME",
-                "APPLE_HOMEKIT_SERVER.SWITCH.SWITCH.DESCRIPTION", "switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
+                "APPLE_HOMEKIT_SERVER.SWITCH.SWITCH.DESCRIPTION", "switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false,
                 true, true, false, NodeDataType.Boolean, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("a4b7661e-565d-466d-ad46-be2e2628fb7e"), "APPLE_HOMEKIT_SERVER.SWITCH.STATUS.NAME",
+                "APPLE_HOMEKIT_SERVER.SWITCH.STATUS.DESCRIPTION", "status", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
+                true, false, false, NodeDataType.Boolean, 1, false);
+
+
         }
         private void CreateTemperatureSensor(INodeTemplateFactory factory)
         {
