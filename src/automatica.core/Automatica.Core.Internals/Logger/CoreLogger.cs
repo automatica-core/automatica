@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
@@ -39,14 +40,19 @@ namespace Automatica.Core.Internals.Logger
             { 
                 logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
                     retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30)).WriteTo.Console();
+                    flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             else
             {
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"), fileSizeLimitBytes: 31457280,
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(level),
-                        flushToDiskInterval: TimeSpan.FromSeconds(30))
-                    .WriteTo.Console();
+                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"),
+                    fileSizeLimitBytes: 31457280,
+                    retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(level),
+                    flushToDiskInterval: TimeSpan.FromSeconds(30));
+            }
+            // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
+            if (Debugger.IsAttached || ServerInfo.InDocker)
+            {
+                logBuild.WriteTo.Console();
             }
 
             switch (_level)

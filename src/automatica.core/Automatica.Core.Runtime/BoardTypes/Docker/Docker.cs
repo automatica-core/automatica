@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 
@@ -10,7 +11,7 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
         public BoardTypeEnum BoardType => BoardTypeEnum.Docker;
         public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual};
 
-        public static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+        public static bool InDocker => ServerInfo.InDocker;
 
 
         public IList<BoardInterface> GetBoardInterfaces()

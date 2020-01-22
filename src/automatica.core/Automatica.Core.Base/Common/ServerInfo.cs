@@ -121,6 +121,8 @@ namespace Automatica.Core.Base.Common
 
         public static IBoardType BoardType { get; set; }
 
+        public static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
 
         /// <summary>
         /// Gets the Automatica.Core version
