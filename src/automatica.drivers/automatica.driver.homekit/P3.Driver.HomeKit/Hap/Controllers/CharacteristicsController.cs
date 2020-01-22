@@ -82,9 +82,12 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     server.RegisterNotifications(characteristic, session);
                 }
 
-                characteristic.Value = sendCharacteristic.Value;
+                if (sendCharacteristic.Value != null)
+                {
+                    characteristic.Value = sendCharacteristic.Value;
 
-                server.NotifyValueChanged(characteristic);
+                    server.NotifyValueChanged(characteristic);
+                }
 
                 characteristic.AccessoryId = accessoryId;
                 retCharactersitcs.Add(characteristic);
