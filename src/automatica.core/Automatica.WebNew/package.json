@@ -1,6 +1,6 @@
 {
   "name": "automatica-web",
-  "version": "0.0.0",
+  "version": "0.0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng b --watch",
@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-themes": "devextreme build"
+    "build-themes": "devextreme build",
+    "set-version": "json -I -f package.json -e \"this.version='$VERSION'\""
   },
   "private": true,
   "dependencies": {
@@ -43,6 +44,7 @@
     "file-saver": "^2.0.2",
     "jquery": "^3.4.1",
     "jquery-ui-dist": "^1.12.1",
+    "json": "^9.0.6",
     "jszip": "^3.2.2",
     "moment": "^2.24.0",
     "msgpack-lite": "^0.1.26",
