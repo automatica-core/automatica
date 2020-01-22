@@ -7,6 +7,7 @@ using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Exceptions;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
@@ -82,12 +83,11 @@ namespace Automatica.Core.WebApi.Tests.Logic
 
             Assert.Equal(page.Name, savedPages.First(a => a.ObjId == page.ObjId).Name);
 
-            savedPages[0] = page;
             page.Name = "UpdatePage1";
             page.Description = null;
-            savedPages = (await Controller.SaveAll(savedPages)).ToList();
+            var savedPages2 = (await Controller.SaveAll(pages)).ToList();
 
-            Assert.Equal(page.Name, savedPages.First(a => a.ObjId == page.ObjId).Name);
+            Assert.Equal(page.Name, savedPages2.First(a => a.ObjId == page.ObjId).Name);
         }
 
         [Fact, TestOrder(5)]

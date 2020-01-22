@@ -3,8 +3,6 @@ using System.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Runtime;
 using Automatica.Core.Runtime.Database;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -15,7 +13,7 @@ namespace Automatica.Core.WebApi.Tests.Base
     [TestCaseOrderer("Automatica.Core.WebApi.Tests.Base.PriorityOrderer", "PriorityOrderer")]
     public class BaseControllerTest<T> : IDisposable where T : BaseController
     {
-        public static string DatabaseFileName { get; } = "AUTOMATICA_TEST_" + Guid.NewGuid().ToString().Replace("-", "");
+        public static string DatabaseFileName { get;} = "AUTOMATICA_TEST_" + Guid.NewGuid().ToString().Replace("-", "");
 
         public static string DatabaseFilePath => $"{DatabaseFileName}-test";
         protected ServiceProvider ServiceProvider { get; }

@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         protected override IQueryable<RulePage> GetAll(AutomaticaContext context)
         {
-            return context.RulePages.AsNoTracking().Include(a => a.This2RulePageTypeNavigation)
+            return context.RulePages.Include(a => a.This2RulePageTypeNavigation)
                 .Include(a => a.Link)
                     .ThenInclude(a => a.This2NodeInstance2RulePageInputNavigation)
                     .ThenInclude(a => a.This2NodeInstanceNavigation)
