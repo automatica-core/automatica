@@ -17,7 +17,7 @@ export class ConfigService extends BaseService {
     }
 
     async loadConfiguration() {
-        
+
     }
 
     getSingleNodeInstance(id: string): Promise<NodeInstance> {

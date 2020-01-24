@@ -163,7 +163,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<IEnumerable<NodeInstance>> Save([FromBody]List<NodeInstance> nodeInstances)
+        public async Task<IEnumerable<NodeInstance>> Save([FromBody]List<NodeInstance> nodeInstances, bool reInit = true)
         {
             SystemLogger.Instance.LogDebug($"Begin NodeInstance save...");
             var transaction = DbContext.Database.BeginTransaction();
@@ -231,14 +231,19 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 transaction.Rollback();
                 SystemLogger.Instance.LogError(e, "Could not save nodeInstances", e);
+                throw;
             }
 
             SystemLogger.Instance.LogDebug($"Begin NodeInstance save...done");
 
 
-            SystemLogger.Instance.LogDebug($"Begin NodeInstance re-init...");
-            await _server.ReInit();
-            SystemLogger.Instance.LogDebug($"Begin NodeInstance re-init...done");
+            if (reInit)
+            {
+                SystemLogger.Instance.LogDebug($"Begin NodeInstance re-init...");
+                await _server.ReInit();
+                SystemLogger.Instance.LogDebug($"Begin NodeInstance re-init...done");
+            }
+
             return Get();
         }
 

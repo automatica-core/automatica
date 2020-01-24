@@ -232,8 +232,13 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = true;
 
     try {
-      await this.configTree.save(false);
-      await this.ruleEngineService.saveAll(this.pages);
+      const config = this.configTree.prepareForSave();
+      await this.configTree.saveSettings(config[0]);
+      const all = await this.ruleEngineService.saveAll(this.pages, config);
+
+      this.nodeInstanceService.convertConfig(all.NodeInstances);
+      this.pages = all.LogicPages;
+
       this.initPages();
 
       this.notify.notifySuccess("COMMON.SAVED");

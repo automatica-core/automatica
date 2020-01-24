@@ -318,7 +318,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.deleteItem(selectedItem);
   }
 
-  public async save(notify: boolean = true) {
+  public prepareForSave() {
     const array = [];
 
     for (const x of this.nodeInstanceService.nodeInstanceList) {
@@ -328,17 +328,26 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       }
     }
 
-    const instances = await this.configService.save(array);
-    this.nodeInstanceService.convertConfig(instances);
+    return array;
+  }
 
+  public async saveSettings(rootNode: NodeInstance) {
     const settings = [];
-    for (const x of array[0].Properties) {
+    for (const x of rootNode.Properties) {
       if (x instanceof VirtualSettingsPropertyInstance) {
         settings.push(x.setting);
       }
     }
 
     this.settings = await this.settingsService.saveSettings(settings);
+  }
+
+  public async save(notify: boolean = true) {
+    const array = this.prepareForSave();
+
+    const instances = await this.configService.save(array);
+    this.nodeInstanceService.convertConfig(instances);
+    await this.saveSettings(array[0]);
 
     if (notify) {
       this.notify.notifySuccess("COMMON.SAVED");

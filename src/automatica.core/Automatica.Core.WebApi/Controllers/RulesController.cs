@@ -2,45 +2,84 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.WebApi.Controllers
 {
+    public class SaveAllLogicEditor : TypedObject
+    {
+        [JsonProperty("logicPages")]
+        public List<RulePage> LogicPages { get; set; }
+
+        [JsonProperty("nodeInstances")]
+        public List<NodeInstance> NodeInstances { get; set; }
+    }
+
     [Route("webapi/rules")]
     public class RulesController : BaseController
     {
         private readonly IRuleDataHandler _ruleDataHandler;
         private readonly ILogicCacheFacade _logicCacheFacade;
         private readonly IConfiguration _config;
+        private readonly INotifyDriver _notifyDriver;
+        private readonly INodeInstanceCache _nodeInstanceCache;
+        private readonly ICoreServer _coreServer;
 
-        public RulesController(AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config)
+        public RulesController(AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
+            INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer coreServer)
             : base(db)
         {
             _ruleDataHandler = ruleDataHandler;
             _logicCacheFacade = logicCacheFacade;
             _config = config;
+            _notifyDriver = notifyDriver;
+            _nodeInstanceCache = nodeInstanceCache;
+            _coreServer = coreServer;
         }
 
         [HttpPost]
         [Route("saveAll")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<IEnumerable<RulePage>> SaveAll([FromBody] List<RulePage> pages)
+        public async Task<SaveAllLogicEditor> SaveAll([FromBody] SaveAllLogicEditor data)
+        {
+            IEnumerable<NodeInstance> nodeInstancesSaved = null;
+            await using (var dbContextNodeInstances = new AutomaticaContext(_config))
+            {
+                var nodeInstanceController = new NodeInstanceController(dbContextNodeInstances, _notifyDriver, _nodeInstanceCache, _coreServer);
+                nodeInstancesSaved = await nodeInstanceController.Save(data.NodeInstances,false);
+            }
+
+            var pages = await Save(data.LogicPages);
+
+            await _coreServer.ReInit();
+            return new SaveAllLogicEditor
+            {
+                LogicPages = pages.ToList(),
+                NodeInstances = nodeInstancesSaved.ToList()
+            };
+        }
+
+        private async Task<IEnumerable<RulePage>> Save(List<RulePage> data)
         {
             await using var dbContext = new AutomaticaContext(_config);
             {
                 var transaction = await dbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    foreach (var page in pages)
+                    foreach (var page in data)
                     {
                         var isNewPage = false;
                         var dbPage = dbContext.RulePages.SingleOrDefault(a => a.ObjId == page.ObjId);
@@ -154,54 +193,54 @@ namespace Automatica.Core.WebApi.Controllers
 
                     await dbContext.SaveChangesAsync(true);
 
-                    foreach (var page in pages)
+                    foreach (var page in data)
                     {
                         var removedRules = from c in dbContext.RuleInstances
-                            where !(from o in page.RuleInstance select o.ObjId).Contains(c.ObjId) &&
-                                  c.This2RulePage == page.ObjId
-                            select c;
+                                           where !(from o in page.RuleInstance select o.ObjId).Contains(c.ObjId) &&
+                                                 c.This2RulePage == page.ObjId
+                                           select c;
 
                         var removedRulesList = removedRules.ToList();
                         dbContext.RuleInstances.RemoveRange(removedRulesList);
 
 
                         var removedLinks = from c in dbContext.Links
-                            where !(from o in page.Link select o.ObjId).Contains(c.ObjId) &&
-                                  c.This2RulePage == page.ObjId
-                            select c;
+                                           where !(from o in page.Link select o.ObjId).Contains(c.ObjId) &&
+                                                 c.This2RulePage == page.ObjId
+                                           select c;
 
                         dbContext.Links.RemoveRange(removedLinks);
 
 
 
                         var removedNodes = (from c in dbContext.NodeInstance2RulePages
-                            where !(from o in page.NodeInstance2RulePage select o.ObjId).Contains(c.ObjId) &&
-                                  c.This2RulePage == page.ObjId
-                            select c).ToList();
+                                            where !(from o in page.NodeInstance2RulePage select o.ObjId).Contains(c.ObjId) &&
+                                                  c.This2RulePage == page.ObjId
+                                            select c).ToList();
 
                         dbContext.NodeInstance2RulePages.RemoveRange(removedNodes);
                     }
 
                     var removedPages = (from c in dbContext.RulePages
-                        where !(from o in pages select o.ObjId).Contains(c.ObjId)
-                        select c).ToList();
+                                        where !(from o in data select o.ObjId).Contains(c.ObjId)
+                                        select c).ToList();
 
                     foreach (var removedPage in removedPages)
                     {
                         var removedRules = from c in dbContext.RuleInstances
-                            where c.This2RulePage == removedPage.ObjId
-                            select c;
+                                           where c.This2RulePage == removedPage.ObjId
+                                           select c;
                         dbContext.RuleInstances.RemoveRange(removedRules);
 
                         var removedLinks = from c in dbContext.Links
-                            where c.This2RulePage == removedPage.ObjId
-                            select c;
+                                           where c.This2RulePage == removedPage.ObjId
+                                           select c;
 
                         dbContext.Links.RemoveRange(removedLinks);
 
                         var removedNodes = (from c in dbContext.NodeInstance2RulePages
-                            where c.This2RulePage == removedPage.ObjId
-                            select c).ToList();
+                                            where c.This2RulePage == removedPage.ObjId
+                                            select c).ToList();
 
                         dbContext.NodeInstance2RulePages.RemoveRange(removedNodes);
 
@@ -220,10 +259,8 @@ namespace Automatica.Core.WebApi.Controllers
                     throw;
                 }
             }
-
             return GetPages();
         }
-
 
         [HttpGet]
         [Route("pages")]
