@@ -1,4 +1,4 @@
-import { EventEmitter } from "@angular/core";
+import { EventEmitter, Input } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { TranslationService } from "angular-l10n";
 import { WebApiException, ExceptionSeverity } from "./model/web-api-exception";
@@ -12,6 +12,18 @@ export class BaseComponent {
     private lastState: boolean = false;
     // gutterH = `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");`;
 
+
+    private _isLoading: boolean;
+
+    @Input()
+    public get isLoading(): boolean {
+        return this._isLoading;
+    }
+    public set isLoading(v: boolean) {
+        this._isLoading = v;
+        this.appService.isLoading = v;
+    }
+
     constructor(protected notifyService: NotifyService, protected translate: TranslationService, protected appService: AppService) {
 
 
@@ -21,6 +33,10 @@ export class BaseComponent {
         this.registerEvent(this.appService.isStartingChanged, async (v) => {
 
             if (!v && this.lastState !== v) {
+                if (this.isLoading) {
+                    console.log("Cannot start reload, because we are not finished now...");
+                    return;
+                }
                 await this.load();
             }
             this.lastState = v;

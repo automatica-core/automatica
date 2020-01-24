@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
 // import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,7 @@ import { NotifyService } from "./services/notify.service";
 import { TranslationService } from "angular-l10n";
 import { BaseComponent } from "./base/base-component";
 import { FontAwesomeModule, FaIconLibrary } from "@fortawesome/angular-fontawesome";
+import { DxLoadPanelComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-root",
@@ -16,7 +17,9 @@ import { FontAwesomeModule, FaIconLibrary } from "@fortawesome/angular-fontaweso
 export class AppComponent extends BaseComponent implements OnInit {
 
   title = "automatica-web";
-  private _isLoading: boolean = true;
+
+  @ViewChild("loadPanel", { static: true })
+  dxLoadPanel: DxLoadPanelComponent;
 
   constructor(appService: AppService,
     notify: NotifyService,
@@ -43,18 +46,12 @@ export class AppComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
-        this._isLoading = v;
-        console.log("isloading changed", v);
-        this.changeDet.detectChanges();
+      if (v) {
+        this.dxLoadPanel.instance.show();
+      } else {
+        this.dxLoadPanel.instance.hide();
+      }
     });
-  }
-
-
-  public get isLoading(): boolean {
-    return this._isLoading;
-  }
-  public set isLoading(v: boolean) {
-    this._isLoading = v;
   }
 
 }

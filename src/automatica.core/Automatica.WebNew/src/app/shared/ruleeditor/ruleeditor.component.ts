@@ -30,17 +30,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   @Input()
   name: string;
 
-  private _isLoading: boolean;
-  @Input()
-  public get isLoading(): boolean {
-    return this._isLoading;
-  }
-  public set isLoading(v: boolean) {
-    this._isLoading = v;
-    this.changeRef.detectChanges();
-  }
-
-
   _selectedItem: any[];
   @Input()
   public get selectedItems(): any[] {

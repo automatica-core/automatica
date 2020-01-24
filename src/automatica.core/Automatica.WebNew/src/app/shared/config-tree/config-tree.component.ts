@@ -64,16 +64,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   @Input() useContextMenu: boolean;
 
-  private _isLoading: boolean;
-  @Input()
-  public get isLoading(): boolean {
-    return this._isLoading;
-  }
-  public set isLoading(v: boolean) {
-    this._isLoading = v;
-    this.changeRef.detectChanges();
-  }
-
 
   @Input()
   showLoadingPanel = false;

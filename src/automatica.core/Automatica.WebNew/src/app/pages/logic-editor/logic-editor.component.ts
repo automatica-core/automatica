@@ -64,18 +64,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   userGroups: UserGroup[] = [];
 
 
-  private _isLoading: boolean;
-  public get isLoading(): boolean {
-    return this._isLoading;
-  }
-  public set isLoading(v: boolean) {
-    this._isLoading = v;
-
-    this.appService.isLoading = v;
-  }
-
-
-
   constructor(private ruleEngineService: RuleEngineService,
     private configService: ConfigService,
     private notify: NotifyService,
