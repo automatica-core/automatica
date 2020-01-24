@@ -7,7 +7,6 @@ using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Exceptions;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
@@ -59,7 +58,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
             var page = pages.First();
             page.Name = "TestPage1";
 
-            var savedPages = await Controller.SaveAll(pages);
+            var savedPages = await Controller.Save(pages);
 
             Assert.Equal(page.Name, savedPages.First().Name);
         }
@@ -79,13 +78,13 @@ namespace Automatica.Core.WebApi.Tests.Logic
             };
             pages.Add(page);
 
-            var savedPages = (await Controller.SaveAll(pages)).ToList();
+            var savedPages = (await Controller.Save(pages)).ToList();
 
             Assert.Equal(page.Name, savedPages.First(a => a.ObjId == page.ObjId).Name);
 
             page.Name = "UpdatePage1";
             page.Description = null;
-            var savedPages2 = (await Controller.SaveAll(pages)).ToList();
+            var savedPages2 = (await Controller.Save(pages)).ToList();
 
             Assert.Equal(page.Name, savedPages2.First(a => a.ObjId == page.ObjId).Name);
         }
@@ -107,7 +106,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
 
             page.RuleInstance.Add(ruleInstance);
 
-            var savedPages = await Controller.SaveAll(pages);
+            var savedPages = await Controller.Save(pages);
 
             Assert.Equal(savedPages.First().RuleInstance.First().ObjId, ruleInstance.ObjId);
         }
@@ -134,7 +133,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
                 This2RuleInterfaceInstanceOutputNavigation= ruleInstance2.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection == (long)RuleInterfaceDirection.Output)
             });
 
-            var savedPages = (await Controller.SaveAll(pages)).ToList();
+            var savedPages = (await Controller.Save(pages)).ToList();
 
             Assert.Equal(2, savedPages.First().RuleInstance.Count);
             Assert.NotEmpty(savedPages.First().Link);
@@ -156,12 +155,12 @@ namespace Automatica.Core.WebApi.Tests.Logic
             page.RuleInstance.Add(ruleInstance1);
             page.RuleInstance.Add(ruleInstance2);
 
-            var savedPages = (await Controller.SaveAll(pages)).ToList();
+            var savedPages = (await Controller.Save(pages)).ToList();
 
             var ruleInstance2ToRemove = savedPages.First().RuleInstance.First(a => a.ObjId == ruleInstance2.ObjId);
             savedPages.First().RuleInstance.Remove(ruleInstance2ToRemove);
 
-            savedPages = (await Controller.SaveAll(savedPages)).ToList();
+            savedPages = (await Controller.Save(savedPages)).ToList();
 
             Assert.Single(savedPages.First().RuleInstance);
             Assert.Equal(savedPages.First().RuleInstance.First().ObjId, ruleInstance1.ObjId);
@@ -179,7 +178,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             await using var db = new AutomaticaContext(Configuration);
 
-            var empty = await Controller.SaveAll(new List<RulePage>());
+            var empty = await Controller.Save(new List<RulePage>());
 
             Assert.Empty(empty);
         }

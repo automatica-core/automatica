@@ -72,7 +72,7 @@ namespace Automatica.Core.WebApi.Controllers
             };
         }
 
-        private async Task<IEnumerable<RulePage>> Save(List<RulePage> data)
+        internal async Task<IEnumerable<RulePage>> Save(List<RulePage> data)
         {
             await using var dbContext = new AutomaticaContext(_config);
             {
