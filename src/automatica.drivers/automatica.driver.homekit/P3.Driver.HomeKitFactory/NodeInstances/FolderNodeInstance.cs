@@ -17,7 +17,7 @@ namespace P3.Driver.HomeKitFactory.NodeInstances
             Driver = driver;
             Accessory = accessory;
 
-            driverContext.Logger.LogDebug($"Create accessory with aid {accessory.Id}");
+            driverContext.Logger.LogDebug($"Create accessory {Name} with aid {accessory.Id}");
 
             foreach (var service in accessory.Services)
             {

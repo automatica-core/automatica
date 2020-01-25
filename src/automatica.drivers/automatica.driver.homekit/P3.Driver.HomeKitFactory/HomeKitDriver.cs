@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit;
 using P3.Driver.HomeKit.Hap;
 using P3.Driver.HomeKit.Hap.EventArgs;
@@ -36,7 +37,7 @@ namespace P3.Driver.HomeKitFactory
                     continue;
                 }
 
-                var aidProperty = child.GetProperty("aid");
+                var aidProperty = child.GetProperty(HomeKitFactory.AidPropertyKey);
 
                 if (!aidProperty.ValueDouble.HasValue)
                 {
@@ -47,6 +48,8 @@ namespace P3.Driver.HomeKitFactory
             }
 
             _aidGenerator = new AccessoryInstanceIdGenerator(highestAid);
+
+            driverContext.Logger.LogDebug($"Highest generated AID is {highestAid}");
 
             InitializeAidProperties(driverContext);
         }
@@ -60,12 +63,14 @@ namespace P3.Driver.HomeKitFactory
                     continue;
                 }
 
-                var aidProperty = child.GetProperty("aid");
+                var aidProperty = child.GetProperty(HomeKitFactory.AidPropertyKey);
 
                 if (!aidProperty.ValueDouble.HasValue)
                 {
                     aidProperty.ValueDouble = _aidGenerator.GetNextAidInstance();
                     driverContext.NodeTemplateFactory.SetPropertyValue(aidProperty.ObjId, aidProperty.ValueDouble);
+
+                    driverContext.Logger.LogDebug($"Set aid {aidProperty.ValueDouble} for {Name} {driverContext.NodeInstance.ObjId}");
                 }
             }
 
@@ -170,8 +175,7 @@ namespace P3.Driver.HomeKitFactory
             }
 
             Accessory accessory = null;
-            var aid = ctx.NodeInstance.GetPropertyValueInt("aid");
-
+            var aid = ctx.NodeInstance.GetPropertyValueInt(HomeKitFactory.AidPropertyKey);
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {

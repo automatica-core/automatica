@@ -9,10 +9,9 @@ namespace P3.Driver.HomeKitFactory
 {
     public class HomeKitFactory : DriverFactory
     {
-        public HomeKitFactory()
-        {
-        }
         public override string DriverName => "AppleHomeKitServer";
+
+        public const string AidPropertyKey = "aid";
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
@@ -64,7 +63,7 @@ namespace P3.Driver.HomeKitFactory
 
         private void AddAidProperty(Guid guid, INodeTemplateFactory factory)
         {
-            factory.CreatePropertyTemplate(GenerateNewGuid(guid, 1), "AID", "AID", "aid", PropertyTemplateType.Numeric,
+            factory.CreatePropertyTemplate(GenerateNewGuid(guid, 1), "AID", "AID", AidPropertyKey, PropertyTemplateType.Numeric,
                 guid, "aid", false, true, null, null, 0, 0);
         }
 
