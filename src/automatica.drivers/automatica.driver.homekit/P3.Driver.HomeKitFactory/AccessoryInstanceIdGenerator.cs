@@ -14,7 +14,7 @@
         {
             lock (_lock)
             {
-                _lastAid += 10; // reserve 10 unique id's for every NodeInstanceFolder
+                _lastAid += 1; // reserve 10 unique id's for every NodeInstanceFolder
                 return _lastAid;
             }
         }

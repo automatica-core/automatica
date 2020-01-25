@@ -61,7 +61,7 @@ namespace P3.Driver.HomeKit
                 Id = 1
             };
             bridgeAccessory.Services.Add(AccessoryFactory.CreateAccessoryInfo(bridgeAccessory, 1, bridgeName, manufacturer, ServerInfo.ServerUid.ToString()));
-            _accessoryContainer.Accessories.Add(bridgeAccessory);
+            _accessoryContainer.AddAccessory(bridgeAccessory);
 
         }
 
