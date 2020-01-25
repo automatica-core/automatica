@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.11.0.642</Version>
+    <Version>0.12.0.678</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>BCC1EC6F-8FCF-45CB-87FF-5744693A9ED4</ProjectGuid>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
