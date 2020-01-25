@@ -108,10 +108,10 @@ namespace P3.Driver.HomeKitFactory
                accessory.Id = _server.AddAccessory(accessory);
             }
 
-            await _server.Start();
-
             _server.PairingCompleted += ServerOnPairingCompleted;
             _server.ValueChanged += ServerOnValueChanged;
+
+            await _server.Start();
 
             return await base.Start();
         }
@@ -132,11 +132,15 @@ namespace P3.Driver.HomeKitFactory
 
         private void ServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
+            DriverContext.Logger.LogInformation($"Saving LTSK {e.Ltsk} and LTPK {e.Ltpk} to database...");
+
             _ltskProperty.Value = e.Ltsk;
             _ltpkProperty.Value = e.Ltpk;
 
             DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, e.Ltsk);  //save to database
             DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, e.Ltpk); //save to database
+
+            DriverContext.Logger.LogInformation($"Saving LTSK {e.Ltsk} and LTPK {e.Ltpk} to database...done");
         }
 
         public override async Task<bool> Stop()
