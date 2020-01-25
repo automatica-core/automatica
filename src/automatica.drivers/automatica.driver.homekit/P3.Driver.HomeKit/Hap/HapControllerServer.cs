@@ -18,8 +18,8 @@ namespace P3.Driver.HomeKit.Hap
         private readonly string _pairCode;
 
         private readonly ILogger _logger;
-        internal static string HapControllerLtsk;
-        internal static string HapControllerLtpk;
+        internal static string HapControllerLtsk { get; private set; }
+        internal static string HapControllerLtpk { get; private set; }
 
         private readonly HttpServer _httpServer;
 

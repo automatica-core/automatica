@@ -97,6 +97,7 @@ namespace P3.Driver.HomeKitFactory
 
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty + 1);
 
+            DriverContext.Logger.LogDebug($"Start homekit server with LTSK {_ltskProperty.ValueSlave} and LTPK {_ltpkProperty.ValueSlave}");
             _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"), DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
                 code, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty);
 
