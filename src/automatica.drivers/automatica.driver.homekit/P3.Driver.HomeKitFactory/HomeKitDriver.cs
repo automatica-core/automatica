@@ -175,7 +175,7 @@ namespace P3.Driver.HomeKitFactory
             }
 
             Accessory accessory = null;
-            var aid = ctx.NodeInstance.GetPropertyValueInt(HomeKitFactory.AidPropertyKey);
+            var aid = Convert.ToInt32(ctx.NodeInstance.GetPropertyValueDouble(HomeKitFactory.AidPropertyKey));
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
