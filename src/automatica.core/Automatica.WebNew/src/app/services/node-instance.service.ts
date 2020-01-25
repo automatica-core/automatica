@@ -19,6 +19,14 @@ export class NodeInstanceService {
     private _nodeInstanceList: NodeInstance[];
     private _settings: Setting[];
 
+    private _rootNode: NodeInstance;
+    public get rootNode(): NodeInstance {
+        return this._rootNode;
+    }
+    public set rootNode(v: NodeInstance) {
+        this._rootNode = v;
+    }
+
     public get nodeInstanceList(): NodeInstance[] {
         return this._nodeInstanceList;
     }
@@ -83,6 +91,8 @@ export class NodeInstanceService {
         }
 
         rootNode.Properties = [...rootNode.Properties, ...rootNodeSettings];
+
+        this.rootNode = rootNode;
 
         return this._nodeInstanceList;
     }

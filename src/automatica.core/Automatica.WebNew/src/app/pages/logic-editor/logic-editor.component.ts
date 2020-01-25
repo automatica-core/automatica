@@ -232,9 +232,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = true;
 
     try {
-      const config = this.configTree.prepareForSave();
-      await this.configTree.saveSettings(config[0]);
-      const all = await this.ruleEngineService.saveAll(this.pages, config);
+      const rootNode = this.configTree.getRootNode();
+      await this.configTree.saveSettings(rootNode);
+      const all = await this.ruleEngineService.saveAll(this.pages, [rootNode]);
 
       this.nodeInstanceService.convertConfig(all.NodeInstances);
       this.pages = all.LogicPages;
