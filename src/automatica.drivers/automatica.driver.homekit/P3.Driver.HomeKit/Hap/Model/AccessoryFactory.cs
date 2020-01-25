@@ -16,8 +16,8 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, aid, name, manufacturer, serial));
-            a2.Services.Add(CreateLightBulb(a2, aid+1, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid+1, name, manufacturer, serial));
+            a2.Services.Add(CreateLightBulb(a2, aid+2, value));
 
 
             return a2;
@@ -29,8 +29,8 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, aid, name, manufacturer, serial));
-            a2.Services.Add(CreateOutlet(a2, aid + 1, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid+1, name, manufacturer, serial));
+            a2.Services.Add(CreateOutlet(a2, aid + 2, value));
 
 
             return a2;
@@ -42,8 +42,8 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, aid, name, manufacturer, serial));
-            a2.Services.Add(CreateContactSensor(a2, aid + 1, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid+1, name, manufacturer, serial));
+            a2.Services.Add(CreateContactSensor(a2, aid + 2, value));
 
 
             return a2;
@@ -55,22 +55,23 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateSwitch(a2, aid + 1, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid+1, name, manufacturer, serial));
+            a2.Services.Add(CreateSwitch(a2, aid + 2, value));
 
 
             return a2;
         }
-        public static Accessory CreateTemperatureSensorAccessory(int aid, string name, string manufacturer, string serial, double value)
+
+        public static Accessory CreateTemperatureSensorAccessory(int aid, string name, string manufacturer,
+            string serial, double value)
         {
             var a2 = new Accessory
             {
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateTemperatureSensor(a2, aid + 1, value));
-
+            a2.Services.Add(CreateAccessoryInfo(a2, aid + 1, name, manufacturer, serial));
+            a2.Services.Add(CreateTemperatureSensor(a2, aid + 2, value));
 
             return a2;
         }
