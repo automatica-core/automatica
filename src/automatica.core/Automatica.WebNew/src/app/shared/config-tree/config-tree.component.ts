@@ -334,11 +334,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public async save() {
-    const array = this.getRootNode();
+    const rootNode = this.getRootNode();
 
-    const instances = await this.configService.save([array]);
+    const instances = await this.configService.save([rootNode]);
     this.nodeInstanceService.convertConfig(instances);
-    await this.saveSettings(array[0]);
+    await this.saveSettings(rootNode);
 
     this.notify.notifySuccess("COMMON.SAVED");
 
