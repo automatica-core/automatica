@@ -15,9 +15,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         public AccessoryData Get(HomeKitServer homeKitServer, NameValueCollection queryString)
         {
             _logger.LogDebug($"Working on queryString {queryString}");
-            var ad = new AccessoryData();
-
-            ad.Accessories = homeKitServer.GetAccessories();
+            var ad = new AccessoryData { Accessories = homeKitServer.GetAccessories()};
 
             return ad;
         }

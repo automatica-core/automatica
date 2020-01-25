@@ -29,7 +29,7 @@ namespace P3.Driver.HomeKit
         public event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
         public event EventHandler<CharactersiticValueChangedEventArgs> ValueChanged;
         
-        private readonly AccessoryData _accessory = new AccessoryData();
+        private readonly AccessoryContainer _accessoryContainer = new AccessoryContainer();
 
         private readonly Dictionary<string, List<Characteristic>> _eventBasedNotifications =
             new Dictionary<string, List<Characteristic>>();
@@ -61,7 +61,7 @@ namespace P3.Driver.HomeKit
                 Id = 1
             };
             bridgeAccessory.Services.Add(AccessoryFactory.CreateAccessoryInfo(bridgeAccessory, 1, bridgeName, manufacturer, ServerInfo.ServerUid.ToString()));
-            _accessory.Accessories.Add(bridgeAccessory);
+            _accessoryContainer.Accessories.Add(bridgeAccessory);
 
         }
 
@@ -113,7 +113,7 @@ namespace P3.Driver.HomeKit
 
         internal List<Accessory> GetAccessories()
         {
-            return _accessory.Accessories;
+            return _accessoryContainer.Accessories;
         }
 
         internal void RegisterNotifications(Characteristic characteristic, HapSession session)
@@ -148,9 +148,7 @@ namespace P3.Driver.HomeKit
 
         public int AddAccessory(Accessory accessory)
         {
-            accessory.Id = _accessory.Accessories.Count + 1;
-
-            _accessory.Accessories.Add(accessory);
+            _accessoryContainer.AddAccessory(accessory);
             return accessory.Id;
         }
 
@@ -158,7 +156,7 @@ namespace P3.Driver.HomeKit
         {
             lock (_eventBasedNotifications)
             {
-                foreach (var a in _accessory.Accessories)
+                foreach (var a in _accessoryContainer.Accessories)
                 {
                     foreach (var s in a.Services)
                     {
