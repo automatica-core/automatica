@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -7,15 +7,11 @@
     <RootNamespace>P3.Driver.HomeKit.Bonjour</RootNamespace>
     <DebugType>full</DebugType>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-    
-    </PropertyGroup>
-
-  
+    <Version>0.12.0.678</Version>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
   </ItemGroup>
-
-  
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit.Bonjour.Abstraction\P3.Driver.HomeKit.Bonjour.Abstraction.csproj" />
   </ItemGroup>

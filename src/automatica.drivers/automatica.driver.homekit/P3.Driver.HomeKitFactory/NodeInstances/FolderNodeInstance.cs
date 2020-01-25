@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit.Hap.Model;
 using P3.Driver.HomeKitFactory.NodeInstances.Nodes;
 
@@ -10,10 +11,23 @@ namespace P3.Driver.HomeKitFactory.NodeInstances
         public HomeKitDriver Driver { get; }
         public Accessory Accessory { get; }
 
-        public FolderNodeInstance(IDriverContext driverContext, HomeKitDriver driver, Accessory accessory) : base(driverContext)
+        public FolderNodeInstance(IDriverContext driverContext, HomeKitDriver driver, Accessory accessory) : base(
+            driverContext)
         {
             Driver = driver;
             Accessory = accessory;
+
+            driverContext.Logger.LogDebug($"Create accessory with aid {accessory.Id}");
+
+            foreach (var service in accessory.Services)
+            {
+                driverContext.Logger.LogDebug($"Create service with iid {service.Id} and type '{service.Type}'");
+
+                foreach (var characteristic in service.Characteristics)
+                {
+                    driverContext.Logger.LogDebug($"Create characteristic with type '{characteristic.Type}'");
+                }
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

@@ -16,13 +16,21 @@ namespace P3.Driver.HomeKitFactory
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
-        public override Version DriverVersion => new Version(0, 4, 0, 3);
+        public override Version DriverVersion => new Version(0, 6, 0, 3);
 
         public override bool InDevelopmentMode => true;
 
         public override IDriver CreateDriver(IDriverContext config)
         {
-            HomeKitServer.Init(config.Logger);
+            try
+            {
+                HomeKitServer.Init(config.Logger);
+            }
+            catch
+            {
+                // can be ignored
+            }
+
             return new HomeKitDriver(config);
         }
 
@@ -54,6 +62,21 @@ namespace P3.Driver.HomeKitFactory
             CreateTemperatureSensor(factory);
         }
 
+        private void AddAidProperty(Guid guid, INodeTemplateFactory factory)
+        {
+            factory.CreatePropertyTemplate(GenerateNewGuid(guid, 1), "AID", "AID", "aid", PropertyTemplateType.Numeric,
+                guid, "aid", false, true, null, null, 0, 0);
+        }
+
+        private Guid GenerateNewGuid(Guid guid, int c)
+        {
+            byte[] gu = guid.ToByteArray();
+
+            gu[gu.Length - 1] = (byte)(Convert.ToInt32(gu[gu.Length - 1]) + c);
+
+            return new Guid(gu);
+        }
+
         private void CreateLight(INodeTemplateFactory factory)
         {
             var interfaceGuid = new Guid("6d07b0a9-4635-4404-8254-76079ea7f6ce");
@@ -63,6 +86,7 @@ namespace P3.Driver.HomeKitFactory
             factory.CreateNodeTemplate(interfaceGuid, "APPLE_HOMEKIT_SERVER.BULB.NAME",
                 "APPLE_HOMEKIT_SERVER.BULB.DESCRIPTION", "light-bulb-folder", DriverGuid, interfaceGuid, false, false,
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+            AddAidProperty(interfaceGuid, factory);
 
             factory.CreateNodeTemplate(new Guid("37685cd8-0494-4ce4-8c59-1fddcf669aa3"), "APPLE_HOMEKIT_SERVER.BULB.SWITCH.NAME",
                 "APPLE_HOMEKIT_SERVER.BULB.SWITCH.DESCRIPTION", "light-bulb-switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
@@ -90,6 +114,7 @@ namespace P3.Driver.HomeKitFactory
             factory.CreateNodeTemplate(interfaceGuid, "APPLE_HOMEKIT_SERVER.OUTLET.NAME",
                 "APPLE_HOMEKIT_SERVER.OUTLET.DESCRIPTION", "power-outlet-folder", DriverGuid, interfaceGuid, false, true,
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+            AddAidProperty(interfaceGuid, factory);
 
             factory.CreateNodeTemplate(new Guid("123fb63d-943e-4c8c-8c59-1586eb79b961"), "APPLE_HOMEKIT_SERVER.OUTLET.SWITCH.NAME",
                 "APPLE_HOMEKIT_SERVER.OUTLET.SWITCH.DESCRIPTION", "power-outlet-switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
@@ -109,6 +134,7 @@ namespace P3.Driver.HomeKitFactory
             factory.CreateNodeTemplate(interfaceGuid, "APPLE_HOMEKIT_SERVER.CONTACT_SENSOR.NAME",
                 "APPLE_HOMEKIT_SERVER.CONTACT_SENSOR.DESCRIPTION", "contact-sensor-folder", DriverGuid, interfaceGuid, false, false,
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+            AddAidProperty(interfaceGuid, factory);
 
             factory.CreateNodeTemplate(new Guid("e3d05974-6c44-4ac8-9eea-a29e036de343"), "APPLE_HOMEKIT_SERVER.CONTACT_SENSOR.CONTACT.NAME",
                 "APPLE_HOMEKIT_SERVER.CONTACT_SENSOR.CONTACT.DESCRIPTION", "contact-sensor", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
@@ -124,6 +150,7 @@ namespace P3.Driver.HomeKitFactory
             factory.CreateNodeTemplate(interfaceGuid, "APPLE_HOMEKIT_SERVER.SWITCH.NAME",
                 "APPLE_HOMEKIT_SERVER.SWITCH.DESCRIPTION", "switch-folder", DriverGuid, interfaceGuid, false, false,
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+            AddAidProperty(interfaceGuid, factory);
 
             factory.CreateNodeTemplate(new Guid("6e6cd234-b1b6-466f-8bea-2bffba36592f"), "APPLE_HOMEKIT_SERVER.SWITCH.SWITCH.NAME",
                 "APPLE_HOMEKIT_SERVER.SWITCH.SWITCH.DESCRIPTION", "switch", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
@@ -144,6 +171,7 @@ namespace P3.Driver.HomeKitFactory
             factory.CreateNodeTemplate(interfaceGuid, "APPLE_HOMEKIT_SERVER.TEMPERATURE_SENSOR.NAME",
                 "APPLE_HOMEKIT_SERVER.TEMPERATURE_SENSOR.DESCRIPTION", "temperature-sensor-folder", DriverGuid, interfaceGuid, false, false,
                 true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+            AddAidProperty(interfaceGuid, factory);
 
             factory.CreateNodeTemplate(new Guid("693e8ded-b488-4991-971a-c2b46c2b1dcd"), "APPLE_HOMEKIT_SERVER.TEMPERATURE_SENSOR.VALUE.NAME",
                 "APPLE_HOMEKIT_SERVER.TEMPERATURE_SENSOR.VALUE.DESCRIPTION", "temperature-sensor", interfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,

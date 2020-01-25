@@ -21,11 +21,54 @@ namespace P3.Driver.HomeKitFactory
         private PairingKeyNode _pairingNode;
 
         private readonly List<Accessory> _accessories = new List<Accessory>();
-
         private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new Dictionary<Characteristic, List<BaseNode>>();
+
+        private readonly AccessoryInstanceIdGenerator _aidGenerator;
 
         public HomeKitDriver(IDriverContext driverContext) : base(driverContext)
         {
+            var highestAid = 1;
+
+            foreach (var child in driverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
+            {
+                if (child.This2NodeTemplateNavigation.Key == "pairing-key")
+                {
+                    continue;
+                }
+
+                var aidProperty = child.GetProperty("aid");
+
+                if (!aidProperty.ValueDouble.HasValue)
+                {
+                    continue;
+                }
+
+                highestAid = Math.Max(highestAid, Convert.ToInt32(aidProperty.ValueDouble.Value));
+            }
+
+            _aidGenerator = new AccessoryInstanceIdGenerator(highestAid);
+
+            InitializeAidProperties(driverContext);
+        }
+
+        private void InitializeAidProperties(IDriverContext driverContext)
+        {
+            foreach (var child in driverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
+            {
+                if (child.This2NodeTemplateNavigation.Key == "pairing-key")
+                {
+                    continue;
+                }
+
+                var aidProperty = child.GetProperty("aid");
+
+                if (!aidProperty.ValueDouble.HasValue)
+                {
+                    aidProperty.ValueDouble = _aidGenerator.GetNextAidInstance();
+                    driverContext.NodeTemplateFactory.SetPropertyValue(aidProperty.ObjId, aidProperty.ValueDouble);
+                }
+            }
+
         }
 
         public override async Task<bool> Start()
@@ -127,28 +170,29 @@ namespace P3.Driver.HomeKitFactory
             }
 
             Accessory accessory = null;
+            var aid = ctx.NodeInstance.GetPropertyValueInt("aid");
 
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "light-bulb-folder":
-                    accessory = AccessoryFactory.CreateLightBulbAccessory(ctx.NodeInstance.Name, "AutomaticaCore",
+                    accessory = AccessoryFactory.CreateLightBulbAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
                         ctx.NodeInstance.ObjId.ToString(), false);
                     break;
                 case "power-outlet-folder":
-                    accessory = AccessoryFactory.CreateOutletAccessory(ctx.NodeInstance.Name, "AutomaticaCore",
+                    accessory = AccessoryFactory.CreateOutletAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
                         ctx.NodeInstance.ObjId.ToString(), false);
                     break;
                 case "contact-sensor-folder":
-                    accessory = AccessoryFactory.CreateContactSensorAccessory(ctx.NodeInstance.Name, "AutomaticaCore",
+                    accessory = AccessoryFactory.CreateContactSensorAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
                         ctx.NodeInstance.ObjId.ToString(), 1);
                     break;
                 case "switch-folder":
-                    accessory = AccessoryFactory.CreateSwitchAccessory(ctx.NodeInstance.Name, "AutomaticaCore",
+                    accessory = AccessoryFactory.CreateSwitchAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
                         ctx.NodeInstance.ObjId.ToString(), false);
                     break;
                 case "temperature-sensor-folder":
-                    accessory = AccessoryFactory.CreateTemperatureSensorAccessory(ctx.NodeInstance.Name, "AutomaticaCore",
+                    accessory = AccessoryFactory.CreateTemperatureSensorAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
                         ctx.NodeInstance.ObjId.ToString(), 0);
                     break;
             }

@@ -1,18 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.12.0.678</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit\P3.Driver.HomeKit.csproj" />
   </ItemGroup>
-
 </Project>

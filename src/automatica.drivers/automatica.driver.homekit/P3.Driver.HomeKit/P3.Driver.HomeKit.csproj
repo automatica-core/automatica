@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>0.12.0.678</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Sodium\linux-arm\native\libsodium.so" />
     <None Remove="Sodium\linux-x64\native\libsodium.so" />
@@ -13,7 +13,6 @@
     <None Remove="Sodium\win-x64\native\libsodium.dll" />
     <None Remove="Sodium\win-x86\native\libsodium.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Sodium\linux-arm\native\libsodium.so" />
     <EmbeddedResource Include="Sodium\linux-x64\native\libsodium.so" />
@@ -23,7 +22,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
     <PackageReference Include="Chaos.NaCl.Core" Version="1.0.0" />
@@ -38,9 +36,7 @@
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00771" />
     <PackageReference Include="srp" Version="1.0.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit.Bonjour\P3.Driver.HomeKit.Bonjour.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Formatters;
-
-namespace P3.Driver.HomeKit.Hap.Model
+﻿namespace P3.Driver.HomeKit.Hap.Model
 {
     public static class AccessoryFactory
     {
@@ -12,67 +9,67 @@ namespace P3.Driver.HomeKit.Hap.Model
         public const string SwitchType = "49";
         public const string TemperatureSensorType = "8A";
 
-        public static Accessory CreateLightBulbAccessory(string name, string manufacturer, string serial, bool value)
+        public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool value)
         {
             var a2 = new Accessory
             {
-                Id = 0
+                Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateLightBulb(a2, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid, name, manufacturer, serial));
+            a2.Services.Add(CreateLightBulb(a2, aid+1, value));
 
 
             return a2;
         }
-        public static Accessory CreateOutletAccessory(string name, string manufacturer, string serial, bool value)
+        public static Accessory CreateOutletAccessory(int aid, string name, string manufacturer, string serial, bool value)
         {
             var a2 = new Accessory
             {
-                Id = 0
+                Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateOutlet(a2, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid, name, manufacturer, serial));
+            a2.Services.Add(CreateOutlet(a2, aid + 1, value));
 
 
             return a2;
         }
-        public static Accessory CreateContactSensorAccessory(string name, string manufacturer, string serial, int value)
+        public static Accessory CreateContactSensorAccessory(int aid, string name, string manufacturer, string serial, int value)
         {
             var a2 = new Accessory
             {
-                Id = 0
+                Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateContactSensor(a2, value));
+            a2.Services.Add(CreateAccessoryInfo(a2, aid, name, manufacturer, serial));
+            a2.Services.Add(CreateContactSensor(a2, aid + 1, value));
 
 
             return a2;
         }
-        public static Accessory CreateSwitchAccessory(string name, string manufacturer, string serial, bool value)
+        public static Accessory CreateSwitchAccessory(int aid, string name, string manufacturer, string serial, bool value)
         {
             var a2 = new Accessory
             {
-                Id = 0
+                Id = aid
             };
 
             a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateSwitch(a2, value));
+            a2.Services.Add(CreateSwitch(a2, aid + 1, value));
 
 
             return a2;
         }
-        public static Accessory CreateTemperatureSensorAccessory(string name, string manufacturer, string serial, double value)
+        public static Accessory CreateTemperatureSensorAccessory(int aid, string name, string manufacturer, string serial, double value)
         {
             var a2 = new Accessory
             {
-                Id = 0
+                Id = aid
             };
 
             a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateTemperatureSensor(a2, value));
+            a2.Services.Add(CreateTemperatureSensor(a2, aid + 1, value));
 
 
             return a2;
@@ -96,12 +93,12 @@ namespace P3.Driver.HomeKit.Hap.Model
             return service;
         }
 
-        public static Service CreateLightBulb(Accessory accessory, bool value)
+        public static Service CreateLightBulb(Accessory accessory, int id, bool value)
         {
             var service = new Service(accessory)
             {
                 Type = LightBulbType,
-                Id = 7
+                Id = id
             };
 
             var bulbC = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.OnType, value, 8), "bool");
@@ -134,12 +131,12 @@ namespace P3.Driver.HomeKit.Hap.Model
             return characteristic;
         }
 
-        public static Service CreateOutlet(Accessory accessory, bool value)
+        public static Service CreateOutlet(Accessory accessory, int id, bool value)
         {
             var service = new Service(accessory)
             {
                 Type = OutletType,
-                Id = 7
+                Id = id
             };
 
             var on = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.OnType, value, 8), "bool");
@@ -154,12 +151,12 @@ namespace P3.Driver.HomeKit.Hap.Model
             return service;
         }
 
-        public static Service CreateContactSensor(Accessory accessory, int value)
+        public static Service CreateContactSensor(Accessory accessory, int id, int value)
         {
             var service = new Service(accessory)
             {
                 Type = ContactSensorType,
-                Id = 7
+                Id = id
             };
 
             var state = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.ContactSensorStateType, value, 8), "uint8", false);
@@ -169,12 +166,12 @@ namespace P3.Driver.HomeKit.Hap.Model
 
             return service;
         }
-        public static Service CreateSwitch(Accessory accessory, bool value)
+        public static Service CreateSwitch(Accessory accessory, int id, bool value)
         {
             var service = new Service(accessory)
             {
                 Type = SwitchType,
-                Id = 7
+                Id = id
             };
 
             var state = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.OnType, value, 8), "bool");
@@ -186,12 +183,12 @@ namespace P3.Driver.HomeKit.Hap.Model
         }
 
 
-        public static Service CreateTemperatureSensor(Accessory accessory, double value)
+        public static Service CreateTemperatureSensor(Accessory accessory, int id, double value)
         {
             var service = new Service(accessory)
             {
                 Type = TemperatureSensorType,
-                Id = 7
+                Id = id
             };
 
             var state = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentTemperatureType, value, 8), "float", false);
