@@ -47,7 +47,7 @@ namespace P3.Driver.HomeKit.Bonjour
             var message = new Message {QR = true};
 
             var txtList = new List<string>();
-            txtList.AddProperty("sf", AlreadyPaired ? "0" : "1");
+            txtList.AddProperty("sf", "1");
             txtList.AddProperty("c#", _configVersion.ToString());
             txtList.AddProperty("s#", "1");
             txtList.AddProperty("md", _name);
