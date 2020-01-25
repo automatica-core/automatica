@@ -417,6 +417,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
 
+  async onCustomActionClick($event, data: PropertyInstance) {
+    await this.config.customAction(this.item as NodeInstance, data.PropertyTemplate.Key);
+  }
+
   async onLearnClick($event, data: PropertyInstance) {
     if (data.Parent instanceof NodeInstance) {
       const currentNode: NodeInstance = data.Parent;

@@ -294,5 +294,15 @@ namespace Automatica.Core.WebApi.Controllers
             };
         }
 
+
+        [HttpPost]
+        [Route("customAction/{actionName}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IList<NodeInstance>> CustomAction([FromBody] NodeInstance instance, string actionName)
+        {
+            var result = await _notifyDriver.CustomAction(instance, actionName);
+            return result;
+        }
+
     }
 }

@@ -177,6 +177,7 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.Scan:
                     case PropertyTemplateType.ImportData:
                     case PropertyTemplateType.LearnMode:
+                    case PropertyTemplateType.CustomAction:
                         return null;
                     case PropertyTemplateType.Invalid:
                         return "INVALID";

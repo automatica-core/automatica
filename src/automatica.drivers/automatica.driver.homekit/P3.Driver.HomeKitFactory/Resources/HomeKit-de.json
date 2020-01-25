@@ -65,6 +65,11 @@
     "PAIRING_KEY": {
       "NAME": "Code",
       "DESCRIPTION": ""
-    }
+    },
+    "CLEAN_PAIRINGS": {
+      "NAME": "Pairing löschen",
+      "DESCRIPTION": "Hebt alle Pairings auf"
+    },
+    "PAIRING":  "Pairing" 
   }
 }

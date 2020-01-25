@@ -12,12 +12,13 @@ namespace P3.Driver.HomeKitFactory
         public override string DriverName => "AppleHomeKitServer";
 
         public const string AidPropertyKey = "aid";
+        public const string ClearPairingsKey = "clean_pairings";
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
-        public override Version DriverVersion => new Version(0, 6, 0, 3);
+        public override Version DriverVersion => new Version(0, 7, 0, 5);
 
-        public override bool InDevelopmentMode => true;
+        public override bool InDevelopmentMode => false;
 
         public override IDriver CreateDriver(IDriverContext config)
         {
@@ -50,9 +51,12 @@ namespace P3.Driver.HomeKitFactory
             factory.CreatePropertyTemplate(new Guid("c3759cf5-6a9b-4afb-b0e4-32941db684ca"), "CONFIG_VERSION", "CONFIG_VERSION", "config-version",
                 PropertyTemplateType.Integer, DriverGuid, "", false, true, null, 1, 0, 0);
 
-
             factory.CreatePropertyTemplate(new Guid("25497b6e-8059-4dfc-8e9f-917d31c624cf"), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION", "port",
                 PropertyTemplateType.Integer, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, short.MaxValue), 52634, 0, 0);
+
+            factory.CreatePropertyTemplate(new Guid("9eaa6a7e-14ca-4682-b600-3b4e5f6f704b"), "APPLE_HOMEKIT_SERVER.CLEAN_PAIRINGS.NAME",
+                "APPLE_HOMEKIT_SERVER.CLEAN_PAIRINGS.DESCRIPTION", ClearPairingsKey, PropertyTemplateType.CustomAction,
+                DriverGuid, "APPLE_HOMEKIT_SERVER.PAIRING", true, true, null, null, 1, 1);
 
             CreateLight(factory);
             CreatePowerOutlet(factory);

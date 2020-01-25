@@ -116,6 +116,18 @@ namespace P3.Driver.HomeKitFactory
             return await base.Start();
         }
 
+        public override Task<IList<NodeInstance>> CustomAction(string actionName)
+        {
+            if (actionName == HomeKitFactory.ClearPairingsKey)
+            {
+                DriverContext.Logger.LogInformation($"Clear pairings...");
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, null);  //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, null); //save to database
+                DriverContext.Logger.LogInformation($"Clear pairings...done");
+            }
+            return base.CustomAction(actionName);
+        }
+
         private void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
         {
             if (_characteristicNodeMap.ContainsKey(e.Characteristic))

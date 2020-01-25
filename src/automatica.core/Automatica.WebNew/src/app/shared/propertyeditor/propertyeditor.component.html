@@ -108,6 +108,11 @@
                     (click)="onLearnClick($event, data.data)"></dx-button>
             </ng-container>
 
+            <ng-container *ngSwitchCase="PropertyTemplateType.CustomAction">
+                <dx-button width="100%" text="{{ data.data.PropertyTemplate.Name | translate:LANG }}"
+                    (click)="onCustomActionClick($event, data.data)"></dx-button>
+            </ng-container>
+
             <ng-container *ngSwitchCase="PropertyTemplateType.VisuPage">
                 <node-value-selector [(value)]="data.data.Value"
                     (openDialog)="openVisuPageSelectDialog($event, data.data)" [readOnly]="data.data.IsReadonly">

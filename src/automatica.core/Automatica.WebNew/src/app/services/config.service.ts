@@ -60,6 +60,9 @@ export class ConfigService extends BaseService {
     read(node: NodeInstance): Promise<any> {
         return super.postJson("nodeInstances/read", node.toJson());
     }
+    customAction(node: NodeInstance, actionName: string): Promise<NodeInstance[]> {
+        return super.postMultiple<NodeInstance>("nodeInstances/customAction/" + actionName, node.toJson());
+    }
 
     save(nodeInstances: NodeInstance[]): Promise<NodeInstance[]> {
         const data = new Array<any>();

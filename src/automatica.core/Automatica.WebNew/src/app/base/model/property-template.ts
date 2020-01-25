@@ -48,6 +48,8 @@ export enum PropertyTemplateType {
     UserGroup = 203,
     Slave = 204,
 
+    CustomAction = 500,
+
     Invalid = 2147483647
 }
 
