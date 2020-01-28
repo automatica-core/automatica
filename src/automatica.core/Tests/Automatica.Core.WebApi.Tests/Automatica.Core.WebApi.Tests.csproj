@@ -32,4 +32,10 @@
     <ProjectReference Include="..\..\Automatica.Core.Driver.Utility\Automatica.Core.Driver.Utility.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.WebApi\Automatica.Core.WebApi.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Area\ETS5_Simple_ThreeLevel.knxproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
