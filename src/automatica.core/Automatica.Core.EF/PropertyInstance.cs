@@ -303,10 +303,12 @@ namespace Automatica.Core.EF.Models
                         if (value is string strValue && string.IsNullOrEmpty(strValue))
                         {
                             ValueDouble = null;
+                            ValueInt = null;
                         }
                         else
                         {
                             ValueDouble = Convert.ToDouble(value, CultureInfo.InvariantCulture);
+                            ValueInt = Convert.ToInt32(value, CultureInfo.InvariantCulture);
                         }
 
                         break;

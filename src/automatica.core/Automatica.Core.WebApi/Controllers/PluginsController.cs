@@ -1,14 +1,9 @@
-﻿using Automatica.Core.Base.Common;
-using Automatica.Core.Common.Update;
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
-using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +12,8 @@ namespace Automatica.Core.WebApi.Controllers
 {
     public class PluginState
     {
-        public EF.Models.Plugin LoadedPlugin { get; set; }
-        public EF.Models.Plugin CloudPlugin { get; set; }
+        public Plugin LoadedPlugin { get; set; }
+        public Plugin CloudPlugin { get; set; }
     }
 
     [Route("webapi/plugins")]

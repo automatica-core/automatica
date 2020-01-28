@@ -16,7 +16,7 @@ namespace Automatica.Core.WebApi.Controllers
         public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler, ISettingsCache settingsCache) : base(dbContext)
         {
             _updateHandler = updateHandler;
-            this._settingsCache = settingsCache;
+            _settingsCache = settingsCache;
         }
 
         [HttpGet]

@@ -43,7 +43,9 @@ namespace Automatica.Core.WebApi.Tests.Area
                 Name = "TestInstance",
                 Description = "testDesc",
                 This2AreaTemplate = template.ObjId,
-                Icon = template.Icon
+                Icon = template.Icon,
+                Rating = 10,
+                IsFavorite = false
             };
             rootInstance.InverseThis2ParentNavigation.Add(newInstance);
 
@@ -54,6 +56,11 @@ namespace Automatica.Core.WebApi.Tests.Area
             Assert.Equal(newInstance.Name, saved.First().InverseThis2ParentNavigation.First().Name);
             Assert.Equal(newInstance.Description, saved.First().InverseThis2ParentNavigation.First().Description);
             Assert.Equal(newInstance.ObjId, saved.First().InverseThis2ParentNavigation.First().ObjId);
+            Assert.Equal(newInstance.Icon, saved.First().InverseThis2ParentNavigation.First().Icon);
+            Assert.Equal(newInstance.Rating, saved.First().InverseThis2ParentNavigation.First().Rating);
+            Assert.Equal(newInstance.IsFavorite, saved.First().InverseThis2ParentNavigation.First().IsFavorite);
+            Assert.Equal(newInstance.This2Parent, rootInstance.ObjId);
+
             Assert.Equal(template.ObjId, saved.First().InverseThis2ParentNavigation.First().This2AreaTemplate);
 
             rootInstance.InverseThis2ParentNavigation.Clear(); 

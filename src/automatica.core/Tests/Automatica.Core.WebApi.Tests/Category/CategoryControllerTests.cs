@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Categories;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Automatica.Core.WebApi.Tests.Category
@@ -71,15 +75,25 @@ namespace Automatica.Core.WebApi.Tests.Category
             var savedInstance = saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId);
             Assert.NotNull(savedInstance);
             Assert.Equal(newInstance.Name, savedInstance.Name);
+            Assert.Equal(newInstance.This2CategoryGroup, savedInstance.This2CategoryGroup);
+            Assert.Equal(newInstance.Color, savedInstance.Color);
+            Assert.Equal(newInstance.IsFavorite, savedInstance.IsFavorite);
+            Assert.Equal(newInstance.Rating, savedInstance.Rating);
+            Assert.Equal(newInstance.Icon, savedInstance.Icon);
 
 
             // update instance
             savedInstance.Name = "update name...";
-            saved = (await Controller.SaveInstances(instances)).ToList();
+            saved = (await Controller.SaveInstances(saved)).ToList();
 
-            savedInstance = saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId);
-            Assert.NotNull(savedInstance);
-            Assert.Equal(savedInstance.Name, savedInstance.Name);
+            var updatedInstance = saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId);
+            Assert.NotNull(updatedInstance);
+            Assert.Equal(savedInstance.Name, updatedInstance.Name);
+            Assert.Equal(savedInstance.This2CategoryGroup, updatedInstance.This2CategoryGroup);
+            Assert.Equal(savedInstance.Color, updatedInstance.Color);
+            Assert.Equal(savedInstance.IsFavorite, updatedInstance.IsFavorite);
+            Assert.Equal(savedInstance.Rating, updatedInstance.Rating);
+            Assert.Equal(savedInstance.Icon, updatedInstance.Icon);
 
 
             //remove instance
@@ -87,6 +101,23 @@ namespace Automatica.Core.WebApi.Tests.Category
             saved = (await Controller.SaveInstances(instances)).ToList();
 
             Assert.Null(saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId));
+        }
+
+        [Fact]
+        public void TestGenerateIfNotExists()
+        {
+            var categoryGroupId = Guid.NewGuid();
+            using (var dbContext = new AutomaticaContext(Configuration))
+            {
+                CategoryGroup.GenerateIfNotExists(dbContext, categoryGroupId, "test");
+
+                var categoryGroupCache = ServiceProvider.GetRequiredService<ICategoryGroupCache>();
+                categoryGroupCache.Clear();
+
+                dbContext.SaveChanges();
+            }
+
+            Assert.NotNull(Controller.GetTemplates().FirstOrDefault(a => a.ObjId == categoryGroupId));
         }
     }
 }

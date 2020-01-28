@@ -13,12 +13,12 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/data")]
     public class DataController : BaseController
     {
-        private readonly IDispatcher _disptacher;
+        private readonly IDispatcher _dispatcher;
 
-        public DataController(AutomaticaContext db, IDispatcher disptacher)
+        public DataController(AutomaticaContext db, IDispatcher dispatcher)
             : base(db)
         {
-            _disptacher = disptacher;
+            _dispatcher = dispatcher;
         }
 
         [HttpGet]
@@ -26,14 +26,14 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IDictionary<Guid, object> GetCurrentNodeValues()
         {
-            return _disptacher.GetValues(DispatchableType.NodeInstance);
+            return _dispatcher.GetValues(DispatchableType.NodeInstance);
         }
         [HttpGet]
         [Route("node/:id")]
         [Authorize(Policy = Role.ViewerRole)]
         public object GetNodeValue(Guid id)
         {
-            return _disptacher.GetValue(DispatchableType.NodeInstance, id);
+            return _dispatcher.GetValue(DispatchableType.NodeInstance, id);
         }
 
         [HttpGet]

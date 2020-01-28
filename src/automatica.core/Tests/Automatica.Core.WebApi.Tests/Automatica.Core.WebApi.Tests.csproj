@@ -6,6 +6,10 @@
     <Version>0.12.0.678</Version>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Localization\Resources\Test-de.json" />
+    <None Remove="Localization\Resources\Test-en.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -24,6 +28,10 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Localization\Resources\Test-de.json" />
+    <EmbeddedResource Include="Localization\Resources\Test-en.json" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
@@ -37,5 +45,16 @@
     <None Include="Area\ETS5_Simple_ThreeLevel.knxproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Visualization\" />
+    <Folder Include="UserManagement\" />
+    <Folder Include="Update\" />
+    <Folder Include="TelegramMonitor\" />
+    <Folder Include="Slave\" />
+    <Folder Include="Plugins\" />
+    <Folder Include="NodeTemplate\" />
+    <Folder Include="NodeInstance\" />
   </ItemGroup>
 </Project>

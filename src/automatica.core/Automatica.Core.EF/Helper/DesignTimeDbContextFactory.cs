@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Automatica.Core.EF.Helper
 {
-    internal class DeisgnTimeDbContextFactory : IDesignTimeDbContextFactory<AutomaticaContext>
+    internal class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AutomaticaContext>
     {
         public AutomaticaContext CreateDbContext(string[] args)
         {

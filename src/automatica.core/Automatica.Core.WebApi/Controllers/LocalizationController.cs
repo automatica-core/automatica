@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.EF.Models;
 using Microsoft.AspNetCore.Authorization;

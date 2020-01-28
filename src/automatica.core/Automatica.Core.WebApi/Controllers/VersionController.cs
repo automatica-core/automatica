@@ -1,7 +1,7 @@
 ﻿using Automatica.Core.Base.Common;
+using Automatica.Core.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -12,8 +12,12 @@ namespace Automatica.Core.WebApi.Controllers
 
     [Route("webapi/version")]
     [AllowAnonymous]
-    public class VersionController
+    public class VersionController : BaseController
     {
+        public VersionController(AutomaticaContext dbContext) : base(dbContext)
+        {
+        }
+
         [HttpGet]
         public VersionObject Get()
         {

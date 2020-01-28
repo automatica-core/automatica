@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using MQTTnet.Server;
 using Xunit;
 
 namespace Automatica.Core.WebApi.Tests.Base
@@ -60,6 +61,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             var clientProxy = new Mock<IClientProxy>();
 
             hubClients.SetupGet(clients => clients.All).Returns(() => clientProxy.Object);
+            hubClients.Setup(clients => clients.Group(It.IsAny<string>())).Returns(() => clientProxy.Object);
 
             var dataHubMoq = new Mock<IHubContext<DataHub>>();
             dataHubMoq.SetupGet(a => a.Clients).Returns(() => hubClients.Object);
@@ -75,6 +77,9 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton<ILogger<PluginHandler>>(NullLogger<PluginHandler>.Instance);
             services.AddSingleton<ILogger<LearnMode>>(NullLogger<LearnMode>.Instance);
             services.AddSingleton<ILogger>(NullLogger.Instance);
+
+            var mqttServerMock = new Mock<IMqttServer>();
+            services.AddSingleton<IMqttServer>(mqttServerMock.Object);
 
 
             ServiceProvider = services.BuildServiceProvider();

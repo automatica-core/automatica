@@ -57,6 +57,7 @@ namespace Automatica.Core.Internals.Cache.Driver
                 .Include(a => a.This2SlaveNavigation)
                 .Include(a => a.This2CategoryInstanceNavigation)
                 .Where(a => !a.IsDeleted && a.This2ParentNodeInstance != null).ToList();
+
             rootItem.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(allItems, rootItem.ObjId);
 
             Root = rootItem;
