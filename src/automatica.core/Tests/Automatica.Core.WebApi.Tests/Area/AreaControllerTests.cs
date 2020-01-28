@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +28,33 @@ namespace Automatica.Core.WebApi.Tests.Area
         }
 
         [Fact, TestOrder(2)]
+        public async Task SaveAreaInstances()
+        {
+            var templates = Controller.GetTemplates().ToList();
+            var instances = Controller.GetInstances().ToList();
+
+            var rootInstance = instances.First();
+            var template = templates.First();
+
+            var newInstance = new AreaInstance
+            {
+                ObjId = Guid.NewGuid(),
+                Name = "TestInstance",
+                Description = "testDesc",
+                This2AreaTemplate = template.ObjId,
+                Icon = template.Icon
+            };
+            rootInstance.InverseThis2ParentNavigation.Add(newInstance);
+
+            var saved = (await Controller.SaveInstances(instances)).ToList();
+
+            Assert.NotNull(saved);
+            Assert.NotEmpty(saved);
+            Assert.Equal(newInstance.Name, saved.First().InverseThis2ParentNavigation.First().Name);
+            Assert.Equal(newInstance.ObjId, saved.First().InverseThis2ParentNavigation.First().ObjId);
+        }
+
+        [Fact, TestOrder(3)]
         public async Task TestEtsImport()
         {
             var formFileMoq = new Mock<IFormFile>();
