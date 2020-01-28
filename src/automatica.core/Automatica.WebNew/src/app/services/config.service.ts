@@ -6,7 +6,6 @@ import { HttpClient } from "@angular/common/http";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { NodeTemplate } from "../base/model/node-template";
 import { NodeInstance } from "../base/model/node-instance";
-import { BoardType } from "../base/model/board-type";
 
 @Injectable()
 export class ConfigService extends BaseService {
@@ -31,10 +30,6 @@ export class ConfigService extends BaseService {
 
     getNodeInstances(): Promise<NodeInstance[]> {
         return super.getMultiple<NodeInstance>("nodeInstances");
-    }
-
-    getBoardType(): Promise<BoardType> {
-        return super.get<BoardType>("boardType");
     }
 
     getNodeInstancesLinkedToArea(area: string) {

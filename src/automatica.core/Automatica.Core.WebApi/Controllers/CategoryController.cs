@@ -77,6 +77,7 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 SystemLogger.Instance.LogError(e, "Could not save data");
                 transaction.Rollback();
+                throw;
             }
 
             return GetInstances();
