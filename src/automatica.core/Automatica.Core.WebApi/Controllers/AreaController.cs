@@ -115,13 +115,6 @@ namespace Automatica.Core.WebApi.Controllers
                         icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.BuildingPart).Icon;
                         break;
                     case EtsBuildingType.Floor:
-                        typeGuid = AreaTemplateAttribute.GetFromEnum(AreaTemplates.Hallway);
-                        icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.Hallway).Icon;
-                        break;
-                    case EtsBuildingType.Room:
-                        typeGuid = AreaTemplateAttribute.GetFromEnum(AreaTemplates.Room);
-                        icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.Room).Icon;
-                        break;
                     case EtsBuildingType.Corridor:
                         typeGuid = AreaTemplateAttribute.GetFromEnum(AreaTemplates.Hallway);
                         icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.Hallway).Icon;
