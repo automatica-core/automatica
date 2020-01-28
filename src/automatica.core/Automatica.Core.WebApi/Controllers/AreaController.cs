@@ -61,7 +61,7 @@ namespace Automatica.Core.WebApi.Controllers
 
             try
             {
-                await ProcessFile(parentInstance, myFile);
+                return await ProcessFile(parentInstance, myFile);
             }
             catch
             {

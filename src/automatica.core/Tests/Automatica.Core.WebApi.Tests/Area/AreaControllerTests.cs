@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,6 +48,42 @@ namespace Automatica.Core.WebApi.Tests.Area
             rootInstance.InverseThis2ParentNavigation.Add(newInstance);
 
             var saved = (await Controller.SaveInstances(instances)).ToList();
+
+            Assert.NotNull(saved);
+            Assert.NotEmpty(saved);
+            Assert.Equal(newInstance.Name, saved.First().InverseThis2ParentNavigation.First().Name);
+            Assert.Equal(newInstance.Description, saved.First().InverseThis2ParentNavigation.First().Description);
+            Assert.Equal(newInstance.ObjId, saved.First().InverseThis2ParentNavigation.First().ObjId);
+            Assert.Equal(template.ObjId, saved.First().InverseThis2ParentNavigation.First().This2AreaTemplate);
+
+            rootInstance.InverseThis2ParentNavigation.Clear(); 
+            saved = (await Controller.SaveInstances(instances)).ToList();
+
+            Assert.Empty(saved.First().InverseThis2ParentNavigation);
+        }
+
+        [Fact, TestOrder(2)]
+        public async Task AddAreaInstances()
+        {
+            var templates = Controller.GetTemplates().ToList();
+            var instances = Controller.GetInstances().ToList();
+
+            var rootInstance = instances.First();
+            var template = templates.First();
+
+            var newInstance = new AreaInstance
+            {
+                ObjId = Guid.NewGuid(),
+                This2Parent =  rootInstance.ObjId,
+                Name = "TestInstance",
+                Description = "testDesc",
+                This2AreaTemplate = template.ObjId,
+                Icon = template.Icon
+            };
+
+            var newInstances = new List<AreaInstance> {newInstance};
+
+            var saved = (await Controller.AddAreaInstances(newInstances)).ToList();
 
             Assert.NotNull(saved);
             Assert.NotEmpty(saved);

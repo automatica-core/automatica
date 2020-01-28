@@ -66,8 +66,13 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
     this.router.navigate(["."], { relativeTo: this.activatedRoute.parent });
   }
 
+  onUploadStarted($event) {
+    this.isLoading = true;
+  }
+
   onFileUploaded($event) {
 
+    this.isLoading = false;
     if ($event.request.status === 200) {
       const json = JSON.parse($event.request.responseText);
 

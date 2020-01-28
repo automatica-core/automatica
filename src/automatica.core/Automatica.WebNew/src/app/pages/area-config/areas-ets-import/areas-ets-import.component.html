@@ -1,7 +1,7 @@
 <dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false" title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translate }}"
   (onHiding)="onHiding($event)">
   <div *dxTemplate="let data of 'content'">
-    <dx-file-uploader *ngIf="parentObjId" (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translate }}"
+    <dx-file-uploader *ngIf="parentObjId" (onUploadStarted)="onUploadStarted($event)" (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translate }}"
       labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="instantly">
     </dx-file-uploader>
 
