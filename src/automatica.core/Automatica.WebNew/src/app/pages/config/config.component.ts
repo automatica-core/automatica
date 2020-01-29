@@ -51,7 +51,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   async load() {
     try {
-      this.appService.isLoading = true;
+      this.isLoading = true;
 
       const [userGroups, areaInstances, categoryInstances] = await Promise.all(
         [
@@ -69,7 +69,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
       super.handleError(error);
     }
 
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
   async ngOnInit() {
@@ -87,13 +87,13 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   }
   async save($event) {
     try {
-      this.appService.isLoading = true;
+      this.isLoading = true;
       await this.configTree.save();
     } catch (error) {
       this.notify.notifyError(error);
       throw error;
     }
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
   validate($event) {
@@ -109,9 +109,9 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   async fileUploaded($event) {
-    this.appService.isLoading = true;
+    this.isLoading = true;
     await this.configTree.fileUploaded($event.item, $event.file.name);
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
   async ngOnDestroy() {

@@ -155,7 +155,7 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Constructed;
 
-            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, _logger)));
+            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, CoreLoggerFactory.GetLogger("Trending"))));
             _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher));
 
             _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();

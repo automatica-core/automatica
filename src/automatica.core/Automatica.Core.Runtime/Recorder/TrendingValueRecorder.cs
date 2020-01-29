@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Cache;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.EF.Models;
@@ -27,6 +28,11 @@ namespace Automatica.Core.Runtime.Recorder
 
         public Task Start()
         {
+            if (!Instance.Trending)
+            {
+                return Task.CompletedTask;
+            }
+
             if(Instance.TrendingInterval == 0)
             {
                 Instance.TrendingInterval = 1;
@@ -39,9 +45,14 @@ namespace Automatica.Core.Runtime.Recorder
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+           RecordValue();
+        }
+
+        internal void RecordValue()
+        {
             lock (_lock)
             {
-                if(!_lastValue.HasValue)
+                if (!_lastValue.HasValue)
                 {
                     return;
                 }
@@ -55,8 +66,13 @@ namespace Automatica.Core.Runtime.Recorder
         {
             lock (_lock)
             {
+                if (value == null)
+                {
+                    return;
+                }
+
                 _lastSource = source;
-                if (value is double dblValue)
+                if (double.TryParse(value.ToString(), out var dblValue))
                 {
                     switch (Instance.TrendingType)
                     {

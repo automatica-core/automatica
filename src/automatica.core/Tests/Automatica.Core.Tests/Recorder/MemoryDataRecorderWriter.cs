@@ -1,34 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Automatica.Core.Base.IO;
+using Automatica.Core.EF.Models.Trendings;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Recorder;
 
 namespace Automatica.Core.Tests.Recorder
 {
-    public class MemoryDataRecorderWriter : IDataRecorderWriter
+    internal class MemoryDataRecorderWriter : BaseDataRecorderWriter
     {
-        public Task Start()
+        public Trending LastTrending { get; private set; }
+
+        public MemoryDataRecorderWriter(string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher) : base(recorderName, nodeCache, dispatcher)
         {
-            return Task.CompletedTask;
         }
 
-        public Task Stop()
+        internal override void Save(Trending trend)
         {
-            return Task.CompletedTask;
-        }
-
-        public Task AddTrend(Guid nodeInstance)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task RemoveTrend(Guid nodeInstance)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task RemoveAll()
-        {
-            return Task.CompletedTask;
+            LastTrending = trend;
         }
     }
 }

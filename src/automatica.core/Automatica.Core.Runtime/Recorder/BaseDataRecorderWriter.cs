@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
@@ -7,6 +8,8 @@ using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Logger;
 using Microsoft.Extensions.Logging;
+
+[assembly: InternalsVisibleTo("Automatica.Core.Tests")]
 
 namespace Automatica.Core.Runtime.Recorder
 {
