@@ -8,6 +8,7 @@ using P3.Knx.Core.DPT.Dpt7;
 using P3.Knx.Core.DPT.Dpt8;
 using P3.Knx.Core.DPT.Dpt9;
 using P3.Knx.Core.Driver;
+using P3.Knx.Core.Driver.DPT;
 
 namespace P3.Knx.Core.DPT
 {
@@ -34,7 +35,9 @@ namespace P3.Knx.Core.DPT
                 typeof(Dpt6Translator),
                 typeof(Dpt9Translator),
                 typeof(Dpt10Translator),
-                typeof(Dpt11Translator)
+                typeof(Dpt11Translator),
+                typeof(Dpt16_000_Translator),
+                typeof(Dpt16_001_Translator)
             };
 
             types.AddRange(Dpt9TypeTranslators.Types);

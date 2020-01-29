@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using Automatica.Core.UnitTests.Base.Common;
+using Automatica.Core.UnitTests.Rules;
 
-namespace Automatica.Core.UnitTests.Rules
+namespace Automatica.Core.UnitTests.Base.Rules
 {
     public class RuleTest<T> where T : RuleFactory
     {
@@ -28,7 +28,7 @@ namespace Automatica.Core.UnitTests.Rules
 
             RuleInstance = Factory.CreateRuleInstanceFromTemplate(Instance.RuleGuid);
 
-            Context = new RuleContextMock(RuleInstance);
+            Context = new RuleContextMock(RuleInstance, DispatcherMock.Instance);
 
             Rule = Instance.CreateRuleInstance(Context);
             Rule.Start();

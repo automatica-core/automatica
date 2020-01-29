@@ -13,14 +13,16 @@ using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
+using Automatica.Core.Base.Common;
+using Automatica.Core.Runtime.BoardTypes;
+using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 
 namespace Automatica.Core.Runtime.Database
 {
     public static class DatabaseInit
     {
-        public static void EnusreDatabaseCreated(IServiceProvider services)
+        public static void EnsureDatabaseCreated(IServiceProvider services)
         {
-
             var context = services.GetRequiredService<AutomaticaContext>();
             var visuInitFactory = services.GetRequiredService<IVisualisationFactory>();
             var config = services.GetRequiredService<IConfiguration>();
@@ -28,30 +30,73 @@ namespace Automatica.Core.Runtime.Database
 
             bool dbCreated = !context.BoardTypes.Any();
 
-          
-
             if (dbCreated)
             {
-                context.Database.ExecuteSqlCommand($@"	       
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 1,
+                    Name = "Input",
+                    Description = "Input",
+                    Key = "I"
+                });
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 2,
+                    Name = "Output",
+                    Description = "Output",
+                    Key = "O"
+                });
+                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                {
+                    ObjId = 3,
+                    Name = "Parameter",
+                    Description = "Parameter",
+                    Key = "P"
+                });
 
-		            INSERT INTO RuleInterfaceDirections (ObjId, Name, Description, Key) VALUES 
-		                (1, 'Input', 'Input', 'I'),
-		                (2, 'Output', 'Output', 'O'),
-		                (3, 'Parameter', 'Parameter', 'P');
+                context.RulePageTypes.Add(new RulePageType()
+                {
+                    ObjId = 1,
+                    Name = "Rules",
+                    Description = "Rules",
+                    Key = "rules"
+                });
+                context.VisuPageTypes.Add(new VisuPageType()
+                {
+                    ObjId = 1,
+                    Name = "PC",
+                    Description = "PC",
+                    Key = "pc"
+                });
+                context.VisuPageTypes.Add(new VisuPageType()
+                {
+                    ObjId = 2,
+                    Name = "Mobile",
+                    Description = "Mobile",
+                    Key = "mobile"
+                });
+                context.SaveChanges();
 
-	                INSERT INTO Settings (ObjId, ValueKey, ValueInt, Type) VALUES (1, 'ConfigVersion', 0, 0);
+                context.Slaves.Add(new Slave()
+                {
+                    ObjId = new Guid(ServerInfo.SelfSlaveId),
+                    Name = "local",
+                    Description = "this is me",
+                    ClientId = "",
+                    ClientKey = ""
+                });
 
-		        
-		        INSERT INTO RulePageTypes (ObjId, Name, Description, Key) VALUES 
-		        (1, 'Rules', 'Rules', 'rules');
 
-
-		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
-		        (1, 'PC', 'PC', 'pc');
-
-
-		        INSERT INTO VisuPageTypes (ObjId, Name, Description, Key) VALUES 
-		        (2, 'Mobile', 'Mobile', 'mobile')");
+                context.Settings.Add(new Setting
+                {
+                    ObjId = 1,
+                    ValueKey = "ConfigVersion",
+                    Type = (long)PropertyTemplateType.Numeric,
+                    Value = 0,
+                    Group = "ConfigVersion",
+                    IsVisible = false,
+                    Order = 10
+                });
                 context.SaveChanges();
             }
 
@@ -191,7 +236,7 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var propertyType in propertyTypes)
             {
-                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == (int) propertyType);
+                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(propertyType));
                 var isNewObject = false;
                 if (propertyTypeDb == null)
                 {
@@ -230,7 +275,7 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var nodeDataType in nodeDataTypes)
             {
-                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == (int)nodeDataType);
+                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(nodeDataType));
                 var isNewObject = false;
                 if (nodeDataTypeDb == null)
                 {
@@ -270,8 +315,25 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
             CreateInterfaceTypes(context);
+            context.SaveChanges();
+
             AddSystemTemplates(context);
-            AddRaspberryPi3Board(context);
+
+            IDatabaseBoardType boardType = null;
+            
+            if (BoardTypes.Docker.Docker.InDocker)
+            {
+                boardType = new BoardTypes.Docker.Docker();
+            }
+            else
+            {
+                boardType = new RaspberryPi();
+            }
+
+            ServerInfo.BoardType = boardType;
+
+            AddBoard(context, boardType);
+
             AddAreaData(context);
             CategoryGroup.GenerateDefault(context);
             context.SaveChanges();
@@ -296,10 +358,10 @@ namespace Automatica.Core.Runtime.Database
 
             if(dbCreated)
             {
-                var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(BoardTypeEnum.RaspberryPi3));
+                var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
                 var rootNode = NodeInstanceFactory.CreateNodeInstanceFromTemplate(rootNodeTemplate);
 
-                rootNode.Name = "Raspberry PI 3";
+                rootNode.Name = boardType.Name;
                 rootNode.Description = "";
 
                 context.NodeInstances.Add(rootNode);
@@ -603,7 +665,9 @@ namespace Automatica.Core.Runtime.Database
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbIr.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbIr);
+                context.SaveChanges();
             }
+
             
             var usbrs485 = new NodeTemplate
             {
@@ -628,7 +692,9 @@ namespace Automatica.Core.Runtime.Database
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs485.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbrs485);
+                context.SaveChanges();
             }
+
             var usbrs232 = new NodeTemplate
             {
                 ObjId = new Guid("09d3b6b4391847e091aa5a540a7bd67f"),
@@ -651,19 +717,19 @@ namespace Automatica.Core.Runtime.Database
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs232.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbrs232);
+                context.SaveChanges();
             }
+
         }
 
-        private static void AddRaspberryPi3Board(AutomaticaContext context)
+        private static void AddBoard(AutomaticaContext context, IDatabaseBoardType boardType)
         {
-            var rsp3Board = new BoardTypes.RaspberryPi3.RaspberryPi3();
-
-            var board = context.BoardTypes.SingleOrDefault(a => a.Type == GuidTemplateTypeAttribute.GetFromEnum(rsp3Board.BoardType));
+            var board = context.BoardTypes.SingleOrDefault(a => a.Type == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
             var boardNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == board.Type);
 
             var boardInterfaceType = context.InterfaceTypes.SingleOrDefault(a => a.Type == board.Type);
 
-            if(boardInterfaceType == null)
+            if (boardInterfaceType == null)
             {
                 boardInterfaceType = new InterfaceType
                 {
@@ -679,7 +745,7 @@ namespace Automatica.Core.Runtime.Database
                 context.InterfaceTypes.Add(boardInterfaceType);
             }
 
-            if(boardNodeTemplate == null)
+            if (boardNodeTemplate == null)
             {
                 boardNodeTemplate = new NodeTemplate
                 {
@@ -706,7 +772,7 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
 
-            foreach (var boardInterface in rsp3Board.GetBoardInterfaces())
+            foreach (var boardInterface in boardType.GetBoardInterfaces())
             {
                 var boardInt = context.BoardInterfaces.SingleOrDefault(a => a.ObjId == boardInterface.ObjId);
                 if (boardInt == null)

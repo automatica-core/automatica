@@ -1,5 +1,6 @@
 {
     "ERROR":{
-        "NODE_NOT_FOUND": "The node could not be found on the server, a reboot can fix that issue!"
+        "NODE_NOT_FOUND": "The node could not be found on the server, a reboot can fix that issue!",
+        "CLOUD_CONNECTION_INVALID": "Cloud connection invalid! You need to enter a API key."
     }
 }

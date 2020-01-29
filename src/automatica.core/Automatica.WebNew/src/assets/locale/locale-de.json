@@ -67,7 +67,7 @@
         "TYPES": "Type",
         "TYPE": "Type",
         "DATETIMEFORMAT": {
-            "DATE":"DD.MM.YYYY",
+            "DATE": "DD.MM.YYYY",
             "TIME": "HH.mm.ss",
             "DATETIME": "DD.MM.YYYY HH.mm.ss"
         },
@@ -96,7 +96,8 @@
             "USERGROUP2ROLE": "Rollen",
             "IMPORT": "Import",
             "SETTING": "Einstellungen",
-            "DISCOVERY": "Suchen"
+            "DISCOVERY": "Suchen",
+            "TRENDING": "Datenaufzeichnung"
         },
         "FACTOR": {
             "NAME": "Faktor",
@@ -292,6 +293,26 @@
             "CLOUDURL": {
                 "NAME": "Cloud Url",
                 "DESCRIPTION": ""
+            },
+            "TRENDING": {
+                "NAME": "Datenaufzeichnung",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_TYPE": {
+                "NAME": "Aufzeichnungstyp",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_INTERVAL": {
+                "NAME": "Intervall [s]",
+                "DESCRIPTION": ""
+            },
+            "OBJID": {
+                "NAME": "ID",
+                "DESCRIPTION": ""
+            },
+            "SLAVE": {
+                "NAME": "Slave",
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY_INSTANCE": {
@@ -331,7 +352,7 @@
                 "NAME": "Multimedia",
                 "DESCRIPTION": ""
             },
-            "PHOTOVOLTAIK": {
+            "PHOTOVOLTAIC": {
                 "NAME": "Photovoltaik",
                 "DESCRIPTION": ""
             },
@@ -449,8 +470,9 @@
         "INSTALLED_VERSION": "Installierte Version",
         "ACTION": "Aktionen",
         "PROGRESS": "Status",
-        "UPDATE_ALL": "Alle Updaten",
-        "RESTART_AFTER_INSTALL": "Nachdem alle Erweiterungen heruntergeladen sind, muss ein Neustart derzeit manuell ausgelöst werden!"
+        "UPDATE_ALL": "Alle aktualisieren",
+        "INSTALL_ALL": "Alle installieren",
+        "INSTALL_UPDATE_ALL": "Alle updaten & installieren"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddatum darf nicht vor dem Startdatum sein",

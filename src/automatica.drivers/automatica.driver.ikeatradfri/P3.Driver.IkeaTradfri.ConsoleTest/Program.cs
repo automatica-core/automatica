@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Models;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfri.ConsoleTest
 {
@@ -14,42 +12,56 @@ namespace P3.Driver.IkeaTradfri.ConsoleTest
             Console.WriteLine("Hello World!");
 
 
-            var gateways = await IkeaTradfriDriver.Discover();
+//            var gateways = await IkeaTradfriDriver.Discover();
 
-            var appName = $"45df1d511";
+            var appName = Guid.NewGuid().ToString();
+
+            var key = IkeaTradfriDriver.GeneratePsk("192.168.8.103", appName, "Ej3Ta2AzrePZ9jcJ");
             
-            var con = new IkeaTradfriDriver("192.168.8.105", appName, "xAWniaZm74vIhEdZ");
-            con.Connect();
+            var con = new IkeaTradfriDriver("192.168.8.103", appName, key.PSK);
+            await con.Connect();
 
             Console.WriteLine("Conncted");
 
-            var devices = con.LoadDevices();
+            var devices = await con.LoadDevices();
+
+            await con.RegisterChange(token =>
+            {
+                Console.WriteLine($"Item {token.Name} sent {token} {token.Control[0].State}");
+
+
+            }, 65539);
+
+            while (true)
+            {
+               // await con.SwitchOff(65539);
+               await Task.Delay(1000);
+
+            }
 
             foreach (var dev in devices)
             {
-                var deviceType = TradfriDeviceType.LightControl;
+                var deviceType = DeviceType.ControlOutlet;
 
-                if (dev.ApplicationType == DeviceType.PowerOutlet)
+                if (dev.DeviceType == DeviceType.ControlOutlet)
+                {
+
+                    await con.SwitchOn(dev.ID);
+                    await con.SwitchOff(dev.ID);
+                    await con.SwitchOn(dev.ID);
+                    continue;
+                }
+                else if (dev.DeviceType == DeviceType.Remote)
                 {
                     continue;
                 }
-                else if (dev.ApplicationType == DeviceType.Remote || dev.ApplicationType == DeviceType.Unknown)
-                {
-                    continue;
-                }
-                con.RegisterChange(token =>
+                await con.RegisterChange(token =>
                 {
                     Console.WriteLine($"Item {dev.Name} sent {token}");
 
-                    if (token is JArray array)
-                    {
-                        var valueProp = ((int)TradfriConstAttribute.LightColorHex).ToString();
 
-                        var strValue = array.First()[valueProp].ToString();
+                }, dev.ID);
 
-                        
-                    }
-                }, deviceType, dev.Id);
             }
 
             Console.ReadLine();

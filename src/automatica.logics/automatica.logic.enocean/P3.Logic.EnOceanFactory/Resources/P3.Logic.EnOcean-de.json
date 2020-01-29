@@ -11,7 +11,7 @@
       },
       "OUTPUT": {
         "NAME": "Output",
-        "DESCRIPTION": "Der Status des Fenstergriff (0 = Geschlossen, 1 = Gekiptt, 2 = Geöffnet)"
+        "DESCRIPTION": "Der Status des Fenstergriff (0 = Geschlossen, 1 = Geöffnet, 2 = Gekiptt)"
       }
     }
   }

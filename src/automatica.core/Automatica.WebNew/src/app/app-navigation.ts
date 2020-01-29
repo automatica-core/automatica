@@ -2,7 +2,7 @@ export const navigation = [
     {
         text: "Home",
         path: "home",
-        icon: "home",
+        icon: "automatica-logo",
         default: true
     }, {
         text: "COMMON.CONFIGURATION",
@@ -39,11 +39,15 @@ export const navigation = [
     }, {
         text: "COMMON.SYSTEM",
         path: "system",
-        icon: "folder"
+        icon: "code-branch"
     }, {
         text: "COMMON.PLUGINS",
         path: "plugins",
-        icon: "folder"
+        icon: "plug"
+    }, {
+        text: "COMMON.SLAVES",
+        path: "slaves",
+        icon: "satellite-dish"
     }];
 
     /*{

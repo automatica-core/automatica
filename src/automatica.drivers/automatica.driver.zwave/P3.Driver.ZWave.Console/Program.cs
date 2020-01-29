@@ -14,24 +14,24 @@ namespace P3.Driver.ZWave.ConsoleTest
         {
             Console.WriteLine("Hello World!");
 
-            var controller = new ZWaveController("COM5");
-            controller.Open();
+            //var controller = new ZWaveController("COM5");
+            //controller.Open();
 
-            controller.Channel.Log = Console.Out;
+            //controller.Channel.Log = Console.Out;
 
-            var setLearnMode = await controller.SetLearnMode(true);
+            //var setLearnMode = await controller.SetLearnMode(true);
 
-            var result = await controller.GetNodes();
+            //var result = await controller.GetNodes();
 
-            var wallPlug = new WallPlug(result.Single(a => a.NodeID == 3));
-            await wallPlug.SwitchOn();
+            //var wallPlug = new WallPlug(result.Single(a => a.NodeID == 3));
+            //await wallPlug.SwitchOn();
 
-            await Task.Delay(500);
-            await wallPlug.SwitchOff();
+            //await Task.Delay(500);
+            //await wallPlug.SwitchOff();
 
 
-            await Task.Delay(500);
-            await wallPlug.SwitchOn();
+            //await Task.Delay(500);
+            //await wallPlug.SwitchOn();
 
             Console.ReadLine();
         }

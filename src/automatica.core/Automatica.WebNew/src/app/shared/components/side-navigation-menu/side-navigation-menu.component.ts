@@ -1,32 +1,34 @@
-import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit } from "@angular/core";
+import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { DxTreeViewModule, DxTreeViewComponent } from "devextreme-angular/ui/tree-view";
 import { TranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
+import { DxScrollViewModule } from "devextreme-angular";
 
 @Component({
     selector: "app-side-navigation-menu",
     templateUrl: "./side-navigation-menu.component.html",
-    styleUrls: ["./side-navigation-menu.component.scss"]
+    styleUrls: ["./side-navigation-menu.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideNavigationMenuComponent implements OnInit {
 
     private _menu: DxTreeViewComponent;
 
-    @ViewChild(DxTreeViewComponent)
+    @ViewChild(DxTreeViewComponent, { static: true })
     public get menu(): DxTreeViewComponent {
         return this._menu;
     }
     public set menu(v: DxTreeViewComponent) {
         this._menu = v;
-
-        this.setDefaultItem();
     }
 
     @Output()
     selectedItemChanged = new EventEmitter<string>();
 
+    @Input()
+    menuOpened: boolean = false;
 
     private _items: any[];
     @Input()
@@ -35,16 +37,20 @@ export class SideNavigationMenuComponent implements OnInit {
     }
     public set items(v: any[]) {
         this._items = v;
-
-        this.setDefaultItem();
     }
 
+    _selectedItem: string;
 
     @Input()
-    set selectedItem(value: String) {
-        if (this.menu.instance) {
+    set selectedItem(value: string) {
+        if (this.menu && this.menu.instance) {
+            this._selectedItem = value;
             this.menu.instance.selectItem(value);
+            this.setDefaultItem();
         }
+    }
+    get selectedItem(): string {
+        return this._selectedItem;
     }
 
     private _compactMode = false;
@@ -54,15 +60,16 @@ export class SideNavigationMenuComponent implements OnInit {
     }
     set compactMode(val) {
         this._compactMode = val;
-        if (val && this.menu.instance) {
+        if (val && this.menu && this.menu.instance) {
             this.menu.instance.collapseAll();
         }
     }
 
+
     constructor(private router: Router) { }
 
     ngOnInit() {
-        this.setDefaultItem();
+        // this.setDefaultItem();
     }
 
     setDefaultItem() {
@@ -70,7 +77,7 @@ export class SideNavigationMenuComponent implements OnInit {
             return;
         }
         const defaultItem = this.findDefaultItemRecursive(this.items);
-        if (this.menu.instance && defaultItem) {
+        if (this.menu && this.menu.instance && defaultItem) {
             this.menu.instance.selectItem(defaultItem);
         }
     }
@@ -97,7 +104,7 @@ export class SideNavigationMenuComponent implements OnInit {
         const leafNodeClass = "dx-treeview-node-is-leaf";
         const element: HTMLElement = event.element;
 
-        const rootNodes = element.querySelectorAll(`.${nodeClass}:not(.${leafNodeClass}`);
+        const rootNodes = element.querySelectorAll(`.${nodeClass}:not(.${leafNodeClass})`);
         Array.from(rootNodes).forEach(node => {
             node.classList.remove(selectedClass);
         });
@@ -114,17 +121,16 @@ export class SideNavigationMenuComponent implements OnInit {
 
     onItemClick(event) {
         this.selectedItemChanged.emit(event);
+        this._selectedItem = event.itemData.path;
     }
 
     onMenuInitialized(event) {
         event.component.option("deferRendering", false);
-
-        this.setDefaultItem();
     }
 }
 
 @NgModule({
-    imports: [CommonModule, DxTreeViewModule, TranslationModule, FontAwesomeModule],
+    imports: [CommonModule, DxTreeViewModule, TranslationModule, FontAwesomeModule, DxScrollViewModule],
     declarations: [SideNavigationMenuComponent],
     exports: [SideNavigationMenuComponent]
 })

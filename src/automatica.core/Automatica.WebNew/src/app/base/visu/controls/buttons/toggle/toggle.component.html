@@ -41,7 +41,7 @@
 
 
 <ng-template #dxSwitchOutlet>
-  <dx-switch [value]="realValue" [switchedOnText]="toggle_on_text" [switchedOffText]="toggle_off_text" (onValueChanged)="onValueChanged($event)"></dx-switch>
+  <dx-switch [value]="toggleValue" [switchedOnText]="toggle_on_text" [switchedOffText]="toggle_off_text" (onValueChanged)="onToggleValueChanged($event)"></dx-switch>
 </ng-template>
 
 <ng-template #dxLabelOutlet>

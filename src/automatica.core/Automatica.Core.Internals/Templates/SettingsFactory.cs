@@ -8,7 +8,7 @@ namespace Automatica.Core.Internals.Templates
     public class SettingsFactory : ISettingsFactory
     {
         private readonly IConfiguration _config;
-        protected readonly AutomaticaContext Db;
+        protected AutomaticaContext Db { get; }
         
         public SettingsFactory(AutomaticaContext database, IConfiguration config)
         {

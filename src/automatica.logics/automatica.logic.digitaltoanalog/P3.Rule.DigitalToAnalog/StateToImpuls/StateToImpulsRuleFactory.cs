@@ -13,7 +13,7 @@ namespace P3.Rule.DigitalToAnalog.StateToImpuls
 
         public static readonly Guid DelayParameter = new Guid("fe035850-de9a-4648-ac7e-57a6ef20cd89");
 
-        public override Version RuleVersion => new Version(1, 0, 0, 2);
+        public override Version RuleVersion => new Version(1, 0, 0, 3);
 
         public override string RuleName => "StatusToImpuls";
         public override Guid RuleGuid => new Guid("088dfa08-6487-4f5e-8d77-2ce4402ba661");

@@ -1,10 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { RuleEngineService, AddLogicData } from "../../services/ruleengine.service";
-import { Subscription } from "rxjs";
 import { TranslationService } from "angular-l10n";
 import { RulePage } from "src/app/base/model/rule-page";
-import { Guid } from "src/app/base/utils/Guid";
-import { LinkChangeData, Link } from "src/app/base/model/link";
 import { NotifyService } from "src/app/services/notify.service";
 import { NodeInstance2RulePage, NodeInterfaceInstance } from "src/app/base/model/node-instance-2-rule-page";
 import { RuleInstance } from "src/app/base/model/rule-instance";
@@ -12,20 +9,19 @@ import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instanc
 import { BaseComponent } from "src/app/base/base-component";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NodeInstance } from "src/app/base/model/node-instance";
-import { RuleTemplate } from "src/app/base/model/rule-template";
-import { BaseModel } from "src/app/base/model/base-model";
-import { PropertyInstance } from "src/app/base/model/property-instance";
 import { LogicShapes } from "./shapes/logic-shape";
 import { LogicLocators } from "./shapes/logic-locators";
 import { LogicLables } from "./shapes/logic-label";
 import { LinkService } from "./link.service";
+import { AppService } from "src/app/services/app.service";
 
 declare var draw2d: any;
 
 @Component({
   selector: "p3-ruleeditor",
   templateUrl: "./ruleeditor.component.html",
-  styleUrls: ["./ruleeditor.component.sass"]
+  styleUrls: ["./ruleeditor.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -61,25 +57,18 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   private linkService: LinkService;
 
-  private _isLoading: boolean = false;
-  public get isLoading(): boolean {
-    return this._isLoading;
-  }
-  public set isLoading(v: boolean) {
-    this._isLoading = v;
-  }
 
-
-  constructor(private ruleEngineService: RuleEngineService, private dataHub: DataHubService, notify: NotifyService, translate: TranslationService) {
-    super(notify, translate);
+  constructor(private ruleEngineService: RuleEngineService,
+    private dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    private changeRef: ChangeDetectorRef,
+    appService: AppService) {
+    super(notify, translate, appService);
   }
 
   async ngOnInit() {
     this.linkService = new LinkService(this.page, this.translate);
-
-    this.ruleEngineService.reInit.subscribe((index) => {
-      // this.loadModel(this.page);
-    });
 
     super.registerEvent(this.ruleEngineService.add, (data: AddLogicData) => {
       if (data.pageIndex === this.page.ObjId) {
@@ -105,6 +94,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
         }
       }
     });
+
+
+    this.changeRef.detectChanges();
   }
 
   ngOnDestroy(): void {
@@ -112,30 +104,13 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   }
 
   ngAfterViewInit() {
-    const that = this;
-    this.isLoading = true;
-    setTimeout(function () {
-      try {
-        that.onInit();
-      } catch (error) {
-        console.error(error);
-      } finally {
-
-        that.isLoading = false;
-      }
-    }, 100);
+    this.onInit();
   }
 
   allowDrop() {
-    const that = this;
-    return (dragData: NodeInstance) => {
+    return () => {
 
-      if (dragData && dragData.NodeTemplate && dragData.NodeTemplate.ProvidesInterface) {
-        if (dragData.NodeTemplate.ProvidesInterface.Type === "00000000-0000-0000-0000-000000000001") {
-          return true;
-        }
-      }
-      return false;
+      return true;
     }
   };
 
@@ -144,15 +119,33 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     const point = this.workplace.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
 
     if ($event.dragData instanceof NodeInstance) {
-      const nodeInstance = $event.dragData;
 
-      const node = NodeInstance2RulePage.createFromNodeInstance(nodeInstance, this.page);
-      this.page.NodeInstances.push(node);
+      const nodeInstance: NodeInstance = $event.dragData;
+      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
 
-      node.X = point.getX();
-      node.Y = point.getY();
-      this.addNode(node, this.page);
+        for (const child of nodeInstance.Children) {
+          if (this.addNodeInstanceToPage(child, point)) {
+            point.y += 35;
+          }
+        }
+      } else {
+        this.addNodeInstanceToPage(nodeInstance, point);
+      }
     }
+  }
+
+  addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
+    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
+      return false;
+    }
+
+    const node = NodeInstance2RulePage.createFromNodeInstance(nodeInstance, this.page);
+    this.page.NodeInstances.push(node);
+
+    node.X = point.getX();
+    node.Y = point.getY();
+    this.addNode(node, this.page);
+    return true;
   }
 
   init(): any {
@@ -190,7 +183,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     const d = new this.logic.ItemShape({}, element, this.linkService);
 
-    d.on("removed", (figure) => {
+    d.on("removed", () => {
       page.removeNodeInstance(element.ObjId);
     });
 
@@ -206,7 +199,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
 
-    d.on("removed", (figure) => {
+    d.on("removed", () => {
       page.removeRuleInstance(element.ObjId);
     });
 

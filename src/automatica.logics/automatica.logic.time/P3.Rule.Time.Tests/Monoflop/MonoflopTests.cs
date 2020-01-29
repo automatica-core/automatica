@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Time.Monoflop;
 using Xunit;
@@ -11,7 +12,8 @@ namespace P3.Rule.Time.Tests.Monoflop
         [Fact]
         public async void TestDelayedOnRule()
         {
-            Context.Dispatcher.Clear();
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
 
             Rule.ValueChanged(GetRuleInterfaceByTemplate(MonoflopRuleFactory.RuleTrigger), Dispatchable, true);
 
@@ -33,7 +35,8 @@ namespace P3.Rule.Time.Tests.Monoflop
         [Fact]
         public async void TestDelayedOnRule2()
         {
-            Context.Dispatcher.Clear();
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
 
             var paramDelay = GetRuleInterfaceByTemplate(MonoflopRuleFactory.RuleParamDelay);
             paramDelay.Value = 1;

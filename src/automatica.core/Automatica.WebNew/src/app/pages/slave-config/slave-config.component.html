@@ -1,0 +1,47 @@
+<div class="content-block">
+    <div class="dx-card wide-card panel-height">
+        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)"
+            itemTemplate="items">
+            <div *dxTemplate="let item of 'items'">
+                <div *ngIf="item.color">
+                    <i class="dx-icon {{ item.Icon }}"></i>
+                    <span [ngClass]="{'isDirty': _isDirty}">{{item.label}}</span>
+                </div>
+                <div *ngIf="!item.color">
+                    <i class="dx-icon {{ item.Icon }}"></i>
+                    <span>{{item.label}}</span>
+                </div>
+            </div>
+        </dx-menu>
+
+        <as-split direction="horizontal">
+            <as-split-area [size]="30">
+                <p3-propertyeditor [item]="selectedSlave"></p3-propertyeditor>
+            </as-split-area>
+            <as-split-area [size]="70">
+                <dx-data-grid [dataSource]="slaves" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
+                    (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)" (onRowInserting)="onRowInserting($event)"
+                    (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
+                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translate }}" deleteRow="{{ 'COMMON.DELETE' | translate }}"
+                            cancelRowChanges="{{ 'COMMON.CANCEL' | translate }}"></dxo-texts>
+                    </dxo-editing>
+                    <dxo-selection mode="single"></dxo-selection>
+
+                    <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
+                    <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+                    
+                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SLAVE.CLIENTID' | translate }}"></dxi-column>
+                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SLAVE.CLIENTKEY' | translate }}"></dxi-column>
+
+
+                 
+                </dx-data-grid>
+            </as-split-area>
+        </as-split>
+    </div>
+</div>
+
+<router-outlet></router-outlet>

@@ -14,8 +14,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.Cloud.Exceptions;
+using Automatica.Core.Internals.Plugins;
 
 namespace Automatica.Core.Internals.Cloud
 {
@@ -29,6 +30,7 @@ namespace Automatica.Core.Internals.Cloud
     public class CloudApi : ICloudApi
     {
         private readonly IConfiguration _config;
+        private readonly IPluginInstaller _pluginInstaller;
         private const string UpdateFileName = "Automatica.Core.Update.zip";
 
         public event EventHandler<DownloadProgressChangedEventArgs> DownloadUpdateProgressChanged;
@@ -36,32 +38,39 @@ namespace Automatica.Core.Internals.Cloud
         public event EventHandler<AsyncCompletedEventArgs> DownloadUpdateFailed;
 
         private const string WebApiVersion = "v2";
+        private const string WebApiPrefix = "webapi";
         
-        public CloudApi(IConfiguration config)
+        public CloudApi(IConfiguration config, IPluginInstaller pluginInstaller)
         {
             _config = config;
+            _pluginInstaller = pluginInstaller;
         }
 
         private string GetUrl()
         {
-            using (var dbContext = new AutomaticaContext(_config))
-            {
-                return $"{dbContext.Settings.SingleOrDefault(a => a.ValueKey == "cloudUrl").ValueText}";
-            }
+            using var dbContext = new AutomaticaContext(_config);
+            return $"{dbContext.Settings.First(a => a.ValueKey == "cloudUrl").ValueText}";
         }
 
         private string GetApiKey()
         {
-            using (var dbContext = new AutomaticaContext(_config))
+            using var dbContext = new AutomaticaContext(_config);
+            var apiKey = dbContext.Settings.First(a => a.ValueKey == "apiKey").ValueText;
+
+            if (string.IsNullOrEmpty(apiKey))
             {
-                return $"{dbContext.Settings.SingleOrDefault(a => a.ValueKey == "apiKey").ValueText}/{ServerInfo.ServerUid}";
+                throw new NoApiKeyException();
             }
+
+            return $"{apiKey}/{ServerInfo.ServerUid}";
         }
 
         private HttpClient SetupClient()
         {
-            var httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+            var httpClientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            };
             // Three versions in one.
             HttpClient client = new HttpClient(httpClientHandler);
 
@@ -74,24 +83,23 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<ServerVersion> CheckForUpdates()
         {
-            return GetRequest<ServerVersion>($"/webapi/{WebApiVersion}/coreServerData/checkForUpdates/{ServerInfo.Rid}/{ServerInfo.GetServerVersion()}");
+            return GetRequest<ServerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForUpdates/{ServerInfo.Rid}/{ServerInfo.GetServerVersion()}");
         }
 
         public Task<IList<Plugin>> GetLatestPlugins()
         {
-            return GetRequest<IList<Plugin>>($"/webapi/{WebApiVersion}/coreServerData/plugins/{ServerInfo.GetServerVersion()}");
+            return GetRequest<IList<Plugin>>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/plugins/{ServerInfo.GetServerVersion()}");
         }
 
         public async Task<bool> SayHelloToCloud(SayHelloData sayHi)
         {
             try
             {
-                await PostRequest<object>($"/webapi/{WebApiVersion}/coreServerData/sayHello", sayHi);
+                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/sayHello", sayHi);
             }
             catch(Exception e)
             {
-
-                SystemLogger.Instance.LogError(e, $"Could not say hi to cloud api");
+                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
                 return false;
             }
             return true;
@@ -106,12 +114,11 @@ namespace Automatica.Core.Internals.Cloud
                 dyn.Subject = subject;
                 dyn.Body = message;
 
-                object test = await PostRequest<object>($"/webapi/{WebApiVersion}/coreServerData/sendMail", dyn);
+                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/sendMail", dyn);
             }
             catch (Exception e)
             {
-
-                SystemLogger.Instance.LogError(e, $"Could not say hi to cloud api");
+                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
                 return false;
             }
             return true;
@@ -121,11 +128,11 @@ namespace Automatica.Core.Internals.Cloud
         {
             try
             {
-                await GetRequest<object>($"/webapi/{WebApiVersion}/coreServerData/ping");
+                await GetRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/ping");
             }
             catch(Exception e)
             {
-                SystemLogger.Instance.LogError(e, $"Could not ping cloud uri");
+                SystemLogger.Instance.LogError(e, "Could not ping cloud uri");
                 return false;
             }
             return true;
@@ -136,25 +143,28 @@ namespace Automatica.Core.Internals.Cloud
             T result = null;
             try
             {
-                using (var client = SetupClient())
+                using var client = SetupClient();
+                var response = await client.GetAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey()))
+                    .ConfigureAwait(false);
+
+                response.EnsureSuccessStatusCode();
+
+                await response.Content.ReadAsStringAsync().ContinueWith(x =>
                 {
-                    var response = await client.GetAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey())).ConfigureAwait(false);
+                    if (x.IsFaulted)
+                        throw x.Exception;
 
-                    response.EnsureSuccessStatusCode();
-
-                    await response.Content.ReadAsStringAsync().ContinueWith(x =>
-                    {
-                        if (x.IsFaulted)
-                            throw x.Exception;
-
-                        SystemLogger.Instance.LogTrace($"Received {x.Result} from {apiUrl}");
-                        result = JsonConvert.DeserializeObject<T>(x.Result);
-                    });
-                }
+                    SystemLogger.Instance.LogTrace($"Received {x.Result} from {apiUrl}");
+                    result = JsonConvert.DeserializeObject<T>(x.Result);
+                });
+            }
+            catch (NoApiKeyException)
+            {
+                throw;
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, $"Could not execute get request to cloud");
+                SystemLogger.Instance.LogError(e, "Could not execute get request to cloud");
             }
 
             return result;
@@ -183,13 +193,13 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<bool> UpdateAlreadyDownloaded()
         {
-            var fileExists = File.Exists(Path.Combine(Path.GetTempPath(), UpdateFileName));
+            var fileExists = File.Exists(Path.Combine(ServerInfo.GetTempPath(), UpdateFileName));
             return Task.FromResult(fileExists);
         }
 
         public void DeleteUpdate()
         {
-            var updateFile = Path.Combine(Path.GetTempPath(), UpdateFileName);
+            var updateFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
 
             if(File.Exists(updateFile))
             {
@@ -201,8 +211,8 @@ namespace Automatica.Core.Internals.Cloud
         {
             var file = await DownloadFile(update.AzureUrl);
 
-            var tmpFile = Path.Combine(Path.GetTempPath(), UpdateFileName);
-            using(var stream = new FileStream(tmpFile, FileMode.OpenOrCreate))
+            var tmpFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
+            await using(var stream = new FileStream(tmpFile, FileMode.OpenOrCreate))
             {
                 stream.Write(file);
             }
@@ -212,8 +222,7 @@ namespace Automatica.Core.Internals.Cloud
 
         public async Task<byte[]> DownloadFile(string url)
         {
-            var webClient = new WebClient();
-
+            using var webClient = new WebClient();
             webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
 
             try
@@ -223,33 +232,22 @@ namespace Automatica.Core.Internals.Cloud
                 DownloadUpdateFinished?.Invoke(this, EventArgs.Empty);
                 return download;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 DownloadUpdateFailed?.Invoke(this, new AsyncCompletedEventArgs(e, false, null));
                 return new byte[0];
             }
         }
 
-        private void WebClient_DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             DownloadUpdateProgressChanged?.Invoke(this, e);
         }
-        
 
-        public async Task<bool> InstallPlugin(Plugin plugin, string fileName)
+
+        public Task<bool> InstallPlugin(Plugin plugin, string fileName)
         {
-            return await Task.Run(() =>
-            {
-                var assemblyInfo = new FileInfo(Assembly.GetEntryAssembly().Location);
-                var directory = Path.Combine(assemblyInfo.DirectoryName, plugin.PluginType == PluginType.Driver ? ServerInfo.DriversDirectory : ServerInfo.LogicsDirectory);
-
-                if (!Directory.Exists(Path.Combine(directory, plugin.ComponentName)))
-                {
-                    Common.Update.Plugin.InstallPlugin(fileName, directory);
-                    return true;
-                }
-                return false;
-            });
+            return _pluginInstaller.InstallPlugin(plugin, fileName);
         }
 
 

@@ -1,5 +1,5 @@
 using System;
-using Automatica.Core.UnitTests.Common;
+using Automatica.Core.UnitTests.Base.Common;
 using P3.Driver.ModBusDriverFactory;
 using Xunit;
 

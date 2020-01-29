@@ -20,6 +20,9 @@ msbuild.err
 msbuild.wrn
 
 .vs/
+*/.vs/
+.vs/**/*
+
 
 /src/automatica.core/Automatica.WebNew/node_modules
 /src/automatica.core/Automatica.Web/node_modules

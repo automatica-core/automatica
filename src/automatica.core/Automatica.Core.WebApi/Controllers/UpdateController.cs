@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Base.Common;
-
 using Automatica.Core.Common.Update;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
@@ -16,23 +15,26 @@ namespace Automatica.Core.WebApi.Controllers
     {
         public bool Result { get; set; }
     }
-    [Route("update")]
+    [Route("webapi/update")]
     public class UpdateController : BaseController
     {
         private readonly ICloudApi api;
+        private readonly IAutoUpdateHandler _updateHandler;
 
         public ICoreServer CoreServer { get; }
 
-        public UpdateController(AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer) : base(dbContext)
+        public UpdateController(AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler) : base(dbContext)
         {
             this.api = api;
+            _updateHandler = updateHandler;
             CoreServer = coreServer;
         }
 
         [HttpGet, Route("checkForUpdate")]
         public async Task<ServerVersion> CheckForUpdate()
         {
-            return await api.CheckForUpdates();
+            var update = await api.CheckForUpdates();
+            return update;
         }
 
         [HttpGet, Route("alreadyDownloaded")]
@@ -47,13 +49,13 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpPost, Route("install")]
-        public Task<ResultDto> Install()
+        public async Task<ResultDto> Install()
         {
-            CoreServer.Update();
-            return Task.FromResult(new ResultDto
+            await _updateHandler.Update();
+            return new ResultDto
             {
                 Result = true
-            });
+            };
         }
 
         [HttpPost, Route("download")]

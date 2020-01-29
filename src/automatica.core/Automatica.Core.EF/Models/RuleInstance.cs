@@ -43,5 +43,39 @@ namespace Automatica.Core.EF.Models
 
         public RuleTemplate This2RuleTemplateNavigation { get; set; }
         public ICollection<RuleInterfaceInstance> RuleInterfaceInstance { get; set; }
+
+        public static RuleInstance CreateFromTemplate(RuleTemplate template)
+        {
+            if (template == null)
+            {
+                throw new ArgumentException($"{nameof(template)} cannot be null");
+            }
+
+            var ruleInstance = new RuleInstance
+            {
+                This2RuleTemplate = template.ObjId,
+                This2RuleTemplateNavigation = template,
+                Name = template.Name,
+                Description = template.Description,
+                ObjId = Guid.NewGuid()
+            };
+
+            foreach (var ruleInterfaceTemplate in template.RuleInterfaceTemplate)
+            {
+                var ruleInterface = new RuleInterfaceInstance
+                {
+                    ObjId = Guid.NewGuid(),
+                    This2RuleInterfaceTemplate = ruleInterfaceTemplate.ObjId,
+                    This2RuleInterfaceTemplateNavigation = ruleInterfaceTemplate,
+                    Value = ruleInterfaceTemplate.DefaultValue,
+                    This2RuleInstance = ruleInstance.ObjId
+                };
+
+                ruleInstance.RuleInterfaceInstance.Add(ruleInterface);
+
+            }
+
+            return ruleInstance;
+        }
     }
 }

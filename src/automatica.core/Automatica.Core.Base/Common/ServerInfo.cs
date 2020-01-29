@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.IO;
+using Automatica.Core.Base.BoardType;
 
 namespace Automatica.Core.Base.Common
 {
@@ -12,6 +14,7 @@ namespace Automatica.Core.Base.Common
         private static DateTime? _startupTimePrivate;
         public const string DbConfigVersionKey = "ConfigVersion";
         public const string ServerExecutable = "Automatica.Core";
+        public const string SlaveExceuteable = "Automatica.Core.Plugin.Dockerize";
         public const string WatchdogExecutable = "Automatica.Core.Watchdog";
         public const string BootloderExecutable = "Automatica.Core.Bootloader";
         public const string UpdateFileName = "Automatica.Core.Update.zip";
@@ -21,6 +24,12 @@ namespace Automatica.Core.Base.Common
 
         public const int ExitCodeUpdateInstall = 2;
         public const int ExitCodePluginUpdateInstall = 3;
+
+
+        public const string SelfSlaveId = "172bb906-b584-4d5d-85e8-b6d881498534";
+
+        public static Guid SelfSlaveGuid => new Guid(SelfSlaveId);
+
         /// <summary>
         /// Gets the loaded config version (increment after every save)
         /// </summary>
@@ -39,12 +48,12 @@ namespace Automatica.Core.Base.Common
         /// <summary>
         /// Directory where the drivers are searched
         /// </summary>
-        public static string DriverDirectoy { get; set; }
+        public static string PluginDirectory { get; set; }
 
         /// <summary>
         /// Driver search pattern, used for development mode
         /// </summary>
-        public static string DriverPattern { get; set; } = "*.dll";
+        public static string PluginFilePattern { get; set; } = "*.dll";
 
         /// <summary>
         /// Indicates if the server runs in development mode
@@ -81,6 +90,9 @@ namespace Automatica.Core.Base.Common
                 {
                     rid = "win-";
                 }
+                else if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                    rid = "osx-";
+                }
 
                 switch (RuntimeInformation.OSArchitecture)
                 {
@@ -107,6 +119,10 @@ namespace Automatica.Core.Base.Common
         /// </summary>
         public static string WebPort { get; set; }
 
+        public static IBoardType BoardType { get; set; }
+
+        public static bool InDocker => Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
 
         /// <summary>
         /// Gets the Automatica.Core version
@@ -115,6 +131,41 @@ namespace Automatica.Core.Base.Common
         public static string GetServerVersion()
         {
             return Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        }
+
+        public static string GetBasePath()
+        {
+            return new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+        }
+
+        public static string GetTempPath()
+        {
+            return Path.GetTempPath();
+        }
+
+        public static string GetConfigDirectory()
+        {
+            var configDir = GetBasePath();
+
+            if (Directory.Exists(Path.Combine(configDir, "config")))
+            {
+                configDir = Path.Combine(configDir, "config");
+            }
+
+            return configDir;
+        }
+
+        public static string GetLogDirectory()
+        {
+            var logDirectory = GetBasePath();
+            logDirectory = Path.Combine(logDirectory, "logs");
+            return logDirectory;
+        }
+        public static string GetTrendingDirectory()
+        {
+            var logDirectory = GetBasePath();
+            logDirectory = Path.Combine(logDirectory, "trending");
+            return logDirectory;
         }
     }
 }

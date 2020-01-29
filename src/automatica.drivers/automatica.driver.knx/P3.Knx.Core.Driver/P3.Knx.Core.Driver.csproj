@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Version>0.5.0</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>9FCFCD63-DA29-432B-BC77-B04B6F52FAFC</ProjectGuid>
@@ -11,9 +11,9 @@
     <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="P3.Elliptic.Curve25519" Version="1.0.0" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.7.0.263" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.7.0.263" />
+    <PackageReference Include="P3.Elliptic.Curve25519" Version="3.0.0" />
+    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

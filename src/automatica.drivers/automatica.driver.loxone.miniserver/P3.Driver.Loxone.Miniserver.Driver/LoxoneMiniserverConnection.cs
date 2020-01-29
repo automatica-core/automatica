@@ -155,7 +155,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             _webSocket.Disconnect();
         }
 
-        private void _webSocket_OnData(byte[] data)
+        private void _webSocket_OnData(object sender, byte[] data)
         {
             lock (_lock)
             {
@@ -236,17 +236,17 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             return rp;
         }
 
-        private void _webSocket_OnSendFailed(string data, Exception ex)
+        private void _webSocket_OnSendFailed(object sender, string data, Exception ex)
         {
             throw new NotImplementedException();
         }
 
-        private void _webSocket_OnClosed(System.Net.WebSockets.WebSocketCloseStatus reason)
+        private void _webSocket_OnClosed(object sender, System.Net.WebSockets.WebSocketCloseStatus reason)
         {
             OnConnectionClosed?.Invoke(this, System.EventArgs.Empty);   
         }
 
-        private void _webSocket_OnMessage(string message)
+        private void _webSocket_OnMessage(object sender, string message)
         {
             if (_encrypted)
             {
@@ -409,7 +409,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
     
 
-        private async void _webSocket_OnStateChanged(System.Net.WebSockets.WebSocketState newState, System.Net.WebSockets.WebSocketState prevState)
+        private async void _webSocket_OnStateChanged(object sender, System.Net.WebSockets.WebSocketState newState, System.Net.WebSockets.WebSocketState prevState)
         {
             if(newState == System.Net.WebSockets.WebSocketState.Open)
             {

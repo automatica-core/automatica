@@ -46,6 +46,9 @@ export enum PropertyTemplateType {
     User2Roles = 201,
     UserGroup2Roles = 202,
     UserGroup = 203,
+    Slave = 204,
+
+    CustomAction = 500,
 
     Invalid = 2147483647
 }
@@ -60,6 +63,25 @@ export class DefaultExtendedPropertyTemplate {
 export class EnumExtendedPropertyTemplate extends DefaultExtendedPropertyTemplate {
 
     public items: any[] = [];
+
+    static createFromEnum(data): string {
+        const objects: { id: number; name: string }[] = [];
+        for (const n in data) {
+            if (typeof data[n] === "number") {
+                objects.push({ id: <any>data[n], name: n });
+            }
+        }
+
+        let retString = "ENUM(";
+        for (const obj of objects) {
+            retString += obj.id + "," + obj.name + ";";
+        }
+        // remove last ;
+        retString = retString.substring(0, retString.length - 1)
+        return retString + ")";
+    }
+
+
 
     constructor(template: PropertyTemplate) {
         super(template);
@@ -83,6 +105,8 @@ export class EnumExtendedPropertyTemplate extends DefaultExtendedPropertyTemplat
             });
         });
     }
+
+
 }
 
 export class RangeExtendedPropertyTemplate extends DefaultExtendedPropertyTemplate {

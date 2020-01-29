@@ -9,31 +9,31 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 
 
 function versionCompare(v1: Version, v2: Version) {
-  if (v1.Major !== v2.Major) {
-    if (v1.Major > v2.Major) {
+  if (v1.major !== v2.major) {
+    if (v1.major > v2.major) {
       return 1;
     } else {
     } return -1;
   }
 
-  if (v1.Minor !== v2.Minor) {
-    if (v1.Minor > v2.Minor) {
+  if (v1.minor !== v2.minor) {
+    if (v1.minor > v2.minor) {
       return 1;
     } else {
       return -1;
     }
   }
 
-  if (v1.Build !== v2.Build) {
-    if (v1.Build > v2.Build) {
+  if (v1.build !== v2.build) {
+    if (v1.build > v2.build) {
       return 1;
     } else {
       return -1;
     }
   }
 
-  if (v1.Revision !== v2.Revision) {
-    if (v1.Revision > v2.Revision) {
+  if (v1.revision !== v2.revision) {
+    if (v1.revision > v2.revision) {
       return 1;
     } else {
       return -1;
@@ -44,7 +44,7 @@ function versionCompare(v1: Version, v2: Version) {
 }
 
 function versionToString(v: Version) {
-  return `${v.Major}.${v.Minor}.${v.Build}.${v.Revision}`;
+  return `${v.major}.${v.minor}.${v.build}.${v.revision}`;
 }
 
 function versionParse(v: string): Version {
@@ -55,34 +55,34 @@ function versionParse(v: string): Version {
   }
   if (split.length === 1) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: 0,
-      Build: 0,
-      Revision: 0
+      major: parseInt(split[0], 10),
+      minor: 0,
+      build: 0,
+      revision: 0
     };
   }
   if (split.length === 2) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: parseInt(split[1], 10),
-      Build: 0,
-      Revision: 0
+      major: parseInt(split[0], 10),
+      minor: parseInt(split[1], 10),
+      build: 0,
+      revision: 0
     };
   }
   if (split.length === 3) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: parseInt(split[1], 10),
-      Build: parseInt(split[2], 10),
-      Revision: 0
+      major: parseInt(split[0], 10),
+      minor: parseInt(split[1], 10),
+      build: parseInt(split[2], 10),
+      revision: 0
     };
   }
   if (split.length === 4) {
     return {
-      Major: parseInt(split[0], 10),
-      Minor: parseInt(split[1], 10),
-      Build: parseInt(split[2], 10),
-      Revision: parseInt(split[3], 10)
+      major: parseInt(split[0], 10),
+      minor: parseInt(split[1], 10),
+      build: parseInt(split[2], 10),
+      revision: parseInt(split[3], 10)
     };
   }
 }
@@ -102,30 +102,32 @@ class PluginStateInstance {
   private corePluginVersion: Version;
 
   constructor(public instance: PluginState) {
-    this.cloudVersion = versionParse(instance.CloudPlugin.Version);
-    if (instance.LoadedPlugin) {
-      this.corePluginVersion = versionParse(instance.LoadedPlugin.Version);
+    if (instance.cloudPlugin) {
+      this.cloudVersion = versionParse(instance.cloudPlugin.version);
+    }
+    if (instance.loadedPlugin) {
+      this.corePluginVersion = versionParse(instance.loadedPlugin.version);
     }
   }
 
   get objId() {
-    return this.instance.CloudPlugin.PluginGuid;
+    return this.instance.cloudPlugin.pluginGuid;
   }
 
   get name() {
-    return this.instance.CloudPlugin.Name;
+    return this.instance.cloudPlugin.name;
   }
 
   get version() {
-    return this.instance.CloudPlugin.Version;
+    return this.instance.cloudPlugin.version;
   }
 
   get type() {
-    return this.instance.CloudPlugin.PluginType === PluginType.Driver ? "Driver" : "Logic";
+    return this.instance.cloudPlugin.pluginType === PluginType.Driver ? "Driver" : "Logic";
   }
 
   get isInstalled(): boolean {
-    if (this.instance.LoadedPlugin) {
+    if (this.instance.loadedPlugin) {
       return true;
     }
     return false;
@@ -217,40 +219,68 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     items: undefined,
     command: (event) => { this.updateAll(); }
   }
-  menuRestart: CustomMenuItem = {
-    id: "restart",
-    label: "Restart",
+  menuInstall: CustomMenuItem = {
+    id: "save",
+    label: "Install all",
     icon: "fa-download",
     items: undefined,
-    command: (event) => { this.restart(); }
+    command: (event) => { this.installAll(); }
+  }
+  menuInstallUpdate: CustomMenuItem = {
+    id: "restart",
+    label: "Install update all",
+    icon: "fa-download",
+    items: undefined,
+    command: (event) => { this.installUpdateAll(); }
   }
 
   plugins: PluginStateInstance[] = [];
   pluginsMap = new Map<string, PluginStateInstance>();
-  constructor(private pluginsService: PluginsService, private updateHubService: UpdateHubService,
-    notify: NotifyService, translationService: TranslationService, private appService: AppService) {
-    super(notify, translationService);
+  constructor(
+    private pluginsService: PluginsService,
+    private updateHubService: UpdateHubService,
+    notify: NotifyService,
+    translationService: TranslationService,
+    appService: AppService) {
+    super(notify, translationService, appService);
 
     this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
-    this.menuRestart.label = translationService.translate("COMMON.RESTART");
+    this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
+    this.menuInstallUpdate.label = translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
 
     this.menuItems.push(this.menuUpdate);
-    this.menuItems.push(this.menuRestart);
+    this.menuItems.push(this.menuInstall);
+    this.menuItems.push(this.menuInstallUpdate);
 
     appService.setAppTitle("PLUGINS.NAME");
   }
 
-  async ngOnInit() {
-
-    this.appService.isLoading = true;
+  async load() {
     try {
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
       for (const p of plugins) {
-        const instance = new PluginStateInstance(p);
-        this.plugins.push(instance);
-        this.pluginsMap.set(p.CloudPlugin.PluginGuid, instance);
+        try {
+          const instance = new PluginStateInstance(p);
+          this.plugins.push(instance);
+          this.pluginsMap.set(p.cloudPlugin.pluginGuid, instance);
+        } catch (error) {
+          console.log(p, error);
+        }
       }
+
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async ngOnInit() {
+
+    this.baseOnInit();
+
+    this.appService.isLoading = true;
+    try {
+      await this.load();
 
       super.registerEvent(this.updateHubService.PluginDownloadProgressChanged, (a) => {
         const instance = this.pluginsMap.get(a[0][0]);
@@ -277,27 +307,44 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   async install($event, data: PluginStateInstance) {
-    await this.updateHubService.installPlugin(data.instance.CloudPlugin);
+    await this.updateHubService.installPlugin(data.instance.cloudPlugin);
   }
   async update($event, data: PluginStateInstance) {
-    await this.updateHubService.updatePlugin(data.instance.CloudPlugin);
+    await this.updateHubService.updatePlugin(data.instance.cloudPlugin);
   }
 
   async updateAll() {
-
-    alert(this.translate.translate("PLUGINS.RESTART_AFTER_INSTALL"));
-
     const items = this.plugins.filter(a => a.cloudIsNewer && a.isInstalled);
-
-    const data = [];
-    for (const x of items) {
-      data.push(x.instance.CloudPlugin);
-    }
+    const data = this.preparePluginList(items);
     await this.updateHubService.updateAllPlugins(data);
+
+    this.appService.isStartingChanged.emit(true);
   }
 
-  async restart() {
-    await this.updateHubService.restart();
+  async installAll() {
+    const items = this.plugins.filter(a => !a.isInstalled);
+    const data = this.preparePluginList(items);
+    await this.updateHubService.installAllPlugins(data);
+
+    this.appService.isStartingChanged.emit(true);
+  }
+
+  async installUpdateAll() {
+    const updateItems = this.plugins.filter(a => a.cloudIsNewer && a.isInstalled);
+    const installItems = this.plugins.filter(a => !a.isInstalled);
+    const items = [...updateItems, ...installItems];
+    const data = this.preparePluginList(items);
+    await this.updateHubService.installUpdateAllPlugins(data);
+
+    this.appService.isStartingChanged.emit(true);
+  }
+
+  preparePluginList(plugins: PluginStateInstance[]) {
+    const data = [];
+    for (const x of plugins) {
+      data.push(x.instance.cloudPlugin);
+    }
+    return data;
   }
 
   itemClick($event) {

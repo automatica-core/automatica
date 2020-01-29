@@ -80,5 +80,26 @@ namespace Automatica.Core.Base.Templates
         /// <param name="template"><see cref="VisuMobileObjectTemplateTypes"/> for available templates</param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
         CreateTemplateCode ChangeDefaultVisuTemplate(Guid id, VisuMobileObjectTemplateTypes template);
+
+        /// <summary>
+        /// Returns the <see cref="RuleTemplate"/> from the given id. Returns null if not found
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        RuleTemplate GetById(Guid id);
+
+        /// <summary>
+        /// Creates a new <see cref="RuleInstance"/> from the given template id
+        /// </summary>
+        /// <param name="templateId"></param>
+        /// <returns></returns>
+        RuleInstance CreateRuleInstance(Guid templateId);
+
+        /// <summary>
+        /// Creates a new <see cref="RuleInstance"/> from the given template.
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        RuleInstance CreateRuleInstance(RuleTemplate template);
     }
 }

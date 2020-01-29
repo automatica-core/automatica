@@ -6,7 +6,6 @@ using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Driver
@@ -21,10 +20,9 @@ namespace Automatica.Core.Driver
         public Guid Id => DriverContext.NodeInstance.ObjId;
         public string Name => DriverContext?.NodeInstance.Name;
 
-
-        private Queue<(IDispatchable, object)> _writeQueue = new Queue<(IDispatchable, object)>();
-        private SemaphoreSlim _writeSemaphore = new SemaphoreSlim(0, short.MaxValue);
-        private CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+        private readonly Queue<(IDispatchable, object)> _writeQueue = new Queue<(IDispatchable, object)>();
+        private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(0, short.MaxValue);
+        private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private Task _writeTask;
 
         public string FullName
@@ -34,7 +32,7 @@ namespace Automatica.Core.Driver
                 var list = new List<string>();
                 GetFullNameRecursive(DriverContext.NodeInstance, ref list);
                 list.Reverse();
-                return list.Join("-");
+                return String.Join("-", list);
             }
         }
 
@@ -110,17 +108,18 @@ namespace Automatica.Core.Driver
                         driverNode.Parent = this;
                         Children.Add(driverNode);
 
-                        if (ChildrensCreated >= DriverContext.LicenseState.MaxDatapoints)
+                        if (DriverContext.LicenseState != null && ChildrensCreated >= DriverContext.LicenseState.MaxDataPoints)
                         {
                             node.State = NodeInstanceState.OutOfDatapoits;
-                            DriverContext.Logger.LogError("Cannot instantiate more datapoints, license exceeded");
+                            DriverContext.Logger.LogError("Cannot instantiate more data-points, license exceeded");
                             return false;
                         }
 
                         driverNode.Configure();
 
-                        DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) => {
-                            if(source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
+                        DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
+                        {
+                            if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
                             {
                                 return;
                             }
@@ -213,7 +212,7 @@ namespace Automatica.Core.Driver
 
         public virtual Task<bool> Read()
         {
-            DriverContext.Logger.LogError($"Read is not implmenent in {DriverContext.NodeInstance.Name}");
+            DriverContext.Logger.LogError($"Read is not implemented in {DriverContext.NodeInstance.Name}");
             return Task.FromResult(false);
         }
 
@@ -232,14 +231,13 @@ namespace Automatica.Core.Driver
             return Task.CompletedTask;
         }
 
-        public virtual async Task<bool> Start()
+        public virtual Task<bool> Start()
         {
             _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
 
-            foreach (var node in Children)
-            {
+            Parallel.ForEach(Children, async node => {
                 var cts = new CancellationTokenSource();
-                cts.CancelAfter(TimeSpan.FromSeconds(30));
+                cts.CancelAfter(TimeSpan.FromMinutes(2));
                 try
                 {
                     var driverStart = await node.Start().WithCancellation(cts.Token);
@@ -257,14 +255,14 @@ namespace Automatica.Core.Driver
                         }
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
                     DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
                 }
-            }
+            });
             
-            return true;
+            return Task.FromResult(true);
         }
 
         private async Task WriteTask()
@@ -278,7 +276,17 @@ namespace Automatica.Core.Driver
 
                     DriverContext.Logger.LogDebug($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
-                    await WriteValue(writeData.Item1, writeData.Item2);
+                    var cts = new CancellationTokenSource();
+                    cts.CancelAfter(TimeSpan.FromSeconds(30));
+
+                    try
+                    {
+                        await WriteValue(writeData.Item1, writeData.Item2).WithCancellation(cts.Token);
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                    }
                 }
             }
             catch(TaskCanceledException)
@@ -328,7 +336,6 @@ namespace Automatica.Core.Driver
         }
 
         public abstract IDriverNode CreateDriverNode(IDriverContext ctx);
-
 
     }
 }

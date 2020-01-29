@@ -1,9 +1,7 @@
 {
   "profiles": {
     "P3.Driver.IkeaTradfriDriverFactory": {
-      "commandName": "Executable",
-      "executablePath": "D:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\win-x64\\Automatica.Core.exe",
-      "workingDirectory": "D:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\"
+      "commandName": "Project"
     }
   }
 }

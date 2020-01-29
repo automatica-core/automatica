@@ -13,7 +13,7 @@ namespace Automatica.Core.Common.Update
     {
         public static bool CheckUpdateFile(ILogger logger, string fileName, string currentRid)
         {
-            var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var tempPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
             var check = CheckUpdateFileInternal(logger, tempPath, fileName, currentRid);
 
             if (Directory.Exists(tempPath))

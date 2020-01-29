@@ -15,8 +15,10 @@ import { VisuObjectInstance } from "../base/model/visu-object-instance";
 import { PropertyTemplate } from "../base/model/property-template";
 import { AreaInstance, AreaTemplate, AreaType } from "../base/model/areas";
 import { CategoryGroup, CategoryInstance } from "../base/model/categories";
-import { AutomaticVisualizationData } from "../base/model/automatic-visualization-data";
 import { Link } from "../base/model/link";
+import { Trending } from "../base/model/trending/trending";
+import { Slave } from "../base/model/slaves/slave";
+import { VisualizationDataFacade } from "../base/model/visualization-data-facade";
 
 @Injectable()
 export class ModelDecoratorService {
@@ -48,8 +50,10 @@ export class ModelDecoratorService {
         new TelegramMessage();
         new WebApiException();
         new Setting();
-        new AutomaticVisualizationData();
+        new VisualizationDataFacade();
 
+        new Trending();
+        new Slave();
 
         // tslint:enable:no-unused-expression
     }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.EF.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("localization")]
+    [Route("webapi/localization")]
     [AllowAnonymous]
     public class LocalizationController : BaseController
     {
-        private readonly LocalizationProvider _provider;
+        private readonly ILocalizationProvider _provider;
 
-        public LocalizationController(LocalizationProvider provider, AutomaticaContext db)
+        public LocalizationController(ILocalizationProvider provider, AutomaticaContext db)
             : base(db)
         {
             _provider = provider;

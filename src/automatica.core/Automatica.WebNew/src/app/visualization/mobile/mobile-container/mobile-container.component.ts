@@ -1,10 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from "@angular/core";
-import { GridsterConfig, GridsterItem, GridsterComponent } from "angular-gridster2";
+import { GridsterConfig, GridsterComponent } from "ngx-gridster";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslationService } from "angular-l10n";
 import { ConfigService } from "../../../services/config.service";
 import { LoginService } from "../../../services/login.service";
-import { BaseService } from "src/app/services/base-service";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { NotifyService } from "src/app/services/notify.service";
 import { VisuService } from "src/app/services/visu.service";
@@ -12,12 +11,11 @@ import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { VisuPage, VisuPageType } from "src/app/base/model/visu-page";
 import { VisuObjectTemplate } from "src/app/base/model/visu-object-template";
-import { BaseModel } from "src/app/base/model/base-model";
-import { NodeInstance } from "src/app/base/model/node-instance";
 import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
-import { RuleInstance } from "src/app/base/model/rule-instance";
-import { AutomaticVisualizationData } from "src/app/base/model/automatic-visualization-data";
-import { NodeDataType, NodeDataTypeEnum } from "src/app/base/model/node-data-type";
+import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
+import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
+import { DeviceService, Orientation } from "src/app/services/device/device.service";
+import { gridTypes } from "ngx-gridster/lib/gridsterConfig.interface";
 
 @Component({
   selector: "mobile-container",
@@ -28,6 +26,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
   options: GridsterConfig;
   private _selectedItem: VisuObjectMobileInstance;
+  orientationSub: any;
 
   @Input()
   public get selectedItem(): VisuObjectMobileInstance {
@@ -46,7 +45,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   @Output()
   selectedItemChange = new EventEmitter<VisuObjectMobileInstance>();
 
-  @ViewChild("gridster")
+  @ViewChild("gridster", { static: false })
   gridster: GridsterComponent;
 
   version: any;
@@ -61,16 +60,17 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     private configService: ConfigService,
     private router: Router,
     private login: LoginService,
-    private appService: AppService) {
+    appService: AppService,
+    private deviceService: DeviceService) {
 
-    super(notify, translate);
+    super(notify, translate, appService);
   }
 
-  itemChange(item, itemComponent) {
+  itemChange() {
     // console.log("itemChanged", item, itemComponent);
   }
 
-  itemResize(item: VisuObjectMobileInstance, itemComponent) {
+  itemResize(item: VisuObjectMobileInstance) {
     // console.log("itemResized", item, itemComponent);
     if (item.itemResized) {
       item.itemResized.emit();
@@ -78,6 +78,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   }
 
   async ngOnInit() {
+
+    this.registerEvent(this.deviceService.orientationChange, () => {
+      this.initGridster();
+    });
+
 
     this.appService.isLoading = true;
     this.visuTemplates = await this.visuService.getVisuTemplates();
@@ -105,7 +110,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
             const data = await this.visuService.getVisuPage(id);
 
-            if (data instanceof AutomaticVisualizationData) {
+            if (data instanceof VisualizationDataFacade) {
               this.page = new VisuPage();
               this.page.Height = 3;
               this.page.Width = 5;
@@ -178,19 +183,57 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
   initGridster() {
 
+    let maxRows = this.page.Height;
+    let maxColumns = this.page.Width;
+    let minRows = this.page.Height;
+    let minColumns = this.page.Width;
+    let keepFixedHeightInMobile = false;
+    let keepFixedWidthInMobile = false;
+    let fixedSize = (window.innerWidth / 2) - 35;
+
+    const gridType: gridTypes = "fitToGridOptions";
+
+    if (this.deviceService.isMobile()) {
+      keepFixedHeightInMobile = true;
+      keepFixedWidthInMobile = true;
+
+      if (this.deviceService.orientation === Orientation.Portrait) {
+        maxRows = this.page.Width;
+        minRows = this.page.Width;
+
+        maxColumns = this.page.Height;
+        minColumns = this.page.Width;
+      } else {
+        maxRows = this.page.Height;
+        minRows = this.page.Height;
+
+        maxColumns = this.page.Width;
+        minColumns = this.page.Width;
+
+        fixedSize = (window.innerHeight / 2) - 65;
+      }
+    }
+
+    console.log("height:", maxRows, "width", maxColumns);
+
     if (!this.page) {
       console.error("cannot init grid because no page has been loaded so far");
       return;
     }
+
     this.options = {
-      gridType: "fit",
+      gridType: gridType,
       mobileBreakpoint: 0,
       itemChangeCallback: this.itemChange,
       itemResizeCallback: this.itemResize,
-      maxRows: this.page.Height,
-      maxCols: this.page.Width,
-      minRows: this.page.Height,
-      minCols: this.page.Width,
+      keepFixedHeightInMobile: keepFixedHeightInMobile,
+      keepFixedWidthInMobile: keepFixedWidthInMobile,
+      fixedColWidth: fixedSize,
+      fixedRowHeight: fixedSize,
+      maxRows: maxRows,
+      maxCols: maxColumns,
+      minRows: minRows,
+      minCols: minColumns,
       enableEmptyCellDrop: true,
       resizable: {
         enabled: true
@@ -211,6 +254,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     }
     if (this.gridster) {
       this.gridster.resize();
+      this.options.api.optionsChanged();
     }
   }
 
@@ -248,7 +292,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     this.selectedItem.isSelected = true;
   }
 
-  async logoutClicked($event) {
+  async logoutClicked() {
     await this.login.logout();
     this.router.navigateByUrl("/login");
   }

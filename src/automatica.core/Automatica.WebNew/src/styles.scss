@@ -1,5 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
+
+@import "themes/generated/variables.base";
+
+.main {
+  height:100%;
+  width:100%;
+}
+
+.a2 {
+  color: $base-accent2 !important;
+}
+
 .draw2d_InputPort{
   fill:red;
   stroke:transparent;
@@ -27,14 +39,16 @@ html, body {
   margin: 0px;
   min-height: 100%;
   height: 100%;
+
+  
+  min-width: 100%;
+  width: 100%;
 }
 
 * {
   box-sizing: border-box;
 }
 
-
-@import "themes/generated/variables.base";
 
 .loading-spinner {
   margin: 100px auto;
@@ -45,7 +59,7 @@ html, body {
 }
 
 .loading-spinner>div {
-  background-color: $base-accent;
+  background-color: $base-accent2;
   height: 100%;
   width: 6px;
   display: inline-block;
@@ -115,7 +129,7 @@ html, body {
     position: absolute;
     margin-top: 150px;
     margin-left: -25px;
-    color: $base-accent;
+    color: $base-accent2;
     font-size: 36px !important;
     font-weight: 600;
   }
@@ -135,11 +149,22 @@ html, body {
 
 
   .panel-height {
-    height: calc(100vh - 170px) !important;
-  }
-  .visu-height {
     height: calc(100vh - 150px) !important;
   }
+  .panel-dashboard {
+    height: calc(100vh - 270px) !important;
+  }
+
+  .visu-height {
+    height: calc(100vh - 70px) !important;
+  }
+  
+  @media only screen and (min-width: 600px) and (min-height: 400px) {
+    .visu-height {
+      height: calc(100vh - 150px) !important;
+    }
+  }
+
   .monitor-panel-height {
     height: calc(100vh - 220px) !important;
   }
@@ -166,3 +191,6 @@ html, body {
     color: red;
   }
 
+  .h-100 {
+    height: 100%;
+  }

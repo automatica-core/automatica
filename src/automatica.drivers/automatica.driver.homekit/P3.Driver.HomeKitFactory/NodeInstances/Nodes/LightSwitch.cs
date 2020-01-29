@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Automatica.Core.Driver;
 using P3.Driver.HomeKit.Hap.Model;
 

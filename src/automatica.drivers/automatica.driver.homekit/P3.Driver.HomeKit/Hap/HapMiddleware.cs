@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using P3.Driver.HomeKit.Hap.Controllers;
-using P3.Driver.HomeKit.Hap.Data;
+using P3.Driver.HomeKit.Hap.TlvData;
+using P3.Driver.HomeKit.Http;
 
 namespace P3.Driver.HomeKit.Hap
 {
@@ -32,7 +34,7 @@ namespace P3.Driver.HomeKit.Hap
 
         public static event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
 
-        private readonly Dictionary<string, HapSession> _sessions = new Dictionary<string, HapSession>();
+        private readonly ConcurrentDictionary<string, HapSession> _sessions = new ConcurrentDictionary<string, HapSession>();
         internal static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.None,
@@ -55,7 +57,7 @@ namespace P3.Driver.HomeKit.Hap
         {
             if (!_sessions.ContainsKey(connectionId))
             {
-                _sessions.Add(connectionId, new HapSession());
+                _sessions.TryAdd(connectionId, new HapSession());
             }
 
             return _sessions[connectionId];
@@ -63,21 +65,25 @@ namespace P3.Driver.HomeKit.Hap
 
         private Tuple<string, byte[]> ReturnError(int state, ErrorCodes error)
         {
+            _logger.LogDebug($"Return error code: {error} state {state}");
             var tlvData = new Tlv();
             tlvData.AddType(Constants.State, state++);
             tlvData.AddType(Constants.Error, error);
-            byte[] output = TlvParser.Serialise(tlvData);
+            byte[] output = TlvParser.Serialize(tlvData);
 
             return new Tuple<string, byte[]>("application/pairing+tlv8", output);    
         }
 
-        public Tuple<string, byte[]> Invoke(string connectionId, string url, string method, byte[] inputData)
+        public Tuple<string, byte[]> Invoke(string connectionId, string url, string method, byte[] inputData,
+            ConnectionSession session)
         {
             if (!_sessions.ContainsKey(connectionId))
             {
-                _sessions.Add(connectionId, new HapSession());
+                _sessions.TryAdd(connectionId, new HapSession());
             }
 
+
+            _logger.LogDebug($"Working on request {url}");
             var queryString = new NameValueCollection();
 
             if (url.Contains("?"))
@@ -100,6 +106,7 @@ namespace P3.Driver.HomeKit.Hap
 
                         if (url.EndsWith("pair-setup"))
                         {
+                            _logger.LogDebug($"Working on pair-setup request");
                             if (_pairController != null && state == 1)
                             {
                                 return ReturnError(state, ErrorCodes.Busy);
@@ -108,17 +115,23 @@ namespace P3.Driver.HomeKit.Hap
                             if (state == 1 && _pairController == null)
                             {
                                 _pairController =
-                                    new PairSetupController(_logger, _pairCode); //Todo: change code to param
+                                    new PairSetupController(_logger, _pairCode);
                             }
 
-                            var data = _pairController.Post(parts);
+                            if (_pairController == null)
+                            {
+                                _logger.LogError($"Something is wrong here, closing tcp connection");
+                                throw new ArgumentException($"Something is wrong here, closing tcp connection");
+                            }
 
-                            var raw = TlvParser.Serialise(data.TlvData);
+                            var data = _pairController.Post(parts, session);
+
+                            var raw = TlvParser.Serialize(data.TlvData);
 
                             if (!data.Ok)
                             {
                                 _pairController = null;
-                                _sessions.Remove(connectionId);
+                                _sessions.TryRemove(connectionId, out var _);
                             }
                             else if (data.State == 5)
                             {
@@ -126,11 +139,12 @@ namespace P3.Driver.HomeKit.Hap
                                 _pairController = null;
                             }
 
-                            return new Tuple<string, byte[]>(data.ContentType, raw);
+                            return new Tuple<string, byte[]>(PairSetupReturn.ContentType, raw);
                         }
 
                         if (url.EndsWith("pair-verify"))
                         {
+                            _logger.LogDebug($"Working on pair-verify request");
                             if (string.IsNullOrEmpty(HapControllerServer.HapControllerLtsk))
                             {
 
@@ -145,16 +159,17 @@ namespace P3.Driver.HomeKit.Hap
                                 _sessions[connectionId] = data.HapSession;
                             }
 
-                            var raw = TlvParser.Serialise(data.TlvData);
+                            var raw = TlvParser.Serialize(data.TlvData);
                             return new Tuple<string, byte[]>(data.ContentType, raw);
                         }
 
                         if (url.EndsWith("pairings"))
                         {
+                            _logger.LogDebug($"Working on pairings");
                             var pair = new PairingController(_logger);
                             var data = pair.Post(parts);
 
-                            var raw = TlvParser.Serialise(data.TlvData);
+                            var raw = TlvParser.Serialize(data.TlvData);
                             return new Tuple<string, byte[]>(data.ContentType, raw);
                         }
 
@@ -170,14 +185,12 @@ namespace P3.Driver.HomeKit.Hap
                     {
                         if (url.EndsWith("characteristics"))
                         {
+                            _logger.LogDebug($"Working on characteristics");
                             var c = new CharacteristicsController(_logger);
                             var data = c.Put(inputData, _sessions[connectionId], _homeKitServer);
 
-                            if (data.Characteristics.Count == 0)
-                            {
-                                return new Tuple<string, byte[]>(data.ContentType, new byte[0]);
-                            }
-                            return new Tuple<string, byte[]>(data.ContentType, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)));
+                            // response with no data if the call was successful - errors need to be implemented
+                            return new Tuple<string, byte[]>(data.ContentType, new byte[0]);
                         }
                     }
                 }
@@ -187,20 +200,29 @@ namespace P3.Driver.HomeKit.Hap
                     {
                         if (url.EndsWith("accessories"))
                         {
-                            var accessoryController = new AccesoriesController();
+                            _logger.LogDebug($"Working on accessories");
+
+                            var accessoryController = new AccesoriesController(_logger);
                             var accessories = accessoryController.Get(_homeKitServer, queryString);
                             var strValue = JsonConvert.SerializeObject(accessories, JsonSettings);
+
+                            _logger.LogDebug($"Sending {strValue}");
 
                             return new Tuple<string, byte[]>("application/hap+json", Encoding.UTF8.GetBytes(strValue));
                         }
 
                         if (url.EndsWith("characteristics"))
                         {
+                            _logger.LogDebug($"Working on characteristics");
+
                             var ids = queryString["id"].Split(",");
                             var c = new CharacteristicsController(_logger);
                             var data = c.Get(ids, _homeKitServer);
+                            var strValue = JsonConvert.SerializeObject(data, JsonSettings);
 
-                            return new Tuple<string, byte[]>(data.ContentType, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data, JsonSettings)));
+                            _logger.LogDebug($"Sending {strValue}");
+
+                            return new Tuple<string, byte[]>(data.ContentType, Encoding.UTF8.GetBytes(strValue));
 
                         }
                     }
@@ -208,7 +230,7 @@ namespace P3.Driver.HomeKit.Hap
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error occured while processing request");
+                _logger.LogError(e, $"{e}: Error occured while processing request");
                 _pairController = null;
             }
             
@@ -217,7 +239,7 @@ namespace P3.Driver.HomeKit.Hap
 
         public void TerminateSession(string session)
         {
-            _sessions.Remove(session);
+            _sessions.TryRemove(session, out var _);
         }
     }
 }

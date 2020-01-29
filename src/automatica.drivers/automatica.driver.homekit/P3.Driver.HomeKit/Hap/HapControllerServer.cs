@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit.Hap.Model;
@@ -17,8 +18,8 @@ namespace P3.Driver.HomeKit.Hap
         private readonly string _pairCode;
 
         private readonly ILogger _logger;
-        internal static string HapControllerLtsk;
-        internal static string HapControllerLtpk;
+        internal static string HapControllerLtsk { get; private set; }
+        internal static string HapControllerLtpk { get; private set; }
 
         private readonly HttpServer _httpServer;
 
@@ -35,7 +36,7 @@ namespace P3.Driver.HomeKit.Hap
             HapControllerId = controllerId;
             _pairCode = pairCode;
 
-            _httpServer = new HttpServer(logger, homeKitServer, port, controllerId, pairCode);
+            _httpServer = new HttpServer(logger, homeKitServer, port, pairCode);
             HapMiddleware.PairingCompleted += PairingCompletedEvent;
         }
         public async Task<bool> Start()
@@ -55,6 +56,7 @@ namespace P3.Driver.HomeKit.Hap
             PairingCompleted?.Invoke(this, e);
         }
 
+
         public async Task<bool> Stop()
         {
             await _httpServer.Stop();
@@ -63,9 +65,18 @@ namespace P3.Driver.HomeKit.Hap
             return true;
         }
 
-        internal void SendNotificiation(Characteristic characteristic, List<HapSession> eventBasedNotification)
+        internal bool SendNotification(Characteristic characteristic, HapSession session)
         {
-            _httpServer.SendNotification(characteristic, eventBasedNotification);
+            if (session == null)
+            {
+                return false;
+            }
+            return _httpServer.SendNotification(characteristic, session);
+        }
+
+        internal HapSession GetClientSession(string clientUserName)
+        {
+            return _httpServer.GetClientSession(clientUserName);
         }
     }
 }

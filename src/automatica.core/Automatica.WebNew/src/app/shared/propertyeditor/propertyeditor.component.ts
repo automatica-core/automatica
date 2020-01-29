@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
 import { TranslationService, Language } from "angular-l10n";
@@ -21,8 +21,12 @@ import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { VirtualAreaPropertyInstance } from "src/app/base/model/virtual-props";
 import { ConfigTreeComponent } from "../config-tree/config-tree.component";
+import { Slave } from "src/app/base/model/slaves/slave";
+import { SlavesService } from "src/app/services/slaves.services";
+import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
+import { AppService } from "src/app/services/app.service";
 
-function sortByOrder(a: PropertyInstance, b: PropertyInstance) {
+function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
     return -1;
   }
@@ -30,15 +34,10 @@ function sortByOrder(a: PropertyInstance, b: PropertyInstance) {
     return 1;
   }
 
-  return 0;
-
-}
-
-function sortByGroupOrder(a: PropertyInstance, b: PropertyInstance) {
-  if (a.PropertyTemplate.GroupOrder < b.PropertyTemplate.GroupOrder) {
+  if (a.Name < b.Name) {
     return -1;
   }
-  if (a.PropertyTemplate.GroupOrder > b.PropertyTemplate.GroupOrder) {
+  if (a.Name > b.Name) {
     return 1;
   }
 
@@ -46,14 +45,15 @@ function sortByGroupOrder(a: PropertyInstance, b: PropertyInstance) {
 
 }
 
-export class LearnNodeInstance {
-  nodeTemplateInstance: NodeTemplate;
 
-  private _nodeTemplates: NodeTemplate[];
-  public get nodeTemplates(): NodeTemplate[] {
+export class LearnNodeInstance {
+  nodeTemplateInstance: LearnModeNodeTemplate;
+
+  private _nodeTemplates: LearnModeNodeTemplate[];
+  public get nodeTemplates(): LearnModeNodeTemplate[] {
     return this._nodeTemplates;
   }
-  public set nodeTemplates(v: NodeTemplate[]) {
+  public set nodeTemplates(v: LearnModeNodeTemplate[]) {
     this._nodeTemplates = v;
   }
 
@@ -108,7 +108,9 @@ export class LearnNodeInstance {
 @Component({
   selector: "p3-propertyeditor",
   templateUrl: "./propertyeditor.component.html",
-  styleUrls: ["./propertyeditor.component.sass"]
+  styleUrls: ["./propertyeditor.component.sass"],
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {
@@ -117,28 +119,28 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @Language()
   lang: any;
 
-  @ViewChild("configTree")
+  @ViewChild("configTree", { static: false })
   configTree: ConfigTreeComponent;
 
-  @ViewChild("popupNodeSelect")
+  @ViewChild("popupNodeSelect", { static: false })
   popupNodeSelect: DxPopupComponent;
   private _popupPropertyInstance: PropertyInstance;
   public selectedNodeInstance: NodeInstance;
   public nodeSelectorVisible: boolean = false;
   public nodeSelectorTreeLoading: boolean = false;
 
-  @ViewChild("popupVisuPageSelect")
+  @ViewChild("popupVisuPageSelect", { static: false })
   popupVisuPageSelect: DxPopupComponent;
   public selectedVisuPage: VisuPage;
   public visuPageSelectorVisible: boolean = false;
 
-  @ViewChild("popupLearnMode")
+  @ViewChild("popupLearnMode", { static: false })
   popupLearnMode: DxPopupComponent;
   public learnedNodeInstances: NodeInstance[] = [];
   public learnModeVisible: boolean = false;
   public learnNodeInstance: LearnNodeInstance[] = [];
 
-  @ViewChild("timerEditPopup")
+  @ViewChild("timerEditPopup", { static: false })
   popupTimerEdit: DxPopupComponent;
   public timerEditPopupVisible: boolean = false;
   public timerEditValue: TimerPropertyData = void 0;
@@ -159,7 +161,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this._item = value;
 
     if (this.item && this.item.Properties) {
-      this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortByGroupOrder).sort(sortByOrder);
+      this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortProperties);
     }
     if (!value) {
       this._properties = [];
@@ -176,8 +178,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     return this._properties;
   }
 
-  @ViewChild("dataTable")
-  dataTable: DxDataGridComponent;
+  @ViewChild("dataTable", { static: false })
+  private dataTable: DxDataGridComponent;
 
   @Output()
   validate = new EventEmitter<any>();
@@ -234,6 +236,19 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this._roles = v;
   }
 
+
+
+  private _slaves: Slave[];
+
+  @Input()
+  public get slaves(): Slave[] {
+    return this._slaves;
+  }
+  public set slaves(v: Slave[]) {
+    this._slaves = v;
+  }
+
+
   get uploadHeader() {
     return { "Authorization": "Bearer " + localStorage.getItem("jwt") };
   }
@@ -241,22 +256,27 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   private inputValidator: InputValidator = new InputValidator();
 
-  @ViewChild("startDateValidator")
+  @ViewChild("startDateValidator", { static: false })
   startDateValidator: DxValidatorComponent;
 
-  @ViewChild("endDateValidator")
+  @ViewChild("endDateValidator", { static: false })
   endDateValidator: DxValidatorComponent;
+
+  @Input()
+  isLoading: boolean;
 
   constructor(
     private config: ConfigService,
     translate: TranslationService,
     private dataHub: DataHubService,
-    private notify: NotifyService) {
-    super(notify, translate);
+    private notify: NotifyService,
+    private slaveService: SlavesService,
+    appService: AppService) {
+    super(notify, translate, appService);
   }
 
-  ngOnInit() {
-
+  async ngOnInit() {
+    this.slaves = await this.slaveService.getSlaves();
   }
 
   flattenAraInit() {
@@ -385,7 +405,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   nodeTemplateSelectItem($event, learnInstance: LearnNodeInstance) {
     if ($event.node.children.length === 0) {
       learnInstance.nodeTemplateInstance = $event.itemData;
-      learnInstance.nodeTemplate = learnInstance.nodeTemplateInstance.ObjId;
+      learnInstance.nodeTemplate = learnInstance.nodeTemplateInstance.nodeTemplate.ObjId;
     }
   }
 
@@ -397,8 +417,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
 
+  async onCustomActionClick($event, data: PropertyInstance) {
+    await this.config.customAction(this.item as NodeInstance, data.PropertyTemplate.Key);
+  }
+
   async onLearnClick($event, data: PropertyInstance) {
     if (data.Parent instanceof NodeInstance) {
+      const currentNode: NodeInstance = data.Parent;
+
       await this.dataHub.enableLearnMode(data.Parent);
       this.learnedNodeInstances = [];
       this.learnModeVisible = true;
@@ -410,13 +436,23 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
           learnNode.name = hubData[0];
           learnNode.key = hubData[0];
           learnNode.description = hubData[1];
-          learnNode.nodeTemplates = BaseService.getValidBaseModels<NodeTemplate>(hubData[2], this.translate);
+          const nodeTemplates = BaseService.getValidBaseModels<NodeTemplate>(hubData[2], this.translate);
+          learnNode.nodeTemplates = [];
 
-          learnNode.nodeTemplates[learnNode.nodeTemplates.length - 1].NeedsInterface2InterfacesType = void 0;
+          for (const nodeTemplate of nodeTemplates) {
+            learnNode.nodeTemplates.push(new LearnModeNodeTemplate(nodeTemplate));
+          }
+
+          const rootElements = learnNode.nodeTemplates.filter(a => a.nodeTemplate.NeedsInterface2InterfacesType === currentNode.NodeTemplate.ProvidesInterface2InterfaceType);
+
+          for (const rootEl of rootElements) {
+            rootEl.ParentId = void 0;
+          }
 
           if (hubData[3]) {
             learnNode.propertyInstances = BaseService.getValidBaseModels<PropertyInstance>(hubData[3], this.translate);
           }
+
           this.learnNodeInstance = [...this.learnNodeInstance, learnNode];
         }
       });

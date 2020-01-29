@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -15,7 +9,6 @@ using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace P3.Driver.EnOcean.DriverFactory
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class EnOceanDriverFactory : Automatica.Core.Driver.DriverFactory
     {
         public static readonly Guid InterfaceGuid = new Guid("eb2c5295-4a34-4389-8bb5-29eddeb67404");
@@ -28,6 +21,11 @@ namespace P3.Driver.EnOcean.DriverFactory
         public override string DriverName => "EnOcean";
         public override Guid DriverGuid => DriverGuidId;
         public override Version DriverVersion => new Version(0, 1, 0, 10);
+
+        public override string ImageName => "automaticacore/plugin-p3.driver.enocean";
+        public override string Tag => "latest-develop";
+
+        public override InterfaceTypeEnum[] UsesInterfaces => new[] {InterfaceTypeEnum.Usb};
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
@@ -61,10 +59,10 @@ namespace P3.Driver.EnOcean.DriverFactory
             EnOceanRorgD2Data.AddRorgD2Templates(factory, _enoceanFactory);
             EnOceanRorgF6Data.AddRorgF6Templates(factory, _enoceanFactory);
 
-            AddWriteableDatapoints(factory);
+            AddWriteAbleDataPoints(factory);
         }
 
-        private void AddWriteableDatapoints(INodeTemplateFactory factory)
+        private void AddWriteAbleDataPoints(INodeTemplateFactory factory)
         {
             var simulatedRelayGuid = new Guid("4a0c8c59-e8c5-4098-8420-15e886f4648f");
             factory.CreateInterfaceType(simulatedRelayGuid, "ENOCEAN.SIMULATED.RELAY.NAME", "ENOCEAN.SIMULATED.RELAY.DESCRIPTION", 1, Int32.MaxValue, false);

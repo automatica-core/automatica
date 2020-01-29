@@ -8,9 +8,9 @@ namespace P3.Knx.Core.Driver.Frames
 {
     internal abstract class KnxFrame
     {
-        protected readonly KnxConnection KnxConnection;
+        protected readonly IKnxConnection KnxConnection;
         public DateTime CreationDateTime { get; }
-        protected KnxFrame(KnxConnection knx, ServiceType serviceType)
+        protected KnxFrame(IKnxConnection knx, ServiceType serviceType)
         {
             KnxConnection = knx;
             CreationDateTime = DateTime.Now;

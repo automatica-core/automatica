@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
-using P3.Driver.HomeKit.Hap.Data;
+using P3.Driver.HomeKit.Hap.TlvData;
 using P3.Elliptic;
 using Ed25519 = Chaos.NaCl.Ed25519;
 
@@ -53,7 +53,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var material = publicKey.Concat(serverUsername).Concat(clientPublicKey).ToArray();
                 var accessoryLtsk = StringToByteArray(HapControllerServer.HapControllerLtsk);
 
-                var proof = Ed25519.Sign(material, accessoryLtsk);
+                var proof = Chaos.NaCl.Ed25519.Sign(material, accessoryLtsk);
 
                 var hdkf = new HkdfSha512();
                 var hkdfEncKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), Encoding.UTF8.GetBytes("Pair-Verify-Encrypt-Salt"),
@@ -62,7 +62,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var encoder = new Tlv();
                 encoder.AddType(Constants.Identifier, serverUsername);
                 encoder.AddType(Constants.Signature, proof);
-                var plaintext = TlvParser.Serialise(encoder);
+                var plaintext = TlvParser.Serialize(encoder);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
                 var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg02"));
@@ -130,8 +130,10 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 var clientPublicKey = StringToByteArray(HapControllerServer.HapControllerLtpk);
                 var material = session.ClientPublicKey.Concat(clientUserName).Concat(session.PublicKey).ToArray();
+
+                session.ClientUsername = Automatica.Core.Driver.Utility.Utils.ByteArrayToString(in clientUserName);
               
-                if (!Ed25519.Verify(signature, material, clientPublicKey))
+                if (!Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
                 {
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.State, 4);

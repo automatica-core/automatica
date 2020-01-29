@@ -1,4 +1,4 @@
-﻿using Automatica.Core.UnitTests.Common;
+﻿using Automatica.Core.UnitTests.Base.Common;
 using Xunit;
 
 namespace P3.Driver.ModBus.Tests

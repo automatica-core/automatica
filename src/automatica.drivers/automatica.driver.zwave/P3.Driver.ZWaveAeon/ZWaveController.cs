@@ -29,19 +29,10 @@ namespace P3.Driver.ZWaveAeon
         {
         }
 
-#if NET || WINDOWS_UWP || NETCOREAPP2_0 || NETSTANDARD2_0
         public ZWaveController(string portName)
             : this(new ZWaveChannel(portName))
         {
         }
-#endif
-
-#if WINDOWS_UWP
-        public ZWaveController(ushort vendorId, ushort productId)
-             : this(new ZWaveChannel(vendorId, productId))
-        {
-        }
-#endif
 
         protected virtual void OnError(ErrorEventArgs e)
         {

@@ -5,6 +5,7 @@ import { RuleInstanceVisuService } from "src/app/services/rule-visu.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 
 enum WindowState {
@@ -35,8 +36,14 @@ export class WindowMonitorComponent extends BaseMobileRuleComponent implements O
   tiltCount = 0;
   unlockedCount = 0;
 
-  constructor(dataHubService: DataHubService, notify: NotifyService, translate: TranslationService, visu: RuleInstanceVisuService, configService: ConfigService) {
-    super(dataHubService, notify, translate, configService, visu);
+  constructor(
+    dataHubService: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    visu: RuleInstanceVisuService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHubService, notify, translate, configService, visu, appService);
   }
 
   async ngOnInit() {

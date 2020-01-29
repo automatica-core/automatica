@@ -82,6 +82,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 KnxHelper.Logger.LogError($"Could not init knx driver {e}");
                 return false;
             }
+
+            KnxHelper.Logger.LogInformation($"Init done...");
+
             return true;
         }
 

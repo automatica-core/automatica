@@ -22,6 +22,8 @@ import { LicenseService } from "./license.service";
 import { SystemService } from "./system.service";
 import { PluginsService } from "./plugins.service";
 import { AppService } from "./app.service";
+import { SlavesService } from "./slaves.services";
+import { NodeInstanceService } from "./node-instance.service";
 
 @NgModule({
   imports: [
@@ -32,6 +34,7 @@ import { AppService } from "./app.service";
     AreaService,
     CategoryService,
     ConfigService,
+    NodeInstanceService,
     DataService,
     DesignTimeDataService,
     LoginService,
@@ -49,7 +52,8 @@ import { AppService } from "./app.service";
     LicenseService,
     SystemService,
     PluginsService,
-    AppService
+    AppService,
+    SlavesService
 
   ]
 })

@@ -12,6 +12,8 @@ namespace Automatica.Core.Internals.License
 {
     public class LicenseContext : ILicenseContext
     {
+        private int _dataPointsInUse = 0;
+
         public const string LicenseFileName = ".automatica.core.lic";
         public string LicensePath { get; }
 
@@ -19,9 +21,18 @@ namespace Automatica.Core.Internals.License
 
         public bool IsLicensed { get; private set; }
 
-        public int MaxDatapoints { get; private set; }
+        public int MaxDataPoints { get; private set; }
 
         public int MaxUsers { get; private set; }
+        public bool DriverLicenseCountExceeded()
+        {
+            return _dataPointsInUse > MaxDataPoints;
+        }
+
+        public void IncrementDriverCount()
+        {
+            ++_dataPointsInUse;
+        }
 
         public List<string> LicensedFeatures { get; set; }
 
@@ -65,12 +76,12 @@ namespace Automatica.Core.Internals.License
 
             if(IsLicensed)
             {
-                MaxDatapoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
+                MaxDataPoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
                 MaxUsers = Convert.ToInt32(_license.ProductFeatures.Get("MaxUsers"));
             }
             else
             {
-                MaxDatapoints = int.MaxValue;
+                MaxDataPoints = int.MaxValue;
                 MaxUsers = int.MaxValue;
             }
             return IsLicensed;

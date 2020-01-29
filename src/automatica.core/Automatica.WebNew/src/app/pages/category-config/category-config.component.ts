@@ -13,7 +13,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
   templateUrl: "./category-config.component.html",
   styleUrls: ["./category-config.component.scss"]
 })
-export class CategoryConfigComponent  extends BaseComponent implements OnInit {
+export class CategoryConfigComponent extends BaseComponent implements OnInit {
   groups: CategoryGroup[] = [];
   categories: CategoryInstance[] = [];
   selectedNode: CategoryInstance = void 0;
@@ -29,8 +29,12 @@ export class CategoryConfigComponent  extends BaseComponent implements OnInit {
     command: (event) => { this.save(); }
   }
 
-  constructor(private catService: CategoryService, translate: TranslationService, private notify: NotifyService, private appService: AppService) {
-    super(notify, translate);
+  constructor(
+    private catService: CategoryService,
+    translate: TranslationService,
+    private notify: NotifyService,
+    appService: AppService) {
+    super(notify, translate, appService);
     appService.setAppTitle("CATEGORIES.NAME");
 
 
@@ -42,8 +46,13 @@ export class CategoryConfigComponent  extends BaseComponent implements OnInit {
     this.appService.isLoading = true;
 
     try {
-      this.groups = await this.catService.getCategoryGroups();
-      this.categories = await this.catService.getCategoryInstances();
+      const [groups, categories] = await Promise.all(
+        [
+          this.catService.getCategoryGroups(),
+          this.catService.getCategoryInstances()
+        ]);
+      this.groups = groups;
+      this.categories = categories;
 
     } catch (error) {
       this.handleError(error);

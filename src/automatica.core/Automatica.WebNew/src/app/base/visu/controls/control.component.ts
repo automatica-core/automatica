@@ -6,8 +6,6 @@ import { LinkComponent } from "./link/link.component";
 import { SliderComponent } from "./slider/slider.component";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { NumberBoxComponent } from "./number-box/number-box.component";
-import { PropertyInstance } from "../../model/property-instance";
-import { DataHubService } from "../../communication/hubs/data-hub.service";
 import { TranslationService } from "angular-l10n";
 import { WindowMonitorComponent } from "./window-monitor/window-monitor.component";
 import { NotifyService } from "src/app/services/notify.service";
@@ -15,6 +13,9 @@ import { BaseComponent } from "../../base-component";
 import { VisuObjectMobileInstance } from "../../model/visu/visu-object-mobile-instance";
 import { BaseMobileComponent } from "../base-mobile-component";
 import { RgbComponent } from "./rgb/rgb.component";
+import { ChartsComponent } from "./charts/charts.component";
+import { GaugeComponent } from "./gauge/gauge.component";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-component",
@@ -40,8 +41,12 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
 
   component: Type<BaseMobileComponent>;
 
-  constructor(private elementRef: ElementRef, notify: NotifyService, translate: TranslationService) {
-    super(notify, translate);
+  constructor(
+    private elementRef: ElementRef,
+    notify: NotifyService,
+    translate: TranslationService,
+    appService: AppService) {
+    super(notify, translate, appService);
   }
 
   ngOnInit() {
@@ -84,6 +89,14 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
       }
       case "rgba": {
         this.component = RgbComponent;
+        break;
+      }
+      case "chart": {
+        this.component = ChartsComponent;
+        break;
+      }
+      case "gauge": {
+        this.component = GaugeComponent;
         break;
       }
       default: {

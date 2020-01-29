@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using Automatica.Core.Model;
 
 namespace Automatica.Core.EF.Models

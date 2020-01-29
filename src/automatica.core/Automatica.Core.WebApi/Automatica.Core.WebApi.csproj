@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>0.8.0.268</Version>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>0.12.1.715</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>50D44EF3-6768-4C8D-9AA7-87016FB3FDEE</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="MessagePack" Version="2.0.335" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
@@ -19,6 +19,6 @@
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
     <ProjectReference Include="..\Automatica.Core.Runtime\Automatica.Core.Runtime.csproj" />
     <ProjectReference Include="..\Automatica.Push\Automatica.Push.csproj" />
-    <ProjectReference Include="..\Drivers\Knx\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj" />
+    <ProjectReference Include="..\Drivers\Knx\P3.Knx.Core.Ets\P3.Knx.Core.Ets.Internal.csproj" />
   </ItemGroup>
 </Project>

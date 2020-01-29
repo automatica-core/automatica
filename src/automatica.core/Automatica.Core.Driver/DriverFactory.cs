@@ -1,5 +1,5 @@
 ﻿using System;
-using Automatica.Core.Base.Localization;
+using System.Collections.Generic;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 
@@ -16,12 +16,33 @@ namespace Automatica.Core.Driver
         public abstract string DriverName { get; }
         public abstract  Guid DriverGuid { get; }
         public abstract Version DriverVersion { get; }
+        public virtual InterfaceTypeEnum[] UsesInterfaces { get; }
 
+        public Guid FactoryGuid => DriverGuid;
+
+        protected DriverFactory()
+        {
+            var usesInterfaces = new List<InterfaceTypeEnum>();
+
+            foreach (var enu in Enum.GetValues(typeof(InterfaceTypeEnum)))
+            {
+                usesInterfaces.Add((InterfaceTypeEnum) enu);
+            }
+
+            UsesInterfaces = usesInterfaces.ToArray();  
+        }
 
         /// <summary>
         /// Indicates that the factory is in development mode and the <see cref="InitNodeTemplates(INodeTemplateFactory)"/> method will be called on every start
         /// </summary>
         public virtual bool InDevelopmentMode => false;
+
+        public virtual string ImageSource => "https://hub.docker.com";
+
+        public virtual string ImageName => DriverName;
+
+        public virtual string Tag => "latest";
+
 
         /// <summary>
         /// The entry point to set your driver definition
@@ -57,6 +78,11 @@ namespace Automatica.Core.Driver
         public virtual void Scan(NodeInstance instance)
         {
             //empty base impl
+        }
+
+        public void InitTemplates(INodeTemplateFactory factory)
+        {
+            InitNodeTemplates(factory);
         }
     }
 }

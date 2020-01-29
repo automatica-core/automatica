@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Driver.Frames;
 
 namespace P3.Knx.Core.Driver
@@ -21,7 +22,7 @@ namespace P3.Knx.Core.Driver
         }
     }
 
-    public abstract class KnxConnection
+    public abstract class KnxConnection : IKnxConnection
     {
 
         internal KnxSender Sender { get; private set; }
@@ -65,6 +66,7 @@ namespace P3.Knx.Core.Driver
         }
         public virtual void Start()
         {
+            KnxHelper.Logger.LogInformation($"Try to connect to {Host}:{Port}...");
             Connect();
 
             Sender = CreateSender();
@@ -102,7 +104,7 @@ namespace P3.Knx.Core.Driver
         public bool Connected { get; protected set; }
 
 
-        internal byte ChannelId { get; private set; }
+        public byte ChannelId { get; private set; }
 
         internal byte GetSequenceNumber()
         {
@@ -114,7 +116,7 @@ namespace P3.Knx.Core.Driver
             _sequenceNumber = value;
         }
 
-        internal byte GenerateSequenceNumber()
+        public byte GenerateSequenceNumber()
         {
             lock (_lock)
             {

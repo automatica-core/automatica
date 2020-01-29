@@ -3,7 +3,7 @@ FROM microsoft/dotnet:sdk AS libnserial
 WORKDIR /app
 
 RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get -y install cmake build-essential
+RUN apt-get -y install cmake build-essential 
 
 RUN mkdir /src
 RUN git clone https://github.com/jcurl/serialportstream.git /src/serialportstream
@@ -11,7 +11,7 @@ RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
 
-FROM node:8.11.2-alpine as node
+FROM node:12-alpine as node
 WORKDIR /src
 
 ARG FONTAWESOME_TOKEN
@@ -28,11 +28,11 @@ RUN npm install
 RUN npm run build-docker
 
 
-FROM microsoft/dotnet:latest
+FROM microsoft/dotnet:latest AS build
 WORKDIR /app
 
 RUN apt-get update 
-RUN apt-get install zip -y
+RUN apt-get install zip net-tools -y
 
 ARG AUTOMATICA_VERSION
 ARG CLOUD_API_KEY
@@ -65,9 +65,6 @@ RUN echo $AUTOMATICA_VERSION
 RUN dotnet publish -c Release -o /tmp/db/ /src/src/automatica.core/CI/Automatica.Core.CI.CreateDatabase
 RUN automatica-cli InstallLatestPlugins -I /app/automatica -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
-#RUN chmod 755 /src/docker/automatica/build-packages.sh
-#RUN /src/docker/automatica/build-packages.sh /src $version
-
 COPY ./src/automatica.core/Automatica.Core/appsettings.json /tmp/db/appsettings.json
 
 RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
@@ -76,8 +73,13 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
 
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+WORKDIR /app/
+
+COPY --from=build /app/ ./
+
+EXPOSE 1883/tcp
 EXPOSE 5001/tcp	
-EXPOSE 5000/tcp 
 
 # Build runtime image
-ENTRYPOINT ["dotnet", "/app/automatica.bootloader/Automatica.Core.Bootloader.dll"]
+ENTRYPOINT ["dotnet", "/app/automatica/Automatica.Core.dll"]

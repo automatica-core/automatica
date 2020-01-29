@@ -1,6 +1,5 @@
 ﻿using Automatica.Core.EF.Models;
-using Automatica.Core.UnitTests.Drivers;
-using P3.Driver.Knx.DriverFactory;
+using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using Xunit;
 

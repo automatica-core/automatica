@@ -1,0 +1,26 @@
+{
+  "PING": {
+    "NAME": "Ping",
+    "DESCRIPTION": "",
+    "DEVICE": {
+      "NAME": "Gerät",
+      "DESCRIPTION": ""
+    },
+    "IP": {
+      "NAME": "Adresse",
+      "DESCRIPTION": ""
+    },
+    "INTERVAL": {
+      "NAME": "Interval [s]",
+      "DESCRIPTION": ""
+    },
+    "TIMEOUT": {
+      "NAME": "Timeout [ms]",
+      "DESCRIPTION": ""
+    },
+    "MIN_SUCCESS": {
+      "NAME": "Min. Erfolgsmeldungen",
+      "DESCRIPTION": ""
+    } 
+  }
+}

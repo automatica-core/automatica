@@ -1,7 +1,5 @@
 ﻿using Automatica.Core.Base.License;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Automatica.Core.Internals.License
 {
@@ -13,7 +11,7 @@ namespace Automatica.Core.Internals.License
         }
         public bool IsLicensed => Context.IsLicensed;
 
-        public int MaxDatapoints => Context.MaxDatapoints;
+        public int MaxDataPoints => Context.MaxDataPoints;
 
         public int MaxUsers => Context.MaxUsers;
 

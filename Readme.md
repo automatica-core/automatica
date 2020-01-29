@@ -1,5 +1,10 @@
 # Automatica.Core
 
+## Donate
+[![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/1Ck4XgAxys3aBjdesKQQ62zx7m4vozUest)](https://en.cryptobadges.io/donate/1Ck4XgAxys3aBjdesKQQ62zx7m4vozUest)
+
+Donate DogeCoin: DPVz6RSAJrXZqTF4sGXpS1dqwvU36hSaAQ
+
 ## Status
 ### Backend Buid ###
 [![Build Status Core](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.core?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=12&branchName=develop)
@@ -9,6 +14,9 @@
 
 ### Develop Automatica.Core.Cloud Status ###
 [![Demo Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
+
+### SonarCloud ###
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=automaticacore&metric=alert_status)](https://sonarcloud.io/dashboard?id=automaticacore)
 
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine. Try it as your smart home hub today.
 
@@ -23,6 +31,7 @@ Automatica is a building management system thats runs on .NET Core and is built 
 * [Implemented drivers/logics](#Implemented-drivers/logics)
    * [Drivers](#drivers)   
    * [Logics](#logics)
+* [Features](#features)
 * [Project structure](#project-structure)
 * [How to build](#how-to-build)
    * [Frontend](#frontend)
@@ -31,8 +40,11 @@ Automatica is a building management system thats runs on .NET Core and is built 
 * [Online Demo](#online-demo)
 * [Docker images](#docker-images)
    * [Run in a docker image](#run-in-a-docker-image)
+   * [How to use this image](#how-to-use-this-image)
+		* [Database](#database)
+			* [SQLite](#sqlite)
+			* [MySQL](#mysql)
 * [Roadmap](#roadmap)
-   * [Core 2.0](#core-20)
    * [Roadmap core](#roadmap-core)   
    * [Roadmap cloud](#roadmap-cloud)   
    * [Roadmap drivers](#roadmap-drivers)   
@@ -57,7 +69,7 @@ At the moment the following drivers & logics are implemented and ready to use, a
 * [Apple HomeKit](./src/automatica.drivers/automatica.driver.homekit)
 * [Hue Bridge Simulator](./src/automatica.drivers/automatica.driver.huebridgesimulator)
 * [Ikea Tradfri](./src/automatica.drivers/automatica.driver.ikeatradfri)
-* [KNX](./src/automatica.drivers/automatica.driver.knx)
+* [KNX+BAOS](./src/automatica.drivers/automatica.driver.knx)
 * [Loxone Miniserver](./src/automatica.drivers/automatica.driver.loxone.miniserver)
 * [MachineFlags](./src/automatica.drivers/automatica.driver.machineflags)
 * [MBus](./src/automatica.drivers/automatica.driver.mbus)
@@ -66,6 +78,7 @@ At the moment the following drivers & logics are implemented and ready to use, a
 * [Times](./src/automatica.drivers/automatica.driver.times)
 * [WakeOnLan](./src/automatica.drivers/automatica.driver.wakeonlan)
 * [ZWave](./src/automatica.drivers/automatica.driver.zwave)
+* [Sonos](./src/automatica.drivers/automatica.driver.sonos)
 
 ## Logics
 * [Compare](./src/automatica.logics/automatica.logic.compare.baseoperations)
@@ -76,7 +89,15 @@ At the moment the following drivers & logics are implemented and ready to use, a
 * [Messenger](./src/automatica.logics/automatica.logic.messenger)
 * [Surveillance](./src/automatica.logics/automatica.logic.surveillance)
 * [Time](./src/automatica.logics/automatica.logic.time)
+* [String](./src/automatica.logics/automatica.logic.string.baseoperations)
 
+# Features
+Automatica.Core provides a rich set of features, for example:
+* Trendings - record datapoints (used later for ML, Reporting,...)
+* ETS Import - import your existing ETS5 project 
+* Dockerizeable - automatica.core can run in a dockerized environment
+* Easy to extend
+* ...TBC....
 
 # Project structure
 This project is a mono repository. The master & develop branch will be splitted nightly.
@@ -84,16 +105,19 @@ This project is a mono repository. The master & develop branch will be splitted 
 The Structure of the project is as follows.
 
     .
-    ├── automatica.build/        # Some build tools for the project (submodule repo)
-    ├── bin/                     # Bin tools for splitting the repo
-    ├── build/                   # Some build tools for the project 
-    ├── docker/                  # Docker build files
-    ├── documentation/           # docfx documentation source
-    ├── images/                  # Image files displayed in the readme.md
-    ├── src/                     # Source files
-    |   ├── automatica.core      # The core system for automatica.core
-    |   ├── automatica.drivers   # Automatica drivers - split repository
-    |   ├── automatica.logics    # Automatica logics - split repository
+    ├── automatica.build/                          # Some build tools for the project (submodule repo)
+    ├── bin/                                       # Bin tools for spliting the repo
+    ├── build/                                     # Some build tools for the project 
+    ├── docker/                                    # Docker build files
+    ├── documentation/                             # docfx documentation source
+    ├── images/                                    # Image files displayed in the readme.md
+    ├── src/                                       # Source files
+    |   ├── automatica.core.plugin.standalone      # Standalone plugins - split repository
+    |   ├── automatica.core.slave                  # Automatica slave - split repository
+    |   ├── automatica.core                        # The core system for automatica.core  - split repository
+    |   ├── automatica.drivers                     # Automatica drivers - split repository
+    |   ├── automatica.logics                      # Automatica logics - split repository
+    |   ├── automatica.supervisor                  # Automatica supervisor - split repository
     ├── LICENSE
     └── README.md
 
@@ -134,16 +158,45 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request! 
 
 Any help is appreciated!
 
-
-# Online Demo
-The demo is currently not available!
-
 # Docker images
 Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
 
 There is also a automaticacore_proxy image which represents an nginx reverse proxy.
 
-The automaticacore_demo is just for demonstration purpose - also for the online demo! 
+
+## How to use this image
+```console
+docker run -it -p 5001:5001 automaticacore/automatica:latest-develop --name automatica
+```
+
+## Database
+Automatica works with different database systems. Currently we support MySQL and SQlite.
+
+The first startup can takeup some time, because the database needs to be initialized.
+
+### SQLite
+```console
+$ docker run -it \
+    -p 5001:5001 \
+    --mount type=bind,source=~/database,target=/app/database \
+    -e DATABASE_TYPE="sqlite" \
+    -e "ConnectionStrings:AutomaticaDatabaseSqlite=Data Source=/app/database/automatica.core.db" \
+    --name automaticacore \
+    automaticacore/automatica:latest-develop
+```
+
+### MySQL
+You need to provide a maria-db server and enter the credentials in the environment variable in the docker run command:
+
+```console
+$ docker run -it \
+    -p 5001:5001 \
+    -e DATABASE_TYPE="mysql" \
+    -e ConnectionStrings:"AutomaticaDatabaseMaria=Server=<server>;User Id=<username>;Password=<password>;Database=<db-name>" \
+    --name automaticacore \
+    automaticacore/automatica:latest-develop
+```
+
 
 ## Run in a docker image
 To just play around with automatica.core use this docker-compose configuration.
@@ -170,15 +223,9 @@ services:
 # Roadmap
 Things I want to implement in the near future - help is appreciated!
 
-## Core 2.0
-* Dockerize Plugins & Core
-    * All plugins and the core should run in several docker containers orchestrated by the core system.
-
 ## Roadmap core   
 * Automatica.Core Mobile
 * Alarms
-* Data Recording
-  * Record data for reporting, AI,....
 * Automatic editor - to generate time/trigger based actions
    * Simulate movement in the building when you are on vacation,etc...
 * Scripting interface
@@ -196,11 +243,9 @@ Things I want to implement in the near future - help is appreciated!
 * ...
 
 ## Roadmap Drivers
-* KNX Weinzierl BAOS (Raspberry PI)
 * ZigBee
 * Z-Wave
 * Fronius Solar API
-* Sonos
 * MQTT
 * 1-Wire
 * Homematic

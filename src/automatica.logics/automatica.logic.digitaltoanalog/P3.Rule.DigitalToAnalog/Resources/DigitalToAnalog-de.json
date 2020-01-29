@@ -12,8 +12,27 @@
         "NAME": "Impuls Ausgang"
       },
       "DELAY": {
-        "NAME":  "Impuls dauer [ms]" 
-      } 
+        "NAME": "Impuls dauer [ms]"
+      }
+    },
+    "TRIGGER": {
+      "NAME": "Trigger",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "Trigger Start"
+      },
+      "OUTPUT": {
+        "NAME": "Trigger Wert"
+      },
+      "DELAY": {
+        "NAME": "Trigger Verzögerung [ms]"
+      },
+      "VALUE": {
+        "NAME": "Trigger Wert"
+      },
+      "VALUE_PARAM": {
+        "NAME": "Trigger Wert"
+      }
     }
   }
 }

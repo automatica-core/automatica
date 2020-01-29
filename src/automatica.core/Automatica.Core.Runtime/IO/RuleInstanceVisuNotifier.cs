@@ -8,15 +8,15 @@ namespace Automatica.Core.Runtime.IO
 {
     public class RuleInstanceVisuNotifier : IRuleInstanceVisuNotify
     {
-        private readonly IHubContext<DataHub> hub;
+        private readonly IHubContext<DataHub> _hub;
 
         public RuleInstanceVisuNotifier(IHubContext<DataHub> hub)
         {
-            this.hub = hub;
+            this._hub = hub;
         }
         public async Task NotifyValueChanged(RuleInstance instance, object value)
         {
-            await hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value);
+            await _hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value);
         }
     }
 }

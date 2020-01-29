@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("telegramMonitor")]
+    [Route("webapi/telegramMonitor")]
     public class TelegramMonitorController : BaseController
     {
         private readonly ITelegramMonitor _telegramMonitor;

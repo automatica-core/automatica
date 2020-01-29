@@ -15,6 +15,7 @@ import { NodeTemplate } from "src/app/base/model/node-template";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 @Component({
   selector: "app-config",
@@ -25,9 +26,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   selectedItem: NodeInstance;
 
-  nodeTemplates: NodeTemplate[];
-
-  @ViewChild("configTree")
+  @ViewChild("configTree", { static: false })
   configTree: ConfigTreeComponent;
 
   deletedConfig: number[] = [];
@@ -36,36 +35,46 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   categoryInstances: CategoryInstance[] = [];
   userGroups: UserGroup[] = [];
 
-  constructor(private configService: ConfigService, private dataHub: DataHubService, private notify: NotifyService,
-    private areaService: AreaService, private categoryService: CategoryService, translate: TranslationService, private userGroupsService: GroupsService, private appService: AppService) {
-    super(notify, translate);
+  constructor(private configService: ConfigService,
+    private dataHub: DataHubService,
+    private notify: NotifyService,
+    private areaService: AreaService,
+    private categoryService: CategoryService,
+    translate: TranslationService,
+    private userGroupsService: GroupsService,
+    appService: AppService,
+    private nodeInstanceService: NodeInstanceService) {
+    super(notify, translate, appService);
 
     appService.setAppTitle("CONFIGURATION.NAME");
   }
 
-  async ngOnInit() {
+  async load() {
     try {
-      this.appService.isLoading = true;
+      this.isLoading = true;
 
-      this.userGroups = await this.userGroupsService.getUserGroups();
+      const [userGroups, areaInstances, categoryInstances] = await Promise.all(
+        [
+          this.userGroupsService.getUserGroups(),
+          this.areaService.getAreaInstances(),
+          this.categoryService.getCategoryInstances(),
+          this.nodeInstanceService.load()
+        ]);
 
-      const templates = await this.configService.getNodeTemplates();
-
-      this.nodeTemplates = templates;
-
-      await this.configTree.loadTree();
-
-      await this.dataHub.subscribe("All");
-
-      this.areaInstances = await this.areaService.getAreaInstances();
-      this.categoryInstances = await this.categoryService.getCategoryInstances();
-
+      this.userGroups = userGroups;
+      this.areaInstances = areaInstances;
+      this.categoryInstances = categoryInstances;
 
     } catch (error) {
       super.handleError(error);
     }
 
-    this.appService.isLoading = false;
+    this.isLoading = false;
+  }
+
+  async ngOnInit() {
+    await this.load();
+    this.baseOnInit();
   }
 
   delete(e) {
@@ -78,13 +87,13 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   }
   async save($event) {
     try {
-      this.appService.isLoading = true;
+      this.isLoading = true;
       await this.configTree.save();
     } catch (error) {
       this.notify.notifyError(error);
       throw error;
     }
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
   validate($event) {
@@ -95,22 +104,18 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     this.selectedItem = event;
   }
 
-  async onReinit($event) {
-    await this.configService.reInitServer();
-  }
-
   scan(nodeInstance: NodeInstance) {
     this.configTree.scan(nodeInstance);
   }
 
   async fileUploaded($event) {
-    this.appService.isLoading = true;
+    this.isLoading = true;
     await this.configTree.fileUploaded($event.item, $event.file.name);
-    this.appService.isLoading = false;
+    this.isLoading = false;
   }
 
   async ngOnDestroy() {
-    await this.dataHub.unsubscribe("All");
+    await this.dataHub.unSubscribeForAll();
   }
 
   onImportData($event) {

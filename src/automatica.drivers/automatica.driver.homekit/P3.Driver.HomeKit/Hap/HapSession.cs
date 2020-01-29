@@ -16,7 +16,7 @@ namespace P3.Driver.HomeKit.Hap
 
         public long InboundBinaryMessageCount { get; internal set; }
         public long OutboundBinaryMessageCount { get; internal set; }
-        public Socket Socket { get; set; }
+        public TcpClient Client { get; set; }
 
         public string ClientUsername { get; set; }
     }

@@ -7,6 +7,7 @@ import { NotifyService } from "src/app/services/notify.service";
 import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
+import { AppService } from "src/app/services/app.service";
 
 export abstract class BaseMobileComponent extends BaseComponent {
     @HostBinding("class.mobile-control") true;
@@ -20,6 +21,8 @@ export abstract class BaseMobileComponent extends BaseComponent {
     @Input()
     public parent: ElementRef;
 
+    private subscribedNodeInstances: Map<string, NodeInstance> = new Map<string, NodeInstance>();
+    _primaryNodeInstance: any;
     nodeInstanceModel: NodeInstance;
 
     public get isLoading(): boolean {
@@ -28,9 +31,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
     public set isLoading(v: boolean) {
         this.item.isLoading = v;
     }
-
-
-    private _nodeInstance: string;
 
     protected _value: any;
 
@@ -64,6 +64,14 @@ export abstract class BaseMobileComponent extends BaseComponent {
         return this.getPropertyValue("foreground_color");
     }
 
+    public get width() {
+        return this.parent.nativeElement.offsetWidth;
+    }
+
+    public get height() {
+        return this.parent.nativeElement.offsetHeight;
+    }
+
     public get displayText() {
         if (this.item.VisuName) {
             return this.item.VisuName;
@@ -71,8 +79,13 @@ export abstract class BaseMobileComponent extends BaseComponent {
         return this.getPropertyValue("text");
     }
 
-    constructor(protected dataHub: DataHubService, notify: NotifyService, translate: TranslationService, private configService: ConfigService) {
-        super(notify, translate);
+    constructor(
+        protected dataHub: DataHubService,
+        notify: NotifyService,
+        translate: TranslationService,
+        private configService: ConfigService,
+        appService: AppService) {
+        super(notify, translate, appService);
 
     }
 
@@ -84,6 +97,11 @@ export abstract class BaseMobileComponent extends BaseComponent {
     getFontSize() {
         return this.getPropertyValue("text_size") + "px";
     }
+
+    public get fontSize() {
+        return this.getPropertyValue("text_size");
+    }
+
     getForegroundColor() {
         return this.getPropertyValue("foreground_color");
     }
@@ -126,37 +144,57 @@ export abstract class BaseMobileComponent extends BaseComponent {
 
     public async registerForItemValues(nodeProperty: PropertyInstance) {
         super.registerEvent(nodeProperty.propertyChanged, async (value) => {
-            await this.registerForNodeValues();
+            const nodeId = this.getPropertyValue("nodeInstance");
+            await this.registerForNodeValues(nodeId);
+            this._primaryNodeInstance = nodeId;
         });
 
-        super.registerEvent(this.dataHub.dispatchValue, (args) => {
-            if (args[1] === this._nodeInstance && args[0] === 0) { // check if node instance and dispatchable type is correct
-                this.value = args[2];
+        super.registerEvent(this.dataHub.dispatchValue, async (args) => {
+            const nodeId = args[1];
+            if (this.subscribedNodeInstances.has(nodeId) && args[0] === 0) { // check if node instance and dispatchable type is correct
+
+                if (this._primaryNodeInstance === nodeId) {
+                    this.value = args[2];
+                }
+                await this.nodeValueReceived(nodeId, args[2]);
             }
         });
 
         if (nodeProperty.Value) {
-            await this.registerForNodeValues();
+            const nodeId = this.getPropertyValue("nodeInstance");
+            this.nodeInstanceModel = await this.registerForNodeValues(nodeId);
+            this._primaryNodeInstance = nodeId;
         }
     }
 
-    private async unregisterForNodeValues() {
-        if (this._nodeInstance) {
-            await this.dataHub.unsubscribe(this._nodeInstance);
+    protected nodeValueReceived(nodeId: string, value: any): Promise<void> {
+        return Promise.resolve();
+    }
+
+    private async unregisterForNodeValues(nodeId: string) {
+        if (nodeId) {
+            await this.dataHub.unsubscribe(nodeId);
+
+            if (this.subscribedNodeInstances.has(nodeId)) {
+                this.subscribedNodeInstances.delete(nodeId);
+            }
         }
 
     }
-    private async registerForNodeValues() {
 
-        this.unregisterForNodeValues();
-        const nodeProperty = this.getPropertyValue("nodeInstance");
+    protected async registerForNodeValues(nodeId: string) {
+        this.unregisterForNodeValues(nodeId);
 
-        if (nodeProperty) {
-            this.nodeInstanceModel = await this.configService.getSingleNodeInstance(nodeProperty);
+        if (nodeId) {
+            const node = await this.configService.getSingleNodeInstance(nodeId);
 
-            await this.dataHub.subscribe(nodeProperty);
-            this._nodeInstance = nodeProperty;
+            this.subscribedNodeInstances.set(nodeId, node);
+
+            await this.dataHub.subscribe(nodeId);
+
+            return node;
         }
+        return void 0;
     }
 
 

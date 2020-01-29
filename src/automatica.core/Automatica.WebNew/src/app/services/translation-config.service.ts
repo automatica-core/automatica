@@ -4,8 +4,6 @@ import { TranslationService, LocaleService, StorageStrategy, ProviderType, L10nC
 import { loadMessages, locale } from "devextreme/localization"
 import { HttpClient } from "@angular/common/http";
 
-import "devextreme-intl";
-
 import * as deMessages from "devextreme/localization/messages/de.json";
 import * as enMessages from "devextreme/localization/messages/en.json";
 

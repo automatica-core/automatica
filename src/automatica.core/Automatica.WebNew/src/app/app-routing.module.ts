@@ -17,6 +17,7 @@ import { LoginFormComponent } from "./shared/components/login-form/login-form.co
 import { AreasEtsImportComponent } from "./pages/area-config/areas-ets-import/areas-ets-import.component";
 import { VisualizationComponent } from "./visualization/visualization.component";
 import { Role } from "./base/model/user/role";
+import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
 
 const routes: Routes = [
     {
@@ -75,6 +76,9 @@ const routes: Routes = [
             }, {
                 path: "plugins",
                 component: PluginsComponent
+            }, {
+                path: "slaves",
+                component: SlaveConfigComponent
             }]
     },
     {
@@ -84,7 +88,7 @@ const routes: Routes = [
                 redirectTo: "page",
                 pathMatch: "full"
             }, {
-                path: "page", loadChildren: "./visualization/mobile/mobile-view.module#MobileViewModule"
+                path: "page", loadChildren: () => import('./visualization/mobile/mobile-view.module').then(m => m.MobileViewModule)
             }
         ],
     },

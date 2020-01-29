@@ -12,9 +12,8 @@ namespace P3.Driver.Constants
     {
         // the timer is used to sent the value every 10 sec
         private readonly Timer _dispatchTimer = new Timer();
-        private double? _value = null;
+        private object _value = null;
 
-        internal double? Value => this._value;
 
         public Constant(IDriverContext ctx) : base(ctx)
         {
@@ -23,10 +22,12 @@ namespace P3.Driver.Constants
 
         }
 
+        public object Value => _value;
+
         // timer elapsed method
         private void _dispatchTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_value.HasValue)
+            if (_value != null)
             {
                 // dispatch the value
                 DispatchValue(_value);
@@ -45,7 +46,12 @@ namespace P3.Driver.Constants
             }
             else if (DriverContext.NodeInstance.This2NodeTemplateNavigation.Key == "const_doublepi")
             {
-                _value = Math.PI *2;
+                _value = Math.PI * 2;
+            }
+            else if (DriverContext.NodeInstance.This2NodeTemplateNavigation.Key == "const_string")
+            {
+                var prop = GetPropertyValueString("const_value"); // get the value property
+                _value = prop;
             }
             else
             {

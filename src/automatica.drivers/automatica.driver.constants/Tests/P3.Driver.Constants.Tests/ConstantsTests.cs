@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Base.Drivers;
 using Xunit;
 
 namespace P3.Driver.Constants.Tests
@@ -27,7 +27,7 @@ namespace P3.Driver.Constants.Tests
             var con = driver.Children[0] as Constant;
 
             Assert.NotNull(con);
-            Assert.Equal(100, con.Value);
+            Assert.Equal(100d, con.Value);
         }
 
         [Fact]
@@ -85,6 +85,29 @@ namespace P3.Driver.Constants.Tests
 
             Assert.NotNull(con);
             Assert.Equal(Math.PI  * 2, con.Value);
+        }
+
+        [Fact]
+        public void Test_ConstantString()
+        {
+            var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
+            var valueId = CreateNodeInstance(ConstantsDriverFactory.StringValueId);
+
+            var prop = valueId.PropertyInstance.SingleOrDefault(a => a.This2PropertyTemplate == ConstantsDriverFactory.StringPropertyValueId);
+            Assert.NotNull(prop);
+            prop.Value = "test123";
+
+            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
+
+            var driver = CreateDriver(constantsRoot);
+
+            Assert.True(driver.Children.Count == 1);
+            Assert.IsType<Constant>(driver.Children[0]);
+
+            var con = driver.Children[0] as Constant;
+
+            Assert.NotNull(con);
+            Assert.Equal("test123", con.Value);
         }
     }
 }

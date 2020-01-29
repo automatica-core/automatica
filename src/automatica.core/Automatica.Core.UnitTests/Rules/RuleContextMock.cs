@@ -4,11 +4,10 @@ using Automatica.Core.Base.License;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 using Automatica.Core.UnitTests.Base.Common;
-using Automatica.Core.UnitTests.Common;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Automatica.Core.UnitTests.Rules
+namespace Automatica.Core.UnitTests.Base.Rules
 {
     public class RuleInstanceVisuNotifyMock : IRuleInstanceVisuNotify
     {
@@ -20,13 +19,14 @@ namespace Automatica.Core.UnitTests.Rules
 
     public class RuleContextMock : IRuleContext
     {
-        public RuleContextMock(RuleInstance instance)
+        public RuleContextMock(RuleInstance instance, IDispatcher dispatcher)
         {
             RuleInstance = instance;
             Notify = new RuleInstanceVisuNotifyMock();
+            Dispatcher = dispatcher;
         }
         public RuleInstance RuleInstance { get; }
-        public DispatcherMock Dispatcher => DispatcherMock.Instance;
+        public IDispatcher Dispatcher { get; }
 
         public IRuleInstanceVisuNotify Notify { get; }
 
@@ -34,7 +34,6 @@ namespace Automatica.Core.UnitTests.Rules
         public IServerCloudApi CloudApi => new CloudApiMock();
         public ILicenseContract LicenseContract => new LicenseContractMock();
 
-        IDispatcher IRuleContext.Dispatcher => Dispatcher;
     }
 
    

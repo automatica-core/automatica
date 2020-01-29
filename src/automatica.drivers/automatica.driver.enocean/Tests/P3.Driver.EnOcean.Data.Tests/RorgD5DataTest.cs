@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.EF.Models;
-using Automatica.Core.UnitTests.Common;
-using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory;
 using P3.Driver.EnOcean.DriverFactory.Driver;
@@ -52,15 +51,15 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public void TestCoBit()
+        public async Task TestCoBit()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_CO_Guid);
 
             var telegram = CreatePacket("55000707017AD509019DC2E80001FFFFFFFF5E0011");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -69,15 +68,15 @@ namespace P3.Driver.EnOcean.Data.Tests
 
         }
         [Fact]
-        public void TestLrnBit_False()
+        public async Task TestLrnBit_False()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_LRN_Guid);
 
             var telegram = CreatePacket("55000707017AD509019DC2E80001FFFFFFFF5E0011");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 
@@ -86,15 +85,15 @@ namespace P3.Driver.EnOcean.Data.Tests
 
         }
         [Fact]
-        public void TestLrnBit_True()
+        public async Task TestLrnBit_True()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_LRN_Guid);
 
             var telegram = CreatePacket("55000707017AD510019DC2E80001FFFFFFFF5E0011");
             driver.TelegramReceived(telegram);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.NotNull(values);
 

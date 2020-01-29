@@ -21,7 +21,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
   _isDirty: boolean = false;
 
-  @ViewChild("tree")
+  @ViewChild("tree", { static: false })
   tree: DxTreeListComponent;
 
   private mapList: Map<any, AreaInstance> = new Map<any, AreaInstance>();
@@ -71,8 +71,8 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     private notify: NotifyService,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private appService: AppService) {
-    super(notify, translationService);
+    appService: AppService) {
+    super(notify, translationService, appService);
     this.menuItems = [];
 
 
@@ -113,9 +113,13 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   async loadConfig() {
     this.appService.isLoading = true;
     try {
-      this.templates = await this.areasService.getAreaTemplates();
+      const [templates, instances] = await Promise.all(
+        [
+          this.areasService.getAreaTemplates(),
+          this.areasService.getAreaInstances()
+        ]);
 
-      const instances = await this.areasService.getAreaInstances();
+      this.templates = templates;
 
       this.instances = [];
 
@@ -199,7 +203,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     const menuItems = this.menuItems;
     this.menuItems = [];
-    this.changeRef.detectChanges();
+    // this.changeRef.detectChanges();
     this.menuItems = menuItems;
   }
 

@@ -34,18 +34,18 @@ export class DataHubService extends BaseHub {
     }
 
     public subscribe(nodeInstance: string) {
-        super.callHubProxyWithParam("subscribe", nodeInstance);
+        return super.callHubProxyWithParam("subscribe", nodeInstance);
     }
     public unsubscribe(nodeInstance: string) {
-        super.callHubProxyWithParam("unsubscribe", nodeInstance);
+        return super.callHubProxyWithParam("unsubscribe", nodeInstance);
     }
 
     public enableLearnMode(nodeInstance: NodeInstance) {
-        super.callHubProxyWithParam("enableLearnMode", nodeInstance.toJson());
+        return super.callHubProxyWithParam("enableLearnMode", nodeInstance.toJson());
     }
 
     public disableLearnMode(nodeInstance: NodeInstance) {
-        super.callHubProxyWithParam("disalbeLearnMode", nodeInstance.toJson());
+        return super.callHubProxyWithParam("disalbeLearnMode", nodeInstance.toJson());
     }
 
 }

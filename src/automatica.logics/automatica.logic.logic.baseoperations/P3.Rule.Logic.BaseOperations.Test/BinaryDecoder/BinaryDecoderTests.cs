@@ -1,3 +1,4 @@
+using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Logic.BaseOperations.BinaryDecoder;
 using Xunit;

@@ -1,36 +1,25 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
-using Newtonsoft.Json.Linq;
-using P3.Driver.IkeaTradfri.Models;
+using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
 {
-    public class IkeaTradfriLightColorNode : IkeaTradfriDevice
+    public class IkeaTradfriLightColorNode : IkeaTradfriAttribute
     {
         private string _value;
 
-        public IkeaTradfriLightColorNode(IDriverContext driverContext, IkeaTradfriContainerNode container) : base(driverContext, container, TradfriDeviceType.LightControl)
+        public IkeaTradfriLightColorNode(IDriverContext driverContext, IkeaTradfriContainerNode container) : base(driverContext, container, DeviceType.Light)
         {
         }
 
-        protected override void Update(JToken device)
+        internal override void Update(TradfriDevice device)
         {
-            if (device is JArray array)
-            {
-                var valueProp = ((int)TradfriConstAttribute.LightColorHex).ToString();
-
-                var strValue = array.First()[valueProp].ToString();
-
-                if (strValue != _value)
-                {
-                    _value = strValue;
-                    DispatchValue(_value);
-                }
-            }
+            _value = device.LightControl[0].ColorHex;
+            DispatchValue(_value);
         }
+
         public override Task<bool> Read()
         {
             DispatchValue(_value);

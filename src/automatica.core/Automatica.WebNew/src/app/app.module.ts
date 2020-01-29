@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { NgModule, APP_INITIALIZER, Injectable } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 
@@ -26,16 +26,21 @@ import { LoginFormModule } from "./shared/components/login-form/login-form.modul
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ServicesModule } from "./services/services.module";
 import { SharedModule } from "./shared/shared.module";
-import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule } from "devextreme-angular";
+import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxScrollViewModule } from "devextreme-angular";
 import { AutomaticaCommunicationModule } from "./base/communication/automatica-communication.module";
 import { AngularSplitModule } from "angular-split";
-import { DndModule, DragDropConfig, DataTransferEffect, DragImage } from "ngx-dnd";
+import { DndModule, DragDropConfig, DataTransferEffect, DragImage } from "p3root-angular-dnd";
 import { AreasEtsImportComponent } from "./pages/area-config/areas-ets-import/areas-ets-import.component";
 import { MobileModule } from "./visualization/mobile/mobile.module";
 import { HasRoleGuard } from "./services/login.service";
 import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
+import { SlavesService } from "./services/slaves.services";
+import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
+import { DeviceDetectorModule } from "ngx-device-detector";
+import { DeviceService } from "./services/device/device.service";
 
+@Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
   public onDragStartClass: string = "dnd-drag-start";
   public onDragEnterClass: string = "dnd-drag-enter";
@@ -84,8 +89,10 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     DxTextAreaModule,
     DxProgressBarModule,
     VisualizationModule,
+    DxScrollViewModule,
     MobileModule,
-    StartingOverlayModule
+    StartingOverlayModule,
+    DeviceDetectorModule.forRoot()
   ],
   providers: [
     {
@@ -97,7 +104,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     TranslationConfigService,
     CustomDragDropConfig,
     { provide: DragDropConfig, useValue: new CustomDragDropConfig() },
-    HasRoleGuard
+    HasRoleGuard,
+    DeviceService
   ],
   bootstrap: [
     AppComponent
@@ -116,7 +124,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     LicenseComponent,
     SystemComponent,
     PluginsComponent,
-    AreasEtsImportComponent
+    AreasEtsImportComponent,
+    SlaveConfigComponent
   ]
 })
 export class AppModule {

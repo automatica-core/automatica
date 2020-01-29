@@ -15,6 +15,7 @@ import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { AreaInstance } from "src/app/base/model/areas";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 @Component({
   selector: "app-visualisation-edit",
@@ -101,8 +102,10 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
     private changeRef: ChangeDetectorRef,
     private notify: NotifyService,
     private areaService: AreaService,
-    private userGroupsService: GroupsService, private appService: AppService) {
-    super(notify, translate);
+    private userGroupsService: GroupsService,
+    appService: AppService,
+    private nodeInstanceService: NodeInstanceService) {
+    super(notify, translate, appService);
 
     appService.setAppTitle("VISU.NAME");
   }
@@ -154,7 +157,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
   onTabClick($event) {
     this.selectedVisuObject = void 0;
-    this.changeRef.detectChanges();
+    // this.changeRef.detectChanges();
 
     this.selectedItem = $event.itemData;
     this.selectedVisuPage = $event.itemData;
@@ -182,10 +185,19 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
 
     try {
-      this.userGroups = await this.userGroupsService.getUserGroups();
 
-      this.areaInstances = await this.areaService.getAreaInstances();
-      this.templates = await this.visuService.getVisuTemplates();
+      const [userGroups, areaInstances, templates, pages] = await Promise.all(
+        [
+          this.userGroupsService.getUserGroups(),
+          this.areaService.getAreaInstances(),
+          this.visuService.getVisuTemplates(),
+          this.visuService.getVisuPages(),
+          this.nodeInstanceService.load()
+        ]);
+      this.userGroups = userGroups;
+      this.areaInstances = areaInstances;
+      this.templates = templates;
+
 
       for (const x of this.templates) {
         const menu = {
@@ -200,7 +212,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
       this.templates = this.templates.filter(a => a.IsVisibleForUser);
 
-      this.pages = await this.visuService.getVisuPages();
+      this.pages = pages;
 
       if (this.pages.length > 0) {
         this.selectedVisuPage = this.pages[0];

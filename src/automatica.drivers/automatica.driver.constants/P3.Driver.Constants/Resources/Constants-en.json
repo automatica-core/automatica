@@ -18,6 +18,10 @@
       "PI": {
         "NAME": "PI",
         "DESCRIPION": "Represents PI"
+      },
+      "STRING": {
+        "NAME": "String",
+        "DESCRIPION": "Returns a fixed string"
       }
     },
     "PROPERTY": {

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Time.DelayedOn;
 using Xunit;
@@ -11,7 +12,8 @@ namespace P3.Rule.Time.Tests.DelayedOn
         [Fact]
         public async void TestDelayedOnRule()
         {
-            Context.Dispatcher.Clear();
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
 
             Rule.ValueChanged(GetRuleInterfaceByTemplate(DelayedOnRuleFactory.RuleTrigger), Dispatchable, true);
 
@@ -26,7 +28,8 @@ namespace P3.Rule.Time.Tests.DelayedOn
         [Fact]
         public async void TestDelayedOnRule2()
         {
-            Context.Dispatcher.Clear();
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
 
             var paramDelay = GetRuleInterfaceByTemplate(DelayedOnRuleFactory.RuleParamDelay);
             paramDelay.Value = 1;

@@ -15,8 +15,8 @@ export class VirtualPropertyInstance extends PropertyInstance {
 
         this.PropertyTemplate.Group = "COMMON.CATEGORY.MISC";
 
-        this.PropertyTemplate.GroupOrder = -1;
-        this.PropertyTemplate.Order = 1;
+        this.PropertyTemplate.GroupOrder = -10;
+        this.PropertyTemplate.Order = -10;
         this.PropertyTemplate.IsVisible = true;
     }
 }

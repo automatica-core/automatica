@@ -25,7 +25,7 @@ export class ServerStateService {
   async isStarted(): Promise<boolean> {
     try {
       const currentServerState = await this.configService.getServerState();
-      const state: RunState = currentServerState.Status;
+      const state: RunState = currentServerState.status;
       this.serverState = state;
 
       return state === RunState.Started;

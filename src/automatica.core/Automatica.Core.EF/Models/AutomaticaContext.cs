@@ -8,11 +8,15 @@ using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using System;
 using Automatica.Core.Model.Models.User;
+using Automatica.Core.EF.Models.Trendings;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.EF.Models
 {
     public class AutomaticaContext : DbContext
     {
+        private readonly bool _extendedLogs;
         public virtual DbSet<BoardInterface> BoardInterfaces { get; set; }
         public virtual DbSet<BoardType> BoardTypes { get; set; }
         public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
@@ -52,7 +56,7 @@ namespace Automatica.Core.EF.Models
 
 
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Model.Models.User.User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<Priviledge> Priviledges { get; set; }
         public virtual DbSet<User2Group> User2Groups { get; set; }
@@ -62,35 +66,105 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<UserGroup2Role> UserGroup2Roles { get; set; }
         public virtual DbSet<Plugin> Plugins { get; set; }
 
+        public virtual DbSet<Trending> Trendings { get; set; }
+        public virtual DbSet<Slave> Slaves { get; set; }
+
         public IConfiguration Configuration { get; }
 
         public AutomaticaContext(IConfiguration configuration)
         {
             Configuration = configuration;
-
-
         }
+        public AutomaticaContext(IConfiguration configuration, bool extendedLogs) : this(configuration)
+        {
+            _extendedLogs = extendedLogs;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string conString = Configuration.GetConnectionString("AutomaticaDatabase");
-                var sqliteConBuilder = new SqliteConnectionStringBuilder(conString);
+                var logger = new DatabaseLoggerFactory();
+                var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
+                var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
+                var loggerInstance = NullLogger.Instance; // logger.CreateLogger("database");
 
-                var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-                var dbFile = Path.Combine(fi.DirectoryName, sqliteConBuilder.DataSource);
-                var dbInitFile = Path.Combine(fi.DirectoryName, DatabaseConstants.DatabaseInitName);
+                string useDbType = envDbType;
 
-                if (File.Exists(dbInitFile) && !File.Exists(dbFile))
+                if (string.IsNullOrEmpty(envDbType))
                 {
-                    File.Copy(dbInitFile, dbFile);
+                    useDbType = dbType;
+                    loggerInstance.LogWarning($"Using databasetype from appsettings, environment variable \"DATABASE_TYPE\" is not set");
                 }
 
-                optionsBuilder.UseSqlite(conString);
-                //    optionsBuilder.UseLoggerFactory(new DatabaseLoggerFactory());
+                if (string.IsNullOrEmpty(dbType))
+                {
+                    loggerInstance.LogError($"No DatabaseType is set! Using sqlite database driver!");
+                    useDbType = "sqlite";
+                    dbType = useDbType;
+                }
+
+                
+
+                switch(useDbType.ToLower())
+                {
+                    case "sqlite":
+                        ConfigureSqLiteDatabase(optionsBuilder, loggerInstance);
+                        break;
+                    case "mariadb":
+                        ConfigureMariaDatabase(optionsBuilder, loggerInstance);
+                        break;
+                    case "memory":
+                        optionsBuilder.UseInMemoryDatabase("automatica");
+                        loggerInstance.LogInformation($"Using MemoryDatabase provider...");
+                        break;
+                    default:
+                        loggerInstance.LogCritical($"No or invalid database provider configured {dbType.ToLower()}\nSupported are sqlite, mariadb, memory");
+                        break;
+                }
+
+
+                if (_extendedLogs || !string.IsNullOrEmpty($"DATABASE_LOGS"))
+                {
+                    optionsBuilder.UseLoggerFactory(logger);
+                }
             }
 
             optionsBuilder.EnableSensitiveDataLogging();
+        }
+
+        private void ConfigureMariaDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
+        {
+            logger.LogInformation($"Using MariaDB database engine...");
+
+            var mariaDbConString = $"Server={Environment.GetEnvironmentVariable("MARIADB_HOST")};User Id={Environment.GetEnvironmentVariable("MARIADB_USER")};Password={Environment.GetEnvironmentVariable("MARIADB_PASSWORD")};Database=automatica";
+
+            if(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MARIADB_HOST")))
+            {
+                mariaDbConString = Configuration.GetConnectionString($"AutomaticaDatabaseMaria");
+                logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
+            }
+
+            optionsBuilder.UseMySql(mariaDbConString);
+        }
+
+        private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
+        {
+
+            logger.LogInformation($"Using SQLite database engine...");
+            string conString = Configuration.GetConnectionString("AutomaticaDatabaseSqlite");
+            var sqliteConBuilder = new SqliteConnectionStringBuilder(conString);
+
+            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
+            var dbFile = Path.Combine(fi.DirectoryName, sqliteConBuilder.DataSource);
+            var dbInitFile = Path.Combine(fi.DirectoryName, DatabaseConstants.DatabaseInitName);
+
+            if (File.Exists(dbInitFile) && !File.Exists(dbFile))
+            {
+                File.Copy(dbInitFile, dbFile);
+            }
+
+            optionsBuilder.UseSqlite(conString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -100,14 +174,14 @@ namespace Automatica.Core.EF.Models
                 entity.HasKey(e => e.ObjId);
                 entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.ValueKey).HasColumnType("varchar(254)").IsRequired();
-                entity.Property(e => e.ValueText).HasColumnType("text");
-                entity.Property(e => e.ValueInt).HasColumnType("int");
-                entity.Property(e => e.ValueDouble).HasColumnType("double");
-                entity.Property(e => e.Type).HasColumnType("int");
+                entity.Property(e => e.ValueKey).IsRequired();
+                entity.Property(e => e.ValueText);
+                entity.Property(e => e.ValueInt);
+                entity.Property(e => e.ValueDouble);
+                entity.Property(e => e.Type);
                 entity.Property(e => e.IsVisible).HasDefaultValue(false);
 
-                entity.Property(e => e.Group).HasColumnType("varchar(1024)").HasDefaultValue("System");
+                entity.Property(e => e.Group).HasDefaultValue("System");
                 entity.Ignore(e => e.TypeInfo);
             });
 
@@ -180,10 +254,10 @@ namespace Automatica.Core.EF.Models
                     .IsRequired()
                     .HasMaxLength(1024).HasDefaultValue("");
 
-                entity.Property(e => e.MaxChilds).HasColumnType("int(11)");
+                entity.Property(e => e.MaxChilds);
 
                 entity.Property(e => e.IsDriverInterface).HasDefaultValue(false);
-                entity.Property(e => e.MaxInstances).HasColumnType("int(11)");
+                entity.Property(e => e.MaxInstances);
                 entity.Property(e => e.CanProvideBoardType).HasDefaultValue(false);
 
                 entity.Property(e => e.Name)
@@ -252,7 +326,6 @@ namespace Automatica.Core.EF.Models
                 entity.HasKey(e => e.Type);
 
                 entity.Property(e => e.Type)
-                    .HasColumnType("bigint(20)")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
@@ -339,6 +412,12 @@ namespace Automatica.Core.EF.Models
                     .HasForeignKey(d => d.This2UserGroup)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("NodeInstance_This2UserGroup");
+
+                entity.HasOne(d => d.This2SlaveNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.This2Slave)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("NodeInstance_This2Slave");
             });
 
             modelBuilder.Entity<NodeInstance2RulePage>(entity =>
@@ -400,7 +479,7 @@ namespace Automatica.Core.EF.Models
                     .IsRequired()
                     .HasMaxLength(1024);
 
-                entity.Property(e => e.MaxInstances).HasColumnType("int(11)");
+                entity.Property(e => e.MaxInstances);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -410,8 +489,8 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.ProvidesInterface2InterfaceType);
 
-                entity.Property(e => e.This2NodeDataType).HasColumnType("bigint(20)");
-                entity.Property(e => e.NameMeta).HasColumnType("varchar(1024)");
+                entity.Property(e => e.This2NodeDataType);
+                entity.Property(e => e.NameMeta);
 
                 entity.Property(e => e.This2DefaultMobileVisuTemplate).HasDefaultValue(new Guid("16780dfd-887a-4a0a-9b2a-4d62ccc32c93"));
 
@@ -458,15 +537,15 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.ValueBool).HasDefaultValue(false);
 
-                entity.Property(e => e.ValueInt).HasColumnType("int(11)");
+                entity.Property(e => e.ValueInt);
                 entity.Property(e => e.ValueNodeInstance);
                 entity.Property(e => e.ValueRulePage);
                 entity.Property(e => e.ValueVisuPage);
                 entity.Property(e => e.ValueAreaInstance);
                 entity.Property(e => e.ValueCategoryInstance);
-                entity.Property(e => e.ValueLong).HasColumnType("bigint(64)");
+                entity.Property(e => e.ValueLong);
 
-                entity.Property(e => e.ValueString).HasColumnType("text");
+                entity.Property(e => e.ValueString);
 
                 entity.HasOne(d => d.This2NodeInstanceNavigation)
                     .WithMany(p => p.PropertyInstance)
@@ -510,6 +589,13 @@ namespace Automatica.Core.EF.Models
                  .OnDelete(DeleteBehavior.Cascade)
                  .HasConstraintName("PropertyInstance_CategoryInstance_ValueCategoryInstance");
 
+                entity.HasOne(d => d.ValueSlaveNavigation)
+                 .WithMany()
+                 .HasForeignKey(d => d.ValueSlave)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("PropertyInstance_Slave_ValueSlave");
+
+
                 entity.HasOne(d => d.This2PropertyTemplateNavigation)
                     .WithMany()
                     .HasForeignKey(d => d.This2PropertyTemplate)
@@ -537,7 +623,6 @@ namespace Automatica.Core.EF.Models
                     .HasMaxLength(1024);
 
                 entity.Property(e => e.GroupOrder)
-                    .HasColumnType("int(8)")
                     .HasDefaultValueSql("1");
 
                 entity.Property(e => e.IsReadonly).HasDefaultValue(false);
@@ -555,13 +640,12 @@ namespace Automatica.Core.EF.Models
                     .HasMaxLength(1024);
 
                 entity.Property(e => e.Order)
-                    .HasColumnType("int(8)")
                     .HasDefaultValueSql("1");
 
                 entity.Property(e => e.This2NodeTemplate).HasDefaultValue();
                 entity.Property(e => e.This2VisuObjectTemplate).HasDefaultValue();
 
-                entity.Property(e => e.This2PropertyType).HasColumnType("bigint(20)");
+                entity.Property(e => e.This2PropertyType);
 
 
                 entity.HasOne(d => d.This2NodeTemplateNavigation)
@@ -588,12 +672,12 @@ namespace Automatica.Core.EF.Models
                 entity.Ignore(e => e.TypeInfo);
                 entity.HasKey(e => e.ObjId);
                 entity.Property(e => e.ObjId);
-                entity.Property(e => e.Factor).HasColumnType("double").HasDefaultValue(1.0);
-                entity.Property(e => e.Offset).HasColumnType("double").HasDefaultValue(0.0);
-                entity.Property(e => e.ConditionType).HasColumnType("int(20)").IsRequired();
+                entity.Property(e => e.Factor).HasDefaultValue(1.0);
+                entity.Property(e => e.Offset).HasDefaultValue(0.0);
+                entity.Property(e => e.ConditionType).IsRequired();
 
 
-                entity.Property(e => e.PropertyKey).HasColumnType("varchar(1024)");
+                entity.Property(e => e.PropertyKey);
                 entity.Property(e => e.This2PropertyTemplateConstraint);
 
                 entity.HasOne(d => d.This2PropertyTemplateConstraintNavigation)
@@ -618,8 +702,8 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.This2PropertyTemplate);
 
-                entity.Property(e => e.ConstraintType).HasColumnType("int(20)").IsRequired();
-                entity.Property(e => e.ConstraintLevel).HasColumnType("int(20)").IsRequired();
+                entity.Property(e => e.ConstraintType).IsRequired();
+                entity.Property(e => e.ConstraintLevel).IsRequired();
 
                 entity.HasOne(d => d.This2PropertyTemplateNavigation)
                     .WithMany(p => p.Constraints)
@@ -633,7 +717,6 @@ namespace Automatica.Core.EF.Models
                 entity.HasKey(e => e.Type);
 
                 entity.Property(e => e.Type)
-                    .HasColumnType("bigint(20)")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
@@ -710,7 +793,6 @@ namespace Automatica.Core.EF.Models
                 entity.HasKey(e => e.ObjId);
 
                 entity.Property(e => e.ObjId)
-                    .HasColumnType("bigint(20)")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
@@ -770,18 +852,18 @@ namespace Automatica.Core.EF.Models
                     .IsRequired()
                     .HasMaxLength(1024).HasDefaultValue("");
 
-                entity.Property(e => e.MaxLinks).HasColumnType("int(11)");
+                entity.Property(e => e.MaxLinks);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(1024);
 
-                entity.Property(e => e.This2RuleInterfaceDirection).HasColumnType("bigint(20)");
+                entity.Property(e => e.This2RuleInterfaceDirection);
 
                 entity.Property(e => e.This2RuleTemplate);
 
-                entity.Property(e => e.ParameterDataType).HasColumnType("int(11)").HasConversion(type => (int)type, i => (RuleInterfaceParameterDataType)i);
-                entity.Property(e => e.DefaultValue).HasColumnType("varchar(64)");
+                entity.Property(e => e.ParameterDataType).HasConversion(type => (int)type, i => (RuleInterfaceParameterDataType)i);
+                entity.Property(e => e.DefaultValue);
 
                 entity.HasOne(d => d.This2RuleInterfaceDirectionNavigation)
                     .WithMany()
@@ -815,7 +897,7 @@ namespace Automatica.Core.EF.Models
                     .IsRequired()
                     .HasMaxLength(1024);
 
-                entity.Property(e => e.This2RulePageType).HasColumnType("bigint(20)");
+                entity.Property(e => e.This2RulePageType);
 
                 entity.HasOne(d => d.This2RulePageTypeNavigation)
                     .WithMany()
@@ -830,7 +912,6 @@ namespace Automatica.Core.EF.Models
                 entity.HasKey(e => e.ObjId);
 
                 entity.Property(e => e.ObjId)
-                    .HasColumnType("bigint(20)")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
@@ -893,8 +974,7 @@ namespace Automatica.Core.EF.Models
 
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.DefaultPage)
-                    .HasColumnType("bit(1)");
+                entity.Property(e => e.DefaultPage);
 
                 entity.HasIndex(e => e.This2VisuPageType)
                     .HasName("This2VisuPageType");
@@ -910,7 +990,7 @@ namespace Automatica.Core.EF.Models
                     .IsRequired()
                     .HasMaxLength(1024).HasDefaultValue("");
 
-                entity.Property(e => e.This2VisuPageType).HasColumnType("bigint(20)");
+                entity.Property(e => e.This2VisuPageType);
 
                 entity.HasOne(d => d.This2VisuPageTypeNavigation)
                     .WithMany()
@@ -999,7 +1079,7 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.IsVisibleForUser).HasDefaultValue(true);
 
-                entity.Property(e => e.This2VisuPageType).IsRequired().HasColumnType("bigint(20)");
+                entity.Property(e => e.This2VisuPageType).IsRequired();
 
                 entity.HasOne(d => d.This2VisuPageTypeNavigation)
                     .WithMany()
@@ -1013,7 +1093,6 @@ namespace Automatica.Core.EF.Models
                 entity.HasKey(e => e.ObjId);
 
                 entity.Property(e => e.ObjId)
-                    .HasColumnType("bigint(20)")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
@@ -1062,7 +1141,7 @@ namespace Automatica.Core.EF.Models
                 entity.Property(e => e.NeedsThis2AreaType).IsRequired();
                 entity.Property(e => e.IsDeleteable).HasDefaultValue(true).IsRequired();
 
-                entity.Property(e => e.Icon).IsRequired().HasColumnType("nvarchar(128)");
+                entity.Property(e => e.Icon).IsRequired();
 
 
                 entity.HasOne(d => d.This2AreaTypeNavigation)
@@ -1101,7 +1180,7 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.This2AreaTemplate).IsRequired();
                 entity.Property(e => e.This2Parent);
-                entity.Property(e => e.Icon).IsRequired().HasColumnType("nvarchar(128)");
+                entity.Property(e => e.Icon).IsRequired();
 
                 entity.HasOne(d => d.This2ParentNavigation)
                     .WithMany(d => d.InverseThis2ParentNavigation)
@@ -1124,7 +1203,7 @@ namespace Automatica.Core.EF.Models
                     .WithMany()
                     .HasForeignKey(d => d.This2UserGroup)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("NodeInstance_This2UserGroup");
+                    .HasConstraintName("FK_AreaInstance_This2UserGroup");
 
             });
 
@@ -1174,7 +1253,7 @@ namespace Automatica.Core.EF.Models
                     .WithMany()
                     .HasForeignKey(d => d.This2UserGroup)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("NodeInstance_This2UserGroup");
+                    .HasConstraintName("FK_CategoryInstance_This2UserGroup");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -1315,12 +1394,36 @@ namespace Automatica.Core.EF.Models
                     .HasMaxLength(36);
 
                 entity.Property(e => e.Name)
-                    .HasColumnType("varchar(1024)")
                     .HasMaxLength(1024);
 
                 entity.Property(e => e.Version)
                     .IsRequired()
                     .HasMaxLength(1024);
+            });
+
+            modelBuilder.Entity<Trending>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.Property(e => e.Source).HasMaxLength(1024);
+
+                entity.HasOne(d => d.This2NodeInstanceNavigation)
+                  .WithMany()
+                  .HasForeignKey(d => d.This2NodeInstance)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            modelBuilder.Entity<Slave>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name);
+                entity.Property(e => e.Description);
+
+                entity.Property(e => e.ClientId);
+                entity.Property(e => e.ClientKey);
             });
         }
     }

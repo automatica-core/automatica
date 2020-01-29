@@ -174,5 +174,20 @@ namespace Automatica.Core.UnitTests.Rules
         {
             return CreateTemplateCode.Updated;
         }
+
+        public RuleTemplate GetById(Guid id)
+        {
+            return _ruleTemplates[id];
+        }
+
+        public RuleInstance CreateRuleInstance(Guid templateId)
+        {
+            return CreateRuleInstance(GetById(templateId));
+        }
+
+        public RuleInstance CreateRuleInstance(RuleTemplate template)
+        {
+            return RuleInstance.CreateFromTemplate(template);
+        }
     }
 }

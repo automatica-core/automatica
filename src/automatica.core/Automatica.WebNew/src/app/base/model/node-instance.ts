@@ -13,8 +13,6 @@ import { VirtualPropertyInstance } from "./virtual-props/virtual-property-instan
 import { MetaHelper } from "../base/meta-helper";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
 import { Guid } from "../utils/Guid";
-import { CategoryInstance } from "./categories/category-instance";
-import { AreaInstance } from "./areas/area-instance";
 import { VirtualUseInVisuPropertyInstance } from "./virtual-props/virtual-use-in-visu-property-instance";
 import { VirtualAreaPropertyInstance } from "./virtual-props/virtual-area-property-instance";
 import { VirtualCategoryPropertyInstance } from "./virtual-props/virtual-category-property-instance";
@@ -23,7 +21,11 @@ import { ICategoryInstanceModel } from "./ICategoryInstanceModel";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
 import { VirtualGenericPropertyInstance } from "./virtual-props/virtual-generic-property-instance";
 import { NodeDataTypeEnum } from "./node-data-type";
-import { PropertyTemplateType } from "./property-template";
+import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-template";
+import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
+import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
+import { INodeInstance } from "./INodeInstance";
+import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -88,8 +90,15 @@ export enum NodeInstanceState {
     Unknown
 }
 
+export enum TrendingTypes {
+    Average = 0,
+    Raw = 1,
+    Max = 2,
+    Min = 3
+}
+
 @Model()
-export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel {
+export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel, INodeInstance {
 
     @JsonProperty()
     ObjId: string;
@@ -209,6 +218,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     @JsonProperty()
     This2UserGroup: string;
 
+    @JsonProperty()
+    This2Slave: string;
+
 
     @JsonProperty()
     StateTextValueTrue: string;
@@ -221,6 +233,18 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
     @JsonProperty()
     VisuName: string;
+
+    @JsonProperty()
+    Trending: boolean;
+
+    @JsonProperty()
+    TrendingInterval: number;
+
+    @JsonProperty()
+    TrendingType: TrendingTypes;
+
+    @JsonProperty()
+    TrendingToCloud: boolean;
 
     private _ValidationOk: boolean = true;
     public get ValidationOk(): boolean {
@@ -247,6 +271,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         instance.IsReadable = template.IsReadable;
         instance.IsWriteable = template.IsWriteable;
         instance.IsFavorite = false;
+
+        if (template.isDriverNode()) {
+            instance.This2Slave = "172bb906-b584-4d5d-85e8-b6d881498534";
+        }
 
         for (const p of template.Properties) {
             const prop: PropertyInstance = PropertyInstance.createFromTemplate(instance, p);
@@ -330,6 +358,10 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         if (node instanceof NodeInstance) {
             const ni: NodeInstance = node as NodeInstance;
 
+            if (!ni.NodeTemplate) {
+                return void 0;
+            }
+
             if (node.Children.length >= ni.NodeTemplate.ProvidesInterface.MaxChilds) {
                 return void 0;
             }
@@ -365,6 +397,11 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     private addVirtualProperties() {
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
+        this.Properties.push(new VirtualObjIdPropertyInstance(this));
+
+        if (this.isDriverNode()) {
+            this.Properties.push(new VirtualSlavePropertyInstance(this));
+        }
 
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
@@ -385,17 +422,28 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_COLOR_TRUE", 8, this, () => this.StateColorValueTrue, (value) => this.StateColorValueTrue = value, false, PropertyTemplateType.Color, "COMMON.CATEGORY.VISU"));
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_COLOR_FALSE", 9, this, () => this.StateColorValueFalse, (value) => this.StateColorValueFalse = value, false, PropertyTemplateType.Color, "COMMON.CATEGORY.VISU"));
             }
+            this.Properties.push(new VirtualGenericPropertyInstance("TRENDING", 10, this, () => this.Trending, (value) => this.Trending = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.TRENDING"));
+            this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes)));
+            this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
+
         }
 
 
         this.updateDisplayName();
 
         for (const x of this.Properties) {
-            x.propertyChanged.subscribe((property) => {
+            x.propertyChanged.subscribe(() => {
                 this.updateDisplayName();
                 this.notifyChange("Properties");
             });
         }
+    }
+
+    private isDriverNode() {
+        if (this.NodeTemplate && this.NodeTemplate.ProvidesInterface && this.NodeTemplate.ProvidesInterface.IsDriverInterface) {
+            return true;
+        }
+        return false;
     }
 
     public setParent(parent: ITreeNode) {

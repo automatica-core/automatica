@@ -1,6 +1,5 @@
 ﻿using Automatica.Core.EF.Models;
-using Automatica.Core.UnitTests.Drivers;
-using P3.Driver.OmsDriverFactory;
+using Automatica.Core.UnitTests.Base.Drivers;
 using Xunit;
 
 namespace P3.Driver.Oms.MBus.Tests

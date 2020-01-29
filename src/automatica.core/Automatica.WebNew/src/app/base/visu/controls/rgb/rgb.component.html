@@ -1,11 +1,11 @@
 <div class="visu-mobile-content" [style.background]="getPropertyValue('background_color')">
-  <ng-container *ngIf="text">
+  <!-- <ng-container *ngIf="text">
     <div>
       <p [style.color]="foregroundColor" [style.font-size]="getFontSize()">{{ displayText }}{{ getPropertyValue("unit")
         }}</p>
     </div>
     <br />
-  </ng-container>
+  </ng-container> -->
 
   <!-- <dx-color-box [value]="realValue" (onValueChanged)="onValueChanged($event)"></dx-color-box> -->
   <ng-color-circle style="height:100%;width:100%" startHex="23bf26" (colorChanged)="colorChange($event)" [(ngModel)]="colorValue"></ng-color-circle>

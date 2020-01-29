@@ -1,21 +1,22 @@
-import { Component, OnInit, NgModule, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, NgModule, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
 import { DxScrollViewModule } from "devextreme-angular/ui/scroll-view";
 import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { CommonModule } from "@angular/common";
-
-import { navigation } from "../../app-navigation";
 import { Router, NavigationEnd, ActivatedRoute } from "@angular/router";
 import { SideNavigationMenuModule } from "src/app/shared/components/side-navigation-menu/side-navigation-menu.component";
 import { HeaderModule } from "src/app/shared/components/header/header.component";
 import { FooterModule } from "src/app/shared/components/footer/footer.component";
 import { Subscription } from "rxjs";
+import { DeviceService } from "src/app/services/device/device.service";
+import { DxTooltipModule } from "devextreme-angular";
 
 @Component({
     selector: "app-side-nav-inner-toolbar",
     templateUrl: "./side-nav-inner-toolbar.component.html",
-    styleUrls: ["./side-nav-inner-toolbar.component.scss"]
+    styleUrls: ["./side-nav-inner-toolbar.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     selectedRoute = "";
@@ -23,8 +24,20 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     @Input()
     menuItems: any[];
 
+    private _menuOpened: boolean;
+
     @Input()
-    menuOpened: boolean = false;
+    public get menuOpened(): boolean {
+        return this._menuOpened;
+    }
+    public set menuOpened(v: boolean) {
+        this._menuOpened = v;
+        this.menuOpenedChanged.emit(v);
+    }
+
+
+    @Output()
+    menuOpenedChanged = new EventEmitter<any>();
 
     @Input()
     title: string;
@@ -35,7 +48,14 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     shaderEnabled = true;
     routerSub: Subscription;
 
-    constructor(private breakpointObserver: BreakpointObserver, private router: Router, private activatedRoute: ActivatedRoute) { }
+    public get isMobile() {
+        return this.deviceService.isMobile();
+    }
+
+    constructor(private breakpointObserver: BreakpointObserver,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private deviceService: DeviceService) { }
 
     ngOnInit() {
         this.selectedRoute = "";
@@ -123,7 +143,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
 }
 
 @NgModule({
-    imports: [SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, FooterModule],
+    imports: [SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, FooterModule, DxTooltipModule],
     exports: [SideNavInnerToolbarComponent],
     declarations: [SideNavInnerToolbarComponent]
 })

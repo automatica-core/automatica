@@ -59,6 +59,79 @@ namespace Automatica.Core.Visu
 
             AddWindowMonitor(factory);
             AddRgbControl(factory);
+
+            AddChartControl(factory);
+            AddGaugeControl(factory);
+
+            AddClockControl(factory);
+
+            AddPushButton(factory);
+        }
+
+        private void AddClockControl(VisuMobileTemplateFactory factory)
+        {
+            var clock = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Clock);
+            factory.CreateVisuMobileTemplate(clock, "VISU.OBJECT.CLOCK.NAME", "VISU.OBJECT.CLOCK.DESCRIPTION", "clock",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.UpdateMaxMinValues(clock, 1, 1, 1, 1);
+            AddCommonProperty(clock, factory);
+        }
+
+        private enum GaugeType
+        {
+            Linear = 0,
+            Circular = 1
+        }
+
+        private void AddGaugeControl(VisuMobileTemplateFactory factory)
+        {
+            var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Gauge);
+            factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.GAUGE.NAME", "VISU.OBJECT.GAUGE.DESCRIPTION", "gauge",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.CreatePropertyTemplate(new Guid("85e6e721-d45b-479c-ab44-6672d2f772dc"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, chart, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
+            factory.CreatePropertyTemplate(new Guid("258fad47-e750-4e3e-9620-9d1afabfef1a"), "VISU.APPEARANCE.GAUGE_TYPE.NAME",
+                "VISU.APPEARANCE.GAUGE_TYPE.DESCRIPTION", "gauge_type", PropertyTemplateType.Enum, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, PropertyHelper.CreateEnumMetaString(typeof(GaugeType)),
+                (int)GaugeType.Circular, 0, 0);
+
+
+            factory.CreatePropertyTemplate(new Guid("da0c1047-bfd0-4095-b0ac-781a3808e162"), "VISU.APPEARANCE.SCALE_START.NAME",
+                "VISU.APPEARANCE.SCALE_START.DESCRIPTION", "scale_start", PropertyTemplateType.Integer, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, null,
+                0, 0, 10);
+
+            factory.CreatePropertyTemplate(new Guid("d1d5ce5f-94e2-48c1-a065-89557f12dca4"), "VISU.APPEARANCE.SCALE_END.NAME",
+                "VISU.APPEARANCE.SCALE_END.DESCRIPTION", "scale_end", PropertyTemplateType.Integer, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, null,
+                100, 0, 11);
+
+            factory.CreatePropertyTemplate(new Guid("81bbbbc1-2b14-4e44-9f6d-ee7ebacc6dcf"), "VISU.APPEARANCE.TICKS.NAME",
+                "VISU.APPEARANCE.TICKS.DESCRIPTION", "ticks", PropertyTemplateType.Numeric, chart,
+                "VISU.CATEGORY.APPEARANCE.NAME", true, false, null,
+                1, 0, 12);
+
+
+
+            AddCommonProperty(chart, factory);
+            AddTextProperty(chart, factory);
+        }
+
+        private void AddChartControl(VisuMobileTemplateFactory factory)
+        {
+            var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Chart);
+            factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.CHART.NAME", "VISU.OBJECT.CHART.DESCRIPTION", "chart",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.CreatePropertyTemplate(new Guid("6c3f4a8c-4fe1-48cc-af1a-1b5a23d0bdb3"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, chart, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+
+
+            AddCommonProperty(chart, factory);
+            AddTextProperty(chart, factory);
         }
 
         private void AddRgbControl(VisuMobileTemplateFactory factory)
@@ -92,19 +165,59 @@ namespace Automatica.Core.Visu
                 "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
             factory.CreatePropertyTemplate(new Guid("8238bcc7-4396-464a-ae8b-d615582fb97b"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
-                PropertyTemplateType.NodeInstance, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
+                PropertyTemplateType.NodeInstance, toggleButton, "VISU.CATEGORY.VALUE.NAME", true, false, null, null, 1, 1);
+
+            factory.CreatePropertyTemplate(new Guid("85d1ccd7-36e6-4129-b34b-f0e9100ac1ee"), "VISU.APPEARANCE.NODE_STATE_VALUE.NAME", "VISU.APPEARANCE.NODE_STATE_VALUE.DESCRIPTION", "nodeInstanceState",
+                PropertyTemplateType.NodeInstance, toggleButton, "VISU.CATEGORY.VALUE.NAME", true, false, null, null, 1, 2);
 
             factory.CreatePropertyTemplate(new Guid("3eef3ccb-34f9-4e2c-b804-0236ee32d184"), "VISU.APPEARANCE.READONLY.NAME", "VISU.APPEARANCE.READONLY.DESCRIPTION", "readonly",
-                PropertyTemplateType.Bool, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", false, 1, 2);
+                PropertyTemplateType.Bool, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", false, 2, 1);
 
             factory.CreatePropertyTemplate(new Guid("f487195e-a447-42ca-919d-6fd36e27eddc"), "VISU.APPEARANCE.TOGGLE.ON.NAME", "VISU.APPEARANCE.TOGGLE.ON.DESCRIPTION", "toggle_on_text",
-                PropertyTemplateType.Text, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "On", 1, 3);
+                PropertyTemplateType.Text, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "On", 2, 2);
 
             factory.CreatePropertyTemplate(new Guid("336fb367-593e-4165-a3dd-283182e28f18"), "VISU.APPEARANCE.TOGGLE.OFF.NAME", "VISU.APPEARANCE.TOGGLE.OFF.DESCRIPTION", "toggle_off_text",
-                PropertyTemplateType.Text, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "Off", 1, 4);
+                PropertyTemplateType.Text, toggleButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "Off", 2, 3);
 
             AddCommonProperty(toggleButton, factory);
             AddTextProperty(toggleButton, factory);
+        }
+
+        enum PushButtonBehaviour
+        {
+            SendValue = 0,
+            Switch = 1,
+            SendTrue = 2,
+            SendFalse = 3
+        }
+        private void AddPushButton(VisuMobileTemplateFactory factory)
+        {
+            var pushButton = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.PushButton);
+            factory.CreateVisuMobileTemplate(pushButton, "VISU.OBJECT.PUSH_BUTTON.NAME", "VISU.OBJECT.PUSH_BUTTON.DESCRIPTION", "push-button",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.CreatePropertyTemplate(new Guid("a4339ad8-09bc-46e7-a395-0e1e79bbeab7"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
+                PropertyTemplateType.NodeInstance, pushButton, "VISU.CATEGORY.VALUE.NAME", true, false, null, null, 1, 1);
+            
+            factory.CreatePropertyTemplate(new Guid("90461b81-8c04-409f-928a-37bb7eb4e1ea"), "VISU.APPEARANCE.SEND_VALUE.NAME", "VISU.APPEARANCE.SEND_VALUE.DESCRIPTION", "send_value",
+                PropertyTemplateType.Text, pushButton, "VISU.CATEGORY.VALUE.NAME", true, false, "", true, 1, 2);
+
+            factory.CreatePropertyTemplate(new Guid("e2509320-c72f-410b-bda0-6bd9459cb50f"), "VISU.APPEARANCE.READONLY.NAME", "VISU.APPEARANCE.READONLY.DESCRIPTION", "readonly",
+                PropertyTemplateType.Bool, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", false, 1, 1);
+
+            factory.CreatePropertyTemplate(new Guid("9c1f9103-f580-47ba-ad30-b21f0a93ac5a"), "VISU.APPEARANCE.TOGGLE.ON.NAME", "VISU.APPEARANCE.TOGGLE.ON.DESCRIPTION", "toggle_on_text",
+                PropertyTemplateType.Text, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "On", 1, 2);
+
+            factory.CreatePropertyTemplate(new Guid("1dba9926-dba7-4cd1-a7c3-5cf9b9197bf0"), "VISU.APPEARANCE.TOGGLE.OFF.NAME", "VISU.APPEARANCE.TOGGLE.OFF.DESCRIPTION", "toggle_off_text",
+                PropertyTemplateType.Text, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, "", "Off", 1, 3);
+
+            factory.CreatePropertyTemplate(new Guid("2c05f69d-dff1-4110-9a4f-7b6aa886c00d"), "VISU.APPEARANCE.BEHAVIOUR.NAME", "VISU.APPEARANCE.BEHAVIOUR.DESCRIPTION", "behaviour",
+                PropertyTemplateType.Enum, pushButton, "VISU.CATEGORY.APPEARANCE.NAME", true, false, PropertyHelper.CreateEnumMetaString(typeof(PushButtonBehaviour)), PushButtonBehaviour.SendTrue, 1, 4);
+
+            
+
+            AddCommonProperty(pushButton, factory);
+            AddTextProperty(pushButton, factory);
         }
 
         private void AddNumberBox(VisuMobileTemplateFactory factory)
@@ -161,7 +274,7 @@ namespace Automatica.Core.Visu
         {
             byte[] gu = guid.ToByteArray();
 
-            gu[gu.Length - index] = (byte)(Convert.ToInt32(gu[gu.Length - index]) + c);
+            gu[^index] = (byte)(Convert.ToInt32(gu[^index]) + c);
 
             return new Guid(gu);
         }

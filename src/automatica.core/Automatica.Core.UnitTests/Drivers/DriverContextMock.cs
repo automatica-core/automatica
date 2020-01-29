@@ -6,25 +6,25 @@ using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Common;
-using Automatica.Core.UnitTests.Base.Drivers;
-using Automatica.Core.UnitTests.Common;
+using Automatica.Core.UnitTests.Drivers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Automatica.Core.UnitTests.Drivers
+namespace Automatica.Core.UnitTests.Base.Drivers
 {
     public class DriverContextMock : IDriverContext
     {
-        public DriverContextMock(NodeInstance nodeInstance, INodeTemplateFactory nodeTemplateFactory)
+        public DriverContextMock(NodeInstance nodeInstance, INodeTemplateFactory nodeTemplateFactory, IDispatcher dispatcher)
         {
             NodeInstance = nodeInstance;
             NodeTemplateFactory = nodeTemplateFactory;
             TelegramMonitor = new TelegramMonitorMock();
             LicenseState = new LicenseStateMock();
+            Dispatcher = dispatcher;
         }
 
         public NodeInstance NodeInstance { get; }
-        public IDispatcher Dispatcher => DispatcherMock.Instance;
+        public IDispatcher Dispatcher { get; }
         public INodeTemplateFactory NodeTemplateFactory { get; }
         public bool IsTest => true;
 

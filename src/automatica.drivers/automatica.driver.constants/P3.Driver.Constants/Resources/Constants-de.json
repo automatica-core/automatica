@@ -18,6 +18,10 @@
       "PI": {
         "NAME": "PI",
         "DESCRIPION": "Definiert PI"
+      },
+      "STRING": {
+        "NAME": "Text",
+        "DESCRIPION": "Gibt einen Fixen Wert zurück"
       }
     },
     "PROPERTY": {

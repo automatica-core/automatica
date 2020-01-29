@@ -26,16 +26,16 @@ namespace Automatica.Core.EF.Models.Categories
 
         public static void GenerateDefault(AutomaticaContext context)
         {
-            GenerateIfNotExists(context, Alarm, CategoryGroup.OtherGroup, "ALARM", "alarm-clock");
+            GenerateIfNotExists(context, Alarm, CategoryGroup.OtherGroup, "ALARM", "bell");
             GenerateIfNotExists(context, Audio, CategoryGroup.OtherGroup, "AUDIO", "volume-up");
             GenerateIfNotExists(context, Lightning, CategoryGroup.LightningGroup, "LIGHTNING", "lightbulb");
             GenerateIfNotExists(context, Shading, CategoryGroup.ShadingGroup, "SHADING", "th-large");
             GenerateIfNotExists(context, Energy, CategoryGroup.OtherGroup, "ENERGY", "plug");
             GenerateIfNotExists(context, Window, CategoryGroup.OtherGroup, "WINDOW", "square");
-            GenerateIfNotExists(context, Heating, CategoryGroup.HvacGroup, "HEATING", "temperature-hot");
-            GenerateIfNotExists(context, Climate, CategoryGroup.HvacGroup, "CLIMATE", "temperature-frigid");
+            GenerateIfNotExists(context, Heating, CategoryGroup.HvacGroup, "HEATING", "temperature-high");
+            GenerateIfNotExists(context, Climate, CategoryGroup.HvacGroup, "CLIMATE", "temperature-low");
             GenerateIfNotExists(context, Multimedia, CategoryGroup.OtherGroup, "MULTIMEDIA", "compact-disc");
-            GenerateIfNotExists(context, Photovoltaik, CategoryGroup.OtherGroup, "PHOTOVOLTAIK", "solar-panel");
+            GenerateIfNotExists(context, Photovoltaik, CategoryGroup.OtherGroup, "PHOTOVOLTAIC", "solar-panel");
             GenerateIfNotExists(context, Power, CategoryGroup.OtherGroup, "POWER", "bolt");
             GenerateIfNotExists(context, Technology, CategoryGroup.OtherGroup, "TECHNOLOGY", "memory");
             GenerateIfNotExists(context, Temperature, CategoryGroup.OtherGroup, "TEMPERATURE", "thermometer");

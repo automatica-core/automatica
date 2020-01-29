@@ -79,7 +79,7 @@ namespace Automatica.Core.Base.Localization
             var json = new object();
             if (!_localizationStreams.ContainsKey(locale))
             {
-                return json;
+                return null;
             }
             return JsonConvert.SerializeObject(_localizationStreams[locale]);
         }

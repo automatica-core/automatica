@@ -24,7 +24,7 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
     translate: TranslationService,
     private telegramMonitorService: TelegramMonitorService,
     appService: AppService) {
-    super(notify, translate);
+    super(notify, translate, appService);
 
     appService.setAppTitle("TELEGRAM_MONITOR.NAME");
   }

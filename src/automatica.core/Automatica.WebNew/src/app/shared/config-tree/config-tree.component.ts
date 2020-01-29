@@ -1,4 +1,4 @@
-import { ViewChild, Component, OnInit, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
+import { ViewChild, Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from "@angular/core";
 import { ConfigService } from "../../services/config.service";
 import { DxTreeListComponent } from "devextreme-angular";
 import { TranslationService } from "angular-l10n";
@@ -17,26 +17,23 @@ import { NodeTemplate } from "src/app/base/model/node-template";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { BoardInterface } from "src/app/base/model/board-interface";
 import { PropertyInstance } from "src/app/base/model/property-instance";
+import { DesignTimeDataService } from "src/app/services/design-time-data.service";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 @Component({
   selector: "p3-config-tree",
   templateUrl: "./config-tree.component.html",
-  styleUrls: ["./config-tree.component.scss"]
+  styleUrls: ["./config-tree.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDestroy {
 
   NodeInstanceState: typeof NodeInstanceState = NodeInstanceState;
-
-
   expandedRowKeys: any[] = ["b0"];
-
-  @Input()
-  public config: NodeInstance[];
 
   @Output()
   public configChange: EventEmitter<any> = new EventEmitter<any>();
-
-  private mapList: Map<any, NodeInstance> = new Map<any, NodeInstance>();
 
   boardTypeOrig: BoardType;
   nodeInstances: NodeInstance[];
@@ -52,15 +49,14 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.onNodeSelect.emit(v);
   }
 
+  selectedRowKeys: any[] = [];
+
 
   popoverVisible: boolean = false;
 
   nextId: number;
 
-  @Input()
-  nodeTemplates: NodeTemplate[];
-
-  @ViewChild("tree") tree: DxTreeListComponent;
+  @ViewChild("tree", { static: false }) tree: DxTreeListComponent;
 
   @Output() onNodeSelect = new EventEmitter<ITreeNode>();
   @Output() onNodeDrag: EventEmitter<any> = new EventEmitter();
@@ -68,7 +64,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   @Input() useContextMenu: boolean;
 
-  @Output() isLoadingChange = new EventEmitter<boolean>();
 
   @Input()
   showLoadingPanel = false;
@@ -76,30 +71,21 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Input()
   loadOnInit = false;
 
-  private _isLoading: boolean;
-
-  @Input()
-  public get isLoading(): boolean {
-    return this._isLoading;
-  }
-  public set isLoading(v: boolean) {
-    this._isLoading = v;
-    this.isLoadingChange.emit(v);
-  }
-
-
   settings: Setting[] = [];
 
   constructor(
     private configService: ConfigService,
+    private designTimeDataService: DesignTimeDataService,
+    public nodeInstanceService: NodeInstanceService,
     translate: TranslationService,
     private notify: NotifyService,
     private hub: DataHubService,
-    private dataService: DataService,
     private settingsService: SettingsService,
-    private appService: AppService) {
+    appService: AppService,
+    private changeRef: ChangeDetectorRef,
+    private ngZone: NgZone) {
 
-    super(notify, translate);
+    super(notify, translate, appService);
     this.useContextMenu = true;
     this.nextId = 0;
   }
@@ -108,50 +94,30 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     super.baseOnInit();
 
-    if (this.loadOnInit) {
-      try {
-        this.isLoading = true;
-        await this.loadTree();
-      } catch {
-        this.isLoading = false;
-      }
-    }
-  }
+    try {
+      super.registerEvent(this.hub.dispatchValue, (data) => {
 
-  async loadTree() {
-    this.nodeTemplates = await this.configService.getNodeTemplates();
+        this.ngZone.runOutsideAngular(() => {
 
-    await this.loadConfig();
+          if (data[0] === 0) { // 0 = nodeinstance value
+            const id = data[1];
+            this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
+          }
 
-    super.registerEvent(this.hub.dispatchValue, (data) => {
-      if (data[0] === 0) { // 0 = nodeinstance value
-        const id = data[1];
+        });
+      });
 
-        if (this.mapList.has(id)) {
-          const treeNode = this.mapList.get(id);
-          treeNode.Value = data[2];
-        }
-      }
-    });
+      super.registerEvent(this.appService.isLoadingChanged, (isLoading) => {
+        this.changeRef.detectChanges();
+      });
 
-    await this.hub.subscribeForAll();
-
-
-    const nodeData = await this.dataService.getCurrentNodeValues();
-
-    // tslint:disable-next-line:forin
-    for (const id in nodeData) {
-      if (this.mapList.has(id)) {
-        const treeNode = this.mapList.get(id);
-        treeNode.Value = nodeData[id];
-      }
+    } catch (error) {
+      super.handleError(error);
     }
 
-    this.appService.isLoading = false;
   }
 
   async ngOnDestroy() {
-    await this.hub.unSubscribeForAll();
     super.baseOnDestroy();
   }
 
@@ -176,6 +142,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     } catch (error) {
       super.handleError(error);
     }
+    this.changeRef.detectChanges();
     this.appService.isLoading = false;
   }
 
@@ -187,6 +154,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     } catch (error) {
       super.handleError(error);
     }
+    this.changeRef.detectChanges();
     this.appService.isLoading = false;
   }
 
@@ -194,11 +162,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     for (const ni of nodeInstances) {
       const children = ni.Children;
 
-      if (!this.mapList.has(ni.ObjId)) {
+      if (!this.nodeInstanceService.hasNodeInstance(ni.ObjId)) {
         ni.isNewObject = true;
 
         ni.Children = [];
-        const existingParent = this.mapList.get(parent.Id);
+        const existingParent = this.nodeInstanceService.getNodeInstance(parent.Id);
         this.prepareNewItem(ni, existingParent, false, false);
       }
       if (children) {
@@ -207,80 +175,13 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  private findNodeTemplate(id: string) {
-    for (const nt of this.nodeTemplates) {
-      if (nt.ObjId === id) {
-        return nt;
-      }
-    }
-    return void 0;
-  }
-
-  public convertConfig(instances: NodeInstance[]) {
-    this.mapList.clear();
-    this.mapList = new Map<number, NodeInstance>();
-
-    this.config = [];
-
-    const tmpConfig: NodeInstance[] = [];
-
-    for (const node of instances) {
-      this.mapList.set(node.Id, node);
-      this.addNodeInstancesRec(node, tmpConfig);
-
-      tmpConfig.push(node);
-    }
-    tmpConfig.sort((a, b) => (a.Name.localeCompare(b.Name) - (b.Name.localeCompare(a.Name))));
-
-    this.config = tmpConfig;
-
-    const rootNode = this.config.filter(a => !a.This2ParentNodeInstance)[0];
-    const rootNodeSettings: VirtualSettingsPropertyInstance[] = [];
-
-    for (const x of this.settings) {
-      rootNodeSettings.push(new VirtualSettingsPropertyInstance(x));
-    }
-
-    rootNode.Properties = [...rootNode.Properties, ...rootNodeSettings];
-
-    this.onConfigLoaded.emit(this.config);
-  }
-
-  async loadConfig() {
-    try {
-      this.isLoadingChange.emit(true);
-      const instances = await this.configService.getNodeInstances();
-
-      // this.expandedRowKeys = [instances[0].ObjId];
-
-      this.settings = await this.settingsService.getSettings();
-
-      this.convertConfig(instances);
-    } catch (error) {
-      super.handleError(error);
-    }
-
-    this.isLoadingChange.emit(false);
-  }
-
-  private getExpandedRowKeys(id: string, expandedRowKeys: string[]) {
-    expandedRowKeys = [...expandedRowKeys, id];
-
-    if (this.mapList.has(id)) {
-      const item = this.mapList.get(id);
-      if (item && item.ParentId) {
-        return this.getExpandedRowKeys(item.ParentId, expandedRowKeys);
-      }
-    }
-    return expandedRowKeys;
-  }
 
   getNodeValue = (rowData: ITreeNode): any => {
     return rowData.Value;
   }
 
   getDisplayName = (rowData: ITreeNode) => {
-    const instance = this.mapList.get(rowData.Id);
+    const instance = this.nodeInstanceService.getNodeInstance(rowData.Id);
 
     if (!instance.Parent) {
       return rowData.DisplayName;
@@ -296,41 +197,33 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     return rowData.DisplayName;
   }
 
-  private addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstance[]) {
 
-    for (const x of node.Children) {
-      this.mapList.set(x.Id, x);
-      tmpConfig.push(x);
 
-      this.addNodeInstancesRec(x, tmpConfig);
-    }
-  }
-
-  selectionChanged($event) {
-    this.selectedNode = $event.selectedRowsData[0];
+  onRowClicked($event) {
+    const item = this.nodeInstanceService.getNodeInstance($event.data.ObjId);
+    this.selectNode(item);
   }
 
   selectNode(node: ITreeNode) {
     if (!node) {
-      this.tree.instance.selectRows([], false);
+      this.selectedRowKeys = [];
       this.selectedNode = void 0;
       return;
     }
 
     if (!this.selectedNode || this.selectedNode.Id !== node.Id) {
-      this.tree.instance.selectRows([node.Id], false);
+      this.selectedRowKeys = [node.Id];
       this.selectedNode = node;
-      // this.expandedRowKeys = this.getExpandedRowKeys(node.Id, this.expandedRowKeys);
     }
+
+    this.tree.instance.repaint();
   }
 
   selectNodeById(id: any) {
-    if (this.mapList.has(id)) {
-      const node = this.mapList.get(id);
+    if (this.nodeInstanceService.hasNodeInstance(id)) {
+      const node = this.nodeInstanceService.getNodeInstance(id);
       this.selectNode(node);
 
-      const expandedRowKeys = this.getExpandedRowKeys(id, this.expandedRowKeys);
-      // this.expandedRowKeys = expandedRowKeys;
     } else if (id === void 0) {
       this.selectedNode = void 0;
       this.tree.instance.selectRows([], false);
@@ -344,19 +237,15 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     parent.Children = [...parent.Children, nodeInstance];
 
     const tmpConfig = [nodeInstance];
-    this.addNodeInstancesRec(nodeInstance, tmpConfig)
-
-    for (const x of tmpConfig) {
-      this.mapList.set(x.Id, x);
-    }
-    this.config = [...this.config, ...tmpConfig];
+    this.nodeInstanceService.addNodeInstancesRec(nodeInstance, tmpConfig)
 
     this.tree.instance.refresh();
   }
 
-  createNodeInstanceChildren(nodeInstance: NodeInstance, nodeTemplate: NodeTemplate) {
+  async createNodeInstanceChildren(nodeInstance: NodeInstance, nodeTemplate: NodeTemplate) {
+    const nodeTemplates = await this.designTimeDataService.getNodeTemplates();
 
-    for (const e of this.nodeTemplates) {
+    for (const e of nodeTemplates) {
       if (e.NeedsInterface2InterfacesType === nodeTemplate.ProvidesInterface2InterfaceType) {
         if (e.DefaultCreated) {
           this.addItem(nodeInstance, e, false);
@@ -396,17 +285,12 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     parentNode.Children = [...parentNode.Children, data];
 
-    this.mapList.set(data.Id, data);
-    this.config = [...this.config, data];
+    this.nodeInstanceService.addNodeInstance(data);
 
-    this.configChange.emit(this.config);
     this.setDefaultParams(data);
 
     if (selectNode) {
       this.selectNode(data);
-
-      const expandedRowKeys = this.getExpandedRowKeys(data.Id, this.expandedRowKeys);
-      // this.expandedRowKeys = expandedRowKeys;
     }
   }
 
@@ -425,10 +309,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     const parentNode = item.Parent;
     this.selectNode(parentNode);
 
-    this.config = this.config.filter(a => a.Id !== item.Id);
+    this.nodeInstanceService.removeItem(item);
     parentNode.Children = parentNode.Children.filter(a => a.Id !== item.Id);
-
-    // this.tree.instance.refresh();
   }
 
   removeItem() {
@@ -436,31 +318,29 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.deleteItem(selectedItem);
   }
 
-  public async save(notify: boolean = true) {
-    const array = [];
+  public getRootNode(): NodeInstance {
+    return this.nodeInstanceService.rootNode;
+  }
 
-    for (const x of this.config) {
-      if (!x.Parent) {
-        array.push(x);
-        break;
-      }
-    }
-
-    const instances = await this.configService.save(array);
-    this.convertConfig(instances);
-
+  public async saveSettings(rootNode: NodeInstance) {
     const settings = [];
-    for (const x of array[0].Properties) {
+    for (const x of rootNode.Properties) {
       if (x instanceof VirtualSettingsPropertyInstance) {
         settings.push(x.setting);
       }
     }
 
     this.settings = await this.settingsService.saveSettings(settings);
+  }
 
-    if (notify) {
-      this.notify.notifySuccess("COMMON.SAVED");
-    }
+  public async save() {
+    const rootNode = this.getRootNode();
+
+    const instances = await this.configService.save([rootNode]);
+    this.nodeInstanceService.convertConfig(instances);
+    await this.saveSettings(rootNode);
+
+    this.notify.notifySuccess("COMMON.SAVED");
 
     this.selectNode(void 0);
   }
@@ -473,8 +353,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         return false;
       }
 
-      const drop = that.mapList.get(dropTarget.Id);
-      const drag = that.mapList.get(dragData.Id);
+      const drop = that.nodeInstanceService.getNodeInstance(dropTarget.Id);
+      const drag = that.nodeInstanceService.getNodeInstance(dragData.Id);
 
       if (drag.ParentId === drop.Id) {
         return false;
@@ -524,22 +404,21 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   dropSuccess($event, dropTarget: any) {
     const dragData = $event.dragData;
 
-    const drop = this.mapList.get(dropTarget.Id);
-    const drag = this.mapList.get(dragData.Id);
+    const drop = this.nodeInstanceService.getNodeInstance(dropTarget.Id);
+    const drag = this.nodeInstanceService.getNodeInstance(dragData.Id);
 
     if (drag instanceof NodeInstance) {
-      const parentDrag = this.mapList.get(drag.ParentId);
+      const parentDrag = this.nodeInstanceService.getNodeInstance(drag.ParentId);
       parentDrag.Children = [];
 
       drag.setParent(drop);
-
-      const filteredConfig = this.config.filter(a => a.Id !== drag.Id);
       drop.Children = [...drop.Children, drag];
-      this.config = [...filteredConfig, drag];
 
       this.selectNode(drag);
 
       this.setDefaultParams(drag, true);
+
+      this.tree.instance.refresh();
     }
   }
 
@@ -571,18 +450,23 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.tree.instance.refresh();
   }
 
-  onContextMenuPreparing($event) {
+  async onContextMenuPreparing($event) {
+
+    if (!$event.row) {
+      return;
+    }
+
     this.popoverVisible = false;
     const that = this;
     const treeNode: ITreeNode = $event.row.data;
-    const model: ITreeNode = this.mapList.get(treeNode.Id);
+    const model: ITreeNode = this.nodeInstanceService.getNodeInstance(treeNode.Id);
 
-    this.selectNode(this.mapList.get(treeNode.Id));
+    this.selectNode(model);
 
     const addMenu = [];
     $event.items = [];
 
-    let nodeTemplates: NodeTemplate[] = NodeInstance.getSupportedTypes(model, this.nodeTemplates);
+    let nodeTemplates: NodeTemplate[] = this.nodeInstanceService.getSupportedNodeTemplates(model);
 
     if (nodeTemplates) {
       nodeTemplates = nodeTemplates.sort(this.sortByName);
@@ -619,6 +503,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   async readNode(node: NodeInstance) {
     try {
       await this.configService.read(node);
+      this.changeRef.detectChanges();
     } catch (error) {
       super.handleError(error);
     }
@@ -642,27 +527,24 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  onRowClicked($event) {
-
-  }
-
-  saveLearnNodeInstances(nodeInstance: NodeInstance, learnedNodes: LearnNodeInstance[]) {
-    for (const x of learnedNodes) {
-      let existingNode = this.getNodeInstanceByNeedsInterface(nodeInstance, x.nodeTemplateInstance.NeedsInterface2InterfacesType);
+  async saveLearnNodeInstances(nodeInstance: NodeInstance, learnedNodes: LearnNodeInstance[]) {
+    for (const learnNode of learnedNodes) {
+      let existingNode = this.nodeInstanceService.getNodeInstanceByNeedsInterface(nodeInstance, learnNode.nodeTemplateInstance.nodeTemplate.NeedsInterface2InterfacesType);
 
       let created = void 0;
       if (!existingNode) {
-        created = this.createFromNodeTemplate(nodeInstance, x.nodeTemplateInstance, x.propertyInstances);
+        created = await this.nodeInstanceService.createFromNodeTemplate(nodeInstance, learnNode.nodeTemplateInstance.nodeTemplate, learnNode.propertyInstances);
+
         existingNode = created.node;
 
         this.createNodeInstanceChildren(existingNode, existingNode.NodeTemplate);
 
       } else {
-        created = this.createFromNodeTemplate(existingNode, x.nodeTemplateInstance, x.propertyInstances);
+        created = await this.nodeInstanceService.createFromNodeTemplate(existingNode, learnNode.nodeTemplateInstance.nodeTemplate, learnNode.propertyInstances);
       }
 
-      created.node.Name = x.name;
-      created.node.Description = x.description;
+      created.node.Name = learnNode.name;
+      created.node.Description = learnNode.description;
 
       for (const newNode of created.created) {
         this.prepareNewItem(newNode, newNode.Parent, false, true);
@@ -671,62 +553,4 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  private createFromNodeTemplate(baseNode: NodeInstance, nodeTemplate: NodeTemplate, propertyInstances: PropertyInstance[]): { node: NodeInstance, created: NodeInstance[] } {
-    const node = NodeInstance.createForNodeInstanceFromTemplate(nodeTemplate, void 0);
-    let created = [node];
-
-    if (node) {
-      for (const prop of propertyInstances) {
-        const nodeProp = node.Properties.find(a => a.PropertyTemplate.Key === prop.PropertyTemplate.Key);
-
-        if (nodeProp) {
-          nodeProp.Value = prop.Value;
-        }
-      }
-    }
-
-    let parent = void 0;
-    if (baseNode.NodeTemplate.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType) {
-      parent = baseNode;
-    }
-
-    parent = this.getNodeInstanceByNeedsInterface(baseNode, nodeTemplate.NeedsInterface2InterfacesType);
-
-    if (!parent) {
-      const nextTemplate = this.nodeTemplates.find(a => a.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType);
-      const newNode = this.createFromNodeTemplate(baseNode, nextTemplate, propertyInstances);
-      if (newNode) {
-        parent = newNode.node;
-        created = [...created, ...newNode.created];
-      }
-    }
-
-    if (parent) {
-      node.Parent = parent;
-      node.This2ParentNodeInstance = parent.ObjId;
-    }
-    return { node: node, created: created };
-  }
-
-  private getNodeInstanceByNeedsInterface(nodeInstance: NodeInstance, needsInterfaceGuid: string): NodeInstance {
-    if (nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === needsInterfaceGuid) {
-      return nodeInstance;
-    }
-
-    if (!nodeInstance.Children || nodeInstance.Children.length === 0) {
-      return void 0;
-    }
-    for (const x of nodeInstance.Children) {
-      if (x.NodeTemplate.ProvidesInterface2InterfaceType === needsInterfaceGuid) {
-        return x;
-      }
-
-      const child = this.getNodeInstanceByNeedsInterface(x, needsInterfaceGuid);
-      if (child) {
-        return child;
-      }
-    }
-
-    return void 0;
-  }
 }

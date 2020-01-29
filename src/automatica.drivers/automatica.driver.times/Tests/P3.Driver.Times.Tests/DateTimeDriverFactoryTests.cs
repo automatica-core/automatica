@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.UnitTests.Common;
-using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Base.Drivers;
 using P3.Driver.Times.DriverFactory;
 using P3.Driver.Times.DriverFactory.DateTime;
 using Xunit;
@@ -17,15 +17,15 @@ namespace P3.Driver.Times.Tests
         }
 
         [Fact]
-        public void TestDateTimeNow()
+        public async Task TestDateTimeNow()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.DateTime);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -40,20 +40,20 @@ namespace P3.Driver.Times.Tests
             Assert.Equal(dtNow.Minute, busDt.Value.Minute);
             Assert.Equal(dtNow.Second, busDt.Value.Second);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
 
         [Fact]
-        public void TestDateNow()
+        public async Task TestDateNow()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Date);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -67,19 +67,19 @@ namespace P3.Driver.Times.Tests
             Assert.Equal(0, busDt.Value.Minute);
             Assert.Equal(0, busDt.Value.Second);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
         [Fact]
-        public void TestTimeNow()
+        public async Task TestTimeNow()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Time);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -93,62 +93,62 @@ namespace P3.Driver.Times.Tests
             Assert.InRange(busDt.Value.Seconds, dtNow.TimeOfDay.Seconds - 5, dtNow.TimeOfDay.Seconds + 5);
 
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
 
 
         [Fact]
-        public void TestDayOfWeek()
+        public async Task TestDayOfWeek()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.DayOfWeek);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
             var value =  values.First().Value;
 
             Assert.Equal(value, dtNow.DayOfWeek);
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
 
         [Fact]
-        public void TestDayOfMonth()
+        public async Task TestDayOfMonth()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.DayOfMonth);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
             var value =  values.First().Value;
 
             Assert.Equal(value, dtNow.Day);
-            
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
 
         [Fact]
-        public void TestYear()
+        public async Task TestYear()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Year);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -156,19 +156,19 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(value, dtNow.Year);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
         [Fact]
-        public void TestMonth()
+        public async Task TestMonth()
         {
-            DispatcherMock.Instance.Clear();
+            Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Month);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -176,19 +176,19 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(value, dtNow.Month);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
         [Fact]
-        public void TestMinutes()
+        public async Task TestMinutes()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Minutes);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -196,19 +196,19 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(value, dtNow.Minute);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
         [Fact]
-        public void TestSeconds()
+        public async Task TestSeconds()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Seconds);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -216,19 +216,19 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(value, dtNow.Second);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
         [Fact]
-        public void TestHours()
+        public async Task TestHours()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
             var driver = CreateDriver(DateTimeDriverFactory.Hours);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -236,18 +236,18 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(value, dtNow.Hour);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
         [Fact]
-        public void TestMilliseconds()
+        public async Task TestMilliseconds()
         {
-            DispatcherMock.Instance.Clear();
+            await Dispatcher.ClearValues();
             var driver = CreateDriver(DateTimeDriverFactory.Milliseconds);
 
             Assert.Equal(1, driver.Children.Count);
 
-            var values = DispatcherMock.Instance.GetValues(DispatchableType.NodeInstance);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.Equal(1, values.Count);
 
@@ -255,8 +255,8 @@ namespace P3.Driver.Times.Tests
 
             Assert.NotNull(value);
 
-            driver.Stop();
-            DispatcherMock.Instance.Clear();
+            await driver.Stop();
+            await Dispatcher.ClearValues();
         }
     }
 }

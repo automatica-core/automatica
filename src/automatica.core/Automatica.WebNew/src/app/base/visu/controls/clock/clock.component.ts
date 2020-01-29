@@ -5,6 +5,7 @@ import { TranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "visu-clock",
@@ -13,8 +14,17 @@ import { ConfigService } from "src/app/services/config.service";
 })
 export class ClockComponent extends BaseMobileComponent implements OnInit {
 
-  constructor(dataHub: DataHubService, notify: NotifyService, translate: TranslationService, configService: ConfigService) {
-    super(dataHub, notify, translate, configService);
+  @ViewChild("second", { static: true }) second: ElementRef;
+  @ViewChild("minute", { static: true }) minute: ElementRef;
+  @ViewChild("hour", { static: true }) hour: ElementRef;
+
+  constructor(
+    dataHub: DataHubService,
+    notify: NotifyService,
+    translate: TranslationService,
+    configService: ConfigService,
+    appService: AppService) {
+    super(dataHub, notify, translate, configService, appService);
   }
 
   public onItemResized() {
@@ -23,6 +33,34 @@ export class ClockComponent extends BaseMobileComponent implements OnInit {
 
   ngOnInit() {
 
+
+    const currentSec = this.getSecondsToday();
+
+    const seconds = (currentSec / 60) % 1;
+    const minutes = (currentSec / 3600) % 1;
+    const hours = (currentSec / 43200) % 1;
+
+    this.setTime(60 * seconds, this.second);
+    this.setTime(3600 * minutes, this.minute);
+    this.setTime(43200 * hours, this.hour);
+  }
+
+  // Javascript is used to set the clock to your computer time.
+
+
+  setTime(left, hand: ElementRef) {
+    hand.nativeElement.style["animation-delay"] = left * -1 + "s";
+    // $(".clock__" + hand).css("animation-delay", "" + left * -1 + "s");
+  }
+
+  getSecondsToday() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const diff = <any>now - <any>today;
+    const round = Math.round(diff / 1000);
+
+    return round;
   }
 
 

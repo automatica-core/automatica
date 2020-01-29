@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.Bootloader
 {
@@ -16,14 +17,7 @@ namespace Automatica.Core.Bootloader
                 var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
 
                 var appName = Path.Combine(fi.DirectoryName, "..", "automatica", "Automatica.Core.Watchdog");
-                var tmpPath = Path.Combine(Path.GetTempPath(), $"Automatica.Core.Update");
-
-                if (Directory.Exists(tmpPath))
-                {
-                    Directory.Delete(tmpPath, true);
-                }
-
-
+              
                 ProcessStartInfo processInfo = null;
                 if (!File.Exists(appName))
                 {
@@ -49,57 +43,12 @@ namespace Automatica.Core.Bootloader
 
                     while (true)
                     {
-                        process = Process.Start(processInfo);
+                        CheckForUpdateAndInstall();
 
+                        process = Process.Start(processInfo);
                         process.WaitForExit();
 
-                        var exitCode = process.ExitCode;
-
-                        if (exitCode == 2)
-                        {
-                            var sourceDir = tmpPath;
-                            var targetDir = Path.Combine(fi.DirectoryName, "..", "automatica");
-
-                            if (!Directory.Exists(sourceDir))
-                            {
-                                Console.Error.WriteLine($"Source directory does not exist ({sourceDir})...");
-                                return;
-                            }
-                            if (!Directory.Exists(targetDir))
-                            {
-                                Console.Error.WriteLine($"Target directory does not exist ({targetDir})...");
-                                return;
-                            }
-
-                            Console.WriteLine("Starting update...");
-
-                            var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
-
-                            Console.WriteLine("Back up current binaries...");
-                            CopyDirectory(targetDir, tmpDirectory);
-
-                            // DeleteAllFilesInDirectory(targetDir);
-
-                            Console.WriteLine("Copy new binaries...");
-                            if (!CopyDirectory(sourceDir, targetDir))
-                            {
-                                Console.WriteLine("Copy failed...restore old binaries");
-                                Directory.Delete(targetDir, true);
-                                CopyDirectory(tmpDirectory, targetDir);
-                                Directory.Delete(tmpDirectory, true);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Copy success...remove old binaries");
-                                Directory.Delete(tmpDirectory, true);
-                                Directory.Delete(sourceDir, true);
-                            }
-
-
-                            Console.WriteLine("Starting update...done");
-                        }
-
-                        process = null;
+                        Console.WriteLine($"Process exited with code {process.ExitCode}");
 
                         Thread.Sleep(500);
                     }
@@ -113,6 +62,58 @@ namespace Automatica.Core.Bootloader
             {
                 Console.Error.WriteLine($"{e}");
             }
+        }
+
+        private static void CheckForUpdateAndInstall()
+        {
+            var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
+            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
+
+            var sourceDir = tmpPath;
+            var targetDir = Path.Combine(fi.DirectoryName, "..", "automatica");
+
+            if (!Directory.Exists(sourceDir))
+            {
+                Console.Error.WriteLine($"Source directory does not exist ({sourceDir})...");
+                return;
+            }
+            if (!Directory.Exists(targetDir))
+            {
+                Console.Error.WriteLine($"Target directory does not exist ({targetDir})...");
+                return;
+            }
+
+            Console.WriteLine("Starting update...");
+
+            var tmpDirectory = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
+
+            Console.WriteLine("Back up current binaries...");
+            CopyDirectory(targetDir, tmpDirectory);
+
+            // DeleteAllFilesInDirectory(targetDir);
+
+            Console.WriteLine("Copy new binaries...");
+            if (!CopyDirectory(sourceDir, targetDir))
+            {
+                Console.WriteLine("Copy failed...restore old binaries");
+                Directory.Delete(targetDir, true);
+                CopyDirectory(tmpDirectory, targetDir);
+                Directory.Delete(tmpDirectory, true);
+            }
+            else
+            {
+                Console.WriteLine("Copy success...remove old binaries");
+                Directory.Delete(tmpDirectory, true);
+                Directory.Delete(sourceDir, true);
+            }
+
+
+            if (Directory.Exists(tmpPath))
+            {
+                Directory.Delete(tmpPath, true);
+            }
+
+            Console.WriteLine("Starting update...done");
         }
 
         private static void DeleteAllFilesInDirectory(string directory)
@@ -157,11 +158,18 @@ namespace Automatica.Core.Bootloader
                 try
                 {
                     var fileInfo = new FileInfo(newPath);
-                    if(fileInfo.Name == "Automatica.Core.Bootloader")
+                    if(fileInfo.Name == "Automatica.Core.Bootloader" )
                     {
                         Console.WriteLine($"Ignore update of Automatica.Core.Bootloader");
                         continue;
                     }
+
+                    if (fileInfo.Name.EndsWith(".log"))
+                    {
+                        Console.WriteLine($"Ignore log file...");
+                        continue;
+                    }
+
                     var newFile = newPath.Replace(source, destination);
                     Console.WriteLine($"Copy {newPath} to {newFile}");
                     File.Copy(newPath, newFile, true); 

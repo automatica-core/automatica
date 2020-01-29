@@ -2,27 +2,39 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.LinqExtensions;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Areas;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Ets;
 
+[assembly:InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
+
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("areas")]
+    [Route("webapi/areas")]
 
     public class AreaController : BaseController
     {
-        public AreaController(AutomaticaContext dbContext) : base(dbContext)
+        private readonly IAreaCache _areaCache;
+        private readonly IAreaTemplateCache _areaTemplateCache;
+
+        public AreaController(AutomaticaContext dbContext, IAreaCache areaCache, IAreaTemplateCache areaTemplateCache) : base(dbContext)
         {
+            _areaCache = areaCache;
+            _areaTemplateCache = areaTemplateCache;
         }
 
         [HttpGet]
@@ -30,7 +42,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<AreaTemplate> GetTemplates()
         {
-            return DbContext.AreaTemplates;
+            return _areaTemplateCache.All();
         }
 
         [HttpPost]
@@ -38,51 +50,53 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<IEnumerable<AreaInstance>> Post(Guid parentObjId)
         {
             // full path to file in temp location
-
             var parentInstance = await DbContext.AreaInstances.SingleOrDefaultAsync(a => a.ObjId == parentObjId);
 
             if (parentInstance == null)
             {
-                return new List<AreaInstance>(); //TODO error handling
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return new List<AreaInstance>(); 
             }
-            var myFile = Request.Form.Files[0];
-            var targetLocation = Path.GetTempPath();
+            var myFile = Request.Form.Files[0]; 
 
             try
             {
-                var path = Path.Combine(targetLocation, myFile.FileName);
-
-                // Uncomment to save the file
-                using (var fileStream = System.IO.File.Create(path))
-                {
-                    myFile.CopyTo(fileStream);
-                }
-
-
-                var etsProject = new EtsProjectParser().ParseEtsFile(path, GroupAddressStyle.ThreeLevel);
-
-                foreach (var b in etsProject.Buildings)
-                {
-                    var bInstance = CreateAreaInstance(parentInstance, b);
-
-                    parentInstance.InverseThis2ParentNavigation.Add(bInstance);
-                }
-
-                return new List<AreaInstance>
-                {
-                    parentInstance
-                };
-
-
+                return await ProcessFile(parentInstance, myFile);
             }
             catch
             {
-                Response.StatusCode = 400;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
 
             return new List<AreaInstance>();
         }
 
+        internal async Task<IEnumerable<AreaInstance>> ProcessFile(AreaInstance parentInstance, IFormFile formFile)
+        {
+            var targetLocation = ServerInfo.GetTempPath();
+            var path = Path.Combine(targetLocation, formFile.FileName);
+
+            // Uncomment to save the file
+            await using (var fileStream = System.IO.File.Create(path))
+            {
+                formFile.CopyTo(fileStream);
+            }
+
+
+            var etsProject = new EtsProjectParser().ParseEtsFile(path, GroupAddressStyle.ThreeLevel);
+
+            foreach (var b in etsProject.Buildings)
+            {
+                var bInstance = CreateAreaInstance(parentInstance, b);
+
+                parentInstance.InverseThis2ParentNavigation.Add(bInstance);
+            }
+
+            return new List<AreaInstance>
+            {
+                parentInstance
+            };
+        }
 
         private AreaInstance CreateAreaInstance(AreaInstance parent, EtsBuildingPart building)
         {
@@ -101,13 +115,6 @@ namespace Automatica.Core.WebApi.Controllers
                         icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.BuildingPart).Icon;
                         break;
                     case EtsBuildingType.Floor:
-                        typeGuid = AreaTemplateAttribute.GetFromEnum(AreaTemplates.Hallway);
-                        icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.Hallway).Icon;
-                        break;
-                    case EtsBuildingType.Room:
-                        typeGuid = AreaTemplateAttribute.GetFromEnum(AreaTemplates.Room);
-                        icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.Room).Icon;
-                        break;
                     case EtsBuildingType.Corridor:
                         typeGuid = AreaTemplateAttribute.GetFromEnum(AreaTemplates.Hallway);
                         icon = AreaTemplateAttribute.GetAttributeFromEnum(AreaTemplates.Hallway).Icon;
@@ -162,6 +169,7 @@ namespace Automatica.Core.WebApi.Controllers
                 }
 
                 await DbContext.SaveChangesAsync();
+                _areaCache.Clear();
             }
             finally
             {
@@ -175,15 +183,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public IEnumerable<AreaInstance> GetInstances()
         {
-            var rootItems = DbContext.AreaInstances.Where(a => a.This2Parent == null).Where(a => IsUserInGroup(a.This2UserGroup));
-            var items = new List<AreaInstance>();
-
-            foreach (var root in rootItems)
-            {
-                items.Add(RecursiveLoad(root, DbContext));
-            }
-
-            return items;
+            return _areaCache.All().Where(a => IsUserInGroup(a.This2UserGroup));
         }
 
         private async Task SaveAreaInstanceRec(AreaInstance instance)
@@ -234,6 +234,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 await DbContext.SaveChangesAsync(true);
                 transaction.Commit();
+                _areaCache.Clear();
             }
             catch (Exception e)
             {
@@ -244,30 +245,6 @@ namespace Automatica.Core.WebApi.Controllers
             return GetInstances();
         }
 
-        private static AreaInstance RecursiveLoad(AreaInstance parent, AutomaticaContext dbContext)
-        {
-            var loaded = dbContext.AreaInstances
-                .Include(a => a.InverseThis2ParentNavigation)
-                .Include(a => a.This2AreaTemplateNavigation)
-                .ThenInclude(a => a.This2AreaTypeNavigation)
-                .Include(a => a.This2AreaTemplateNavigation)
-                .ThenInclude(a => a.NeedsThis2AreaTypeNavigation)
-                .Include(a => a.This2AreaTemplateNavigation)
-                .ThenInclude(a => a.ProvidesThis2AreayTypeNavigation).SingleOrDefault(a => a.ObjId == parent.ObjId);
-
-            var newChilds = new List<AreaInstance>();
-            if (loaded == null)
-            {
-                return null;
-            }
-
-            foreach (var child in loaded.InverseThis2ParentNavigation)
-            {
-                newChilds.Add(RecursiveLoad(child, dbContext));
-            }
-
-            loaded.InverseThis2ParentNavigation = newChilds;
-            return loaded;
-        }
+       
     }
 }

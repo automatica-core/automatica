@@ -4,6 +4,11 @@
     display: block;
 }
 
+.dx-toolbar {
+    background: $base-accent2;
+}
+
+
 :host ::ng-deep .dx-toolbar-items-container {
     .dx-toolbar-after {
         padding: 0 40px;

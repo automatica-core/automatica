@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.Serial;
@@ -43,6 +44,7 @@ namespace P3.Driver.EnOcean
             {
                 _stream.TelegramReceived += TelegramReceivedEventHandler;
 
+                Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}");
                 var readIdBase = await SendTelegram(new CommonCommandPacket(CommonCommands.CO_RD_IDBASE));
 
                 if(readIdBase != null)

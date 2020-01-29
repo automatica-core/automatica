@@ -35,12 +35,32 @@
                 "NAME": "Toggle button",
                 "DESCRIPTION": ""
             },
+            "PUSH_BUTTON": {
+                "NAME": "Push button",
+                "DESCRIPTION": ""
+            },
             "NUMBER_BOX": {
                 "NAME": "Numberbox",
                 "DESCRIPTION": ""
             },
             "WINDOW_MONITOR": {
                 "NAME": "Window monitor (ALPHA)",
+                "DESCRIPTION": ""
+            },
+            "CHART": {
+                "NAME": "Chart",
+                "DESCRIPTION": ""
+            },
+            "GAUGE": {
+                "NAME": "Gauge",
+                "DESCRIPTION": ""
+            },
+            "CLOCK": {
+                "NAME": "Clock",
+                "DESCRIPTION": ""
+            },
+            "RGBA": {
+                "NAME": "RGBA",
                 "DESCRIPTION": ""
             }
         },
@@ -54,6 +74,9 @@
             },
             "TEXT": {
                 "NAME": "Text"
+            },
+            "VALUE": {
+                "NAME": "Value"
             }
         },
         "APPEARANCE": {
@@ -111,11 +134,39 @@
             },
             "STEP": {
                 "NAME": "Step",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "AREA_LINK": {
                 "NAME": "Area",
                 "DESCRIPTION": ""
+            },
+            "SCALE_START": {
+                "NAME": "Start",
+                "DESCRIPTION": ""
+            },
+            "SCALE_END": {
+                "NAME": "End",
+                "DESCRIPTION": ""
+            },
+            "TICKS": {
+                "NAME": "Ticks",
+                "DESCRIPTION": ""
+            },
+            "GAUGE_TYPE": {
+                "NAME": "Gauge type",
+                "DESCRIPTION": ""
+            },
+            "NODE_STATE_VALUE": {
+                "NAME": "State",
+                "DESCRIPTION":""
+            },
+            "BEHAVIOUR": {
+                "NAME": "Behaviour",
+                "DESCRIPTION": ""
+            }, 
+            "SEND_VALUE": {
+                "NAME": "Value to send",
+                "DESCRIPTION":""
             }
         }
     }

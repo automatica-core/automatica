@@ -99,7 +99,8 @@ namespace P3.Driver.HomeKit.Hap.Model
                 {
                     "pr"
                 },
-                Id = id
+                Id = id,
+                EventBasedNotification = true
             };
         }
 

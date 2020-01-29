@@ -11,26 +11,26 @@ export enum PluginType {
 }
 
 export interface Version {
-    Major: number;
-    Minor: number;
-    Build: number;
-    Revision: number;
+    major: number;
+    minor: number;
+    build: number;
+    revision: number;
 }
 
 export interface Plugin {
-    AzureFileName: string;
-    ComponentName: string;
-    MinCoreServerVersionObj: Version;
-    Version: string;
-    PluginGuid: string;
-    IsPrerelease: boolean;
-    Name: string;
-    PluginType: PluginType;
+    azureFileName: string;
+    componentName: string;
+    minCoreServerVersionObj: Version;
+    version: string;
+    pluginGuid: string;
+    isPrerelease: boolean;
+    name: string;
+    pluginType: PluginType;
 }
 
 export interface PluginState {
-    CloudPlugin: Plugin;
-    LoadedPlugin: Plugin;
+    cloudPlugin: Plugin;
+    loadedPlugin: Plugin;
 }
 
 

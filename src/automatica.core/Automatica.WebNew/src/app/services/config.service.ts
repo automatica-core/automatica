@@ -6,13 +6,17 @@ import { HttpClient } from "@angular/common/http";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { NodeTemplate } from "../base/model/node-template";
 import { NodeInstance } from "../base/model/node-instance";
-import { BoardType } from "../base/model/board-type";
 
 @Injectable()
 export class ConfigService extends BaseService {
 
+
     constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designData: DesignTimeDataService) {
         super(http, pRouter, translationService);
+    }
+
+    async loadConfiguration() {
+
     }
 
     getSingleNodeInstance(id: string): Promise<NodeInstance> {
@@ -26,10 +30,6 @@ export class ConfigService extends BaseService {
 
     getNodeInstances(): Promise<NodeInstance[]> {
         return super.getMultiple<NodeInstance>("nodeInstances");
-    }
-
-    getBoardType(): Promise<BoardType> {
-        return super.get<BoardType>("boardType");
     }
 
     getNodeInstancesLinkedToArea(area: string) {
@@ -54,6 +54,9 @@ export class ConfigService extends BaseService {
     }
     read(node: NodeInstance): Promise<any> {
         return super.postJson("nodeInstances/read", node.toJson());
+    }
+    customAction(node: NodeInstance, actionName: string): Promise<NodeInstance[]> {
+        return super.postMultiple<NodeInstance>("nodeInstances/customAction/" + actionName, node.toJson());
     }
 
     save(nodeInstances: NodeInstance[]): Promise<NodeInstance[]> {

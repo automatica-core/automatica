@@ -15,6 +15,7 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     private _Height: number
     private _Width: number;
 
+
     @JsonProperty()
     public ObjId: string;
 
@@ -182,6 +183,9 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     public set Width(v: number) {
         this._Width = v;
     }
+
+
+
 
     public typeInfo(): string {
         return "VisuObjectInstance";

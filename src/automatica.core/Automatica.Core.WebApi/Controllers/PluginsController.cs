@@ -1,34 +1,27 @@
-﻿using Automatica.Core.Base.Common;
-using Automatica.Core.Common.Update;
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
-using Automatica.Core.Internals.Cloud.Model;
-using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
 {
     public class PluginState
     {
-        public EF.Models.Plugin LoadedPlugin { get; set; }
-        public EF.Models.Plugin CloudPlugin { get; set; }
+        public Plugin LoadedPlugin { get; set; }
+        public Plugin CloudPlugin { get; set; }
     }
 
-    [Route("plugins")]
+    [Route("webapi/plugins")]
     public class PluginsController : BaseController
     {
         private readonly ICloudApi _api;
-        private readonly ICoreServer _coreServer;
 
-        public PluginsController(AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer) : base(dbContext)
+        public PluginsController(AutomaticaContext dbContext, ICloudApi api) : base(dbContext)
         {
             _api = api;
-            _coreServer = coreServer;
         }
 
         [HttpGet, Route("plugins")]
@@ -36,8 +29,9 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var plugins = await _api.GetLatestPlugins();
             var ret = new List<PluginState>();
-            var loadedPlugins = DbContext.Plugins.Where(a => a.Loaded).ToList();
+            var loadedPlugins = DbContext.Plugins.AsNoTracking().Where(a => a.Loaded).ToList();
 
+            
             foreach (var cloudPlugin in plugins)
             {
                 var loadedPlugin = loadedPlugins.SingleOrDefault(a => a.PluginGuid == cloudPlugin.PluginGuid);

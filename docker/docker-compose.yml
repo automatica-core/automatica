@@ -7,6 +7,7 @@ services:
       dockerfile: docker/automatica/Dockerfile
     ports:
       - "5001:5001"
+      - "1883:1883"
       - "5000:5000"
  
   proxy:

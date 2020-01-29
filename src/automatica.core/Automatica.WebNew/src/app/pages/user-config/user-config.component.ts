@@ -20,7 +20,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 export class UserConfigComponent extends BaseComponent implements OnInit {
 
 
-  @ViewChild("grid")
+  @ViewChild("grid", {static: false})
   grid: DxDataGridComponent;
 
   users: User[] = [];
@@ -44,9 +44,9 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     translate: TranslationService,
     private notify: NotifyService,
     private userGroupService: GroupsService,
-    private appService: AppService) {
+    appService: AppService) {
 
-    super(notify, translate);
+    super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
     this.menuSave.label = translate.translate("COMMON.SAVE");
 

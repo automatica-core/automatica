@@ -4,52 +4,37 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
-using Automatica.Core.Base.IO;
-using Automatica.Core.Base.License;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Runtime.Core;
-using Automatica.Core.Runtime.IO;
 using Automatica.Core.WebApi;
-using Automatica.Core.WebApi.Converter;
 using Automatica.Discovery;
 using Automatica.Push.Hubs;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Cors;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Automatica.Core.Base.Visu;
-using Automatica.Core.Visu;
-using Automatica.Core.Driver.Monitor;
-using Automatica.Core.Driver.LeanMode;
 using Microsoft.AspNetCore.Http.Features;
 using Automatica.Core.WebApi.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Automatica.Core.Internals.License;
-using Automatica.Core.Internals.Cloud;
-using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.SignalR;
 using Automatica.Core.Push;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Model.Models.User;
-using Automatica.Push.LearnMode;
-using Automatica.Core.WebApi.Converter.MessagePack;
 using Microsoft.AspNetCore.ResponseCompression;
+using MQTTnet.AspNetCore;
+using Automatica.Core.Runtime;
+using Automatica.Core.WebApi.Converter;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Automatica.Core
 {
@@ -65,6 +50,8 @@ namespace Automatica.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMqttTcpServerAdapter();
+
             services.AddDbContext<AutomaticaContext>();
             services.AddResponseCompression(options =>
             {
@@ -104,53 +91,44 @@ namespace Automatica.Core
                         {
                             var accessToken = context.Request.Query["access_token"];
 
-                        // If the request is for our hub...
-                        var path = context.HttpContext.Request.Path;
+                            // If the request is for our hub...
+                            var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
                                 (path.StartsWithSegments("/signalr")))
                             {
-                            // Read the token out of the query string
-                            context.Token = accessToken;
+                                // Read the token out of the query string
+                                context.Token = accessToken;
                             }
                             return Task.CompletedTask;
                         }
                     };
                 });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", b =>
-                {
-                    b.AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin()
-                        .AllowCredentials();
-                });
-            });
-
-            services.AddMvcCore(config =>
-            {
-                config.Filters.Add(new AuthorizeFilter());
-                
-            }).AddAuthorization(options =>
-            {
-                options.AddPolicy(Role.AdminRole, policy => policy.RequireRole(Role.AdminRole));
-                options.AddPolicy(Role.ViewerRole, policy => policy.RequireRole(Role.ViewerRole, Role.AdminRole, Role.VisuRole));
-                options.AddPolicy(Role.VisuRole, policy => policy.RequireRole(Role.VisuRole));
-            }).AddApplicationPart(typeof(BaseController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options => {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.Converters.Add(new ByteArrayToLongConverter());
-            }).AddApplicationPart(typeof(DiscoveryDeviceDescriptionController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options => {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.Converters.Add(new ByteArrayToLongConverter());
-            }).AddJsonFormatters().AddMessagePackFormatters();
-
             services.Configure<MvcOptions>(options =>
             {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("CorsPolicy"));
             });
+            services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy(Role.AdminRole, policy => policy.RequireRole(Role.AdminRole));
+                    options.AddPolicy(Role.ViewerRole,
+                        policy => policy.RequireRole(Role.ViewerRole, Role.AdminRole, Role.VisuRole));
+                    options.AddPolicy(Role.VisuRole, policy => policy.RequireRole(Role.VisuRole));
+                })
+                .AddApplicationPart(typeof(BaseController).GetTypeInfo().Assembly)
+                .AddControllersAsServices()
+                .AddApplicationPart(typeof(DiscoveryDeviceDescriptionController).GetTypeInfo().Assembly)
+                .AddControllersAsServices()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.Converters.Add(new ByteArrayToLongConverter());
+                });
+
+            services.AddControllers(options =>
+                options.Filters.Add(new HttpResponseExceptionFilter()));
+
 
             services.Configure<FormOptions>(x =>
             {
@@ -158,40 +136,22 @@ namespace Automatica.Core
                 x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
             });
 
-            services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));
-
             services.AddSingleton<DiscoveryService>();
-            services.AddSingleton<IVisualisationFactory, VisuTempInit>();
-            services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
-            services.AddSingleton<IServerCloudApi, CloudApi>();
-            services.AddSingleton<ICloudApi, CloudApi>();
-            services.AddSingleton<ILicenseContext, LicenseContext>();
-            services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
-            services.AddSingleton<ILearnMode, LearnMode>();
-     
-
             if (!HybridSupport.IsElectronActive)
             {
                 services.AddSingleton<IHostedService>(provider => provider.GetService<DiscoveryService>());
-
-                services.AddSingleton<CoreServer, CoreServer>();
-                services.AddSingleton<IHostedService>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<INotifyDriver>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<IRuleVisualisation>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<ICoreServer>(provider => provider.GetService<CoreServer>());
             }
-            services.AddSingleton<IDispatcher, Dispatcher>();
+
+            services.AddAutomaticaCoreService(Configuration, HybridSupport.IsElectronActive);
 
             services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
             services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
 
             var builder = new ConfigurationBuilder()
-                .SetBasePath(new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName)
+                .SetBasePath(ServerInfo.GetConfigDirectory())
                 .AddJsonFile("appsettings.json");
-           
-            Configuration = builder.Build();
 
-            services.TryAddTransient<CorsAuthorizationFilter, CorsAuthorizationFilter>();
+            Configuration = builder.Build();
 
 
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
@@ -199,17 +159,14 @@ namespace Automatica.Core
             services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
-            }).AddJsonProtocol(options => {
-            }); ;
-
+            }).AddJsonProtocol(options =>
+            {
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            app.UseCors("CorsPolicy");
-            app.UseResponseCompression();
-
             var port = ServerInfo.WebPort;
 
             if (env.IsDevelopment())
@@ -220,7 +177,6 @@ namespace Automatica.Core
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict
             });
-            app.UseAuthentication();
 
 
             string wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "wwwroot");
@@ -233,29 +189,31 @@ namespace Automatica.Core
             {
                 wwwrootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
             }
+            SystemLogger.Instance.LogInformation($"wwwroot directory {wwwrootPath}");
 
 
-            app.UseSignalR(routes =>
+            app.UseRouting();
+
+            app.UseResponseCompression();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+//app.UseMiddleware<WebApiErrorMiddleware>();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<DataHub>("/signalr/dataHub", options =>
+                endpoints.MapHub<DataHub>("/signalr/dataHub", options =>
                 {
                     options.ApplicationMaxBufferSize = 1024 * 1024;
                 });
-                routes.MapHub<TelegramHub>("/signalr/telegramHub");
-                routes.MapHub<UpdateHub>("/signalr/updateHub");
+                endpoints.MapHub<TelegramHub>("/signalr/telegramHub");
+                endpoints.MapHub<UpdateHub>("/signalr/updateHub"); 
+
+                endpoints.MapControllerRoute("webapi", "");
+
             });
 
-
-
-            SystemLogger.Instance.LogInformation($"wwwroot directory {wwwrootPath}");
-            app.Map("/webapi", appBuilder =>
-            {
-                appBuilder.UseCors("CorsPolicy");
-                appBuilder.UseAuthentication();
-                appBuilder.UseMiddleware<WebApiErrorMiddleware>();
-                appBuilder.UseMvc();
-            });
-            
             app.Use(async (context, next) => {
                 await next();
                 if (context.Response.StatusCode == 404 &&

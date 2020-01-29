@@ -85,18 +85,19 @@
             "MAX_CHILDS_REACHED": "Max instances of node reached."
         },
         "CATEGORY": {
-            "ADDRESS": "Adress",
-            "ADRESS": "Adress",
+            "ADDRESS": "Address",
+            "ADRESS": "Address",
             "TRANSFORM": "Transform",
             "MISC": "Common",
             "PARAMETERS": "Parameters",
-            "VISU": "Visu",
+            "VISU": "Visualization",
             "USER2GROUP": "Usergroups",
             "USER2ROLE": "Roles",
             "USERGROUP2ROLE": "Roles",
             "IMPORT": "Import",
             "SETTING": "Settings",
-            "DISCOVERY": "Discovery"
+            "DISCOVERY": "Discovery",
+            "TRENDING": "Trendings"
         },
         "FACTOR": {
             "NAME": "Factor",
@@ -292,6 +293,26 @@
             "CLOUDURL": {
                 "NAME": "Cloud Url",
                 "DESCRIPTION": ""
+            },
+            "TRENDING": {
+                "NAME": "Trending",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_TYPE":{
+                "NAME": "Type",
+                "DESCRIPTION": ""
+            },
+            "TRENDING_INTERVAL": {
+                "NAME": "Interval [s]",
+                "DESCRIPTION": ""
+            },
+            "OBJID":{
+                "NAME": "ID",
+                "DESCRIPTION": ""
+            },
+            "SLAVE": {
+                "NAME": "Slave",
+                "DESCRIPTION":""
             }
         },
         "CATEGORY_INSTANCE": {
@@ -331,7 +352,7 @@
                 "NAME": "Multimedia",
                 "DESCRIPTION": ""
             },
-            "PHOTOVOLTAIK": {
+            "PHOTOVOLTAIC": {
                 "NAME": "Photovoltaik",
                 "DESCRIPTION": ""
             },
@@ -450,7 +471,8 @@
         "ACTION": "Actions",
         "PROGRESS": "Progress",
         "UPDATE_ALL": "Update all",
-        "RESTART_AFTER_INSTALL": "After the plugins were downloaded, a manuel restart must be triggered!"
+        "INSTALL_ALL": "Install all",
+        "INSTALL_UPDATE_ALL": "Update & install all"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddate must be after startdate",

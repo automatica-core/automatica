@@ -61,10 +61,6 @@ namespace P3.Driver.Knx.DriverFactory
                     foreach(var datapoint in ((EtsGroup)middle).Children)
                     {
                         var dp = (EtsDatapoint)datapoint;
-                        if(!dp.HasDeviceLinked) // ignore not linked addresses -> we maybe don't know which data type is used
-                        {
-                            continue;
-                        }
                         var dpNode = FindByAddressProperty(dp.Address, dpItems);
                         
                         if(dpNode == null) // already existing

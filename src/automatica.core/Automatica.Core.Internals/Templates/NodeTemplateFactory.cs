@@ -41,12 +41,26 @@ namespace Automatica.Core.Internals.Templates
 
         public ICollection<NodeTemplate> GetNodeTemplates(params Guid[] key)
         {
-            return Db.NodeTemplates
+            var templates = Db.NodeTemplates
                 .Include(a => a.This2NodeDataTypeNavigation)
                 .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
                 .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
                 .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
                 .Where(a => key.Contains(a.ObjId)).ToList();
+
+            return templates;
+        }
+
+        private ICollection<NodeTemplate> GetDefaultChildNodeTemplates(NodeTemplate nodeTemplate)
+        {
+            var templates = Db.NodeTemplates
+                .Include(a => a.This2NodeDataTypeNavigation)
+                .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
+                .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
+                .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
+                .Where(a => a.DefaultCreated & a.NeedsInterface2InterfacesType == nodeTemplate.ProvidesInterface2InterfaceType).ToList();
+
+            return templates;
         }
 
         public NodeInstance CreateNodeInstanceByKey(string key)
@@ -56,7 +70,16 @@ namespace Automatica.Core.Internals.Templates
 
         public NodeInstance CreateNodeInstance(NodeTemplate template)
         {
-            return NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
+            var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
+
+            var childrens = GetDefaultChildNodeTemplates(template);
+
+            foreach (var child in childrens)
+            {
+                node.InverseThis2ParentNodeInstanceNavigation.Add(CreateNodeInstance(child));
+            }
+
+            return node;
         }
 
         public NodeInstance CreateNodeInstance(Guid template)
@@ -279,5 +302,8 @@ namespace Automatica.Core.Internals.Templates
             Db.SaveChanges();
             return CreateTemplateCode.Updated;
         }
+
+
+ 
     }
 }

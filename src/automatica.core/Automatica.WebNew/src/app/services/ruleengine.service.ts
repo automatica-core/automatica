@@ -10,10 +10,28 @@ import { RuleTemplate } from "../base/model/rule-template";
 import { RuleInstance } from "../base/model/rule-instance";
 import { NodeInstance } from "../base/model/node-instance";
 import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
+import { Model, JsonProperty, JsonFieldInfo, BaseModel } from "../base/model/base-model";
 
 export interface AddLogicData {
   data: RuleInstance | NodeInstance2RulePage;
   pageIndex: string;
+}
+
+@Model()
+export class SaveAllLogicEditor extends BaseModel {
+  @JsonProperty()
+  LogicPages: RulePage[] = [];
+
+  @JsonProperty()
+  NodeInstances: NodeInstance[] = [];
+
+  public typeInfo(): string {
+    return "SaveAllLogicEditor";
+  }
+
+  protected getJsonProperty(): Map<string, JsonFieldInfo> {
+    return void 0;
+  }
 }
 
 @Injectable()
@@ -31,13 +49,19 @@ export class RuleEngineService extends BaseService {
     return super.post<RulePage>("rules/save", page.toJson());
   }
 
-  saveAll(pages: RulePage[]): Promise<void> {
-    const ar = [];
+  saveAll(pages: RulePage[], nodeInstances: NodeInstance[]): Promise<SaveAllLogicEditor> {
+    const pagesJson = [];
     for (const page of pages) {
-      ar.push(page.toJson());
+      pagesJson.push(page.toJson());
     }
-    return super.postJson("rules/saveAll", ar);
+
+    const nodesJson = new Array<any>();
+    for (const set of nodeInstances) {
+      nodesJson.push(set.toJson());
+    }
+    return super.post<SaveAllLogicEditor>("rules/saveAll", { logicPages: pagesJson, nodeInstances: nodesJson });
   }
+
   getPages(): Promise<RulePage[]> {
     return super.getMultiple<RulePage>("rules/pages");
   }
