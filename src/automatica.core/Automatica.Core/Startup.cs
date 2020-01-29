@@ -126,6 +126,8 @@ namespace Automatica.Core
                     options.SerializerSettings.Converters.Add(new ByteArrayToLongConverter());
                 });
 
+            services.AddControllers(options =>
+                options.Filters.Add(new HttpResponseExceptionFilter()));
 
 
             services.Configure<FormOptions>(x =>

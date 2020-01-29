@@ -258,7 +258,7 @@ export class BaseService {
             ex.Severity = ExceptionSeverity.Error;
             ex.ErrorText = "UNAUTHORISED";
             return ex;
-        } else if (error.error && error.error.hasOwnProperty("TypeInfo")) {
+        } else if (error.error && (error.error.hasOwnProperty("TypeInfo") || error.error.hasOwnProperty("typeInfo"))) {
             const ex = new WebApiException();
             BaseModel.fromJson(error.error, ex, this.translationService);
             return ex;

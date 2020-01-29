@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Dynamic;
 
 namespace Automatica.Core.Base.Exceptions
@@ -14,7 +13,7 @@ namespace Automatica.Core.Base.Exceptions
     }
 
     /// <summary>
-    /// Provides a serializeable exception for the UI
+    /// Provides a serializable exception for the UI
     /// </summary>
     [Serializable]
     public class WebApiException : Exception
@@ -28,14 +27,14 @@ namespace Automatica.Core.Base.Exceptions
         public ExceptionSeverity Severity { get; }
 
 
-        public string ToJson()
+        public object ToJson()
         {
             dynamic obj = new ExpandoObject();
             obj.errorText = ErrorText;
             obj.severity = Severity;
 
             obj.TypeInfo = "WebApiException";
-            return JsonConvert.SerializeObject(obj);
+            return obj;
         }
     }
 }

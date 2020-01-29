@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Base.Common;
-
 using Automatica.Core.Common.Update;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
@@ -9,7 +8,6 @@ using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Exceptions;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -36,10 +34,6 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<ServerVersion> CheckForUpdate()
         {
             var update = await api.CheckForUpdates();
-            if (update == null)
-            {
-                throw new WebApiException("CLOUD_CONNECTION_INVALID", ExceptionSeverity.Warning);
-            }
             return update;
         }
 

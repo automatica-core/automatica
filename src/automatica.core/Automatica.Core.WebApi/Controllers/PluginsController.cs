@@ -1,11 +1,9 @@
 ﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
-using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -20,24 +18,16 @@ namespace Automatica.Core.WebApi.Controllers
     public class PluginsController : BaseController
     {
         private readonly ICloudApi _api;
-        private readonly ICoreServer _coreServer;
 
-        public PluginsController(AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer) : base(dbContext)
+        public PluginsController(AutomaticaContext dbContext, ICloudApi api) : base(dbContext)
         {
             _api = api;
-            _coreServer = coreServer;
         }
 
         [HttpGet, Route("plugins")]
         public async Task<IList<PluginState>> GetPlugins()
         {
             var plugins = await _api.GetLatestPlugins();
-
-            if (plugins == null)
-            {
-                throw new WebApiException("CLOUD_CONNECTION_INVALID", ExceptionSeverity.Warning);
-            }
-
             var ret = new List<PluginState>();
             var loadedPlugins = DbContext.Plugins.AsNoTracking().Where(a => a.Loaded).ToList();
 
