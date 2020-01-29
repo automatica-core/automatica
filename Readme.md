@@ -31,6 +31,7 @@ Automatica is a building management system thats runs on .NET Core and is built 
 * [Implemented drivers/logics](#Implemented-drivers/logics)
    * [Drivers](#drivers)   
    * [Logics](#logics)
+* [Features](#features)
 * [Project structure](#project-structure)
 * [How to build](#how-to-build)
    * [Frontend](#frontend)
@@ -68,7 +69,7 @@ At the moment the following drivers & logics are implemented and ready to use, a
 * [Apple HomeKit](./src/automatica.drivers/automatica.driver.homekit)
 * [Hue Bridge Simulator](./src/automatica.drivers/automatica.driver.huebridgesimulator)
 * [Ikea Tradfri](./src/automatica.drivers/automatica.driver.ikeatradfri)
-* [KNX](./src/automatica.drivers/automatica.driver.knx)
+* [KNX+BAOS](./src/automatica.drivers/automatica.driver.knx)
 * [Loxone Miniserver](./src/automatica.drivers/automatica.driver.loxone.miniserver)
 * [MachineFlags](./src/automatica.drivers/automatica.driver.machineflags)
 * [MBus](./src/automatica.drivers/automatica.driver.mbus)
@@ -77,6 +78,7 @@ At the moment the following drivers & logics are implemented and ready to use, a
 * [Times](./src/automatica.drivers/automatica.driver.times)
 * [WakeOnLan](./src/automatica.drivers/automatica.driver.wakeonlan)
 * [ZWave](./src/automatica.drivers/automatica.driver.zwave)
+* [Sonos](./src/automatica.drivers/automatica.driver.sonos)
 
 ## Logics
 * [Compare](./src/automatica.logics/automatica.logic.compare.baseoperations)
@@ -87,7 +89,15 @@ At the moment the following drivers & logics are implemented and ready to use, a
 * [Messenger](./src/automatica.logics/automatica.logic.messenger)
 * [Surveillance](./src/automatica.logics/automatica.logic.surveillance)
 * [Time](./src/automatica.logics/automatica.logic.time)
+* [String](./src/automatica.logics/automatica.logic.string.baseoperations)
 
+# Features
+Automatica.Core provides a rich set of features, for example:
+* Trendings - record datapoints (used later for ML, Reporting,...)
+* ETS Import - import your existing ETS5 project 
+* Dockerizeable - automatica.core can run in a dockerized environment
+* Easy to extend
+* ...TBC....
 
 # Project structure
 This project is a mono repository. The master & develop branch will be splitted nightly.
@@ -216,8 +226,6 @@ Things I want to implement in the near future - help is appreciated!
 ## Roadmap core   
 * Automatica.Core Mobile
 * Alarms
-* Data Recording
-  * Record data for reporting, AI,....
 * Automatic editor - to generate time/trigger based actions
    * Simulate movement in the building when you are on vacation,etc...
 * Scripting interface
@@ -235,11 +243,9 @@ Things I want to implement in the near future - help is appreciated!
 * ...
 
 ## Roadmap Drivers
-* KNX Weinzierl BAOS (Raspberry PI)
 * ZigBee
 * Z-Wave
 * Fronius Solar API
-* Sonos
 * MQTT
 * 1-Wire
 * Homematic
