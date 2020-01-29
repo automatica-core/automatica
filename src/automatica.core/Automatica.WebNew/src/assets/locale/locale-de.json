@@ -294,6 +294,10 @@
                 "NAME": "Cloud Url",
                 "DESCRIPTION": ""
             },
+            "CLOUDENVIRONMENT": {
+                "NAME": "Cloud Umgebung",
+                "DESCRIPTION":""
+            },
             "TRENDING": {
                 "NAME": "Datenaufzeichnung",
                 "DESCRIPTION": ""

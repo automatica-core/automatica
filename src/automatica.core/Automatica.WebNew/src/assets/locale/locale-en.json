@@ -291,8 +291,12 @@
                 }
             },
             "CLOUDURL": {
-                "NAME": "Cloud Url",
+                "NAME": "Cloud url",
                 "DESCRIPTION": ""
+            },
+            "CLOUDENVIRONMENT": {
+                "NAME": "Cloud environment",
+                "DESCRIPTION":""
             },
             "TRENDING": {
                 "NAME": "Trending",
