@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Base.IO;
+using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Recorder;
@@ -13,7 +14,7 @@ namespace Automatica.Core.Tests.Recorder
         {
         }
 
-        internal override void Save(Trending trend)
+        internal override void Save(Trending trend, NodeInstance nodeInstance)
         {
             LastTrending = trend;
         }

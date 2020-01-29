@@ -17,10 +17,10 @@ namespace Automatica.Core.Runtime.Database
             _logger = logger;
         }
 
-        public void Add(Trending value)
+        public void Add(Trending value, NodeInstance nodeInstance)
         {
             using var context = new AutomaticaContext(_config);
-            _logger.LogInformation($"Save trend for {value.This2NodeInstance} with value {value.Value}...");
+            _logger.LogInformation($"Save trend for {nodeInstance.Name} ({nodeInstance.ObjId}) with value {value.Value}...");
             context.Add(value);
             context.SaveChanges();
         }

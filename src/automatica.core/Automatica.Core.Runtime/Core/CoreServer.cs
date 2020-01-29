@@ -157,6 +157,7 @@ namespace Automatica.Core.Runtime.Core
 
             _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, CoreLoggerFactory.GetLogger("Trending"))));
             _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher));
+            _trendingRecorder.Add(new FileDataRecorderWriter(_nodeInstanceCache, _dispatcher));
 
             _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
 
@@ -195,7 +196,7 @@ namespace Automatica.Core.Runtime.Core
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Could not startup...");
+                    _logger.LogError(e, "Could not startup...");
                 }
             }, cancellationToken);
 
@@ -472,11 +473,10 @@ namespace Automatica.Core.Runtime.Core
 
                 _configuredDrivers++;
 
-                //TODO!
                 if (_configuredDrivers >= _licenseContext.MaxDataPoints)
                 {
                     _logger.LogError("Cannot instantiate more data-points, license exceeded");
-                //    return;
+                //    return; //license will be ignored for now
                 }
 
                 AddRemoteDriverRecursive(driverInstanceGuid, dr);
@@ -549,30 +549,33 @@ namespace Automatica.Core.Runtime.Core
             }
 
 
-            _logger.LogInformation($"Loading recording data-points...");
-            
-            using (var db = new AutomaticaContext(_config))
+            _logger.LogInformation("Loading recording data-points...");
+            int recordingDataPointCount = 0;
+
+            await using (var db = new AutomaticaContext(_config))
             {
                 var nodeInstances = db.NodeInstances.Where(a => a.Trending).ToList();
-
+                
                 foreach(var node in nodeInstances)
                 {
                     foreach(var recorder in _trendingRecorder)
                     {
+                        _logger.LogDebug($"Node {node.Name} is selected for trending...");
                         await recorder.AddTrend(node.ObjId);
+                        recordingDataPointCount++;
                     }
                 }
             }
 
 
-            _logger.LogInformation($"Loading recording data-points...done");
+            _logger.LogInformation($"Loading recording data-points (found {recordingDataPointCount})...done");
         }
         
       
 
         internal async Task Load(string path, string searchPattern)
         {
-            using var context = new AutomaticaContext(_config);
+            await using var context = new AutomaticaContext(_config);
             try
             {
                 _driverFactoryStore.Clear();

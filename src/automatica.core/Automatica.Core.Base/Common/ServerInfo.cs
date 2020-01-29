@@ -161,5 +161,11 @@ namespace Automatica.Core.Base.Common
             logDirectory = Path.Combine(logDirectory, "logs");
             return logDirectory;
         }
+        public static string GetTrendingDirectory()
+        {
+            var logDirectory = GetBasePath();
+            logDirectory = Path.Combine(logDirectory, "trending");
+            return logDirectory;
+        }
     }
 }

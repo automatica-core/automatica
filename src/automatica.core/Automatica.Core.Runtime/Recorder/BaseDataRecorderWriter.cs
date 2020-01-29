@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
+using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Logger;
 using Microsoft.Extensions.Logging;
@@ -72,11 +73,17 @@ namespace Automatica.Core.Runtime.Recorder
                 Source = source
             };
             trending.Source = source;
-
-            Save(trending);
+            try
+            {
+                Save(trending, instance);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Error save trending value...");
+            }
         }
 
-        internal abstract void Save(Trending trend);
+        internal abstract void Save(Trending trend, NodeInstance nodeInstance);
 
         public Task RemoveAll()
         {
