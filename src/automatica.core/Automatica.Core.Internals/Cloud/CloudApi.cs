@@ -65,6 +65,18 @@ namespace Automatica.Core.Internals.Cloud
             return $"{apiKey}/{ServerInfo.ServerUid}";
         }
 
+        private string GetCloudEnvironmentType()
+        {
+            using var dbContext = new AutomaticaContext(_config);
+            var cloudEnv = dbContext.Settings.FirstOrDefault(a => a.ValueKey == "cloudEnvironment");
+
+            if (cloudEnv == null)
+            {
+                return "develop";
+            }
+            return $"{cloudEnv.ValueText}";
+        }
+
         private HttpClient SetupClient()
         {
             var httpClientHandler = new HttpClientHandler
@@ -83,12 +95,12 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<ServerVersion> CheckForUpdates()
         {
-            return GetRequest<ServerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForUpdates/{ServerInfo.Rid}/{ServerInfo.GetServerVersion()}");
+            return GetRequest<ServerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForUpdates/{ServerInfo.Rid}/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
         }
 
         public Task<IList<Plugin>> GetLatestPlugins()
         {
-            return GetRequest<IList<Plugin>>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/plugins/{ServerInfo.GetServerVersion()}");
+            return GetRequest<IList<Plugin>>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/plugins/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
         }
 
         public async Task<bool> SayHelloToCloud(SayHelloData sayHi)

@@ -232,6 +232,28 @@ namespace Automatica.Core.Runtime.Database
 
             }
 
+            var cloudEnvironment = context.Settings.SingleOrDefault(a => a.ValueKey == "cloudEnvironment");
+
+            if (cloudEnvironment == null)
+            {
+                var cloudEnvironmentType = "master";
+#if DEBUG
+                cloudEnvironmentType = "develop";
+#else
+                cloudEnvironmentType = "master";
+#endif
+
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "cloudEnvironment",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = cloudEnvironmentType,
+                    Group = "SERVER.SETTINGS",
+                    IsVisible = true,
+                    Order = 0
+                });
+            }
+
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
             foreach (var propertyType in propertyTypes)
