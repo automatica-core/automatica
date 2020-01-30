@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { GridsterConfig, GridsterComponent } from "ngx-gridster";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TranslationService } from "angular-l10n";
@@ -61,7 +61,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     private router: Router,
     private login: LoginService,
     appService: AppService,
-    private deviceService: DeviceService) {
+    private deviceService: DeviceService,
+    private changeRef: ChangeDetectorRef) {
 
     super(notify, translate, appService);
   }
@@ -191,11 +192,12 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     let keepFixedWidthInMobile = false;
     let fixedSize = (window.innerWidth / 2) - 35;
 
-    const gridType: gridTypes = "fitToGridOptions";
+    let gridType: gridTypes = "fit";
 
     if (this.deviceService.isMobile()) {
       keepFixedHeightInMobile = true;
       keepFixedWidthInMobile = true;
+      gridType = "fitToGridOptions";
 
       if (this.deviceService.orientation === Orientation.Portrait) {
         maxRows = this.page.Width;
@@ -254,8 +256,12 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     }
     if (this.gridster) {
       this.gridster.resize();
-      this.options.api.optionsChanged();
+      if (this.gridster.options && this.gridster.options.api) {
+        this.gridster.options.api.optionsChanged();
+      }
     }
+
+    this.changeRef.detectChanges();
   }
 
   changedOptions() {
