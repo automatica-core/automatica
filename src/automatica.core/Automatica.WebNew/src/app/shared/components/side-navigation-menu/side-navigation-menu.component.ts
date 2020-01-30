@@ -1,4 +1,4 @@
-import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef } from "@angular/core";
 import { DxTreeViewModule, DxTreeViewComponent } from "devextreme-angular/ui/tree-view";
 import { TranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -6,13 +6,15 @@ import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { DxScrollViewModule } from "devextreme-angular";
 
+import * as events from "devextreme/events";
+
 @Component({
     selector: "app-side-navigation-menu",
     templateUrl: "./side-navigation-menu.component.html",
     styleUrls: ["./side-navigation-menu.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideNavigationMenuComponent implements OnInit {
+export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private _menu: DxTreeViewComponent;
 
@@ -46,7 +48,6 @@ export class SideNavigationMenuComponent implements OnInit {
         if (this.menu && this.menu.instance) {
             this._selectedItem = value;
             this.menu.instance.selectItem(value);
-            this.setDefaultItem();
         }
     }
     get selectedItem(): string {
@@ -69,38 +70,23 @@ export class SideNavigationMenuComponent implements OnInit {
     constructor(private router: Router) { }
 
     ngOnInit() {
-        // this.setDefaultItem();
+
     }
 
-    setDefaultItem() {
+    setInitialItem() {
         if (!this.items) {
             return;
         }
-        const defaultItem = this.findDefaultItemRecursive(this.items);
-        if (this.menu && this.menu.instance && defaultItem) {
-            this.menu.instance.selectItem(defaultItem);
-        }
+
+        const uriSplit = this.router.url.split("/");
+        const curItem = uriSplit[uriSplit.length - 1];
+        this.selectedItem = curItem;
     }
 
-    findDefaultItemRecursive(items: any[]) {
-        for (const x of items) {
-            if (x.default) {
-                return x;
-            }
-
-            if (x.items) {
-                const item = this.findDefaultItemRecursive(x.items);
-                if (item) {
-                    return item;
-                }
-            }
-        }
-        return void 0;
-    }
 
     updateSelection(event) {
         const nodeClass = "dx-treeview-node";
-        const selectedClass = "dx-state-selected";
+        const selectedClass = "dx-state-focused";
         const leafNodeClass = "dx-treeview-node-is-leaf";
         const element: HTMLElement = event.element;
 
@@ -126,6 +112,15 @@ export class SideNavigationMenuComponent implements OnInit {
 
     onMenuInitialized(event) {
         event.component.option("deferRendering", false);
+    }
+
+
+    ngAfterViewInit() {
+        this.setInitialItem();
+    }
+
+    ngOnDestroy() {
+
     }
 }
 
