@@ -6,8 +6,6 @@ import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { DxScrollViewModule } from "devextreme-angular";
 
-import * as events from "devextreme/events";
-
 @Component({
     selector: "app-side-navigation-menu",
     templateUrl: "./side-navigation-menu.component.html",
