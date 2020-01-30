@@ -25,6 +25,16 @@ export class ChartsComponent extends BaseMobileComponent implements OnInit {
   chartDataSource: any;
   bounds: any;
 
+  public get chartHeight() {
+    // console.log("h",  this.height - 200);
+    return this.height - 200;
+  }
+
+  public get chartWidth() {
+    // console.log("w",  this.width - 400);
+    return this.width - 400;
+  }
+
 
 
   private _nodeProperty: PropertyInstance;

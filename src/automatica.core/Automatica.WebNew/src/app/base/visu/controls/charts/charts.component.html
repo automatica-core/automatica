@@ -2,7 +2,7 @@
   <dx-chart id="chart" title="{{ getPropertyValue('text') }}" [dataSource]="chartDataSource" #chart>
     <dxo-zoom-and-pan valueAxis="both" argumentAxis="both" [dragToZoom]="false" [allowMouseWheel]="true" panKey="shift">
     </dxo-zoom-and-pan>
-    <dxo-adaptive-layout width="{{ width - 100 }}" height="{{ height - 500 }}"></dxo-adaptive-layout>
+    <dxo-adaptive-layout [width]="chartWidth" [height]="chartHeight" keepLabels="true"></dxo-adaptive-layout>
     <dxo-scroll-bar [visible]="true"></dxo-scroll-bar>
     <dxo-argument-axis argumentType="datetime" [visualRangeUpdateMode]="keep" [(visualRange)]="currentVisualRange"
       [wholeRange]="bounds">
