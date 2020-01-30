@@ -36,10 +36,18 @@ namespace Automatica.Core.Runtime.Core.Update
 
             if (update != null)
             {
-
                 SystemLogger.Instance.LogInformation("Download update");
-                await _api.DownloadUpdate(update);
+                var fileInfo = await _api.DownloadUpdate(update);
+                
+                var check = Common.Update.Update.CheckUpdateFile(SystemLogger.Instance, fileInfo.FullName, ServerInfo.Rid);
+
+                if (!check)
+                {
+                    _api.DeleteUpdate();
+                }
+
                 SystemLogger.Instance.LogInformation("Install update");
+                await Update();
             }
 
             await Init();
