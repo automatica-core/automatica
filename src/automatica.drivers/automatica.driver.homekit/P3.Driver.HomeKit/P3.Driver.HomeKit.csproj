@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.12.0.678</Version>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Sodium\linux-arm\native\libsodium.so" />

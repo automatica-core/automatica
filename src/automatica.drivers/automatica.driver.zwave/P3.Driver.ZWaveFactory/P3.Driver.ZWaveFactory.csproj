@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\P3.Driver.ZWave-de.json" />
@@ -11,20 +11,15 @@
     <None Remove="Resources\ZWave-de.json" />
     <None Remove="Resources\ZWave-en.json" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
     <EmbeddedResource Include="Resources\ZWave-de.json" />
     <EmbeddedResource Include="Resources\ZWave-en.json" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Driver" Version="0.12.0.678" />
-    
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.ZWaveAeon\P3.Driver.ZWaveAeon.csproj" />
   </ItemGroup>
-
 </Project>

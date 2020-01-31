@@ -1,12 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.FroniusSolar\P3.Driver.FroniusSolar.csproj" />
   </ItemGroup>
-
 </Project>
