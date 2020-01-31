@@ -97,46 +97,53 @@ namespace P3.Driver.HomeKit.Bonjour
 
         public Task Start()
         {
-              _mdns.QueryReceived += _mdns_QueryReceived;
+            _mdns.QueryReceived += _mdns_QueryReceived;
 
-              var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
-              foreach (var network in networkInterfaces)
-              {
-                  _logger.LogDebug(
-                      $"Interface {network.Name}, Type {network.NetworkInterfaceType}, OP Status {network.OperationalStatus}, IP {network.GetIPProperties().UnicastAddresses}");
-              }
+            foreach (var network in networkInterfaces)
+            {
+                _logger.LogDebug(
+                    $"Interface {network.Name}, Type {network.NetworkInterfaceType}, OP Status {network.OperationalStatus}, IP {network.GetIPProperties().UnicastAddresses.FirstOrDefault()}");
+            }
 
-             var startMessage = new Message();
-             startMessage.AuthorityRecords.Add(new SRVRecord
-             {
-                 Name = $"{_name}.{DnsHapDomain}",
-                 Port = _port,
-                 Target = $"{_hapId.Replace(":", "_")}.local"
-             });
+            var weUseAddresses = MulticastService.GetIpAddresses();
 
-             var q = new Question
-             {
-                 Type = DnsType.ANY,
-                 Name = $"{_name}.{DnsHapDomain}",
-                 QU = true,
-                 Class = DnsClass.IN
-             };
-             startMessage.Questions.Add(q);
+            foreach (var ip in weUseAddresses)
+            {
+                _logger.LogDebug($"We use {ip}");
+            }
 
-             _mdns.Start();
+            var startMessage = new Message();
+            startMessage.AuthorityRecords.Add(new SRVRecord
+            {
+                Name = $"{_name}.{DnsHapDomain}",
+                Port = _port,
+                Target = $"{_hapId.Replace(":", "_")}.local"
+            });
+
+            var q = new Question
+            {
+                Type = DnsType.ANY,
+                Name = $"{_name}.{DnsHapDomain}",
+                QU = true,
+                Class = DnsClass.IN
+            };
+            startMessage.Questions.Add(q);
+
+            _mdns.Start();
 
 #pragma warning disable 4014
-             Task.Run(async () =>
-             {
-                 _mdns.SendQuery(startMessage);
-                 await Task.Delay(1000);
-                 q.QU = false;
-                 _mdns.SendQuery(startMessage);
-                 await Task.Delay(1000);
-                 _mdns.SendQuery(startMessage);
-                 await Task.Delay(1000);
-             }).ConfigureAwait(false);
+            Task.Run(async () =>
+            {
+                _mdns.SendQuery(startMessage);
+                await Task.Delay(1000);
+                q.QU = false;
+                _mdns.SendQuery(startMessage);
+                await Task.Delay(1000);
+                _mdns.SendQuery(startMessage);
+                await Task.Delay(1000);
+            }).ConfigureAwait(false);
 #pragma warning restore 4014
             return Task.CompletedTask;
         }
