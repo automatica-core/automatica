@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using P3.Driver.HomeKit.Bonjour.Abstraction;
@@ -97,6 +98,14 @@ namespace P3.Driver.HomeKit.Bonjour
         public Task Start()
         {
               _mdns.QueryReceived += _mdns_QueryReceived;
+
+              var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+              foreach (var network in networkInterfaces)
+              {
+                  _logger.LogDebug(
+                      $"Interface {network.Name}, Type {network.NetworkInterfaceType}, OP Status {network.OperationalStatus}, IP {network.GetIPProperties().UnicastAddresses}");
+              }
 
              var startMessage = new Message();
              startMessage.AuthorityRecords.Add(new SRVRecord
