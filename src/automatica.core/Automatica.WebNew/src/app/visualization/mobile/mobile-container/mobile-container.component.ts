@@ -142,8 +142,6 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
               for (const x of data.RuleInstances) {
                 const instance = VisuObjectInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate));
-
-                instance.RuleInstance = x;
                 visuObjectInstances.push(instance);
 
               }
@@ -273,7 +271,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   }
 
   elementDroped($event) {
-    const instance = VisuObjectMobileInstance.CreateFromTemplate($event.dragData);
+    const instance = VisuObjectMobileInstance.CreateFromTemplate($event.dragData, void 0);
     const pos = this.gridster.getFirstPossiblePosition(instance);
 
     instance.x = pos.x;

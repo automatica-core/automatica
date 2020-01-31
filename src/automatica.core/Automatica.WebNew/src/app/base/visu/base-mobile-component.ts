@@ -8,13 +8,25 @@ import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
 import { AppService } from "src/app/services/app.service";
-import { VisuObjectNodeInstance } from "../model/visu-object-node-instance";
+import { AreaInstance } from "../model/areas";
+import { CategoryInstance } from "../model/categories";
+
+export interface VisuObjectType {
+    This2AreaInstanceNavigation: AreaInstance;
+    This2CategoryInstanceNavigation: CategoryInstance;
+
+    DisplayName: string;
+}
 
 export abstract class BaseMobileComponent extends BaseComponent {
     @HostBinding("class.mobile-control") true;
 
     @Input()
     public item: VisuObjectMobileInstance;
+
+    public get visuObjectType() {
+        return this.item.objectType;
+    }
 
     @Input()
     editMode: boolean = false;
@@ -81,20 +93,17 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     public get icon() {
-        if (this.item instanceof VisuObjectNodeInstance) {
-            if (this.item.nodeInstance.This2CategoryInstanceNavigation) {
-                return this.item.nodeInstance.This2CategoryInstanceNavigation.Icon;
-            }
+        if (this.visuObjectType.This2CategoryInstanceNavigation) {
+            return this.visuObjectType.This2CategoryInstanceNavigation.Icon;
         }
         return void 0;
     }
 
     public get location() {
-        if (this.item instanceof VisuObjectNodeInstance) {
-            if (this.item.nodeInstance.This2AreaInstanceNavigation) {
-                return this.item.nodeInstance.This2AreaInstanceNavigation.DisplayName;
-            }
+        if (this.visuObjectType.This2AreaInstanceNavigation) {
+            return this.visuObjectType.This2AreaInstanceNavigation.DisplayName;
         }
+
         return void 0;
     }
 
@@ -132,12 +141,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
     public baseOnInit() {
 
         if (this.item) {
-            if (this.item.itemResized) {
-                super.registerEvent((this.item.itemResized), () => {
-                    this.onItemResized();
-                });
-            }
-
             super.registerEvent((this.item.notifyChangeEvent), (prop) => {
                 this.propertyChanged()
             });
@@ -215,7 +218,4 @@ export abstract class BaseMobileComponent extends BaseComponent {
         }
         return void 0;
     }
-
-
-    public abstract onItemResized();
 }

@@ -99,6 +99,9 @@ namespace Automatica.Core.WebApi.Controllers
             var childs = node.InverseThis2ParentNodeInstanceNavigation;
             var props = node.PropertyInstance;
 
+            node.This2AreaInstanceNavigation = null;
+            node.This2CategoryInstanceNavigation = null;
+
             node.InverseThis2ParentNodeInstanceNavigation = null;
             node.PropertyInstance = null;
             node.IsDeleted = false;
@@ -174,7 +177,11 @@ namespace Automatica.Core.WebApi.Controllers
                 foreach (var node in nodeInstances)
                 {
                     node.This2ParentNodeInstance = null; //set root parent always to null -> if we are a slave server the parentid could be set
+                    node.This2AreaInstanceNavigation = null;
+                    node.This2CategoryInstanceNavigation = null;
                     var state = await SetNodeInstanceState(node, null, dbEntries.ToDictionary(a => a.ObjId, a => a));
+
+
                     SystemLogger.Instance.LogDebug($"NodeInstance State Added Nodes {state.AddedNodeInstances.Count}, UpdatedNodes {state.UpdatedNodeInstances.Count}. AddedProperties: {state.AddedPropertyInstances.Count}, UpdatedProperties: {state.UpdatedPropertyInstances.Count}");
                     SystemLogger.Instance.LogDebug("Start add/updating entities...done");
                     DbContext.NodeInstances.AddRange(state.AddedNodeInstances);

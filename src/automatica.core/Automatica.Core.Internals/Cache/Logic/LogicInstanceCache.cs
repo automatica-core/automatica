@@ -21,7 +21,11 @@ namespace Automatica.Core.Internals.Cache.Logic
         {
             var all = context.RuleInstances
                 .Include(a => a.RuleInterfaceInstance)
-                    .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
+                .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
+                .ThenInclude(a => a.This2RuleTemplateNavigation)
+                .Include(a => a.This2RuleTemplateNavigation)
+                .Include(a => a.This2AreaInstanceNavigation)
+                .Include(a => a.This2CategoryInstanceNavigation)
                 .AsNoTracking();
 
             foreach (var item in all)

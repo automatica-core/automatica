@@ -57,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Common.Upda
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Model", "Automatica.Core.Model\Automatica.Core.Model.csproj", "{4234F78C-3F64-4233-80C5-913F74579DCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.WebApi.Tests", "Tests\Automatica.Core.WebApi.Tests\Automatica.Core.WebApi.Tests.csproj", "{74E31925-2B60-4FFD-8471-B6D41674862F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.WebApi.Tests", "Tests\Automatica.Core.WebApi.Tests\Automatica.Core.WebApi.Tests.csproj", "{74E31925-2B60-4FFD-8471-B6D41674862F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 Base", "00 Base", "{9B0689B8-D06D-4C9C-9E16-AFBC402EEA59}"
 EndProject
@@ -251,18 +251,18 @@ Global
 		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.Debug|x64.Build.0 = Debug|Any CPU
 		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.Debug|x86.Build.0 = Debug|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x64.ActiveCfg = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x64.Build.0 = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x86.ActiveCfg = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x86.Build.0 = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|Any CPU.ActiveCfg = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|Any CPU.Build.0 = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x64.ActiveCfg = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x64.Build.0 = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x86.ActiveCfg = DebugLocal|Any CPU
-		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x86.Build.0 = DebugLocal|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x64.ActiveCfg = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x64.Build.0 = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x86.ActiveCfg = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugLocal|x86.Build.0 = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|Any CPU.Build.0 = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x64.ActiveCfg = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x64.Build.0 = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x86.ActiveCfg = Debug|Any CPU
+		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.DebugTests|x86.Build.0 = Debug|Any CPU
 		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFBC4EED-183B-4E60-8E6D-A1753CBE42FA}.Release|x64.ActiveCfg = Release|Any CPU

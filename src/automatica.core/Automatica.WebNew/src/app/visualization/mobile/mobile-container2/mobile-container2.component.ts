@@ -13,7 +13,7 @@ import { DeviceService } from "src/app/services/device/device.service";
 import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
 import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
-import { VisuObjectNodeInstance } from "src/app/base/model/visu-object-node-instance";
+import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 
 @Component({
   selector: "app-mobile-container2",
@@ -78,7 +78,7 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
 
               for (const x of data.NodeInstances) {
                 if (x.NodeTemplate.This2DefaultMobileVisuTemplate && this.visuTemplatesMap.has(x.NodeTemplate.This2DefaultMobileVisuTemplate)) {
-                  const instance = VisuObjectNodeInstance.CreateFromTemplateForNode(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x);
+                  const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x);
 
                   this.getAndSetProperty(instance, "nodeInstance", x.ObjId);
                   this.getAndSetProperty(instance, "text", x.Name);
@@ -100,11 +100,8 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
               }
 
               for (const x of data.RuleInstances) {
-                const instance = VisuObjectInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate));
-
-                instance.RuleInstance = x;
+                const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate), x);
                 visuObjectInstances.push(instance);
-
               }
 
               this.page.VisuObjectInstances = visuObjectInstances;

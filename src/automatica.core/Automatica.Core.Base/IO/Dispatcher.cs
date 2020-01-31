@@ -120,37 +120,17 @@ namespace Automatica.Core.Base.IO
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
             {
                 var dispatch = _registrationMap[self.Type][self.Id];
+                await ExecuteDispatch(self, value, dispatch, dispatchAction);
 
-                foreach (var dis in dispatch)
+            }
+            else if (self.Type == DispatchableType.Visualization)
+            {
+                foreach (var all in _registrationMap)
                 {
-
-                    if (!_hopCounts[self.Id].ContainsKey(dis))
+                    if (all.Value.ContainsKey(self.Id))
                     {
-                        _hopCounts[self.Id].Add(dis, 0);
-                    }
-
-                    try
-                    {
-                        if (_hopCounts[self.Id][dis] > 10)
-                        {
-                            _hopCounts.Clear();
-                            throw new DispatchLoopDetectedException(self);
-                        }
-
-                        IncrementHopCount(self, dis);
-                        dispatchAction.Invoke(self, value, dis);
-
-                        ResetHopCount(self, dis);
-                    }
-                    catch (DispatchLoopDetectedException dlde)
-                    {
-                        _logger.LogError(dlde, $"Detected a dispatch loop while dispatching {dlde.Dispatchable.Id}-{dlde.Dispatchable.Name}");
-                        throw;
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
-
+                        var dispatch = all.Value[self.Id];
+                        await ExecuteDispatch(self, value, dispatch, dispatchAction);
                     }
                 }
             }
@@ -160,8 +140,45 @@ namespace Automatica.Core.Base.IO
 
                 await _remoteSender.DispatchValue(self, value);
             }
+            
 
             await _dataBroadcast.DispatchValue(self.Type, self.Id, value);
+        }
+
+        private async Task ExecuteDispatch(IDispatchable self, object value, IList<Action<IDispatchable, object>> dispatch, Action<IDispatchable, object, Action<IDispatchable, object>> dispatchAction)
+        {
+            foreach (var dis in dispatch)
+            {
+
+                if (!_hopCounts[self.Id].ContainsKey(dis))
+                {
+                    _hopCounts[self.Id].Add(dis, 0);
+                }
+
+                try
+                {
+                    if (_hopCounts[self.Id][dis] > 10)
+                    {
+                        _hopCounts.Clear();
+                        throw new DispatchLoopDetectedException(self);
+                    }
+
+                    IncrementHopCount(self, dis);
+                    dispatchAction.Invoke(self, value, dis);
+
+                    ResetHopCount(self, dis);
+                }
+                catch (DispatchLoopDetectedException dlde)
+                {
+                    _logger.LogError(dlde, $"Detected a dispatch loop while dispatching {dlde.Dispatchable.Id}-{dlde.Dispatchable.Name}");
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"Error while dispatching {self.Id}-{self.Name}. {e}");
+
+                }
+            }
         }
 
         private void ResetHopCount(IDispatchable self, Action<IDispatchable, object> action)

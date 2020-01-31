@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.7.0.100</Version>
+    <Version>0.14.0.1</Version>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>44A70735-8865-4DB9-9B4D-6225126E9B14</ProjectGuid>

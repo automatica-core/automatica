@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
-import { VisuObjectNodeInstance } from "src/app/base/model/visu-object-node-instance";
 
 interface Section {
   title: string;
@@ -29,10 +28,7 @@ export class ContainerComponent implements OnInit {
 
     for (const item of v) {
       let sectionName = "unknown";
-
-      if (item instanceof VisuObjectNodeInstance) {
-        sectionName = item.nodeInstance.This2CategoryInstanceNavigation.Name;
-      }
+      sectionName = item.objectType.This2CategoryInstanceNavigation.Name;
 
       if (!this.sectionsMap.has(sectionName)) {
         const section: Section = { title: sectionName, items: [] };

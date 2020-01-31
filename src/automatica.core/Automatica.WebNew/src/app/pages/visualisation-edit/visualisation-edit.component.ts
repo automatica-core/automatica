@@ -245,7 +245,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
     this.appService.isLoading = false;
   }
   addVisuElement(x: VisuObjectTemplate) {
-    const instance = VisuObjectMobileInstance.CreateFromTemplate(x);
+    const instance = VisuObjectMobileInstance.CreateFromTemplate(x, void 0);
 
     instance.Height = instance.VisuObjectTemplate.Height;
     instance.Width = instance.VisuObjectTemplate.Width;

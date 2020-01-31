@@ -1,3 +1,3 @@
 <app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location">
-  <dx-switch></dx-switch>
+  <dx-switch [value]="state" (onValueChanged)="onValueChanged($event)"></dx-switch>
 </app-visualization-control>

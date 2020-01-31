@@ -1,124 +1,73 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
-import { PropertyInstance } from "../../../../model/property-instance";
-import { DataHubService } from "../../../../communication/hubs/data-hub.service";
-import { TranslationService } from "angular-l10n";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { BaseMobileRuleComponent } from "../../../base-mobile-rule-component";
+import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
-import { BaseMobileComponent } from "../../../base-mobile-component";
+import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
+import { RuleInstanceVisuService } from "src/app/services/rule-visu.service";
 import { AppService } from "src/app/services/app.service";
+import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
+import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
+
+interface IToggleComponent {
+  state: boolean;
+}
 
 @Component({
   selector: "visu-toggle",
   templateUrl: "./toggle.component.html",
   styleUrls: ["./toggle.component.scss"]
 })
-export class ToggleComponent extends BaseMobileComponent implements OnInit, OnDestroy {
+export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy, IToggleComponent {
 
+  private _state: boolean;
+  stateType: RuleInterfaceInstance;
+  inputType: RuleInterfaceInstance;
+  outputType: RuleInterfaceInstance;
 
-  private _readOnly: boolean;
-  public get readOnly(): boolean {
-    return this._readOnly;
+  public get state(): boolean {
+    return this._state;
   }
-  public set readOnly(v: boolean) {
-    this._readOnly = v;
-  }
-
-
-  private _nodeProperty: PropertyInstance;
-  public get nodeProperty(): PropertyInstance {
-    return this._nodeProperty;
-  }
-  public set nodeProperty(v: PropertyInstance) {
-    this._nodeProperty = v;
-  }
-
-  private nodeInstanceState: string;
-
-  public get toggle_on_text(): any {
-    if (this.item.StateTextValueTrue) {
-      return this.item.StateTextValueTrue;
-    }
-
-    return this.getPropertyValue("toggle_on_text");
-  }
-  public get toggle_off_text(): any {
-    if (this.item.StateTextValueFalse) {
-      return this.item.StateTextValueFalse;
-    }
-
-    return this.getPropertyValue("toggle_off_text");
-  }
-
-
-  private _toggleValue: any;
-  public get toggleValue(): any {
-
-    return this._toggleValue;
-  }
-
-  public set toggleValue(value: any) {
-    this._toggleValue = value;
-  }
-
-  public onItemResized() {
-
+  public set state(v: boolean) {
+    this._state = v;
   }
 
   constructor(
-    dataHub: DataHubService,
+    dataHubService: DataHubService,
     notify: NotifyService,
     translate: TranslationService,
     configService: ConfigService,
-    private changeRef: ChangeDetectorRef,
+    ruleInstanceVisuService: RuleInstanceVisuService,
     appService: AppService) {
-    super(dataHub, notify, translate, configService, appService);
+    super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
   }
 
-  protected async propertyChanged() {
-    this.readOnly = super.getPropertyValue("readonly");
 
-    if (this.editMode) {
-      this.readOnly = true;
+  async ngOnInit() {
+    this.baseOnInit();
+
+    super.mobileRuleInit();
+
+    this.stateType = this.getInterfaceByType(RuleInterfaceType.Status);
+    this.inputType = this.getInterfaceByType(RuleInterfaceType.Input);
+    this.outputType = this.getInterfaceByType(RuleInterfaceType.Output);
+
+  }
+
+  onRuleInstanceValueChanged(interfaceId, value) {
+    console.log("ruleinterfacevalue changed", interfaceId, value);
+
+    if (this.stateType.ObjId === interfaceId) {
+      this.state = value;
     }
-
-    const nodeProperty = this.getProperty("nodeInstance");
-
-    if (!nodeProperty) {
-      return;
-    }
-    this.nodeProperty = nodeProperty;
-
-    this.nodeInstanceState = this.getPropertyValue("nodeInstanceState");
-    await this.registerForNodeValues(this.nodeInstanceState)
-
-    super.propertyChanged();
   }
 
-  ngOnInit() {
-    super.baseOnInit();
-    this.propertyChanged();
+  onValueChanged($event) {
+    this.dataHub.setValue(this.outputType.ObjId, $event.value);
   }
-  ngOnDestroy() {
+
+  ngOnDestroy(): void {
     this.baseOnDestroy();
-  }
-
-  async onToggleValueChanged($event) {
-    if ($event.event && this.nodeProperty.Value) {
-      const value = $event.value;
-      this.toggleValue = value;
-      await this.dataHub.setValue(this.nodeProperty.Value, value);
-    }
-  }
-
-  protected nodeValueReceived(nodeId: string, value: any): Promise<void> {
-    if (this.nodeInstanceState && nodeId === this.nodeInstanceState) {
-      this.toggleValue = value;
-    }
-    if (!this.nodeInstanceState && nodeId === this._primaryNodeInstance) {
-      this.toggleValue = value;
-    }
-
-    return Promise.resolve();
   }
 
 

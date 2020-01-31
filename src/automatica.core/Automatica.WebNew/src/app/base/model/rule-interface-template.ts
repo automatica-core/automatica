@@ -15,6 +15,13 @@ export enum RuleInterfaceDirectionEnum {
     Param
 }
 
+export enum RuleInterfaceType {
+    Unknown = 0,
+    Input = 1,
+    Status = 2,
+    Output = 3
+}
+
 @Model()
 export class RuleInterfaceTemplate extends BaseModel {
 
@@ -50,6 +57,9 @@ export class RuleInterfaceTemplate extends BaseModel {
 
     @JsonProperty()
     IsLinkableParameter: boolean;
+
+    @JsonProperty()
+    InterfaceType: RuleInterfaceType;
 
 
     protected getJsonProperty(): Map<string, JsonFieldInfo> {

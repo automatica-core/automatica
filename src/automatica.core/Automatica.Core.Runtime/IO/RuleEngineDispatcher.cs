@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -24,6 +25,7 @@ namespace Automatica.Core.Runtime.IO
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
         private readonly ILogger<RuleEngineDispatcher> _logger;
+        private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotifier;
         private readonly object _lock = new object();
 
         public RuleEngineDispatcher(ILinkCache linkCache, 
@@ -32,7 +34,8 @@ namespace Automatica.Core.Runtime.IO
             IDriverNodesStore driverNodesStore,
             INodeInstanceCache nodeInstanceCache,
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache,
-            ILogger<RuleEngineDispatcher> logger)
+            ILogger<RuleEngineDispatcher> logger,
+            IRuleInstanceVisuNotify ruleInstanceVisuNotifier)
         {
             _linkCache = linkCache;
             _dispatcher = dispatcher;
@@ -41,6 +44,7 @@ namespace Automatica.Core.Runtime.IO
             _nodeInstanceCache = nodeInstanceCache;
             _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
             _logger = logger;
+            _ruleInstanceVisuNotifier = ruleInstanceVisuNotifier;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -152,6 +156,11 @@ namespace Automatica.Core.Runtime.IO
         {
             lock (_lock)
             {
+                Task.Run(async () =>
+                {
+                    await _ruleInstanceVisuNotifier.NotifyValueChanged(toInterface, o);
+                }).ConfigureAwait(false);
+
                 foreach (var rule in _logicInstancesStore.Dictionary())
                 {
                     if (rule.Key.ObjId == toRule)
@@ -164,7 +173,10 @@ namespace Automatica.Core.Runtime.IO
 
                             foreach (var result in ruleResults)
                             {
-                                _dispatcher.DispatchValue(result.Instance, result.Value);
+                                Task.Run(async () =>
+                                {
+                                    await _dispatcher.DispatchValue(result.Instance, result.Value);
+                                }).ConfigureAwait(false);
                             }
                         }
                         catch (Exception e)
