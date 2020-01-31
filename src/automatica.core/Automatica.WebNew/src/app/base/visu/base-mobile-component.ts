@@ -8,6 +8,7 @@ import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
 import { AppService } from "src/app/services/app.service";
+import { VisuObjectNodeInstance } from "../model/visu-object-node-instance";
 
 export abstract class BaseMobileComponent extends BaseComponent {
     @HostBinding("class.mobile-control") true;
@@ -77,6 +78,24 @@ export abstract class BaseMobileComponent extends BaseComponent {
             return this.item.VisuName;
         }
         return this.getPropertyValue("text");
+    }
+
+    public get icon() {
+        if (this.item instanceof VisuObjectNodeInstance) {
+            if (this.item.nodeInstance.This2CategoryInstanceNavigation) {
+                return this.item.nodeInstance.This2CategoryInstanceNavigation.Icon;
+            }
+        }
+        return void 0;
+    }
+
+    public get location() {
+        if (this.item instanceof VisuObjectNodeInstance) {
+            if (this.item.nodeInstance.This2AreaInstanceNavigation) {
+                return this.item.nodeInstance.This2AreaInstanceNavigation.DisplayName;
+            }
+        }
+        return void 0;
     }
 
     constructor(

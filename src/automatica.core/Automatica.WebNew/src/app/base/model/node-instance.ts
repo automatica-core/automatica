@@ -27,6 +27,7 @@ import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-prop
 import { INodeInstance } from "./INodeInstance";
 import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
 import { CategoryInstance } from "./categories";
+import { AreaInstance } from "./areas";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -205,6 +206,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
     @JsonProperty()
     This2AreaInstance: string;
+
+    @JsonProperty()
+    This2AreaInstanceNavigation: AreaInstance;
 
     @JsonProperty()
     This2CategoryInstance: string;

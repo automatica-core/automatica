@@ -4,6 +4,7 @@ using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace Automatica.Core.Internals.Templates
 {
@@ -50,22 +51,28 @@ namespace Automatica.Core.Internals.Templates
         }
 
         public CreateTemplateCode CreateRuleInterfaceTemplate(Guid ui, string name, string description, Guid ruleTemplate,
-            Base.Templates.RuleInterfaceDirection direction, int maxLinks, int sortOrder)
+            RuleInterfaceDirection direction, int maxLinks, int sortOrder)
         {
+            return CreateRuleInterfaceTemplate(ui, name, description, ruleTemplate, direction, maxLinks, sortOrder,
+                RuleInterfaceType.Unknown);
+        }
 
-            if (direction == Base.Templates.RuleInterfaceDirection.Param)
+        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
+        {
+            if (direction == RuleInterfaceDirection.Param)
             {
                 throw new ArgumentException(
-                    $"Please use {nameof(CreateParameterRuleInterfaceTemplate)} for creating parameter interface tempaltes");
+                    $"Please use {nameof(CreateParameterRuleInterfaceTemplate)} for creating parameter interface templates");
             }
 
-            var interfaceType = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == ui);
+            var interfaceType = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
             var retValue = CreateTemplateCode.Updated;
             bool isNewObject = false;
             if (interfaceType == null)
             {
                 interfaceType = new RuleInterfaceTemplate();
-                interfaceType.ObjId = ui;
+                interfaceType.ObjId = id;
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
@@ -73,10 +80,11 @@ namespace Automatica.Core.Internals.Templates
             interfaceType.Name = name;
             interfaceType.Description = description;
             interfaceType.This2RuleTemplate = ruleTemplate;
-            interfaceType.This2RuleInterfaceDirection = (long) direction;
+            interfaceType.This2RuleInterfaceDirection = (long)direction;
             interfaceType.MaxLinks = maxLinks;
             interfaceType.SortOrder = sortOrder;
             interfaceType.ParameterDataType = RuleInterfaceParameterDataType.NoParameter;
+            interfaceType.InterfaceType = type;
 
             if (isNewObject)
             {
@@ -115,7 +123,7 @@ namespace Automatica.Core.Internals.Templates
             interfaceType.Name = name;
             interfaceType.Description = description;
             interfaceType.This2RuleTemplate = ruleTemplate;
-            interfaceType.This2RuleInterfaceDirection = (long)Base.Templates.RuleInterfaceDirection.Param;
+            interfaceType.This2RuleInterfaceDirection = (long)RuleInterfaceDirection.Param;
             interfaceType.MaxLinks = 0;
             interfaceType.SortOrder = sortOrder;
             interfaceType.ParameterDataType = dataType;
