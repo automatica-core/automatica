@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Docker.DotNet" Version="3.125.2" />
-    <PackageReference Include="MessagePack" Version="2.0.335" />
+    <PackageReference Include="MessagePack" Version="2.1.80" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.0" />
