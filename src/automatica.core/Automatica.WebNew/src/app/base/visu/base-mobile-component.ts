@@ -65,18 +65,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
         this._value = value;
     }
 
-    public get foregroundColor(): any {
-
-        if (this.item.StateColorValueTrue && this._value === true) {
-            return this.item.StateColorValueTrue;
-        }
-        if (this.item.StateColorValueFalse && this._value === false) {
-            return this.item.StateColorValueFalse;
-        }
-
-        return this.getPropertyValue("foreground_color");
-    }
-
     public get width() {
         return this.parent.nativeElement.offsetWidth;
     }
@@ -86,10 +74,7 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     public get displayText() {
-        if (this.item.VisuName) {
-            return this.item.VisuName;
-        }
-        return this.getPropertyValue("text");
+        return this.visuObjectType.DisplayName;
     }
 
     public get icon() {

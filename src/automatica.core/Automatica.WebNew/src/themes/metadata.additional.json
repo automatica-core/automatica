@@ -6,7 +6,7 @@
     "items": [
         {
             "key": "@base-accent",
-            "value": "#1d97c2"
+            "value": "#457987"
         }
     ],
     "baseTheme": "material.orange.dark",

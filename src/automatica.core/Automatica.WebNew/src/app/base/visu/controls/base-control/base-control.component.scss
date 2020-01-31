@@ -55,6 +55,14 @@
    color: white;
    font-size: 17px;
    margin-top: 80px;
+   width: 160px;
+}
+
+
+.cell_text_overflow {    
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cell_text_hint {
