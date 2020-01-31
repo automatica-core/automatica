@@ -1,0 +1,30 @@
+
+
+.section_view {
+    position: relative;
+}
+
+.section_header {
+    margin-top: -15px;
+    position: relative;
+    min-height: 15px;
+    display: flex;
+    justify-content: flex-start;
+    -webkit-box-pack: end;
+}
+
+.section_header_text {
+    margin-left: 3px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 14px;
+    letter-spacing: .1em;
+}
+
+.sections_rows {
+    display: -webkit-box;
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    flex-flow: wrap;
+}

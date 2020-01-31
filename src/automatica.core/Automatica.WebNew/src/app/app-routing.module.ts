@@ -88,7 +88,7 @@ const routes: Routes = [
                 redirectTo: "page",
                 pathMatch: "full"
             }, {
-                path: "page", loadChildren: () => import('./visualization/mobile/mobile-view.module').then(m => m.MobileViewModule)
+                path: "page", loadChildren: () => import("./visualization/mobile/mobile-view.module").then(m => m.MobileViewModule)
             }
         ],
     },

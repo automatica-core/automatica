@@ -10,11 +10,13 @@ import { DxLoadPanelModule, DxButtonModule } from "devextreme-angular";
 import { HasRoleGuard } from "../../services/login.service";
 import { Role } from "src/app/base/model/user/role";
 import { ControlsModule } from "src/app/base/visu/controls/controls.module";
+import { MobileContainer2Component } from "./mobile-container2/mobile-container2.component";
+import { MobileContainer2Module } from "./mobile-container2/mobile-container2.module";
 
 const routes: Routes = [
   {
     path: "",
-    component: MobileContainerComponent,
+    component: MobileContainer2Component,
     data: {
       title: "Visualization",
       loadHomepage: true,
@@ -25,7 +27,7 @@ const routes: Routes = [
   },
   {
     path: ":id",
-    component: MobileContainerComponent,
+    component: MobileContainer2Component,
     data: {
       title: "Visualization",
       loadHomepage: false,
@@ -59,7 +61,8 @@ export class MobileViewRoutingModule { }
     DndModule,
     MobileViewRoutingModule,
     MobileModule,
-    DxLoadPanelModule
+    DxLoadPanelModule,
+    MobileContainer2Module
   ],
   declarations: [],
   providers: [

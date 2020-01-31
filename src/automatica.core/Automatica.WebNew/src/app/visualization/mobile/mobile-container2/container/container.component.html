@@ -1,0 +1,10 @@
+<div class="container">
+    <dx-scroll-view>
+        <ng-container *ngFor="let section of sections">
+
+            <app-visualization-section [title]="section.title" [items]="section.items"></app-visualization-section>
+
+        </ng-container>
+
+    </dx-scroll-view>
+</div>

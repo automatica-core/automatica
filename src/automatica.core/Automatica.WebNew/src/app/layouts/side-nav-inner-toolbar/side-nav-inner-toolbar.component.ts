@@ -35,6 +35,9 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
         this.menuOpenedChanged.emit(v);
     }
 
+    @Input()
+    backgroundColor = "white";
+
 
     @Output()
     menuOpenedChanged = new EventEmitter<any>();

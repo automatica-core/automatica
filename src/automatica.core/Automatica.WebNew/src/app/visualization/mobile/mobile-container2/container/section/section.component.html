@@ -1,0 +1,11 @@
+<div class="section_view">
+    <div class="section_header">
+        <div class="section_header_text">{{ title }}</div>
+    </div>
+
+    <div class="sections_rows">
+       <ng-container *ngFor="let item of items">
+           <app-visualization-element [item]="item"></app-visualization-element>
+       </ng-container>
+    </div>
+</div>

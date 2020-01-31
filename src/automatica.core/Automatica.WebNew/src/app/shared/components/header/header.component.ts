@@ -1,16 +1,23 @@
 import { Component, NgModule, Input, Output, EventEmitter } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
-import { UserPanelModule } from "../user-panel/user-panel.component";
 import { DxButtonModule } from "devextreme-angular/ui/button";
 import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { DxPopupModule } from "devextreme-angular/ui/popup";
 import { Router, ActivatedRoute } from "@angular/router";
-import { LoginFormModule } from "../login-form/login-form.module";
 import { AppService } from "src/app/services/app.service";
 import { TranslationModule } from "angular-l10n";
 import { LoginService } from "src/app/services/login.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
+import { DxSpeedDialActionModule } from "devextreme-angular";
+
+import config from "devextreme/core/config";
+
+config({
+    floatingActionButtonConfig: {
+        icon: "more"
+    }
+});
 
 @Component({
     selector: "app-header",
@@ -44,17 +51,17 @@ export class HeaderComponent {
         }
         return false;
     }
-    async logout($event) {
+    async logout() {
         await this.hubService.stop();
         await this.loginService.logout();
         this.router.navigate(["/login"]);
     }
 
-    navigateToAdminPage($event) {
+    navigateToAdminPage() {
         this.router.navigate(["admin", "home"]);
     }
 
-    navigateToVisualization($event) {
+    navigateToVisualization() {
         this.router.navigate(["visualization"]);
     }
 }
@@ -65,7 +72,8 @@ export class HeaderComponent {
         DxPopupModule,
         DxButtonModule,
         DxToolbarModule,
-        TranslationModule
+        TranslationModule,
+        DxSpeedDialActionModule
     ],
     declarations: [HeaderComponent],
     exports: [HeaderComponent]
