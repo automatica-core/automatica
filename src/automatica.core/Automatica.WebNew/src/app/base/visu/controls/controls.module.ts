@@ -18,6 +18,7 @@ import { NgColorModule } from "../../color";
 import { ChartsComponent } from "./charts/charts.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { GaugeModule } from "./gauge/gauge.module";
+import { BaseControlModule } from "./base-control/base-control.module";
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { GaugeModule } from "./gauge/gauge.module";
     NgColorModule,
     DxChartModule,
     GaugeModule,
+    BaseControlModule,
     DynamicModule.withComponents([
       LabelComponent,
       ClockComponent,

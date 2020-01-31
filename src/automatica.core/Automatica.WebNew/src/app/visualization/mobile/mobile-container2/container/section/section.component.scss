@@ -1,4 +1,10 @@
 
+:host {
+    user-select: none;
+    touch-action: pan-y;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 
 .section_view {
     position: relative;

@@ -6,6 +6,7 @@ import { Guid } from "../utils/Guid";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
 import { RuleInstance } from "./rule-instance";
+import { NodeInstance } from "./node-instance";
 
 @Model()
 export class VisuObjectInstance extends BaseModel implements IPropertyModel {

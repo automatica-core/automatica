@@ -1,1 +1,1 @@
-<app-visualization-container [items]="dataSource"></app-visualization-container>
+<app-visualization-container *ngIf="page" [items]="page.VisuObjectInstances"></app-visualization-container>

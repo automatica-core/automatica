@@ -1,0 +1,90 @@
+@import "../../../../../themes/generated/variables.additional.scss"; 
+
+:host {
+    display: block;    
+    user-select: none;
+    touch-action: pan-y;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.section_cell {
+    width: 180px;
+    height: 180px;
+    border-radius: 2px;
+    margin: 0 5px 5px 0;
+    background-color: $base-border-color;
+}
+
+.cell_content {
+    flex: 1;
+    -webkit-box-pack: initial;
+    justify-content: initial;
+    -webkit-box-align: start;
+    align-items: flex-start;
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+    flex-direction: column;
+
+    position: relative;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -moz-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    height: 100%;
+    min-height: 60px;
+    min-width: 0;
+}
+
+.cell_icon_placeholder {
+    max-height: 80px;
+    max-width: 80px;
+    position: absolute;
+    margin: 20px;
+}
+
+.cell_texts {
+   margin: 20px;
+   color: white;
+   font-size: 17px;
+   margin-top: 80px;
+}
+
+.cell_text_hint {
+    font-size: 17px;
+    color: white;
+}
+
+.cell_text_location {
+    font-size: 14px;
+    color: #8393A3;
+    max-width: 100%;
+}
+
+.cell_text_value {
+    font-size: 13px;
+    color: white;
+}
+
+.cell_text_sub {
+    font-size: 17px;
+    color: #8393A3;
+    padding-top: 2px;
+}
+
+.cell_controls {
+    position: absolute;
+    padding-top: 10px;
+    top: 0;
+    right: 0;
+    height: 110px;
+    width: 65px;
+    margin:auto;
+}

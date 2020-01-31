@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { VisuObjectNodeInstance } from "src/app/base/model/visu-object-node-instance";
 
 interface Section {
   title: string;
 
-  items: any[];
+  items: VisuObjectMobileInstance[];
 }
 
 @Component({
@@ -13,20 +15,25 @@ interface Section {
 })
 export class ContainerComponent implements OnInit {
 
-  private _items: any[];
+  private _items: VisuObjectMobileInstance[];
 
   @Input()
-  public get items(): any[] {
+  public get items(): VisuObjectMobileInstance[] {
     return this._items;
   }
-  public set items(v: any[]) {
+  public set items(v: VisuObjectMobileInstance[]) {
     this._items = v;
 
     this.sectionsMap = new Map<string, Section>();
     this.sections = [];
 
     for (const item of v) {
-      const sectionName = item[this.sectionKey];
+      let sectionName = "unknown";
+
+      if (item instanceof VisuObjectNodeInstance) {
+        sectionName = item.nodeInstance.This2CategoryInstanceNavigation.Name;
+      }
+
       if (!this.sectionsMap.has(sectionName)) {
         const section: Section = { title: sectionName, items: [] };
 
@@ -43,9 +50,6 @@ export class ContainerComponent implements OnInit {
   private sectionsMap: Map<string, Section>;
 
   sections: Section[] = [];
-
-  @Input()
-  sectionKey: string = "section";
 
   constructor() { }
 

@@ -1,0 +1,18 @@
+<div class="section_cell">
+    <div class="cell_content">
+        <div class="cell_icon_placeholder">
+            <span [style.color]="iconColor" style="vertical-align: middle;">
+                <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
+            </span>
+        </div>
+        <div class="cell_texts">
+            <div [hidden]="!location" class="cell_text_location">{{ location }}</div>
+            <div [hidden]="!hint" class="cell_text_hint">{{ hint }}</div>
+            <div [hidden]="!value" class="cell_text_value">{{ value }}</div>
+            <div [hidden]="!subValue" class="cell_text_sub">{{ subValue }}</div>
+        </div>
+        <div class="cell_controls">
+           <ng-content></ng-content>
+        </div>
+    </div>
+</div>

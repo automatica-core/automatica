@@ -1,71 +1,8 @@
-@import "../../../../../../../themes/generated/variables.additional.scss"; 
 
 :host {
-    display: block;
-}
-
-.section_cell {
-    width: 180px;
-    height: 180px;
-    border-radius: 2px;
-    margin: 0 5px 5px 0;
-    background-color: $base-border-color;
-}
-
-.cell_content {
-    flex: 1;
-    -webkit-box-pack: initial;
-    justify-content: initial;
-    -webkit-box-align: start;
-    align-items: flex-start;
-    -webkit-box-direction: normal;
-    -webkit-box-orient: vertical;
-    flex-direction: column;
-
-    position: relative;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -moz-box-flex: 1;
-    -moz-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    height: 100%;
-    min-height: 60px;
-    min-width: 0;
-}
-
-.cell_icon_placeholder {
-    max-height: 60px;
-    max-width: 60px;
-    margin: auto;
-    margin-top: 20px;
-}
-
-.cell_texts {
-    -webkit-box-direction: normal;
-    -webkit-box-orient: vertical;
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    max-width: 100%;
-    margin-top: -2px;
-    padding: 0 5px 0 15px;
-}
-
-.cell_controls {
-    -webkit-box-direction: normal;
-    -webkit-box-orient: vertical;
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    max-width: 100%;
-    margin-top: -2px;
-    padding: 0 5px 0 15px;
+    display: block;    
+    user-select: none;
+    touch-action: pan-y;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }

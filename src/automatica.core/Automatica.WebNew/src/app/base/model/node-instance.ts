@@ -26,6 +26,7 @@ import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-ins
 import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
 import { INodeInstance } from "./INodeInstance";
 import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
+import { CategoryInstance } from "./categories";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -208,6 +209,8 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     @JsonProperty()
     This2CategoryInstance: string;
 
+    @JsonProperty()
+    This2CategoryInstanceNavigation: CategoryInstance;
 
     @JsonProperty()
     IsFavorite: boolean;
