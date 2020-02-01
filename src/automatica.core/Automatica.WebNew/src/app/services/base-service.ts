@@ -205,6 +205,43 @@ export class BaseService {
         }
     }
 
+    async put<T extends BaseModel>(url: string, body: any, withCredentials: boolean = true): Promise<T> {
+        try {
+            const data = this.encode(url, body);
+            const response = await this.httpService.put(this.getS1Server() + "/" + url, data,
+                { withCredentials: withCredentials, headers: this.headers()}).toPromise();
+
+            if (!response) {
+                return void 0;
+            }
+
+            const json = response; // this.decode(url, response);
+            return BaseModel.getBaseModelFromJson<T>(json, void 0, this.translationService);
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
+    async putJson(url: string, body: any, withCredentials: boolean = true): Promise<any> {
+        try {
+            const data = this.encode(url, body);
+            const response = await this.httpService.put(this.getS1Server() + "/" + url, data,
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
+
+            if (!data) {
+                return void 0;
+            }
+
+            const json = response; // this.decode(url, response);
+            return json;
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
+
     // async patch<T extends BaseModel>(url: string, body: any): Promise<T> {
     //     try {
     //         const response = await this.httpService.patch(this.getS1Server() + "/" + url, body,

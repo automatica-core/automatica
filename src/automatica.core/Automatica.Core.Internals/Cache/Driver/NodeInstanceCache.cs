@@ -14,15 +14,17 @@ namespace Automatica.Core.Internals.Cache.Driver
     internal class NodeInstanceCache : AbstractCache<NodeInstance>, INodeInstanceCache
     {
         private readonly INodeInstanceStateHandler _nodeInstanceStateHandler;
+        private readonly INodeTemplateCache _nodeTemplateCache;
 
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
         private NodeInstance _root;
 
-        public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler) : base(configuration)
+        public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache) : base(configuration)
         {
             _nodeInstanceStateHandler = nodeInstanceStateHandler;
+            _nodeTemplateCache = nodeTemplateCache;
         }
 
         protected override IQueryable<NodeInstance> GetAll(AutomaticaContext context)
@@ -115,6 +117,8 @@ namespace Automatica.Core.Internals.Cache.Driver
 
         public override NodeInstance Get(Guid key)
         {
+            Initialize();
+
             if (_allCache.ContainsKey(key))
             {
                 return _allCache[key];
@@ -168,6 +172,26 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             }
             private set => _root = value;
+        }
+
+        public NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child)
+        {
+            if (child == null)
+            {
+                return null;
+            }
+            var nodeTemplate = _nodeTemplateCache.Get(child.This2NodeTemplate.Value);
+
+            if (nodeTemplate.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
+            {
+                return child;
+            }
+
+            if (!child.This2ParentNodeInstance.HasValue)
+            {
+                return null;
+            }
+            return GetDriverNodeInstanceFromChild(Get(child.This2ParentNodeInstance.Value));
         }
     }
 }

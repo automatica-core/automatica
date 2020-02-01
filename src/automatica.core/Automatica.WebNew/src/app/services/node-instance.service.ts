@@ -7,7 +7,6 @@ import { PropertyInstance } from "../base/model/property-instance";
 import { VirtualSettingsPropertyInstance } from "../base/model/virtual-props/settings/settings-property-instance";
 import { SettingsService } from "./settings.service";
 import { Setting } from "../base/model/setting";
-import { faTintSlash } from "@fortawesome/free-solid-svg-icons";
 import { ITreeNode } from "../base/model/ITreeNode";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
 
@@ -20,6 +19,7 @@ export class NodeInstanceService {
     private _settings: Setting[];
 
     private _rootNode: NodeInstance;
+
     public get rootNode(): NodeInstance {
         return this._rootNode;
     }
@@ -43,7 +43,6 @@ export class NodeInstanceService {
         this._settings = await this.settingsService.getSettings();
         await this.loadConfig();
         await this.dataHubService.subscribeForAll();
-
     }
 
     public getNodeInstance(id: string) {
@@ -67,6 +66,16 @@ export class NodeInstanceService {
         const instances = await this.configService.getNodeInstances();
 
         this.convertConfig(instances);
+
+
+    }
+
+    updateNodeInstance(nodeInstance: NodeInstance) {
+        this.addNodeInstance(nodeInstance);
+
+        for (const child of nodeInstance.Children) {
+            this.updateNodeInstance(child);
+        }
     }
 
     public convertConfig(instances: NodeInstance[]) {
@@ -99,7 +108,7 @@ export class NodeInstanceService {
 
     public addNodeInstance(node: NodeInstance) {
         this._nodeInstanceMap.set(node.Id, node);
-        this._nodeInstanceList = [...this._nodeInstanceList, node];
+        this._nodeInstanceList = [...Array.from(this._nodeInstanceMap.values())];
     }
 
     public removeItem(node: ITreeNode) {
@@ -108,7 +117,6 @@ export class NodeInstanceService {
     }
 
     public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstance[]) {
-
         this._nodeInstanceMap.set(node.Id, node);
         tmpConfig.push(node);
 
@@ -184,6 +192,17 @@ export class NodeInstanceService {
 
     public getSupportedNodeTemplates(node: ITreeNode) {
         return NodeInstance.getSupportedTypes(node, this._nodeTemplates);
+    }
+
+    public async saveSettings() {
+        const settings = [];
+        for (const x of this.rootNode.Properties) {
+            if (x instanceof VirtualSettingsPropertyInstance) {
+                settings.push(x.setting);
+            }
+        }
+
+        this._settings = await this.settingsService.saveSettings(settings);
     }
 
 }

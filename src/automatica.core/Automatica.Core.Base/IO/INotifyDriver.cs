@@ -14,7 +14,14 @@ namespace Automatica.Core.Base.IO
         /// </summary>
         /// <param name="node">Saved <see cref="NodeInstance"/></param>
         /// <returns><see cref="Task"/></returns>
-        Task NotifySave(NodeInstance node);
+        Task NotifyUpdate(NodeInstance node);
+
+        /// <summary>
+        /// Notification when a <see cref="NodeInstance"/> is saved
+        /// </summary>
+        /// <param name="node">Saved <see cref="NodeInstance"/></param>
+        /// <returns><see cref="Task"/></returns>
+        Task NotifyAdd(NodeInstance node);
 
         /// <summary>
         /// Notification when a <see cref="NodeInstance"/> is deleted

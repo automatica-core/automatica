@@ -47,7 +47,6 @@ namespace P3.Knx.Core.Driver.Tunneling
 
         protected override void StopReceive()
         {
-            _client.Dispose();
         }
         
     }

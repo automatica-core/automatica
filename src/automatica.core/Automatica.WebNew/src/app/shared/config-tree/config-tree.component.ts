@@ -71,8 +71,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Input()
   loadOnInit = false;
 
-  settings: Setting[] = [];
-
   constructor(
     private configService: ConfigService,
     private designTimeDataService: DesignTimeDataService,
@@ -151,6 +149,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       this.appService.isLoading = true;
       const nodeInstances = await this.configService.import(nodeInstance, fileName);
       this.prepareRecurisve(nodeInstances, nodeInstance);
+
+      const newNodeInstance = await this.configService.add(nodeInstance);
+      newNodeInstance.Parent = nodeInstance;
+      this.nodeInstanceService.updateNodeInstance(newNodeInstance);
+
     } catch (error) {
       super.handleError(error);
     }
@@ -232,17 +235,29 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  add(nodeInstance: NodeInstance, parent: NodeInstance) {
+  async add(nodeInstance: NodeInstance, parent: NodeInstance) {
     nodeInstance.This2ParentNodeInstance = parent.ObjId;
     parent.Children = [...parent.Children, nodeInstance];
 
     const tmpConfig = [nodeInstance];
     this.nodeInstanceService.addNodeInstancesRec(nodeInstance, tmpConfig)
 
+    try {
+      const newNodeInstance = await this.configService.add(nodeInstance);
+      newNodeInstance.Parent = nodeInstance;
+      this.nodeInstanceService.updateNodeInstance(newNodeInstance);
+
+    } catch (error) {
+
+      super.handleError(error);
+
+      await this.nodeInstanceService.load();
+    }
+
     this.tree.instance.refresh();
   }
 
-  async createNodeInstanceChildren(nodeInstance: NodeInstance, nodeTemplate: NodeTemplate) {
+  private async createNodeInstanceChildren(nodeInstance: NodeInstance, nodeTemplate: NodeTemplate) {
     const nodeTemplates = await this.designTimeDataService.getNodeTemplates();
 
     for (const e of nodeTemplates) {
@@ -254,13 +269,29 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  async addItem(parentNode: ITreeNode, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
+  private async createItem(parentNode: ITreeNode, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
+    const nodeInstance = await this.addItem(parentNode, nodeTemplate, selectNode);
+
+    try {
+      const newNodeInstance = await this.configService.add(nodeInstance);
+      newNodeInstance.Parent = nodeInstance;
+      this.nodeInstanceService.updateNodeInstance(newNodeInstance);
+
+    } catch (error) {
+      super.handleError(error);
+
+      await this.nodeInstanceService.load();
+    }
+
+    this.tree.instance.refresh();
+  }
+
+  private async addItem(parentNode: ITreeNode, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
     let data: NodeInstance = void 0;
     if (parentNode instanceof NodeInstance) {
       data = NodeInstance.createForNodeInstanceFromTemplate(nodeTemplate, parentNode);
-    } else if (parentNode instanceof BoardInterface) {
-      data = NodeInstance.createForBoardInterfaceFromTemplate(nodeTemplate, parentNode);
-
+    } else {
+      throw new Error("should not happen!")
     }
 
     if (!data) {
@@ -268,13 +299,12 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
 
     this.prepareNewItem(data, parentNode, selectNode, true);
-    this.createNodeInstanceChildren(data, nodeTemplate);
+    await this.createNodeInstanceChildren(data, nodeTemplate);
 
     for (const e of parentNode.Children) {
       e.validate();
     }
-
-    this.tree.instance.refresh();
+    return data;
   }
 
   private prepareNewItem(data: NodeInstance, parentNode: ITreeNode, selectNode: boolean, refreshTree: boolean) {
@@ -305,41 +335,34 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  deleteItem(item: ITreeNode) {
+  async deleteItem(item: ITreeNode) {
     const parentNode = item.Parent;
     this.selectNode(parentNode);
 
     this.nodeInstanceService.removeItem(item);
     parentNode.Children = parentNode.Children.filter(a => a.Id !== item.Id);
+
+    try {
+      this.configService.delete(<NodeInstance>item);
+    } catch (error) {
+      super.handleError(error);
+
+      await this.nodeInstanceService.load();
+    }
+
   }
 
-  removeItem() {
+  async removeItem() {
     const selectedItem = this.selectedNode;
-    this.deleteItem(selectedItem);
+    await this.deleteItem(selectedItem);
   }
 
   public getRootNode(): NodeInstance {
     return this.nodeInstanceService.rootNode;
   }
 
-  public async saveSettings(rootNode: NodeInstance) {
-    const settings = [];
-    for (const x of rootNode.Properties) {
-      if (x instanceof VirtualSettingsPropertyInstance) {
-        settings.push(x.setting);
-      }
-    }
-
-    this.settings = await this.settingsService.saveSettings(settings);
-  }
 
   public async save() {
-    const rootNode = this.getRootNode();
-
-    const instances = await this.configService.save([rootNode]);
-    this.nodeInstanceService.convertConfig(instances);
-    await this.saveSettings(rootNode);
-
     this.notify.notifySuccess("COMMON.SAVED");
 
     this.selectNode(void 0);
@@ -474,7 +497,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (nodeTemplates) {
       for (const x of nodeTemplates) {
-        addMenu.push({ text: this.translate.translate(x.Name), key: "add", onItemClick: function () { that.addItem(model, x); } });
+        addMenu.push({ text: this.translate.translate(x.Name), key: "add", onItemClick: async function () { await that.createItem(model, x); } });
       }
 
       if (addMenu.length > 0) {

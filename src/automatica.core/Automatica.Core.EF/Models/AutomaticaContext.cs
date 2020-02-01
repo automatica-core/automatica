@@ -124,7 +124,7 @@ namespace Automatica.Core.EF.Models
                 }
 
 
-                if (_extendedLogs || !string.IsNullOrEmpty($"DATABASE_LOGS"))
+                if (_extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")))
                 {
                     optionsBuilder.UseLoggerFactory(logger);
                 }

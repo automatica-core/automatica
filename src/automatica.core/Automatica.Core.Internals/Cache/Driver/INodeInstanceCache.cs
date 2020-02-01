@@ -11,5 +11,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         IList<NodeInstance> ByArea(Guid category);
 
         NodeInstance Root { get; }
+
+        NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child);
     }
 }

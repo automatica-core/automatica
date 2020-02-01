@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Driver.Frames;
 
@@ -12,43 +13,38 @@ namespace P3.Knx.Core.Driver
 
     }
 
-    public class KnxDatgramEventArgs : EventArgs
+    public interface IKnxEvents
     {
-        public KnxDatagram Datagram { get; }
-
-        public KnxDatgramEventArgs(KnxDatagram datagram)
-        {
-            Datagram = datagram;
-        }
+        Task Connected();
+        Task Disconnected();
+        Task OnDatagram(KnxDatagram datagram);
     }
 
     public abstract class KnxConnection : IKnxConnection
     {
+        private readonly IKnxEvents _knxEvents;
 
         internal KnxSender Sender { get; private set; }
         internal KnxReceiver Receiver { get; private set; }
         private byte _sequenceNumber;
 
-        public EventHandler<EventArgs> OnDisconnected { get; set; }
-        public EventHandler<EventArgs> OnConnected { get; set; }
-        public EventHandler<KnxDatgramEventArgs> OnDatagramReceived { get; set; }
-
         private readonly HeartbeatMonitor _heartbeatMonitor;
         private readonly object _lock = new object();
 
-        protected KnxConnection(IPAddress host, int port, IPAddress localIp)
+        protected KnxConnection(IKnxEvents knxEvents, IPAddress host, int port, IPAddress localIp)
         {
+            _knxEvents = knxEvents;
             Host = host;
             Port = port;
             LocalAddress = localIp;
 
             LocalEndpoint = new IPEndPoint(LocalAddress, 3671);
 
-            _heartbeatMonitor = new HeartbeatMonitor(this);
+            _heartbeatMonitor = new HeartbeatMonitor(this, knxEvents);
         }
 
-        protected KnxConnection(IPAddress host, int port, IPAddress localIp, int localPort)
-            : this(host, port, localIp)
+        protected KnxConnection(IKnxEvents knxEvents, IPAddress host, int port, IPAddress localIp, int localPort)
+            : this(knxEvents, host, port, localIp)
         {
 
             LocalEndpoint = new IPEndPoint(LocalAddress, localPort);
@@ -76,18 +72,17 @@ namespace P3.Knx.Core.Driver
             Receiver.Start();
 
             _heartbeatMonitor.Start();
-            _heartbeatMonitor.OnHeartbeatFailure += HeartbeatMonitor_OnFailure;
 
         }
 
-        private void HeartbeatMonitor_OnFailure(object sender, EventArgs e)
+        private async Task HeartbeatMonitor_OnFailure(object sender, EventArgs e)
         {
-            OnDisconnected?.Invoke(this, EventArgs.Empty);
+            
+            await _knxEvents.Disconnected();
         }
 
         public virtual void Stop()
         {
-            _heartbeatMonitor.OnHeartbeatFailure -= HeartbeatMonitor_OnFailure;
             _heartbeatMonitor.Stop();
 
             Sender?.Stop();
@@ -156,11 +151,11 @@ namespace P3.Knx.Core.Driver
                         SetSequenceNumber(0);
                         ChannelId = connectResponse.ChannelId;
 
-                        OnConnected?.Invoke(this, EventArgs.Empty);
+                        _knxEvents.Connected().ConfigureAwait(false);
                     }
                     else
                     {
-                        OnDisconnected?.Invoke(this, EventArgs.Empty);
+                        _knxEvents.Disconnected().ConfigureAwait(false);
                         Connected = false;
                     }
                     break;
@@ -171,7 +166,7 @@ namespace P3.Knx.Core.Driver
                 case KnxHelper.ServiceType.DisconnectRequest:
                     SendFrame(new DisconnectResponseFrame(this));
                     Connected = false;
-                    OnDisconnected?.Invoke(this, EventArgs.Empty);
+                    _knxEvents.Disconnected().ConfigureAwait(false);
                     break;
                 case KnxHelper.ServiceType.DisconnectResponse:
                     break;
@@ -186,7 +181,7 @@ namespace P3.Knx.Core.Driver
 
                     if (KnxHelper.ProcessCemi(p.Datagram, p.CemiPacket))
                     {
-                        OnDatagramReceived?.Invoke(this, new KnxDatgramEventArgs(p.Datagram));
+                        _knxEvents.OnDatagram(p.Datagram).ConfigureAwait(false);
                     }
 
                     break;

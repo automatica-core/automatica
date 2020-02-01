@@ -19,5 +19,9 @@ namespace Automatica.Core.Tests.Model
         }
 
         public NodeInstance Root => null;
+        public NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
