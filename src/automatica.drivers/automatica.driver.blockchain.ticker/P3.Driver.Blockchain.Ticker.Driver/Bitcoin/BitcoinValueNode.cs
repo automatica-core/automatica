@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Driver;
+﻿using System.Threading.Tasks;
+using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,11 +20,21 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
     {
         private readonly string _currency;
         private readonly bool _addSymbol;
+        private readonly BitcoinNode _bitcoinNode;
 
-        public BitcoinValueNode(IDriverContext driverContext, string currency, bool addSymbol=false) : base(driverContext)
+        public BitcoinValueNode(IDriverContext driverContext, string currency, bool addSymbol,
+            BitcoinNode bitcoinNode) : base(driverContext)
         {
             _currency = currency;
             _addSymbol = addSymbol;
+            _bitcoinNode = bitcoinNode;
+        }
+
+        public override async Task<bool> Read()
+        {
+            await _bitcoinNode.Refresh();
+
+            return true;
         }
 
         public void UpdateValue(JObject jObject)

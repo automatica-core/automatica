@@ -1,14 +1,14 @@
-﻿using Automatica.Core.Base.Templates;
+﻿using System;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using System;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
-namespace P3.Driver.OpenWeatherMap.DriverFactory
+namespace P3.Driver.Blockchain.Ticker.Driver
 {
-    public class BlockchainDriverFactory : Automatica.Core.Driver.DriverFactory
+    public class BlockchainDriverFactory : DriverFactory
     {
-        public override string DriverName => "BlockChainTicker";
+        public override string DriverName => "BlockchainTicker";
 
         public override Guid DriverGuid => new Guid("7284093b-d1a0-4b9e-84ba-1f031f518af8");
 

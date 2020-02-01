@@ -10,8 +10,8 @@ namespace P3.Driver.Blockchain.Ticker.Console
             System.Console.WriteLine("Hello World!");
 
             var node = new BitcoinNode(null);
-            node.AddNode(new BitcoinValueNode(null, "EUR"));
-            node.AddNode(new BitcoinValueNode(null, "USD"));
+            node.AddNode(new BitcoinValueNode(null, "EUR", false, null));
+            node.AddNode(new BitcoinValueNode(null, "USD", false, null));
 
             await node.Refresh();
 
