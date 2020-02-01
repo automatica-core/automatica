@@ -25,6 +25,7 @@ import { Slave } from "src/app/base/model/slaves/slave";
 import { SlavesService } from "src/app/services/slaves.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -271,7 +272,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private dataHub: DataHubService,
     private notify: NotifyService,
     private slaveService: SlavesService,
-    appService: AppService) {
+    appService: AppService,
+    private nodeInstanceService: NodeInstanceService) {
     super(notify, translate, appService);
   }
 
@@ -468,11 +470,20 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
 
-  valueChanged(e, data) {
+  async valueChanged(e, data) {
     const prop = data.data as PropertyInstance;
 
     this.validate.emit(prop);
+
+    if (this.item instanceof NodeInstance) {
+      await this.config.update(this.item);
+
+      if (!this.item.ParentId) {
+        this.nodeInstanceService.saveSettings();
+      }
+    }
   }
+
 
   onAreaItemSelectionChanged($event, data) {
     const prop = data.data as VirtualAreaPropertyInstance;

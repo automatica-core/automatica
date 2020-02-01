@@ -237,36 +237,7 @@ namespace Automatica.Core.Runtime.Core
             foreach (var driver in _driverStore.All())
             {
                 _logger.LogInformation($"Starting driver {driver.Name}...");
-                try
-                {
-                    var cts = new CancellationTokenSource();
-                    cts.CancelAfter(TimeSpan.FromSeconds(120));
-                    var driverStart = await driver.Start().WithCancellation(cts.Token);
-
-                    if (driverStart)
-                    {
-                        if (driver.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
-                        {
-                            driver.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
-                        }
-                        _logger.LogInformation($"Starting driver {driver.Name}...done");
-                    }
-                    else
-                    {
-                        driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                        _logger.LogError($"Could not start driver {driver.Name}");
-                    }
-                }
-                catch (OperationCanceledException canceled)
-                {
-                    driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                    _logger.LogError(canceled, $"Could not start driver {driver.Name}. Task was canceled after 30seconds");
-                }
-                catch (Exception e)
-                {
-                    driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                    _logger.LogError(e, $"Could not start driver {driver.Name}");
-                }
+                await StartDriver(driver);
             }
 
 
@@ -303,29 +274,37 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Started;
         }
 
+        public async Task StopDriver(IDriver driver)
+        {
+            try
+            {
+                _logger.LogInformation($"Stopping driver {driver.Name}...");
+
+                if (await driver.Stop())
+                {
+                    _logger.LogInformation($"Stopping driver {driver.Name}...success");
+                }
+                else
+                {
+                    _logger.LogError($"Stopping driver {driver.Name}...error");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Stopping driver {driver.Name}...error");
+            }
+
+            _driverStore.Remove(driver);
+            _driverNodesStore.RemoveDriver(driver);
+        }
+
         private async Task Stop()
         {
             await _remoteServerHandler.Stop();
 
             foreach (var driver in _driverStore.All())
             {
-                try
-                {
-                    _logger.LogInformation($"Stopping driver {driver.Name}...");
-
-                    if (await driver.Stop())
-                    {
-                        _logger.LogInformation($"Stopping driver {driver.Name}...success");
-                    }
-                    else
-                    {
-                        _logger.LogError($"Stopping driver {driver.Name}...error");
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Stopping driver {driver.Name}...error");
-                }
+                await StopDriver(driver);
             }
 
             foreach (var rule in _logicInstanceStore.Dictionary())
@@ -444,15 +423,9 @@ namespace Automatica.Core.Runtime.Core
                     else
                     {
                         _logger.LogDebug($"Creating instance for driver {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
-
-                        var factory = _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId);
-                        var config = new DriverContext(nodeInstance,
-                        _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
-
-                        await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
+                        await InitializeDriver(nodeInstance, nodeInstance.This2NodeTemplateNavigation);
                     }
 
-                    AddNodeInstancesRecursive(nodeInstance);
                 }
                 catch (Exception e)
                 {
@@ -641,6 +614,60 @@ namespace Automatica.Core.Runtime.Core
             await ConfigureAndStart();
             _logger.LogInformation("ReInit done...");
 
+        }
+
+        public async Task<IDriver> InitializeDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
+        {
+            var factory = _driverFactoryStore.Get(nodeTemplate.ObjId);
+            var config = new DriverContext(nodeInstance,
+                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
+
+            var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
+
+            AddNodeInstancesRecursive(nodeInstance);
+
+            return driver;
+
+        }
+
+        public async Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
+        {
+            var driver = await InitializeDriver(nodeInstance, nodeTemplate);
+            await StartDriver(driver);
+        }
+
+        private async Task StartDriver(IDriver driver)
+        {
+            try
+            {
+                var cts = new CancellationTokenSource();
+                cts.CancelAfter(TimeSpan.FromSeconds(120));
+                var driverStart = await driver.Start().WithCancellation(cts.Token);
+
+                if (driverStart)
+                {
+                    if (driver.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
+                    {
+                        driver.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
+                    }
+                    _logger.LogInformation($"Starting driver {driver.Name}...done");
+                }
+                else
+                {
+                    driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                    _logger.LogError($"Could not start driver {driver.Name}");
+                }
+            }
+            catch (OperationCanceledException canceled)
+            {
+                driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                _logger.LogError(canceled, $"Could not start driver {driver.Name}. Task was canceled after 30seconds");
+            }
+            catch (Exception e)
+            {
+                driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                _logger.LogError(e, $"Could not start driver {driver.Name}");
+            }
         }
 
         public void Restart()

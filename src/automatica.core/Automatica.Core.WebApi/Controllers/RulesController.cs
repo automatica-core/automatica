@@ -55,12 +55,10 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<SaveAllLogicEditor> SaveAll([FromBody] SaveAllLogicEditor data)
         {
-            IEnumerable<NodeInstance> nodeInstancesSaved = null;
-            await using (var dbContextNodeInstances = new AutomaticaContext(_config))
-            {
-                var nodeInstanceController = new NodeInstanceController(dbContextNodeInstances, _notifyDriver, _nodeInstanceCache, _coreServer);
-                nodeInstancesSaved = await nodeInstanceController.Save(data.NodeInstances,false);
-            }
+            await using var dbContextNodeInstances = new AutomaticaContext(_config);
+
+            var nodeInstanceController = new NodeInstanceController(dbContextNodeInstances, _notifyDriver,
+                _nodeInstanceCache, _coreServer);
 
             var pages = await Save(data.LogicPages);
 
@@ -68,7 +66,7 @@ namespace Automatica.Core.WebApi.Controllers
             return new SaveAllLogicEditor
             {
                 LogicPages = pages.ToList(),
-                NodeInstances = nodeInstancesSaved.ToList()
+                NodeInstances = nodeInstanceController.Get().ToList()
             };
         }
 

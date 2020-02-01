@@ -1,5 +1,4 @@
 ﻿using P3.Knx.Core.Driver.Frames;
-using System;
 using System.Timers;
 
 namespace P3.Knx.Core.Driver
@@ -7,24 +6,24 @@ namespace P3.Knx.Core.Driver
     internal class HeartbeatMonitor
     {
         private readonly KnxConnection connection;
+        private readonly IKnxEvents _knxEvents;
         private readonly Timer _timer;
 
         private int _heartbeatCount = 0;
 
-        public EventHandler<EventArgs> OnHeartbeatFailure { get; set; }
-
-        public HeartbeatMonitor(KnxConnection connection)
+        public HeartbeatMonitor(KnxConnection connection, IKnxEvents knxEvents)
         {
             this.connection = connection;
+            _knxEvents = knxEvents;
 
             _timer = new Timer(50*1000);  
         }
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if(_heartbeatCount >= 3)
             {
-                OnHeartbeatFailure?.Invoke(this, EventArgs.Empty);
+                await _knxEvents.Disconnected();
                 Stop();
                 return;
             }

@@ -88,7 +88,7 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 try
                 {
-                    await _notifyDriver.NotifySave(node);
+                    await _notifyDriver.NotifyUpdate(node);
                 }
                 catch (Exception e)
                 {
@@ -164,6 +164,9 @@ namespace Automatica.Core.WebApi.Controllers
                 .Where(a => IsUserInGroup(a.This2UserGroup)).ToList();
         }
 
+        
+
+       
         [HttpPost]
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<NodeInstance>> Save([FromBody]List<NodeInstance> nodeInstances, bool reInit = true)

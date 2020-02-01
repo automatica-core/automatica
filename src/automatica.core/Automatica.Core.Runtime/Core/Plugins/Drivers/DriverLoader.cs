@@ -96,7 +96,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 }
                 else
                 {
-                        factory.InitNodeTemplates(new DoNothingNodeTemplateFactory());
+                    factory.InitNodeTemplates(new DoNothingNodeTemplateFactory());
                 }
 
                 _logger.LogDebug($"Init driver {factory.DriverName} {factory.DriverVersion}...done");

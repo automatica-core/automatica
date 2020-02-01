@@ -155,7 +155,7 @@
             <ng-container *ngSwitchCase="PropertyTemplateType.CategoryInstance">
                 <!--TODO: Placeholder-->
                 <dx-drop-down-box [(value)]="data.data.Value" valueExpr="ObjId" displayExpr="DisplayName"
-                    [showClearButton]="true" [dataSource]="categoryInstances">
+                    [showClearButton]="true" [dataSource]="categoryInstances" (onValueChanged)="valueChanged($event, data)">
 
                     <div *dxTemplate="let datax of 'content'">
                         <dx-data-grid [dataSource]="categoryInstances" keyExpr="ObjId" [columns]="['DisplayName']"

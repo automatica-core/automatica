@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -19,25 +18,28 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
 
         public BitcoinNode(IDriverContext driverContext) : base(driverContext)
         {
+        }
 
+        public override async Task<bool> Read()
+        {
+            await Refresh();
+            return true;
         }
 
         public override async Task Refresh()
         {
             try
             {
-                using (var response = await _client.GetAsync("https://blockchain.info/ticker"))
+                using var response = await _client.GetAsync("https://blockchain.info/ticker");
+                response.EnsureSuccessStatusCode();
+
+                var res = await response.Content.ReadAsStringAsync();
+
+                var jsonToken = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(res);
+
+                foreach (var node in _nodes)
                 {
-                    response.EnsureSuccessStatusCode();
-
-                    var res = await response.Content.ReadAsStringAsync();
-
-                    var jsonToken = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(res);
-
-                    foreach (var node in _nodes)
-                    {
-                        node.UpdateValue(jsonToken);
-                    }
+                    node.UpdateValue(jsonToken);
                 }
             }
             catch (Exception e)
@@ -60,16 +62,16 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "blockchain-btc-usd":
-                    node = new BitcoinValueNode(ctx, "USD");
+                    node = new BitcoinValueNode(ctx, "USD", false, this);
                     break;
                 case "blockchain-btc-eur":
-                    node = new BitcoinValueNode(ctx, "EUR");
+                    node = new BitcoinValueNode(ctx, "EUR", false, this);
                     break;
                 case "blockchain-btc-usd-with-symbol":
-                    node = new BitcoinValueNode(ctx, "USD", true);
+                    node = new BitcoinValueNode(ctx, "USD", true, this);
                     break;
                 case "blockchain-btc-eur-with-symbol":
-                    node = new BitcoinValueNode(ctx, "EUR", true);
+                    node = new BitcoinValueNode(ctx, "EUR", true, this);
                     break;
             }
 

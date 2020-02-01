@@ -1,13 +1,11 @@
-﻿using Automatica.Core.Driver;
-using Microsoft.Extensions.Logging;
-using OpenWeatherMap;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
-using P3.Driver.Blockchain.Ticker.Driver;
+using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.Blockchain.Ticker.Driver.Bitcoin;
 
-namespace P3.Driver.OpenWeatherMap.DriverFactory
+namespace P3.Driver.Blockchain.Ticker.Driver
 {
     internal class BlockchainDriver : DriverBase
     {

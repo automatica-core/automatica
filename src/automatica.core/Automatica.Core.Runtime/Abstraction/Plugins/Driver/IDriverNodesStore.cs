@@ -8,5 +8,6 @@ namespace Automatica.Core.Runtime.Abstraction.Plugins.Driver
         Task ReInitialize();
         void Clear();
         void Add(IDriverNode node);
+        void RemoveDriver(IDriver driver);
     }
 }

@@ -20,14 +20,34 @@ namespace Automatica.Core.Runtime.Core
             _logger = logger;
         }
 
-        public Task NotifySave(NodeInstance node)
+        public async Task NotifyUpdate(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _?.OnSave(node));
+            await ExecuteAction(node, _ => _?.OnSave(node));
         }
 
-        public Task NotifyDeleted(NodeInstance node)
+
+        public async Task NotifyAdd(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _?.OnDelete(node));
+            await ExecuteAction(node, _ => _?.OnSave(node));
+        }
+
+        public async Task NotifyDeleted(NodeInstance node)
+        {
+            await ExecuteAction(node, _ => _?.OnDelete(node));
+
+            var driverNode = _mapper.Get(node.ObjId);
+
+            if (driverNode == null)
+            {
+                return;
+            }
+            foreach (var child in driverNode.Children)
+            {
+                await NotifyDeleted(child.DriverContext.NodeInstance);
+            }
+
+            await driverNode.Stop();
+            _mapper.Remove(driverNode);
         }
 
         public Task<IList<NodeInstance>> ScanBus(NodeInstance node)

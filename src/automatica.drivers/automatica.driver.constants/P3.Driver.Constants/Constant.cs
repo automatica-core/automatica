@@ -18,7 +18,6 @@ namespace P3.Driver.Constants
         public Constant(IDriverContext ctx) : base(ctx)
         {
             _dispatchTimer.Interval = 10000;
-            _dispatchTimer.Elapsed += _dispatchTimer_Elapsed;
 
         }
 
@@ -65,13 +64,24 @@ namespace P3.Driver.Constants
         public override Task<bool> Start()
         {
             _dispatchTimer.Start();
+            _dispatchTimer.Elapsed += _dispatchTimer_Elapsed;
 
-            // initially dispatch the value on satrt
+            // initially dispatch the value on start
             DispatchValue(_value);
 
             return base.Start();
         }
-        
+
+        public override Task<bool> Stop()
+        {
+            _dispatchTimer.Elapsed -= _dispatchTimer_Elapsed;
+            _dispatchTimer.Stop();
+
+            _dispatchTimer.Dispose();
+
+            return base.Stop();
+        }
+
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             return null; //we have no more children, therefore return null

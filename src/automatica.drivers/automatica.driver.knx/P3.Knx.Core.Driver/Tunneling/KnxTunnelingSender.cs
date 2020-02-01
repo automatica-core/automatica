@@ -42,7 +42,6 @@ namespace P3.Knx.Core.Driver.Tunneling
 
         internal override void Stop()
         {
-            _client.Dispose();
         }
     }
 }
