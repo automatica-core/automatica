@@ -30,5 +30,24 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
         {
             _store.Add(node.Id, node);
         }
+
+        public void RemoveDriver(IDriver driver)
+        {
+            _store.Remove(driver);
+
+            foreach (var child in driver.Children)
+            {
+                RemoveNode(child);
+            }
+        }
+
+        private void RemoveNode(IDriverNode node)
+        {
+            _store.Remove(node);
+            foreach (var child in node.Children)
+            {
+                RemoveNode(child);
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Automatica.Core.EF.Models;
+﻿using System;
+using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Runtime.Abstraction;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,14 @@ namespace Automatica.Core.Runtime.Database
             using var context = new AutomaticaContext(_config);
             _logger.LogInformation($"Save trend for {nodeInstance.Name} ({nodeInstance.ObjId}) with value {value.Value}...");
             context.Add(value);
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
 

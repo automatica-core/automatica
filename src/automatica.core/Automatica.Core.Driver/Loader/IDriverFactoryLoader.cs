@@ -5,6 +5,6 @@ namespace Automatica.Core.Driver.Loader
 {
     public interface IDriverFactoryLoader
     {
-        Task LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context);
+        Task<IDriver> LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context);
     }
 }

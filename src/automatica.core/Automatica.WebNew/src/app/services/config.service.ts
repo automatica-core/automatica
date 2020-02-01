@@ -6,6 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { NodeTemplate } from "../base/model/node-template";
 import { NodeInstance } from "../base/model/node-instance";
+import { PropertyInstance } from "../base/model/property-instance";
 
 @Injectable()
 export class ConfigService extends BaseService {
@@ -66,6 +67,19 @@ export class ConfigService extends BaseService {
         }
         return super.postMultiple<NodeInstance>("nodeInstances", data);
     }
+
+    async add(nodeInstance: NodeInstance): Promise<NodeInstance> {
+        return await super.put<NodeInstance>("nodeInstancesV2/add", nodeInstance.toJson());
+    }
+
+    async update(nodeInstance: NodeInstance): Promise<NodeInstance> {
+        return await super.post<NodeInstance>("nodeInstancesV2/update", nodeInstance.toJson());
+    }
+
+    async delete(nodeInstance: NodeInstance): Promise<void> {
+        return await super.postJson("nodeInstancesV2/delete", nodeInstance.toJson());
+    }
+
     getLinkableNodes(): Promise<NodeInstance[]> {
         return super.getMultiple<NodeInstance>("nodeInstances/linkable");
     }

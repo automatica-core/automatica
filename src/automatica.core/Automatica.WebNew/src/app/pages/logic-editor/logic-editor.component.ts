@@ -232,9 +232,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = true;
 
     try {
-      const rootNode = this.configTree.getRootNode();
-      await this.configTree.saveSettings(rootNode);
-      const all = await this.ruleEngineService.saveAll(this.pages, [rootNode]);
+      const all = await this.ruleEngineService.saveAll(this.pages,  []);
 
       this.nodeInstanceService.convertConfig(all.NodeInstances);
       this.pages = all.LogicPages;
@@ -267,11 +265,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.pages = this.pages.filter(a => a.ObjId !== this.selectedItem.ObjId);
     }
 
-  }
-  addItem(nodeTemplate: NodeTemplate) {
-    if (this.selectedItem instanceof NodeInstance) {
-      this.configTree.addItem(this.selectedItem, nodeTemplate, true);
-    }
   }
 
   nodeSelect(event: NodeInstance) {

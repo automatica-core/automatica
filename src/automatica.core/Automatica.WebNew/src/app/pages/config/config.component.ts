@@ -81,10 +81,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     this.configTree.removeItem();
 
   }
-  addItem(nodeTemplate: NodeTemplate) {
-    this.configTree.addItem(this.selectedItem, nodeTemplate, true);
 
-  }
   async save($event) {
     try {
       this.isLoading = true;

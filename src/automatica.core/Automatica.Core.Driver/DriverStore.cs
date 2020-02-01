@@ -7,5 +7,9 @@ namespace Automatica.Core.Driver
 {
     internal class DriverStore : GuidStoreBase<IDriver>, IDriverStore
     {
+        public void Remove(IDriver driver)
+        {
+            Remove(driver.Id);
+        }
     }
 }
