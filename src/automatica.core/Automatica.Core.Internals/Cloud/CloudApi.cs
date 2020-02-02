@@ -159,6 +159,10 @@ namespace Automatica.Core.Internals.Cloud
                 var response = await client.GetAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey()))
                     .ConfigureAwait(false);
 
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    throw new NoApiKeyException();
+                }
                 response.EnsureSuccessStatusCode();
 
                 await response.Content.ReadAsStringAsync().ContinueWith(x =>

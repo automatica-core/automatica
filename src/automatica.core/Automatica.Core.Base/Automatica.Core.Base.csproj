@@ -17,15 +17,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Docker.DotNet" Version="3.125.2" />
-    <PackageReference Include="MessagePack" Version="2.0.335" />
+    <PackageReference Include="MessagePack" Version="2.1.80" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.1" />
     <PackageReference Include="Serilog" Version="2.9.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00779" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />

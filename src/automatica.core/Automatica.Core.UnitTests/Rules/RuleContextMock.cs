@@ -15,6 +15,11 @@ namespace Automatica.Core.UnitTests.Base.Rules
         {
             return Task.CompletedTask;
         }
+
+        public Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
+        {
+            return Task.CompletedTask;
+        }
     }
 
     public class RuleContextMock : IRuleContext
