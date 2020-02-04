@@ -18,7 +18,6 @@ export class VisualizationComponent implements OnInit {
 
   menuItems = [];
   areas: AreaInstance[] = [];
-  visuPages: VisuPage[] = [];
   categories: CategoryInstance[] = [];
 
   constructor(private hubService: HubConnectionService,
@@ -39,36 +38,23 @@ export class VisualizationComponent implements OnInit {
     this.serverStateService.start();
     await this.hubService.init();
 
-    const [areas, visuPages, categories] = await Promise.all(
+    const [areas,  categories] = await Promise.all(
       [
         this.areaService.getAreaInstances(),
-        this.visuService.getVisuPages(),
         this.catService.getCategoryInstances()
       ]);
 
     this.areas = areas;
-
-    this.visuPages = visuPages;
 
     this.categories = categories;
 
 
     const menu = [];
     menu.push({
-      text: "COMMON.PAGES",
-      icon: "images",
+      text: "COMMON.HOME",
+      icon: "home",
       path: "/visualization",
     });
-
-    for (const x of this.visuPages) {
-      const isDefault = x.DefaultPage;
-      menu.push({
-        text: x.DisplayName,
-        path: "/visualization/page/" + x.ObjId,
-        icon: "eye",
-        default: isDefault
-      });
-    }
 
     const categoriesItem = {
       text: "CATEGORIES.NAME",

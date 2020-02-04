@@ -43,7 +43,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.ViewerRole)]
         public object LoadDefaultPage(long pageType)
         {
-            return _cache.PageCache.GetDefaultPage(pageType);
+            return _cache.PageCache.ByFavorites();
         }
 
         [HttpGet]

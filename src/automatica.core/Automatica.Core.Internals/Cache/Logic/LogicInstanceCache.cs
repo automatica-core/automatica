@@ -12,6 +12,7 @@ namespace Automatica.Core.Internals.Cache.Logic
     {
         private readonly IDictionary<Guid, IList<RuleInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IDictionary<Guid, IList<RuleInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
+        private readonly IList<RuleInstance> _favorites = new List<RuleInstance>();
 
         public LogicInstanceCache(IConfiguration configuration) : base(configuration)
         {
@@ -49,6 +50,11 @@ namespace Automatica.Core.Internals.Cache.Logic
 
                     _categoryCache[item.This2CategoryInstance.Value].Add(item);
                 }
+
+                if (item.IsFavorite)
+                {
+                    _favorites.Add(item);
+                }
             }
 
             return all;
@@ -60,11 +66,19 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             _areaCache.Clear();
             _categoryCache.Clear();
+            _favorites.Clear();
         }
 
         protected override Guid GetKey(RuleInstance obj)
         {
             return obj.ObjId;
+        }
+
+        public IList<RuleInstance> ByFavorites()
+        {
+            Initialize();
+
+            return _favorites;
         }
 
         public IList<RuleInstance> ByCategory(Guid category)

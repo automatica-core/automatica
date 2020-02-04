@@ -10,6 +10,7 @@ import { NodeInstance } from "../model/node-instance";
 import { AppService } from "src/app/services/app.service";
 import { AreaInstance } from "../model/areas";
 import { CategoryInstance } from "../model/categories";
+import { VisuPageGroupType } from "../model/visu-page";
 
 export interface VisuObjectType {
     This2AreaInstanceNavigation: AreaInstance;
@@ -33,6 +34,9 @@ export abstract class BaseMobileComponent extends BaseComponent {
 
     @Input()
     public parent: ElementRef;
+
+    @Input()
+    pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
     private subscribedNodeInstances: Map<string, NodeInstance> = new Map<string, NodeInstance>();
     _primaryNodeInstance: any;
@@ -78,9 +82,22 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     public get icon() {
-        if (this.visuObjectType.This2CategoryInstanceNavigation) {
-            return this.visuObjectType.This2CategoryInstanceNavigation.Icon;
+
+        switch (this.pageGroupType) {
+            case VisuPageGroupType.Category:
+                if (this.visuObjectType.This2CategoryInstanceNavigation) {
+                    return this.visuObjectType.This2CategoryInstanceNavigation.Icon;
+                }
+                break;
+            case VisuPageGroupType.Area:
+                break;
+            case VisuPageGroupType.Favorites:
+                if (this.visuObjectType.This2CategoryInstanceNavigation) {
+                    return this.visuObjectType.This2CategoryInstanceNavigation.Icon;
+                }
+                return "star";
         }
+
         return void 0;
     }
 

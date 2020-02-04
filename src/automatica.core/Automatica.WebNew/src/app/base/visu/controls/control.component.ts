@@ -9,6 +9,7 @@ import { BaseComponent } from "../../base-component";
 import { VisuObjectMobileInstance } from "../../model/visu/visu-object-mobile-instance";
 import { BaseMobileComponent } from "../base-mobile-component";
 import { AppService } from "src/app/services/app.service";
+import { VisuPageGroupType } from "../../model/visu-page";
 
 @Component({
   selector: "visu-component",
@@ -27,6 +28,9 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
 
   @Input()
   editMode: boolean = false;
+
+  @Input()
+  pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
   inputs: any;
 
@@ -48,7 +52,8 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
     this.inputs = {
       item: this.item,
       parent: this.elementRef,
-      editMode: this.editMode
+      editMode: this.editMode,
+      pageGroupType: this.pageGroupType
     };
 
     switch (this.item.VisuObjectTemplate.Key) {

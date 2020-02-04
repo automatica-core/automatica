@@ -5,5 +5,6 @@ namespace Automatica.Core.Internals.Cache.Common
 {
     public interface ISettingsCache : IStore<long, Setting>
     {
+        Setting GetByKey(string key);
     }
 }

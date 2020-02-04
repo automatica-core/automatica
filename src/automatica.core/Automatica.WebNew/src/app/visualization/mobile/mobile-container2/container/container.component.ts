@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { VisuPageGroupType } from "src/app/base/model/visu-page";
+import { TranslationService } from "angular-l10n";
 
 interface Section {
   title: string;
@@ -17,6 +19,9 @@ export class ContainerComponent implements OnInit {
   private _items: VisuObjectMobileInstance[];
 
   @Input()
+  public pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
+
+  @Input()
   public get items(): VisuObjectMobileInstance[] {
     return this._items;
   }
@@ -26,9 +31,17 @@ export class ContainerComponent implements OnInit {
     this.sectionsMap = new Map<string, Section>();
     this.sections = [];
 
+    if (!v) {
+      return;
+    }
+
     for (const item of v) {
       let sectionName = "unknown";
-      sectionName = item.objectType.This2CategoryInstanceNavigation.Name;
+      if (this.pageGroupType === VisuPageGroupType.Favorites) {
+        sectionName = this.translationService.translate("COMMON.FAVORITES");
+      } else if (this.pageGroupType === VisuPageGroupType.Category) {
+        sectionName = item.objectType.This2CategoryInstanceNavigation.Name;
+      }
 
       if (!this.sectionsMap.has(sectionName)) {
         const section: Section = { title: sectionName, items: [] };
@@ -47,7 +60,7 @@ export class ContainerComponent implements OnInit {
 
   sections: Section[] = [];
 
-  constructor() { }
+  constructor(private translationService: TranslationService) { }
 
   ngOnInit() {
 

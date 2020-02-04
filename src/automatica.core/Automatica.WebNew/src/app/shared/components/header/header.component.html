@@ -17,6 +17,12 @@
             </div>
         </dxi-item>
 
+        <dxi-item location="after" *ngIf="time">
+            <div *dxTemplate="let data of 'item'">
+                <span style="margin-left: 20px; font-size: 20px; color: white;" translate>{{ time }}</span>
+            </div>
+        </dxi-item>
+
         <dx-speed-dial-action icon="preferences" label="{{ 'COMMON.ADMIN' | translate }}" [index]="1" [visible]="!isAdminPage()"
             (onClick)="navigateToAdminPage($event)">
         </dx-speed-dial-action>

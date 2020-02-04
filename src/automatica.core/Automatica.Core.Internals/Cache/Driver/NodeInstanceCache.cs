@@ -19,6 +19,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
+        private readonly IList<NodeInstance> _favorites = new List<NodeInstance>();
         private NodeInstance _root;
 
         public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache) : base(configuration)
@@ -95,6 +96,11 @@ namespace Automatica.Core.Internals.Cache.Driver
 
                     _categoryCache[item.This2CategoryInstance.Value].Add(item);
                 }
+
+                if (item.IsFavorite)
+                {
+                    _favorites.Add(item);
+                }
             }
 
 
@@ -138,7 +144,15 @@ namespace Automatica.Core.Internals.Cache.Driver
             _allCache.Clear();
 
             _areaCache.Clear();
-            _categoryCache.Clear();
+            _categoryCache.Clear(); 
+            _favorites.Clear();
+        }
+
+        public IList<NodeInstance> ByFavorites()
+        {
+            Initialize();
+
+            return _favorites;
         }
 
         public IList<NodeInstance> ByCategory(Guid category)
@@ -180,11 +194,15 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 return null;
             }
-            var nodeTemplate = _nodeTemplateCache.Get(child.This2NodeTemplate.Value);
 
-            if (nodeTemplate.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
+            if (child.This2NodeTemplate != null)
             {
-                return child;
+                var nodeTemplate = _nodeTemplateCache.Get(child.This2NodeTemplate.Value);
+
+                if (nodeTemplate.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
+                {
+                    return child;
+                }
             }
 
             if (!child.This2ParentNodeInstance.HasValue)

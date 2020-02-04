@@ -5,7 +5,7 @@
 
     <div class="sections_rows">
        <ng-container *ngFor="let item of items">
-           <app-visualization-element [item]="item"></app-visualization-element>
+           <app-visualization-element [pageGroupType]="pageGroupType" [item]="item"></app-visualization-element>
        </ng-container>
     </div>
 </div>

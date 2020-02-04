@@ -66,6 +66,7 @@
         "EDIT": "Bearbeiten...",
         "TYPES": "Type",
         "TYPE": "Type",
+        "FAVORITES": "Favoriten",
         "DATETIMEFORMAT": {
             "DATE": "DD.MM.YYYY",
             "TIME": "HH.mm.ss",
@@ -208,6 +209,10 @@
                 "NAME": "In Visu verwenden",
                 "DESCRIPTION": ""
             },
+            "IS_FAVORITE": {
+                "NAME": "Favorit",
+                "DESCRIPTION": ""
+            },
             "AREA": {
                 "NAME": "Bereich",
                 "DESCRIPTION": ""
@@ -296,6 +301,10 @@
             },
             "CLOUDENVIRONMENT": {
                 "NAME": "Cloud Umgebung",
+                "DESCRIPTION":""
+            },
+            "PROJECTNAME": {
+                "NAME": "Projekt Name",
                 "DESCRIPTION":""
             },
             "TRENDING": {

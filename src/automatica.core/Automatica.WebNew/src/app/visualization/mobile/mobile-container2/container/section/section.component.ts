@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { VisuPageGroupType } from "src/app/base/model/visu-page";
 
 @Component({
   selector: "app-visualization-section",
@@ -13,6 +14,9 @@ export class SectionComponent implements OnInit {
 
   @Input()
   items: VisuObjectMobileInstance[] = [];
+
+  @Input()
+  pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
   constructor() { }
 

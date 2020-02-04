@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef } from "@angular/core";
-import { VisuPage, VisuPageType } from "src/app/base/model/visu-page";
+import { VisuPage, VisuPageType, VisuPageGroupType } from "src/app/base/model/visu-page";
 import { VisuObjectTemplate } from "src/app/base/model/visu-object-template";
 import { BaseComponent } from "src/app/base/base-component";
 import { VisuService } from "src/app/services/visu.service";
@@ -30,6 +30,8 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
   private visuTemplatesMap = new Map<string, VisuObjectTemplate>();
   version: any;
 
+  public pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
+
   constructor(private visuService: VisuService,
     private route: ActivatedRoute,
     notify: NotifyService,
@@ -58,9 +60,13 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
 
       if (!this.page) {
         if (this.route.snapshot.data.loadHomepage) {
-          this.page = await this.visuService.getDefaultVisuPage(VisuPageType.Mobile);
+          this.pageGroupType = VisuPageGroupType.Favorites;
+          const data = await this.visuService.getFavorites();
+          this.initPage(data);
+
         } else {
           super.registerObservable(this.route.params, async (params) => {
+            this.pageGroupType = VisuPageGroupType.Category;
             this.appService.isLoading = true;
             const id = params["id"];
             if (!params.id) {
@@ -68,46 +74,8 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
             }
 
             const data = await this.visuService.getVisuPage(id);
+            this.initPage(data);
 
-            if (data instanceof VisualizationDataFacade) {
-              this.page = new VisuPage();
-              this.page.Height = 3;
-              this.page.Width = 5;
-
-              const visuObjectInstances = [];
-
-              for (const x of data.NodeInstances) {
-                if (x.NodeTemplate.This2DefaultMobileVisuTemplate && this.visuTemplatesMap.has(x.NodeTemplate.This2DefaultMobileVisuTemplate)) {
-                  const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x);
-
-                  this.getAndSetProperty(instance, "nodeInstance", x.ObjId);
-                  this.getAndSetProperty(instance, "text", x.Name);
-                  this.getAndSetProperty(instance, "readonly", !x.IsWriteable);
-                  this.getAndSetProperty(instance, "min", 0);
-                  this.getAndSetProperty(instance, "max", 100);
-
-
-                  if (x.NodeTemplate.This2NodeDataType === NodeDataTypeEnum.Boolean) {
-                    instance.StateTextValueTrue = x.StateTextValueTrue;
-                    instance.StateTextValueFalse = x.StateTextValueFalse;
-                    instance.StateColorValueTrue = x.StateColorValueTrue;
-                    instance.StateColorValueFalse = x.StateColorValueFalse;
-                  }
-                  instance.VisuName = x.VisuName;
-
-                  visuObjectInstances.push(instance);
-                }
-              }
-
-              for (const x of data.RuleInstances) {
-                const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate), x);
-                visuObjectInstances.push(instance);
-              }
-
-              this.page.VisuObjectInstances = visuObjectInstances;
-            } else if (data instanceof VisuPage) {
-              this.page = data;
-            }
 
             this.appService.isLoading = false;
           });
@@ -120,6 +88,48 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
     }
 
     this.appService.isLoading = false;
+  }
+
+  private initPage(data) {
+    if (data instanceof VisualizationDataFacade) {
+      this.page = new VisuPage();
+      this.page.Height = 3;
+      this.page.Width = 5;
+
+      const visuObjectInstances = [];
+
+      for (const x of data.NodeInstances) {
+        if (x.NodeTemplate.This2DefaultMobileVisuTemplate && this.visuTemplatesMap.has(x.NodeTemplate.This2DefaultMobileVisuTemplate)) {
+          const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x);
+
+          this.getAndSetProperty(instance, "nodeInstance", x.ObjId);
+          this.getAndSetProperty(instance, "text", x.Name);
+          this.getAndSetProperty(instance, "readonly", !x.IsWriteable);
+          this.getAndSetProperty(instance, "min", 0);
+          this.getAndSetProperty(instance, "max", 100);
+
+
+          if (x.NodeTemplate.This2NodeDataType === NodeDataTypeEnum.Boolean) {
+            instance.StateTextValueTrue = x.StateTextValueTrue;
+            instance.StateTextValueFalse = x.StateTextValueFalse;
+            instance.StateColorValueTrue = x.StateColorValueTrue;
+            instance.StateColorValueFalse = x.StateColorValueFalse;
+          }
+          instance.VisuName = x.VisuName;
+
+          visuObjectInstances.push(instance);
+        }
+      }
+
+      for (const x of data.RuleInstances) {
+        const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate), x);
+        visuObjectInstances.push(instance);
+      }
+
+      this.page.VisuObjectInstances = visuObjectInstances;
+    } else if (data instanceof VisuPage) {
+      this.page = data;
+    }
   }
 
   private getAndSetProperty(instance: VisuObjectInstance, property: string, value: any) {

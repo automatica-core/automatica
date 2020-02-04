@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, NgModule, Input, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
 import { DxScrollViewModule } from "devextreme-angular/ui/scroll-view";
@@ -58,7 +58,8 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     constructor(private breakpointObserver: BreakpointObserver,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private deviceService: DeviceService) { }
+        private deviceService: DeviceService,
+        private changeRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.selectedRoute = "";
@@ -93,6 +94,8 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     toggleMenu = (e) => {
         this.menuOpened = !this.menuOpened;
         e.event.stopPropagation();
+
+        this.changeRef.detectChanges();
     }
 
     get isLargeScreen() {

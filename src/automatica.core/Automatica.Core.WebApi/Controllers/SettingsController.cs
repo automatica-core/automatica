@@ -25,6 +25,13 @@ namespace Automatica.Core.WebApi.Controllers
             return _settingsCache.All();
         }
 
+        [HttpGet]
+        [Route("key/{key}")]
+        public Setting GetSetting(string key)
+        {
+            return _settingsCache.GetByKey(key);
+        }
+
         [HttpPost]
         public ICollection<Setting> SaveSettings([FromBody]IList<Setting> settings)
         {

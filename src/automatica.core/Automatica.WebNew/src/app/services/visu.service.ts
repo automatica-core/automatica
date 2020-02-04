@@ -28,6 +28,10 @@ export class VisuService extends BaseService {
         return super.get<VisuPage>("visualization/page/default/" + pageType);
     }
 
+    getFavorites(): Promise<BaseModel> {
+        return super.get("visualization/page/default/0");
+    }
+
     saveVisuPages(pages: VisuPage[]): Promise<VisuPage[]> {
         const ar = [];
         for (const page of pages) {

@@ -22,6 +22,7 @@ import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergr
 import { AreaInstance } from "./areas"
 import { CategoryInstance } from "./categories"
 import { VisuObjectType } from "../visu/base-mobile-component"
+import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance"
 
 function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
     if (!a.Template) {
@@ -33,7 +34,7 @@ function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
 
 @Model()
 export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDescriptionModel, INameModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel {
-    
+
     public static KeyPrefix: string = "Rule";
 
     @JsonProperty()
@@ -84,6 +85,9 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
 
     @JsonProperty()
     UseInVisu: boolean;
+
+    @JsonProperty()
+    IsFavorite: boolean;
 
     @JsonProperty()
     This2AreaInstance: string;
@@ -157,10 +161,10 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
 
-
         this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
         this.Properties.push(new VirtualAreaPropertyInstance(this));
         this.Properties.push(new VirtualCategoryPropertyInstance(this));
+        this.Properties.push(new VirtualIsFavoriteVisuPropertyInstance(this));
 
         this.Properties.push(new VirtualUserGroupPropertyInstance(this));
 

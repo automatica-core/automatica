@@ -2,7 +2,7 @@
     <dx-scroll-view height="100%">
         <ng-container *ngFor="let section of sections">
 
-            <app-visualization-section [title]="section.title" [items]="section.items"></app-visualization-section>
+            <app-visualization-section [pageGroupType]="pageGroupType" [title]="section.title" [items]="section.items"></app-visualization-section>
 
         </ng-container>
 
