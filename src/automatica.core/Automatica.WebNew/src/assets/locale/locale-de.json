@@ -67,6 +67,7 @@
         "TYPES": "Type",
         "TYPE": "Type",
         "FAVORITES": "Favoriten",
+        "HOME": "Home",
         "DATETIMEFORMAT": {
             "DATE": "DD.MM.YYYY",
             "TIME": "HH.mm.ss",

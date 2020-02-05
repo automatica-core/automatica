@@ -66,11 +66,23 @@ export class MobileContainer2Component extends BaseComponent implements OnInit, 
 
         } else {
           super.registerObservable(this.route.params, async (params) => {
-            this.pageGroupType = VisuPageGroupType.Category;
+
             this.appService.isLoading = true;
-            const id = params["id"];
             if (!params.id) {
               return;
+            }
+
+            const id = params["id"];
+            const type = params["type"];
+
+            if (!type) {
+              return;
+            }
+
+            if (type === "area") {
+              this.pageGroupType = VisuPageGroupType.Area;
+            } else {
+              this.pageGroupType = VisuPageGroupType.Category;
             }
 
             const data = await this.visuService.getVisuPage(id);

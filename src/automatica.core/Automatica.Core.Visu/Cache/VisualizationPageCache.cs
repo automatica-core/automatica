@@ -101,7 +101,7 @@ namespace Automatica.Core.Visu.Cache
 
         public object ByPage(Guid id)
         {
-            if (_areaCache.Contains(id))
+            if (_areaCache.IsAreaExisting(id))
             {
                 return AllByArea(id);
             }

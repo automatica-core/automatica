@@ -53,7 +53,7 @@ export class VisualizationComponent implements OnInit {
     menu.push({
       text: "COMMON.HOME",
       icon: "home",
-      path: "/visualization",
+      path: "/visualization/home",
     });
 
     const categoriesItem = {
@@ -66,7 +66,7 @@ export class VisualizationComponent implements OnInit {
     for (const x of this.categories) {
       categoriesItem.items.push({
         text: x.DisplayName,
-        path: "/visualization/page/" + x.ObjId,
+        path: "/visualization/page/category/" + x.ObjId,
         icon: x.Icon.replace("fas", "").trim()
       });
     }
@@ -90,7 +90,7 @@ export class VisualizationComponent implements OnInit {
     for (const x of areas) {
       const item = {
         text: x.DisplayName,
-        path: "/visualization/page/" + x.ObjId,
+        path: "/visualization/page/area/" + x.ObjId,
         icon: x.Icon,
         expanded: true,
         items: []

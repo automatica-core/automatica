@@ -1666,11 +1666,11 @@
   color: #fff;
 }
 .dx-button-mode-contained.dx-button-default.dx-state-hover {
-  background-color: #739b1e;
+  background-color: #457987;
   border-color: transparent;
 }
 .dx-button-mode-contained.dx-button-default.dx-state-focused {
-  background-color: #6a8f1b;
+  background-color: #457987;
   border-color: transparent;
 }
 .dx-button-mode-contained.dx-button-default.dx-state-active {
@@ -5767,7 +5767,7 @@
   margin: 1.5px 6px;
 }
 .dx-state-focused.dx-gallery .dx-gallery-indicator-item-selected {
-  background: #608219;
+  background: #457987;
 }
 .dx-lookup {
   height: 26px;
@@ -13965,13 +13965,13 @@
           box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 .dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-hover {
-  background-color: #325862d;
+  background-color: #325862;
 }
 .dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-hover .dx-fa-button-icon {
   background-color: transparent;
 }
 .dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-active {
-  background-color: #608219;
+  background-color: #457987;
 }
 .dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-active .dx-fa-button-icon {
   background-color: transparent;

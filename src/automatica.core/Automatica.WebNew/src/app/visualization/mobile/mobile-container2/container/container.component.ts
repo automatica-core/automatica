@@ -41,6 +41,8 @@ export class ContainerComponent implements OnInit {
         sectionName = this.translationService.translate("COMMON.FAVORITES");
       } else if (this.pageGroupType === VisuPageGroupType.Category) {
         sectionName = item.objectType.This2CategoryInstanceNavigation.Name;
+      } else if (this.pageGroupType === VisuPageGroupType.Area) {
+        sectionName = item.objectType.This2AreaInstanceNavigation.Name;
       }
 
       if (!this.sectionsMap.has(sectionName)) {

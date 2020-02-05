@@ -31,13 +31,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
   addItemsMenu: CustomMenuItem[] = void 0;
 
-  menuItemNew: CustomMenuItem = {
-    id: "new",
-    label: "New",
-    icon: "fas fa-plus",
-    disabled: true,
-    items: this.addItemsMenu
-  }
+
   menuSave: CustomMenuItem = {
     id: "save",
     label: "Save",
@@ -45,16 +39,6 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     items: undefined,
     command: (event) => { this.save(); }
   }
-
-  menuDelete: CustomMenuItem = {
-    id: "delete",
-    label: "Delete",
-    icon: "fa fa-minus",
-    disabled: true,
-    items: undefined,
-    command: (event) => { this.delete(); }
-  }
-
   menuImportEts: CustomMenuItem = {
     id: "ets-import",
     label: "EtsImport",
@@ -78,14 +62,10 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     appService.setAppTitle("AREAS.NAME");
 
-    this.menuItems.push(this.menuItemNew);
-    this.menuItems.push(this.menuDelete);
     this.menuItems.push(this.menuSave);
     this.menuItems.push(this.menuImportEts);
 
-    this.menuItemNew.label = this.translate.translate("COMMON.NEW");
     this.menuSave.label = this.translate.translate("COMMON.SAVE");
-    this.menuDelete.label = this.translate.translate("COMMON.DELETE");
     this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
   }
 
@@ -177,29 +157,10 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     }
 
     this.addItemsMenu = [];
-    this.menuItemNew.disabled = true;
-    this.menuDelete.disabled = true;
 
 
     const supported: AreaTemplate[] = AreaInstance.getSupportedAreaTemplats(data, this.templates);
     this.addSupportedItems(supported);
-
-    if (this.addItemsMenu.length === 0) {
-      this.menuItemNew.disabled = true;
-    } else {
-      this.menuItemNew.disabled = false;
-    }
-
-
-    if (data.This2AreaTemplateNavigation.IsDeleteable) {
-      this.menuDelete.disabled = false;
-    } else {
-      this.menuDelete.disabled = true;
-    }
-    this.menuDelete.source = data;
-
-
-    this.menuItemNew.items = this.addItemsMenu;
 
     const menuItems = this.menuItems;
     this.menuItems = [];

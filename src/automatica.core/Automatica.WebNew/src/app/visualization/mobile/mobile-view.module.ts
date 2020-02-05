@@ -26,7 +26,7 @@ const routes: Routes = [
      canActivate: [HasRoleGuard]
   },
   {
-    path: ":id",
+    path: ":type/:id",
     component: MobileContainer2Component,
     data: {
       title: "Visualization",

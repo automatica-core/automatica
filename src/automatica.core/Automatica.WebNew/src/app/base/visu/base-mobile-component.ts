@@ -90,6 +90,9 @@ export abstract class BaseMobileComponent extends BaseComponent {
                 }
                 break;
             case VisuPageGroupType.Area:
+                if (this.visuObjectType.This2AreaInstanceNavigation) {
+                    return this.visuObjectType.This2AreaInstanceNavigation.Icon;
+                }
                 break;
             case VisuPageGroupType.Favorites:
                 if (this.visuObjectType.This2CategoryInstanceNavigation) {
