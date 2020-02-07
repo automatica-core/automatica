@@ -24,6 +24,16 @@ const routes: Routes = [
       requiresRole: Role.VISU_ROLE
     },
      canActivate: [HasRoleGuard]
+  }, {
+    path: "home",
+    component: MobileContainer2Component,
+    data: {
+      title: "Visualization",
+      loadHomepage: true,
+      editable: false,
+      requiresRole: Role.VISU_ROLE
+    },
+     canActivate: [HasRoleGuard]
   },
   {
     path: ":type/:id",

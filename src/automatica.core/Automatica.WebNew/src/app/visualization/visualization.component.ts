@@ -53,7 +53,7 @@ export class VisualizationComponent implements OnInit {
     menu.push({
       text: "COMMON.HOME",
       icon: "home",
-      path: "/visualization/home",
+      path: "/visualization/page/home",
     });
 
     const categoriesItem = {

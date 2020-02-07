@@ -30,4 +30,8 @@ export class BaseControlComponent implements OnInit {
   ngOnInit() {
   }
 
+  onCellClick($event) {
+    console.log("on cell click...");
+  }
+
 }
