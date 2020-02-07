@@ -1,4 +1,4 @@
-import { HostBinding, Input, ElementRef } from "@angular/core";
+import { HostBinding, Input, ElementRef, Directive } from "@angular/core";
 import { BaseComponent } from "../base-component";
 import { VisuObjectMobileInstance } from "../model/visu";
 import { DataHubService } from "../communication/hubs/data-hub.service";
@@ -19,6 +19,7 @@ export interface VisuObjectType {
     DisplayName: string;
 }
 
+@Directive()
 export abstract class BaseMobileComponent extends BaseComponent {
     @HostBinding("class.mobile-control") true;
 

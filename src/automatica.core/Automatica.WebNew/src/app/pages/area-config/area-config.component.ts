@@ -21,7 +21,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
   _isDirty: boolean = false;
 
-  @ViewChild("tree", { static: false })
+  @ViewChild("tree")
   tree: DxTreeListComponent;
 
   private mapList: Map<any, AreaInstance> = new Map<any, AreaInstance>();

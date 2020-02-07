@@ -120,28 +120,28 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @Language()
   lang: any;
 
-  @ViewChild("configTree", { static: false })
+  @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
-  @ViewChild("popupNodeSelect", { static: false })
+  @ViewChild("popupNodeSelect")
   popupNodeSelect: DxPopupComponent;
   private _popupPropertyInstance: PropertyInstance;
   public selectedNodeInstance: NodeInstance;
   public nodeSelectorVisible: boolean = false;
   public nodeSelectorTreeLoading: boolean = false;
 
-  @ViewChild("popupVisuPageSelect", { static: false })
+  @ViewChild("popupVisuPageSelect")
   popupVisuPageSelect: DxPopupComponent;
   public selectedVisuPage: VisuPage;
   public visuPageSelectorVisible: boolean = false;
 
-  @ViewChild("popupLearnMode", { static: false })
+  @ViewChild("popupLearnMode")
   popupLearnMode: DxPopupComponent;
   public learnedNodeInstances: NodeInstance[] = [];
   public learnModeVisible: boolean = false;
   public learnNodeInstance: LearnNodeInstance[] = [];
 
-  @ViewChild("timerEditPopup", { static: false })
+  @ViewChild("timerEditPopup")
   popupTimerEdit: DxPopupComponent;
   public timerEditPopupVisible: boolean = false;
   public timerEditValue: TimerPropertyData = void 0;
@@ -179,7 +179,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     return this._properties;
   }
 
-  @ViewChild("dataTable", { static: false })
+  @ViewChild("dataTable")
   private dataTable: DxDataGridComponent;
 
   @Output()
@@ -257,10 +257,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   private inputValidator: InputValidator = new InputValidator();
 
-  @ViewChild("startDateValidator", { static: false })
+  @ViewChild("startDateValidator")
   startDateValidator: DxValidatorComponent;
 
-  @ViewChild("endDateValidator", { static: false })
+  @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
   @Input()

@@ -1,4 +1,4 @@
-import { ElementRef, Input } from '@angular/core';
+import { ElementRef, Input, Directive } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { Vector } from '../../vector';
@@ -10,6 +10,7 @@ export interface SaturationLightness {
     lightness: number;
 }
 
+@Directive()
 export class HslBaseComponent implements ControlValueAccessor {
     public cursorPosition: Vector;
     @Input() public hue: number;

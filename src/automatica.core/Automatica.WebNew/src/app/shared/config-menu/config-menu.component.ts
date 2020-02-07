@@ -24,7 +24,7 @@ import { DesignTimeDataService } from "src/app/services/design-time-data.service
 
 export class ConfigMenuComponent implements OnInit {
 
-  @ViewChild("menu", { static: false })
+  @ViewChild("menu")
   menu: DxMenuComponent;
 
 
