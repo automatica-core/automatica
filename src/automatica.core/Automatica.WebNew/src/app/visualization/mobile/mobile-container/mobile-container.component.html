@@ -1,9 +1,1 @@
-<div style="display: block; width: 100%; height: 93%" id="visualization-load-panel" dnd-droppable (onDropSuccess)="elementDroped($event)">
-  <gridster *ngIf="page && options" #gridster [options]="options">
-    <ng-container *ngFor="let item of page.VisuObjectInstances">
-      <gridster-item [item]="item" (mousedown)="onMouseDown($event, item)" [ngClass]="{ 'item-selected': item.isSelected }">
-        <visu-component [editMode]="selectionEnabled" [item]="item"></visu-component>
-      </gridster-item>
-    </ng-container>
-  </gridster>
-</div>
+<app-visualization-container *ngIf="page" [pageGroupType]="pageGroupType" [items]="page.VisuObjectInstances"></app-visualization-container>

@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MobileContainerComponent } from "./mobile-container/mobile-container.component";
-import { GridsterModule } from "ngx-gridster";
 import { DndModule } from "p3root-angular-dnd";
 import { DxLoadPanelModule, DxButtonModule } from "devextreme-angular";
 import { RouterModule } from "@angular/router";
@@ -13,7 +12,6 @@ import { ControlsModule } from "src/app/base/visu/controls/controls.module";
   imports: [
     CommonModule,
     RouterModule,
-    GridsterModule,
     ControlsModule,
     DndModule,
     DxLoadPanelModule,

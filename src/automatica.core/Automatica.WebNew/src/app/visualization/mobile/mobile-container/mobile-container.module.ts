@@ -1,17 +1,17 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { MobileContainer2Component } from "./mobile-container2.component";
 import { ContainerModule } from "./container/container.module";
+import { MobileContainerComponent } from "./mobile-container.component";
 
 
 @NgModule({
-  declarations: [MobileContainer2Component],
+  declarations: [MobileContainerComponent],
   imports: [
     CommonModule,
     ContainerModule
   ],
   exports: [
-    MobileContainer2Component
+    MobileContainerComponent
   ]
 })
-export class MobileContainer2Module { }
+export class MobileContainerModule { }
