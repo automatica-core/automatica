@@ -1,25 +1,21 @@
 ﻿{
-  "TIME": {
-    "NAME": "Zeit",
-    "DELAYOFF": {
-      "NAME": "Delayed off",
-      "DESCRIPTION": ""
-    },
-    "DELAYON": {
-      "NAME": "Delayed on",
-      "DESCRIPTION": ""
-    },
-    "MONOFLOP": {
-      "NAME": "Monoflop",
-      "DESCRIPTION": ""
-    },
-    "DELAY": {
-      "NAME": "Delay [s]",
-      "DESCRIPTION": ""
-    },
-    "TIMER": {
-      "NAME": "Timer",
-      "DESCRIPTION": ""
+  "OPERATIONS": {
+    "NAME": "Operation",
+    "SWITCH": {
+      "NAME": "Switch",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "I",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "S",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "O",
+        "DESCRIPTION": ""
+      }
     }
   }
 }

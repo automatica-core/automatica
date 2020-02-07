@@ -1,25 +1,21 @@
 ﻿{
-  "TIME": {
-    "NAME": "Zeit",
-    "DELAYOFF": {
-      "NAME": "Verzögert aus",
-      "DESCRIPTION": ""
-    },
-    "DELAYON": {
-      "NAME": "Verzögert ein",
-      "DESCRIPTION": ""
-    },
-    "MONOFLOP": {
-      "NAME": "Monoflop",
-      "DESCRIPTION": ""
-    },
-    "DELAY": {
-      "NAME": "Zeit [s]",
-      "DESCRIPTION": ""
-    },
-    "TIMER": {
-      "NAME": "Zeitschaltuhr",
-      "DESCRIPTION":  "" 
-    } 
+  "OPERATIONS": {
+    "NAME": "Bedienung",
+    "SWITCH": {
+      "NAME": "Taster",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "I",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "S",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "O",
+        "DESCRIPTION": ""
+      }
+    }
   }
 }
