@@ -24,15 +24,15 @@
         </dxi-item>
 
         <dx-speed-dial-action icon="preferences" label="{{ 'COMMON.ADMIN' | translate }}" [index]="1" [visible]="!isAdminPage()"
-            (onClick)="navigateToAdminPage($event)">
+            (onClick)="navigateToAdminPage()">
         </dx-speed-dial-action>
 
         <dx-speed-dial-action icon="home" label="{{ 'VISU.NAME' | translate }}" [index]="1" [visible]="isAdminPage()"
-            (onClick)="navigateToVisualization($event)">
+            (onClick)="navigateToVisualization()">
         </dx-speed-dial-action>
 
         <dx-speed-dial-action icon="export" label="{{ 'COMMON.LOGOUT' | translate }}" [index]="3" [visible]="true"
-            (onClick)="logout($event)">
+            (onClick)="logout()">
         </dx-speed-dial-action>
 
     </dx-toolbar>

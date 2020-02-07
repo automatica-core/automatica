@@ -24,6 +24,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
   stateType: RuleInterfaceInstance;
   inputType: RuleInterfaceInstance;
   outputType: RuleInterfaceInstance;
+  displayValue: any;
 
   public get state(): boolean {
     return this._state;
