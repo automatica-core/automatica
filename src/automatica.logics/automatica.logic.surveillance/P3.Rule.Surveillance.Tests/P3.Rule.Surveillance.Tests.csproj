@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <Version>0.5.0</Version>
+    <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>BCCA7E26-EA48-4A4A-8799-3B5CB3338B52</ProjectGuid>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

@@ -1,19 +1,18 @@
-import { BaseMobileComponent } from "./base-mobile-component";
+import { BaseMobileComponent, VisuObjectType } from "./base-mobile-component";
 import { TranslationService } from "angular-l10n";
 import { RuleInstanceVisuService } from "src/app/services/rule-visu.service";
 import { NotifyService } from "src/app/services/notify.service";
-import { RuleInstance } from "../model/rule-instance";
 import { DataHubService } from "../communication/hubs/data-hub.service";
 import { ConfigService } from "src/app/services/config.service";
 import { AppService } from "src/app/services/app.service";
+import { RuleInterfaceType } from "../model/rule-interface-template";
+import { RuleInstance } from "../model/rule-instance";
 
 export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
 
-
-    public get ruleInstance(): RuleInstance {
-        return this.item.RuleInstance;
+    protected get ruleInstance(): RuleInstance {
+        return <RuleInstance>this.item.objectType;
     }
-
 
     constructor(
         private dataHubService: DataHubService,
@@ -25,21 +24,24 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
         super(dataHubService, notify, translate, configService, appService);
     }
 
+    protected getInterfaceByType(type: RuleInterfaceType) {
+        for (const interf of this.ruleInstance.Interfaces) {
+            if (interf.Template.InterfaceType === type) {
+                return interf;
+            }
+        }
+        return void 0;
+    }
+
     protected async mobileRuleInit() {
-        const ruleData = await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId);
-
-        this.onRuleInstanceValueChanged(ruleData);
-
         this.registerEvent(this.dataHubService.ruleInstanceValueChanged, (data) => {
-            if (data[0] === this.ruleInstance.ObjId) {
-                this.onRuleInstanceValueChanged(data[1]);
+            if (this.ruleInstance.Interfaces.filter(a => a.ObjId === data[0]).length > 0) {
+                this.onRuleInstanceValueChanged(data[0], data[1]);
             }
         });
         super.baseOnInit();
     }
 
-    protected onRuleInstanceValueChanged(value) {
-
-    }
+    protected abstract onRuleInstanceValueChanged(ruleInterfaceId, value);
 
 }

@@ -11,7 +11,7 @@ import { CircleColorPickerModule } from "./circle-color-picker/circle-color-pick
     exports: [CircleColorPickerModule, BoxColorPickerModule],
 })
 export class NgColorModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<NgColorModule> {
         return {
             ngModule: NgColorModule,
             providers: [],

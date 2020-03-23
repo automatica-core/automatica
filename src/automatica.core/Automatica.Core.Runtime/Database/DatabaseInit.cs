@@ -250,7 +250,22 @@ namespace Automatica.Core.Runtime.Database
                     Value = cloudEnvironmentType,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 0
+                    Order = 2
+                });
+            }
+
+            var projectName = context.Settings.SingleOrDefault(a => a.ValueKey == "projectName");
+
+            if (projectName == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "projectName",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "Automatica.Core",
+                    Group = "SERVER.SETTINGS",
+                    IsVisible = true,
+                    Order = 3
                 });
             }
 

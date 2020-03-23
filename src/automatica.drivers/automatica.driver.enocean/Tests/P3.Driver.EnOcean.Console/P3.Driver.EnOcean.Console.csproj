@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>57F8324A-6E74-4C26-90FF-BBBEAAB9C1A4</ProjectGuid>
-    <Version>0.5.0</Version>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.EnOcean\P3.Driver.EnOcean.csproj" />

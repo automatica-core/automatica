@@ -1,21 +1,15 @@
 import { Component, OnInit, Input, Type, ViewEncapsulation, HostBinding, OnDestroy, ElementRef } from "@angular/core";
 import { LabelComponent } from "./label/label.component";
-import { ClockComponent } from "./clock/clock.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { SliderComponent } from "./slider/slider.component";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
-import { NumberBoxComponent } from "./number-box/number-box.component";
 import { TranslationService } from "angular-l10n";
-import { WindowMonitorComponent } from "./window-monitor/window-monitor.component";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseComponent } from "../../base-component";
 import { VisuObjectMobileInstance } from "../../model/visu/visu-object-mobile-instance";
 import { BaseMobileComponent } from "../base-mobile-component";
-import { RgbComponent } from "./rgb/rgb.component";
-import { ChartsComponent } from "./charts/charts.component";
-import { GaugeComponent } from "./gauge/gauge.component";
 import { AppService } from "src/app/services/app.service";
+import { VisuPageGroupType } from "../../model/visu-page";
 
 @Component({
   selector: "visu-component",
@@ -34,6 +28,9 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
 
   @Input()
   editMode: boolean = false;
+
+  @Input()
+  pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
   inputs: any;
 
@@ -55,7 +52,8 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
     this.inputs = {
       item: this.item,
       parent: this.elementRef,
-      editMode: this.editMode
+      editMode: this.editMode,
+      pageGroupType: this.pageGroupType
     };
 
     switch (this.item.VisuObjectTemplate.Key) {
@@ -63,40 +61,12 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
         this.component = LabelComponent;
         break;
       }
-      case "clock": {
-        this.component = ClockComponent;
-        break;
-      }
       case "link": {
         this.component = LinkComponent;
         break;
       }
-      case "slider": {
-        this.component = SliderComponent;
-        break;
-      }
       case "toggle-button": {
         this.component = ToggleComponent;
-        break;
-      }
-      case "number-box": {
-        this.component = NumberBoxComponent;
-        break;
-      }
-      case "window-monitor": {
-        this.component = WindowMonitorComponent;
-        break;
-      }
-      case "rgba": {
-        this.component = RgbComponent;
-        break;
-      }
-      case "chart": {
-        this.component = ChartsComponent;
-        break;
-      }
-      case "gauge": {
-        this.component = GaugeComponent;
         break;
       }
       default: {

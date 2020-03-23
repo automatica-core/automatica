@@ -13,10 +13,6 @@ export const navigation = [
         path: "logic-editor",
         icon: "play"
     }, {
-        text: "COMMON.VISU",
-        path: "visualisation",
-        icon: "eye"
-    }, {
         text: "COMMON.AREAS",
         path: "area-config",
         icon: "list"

@@ -3,8 +3,6 @@ import { RuleInterfaceTemplate, RuleInterfaceParameterDataType, RuleInterfaceDir
 
 import { IKey } from "./IKey";
 import { Guid } from "../utils/Guid";
-import { IPropertyModel } from "./interfaces/ipropertyModel";
-import { PropertyInstance } from "./property-instance";
 import { TimerPropertyData } from "./timer-property-data";
 
 @Model()

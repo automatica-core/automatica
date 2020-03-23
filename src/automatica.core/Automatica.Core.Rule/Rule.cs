@@ -21,7 +21,7 @@ namespace Automatica.Core.Rule
         /// Initializes a new instance of the <see cref="Rule"/> class.
         /// </summary>
         /// <param name="context">The <see cref="IRuleContext"/> to configure the class</param>
-        public Rule(IRuleContext context)
+        protected Rule(IRuleContext context)
         {
             Context = context;
         }

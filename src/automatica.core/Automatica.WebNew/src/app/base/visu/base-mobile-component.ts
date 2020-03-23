@@ -1,4 +1,4 @@
-import { HostBinding, Input, ElementRef } from "@angular/core";
+import { HostBinding, Input, ElementRef, Directive } from "@angular/core";
 import { BaseComponent } from "../base-component";
 import { VisuObjectMobileInstance } from "../model/visu";
 import { DataHubService } from "../communication/hubs/data-hub.service";
@@ -8,18 +8,36 @@ import { TranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
 import { AppService } from "src/app/services/app.service";
+import { AreaInstance } from "../model/areas";
+import { CategoryInstance } from "../model/categories";
+import { VisuPageGroupType } from "../model/visu-page";
 
+export interface VisuObjectType {
+    This2AreaInstanceNavigation: AreaInstance;
+    This2CategoryInstanceNavigation: CategoryInstance;
+
+    DisplayName: string;
+}
+
+@Directive()
 export abstract class BaseMobileComponent extends BaseComponent {
     @HostBinding("class.mobile-control") true;
 
     @Input()
     public item: VisuObjectMobileInstance;
 
+    public get visuObjectType() {
+        return this.item.objectType;
+    }
+
     @Input()
     editMode: boolean = false;
 
     @Input()
     public parent: ElementRef;
+
+    @Input()
+    pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
     private subscribedNodeInstances: Map<string, NodeInstance> = new Map<string, NodeInstance>();
     _primaryNodeInstance: any;
@@ -52,18 +70,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
         this._value = value;
     }
 
-    public get foregroundColor(): any {
-
-        if (this.item.StateColorValueTrue && this._value === true) {
-            return this.item.StateColorValueTrue;
-        }
-        if (this.item.StateColorValueFalse && this._value === false) {
-            return this.item.StateColorValueFalse;
-        }
-
-        return this.getPropertyValue("foreground_color");
-    }
-
     public get width() {
         return this.parent.nativeElement.offsetWidth;
     }
@@ -73,10 +79,38 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     public get displayText() {
-        if (this.item.VisuName) {
-            return this.item.VisuName;
+        return this.visuObjectType.DisplayName;
+    }
+
+    public get icon() {
+
+        switch (this.pageGroupType) {
+            case VisuPageGroupType.Category:
+                if (this.visuObjectType.This2CategoryInstanceNavigation) {
+                    return this.visuObjectType.This2CategoryInstanceNavigation.Icon;
+                }
+                break;
+            case VisuPageGroupType.Area:
+                if (this.visuObjectType.This2AreaInstanceNavigation) {
+                    return this.visuObjectType.This2AreaInstanceNavigation.Icon;
+                }
+                break;
+            case VisuPageGroupType.Favorites:
+                if (this.visuObjectType.This2CategoryInstanceNavigation) {
+                    return this.visuObjectType.This2CategoryInstanceNavigation.Icon;
+                }
+                return "star";
         }
-        return this.getPropertyValue("text");
+
+        return void 0;
+    }
+
+    public get location() {
+        if (this.visuObjectType.This2AreaInstanceNavigation) {
+            return this.visuObjectType.This2AreaInstanceNavigation.DisplayName;
+        }
+
+        return void 0;
     }
 
     constructor(
@@ -113,12 +147,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
     public baseOnInit() {
 
         if (this.item) {
-            if (this.item.itemResized) {
-                super.registerEvent((this.item.itemResized), () => {
-                    this.onItemResized();
-                });
-            }
-
             super.registerEvent((this.item.notifyChangeEvent), (prop) => {
                 this.propertyChanged()
             });
@@ -196,7 +224,4 @@ export abstract class BaseMobileComponent extends BaseComponent {
         }
         return void 0;
     }
-
-
-    public abstract onItemResized();
 }

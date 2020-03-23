@@ -1,16 +1,24 @@
-import { Component, NgModule, Input, Output, EventEmitter } from "@angular/core";
+import { Component, NgModule, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
-import { UserPanelModule } from "../user-panel/user-panel.component";
 import { DxButtonModule } from "devextreme-angular/ui/button";
 import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { DxPopupModule } from "devextreme-angular/ui/popup";
 import { Router, ActivatedRoute } from "@angular/router";
-import { LoginFormModule } from "../login-form/login-form.module";
 import { AppService } from "src/app/services/app.service";
 import { TranslationModule } from "angular-l10n";
 import { LoginService } from "src/app/services/login.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
+import { DxSpeedDialActionModule } from "devextreme-angular";
+
+import config from "devextreme/core/config";
+import { SettingsService } from "src/app/services/settings.service";
+
+config({
+    floatingActionButtonConfig: {
+        icon: "more"
+    }
+});
 
 @Component({
     selector: "app-header",
@@ -18,21 +26,47 @@ import { HubConnectionService } from "src/app/base/communication/hubs/hub-connec
     styleUrls: ["./header.component.scss"]
 })
 
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+
+    get title() {
+        return this.projectName;
+    }
+
     @Output()
     menuToggle = new EventEmitter<boolean>();
 
     @Input()
     menuToggleEnabled = false;
 
+    time: string = "00:00:00";
+    ticker: NodeJS.Timeout;
+
+    private projectName: string;
+
     constructor(private router: Router,
         private activatedRoute: ActivatedRoute,
         public appService: AppService,
         private loginService: LoginService,
-        private hubService: HubConnectionService) { }
+        private hubService: HubConnectionService,
+        private changeRef: ChangeDetectorRef,
+        private settingsService: SettingsService) { }
 
-    get title() {
-        return this.appService.title;
+    async ngOnInit() {
+
+        const projectName = await this.settingsService.getByKey("projectName");
+        this.projectName = projectName.Value;
+        document.title = this.projectName;
+
+        this.ticker = setInterval(() => {
+            const date = new Date();
+            this.time = date.toLocaleTimeString();
+
+            this.changeRef.detectChanges();
+        }, 1000);
+    }
+
+    ngOnDestroy() {
+        clearInterval(this.ticker);
     }
 
     toggleMenu = () => {
@@ -44,17 +78,17 @@ export class HeaderComponent {
         }
         return false;
     }
-    async logout($event) {
+    async logout() {
         await this.hubService.stop();
         await this.loginService.logout();
         this.router.navigate(["/login"]);
     }
 
-    navigateToAdminPage($event) {
+    navigateToAdminPage() {
         this.router.navigate(["admin", "home"]);
     }
 
-    navigateToVisualization($event) {
+    navigateToVisualization() {
         this.router.navigate(["visualization"]);
     }
 }
@@ -65,7 +99,8 @@ export class HeaderComponent {
         DxPopupModule,
         DxButtonModule,
         DxToolbarModule,
-        TranslationModule
+        TranslationModule,
+        DxSpeedDialActionModule
     ],
     declarations: [HeaderComponent],
     exports: [HeaderComponent]

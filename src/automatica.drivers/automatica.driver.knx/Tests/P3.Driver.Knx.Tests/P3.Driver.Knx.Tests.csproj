@@ -6,7 +6,7 @@
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>F1763E39-4D0D-4B08-84CE-7AD7B242DA57</ProjectGuid>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.5.0</Version>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>

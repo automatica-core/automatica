@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>DFF3A848-D126-4747-AA3D-CE989EF1C189</ProjectGuid>
-    <Version>0.5.0</Version>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.MBus\P3.Driver.MBus.csproj" />

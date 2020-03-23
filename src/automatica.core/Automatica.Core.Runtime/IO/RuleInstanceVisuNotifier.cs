@@ -14,7 +14,7 @@ namespace Automatica.Core.Runtime.IO
         {
             this._hub = hub;
         }
-        public async Task NotifyValueChanged(RuleInstance instance, object value)
+        public async Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
         {
             await _hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value);
         }

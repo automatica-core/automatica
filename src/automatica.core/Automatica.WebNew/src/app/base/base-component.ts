@@ -1,10 +1,11 @@
-import { EventEmitter, Input } from "@angular/core";
+import { EventEmitter, Input, Directive } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { TranslationService } from "angular-l10n";
 import { WebApiException, ExceptionSeverity } from "./model/web-api-exception";
 import { NotifyService } from "../services/notify.service";
 import { AppService } from "../services/app.service";
 
+@Directive()
 export class BaseComponent {
 
     private subscriptions: Subscription[] = [];

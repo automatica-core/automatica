@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { BaseService } from "./base-service";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
@@ -16,6 +16,10 @@ export class SettingsService extends BaseService {
 
     getSettings(): Promise<Setting[]> {
         return this.getMultiple<Setting>("settings");
+    }
+
+    getByKey(key: string): Promise<Setting> {
+        return this.get<Setting>("settings/key/" + key);
     }
 
     saveSettings(settings: Setting[]): Promise<Setting[]> {

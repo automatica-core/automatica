@@ -8,7 +8,8 @@ namespace Automatica.Core.Base.IO
     public enum DispatchableType
     {
         NodeInstance,
-        RuleInstance
+        RuleInstance,
+        Visualization
     }
 
     /// <summary>

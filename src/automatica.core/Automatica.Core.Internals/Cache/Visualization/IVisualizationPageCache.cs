@@ -9,7 +9,7 @@ namespace Automatica.Core.Internals.Cache.Visualization
         VisualizationDataFacade AllByCategory(Guid categoryId);
         VisualizationDataFacade AllByArea(Guid areaInstance);
 
-        VisuPage GetDefaultPage(long pageTypeId);
+        VisualizationDataFacade ByFavorites();
 
         object ByPage(Guid id);
     }

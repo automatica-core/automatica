@@ -10,6 +10,8 @@ namespace Automatica.Core.Internals.Cache.Common
 {
     internal class AreaCache : AbstractCache<AreaInstance>, IAreaCache
     {
+        private readonly IDictionary<Guid, AreaInstance> _areaInstances = new Dictionary<Guid, AreaInstance>();
+
         public AreaCache(IConfiguration configuration) : base(configuration)
         {
         }
@@ -19,15 +21,18 @@ namespace Automatica.Core.Internals.Cache.Common
             var rootItems = context.AreaInstances.AsNoTracking().Where(a => a.This2Parent == null).ToList();
             var items = new List<AreaInstance>();
 
+
+
             foreach (var root in rootItems)
             {
+                _areaInstances.Add(root.ObjId, root);
                 items.Add(RecursiveLoad(root, context));
             }
 
             return items.AsQueryable();
         }
 
-        private static AreaInstance RecursiveLoad(AreaInstance parent, AutomaticaContext dbContext)
+        private AreaInstance RecursiveLoad(AreaInstance parent, AutomaticaContext dbContext)
         {
             var loaded = dbContext.AreaInstances.AsNoTracking()
                 .Include(a => a.InverseThis2ParentNavigation)
@@ -38,24 +43,41 @@ namespace Automatica.Core.Internals.Cache.Common
                 .Include(a => a.This2AreaTemplateNavigation)
                 .ThenInclude(a => a.ProvidesThis2AreayTypeNavigation).SingleOrDefault(a => a.ObjId == parent.ObjId);
 
-            var newChilds = new List<AreaInstance>();
+
+            var newChildren = new List<AreaInstance>();
             if (loaded == null)
             {
                 return null;
             }
 
-            foreach (var child in loaded.InverseThis2ParentNavigation)
+            if (!_areaInstances.ContainsKey(loaded.ObjId))
             {
-                newChilds.Add(RecursiveLoad(child, dbContext));
+                _areaInstances.Add(loaded.ObjId, loaded);
             }
 
-            loaded.InverseThis2ParentNavigation = newChilds;
+            foreach (var child in loaded.InverseThis2ParentNavigation)
+            {
+                newChildren.Add(RecursiveLoad(child, dbContext));
+            }
+
+            loaded.InverseThis2ParentNavigation = newChildren;
             return loaded;
         }
 
         protected override Guid GetKey(AreaInstance obj)
         {
             return obj.ObjId;
+        }
+
+        public override void Clear()
+        {
+            _areaInstances.Clear();
+            base.Clear();
+        }
+
+        public bool IsAreaExisting(Guid id)
+        {
+            return _areaInstances.ContainsKey(id);
         }
     }
 }

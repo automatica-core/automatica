@@ -1,11 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IsPackable>false</IsPackable>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
@@ -20,10 +19,8 @@
     </PackageReference>
     <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.12.0.678" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.IkeaTradfriDriverFactory\P3.Driver.IkeaTradfriDriverFactory.csproj" />
     <ProjectReference Include="..\..\P3.Driver.IkeaTradfri\P3.Driver.IkeaTradfri.csproj" />
   </ItemGroup>
-
 </Project>

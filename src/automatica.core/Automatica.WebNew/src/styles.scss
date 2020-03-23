@@ -43,6 +43,7 @@ html, body {
   
   min-width: 100%;
   width: 100%;
+  background-color: #252529;
 }
 
 * {
@@ -188,7 +189,7 @@ html, body {
   }
 
   .isDirty {
-    color: red;
+  //do nothing for now
   }
 
   .h-100 {

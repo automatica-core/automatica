@@ -754,6 +754,9 @@ namespace Automatica.Core.EF.Models
                 entity.Property(e => e.UseInVisu).HasDefaultValue(false);
                 entity.Property(e => e.This2AreaInstance);
                 entity.Property(e => e.This2CategoryInstance);
+                
+                entity.Property(a => a.IsFavorite);
+                entity.Property(a => a.Rating);
 
                 entity.HasOne(e => e.This2AreaInstanceNavigation)
                     .WithMany()

@@ -14,7 +14,7 @@ namespace Automatica.Core.EF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.1");
+                .HasAnnotation("ProductVersion", "3.1.1");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
@@ -916,10 +916,16 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(1024);
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("This2AreaInstance")
                         .HasColumnType("TEXT");
@@ -1037,6 +1043,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(1024)
                         .HasDefaultValue("");
+
+                    b.Property<int>("InterfaceType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsLinkableParameter")
                         .HasColumnType("INTEGER");
@@ -1526,7 +1535,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("This2Role");
 
-                    b.HasAlternateKey("This2Priviledge");
+                    b.HasIndex("This2Priviledge");
 
                     b.ToTable("Priviledge2Roles");
                 });

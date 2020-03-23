@@ -188,7 +188,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task SaveAreaInstanceRec(AreaInstance instance)
         {
-            var existingArea = await DbContext.AreaInstances.SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
+            var existingArea = await DbContext.AreaInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
 
             if (existingArea == null)
             {
@@ -197,6 +197,7 @@ namespace Automatica.Core.WebApi.Controllers
             else
             {
                 DbContext.Entry(existingArea).State = EntityState.Detached;
+                DbContext.Entry(instance).State = EntityState.Modified;
                 DbContext.Update(instance);
             }
 

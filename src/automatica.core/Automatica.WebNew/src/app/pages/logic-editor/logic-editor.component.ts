@@ -56,7 +56,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   nodeTemplates: NodeTemplate[];
 
-  @ViewChild("configTree", { static: false })
+  @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
   areaInstances: AreaInstance[] = [];
