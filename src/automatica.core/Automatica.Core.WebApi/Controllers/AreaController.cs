@@ -196,9 +196,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             else
             {
-                DbContext.Entry(existingArea).State = EntityState.Detached;
-                DbContext.Entry(instance).State = EntityState.Modified;
-                DbContext.Update(instance);
+                DbContext.Entry(existingArea).CurrentValues.SetValues(instance);
             }
 
             foreach (var child in instance.InverseThis2ParentNavigation)

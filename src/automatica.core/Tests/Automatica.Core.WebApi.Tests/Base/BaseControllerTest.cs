@@ -32,7 +32,7 @@ namespace Automatica.Core.WebApi.Tests.Base
 
         protected IConfiguration Configuration { get; }
 
-        protected T Controller { get; }
+        protected T Controller { get; private set; }
         public BaseControllerTest()
         {
             var tmpFolder = Path.Combine(Path.GetTempPath(), DatabaseFilePath);
