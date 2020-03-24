@@ -29,9 +29,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="1.13.0.739" />
-    <PackageReference Include="Automatica.Core.Base" Version="1.13.0.739" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="1.13.0.739" />
+    <PackageReference Include="Automatica.Core.EF" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Base" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.Loxone.Miniserver.Driver\P3.Driver.Loxone.Miniserver.Driver.csproj" />

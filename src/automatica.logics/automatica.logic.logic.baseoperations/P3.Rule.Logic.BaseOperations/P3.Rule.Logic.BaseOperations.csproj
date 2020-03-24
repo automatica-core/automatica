@@ -20,6 +20,6 @@
     <EmbeddedResource Include="Resources\Logic-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="1.13.0.739" />
+    <PackageReference Include="Automatica.Core.Rule" Version="2.0.0.741" />
   </ItemGroup>
 </Project>

@@ -37,11 +37,11 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="1.13.0.739" />
-    <PackageReference Include="Automatica.Core.Base" Version="1.13.0.739" />
-    <PackageReference Include="Automatica.Core.Rule" Version="1.13.0.739" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="1.13.0.739" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="1.13.0.739" />
+    <PackageReference Include="Automatica.Core.EF" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Base" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Rule" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="2.0.0.741" />
     <ProjectReference Include="..\P3.Rule.Surveillance\P3.Rule.Surveillance.csproj" />
   </ItemGroup>
 </Project>
