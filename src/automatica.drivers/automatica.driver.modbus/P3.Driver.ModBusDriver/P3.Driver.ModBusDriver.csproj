@@ -8,8 +8,8 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Driver" Version="1.13.0.739" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="1.13.0.739" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Master\Rtu\" />

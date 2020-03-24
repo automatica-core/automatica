@@ -19,6 +19,6 @@
     <EmbeddedResource Include="Resources\Operations-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="0.14.0.1" />
+    <PackageReference Include="Automatica.Core.Rule" Version="1.13.0.739" />
   </ItemGroup>
 </Project>

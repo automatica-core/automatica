@@ -16,8 +16,8 @@
     <EmbeddedResource Include="Resources\MachineFlags-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Base" Version="1.13.0.739" />
+    <PackageReference Include="Automatica.Core.Driver" Version="1.13.0.739" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="1.13.0.739" />
   </ItemGroup>
 </Project>
