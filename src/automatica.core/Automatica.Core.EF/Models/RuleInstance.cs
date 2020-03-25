@@ -32,6 +32,8 @@ namespace Automatica.Core.EF.Models
         public bool UseInVisu { get; set; }
         public Guid? This2UserGroup { get; set; }
         public Guid? This2AreaInstance { get; set; }
+        public bool IsFavorite { get; set; }
+        public int Rating { get; set; }
 
         public AreaInstance This2AreaInstanceNavigation { get; set; }
 

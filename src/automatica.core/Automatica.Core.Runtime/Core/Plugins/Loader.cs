@@ -179,6 +179,14 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 {
                     assembly = Assembly.LoadFrom(file);
                 }
+                catch (FileLoadException fl)
+                {
+                    if (fl.HResult != -2146232799) // Assembly already loaded, can be ignored here
+                    {
+                        logger.LogError(fl, "Could not load assembly {file}");
+                    }
+                    return list;
+                }
                 catch (Exception e)
                 {
                     logger.LogError(e, $"Could not load assembly {file}");

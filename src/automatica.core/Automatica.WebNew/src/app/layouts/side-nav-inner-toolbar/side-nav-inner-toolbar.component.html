@@ -1,4 +1,4 @@
-<div class="layout" [ngClass]="sizeClasses">
+<div class="layout" [ngClass]="sizeClasses" [style.background-color]="backgroundColor">
     <dx-drawer class="drawer" [closeOnOutsideClick]="true" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
         [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
 
@@ -12,8 +12,6 @@
                             onClick: toggleMenu,
                             elementAttr: { class: 'menu-button' }
                         }">
-                </dxi-item>
-                <dxi-item location="before" [text]="title">
                 </dxi-item>
             </dx-toolbar>
         </app-side-navigation-menu>

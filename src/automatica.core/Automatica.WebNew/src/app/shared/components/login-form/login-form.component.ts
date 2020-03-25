@@ -38,6 +38,7 @@ export class LoginFormComponent implements OnInit {
     async onLoginClick(args) {
         this.appService.isLoading = true;
         if (!this.validationGroup.instance.validate().isValid) {
+            this.appService.isLoading = false;
             return;
         }
 

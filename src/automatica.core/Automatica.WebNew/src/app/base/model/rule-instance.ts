@@ -2,7 +2,7 @@ import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from 
 import { RuleInterfaceInstance } from "./rule-interface-instance"
 import { RuleTemplate } from "./rule-template"
 import { RulePage } from "./rule-page"
-import { RuleInterfaceTemplate, RuleInterfaceParameterDataType } from "./rule-interface-template"
+import { RuleInterfaceParameterDataType } from "./rule-interface-template"
 
 import { IKey } from "./IKey";
 import { VirtualPropertyInstance } from "./virtual-props/virtual-property-instance";
@@ -12,16 +12,17 @@ import { IDescriptionModel } from "./IDescriptionModel";
 import { INameModel } from "./INameModel";
 import { Guid } from "../utils/Guid";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
-import { RuleInterfaceDirection } from "./rule-interface-direction";
 import { RuleInterfaceParamProperty } from "./virtual-props/rule-instance/rule-interface-param-property";
-import { CategoryInstance } from "./categories/category-instance";
-import { AreaInstance } from "./areas/area-instance";
 import { ICategoryInstanceModel } from "./ICategoryInstanceModel";
 import { IAreaInstanceModel } from "./IAreaInstanceModel";
 import { VirtualUseInVisuPropertyInstance } from "./virtual-props/virtual-use-in-visu-property-instance";
 import { VirtualAreaPropertyInstance } from "./virtual-props/virtual-area-property-instance";
 import { VirtualCategoryPropertyInstance } from "./virtual-props/virtual-category-property-instance";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
+import { AreaInstance } from "./areas"
+import { CategoryInstance } from "./categories"
+import { VisuObjectType } from "../visu/base-mobile-component"
+import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance"
 
 function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
     if (!a.Template) {
@@ -32,7 +33,8 @@ function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
 
 
 @Model()
-export class RuleInstance extends BaseModel implements IKey, IDescriptionModel, INameModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel {
+export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDescriptionModel, INameModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel {
+
     public static KeyPrefix: string = "Rule";
 
     @JsonProperty()
@@ -85,10 +87,19 @@ export class RuleInstance extends BaseModel implements IKey, IDescriptionModel, 
     UseInVisu: boolean;
 
     @JsonProperty()
+    IsFavorite: boolean;
+
+    @JsonProperty()
     This2AreaInstance: string;
 
     @JsonProperty()
     This2CategoryInstance: string;
+
+    @JsonProperty()
+    This2AreaInstanceNavigation: AreaInstance;
+
+    @JsonProperty()
+    This2CategoryInstanceNavigation: CategoryInstance;
 
     @JsonProperty()
     This2UserGroup: string;
@@ -150,10 +161,10 @@ export class RuleInstance extends BaseModel implements IKey, IDescriptionModel, 
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
 
-
         this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
         this.Properties.push(new VirtualAreaPropertyInstance(this));
         this.Properties.push(new VirtualCategoryPropertyInstance(this));
+        this.Properties.push(new VirtualIsFavoriteVisuPropertyInstance(this));
 
         this.Properties.push(new VirtualUserGroupPropertyInstance(this));
 

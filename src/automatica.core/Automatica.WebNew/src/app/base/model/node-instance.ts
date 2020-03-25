@@ -26,6 +26,9 @@ import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-ins
 import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
 import { INodeInstance } from "./INodeInstance";
 import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
+import { CategoryInstance } from "./categories";
+import { AreaInstance } from "./areas";
+import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -206,8 +209,13 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     This2AreaInstance: string;
 
     @JsonProperty()
+    This2AreaInstanceNavigation: AreaInstance;
+
+    @JsonProperty()
     This2CategoryInstance: string;
 
+    @JsonProperty()
+    This2CategoryInstanceNavigation: CategoryInstance;
 
     @JsonProperty()
     IsFavorite: boolean;
@@ -410,6 +418,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
             this.Properties.push(new VirtualAreaPropertyInstance(this));
             this.Properties.push(new VirtualCategoryPropertyInstance(this));
+            this.Properties.push(new VirtualIsFavoriteVisuPropertyInstance(this));
 
             this.Properties.push(new VirtualUserGroupPropertyInstance(this));
             this.Properties.push(new VirtualGenericPropertyInstance("VISU_NAME", 5, this, () => this.VisuName, (value) => this.VisuName = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));

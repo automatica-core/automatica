@@ -20,6 +20,12 @@ export enum VisuPageType {
     Mobile = 2
 }
 
+export enum VisuPageGroupType {
+    Favorites = 0,
+    Category = 1,
+    Area = 2
+}
+
 @Model()
 export class VisuPage extends BaseModel implements INameModel, IDescriptionModel, IPropertyModel, IVisuPage {
 

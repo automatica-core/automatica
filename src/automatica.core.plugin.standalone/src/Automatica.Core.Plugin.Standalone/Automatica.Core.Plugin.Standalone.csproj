@@ -1,22 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <AssemblyName>automatica-plugin-standalone</AssemblyName>
-
-
     <PackageId>automatica-plugin-standalone</PackageId>
-    <PackageVersion>0.1.0.0</PackageVersion>
+    <PackageVersion>0.14.0.1</PackageVersion>
     <Authors>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Authors>
     <Description>Tool for running a automatica.core plugin standalone</Description>
-
     <Copyright>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Copyright>
-
     <LangVersion>7.3</LangVersion>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
     <PackageReference Include="Automatica.Core.Common.Update" Version="0.12.0.678" />
@@ -28,5 +23,4 @@
     <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.0.9-rc1" />
     <PackageReference Include="NetStandardUtils" Version="1.0.0" />
   </ItemGroup>
-
 </Project>

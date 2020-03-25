@@ -204,7 +204,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
             // Special case: no operational NIC, then use loopbacks.
             return NetworkInterface.GetAllNetworkInterfaces()
-                .Where(nic => nic.OperationalStatus == OperationalStatus.Up);
+                .Where(nic => nic.OperationalStatus == OperationalStatus.Up || nic.OperationalStatus == OperationalStatus.Unknown);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace P3.Driver.HomeKit.Bonjour
         public static IEnumerable<IPAddress> GetIpAddresses()
         {
             return GetNetworkInterfaces()
-                .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
+                .Where(nic => nic.OperationalStatus == OperationalStatus.Up || nic.OperationalStatus == OperationalStatus.Unknown)
                 .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
                 .Select(u => u.Address);
         }

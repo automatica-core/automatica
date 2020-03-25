@@ -25,6 +25,7 @@ import { Slave } from "src/app/base/model/slaves/slave";
 import { SlavesService } from "src/app/services/slaves.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -119,28 +120,28 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @Language()
   lang: any;
 
-  @ViewChild("configTree", { static: false })
+  @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
-  @ViewChild("popupNodeSelect", { static: false })
+  @ViewChild("popupNodeSelect")
   popupNodeSelect: DxPopupComponent;
   private _popupPropertyInstance: PropertyInstance;
   public selectedNodeInstance: NodeInstance;
   public nodeSelectorVisible: boolean = false;
   public nodeSelectorTreeLoading: boolean = false;
 
-  @ViewChild("popupVisuPageSelect", { static: false })
+  @ViewChild("popupVisuPageSelect")
   popupVisuPageSelect: DxPopupComponent;
   public selectedVisuPage: VisuPage;
   public visuPageSelectorVisible: boolean = false;
 
-  @ViewChild("popupLearnMode", { static: false })
+  @ViewChild("popupLearnMode")
   popupLearnMode: DxPopupComponent;
   public learnedNodeInstances: NodeInstance[] = [];
   public learnModeVisible: boolean = false;
   public learnNodeInstance: LearnNodeInstance[] = [];
 
-  @ViewChild("timerEditPopup", { static: false })
+  @ViewChild("timerEditPopup")
   popupTimerEdit: DxPopupComponent;
   public timerEditPopupVisible: boolean = false;
   public timerEditValue: TimerPropertyData = void 0;
@@ -178,7 +179,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     return this._properties;
   }
 
-  @ViewChild("dataTable", { static: false })
+  @ViewChild("dataTable")
   private dataTable: DxDataGridComponent;
 
   @Output()
@@ -256,10 +257,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   private inputValidator: InputValidator = new InputValidator();
 
-  @ViewChild("startDateValidator", { static: false })
+  @ViewChild("startDateValidator")
   startDateValidator: DxValidatorComponent;
 
-  @ViewChild("endDateValidator", { static: false })
+  @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
   @Input()
@@ -271,7 +272,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private dataHub: DataHubService,
     private notify: NotifyService,
     private slaveService: SlavesService,
-    appService: AppService) {
+    appService: AppService,
+    private nodeInstanceService: NodeInstanceService) {
     super(notify, translate, appService);
   }
 
@@ -468,11 +470,20 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
 
-  valueChanged(e, data) {
+  async valueChanged(e, data) {
     const prop = data.data as PropertyInstance;
 
     this.validate.emit(prop);
+
+    if (this.item instanceof NodeInstance) {
+      await this.config.update(this.item);
+
+      if (!this.item.ParentId) {
+        this.nodeInstanceService.saveSettings();
+      }
+    }
   }
+
 
   onAreaItemSelectionChanged($event, data) {
     const prop = data.data as VirtualAreaPropertyInstance;

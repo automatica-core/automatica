@@ -6,6 +6,8 @@ import { Guid } from "../utils/Guid";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
 import { RuleInstance } from "./rule-instance";
+import { NodeInstance } from "./node-instance";
+import { VisuObjectType } from "../visu/base-mobile-component";
 
 @Model()
 export class VisuObjectInstance extends BaseModel implements IPropertyModel {
@@ -67,8 +69,6 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     StateColorValueTrue: string;
     StateColorValueFalse: string;
 
-    RuleInstance: RuleInstance;
-
 
     private _VisuName: string;
     public get VisuName(): string {
@@ -79,7 +79,7 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     }
 
 
-    public static CreateFromTemplate(template: VisuObjectTemplate): VisuObjectInstance {
+    public static CreateFromTemplate(template: VisuObjectTemplate, x = void 0): VisuObjectInstance {
         const instance = new VisuObjectInstance();
 
         return this.FillNewInstance(instance, template);

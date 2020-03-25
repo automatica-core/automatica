@@ -17,7 +17,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 })
 export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
-  @ViewChild("grid", { static: false })
+  @ViewChild("grid")
   grid: DxDataGridComponent;
 
   groups: UserGroup[] = [];

@@ -45,10 +45,11 @@ namespace Automatica.Core.WebApi.Tests.Area
                 This2AreaTemplate = template.ObjId,
                 Icon = template.Icon,
                 Rating = 10,
-                IsFavorite = false
+                IsFavorite = false,
+                This2Parent = rootInstance.ObjId
             };
             rootInstance.InverseThis2ParentNavigation.Add(newInstance);
-
+            
             var saved = (await Controller.SaveInstances(instances)).ToList();
 
             Assert.NotNull(saved);
@@ -64,6 +65,7 @@ namespace Automatica.Core.WebApi.Tests.Area
             Assert.Equal(template.ObjId, saved.First().InverseThis2ParentNavigation.First().This2AreaTemplate);
 
             rootInstance.InverseThis2ParentNavigation.Clear(); 
+
             saved = (await Controller.SaveInstances(instances)).ToList();
 
             Assert.Empty(saved.First().InverseThis2ParentNavigation);

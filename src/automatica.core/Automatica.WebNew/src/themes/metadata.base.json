@@ -6,11 +6,11 @@
     "items": [
         {
             "key": "@base-accent",
-            "value": "#90C225"
+            "value": "#457987"
         },
         {
             "key": "@base-accent2",
-            "value": "#6A9840"
+            "value": "#325862"
         },
         {
             "key": "@base-border-color",

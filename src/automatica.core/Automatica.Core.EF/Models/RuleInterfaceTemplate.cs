@@ -22,6 +22,14 @@ namespace Automatica.Core.EF.Models
         public IList<DayOfWeek> EnabledDays { get; set; }
     }
 
+    public enum RuleInterfaceType
+    {
+        Unknown = 0,
+        Input = 1,
+        Status = 2,
+        Output = 3
+    }
+
     public class RuleInterfaceTemplate : TypedObject
     {
         public Guid ObjId { get; set; }
@@ -38,6 +46,8 @@ namespace Automatica.Core.EF.Models
         public string DefaultValue { get; set; }
 
         public bool IsLinkableParameter { get; set; }
+
+        public RuleInterfaceType InterfaceType { get; set; }
 
         public RuleInterfaceDirection This2RuleInterfaceDirectionNavigation { get; set; }
 

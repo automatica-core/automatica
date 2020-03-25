@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
@@ -20,7 +19,6 @@ namespace Automatica.Core.Visu.Cache
         private readonly IAreaCache _areaCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
 
-        private readonly IDictionary<long, VisuPage> _defaultPages = new ConcurrentDictionary<long, VisuPage>();
 
         public VisualizationPageCache(IConfiguration config, INodeInstanceCache nodeInstanceCache, ICategoryCache categoryCache, IAreaCache areaCache, ILogicInstanceCache logicInstanceCache) : base(config)
         {
@@ -39,18 +37,6 @@ namespace Automatica.Core.Visu.Cache
             {
                 var loadedPage = LoadPage(context, page.ObjId);
                 ret.Add(loadedPage);
-
-                if (loadedPage.DefaultPage)
-                {
-                    if (!_defaultPages.ContainsKey(loadedPage.This2VisuPageType))
-                    {
-                        _defaultPages.Add(loadedPage.This2VisuPageType, loadedPage);
-                    }
-                    else
-                    {
-                        _defaultPages[loadedPage.This2VisuPageType] = loadedPage;
-                    }
-                }
             }
 
             return ret.AsQueryable();
@@ -103,20 +89,18 @@ namespace Automatica.Core.Visu.Cache
             };
         }
 
-        public VisuPage GetDefaultPage(long pageTypeId)
+        public VisualizationDataFacade ByFavorites()
         {
-            Initialize();
-            if (_defaultPages.ContainsKey(pageTypeId))
+            return new VisualizationDataFacade()
             {
-                return _defaultPages[pageTypeId];
-            }
-
-            throw new IndexOutOfRangeException();
+                NodeInstances = _nodeInstanceCache.ByFavorites(),
+                RuleInstances = _logicInstanceCache.ByFavorites()
+            };
         }
 
         public object ByPage(Guid id)
         {
-            if (_areaCache.Contains(id))
+            if (_areaCache.IsAreaExisting(id))
             {
                 return AllByArea(id);
             }

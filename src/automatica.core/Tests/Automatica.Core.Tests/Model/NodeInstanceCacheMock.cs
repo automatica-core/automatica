@@ -8,6 +8,11 @@ namespace Automatica.Core.Tests.Model
 {
     public class NodeInstanceCacheMock : GuidStoreBase<NodeInstance>, INodeInstanceCache
     {
+        public IList<NodeInstance> ByFavorites()
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<NodeInstance> ByCategory(Guid category)
         {
             throw new NotImplementedException();
@@ -19,5 +24,9 @@ namespace Automatica.Core.Tests.Model
         }
 
         public NodeInstance Root => null;
+        public NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,15 +14,18 @@ namespace Automatica.Core.Internals.Cache.Driver
     internal class NodeInstanceCache : AbstractCache<NodeInstance>, INodeInstanceCache
     {
         private readonly INodeInstanceStateHandler _nodeInstanceStateHandler;
+        private readonly INodeTemplateCache _nodeTemplateCache;
 
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
+        private readonly IList<NodeInstance> _favorites = new List<NodeInstance>();
         private NodeInstance _root;
 
-        public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler) : base(configuration)
+        public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache) : base(configuration)
         {
             _nodeInstanceStateHandler = nodeInstanceStateHandler;
+            _nodeTemplateCache = nodeTemplateCache;
         }
 
         protected override IQueryable<NodeInstance> GetAll(AutomaticaContext context)
@@ -93,6 +96,11 @@ namespace Automatica.Core.Internals.Cache.Driver
 
                     _categoryCache[item.This2CategoryInstance.Value].Add(item);
                 }
+
+                if (item.IsFavorite)
+                {
+                    _favorites.Add(item);
+                }
             }
 
 
@@ -115,6 +123,8 @@ namespace Automatica.Core.Internals.Cache.Driver
 
         public override NodeInstance Get(Guid key)
         {
+            Initialize();
+
             if (_allCache.ContainsKey(key))
             {
                 return _allCache[key];
@@ -134,7 +144,15 @@ namespace Automatica.Core.Internals.Cache.Driver
             _allCache.Clear();
 
             _areaCache.Clear();
-            _categoryCache.Clear();
+            _categoryCache.Clear(); 
+            _favorites.Clear();
+        }
+
+        public IList<NodeInstance> ByFavorites()
+        {
+            Initialize();
+
+            return _favorites;
         }
 
         public IList<NodeInstance> ByCategory(Guid category)
@@ -168,6 +186,30 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             }
             private set => _root = value;
+        }
+
+        public NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child)
+        {
+            if (child == null)
+            {
+                return null;
+            }
+
+            if (child.This2NodeTemplate != null)
+            {
+                var nodeTemplate = _nodeTemplateCache.Get(child.This2NodeTemplate.Value);
+
+                if (nodeTemplate.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
+                {
+                    return child;
+                }
+            }
+
+            if (!child.This2ParentNodeInstance.HasValue)
+            {
+                return null;
+            }
+            return GetDriverNodeInstanceFromChild(Get(child.This2ParentNodeInstance.Value));
         }
     }
 }

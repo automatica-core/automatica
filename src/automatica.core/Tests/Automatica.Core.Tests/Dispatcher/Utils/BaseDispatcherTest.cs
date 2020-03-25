@@ -10,6 +10,7 @@ using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Tests.Model;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
 {
@@ -23,6 +24,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         protected ILogicInterfaceInstanceCache LogicInterfaceInstanceCache { get; set; }
 
         protected IRuleEngineDispatcher RuleEngineDispatcher { get; set; }
+        protected IRuleInstanceVisuNotify RuleNotify { get; set; }
 
         protected BaseDispatcherTest(IDispatcher dispatcher)
         {
@@ -35,9 +37,11 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             NodeInstanceCache = new NodeInstanceCacheMock();
             LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
 
+            var notifyMock = new Mock<IRuleInstanceVisuNotify>();
+            RuleNotify = notifyMock.Object;
 
             RuleEngineDispatcher = new RuleEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
-                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<RuleEngineDispatcher>.Instance);
+                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<RuleEngineDispatcher>.Instance, RuleNotify);
         }
 
 

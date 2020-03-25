@@ -4,7 +4,7 @@
       "commandName": "Project",
       "environmentVariables": {
         "ConnectionStrings:AutomaticaDatabaseSqlite": "Data Source=test.db",
-        "AUTOMATICA_PLUGIN_DIR": "C:\\Users\\patri\\automatica\\plug2",
+        "DATABASE_LOGS": "True",
         "DATABASE_TYPE": "sqlite"
       }
     }

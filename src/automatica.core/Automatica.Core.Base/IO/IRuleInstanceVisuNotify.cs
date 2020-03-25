@@ -5,6 +5,6 @@ namespace Automatica.Core.Base.IO
 {
     public interface IRuleInstanceVisuNotify
     {
-        Task NotifyValueChanged(RuleInstance instance, object value);
+        Task NotifyValueChanged(RuleInterfaceInstance instance, object value);
     }
 }

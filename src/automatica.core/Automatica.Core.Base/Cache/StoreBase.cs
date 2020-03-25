@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Automatica.Core.Model;
 
 namespace Automatica.Core.Base.Cache
 {
@@ -19,6 +18,14 @@ namespace Automatica.Core.Base.Cache
             if (!_store.ContainsKey(key))
             {
                 _store.Add(key, value);
+            }
+        }
+
+        protected void Remove(T1 key)
+        {
+            if (Contains(key))
+            {
+                _store.Remove(key);
             }
         }
 

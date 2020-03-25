@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Automatica.Core.Base.License;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
@@ -19,34 +20,42 @@ namespace Automatica.Core.Driver.Loader
             _driverStore = driverStore;
             _licenseContract = licenseContract;
         }
-        public Task LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context)
+        public Task<IDriver> LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context)
         {
             var driver = factory.CreateDriver(context);
 
             nodeInstance.State = NodeInstanceState.Loaded;
-            if (driver.BeforeInit())
+            try
             {
-                _driverStore.Add(driver.Id, driver);
-                nodeInstance.State = NodeInstanceState.Initialized;
-                driver.Configure();
+                if (driver.BeforeInit())
+                {
+                    _driverStore.Add(driver.Id, driver);
+                    nodeInstance.State = NodeInstanceState.Initialized;
+                    driver.Configure();
+                }
+                else
+                {
+                    nodeInstance.State = NodeInstanceState.UnknownError;
+                }
             }
-            else
+            catch (Exception e)
             {
+                _logger.LogError(e, $"Error initialize driver {factory.DriverName}");
                 nodeInstance.State = NodeInstanceState.UnknownError;
             }
 
-            _driverNodeStore.Add(driver.Id, driver);
+            _driverNodeStore.AddChild(driver, driver);
             for(int i = 0; i <= driver.ChildrensCreated; ++i)
             {
                 _licenseContract.IncrementDriverCount();
             }
 
 
-            AddDriverRecursive(driver);
-            return Task.CompletedTask;
+            AddDriverRecursive(driver, driver);
+            return Task.FromResult(driver);
         }
 
-        private void AddDriverRecursive(IDriverNode driver)
+        private void AddDriverRecursive(IDriver root, IDriverNode driver)
         {
             if (driver.Children == null)
             {
@@ -54,7 +63,7 @@ namespace Automatica.Core.Driver.Loader
             }
             foreach (var dr in driver.Children)
             {
-                _driverNodeStore.Add(dr.Id, dr);
+                _driverNodeStore.AddChild(root, dr);
 
                 _licenseContract.IncrementDriverCount();
 
@@ -64,7 +73,7 @@ namespace Automatica.Core.Driver.Loader
                     return;
                 }
 
-                AddDriverRecursive(dr);
+                AddDriverRecursive(root, dr);
             }
         }
     }

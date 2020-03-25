@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.5.0</Version>
+    <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>88E675FB-AC73-45F0-9551-53003F5A70C5</ProjectGuid>
   </PropertyGroup>
@@ -11,8 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Rssdp" Version="4.0.2" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Base" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
     <PackageReference Include="Serilog" Version="2.9.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00779" />

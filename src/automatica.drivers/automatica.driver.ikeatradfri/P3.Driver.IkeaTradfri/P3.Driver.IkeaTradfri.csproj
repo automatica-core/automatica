@@ -1,15 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Com.AugustCellars.CoAP" Version="1.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Tomidix.CSharpTradFriLibrary" Version="1.2.2.35" />
     <PackageReference Include="Zeroconf" Version="3.3.2" />
   </ItemGroup>
-
 </Project>

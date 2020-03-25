@@ -17,7 +17,7 @@ export class LogicShapes {
                 } if (element.X < 0) {
                     element.X *= -1;
                 }
-                this._super($.extend({ id: element.key, bgColor: "#FFFFFF", alpha: 1, color: "#d7d7d7", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 150 }, attr));
+                this._super($.extend({ id: element.key, bgColor: "#FFFFFF", alpha: 1, color: "#325862", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 150 }, attr));
 
                 this.setUserData(element);
 
@@ -25,7 +25,7 @@ export class LogicShapes {
                     text: element.Name,
                     stroke: 0,
                     fontColor: "#000000",
-                    bgColor: "#1d97c2",
+                    bgColor: "#457987",
                     radius: this.getRadius(),
                     padding: 10,
                     resizeable: true,

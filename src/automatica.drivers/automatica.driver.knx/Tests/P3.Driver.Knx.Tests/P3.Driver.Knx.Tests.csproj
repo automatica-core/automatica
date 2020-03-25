@@ -6,7 +6,7 @@
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>F1763E39-4D0D-4B08-84CE-7AD7B242DA57</ProjectGuid>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>0.5.0</Version>
+    <Version>0.14.0.1</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>
@@ -29,10 +29,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.Driver" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="0.12.0.678" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="0.12.0.678" />
+    <PackageReference Include="Automatica.Core.Base" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Driver" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="2.0.0.741" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ETS\ETS5_Password_Protected.knxproj">
