@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28124.53
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Operations", "P3.Rule.Operations\P3.Rule.Operations.csproj", "{6888202B-8BB1-403B-8A92-AC2D204071CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Operations", "P3.Logic.Operations\P3.Logic.Operations.csproj", "{6888202B-8BB1-403B-8A92-AC2D204071CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Operations.Tests", "P3.Rule.Operations.Tests\P3.Rule.Operations.Tests.csproj", "{872FB579-E7DE-4BAE-B361-17D81B4D6EC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Operations.Tests", "P3.Logic.Operations.Tests\P3.Logic.Operations.Tests.csproj", "{872FB579-E7DE-4BAE-B361-17D81B4D6EC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

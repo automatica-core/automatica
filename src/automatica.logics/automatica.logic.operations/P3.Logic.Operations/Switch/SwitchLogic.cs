@@ -4,7 +4,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 
-namespace P3.Rule.Operations.Switch
+namespace P3.Logic.Operations.Switch
 {
     public class SwitchLogic : Automatica.Core.Rule.Rule
     {

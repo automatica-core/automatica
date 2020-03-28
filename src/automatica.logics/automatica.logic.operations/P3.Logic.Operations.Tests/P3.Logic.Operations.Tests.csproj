@@ -42,6 +42,8 @@
     <PackageReference Include="Automatica.Core.Rule" Version="2.0.0.741" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
     <PackageReference Include="Automatica.Core.UnitTests.Base" Version="2.0.0.741" />
-    <ProjectReference Include="..\P3.Rule.Operations\P3.Rule.Operations.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Rule.Operations\P3.Logic.Operations.csproj" />
   </ItemGroup>
 </Project>

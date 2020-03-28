@@ -4,7 +4,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
-namespace P3.Rule.Operations.Dimmer
+namespace P3.Logic.Operations.Dimmer
 {
     public class DimmerLogicFactory : RuleFactory
     {

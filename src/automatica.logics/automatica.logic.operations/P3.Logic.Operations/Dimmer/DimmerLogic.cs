@@ -4,7 +4,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 
-namespace P3.Rule.Operations.Dimmer
+namespace P3.Logic.Operations.Dimmer
 {
     public class DimmerLogic : Automatica.Core.Rule.Rule
     {
