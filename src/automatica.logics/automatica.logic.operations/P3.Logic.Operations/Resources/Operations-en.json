@@ -5,8 +5,18 @@
       "NAME": "Switch",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "I",
-        "DESCRIPTION": ""
+        "VALUE": {
+          "NAME": "I",
+          "DESCRIPTION": "Value (Ein/Aus)"
+        },
+        "STATE": {
+          "NAME": "V",
+          "DESCRIPTION": "Absolute value (0-100%)"
+        },
+        "RESET": {
+          "NAME": "R",
+          "DESCRIPTION": "Reset (Sets the value to 0%)"
+        }
       },
       "STATE": {
         "NAME": "S",

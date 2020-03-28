@@ -5,8 +5,18 @@
       "NAME": "Taster",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "I",
-        "DESCRIPTION": ""
+        "VALUE": {
+          "NAME": "I",
+          "DESCRIPTION": "Eingangswert (Ein/Aus)"
+        },
+        "STATE": {
+          "NAME": "V",
+          "DESCRIPTION": "Absoluter Wert (0-100%)"
+        },
+        "RESET": {
+          "NAME": "R",
+          "DESCRIPTION": "Reset (Setzt den Wert auf 0%)"
+        }
       },
       "STATE": {
         "NAME": "S",
