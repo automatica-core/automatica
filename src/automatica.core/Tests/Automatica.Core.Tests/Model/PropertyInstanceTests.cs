@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Automatica.Core.EF.Exceptions;
 using Automatica.Core.EF.Models;
 using Xunit;
@@ -50,20 +51,31 @@ namespace Automatica.Core.Tests.Model
             Assert.Equal("stringValue", strValue);
         }
 
-        [Fact]
-        public void TestPropertyNumeric()
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("42", 42)]
+        [InlineData("0", 0)]
+        [InlineData("-0", 0)]
+        [InlineData("-42", -42)]
+
+        [InlineData("42.42", 42.42)]
+        [InlineData("0.0", 0)]
+        [InlineData("-42.42", -42.42)]
+        [InlineData("-0.0", -0)]
+        public void TestPropertyNumeric(string input, double value)
         {
             var node = new NodeInstance
             {
                 PropertyInstance = new List<PropertyInstance>
                 {
-                    CreatePropertyInstance("test", 123, PropertyTemplateType.Numeric)
+                    CreatePropertyInstance("test", input, PropertyTemplateType.Numeric)
                 }
             };
 
-            Assert.Equal(123, node.GetPropertyValueInt("test"));
-            Assert.Equal(123, node.GetPropertyValueDouble("test"));
+            Assert.Equal(Convert.ToInt32(value), node.GetPropertyValueInt("test"));
+            Assert.Equal(value, node.GetPropertyValueDouble("test"));
         }
+
         [Fact]
         public void TestPropertyBoolean()
         {
