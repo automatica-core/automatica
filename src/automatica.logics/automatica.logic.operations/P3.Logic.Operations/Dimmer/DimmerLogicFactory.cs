@@ -27,7 +27,7 @@ namespace P3.Logic.Operations.Dimmer
 
             factory.CreateRuleInterfaceTemplate(RuleOutput, "OPERATIONS.DIMMER.OUTPUT.NAME", "OPERATIONS.DIMMER.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
             
-            factory.ChangeDefaultVisuTemplate(RuleGuid, VisuMobileObjectTemplateTypes.ToggleButton);
+            factory.ChangeDefaultVisuTemplate(RuleGuid, VisuMobileObjectTemplateTypes.Dimmer);
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)
