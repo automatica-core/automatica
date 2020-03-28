@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.14.0.1</Version>
+    <Version>2.0.0.741</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>D659A788-2D0C-4E2D-8774-998BF4F3080B</ProjectGuid>
   </PropertyGroup>

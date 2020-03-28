@@ -44,6 +44,6 @@
     <PackageReference Include="Automatica.Core.UnitTests.Base" Version="2.0.0.741" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\P3.Rule.Operations\P3.Logic.Operations.csproj" />
+    <ProjectReference Include="..\P3.Logic.Operations\P3.Logic.Operations.csproj" />
   </ItemGroup>
 </Project>
