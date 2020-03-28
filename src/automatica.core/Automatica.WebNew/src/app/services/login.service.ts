@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BaseService } from "./base-service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { User } from "../base/model/user/user";
 import { Role } from "../base/model/user/role";
 import { BaseModel } from "../base/model/base-model";
@@ -13,7 +13,7 @@ export class LoginService extends BaseService {
 
   private currentUser: User = void 0;
 
-  constructor(http: HttpClient, pRouter: Router, translationService: TranslationService) {
+  constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
     super(http, pRouter, translationService);
   }
 

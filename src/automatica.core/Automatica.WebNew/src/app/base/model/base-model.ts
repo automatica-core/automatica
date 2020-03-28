@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 
 
 export interface JsonFieldInfo {
@@ -152,7 +152,7 @@ export abstract class BaseModel {
     protected _undoRedoEnabled: boolean;
     private _originalJson: any;
 
-    protected translationService: TranslationService;
+    protected translationService: L10nTranslationService;
 
 
     private notifyChangeSub: any;
@@ -165,12 +165,9 @@ export abstract class BaseModel {
     @JsonPropertyName("TrackingState")
     private _trackingState: TrackingState = TrackingState.Added;
 
-    public get trackingState(): TrackingState {
-        return this._trackingState;
-    }
 
-
-    public static getBaseModelFromJson<T extends BaseModel>(json: any, parent?: BaseModel, translate?: TranslationService): T {
+    // tslint:disable-next-line: member-ordering
+    public static getBaseModelFromJson<T extends BaseModel>(json: any, parent?: BaseModel, translate?: L10nTranslationService): T {
         if (!json || !(json.typeInfo || json.TypeInfo)) {
             console.error("cannot find property TypeInfo in json: ", json);
 
@@ -198,6 +195,7 @@ export abstract class BaseModel {
         return baseModel;
     }
 
+    // tslint:disable-next-line: member-ordering
     private static getJsonField(typeInfo: string, object: BaseModel): Map<string, JsonFieldInfo> {
         const json = new Map<string, JsonFieldInfo>();
         const originTypes = JSON_FIELDS.get(typeInfo);
@@ -224,6 +222,7 @@ export abstract class BaseModel {
         return json;
     }
 
+    // tslint:disable-next-line: member-ordering
     private static inferType(jsonType: JsonType): any {
         switch (jsonType) {
             case JsonType.Array: {
@@ -235,11 +234,12 @@ export abstract class BaseModel {
         }
     }
 
+    // tslint:disable-next-line: member-ordering
     private static lowerFirstLetter(val: string) {
         return val.charAt(0).toLowerCase() + val.slice(1);
     }
 
-    public static fromJson(json: any, object: BaseModel, translate?: TranslationService) {
+    public static fromJson(json: any, object: BaseModel, translate?: L10nTranslationService) {
         object._originalJson = json;
         object.unregisterChanges();
 
@@ -318,6 +318,10 @@ export abstract class BaseModel {
         object.afterFromJson();
         object._isDirty = false;
         object.registerChanges();
+    }
+
+    public get trackingState(): TrackingState {
+        return this._trackingState;
     }
 
     protected abstract getJsonProperty(): Map<string, JsonFieldInfo>;
@@ -425,13 +429,13 @@ export abstract class BaseModel {
     }
 
 
-    private getBaseModelFromJson<T extends BaseModel>(json: any, translation?: TranslationService): T {
+    private getBaseModelFromJson<T extends BaseModel>(json: any, translation?: L10nTranslationService): T {
         const baseModel = BaseModel.getBaseModelFromJson<T>(json, void 0, translation);
         return baseModel;
     }
 
 
-    public fromJson(json: any, translation?: TranslationService) {
+    public fromJson(json: any, translation?: L10nTranslationService) {
         BaseModel.fromJson(json, this, translation);
     }
 

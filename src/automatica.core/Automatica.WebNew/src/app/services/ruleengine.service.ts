@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { BaseService } from "./base-service";
 import { EventEmitter } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -40,7 +40,7 @@ export class RuleEngineService extends BaseService {
   public reInit: EventEmitter<number> = new EventEmitter<number>();
   public add = new EventEmitter<AddLogicData>();
 
-  constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designService: DesignTimeDataService) {
+  constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designService: DesignTimeDataService) {
     super(http, pRouter, translationService);
   }
 

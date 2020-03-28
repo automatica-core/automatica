@@ -3,7 +3,7 @@ import { LabelComponent } from "./label/label.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseComponent } from "../../base-component";
 import { VisuObjectMobileInstance } from "../../model/visu/visu-object-mobile-instance";
@@ -41,7 +41,7 @@ export class ControlComponent extends BaseComponent implements OnInit, OnDestroy
   constructor(
     private elementRef: ElementRef,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     appService: AppService) {
     super(notify, translate, appService);
   }

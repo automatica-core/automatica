@@ -1,6 +1,6 @@
 import { Component, NgModule, Output, Input, EventEmitter, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef } from "@angular/core";
 import { DxTreeViewModule, DxTreeViewComponent } from "devextreme-angular/ui/tree-view";
-import { TranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
@@ -68,7 +68,6 @@ export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDes
     constructor(private router: Router) { }
 
     ngOnInit() {
-
     }
 
     setInitialItem() {
@@ -110,11 +109,16 @@ export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDes
 
     onMenuInitialized(event) {
         event.component.option("deferRendering", false);
+
+        setTimeout(() => {
+            this.menu.instance.collapseAll();
+        }, 100);
     }
 
 
     ngAfterViewInit() {
         this.setInitialItem();
+
     }
 
     ngOnDestroy() {
@@ -123,7 +127,7 @@ export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDes
 }
 
 @NgModule({
-    imports: [CommonModule, DxTreeViewModule, TranslationModule, FontAwesomeModule, DxScrollViewModule],
+    imports: [CommonModule, DxTreeViewModule, L10nTranslationModule, FontAwesomeModule, DxScrollViewModule],
     declarations: [SideNavigationMenuComponent],
     exports: [SideNavigationMenuComponent]
 })

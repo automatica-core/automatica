@@ -5,7 +5,7 @@ import { BaseComponent } from "src/app/base/base-component";
 import { VisuService } from "src/app/services/visu.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotifyService } from "src/app/services/notify.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { LoginService } from "src/app/services/login.service";
 import { AppService } from "src/app/services/app.service";
@@ -35,7 +35,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   constructor(private visuService: VisuService,
     private route: ActivatedRoute,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private configService: ConfigService,
     private router: Router,
     private login: LoginService,

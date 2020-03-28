@@ -5,8 +5,8 @@ import { AppComponent } from "./app.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { RouterModule } from "@angular/router";
-import { TranslationModule, LocalizationModule, LocaleValidationModule, L10nLoader } from "angular-l10n";
-import { TranslationConfigService, TranslationConfiguration } from "./services/translation-config.service";
+import { L10nTranslationModule, L10nLoader, L10nValidationModule } from "angular-l10n";
+import { TranslationConfigService, TranslationConfiguration, HttpTranslationLoader } from "./services/translation-config.service";
 import { HomeComponent } from "./pages/home/home.component";
 import { ConfigComponent } from "./pages/config/config.component";
 import { LogicEditorComponent } from "./pages/logic-editor/logic-editor.component";
@@ -55,7 +55,7 @@ export class CustomDragDropConfig extends DragDropConfig {
 }
 
 export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
-  return (): Promise<void> => l10nLoader.load();
+  return (): Promise<void> => l10nLoader.init();
 }
 
 @NgModule({
@@ -65,8 +65,10 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    LocalizationModule.forRoot(TranslationConfiguration),
-    LocaleValidationModule.forRoot(),
+    L10nTranslationModule.forRoot(TranslationConfiguration, {
+      translationLoader: HttpTranslationLoader
+    }),
+    L10nValidationModule.forRoot(),
     AdminModule,
     LoginFormModule,
     FontAwesomeModule,
@@ -105,7 +107,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     CustomDragDropConfig,
     { provide: DragDropConfig, useValue: new CustomDragDropConfig() },
     HasRoleGuard,
-    DeviceService
+    DeviceService,
+    HttpTranslationLoader
   ],
   bootstrap: [
     AppComponent

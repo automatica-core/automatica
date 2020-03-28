@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UpdateHubService } from "src/app/base/communication/hubs/update-hub.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { SystemService } from "src/app/services/system.service";
 import { AppService } from "src/app/services/app.service";
@@ -26,7 +26,7 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
   constructor(private systemService: SystemService,
     private updateHubService: UpdateHubService,
     notifyService: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     appService: AppService) {
     super(notifyService, translate, appService);
 

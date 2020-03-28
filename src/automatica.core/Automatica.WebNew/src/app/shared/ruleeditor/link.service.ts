@@ -4,7 +4,7 @@ import { RulePage } from "src/app/base/model/rule-page";
 import { Link } from "src/app/base/model/link";
 import { Guid } from "src/app/base/utils/Guid";
 import { NodeInstance } from "src/app/base/model/node-instance";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 
 declare var draw2d: any;
 
@@ -87,7 +87,7 @@ export class LinkService {
         this._isInit = v;
     }
 
-    constructor(private page: RulePage, public translate: TranslationService) {
+    constructor(private page: RulePage, public translate: L10nTranslationService) {
 
     }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
-import { Language, TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { VisuService } from "src/app/services/visu.service";
@@ -27,9 +27,6 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
   VisuPageTypes: typeof VisuPageType = VisuPageType;
 
   pages: VisuPage[] = [];
-
-  @Language()
-  lang: any;
 
   public templates: VisuObjectTemplate[] = [];
 
@@ -98,7 +95,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
   userGroups: UserGroup[] = [];
 
   constructor(private visuService: VisuService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
     private notify: NotifyService,
     private areaService: AreaService,

@@ -4,7 +4,7 @@ import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.comp
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
 import { ConfigService } from "src/app/services/config.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { AreaService } from "src/app/services/areas.service";
 import { CategoryService } from "src/app/services/categories.service";
 import { GroupsService } from "src/app/services/groups.service";
@@ -67,7 +67,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   constructor(private ruleEngineService: RuleEngineService,
     private configService: ConfigService,
     private notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private areaService: AreaService,
     private categoryService: CategoryService,
     private userGroupsService: GroupsService,

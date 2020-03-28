@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PropertyInstance } from "../../../model/property-instance";
 import { DataHubService } from "../../../communication/hubs/data-hub.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../base-mobile-component";
 import { VisuService } from "src/app/services/visu.service";
@@ -29,7 +29,7 @@ export class LinkComponent extends BaseMobileComponent implements OnInit, OnDest
     private route: ActivatedRoute,
     dataHub: DataHubService,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private visuService: VisuService,
     configService: ConfigService,
     appService: AppService) {

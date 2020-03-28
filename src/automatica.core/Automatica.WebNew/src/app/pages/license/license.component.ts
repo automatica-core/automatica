@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LicenseService } from "src/app/services/license.service";
 import { AppService } from "src/app/services/app.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
@@ -28,7 +28,7 @@ export class LicenseComponent extends BaseComponent implements OnInit {
   constructor(
     private licenseService: LicenseService,
     appService: AppService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     notify: NotifyService) {
     super(notify, translate, appService);
 

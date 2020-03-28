@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BaseControlComponent } from "./base-control.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { TranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 
 
 
@@ -11,7 +11,7 @@ import { TranslationModule } from "angular-l10n";
   imports: [
     CommonModule,
     FontAwesomeModule,
-    TranslationModule
+    L10nTranslationModule
   ],
   exports: [
     BaseControlComponent

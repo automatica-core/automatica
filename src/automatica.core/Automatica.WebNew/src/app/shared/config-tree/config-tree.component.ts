@@ -1,7 +1,7 @@
 import { ViewChild, Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from "@angular/core";
 import { ConfigService } from "../../services/config.service";
 import { DxTreeListComponent } from "devextreme-angular";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { DataService } from "../../services/data.service";
 import { SettingsService } from "src/app/services/settings.service";
 import { LearnNodeInstance } from "../propertyeditor/propertyeditor.component";
@@ -75,7 +75,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     private configService: ConfigService,
     private designTimeDataService: DesignTimeDataService,
     public nodeInstanceService: NodeInstanceService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private notify: NotifyService,
     private hub: DataHubService,
     private settingsService: SettingsService,

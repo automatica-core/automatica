@@ -4,7 +4,7 @@ import { far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { BaseComponent } from "./base/base-component";
 import { FontAwesomeModule, FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { DxLoadPanelComponent } from "devextreme-angular";
@@ -23,7 +23,7 @@ export class AppComponent extends BaseComponent implements OnInit {
 
   constructor(appService: AppService,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private changeDet: ChangeDetectorRef,
     library: FaIconLibrary,
     private ngZone: NgZone) {

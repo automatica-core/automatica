@@ -4,7 +4,7 @@ import { VisuObjectMobileInstance } from "../model/visu";
 import { DataHubService } from "../communication/hubs/data-hub.service";
 import { PropertyInstance } from "../model/property-instance";
 import { NotifyService } from "src/app/services/notify.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
 import { AppService } from "src/app/services/app.service";
@@ -116,7 +116,7 @@ export abstract class BaseMobileComponent extends BaseComponent {
     constructor(
         protected dataHub: DataHubService,
         notify: NotifyService,
-        translate: TranslationService,
+        translate: L10nTranslationService,
         private configService: ConfigService,
         appService: AppService) {
         super(notify, translate, appService);

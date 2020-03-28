@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from "@angular/core";
 import { BaseService } from "./base-service";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { HttpClient } from "@angular/common/http";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { NodeTemplate } from "../base/model/node-template";
@@ -12,7 +12,7 @@ import { PropertyInstance } from "../base/model/property-instance";
 export class ConfigService extends BaseService {
 
 
-    constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designData: DesignTimeDataService) {
+    constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designData: DesignTimeDataService) {
         super(http, pRouter, translationService);
     }
 

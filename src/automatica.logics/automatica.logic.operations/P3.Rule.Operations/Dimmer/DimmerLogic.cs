@@ -14,10 +14,10 @@ namespace P3.Rule.Operations.Dimmer
         public DimmerLogic(IRuleContext context) : base(context)
         {
             _input = context.RuleInstance.RuleInterfaceInstance.Single(a =>
-                a.This2RuleInterfaceTemplate == SwitchLogicFactory.RuleInput);
+                a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleInput);
             
             _output = context.RuleInstance.RuleInterfaceInstance.Single(a =>
-                a.This2RuleInterfaceTemplate == SwitchLogicFactory.RuleOutput);
+                a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleOutput);
         }
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,

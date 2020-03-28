@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UpdateHubService } from "src/app/base/communication/hubs/update-hub.service";
 import { PluginType, PluginState, Version, PluginsService } from "src/app/services/plugins.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
@@ -240,7 +240,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     private pluginsService: PluginsService,
     private updateHubService: UpdateHubService,
     notify: NotifyService,
-    translationService: TranslationService,
+    translationService: L10nTranslationService,
     appService: AppService) {
     super(notify, translationService, appService);
 

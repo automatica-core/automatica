@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
-import { TranslationService, Language } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
@@ -116,10 +116,7 @@ export class LearnNodeInstance {
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {
   PropertyTemplateType: typeof PropertyTemplateType = PropertyTemplateType;
-
-  @Language()
-  lang: any;
-
+  
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
@@ -268,7 +265,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   constructor(
     private config: ConfigService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private dataHub: DataHubService,
     private notify: NotifyService,
     private slaveService: SlavesService,

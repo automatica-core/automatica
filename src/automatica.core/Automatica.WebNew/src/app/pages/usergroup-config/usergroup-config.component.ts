@@ -3,7 +3,7 @@ import { DxDataGridComponent } from "devextreme-angular";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { Role } from "src/app/base/model/user/role";
 import { GroupsService } from "src/app/services/groups.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { Guid } from "src/app/base/utils/Guid";
 import { AppService } from "src/app/services/app.service";
@@ -36,7 +36,7 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
   constructor(
     private catService: GroupsService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private notify: NotifyService,
     appService: AppService) {
     super(notify, translate, appService);

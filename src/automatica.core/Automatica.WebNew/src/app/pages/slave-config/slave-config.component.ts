@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CategoryService } from "src/app/services/categories.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -32,7 +32,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
 
   constructor(
     private catService: SlavesService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private notify: NotifyService,
     appService: AppService) {
     super(notify, translate, appService);

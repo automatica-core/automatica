@@ -1,7 +1,7 @@
 /// <reference path="../../../../node_modules/@types/jszip/index.d.ts" />
 
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";
 import * as JSZip from "jszip";
 import { saveAs } from "file-saver";
@@ -128,7 +128,7 @@ export class ConfigMenuComponent implements OnInit {
     command: (event) => { this.importNode(); }
   };
 
-  constructor(private translate: TranslationService,
+  constructor(private translate: L10nTranslationService,
     private notify: NotifyService,
     private designTimeDataService: DesignTimeDataService,
     private changeRef: ChangeDetectorRef) {

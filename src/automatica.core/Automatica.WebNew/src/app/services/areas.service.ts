@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { BaseService } from "./base-service";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { AreaInstance, AreaTemplate } from "../base/model/areas";
 
@@ -12,7 +12,7 @@ export class AreaService extends BaseService {
 
     public etsImported = new EventEmitter<AreaInstance[]>();
 
-    constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designData: DesignTimeDataService) {
+    constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designData: DesignTimeDataService) {
         super(http, pRouter, translationService);
     }
 

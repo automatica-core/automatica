@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { TelegramMonitorInstance } from "src/app/base/model/telegram-monitor/telegram-monitor-instance";
 import { TelegramHubService } from "src/app/base/communication/hubs/telegram-monitor-hub.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { TelegramMessage } from "src/app/base/model/telegram-monitor/telegram-message";
 import { NotifyService } from "src/app/services/notify.service";
 import { TelegramMonitorService } from "src/app/services/telegram-monitor.service";
@@ -21,7 +21,7 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
 
   constructor(private telegramHub: TelegramHubService,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private telegramMonitorService: TelegramMonitorService,
     appService: AppService) {
     super(notify, translate, appService);

@@ -2,14 +2,14 @@ import { BaseService } from "../services/base-service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { VisuObjectTemplate } from "../base/model/visu-object-template";
 import { VisuPage } from "../base/model/visu-page";
 import { BaseModel } from "../base/model/base-model";
 
 @Injectable()
 export class VisuService extends BaseService {
-    constructor(http: HttpClient, pRouter: Router, translationService: TranslationService) {
+    constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(http, pRouter, translationService);
     }
 

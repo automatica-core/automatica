@@ -1,5 +1,5 @@
 import { BaseMobileComponent, VisuObjectType } from "./base-mobile-component";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { RuleInstanceVisuService } from "src/app/services/rule-visu.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { DataHubService } from "../communication/hubs/data-hub.service";
@@ -17,7 +17,7 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
     constructor(
         private dataHubService: DataHubService,
         notify: NotifyService,
-        translate: TranslationService,
+        translate: L10nTranslationService,
         configService: ConfigService,
         public ruleInstanceVisuService: RuleInstanceVisuService,
         appService: AppService) {

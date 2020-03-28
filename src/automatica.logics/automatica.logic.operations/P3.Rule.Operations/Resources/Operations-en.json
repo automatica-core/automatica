@@ -16,6 +16,22 @@
         "NAME": "O",
         "DESCRIPTION": ""
       }
+    },
+    "DIMMER": {
+      "NAME": "Dimmer",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "I",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "S",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "O",
+        "DESCRIPTION": ""
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BaseService } from "./base-service";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { HttpClient } from "@angular/common/http";
 import { NodeTemplate } from "../base/model/node-template";
 import { AreaTemplate } from "../base/model/areas";
@@ -19,7 +19,7 @@ export class DesignTimeDataService extends BaseService {
     private _ruleTemplates: RuleTemplate[];
     private _categoryGroups: CategoryGroup[];
 
-    constructor(http: HttpClient, pRouter: Router, translationService: TranslationService) {
+    constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(http, pRouter, translationService);
     }
 

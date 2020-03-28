@@ -5,7 +5,7 @@ import { UserGroup } from "src/app/base/model/user/user-group";
 import { ConfigService } from "src/app/services/config.service";
 import { AreaService } from "src/app/services/areas.service";
 import { CategoryService } from "src/app/services/categories.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { GroupsService } from "src/app/services/groups.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -40,7 +40,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     private notify: NotifyService,
     private areaService: AreaService,
     private categoryService: CategoryService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private userGroupsService: GroupsService,
     appService: AppService,
     private nodeInstanceService: NodeInstanceService) {

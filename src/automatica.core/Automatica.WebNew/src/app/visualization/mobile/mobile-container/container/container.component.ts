@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { VisuPageGroupType } from "src/app/base/model/visu-page";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 
 interface Section {
   title: string;
@@ -62,7 +62,7 @@ export class ContainerComponent implements OnInit {
 
   sections: Section[] = [];
 
-  constructor(private translationService: TranslationService) { }
+  constructor(private translationService: L10nTranslationService) { }
 
   ngOnInit() {
 

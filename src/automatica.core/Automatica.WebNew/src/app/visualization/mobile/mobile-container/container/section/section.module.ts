@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SectionComponent } from "./section.component";
 import { ElementModule } from "./element/element.module";
-import { TranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 
 
 
@@ -11,7 +11,7 @@ import { TranslationModule } from "angular-l10n";
   imports: [
     CommonModule,
     ElementModule,
-    TranslationModule
+    L10nTranslationModule
   ],
   exports: [
     SectionComponent
