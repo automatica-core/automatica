@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LabelComponent } from "./label/label.component";
 import { DynamicModule } from "ng-dynamic-component";
-import { ControlComponent } from "./control.component";
+import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
 import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxCircularGaugeModule } from "devextreme-angular";
@@ -32,14 +32,14 @@ import { BaseControlModule } from "./base-control/base-control.module";
     ])
   ],
   declarations: [
-    ControlComponent,
+    VisuItemComponent,
     LabelComponent,
     DefaultComponent,
     LinkComponent,
     ToggleComponent
   ],
   exports: [
-    ControlComponent
+    VisuItemComponent
   ]
 })
 export class ControlsModule { }

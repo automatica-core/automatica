@@ -8,7 +8,7 @@
         <div class="cell_texts">
             <div [hidden]="!location" class="cell_text_location cell_text_overflow">{{ location }}</div>
             <div [hidden]="!hint" class="cell_text_hint cell_text_overflow">{{ hint }}</div>
-            <div [hidden]="!value" class="cell_text_value cell_text_overflow">{{ value }}</div>
+            <div [hidden]="valueHidden" class="cell_text_value cell_text_overflow">{{ value }}</div>
             <div [hidden]="!subValue" class="cell_text_sub cell_text_overflow">{{ subValue }}</div>
         </div>
         <div class="cell_controls">

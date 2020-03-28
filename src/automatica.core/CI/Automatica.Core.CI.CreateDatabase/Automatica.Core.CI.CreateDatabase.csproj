@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>285604C0-3A87-49EF-9A06-A4EE0B17D63A</ProjectGuid>
-    <Version>2.0.0.741</Version>
+    <Version>2.0.0.747</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">

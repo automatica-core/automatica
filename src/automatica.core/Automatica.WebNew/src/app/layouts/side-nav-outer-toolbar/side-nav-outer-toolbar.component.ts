@@ -22,7 +22,7 @@ export class SideNavOuterToolbarComponent implements OnInit, OnDestroy {
     menuItems: any[];
 
     @Input()
-    menuOpened: boolean = false;
+    menuOpened: boolean = true;
 
     @Input()
     title: string;

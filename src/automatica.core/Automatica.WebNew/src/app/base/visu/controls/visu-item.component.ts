@@ -13,11 +13,11 @@ import { VisuPageGroupType } from "../../model/visu-page";
 
 @Component({
   selector: "visu-component",
-  templateUrl: "./control.component.html",
-  styleUrls: ["./control.component.scss"],
+  templateUrl: "./visu-item.component.html",
+  styleUrls: ["./visu-item.component.scss"],
   encapsulation: ViewEncapsulation.None
 })
-export class ControlComponent extends BaseComponent implements OnInit, OnDestroy {
+export class VisuItemComponent extends BaseComponent implements OnInit, OnDestroy {
 
 
 

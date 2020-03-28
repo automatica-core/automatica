@@ -1,5 +1,5 @@
 <div class="container">
-    <dx-scroll-view height="100%">
+    <dx-scroll-view [showScrollbar]="'always'">
         <ng-container *ngFor="let section of sections">
 
             <app-visualization-section [pageGroupType]="pageGroupType" [title]="section.title" [items]="section.items"></app-visualization-section>

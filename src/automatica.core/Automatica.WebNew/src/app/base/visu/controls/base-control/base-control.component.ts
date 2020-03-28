@@ -25,6 +25,11 @@ export class BaseControlComponent implements OnInit {
   @Input()
   subValue: string;
 
+  public get valueHidden(): boolean {
+    return this.value === void 0 || this.value === null;
+  }
+
+
   constructor() { }
 
   ngOnInit() {

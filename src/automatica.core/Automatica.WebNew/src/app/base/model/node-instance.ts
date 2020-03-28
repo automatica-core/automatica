@@ -142,6 +142,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         if (this._displayName) {
             return `${this._displayName}`;
         }
+        if (this.VisuName) {
+            return this.VisuName;
+        }
         return this._name;
     }
 

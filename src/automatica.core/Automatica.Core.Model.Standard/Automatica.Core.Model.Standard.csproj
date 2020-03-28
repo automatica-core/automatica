@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.0.0.741</Version>
+    <Version>2.0.0.747</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Automatica.Core.Model\Models\User\Priviledge.cs" Link="Models\User\Priviledge.cs" />

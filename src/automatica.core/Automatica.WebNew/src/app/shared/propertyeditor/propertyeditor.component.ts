@@ -116,7 +116,7 @@ export class LearnNodeInstance {
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {
   PropertyTemplateType: typeof PropertyTemplateType = PropertyTemplateType;
-  
+
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 

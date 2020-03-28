@@ -23,6 +23,7 @@ import { AreaInstance } from "./areas"
 import { CategoryInstance } from "./categories"
 import { VisuObjectType } from "../visu/base-mobile-component"
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance"
+import { L10nTranslationService } from "angular-l10n"
 
 function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
     if (!a.Template) {
@@ -122,18 +123,18 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     }
 
 
-    public static fromRuleTemplate(template: RuleTemplate): RuleInstance {
+    public static fromRuleTemplate(template: RuleTemplate, translationService: L10nTranslationService): RuleInstance {
         const instance = new RuleInstance();
         instance.This2RuleTemplate = template.ObjId;
         instance.RuleTemplate = template;
-        instance.Name = template.Name;
-        instance.Description = template.Description;
+        instance.Name = translationService.translate(template.Name);
+        instance.Description =  translationService.translate(template.Description);
 
         instance.ObjId = Guid.MakeNew().ToString();
 
         instance.Interfaces = [];
         template.Interfaces.forEach(element => {
-            const intre = RuleInterfaceInstance.fromTemplate(element, instance);
+            const intre = RuleInterfaceInstance.fromTemplate(element, instance, translationService);
             intre.RuleInstance = instance;
             instance.Interfaces.push(intre);
         });

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
-import { ConfigMenuComponent } from "src/app/shared/config-menu/config-menu.component";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { ConfigService } from "src/app/services/config.service";
@@ -11,7 +10,6 @@ import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { NodeInstance } from "src/app/base/model/node-instance";
-import { NodeTemplate } from "src/app/base/model/node-template";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";

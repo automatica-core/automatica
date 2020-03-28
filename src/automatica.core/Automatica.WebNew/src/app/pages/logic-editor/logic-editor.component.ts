@@ -303,7 +303,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   add(template: RuleTemplate | NodeInstance, rulePage: RulePage) {
     if (template instanceof RuleTemplate) {
-      const rule = RuleInstance.fromRuleTemplate(template);
+      const rule = RuleInstance.fromRuleTemplate(template, this.translate);
 
       rule.Name = this.translate.translate(rule.Name);
       rule.Description = this.translate.translate(rule.Description);
