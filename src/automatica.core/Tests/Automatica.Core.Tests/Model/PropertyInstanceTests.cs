@@ -62,6 +62,8 @@ namespace Automatica.Core.Tests.Model
         [InlineData("0.0", 0)]
         [InlineData("-42.42", -42.42)]
         [InlineData("-0.0", -0)]
+
+        [InlineData("4294967295", 4294967295)]
         public void TestPropertyNumeric(string input, double value)
         {
             var node = new NodeInstance
@@ -72,8 +74,35 @@ namespace Automatica.Core.Tests.Model
                 }
             };
 
-            Assert.Equal(Convert.ToInt32(value), node.GetPropertyValueInt("test"));
+            if (value <= int.MaxValue)
+            {
+                Assert.Equal(Convert.ToInt32(value), node.GetPropertyValueInt("test"));
+            }
+            else
+            {
+                Assert.Equal(Convert.ToInt64(value), node.GetPropertyValueLong("test"));
+            }
+            
             Assert.Equal(value, node.GetPropertyValueDouble("test"));
+        }
+
+
+
+        [Theory]
+        [InlineData("1", 1)]
+        [InlineData("42", 42)]
+        [InlineData("4294967295", 4294967295)]
+        public void TestPropertyLong(string input, long value)
+        {
+            var node = new NodeInstance
+            {
+                PropertyInstance = new List<PropertyInstance>
+                {
+                    CreatePropertyInstance("test", input, PropertyTemplateType.Long)
+                }
+            };
+
+            Assert.Equal(Convert.ToInt64(value), node.GetPropertyValueLong("test"));
         }
 
         [Fact]

@@ -308,7 +308,14 @@ namespace Automatica.Core.EF.Models
                         else
                         {
                             ValueDouble = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            ValueInt = Convert.ToInt32(ValueDouble);
+                            if (ValueDouble <= int.MaxValue)
+                            {
+                                ValueInt = Convert.ToInt32(ValueDouble);
+                            }
+                            else
+                            {
+                                ValueLong = Convert.ToInt64(ValueDouble);
+                            }
                         }
 
                         break;
