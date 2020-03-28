@@ -233,6 +233,13 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     items: undefined,
     command: (event) => { this.installUpdateAll(); }
   }
+  menuReload: CustomMenuItem = {
+    id: "reload",
+    label: "Reload",
+    icon: "fa-download",
+    items: undefined,
+    command: (event) => { this.load(); }
+  }
 
   plugins: PluginStateInstance[] = [];
   pluginsMap = new Map<string, PluginStateInstance>();
@@ -247,7 +254,9 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
     this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
     this.menuInstallUpdate.label = translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
+    this.menuReload.label = translationService.translate("PLUGINS.RELOAD");
 
+    this.menuItems.push(this.menuReload);
     this.menuItems.push(this.menuUpdate);
     this.menuItems.push(this.menuInstall);
     this.menuItems.push(this.menuInstallUpdate);
@@ -257,6 +266,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
   async load() {
     try {
+      this.plugins = [];
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
       for (const p of plugins) {

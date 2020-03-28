@@ -22,7 +22,6 @@ export class VisualizationComponent implements OnInit {
 
   constructor(private hubService: HubConnectionService,
     private areaService: AreaService,
-    private visuService: VisuService,
     private catService: CategoryService,
     appService: AppService,
     private serverStateService: ServerStateService) {

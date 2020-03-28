@@ -68,6 +68,7 @@
         "TYPE": "Type",
         "FAVORITES": "Favoriten",
         "HOME": "Home",
+        "RELOAD": "Aktualisieren",
         "DATETIMEFORMAT": {
             "DATE": "DD.MM.YYYY",
             "TIME": "HH.mm.ss",
