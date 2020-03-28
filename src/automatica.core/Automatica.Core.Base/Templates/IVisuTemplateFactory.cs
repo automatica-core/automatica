@@ -25,7 +25,9 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("0e742e37-5d83-4476-910c-726677b4477f")]
         Gauge,
         [VisuMobileObjectTemplateType("e3936850-7a0e-4651-9b01-0034e6dabeda")]
-        Clock
+        Clock,
+        [VisuMobileObjectTemplateType("8b17441f-de01-47c4-be49-5f56ba82440d")]
+        Dimmer
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory
