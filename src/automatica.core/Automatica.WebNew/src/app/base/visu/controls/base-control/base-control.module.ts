@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { BaseControlComponent } from "./base-control.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { L10nTranslationModule } from "angular-l10n";
+import { DxPopupModule, DxScrollViewModule, DxTemplateModule } from "devextreme-angular";
 
 
 
@@ -11,7 +12,10 @@ import { L10nTranslationModule } from "angular-l10n";
   imports: [
     CommonModule,
     FontAwesomeModule,
-    L10nTranslationModule
+    L10nTranslationModule,
+    DxPopupModule,
+    DxScrollViewModule,
+    DxTemplateModule
   ],
   exports: [
     BaseControlComponent

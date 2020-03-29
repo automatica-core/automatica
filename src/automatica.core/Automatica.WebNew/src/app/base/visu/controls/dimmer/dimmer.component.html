@@ -1,12 +1,16 @@
 <app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location"
   [hasPopup]="true">
-
   <dx-switch control [value]="state" (onValueChanged)="onValueChanged($event)"></dx-switch>
 
-
   <div popup>
-    <div style="padding-top: 20px">
+
+    <div>
       <visu-component-switch-button [state]="state" (stateChanged)="switch($event)"></visu-component-switch-button>
     </div>
 
+    <div>
+      <visu-component-slider [state]="state" (stateChanged)="sliderUpdate($event)"></visu-component-slider>
+    </div>
+
   </div>
+</app-visualization-control>

@@ -69,6 +69,14 @@
         "FAVORITES": "Favoriten",
         "HOME": "Home",
         "RELOAD": "Aktualisieren",
+        "SWITCH": {
+            "ON": "Einschalten",
+            "OFF": "Ausschalten"
+        },
+        "TOGGLE": {
+            "ON": "Ein",
+            "OFF": "Aus"
+        },
         "DATETIMEFORMAT": {
             "DATE": "DD.MM.YYYY",
             "TIME": "HH.mm.ss",

@@ -25,6 +25,11 @@ export class BaseControlComponent implements OnInit {
   @Input()
   subValue: string;
 
+  @Input()
+  hasPopup: boolean = false;
+
+  popupVisible = false;
+
   public get valueHidden(): boolean {
     return this.value === void 0 || this.value === null;
   }
@@ -35,8 +40,16 @@ export class BaseControlComponent implements OnInit {
   ngOnInit() {
   }
 
+  preventDefault($event) {
+    $event.stopPropagation()
+  }
+
   onCellClick($event) {
-    console.log("on cell click...");
+    this.popupVisible = true;
+  }
+
+  onPopupHiding($event) {
+    this.popupVisible = false;
   }
 
 }

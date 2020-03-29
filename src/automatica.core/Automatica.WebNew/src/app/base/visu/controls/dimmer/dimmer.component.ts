@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { BaseMobileRuleComponent } from "../../../base-mobile-rule-component";
+import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -9,22 +9,23 @@ import { AppService } from "src/app/services/app.service";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 
-interface IToggleComponent {
+interface IDimmerComponent {
   state: boolean;
+  value: number;
 }
 
 @Component({
-  selector: "visu-toggle",
-  templateUrl: "./toggle.component.html",
-  styleUrls: ["./toggle.component.scss"]
+  selector: "visu-dimmer",
+  templateUrl: "./dimmer.component.html",
+  styleUrls: ["./dimmer.component.scss"]
 })
-export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy, IToggleComponent {
+export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy, IDimmerComponent {
 
   private _state: boolean;
+  valueType: RuleInterfaceInstance;
   stateType: RuleInterfaceInstance;
-  inputType: RuleInterfaceInstance;
   outputType: RuleInterfaceInstance;
-  displayValue: any;
+  displayValue: any = "0%";
 
   public get state(): boolean {
     return this._state;
@@ -32,6 +33,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
   public set state(v: boolean) {
     this._state = v;
   }
+
 
   constructor(
     dataHubService: DataHubService,
@@ -49,9 +51,10 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
     super.mobileRuleInit();
 
-    this.stateType = this.getInterfaceByType(RuleInterfaceType.Status);
-    this.inputType = this.getInterfaceByType(RuleInterfaceType.Input);
+    this.valueType = this.getInterfaceByType(RuleInterfaceType.Status);
+    this.stateType = this.getInterfaceByType(RuleInterfaceType.Input);
     this.outputType = this.getInterfaceByType(RuleInterfaceType.Output);
+
 
   }
 
@@ -60,7 +63,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
     if (this.outputType.ObjId === interfaceId) {
       this.state = value;
-      this.displayValue = this.translate.translate(value ? "COMMON.TOGGLE.ON" : "COMMON.TOGGLE.OFF");
+      this.displayValue = `${value}%`;
     }
   }
 
@@ -68,13 +71,17 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     this.switch($event.value);
   }
 
+  switch($event) {
+    this.dataHub.setValue(this.stateType.ObjId, $event);
+  }
+
+  sliderUpdate($event) {
+    this.dataHub.setValue(this.valueType.ObjId, $event);
+  }
+
   ngOnDestroy(): void {
     this.baseOnDestroy();
   }
 
-
-  switch(value) {
-    this.dataHub.setValue(this.inputType.ObjId, value);
-  }
 
 }

@@ -96,3 +96,79 @@
     width: 65px;
     margin:auto;
 }
+
+::ng-deep .dx-popup-wrapper > .dx-overlay-content {
+    border: 0px;
+    border-radius: 0px;
+}
+
+::ng-deep dx-popup-wrapper {
+    border: 0px;
+    border-radius: 0px;
+}
+
+::ng-deep .dx-popup-title {
+    color: white;
+    background-color: #252529;
+    border: 0px;
+    border-radius: 0px;
+}
+
+::ng-deep .dx-popup-content {
+    color: white;
+    background-color: #252529;
+    border: 0px;
+    border-radius: 0px;
+}
+
+::ng-deep .dx-button-mode-contained .dx-icon {
+    color: white;
+}
+
+::ng-deep .dx-popup-title.dx-toolbar .dx-toolbar-after {
+    padding-right: 10px;
+}
+
+::ng-deep .dx-popup-title .dx-closebutton .dx-icon {
+    font-size: 20px;
+    padding: 5px;
+
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+::ng-deep .dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection.dx-popup-title .dx-toolbar-before {
+    margin: 0 auto;
+    height: 100%;
+    text-align: center;
+    position: relative;
+}
+
+::ng-deep .dx-overlay-content.dx-popup-normal.dx-resizable.dx-state-focused {
+    border: 0px;
+}
+
+.overlay {
+    margin: 0 auto;
+    height: 100%;
+    text-align: center;
+    position: relative;
+    max-width: 480px;
+}
+
+.overlay_value {
+    padding-bottom: 20px;
+    font-size: 21px;
+    color: #8393A3;
+}
+
+.overlay_icon {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.overlay_location {
+    padding: 18px 10px 10px;
+    font-size: 21px;
+    color: #fff;
+}

@@ -70,6 +70,14 @@
         "FAVORITES": "Favorites",
         "HOME": "Home",
         "RELOAD": "Reload",
+        "SWITCH": {
+            "ON": "Turn on",
+            "OFF": "Turn off"
+        },
+        "TOGGLE": {
+            "ON": "On",
+            "OFF": "Off"
+        },
         "DATETIMEFORMAT": {
             "DATE": "MM/DD/YYYY",
             "TIME": "hh.mm.ss a",
@@ -303,17 +311,17 @@
             },
             "CLOUDENVIRONMENT": {
                 "NAME": "Cloud environment",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "PROJECTNAME": {
                 "NAME": "Project name",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "TRENDING": {
                 "NAME": "Trending",
                 "DESCRIPTION": ""
             },
-            "TRENDING_TYPE":{
+            "TRENDING_TYPE": {
                 "NAME": "Type",
                 "DESCRIPTION": ""
             },
@@ -321,13 +329,13 @@
                 "NAME": "Interval [s]",
                 "DESCRIPTION": ""
             },
-            "OBJID":{
+            "OBJID": {
                 "NAME": "ID",
                 "DESCRIPTION": ""
             },
             "SLAVE": {
                 "NAME": "Slave",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY_INSTANCE": {

@@ -15,6 +15,9 @@ namespace P3.Logic.Operations.Dimmer
 
         private readonly RuleInterfaceInstance _output;
 
+        private bool? _lastState;
+        private int? _lastValue;
+
         public DimmerLogic(IRuleContext context) : base(context)
         {
             _state = context.RuleInstance.RuleInterfaceInstance.Single(a =>
@@ -33,21 +36,42 @@ namespace P3.Logic.Operations.Dimmer
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
-            if (instance == _state)
+            if (instance.ObjId == _state.ObjId)
             {
                 var booleanValue = Convert.ToBoolean(value);
 
-                return ValueChanged(_output, booleanValue ? 100 : 0);
+                if (_lastState.HasValue && _lastState.Value == booleanValue)
+                {
+                    return new List<IRuleOutputChanged>();
+                }
+
+                _lastState = booleanValue;
+
+                if (!_lastValue.HasValue && booleanValue || (_lastValue.HasValue && _lastValue.Value == 0))
+                {
+                    _lastValue = 100;
+                }
+
+                return SingleOutputChanged(new RuleOutputChanged(_output, booleanValue ? _lastValue.Value : 0));
             }
 
-            if (instance == _value)
+            if (instance.ObjId == _value.ObjId)
             {
-                return ValueChanged(_output, value);
+                int intValue = Convert.ToInt32(value);
+
+                if (_lastValue.HasValue && _lastValue.Value == intValue)
+                {
+                    return new List<IRuleOutputChanged>();
+                }
+
+                _lastValue = intValue;
+
+                return SingleOutputChanged(new RuleOutputChanged(_output, value));
             }
 
-            if (instance == _reset)
+            if (instance.ObjId == _reset.ObjId)
             {
-                return ValueChanged(_output, 0);
+                return SingleOutputChanged(new RuleOutputChanged(_output, 0));
             }
 
             return new List<IRuleOutputChanged>();

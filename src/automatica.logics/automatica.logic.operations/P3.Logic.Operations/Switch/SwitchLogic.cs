@@ -23,9 +23,9 @@ namespace P3.Logic.Operations.Switch
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
-            if (instance == _input)
+            if (instance.ObjId == _input.ObjId)
             {
-                return ValueChanged(_output, value);
+                return SingleOutputChanged(new RuleOutputChanged(_output, value));
             }
 
             return new List<IRuleOutputChanged>();

@@ -10,6 +10,7 @@ import { VisuObjectMobileInstance } from "../../model/visu/visu-object-mobile-in
 import { BaseMobileComponent } from "../base-mobile-component";
 import { AppService } from "src/app/services/app.service";
 import { VisuPageGroupType } from "../../model/visu-page";
+import { DimmerComponent } from "./dimmer/dimmer.component";
 
 @Component({
   selector: "visu-component",
@@ -67,6 +68,10 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "toggle-button": {
         this.component = ToggleComponent;
+        break;
+      }
+      case "dimmer": {
+        this.component = DimmerComponent;
         break;
       }
       default: {
