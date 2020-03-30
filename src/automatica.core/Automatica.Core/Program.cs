@@ -36,10 +36,13 @@ namespace Automatica.Core
 
             Log.Logger = logBuild.CreateLogger();
 
-            foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+            if (Environment.GetEnvironmentVariable("PRINT_ENV") == "true")
             {
-                var envVar = $"{env.Key}={env.Value}";
-                Log.Logger.Debug($"Using env variable: {envVar}");
+                foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+                {
+                    var envVar = $"{env.Key}={env.Value}";
+                    Log.Logger.Debug($"Using env variable: {envVar}");
+                }
             }
 
             var logger = SystemLogger.Instance;
