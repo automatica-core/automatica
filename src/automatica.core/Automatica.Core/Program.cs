@@ -18,6 +18,7 @@ using Automatica.Core.Internals;
 using MQTTnet.Diagnostics;
 using System.Collections;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Automatica.Core
 {
@@ -128,7 +129,14 @@ namespace Automatica.Core
             var webHost = WebHost.CreateDefaultBuilder()
                 .UseStartup<Startup>()
                 .UseKestrel(o => {
-                    o.ListenAnyIP(Convert.ToInt32(port), options => { options.UseHttps(); });
+                    o.ListenAnyIP(Convert.ToInt32(port), options =>
+                    {
+                        options.UseHttps(a =>
+                        {
+                            var x509Cert = new X509Certificate2("./cert/certificate.pfx", "local");
+                            a.ServerCertificate = x509Cert;
+                        });
+                    });
                     o.ConfigureHttpsDefaults(a => {});
 
                 })
