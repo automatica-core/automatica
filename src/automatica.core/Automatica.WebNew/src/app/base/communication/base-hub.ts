@@ -16,6 +16,11 @@ export function SignalRMethod(target: any, propertyKey: string) {
     list.push(propertyKey);
 }
 
+interface CachedProxyRequest {
+    methodName: string;
+    params?: any;
+}
+
 export class BaseHub {
 
     public reconnectTime = 10000;
@@ -26,6 +31,8 @@ export class BaseHub {
     private started = false;
 
     public connectionStateChanged = new EventEmitter<any>();
+
+    private _cachedRequests: CachedProxyRequest[] = [];
 
     public get connected() {
         return this.started;
@@ -94,6 +101,11 @@ export class BaseHub {
 
             try {
                 await this.connection.start();
+
+                for (const cached of this._cachedRequests) {
+                    await this.connection.invoke(cached.methodName, cached.params);
+                }
+
                 this.setConnectedState(true);
             } catch (error) {
                 throw error;
@@ -124,18 +136,42 @@ export class BaseHub {
     }
 
     callHubProxyWithParam(methodName: string, params: any): Promise<any> {
+
+        if (!this.started) {
+            this._cachedRequests.push({
+                methodName: methodName,
+                params: params
+            });
+            return;
+        }
+
         const proxy = this.connection;
         return proxy.invoke(methodName, params);
     }
 
-    callHubProxyWithParams(methodName: string, ...args: any[]): Promise<any> {
+    callHubProxyWithParams(methodName: string, ...params: any[]): Promise<any> {
+
+        if (!this.started) {
+            this._cachedRequests.push({
+                methodName: methodName,
+                params: params
+            });
+            return;
+        }
 
         const proxy = this.connection;
-
-        return proxy.send(methodName, args);
+        return proxy.send(methodName, params);
     }
 
     callHubProxy(methodName: string): Promise<any> {
+
+        if (!this.started) {
+            this._cachedRequests.push({
+                methodName: methodName
+            });
+            return;
+        }
+
         const proxy = this.connection;
         return proxy.send(methodName);
     }
