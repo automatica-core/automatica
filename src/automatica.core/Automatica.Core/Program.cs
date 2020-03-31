@@ -130,17 +130,24 @@ namespace Automatica.Core
             var webHost = WebHost.CreateDefaultBuilder()
                 .UseStartup<Startup>()
                 .UseKestrel(o => {
-                    o.ListenAnyIP(Convert.ToInt32(port));
 
-                    o.ListenAnyIP(Convert.ToInt32(sslPort), options =>
+                    if (!String.IsNullOrWhiteSpace(port))
                     {
-                        options.UseHttps(a =>
-                        {
-                            var x509Cert = new X509Certificate2(Path.Combine(configDir, "cert/certificate.pfx"), "local");
-                            a.ServerCertificate = x509Cert;
-                        });
-                    });
+                        o.ListenAnyIP(Convert.ToInt32(port));
+                    }
 
+                    if (!String.IsNullOrWhiteSpace(sslPort))
+                    {
+                        o.ListenAnyIP(Convert.ToInt32(sslPort), options =>
+                        {
+                            options.UseHttps(a =>
+                            {
+                                var x509Cert = new X509Certificate2(Path.Combine(configDir, "cert/certificate.pfx"),
+                                    "local");
+                                a.ServerCertificate = x509Cert;
+                            });
+                        });
+                    }
                 })
                 .ConfigureAppConfiguration(a =>
                 {

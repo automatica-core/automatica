@@ -66,7 +66,7 @@ export class BaseHub {
 
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl("/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
-            .configureLogging(signalR.LogLevel.None)
+            .configureLogging(signalR.LogLevel.Warning)
             .build();
 
         for (const method of methods) {
