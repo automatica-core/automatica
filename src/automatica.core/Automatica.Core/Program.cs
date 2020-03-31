@@ -67,7 +67,7 @@ namespace Automatica.Core
                 };
             }
 
-            var webHost = BuildWebHost(config["server:port"]);
+            var webHost = BuildWebHost(config["server:port"], config["server:ssl_port"]);
 
             if (args.Length > 0 && args[0] == "develop")
             {
@@ -122,27 +122,28 @@ namespace Automatica.Core
             logger.LogInformation("Stopped...");
         }
 
-        public static IWebHost BuildWebHost(string port)
+        public static IWebHost BuildWebHost(string port, string sslPort)
         {
-            ServerInfo.WebPort = port;
+            ServerInfo.WebPort = port; 
+            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
 
             var webHost = WebHost.CreateDefaultBuilder()
                 .UseStartup<Startup>()
                 .UseKestrel(o => {
-                    o.ListenAnyIP(Convert.ToInt32(port), options =>
+                    o.ListenAnyIP(Convert.ToInt32(port));
+
+                    o.ListenAnyIP(Convert.ToInt32(sslPort), options =>
                     {
                         options.UseHttps(a =>
                         {
-                            var x509Cert = new X509Certificate2("./cert/certificate.pfx", "local");
+                            var x509Cert = new X509Certificate2(Path.Combine(configDir, "cert/certificate.pfx"), "local");
                             a.ServerCertificate = x509Cert;
                         });
                     });
-                    o.ConfigureHttpsDefaults(a => {});
 
                 })
                 .ConfigureAppConfiguration(a =>
                 {
-                    var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
                     if (Directory.Exists(Path.Combine(configDir, "config")))
                     {
                         configDir = Path.Combine(configDir, "config");
