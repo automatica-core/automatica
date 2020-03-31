@@ -69,6 +69,7 @@ export class AreaInstance extends BaseModel implements IPropertyModel, INameMode
         if (!this._Icon && this.This2AreaTemplateNavigation) {
             return this.This2AreaTemplateNavigation.Icon;
         }
+
         return this._Icon;
     }
     public set Icon(v: string) {

@@ -11,13 +11,13 @@
           <dxo-paging [enabled]="false"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
 
-          <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-          <dxi-column dataField="version" caption="{{ 'PLUGINS.VERSION' | translate }}"></dxi-column>
-          <dxi-column dataField="type" [groupIndex]="0" caption="{{ 'COMMON.TYPE' | translate }}"></dxi-column>
-          <dxi-column dataField="installedVersion" caption="{{ 'PLUGINS.INSTALLED_VERSION' | translate }}"></dxi-column>
+          <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+          <dxi-column dataField="version" caption="{{ 'PLUGINS.VERSION' | translateAsync }}"></dxi-column>
+          <dxi-column dataField="type" [groupIndex]="0" caption="{{ 'COMMON.TYPE' | translateAsync }}"></dxi-column>
+          <dxi-column dataField="installedVersion" caption="{{ 'PLUGINS.INSTALLED_VERSION' | translateAsync }}"></dxi-column>
 
-          <dxi-column cellTemplate="cellTemplate" caption="{{ 'PLUGINS.ACTION' | translate }}"></dxi-column>
-          <dxi-column cellTemplate="installTemplate" caption="{{ 'PLUGINS.PROGRESS' | translate }}"></dxi-column>
+          <dxi-column cellTemplate="cellTemplate" caption="{{ 'PLUGINS.ACTION' | translateAsync }}"></dxi-column>
+          <dxi-column cellTemplate="installTemplate" caption="{{ 'PLUGINS.PROGRESS' | translateAsync }}"></dxi-column>
 
           <div *dxTemplate="let data of 'installTemplate'" cellTemplate="installTemplate">
             <dx-progress-bar *ngIf="data.data.downloadMax" [min]="0" [max]="data.data.downloadMax"

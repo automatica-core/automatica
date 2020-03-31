@@ -9,13 +9,13 @@
             <div *dxTemplate="let monitor of 'item'">
                 <dx-data-grid *ngIf="monitor.Messages && monitor.Messages.length > 0" [dataSource]="monitor.Messages"
                     [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" height="100%">
-                    <dxi-column dataType="datetime" sortOrder="desc" dataField="TimeStamp" caption="{{ 'COMMON.TIMESTAMP' | translate }}"></dxi-column>
-                    <dxi-column dataField="Direction" caption="{{ 'COMMON.DIRECTION' | translate }}"
+                    <dxi-column dataType="datetime" sortOrder="desc" dataField="TimeStamp" caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="Direction" caption="{{ 'COMMON.DIRECTION' | translateAsync }}"
                         [calculateCellValue]="calculateDirectionValue"></dxi-column>
-                    <dxi-column dataField="SourceAddress" caption="{{ 'COMMON.SOURCE_ADDRESS' | translate }}"></dxi-column>
-                    <dxi-column dataField="TargetAddress" caption="{{ 'COMMON.TARGET_ADDRESS' | translate }}"></dxi-column>
-                    <dxi-column dataField="Data" caption="{{ 'COMMON.DATA' | translate }}"></dxi-column>
-                    <dxi-column dataField="AdditionalMessageString" caption="{{ 'COMMON.ADDITIONAL_DATA' | translate }}"></dxi-column>
+                    <dxi-column dataField="SourceAddress" caption="{{ 'COMMON.SOURCE_ADDRESS' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="TargetAddress" caption="{{ 'COMMON.TARGET_ADDRESS' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="Data" caption="{{ 'COMMON.DATA' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="AdditionalMessageString" caption="{{ 'COMMON.ADDITIONAL_DATA' | translateAsync }}"></dxi-column>
 
                     <dxo-filter-row [visible]="true"></dxo-filter-row>
                     <dxo-header-filter [visible]="true"></dxo-header-filter>

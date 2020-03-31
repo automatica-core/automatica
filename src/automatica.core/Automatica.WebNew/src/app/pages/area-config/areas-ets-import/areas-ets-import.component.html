@@ -1,7 +1,7 @@
-<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false" title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translate }}"
+<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false" title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translateAsync }}"
   (onHiding)="onHiding($event)">
   <div *dxTemplate="let data of 'content'">
-    <dx-file-uploader *ngIf="parentObjId" (onUploadStarted)="onUploadStarted($event)" (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translate }}"
+    <dx-file-uploader *ngIf="parentObjId" (onUploadStarted)="onUploadStarted($event)" (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
       labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="instantly">
     </dx-file-uploader>
 
@@ -11,8 +11,8 @@
       [(selectedRowKeys)]="selectedRowKeys">
       <dxo-selection mode="multiple" [recursive]="true"></dxo-selection>
 
-      <dxi-column dataField="Name" cellTemplate="cellTemplate" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-      <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+      <dxi-column dataField="Name" cellTemplate="cellTemplate" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+      <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
 
       <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
         <i class="{{ data.data.Icon }}"></i>
@@ -21,7 +21,7 @@
     </dx-tree-list>
 
 
-    <dx-button style="margin-top:10px" text="{{ 'COMMON.SAVE' | translate }}" (onClick)="saveClick($event)"></dx-button>
+    <dx-button style="margin-top:10px" text="{{ 'COMMON.SAVE' | translateAsync }}" (onClick)="saveClick($event)"></dx-button>
 
   </div>
 </dx-popup>

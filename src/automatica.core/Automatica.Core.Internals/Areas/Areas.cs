@@ -112,7 +112,7 @@ namespace Automatica.Core.Internals.Areas
         Building,
         [AreaTemplate("8592c6ac-1093-4242-ba53-7d4456cbd22e", "BuildingPart", "box", AreaTypes.Building, AreaTypes.BuildingPart, AreaTypes.BuildingPart)]
         BuildingPart,
-        [AreaTemplate("492e20ce-7d6a-44d4-aa07-454851180c7f", "Room", "booth-curtain", AreaTypes.BuildingPart, AreaTypes.BuildingPart, AreaTypes.BuildingPart)]
+        [AreaTemplate("492e20ce-7d6a-44d4-aa07-454851180c7f", "Room", "door-open", AreaTypes.BuildingPart, AreaTypes.BuildingPart, AreaTypes.BuildingPart)]
         Room,
         [AreaTemplate("f6052884-5833-4db7-9f88-225cbcb57002", "Staircase", "shoe-prints", AreaTypes.BuildingPart, AreaTypes.Nothing, AreaTypes.BuildingPart)]
         Staircase,

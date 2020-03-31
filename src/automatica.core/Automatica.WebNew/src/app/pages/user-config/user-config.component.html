@@ -17,16 +17,16 @@
                         (onInitialized)="onInitialized($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                            <dxo-texts confirmDeleteMessage="{{ 'COMMON.CONFIRM_DELETE' | translate }}"
-                                saveRowChanges="{{ 'COMMON.ADD' | translate }}"
-                                deleteRow="{{ 'COMMON.DELETE' | translate }}"
-                                cancelRowChanges="{{ 'COMMON.CANCEL' | translate }}"></dxo-texts>
+                            <dxo-texts confirmDeleteMessage="{{ 'COMMON.CONFIRM_DELETE' | translateAsync }}"
+                                saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
+                                deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
+                                cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
                         </dxo-editing>
                         <dxo-selection mode="single"></dxo-selection>
 
-                        <dxi-column dataField="UserName" caption="{{ 'COMMON.USERNAME' | translate }}"></dxi-column>
-                        <dxi-column dataField="FirstName" caption="{{ 'COMMON.FIRSTNAME' | translate }}"></dxi-column>
-                        <dxi-column dataField="LastName" caption="{{ 'COMMON.LASTNAME' | translate }}"></dxi-column>
+                        <dxi-column dataField="UserName" caption="{{ 'COMMON.USERNAME' | translateAsync }}"></dxi-column>
+                        <dxi-column dataField="FirstName" caption="{{ 'COMMON.FIRSTNAME' | translateAsync }}"></dxi-column>
+                        <dxi-column dataField="LastName" caption="{{ 'COMMON.LASTNAME' | translateAsync }}"></dxi-column>
 
                     </dx-data-grid>
                 </div>

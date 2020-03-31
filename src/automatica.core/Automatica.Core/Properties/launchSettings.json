@@ -3,7 +3,7 @@
     "Automatica.Core": {
       "commandName": "Project",
       "environmentVariables": {
-        "ConnectionStrings:AutomaticaDatabaseSqlite": "Data Source=test.db",
+        "ConnectionStrings:AutomaticaDatabaseSqlite": "Data Source=automatica.core.db",
         "DATABASE_LOGS": "True",
         "DATABASE_TYPE": "sqlite"
       }

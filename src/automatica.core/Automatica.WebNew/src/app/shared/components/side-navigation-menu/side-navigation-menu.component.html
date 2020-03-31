@@ -10,13 +10,13 @@
             <div *dxTemplate="let data of 'item'">
 
                 <ng-container *ngIf="data.seperator">
-                    <span title="{{data.text | translate}}">{{data.text | translate}}</span>
+                    <span title="{{data.text | translateAsync}}">{{data.text | translateAsync}}</span>
                 </ng-container>
 
                 <ng-container *ngIf="!data.seperator">
-                    <fa-icon title="{{data.text | translate}}" [fixedWidth]="true" [icon]="['fas', data.icon]">
+                    <fa-icon title="{{data.text | translateAsync}}" [fixedWidth]="true" [icon]="data.icon">
                     </fa-icon>
-                    <span title="{{data.text | translate}}" class="nav-padding">{{data.text | translate}}</span>
+                    <span title="{{data.text | translateAsync}}" class="nav-padding">{{data.text | translateAsync}}</span>
                 </ng-container>
             </div>
         </dx-tree-view>

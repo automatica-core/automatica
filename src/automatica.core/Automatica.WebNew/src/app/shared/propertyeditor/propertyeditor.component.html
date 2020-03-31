@@ -2,10 +2,10 @@
     [allowColumnReordering]="false">
 
     <dxi-column dataField="PropertyTemplate.GroupOrder" [calculateGroupValue]="groupName"
-        caption="{{ 'COMMON.GROUP' | translate }}" [groupIndex]="0" [allowSorting]="false"></dxi-column>
-    <dxi-column caption="{{ 'COMMON.NAME' | translate }}" [allowEditing]="false"
+        caption="{{ 'COMMON.GROUP' | translateAsync }}" [groupIndex]="0" [allowSorting]="false"></dxi-column>
+    <dxi-column caption="{{ 'COMMON.NAME' | translateAsync }}" [allowEditing]="false"
         [calculateCellValue]="translateName" [allowSorting]="false"></dxi-column>
-    <dxi-column [showEditorAlways]="true" caption="{{ 'COMMON.VALUE' | translate }}" dataField="Value"
+    <dxi-column [showEditorAlways]="true" caption="{{ 'COMMON.VALUE' | translateAsync }}" dataField="Value"
         editCellTemplate="editTemplate" [allowSorting]="false">
     </dxi-column>
 
@@ -23,12 +23,12 @@
                 [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"></dx-check-box>
 
             <dx-button *ngSwitchCase="PropertyTemplateType.Scan" width="100%"
-                text="{{ 'COMMON.PROPERTY.SCAN.NAME' | translate:LANG }}" (click)="onScanClick($event, data.data)">
+                text="{{ 'COMMON.PROPERTY.SCAN.NAME' | translateAsync:LANG }}" (click)="onScanClick($event, data.data)">
             </dx-button>
 
             <ng-container *ngSwitchCase="PropertyTemplateType.ImportData">
                 <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
-                    selectButtonText="{{ 'COMMON.SELECT_FILE' | translate }}" labelText="" accept="*"
+                    selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}" labelText="" accept="*"
                     uploadUrl="/webapi/fileUpload" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
                 </dx-file-uploader>
             </ng-container>
@@ -38,11 +38,11 @@
                     (onValueChanged)="valueChanged($event, data)" [readOnly]="data.data.IsReadonly" displayExpr="name"
                     valueExpr="id" [(value)]="data.data.Value" fieldTemplate="field">
                     <div *dxTemplate="let data of 'item'">
-                        {{ data.name | translate }}
+                        {{ data.name | translateAsync }}
                     </div>
                     <div *dxTemplate="let data of 'field'">
                         <div class="custom-item">
-                            <dx-text-box *ngIf="data != null" class="product-name" [value]="data.name | translate"
+                            <dx-text-box *ngIf="data != null" class="product-name" [value]="data.name | translateAsync"
                                 [readOnly]="true"></dx-text-box>
                             <dx-text-box *ngIf="data == null" class="product-name" [readOnly]="true"></dx-text-box>
                         </div>
@@ -104,12 +104,12 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="PropertyTemplateType.LearnMode">
-                <dx-button width="100%" text="{{ 'COMMON.PROPERTY.LEARN.NAME' | translate:LANG }}"
+                <dx-button width="100%" text="{{ 'COMMON.PROPERTY.LEARN.NAME' | translateAsync:LANG }}"
                     (click)="onLearnClick($event, data.data)"></dx-button>
             </ng-container>
 
             <ng-container *ngSwitchCase="PropertyTemplateType.CustomAction">
-                <dx-button width="100%" text="{{ data.data.PropertyTemplate.Name | translate:LANG }}"
+                <dx-button width="100%" text="{{ data.data.PropertyTemplate.Name | translateAsync:LANG }}"
                     (click)="onCustomActionClick($event, data.data)"></dx-button>
             </ng-container>
 
@@ -125,7 +125,7 @@
                     (onValueChanged)="valueChanged($event, data)">
 
                     <div *dxTemplate="let datax of 'content'">
-                        <dx-tree-view [dataSource]="areaInstances" [height]="345" expandAllEnabled="true"
+                        <dx-tree-view [dataSource]="areaInstances"  expandAllEnabled="true"
                             keyExpr="ObjId" itemsExpr="InverseThis2ParentNavigation" parentIdExpr="This2Parent"
                             selectionMode="single" displayExpr="Name" [selectByClick]="true"
                             (onContentReady)="$event.component.selectItem(treeBoxValue)"
@@ -185,8 +185,8 @@
                         <dx-data-grid [dataSource]="userGroups" keyExpr="ObjId" [selection]="{ mode: 'multiple' }"
                             [hoverStateEnabled]="true" [paging]="{ enabled: false}" [filterRow]="{ visible: false }"
                             [scrolling]="{ mode: 'infinite' }" [height]="265" [(selectedRowKeys)]="data.data.ValueIds">
-                            <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-                            <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translate }}">
+                            <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                            <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
                             </dxi-column>
                         </dx-data-grid>
                     </div>
@@ -200,8 +200,8 @@
                         <dx-data-grid [dataSource]="roles" keyExpr="ObjId" [selection]="{ mode: 'multiple' }"
                             [hoverStateEnabled]="true" [paging]="{ enabled: false}" [filterRow]="{ visible: false }"
                             [scrolling]="{ mode: 'infinite' }" [height]="265" [(selectedRowKeys)]="data.data.ValueIds">
-                            <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-                            <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translate }}">
+                            <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                            <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
                             </dxi-column>
                         </dx-data-grid>
                     </div>
@@ -211,7 +211,7 @@
 
             <ng-container *ngSwitchCase="PropertyTemplateType.UserGroup">
                 <dx-select-box [dataSource]="userGroups" (onValueChanged)="valueChanged($event, data)"
-                    [placeholder]="'USER_GROUPS.ALL' | translate" [readOnly]="data.data.IsReadonly"
+                    [placeholder]="'USER_GROUPS.ALL' | translateAsync" [readOnly]="data.data.IsReadonly"
                     valueExpr="ObjId" [(value)]="data.data.Value" displayExpr="DisplayName" [showClearButton]="true">
                 </dx-select-box>
             </ng-container>
@@ -219,13 +219,13 @@
 
             <ng-container *ngSwitchCase="PropertyTemplateType.Slave">
                 <dx-select-box [dataSource]="slaves" (onValueChanged)="valueChanged($event, data)"
-                    [placeholder]="'USER_GROUPS.ALL' | translate" valueExpr="ObjId" [(value)]="data.data.Value"
+                    [placeholder]="'USER_GROUPS.ALL' | translateAsync" valueExpr="ObjId" [(value)]="data.data.Value"
                     displayExpr="DisplayName" [showClearButton]="false ">
                 </dx-select-box>
             </ng-container>
 
             <ng-container *ngSwitchCase="PropertyTemplateType.Timer">
-                <dx-button width="100%" text="{{ 'COMMON.EDIT' | translate }}"
+                <dx-button width="100%" text="{{ 'COMMON.EDIT' | translateAsync }}"
                     (click)="onTimerEditClick($event, data.data)"></dx-button>
             </ng-container>
 
@@ -245,7 +245,7 @@
 
 
 <dx-popup *ngIf="timerEditPopupVisible" #timerEditPopup width="400" height="500" [showTitle]="true"
-    [title]="'COMMON.PROPERTY.TIMER.NAME' | translate" [visible]="timerEditPopupVisible"
+    [title]="'COMMON.PROPERTY.TIMER.NAME' | translateAsync" [visible]="timerEditPopupVisible"
     (onHiding)="onTimerEditPopupClosing($event, false)">
     <div *dxTemplate="let data of 'content'">
         <div class="dx-fieldset">
@@ -256,11 +256,11 @@
                     <dx-date-box [(value)]="timerEditValue.StartTime" type="time">
                         <dx-validator>
                             <dxi-validation-rule type="required"
-                                message="{{ 'COMMON.REQUIRED' | translate:{field: 'COMMON.START_DATETIME' | translate } }}">
+                                message="{{ 'COMMON.REQUIRED' | translateAsync:{field: 'COMMON.START_DATETIME' | translateAsync } }}">
                             </dxi-validation-rule>
                             <dxi-validation-rule #startDateValidator type="custom" reevaluate="false"
                                 [validationCallback]="validateDates"
-                                [message]="'VALIDATION.TIME_START_BEFORE_END' | translate"></dxi-validation-rule>
+                                [message]="'VALIDATION.TIME_START_BEFORE_END' | translateAsync"></dxi-validation-rule>
                         </dx-validator>
                     </dx-date-box>
                 </div>
@@ -271,11 +271,11 @@
                     <dx-date-box [(value)]="timerEditValue.StopTime" type="time">
                         <dx-validator>
                             <dxi-validation-rule type="required"
-                                message="{{ 'COMMON.REQUIRED' | translate:{field: 'COMMON.END_DATETIME' | translate } }}">
+                                message="{{ 'COMMON.REQUIRED' | translateAsync:{field: 'COMMON.END_DATETIME' | translateAsync } }}">
                             </dxi-validation-rule>
                             <dxi-validation-rule #endDateValidator type="custom" reevaluate="false"
                                 [validationCallback]="validateDates"
-                                [message]="'VALIDATION.TIME_END_AFTER_START' | translate"></dxi-validation-rule>
+                                [message]="'VALIDATION.TIME_END_AFTER_START' | translateAsync"></dxi-validation-rule>
                         </dx-validator>
                     </dx-date-box>
                 </div>
@@ -290,7 +290,7 @@
             </ng-container>
             <div class="dx-field">
                 <div class="dx-field-value-static">
-                    <dx-button [disabled]="timerSaveButtonDisabled" text="{{ 'COMMON.SAVE' | translate }}"
+                    <dx-button [disabled]="timerSaveButtonDisabled" text="{{ 'COMMON.SAVE' | translateAsync }}"
                         (click)="onTimerEditPopupClosing($event, true)"></dx-button>
                 </div>
             </div>
@@ -299,10 +299,10 @@
 </dx-popup>
 
 <dx-popup #popupNodeSelect [width]="'90%'" [height]="'90%'" [showTitle]="true"
-    [title]="'COMMON.NODE_INSTANCE_SELECT' | translate" [visible]="nodeSelectorVisible"
+    [title]="'COMMON.NODE_INSTANCE_SELECT' | translateAsync" [visible]="nodeSelectorVisible"
     (onHiding)="onNodeSelectClosing($event)">
     <div *dxTemplate="let data of 'content'">
-        <dx-button [disabled]="!selectedNodeInstance" text="{{ 'COMMON.SELECT' | translate }}"
+        <dx-button [disabled]="!selectedNodeInstance" text="{{ 'COMMON.SELECT' | translateAsync }}"
             (click)="useSelectedNode($event)"></dx-button>
         <dx-scroll-view>
             <p3-config-tree style="display: block; height: 100%" [showLoadingPanel]="true" #configTree
@@ -312,10 +312,10 @@
 </dx-popup>
 
 <dx-popup #popupVisuPageSelect [width]="'90%'" [height]="'90%'" showCloseButton="false" [showTitle]="true"
-    [title]="'COMMON.VISU_PAGE_SELECT' | translate" [visible]="visuPageSelectorVisible"
+    [title]="'COMMON.VISU_PAGE_SELECT' | translateAsync" [visible]="visuPageSelectorVisible"
     (onHiding)="onVisuPageSelectClosing($event)">
     <div *dxTemplate="let data of 'content'">
-        <dx-button [disabled]="!selectedVisuPage" text="{{ 'COMMON.SELECT' | translate }}"
+        <dx-button [disabled]="!selectedVisuPage" text="{{ 'COMMON.SELECT' | translateAsync }}"
             (click)="useSelectedVisuPage($event)"></dx-button>
         <dx-scroll-view>
             <visu-page-list *ngIf="visuPageSelectorVisible" (onItemSelected)="onVisuPageSelected($event)">
@@ -325,22 +325,22 @@
 </dx-popup>
 
 <dx-popup #popupLearnMode [width]="'90%'" [height]="'90%'" showCloseButton="false" [showTitle]="true"
-    [title]="'COMMON.LEARN_MODE.NAME' | translate" [visible]="learnModeVisible"
+    [title]="'COMMON.LEARN_MODE.NAME' | translateAsync" [visible]="learnModeVisible"
     (onHiding)="onLearnModeClosing($event)">
     <div *dxTemplate="let data of 'content'">
-        <dx-button text="{{ 'COMMON.ADD' | translate }}" (click)="saveLearnNodes($event)"></dx-button>
+        <dx-button text="{{ 'COMMON.ADD' | translateAsync }}" (click)="saveLearnNodes($event)"></dx-button>
         <dx-scroll-view>
             <dx-data-grid keyExpr="key" [dataSource]="learnNodeInstance">
 
                 <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                 <dxo-paging [enabled]="false"></dxo-paging>
 
-                <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translate }}">
+                <dxi-column dataField="name" caption="{{ 'COMMON.NAME' | translateAsync }}">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dxi-column>
-                <dxi-column dataField="description" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+                <dxi-column dataField="description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
                 <dxi-column [showEditorAlways]="true" dataField="nodeTemplate"
-                    caption="{{ 'COMMON.TEMPLATE' | translate }}" editCellTemplate="nodeTemplateEditCell">
+                    caption="{{ 'COMMON.TEMPLATE' | translateAsync }}" editCellTemplate="nodeTemplateEditCell">
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                 </dxi-column>
 

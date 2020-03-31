@@ -1,6 +1,6 @@
 ARG BRANCH
 
-FROM automaticacore/automatica:latest-$BRANCH AS automatica
+FROM automaticacore/automatica:latest-develop AS automatica
 WORKDIR /app
 
 RUN cat /app/automatica/appsettings.json

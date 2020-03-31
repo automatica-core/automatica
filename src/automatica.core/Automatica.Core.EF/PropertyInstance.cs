@@ -87,7 +87,7 @@ namespace Automatica.Core.EF.Models
         [PropertyTemplateType("TIME")]
         Time = 25,
 
-        [PropertyTemplateType("AREA_ICON", "booth-curtain,shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-hot,temperature-frigid,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath")]
+        [PropertyTemplateType("AREA_ICON", "shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-hot,temperature-frigid,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath")]
         AreaIcon = 100,
         [PropertyTemplateType("AREA")]
         AreaInstance = 101,
