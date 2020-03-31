@@ -126,8 +126,11 @@ namespace Automatica.Core
             ServerInfo.WebPort = port;
 
             var webHost = WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>().UseKestrel(o => {
-                    o.ListenAnyIP(Convert.ToInt32(port)); 
+                .UseStartup<Startup>()
+                .UseKestrel(o => {
+                    o.ListenAnyIP(Convert.ToInt32(port), options => { options.UseHttps(); });
+                    o.ConfigureHttpsDefaults(a => {});
+
                 })
                 .ConfigureAppConfiguration(a =>
                 {

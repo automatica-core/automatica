@@ -192,6 +192,7 @@ namespace Automatica.Core
             SystemLogger.Instance.LogInformation($"wwwroot directory {wwwrootPath}");
 
 
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseResponseCompression();
