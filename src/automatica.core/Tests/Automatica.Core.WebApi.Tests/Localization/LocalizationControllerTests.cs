@@ -28,6 +28,15 @@ namespace Automatica.Core.WebApi.Tests.Localization
         }
 
         [Fact]
+        public void TestLocaleNotFound()
+        {
+            var ru = Controller.Get("ru");
+
+            Assert.NotNull(ru);
+            Assert.Equal("[]", ru.ToString());
+        }
+
+        [Fact]
         public void TestDoubleAssemblyLoad()
         {
             var localeProvider = ServiceProvider.GetService<ILocalizationProvider>();
