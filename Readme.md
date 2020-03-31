@@ -13,7 +13,7 @@ Donate DogeCoin: DPVz6RSAJrXZqTF4sGXpS1dqwvU36hSaAQ
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
 ### Develop Automatica.Core.Cloud Status ###
-[![Demo Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
+[![Cloud Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
 
 ### SonarCloud ###
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=automaticacore&metric=alert_status)](https://sonarcloud.io/dashboard?id=automaticacore)
@@ -157,6 +157,15 @@ Please refer to each project's style and contribution guidelines for submitting 
 NOTE: Be sure to merge the latest from "upstream" before making a pull request! Pull request must have no merge conflicts!
 
 Any help is appreciated!
+
+# Online Demo
+The current demo can be found [here](https://automatica-test.azurewebsites.net/).
+
+Login with 
+User: sa
+Password: sa
+
+Demo will be reseted daily!
 
 # Docker images
 Docker images will be build daily. The automaticacore image is [here](https://hub.docker.com/r/automaticacore/automaticacore) available. 
