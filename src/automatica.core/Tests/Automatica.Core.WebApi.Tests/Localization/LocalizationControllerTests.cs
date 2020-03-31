@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
@@ -23,13 +25,6 @@ namespace Automatica.Core.WebApi.Tests.Localization
 
             var en = Controller.Get("en");
             Assert.Equal(EnJson, en);
-        }
-
-        [Fact]
-        public void TestLocaleNotFound()
-        {
-            var ru = Controller.Get("ru");
-            Assert.Null(ru);
         }
 
         [Fact]
