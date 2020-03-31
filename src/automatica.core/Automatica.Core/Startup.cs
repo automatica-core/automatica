@@ -191,8 +191,11 @@ namespace Automatica.Core
             }
             SystemLogger.Instance.LogInformation($"wwwroot directory {wwwrootPath}");
 
+            if (Configuration["server:useHttpsRedirect"] == "True")
+            {
+                app.UseHttpsRedirection();
+            }
 
-            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseResponseCompression();
