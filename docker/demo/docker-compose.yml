@@ -2,7 +2,7 @@ version: '3'
  
 services:
   automatica:
-    image: automaticacore/automatica-demo:develop-latest
+    image: automaticacore/automatica-demo:latest-develop
     ports:
       - "5001:5001"
  

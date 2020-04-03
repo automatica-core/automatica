@@ -363,8 +363,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
 
   public async save() {
-    this.notify.notifySuccess("COMMON.SAVED");
-
+    this.notify.notifySuccess("COMMON.RELOADED");
+    this.configService.reload();
     this.selectNode(void 0);
   }
 

@@ -8,7 +8,7 @@
     height: 55px;
 }
 
-::ng-deep .dx-button{
+:host .dx-button{
     border-radius: 0px;
     border-width: 0px;
 
@@ -16,12 +16,12 @@
     color: white;
 }
 
-::ng-deep .dx-button-text {
+:host .dx-button-text {
     font-size: 17px;
     color: #fff;
 }
 
-::ng-deep .switch-button.dx-button.dx-button-normal.dx-button-mode-contained.dx-widget.dx-button-has-text.dx-state-hover {
+:host .switch-button.dx-button.dx-button-normal.dx-button-mode-contained.dx-widget.dx-button-has-text.dx-state-hover {
     background-color: #8393A3;
     color: white;
 }

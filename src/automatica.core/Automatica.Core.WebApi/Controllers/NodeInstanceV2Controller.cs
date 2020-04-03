@@ -213,6 +213,13 @@ namespace Automatica.Core.WebApi.Controllers
             }
         }
 
+        [Route("reload")]
+        [HttpPost]
+        public async Task ReInit()
+        {
+            await _coreServer.ReInit();
+        }
+
         [Route("update")]
         [HttpPost]
         public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node)

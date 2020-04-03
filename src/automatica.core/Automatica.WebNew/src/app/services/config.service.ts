@@ -76,6 +76,10 @@ export class ConfigService extends BaseService {
         return await super.post<NodeInstance>("nodeInstancesV2/update", nodeInstance.toJson());
     }
 
+    async reload(): Promise<any> {
+        return await super.postJson("nodeInstancesV2/reload", void 0);
+    }
+
     async delete(nodeInstance: NodeInstance): Promise<void> {
         return await super.postJson("nodeInstancesV2/delete", nodeInstance.toJson());
     }

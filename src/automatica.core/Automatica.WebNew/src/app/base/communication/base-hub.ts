@@ -19,6 +19,7 @@ export function SignalRMethod(target: any, propertyKey: string) {
 interface CachedProxyRequest {
     methodName: string;
     params?: any;
+    invoke: any;
 }
 
 export class BaseHub {
@@ -102,11 +103,12 @@ export class BaseHub {
             try {
                 await this.connection.start();
 
+                this.setConnectedState(true);
+
                 for (const cached of this._cachedRequests) {
-                    await this.connection.invoke(cached.methodName, cached.params);
+                    await cached.invoke(cached.methodName, cached.params);
                 }
 
-                this.setConnectedState(true);
             } catch (error) {
                 throw error;
             }
@@ -135,39 +137,41 @@ export class BaseHub {
         this.subscriptions = [];
     }
 
-    callHubProxyWithParam(methodName: string, params: any): Promise<any> {
+    callHubProxyWithParam(methodName: string, param: any): Promise<any> {
 
         if (!this.started) {
             this._cachedRequests.push({
                 methodName: methodName,
-                params: params
+                params: param,
+                invoke: async () => await this.callHubProxyWithParam(methodName, param)
             });
             return;
         }
 
         const proxy = this.connection;
-        return proxy.invoke(methodName, params);
+        return proxy.invoke(methodName, param);
     }
 
-    callHubProxyWithParams(methodName: string, ...params: any[]): Promise<any> {
+    callHubProxyWithParams(methodName: string, ...args: any[]): Promise<any> {
 
         if (!this.started) {
             this._cachedRequests.push({
                 methodName: methodName,
-                params: params
+                params: args,
+                invoke: async () => await this.callHubProxyWithParams(methodName, ...args)
             });
             return;
         }
-
         const proxy = this.connection;
-        return proxy.send(methodName, params);
+        return proxy.send(methodName, ...args);
     }
 
     callHubProxy(methodName: string): Promise<any> {
 
         if (!this.started) {
             this._cachedRequests.push({
-                methodName: methodName
+                methodName: methodName,
+                invoke: async () => await this.callHubProxy(methodName)
             });
             return;
         }

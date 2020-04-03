@@ -27,6 +27,7 @@
         "VALUE": "Wert",
         "CONNECT": "Verbinden",
         "SAVED": "Konfiguration gespeichert",
+        "RELOADED": "Konfiguration neu geladen",
         "REINIT": "Konfiguration in server laden",
         "LOGOUT": "Abmelden",
         "FIRSTNAME": "Vorname",

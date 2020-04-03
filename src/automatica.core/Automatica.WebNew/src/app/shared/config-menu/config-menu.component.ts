@@ -74,8 +74,8 @@ export class ConfigMenuComponent implements OnInit {
     items: this.addItemsMenu
   }
   menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
+    id: "reload",
+    label: "Reload",
     icon: "fa-save",
     items: undefined,
     command: (event) => { this.save(); }
@@ -139,17 +139,21 @@ export class ConfigMenuComponent implements OnInit {
     // this.menuItems.push(this.menuDelete);
     this.menuItems.push(this.menuSave);
 
-    this.menuItemNew.label = translate.translate("COMMON.NEW");
-    this.export.label = translate.translate("COMMON.EXPORT");
-    this.import.label = translate.translate("COMMON.IMPORT");
-    this.menuSave.label = translate.translate("COMMON.SAVE");
-    this.menuDelete.label = translate.translate("COMMON.DELETE");
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuItemNew.label = translate.translate("COMMON.NEW");
+        this.export.label = translate.translate("COMMON.EXPORT");
+        this.import.label = translate.translate("COMMON.IMPORT");
+        this.menuSave.label = translate.translate("COMMON.SAVE");
+        this.menuDelete.label = translate.translate("COMMON.DELETE");
 
-    this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
-    this.menuRulePages.items[0].label = translate.translate("COMMON.ADD");
+        this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
+        this.menuRulePages.items[0].label = translate.translate("COMMON.ADD");
 
 
-    this.menuRules.label = translate.translate("COMMON.RULES");
+        this.menuRules.label = translate.translate("COMMON.RULES");
+      }
+    });
   }
 
   save() {

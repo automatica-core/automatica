@@ -30,7 +30,7 @@ export class DataHubService extends BaseHub {
     }
 
     public setValue(nodeInstance: string, value: any): Promise<any> {
-        return this.Connection.send("setValue", nodeInstance, value);
+        return this.callHubProxyWithParams("setValue", nodeInstance, value);
     }
 
     public subscribe(nodeInstance: string) {

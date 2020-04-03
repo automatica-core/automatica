@@ -51,6 +51,7 @@ namespace Automatica.Push.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, name);
         }
 
+
         public void SetValue(Guid nodeInstance, JsonElement value)
         {
             object convertedValue = null;

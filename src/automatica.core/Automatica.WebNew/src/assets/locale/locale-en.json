@@ -28,6 +28,7 @@
         "RULES": "Logic blocks",
         "CONNECT": "Connect",
         "SAVED": "Configuration saved",
+        "RELOADED": "Configuration reloaded",
         "REINIT": "Reload config to server",
         "LOGOUT": "Logout",
         "FIRSTNAME": "Firstname",
