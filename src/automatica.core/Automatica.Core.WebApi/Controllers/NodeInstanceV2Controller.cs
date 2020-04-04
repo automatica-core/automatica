@@ -25,7 +25,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ICoreServer _coreServer;
         private readonly INodeTemplateCache _templateCache;
         private readonly IDriverNodesStore _driverNodeStore;
-        private readonly INodeTemplateFactory _nodeTemplateFactory;
+        private readonly INodeInstanceService _nodeInstanceService;
 
         public NodeInstanceV2Controller(
             AutomaticaContext dbContext, 
@@ -34,14 +34,14 @@ namespace Automatica.Core.WebApi.Controllers
             ICoreServer coreServer, 
             INodeTemplateCache templateCache,
             IDriverNodesStore driverNodeStore,
-            INodeTemplateFactory nodeTemplateFactory) : base(dbContext)
+            INodeInstanceService nodeInstanceService) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
             _notifyDriver = notifyDriver;
             _coreServer = coreServer;
             _templateCache = templateCache;
             _driverNodeStore = driverNodeStore;
-            _nodeTemplateFactory = nodeTemplateFactory;
+            _nodeInstanceService = nodeInstanceService;
         }
 
         private async Task<EntityState> AddOrUpdateNodeInstance(NodeInstance node)
@@ -105,11 +105,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("create/{locale}/{parentNodeInstance}/{nodeTemplate}")]
         public async Task<NodeInstance> CreateFromTemplate(string locale, Guid parentNodeInstance, Guid nodeTemplate)
         {
-            var instance = _nodeTemplateFactory.CreateNodeInstance(locale, nodeTemplate);
-            var childs = instance.InverseThis2ParentNodeInstanceNavigation;
-
-            instance.This2ParentNodeInstance = parentNodeInstance;
-
+            var instance = _nodeInstanceService.CreateNodeInstance(locale, _nodeInstanceCache.Get(parentNodeInstance), nodeTemplate);
             return await AddNode(instance);
         }
 

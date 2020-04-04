@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.Localization;
+using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache;
+using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Automatica.Core.Internals.Cache.Driver
+namespace Automatica.Core.Runtime.Core
 {
     internal class NodeTemplateCache : AbstractCache<NodeTemplate>, INodeTemplateCache
     {
         private readonly ILocalizationProvider _localizationProvider;
+        private readonly IDriverFactoryStore _driverFactoryStore;
 
         private readonly IDictionary<Guid, IList<NodeTemplate>> _neededTemplateKeyDictionary =
             new Dictionary<Guid, IList<NodeTemplate>>();
@@ -18,9 +23,13 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeTemplate>> _defaultTemplateItemsKeyDictionary =
             new Dictionary<Guid, IList<NodeTemplate>>();
 
-        public NodeTemplateCache(IConfiguration configuration, ILocalizationProvider localizationProvider) : base(configuration)
+        private readonly IDictionary<NodeTemplate, IDriverFactory> _nodeTemplateFactoryMapping =
+            new Dictionary<NodeTemplate, IDriverFactory>();
+
+        public NodeTemplateCache(IConfiguration configuration, ILocalizationProvider localizationProvider, IDriverFactoryStore driverFactoryStore) : base(configuration)
         {
             _localizationProvider = localizationProvider;
+            _driverFactoryStore = driverFactoryStore;
         }
 
         protected override IQueryable<NodeTemplate> GetAll(AutomaticaContext context)
@@ -55,12 +64,24 @@ namespace Automatica.Core.Internals.Cache.Driver
                 _defaultTemplateItemsKeyDictionary[value.NeedsInterface2InterfacesType].Add(value);
             }
 
+            var factory = _driverFactoryStore.Get(value.FactoryReference);
+
+            if (factory != null)
+            {
+                _nodeTemplateFactoryMapping.Add(value, factory);
+            }
+
             base.Add(key, value);
         }
 
         protected override Guid GetKey(NodeTemplate obj)
         {
             return obj.ObjId;
+        }
+
+        public void InitCache()
+        {
+            Initialize();
         }
 
         public NodeTemplate GetByKey(string key)
@@ -90,6 +111,11 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             foreach (var template in templates)
             {
+                if (!_nodeTemplateFactoryMapping.ContainsKey(template))
+                {
+                    continue;
+                }
+
                 var existingNodes = targetNodeInstance.InverseThis2ParentNodeInstanceNavigation.Count(a =>
                     a.This2NodeTemplate == template.ObjId);
                 

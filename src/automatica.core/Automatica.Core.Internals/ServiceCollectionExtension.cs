@@ -12,7 +12,6 @@ namespace Automatica.Core.Internals
     {
         public static void AddInternals(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<INodeTemplateCache, NodeTemplateCache>();
             services.AddSingleton<INodeInstanceCache, NodeInstanceCache>();
             services.AddSingleton<INodeInstanceService, NodeInstanceService>();
 

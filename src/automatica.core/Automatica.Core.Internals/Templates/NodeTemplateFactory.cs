@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Templates
     {
         private readonly INodeInstanceService _nodeInstanceService;
 
-        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService) : base (database, config, (template, guid) => template.This2NodeTemplate = guid)
+        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService, IDriverFactory factory) : base (database, config, (template, guid) => template.This2NodeTemplate = guid, factory)
         {
             _nodeInstanceService = nodeInstanceService;
         }
@@ -142,6 +142,7 @@ namespace Automatica.Core.Internals.Templates
             interfaceType.Name = name;
             interfaceType.Description = description;
             interfaceType.MaxChilds = maxChilds;
+            interfaceType.FactoryReference = Factory.FactoryGuid;
             interfaceType.MaxInstances = maxInstances;
             interfaceType.IsDriverInterface = isDriverInterface;
 
@@ -186,6 +187,7 @@ namespace Automatica.Core.Internals.Templates
                     retValue = CreateTemplateCode.Created;
                 }
 
+                nodeTemplate.FactoryReference = Factory.FactoryGuid;
                 nodeTemplate.Name = name;
                 nodeTemplate.Description = description;
                 nodeTemplate.Key = key;

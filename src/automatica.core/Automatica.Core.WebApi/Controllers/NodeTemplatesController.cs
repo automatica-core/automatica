@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Model.Models.User;
@@ -15,18 +14,15 @@ namespace Automatica.Core.WebApi.Controllers
     {
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly INodeInstanceCache _nodeInstanceCache;
-        private readonly INodeTemplateFactory _nodeTemplateFactory;
 
         public NodeTemplatesController(
             AutomaticaContext db, 
             INodeTemplateCache nodeTemplateCache, 
-            INodeInstanceCache nodeInstanceCache,
-            INodeTemplateFactory nodeTemplateFactory)
+            INodeInstanceCache nodeInstanceCache)
             : base(db)
         {
             _nodeTemplateCache = nodeTemplateCache;
             _nodeInstanceCache = nodeInstanceCache;
-            _nodeTemplateFactory = nodeTemplateFactory;
         }
 
         [HttpGet]

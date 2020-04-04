@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
@@ -11,8 +9,8 @@ namespace Automatica.Core.WebApi.Tests.Localization
 {
     public class LocalizationControllerTests : BaseControllerTest<LocalizationController>
     {
-        public const string DeJson = "{\"Test\":\"Deutsch\", \"Deep1\": {\"Test\": \"Deutsch\"}}";
-        public const string EnJson = "{\"Test\":\"English\", \"Deep1\": {\"Test\": \"English\"}}";
+        public const string DeJson = "{\"Test\":\"Deutsch\",\"Deep1\":{\"Test\":\"Deutsch\"}}";
+        public const string EnJson = "{\"Test\":\"English\",\"Deep1\":{\"Test\":\"English\"}}";
 
         [Fact]
         public void TestGet()

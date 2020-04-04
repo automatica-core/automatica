@@ -31,6 +31,7 @@ namespace Automatica.Core.EF.Models
         public string NameMeta { get; set; }
 
         public Guid This2DefaultMobileVisuTemplate { get; set; }
+        public Guid FactoryReference { get; set; }
 
         public InterfaceType NeedsInterface2InterfacesTypeNavigation { get; set; }
         public InterfaceType ProvidesInterface2InterfaceTypeNavigation { get; set; }

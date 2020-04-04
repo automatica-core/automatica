@@ -99,6 +99,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly IDriverFactoryLoader _driverFactoryLoader;
         private readonly ILocalizationProvider _localizationProvider;
         private readonly INodeInstanceService _nodeInstanceService;
+        private readonly INodeTemplateCache _nodeTemplateCache;
 
 
         public RunState RunState
@@ -167,6 +168,8 @@ namespace Automatica.Core.Runtime.Core
 
             _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
             _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
+
+            _nodeTemplateCache = services.GetRequiredService<INodeTemplateCache>();
             InitInternals();
         }
 
@@ -582,6 +585,8 @@ namespace Automatica.Core.Runtime.Core
                     {
                     }
                 }
+
+                _nodeTemplateCache.All();
             }
             catch (Exception e)
             {
@@ -633,7 +638,7 @@ namespace Automatica.Core.Runtime.Core
             }
 
             var config = new DriverContext(nodeInstance,
-                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
+                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
 

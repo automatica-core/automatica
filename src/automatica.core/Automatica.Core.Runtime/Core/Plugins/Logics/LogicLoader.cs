@@ -78,7 +78,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
 
                     using (var db = new AutomaticaContext(_config))
                     {
-                        factory.InitTemplates(new RuleTemplateFactory(db, _config));
+                        factory.InitTemplates(new RuleTemplateFactory(db, _config, factory));
                         db.SaveChanges();
                     }
                     _logger.LogDebug($"InitRuleTemplates for {factory.RuleName}...done");

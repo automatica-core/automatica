@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
+using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Exceptions;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
+using Moq;
 using Xunit;
 using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
@@ -94,7 +97,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             using var db = new AutomaticaContext(Configuration);
 
-            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration);
+            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration, new Mock<IRuleFactory>().Object);
 
             var pages = Controller.GetPages().ToList();
             var page = pages.First();
@@ -116,7 +119,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             await using var db = new AutomaticaContext(Configuration);
 
-            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration);
+            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration, new Mock<IRuleFactory>().Object);
 
             var pages = Controller.GetPages().ToList();
             var page = pages.First();
@@ -144,7 +147,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             await using var db = new AutomaticaContext(Configuration);
 
-            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration);
+            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration, new Mock<IRuleFactory>().Object);
 
             var pages = Controller.GetPages().ToList();
             var page = pages.First();
@@ -187,7 +190,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             using var db = new AutomaticaContext(Configuration);
 
-            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration);
+            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration, new Mock<IRuleFactory>().Object);
 
             var factory = new TestLogicFactory();
             factory.InitTemplates(logicTemplateFactory);

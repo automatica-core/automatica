@@ -47,6 +47,17 @@ namespace Automatica.Core.Internals.Templates
             return CreateNodeInstance(locale, null, nodeTemplate);
         }
 
+        public NodeInstance CreateNodeInstance(string locale, NodeInstance parent, Guid nodeTemplate)
+        {
+
+            return CreateNodeInstance(locale, parent, _nodeTemplateCache.Get(nodeTemplate));
+        }
+
+        public NodeInstance CreateNodeInstance(string locale, Guid nodeTemplate)
+        {
+            return CreateNodeInstance(locale, _nodeTemplateCache.Get(nodeTemplate));
+        }
+
         public NodeTemplate GetTemplateById(Guid id)
         {
             return _nodeTemplateCache.Get(id);

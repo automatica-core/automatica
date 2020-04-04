@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Rule;
 using Microsoft.Extensions.Configuration;
 using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
@@ -10,7 +11,7 @@ namespace Automatica.Core.Internals.Templates
 {
     public class RuleTemplateFactory : PropertyTemplateFactory, IRuleTemplateFactory
     {
-        public RuleTemplateFactory(AutomaticaContext database, IConfiguration config) : base(database, config, (template, guid) => throw new NotImplementedException())
+        public RuleTemplateFactory(AutomaticaContext database, IConfiguration config, IRuleFactory factory) : base(database, config, (template, guid) => throw new NotImplementedException(), factory)
         {
             
         }
