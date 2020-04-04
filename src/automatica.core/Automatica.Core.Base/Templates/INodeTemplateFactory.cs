@@ -42,6 +42,23 @@ namespace Automatica.Core.Base.Templates
         /// <returns>The generated <see cref="NodeInstance"/></returns>
         NodeInstance CreateNodeInstance(Guid template);
 
+
+        /// <summary>
+        /// Creates a <see cref="NodeInstance"/> using the unique id of the <see cref="NodeTemplate"/>
+        /// </summary>
+        /// <param name="locale">Translates fields with the given locale</param>
+        /// <param name="template"></param>
+        /// <returns>The generated <see cref="NodeInstance"/></returns>
+        NodeInstance CreateNodeInstance(string locale, Guid template);
+
+        /// <summary>
+        /// Creates a <see cref="NodeInstance"/> using the <see cref="NodeTemplate"/>
+        /// </summary>
+        /// <param name="locale">Translates fields with the given locale</param>
+        /// <param name="template"></param>
+        /// <returns>The generated <see cref="NodeInstance"/></returns>
+        NodeInstance CreateNodeInstance(string locale, NodeTemplate template);
+
         /// <summary>
         /// Creates a <see cref="NodeInstance"/> using the key of the <see cref="NodeTemplate"/>
         /// </summary>

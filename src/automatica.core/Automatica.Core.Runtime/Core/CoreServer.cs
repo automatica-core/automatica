@@ -22,6 +22,7 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Extensions;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Loader;
 using Automatica.Core.Internals;
@@ -95,6 +96,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly IDriverFactoryLoader _driverFactoryLoader;
+        private readonly ILocalizationProvider _localizationProvider;
 
 
         public RunState RunState
@@ -160,6 +162,8 @@ namespace Automatica.Core.Runtime.Core
             _trendingRecorder.Add(new FileDataRecorderWriter(_nodeInstanceCache, _dispatcher));
 
             _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
+
+            _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
 
             InitInternals();
         }
@@ -619,8 +623,15 @@ namespace Automatica.Core.Runtime.Core
         public async Task<IDriver> InitializeDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
         {
             var factory = _driverFactoryStore.Get(nodeTemplate.ObjId);
+
+            if(factory == null)
+            {
+                _logger.LogError($"No factory found for {nodeTemplate.Name} ({nodeTemplate.ObjId})");
+                return null;
+            }
+
             var config = new DriverContext(nodeInstance,
-                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
+                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _localizationProvider), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
 
@@ -633,6 +644,11 @@ namespace Automatica.Core.Runtime.Core
         public async Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
         {
             var driver = await InitializeDriver(nodeInstance, nodeTemplate);
+            if (driver == null)
+            {
+                _logger.LogError($"Could not initialize driver for {nodeInstance.Name}");
+                return;
+            }
             await StartDriver(driver);
         }
 

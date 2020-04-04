@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -72,6 +73,58 @@ namespace Automatica.Core.Base.Localization
                 }
             }
             _loadedAssemblies.Add(assembly);
+        }
+
+        public string GetTranslation(string locale, string key)
+        {
+            if (string.IsNullOrWhiteSpace(locale))
+            {
+                return key;
+            }
+
+            if (!_localizationStreams.ContainsKey(locale))
+            {
+                return key;
+            }
+
+            var localeObject = _localizationStreams[locale];
+            var keyElements = key.Split(".");
+
+            if (keyElements.Length == 0)
+            {
+                return key;
+            }
+
+            
+            var localePart = localeObject;
+
+            for (int i = 0; i < keyElements.Length; i++)
+            {
+                if (!localePart.ContainsKey(keyElements[i]))
+                {
+                    return key;
+                }
+
+                var token = localePart[keyElements[i]];
+
+                if (token is JObject jobj)
+                {
+                    localePart = jobj;
+                }
+                else
+                {
+                    if (i + 1 == keyElements.Length)
+                    {
+                        return token.ToString();
+                    }
+                    return key;
+                }
+
+                
+
+            }
+
+            return localePart.Value<string>();
         }
 
         public object ToJson(string locale)

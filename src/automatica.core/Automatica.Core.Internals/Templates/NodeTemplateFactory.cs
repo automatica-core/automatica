@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +12,11 @@ namespace Automatica.Core.Internals.Templates
 {
     public class NodeTemplateFactory : PropertyTemplateFactory, INodeTemplateFactory
     {
-        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config) : base (database, config, (template, guid) => template.This2NodeTemplate = guid)
+        private readonly ILocalizationProvider _localizationProvider;
+
+        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config, ILocalizationProvider localizationProvider) : base (database, config, (template, guid) => template.This2NodeTemplate = guid)
         {
+            _localizationProvider = localizationProvider;
         }
         
         public NodeTemplate GetNodeTemplateById(Guid id)
@@ -63,6 +67,34 @@ namespace Automatica.Core.Internals.Templates
             return templates;
         }
 
+        public NodeInstance CreateNodeInstance(string locale, Guid template)
+        {
+            return CreateNodeInstance(locale, GetNodeTemplateById(template));
+        }
+
+        public NodeInstance CreateNodeInstance(string locale, NodeTemplate template)
+        {
+            var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
+
+            node.Name = _localizationProvider.GetTranslation(locale, template.Name);
+            node.Description = _localizationProvider.GetTranslation(locale, template.Description);
+
+            var childTemplates = GetDefaultChildNodeTemplates(template);
+
+            foreach (var child in childTemplates)
+            {
+                var childInstance = CreateNodeInstance(locale, child);
+
+                childInstance.This2ParentNodeInstance = node.ObjId;
+                childInstance.This2ParentNodeInstanceNavigation = node;
+
+                node.InverseThis2ParentNodeInstanceNavigation.Add(childInstance);
+
+            }
+
+            return node;
+        }
+
         public NodeInstance CreateNodeInstanceByKey(string key)
         {
             return CreateNodeInstance(GetNodeTemplateByKey(key));
@@ -70,16 +102,7 @@ namespace Automatica.Core.Internals.Templates
 
         public NodeInstance CreateNodeInstance(NodeTemplate template)
         {
-            var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
-
-            var childrens = GetDefaultChildNodeTemplates(template);
-
-            foreach (var child in childrens)
-            {
-                node.InverseThis2ParentNodeInstanceNavigation.Add(CreateNodeInstance(child));
-            }
-
-            return node;
+            return CreateNodeInstance(null, template);
         }
 
         public NodeInstance CreateNodeInstance(Guid template)

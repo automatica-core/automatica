@@ -268,131 +268,6 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
     }
 
-
-    private static createFromTemplate(template: NodeTemplate, parent: any): NodeInstance {
-        const instance = new NodeInstance(parent);
-        instance.Name = template.Name;
-        instance.Description = template.Description;
-        instance.NodeTemplate = template;
-        instance.Properties = [];
-        instance.This2BoardInterface = void 0;
-        instance.This2ParentNodeInstance = void 0;
-        instance.This2NodeTemplate = template.ObjId;
-
-        instance.IsReadable = template.IsReadable;
-        instance.IsWriteable = template.IsWriteable;
-        instance.IsFavorite = false;
-
-        if (template.isDriverNode()) {
-            instance.This2Slave = "172bb906-b584-4d5d-85e8-b6d881498534";
-        }
-
-        for (const p of template.Properties) {
-            const prop: PropertyInstance = PropertyInstance.createFromTemplate(instance, p);
-            instance.Properties.push(prop);
-        }
-        instance.addVirtualProperties();
-        return instance;
-    }
-    public static createForNodeInstanceFromTemplate(template: NodeTemplate, parent: NodeInstance): NodeInstance {
-        const instance: NodeInstance = this.createFromTemplate(template, parent);
-
-        instance.ObjId = Guid.MakeNew().ToString();
-
-        if (parent) {
-            instance.This2ParentNodeInstance = parent.ObjId;
-        }
-        return instance;
-    }
-
-    public static createForBoardInterfaceFromTemplate(template: NodeTemplate, parent: BoardInterface): NodeInstance {
-        const instance: NodeInstance = this.createFromTemplate(template, parent);
-
-        instance.ObjId = Guid.MakeNew().ToString();
-        instance.This2BoardInterface = parent.ObjId;
-        return instance;
-    }
-
-    public static getSupportedTemplates(treeNode: BoardInterface | NodeInstance, neededInterfaceKey: string, templates: NodeTemplate[]): NodeTemplate[] {
-        const nodeTemplates: NodeTemplate[] = [];
-
-        if (!templates) {
-            return nodeTemplates;
-        }
-
-        for (const e of templates) {
-            if (e.ProvidesInterface.Type === neededInterfaceKey) {
-                continue;
-            }
-            if (e.NeedsInterface.Type === neededInterfaceKey) {
-                if (treeNode instanceof NodeInstance) {
-                    let instancesExist: number = 0;
-
-                    for (const ch of treeNode.Children) {
-                        if (ch instanceof NodeInstance) {
-                            if (ch.NodeTemplate.ObjId === e.ObjId) {
-                                instancesExist++;
-                            }
-                        }
-
-                    }
-
-                    if (e.MaxInstances > 0 && instancesExist >= e.MaxInstances) {
-                        continue;
-                    }
-                }
-                let addItem: boolean = true;
-                let instances = 0;
-                if (e.ProvidesInterface.MaxInstances > 0) {
-                    for (const element of treeNode.Children) {
-                        if (element instanceof NodeInstance) {
-                            if (element.NodeTemplate.ObjId === e.ObjId) {
-                                instances++;
-                            }
-
-                        }
-                    }
-                    if (instances >= e.MaxInstances) {
-                        addItem = false;
-                    }
-                }
-                if (addItem) {
-                    nodeTemplates.push(e);
-                }
-            }
-        }
-
-        return nodeTemplates;
-    }
-
-    public static getSupportedTypes(node: ITreeNode, nodeTemplates: NodeTemplate[]) {
-        if (node instanceof NodeInstance) {
-            const ni: NodeInstance = node as NodeInstance;
-
-            if (!ni.NodeTemplate) {
-                return void 0;
-            }
-
-            if (node.Children.length >= ni.NodeTemplate.ProvidesInterface.MaxChilds) {
-                return void 0;
-            }
-
-            return NodeInstance.getSupportedTemplates(node, ni.NodeTemplate.ProvidesInterface2InterfaceType, nodeTemplates);
-
-        } else if (node instanceof BoardInterface) {
-            const bi: BoardInterface = node as BoardInterface;
-
-            if (node.Children.length >= bi.InterfaceType.MaxChilds) {
-                return void 0;
-            }
-
-            return NodeInstance.getSupportedTemplates(node, bi.InterfaceType.Type, nodeTemplates);
-        }
-        return void 0;
-    }
-
-
-
     constructor(public Parent: ITreeNode) {
         super();
         this.This2ParentNodeInstance = null;
@@ -403,9 +278,17 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.StateTextValueTrue = "1";
         this.StateTextValueFalse = "0";
         this.State = NodeInstanceState.New;
+
+        this.Properties = [];
+        this.Children = [];
     }
 
     private addVirtualProperties() {
+
+        if (!this.Properties) {
+            this.Properties = [];
+        }
+
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
         this.Properties.push(new VirtualObjIdPropertyInstance(this));

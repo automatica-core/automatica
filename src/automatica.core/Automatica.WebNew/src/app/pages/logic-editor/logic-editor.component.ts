@@ -54,8 +54,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   selectedItem: NodeInstance | RulePage | NodeInstance2RulePage | RuleInstance;
 
-  nodeTemplates: NodeTemplate[];
-
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
@@ -109,12 +107,11 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     try {
       this.isLoading = true;
 
-      const [pages, ruleTemplates, linkableNodes, templates, areaInstances, categoryInstances, userGroups] = await Promise.all(
+      const [pages, ruleTemplates, linkableNodes, areaInstances, categoryInstances, userGroups] = await Promise.all(
         [
           this.ruleEngineService.getPages(),
           this.ruleEngineService.getRuleTemplates(),
           this.configService.getLinkableNodes(),
-          this.configService.getNodeTemplates(),
           this.areaService.getAreaInstances(),
           this.categoryService.getCategoryInstances(),
           this.userGroupsService.getUserGroups(),
@@ -140,8 +137,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.areaInstances = areaInstances;
       this.categoryInstances = categoryInstances;
       this.userGroups = userGroups;
-
-      this.nodeTemplates = templates;
 
       // await this.dataHub.subscribeForAll();
 
@@ -232,7 +227,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = true;
 
     try {
-      const all = await this.ruleEngineService.saveAll(this.pages,  []);
+      const all = await this.ruleEngineService.saveAll(this.pages, []);
 
       this.nodeInstanceService.convertConfig(all.NodeInstances);
       this.pages = all.LogicPages;

@@ -88,7 +88,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
                     using (var db = new AutomaticaContext(_config))
                     {
-                        factory.InitNodeTemplates(new NodeTemplateFactory(db, _config));
+                        factory.InitNodeTemplates(new NodeTemplateFactory(db, _config, _localizationProvider));
                         db.SaveChanges();
                     }
 

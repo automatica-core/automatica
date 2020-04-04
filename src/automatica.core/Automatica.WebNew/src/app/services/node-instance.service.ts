@@ -9,6 +9,7 @@ import { SettingsService } from "./settings.service";
 import { Setting } from "../base/model/setting";
 import { ITreeNode } from "../base/model/ITreeNode";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
+import { NodeTemplateService } from "./node-template.service";
 
 @Injectable()
 export class NodeInstanceService {
@@ -34,18 +35,18 @@ export class NodeInstanceService {
     constructor(private designTimeDataService: DesignTimeDataService,
         private configService: ConfigService,
         private settingsService: SettingsService,
-        private dataHubService: DataHubService) {
+        private dataHubService: DataHubService,
+        private nodeTemplateService: NodeTemplateService) {
 
     }
 
     public async load() {
-        this._nodeTemplates = await this.configService.getNodeTemplates();
         this._settings = await this.settingsService.getSettings();
         await this.loadConfig();
         await this.dataHubService.subscribeForAll();
     }
 
-    public getNodeInstance(id: string) {
+    public getNodeInstance(id: string): NodeInstance {
         return this._nodeInstanceMap.get(id);
     }
 
@@ -73,8 +74,10 @@ export class NodeInstanceService {
     updateNodeInstance(nodeInstance: NodeInstance) {
         this.addNodeInstance(nodeInstance);
 
-        for (const child of nodeInstance.Children) {
-            this.updateNodeInstance(child);
+        if (nodeInstance.Children) {
+            for (const child of nodeInstance.Children) {
+                this.updateNodeInstance(child);
+            }
         }
     }
 
@@ -108,7 +111,7 @@ export class NodeInstanceService {
 
     public addNodeInstance(node: NodeInstance) {
         this._nodeInstanceMap.set(node.Id, node);
-        this._nodeInstanceList = [...Array.from(this._nodeInstanceMap.values())];
+        this._nodeInstanceList = Array.from(this._nodeInstanceMap.values());
     }
 
     public removeItem(node: ITreeNode) {
@@ -125,48 +128,48 @@ export class NodeInstanceService {
         }
     }
 
-    public async createFromNodeTemplate(baseNode: NodeInstance, nodeTemplate: NodeTemplate, propertyInstances: PropertyInstance[]): Promise<{ node: NodeInstance, created: NodeInstance[] }> {
-        const cachedNodeTemplate = this.designTimeDataService.getNodeTemplate(nodeTemplate.ObjId);
-        const node = NodeInstance.createForNodeInstanceFromTemplate(cachedNodeTemplate, void 0);
-        let created = [node];
+    // public async createFromNodeTemplate(baseNode: NodeInstance, nodeTemplate: NodeTemplate, propertyInstances: PropertyInstance[]): Promise<{ node: NodeInstance, created: NodeInstance[] }> {
+    //     const cachedNodeTemplate = this.designTimeDataService.getNodeTemplate(nodeTemplate.ObjId);
+    //     const node = NodeInstance.createForNodeInstanceFromTemplate(cachedNodeTemplate, void 0);
+    //     let created = [node];
 
-        if (node) {
-            for (const prop of propertyInstances) {
-                const nodeProp = node.Properties.find(a => a.PropertyTemplate.Key === prop.PropertyTemplate.Key);
+    //     if (node) {
+    //         for (const prop of propertyInstances) {
+    //             const nodeProp = node.Properties.find(a => a.PropertyTemplate.Key === prop.PropertyTemplate.Key);
 
-                console.log(nodeProp);
+    //             console.log(nodeProp);
 
-                if (nodeProp) {
-                    nodeProp.Value = prop.Value;
-                }
-            }
-        }
+    //             if (nodeProp) {
+    //                 nodeProp.Value = prop.Value;
+    //             }
+    //         }
+    //     }
 
-        let parent = void 0;
-        if (baseNode.NodeTemplate.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType) {
-            parent = baseNode;
-        }
+    //     let parent = void 0;
+    //     if (baseNode.NodeTemplate.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType) {
+    //         parent = baseNode;
+    //     }
 
-        parent = this.getNodeInstanceByNeedsInterface(baseNode, nodeTemplate.NeedsInterface2InterfacesType);
+    //     parent = this.getNodeInstanceByNeedsInterface(baseNode, nodeTemplate.NeedsInterface2InterfacesType);
 
-        if (!parent) {
-            const allNodeTemplates = await this.designTimeDataService.getNodeTemplates();
-            const nextTemplate = allNodeTemplates.find(a => a.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType);
+    //     if (!parent) {
+    //         const allNodeTemplates = await this.designTimeDataService.getNodeTemplates();
+    //         const nextTemplate = allNodeTemplates.find(a => a.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType);
 
-            const newNode = await this.createFromNodeTemplate(baseNode, nextTemplate, propertyInstances);
+    //         const newNode = await this.createFromNodeTemplate(baseNode, nextTemplate, propertyInstances);
 
-            if (newNode) {
-                parent = newNode.node;
-                created = [...created, ...newNode.created];
-            }
-        }
+    //         if (newNode) {
+    //             parent = newNode.node;
+    //             created = [...created, ...newNode.created];
+    //         }
+    //     }
 
-        if (parent) {
-            node.Parent = parent;
-            node.This2ParentNodeInstance = parent.ObjId;
-        }
-        return { node: node, created: created };
-    }
+    //     if (parent) {
+    //         node.Parent = parent;
+    //         node.This2ParentNodeInstance = parent.ObjId;
+    //     }
+    //     return { node: node, created: created };
+    // }
 
     public getNodeInstanceByNeedsInterface(nodeInstance: NodeInstance, needsInterfaceGuid: string): NodeInstance {
         if (nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === needsInterfaceGuid) {
@@ -190,8 +193,8 @@ export class NodeInstanceService {
         return void 0;
     }
 
-    public getSupportedNodeTemplates(node: ITreeNode) {
-        return NodeInstance.getSupportedTypes(node, this._nodeTemplates);
+    public async getSupportedNodeTemplates(node: NodeInstance) {
+        return await this.nodeTemplateService.getSupportedTemplates(node, node.NodeTemplate.ProvidesInterface2InterfaceType);
     }
 
     public async saveSettings() {

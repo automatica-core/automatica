@@ -3,10 +3,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Model.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.Logging;
 namespace Automatica.Core.WebApi.Controllers
 {
     [Route("webapi/nodeInstancesV2")]
+    [Authorize(Roles = Role.AdminRole)]
     public class NodeInstanceV2Controller : BaseController
     {
         private readonly INodeInstanceCache _nodeInstanceCache;
@@ -21,6 +25,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ICoreServer _coreServer;
         private readonly INodeTemplateCache _templateCache;
         private readonly IDriverNodesStore _driverNodeStore;
+        private readonly INodeTemplateFactory _nodeTemplateFactory;
 
         public NodeInstanceV2Controller(
             AutomaticaContext dbContext, 
@@ -28,13 +33,15 @@ namespace Automatica.Core.WebApi.Controllers
             INotifyDriver notifyDriver, 
             ICoreServer coreServer, 
             INodeTemplateCache templateCache,
-            IDriverNodesStore driverNodeStore) : base(dbContext)
+            IDriverNodesStore driverNodeStore,
+            INodeTemplateFactory nodeTemplateFactory) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
             _notifyDriver = notifyDriver;
             _coreServer = coreServer;
             _templateCache = templateCache;
             _driverNodeStore = driverNodeStore;
+            _nodeTemplateFactory = nodeTemplateFactory;
         }
 
         private async Task<EntityState> AddOrUpdateNodeInstance(NodeInstance node)
@@ -90,6 +97,48 @@ namespace Automatica.Core.WebApi.Controllers
 
             return entityState;
 
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = Role.AdminRole)]
+        [Route("create/{locale}/{parentNodeInstance}/{nodeTemplate}")]
+        public async Task<NodeInstance> CreateFromTemplate(string locale, Guid parentNodeInstance, Guid nodeTemplate)
+        {
+            var instance = _nodeTemplateFactory.CreateNodeInstance(locale, nodeTemplate);
+            var childs = instance.InverseThis2ParentNodeInstanceNavigation;
+
+            instance.This2ParentNodeInstance = parentNodeInstance;
+
+            return await AddNode(instance);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Role.AdminRole)]
+        [Route("copy/{nodeInstance}/{targetNodeInstance}")]
+        public async Task<NodeInstance> Copy(Guid nodeInstance, Guid targetNodeInstance)
+        {
+            var instance = _nodeInstanceCache.Get(nodeInstance);
+
+            CopyRec(instance);
+
+            instance.This2ParentNodeInstance = targetNodeInstance;
+            var childs = instance.InverseThis2ParentNodeInstanceNavigation;
+
+            await AddNode(instance);
+
+            instance.InverseThis2ParentNodeInstanceNavigation = childs;
+            return instance;
+        }
+
+        private void CopyRec(NodeInstance nodeInstance)
+        {
+            nodeInstance.ObjId = Guid.NewGuid();
+
+            foreach (var node in nodeInstance.InverseThis2ParentNodeInstanceNavigation)
+            {
+                CopyRec(node);
+            }
         }
 
         [HttpPut]
@@ -191,7 +240,10 @@ namespace Automatica.Core.WebApi.Controllers
                     if (rootNode.ObjId == node.ObjId)
                     {
                         var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
-                        await _coreServer.StopDriver(driver);
+                        if (driver != null)
+                        {
+                            await _coreServer.StopDriver(driver);
+                        }
                     }
                     else
                     {

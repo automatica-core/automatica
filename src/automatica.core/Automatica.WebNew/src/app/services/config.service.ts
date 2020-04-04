@@ -24,11 +24,6 @@ export class ConfigService extends BaseService {
         return super.get("nodeInstances/single/" + id);
     }
 
-
-    getNodeTemplates(): Promise<NodeTemplate[]> {
-        return this.designData.getNodeTemplates();
-    }
-
     getNodeInstances(): Promise<NodeInstance[]> {
         return super.getMultiple<NodeInstance>("nodeInstances");
     }
@@ -94,5 +89,13 @@ export class ConfigService extends BaseService {
 
     enableLearnMode(nodeInstance: NodeInstance) {
         return super.postJson("nodeInstances/enableLeranMode", nodeInstance.toJson());
+    }
+
+    createFromTemplate(parentNode: NodeInstance, nodeTemplate: NodeTemplate) {
+        return super.post<NodeInstance>(`nodeInstancesV2/create/${this.translationService.getLocale().language}/${parentNode.ObjId}/${nodeTemplate.ObjId}`, void 0);
+    }
+
+    copy(item: NodeInstance, target: NodeInstance) {
+        return super.post<NodeInstance>(`nodeTemplates/copy/${item.ObjId}/${target.ObjId}`, void 0);
     }
 }

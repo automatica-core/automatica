@@ -43,5 +43,15 @@ namespace Automatica.Core.Base.Templates
 
             return instance;
         }
+
+        public static NodeInstance CreateNodeInstanceFromTemplate(NodeTemplate template, NodeInstance parent)
+        {
+            var instance = CreateNodeInstanceFromTemplate(template);
+
+            instance.This2ParentNodeInstance = parent.ObjId;
+            instance.This2ParentNodeInstanceNavigation = parent;
+
+            return instance;
+        }
     }
 }
