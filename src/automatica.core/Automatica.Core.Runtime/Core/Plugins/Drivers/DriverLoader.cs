@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -25,8 +25,13 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
         private readonly IConfiguration _config;
         private readonly ILoadedStore _store;
         private readonly IDriverFactoryStore _driverFactoryStore;
+        private readonly INodeInstanceService _nodeInstanceService;
 
-        public DriverLoader(ILogger<DriverLoader> logger, AutomaticaContext dbContext, ILocalizationProvider localizationProvider, IConfiguration config, ILoadedStore store, IDriverFactoryStore driverFactoryStore)
+        public DriverLoader(
+            ILogger<DriverLoader> logger, AutomaticaContext dbContext, 
+            ILocalizationProvider localizationProvider, IConfiguration config, 
+            ILoadedStore store, IDriverFactoryStore driverFactoryStore,
+            INodeInstanceService nodeInstanceService)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -34,6 +39,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             _config = config;
             _store = store;
             _driverFactoryStore = driverFactoryStore;
+            _nodeInstanceService = nodeInstanceService;
         }
 
         public Task Load(IDriverFactory factory, IBoardType boardType)
@@ -88,7 +94,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
                     using (var db = new AutomaticaContext(_config))
                     {
-                        factory.InitNodeTemplates(new NodeTemplateFactory(db, _config, _localizationProvider));
+                        factory.InitNodeTemplates(new NodeTemplateFactory(db, _config, _nodeInstanceService));
                         db.SaveChanges();
                     }
 

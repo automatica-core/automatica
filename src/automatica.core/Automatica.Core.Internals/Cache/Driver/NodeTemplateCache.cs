@@ -15,6 +15,9 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeTemplate>> _neededTemplateKeyDictionary =
             new Dictionary<Guid, IList<NodeTemplate>>();
 
+        private readonly IDictionary<Guid, IList<NodeTemplate>> _defaultTemplateItemsKeyDictionary =
+            new Dictionary<Guid, IList<NodeTemplate>>();
+
         public NodeTemplateCache(IConfiguration configuration, ILocalizationProvider localizationProvider) : base(configuration)
         {
             _localizationProvider = localizationProvider;
@@ -41,12 +44,28 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             _neededTemplateKeyDictionary[value.NeedsInterface2InterfacesType].Add(value);
 
+
+            if (!_defaultTemplateItemsKeyDictionary.ContainsKey(value.NeedsInterface2InterfacesType))
+            {
+                _defaultTemplateItemsKeyDictionary.Add(value.NeedsInterface2InterfacesType, new List<NodeTemplate>());
+            }
+
+            if (value.DefaultCreated)
+            {
+                _defaultTemplateItemsKeyDictionary[value.NeedsInterface2InterfacesType].Add(value);
+            }
+
             base.Add(key, value);
         }
 
         protected override Guid GetKey(NodeTemplate obj)
         {
             return obj.ObjId;
+        }
+
+        public NodeTemplate GetByKey(string key)
+        {
+            return All().SingleOrDefault(a => a.Key == key);
         }
 
         public ICollection<NodeTemplate> GetSupportedTemplates(NodeInstance targetNodeInstance, Guid neededInterfaceType)
@@ -94,6 +113,18 @@ namespace Automatica.Core.Internals.Cache.Driver
             }
 
             return toAdd.GroupBy(a => a.ObjId).Select(g => g.First()).ToList();
+        }
+
+        public ICollection<NodeTemplate> GetDefaultItemsForTemplate(NodeTemplate template)
+        {
+            Initialize();
+
+            if (!_defaultTemplateItemsKeyDictionary.ContainsKey(template.ProvidesInterface2InterfaceType))
+            {
+                return new List<NodeTemplate>();
+            }
+
+            return _defaultTemplateItemsKeyDictionary[template.ProvidesInterface2InterfaceType];
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Automatica.Core.Base.Localization;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,59 +12,26 @@ namespace Automatica.Core.Internals.Templates
 {
     public class NodeTemplateFactory : PropertyTemplateFactory, INodeTemplateFactory
     {
-        private readonly ILocalizationProvider _localizationProvider;
+        private readonly INodeInstanceService _nodeInstanceService;
 
-        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config, ILocalizationProvider localizationProvider) : base (database, config, (template, guid) => template.This2NodeTemplate = guid)
+        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService) : base (database, config, (template, guid) => template.This2NodeTemplate = guid)
         {
-            _localizationProvider = localizationProvider;
+            _nodeInstanceService = nodeInstanceService;
         }
         
         public NodeTemplate GetNodeTemplateById(Guid id)
         {
-            var db = Db;
-            var x = db.NodeTemplates
-                .Include(a => a.This2NodeDataTypeNavigation)
-                .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Single(a => a.ObjId == id);
-            return x;
+            return _nodeInstanceService.GetTemplateById(id);
         }
 
         public NodeTemplate GetNodeTemplateByKey(string key)
         {
-            var db = Db;
-            var x = db.NodeTemplates
-                .Include(a => a.This2NodeDataTypeNavigation)
-                .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Single(a => a.Key == key);
-            return x;
+            return _nodeInstanceService.GetTemplateByKey(key);
         }
 
         public ICollection<NodeTemplate> GetNodeTemplates(params Guid[] key)
         {
-            var templates = Db.NodeTemplates
-                .Include(a => a.This2NodeDataTypeNavigation)
-                .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Where(a => key.Contains(a.ObjId)).ToList();
-
-            return templates;
-        }
-
-        private ICollection<NodeTemplate> GetDefaultChildNodeTemplates(NodeTemplate nodeTemplate)
-        {
-            var templates = Db.NodeTemplates
-                .Include(a => a.This2NodeDataTypeNavigation)
-                .Include(a => a.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Where(a => a.DefaultCreated & a.NeedsInterface2InterfacesType == nodeTemplate.ProvidesInterface2InterfaceType).ToList();
-
-            return templates;
+            return _nodeInstanceService.GetTemplatesById(key);
         }
 
         public NodeInstance CreateNodeInstance(string locale, Guid template)
@@ -74,25 +41,7 @@ namespace Automatica.Core.Internals.Templates
 
         public NodeInstance CreateNodeInstance(string locale, NodeTemplate template)
         {
-            var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(template);
-
-            node.Name = _localizationProvider.GetTranslation(locale, template.Name);
-            node.Description = _localizationProvider.GetTranslation(locale, template.Description);
-
-            var childTemplates = GetDefaultChildNodeTemplates(template);
-
-            foreach (var child in childTemplates)
-            {
-                var childInstance = CreateNodeInstance(locale, child);
-
-                childInstance.This2ParentNodeInstance = node.ObjId;
-                childInstance.This2ParentNodeInstanceNavigation = node;
-
-                node.InverseThis2ParentNodeInstanceNavigation.Add(childInstance);
-
-            }
-
-            return node;
+            return _nodeInstanceService.CreateNodeInstance(locale, template);
         }
 
         public NodeInstance CreateNodeInstanceByKey(string key)

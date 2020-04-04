@@ -7,6 +7,10 @@ namespace Automatica.Core.Internals.Cache.Driver
 {
     public interface INodeTemplateCache : IStore<NodeTemplate>
     {
+        NodeTemplate GetByKey(string key);
+
         ICollection<NodeTemplate> GetSupportedTemplates(NodeInstance targetNodeInstance, Guid neededInterfaceType);
+
+        ICollection<NodeTemplate> GetDefaultItemsForTemplate(NodeTemplate template);
     }
 }

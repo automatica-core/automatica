@@ -9,6 +9,7 @@ namespace Automatica.Core.Base.Cache
         bool Contains(T1 key);
 
         T2 Get(T1 key);
+        ICollection<T2> Get(params T1[] keys);
 
         ICollection<T2> All();
 
