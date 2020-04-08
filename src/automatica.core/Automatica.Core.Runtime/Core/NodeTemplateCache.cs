@@ -111,7 +111,7 @@ namespace Automatica.Core.Runtime.Core
 
             foreach (var template in templates)
             {
-                if (!_nodeTemplateFactoryMapping.ContainsKey(template))
+                if (!(template.IsAdapterInterface.HasValue && template.IsAdapterInterface.Value) && !_nodeTemplateFactoryMapping.ContainsKey(template))
                 {
                     continue;
                 }
