@@ -51,214 +51,239 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("saveAll")]
+        [Route("page/add")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<SaveAllLogicEditor> SaveAll([FromBody] SaveAllLogicEditor data)
-        {
-            await using var dbContextNodeInstances = new AutomaticaContext(_config);
-
-            var nodeInstanceController = new NodeInstanceController(dbContextNodeInstances, _notifyDriver,
-                _nodeInstanceCache, _coreServer);
-
-            var pages = await Save(data.LogicPages);
-
-            await _coreServer.ReInit();
-            return new SaveAllLogicEditor
-            {
-                LogicPages = pages.ToList(),
-                NodeInstances = nodeInstanceController.Get().ToList()
-            };
-        }
-
-        internal async Task<IEnumerable<RulePage>> Save(List<RulePage> data)
+        public async Task<RulePage> AddPage([FromBody]RulePage page)
         {
             await using var dbContext = new AutomaticaContext(_config);
-            {
-                var transaction = await dbContext.Database.BeginTransactionAsync();
-                try
-                {
-                    foreach (var page in data)
-                    {
-                        var isNewPage = false;
-                        var dbPage = dbContext.RulePages.SingleOrDefault(a => a.ObjId == page.ObjId);
 
-                        if (dbPage == null)
-                        {
-                            dbPage = page;
-                            isNewPage = true;
-                        }
-                        else
-                        {
-                            dbContext.Entry(dbPage).State = EntityState.Detached;
-                        }
+            dbContext.RulePages.Add(page);
+            await dbContext.SaveChangesAsync();
+            _logicCacheFacade.ClearInstances();
 
-                        if (page.Description == null)
-                        {
-                            page.Description = "";
-                        }
-
-                        foreach (var ruleInstance in page.RuleInstance)
-                        {
-                            if (ruleInstance.Description == null)
-                            {
-                                ruleInstance.Description = "";
-                            }
-
-                            foreach (var ruleInterface in ruleInstance.RuleInterfaceInstance)
-                            {
-                                ruleInterface.This2RuleInterfaceTemplateNavigation = null;
-
-                                if (dbContext.RuleInterfaceInstances.AsNoTracking()
-                                        .SingleOrDefault(a => a.ObjId == ruleInterface.ObjId) != null)
-                                {
-                                    dbContext.Entry(ruleInterface).State = EntityState.Modified;
-                                    dbContext.RuleInterfaceInstances.Update(ruleInterface);
-                                }
-                                else
-                                {
-                                    dbContext.RuleInterfaceInstances.Add(ruleInterface);
-                                    dbContext.Entry(ruleInterface).State = EntityState.Added;
-                                }
-                            }
-
-                            ruleInstance.This2RulePage = page.ObjId;
-
-                            ruleInstance.This2RuleTemplate = ruleInstance.This2RuleTemplateNavigation.ObjId;
-                            ruleInstance.This2RuleTemplateNavigation = null;
-
-                            if (dbContext.RuleInstances.AsNoTracking()
-                                    .SingleOrDefault(a => a.ObjId == ruleInstance.ObjId) == null)
-                            {
-                                dbContext.RuleInstances.Add(ruleInstance);
-                                dbContext.Entry(ruleInstance).State = EntityState.Added;
-                            }
-                            else
-                            {
-                                dbContext.Entry(ruleInstance).State = EntityState.Modified;
-                                dbContext.RuleInstances.Update(ruleInstance);
-                            }
-                        }
-
-                        foreach (var node in page.NodeInstance2RulePage)
-                        {
-                            if (dbContext.NodeInstance2RulePages.AsNoTracking()
-                                    .SingleOrDefault(a => a.ObjId == node.ObjId) == null)
-                            {
-                                node.This2NodeInstanceNavigation = null;
-                                await dbContext.AddAsync(node);
-                                dbContext.Entry(node).State = EntityState.Added;
-                            }
-                            else
-                            {
-                                dbContext.Entry(node).State = EntityState.Modified;
-                                dbContext.NodeInstance2RulePages.Update(node);
-                            }
-                        }
-
-                        foreach (var link in page.Link)
-                        {
-                            link.This2RulePage = dbPage.ObjId;
-
-
-                            link.This2RuleInterfaceInstanceOutputNavigation = null;
-                            link.This2RuleInterfaceInstanceInputNavigation = null;
-                            link.This2NodeInstance2RulePageInputNavigation = null;
-                            link.This2NodeInstance2RulePageOutputNavigation = null;
-
-                            if (dbContext.Links.AsNoTracking().SingleOrDefault(a => a.ObjId == link.ObjId) == null)
-                            {
-                                await dbContext.AddAsync(link);
-                                dbContext.Entry(link).State = EntityState.Added;
-                            }
-                            else
-                            {
-                                dbContext.Update(link);
-                                dbContext.Entry(link).State = EntityState.Modified;
-                            }
-                        }
-
-                        if (isNewPage)
-                        {
-                            dbContext.Entry(page).State = EntityState.Added;
-                            await dbContext.RulePages.AddAsync(page);
-                        }
-                        else
-                        {
-                            dbContext.Entry(page).State = EntityState.Modified;
-                            dbContext.RulePages.Update(page);
-                        }
-                    }
-
-                    await dbContext.SaveChangesAsync(true);
-
-                    foreach (var page in data)
-                    {
-                        var removedRules = from c in dbContext.RuleInstances
-                                           where !(from o in page.RuleInstance select o.ObjId).Contains(c.ObjId) &&
-                                                 c.This2RulePage == page.ObjId
-                                           select c;
-
-                        var removedRulesList = removedRules.ToList();
-                        dbContext.RuleInstances.RemoveRange(removedRulesList);
-
-
-                        var removedLinks = from c in dbContext.Links
-                                           where !(from o in page.Link select o.ObjId).Contains(c.ObjId) &&
-                                                 c.This2RulePage == page.ObjId
-                                           select c;
-
-                        dbContext.Links.RemoveRange(removedLinks);
-
-
-
-                        var removedNodes = (from c in dbContext.NodeInstance2RulePages
-                                            where !(from o in page.NodeInstance2RulePage select o.ObjId).Contains(c.ObjId) &&
-                                                  c.This2RulePage == page.ObjId
-                                            select c).ToList();
-
-                        dbContext.NodeInstance2RulePages.RemoveRange(removedNodes);
-                    }
-
-                    var removedPages = (from c in dbContext.RulePages
-                                        where !(from o in data select o.ObjId).Contains(c.ObjId)
-                                        select c).ToList();
-
-                    foreach (var removedPage in removedPages)
-                    {
-                        var removedRules = from c in dbContext.RuleInstances
-                                           where c.This2RulePage == removedPage.ObjId
-                                           select c;
-                        dbContext.RuleInstances.RemoveRange(removedRules);
-
-                        var removedLinks = from c in dbContext.Links
-                                           where c.This2RulePage == removedPage.ObjId
-                                           select c;
-
-                        dbContext.Links.RemoveRange(removedLinks);
-
-                        var removedNodes = (from c in dbContext.NodeInstance2RulePages
-                                            where c.This2RulePage == removedPage.ObjId
-                                            select c).ToList();
-
-                        dbContext.NodeInstance2RulePages.RemoveRange(removedNodes);
-
-                    }
-
-                    dbContext.RemoveRange(removedPages);
-
-                    await dbContext.SaveChangesAsync(true);
-                    await transaction.CommitAsync();
-                    _logicCacheFacade.ClearInstances();
-                }
-                catch (Exception e)
-                {
-                    SystemLogger.Instance.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
-                    throw;
-                }
-            }
-            return GetPages();
+            return page;
         }
+
+        [HttpPost]
+        [Route("item/ruleInstance/{pageId}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<RuleInstance> AddRuleInstance([FromBody] RuleInstance ruleInstance, Guid pageId)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            foreach (var ruleInterface in ruleInstance.RuleInterfaceInstance)
+            {
+                ruleInterface.This2RuleInterfaceTemplateNavigation = null;
+
+                dbContext.RuleInterfaceInstances.Add(ruleInterface);
+                dbContext.Entry(ruleInterface).State = EntityState.Added;
+            }
+
+            ruleInstance.This2RulePage = pageId;
+
+            ruleInstance.This2RuleTemplate = ruleInstance.This2RuleTemplateNavigation.ObjId;
+            ruleInstance.This2RuleTemplateNavigation = null;
+
+            dbContext.RuleInstances.Add(ruleInstance);
+            dbContext.Entry(ruleInstance).State = EntityState.Added;
+
+            ruleInstance.This2RulePage = pageId;
+            await dbContext.SaveChangesAsync();
+
+
+            _logicCacheFacade.PageCache.AddRuleInstance(ruleInstance);
+            _logicCacheFacade.ClearInstances();
+
+            return ruleInstance;
+        }
+
+        [HttpPatch]
+        [Route("item/ruleInstance")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<RuleInstance> UpdateRuleInstance([FromBody] RuleInstance ruleInstance)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            var existingInstance = dbContext.RuleInstances.Single(a => a.ObjId == ruleInstance.ObjId);
+
+            existingInstance.Name = ruleInstance.Name;
+            existingInstance.X = ruleInstance.X;
+            existingInstance.Y= ruleInstance.Y;
+
+            dbContext.Update(existingInstance);
+            dbContext.Entry(existingInstance).State = EntityState.Modified;
+
+            await dbContext.SaveChangesAsync();
+
+            _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
+            _logicCacheFacade.ClearInstances();
+            return ruleInstance;
+        }
+
+        [HttpPost]
+        [Route("item/nodeInstance/{pageId}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<NodeInstance2RulePage> AddNodeInstance([FromBody]NodeInstance2RulePage instance, Guid pageId)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            instance.This2RulePage = pageId;
+            var nav = instance.This2NodeInstanceNavigation;
+            
+            instance.This2NodeInstanceNavigation = null;
+            await dbContext.AddAsync(instance);
+            dbContext.Entry(instance).State = EntityState.Added;
+
+            await dbContext.SaveChangesAsync();
+
+            instance.This2NodeInstanceNavigation = nav;
+            _logicCacheFacade.PageCache.AddNodeInstance(instance);
+
+
+            _logicCacheFacade.ClearInstances();
+            return instance;
+        }
+
+
+
+        [HttpPatch]
+        [Route("item/nodeInstance")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<NodeInstance2RulePage> UpdateNodeInstance([FromBody] NodeInstance2RulePage nodeInstance)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            var existingInstance = dbContext.NodeInstance2RulePages.Single(a => a.ObjId == nodeInstance.ObjId);
+
+            existingInstance.X = nodeInstance.X;
+            existingInstance.Y = nodeInstance.Y;
+
+            dbContext.Update(existingInstance);
+            dbContext.Entry(existingInstance).State = EntityState.Modified;
+
+            await dbContext.SaveChangesAsync();
+
+            _logicCacheFacade.PageCache.UpdateNodeInstance(existingInstance);
+            _logicCacheFacade.ClearInstances();
+            return nodeInstance;
+        }
+
+        [HttpDelete]
+        [Route("page/{pageId}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task RemovePage(Guid pageId)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            var rulePage = dbContext.RulePages.SingleOrDefault(a => a.ObjId == pageId);
+
+            if (rulePage != null)
+            {
+                dbContext.RulePages.Remove(rulePage);
+                await dbContext.SaveChangesAsync();
+            }
+            _logicCacheFacade.ClearInstances();
+        }
+
+        [HttpDelete]
+        [Route("item/ruleInstance/{instanceId}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task RemoveRuleInstance(Guid instanceId)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            var ruleInstance = dbContext.RuleInstances.SingleOrDefault(a => a.ObjId == instanceId);
+
+            if (ruleInstance != null)
+            {
+                _logicCacheFacade.PageCache.RemoveRuleInstance(ruleInstance);
+                dbContext.RuleInstances.Remove(ruleInstance);
+                await dbContext.SaveChangesAsync();
+            }
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        [HttpDelete]
+        [Route("item/nodeInstance/{instanceId}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task RemoveNodeInstance(Guid instanceId)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            var nodeInstance = dbContext.NodeInstance2RulePages.SingleOrDefault(a => a.ObjId == instanceId);
+
+            if (nodeInstance != null)
+            {
+                dbContext.NodeInstance2RulePages.Remove(nodeInstance);
+
+                _logicCacheFacade.PageCache.RemoveNodeInstance(nodeInstance);
+                await dbContext.SaveChangesAsync();
+            }
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        [HttpPost]
+        [Route("link")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<Link> AddOrUpdateLink([FromBody] Link link)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            link.This2RuleInterfaceInstanceOutputNavigation = null;
+            link.This2RuleInterfaceInstanceInputNavigation = null;
+            link.This2NodeInstance2RulePageInputNavigation = null;
+            link.This2NodeInstance2RulePageOutputNavigation = null;
+
+            if (dbContext.Links.AsNoTracking().SingleOrDefault(a => a.ObjId == link.ObjId) == null)
+            {
+                await dbContext.AddAsync(link);
+                dbContext.Entry(link).State = EntityState.Added;
+
+                await dbContext.SaveChangesAsync();
+                _logicCacheFacade.PageCache.AddLink(link);
+            }
+            else
+            {
+                dbContext.Update(link);
+                dbContext.Entry(link).State = EntityState.Modified;
+
+                await dbContext.SaveChangesAsync();
+                _logicCacheFacade.PageCache.UpdateLink(link);
+            }
+
+
+            _logicCacheFacade.ClearInstances();
+            return link;
+        }
+
+        [HttpDelete]
+        [Route("link/{objId}")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task RemoveLink(Guid objId)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+            var link = dbContext.Links.SingleOrDefault(a => a.ObjId == objId);
+
+            if (link != null)
+            {
+                dbContext.Remove(link);
+                await dbContext.SaveChangesAsync();
+                _logicCacheFacade.PageCache.RemoveLink(link);
+            }
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        [HttpPost]
+        [Route("reload")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task Reload()
+        {
+            await _coreServer.ReloadLogicServices();
+        }
+
 
         [HttpGet]
         [Route("pages")]

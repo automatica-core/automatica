@@ -8,6 +8,7 @@ namespace Automatica.Core.Internals.Core
     {
         void Restart();
         Task ReInit();
+        Task ReloadLogicServices();
 
         Task StopDriver(IDriver driver);
         Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate);

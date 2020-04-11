@@ -249,7 +249,20 @@ namespace Automatica.Core.Runtime.Core
                 await StartDriver(driver);
             }
 
+            await StartLogicEngine();
 
+           
+            _logger.LogInformation("Starting recorders...");
+            foreach (var rec in _trendingRecorder)
+            {
+                await rec.Start();
+            }
+            _logger.LogInformation("Starting recorders...done");
+            RunState = RunState.Started;
+        }
+
+        private async Task StartLogicEngine()
+        {
             _logger.LogInformation("Loading logic engine connections...");
             _ruleEngineDispatcher.Load();
             _logger.LogInformation("Loading logic engine connections...done");
@@ -274,13 +287,12 @@ namespace Automatica.Core.Runtime.Core
                 }
             }
 
-            _logger.LogInformation("Starting recorders...");
-            foreach (var rec in _trendingRecorder)
-            {
-                await rec.Start();
-            }
-            _logger.LogInformation("Starting recorders...done");
-            RunState = RunState.Started;
+        }
+
+        public async Task ReloadLogicServices()
+        {
+            await StopLogicEngine();
+            await StartLogicEngine();
         }
 
         public async Task StopDriver(IDriver driver)
@@ -307,15 +319,8 @@ namespace Automatica.Core.Runtime.Core
             _driverNodesStore.RemoveDriver(driver);
         }
 
-        private async Task Stop()
+        private async Task StopLogicEngine()
         {
-            await _remoteServerHandler.Stop();
-
-            foreach (var driver in _driverStore.All())
-            {
-                await StopDriver(driver);
-            }
-
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
                 try
@@ -336,6 +341,19 @@ namespace Automatica.Core.Runtime.Core
                     _logger.LogError(e, $"Stopping logic {rule.Key.Name}...error");
                 }
             }
+        }
+
+        private async Task Stop()
+        {
+            await _remoteServerHandler.Stop();
+
+            foreach (var driver in _driverStore.All())
+            {
+                await StopDriver(driver);
+            }
+
+            await StopLogicEngine();
+         
 
             RunState = RunState.Stopped;
             _logger.LogInformation("CoreServer stopping...");
