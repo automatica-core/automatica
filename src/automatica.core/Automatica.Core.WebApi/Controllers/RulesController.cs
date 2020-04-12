@@ -109,6 +109,13 @@ namespace Automatica.Core.WebApi.Controllers
             existingInstance.Name = ruleInstance.Name;
             existingInstance.X = ruleInstance.X;
             existingInstance.Y= ruleInstance.Y;
+            existingInstance.UseInVisu = ruleInstance.UseInVisu;
+            existingInstance.Description = ruleInstance.Description;
+            existingInstance.IsFavorite = ruleInstance.IsFavorite;
+            existingInstance.Rating = ruleInstance.Rating;
+            existingInstance.This2UserGroup = ruleInstance.This2UserGroup;
+            existingInstance.This2AreaInstance = ruleInstance.This2AreaInstance;
+            existingInstance.This2CategoryInstance = ruleInstance.This2CategoryInstance;
 
             dbContext.Update(existingInstance);
             dbContext.Entry(existingInstance).State = EntityState.Modified;
