@@ -1,6 +1,8 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Logic.BaseOperations.BinaryDecoder
 {
@@ -19,14 +21,14 @@ namespace P3.Rule.Logic.BaseOperations.BinaryDecoder
         public static readonly Guid RuleOutput8 = new Guid("1e11f30b-df35-4daa-8804-3e4b36125795");
 
         public override string RuleName => "Logic.BinaryDecoder";
-        public override Version RuleVersion => new Version(1, 0, 0, 0);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
         public override Guid RuleGuid => new Guid("bb300e2a-dcec-4753-a37b-2b23ea937387");
 
         public override void InitTemplates(IRuleTemplateFactory factory)
         {
             factory.CreateRuleTemplate(RuleGuid, "LOGIC.BINARY_DECODER.NAME", "LOGIC.BINARY_DECODER.DESCRIPTION", "logic.binary_decoder", "LOGIC.NAME", 100, 100);
 
-            factory.CreateRuleInterfaceTemplate(RuleInput1, "AI", "LOGIC.BINARY_DECODER.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
+            factory.CreateRuleInterfaceTemplate(RuleInput1, "AI", "LOGIC.BINARY_DECODER.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1, RuleInterfaceType.Status);
 
             factory.CreateRuleInterfaceTemplate(RuleOutput1, "Q1", "LOGIC.BINARY_DECODER.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
             factory.CreateRuleInterfaceTemplate(RuleOutput2, "Q2", "LOGIC.BINARY_DECODER.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 2);

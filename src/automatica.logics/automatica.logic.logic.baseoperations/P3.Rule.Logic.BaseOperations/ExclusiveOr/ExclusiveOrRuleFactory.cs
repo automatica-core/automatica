@@ -1,6 +1,8 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Logic.BaseOperations.ExclusiveOr
 {
@@ -13,7 +15,7 @@ namespace P3.Rule.Logic.BaseOperations.ExclusiveOr
         public static readonly Guid RuleOutput = new Guid("85248065-c7c0-458e-af4b-488a287bed9a");
 
         public override string RuleName => "Logic.ExclusiveOr";
-        public override Version RuleVersion => new Version(1, 0, 0, 0);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
         public override Guid RuleGuid => new Guid("0f6ddef4-0522-4181-ab0b-32b4e68ea390");
 
         public override void InitTemplates(IRuleTemplateFactory factory)
@@ -23,7 +25,7 @@ namespace P3.Rule.Logic.BaseOperations.ExclusiveOr
             factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "LOGIC.EXCLUSIVE_OR.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
             factory.CreateRuleInterfaceTemplate(RuleInput2, "I2", "LOGIC.EXCLUSIVE_OR.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "LOGIC.EXCLUSIVE_OR.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
+            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "LOGIC.EXCLUSIVE_OR.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)

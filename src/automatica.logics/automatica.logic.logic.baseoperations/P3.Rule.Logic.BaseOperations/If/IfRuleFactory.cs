@@ -1,6 +1,8 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Logic.BaseOperations.If
 {
@@ -17,7 +19,7 @@ namespace P3.Rule.Logic.BaseOperations.If
         public static readonly Guid RuleOutput = new Guid("76b8d507-8237-4af8-a320-ccebfdd7007d");
 
         public override string RuleName => "Logic.If";
-        public override Version RuleVersion => new Version(0, 0, 0, 1);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
         public override Guid RuleGuid => new Guid("8e3666b9-3455-441e-afe2-b96c012929c5");
 
         public override void InitTemplates(IRuleTemplateFactory factory)
@@ -27,7 +29,7 @@ namespace P3.Rule.Logic.BaseOperations.If
             factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "LOGIC.IF.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
             factory.CreateRuleInterfaceTemplate(RuleInput2, "I2", "LOGIC.IF.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "LOGIC.IF.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
+            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "LOGIC.IF.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
 
             factory.CreateParameterRuleInterfaceTemplate(RuleParamTrue, "LOGIC.IF.PARAM.TRUE.NAME", "LOGIC.IF.PARAM.TRUE.DESCRIPTION", RuleGuid, 1, Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Integer, 1);
             factory.CreateParameterRuleInterfaceTemplate(RuleParamFalse, "LOGIC.IF.PARAM.FALSE.NAME", "LOGIC.IF.PARAM.FALSE.DESCRIPTION", RuleGuid, 2, Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Integer, 0);
