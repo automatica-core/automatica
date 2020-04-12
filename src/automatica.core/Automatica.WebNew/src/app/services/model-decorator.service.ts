@@ -11,7 +11,7 @@ import { Setting } from "../base/model/setting";
 import { PropertyTemplateConstraint } from "../base/model/property-template-constraint";
 import { PropertyTemplateConstraintData } from "../base/model/property-template-constraint-data";
 import { VisuObjectTemplate } from "../base/model/visu-object-template";
-import { VisuObjectInstance } from "../base/model/visu-object-instance";
+import { VisuObjectInstance, VisuObjectSourceType } from "../base/model/visu-object-instance";
 import { PropertyTemplate } from "../base/model/property-template";
 import { AreaInstance, AreaTemplate, AreaType } from "../base/model/areas";
 import { CategoryGroup, CategoryInstance } from "../base/model/categories";
@@ -30,7 +30,7 @@ export class ModelDecoratorService {
         new PropertyTemplateConstraintData();
 
         new VisuObjectTemplate();
-        new VisuObjectMobileInstance();
+        new VisuObjectMobileInstance(VisuObjectSourceType.NodeInstance);
         new VisuObjectInstance();
 
         new PropertyTemplate();

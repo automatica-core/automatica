@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Logic.BaseOperations.ExclusiveOr;
 using Xunit;
 
-namespace P3.Rule.Logic.BaseOperations.Test.ExclusiveOr
+namespace P3.Rule.Logic.BaseOperations.Tests.ExclusiveOr
 {
     public class ExclusiveOrTests : RuleTest<ExclusiveOrRuleFactory>
     {

@@ -1,13 +1,16 @@
 import { BaseModel, JsonFieldInfo, JsonProperty, JsonPropertyName, Model } from "./base-model";
 import { VisuObjectTemplate } from "./visu-object-template";
 import { PropertyInstance } from "./property-instance";
-;
+
 import { Guid } from "../utils/Guid";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
-import { RuleInstance } from "./rule-instance";
-import { NodeInstance } from "./node-instance";
-import { VisuObjectType } from "../visu/base-mobile-component";
+
+export enum VisuObjectSourceType {
+
+    NodeInstance,
+    RuleInstance
+}
 
 @Model()
 export class VisuObjectInstance extends BaseModel implements IPropertyModel {
@@ -79,7 +82,7 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     }
 
 
-    public static CreateFromTemplate(template: VisuObjectTemplate, x = void 0): VisuObjectInstance {
+    public static CreateFromTemplate(template: VisuObjectTemplate, x = void 0, type: VisuObjectSourceType): VisuObjectInstance {
         const instance = new VisuObjectInstance();
 
         return this.FillNewInstance(instance, template);

@@ -19,15 +19,15 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+    <PackageReference Include="coverlet.msbuild" Version="2.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Base" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Rule" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.EF" Version="2.1.0.751" />
+    <PackageReference Include="Automatica.Core.Base" Version="2.1.0.751" />
+    <PackageReference Include="Automatica.Core.Rule" Version="2.1.0.751" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.1.0.751" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="2.1.0.751" />
     <ProjectReference Include="..\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations.csproj" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>

@@ -1,10 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Xunit;
 using P3.Rule.Logic.BaseOperations.Not;
+using Xunit;
 
-
-namespace P3.Rule.Logic.BaseOperations.Test.Not
+namespace P3.Rule.Logic.BaseOperations.Tests.Not
 {
     
     public class NotTests : RuleTest<NotRuleFactory>

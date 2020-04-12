@@ -11,6 +11,8 @@ import { BaseMobileComponent } from "../base-mobile-component";
 import { AppService } from "src/app/services/app.service";
 import { VisuPageGroupType } from "../../model/visu-page";
 import { DimmerComponent } from "./dimmer/dimmer.component";
+import { VisuObjectSourceType } from "../../model/visu-object-instance";
+import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 
 @Component({
   selector: "visu-component",
@@ -59,7 +61,11 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
 
     switch (this.item.VisuObjectTemplate.Key) {
       case "label": {
-        this.component = LabelComponent;
+        if (this.item.type === VisuObjectSourceType.RuleInstance) {
+          this.component = LogicDefaultComponent;
+        } else {
+          this.component = LabelComponent;
+        }
         break;
       }
       case "link": {
@@ -75,7 +81,12 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         break;
       }
       default: {
-        this.component = DefaultComponent;
+
+        if (this.item.type === VisuObjectSourceType.RuleInstance) {
+          this.component = LogicDefaultComponent;
+        } else {
+          this.component = DefaultComponent;
+        }
         break;
       }
     }

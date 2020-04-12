@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Logic.BaseOperations.If;
 using Xunit;
 
-namespace P3.Rule.Logic.BaseOperations.Test.If
+namespace P3.Rule.Logic.BaseOperations.Tests.If
 {
     public class IfTests : RuleTest<IfRuleFactory>
     {

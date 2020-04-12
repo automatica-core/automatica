@@ -13,6 +13,7 @@ import { BaseControlModule } from "./base-control/base-control.module";
 import { DimmerComponent } from "./dimmer/dimmer.component";
 import { L10nTranslationModule } from "angular-l10n";
 import { ComponentsModule } from "../components/components.module";
+import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { ComponentsModule } from "../components/components.module";
       DefaultComponent,
       LinkComponent,
       ToggleComponent,
-      DimmerComponent
+      DimmerComponent,
+      LogicDefaultComponent
     ])
   ],
   declarations: [
@@ -45,7 +47,8 @@ import { ComponentsModule } from "../components/components.module";
     DefaultComponent,
     LinkComponent,
     ToggleComponent,
-    DimmerComponent
+    DimmerComponent,
+    LogicDefaultComponent
   ],
   exports: [
     VisuItemComponent
