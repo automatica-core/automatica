@@ -65,8 +65,14 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     this.menuItems.push(this.menuSave);
     this.menuItems.push(this.menuImportEts);
 
-    this.menuSave.label = this.translate.translate("COMMON.SAVE");
-    this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
+
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuSave.label = this.translate.translate("COMMON.SAVE");
+        this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
+      }
+    });
+
   }
 
   async ngOnInit() {

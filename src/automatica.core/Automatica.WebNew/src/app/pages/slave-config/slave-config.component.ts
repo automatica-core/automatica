@@ -40,7 +40,13 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
     appService.setAppTitle("CATEGORIES.NAME");
 
     this.menuItems.push(this.menuSave);
-    this.menuSave.label = translate.translate("COMMON.SAVE");
+
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuSave.label = translate.translate("COMMON.SAVE");
+      }
+    });
+
   }
 
   async ngOnInit() {

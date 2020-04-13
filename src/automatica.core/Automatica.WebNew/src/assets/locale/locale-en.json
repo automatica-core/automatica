@@ -71,6 +71,7 @@
         "FAVORITES": "Favorites",
         "HOME": "Home",
         "RELOAD": "Reload",
+        "SLAVES": "Slaves (Preview)",
         "SWITCH": {
             "ON": "Turn on",
             "OFF": "Turn off"
@@ -496,7 +497,8 @@
         "PROGRESS": "Progress",
         "UPDATE_ALL": "Update all",
         "INSTALL_ALL": "Install all",
-        "INSTALL_UPDATE_ALL": "Update & install all"
+        "INSTALL_UPDATE_ALL": "Update & install all",
+        "RELOAD": "Refresh"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddate must be after startdate",
