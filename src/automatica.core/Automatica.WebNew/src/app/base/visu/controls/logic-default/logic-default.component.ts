@@ -42,6 +42,8 @@ export class LogicDefaultComponent extends BaseMobileRuleComponent implements On
 
     super.propertyChanged();
 
+    this.value = this.dataHub.getCurrentValue(this.stateType.ObjId);
+
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {

@@ -169,6 +169,8 @@ export abstract class BaseMobileComponent extends BaseComponent {
             super.registerEvent((this.item.notifyChangeEvent), (prop) => {
                 this.propertyChanged()
             });
+
+            this.value = this.dataHub.getCurrentValue(this.item.ObjId);
         }
     }
 

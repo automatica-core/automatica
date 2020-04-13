@@ -10,6 +10,7 @@ import { Setting } from "../base/model/setting";
 import { ITreeNode } from "../base/model/ITreeNode";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
 import { NodeTemplateService } from "./node-template.service";
+import { DataService } from "./data.service";
 
 @Injectable()
 export class NodeInstanceService {
@@ -36,7 +37,8 @@ export class NodeInstanceService {
         private configService: ConfigService,
         private settingsService: SettingsService,
         private dataHubService: DataHubService,
-        private nodeTemplateService: NodeTemplateService) {
+        private nodeTemplateService: NodeTemplateService,
+        private dataService: DataService) {
 
     }
 
@@ -44,6 +46,15 @@ export class NodeInstanceService {
         this._settings = await this.settingsService.getSettings();
         await this.loadConfig();
         await this.dataHubService.subscribeForAll();
+
+        const currentValues = await this.dataService.getCurrentNodeValues();
+        const that = this;
+
+        console.log(currentValues);
+
+        Object.keys(currentValues).forEach(function (key) {
+            that.setNodeInstanceValue(key, currentValues[key]);
+        });
     }
 
     public getNodeInstance(id: string): NodeInstance {

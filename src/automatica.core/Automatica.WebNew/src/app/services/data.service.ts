@@ -8,11 +8,31 @@ import { Trending } from "../base/model/trending/trending";
 @Injectable()
 export class DataService extends BaseService {
 
+    private _latestValues: Map<string, any> = new Map<string, any>();
+
     constructor(httpService: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(httpService, pRouter, translationService);
     }
     public getCurrentNodeValues(): Promise<any> {
         return super.getJson("data/node/current");
+    }
+
+    public async getAllValues(): Promise<any> {
+        const values = await super.getJson("data/all/current");
+        const that = this;
+
+        Object.keys(values).forEach(function (key) {
+            that._latestValues.set(key, values[key]);
+        });
+
+        return values;
+    }
+
+    public getLocalValue(id: string) {
+        if (this._latestValues.has(id)) {
+            return this._latestValues.get(id);
+        }
+        return void 0;
     }
 
     public getTrendings(nodeId: string, startDate: Date, endDate: Date) {

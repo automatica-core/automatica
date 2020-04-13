@@ -17,6 +17,7 @@ import { PropertyInstance } from "src/app/base/model/property-instance";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { NodeTemplateService } from "src/app/services/node-template.service";
+import { DataService } from "src/app/services/data.service";
 
 @Component({
   selector: "p3-config-tree",

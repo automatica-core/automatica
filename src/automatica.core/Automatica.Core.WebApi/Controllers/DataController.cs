@@ -37,6 +37,21 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("all/current")]
+        [Authorize(Policy = Role.ViewerRole)]
+        public IDictionary<Guid, object> GetCurrentValues()
+        {
+            return _dispatcher.GetValues();
+        }
+        [HttpGet]
+        [Route("all/:id")]
+        [Authorize(Policy = Role.ViewerRole)]
+        public object GetValue(Guid id)
+        {
+            return _dispatcher.GetValue(id);
+        }
+
+        [HttpGet]
         [Route("trend/{id}/{startVisible}/{endVisible}/{startBound}/{endBound}")]
         public IList<Trending> GetTrendingValues(Guid id, DateTime startVisible, DateTime endVisible, DateTime startBound, DateTime endBound)
         {

@@ -14,6 +14,7 @@ import { VisuObjectInstance, VisuObjectSourceType } from "src/app/base/model/vis
 import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { DataService } from "src/app/services/data.service";
 
 @Component({
   selector: "app-mobile-container",
@@ -37,18 +38,20 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     notify: NotifyService,
     translate: L10nTranslationService,
     private configService: ConfigService,
-    private router: Router,
-    private login: LoginService,
     appService: AppService,
-    private deviceService: DeviceService,
-    private changeRef: ChangeDetectorRef) {
+    private dataService: DataService) {
 
     super(notify, translate, appService);
   }
 
   async ngOnInit() {
     this.appService.isLoading = true;
+
+    await this.dataService.getAllValues();
+
     this.visuTemplates = await this.visuService.getVisuTemplates();
+
+
     for (const v of this.visuTemplates) {
       this.visuTemplatesMap.set(v.ObjId, v);
     }
