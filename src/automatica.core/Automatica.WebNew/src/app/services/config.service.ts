@@ -46,7 +46,7 @@ export class ConfigService extends BaseService {
     }
 
     import(node: NodeInstance, fileName: string): Promise<NodeInstance[]> {
-        return super.postMultiple<NodeInstance>("nodeInstances/import/", { Node: node.toJson(), FileName: fileName });
+        return super.postMultiple<NodeInstance>("nodeInstancesV2/import/", { Node: node.toJson(), FileName: fileName });
     }
     read(node: NodeInstance): Promise<any> {
         return super.postJson("nodeInstances/read", node.toJson());

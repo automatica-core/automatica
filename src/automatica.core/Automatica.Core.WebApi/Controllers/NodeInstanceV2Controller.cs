@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.EF.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -46,7 +47,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task<EntityState> AddOrUpdateNodeInstance(NodeInstance node)
         {
-            var childs = node.InverseThis2ParentNodeInstanceNavigation;
+            var childs = node.InverseThis2ParentNodeInstanceNavigation ?? new List<NodeInstance>();
             var props = node.PropertyInstance;
 
             node.InverseThis2ParentNodeInstanceNavigation = null;
@@ -141,6 +142,14 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("add")]
         public async Task<NodeInstance> AddNode([FromBody]NodeInstance node)
         {
+            var newNode = await AddNodeInternal(node);
+            await ReloadDriver(node, newNode.entityState);
+
+            return newNode.node;
+        }
+
+        private async Task<(NodeInstance node, EntityState entityState)> AddNodeInternal(NodeInstance node)
+        {
             var transaction = DbContext.Database.BeginTransaction();
             try
             {
@@ -149,10 +158,7 @@ namespace Automatica.Core.WebApi.Controllers
                 await transaction.CommitAsync();
 
                 _nodeInstanceCache.Clear();
-
-                await ReloadDriver(node, entityState);
-
-                return _nodeInstanceCache.Get(node.ObjId);
+                return (_nodeInstanceCache.Get(node.ObjId), entityState);
             }
             catch (Exception e)
             {
@@ -292,6 +298,35 @@ namespace Automatica.Core.WebApi.Controllers
                 SystemLogger.Instance.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
                 throw;
             }
+        }
+
+        [HttpPost]
+        [Route("import")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IList<NodeInstance>> Import([FromBody] ImportData instance)
+        {
+            var data = await _notifyDriver.Import(instance.Node, instance.FileName);
+
+            if (System.IO.File.Exists(instance.FileName))
+            {
+                System.IO.File.Delete(instance.FileName);
+            }
+
+            var savedNodes = new List<NodeInstance>();
+            var savedNodesData = new List<(NodeInstance node, EntityState entityState)>();
+            foreach (var node in data)
+            {
+                var newNode = await AddNodeInternal(node);
+                savedNodes.Add(newNode.node);
+                savedNodesData.Add(newNode);
+            }
+
+            if (savedNodesData.Any())
+            {
+                await ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState);
+            }
+
+            return savedNodes;
         }
 
     }
