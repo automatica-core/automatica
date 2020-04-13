@@ -143,6 +143,12 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<NodeInstance> AddNode([FromBody]NodeInstance node)
         {
             var newNode = await AddNodeInternal(node);
+
+            if (node.This2NodeTemplateNavigation.IsAdapterInterface.HasValue && node.This2NodeTemplateNavigation.IsAdapterInterface.Value && newNode.node.This2ParentNodeInstance.HasValue)
+            {
+                newNode.node.This2ParentNodeInstanceNavigation = _nodeInstanceCache.Get(newNode.node.This2ParentNodeInstance.Value);
+                return newNode.node;
+            }
             await ReloadDriver(node, newNode.entityState);
 
             return newNode.node;
@@ -203,6 +209,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task StopStartDriver(NodeInstance node)
         {
+
             var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
             await _notifyDriver.NotifyAdd(node);
 
@@ -226,7 +233,7 @@ namespace Automatica.Core.WebApi.Controllers
             var transaction = DbContext.Database.BeginTransaction();
             try
             {
-                var existingNode = DbContext.NodeInstances.AsNoTracking().SingleOrDefault(a => a.ObjId == node.ObjId);
+                var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation).SingleOrDefault(a => a.ObjId == node.ObjId);
                 if (existingNode != null)
                 {
                     DbContext.Entry(existingNode).State = EntityState.Deleted;
@@ -237,6 +244,12 @@ namespace Automatica.Core.WebApi.Controllers
 
                 try
                 {
+                    if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                        existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
+                    {
+                        _nodeInstanceCache.Clear();
+                        return;
+                    }
                     var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
 
                     if (rootNode.ObjId == node.ObjId)

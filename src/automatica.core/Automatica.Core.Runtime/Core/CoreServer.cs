@@ -170,6 +170,8 @@ namespace Automatica.Core.Runtime.Core
             _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
 
             _nodeTemplateCache = services.GetRequiredService<INodeTemplateCache>();
+
+            _localizationProvider.LoadFromAssembly(GetType().Assembly);
             InitInternals();
         }
 

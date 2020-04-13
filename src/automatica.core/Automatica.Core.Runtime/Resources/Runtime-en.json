@@ -1,0 +1,19 @@
+﻿{
+
+  "COMMON": {
+    "INTERFACES": {
+      "USB_IR": {
+        "NAME": "USB IR",
+        "DESCRIPTION": ""
+      },
+      "RS485": {
+        "NAME": "RS485",
+        "DESCRIPTION": ""
+      },
+      "RS232": {
+        "NAME": "RS232",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

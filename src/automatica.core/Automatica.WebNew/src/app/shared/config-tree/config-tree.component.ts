@@ -435,6 +435,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     $event.items = [];
 
+    if (!nodeInstance.ParentId) {
+      return;
+    }
+
     let nodeTemplates: NodeTemplate[] = await this.nodeInstanceService.getSupportedNodeTemplates(nodeInstance);
 
     if (nodeTemplates) {
@@ -451,7 +455,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       }
     }
 
-    if (nodeInstance.Parent && nodeInstance instanceof NodeInstance) {
+    if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
       items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
 
 
