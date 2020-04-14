@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Math.BasicOperations.Addition
 {
@@ -19,8 +17,9 @@ namespace P3.Rule.Math.BasicOperations.Addition
         public static readonly Guid RuleOutput = new Guid("7a9d63b2-050f-4532-8ba9-188a308b4a9a");
 
         public override string RuleName => "Math.Add";
-        public override Version RuleVersion => new Version(1, 0, 0, 0);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
         public override Guid RuleGuid => new Guid("010669c3-11db-4e99-86a9-ce678779d3a0");
+
         public override void InitTemplates(IRuleTemplateFactory factory)
         {
             factory.CreateRuleTemplate(RuleGuid, "MATH.ADD.NAME", "MATH.ADD.DESCRIPTION",
@@ -31,7 +30,7 @@ namespace P3.Rule.Math.BasicOperations.Addition
             factory.CreateRuleInterfaceTemplate(RuleInput3, "I3", "MATH.ADD.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 3);
             factory.CreateRuleInterfaceTemplate(RuleInput4, "I4", "MATH.ADD.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 4);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.ADD.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
+            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.ADD.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)

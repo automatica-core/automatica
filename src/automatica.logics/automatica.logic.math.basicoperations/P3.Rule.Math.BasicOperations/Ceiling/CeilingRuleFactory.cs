@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Math.BasicOperations.Ceiling
 {
@@ -28,7 +26,7 @@ namespace P3.Rule.Math.BasicOperations.Ceiling
         /// <summary>
         /// Version
         /// </summary>
-        public override Version RuleVersion => new Version(1, 0, 0, 0);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
 
         /// <summary>
         /// Unique id for the rule block
@@ -47,7 +45,7 @@ namespace P3.Rule.Math.BasicOperations.Ceiling
 
             factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "MATH.CEILING.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.CEILING.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
+            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.CEILING.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ import { Link } from "src/app/base/model/link";
 import { Guid } from "src/app/base/utils/Guid";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { L10nTranslationService } from "angular-l10n";
+import { RuleEngineService } from "src/app/services/ruleengine.service";
 
 declare var draw2d: any;
 
@@ -13,11 +14,12 @@ export class LinkService {
 
     private _isInit: boolean = true;
 
-    static handleOnDisconnection(linkService: LinkService, connection: any) {
-        linkService.removeLink(connection.connection.getUserData());
+    static async handleOnDisconnection(linkService: LinkService, connection: any, isInput: boolean) {
+        await linkService.removeLink(connection.connection.getUserData(), isInput);
     }
 
-    static handleOnConnection(linkService: LinkService, port: any, connection: any, isInput: boolean, element: RuleInterfaceInstance | NodeInstance2RulePage) {
+    static async handleOnConnection(linkService: LinkService, port: any, connection: any, isInput: boolean,
+        element: RuleInterfaceInstance | NodeInstance2RulePage, ruleEngineService: RuleEngineService) {
         let userData: Link = connection.connection.getUserData();
 
         if (!userData) {
@@ -29,7 +31,7 @@ export class LinkService {
         if (userData) {
 
             connection.connection.setRouter(new draw2d.layout.connection.ManhattanBridgedConnectionRouter());
-            const existingLink: Link = connection.connection.getUserData();
+            const existingLink: Link = userData;
 
             if (element instanceof RuleInterfaceInstance) {
                 if (isInput) {
@@ -77,6 +79,9 @@ export class LinkService {
             }
         }
 
+        if (!linkService.isInit && isInput) {
+            await ruleEngineService.addOrUpdateLink(userData);
+        }
 
     }
 
@@ -87,7 +92,7 @@ export class LinkService {
         this._isInit = v;
     }
 
-    constructor(private page: RulePage, public translate: L10nTranslationService) {
+    constructor(private page: RulePage, public translate: L10nTranslationService, private ruleEngineService: RuleEngineService) {
 
     }
 
@@ -105,12 +110,17 @@ export class LinkService {
 
         return linkData;
     }
-    removeLink(link: Link) {
+
+    async removeLink(link: Link, isInput: boolean) {
         if (this.isInit) {
             return;
         }
 
         this.page.removeLink(link);
+
+        if (isInput) {
+            await this.ruleEngineService.removeLink(link);
+        }
 
     }
 

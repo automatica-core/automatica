@@ -4,15 +4,18 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Remote;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.Internals;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Plugins;
+using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
@@ -61,6 +64,7 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<IDriverNodesStoreInternal, DriverNodesStoreInternal>();
                 services.AddSingleton<INodeInstanceStore, NodeInstanceStore>();
                 services.AddSingleton<ILogicInstancesStore, LogicInstanceStore>();
+                services.AddSingleton<INodeTemplateCache, NodeTemplateCache>();
 
                 services.AddSingleton<LogicStore, LogicStore>();
                 services.AddSingleton<ILogicStore>(a => a.GetService<LogicStore>());
@@ -77,6 +81,7 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<ILoadedStore, LoadedStore>();
                 services.AddSingleton<ILogicFactoryStore, LogicFactoryStore>();
                 services.AddSingleton<IDriverFactoryStore, DriverFactoryStore>();
+
 
                 services.AddSingleton<IDriverLoader, DriverLoader>();
                 services.AddSingleton<ILogicLoader, LogicLoader>();

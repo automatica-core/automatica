@@ -24,6 +24,7 @@ import { PluginsService } from "./plugins.service";
 import { AppService } from "./app.service";
 import { SlavesService } from "./slaves.services";
 import { NodeInstanceService } from "./node-instance.service";
+import { NodeTemplateService } from "./node-template.service";
 
 @NgModule({
   imports: [
@@ -53,7 +54,8 @@ import { NodeInstanceService } from "./node-instance.service";
     SystemService,
     PluginsService,
     AppService,
-    SlavesService
+    SlavesService,
+    NodeTemplateService
 
   ]
 })

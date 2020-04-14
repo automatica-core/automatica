@@ -5,6 +5,7 @@
         ILogicInstanceCache InstanceCache { get; }
         ILogicPageCache PageCache { get; }
         ILogicTemplateCache TemplateCache{ get; }
+        ILogicNodeInstanceCache LogicNodeInstanceCache { get; }
 
         void ClearInstances();
     }

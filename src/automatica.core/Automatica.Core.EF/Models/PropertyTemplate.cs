@@ -27,6 +27,8 @@ namespace Automatica.Core.EF.Models
         public int GroupOrder { get; set; }
         public int Order { get; set; }
 
+        public Guid FactoryReference { get; set; }
+
         [JsonIgnore, IgnoreMember]
         public NodeTemplate This2NodeTemplateNavigation { get; set; }
 

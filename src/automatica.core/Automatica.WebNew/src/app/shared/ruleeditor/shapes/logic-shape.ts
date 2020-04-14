@@ -3,12 +3,13 @@ import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instanc
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
 import { Link } from "src/app/base/model/link";
+import { RuleEngineService } from "src/app/services/ruleengine.service";
 
 declare var draw2d: any;
 declare var $: any;
 
 export class LogicShapes {
-    public static addShape(logic) {
+    public static addShape(logic, ruleEngineService: RuleEngineService) {
 
         logic.LogicShape = draw2d.shape.layout.VerticalLayout.extend({
             init: function (attr, element: RuleInstance, linkService: LinkService) {
@@ -49,6 +50,10 @@ export class LogicShapes {
                     element.Y = context.y;
                 });
 
+                this.on("dragEnd", async (context, data) => {
+                    await ruleEngineService.updateItem(element);
+                });
+
                 this.add(this.classLabel);
                 this.add(logicName);
 
@@ -56,6 +61,12 @@ export class LogicShapes {
             },
             getWidth() {
                 return Math.max(this.width, this.minWidth);
+            },
+            onDragEnd(x, y, shiftKey, ctrlKey) {
+                this._super();
+
+                this.fireEvent("dragEnd", { x: x, y: y });
+
             }
         });
 
@@ -131,13 +142,13 @@ export class LogicShapes {
                     port.setMaxFanOut(portInstance.FromMaxLinks);
                     port.setUserData(portInstance);
 
-                    port.on("connect", function (emitterPort, connection) {
-                        LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance);
+                    port.on("connect", async function (emitterPort, connection) {
+                        await LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance, ruleEngineService);
 
                     });
 
-                    port.on("disconnect", function (emitterPort, connection) {
-                        LinkService.handleOnDisconnection(linkService, connection);
+                    port.on("disconnect", async function (emitterPort, connection) {
+                        await LinkService.handleOnDisconnection(linkService, connection, isInput);
                     });
 
                     data.push(label);
@@ -178,13 +189,13 @@ export class LogicShapes {
                     input.setName(element.Inputs[0].PortId);
                     input.setId(element.Inputs[0].PortId);
 
-                    input.on("connect", function (emitterPort, connection) {
-                        LinkService.handleOnConnection(linkService, input, connection, true, element);
+                    input.on("connect", async function (emitterPort, connection) {
+                        await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
 
                     });
 
-                    input.on("disconnect", function (emitterPort, connection) {
-                        LinkService.handleOnDisconnection(linkService, connection);
+                    input.on("disconnect", async function (emitterPort, connection) {
+                        await LinkService.handleOnDisconnection(linkService, connection, true);
                     });
                 }
                 if (element.Outputs.length > 0) {
@@ -193,12 +204,12 @@ export class LogicShapes {
                     output.setName(element.Outputs[0].PortId);
                     output.setId(element.Outputs[0].PortId);
 
-                    output.on("connect", function (emitterPort, connection) {
-                        LinkService.handleOnConnection(linkService, output, connection, false, element);
+                    output.on("connect", async function (emitterPort, connection) {
+                        await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
                     });
 
-                    output.on("disconnect", function (emitterPort, connection) {
-                        LinkService.handleOnDisconnection(linkService, connection);
+                    output.on("disconnect", async function (emitterPort, connection) {
+                        await LinkService.handleOnDisconnection(linkService, connection, false);
                     });
                 }
 
@@ -208,10 +219,26 @@ export class LogicShapes {
                 });
 
 
+                this.on("dragEnd", async (context, data) => {
+                    try {
+                        await ruleEngineService.updateItem(element);
+                    } catch (error) {
+
+                    }
+                });
+
+
+
                 this.add(label);
             },
             getWidth() {
                 return 130;
+            },
+            onDragEnd(x, y, shiftKey, ctrlKey) {
+                this._super();
+
+                this.fireEvent("dragEnd", { x: x, y: y });
+
             }
         });
 

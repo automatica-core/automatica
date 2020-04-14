@@ -8,15 +8,17 @@ namespace Automatica.Core.Internals.Templates
 {
     public class PropertyTemplateFactory : SettingsFactory, IPropertyTemplateFactory
     {
+        public IFactory Factory { get; }
         private readonly Action<PropertyTemplate, Guid> _propertyExpression;
 
-        public PropertyTemplateFactory(AutomaticaContext database, IConfiguration config, Action<PropertyTemplate, Guid> propertyExpression) : base(database, config)
+        public PropertyTemplateFactory(AutomaticaContext database, IConfiguration config, Action<PropertyTemplate, Guid> propertyExpression, IFactory factory) : base(database, config)
         {
+            Factory = factory;
             _propertyExpression = propertyExpression;
         }
         
         public CreateTemplateCode CreatePropertyTemplate(Guid uid, string name, string description, string key,
-            PropertyTemplateType propertyType, Guid objectRef, string groupd, bool isVisible, bool isReadonly, string meta,
+            PropertyTemplateType propertyType, Guid objectRef, string group, bool isVisible, bool isReadonly, string meta,
             object defaultValue, int groupOrder, int order)
         {
             var retValue = CreateTemplateCode.Updated;
@@ -26,11 +28,11 @@ namespace Automatica.Core.Internals.Templates
             if (propertyTemplate == null)
             {
                 isNewObject = true;
-                propertyTemplate = new PropertyTemplate();
-                propertyTemplate.ObjId = uid;
+                propertyTemplate = new PropertyTemplate {ObjId = uid};
                 retValue = CreateTemplateCode.Created;
             }
 
+            propertyTemplate.FactoryReference = Factory.FactoryGuid;
             propertyTemplate.Name = name;
             propertyTemplate.Description = description;
             propertyTemplate.Key = key;
@@ -38,7 +40,7 @@ namespace Automatica.Core.Internals.Templates
 
             _propertyExpression(propertyTemplate, objectRef);
 
-            propertyTemplate.Group = groupd;
+            propertyTemplate.Group = group;
             propertyTemplate.IsVisible = isVisible;
             propertyTemplate.IsReadonly = isReadonly;
             propertyTemplate.Meta = String.IsNullOrEmpty(meta) ? "" : meta;
@@ -58,13 +60,15 @@ namespace Automatica.Core.Internals.Templates
 
                 foreach (var node in nodeList)
                 {
-                    var propertyInstance = new PropertyInstance();
-                    propertyInstance.ObjId = Guid.NewGuid();
-                    propertyInstance.This2NodeInstance = node.ObjId;
-                    propertyInstance.This2PropertyTemplate = propertyTemplate.ObjId;
-                    propertyInstance.This2PropertyTemplateNavigation = propertyTemplate;
-                    propertyInstance.Value = propertyTemplate.DefaultValue;
-                    propertyInstance.IsDeleted = false;
+                    var propertyInstance = new PropertyInstance
+                    {
+                        ObjId = Guid.NewGuid(),
+                        This2NodeInstance = node.ObjId,
+                        This2PropertyTemplate = propertyTemplate.ObjId,
+                        This2PropertyTemplateNavigation = propertyTemplate,
+                        Value = propertyTemplate.DefaultValue,
+                        IsDeleted = false
+                    };
 
                     Db.PropertyInstances.Add(propertyInstance);
                 }
@@ -82,7 +86,7 @@ namespace Automatica.Core.Internals.Templates
             return retValue;
         }
 
-        public CreateTemplateCode CreatePropertyConstraint(Guid constraintId, string name, string descrption,
+        public CreateTemplateCode CreatePropertyConstraint(Guid constraintId, string name, string description,
             PropertyConstraint constraintType, PropertyConstraintLevel level, Guid propertyTemplate)
         {
             var retValue = CreateTemplateCode.Updated;
@@ -92,13 +96,12 @@ namespace Automatica.Core.Internals.Templates
             if (constraint == null)
             {
                 isNewObject = true;
-                constraint = new PropertyTemplateConstraint();
-                constraint.ObjId = constraintId;
+                constraint = new PropertyTemplateConstraint {ObjId = constraintId};
                 retValue = CreateTemplateCode.Created;
             }
 
             constraint.Name = name;
-            constraint.Description = descrption;
+            constraint.Description = description;
             constraint.ConstraintType = (long)constraintType;
             constraint.This2PropertyTemplate = propertyTemplate;
             constraint.ConstraintLevel = (long)level;

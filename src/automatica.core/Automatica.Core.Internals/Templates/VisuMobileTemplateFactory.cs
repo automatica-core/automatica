@@ -6,10 +6,15 @@ using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Internals.Templates
 {
+    public class VisuMobileFactory : IFactory
+    {
+        public Guid FactoryGuid => new Guid("58df0a39-e110-42cc-a540-88d7e1dfa0a0");
+    }
+
     public class VisuMobileTemplateFactory : PropertyTemplateFactory, IVisuTemplateFactory
     {
         public VisuMobileTemplateFactory(AutomaticaContext database, IConfiguration config) : base(database, config,
-            (template, guid) => template.This2VisuObjectTemplate = guid)
+            (template, guid) => template.This2VisuObjectTemplate = guid, new VisuMobileFactory())
         {
 
         }

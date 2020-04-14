@@ -26,6 +26,8 @@ import { SlavesService } from "src/app/services/slaves.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { RuleInstance } from "src/app/base/model/rule-instance";
+import { RuleEngineService } from "src/app/services/ruleengine.service";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -270,7 +272,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private notify: NotifyService,
     private slaveService: SlavesService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService) {
+    private nodeInstanceService: NodeInstanceService,
+    private ruleEngineService: RuleEngineService) {
     super(notify, translate, appService);
   }
 
@@ -478,6 +481,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       if (!this.item.ParentId) {
         this.nodeInstanceService.saveSettings();
       }
+    } else if (this.item instanceof RuleInstance) {
+      await this.ruleEngineService.updateItem(this.item);
     }
   }
 

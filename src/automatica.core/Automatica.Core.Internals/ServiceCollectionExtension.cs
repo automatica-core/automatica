@@ -1,6 +1,8 @@
-﻿using Automatica.Core.Internals.Cache.Common;
+﻿using Automatica.Core.Base.Templates;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Internals.Templates;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +12,8 @@ namespace Automatica.Core.Internals
     {
         public static void AddInternals(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<INodeTemplateCache, NodeTemplateCache>();
             services.AddSingleton<INodeInstanceCache, NodeInstanceCache>();
+            services.AddSingleton<INodeInstanceService, NodeInstanceService>();
 
             services.AddSingleton<ISettingsCache, SettingsCache>();
 
@@ -30,6 +32,7 @@ namespace Automatica.Core.Internals
             services.AddSingleton<ILogicTemplateCache, LogicTemplateCache>();
             services.AddSingleton<ILogicCacheFacade, LogicCacheFacade>();
             services.AddSingleton<ILogicInterfaceInstanceCache, LogicInterfaceInstanceCache>();
+            services.AddSingleton<ILogicNodeInstanceCache, LogicNodeInstanceCache>();
 
             services.AddSingleton<ILinkCache, LinkCache>();
         }

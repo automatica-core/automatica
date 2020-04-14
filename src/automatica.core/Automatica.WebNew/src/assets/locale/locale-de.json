@@ -70,6 +70,7 @@
         "FAVORITES": "Favoriten",
         "HOME": "Home",
         "RELOAD": "Aktualisieren",
+        "SLAVES": "Slaves (Preview)",
         "SWITCH": {
             "ON": "Einschalten",
             "OFF": "Ausschalten"
@@ -494,9 +495,10 @@
         "INSTALLED_VERSION": "Installierte Version",
         "ACTION": "Aktionen",
         "PROGRESS": "Status",
-        "UPDATE_ALL": "Alle aktualisieren",
+        "UPDATE_ALL": "Alle updaten",
         "INSTALL_ALL": "Alle installieren",
-        "INSTALL_UPDATE_ALL": "Alle updaten & installieren"
+        "INSTALL_UPDATE_ALL": "Alle updaten & installieren",
+        "RELOAD": "Aktualisieren"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddatum darf nicht vor dem Startdatum sein",

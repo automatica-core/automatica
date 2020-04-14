@@ -11,8 +11,8 @@
         "DESCRIPTION": "Ausgangswert"
       }
     },
-    "SUBSTRACT": {
-      "NAME": "Substraction",
+    "SUBTRACT": {
+      "NAME": "SUBTRACTion",
       "DESCRIPTION": "Substraihiert die Eingangswerte und gibt den Wert beim Ausgang aus (O = - I1 - I2)",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"

@@ -14,7 +14,7 @@ namespace Automatica.Core.EF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1");
+                .HasAnnotation("ProductVersion", "3.1.3");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
@@ -291,6 +291,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasDefaultValue("");
 
+                    b.Property<Guid>("FactoryReference")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDriverInterface")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -535,6 +538,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasDefaultValue("");
 
+                    b.Property<Guid>("FactoryReference")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool?>("IsAdapterInterface")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -746,6 +752,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(1024)
                         .HasDefaultValue("");
+
+                    b.Property<Guid>("FactoryReference")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Group")
                         .IsRequired()

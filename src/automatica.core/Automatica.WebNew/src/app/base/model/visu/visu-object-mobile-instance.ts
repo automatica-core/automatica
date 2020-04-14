@@ -1,9 +1,10 @@
 import { EventEmitter } from "@angular/core";
 import { IGridsterItem } from ".";
-import { VisuObjectInstance } from "../visu-object-instance";
+import { VisuObjectInstance, VisuObjectSourceType } from "../visu-object-instance";
 import { Model, JsonFieldInfo, JSON_FIELDS } from "../base-model";
 import { VisuObjectTemplate } from "../visu-object-template";
 import { VisuObjectType } from "../../visu/base-mobile-component";
+
 
 @Model()
 export class VisuObjectMobileInstance extends VisuObjectInstance implements IGridsterItem {
@@ -14,8 +15,8 @@ export class VisuObjectMobileInstance extends VisuObjectInstance implements IGri
     private _isLoading: boolean;
     objectType: VisuObjectType;
 
-    public static CreateFromTemplate(template: VisuObjectTemplate, objectType: VisuObjectType): VisuObjectMobileInstance {
-        const instance = new VisuObjectMobileInstance();
+    public static CreateFromTemplate(template: VisuObjectTemplate, objectType: VisuObjectType, type: VisuObjectSourceType): VisuObjectMobileInstance {
+        const instance = new VisuObjectMobileInstance(type);
 
         instance.objectType = objectType;
         instance.x = instance.X;
@@ -26,6 +27,11 @@ export class VisuObjectMobileInstance extends VisuObjectInstance implements IGri
         super.FillNewInstance(instance, template);
 
         return instance;
+    }
+
+    constructor(public type: VisuObjectSourceType) {
+        super();
+
     }
 
 

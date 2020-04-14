@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Xunit;
 using P3.Rule.Math.BasicOperations.Modulo;
+using Xunit;
 
-namespace P3.Rule.Math.BasicOperations.Test.Modulo
+namespace P3.Rule.Math.BasicOperations.Tests.Modulo
 {
     
     public class ModuloTests : RuleTest<ModuloRuleFactory>

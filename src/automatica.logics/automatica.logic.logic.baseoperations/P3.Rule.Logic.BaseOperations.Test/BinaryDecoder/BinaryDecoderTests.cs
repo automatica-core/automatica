@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Logic.BaseOperations.BinaryDecoder;
 using Xunit;
 
-namespace P3.Rule.Logic.BaseOperations.Test.BinaryDecoder
+namespace P3.Rule.Logic.BaseOperations.Tests.BinaryDecoder
 {
     public class BinaryDecoderTests : RuleTest<BinaryDecoderRuleFactory>
     {

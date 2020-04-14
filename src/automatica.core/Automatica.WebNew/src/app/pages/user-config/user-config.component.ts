@@ -48,7 +48,13 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
 
     super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
-    this.menuSave.label = translate.translate("COMMON.SAVE");
+
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuSave.label = this.translate.translate("COMMON.SAVE");
+      }
+    });
+
 
     appService.setAppTitle("USERS.NAME");
   }

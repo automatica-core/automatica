@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Xunit;
 using P3.Rule.Math.BasicOperations.Ceiling;
+using Xunit;
 
-namespace P3.Rule.Math.BasicOperations.Test.Ceiling
+namespace P3.Rule.Math.BasicOperations.Tests.Ceiling
 {
     
     public class CeilingTests : RuleTest<CeilingRuleFactory>

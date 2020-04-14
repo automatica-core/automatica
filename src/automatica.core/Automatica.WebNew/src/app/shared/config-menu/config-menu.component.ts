@@ -73,7 +73,7 @@ export class ConfigMenuComponent implements OnInit {
     disabled: true,
     items: this.addItemsMenu
   }
-  menuSave: CustomMenuItem = {
+  menuReload: CustomMenuItem = {
     id: "reload",
     label: "Reload",
     icon: "fa-save",
@@ -137,14 +137,14 @@ export class ConfigMenuComponent implements OnInit {
 
     // this.menuItems.push(this.menuItemNew);
     // this.menuItems.push(this.menuDelete);
-    this.menuItems.push(this.menuSave);
+    this.menuItems.push(this.menuReload);
 
     this.translate.onChange().subscribe({
       next: () => {
         this.menuItemNew.label = translate.translate("COMMON.NEW");
         this.export.label = translate.translate("COMMON.EXPORT");
         this.import.label = translate.translate("COMMON.IMPORT");
-        this.menuSave.label = translate.translate("COMMON.SAVE");
+        this.menuReload.label = translate.translate("COMMON.RELOAD");
         this.menuDelete.label = translate.translate("COMMON.DELETE");
 
         this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
@@ -223,21 +223,24 @@ export class ConfigMenuComponent implements OnInit {
   }
 
   private importRecursive(nodeInstance: NodeInstance, parent: NodeInstance): NodeInstance {
-    const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
-    newNodeInstance.Name = nodeInstance.Name;
-    newNodeInstance.Description = nodeInstance.Description;
+    // const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
+    // newNodeInstance.Name = nodeInstance.Name;
+    // newNodeInstance.Description = nodeInstance.Description;
 
-    newNodeInstance.This2ParentNodeInstance = parent.ObjId;
+    // newNodeInstance.This2ParentNodeInstance = parent.ObjId;
 
-    for (const p of nodeInstance.Properties) {
-      newNodeInstance.setPropertyValueIfPresent(p.PropertyTemplate.Key, p.Value);
-    }
+    // for (const p of nodeInstance.Properties) {
+    //   newNodeInstance.setPropertyValueIfPresent(p.PropertyTemplate.Key, p.Value);
+    // }
 
-    for (const x of nodeInstance.Children) {
-      const child = this.importRecursive(x, newNodeInstance);
-      newNodeInstance.Children.push(child);
-    }
-    return newNodeInstance;
+    // for (const x of nodeInstance.Children) {
+    //   const child = this.importRecursive(x, newNodeInstance);
+    //   newNodeInstance.Children.push(child);
+    // }
+    // return newNodeInstance;
+
+    // TODO
+    return void 0;
   }
 
 

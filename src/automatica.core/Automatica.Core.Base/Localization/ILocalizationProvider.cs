@@ -12,7 +12,8 @@ namespace Automatica.Core.Base.Localization
         /// </summary>
         /// <param name="assembly"></param>
         void LoadFromAssembly(Assembly assembly);
-      
+
+        string GetTranslation(string locale, string key);
 
         /// <summary>
         /// Returns all loaded localization data as json

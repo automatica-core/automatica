@@ -7,6 +7,14 @@
     <ProjectGuid>A07B806E-69D6-452D-BB29-7ED80501C39F</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Runtime-de.json" />
+    <None Remove="Resources\Runtime-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Runtime-de.json" />
+    <EmbeddedResource Include="Resources\Runtime-en.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Connections" Version="1.1.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.3" />

@@ -247,25 +247,18 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     private pluginsService: PluginsService,
     private updateHubService: UpdateHubService,
     notify: NotifyService,
-    translationService: L10nTranslationService,
+    private translationService: L10nTranslationService,
     appService: AppService) {
     super(notify, translationService, appService);
 
-    this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
-    this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
-    this.menuInstallUpdate.label = translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
-    this.menuReload.label = translationService.translate("PLUGINS.RELOAD");
 
-    this.menuItems.push(this.menuReload);
-    this.menuItems.push(this.menuUpdate);
-    this.menuItems.push(this.menuInstall);
-    this.menuItems.push(this.menuInstallUpdate);
 
     appService.setAppTitle("PLUGINS.NAME");
   }
 
   async load() {
     try {
+      this.isLoading = true;
       this.plugins = [];
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
@@ -282,9 +275,24 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     } catch (error) {
       this.handleError(error);
     }
+
+    this.isLoading = false;
   }
 
   async ngOnInit() {
+    this.translationService.onChange().subscribe({
+      next: () => {
+        this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
+        this.menuInstall.label = this.translationService.translate("PLUGINS.INSTALL_ALL");
+        this.menuInstallUpdate.label = this.translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
+        this.menuReload.label = this.translationService.translate("PLUGINS.RELOAD");
+      }
+    });
+
+    this.menuItems.push(this.menuReload);
+    this.menuItems.push(this.menuUpdate);
+    this.menuItems.push(this.menuInstall);
+    this.menuItems.push(this.menuInstallUpdate);
 
     this.baseOnInit();
 

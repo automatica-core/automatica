@@ -8,6 +8,7 @@ import { ServerStateService } from "../services/server-state.service";
 import { AreaInstance } from "../base/model/areas";
 import { VisuPage } from "../base/model/visu-page";
 import { CategoryInstance } from "../base/model/categories";
+import { DataService } from "../services/data.service";
 
 @Component({
   selector: "app-visualization",
@@ -19,6 +20,7 @@ export class VisualizationComponent implements OnInit {
   menuItems = [];
   areas: AreaInstance[] = [];
   categories: CategoryInstance[] = [];
+  values: any;
 
   constructor(private hubService: HubConnectionService,
     private areaService: AreaService,
@@ -37,14 +39,13 @@ export class VisualizationComponent implements OnInit {
     this.serverStateService.start();
     await this.hubService.init();
 
-    const [areas,  categories] = await Promise.all(
+    const [areas, categories] = await Promise.all(
       [
         this.areaService.getAreaInstances(),
         this.catService.getCategoryInstances()
       ]);
 
     this.areas = areas;
-
     this.categories = categories;
 
 

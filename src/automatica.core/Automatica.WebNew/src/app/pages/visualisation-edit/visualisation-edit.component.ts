@@ -11,7 +11,7 @@ import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { VisuPageType, VisuPage } from "src/app/base/model/visu-page";
 import { VisuObjectTemplate } from "src/app/base/model/visu-object-template";
-import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
+import { VisuObjectInstance, VisuObjectSourceType } from "src/app/base/model/visu-object-instance";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { AreaInstance } from "src/app/base/model/areas";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
@@ -242,7 +242,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
     this.appService.isLoading = false;
   }
   addVisuElement(x: VisuObjectTemplate) {
-    const instance = VisuObjectMobileInstance.CreateFromTemplate(x, void 0);
+    const instance = VisuObjectMobileInstance.CreateFromTemplate(x, void 0, VisuObjectSourceType.NodeInstance);
 
     instance.Height = instance.VisuObjectTemplate.Height;
     instance.Width = instance.VisuObjectTemplate.Width;

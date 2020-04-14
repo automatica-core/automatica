@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Math.BasicOperations.Addition;
 using Xunit;
 
-namespace P3.Rule.Math.BasicOperations.Test.Addition
+namespace P3.Rule.Math.BasicOperations.Tests.Addition
 {
     public class AdditionTests : RuleTest<AdditionRuleFactory>
     {
