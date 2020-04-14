@@ -19,14 +19,30 @@ namespace Automatica.Core.Internals.Logger
 
         }
 
-        public CoreLogger(string facility) : this(facility, LogLevel.Trace)
+        public CoreLogger(string facility) : this(facility, null)
         {
             
         }
 
-        public CoreLogger(string facility, LogLevel level, bool isFrameworkLog = false) {
+        public CoreLogger(string facility, LogLevel? level, bool isFrameworkLog = false) {
             _facility = facility;
-            _level = level;
+
+            if (level.HasValue)
+            {
+                _level = level.Value;
+            }
+            else
+            {
+                if (CoreLoggerFactory.Configuration == null)
+                {
+                    _level = LogLevel.Information;
+                }
+                else
+                {
+                    _level = Parse(CoreLoggerFactory.Configuration["server:log_level"]);
+                }
+            }
+            
 
             if(string.IsNullOrEmpty(facility))
             {
@@ -39,14 +55,14 @@ namespace Automatica.Core.Internals.Logger
             if (isFrameworkLog)
             { 
                 logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(level),
+                    retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
                     flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             else
             {
                 logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"),
                     fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(level),
+                    retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
                     flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
@@ -83,6 +99,28 @@ namespace Automatica.Core.Internals.Logger
             }
 
             _logger = logBuild.CreateLogger();
+        }
+
+        private LogLevel Parse(string logLevel)
+        {
+            switch (logLevel.ToLowerInvariant())
+            {
+                case "trace":
+                    return LogLevel.Trace;
+                case "debug":
+                    return LogLevel.Debug;
+                case "warning":
+                    return LogLevel.Warning;
+                case "error":
+                    return LogLevel.Error;
+                case "critical":
+                    return LogLevel.Critical;
+                case "none":
+                    return LogLevel.None;
+
+                default:
+                    return LogLevel.Error;
+            }
         }
 
         public IDisposable BeginScope<TState>(TState state)

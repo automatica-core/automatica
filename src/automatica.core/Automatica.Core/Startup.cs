@@ -147,6 +147,8 @@ namespace Automatica.Core
             services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
             services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
 
+            CoreLoggerFactory.Configuration = Configuration;
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
                 .AddJsonFile("appsettings.json");
