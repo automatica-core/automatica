@@ -286,11 +286,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
 
   async deleteItem(item: ITreeNode) {
-    const parentNode = item.Parent;
-    this.selectNode(parentNode);
-
     this.nodeInstanceService.removeItem(item);
-    parentNode.Children = parentNode.Children.filter(a => a.Id !== item.Id);
 
     try {
       this.configService.delete(<NodeInstance>item);

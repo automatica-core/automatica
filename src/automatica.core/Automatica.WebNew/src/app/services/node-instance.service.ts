@@ -50,8 +50,6 @@ export class NodeInstanceService {
         const currentValues = await this.dataService.getCurrentNodeValues();
         const that = this;
 
-        console.log(currentValues);
-
         Object.keys(currentValues).forEach(function (key) {
             that.setNodeInstanceValue(key, currentValues[key]);
         });
@@ -138,49 +136,6 @@ export class NodeInstanceService {
             this.addNodeInstancesRec(x, tmpConfig);
         }
     }
-
-    // public async createFromNodeTemplate(baseNode: NodeInstance, nodeTemplate: NodeTemplate, propertyInstances: PropertyInstance[]): Promise<{ node: NodeInstance, created: NodeInstance[] }> {
-    //     const cachedNodeTemplate = this.designTimeDataService.getNodeTemplate(nodeTemplate.ObjId);
-    //     const node = NodeInstance.createForNodeInstanceFromTemplate(cachedNodeTemplate, void 0);
-    //     let created = [node];
-
-    //     if (node) {
-    //         for (const prop of propertyInstances) {
-    //             const nodeProp = node.Properties.find(a => a.PropertyTemplate.Key === prop.PropertyTemplate.Key);
-
-    //             console.log(nodeProp);
-
-    //             if (nodeProp) {
-    //                 nodeProp.Value = prop.Value;
-    //             }
-    //         }
-    //     }
-
-    //     let parent = void 0;
-    //     if (baseNode.NodeTemplate.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType) {
-    //         parent = baseNode;
-    //     }
-
-    //     parent = this.getNodeInstanceByNeedsInterface(baseNode, nodeTemplate.NeedsInterface2InterfacesType);
-
-    //     if (!parent) {
-    //         const allNodeTemplates = await this.designTimeDataService.getNodeTemplates();
-    //         const nextTemplate = allNodeTemplates.find(a => a.ProvidesInterface2InterfaceType === nodeTemplate.NeedsInterface2InterfacesType);
-
-    //         const newNode = await this.createFromNodeTemplate(baseNode, nextTemplate, propertyInstances);
-
-    //         if (newNode) {
-    //             parent = newNode.node;
-    //             created = [...created, ...newNode.created];
-    //         }
-    //     }
-
-    //     if (parent) {
-    //         node.Parent = parent;
-    //         node.This2ParentNodeInstance = parent.ObjId;
-    //     }
-    //     return { node: node, created: created };
-    // }
 
     public getNodeInstanceByNeedsInterface(nodeInstance: NodeInstance, needsInterfaceGuid: string): NodeInstance {
         if (nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === needsInterfaceGuid) {

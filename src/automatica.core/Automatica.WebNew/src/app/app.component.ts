@@ -62,6 +62,43 @@ export class AppComponent extends BaseComponent implements OnInit {
     iconConfig.fallbackIcon = faQuestion;
 
     document.title = this.title;
+
+    this.dogeLog();
+  }
+
+  private dogeLog() {
+    console.log("                   ▄              ▄");
+    console.log("                  ▌▒█           ▄▀▒▌");
+    console.log("                  ▌▒▒█        ▄▀▒▒▒▐");
+    console.log("                 ▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐");
+    console.log("               ▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐");
+    console.log("             ▄▀▒▒▒░░░▒▒▒░░░▒▒▒▀██▀▒▌");
+    console.log("            ▐▒▒▒▄▄▒▒▒▒░░░▒▒▒▒▒▒▒▀▄▒▒▌");
+    console.log("            ▌░░▌█▀▒▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐");
+    console.log("           ▐░░░▒▒▒▒▒▒▒▒▌██▀▒▒░░░▒▒▒▀▄▌");
+    console.log("           ▌░▒▄██▄▒▒▒▒▒▒▒▒▒░░░░░░▒▒▒▒▌");
+    console.log("          ▌▒▀▐▄█▄█▌▄░▀▒▒░░░░░░░░░░▒▒▒▐");
+    console.log("          ▐▒▒▐▀▐▀▒░▄▄▒▄▒▒▒▒▒▒░▒░▒░▒▒▒▒▌");
+    console.log("          ▐▒▒▒▀▀▄▄▒▒▒▄▒▒▒▒▒▒▒▒░▒░▒░▒▒▐");
+    console.log("           ▌▒▒▒▒▒▒▀▀▀▒▒▒▒▒▒░▒░▒░▒░▒▒▒▌");
+    console.log("           ▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▒▄▒▒▐");
+    console.log("            ▀▄▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▄▒▒▒▒▌");
+    console.log("              ▀▄▒▒▒▒▒▒▒▒▒▒▄▄▄▀▒▒▒▒▄▀");
+    console.log("                ▀▄▄▄▄▄▄▀▀▀▒▒▒▒▒▄▄▀");
+    console.log("                   ▒▒▒▒▒▒▒▒▒▒▀▀");
+    console.log("");
+    console.log("");
+    console.log("          MUCH WOW, MUCH COOL, MUCH N1");
+    console.log("           MUCH LOVE AUTOMATICA.CORE");
+    console.log("            DONATE MUCH DOGE TO");
+    console.log("              DPVz6RSAJrXZqTF4sGXpS1dqwvU36hSaAQ");
+    console.log("");
+    console.log("            DONATE MUCH BITCOIN TO");
+    console.log("              1Ck4XgAxys3aBjdesKQQ62zx7m4vozUest");
+    console.log("");
+    console.log("");
+    console.log("");
+
   }
 
   ngOnInit() {
