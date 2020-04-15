@@ -5,10 +5,6 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>0.14.0.1</Version>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>
-    </OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\Ikea.Tradfri-de.json" />

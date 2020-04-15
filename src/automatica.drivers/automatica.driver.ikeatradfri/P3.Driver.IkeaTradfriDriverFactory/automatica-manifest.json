@@ -10,8 +10,8 @@
         "MinorRevision": 0
       },
       "plugin-version": {
-        "Major": 0,
-        "Minor": 1,
+        "Major": 2,
+        "Minor": 0,
         "Build": 0,
         "Revision": 0,
         "MajorRevision": 0,
@@ -38,12 +38,12 @@
         "RestSharp.dll"
       ],
       "MinCoreServerVersion": {
-        "Major": 0,
-        "Minor": 10,
+        "Major": 2,
+        "Minor": 3,
         "Build": 0,
-        "Revision": 244,
+        "Revision": 0,
         "MajorRevision": 0,
-        "MinorRevision": 244
+        "MinorRevision": 0
       },
       "MandatoryLicenseFeatures": [],
       "OptionalLicenseFeatures": []
