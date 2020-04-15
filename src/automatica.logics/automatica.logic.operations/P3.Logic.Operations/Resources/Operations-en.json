@@ -5,6 +5,8 @@
       "NAME": "Switch",
       "DESCRIPTION": "",
       "INPUT": {
+	    "NAME": "I",
+        "DESCRIPTION": "Value (Ein/Aus)",
         "VALUE": {
           "NAME": "I",
           "DESCRIPTION": "Value (Ein/Aus)"

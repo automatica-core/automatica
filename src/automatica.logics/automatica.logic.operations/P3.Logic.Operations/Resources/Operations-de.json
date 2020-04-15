@@ -5,6 +5,8 @@
       "NAME": "Taster",
       "DESCRIPTION": "",
       "INPUT": {
+        "NAME": "I",
+        "DESCRIPTION": "Eingangswert (Ein/Aus)",
         "VALUE": {
           "NAME": "I",
           "DESCRIPTION": "Eingangswert (Ein/Aus)"
