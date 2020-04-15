@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <Version>2.1.0.751</Version>
+    <Version>2.3.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Localization\Resources\Test-de.json" />
