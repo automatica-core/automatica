@@ -129,7 +129,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory
 
         public override async Task<bool> Stop()
         {
-            await Driver.Disconnect();
+            if (Driver != null)
+            {
+                await Driver.Disconnect();
+            }
             return true;
         }
 
