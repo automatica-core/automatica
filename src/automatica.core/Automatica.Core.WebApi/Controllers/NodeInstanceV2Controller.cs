@@ -325,9 +325,14 @@ namespace Automatica.Core.WebApi.Controllers
                 System.IO.File.Delete(instance.FileName);
             }
 
+            return await SaveAndReloadNodeInstances(data);
+        }
+
+        private async Task<IList<NodeInstance>> SaveAndReloadNodeInstances(IList<NodeInstance> nodeInstances)
+        {
             var savedNodes = new List<NodeInstance>();
             var savedNodesData = new List<(NodeInstance node, EntityState entityState)>();
-            foreach (var node in data)
+            foreach (var node in nodeInstances)
             {
                 var newNode = await AddNodeInternal(node);
                 savedNodes.Add(newNode.node);
@@ -342,5 +347,28 @@ namespace Automatica.Core.WebApi.Controllers
             return savedNodes;
         }
 
+        [HttpPost]
+        [Route("scan")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IList<NodeInstance>> Scan([FromBody] NodeInstance instance)
+        {
+            try
+            {
+                SystemLogger.Instance.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
+                var scan = await _notifyDriver.ScanBus(instance);
+
+                foreach (var s in scan)
+                {
+                    s.This2ParentNodeInstance = instance.ObjId;
+                }
+
+                return await SaveAndReloadNodeInstances(scan);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not scan driver");
+                throw;
+            }
+        }
     }
 }

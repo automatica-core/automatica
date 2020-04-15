@@ -42,7 +42,7 @@ export class ConfigService extends BaseService {
     }
 
     scan(node: NodeInstance): Promise<NodeInstance[]> {
-        return super.postMultiple<NodeInstance>("nodeInstances/scan", node.toJson());
+        return super.postMultiple<NodeInstance>("nodeInstancesV2/scan", node.toJson());
     }
 
     import(node: NodeInstance, fileName: string): Promise<NodeInstance[]> {

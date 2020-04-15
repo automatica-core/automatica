@@ -301,7 +301,15 @@ namespace Automatica.Core.Driver
 
             foreach (var node in Children)
             {
-                await node.Stop();
+                try
+                {
+                    await node.Stop();
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError(e, "Could not stop successfully!");
+                }
+
                 DriverContext.NodeInstance.State = NodeInstanceState.Unloaded;
             }
             return true;
