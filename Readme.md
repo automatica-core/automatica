@@ -270,8 +270,6 @@ Things I want to implement in the near future - help is appreciated!
 
 ![Logic-editor](./images/logic.png) Logic editor
 
-![Visualization](./images/visualization.png) Visualization
-
 
 # Documentation
 [Documentation](https://docu.automaticacore.com)
