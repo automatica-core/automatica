@@ -219,6 +219,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   async add(nodeInstance: NodeInstance, parent: NodeInstance) {
+    this.appService.isLoading = true;
     nodeInstance.This2ParentNodeInstance = parent.ObjId;
     parent.Children = [...parent.Children, nodeInstance];
 
@@ -238,14 +239,24 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
 
     this.tree.instance.refresh();
+    this.appService.isLoading = false;
   }
 
 
   private async createItem(parentNode: NodeInstance, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
-    const nodeInstance = await this.addItem(parentNode, nodeTemplate, selectNode);
+    this.appService.isLoading = true;
+    try {
+      const nodeInstance = await this.addItem(parentNode, nodeTemplate, selectNode);
+      this.nodeInstanceService.updateNodeInstance(nodeInstance);
+    } catch (error) {
+      this.handleError(error);
 
-    this.nodeInstanceService.updateNodeInstance(nodeInstance);
+      await this.load();
+    }
+
+
     this.tree.instance.refresh();
+    this.appService.isLoading = false;
   }
 
   private async addItem(parentNode: NodeInstance, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
