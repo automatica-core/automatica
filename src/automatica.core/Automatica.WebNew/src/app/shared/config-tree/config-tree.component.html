@@ -21,35 +21,7 @@
                     <fa-icon [icon]="['fas', 'exclamation']" *ngIf="!data.data.ValidationOk"></fa-icon>
 
                     <span id="{{ data.data.Id }}">
-                        <ng-container [ngSwitch]="data.data.State">
-                            <ng-container *ngSwitchCase="NodeInstanceState.New">
-                                <fa-icon [icon]="['fas', 'file']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.Saved">
-                                <fa-icon [icon]="['fas', 'save']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.Loaded">
-                                <fa-icon [icon]="['fas', 'sync-alt']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.Initialized">
-                                <fa-icon [icon]="['fas', 'tint']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.InUse">
-                                <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.OutOfDatapoits">
-                                <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.UnknownError">
-                                <fa-icon [icon]="['fas', 'question-circle']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.Unloaded">
-                                <fa-icon [icon]="['fas', 'redo']"></fa-icon>
-                            </ng-container>
-                            <ng-container *ngSwitchCase="NodeInstanceState.Unknown">
-                                <fa-icon [icon]="['fas', 'question']"></fa-icon>
-                            </ng-container>
-                        </ng-container> {{data.value}}
+                         {{data.value}}
                     </span>
                 </div>
             </div>

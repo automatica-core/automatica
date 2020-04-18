@@ -285,6 +285,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   async deleteItem(item: ITreeNode) {
     this.nodeInstanceService.removeItem(item);
+    this.appService.isLoading = true;
 
     try {
       this.configService.delete(<NodeInstance>item);
@@ -293,6 +294,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       await this.load();
     }
+    this.appService.isLoading = false;
 
   }
 

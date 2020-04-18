@@ -155,7 +155,9 @@ namespace Automatica.Core.WebApi.Controllers
                 newNode.node.This2ParentNodeInstanceNavigation = _nodeInstanceCache.Get(newNode.node.This2ParentNodeInstance.Value);
                 return newNode.node;
             }
-            await ReloadDriver(node, newNode.entityState);
+            
+            async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
+            ReloadAndForget();
 
             return newNode.node;
         }
@@ -307,7 +309,8 @@ namespace Automatica.Core.WebApi.Controllers
 
                 _nodeInstanceCache.Clear();
 
-                await ReloadDriver(node, entityState);
+                async void ReloadAndForget() => await ReloadDriver(node, entityState);
+                ReloadAndForget();
 
                 return _nodeInstanceCache.Get(node.ObjId);
             }

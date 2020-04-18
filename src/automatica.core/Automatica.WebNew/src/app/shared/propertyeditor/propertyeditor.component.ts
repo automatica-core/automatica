@@ -474,16 +474,22 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     const prop = data.data as PropertyInstance;
 
     this.validate.emit(prop);
+    this.appService.isLoading = true;
+    try {
+      if (this.item instanceof NodeInstance) {
+        await this.config.update(this.item);
 
-    if (this.item instanceof NodeInstance) {
-      await this.config.update(this.item);
-
-      if (!this.item.ParentId) {
-        this.nodeInstanceService.saveSettings();
+        if (!this.item.ParentId) {
+          this.nodeInstanceService.saveSettings();
+        }
+      } else if (this.item instanceof RuleInstance) {
+        await this.ruleEngineService.updateItem(this.item);
       }
-    } else if (this.item instanceof RuleInstance) {
-      await this.ruleEngineService.updateItem(this.item);
+    } catch (error) {
+      this.handleError(error);
     }
+
+    this.appService.isLoading = false;
   }
 
 
