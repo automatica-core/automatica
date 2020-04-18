@@ -132,9 +132,15 @@ namespace Automatica.Core.WebApi.Controllers
         {
             nodeInstance.ObjId = Guid.NewGuid();
 
+            foreach (var property in nodeInstance.PropertyInstance)
+            {
+                property.ObjId = Guid.NewGuid();
+            }
+
             foreach (var node in nodeInstance.InverseThis2ParentNodeInstanceNavigation)
             {
                 CopyRec(node);
+                node.This2ParentNodeInstance = nodeInstance.ObjId;
             }
         }
 

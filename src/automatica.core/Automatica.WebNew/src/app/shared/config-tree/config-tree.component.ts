@@ -115,6 +115,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   }
 
+  protected async load(): Promise<any> {
+    await this.nodeInstanceService.load();
+  }
+
   async ngOnDestroy() {
     super.baseOnDestroy();
   }
@@ -134,9 +138,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   public async scan(nodeInstance: NodeInstance) {
     try {
       this.appService.isLoading = true;
-      const nodeInstances = await this.configService.scan(nodeInstance);
+      await this.configService.scan(nodeInstance);
 
-      this.prepareRecurisve(nodeInstances, nodeInstance);
+      await this.load();
     } catch (error) {
       super.handleError(error);
     }
@@ -148,30 +152,13 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     try {
       this.appService.isLoading = true;
       await this.configService.import(nodeInstance, fileName);
-      await this.nodeInstanceService.load();
+      await this.load();
 
     } catch (error) {
       super.handleError(error);
     }
     this.changeRef.detectChanges();
     this.appService.isLoading = false;
-  }
-
-  private prepareRecurisve(nodeInstances: NodeInstance[], parent: NodeInstance) {
-    for (const ni of nodeInstances) {
-      const children = ni.Children;
-
-      if (!this.nodeInstanceService.hasNodeInstance(ni.ObjId)) {
-        ni.isNewObject = true;
-
-        ni.Children = [];
-        const existingParent = this.nodeInstanceService.getNodeInstance(parent.Id);
-        this.prepareNewItem(ni, existingParent, false);
-      }
-      if (children) {
-        this.prepareRecurisve(children, ni);
-      }
-    }
   }
 
 
@@ -247,7 +234,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       super.handleError(error);
 
-      await this.nodeInstanceService.load();
+      await this.load();
     }
 
     this.tree.instance.refresh();
@@ -293,7 +280,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     } catch (error) {
       super.handleError(error);
 
-      await this.nodeInstanceService.load();
+      await this.load();
     }
 
   }
@@ -391,14 +378,14 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
 
   async copy(toCopy: NodeInstance, target: NodeInstance) {
-    const newItem = await this.configService.copy(toCopy, target);
-
-
-    for (const e of newItem.Children) {
-      e.validate();
+    this.appService.isLoading = true;
+    try {
+      await this.configService.copy(toCopy, target);
+    } catch (error) {
+      this.handleError(error);
     }
-
-    this.tree.instance.refresh();
+    await this.load();
+    this.appService.isLoading = false;
   }
 
   onContextMenuHiding() {

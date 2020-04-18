@@ -96,6 +96,6 @@ export class ConfigService extends BaseService {
     }
 
     copy(item: NodeInstance, target: NodeInstance) {
-        return super.post<NodeInstance>(`nodeTemplates/copy/${item.ObjId}/${target.ObjId}`, void 0);
+        return super.post<NodeInstance>(`nodeInstancesV2/copy/${item.ObjId}/${target.ObjId}`, void 0);
     }
 }

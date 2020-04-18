@@ -3,7 +3,6 @@ import { DesignTimeDataService } from "./design-time-data.service";
 import { ConfigService } from "./config.service";
 import { NodeInstance } from "../base/model/node-instance";
 import { NodeTemplate } from "../base/model/node-template";
-import { PropertyInstance } from "../base/model/property-instance";
 import { VirtualSettingsPropertyInstance } from "../base/model/virtual-props/settings/settings-property-instance";
 import { SettingsService } from "./settings.service";
 import { Setting } from "../base/model/setting";
@@ -19,6 +18,7 @@ export class NodeInstanceService {
     private _nodeInstanceMap: Map<string, NodeInstance>;
     private _nodeInstanceList: NodeInstance[];
     private _settings: Setting[];
+
 
     private _rootNode: NodeInstance;
 
