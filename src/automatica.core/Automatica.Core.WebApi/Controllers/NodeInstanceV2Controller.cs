@@ -350,7 +350,8 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (savedNodesData.Any())
             {
-                await ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState);
+                async void ReloadAndForget() => await ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState);
+                ReloadAndForget();
             }
 
             return savedNodes;
