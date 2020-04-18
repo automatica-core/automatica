@@ -145,7 +145,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     node.X = point.getX();
     node.Y = point.getY();
-    this.addNode(node, this.page);
 
     await this.ruleEngineService.addItem({ data: node, pageId: this.page.ObjId });
     return true;

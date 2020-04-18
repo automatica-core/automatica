@@ -17,6 +17,20 @@ export class LogicLables {
 
                 this.direction = direction;
                 this.realParent = realParent;
+            },
+            getMinWidth() {
+                if (this.direction === 0) {
+                    if (this.realParent) {
+                        return this.realParent.width - (this.cachedMinWidth * 2);
+                    }
+                }
+                return this.cachedMinWidth;
+            },
+            getX() {
+                if (this.direction === 1) {
+                    return this.realParent.width - 20;
+                }
+                return this.x;
             }
         });
 
