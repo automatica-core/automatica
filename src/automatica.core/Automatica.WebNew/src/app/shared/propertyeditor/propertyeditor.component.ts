@@ -28,6 +28,7 @@ import { AppService } from "src/app/services/app.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { RulePage } from "src/app/base/model/rule-page";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -484,6 +485,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);
+      } else if (this.item instanceof RulePage) {
+        await this.ruleEngineService.updatePage(this.item);
       }
     } catch (error) {
       this.handleError(error);

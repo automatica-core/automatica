@@ -59,9 +59,9 @@ export class LogicShapes {
                 this.add(new logic.PortShape({}, element, this, linkService));
             },
             getMinWidth() {
-                if (this.logicName) {
-                    if (this.logicName.cachedMinWidth > 150) {
-                        return this.logicName.cachedMinWidth;
+                if (this.classLabel) {
+                    if (this.classLabel.cachedMinWidth > 150) {
+                        return this.classLabel.cachedMinWidth;
                     }
                 }
                 return 150;

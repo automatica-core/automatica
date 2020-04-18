@@ -244,12 +244,25 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  addRulePage() {
+  async addRulePage() {
+
+    this.appService.isLoading = true;
+
     const rulePage = new RulePage();
     rulePage.ObjId = Guid.MakeNew().ToString();
     rulePage.Name = "Page " + (this.pages.length + 1);
     rulePage.Description = "Page " + (this.pages.length + 1);
     this.pages.push(rulePage);
+
+    try {
+      await this.ruleEngineService.addPage(rulePage);
+    } catch (error) {
+      this.handleError(error);
+      await this.load();
+    }
+
+
+    this.appService.isLoading = false;
   }
 
   async addRule($event) {

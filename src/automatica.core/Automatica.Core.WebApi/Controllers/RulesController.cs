@@ -324,5 +324,28 @@ namespace Automatica.Core.WebApi.Controllers
         {
             return _ruleDataHandler.GetDataForRuleInstance(id);
         }
+
+        [HttpPatch]
+        [Route("page")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<RulePage> UpdateRulePage([FromBody]RulePage page)
+        {
+            await using var dbContext = new AutomaticaContext(_config);
+
+            var rulePage = dbContext.RulePages.SingleOrDefault(a => a.ObjId == page.ObjId);
+
+            if (rulePage != null)
+            {
+                rulePage.Name = page.Name;
+                rulePage.Description = page.Description;
+
+                dbContext.Update(rulePage);
+                await dbContext.SaveChangesAsync();
+            }
+
+            _logicCacheFacade.PageCache.Clear();
+            return rulePage;
+        }
+
     }
 }

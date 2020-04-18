@@ -22,7 +22,6 @@ export interface AddLogicData {
 @Injectable()
 export class RuleEngineService extends BaseService {
 
-
   public reInit: EventEmitter<number> = new EventEmitter<number>();
   public add = new EventEmitter<AddLogicData>();
 
@@ -98,5 +97,9 @@ export class RuleEngineService extends BaseService {
 
   removeLink(item: Link) {
     return super.deleteJson(`rules/link/${item.ObjId}`);
+  }
+
+  updatePage(item: RulePage) {
+    return super.patch("rules/page", item.toJson());
   }
 }
