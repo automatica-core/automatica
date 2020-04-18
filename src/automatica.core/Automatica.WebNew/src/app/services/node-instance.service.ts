@@ -160,6 +160,11 @@ export class NodeInstanceService {
     }
 
     public async getSupportedNodeTemplates(node: NodeInstance) {
+
+        if (node.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
+            return [];
+        }
+
         return await this.nodeTemplateService.getSupportedTemplates(node, node.NodeTemplate.ProvidesInterface2InterfaceType);
     }
 
