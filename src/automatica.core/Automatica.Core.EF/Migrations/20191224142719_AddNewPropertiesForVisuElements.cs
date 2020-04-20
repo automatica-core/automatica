@@ -6,11 +6,6 @@ namespace Automatica.Core.EF.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameIndex(
-                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai",
-                table: "PropertyTemplateConstraintData",
-                newName: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstraint");
-
             migrationBuilder.AddColumn<float>(
                 name: "MaxHeight",
                 table: "VisuObjectTemplates",
@@ -49,11 +44,6 @@ namespace Automatica.Core.EF.Migrations
             migrationBuilder.DropColumn(
                 name: "MinWidth",
                 table: "VisuObjectTemplates");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstraint",
-                table: "PropertyTemplateConstraintData",
-                newName: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai");
         }
     }
 }
