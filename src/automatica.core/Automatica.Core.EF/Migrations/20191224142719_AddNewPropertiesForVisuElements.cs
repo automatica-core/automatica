@@ -7,7 +7,7 @@ namespace Automatica.Core.EF.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameIndex(
-                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai~",
+                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai",
                 table: "PropertyTemplateConstraintData",
                 newName: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstraint");
 
@@ -53,7 +53,7 @@ namespace Automatica.Core.EF.Migrations
             migrationBuilder.RenameIndex(
                 name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstraint",
                 table: "PropertyTemplateConstraintData",
-                newName: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai~");
+                newName: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai");
         }
     }
 }

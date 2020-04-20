@@ -1316,7 +1316,7 @@ namespace Automatica.Core.EF.Migrations
                 column: "ValueVisuPage");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PropertyTemplateConstraintData_This2PropertyTemplateConstrai~",
+                name: "IX_PropertyTemplateCD_T2PropTempConst",
                 table: "PropertyTemplateConstraintData",
                 column: "This2PropertyTemplateConstraint");
 
