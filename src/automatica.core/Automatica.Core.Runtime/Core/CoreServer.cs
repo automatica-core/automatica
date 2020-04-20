@@ -617,11 +617,13 @@ namespace Automatica.Core.Runtime.Core
             {
                 var ruleLoadingPath = Path.Combine(path, ServerInfo.LogicsDirectory);
                 _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
-                foreach (var rule in await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode))
+                var logicFactories = await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config,
+                    ServerInfo.IsInDevelopmentMode);
+                foreach (var logic in logicFactories)
                 {
                     try
                     {
-                        await _logicLoader.Load(rule, ServerInfo.BoardType);
+                        await _logicLoader.Load(logic, ServerInfo.BoardType);
                     }
                     catch (NoManifestFoundException)
                     {

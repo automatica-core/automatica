@@ -3,6 +3,7 @@ import { AppService } from "src/app/services/app.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { L10nTranslationService } from "angular-l10n";
 import { BaseComponent } from "src/app/base/base-component";
+import { TranslationConfigService } from "src/app/services/translation-config.service";
 
 @Component({
   selector: "app-starting-overlay",
@@ -18,7 +19,8 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
     appService: AppService,
     notify: NotifyService,
     translation: L10nTranslationService,
-    private ngZone: NgZone) {
+    private ngZone: NgZone,
+    private translationConfigService: TranslationConfigService) {
     super(notify, translation, appService);
   }
 
@@ -29,7 +31,7 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
       });
 
       if (!v) {
-        await this.translate.init();
+        await this.translationConfigService.init();
       }
     });
   }
