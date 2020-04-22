@@ -202,7 +202,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       this.selectedNode = node;
     }
 
-    this.tree.instance.repaint();
+    // this.tree.instance.repaint();
   }
 
   selectNodeById(id: any) {

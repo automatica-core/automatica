@@ -206,6 +206,8 @@ $ docker run -it \
     automaticacore/automatica:latest-develop
 ```
 
+### Plugins
+Do persist your plugin directory set the "AUTOMATICA_PLUGIN_DIR" environment variable and mount the folder in your docker repository!
 
 ## Run in a docker image
 To just play around with automatica.core use this docker-compose configuration.

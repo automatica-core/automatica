@@ -87,7 +87,7 @@ namespace Automatica.Core.EF.Models
                 var logger = new DatabaseLoggerFactory();
                 var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
                 var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
-                var loggerInstance = NullLogger.Instance; // logger.CreateLogger("database");
+                var loggerInstance = logger.CreateLogger("database");
 
                 string useDbType = envDbType;
 
@@ -137,7 +137,7 @@ namespace Automatica.Core.EF.Models
         {
             logger.LogInformation($"Using MariaDB database engine...");
 
-            var mariaDbConString = $"Server={Environment.GetEnvironmentVariable("MARIADB_HOST")};User Id={Environment.GetEnvironmentVariable("MARIADB_USER")};Password={Environment.GetEnvironmentVariable("MARIADB_PASSWORD")};Database=automatica";
+            var mariaDbConString = $"Server={Environment.GetEnvironmentVariable("MARIADB_HOST")};User Id={Environment.GetEnvironmentVariable("MARIADB_USER")};Password={Environment.GetEnvironmentVariable("MARIADB_PASSWORD")};Database={Environment.GetEnvironmentVariable("MARIADB_DATABASE")}";
 
             if(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MARIADB_HOST")))
             {
