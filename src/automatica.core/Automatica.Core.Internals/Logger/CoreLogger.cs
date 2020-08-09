@@ -103,6 +103,9 @@ namespace Automatica.Core.Internals.Logger
 
         private LogLevel Parse(string logLevel)
         {
+			if(String.IsNullOrEmpty(logLevel)) {
+				return LogLevel.Debug;
+			}
             switch (logLevel.ToLowerInvariant())
             {
                 case "trace":
