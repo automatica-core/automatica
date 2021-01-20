@@ -121,7 +121,10 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 var existingRuleInterfaceInstance = dbContext.RuleInterfaceInstances.Single(a => a.ObjId == ruleInterfaceInstance.ObjId);
 
-                existingRuleInterfaceInstance.Value = ruleInterfaceInstance.Value;
+                existingRuleInterfaceInstance.ValueString = ruleInterfaceInstance.ValueString;
+                existingRuleInterfaceInstance.ValueDouble = ruleInterfaceInstance.ValueDouble;
+                existingRuleInterfaceInstance.ValueInteger = ruleInterfaceInstance.ValueInteger;
+                
                 dbContext.Update(existingRuleInterfaceInstance);
                 dbContext.Entry(existingRuleInterfaceInstance).State = EntityState.Modified;
             }
