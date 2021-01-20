@@ -116,6 +116,13 @@ namespace Automatica.Core.WebApi.Controllers
             existingInstance.This2UserGroup = ruleInstance.This2UserGroup;
             existingInstance.This2AreaInstance = ruleInstance.This2AreaInstance;
             existingInstance.This2CategoryInstance = ruleInstance.This2CategoryInstance;
+            
+            foreach(var ruleInterfaceInstance in ruleInstance.RuleInterfaceInstance)
+            {
+                var existingRuleInterfaceInstance = dbContext.RuleInterfaceInstances.Single(a => a.ObjId == ruleInterfaceInstance.ObjId);
+
+                existingRuleInterfaceInstance.Value = ruleInterfaceInstance.Value;
+            }
 
             dbContext.Update(existingInstance);
             dbContext.Entry(existingInstance).State = EntityState.Modified;
