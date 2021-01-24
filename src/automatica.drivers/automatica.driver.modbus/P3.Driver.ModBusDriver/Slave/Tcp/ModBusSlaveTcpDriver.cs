@@ -34,7 +34,8 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private void Start()
         {
-            _logger.LogInformation($"Start tcp listener on port {_config.Port}");
+
+            ModBus.Logger.LogInformation($"Start tcp listener on port {_config.Port}");
             while (_running)
             {
                 if (_listener.Pending())
@@ -54,7 +55,8 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                     Thread.Sleep(100); //<--- timeout
                 }
             }
-            _logger.LogInformation($"Stopping tcp listener on port {_config.Port}");
+
+            ModBus.Logger.LogInformation($"Stopping tcp listener on port {_config.Port}");
         }
 
         private async Task WorkOnClient(TcpClient client)
