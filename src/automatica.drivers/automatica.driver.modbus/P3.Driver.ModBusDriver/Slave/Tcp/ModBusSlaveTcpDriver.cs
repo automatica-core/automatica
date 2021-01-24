@@ -13,6 +13,8 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 {
     public class ModBusSlaveTcpDriver : ModBusSlaveDriver<ModBusSlaveTcpConfig>
     {
+        private readonly ModBusSlaveTcpConfig _config;
+        private readonly ILogger _logger;
         private readonly TcpListener _listener;
         private readonly List<TcpClient> _connections = new List<TcpClient>();
         private bool _running = true;
@@ -20,8 +22,10 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
         private readonly Thread _listenerThread;
         private readonly object _lock = new object();
 
-        public ModBusSlaveTcpDriver(ModBusSlaveTcpConfig config, ITelegramMonitorInstance telegramMonitor) : base(config, telegramMonitor)
+        public ModBusSlaveTcpDriver(ModBusSlaveTcpConfig config, ITelegramMonitorInstance telegramMonitor, ILogger logger) : base(config, telegramMonitor)
         {
+            _config = config;
+            _logger = logger;
             _listener = new TcpListener(IPAddress.Any, config.Port);
             _listenerThread = new Thread(Start);
 
@@ -30,6 +34,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private void Start()
         {
+            _logger.LogInformation($"Start tcp listener on port {_config.Port}");
             while (_running)
             {
                 if (_listener.Pending())
@@ -49,6 +54,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                     Thread.Sleep(100); //<--- timeout
                 }
             }
+            _logger.LogInformation($"Stopping tcp listener on port {_config.Port}");
         }
 
         private async Task WorkOnClient(TcpClient client)

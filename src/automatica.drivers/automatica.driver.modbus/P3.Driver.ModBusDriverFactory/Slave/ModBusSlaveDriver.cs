@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Slave;
 using P3.Driver.ModBusDriver.Slave.Tcp;
@@ -12,13 +13,15 @@ namespace P3.Driver.ModBusDriverFactory.Slave
 {
     public class ModBusSlaveDriver: DriverBase
     {
+        private readonly ILogger _logger;
         private readonly bool _isTcp;
         private IModBusSlaveDriver _modBusDriver;
 
         private readonly List<ModBusSlaveDevice> _childs = new List<ModBusSlaveDevice>();
 
-        public ModBusSlaveDriver(IDriverContext driverContext, bool isTcp=true) : base(driverContext)
+        public ModBusSlaveDriver(IDriverContext driverContext, ILogger logger, bool isTcp=true) : base(driverContext)
         {
+            _logger = logger;
             _isTcp = isTcp;
         }
 
@@ -45,7 +48,7 @@ namespace P3.Driver.ModBusDriverFactory.Slave
                 config.IgnoreDeviceId = ignoreDeviceId;
                 config.DeviceIds = devices;
 
-                _modBusDriver = new ModBusSlaveTcpDriver(config, TelegramMonitor);
+                _modBusDriver = new ModBusSlaveTcpDriver(config, TelegramMonitor, _logger);
             }
             else
             {
