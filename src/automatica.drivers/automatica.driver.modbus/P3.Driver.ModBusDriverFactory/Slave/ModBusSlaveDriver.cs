@@ -61,18 +61,16 @@ namespace P3.Driver.ModBusDriverFactory.Slave
 
         public override Task<bool> Start()
         {
-            Task.Run(() =>
+            if (_modBusDriver != null)
             {
-                if (_modBusDriver != null)
-                {
-                    DriverContext.Logger.LogInformation($"Starting modbus tcp...");
-                    _modBusDriver.Open();
-                }
-                else
-                {
-                    DriverContext.Logger.LogInformation($"Something went wrong starting the modbus tcp slave...");
-                }
-            });
+                DriverContext.Logger.LogInformation($"Starting modbus tcp...");
+                _modBusDriver.Open();
+            }
+            else
+            {
+                DriverContext.Logger.LogInformation($"Something went wrong starting the modbus tcp slave...");
+            }
+
             return base.Start();
         }
 
