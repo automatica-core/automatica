@@ -70,7 +70,6 @@ namespace Automatica.Core.EF.Helper
             var level = ConvertLogLevel(logLevel);
             var msg = $"{_facility.ToLower()}: {formatter.Invoke(state, exception)}";
             _logger.Write(level, exception, msg);
-            Console.WriteLine(msg);
         }
     }
 }
