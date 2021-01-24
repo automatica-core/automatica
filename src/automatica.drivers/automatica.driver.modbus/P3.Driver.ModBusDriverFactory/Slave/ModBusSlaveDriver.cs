@@ -49,6 +49,7 @@ namespace P3.Driver.ModBusDriverFactory.Slave
                 config.DeviceIds = devices;
 
                 _modBusDriver = new ModBusSlaveTcpDriver(config, TelegramMonitor, _logger);
+                ModBus.Logger = DriverContext.Logger;
             }
             else
             {
