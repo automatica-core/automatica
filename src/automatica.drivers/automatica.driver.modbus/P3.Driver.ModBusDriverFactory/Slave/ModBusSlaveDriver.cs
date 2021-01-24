@@ -60,7 +60,9 @@ namespace P3.Driver.ModBusDriverFactory.Slave
 
         public override Task<bool> Start()
         {
-            Task.Run(() => {
+            Task.Run(() =>
+            {
+                DriverContext.Logger.LogInformation($"Starting modbus tcp...");
                 _modBusDriver?.Open();
             });
             return base.Start();
