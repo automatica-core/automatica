@@ -62,8 +62,15 @@ namespace P3.Driver.ModBusDriverFactory.Slave
         {
             Task.Run(() =>
             {
-                DriverContext.Logger.LogInformation($"Starting modbus tcp...");
-                _modBusDriver?.Open();
+                if (_modBusDriver != null)
+                {
+                    DriverContext.Logger.LogInformation($"Starting modbus tcp...");
+                    _modBusDriver.Open();
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Something went wrong starting the modbus tcp slave...");
+                }
             });
             return base.Start();
         }
