@@ -39,6 +39,7 @@
   <ItemGroup>
     <PackageReference Include="Automatica.Core.EF" Version="5.0.0.817" />
     <PackageReference Include="Automatica.Core.Base" Version="5.0.0.817" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1">
     <PackageReference Include="Automatica.Core.Rule" Version="5.0.0.817" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="5.0.0.817" />
     <PackageReference Include="Automatica.Core.UnitTests.Base" Version="5.0.0.817" />

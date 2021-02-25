@@ -41,5 +41,6 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1">
   </ItemGroup>
 </Project>
