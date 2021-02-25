@@ -1,4 +1,4 @@
-FROM  mcr.microsoft.com/dotnet/core/sdk:3.1.100 AS libnserial
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS libnserial
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS runtime
 WORKDIR /app/
 
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1.1 /usr/lib
