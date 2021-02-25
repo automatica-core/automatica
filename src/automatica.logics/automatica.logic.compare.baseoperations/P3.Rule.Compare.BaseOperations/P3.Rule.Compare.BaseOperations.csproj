@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>6C397990-0876-4A37-940E-A3E7A6EE13D6</ProjectGuid>
@@ -22,6 +22,6 @@
     <EmbeddedResource Include="Resources\Compare-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Rule" Version="5.0.0.817" />
   </ItemGroup>
 </Project>

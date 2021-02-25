@@ -121,6 +121,11 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
         }
 
 
+        public object GetValue(Guid id)
+        {
+            return null;
+        }
+
         public object GetValue(DispatchableType type, Guid id)
         {
 
@@ -133,6 +138,12 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             }
 
             return null;
+        }
+
+        public IDictionary<Guid, object> GetValues()
+        {
+            return null;
+
         }
 
         public IDictionary<Guid, object> GetValues(DispatchableType type)

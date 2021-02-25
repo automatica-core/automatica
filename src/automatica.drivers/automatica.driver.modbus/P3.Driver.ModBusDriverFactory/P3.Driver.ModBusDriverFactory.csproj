@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>P3.Driver.ModBusDriverFactory</AssemblyName>
     <RootNamespace>P3.Driver.ModBusDriverFactory</RootNamespace>
     <Version>0.14.0.1</Version>
@@ -22,9 +22,9 @@
     <EmbeddedResource Include="Resources\ModBus-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Driver" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.EF" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="5.0.0.817" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj" />

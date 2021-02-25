@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Configurations>Debug;Release;DebugLocal</Configurations>
@@ -26,11 +26,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Driver" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
-    <PackageReference Include="PureWebSockets" Version="3.0.0" />
+    <PackageReference Include="Automatica.Core.Base" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="5.0.0.817" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.8" />
+    <PackageReference Include="PureWebSockets" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.Loxone.Miniserver.Driver\P3.Driver.Loxone.Miniserver.Driver.csproj" />

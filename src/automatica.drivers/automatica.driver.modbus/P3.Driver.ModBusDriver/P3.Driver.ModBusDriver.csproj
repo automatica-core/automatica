@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>335DC61B-B5F8-402C-B3E1-320690E7B789</ProjectGuid>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="2.0.0.741" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.741" />
+    <PackageReference Include="Automatica.Core.Driver" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="5.0.0.817" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Master\Rtu\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SerialPortStream" Version="2.2.0" />
+    <PackageReference Include="SerialPortStream" Version="2.2.2" />
   </ItemGroup>
 </Project>

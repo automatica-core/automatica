@@ -118,7 +118,6 @@ namespace P3.Driver.Loxone.Miniserver.Driver
                 _webSocket.OnStateChanged += _webSocket_OnStateChanged;
                 _webSocket.OnMessage += _webSocket_OnMessage;
                 _webSocket.OnClosed += _webSocket_OnClosed;
-                _webSocket.OnSendFailed += _webSocket_OnSendFailed;
                 _webSocket.OnData += _webSocket_OnData;
 
                 try
@@ -149,7 +148,6 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             _webSocket.OnStateChanged -= _webSocket_OnStateChanged;
             _webSocket.OnMessage -= _webSocket_OnMessage;
             _webSocket.OnClosed -= _webSocket_OnClosed;
-            _webSocket.OnSendFailed -= _webSocket_OnSendFailed;
             _webSocket.OnData -= _webSocket_OnData;
 
             _webSocket.Disconnect();

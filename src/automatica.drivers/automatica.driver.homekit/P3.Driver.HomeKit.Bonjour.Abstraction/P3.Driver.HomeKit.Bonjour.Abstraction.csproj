@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <AssemblyName>P3.Driver.HomeKit.Bonjour.Abstraction</AssemblyName>
     <RootNamespace>P3.Driver.HomeKit.Bonjour.Abstraction</RootNamespace>
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SimpleBase" Version="3.0.0" />
+    <PackageReference Include="SimpleBase" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resolving/RootHints" />
