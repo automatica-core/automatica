@@ -18,6 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Automatica.Core.UnitTests.Base" Version="5.0.0.817" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1">
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.IkeaTradfriDriverFactory\P3.Driver.IkeaTradfriDriverFactory.csproj" />
