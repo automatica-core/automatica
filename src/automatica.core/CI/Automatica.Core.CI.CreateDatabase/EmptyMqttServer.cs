@@ -28,6 +28,11 @@ namespace Automatica.Core.CI.CreateDatabase
             throw new NotImplementedException();
         }
 
+        public Task SubscribeAsync(string clientId, ICollection<MqttTopicFilter> topicFilters)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IList<IMqttClientStatus>> GetClientStatusAsync()
         {
             throw new NotImplementedException();
@@ -58,12 +63,19 @@ namespace Automatica.Core.CI.CreateDatabase
             throw new NotImplementedException();
         }
 
+        public bool IsStarted { get; }
+
         public Task SubscribeAsync(string clientId, ICollection<TopicFilter> topicFilters)
         {
             throw new NotImplementedException();
         }
 
         public Task UnsubscribeAsync(string clientId, ICollection<string> topicFilters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
         {
             throw new NotImplementedException();
         }

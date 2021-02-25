@@ -8,8 +8,6 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.WebApi;
 using Automatica.Discovery;
 using Automatica.Push.Hubs;
-using ElectronNET.API;
-using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -33,6 +31,7 @@ using MQTTnet.AspNetCore;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
 using Microsoft.AspNetCore.Mvc;
+using MQTTnet.AspNetCore.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -137,12 +136,7 @@ namespace Automatica.Core
             });
 
             services.AddSingleton<DiscoveryService>();
-            if (!HybridSupport.IsElectronActive)
-            {
-                services.AddSingleton<IHostedService>(provider => provider.GetService<DiscoveryService>());
-            }
-
-            services.AddAutomaticaCoreService(Configuration, HybridSupport.IsElectronActive);
+            services.AddAutomaticaCoreService(Configuration, false);
 
             services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
             services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
@@ -182,11 +176,7 @@ namespace Automatica.Core
 
 
             string wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "wwwroot");
-            if (HybridSupport.IsElectronActive)
-            {
-                wwwrootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "wwwroot");
-                SystemLogger.Instance.LogInformation($"Electron is active {wwwrootPath}");
-            }
+          
             if (!Directory.Exists(wwwrootPath))
             {
                 wwwrootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
@@ -227,7 +217,7 @@ namespace Automatica.Core
                     !context.Request.Path.Value.StartsWith("/api/"))
                 {
                     context.Request.Path = "/index.html";
-                    context.Response.Cookies.Append("Electron", HybridSupport.IsElectronActive.ToString());
+                    context.Response.Cookies.Append("Electron", "false");
                     await next();
                 }
             });
@@ -247,22 +237,22 @@ namespace Automatica.Core
 
 
 
-            if (HybridSupport.IsElectronActive)
-            {
-                Task.Run(async () => await ElectronBootstrap(port));
-            }
+            //if (HybridSupport.IsElectronActive)
+            //{
+            //    Task.Run(async () => await ElectronBootstrap(port));
+            //}
         }
 
-        public async Task ElectronBootstrap(string port)
-        {
-            var browserWindow = await Electron.WindowManager.CreateWindowAsync($"http://localhost:{port}");
-            browserWindow.SetTitle("Automatica.Core");   
+        //public async Task ElectronBootstrap(string port)
+        //{
+        //    var browserWindow = await Electron.WindowManager.CreateWindowAsync($"http://localhost:{port}");
+        //    browserWindow.SetTitle("Automatica.Core");   
 
-            browserWindow.WebContents.OpenDevTools(new OpenDevToolsOptions
-            {
-                Mode = DevToolsMode.undocked
-            });
-        }
+        //    browserWindow.WebContents.OpenDevTools(new OpenDevToolsOptions
+        //    {
+        //        Mode = DevToolsMode.undocked
+        //    });
+        //}
         
     }
 }

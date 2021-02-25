@@ -4,7 +4,6 @@ using System.Linq;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Discovery;
-using ElectronNET.API;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -172,10 +171,10 @@ namespace Automatica.Core
                         .AddEnvironmentVariables();
                 });
 
-            if (HybridSupport.IsElectronActive)
-            {
-                ServerInfo.WebPort = "80";
-            }
+            //if (HybridSupport.IsElectronActive)
+            //{
+            //    ServerInfo.WebPort = "80";
+            //}
 
             return webHost.Build();
         }

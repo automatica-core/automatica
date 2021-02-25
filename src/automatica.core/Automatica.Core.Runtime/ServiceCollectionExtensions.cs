@@ -35,6 +35,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MQTTnet.AspNetCore;
+using MQTTnet.AspNetCore.Extensions;
 using MQTTnet.Server;
 
 namespace Automatica.Core.Runtime
