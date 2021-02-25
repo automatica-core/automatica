@@ -1,2 +1,2 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim-arm32v7
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
