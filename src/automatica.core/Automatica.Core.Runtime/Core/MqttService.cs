@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
+using MQTTnet.Server.Internal;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.Runtime.Core

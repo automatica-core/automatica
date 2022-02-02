@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim-arm32v7 AS libnserial
+FROM mcr.microsoft.com/dotnet/sdk:6.0.1-bullseye-slim-arm32v7 AS libnserial
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim-arm32v7 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0.1-bullseye-slim-arm32v7 AS runtime
 WORKDIR /app/
 
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1.1 /usr/lib

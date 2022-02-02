@@ -144,8 +144,8 @@ namespace Automatica.Core.EF.Models
                 mariaDbConString = Configuration.GetConnectionString($"AutomaticaDatabaseMaria");
                 logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
             }
-
-            optionsBuilder.UseMySql(mariaDbConString);
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+            optionsBuilder.UseMySql(mariaDbConString, serverVersion);
         }
 
         private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)

@@ -13,7 +13,7 @@ RUN npm install
 RUN npm run build-docker
 
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 RUN apt-get update 

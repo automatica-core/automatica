@@ -59,7 +59,25 @@ namespace P3.Driver.EnOcean
 
             return false;
         }
-        
+
+        public async Task<EnOceanPacket> SendRawTelegram(EnOceanPacket packet)
+        {
+            _stream.Pause();
+
+            _stream.WriteFrame(packet);
+
+            var p = await _stream.ReadFrame();
+
+            if (p != null)
+            {
+                AnswerReceived?.Invoke(this, new AnswerReceviedEventArgs(p));
+            }
+
+            _stream.Continue();
+
+            return p;
+        }
+
         public async Task<EnOceanPacket> SendTelegram(EnOceanTelegram telegram)
         {
             _stream.Pause();
