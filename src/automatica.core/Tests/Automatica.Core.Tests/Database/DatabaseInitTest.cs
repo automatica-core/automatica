@@ -43,13 +43,7 @@ namespace Automatica.Core.Tests.Database
                 Assert.True(false);
                 Console.Error.WriteLine($"{e}");
             }
-            finally
-            {
-                if (File.Exists("automatica.core-test.db"))
-                {
-                    File.Delete("automatica.core-test.db");
-                }
-            }
+           
         }
     }
 }
