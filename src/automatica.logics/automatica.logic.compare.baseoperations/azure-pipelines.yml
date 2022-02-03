@@ -1,15 +1,10 @@
 pool:
   name: Azure Pipelines
-#Your build pipeline references an undefined variable named ‘SDK_VERSION’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘MYGET_API_KEY’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘MYGET_API_KEY’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘AUTOMATICA_VERSION’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘CLOUD_API_KEY’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘CLOUD_URL’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
 variables:
 - group: automatica.core variables
- - name: BuildConfiguration: 
-   value:'Release'
+- name: BuildConfiguration: 
+  value:'Release'
 
 steps:
 - task: UseDotNet@2
