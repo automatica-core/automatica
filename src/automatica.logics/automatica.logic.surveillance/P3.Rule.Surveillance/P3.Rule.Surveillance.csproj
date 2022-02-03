@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>{FD6AFFB8-7382-4DE7-B491-8B30065EE768}</ProjectGuid>
@@ -17,6 +17,6 @@
     <EmbeddedResource Include="Resources\Surveillance-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Rule" Version="6.0.0.827" />
   </ItemGroup>
 </Project>

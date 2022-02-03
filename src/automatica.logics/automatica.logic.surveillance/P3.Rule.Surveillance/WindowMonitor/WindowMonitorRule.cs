@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
@@ -92,7 +93,7 @@ namespace P3.Rule.Surveillance.WindowMonitor
 
             // TODO: Notify only if a state changes???
 
-            Context.Notify.NotifyValueChanged(Context.RuleInstance, GetDataForVisu());
+            Context.Notify.NotifyValueChanged(Context.RuleInstance.RuleInterfaceInstance.First(), GetDataForVisu());
 
             return new List<IRuleOutputChanged>();
         }

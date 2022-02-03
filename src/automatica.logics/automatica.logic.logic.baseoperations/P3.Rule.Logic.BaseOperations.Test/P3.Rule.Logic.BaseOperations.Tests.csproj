@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
@@ -21,24 +21,24 @@
   <ItemGroup>
 
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="coverlet.msbuild" Version="3.0.3">
+    <PackageReference Include="coverlet.msbuild" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="5.0.0.817" />
-    <PackageReference Include="Automatica.Core.Base" Version="5.0.0.817" />
-    <PackageReference Include="Automatica.Core.Rule" Version="5.0.0.817" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="5.0.0.817" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1"/>
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Rule" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="6.0.0.827" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <ProjectReference Include="..\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations.csproj" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="OpenCover" Version="4.7.922">
+    <PackageReference Include="OpenCover" Version="4.7.1221">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="OpenCoverToCoberturaConverter" Version="0.3.4">
