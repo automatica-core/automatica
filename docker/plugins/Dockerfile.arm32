@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS libnserial
 
 WORKDIR /app
-
+RUN apt-get clean -y
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install cmake build-essential 
 
