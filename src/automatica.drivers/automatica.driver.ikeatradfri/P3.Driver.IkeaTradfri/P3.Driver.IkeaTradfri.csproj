@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Com.AugustCellars.CoAP" Version="1.10.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Tomidix.CSharpTradFriLibrary" Version="1.5.0.43" />
-    <PackageReference Include="Zeroconf" Version="3.4.2" />
+    <PackageReference Include="Zeroconf" Version="3.5.11" />
   </ItemGroup>
 </Project>

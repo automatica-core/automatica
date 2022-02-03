@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>2214B583-BA03-47C6-8696-85536439EB93</ProjectGuid>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.8" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.10" />
     <PackageReference Include="PureWebSockets" Version="4.0.0" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
   </ItemGroup>
 </Project>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <ProjectGuid>A39642E9-A6D8-420F-8B37-937283A776AF</ProjectGuid>
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SerialPortStream" Version="2.2.0" />
-    <PackageReference Include="Automatica.Core.Driver" Version="2.0.0.747" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="2.0.0.747" />
+    <PackageReference Include="SerialPortStream" Version="2.4.0" />
+    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
   </ItemGroup>
 </Project>

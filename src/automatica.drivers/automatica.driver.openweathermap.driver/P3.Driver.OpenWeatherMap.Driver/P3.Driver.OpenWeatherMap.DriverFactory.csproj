@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>0.14.0.1</Version>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.827" />
     <PackageReference Include="OpenWeatherMap" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>

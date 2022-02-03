@@ -2,13 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>A3C6FEF6-8776-4F17-92C6-61B20E47C120</ProjectGuid>
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.EnOcean.DriverFactory\P3.Driver.EnOcean.DriverFactory.csproj" />

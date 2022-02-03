@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -19,7 +19,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.0.3">
+    <PackageReference Include="coverlet.msbuild" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -29,9 +29,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="5.0.0.817" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="5.0.0.817" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1"/>
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="6.0.0.827" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.ModBusDriverFactory\P3.Driver.ModBusDriverFactory.csproj" />

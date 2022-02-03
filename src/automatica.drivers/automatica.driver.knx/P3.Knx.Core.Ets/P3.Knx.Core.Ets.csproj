@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>AF274AE7-266C-4ED5-B1F2-E2A1C852DAA9</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="5.0.0.817" />
-    <PackageReference Include="Automatica.Core.Base" Version="5.0.0.817" />
+    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.827" />
   </ItemGroup>
 </Project>
