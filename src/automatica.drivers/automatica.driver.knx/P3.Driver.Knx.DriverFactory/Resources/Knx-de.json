@@ -274,6 +274,13 @@
         "NAME": "Datum"
       }
     },
+    "DPT13": {
+      "NAME": "13.* Signed Count",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Wert"
+      }
+    },
     "DPT16": {
       "NAME": "16.* String",
       "DESCRIPTION": "",

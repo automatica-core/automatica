@@ -13,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(0, 7, 2, 19);
+        public override Version DriverVersion => new Version(0, 8, 0, 0);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -122,6 +122,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             AddDpt10Nodes(factory, KnxInterface3LevelMiddle);
             AddDpt11Nodes(factory, KnxInterface3LevelMiddle);
+            AddDpt13Nodes(factory, KnxInterface3LevelMiddle);
 
 
             AddDpt16Nodes(factory, KnxInterface3LevelMiddle);
@@ -314,6 +315,16 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 NodeDataType.Date, int.MaxValue, false);
 
             InitDptType((int)DptType.Dpt11, dpt11Guid, factory);
+        }
+
+        private void AddDpt13Nodes(INodeTemplateFactory factory, Guid parentNode)
+        {
+            var dpt13Guid = new Guid("94d9744e-4677-4d60-b7bc-0638cc355675");
+            factory.CreateNodeTemplate(dpt13Guid, "KNX.DPT13.NAME", "KNX.DPT13.DESCRIPTION", "knx-dpt13",
+                parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
+                NodeDataType.Date, int.MaxValue, false);
+
+            InitDptType((int)DptType.Dpt13, dpt13Guid, factory);
         }
 
         private void AddDpt16Nodes(INodeTemplateFactory factory, Guid parentNode)
