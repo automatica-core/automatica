@@ -7,7 +7,9 @@ import { ConfigService } from "src/app/services/config.service";
 import { AppService } from "src/app/services/app.service";
 import { RuleInterfaceType } from "../model/rule-interface-template";
 import { RuleInstance } from "../model/rule-instance";
+import { Directive } from "@angular/core";
 
+@Directive()
 export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
 
     protected get ruleInstance(): RuleInstance {
