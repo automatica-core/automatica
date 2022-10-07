@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace P3.Knx.Core.DPT.Base
 {
@@ -6,10 +7,11 @@ namespace P3.Knx.Core.DPT.Base
     {
         public override object FromDataPoint(byte[] data)
         {
-            if (data == null || data.Length != 2)
-                throw new FromDataPointException("data input must have 2 bytes");
+            if (data == null || data.Length != 4)
+                throw new FromDataPointException("data input must have 4 bytes");
 
-            return ConvertFromBusValue(ValidateMinMax(BitConverter.ToInt16(data, 0)));
+            var reversed = data.Reverse().ToArray();
+            return ConvertFromBusValue(ValidateMinMax(BitConverter.ToInt32(reversed, 0)));
         }
 
         public virtual int ValidateMinMax(int value)
@@ -47,8 +49,8 @@ namespace P3.Knx.Core.DPT.Base
             var intInput = ConvertToBusValue(ValidateMinMax(input.Value));
 
             var dataPoint = BitConverter.GetBytes(intInput);
-
-            return dataPoint;
+            
+            return dataPoint.Reverse().ToArray();
         }
     }
 }
