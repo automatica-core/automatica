@@ -32,14 +32,7 @@ import { LogicDefaultComponent } from "./logic-default/logic-default.component";
     L10nTranslationModule,
     DxButtonModule,
     ComponentsModule,
-    DynamicModule.withComponents([
-      LabelComponent,
-      DefaultComponent,
-      LinkComponent,
-      ToggleComponent,
-      DimmerComponent,
-      LogicDefaultComponent
-    ])
+    DynamicModule
   ],
   declarations: [
     VisuItemComponent,

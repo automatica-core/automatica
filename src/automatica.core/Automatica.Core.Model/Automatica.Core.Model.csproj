@@ -13,7 +13,7 @@
     <Product>Automatica.Core</Product>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.3.85" />
+    <PackageReference Include="MessagePack" Version="2.4.35" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>

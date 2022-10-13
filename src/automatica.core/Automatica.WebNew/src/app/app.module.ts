@@ -37,7 +37,7 @@ import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
 import { SlavesService } from "./services/slaves.services";
 import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
-import { DeviceDetectorModule } from "ngx-device-detector";
+import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 
 @Injectable()
@@ -93,8 +93,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     VisualizationModule,
     DxScrollViewModule,
     MobileModule,
-    StartingOverlayModule,
-    DeviceDetectorModule.forRoot()
+    StartingOverlayModule
   ],
   providers: [
     {
@@ -108,7 +107,11 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     { provide: DragDropConfig, useValue: new CustomDragDropConfig() },
     HasRoleGuard,
     DeviceService,
-    HttpTranslationLoader
+    HttpTranslationLoader,
+    {
+      provide: DeviceDetectorService,
+      useClass: DeviceDetectorService
+    },
   ],
   bootstrap: [
     AppComponent

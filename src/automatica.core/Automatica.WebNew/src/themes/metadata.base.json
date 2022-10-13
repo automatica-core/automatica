@@ -1,35 +1,37 @@
 {
-    "version": "19.2.4",
+    "version": "22.1.5",
     "date": "11/21/2018",
     "themeId": "9",
     "hue": null,
     "items": [
         {
-            "key": "@base-accent",
+            "key": "$base-accent",
             "value": "#457987"
         },
         {
-            "key": "@base-accent2",
+            "key": "$base-accent2",
             "value": "#325862"
         },
         {
-            "key": "@base-border-color",
+            "key": "$base-border-color",
             "value": "#e0e0e0"
         },
         {
-            "key": "@base-border-radius",
+            "key": "$base-border-radius",
             "value": "4px"
         },
         {
-            "key": "@base-text-color",
+            "key": "$base-text-color",
             "value": "rgba(0, 0, 0, 0.87)"
         },
         {
-            "key": "@base-bg",
+            "key": "$base-bg",
             "value": "#fff"
         }
     ],
     "baseTheme": "generic.light.compact",
     "outputColorScheme": "custom-scheme",
-    "makeSwatch": false
+    "makeSwatch": false,
+    "widgets": [],
+    "removeExternalResources": false
 }

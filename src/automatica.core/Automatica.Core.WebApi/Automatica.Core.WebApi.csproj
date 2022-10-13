@@ -7,10 +7,10 @@
     <ProjectGuid>50D44EF3-6768-4C8D-9AA7-87016FB3FDEE</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.3.85" />
+    <PackageReference Include="MessagePack" Version="2.4.35" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />

@@ -14,7 +14,7 @@ export enum VisuObjectSourceType {
 
 @Model()
 export class VisuObjectInstance extends BaseModel implements IPropertyModel {
-    isNewObject: boolean;
+
     private _X: number;
     private _Y: number;
     private _Height: number

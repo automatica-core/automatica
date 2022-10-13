@@ -14,13 +14,13 @@ import { IPropertyModel } from "./interfaces/ipropertyModel";
 export class BoardInterface extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel {
     ValidationOk: boolean = true;
 
-    Parent: ITreeNode;
+    public Parent: ITreeNode;
 
     @JsonProperty()
-    ObjId: string;
+    public ObjId: string;
 
     @JsonProperty()
-    Name: string;
+    public Name: string;
 
 
     private _DisplayDescription: string;
@@ -47,24 +47,24 @@ export class BoardInterface extends BaseModel implements ITreeNode, INameModel, 
     }
 
     @JsonProperty()
-    Description: string;
+    public Description: string;
 
     @JsonProperty()
-    This2BoardType: string;
+    public This2BoardType: string;
 
     @JsonProperty()
-    This2InterfaceType: string;
+    public This2InterfaceType: string;
 
     @JsonProperty()
-    BoardType: BoardType;
+    public BoardType: BoardType;
 
     @JsonPropertyName("This2InterfaceTypeNavigation")
-    InterfaceType: InterfaceType;
+    public InterfaceType: InterfaceType;
 
     @JsonProperty()
-    Meta: string;
+    public Meta: string;
 
-    Children: ITreeNode[] = [];
+    public Children: ITreeNode[] = [];
 
     Properties: PropertyInstance[] = [];
 
@@ -84,14 +84,14 @@ export class BoardInterface extends BaseModel implements ITreeNode, INameModel, 
         return "BoardInterface";
     }
 
-    getPropertyValue(property: string) {
+    public getPropertyValue(property: string) {
         return void 0;
     }
-    getPropertyValueById(property: string) {
+    public getPropertyValueById(property: string) {
         return void 0;
     }
 
-    validate(): boolean {
+    public validate(): boolean {
         return true;
     }
 

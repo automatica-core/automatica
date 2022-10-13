@@ -14,7 +14,7 @@
     <Product>Automatica.Core</Product>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="Moq" Version="4.18.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />

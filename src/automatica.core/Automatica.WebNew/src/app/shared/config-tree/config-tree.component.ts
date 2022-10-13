@@ -356,11 +356,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       if (drop instanceof BoardInterface) {
         if (drag instanceof NodeInstance) {
-          if (drop.InterfaceType.Type !== drag.NodeTemplate.NeedsInterface2InterfacesType) {
+          if ((<BoardInterface>drop).InterfaceType.Type !== drag.NodeTemplate.NeedsInterface2InterfacesType) {
             return false;
           }
 
-          if (drop.Children.length >= drop.InterfaceType.MaxChilds) {
+          if ((<BoardInterface>drop).Children.length >= (<BoardInterface>drop).InterfaceType.MaxChilds) {
             return false;
           }
           return true;

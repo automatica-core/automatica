@@ -263,9 +263,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
-  @Input()
-  isLoading: boolean;
-
   constructor(
     private config: ConfigService,
     translate: L10nTranslationService,

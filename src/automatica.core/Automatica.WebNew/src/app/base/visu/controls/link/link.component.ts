@@ -18,7 +18,6 @@ import { AppService } from "src/app/services/app.service";
 })
 export class LinkComponent extends BaseMobileComponent implements OnInit, OnDestroy {
 
-  value: string;
 
   private _linkProperty: PropertyInstance;
   private _areaLinkProperty: PropertyInstance;
