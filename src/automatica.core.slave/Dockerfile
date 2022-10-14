@@ -21,7 +21,7 @@ COPY . /src
 RUN automatica-cli setversion $VERSION -W /src/src
 RUN dotnet publish -c Release -o /app/slave /src/src/ -r linux-x64
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-6 AS runtime
 WORKDIR /app/slave
 
 COPY --from=node /www/dist /app/slave/wwwroot

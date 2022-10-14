@@ -2,13 +2,13 @@ import { Injectable } from "@angular/core";
 import { BaseService } from "../services/base-service";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { TelegramMonitorInstance } from "../base/model/telegram-monitor/telegram-monitor-instance";
 
 @Injectable()
 export class TelegramMonitorService extends BaseService {
 
-  constructor(httpService: HttpClient, pRouter: Router, translationService: TranslationService) {
+  constructor(httpService: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
     super(httpService, pRouter, translationService);
   }
 

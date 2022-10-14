@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { DataHubService } from "../../../communication/hubs/data-hub.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { BaseMobileComponent } from "../../base-mobile-component";
 import { ConfigService } from "src/app/services/config.service";
@@ -41,7 +41,7 @@ export class LabelComponent extends BaseMobileComponent implements OnInit, OnDes
   constructor(
     dataHub: DataHubService,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     configService: ConfigService,
     appService: AppService) {
     super(dataHub, notify, translate, configService, appService);

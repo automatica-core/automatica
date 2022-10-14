@@ -87,7 +87,7 @@ namespace Automatica.Core.EF.Models
         [PropertyTemplateType("TIME")]
         Time = 25,
 
-        [PropertyTemplateType("AREA_ICON", "booth-curtain,shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-hot,temperature-frigid,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath")]
+        [PropertyTemplateType("AREA_ICON", "shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-hot,temperature-frigid,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath")]
         AreaIcon = 100,
         [PropertyTemplateType("AREA")]
         AreaInstance = 101,
@@ -308,7 +308,14 @@ namespace Automatica.Core.EF.Models
                         else
                         {
                             ValueDouble = Convert.ToDouble(value, CultureInfo.InvariantCulture);
-                            ValueInt = Convert.ToInt32(value, CultureInfo.InvariantCulture);
+                            if (ValueDouble <= int.MaxValue)
+                            {
+                                ValueInt = Convert.ToInt32(ValueDouble);
+                            }
+                            else
+                            {
+                                ValueLong = Convert.ToInt64(ValueDouble);
+                            }
                         }
 
                         break;

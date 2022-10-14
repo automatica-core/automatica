@@ -1,4 +1,4 @@
-FROM node:12-alpine as node
+FROM node:18-alpine as node
 WORKDIR /src
 
 ARG FONTAWESOME_TOKEN
@@ -13,7 +13,7 @@ RUN npm install
 RUN npm run build-docker
 
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 RUN apt-get update 
@@ -35,7 +35,7 @@ COPY --from=node /src/dist /app/automatica/wwwroot
 RUN dotnet test /src/
 
 RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/
-RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-x64
+RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-x64 --self-contained
 
 COPY ./Automatica.Core/appsettings.json /app/automatica/appsettings.json
 RUN echo docker has some strange errors sometimes
@@ -48,7 +48,7 @@ RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $AUTOMATICA_VERSION -
 
 RUN rm -rf /src
 
-FROM automaticacore/automatica-plugin-runtime:amd64 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-6 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./

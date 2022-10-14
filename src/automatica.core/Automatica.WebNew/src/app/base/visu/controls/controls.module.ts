@@ -2,14 +2,18 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LabelComponent } from "./label/label.component";
 import { DynamicModule } from "ng-dynamic-component";
-import { ControlComponent } from "./control.component";
+import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxCircularGaugeModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxCircularGaugeModule, DxButtonModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
 import { BaseControlModule } from "./base-control/base-control.module";
+import { DimmerComponent } from "./dimmer/dimmer.component";
+import { L10nTranslationModule } from "angular-l10n";
+import { ComponentsModule } from "../components/components.module";
+import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 
 @NgModule({
   imports: [
@@ -24,22 +28,23 @@ import { BaseControlModule } from "./base-control/base-control.module";
     NgColorModule,
     DxChartModule,
     BaseControlModule,
-    DynamicModule.withComponents([
-      LabelComponent,
-      DefaultComponent,
-      LinkComponent,
-      ToggleComponent
-    ])
+    DxSliderModule,
+    L10nTranslationModule,
+    DxButtonModule,
+    ComponentsModule,
+    DynamicModule
   ],
   declarations: [
-    ControlComponent,
+    VisuItemComponent,
     LabelComponent,
     DefaultComponent,
     LinkComponent,
-    ToggleComponent
+    ToggleComponent,
+    DimmerComponent,
+    LogicDefaultComponent
   ],
   exports: [
-    ControlComponent
+    VisuItemComponent
   ]
 })
 export class ControlsModule { }

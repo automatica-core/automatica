@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from "@angular/core";
 import { BaseService } from "./base-service";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { HttpClient } from "@angular/common/http";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { NodeTemplate } from "../base/model/node-template";
@@ -12,7 +12,7 @@ import { PropertyInstance } from "../base/model/property-instance";
 export class ConfigService extends BaseService {
 
 
-    constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designData: DesignTimeDataService) {
+    constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designData: DesignTimeDataService) {
         super(http, pRouter, translationService);
     }
 
@@ -22,11 +22,6 @@ export class ConfigService extends BaseService {
 
     getSingleNodeInstance(id: string): Promise<NodeInstance> {
         return super.get("nodeInstances/single/" + id);
-    }
-
-
-    getNodeTemplates(): Promise<NodeTemplate[]> {
-        return this.designData.getNodeTemplates();
     }
 
     getNodeInstances(): Promise<NodeInstance[]> {
@@ -47,11 +42,11 @@ export class ConfigService extends BaseService {
     }
 
     scan(node: NodeInstance): Promise<NodeInstance[]> {
-        return super.postMultiple<NodeInstance>("nodeInstances/scan", node.toJson());
+        return super.postMultiple<NodeInstance>("nodeInstancesV2/scan", node.toJson());
     }
 
     import(node: NodeInstance, fileName: string): Promise<NodeInstance[]> {
-        return super.postMultiple<NodeInstance>("nodeInstances/import/", { Node: node.toJson(), FileName: fileName });
+        return super.postMultiple<NodeInstance>("nodeInstancesV2/import/", { Node: node.toJson(), FileName: fileName });
     }
     read(node: NodeInstance): Promise<any> {
         return super.postJson("nodeInstances/read", node.toJson());
@@ -76,6 +71,10 @@ export class ConfigService extends BaseService {
         return await super.post<NodeInstance>("nodeInstancesV2/update", nodeInstance.toJson());
     }
 
+    async reload(): Promise<any> {
+        return await super.postJson("nodeInstancesV2/reload", void 0);
+    }
+
     async delete(nodeInstance: NodeInstance): Promise<void> {
         return await super.postJson("nodeInstancesV2/delete", nodeInstance.toJson());
     }
@@ -90,5 +89,13 @@ export class ConfigService extends BaseService {
 
     enableLearnMode(nodeInstance: NodeInstance) {
         return super.postJson("nodeInstances/enableLeranMode", nodeInstance.toJson());
+    }
+
+    createFromTemplate(parentNode: NodeInstance, nodeTemplate: NodeTemplate) {
+        return super.post<NodeInstance>(`nodeInstancesV2/create/${this.translationService.getLocale().language}/${parentNode.ObjId}/${nodeTemplate.ObjId}`, void 0);
+    }
+
+    copy(item: NodeInstance, target: NodeInstance) {
+        return super.post<NodeInstance>(`nodeInstancesV2/copy/${item.ObjId}/${target.ObjId}`, void 0);
     }
 }

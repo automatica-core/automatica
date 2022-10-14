@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Logic.BaseOperations.And;
 using Xunit;
 
-namespace P3.Rule.Logic.BaseOperations.Test.And
+namespace P3.Rule.Logic.BaseOperations.Tests.And
 {
     public class AndTests : RuleTest<AndRuleFactory>
     {

@@ -7,7 +7,6 @@ namespace Automatica.Core.Driver
     {
         public static void AddAutomaticaDrivers(this IServiceCollection services)
         {
-
             services.AddSingleton<IDriverNodesStore, DriverNodesStore>();
             services.AddSingleton<IDriverStore, DriverStore>();
 

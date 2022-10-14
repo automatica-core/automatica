@@ -62,6 +62,17 @@ namespace Automatica.Core.Internals.Templates
             return null;
         }
 
+        public NodeInstance CreateNodeInstance(string locale, Guid template)
+        {
+            return null;
+        }
+
+        public NodeInstance CreateNodeInstance(string locale, NodeTemplate template)
+        {
+
+            return null;
+        }
+
         public NodeInstance CreateNodeInstanceByKey(string key)
         {
             return null;

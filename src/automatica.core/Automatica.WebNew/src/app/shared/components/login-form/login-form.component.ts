@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from "@angular/core";
 
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
 import { DxValidationGroupComponent } from "devextreme-angular";
+import { L10N_LOCALE, L10nLocale } from "angular-l10n";
 
 
 @Component({
@@ -21,7 +22,8 @@ export class LoginFormComponent implements OnInit {
     constructor(private loginService: LoginService,
         private router: Router,
         private appService: AppService,
-        private changeRef: ChangeDetectorRef) {
+        private changeRef: ChangeDetectorRef,
+        @Inject(L10N_LOCALE) public locale: L10nLocale) {
         localStorage.removeItem("jwt");
     }
 

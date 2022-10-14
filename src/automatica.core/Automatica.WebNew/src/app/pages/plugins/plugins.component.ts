@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { UpdateHubService } from "src/app/base/communication/hubs/update-hub.service";
 import { PluginType, PluginState, Version, PluginsService } from "src/app/services/plugins.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
@@ -233,6 +233,13 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     items: undefined,
     command: (event) => { this.installUpdateAll(); }
   }
+  menuReload: CustomMenuItem = {
+    id: "reload",
+    label: "Reload",
+    icon: "fa-download",
+    items: undefined,
+    command: (event) => { this.load(); }
+  }
 
   plugins: PluginStateInstance[] = [];
   pluginsMap = new Map<string, PluginStateInstance>();
@@ -240,23 +247,19 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     private pluginsService: PluginsService,
     private updateHubService: UpdateHubService,
     notify: NotifyService,
-    translationService: TranslationService,
+    private translationService: L10nTranslationService,
     appService: AppService) {
     super(notify, translationService, appService);
 
-    this.menuUpdate.label = translationService.translate("PLUGINS.UPDATE_ALL");
-    this.menuInstall.label = translationService.translate("PLUGINS.INSTALL_ALL");
-    this.menuInstallUpdate.label = translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
 
-    this.menuItems.push(this.menuUpdate);
-    this.menuItems.push(this.menuInstall);
-    this.menuItems.push(this.menuInstallUpdate);
 
     appService.setAppTitle("PLUGINS.NAME");
   }
 
   async load() {
     try {
+      this.isLoading = true;
+      this.plugins = [];
       const plugins: PluginState[] = await this.pluginsService.getPlugins();
 
       for (const p of plugins) {
@@ -272,9 +275,24 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     } catch (error) {
       this.handleError(error);
     }
+
+    this.isLoading = false;
   }
 
   async ngOnInit() {
+    this.translationService.onChange().subscribe({
+      next: () => {
+        this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
+        this.menuInstall.label = this.translationService.translate("PLUGINS.INSTALL_ALL");
+        this.menuInstallUpdate.label = this.translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
+        this.menuReload.label = this.translationService.translate("PLUGINS.RELOAD");
+      }
+    });
+
+    this.menuItems.push(this.menuReload);
+    this.menuItems.push(this.menuUpdate);
+    this.menuItems.push(this.menuInstall);
+    this.menuItems.push(this.menuInstallUpdate);
 
     this.baseOnInit();
 

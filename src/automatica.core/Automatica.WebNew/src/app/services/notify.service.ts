@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import notify from "devextreme/ui/notify";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 
 @Injectable()
 export class NotifyService {
 
 
-    constructor(private translate: TranslationService) {
+    constructor(private translate: L10nTranslationService) {
 
     }
     notifyInfo(text: any): any {

@@ -1,5 +1,5 @@
 import { throwError as observableThrowError, Observable } from "rxjs";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -8,7 +8,7 @@ import * as msgpack from "msgpack-lite";
 import { BaseModel } from "../base/model/base-model";
 
 export class BaseService {
-    public static getValidBaseModels<T extends BaseModel>(jsonArr: any, translationService: TranslationService) {
+    public static getValidBaseModels<T extends BaseModel>(jsonArr: any, translationService: L10nTranslationService) {
         const list: Array<T> = [];
         for (const node of jsonArr) {
             const model = BaseModel.getBaseModelFromJson<T>(node, void 0, translationService);
@@ -23,7 +23,7 @@ export class BaseService {
         return list;
     }
 
-    constructor(private httpService: HttpClient, private pRouter: Router, protected translationService: TranslationService) {
+    constructor(private httpService: HttpClient, private pRouter: Router, protected translationService: L10nTranslationService) {
 
     }
 
@@ -150,7 +150,7 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers()}).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             if (!response) {
                 return void 0;
@@ -209,7 +209,7 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.put(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers()}).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             if (!response) {
                 return void 0;
@@ -232,6 +232,55 @@ export class BaseService {
             if (!data) {
                 return void 0;
             }
+
+            const json = response; // this.decode(url, response);
+            return json;
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
+    async patch<T extends BaseModel>(url: string, body: any, withCredentials: boolean = true): Promise<T> {
+        try {
+            const data = this.encode(url, body);
+            const response = await this.httpService.patch(this.getS1Server() + "/" + url, data,
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
+
+            if (!response) {
+                return void 0;
+            }
+
+            const json = response; // this.decode(url, response);
+            return BaseModel.getBaseModelFromJson<T>(json, void 0, this.translationService);
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
+    async patchJson(url: string, body: any, withCredentials: boolean = true): Promise<any> {
+        try {
+            const data = this.encode(url, body);
+            const response = await this.httpService.patch(this.getS1Server() + "/" + url, data,
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
+
+            if (!response) {
+                return void 0;
+            }
+
+            const json = response; // this.decode(url, response);
+            return json;
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
+    async deleteJson(url: string, withCredentials: boolean = true): Promise<any> {
+        try {
+            const response = await this.httpService.delete(this.getS1Server() + "/" + url,
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             const json = response; // this.decode(url, response);
             return json;

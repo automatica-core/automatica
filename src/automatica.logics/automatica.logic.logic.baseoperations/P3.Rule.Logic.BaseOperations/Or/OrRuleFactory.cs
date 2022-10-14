@@ -1,6 +1,8 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Logic.BaseOperations.Or
 {
@@ -13,7 +15,7 @@ namespace P3.Rule.Logic.BaseOperations.Or
         public static readonly Guid RuleOutput = new Guid("6b7874eb-f0c2-421f-a55f-4f1e0bfcd137");
 
         public override string RuleName => "Logic.Or";
-        public override Version RuleVersion => new Version(1, 0, 0, 0);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
         public override Guid RuleGuid => new Guid("aa37f47b-8d47-4d43-9121-1992ca89e2f5");
 
         public override void InitTemplates(IRuleTemplateFactory factory)
@@ -23,7 +25,7 @@ namespace P3.Rule.Logic.BaseOperations.Or
             factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "LOGIC.OR.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
             factory.CreateRuleInterfaceTemplate(RuleInput2, "I2", "LOGIC.OR.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "LOGIC.OR.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
+            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "LOGIC.OR.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)

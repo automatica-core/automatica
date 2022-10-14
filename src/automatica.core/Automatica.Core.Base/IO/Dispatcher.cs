@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
@@ -23,6 +24,8 @@ namespace Automatica.Core.Base.IO
         protected readonly IDictionary<DispatchableType, IDictionary<Guid, object>> NodeValues =
             new ConcurrentDictionary<DispatchableType, IDictionary<Guid, object>>();
 
+        protected readonly IDictionary<Guid, object> Values = new ConcurrentDictionary<Guid, object>();
+
         private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>>();
         private readonly Timer _notifyTimer = new Timer();
 
@@ -38,6 +41,28 @@ namespace Automatica.Core.Base.IO
             _notifyTimer.Elapsed += _notifyTimer_Elapsed;
             _notifyTimer.Interval = 1000;
             _notifyTimer.Start();
+        }
+
+        public IDictionary<Guid, object> GetValues()
+        {
+            lock (_lock)
+            {
+                    return Values;
+            }
+        }
+
+        public object GetValue(Guid id)
+        {
+
+            lock (_lock)
+            {
+                if (Values.ContainsKey(id))
+                {
+                    return Values[id];
+                }
+            }
+
+            return null;
         }
 
         public virtual IDictionary<Guid, object> GetValues(DispatchableType type)
@@ -94,6 +119,7 @@ namespace Automatica.Core.Base.IO
                 if (!NodeValues[self.Type].ContainsKey(self.Id))
                 {
                     NodeValues[self.Type].Add(self.Id, value);
+                    Values.Add(self.Id, value);
                 }
                 else
                 {
@@ -102,6 +128,7 @@ namespace Automatica.Core.Base.IO
                         return;
                     }
                     NodeValues[self.Type][self.Id] = value;
+                    Values[self.Id] = value;
                 }
 
             }

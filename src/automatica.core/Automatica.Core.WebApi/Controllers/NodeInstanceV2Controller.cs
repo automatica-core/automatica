@@ -1,12 +1,16 @@
 ﻿using Automatica.Core.EF.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Model.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,6 +18,7 @@ using Microsoft.Extensions.Logging;
 namespace Automatica.Core.WebApi.Controllers
 {
     [Route("webapi/nodeInstancesV2")]
+    [Authorize(Roles = Role.AdminRole)]
     public class NodeInstanceV2Controller : BaseController
     {
         private readonly INodeInstanceCache _nodeInstanceCache;
@@ -21,6 +26,8 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ICoreServer _coreServer;
         private readonly INodeTemplateCache _templateCache;
         private readonly IDriverNodesStore _driverNodeStore;
+        private readonly INodeInstanceService _nodeInstanceService;
+        private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
             AutomaticaContext dbContext, 
@@ -28,18 +35,22 @@ namespace Automatica.Core.WebApi.Controllers
             INotifyDriver notifyDriver, 
             ICoreServer coreServer, 
             INodeTemplateCache templateCache,
-            IDriverNodesStore driverNodeStore) : base(dbContext)
+            IDriverNodesStore driverNodeStore,
+            INodeInstanceService nodeInstanceService,
+            ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
             _notifyDriver = notifyDriver;
             _coreServer = coreServer;
             _templateCache = templateCache;
             _driverNodeStore = driverNodeStore;
+            _nodeInstanceService = nodeInstanceService;
+            _logger = logger;
         }
 
         private async Task<EntityState> AddOrUpdateNodeInstance(NodeInstance node)
         {
-            var childs = node.InverseThis2ParentNodeInstanceNavigation;
+            var childs = node.InverseThis2ParentNodeInstanceNavigation ?? new List<NodeInstance>();
             var props = node.PropertyInstance;
 
             node.InverseThis2ParentNodeInstanceNavigation = null;
@@ -92,9 +103,74 @@ namespace Automatica.Core.WebApi.Controllers
 
         }
 
+
+        [HttpPost]
+        [Authorize(Roles = Role.AdminRole)]
+        [Route("create/{locale}/{parentNodeInstance}/{nodeTemplate}")]
+        public async Task<NodeInstance> CreateFromTemplate(string locale, Guid parentNodeInstance, Guid nodeTemplate)
+        {
+            var instance = _nodeInstanceService.CreateNodeInstance(locale, _nodeInstanceCache.Get(parentNodeInstance), nodeTemplate);
+            return await AddNode(instance);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Role.AdminRole)]
+        [Route("copy/{nodeInstance}/{targetNodeInstance}")]
+        public async Task<NodeInstance> Copy(Guid nodeInstance, Guid targetNodeInstance)
+        {
+            var instance = _nodeInstanceCache.Get(nodeInstance);
+
+            CopyRec(instance);
+
+            instance.This2ParentNodeInstance = targetNodeInstance;
+            var childs = instance.InverseThis2ParentNodeInstanceNavigation;
+
+            await AddNode(instance);
+
+            instance.InverseThis2ParentNodeInstanceNavigation = childs;
+            return instance;
+        }
+
+        private void CopyRec(NodeInstance nodeInstance)
+        {
+            nodeInstance.ObjId = Guid.NewGuid();
+
+            foreach (var property in nodeInstance.PropertyInstance)
+            {
+                property.ObjId = Guid.NewGuid();
+            }
+
+            foreach (var node in nodeInstance.InverseThis2ParentNodeInstanceNavigation)
+            {
+                CopyRec(node);
+                node.This2ParentNodeInstance = nodeInstance.ObjId;
+            }
+        }
+
         [HttpPut]
         [Route("add")]
         public async Task<NodeInstance> AddNode([FromBody]NodeInstance node)
+        {
+            _logger.LogDebug($"Add Node...");
+
+            var newNode = await AddNodeInternal(node);
+            
+
+            if (node.This2NodeTemplateNavigation.IsAdapterInterface.HasValue && node.This2NodeTemplateNavigation.IsAdapterInterface.Value && newNode.node.This2ParentNodeInstance.HasValue)
+            {
+                newNode.node.This2ParentNodeInstanceNavigation = _nodeInstanceCache.Get(newNode.node.This2ParentNodeInstance.Value);
+                return newNode.node;
+            }
+            
+            async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
+            ReloadAndForget();
+
+
+            _logger.LogDebug($"Add Node...done");
+            return newNode.node;
+        }
+
+        private async Task<(NodeInstance node, EntityState entityState)> AddNodeInternal(NodeInstance node)
         {
             var transaction = DbContext.Database.BeginTransaction();
             try
@@ -104,10 +180,7 @@ namespace Automatica.Core.WebApi.Controllers
                 await transaction.CommitAsync();
 
                 _nodeInstanceCache.Clear();
-
-                await ReloadDriver(node, entityState);
-
-                return _nodeInstanceCache.Get(node.ObjId);
+                return (_nodeInstanceCache.Get(node.ObjId), entityState);
             }
             catch (Exception e)
             {
@@ -152,6 +225,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task StopStartDriver(NodeInstance node)
         {
+
             var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
             await _notifyDriver.NotifyAdd(node);
 
@@ -175,7 +249,7 @@ namespace Automatica.Core.WebApi.Controllers
             var transaction = DbContext.Database.BeginTransaction();
             try
             {
-                var existingNode = DbContext.NodeInstances.AsNoTracking().SingleOrDefault(a => a.ObjId == node.ObjId);
+                var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation).SingleOrDefault(a => a.ObjId == node.ObjId);
                 if (existingNode != null)
                 {
                     DbContext.Entry(existingNode).State = EntityState.Deleted;
@@ -186,12 +260,21 @@ namespace Automatica.Core.WebApi.Controllers
 
                 try
                 {
+                    if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                        existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
+                    {
+                        _nodeInstanceCache.Clear();
+                        return;
+                    }
                     var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
 
                     if (rootNode.ObjId == node.ObjId)
                     {
                         var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
-                        await _coreServer.StopDriver(driver);
+                        if (driver != null)
+                        {
+                            await _coreServer.StopDriver(driver);
+                        }
                     }
                     else
                     {
@@ -213,6 +296,13 @@ namespace Automatica.Core.WebApi.Controllers
             }
         }
 
+        [Route("reload")]
+        [HttpPost]
+        public async Task ReInit()
+        {
+            await _coreServer.ReInit();
+        }
+
         [Route("update")]
         [HttpPost]
         public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node)
@@ -227,7 +317,8 @@ namespace Automatica.Core.WebApi.Controllers
 
                 _nodeInstanceCache.Clear();
 
-                await ReloadDriver(node, entityState);
+                async void ReloadAndForget() => await ReloadDriver(node, entityState);
+                ReloadAndForget();
 
                 return _nodeInstanceCache.Get(node.ObjId);
             }
@@ -239,5 +330,63 @@ namespace Automatica.Core.WebApi.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("import")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IList<NodeInstance>> Import([FromBody] ImportData instance)
+        {
+            var data = await _notifyDriver.Import(instance.Node, instance.FileName);
+
+            if (System.IO.File.Exists(instance.FileName))
+            {
+                System.IO.File.Delete(instance.FileName);
+            }
+
+            return await SaveAndReloadNodeInstances(data);
+        }
+
+        private async Task<IList<NodeInstance>> SaveAndReloadNodeInstances(IList<NodeInstance> nodeInstances)
+        {
+            var savedNodes = new List<NodeInstance>();
+            var savedNodesData = new List<(NodeInstance node, EntityState entityState)>();
+            foreach (var node in nodeInstances)
+            {
+                var newNode = await AddNodeInternal(node);
+                savedNodes.Add(newNode.node);
+                savedNodesData.Add(newNode);
+            }
+
+            if (savedNodesData.Any())
+            {
+                async void ReloadAndForget() => await ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState);
+                ReloadAndForget();
+            }
+
+            return savedNodes;
+        }
+
+        [HttpPost]
+        [Route("scan")]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IList<NodeInstance>> Scan([FromBody] NodeInstance instance)
+        {
+            try
+            {
+                SystemLogger.Instance.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
+                var scan = await _notifyDriver.ScanBus(instance);
+
+                foreach (var s in scan)
+                {
+                    s.This2ParentNodeInstance = instance.ObjId;
+                }
+
+                return await SaveAndReloadNodeInstances(scan);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not scan driver");
+                throw;
+            }
+        }
     }
 }

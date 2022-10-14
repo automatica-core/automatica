@@ -40,17 +40,17 @@ namespace Automatica.Core.Plugin.Standalone
             var logger = new ConsoleLogger();
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {
-                MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
-                {
-                    var trace =
-                        $"mqtt >> [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
-                    if (e.TraceMessage.Exception != null)
-                    {
-                        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
-                    }
+                //MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
+                //{
+                //    var trace =
+                //        $"mqtt >> [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
+                //    if (e.TraceMessage.Exception != null)
+                //    {
+                //        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
+                //    }
 
-                    logger.LogDebug(trace);
-                };
+                //    logger.LogDebug(trace);
+                //};
             }
 
             while (true)

@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Logic.BaseOperations.If;
 using Xunit;
 
-namespace P3.Rule.Logic.BaseOperations.Test.If
+namespace P3.Rule.Logic.BaseOperations.Tests.If
 {
     public class IfTests : RuleTest<IfRuleFactory>
     {
@@ -61,6 +60,20 @@ namespace P3.Rule.Logic.BaseOperations.Test.If
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(IfRuleFactory.RuleInput1), Dispatchable, true)[0].ValueInteger == 5);
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(IfRuleFactory.RuleInput2), Dispatchable, false)[0].ValueInteger == 5);
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(IfRuleFactory.RuleInput2), Dispatchable, true)[0].ValueInteger == 10);
+        }
+
+        [Fact]
+        public void TestRuleLogic5()
+        {
+            var paramTrue = GetRuleInterfaceByTemplate(IfRuleFactory.RuleParamTrue);
+            paramTrue.Value = 1;
+
+            var paramFalse = GetRuleInterfaceByTemplate(IfRuleFactory.RuleParamFalse);
+            paramFalse.Value = 0;
+
+            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(IfRuleFactory.RuleInput1), Dispatchable, true)[0].ValueInteger == 0);
+            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(IfRuleFactory.RuleInput2), Dispatchable, 1)[0].ValueInteger == 1);
+            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(IfRuleFactory.RuleInput2), Dispatchable, 1)[0].ValueInteger == 1);
         }
     }
 }

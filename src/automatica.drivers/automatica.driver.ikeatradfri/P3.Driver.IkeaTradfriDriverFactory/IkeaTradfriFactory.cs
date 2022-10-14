@@ -32,7 +32,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         public override Guid DriverGuid => GatewayContainerGuid;
 
 
-        public override Version DriverVersion => new Version(0, 7, 0, 16);
+        public override Version DriverVersion => new Version(2, 7, 0, 16);
 
         public override bool InDevelopmentMode => false;
 
@@ -52,7 +52,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 0);
 
             var gwInterface = new Guid("f15cca2e-7fe5-43f6-ad8a-ea4b60fc7b56");
-            factory.CreateInterfaceType(gwInterface, "IKEA.TRADFRI.GATEWAY.NAME", "IKEA.TRADFRI.GATEWAY.DESCRIPTION", int.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(gwInterface, "IKEA.TRADFRI.GATEWAY.NAME", "IKEA.TRADFRI.GATEWAY.DESCRIPTION", int.MaxValue, int.MaxValue, false);
             factory.CreateNodeTemplate(GatewayGuid, "IKEA.TRADFRI.GATEWAY.NAME", "IKEA.TRADFRI.GATEWAY.NAME", "ikea-tradfri-gateway", DriverGuid, gwInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
 
             factory.CreatePropertyTemplate(new Guid("dbac52e1-a070-4961-b7fe-fb9ee6d924c7"), "IKEA.TRADFRI.GATEWAY.ID.NAME",

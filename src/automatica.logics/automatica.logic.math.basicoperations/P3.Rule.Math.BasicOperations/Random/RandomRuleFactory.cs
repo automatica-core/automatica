@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -35,7 +31,7 @@ namespace P3.Rule.Math.BasicOperations.Random
             factory.CreateParameterRuleInterfaceTemplate(RuleParamMin, "Min", "MATH.RANDOM.MIN.DESCRIPTION", RuleGuid,  1, RuleInterfaceParameterDataType.Integer, 0);
             factory.CreateParameterRuleInterfaceTemplate(RuleParamMax, "Max", "MATH.RANDOM.MAX.DESCRIPTION", RuleGuid, 2, RuleInterfaceParameterDataType.Integer, 100);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.RANDOM.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
+            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.RANDOM.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)

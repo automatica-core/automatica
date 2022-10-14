@@ -4,6 +4,7 @@ import { RuleInterfaceTemplate, RuleInterfaceParameterDataType, RuleInterfaceDir
 import { IKey } from "./IKey";
 import { Guid } from "../utils/Guid";
 import { TimerPropertyData } from "./timer-property-data";
+import { L10nTranslationService } from "angular-l10n";
 
 @Model()
 export class RuleInterfaceInstance extends BaseModel {
@@ -29,8 +30,10 @@ export class RuleInterfaceInstance extends BaseModel {
     @JsonPropertyName("This2RuleInstanceNavigation", false, false, true)
     RuleInstance: IKey;
 
-    public static fromTemplate(template: RuleInterfaceTemplate, ruleInstance: IKey): RuleInterfaceInstance {
+    public static fromTemplate(template: RuleInterfaceTemplate, ruleInstance: IKey, translationService: L10nTranslationService): RuleInterfaceInstance {
         const instance = new RuleInterfaceInstance(ruleInstance);
+
+        instance.translationService = translationService;
 
         instance.ObjId = Guid.MakeNew().ToString();
         instance.Template = template;
@@ -76,7 +79,7 @@ export class RuleInterfaceInstance extends BaseModel {
     }
 
     get Name(): string {
-        return this.Template.Name;
+        return this.translationService.translate(this.Template.Name);
     }
 
     public get Value(): any {

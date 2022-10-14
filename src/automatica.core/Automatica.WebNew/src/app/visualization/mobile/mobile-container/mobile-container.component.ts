@@ -5,15 +5,16 @@ import { BaseComponent } from "src/app/base/base-component";
 import { VisuService } from "src/app/services/visu.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotifyService } from "src/app/services/notify.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { LoginService } from "src/app/services/login.service";
 import { AppService } from "src/app/services/app.service";
 import { DeviceService } from "src/app/services/device/device.service";
-import { VisuObjectInstance } from "src/app/base/model/visu-object-instance";
+import { VisuObjectInstance, VisuObjectSourceType } from "src/app/base/model/visu-object-instance";
 import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { DataService } from "src/app/services/data.service";
 
 @Component({
   selector: "app-mobile-container",
@@ -35,20 +36,22 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   constructor(private visuService: VisuService,
     private route: ActivatedRoute,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private configService: ConfigService,
-    private router: Router,
-    private login: LoginService,
     appService: AppService,
-    private deviceService: DeviceService,
-    private changeRef: ChangeDetectorRef) {
+    private dataService: DataService) {
 
     super(notify, translate, appService);
   }
 
   async ngOnInit() {
     this.appService.isLoading = true;
+
+    await this.dataService.getAllValues();
+
     this.visuTemplates = await this.visuService.getVisuTemplates();
+
+
     for (const v of this.visuTemplates) {
       this.visuTemplatesMap.set(v.ObjId, v);
     }
@@ -112,7 +115,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
       for (const x of data.NodeInstances) {
         if (x.NodeTemplate.This2DefaultMobileVisuTemplate && this.visuTemplatesMap.has(x.NodeTemplate.This2DefaultMobileVisuTemplate)) {
-          const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x);
+          const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x, VisuObjectSourceType.NodeInstance);
 
           this.getAndSetProperty(instance, "nodeInstance", x.ObjId);
           this.getAndSetProperty(instance, "text", x.Name);
@@ -134,7 +137,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       }
 
       for (const x of data.RuleInstances) {
-        const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate), x);
+        const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.RuleTemplate.This2DefaultMobileVisuTemplate), x, VisuObjectSourceType.RuleInstance);
         visuObjectInstances.push(instance);
       }
 

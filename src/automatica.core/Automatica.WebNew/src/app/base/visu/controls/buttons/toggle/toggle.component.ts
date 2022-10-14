@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../../base-mobile-rule-component";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { RuleInstanceVisuService } from "src/app/services/rule-visu.service";
 import { AppService } from "src/app/services/app.service";
@@ -36,7 +36,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
   constructor(
     dataHubService: DataHubService,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     configService: ConfigService,
     ruleInstanceVisuService: RuleInstanceVisuService,
     appService: AppService) {
@@ -58,18 +58,23 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
   onRuleInstanceValueChanged(interfaceId, value) {
     console.log("ruleinterfacevalue changed", interfaceId, value);
 
-    if (this.stateType.ObjId === interfaceId) {
+    if (this.outputType.ObjId === interfaceId) {
       this.state = value;
+      this.displayValue = this.translate.translate(value ? "COMMON.TOGGLE.ON" : "COMMON.TOGGLE.OFF");
     }
   }
 
   onValueChanged($event) {
-    this.dataHub.setValue(this.outputType.ObjId, $event.value);
+    this.switch($event.value);
   }
 
   ngOnDestroy(): void {
     this.baseOnDestroy();
   }
 
+
+  switch(value) {
+    this.dataHub.setValue(this.inputType.ObjId, value);
+  }
 
 }

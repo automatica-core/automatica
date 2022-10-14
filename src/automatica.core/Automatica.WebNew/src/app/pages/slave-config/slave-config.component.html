@@ -25,16 +25,16 @@
                     (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translate }}" deleteRow="{{ 'COMMON.DELETE' | translate }}"
-                            cancelRowChanges="{{ 'COMMON.CANCEL' | translate }}"></dxo-texts>
+                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}" deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
+                            cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
                     </dxo-editing>
                     <dxo-selection mode="single"></dxo-selection>
 
-                    <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-                    <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translate }}"></dxi-column>
+                    <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
                     
-                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SLAVE.CLIENTID' | translate }}"></dxi-column>
-                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SLAVE.CLIENTKEY' | translate }}"></dxi-column>
+                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SLAVE.CLIENTID' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SLAVE.CLIENTKEY' | translateAsync }}"></dxi-column>
 
 
                  

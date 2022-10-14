@@ -80,10 +80,10 @@ namespace Automatica.Core.Rule
                 {
                     ParamterValueChanged(instance, source, value);
 
-                    Context.Logger.LogDebug($"RuleParameter changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} from {source.GetType()}-{source.Name} value {value}");
+                    Context.Logger.LogDebug($"RuleParameter changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}= value {value}");
                     return new List<IRuleOutputChanged>();
                 }
-                Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} from {source.GetType()}-{source.Name} value {value}");
+                Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}) value {value}");
 
                 var values = InputValueChanged(instance, source, value);
 

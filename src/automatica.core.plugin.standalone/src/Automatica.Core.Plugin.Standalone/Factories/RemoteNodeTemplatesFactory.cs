@@ -86,6 +86,11 @@ namespace Automatica.Core.Plugin.Standalone.Factories
             return _nodeTemplates.Values.Where(a => key.Contains(a.ObjId)).ToList();
          }
 
+        public NodeInstance CreateNodeInstance(string locale, NodeTemplate template)
+        {
+            return CreateNodeInstance(template);
+        }
+
         public NodeInstance CreateNodeInstanceByKey(string key)
         {
             return CreateNodeInstance(GetNodeTemplateByKey(key));
@@ -97,6 +102,11 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         }
 
         public NodeInstance CreateNodeInstance(Guid template)
+        {
+            return CreateNodeInstance(GetNodeTemplateById(template));
+        }
+
+        public NodeInstance CreateNodeInstance(string locale, Guid template)
         {
             return CreateNodeInstance(GetNodeTemplateById(template));
         }

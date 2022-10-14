@@ -24,7 +24,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     @Input()
     menuItems: any[];
 
-    private _menuOpened: boolean;
+    private _menuOpened: boolean = true;
 
     @Input()
     public get menuOpened(): boolean {

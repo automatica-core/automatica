@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Internals.Logger
 {
@@ -9,6 +9,8 @@ namespace Automatica.Core.Internals.Logger
     {
         private static readonly object _lock = new object();
         private static readonly IDictionary<string, ILogger> _loggerInstances = new ConcurrentDictionary<string, ILogger>();
+        
+        public static IConfiguration Configuration { get; set; }
 
         public static ILogger GetLogger(string name)
         {

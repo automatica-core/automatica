@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CategoryService } from "src/app/services/categories.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -31,7 +31,7 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
 
   constructor(
     private catService: CategoryService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private notify: NotifyService,
     appService: AppService) {
     super(notify, translate, appService);
@@ -39,7 +39,13 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
 
 
     this.menuItems.push(this.menuSave);
-    this.menuSave.label = translate.translate("COMMON.SAVE");
+
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuSave.label = this.translate.translate("COMMON.SAVE");
+      }
+    });
+
   }
 
   async ngOnInit() {

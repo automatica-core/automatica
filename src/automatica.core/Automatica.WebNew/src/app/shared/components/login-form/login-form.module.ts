@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DxButtonModule, DxTextBoxModule, DxValidatorModule, DxValidationGroupModule, DxLoadPanelModule } from "devextreme-angular";
-import { TranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 import { LoginFormComponent } from "./login-form.component";
 
 @NgModule({
@@ -11,7 +11,7 @@ import { LoginFormComponent } from "./login-form.component";
         DxTextBoxModule,
         DxValidatorModule,
         DxValidationGroupModule,
-        TranslationModule,
+        L10nTranslationModule,
         DxLoadPanelModule
     ],
     declarations: [ LoginFormComponent ],

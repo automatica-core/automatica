@@ -1,5 +1,5 @@
 #build libserialport
-FROM microsoft/dotnet:sdk AS libnserial
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS libnserial
 WORKDIR /app
 
 RUN apt-get -y update && apt-get -y upgrade
@@ -28,7 +28,7 @@ RUN npm install
 RUN npm run build-docker
 
 
-FROM microsoft/dotnet:latest AS build
+FROM mcr.microsoft.com/dotnet/sdk:6 AS build
 WORKDIR /app
 
 RUN apt-get update 
@@ -73,7 +73,7 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./

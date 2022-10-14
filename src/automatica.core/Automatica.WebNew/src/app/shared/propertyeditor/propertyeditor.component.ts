@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
-import { TranslationService, Language } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
@@ -26,6 +26,9 @@ import { SlavesService } from "src/app/services/slaves.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { RuleInstance } from "src/app/base/model/rule-instance";
+import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { RulePage } from "src/app/base/model/rule-page";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -116,9 +119,6 @@ export class LearnNodeInstance {
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {
   PropertyTemplateType: typeof PropertyTemplateType = PropertyTemplateType;
-
-  @Language()
-  lang: any;
 
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
@@ -263,17 +263,15 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
-  @Input()
-  isLoading: boolean;
-
   constructor(
     private config: ConfigService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private dataHub: DataHubService,
     private notify: NotifyService,
     private slaveService: SlavesService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService) {
+    private nodeInstanceService: NodeInstanceService,
+    private ruleEngineService: RuleEngineService) {
     super(notify, translate, appService);
   }
 
@@ -474,14 +472,24 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     const prop = data.data as PropertyInstance;
 
     this.validate.emit(prop);
+    this.appService.isLoading = true;
+    try {
+      if (this.item instanceof NodeInstance) {
+        await this.config.update(this.item);
 
-    if (this.item instanceof NodeInstance) {
-      await this.config.update(this.item);
-
-      if (!this.item.ParentId) {
-        this.nodeInstanceService.saveSettings();
+        if (!this.item.ParentId) {
+          this.nodeInstanceService.saveSettings();
+        }
+      } else if (this.item instanceof RuleInstance) {
+        await this.ruleEngineService.updateItem(this.item);
+      } else if (this.item instanceof RulePage) {
+        await this.ruleEngineService.updatePage(this.item);
       }
+    } catch (error) {
+      this.handleError(error);
     }
+
+    this.appService.isLoading = false;
   }
 
 

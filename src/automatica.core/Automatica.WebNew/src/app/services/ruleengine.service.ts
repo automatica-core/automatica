@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { BaseService } from "./base-service";
 import { EventEmitter } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -11,28 +11,13 @@ import { RuleInstance } from "../base/model/rule-instance";
 import { NodeInstance } from "../base/model/node-instance";
 import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
 import { Model, JsonProperty, JsonFieldInfo, BaseModel } from "../base/model/base-model";
+import { Link } from "../base/model/link";
 
 export interface AddLogicData {
   data: RuleInstance | NodeInstance2RulePage;
-  pageIndex: string;
+  pageId: string;
 }
 
-@Model()
-export class SaveAllLogicEditor extends BaseModel {
-  @JsonProperty()
-  LogicPages: RulePage[] = [];
-
-  @JsonProperty()
-  NodeInstances: NodeInstance[] = [];
-
-  public typeInfo(): string {
-    return "SaveAllLogicEditor";
-  }
-
-  protected getJsonProperty(): Map<string, JsonFieldInfo> {
-    return void 0;
-  }
-}
 
 @Injectable()
 export class RuleEngineService extends BaseService {
@@ -40,7 +25,7 @@ export class RuleEngineService extends BaseService {
   public reInit: EventEmitter<number> = new EventEmitter<number>();
   public add = new EventEmitter<AddLogicData>();
 
-  constructor(http: HttpClient, pRouter: Router, translationService: TranslationService, private designService: DesignTimeDataService) {
+  constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designService: DesignTimeDataService) {
     super(http, pRouter, translationService);
   }
 
@@ -49,17 +34,8 @@ export class RuleEngineService extends BaseService {
     return super.post<RulePage>("rules/save", page.toJson());
   }
 
-  saveAll(pages: RulePage[], nodeInstances: NodeInstance[]): Promise<SaveAllLogicEditor> {
-    const pagesJson = [];
-    for (const page of pages) {
-      pagesJson.push(page.toJson());
-    }
-
-    const nodesJson = new Array<any>();
-    for (const set of nodeInstances) {
-      nodesJson.push(set.toJson());
-    }
-    return super.post<SaveAllLogicEditor>("rules/saveAll", { logicPages: pagesJson, nodeInstances: nodesJson });
+  reload(): Promise<any> {
+    return super.postJson("rules/reload", {});
   }
 
   getPages(): Promise<RulePage[]> {
@@ -71,5 +47,59 @@ export class RuleEngineService extends BaseService {
 
   getRuleTemplates(): Promise<RuleTemplate[]> {
     return this.designService.getRuleTemplates();
+  }
+
+  addPage(page: RulePage): Promise<RulePage> {
+    return super.post<RulePage>("rules/page/add", page.toJson());
+  }
+
+  addItem(item: AddLogicData): Promise<any> {
+
+    let linkExtension = "ruleInstance";
+    if (item.data instanceof RuleInstance) {
+      linkExtension = "ruleInstance";
+    } else {
+      linkExtension = "nodeInstance";
+    }
+
+    this.add.emit(item);
+
+    return super.postJson(`rules/item/${linkExtension}/${item.pageId}`, item.data.toJson());
+  }
+
+  removePage(page: RulePage): Promise<any> {
+    return super.deleteJson(`rules/page/${page.ObjId}`);
+  }
+
+  removeItem(data: RuleInstance | NodeInstance2RulePage): Promise<any> {
+
+    let linkExtension = "ruleInstance";
+    if (data instanceof RuleInstance) {
+      linkExtension = "ruleInstance";
+    } else {
+      linkExtension = "nodeInstance";
+    }
+
+    return super.deleteJson(`rules/item/${linkExtension}/${data.ObjId}`);
+  }
+
+  updateItem(item: RuleInstance | NodeInstance2RulePage) {
+    if (item instanceof RuleInstance) {
+      return super.patchJson(`rules/item/ruleInstance`, item.toJson());
+    } else {
+      return super.patchJson(`rules/item/nodeInstance`, item.toJson());
+    }
+  }
+
+  addOrUpdateLink(item: Link) {
+    return super.postJson(`rules/link`, item.toJson());
+  }
+
+  removeLink(item: Link) {
+    return super.deleteJson(`rules/link/${item.ObjId}`);
+  }
+
+  updatePage(item: RulePage) {
+    return super.patch("rules/page", item.toJson());
   }
 }

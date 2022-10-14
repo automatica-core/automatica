@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { RuleEngineService, AddLogicData } from "../../services/ruleengine.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { RulePage } from "src/app/base/model/rule-page";
 import { NotifyService } from "src/app/services/notify.service";
 import { NodeInstance2RulePage, NodeInterfaceInstance } from "src/app/base/model/node-instance-2-rule-page";
@@ -61,17 +61,17 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   constructor(private ruleEngineService: RuleEngineService,
     private dataHub: DataHubService,
     notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
     appService: AppService) {
     super(notify, translate, appService);
   }
 
   async ngOnInit() {
-    this.linkService = new LinkService(this.page, this.translate);
+    this.linkService = new LinkService(this.page, this.translate, this.ruleEngineService);
 
     super.registerEvent(this.ruleEngineService.add, (data: AddLogicData) => {
-      if (data.pageIndex === this.page.ObjId) {
+      if (data.pageId === this.page.ObjId) {
         if (data.data instanceof RuleInstance) {
           this.addLogic(data.data, this.page);
         } else if (data.data instanceof NodeInstance2RulePage) {
@@ -114,7 +114,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
   };
 
-  dropSuccess($event) {
+  async dropSuccess($event) {
     const event: any = $event.mouseEvent;
     const point = this.workplace.fromDocumentToCanvasCoordinate(event.clientX, event.clientY);
 
@@ -124,17 +124,18 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
 
         for (const child of nodeInstance.Children) {
-          if (this.addNodeInstanceToPage(child, point)) {
+          const success = await this.addNodeInstanceToPage(child, point)
+          if (success) {
             point.y += 35;
           }
         }
       } else {
-        this.addNodeInstanceToPage(nodeInstance, point);
+        await this.addNodeInstanceToPage(nodeInstance, point);
       }
     }
   }
 
-  addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
+  async addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
     if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
       return false;
     }
@@ -144,13 +145,14 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     node.X = point.getX();
     node.Y = point.getY();
-    this.addNode(node, this.page);
+
+    await this.ruleEngineService.addItem({ data: node, pageId: this.page.ObjId });
     return true;
   }
 
   init(): any {
 
-    LogicShapes.addShape(this.logic);
+    LogicShapes.addShape(this.logic, this.ruleEngineService);
     LogicLocators.addLocators(this.logic);
     LogicLables.addLables(this.logic);
 
@@ -183,8 +185,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     const d = new this.logic.ItemShape({}, element, this.linkService);
 
-    d.on("removed", () => {
+    d.on("removed", async () => {
       page.removeNodeInstance(element.ObjId);
+
+      await this.ruleEngineService.removeItem(element);
     });
 
     this.workplace.add(d);
@@ -199,8 +203,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
 
-    d.on("removed", () => {
+    d.on("removed", async () => {
       page.removeRuleInstance(element.ObjId);
+      await this.ruleEngineService.removeItem(element);
     });
 
     this.workplace.add(d);

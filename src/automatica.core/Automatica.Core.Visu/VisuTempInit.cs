@@ -66,6 +66,10 @@ namespace Automatica.Core.Visu
             AddClockControl(factory);
 
             AddPushButton(factory);
+
+            var dimmer = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Dimmer);
+            factory.CreateVisuMobileTemplate(dimmer, "VISU.OBJECT.DIMMER.NAME", "VISU.OBJECT.DIMMER.DESCRIPTION",
+                "dimmer", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
         }
 
         private void AddClockControl(VisuMobileTemplateFactory factory)

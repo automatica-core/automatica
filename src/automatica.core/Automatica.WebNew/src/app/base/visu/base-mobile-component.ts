@@ -4,19 +4,22 @@ import { VisuObjectMobileInstance } from "../model/visu";
 import { DataHubService } from "../communication/hubs/data-hub.service";
 import { PropertyInstance } from "../model/property-instance";
 import { NotifyService } from "src/app/services/notify.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeInstance } from "../model/node-instance";
 import { AppService } from "src/app/services/app.service";
 import { AreaInstance } from "../model/areas";
 import { CategoryInstance } from "../model/categories";
 import { VisuPageGroupType } from "../model/visu-page";
+import { NodeDataTypeEnum } from "../model/node-data-type";
+import * as moment from "moment";
 
 export interface VisuObjectType {
     This2AreaInstanceNavigation: AreaInstance;
     This2CategoryInstanceNavigation: CategoryInstance;
 
     DisplayName: string;
+    IsFavorite: boolean;
 }
 
 @Directive()
@@ -63,6 +66,18 @@ export abstract class BaseMobileComponent extends BaseComponent {
         if (this.item.StateTextValueFalse && this._value === false) {
             return this.item.StateTextValueFalse;
         }
+
+        if (this.nodeInstanceModel) {
+            switch (this.nodeInstanceModel.NodeTemplate.This2NodeDataType) {
+                case NodeDataTypeEnum.DateTime:
+                    const dateTime = moment(this._value).toDate();
+
+                    return dateTime.toLocaleString();
+                default:
+                    return this._value;
+            }
+        }
+
         return this._value;
     }
 
@@ -110,13 +125,17 @@ export abstract class BaseMobileComponent extends BaseComponent {
             return this.visuObjectType.This2AreaInstanceNavigation.DisplayName;
         }
 
+
+        if (this.visuObjectType.IsFavorite) {
+            return this.translate.translate("COMMON.PROPERTY.IS_FAVORITE.NAME");
+        }
         return void 0;
     }
 
     constructor(
         protected dataHub: DataHubService,
         notify: NotifyService,
-        translate: TranslationService,
+        translate: L10nTranslationService,
         private configService: ConfigService,
         appService: AppService) {
         super(notify, translate, appService);
@@ -150,6 +169,8 @@ export abstract class BaseMobileComponent extends BaseComponent {
             super.registerEvent((this.item.notifyChangeEvent), (prop) => {
                 this.propertyChanged()
             });
+
+            this.value = this.dataHub.getCurrentValue(this.item.ObjId);
         }
     }
 

@@ -23,15 +23,33 @@ namespace Automatica.Core.Base.Templates
 
             foreach (var prop in template.PropertyTemplate)
             {
-                var propertyInstance = new PropertyInstance
-                {ObjId = Guid.NewGuid(),
-                    This2NodeInstanceNavigation = instance,
-                    This2PropertyTemplateNavigation = prop,
-                    This2PropertyTemplate = prop.ObjId,
-                    Value = prop.DefaultValue
-                };
-                instance.PropertyInstance.Add(propertyInstance);
+                try
+                {
+                    var propertyInstance = new PropertyInstance
+                    {
+                        ObjId = Guid.NewGuid(),
+                        This2NodeInstanceNavigation = instance,
+                        This2PropertyTemplateNavigation = prop,
+                        This2PropertyTemplate = prop.ObjId,
+                        Value = prop.DefaultValue
+                    };
+                    instance.PropertyInstance.Add(propertyInstance);
+                }
+                catch (Exception e)
+                {
+                    throw new FormatException($"Error creating {nameof(PropertyInstance)} for template {prop.Name} ({prop.DefaultValue})", e);
+                }
             }
+
+            return instance;
+        }
+
+        public static NodeInstance CreateNodeInstanceFromTemplate(NodeTemplate template, NodeInstance parent)
+        {
+            var instance = CreateNodeInstanceFromTemplate(template);
+
+            instance.This2ParentNodeInstance = parent.ObjId;
+            instance.This2ParentNodeInstanceNavigation = parent;
 
             return instance;
         }

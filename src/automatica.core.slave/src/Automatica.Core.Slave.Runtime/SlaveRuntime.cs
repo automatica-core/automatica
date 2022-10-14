@@ -60,17 +60,17 @@ namespace Automatica.Core.Slave.Runtime
 
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {
-                MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
-                {
-                    var trace =
-                        $">> [{e.TraceMessage.Timestamp:O}] [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
-                    if (e.TraceMessage.Exception != null)
-                    {
-                        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
-                    }
+                //MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
+                //{
+                //    var trace =
+                //        $">> [{e.TraceMessage.Timestamp:O}] [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
+                //    if (e.TraceMessage.Exception != null)
+                //    {
+                //        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
+                //    }
 
-                    _logger.LogTrace(trace);
-                };
+                //    _logger.LogTrace(trace);
+                //};
             }
 
             _mqttClient = new MqttFactory().CreateMqttClient();

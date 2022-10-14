@@ -1,8 +1,9 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100-buster-arm32v7 AS libnserial
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS libnserial
 
 WORKDIR /app
-
-RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get clean -y
+RUN apt-get -y update
+RUN apt-get -y upgrade
 RUN apt-get -y install cmake build-essential 
 
 RUN mkdir /src
@@ -11,7 +12,7 @@ RUN cd /src/serialportstream/dll/serialunix && ./build.sh
 RUN cd -
 
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim-arm32v7 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app/
 
 COPY --from=libnserial /src/serialportstream/dll/serialunix/bin/usr/local/lib/libnserial.so.1.1 /usr/lib

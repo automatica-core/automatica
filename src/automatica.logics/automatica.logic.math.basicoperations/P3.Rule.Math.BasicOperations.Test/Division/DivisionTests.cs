@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Xunit;
 using P3.Rule.Math.BasicOperations.Division;
+using Xunit;
 
-namespace P3.Rule.Math.BasicOperations.Test.Division
+namespace P3.Rule.Math.BasicOperations.Tests.Division
 {
     
     public class DivisionTests : RuleTest<DivisionRuleFactory>

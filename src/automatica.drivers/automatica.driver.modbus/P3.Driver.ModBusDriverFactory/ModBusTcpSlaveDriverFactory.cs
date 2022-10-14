@@ -32,7 +32,7 @@ namespace P3.Driver.ModBusDriverFactory
         public override IDriver CreateDriver(IDriverContext config)
         {
             ModBus.Logger = config.Logger;
-            return new ModBusSlaveDriver(config);
+            return new ModBusSlaveDriver(config, config.Logger);
         }
     }
 }

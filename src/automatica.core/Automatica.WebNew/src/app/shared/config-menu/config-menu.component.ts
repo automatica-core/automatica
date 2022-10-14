@@ -1,7 +1,7 @@
 /// <reference path="../../../../node_modules/@types/jszip/index.d.ts" />
 
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";
 import * as JSZip from "jszip";
 import { saveAs } from "file-saver";
@@ -73,9 +73,9 @@ export class ConfigMenuComponent implements OnInit {
     disabled: true,
     items: this.addItemsMenu
   }
-  menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
+  menuReload: CustomMenuItem = {
+    id: "reload",
+    label: "Reload",
     icon: "fa-save",
     items: undefined,
     command: (event) => { this.save(); }
@@ -128,7 +128,7 @@ export class ConfigMenuComponent implements OnInit {
     command: (event) => { this.importNode(); }
   };
 
-  constructor(private translate: TranslationService,
+  constructor(private translate: L10nTranslationService,
     private notify: NotifyService,
     private designTimeDataService: DesignTimeDataService,
     private changeRef: ChangeDetectorRef) {
@@ -137,19 +137,23 @@ export class ConfigMenuComponent implements OnInit {
 
     // this.menuItems.push(this.menuItemNew);
     // this.menuItems.push(this.menuDelete);
-    this.menuItems.push(this.menuSave);
+    this.menuItems.push(this.menuReload);
 
-    this.menuItemNew.label = translate.translate("COMMON.NEW");
-    this.export.label = translate.translate("COMMON.EXPORT");
-    this.import.label = translate.translate("COMMON.IMPORT");
-    this.menuSave.label = translate.translate("COMMON.SAVE");
-    this.menuDelete.label = translate.translate("COMMON.DELETE");
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuItemNew.label = translate.translate("COMMON.NEW");
+        this.export.label = translate.translate("COMMON.EXPORT");
+        this.import.label = translate.translate("COMMON.IMPORT");
+        this.menuReload.label = translate.translate("COMMON.RELOAD");
+        this.menuDelete.label = translate.translate("COMMON.DELETE");
 
-    this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
-    this.menuRulePages.items[0].label = translate.translate("COMMON.ADD");
+        this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
+        this.menuRulePages.items[0].label = translate.translate("COMMON.ADD");
 
 
-    this.menuRules.label = translate.translate("COMMON.RULES");
+        this.menuRules.label = translate.translate("COMMON.RULES");
+      }
+    });
   }
 
   save() {
@@ -219,21 +223,24 @@ export class ConfigMenuComponent implements OnInit {
   }
 
   private importRecursive(nodeInstance: NodeInstance, parent: NodeInstance): NodeInstance {
-    const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
-    newNodeInstance.Name = nodeInstance.Name;
-    newNodeInstance.Description = nodeInstance.Description;
+    // const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
+    // newNodeInstance.Name = nodeInstance.Name;
+    // newNodeInstance.Description = nodeInstance.Description;
 
-    newNodeInstance.This2ParentNodeInstance = parent.ObjId;
+    // newNodeInstance.This2ParentNodeInstance = parent.ObjId;
 
-    for (const p of nodeInstance.Properties) {
-      newNodeInstance.setPropertyValueIfPresent(p.PropertyTemplate.Key, p.Value);
-    }
+    // for (const p of nodeInstance.Properties) {
+    //   newNodeInstance.setPropertyValueIfPresent(p.PropertyTemplate.Key, p.Value);
+    // }
 
-    for (const x of nodeInstance.Children) {
-      const child = this.importRecursive(x, newNodeInstance);
-      newNodeInstance.Children.push(child);
-    }
-    return newNodeInstance;
+    // for (const x of nodeInstance.Children) {
+    //   const child = this.importRecursive(x, newNodeInstance);
+    //   newNodeInstance.Children.push(child);
+    // }
+    // return newNodeInstance;
+
+    // TODO
+    return void 0;
   }
 
 

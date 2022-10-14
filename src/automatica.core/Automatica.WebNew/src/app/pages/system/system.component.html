@@ -4,22 +4,22 @@
             <p translate>SYSTEM.UPDATE_AVAILABLE</p>
             <span>
                 <div>
-                    <p>{{ 'COMMON.VERSION' | translate }}: {{ update.version }}</p>
+                    <p>{{ 'COMMON.VERSION' | translateAsync }}: {{ update.version }}</p>
                 </div>
                 <br />
                 <div>
                     <div>
                         <div class="progress-info" *ngIf="fileMax">
-                            {{ 'COMMON.DOWNLOADING' | translate }} {{downloadValue}}/{{downloadMaxValue}}
+                            {{ 'COMMON.DOWNLOADING' | translateAsync }} {{downloadValue}}/{{downloadMaxValue}}
                         </div>
                         <dx-progress-bar *ngIf="fileMax" [min]="0" [max]="fileMax" [statusFormat]="format" [value]="fileCurrent"></dx-progress-bar>
                     </div>
-                    <dx-button *ngIf="!alreadyDownloaded && !fileMax" text="{{ 'COMMON.DOWNLOAD' | translate }}"
+                    <dx-button *ngIf="!alreadyDownloaded && !fileMax" text="{{ 'COMMON.DOWNLOAD' | translateAsync }}"
                         (onClick)="downloadClick($event)">
                     </dx-button>
                 </div>
 
-                <dx-button *ngIf="alreadyDownloaded" text="{{ 'COMMON.INSTALL' | translate }}" (onClick)="installClick($event)">
+                <dx-button *ngIf="alreadyDownloaded" text="{{ 'COMMON.INSTALL' | translateAsync }}" (onClick)="installClick($event)">
                 </dx-button>
             </span>
         </ng-container>

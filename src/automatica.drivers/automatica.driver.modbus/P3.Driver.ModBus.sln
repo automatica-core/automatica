@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28124.53
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ModBusDriverFactory", "P3.Driver.ModBusDriverFactory\P3.Driver.ModBusDriverFactory.csproj", "{1384CF90-B3A1-483E-87DE-97FBD28D3AFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ModBusDriver", "P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj", "{335DC61B-B5F8-402C-B3E1-320690E7B789}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ModBus.Tests", "Tests\P3.Driver.ModBus.Tests\P3.Driver.ModBus.Tests.csproj", "{D30AECB5-E1B8-4641-8D5A-D77B0C81ECAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "Tests\ConsoleTest\ConsoleTest.csproj", "{B913E726-0F5C-4192-81FA-A81F5B5C57BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +36,12 @@ Global
 		{D30AECB5-E1B8-4641-8D5A-D77B0C81ECAC}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
 		{D30AECB5-E1B8-4641-8D5A-D77B0C81ECAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D30AECB5-E1B8-4641-8D5A-D77B0C81ECAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { DxTreeListComponent } from "devextreme-angular";
 import { AreaService } from "src/app/services/areas.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -50,7 +50,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
   constructor(
     private areasService: AreaService,
-    private translationService: TranslationService,
+    private translationService: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
     private notify: NotifyService,
     private router: Router,
@@ -65,8 +65,14 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     this.menuItems.push(this.menuSave);
     this.menuItems.push(this.menuImportEts);
 
-    this.menuSave.label = this.translate.translate("COMMON.SAVE");
-    this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
+
+    this.translate.onChange().subscribe({
+      next: () => {
+        this.menuSave.label = this.translate.translate("COMMON.SAVE");
+        this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
+      }
+    });
+
   }
 
   async ngOnInit() {

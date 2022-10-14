@@ -4,7 +4,6 @@ using System.Linq;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Discovery;
-using ElectronNET.API;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +17,7 @@ using Automatica.Core.Internals;
 using MQTTnet.Diagnostics;
 using System.Collections;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Automatica.Core
 {
@@ -36,10 +36,13 @@ namespace Automatica.Core
 
             Log.Logger = logBuild.CreateLogger();
 
-            foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+            if (Environment.GetEnvironmentVariable("PRINT_ENV") == "true")
             {
-                var envVar = $"{env.Key}={env.Value}";
-                Log.Logger.Debug($"Using env variable: {envVar}");
+                foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+                {
+                    var envVar = $"{env.Key}={env.Value}";
+                    Log.Logger.Debug($"Using env variable: {envVar}");
+                }
             }
 
             var logger = SystemLogger.Instance;
@@ -50,20 +53,20 @@ namespace Automatica.Core
 
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {
-                MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
-                {
-                    var trace =
-                        $"mqtt >> [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
-                    if (e.TraceMessage.Exception != null)
-                    {
-                        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
-                    }
+                //MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
+                //{
+                //    var trace =
+                //        $"mqtt >> [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
+                //    if (e.TraceMessage.Exception != null)
+                //    {
+                //        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
+                //    }
 
-                    logger.LogDebug(trace);
-                };
+                //    logger.LogDebug(trace);
+                //};
             }
 
-            var webHost = BuildWebHost(config["server:port"]);
+            var webHost = BuildWebHost(config["server:port"], config["server:ssl_port"]);
 
             if (args.Length > 0 && args[0] == "develop")
             {
@@ -118,17 +121,35 @@ namespace Automatica.Core
             logger.LogInformation("Stopped...");
         }
 
-        public static IWebHost BuildWebHost(string port)
+        public static IWebHost BuildWebHost(string port, string sslPort)
         {
-            ServerInfo.WebPort = port;
+            ServerInfo.WebPort = port; 
+            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
 
             var webHost = WebHost.CreateDefaultBuilder()
-                .UseStartup<Startup>().UseKestrel(o => {
-                    o.ListenAnyIP(Convert.ToInt32(port)); 
+                .UseStartup<Startup>()
+                .UseKestrel(o => {
+
+                    if (!String.IsNullOrWhiteSpace(port))
+                    {
+                        o.ListenAnyIP(Convert.ToInt32(port));
+                    }
+
+                    if (!String.IsNullOrWhiteSpace(sslPort))
+                    {
+                        o.ListenAnyIP(Convert.ToInt32(sslPort), options =>
+                        {
+                            options.UseHttps(a =>
+                            {
+                                var x509Cert = new X509Certificate2(Path.Combine(configDir, "cert/certificate.pfx"),
+                                    "local");
+                                a.ServerCertificate = x509Cert;
+                            });
+                        });
+                    }
                 })
                 .ConfigureAppConfiguration(a =>
                 {
-                    var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
                     if (Directory.Exists(Path.Combine(configDir, "config")))
                     {
                         configDir = Path.Combine(configDir, "config");
@@ -150,10 +171,10 @@ namespace Automatica.Core
                         .AddEnvironmentVariables();
                 });
 
-            if (HybridSupport.IsElectronActive)
-            {
-                ServerInfo.WebPort = "80";
-            }
+            //if (HybridSupport.IsElectronActive)
+            //{
+            //    ServerInfo.WebPort = "80";
+            //}
 
             return webHost.Build();
         }

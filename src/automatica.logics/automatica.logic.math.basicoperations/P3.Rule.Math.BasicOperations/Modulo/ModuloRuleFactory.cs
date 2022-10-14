@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace P3.Rule.Math.BasicOperations.Modulo
 {
@@ -18,7 +16,7 @@ namespace P3.Rule.Math.BasicOperations.Modulo
         public static readonly Guid RuleOutput2 = new Guid("f9aaa35e-d494-470c-83ad-c0173682eb36");
 
         public override string RuleName => "Math.Modulo";
-        public override Version RuleVersion => new Version(1, 0, 0, 0);
+        public override Version RuleVersion => new Version(2, 0, 0, 0);
         public override Guid RuleGuid => new Guid("1aae846f-79df-45da-a671-f71b6aafa285");
 
         public override void InitTemplates(IRuleTemplateFactory factory)
@@ -29,7 +27,7 @@ namespace P3.Rule.Math.BasicOperations.Modulo
             factory.CreateRuleInterfaceTemplate(RuleInput2, "I2", "MATH.MODULO.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
 
             factory.CreateRuleInterfaceTemplate(RuleOutput1, "O1", "MATH.MODULO.OUTPUT1.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
-            factory.CreateRuleInterfaceTemplate(RuleOutput2, "O2", "MATH.MODULO.OUTPUT2.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 2);
+            factory.CreateRuleInterfaceTemplate(RuleOutput2, "O2", "MATH.MODULO.OUTPUT2.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 2, RuleInterfaceType.Status);
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)

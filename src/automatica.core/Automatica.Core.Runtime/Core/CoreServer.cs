@@ -22,6 +22,8 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Base.Extensions;
+using Automatica.Core.Base.Localization;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Loader;
 using Automatica.Core.Internals;
@@ -95,6 +97,9 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly IDriverFactoryLoader _driverFactoryLoader;
+        private readonly ILocalizationProvider _localizationProvider;
+        private readonly INodeInstanceService _nodeInstanceService;
+        private readonly INodeTemplateCache _nodeTemplateCache;
 
 
         public RunState RunState
@@ -161,6 +166,12 @@ namespace Automatica.Core.Runtime.Core
 
             _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
 
+            _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
+            _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
+
+            _nodeTemplateCache = services.GetRequiredService<INodeTemplateCache>();
+
+            _localizationProvider.LoadFromAssembly(GetType().Assembly);
             InitInternals();
         }
 
@@ -240,7 +251,20 @@ namespace Automatica.Core.Runtime.Core
                 await StartDriver(driver);
             }
 
+            await StartLogicEngine();
 
+           
+            _logger.LogInformation("Starting recorders...");
+            foreach (var rec in _trendingRecorder)
+            {
+                await rec.Start();
+            }
+            _logger.LogInformation("Starting recorders...done");
+            RunState = RunState.Started;
+        }
+
+        private async Task StartLogicEngine()
+        {
             _logger.LogInformation("Loading logic engine connections...");
             _ruleEngineDispatcher.Load();
             _logger.LogInformation("Loading logic engine connections...done");
@@ -265,13 +289,12 @@ namespace Automatica.Core.Runtime.Core
                 }
             }
 
-            _logger.LogInformation("Starting recorders...");
-            foreach (var rec in _trendingRecorder)
-            {
-                await rec.Start();
-            }
-            _logger.LogInformation("Starting recorders...done");
-            RunState = RunState.Started;
+        }
+
+        public async Task ReloadLogicServices()
+        {
+            await StopLogicEngine();
+            await StartLogicEngine();
         }
 
         public async Task StopDriver(IDriver driver)
@@ -298,15 +321,8 @@ namespace Automatica.Core.Runtime.Core
             _driverNodesStore.RemoveDriver(driver);
         }
 
-        private async Task Stop()
+        private async Task StopLogicEngine()
         {
-            await _remoteServerHandler.Stop();
-
-            foreach (var driver in _driverStore.All())
-            {
-                await StopDriver(driver);
-            }
-
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
                 try
@@ -327,6 +343,19 @@ namespace Automatica.Core.Runtime.Core
                     _logger.LogError(e, $"Stopping logic {rule.Key.Name}...error");
                 }
             }
+        }
+
+        private async Task Stop()
+        {
+            await _remoteServerHandler.Stop();
+
+            foreach (var driver in _driverStore.All())
+            {
+                await StopDriver(driver);
+            }
+
+            await StopLogicEngine();
+         
 
             RunState = RunState.Stopped;
             _logger.LogInformation("CoreServer stopping...");
@@ -576,6 +605,8 @@ namespace Automatica.Core.Runtime.Core
                     {
                     }
                 }
+
+                _nodeTemplateCache.All();
             }
             catch (Exception e)
             {
@@ -586,11 +617,13 @@ namespace Automatica.Core.Runtime.Core
             {
                 var ruleLoadingPath = Path.Combine(path, ServerInfo.LogicsDirectory);
                 _logger.LogInformation($"Searching for logic's in {ruleLoadingPath}");
-                foreach (var rule in await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config, ServerInfo.IsInDevelopmentMode))
+                var logicFactories = await RuleLoader.GetRuleFactories(_logger, ruleLoadingPath, searchPattern, _config,
+                    ServerInfo.IsInDevelopmentMode);
+                foreach (var logic in logicFactories)
                 {
                     try
                     {
-                        await _logicLoader.Load(rule, ServerInfo.BoardType);
+                        await _logicLoader.Load(logic, ServerInfo.BoardType);
                     }
                     catch (NoManifestFoundException)
                     {
@@ -619,8 +652,15 @@ namespace Automatica.Core.Runtime.Core
         public async Task<IDriver> InitializeDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
         {
             var factory = _driverFactoryStore.Get(nodeTemplate.ObjId);
+
+            if(factory == null)
+            {
+                _logger.LogError($"No factory found for {nodeTemplate.Name} ({nodeTemplate.ObjId})");
+                return null;
+            }
+
             var config = new DriverContext(nodeInstance,
-                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
+                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
 
@@ -633,6 +673,11 @@ namespace Automatica.Core.Runtime.Core
         public async Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
         {
             var driver = await InitializeDriver(nodeInstance, nodeTemplate);
+            if (driver == null)
+            {
+                _logger.LogError($"Could not initialize driver for {nodeInstance.Name}");
+                return;
+            }
             await StartDriver(driver);
         }
 

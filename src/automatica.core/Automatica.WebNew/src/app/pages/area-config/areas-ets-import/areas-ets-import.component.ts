@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DxTreeListComponent } from "devextreme-angular";
 import { NotifyService } from "src/app/services/notify.service";
@@ -45,7 +45,7 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
   }
 
   constructor(
-    private translationService: TranslationService,
+    private translationService: L10nTranslationService,
     private router: Router,
     private notify: NotifyService,
     private activatedRoute: ActivatedRoute,

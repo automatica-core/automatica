@@ -31,16 +31,17 @@ namespace P3.Driver.HueBridge
 
             services.AddCors();
             services.AddMvc();
-            
-            services.AddMvcCore(config =>
-            {
 
-            }).AddApplicationPart(typeof(HueController).GetTypeInfo().Assembly).AddControllersAsServices().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ContractResolver = new LowerCaseContractResolver();
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            }).AddJsonFormatters();
-           
+            services.AddMvcCore(config =>
+                {
+
+                }).AddApplicationPart(typeof(HueController).GetTypeInfo().Assembly).AddControllersAsServices()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new LowerCaseContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+
         }
         public void Configure(IApplicationBuilder app)
         {

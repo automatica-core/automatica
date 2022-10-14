@@ -1,6 +1,6 @@
 import { EventEmitter, Input, Directive } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { WebApiException, ExceptionSeverity } from "./model/web-api-exception";
 import { NotifyService } from "../services/notify.service";
 import { AppService } from "../services/app.service";
@@ -25,7 +25,7 @@ export class BaseComponent {
         this.appService.isLoading = v;
     }
 
-    constructor(protected notifyService: NotifyService, protected translate: TranslationService, protected appService: AppService) {
+    constructor(protected notifyService: NotifyService, protected translate: L10nTranslationService, protected appService: AppService) {
 
 
     }

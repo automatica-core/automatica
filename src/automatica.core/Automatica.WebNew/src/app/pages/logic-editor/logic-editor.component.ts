@@ -4,7 +4,7 @@ import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.comp
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
 import { ConfigService } from "src/app/services/config.service";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { AreaService } from "src/app/services/areas.service";
 import { CategoryService } from "src/app/services/categories.service";
 import { GroupsService } from "src/app/services/groups.service";
@@ -36,25 +36,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   linkableNodes: NodeInstance[] = [];
 
   selectedPageIndex = 0;
-  menuItems: CustomMenuItem[] = [];
-
-
-  menuItemNew: CustomMenuItem = {
-    id: "new",
-    icon: "fa-plus",
-    disabled: false,
-    // items: this.addItemsMenu
-  }
-  menuSave: CustomMenuItem = {
-    id: "save",
-    icon: "fa-save",
-    items: undefined,
-    command: () => { this.save(); }
-  }
 
   selectedItem: NodeInstance | RulePage | NodeInstance2RulePage | RuleInstance;
-
-  nodeTemplates: NodeTemplate[];
 
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
@@ -67,7 +50,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   constructor(private ruleEngineService: RuleEngineService,
     private configService: ConfigService,
     private notify: NotifyService,
-    translate: TranslationService,
+    translate: L10nTranslationService,
     private areaService: AreaService,
     private categoryService: CategoryService,
     private userGroupsService: GroupsService,
@@ -109,12 +92,11 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     try {
       this.isLoading = true;
 
-      const [pages, ruleTemplates, linkableNodes, templates, areaInstances, categoryInstances, userGroups] = await Promise.all(
+      const [pages, ruleTemplates, linkableNodes, areaInstances, categoryInstances, userGroups] = await Promise.all(
         [
           this.ruleEngineService.getPages(),
           this.ruleEngineService.getRuleTemplates(),
           this.configService.getLinkableNodes(),
-          this.configService.getNodeTemplates(),
           this.areaService.getAreaInstances(),
           this.categoryService.getCategoryInstances(),
           this.userGroupsService.getUserGroups(),
@@ -141,8 +123,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.categoryInstances = categoryInstances;
       this.userGroups = userGroups;
 
-      this.nodeTemplates = templates;
-
       // await this.dataHub.subscribeForAll();
 
     } catch (error) {
@@ -159,35 +139,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   async ngOnInit() {
 
     await this.loadData();
-
-    this.menuItems = [];
-
-    this.menuItemNew.items = [];
-    for (const temp of this.ruleTemplates) {
-      const menuItem: CustomMenuItem = {
-        id: "add-" + temp.Key,
-        label: temp.Name,
-        icon: "fa-plus",
-        command: () => { this.add(temp, this.pages[this.selectedPageIndex]); }
-      };
-
-      this.menuItemNew.items.push(menuItem);
-    }
-
-    for (const temp of this.linkableNodes) {
-      const menuItem: CustomMenuItem = {
-        id: "add-node-" + temp.Id,
-        label: temp.Name,
-        icon: "fa-plus",
-        command: () => { this.add(temp, this.pages[this.selectedPageIndex]); }
-      };
-
-      this.menuItemNew.items.push(menuItem);
-    }
-
-    this.menuItems.push(this.menuItemNew);
-    this.menuItems.push(this.menuSave);
-
     this.baseOnInit();
 
   }
@@ -232,13 +183,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = true;
 
     try {
-      const all = await this.ruleEngineService.saveAll(this.pages,  []);
-
-      this.nodeInstanceService.convertConfig(all.NodeInstances);
-      this.pages = all.LogicPages;
-
-      this.initPages();
-
+      await this.ruleEngineService.reload();
       this.notify.notifySuccess("COMMON.SAVED");
 
     } catch (error) {
@@ -248,21 +193,31 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = false;
   }
 
-  delete() {
+  async delete() {
     if (this.selectedItem instanceof NodeInstance2RulePage) {
       const selectedPage = this.pages[this.selectedPageIndex];
       selectedPage.NodeInstances = selectedPage.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
 
       this.ruleEngineService.reInit.emit(this.selectedPageIndex);
+
+      await this.ruleEngineService.removeItem(this.selectedItem);
+
     } else if (this.selectedItem instanceof RuleInstance) {
       const selectedPage = this.pages[this.selectedPageIndex];
       selectedPage.RuleInstances = selectedPage.RuleInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
 
       this.ruleEngineService.reInit.emit(this.selectedPageIndex);
+
+      await this.ruleEngineService.removeItem(this.selectedItem);
+
     } else if (this.selectedItem instanceof NodeInstance) {
       this.configTree.removeItem();
+
     } else if (this.selectedItem instanceof RulePage) {
+
       this.pages = this.pages.filter(a => a.ObjId !== this.selectedItem.ObjId);
+
+      await this.ruleEngineService.removePage(this.selectedItem);
     }
 
   }
@@ -289,40 +244,52 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  addRulePage() {
+  async addRulePage() {
+
+    this.appService.isLoading = true;
+
     const rulePage = new RulePage();
     rulePage.ObjId = Guid.MakeNew().ToString();
     rulePage.Name = "Page " + (this.pages.length + 1);
     rulePage.Description = "Page " + (this.pages.length + 1);
     this.pages.push(rulePage);
+
+    try {
+      await this.ruleEngineService.addPage(rulePage);
+    } catch (error) {
+      this.handleError(error);
+      await this.load();
+    }
+
+
+    this.appService.isLoading = false;
   }
 
-  addRule($event) {
-    this.add($event, this.pages[this.selectedPageIndex]);
+  async addRule($event) {
+    await this.add($event, this.pages[this.selectedPageIndex]);
   }
 
-  add(template: RuleTemplate | NodeInstance, rulePage: RulePage) {
+  async add(template: RuleTemplate | NodeInstance, rulePage: RulePage) {
     if (template instanceof RuleTemplate) {
-      const rule = RuleInstance.fromRuleTemplate(template);
+      const rule = RuleInstance.fromRuleTemplate(template, this.translate);
 
       rule.Name = this.translate.translate(rule.Name);
       rule.Description = this.translate.translate(rule.Description);
 
       this.pages[this.selectedPageIndex].RuleInstances.push(rule);
 
-      this.ruleEngineService.add.emit({
+      await this.ruleEngineService.addItem({
         data: rule,
-        pageIndex: this.pages[this.selectedPageIndex].ObjId
+        pageId: this.pages[this.selectedPageIndex].ObjId
       });
+
     } else if (template instanceof NodeInstance) {
       const node = NodeInstance2RulePage.createFromNodeInstance(template, rulePage);
 
       this.pages[this.selectedPageIndex].NodeInstances.push(node);
-
-
-      this.ruleEngineService.add.emit({
+      await this.ruleEngineService.addItem({
         data: node,
-        pageIndex: this.pages[this.selectedPageIndex].ObjId
+        pageId: this.pages[this.selectedPageIndex].ObjId
       });
     }
   }

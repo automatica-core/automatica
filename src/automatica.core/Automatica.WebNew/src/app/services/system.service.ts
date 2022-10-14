@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { BaseService } from "../services/base-service";
 import { Router } from "@angular/router";
-import { TranslationService } from "angular-l10n";
+import { L10nTranslationService } from "angular-l10n";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class SystemService extends BaseService {
 
-    constructor(httpService: HttpClient, pRouter: Router, translationService: TranslationService) {
+    constructor(httpService: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(httpService, pRouter, translationService);
     }
 

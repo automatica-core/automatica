@@ -88,10 +88,12 @@ namespace Automatica.Core.WebApi.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, role.This2RoleNavigation.Key));
             }
 
-            foreach (var userGroups in DbContext.User2Groups.Where(a => a.This2User == user.ObjId))
+            var userGroups = DbContext.User2Groups.Where(a => a.This2User == user.ObjId).ToList();
+
+            foreach (var userGroup in userGroups)
             {
-                var roles = DbContext.UserGroup2Roles.Where(a => a.This2UserGroup == userGroups.This2UserGroup)
-                    .Include(a => a.This2RoleNavigation);
+                var roles = DbContext.UserGroup2Roles.Where(a => a.This2UserGroup == userGroup.This2UserGroup)
+                    .Include(a => a.This2RoleNavigation).ToList();
 
                 foreach (var userGroupRoles in roles)
                 {
@@ -105,15 +107,11 @@ namespace Automatica.Core.WebApi.Controllers
                     });
                 }
 
-                claims.Add(new Claim(UserGroup.ClaimType, userGroups.This2UserGroup.ToString()));
+                claims.Add(new Claim(UserGroup.ClaimType, userGroup.This2UserGroup.ToString()));
             }
 
             var claimsIdentity = new ClaimsIdentity(claims);
 
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = true
-            };
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = ServerInfo.ServerUid.ToByteArray();
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Xunit;
 using P3.Rule.Math.BasicOperations.Random;
+using Xunit;
 
-namespace P3.Rule.Math.BasicOperations.Test.Random
+namespace P3.Rule.Math.BasicOperations.Tests.Random
 {
     
     public class RandomTests : RuleTest<RandomRuleFactory>

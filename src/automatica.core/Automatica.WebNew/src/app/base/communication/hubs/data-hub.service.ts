@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { BaseHub, SignalRMethod } from "../base-hub";
 import { NodeInstance } from "../../model/node-instance";
+import { DataService } from "src/app/services/data.service";
 
 @Injectable()
 export class DataHubService extends BaseHub {
@@ -17,8 +18,12 @@ export class DataHubService extends BaseHub {
     @SignalRMethod
     public notifyLearnMode: EventEmitter<any> = new EventEmitter<any>();
 
-    constructor() {
+    constructor(private dataService: DataService) {
         super("dataHub");
+    }
+
+    public getCurrentValue(id: string) {
+        return this.dataService.getLocalValue(id);
     }
 
     public subscribeForAll() {
@@ -30,7 +35,7 @@ export class DataHubService extends BaseHub {
     }
 
     public setValue(nodeInstance: string, value: any): Promise<any> {
-        return this.Connection.send("setValue", nodeInstance, value);
+        return this.callHubProxyWithParams("setValue", nodeInstance, value);
     }
 
     public subscribe(nodeInstance: string) {

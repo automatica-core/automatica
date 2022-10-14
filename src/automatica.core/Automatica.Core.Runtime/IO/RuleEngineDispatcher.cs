@@ -147,6 +147,14 @@ namespace Automatica.Core.Runtime.IO
                 }
             }
 
+            var logicInterfaces= _logicInterfaceInstanceCache.All();
+
+            foreach (var logicInterface in logicInterfaces)
+            {
+                _dispatcher.RegisterDispatch(DispatchableType.Visualization, logicInterface.ObjId,
+                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface); });
+            }
+
             return true;
         }
 
@@ -176,6 +184,7 @@ namespace Automatica.Core.Runtime.IO
                                 Task.Run(async () =>
                                 {
                                     await _dispatcher.DispatchValue(result.Instance, result.Value);
+                                    await _ruleInstanceVisuNotifier.NotifyValueChanged(result.Instance.RuleInterfaceInstance, result.Value);
                                 }).ConfigureAwait(false);
                             }
                         }

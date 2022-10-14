@@ -1,3 +1,6 @@
 ﻿{
-  "Test": "en"
+  "Test": "English",
+  "Deep1": {
+    "Test": "English"
+  }
 }

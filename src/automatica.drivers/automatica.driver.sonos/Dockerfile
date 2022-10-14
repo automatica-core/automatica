@@ -1,5 +1,5 @@
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS build
 WORKDIR /src
 
 ARG MANIFEST_DIR
@@ -7,6 +7,7 @@ ARG VERSION
 ARG CONFIG
 
 
+RUN dotnet --list-sdks
 RUN dotnet tool install automatica-plugin-standalone --global
 RUN dotnet tool install automatica-cli --global
 
@@ -28,9 +29,10 @@ RUN ls /build
 RUN automatica-cli InstallPlugin -p /build/pluginFile.acpkg -I /plugin
 
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS runtime
+FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS runtime
 COPY --from=build /plugin /plugin
 
+RUN dotnet --list-sdks
 RUN dotnet tool install automatica-plugin-standalone --global
 ENV PATH="${PATH}:/root/.dotnet/tools"
 

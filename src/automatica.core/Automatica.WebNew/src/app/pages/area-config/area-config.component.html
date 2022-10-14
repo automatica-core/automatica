@@ -30,8 +30,8 @@
                         <dxo-selection mode="single"></dxo-selection>
 
                         <dxi-column dataField="Name" cellTemplate="cellTemplate"
-                            caption="{{ 'COMMON.NAME' | translate }}"></dxi-column>
-                        <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translate }}">
+                            caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                        <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
                         </dxi-column>
 
                         <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaAreaInstances">

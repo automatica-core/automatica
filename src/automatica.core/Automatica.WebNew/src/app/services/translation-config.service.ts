@@ -1,39 +1,59 @@
 
-import { Injectable } from "@angular/core";
-import { TranslationService, LocaleService, StorageStrategy, ProviderType, L10nConfig, L10nLoader } from "angular-l10n";
+import { Injectable, Optional } from "@angular/core";
+import { L10nTranslationService, L10nConfig, L10nLoader, L10nTranslationLoader, L10nProvider } from "angular-l10n";
 import { loadMessages, locale } from "devextreme/localization"
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
 import * as deMessages from "devextreme/localization/messages/de.json";
 import * as enMessages from "devextreme/localization/messages/en.json";
+import { Observable } from "rxjs";
+
+@Injectable() export class HttpTranslationLoader implements L10nTranslationLoader {
+
+  private headers = new HttpHeaders({ "Content-Type": "application/json" });
+
+  constructor(@Optional() private http: HttpClient) { }
+
+  public get(language: string, provider: L10nProvider): Observable<{ [key: string]: any }> {
+
+    if (provider.options.type === "file") {
+
+      const url = `${provider.asset}-${language}.json`;
+      const options = {
+        headers: this.headers
+      };
+      return this.http.get(url, options);
+
+    } else if (provider.options.type === "webapi") {
+
+      const url = `${provider.asset}/${language}`;
+      const options = {
+        headers: this.headers
+      };
+
+      return this.http.get(url, options);
+    }
+  }
+
+}
 
 export const TranslationConfiguration: L10nConfig = {
-  locale: {
-    languages: [
-      { code: "en", dir: "ltr" },
-      { code: "de", dir: "ltr" }
-    ],
-    language: "de",
-    defaultLocale: {
-      countryCode: "DE",
-      languageCode: "de"
-    },
-    currency: "€",
-    storage: StorageStrategy.Disabled
-  },
-  translation: {
-    providers: [
-      { type: ProviderType.Static, prefix: "./assets/locale/locale-" },
-      { type: ProviderType.Static, prefix: "./assets/locale/permission/locale-" },
-      { type: ProviderType.Static, prefix: "./assets/locale/visu/locale-visu-" },
-      { type: ProviderType.Static, prefix: "./assets/locale/login/locale-" },
-      { type: ProviderType.Static, prefix: "./assets/locale/error/locale-" },
-      { type: ProviderType.WebAPI, path: "./webapi/localization/" }
-    ],
-    caching: true,
-    composedKeySeparator: ".",
-    missingValue: miss
-  }
+  format: "language-region",
+  cache: true,
+  keySeparator: ".",
+  defaultLocale: { language: "de", currency: "EUR" },
+  schema: [
+    { locale: { language: "de", currency: "EUR" }, dir: "ltr", text: "German" },
+    { locale: { language: "en", currency: "USD" }, dir: "ltr", text: "English" }
+  ],
+  providers: [
+    { name: "locale", asset: "./assets/locale/locale", options: { type: "file" } },
+    { name: "visu", asset: "./assets/locale/permission/locale", options: { type: "file" } },
+    { name: "visu_login", asset: "./assets/locale/visu/locale-visu", options: { type: "file" } },
+    { name: "login", asset: "./assets/locale/login/locale", options: { type: "file" } },
+    { name: "error", asset: "./assets/locale/error/locale", options: { type: "file" } },
+    { name: "webapi", asset: "./webapi/localization", options: { type: "webapi" } }
+  ]
 };
 
 export function miss(path: string): string {
@@ -46,12 +66,12 @@ export function miss(path: string): string {
 
 @Injectable()
 export class TranslationConfigService {
-  constructor(public localeService: LocaleService, public translation: TranslationService, private http: HttpClient, private l10Loader: L10nLoader) {
-    this.translation.translationError.subscribe((error: any) => console.log(error));
+  constructor(public translation: L10nTranslationService, private http: HttpClient, private l10Loader: L10nLoader) {
+    // this.translation.translationError.subscribe((error: any) => console.log(error));
   }
 
   async init() {
-    await this.l10Loader.load();
+    await this.l10Loader.init();
 
     loadMessages(deMessages);
     loadMessages(enMessages);

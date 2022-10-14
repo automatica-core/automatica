@@ -14,5 +14,7 @@ namespace Automatica.Core.EF.Models
         public bool IsDriverInterface { get; set; }
 
         public bool CanProvideBoardType { get; set; }
+
+        public Guid FactoryReference { get; set; }
     }
 }

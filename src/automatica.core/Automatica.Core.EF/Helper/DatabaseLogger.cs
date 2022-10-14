@@ -17,8 +17,16 @@ namespace Automatica.Core.EF.Helper
 
             var logBuild = new LoggerConfiguration()
             .WriteTo.RollingFile(Path.Combine("logs", $"{_facility}.log"), fileSizeLimitBytes: 31457280, retainedFileCountLimit: 10, restrictedToMinimumLevel: LogEventLevel.Verbose, flushToDiskInterval: TimeSpan.FromSeconds(30))
-            .MinimumLevel.Error()
             .WriteTo.Console();
+
+            if(!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_DEBUG_LOG")))
+            {
+                logBuild.MinimumLevel.Debug();
+            }
+            else
+            {
+                logBuild.MinimumLevel.Error();
+            }
 
             _logger = logBuild.CreateLogger();
         }
@@ -70,7 +78,6 @@ namespace Automatica.Core.EF.Helper
             var level = ConvertLogLevel(logLevel);
             var msg = $"{_facility.ToLower()}: {formatter.Invoke(state, exception)}";
             _logger.Write(level, exception, msg);
-            Console.WriteLine(msg);
         }
     }
 }

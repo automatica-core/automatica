@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 RUN apt-get update 
@@ -19,7 +19,7 @@ RUN dotnet publish -c Release -o /app/plugin /src/src/Automatica.Core.Plugin.Sta
 RUN echo $AUTOMATICA_VERSION
 RUN rm -rf /src
 
-FROM automaticacore/automatica-plugin-runtime:amd64 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-6 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./

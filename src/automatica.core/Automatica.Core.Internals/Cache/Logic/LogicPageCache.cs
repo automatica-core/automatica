@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,20 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     internal class LogicPageCache : AbstractCache<RulePage>, ILogicPageCache
     {
-        public LogicPageCache(IConfiguration configuration) : base(configuration)
+        private readonly ILogicNodeInstanceCache _nodeInstanceCache;
+        private readonly ILogicInterfaceInstanceCache _logicInstanceCache;
+
+        private readonly IDictionary<Guid, RulePage> _rulePageCache = new Dictionary<Guid, RulePage>();
+
+        private readonly IDictionary<Guid, IDictionary<Guid, RuleInstance>> _ruleInstanceCache = new Dictionary<Guid, IDictionary<Guid, RuleInstance>>();
+        private readonly IDictionary<Guid, IDictionary<Guid, NodeInstance2RulePage>> _nodeInstanceRefCache = new Dictionary<Guid, IDictionary<Guid, NodeInstance2RulePage>>();
+
+        private readonly IDictionary<Guid, IDictionary<Guid, Link>> _linkCache = new Dictionary<Guid, IDictionary<Guid, Link>>();
+
+        public LogicPageCache(IConfiguration configuration, ILogicNodeInstanceCache nodeInstanceCache, ILogicInterfaceInstanceCache logicInstanceCache) : base(configuration)
         {
+            _nodeInstanceCache = nodeInstanceCache;
+            _logicInstanceCache = logicInstanceCache;
         }
 
         protected override IQueryable<RulePage> GetAll(AutomaticaContext context)
@@ -42,9 +55,244 @@ namespace Automatica.Core.Internals.Cache.Logic
                 .Include(a => a.RuleInstance).ThenInclude(a => a.This2CategoryInstanceNavigation);
         }
 
+        public override void Add(Guid key, RulePage value)
+        {
+            if (!_rulePageCache.ContainsKey(key))
+            {
+                _rulePageCache.Add(key, value);
+            }
+
+            if (!_ruleInstanceCache.ContainsKey(key))
+            {
+                _ruleInstanceCache.Add(key, new Dictionary<Guid, RuleInstance>());
+            }
+
+            if (!_nodeInstanceRefCache.ContainsKey(key))
+            {
+                _nodeInstanceRefCache.Add(key, new Dictionary<Guid, NodeInstance2RulePage>());
+            }
+            if (!_linkCache.ContainsKey(key))
+            {
+                _linkCache.Add(key, new Dictionary<Guid, Link>());
+            }
+
+            foreach (var ruleInstance in value.RuleInstance)
+            {
+                if (!_ruleInstanceCache[key].ContainsKey(ruleInstance.ObjId))
+                {
+                    _ruleInstanceCache[key].Add(ruleInstance.ObjId, ruleInstance);
+                }
+            }
+            foreach (var ruleInstance in value.NodeInstance2RulePage)
+            {
+                if (!_nodeInstanceRefCache[key].ContainsKey(ruleInstance.ObjId))
+                {
+                    _nodeInstanceRefCache[key].Add(ruleInstance.ObjId, ruleInstance);
+                }
+            }
+
+            foreach (var link in value.Link)
+            {
+                if (!_linkCache[key].ContainsKey(link.ObjId))
+                {
+                    _linkCache[key].Add(link.ObjId, link);
+                }
+            }
+
+            base.Add(key, value);
+        }
+
         protected override Guid GetKey(RulePage obj)
         {
             return obj.ObjId;
+        }
+
+        public void AddRuleInstance(RuleInstance ruleInstance)
+        {
+            if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
+            {
+                _rulePageCache[ruleInstance.This2RulePage].RuleInstance.Add(ruleInstance);
+            }
+
+            if (_ruleInstanceCache.ContainsKey(ruleInstance.This2RulePage))
+            {
+                _ruleInstanceCache[ruleInstance.This2RulePage].Add(ruleInstance.ObjId, ruleInstance);
+            }
+        }
+
+        public void AddNodeInstance(NodeInstance2RulePage nodeInstance)
+        {
+            if (_rulePageCache.ContainsKey(nodeInstance.This2RulePage))
+            {
+                _rulePageCache[nodeInstance.This2RulePage].NodeInstance2RulePage.Add(nodeInstance);
+            }
+
+            if (_ruleInstanceCache.ContainsKey(nodeInstance.This2RulePage))
+            {
+                _nodeInstanceRefCache[nodeInstance.This2RulePage].Add(nodeInstance.ObjId, nodeInstance);
+            }
+        }
+
+        public void UpdateRuleInstance(RuleInstance ruleInstance)
+        {
+            if (_ruleInstanceCache.ContainsKey(ruleInstance.This2RulePage))
+            {
+                if(_ruleInstanceCache[ruleInstance.This2RulePage].ContainsKey(ruleInstance.ObjId))
+                {
+                    _ruleInstanceCache[ruleInstance.This2RulePage][ruleInstance.ObjId] = ruleInstance;
+                }
+            }
+
+            if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
+            {
+                var page = _rulePageCache[ruleInstance.This2RulePage];
+                var existing = page.RuleInstance.First(a => a.ObjId == ruleInstance.ObjId);
+
+                existing.X = ruleInstance.X;
+                existing.Y = ruleInstance.Y;
+                existing.Name = ruleInstance.Name;
+
+            }
+        }
+
+        public void UpdateNodeInstance(NodeInstance2RulePage nodeInstance)
+        {
+            if (_nodeInstanceRefCache.ContainsKey(nodeInstance.This2RulePage))
+            {
+                if (_nodeInstanceRefCache[nodeInstance.This2RulePage].ContainsKey(nodeInstance.ObjId))
+                {
+                    _nodeInstanceRefCache[nodeInstance.This2RulePage][nodeInstance.ObjId] = nodeInstance;
+                }
+            }
+            if (_rulePageCache.ContainsKey(nodeInstance.This2RulePage))
+            {
+                var page = _rulePageCache[nodeInstance.This2RulePage];
+                var existing = page.NodeInstance2RulePage.First(a => a.ObjId == nodeInstance.ObjId);
+
+                existing.X = nodeInstance.X;
+                existing.Y = nodeInstance.Y;
+            }
+        }
+
+        public void AddLink(Link link)
+        {
+            if (_rulePageCache.ContainsKey(link.This2RulePage))
+            {
+                _rulePageCache[link.This2RulePage].Link.Add(link);
+            }
+
+            if (_linkCache.ContainsKey(link.This2RulePage))
+            {
+                if (!_linkCache[link.This2RulePage].ContainsKey(link.ObjId))
+                {
+                    _linkCache[link.This2RulePage].Add(link.ObjId, link);
+                }
+            }
+
+            InitLink(link);
+        }
+
+        public void UpdateLink(Link link)
+        {
+            if (_linkCache.ContainsKey(link.This2RulePage))
+            {
+                if (_linkCache[link.This2RulePage].ContainsKey(link.ObjId))
+                {
+                    _linkCache[link.This2RulePage][link.ObjId] = link;
+                }
+            }
+            if (_rulePageCache.ContainsKey(link.This2RulePage))
+            {
+                var page = _rulePageCache[link.This2RulePage];
+                var existing = page.Link.First(a => a.ObjId == link.ObjId);
+
+                existing.This2RuleInterfaceInstanceInput = link.This2RuleInterfaceInstanceInput;
+                existing.This2RuleInterfaceInstanceOutput = link.This2RuleInterfaceInstanceOutput;
+                existing.This2NodeInstance2RulePageInput = link.This2NodeInstance2RulePageInput;
+                existing.This2NodeInstance2RulePageOutput = link.This2NodeInstance2RulePageOutput;
+                InitLink(existing);
+            }
+        }
+
+        private void InitLink(Link link)
+        {
+            if (link.This2RuleInterfaceInstanceInput.HasValue)
+            {
+                link.This2RuleInterfaceInstanceInputNavigation =
+                    _logicInstanceCache.Get(link.This2RuleInterfaceInstanceInput.Value);
+            }
+            if (link.This2RuleInterfaceInstanceOutput.HasValue)
+            {
+                link.This2RuleInterfaceInstanceOutputNavigation =
+                    _logicInstanceCache.Get(link.This2RuleInterfaceInstanceOutput.Value);
+            }
+
+            if (link.This2NodeInstance2RulePageInput.HasValue)
+            {
+                link.This2NodeInstance2RulePageInputNavigation =
+                    _nodeInstanceCache.Get(link.This2NodeInstance2RulePageInput.Value);
+            }
+
+            if (link.This2NodeInstance2RulePageOutput.HasValue)
+            {
+                link.This2NodeInstance2RulePageOutputNavigation =
+                    _nodeInstanceCache.Get(link.This2NodeInstance2RulePageOutput.Value);
+            }
+        }
+
+        public void RemoveNodeInstance(NodeInstance2RulePage nodeInstance)
+        {
+            if (_nodeInstanceRefCache.ContainsKey(nodeInstance.This2RulePage))
+            {
+                if (_nodeInstanceRefCache[nodeInstance.This2RulePage].ContainsKey(nodeInstance.ObjId))
+                {
+                    _nodeInstanceRefCache[nodeInstance.This2RulePage].Remove(nodeInstance.ObjId);
+                }
+            }
+            if (_rulePageCache.ContainsKey(nodeInstance.This2RulePage))
+            {
+                var page = _rulePageCache[nodeInstance.This2RulePage];
+                var existing = page.NodeInstance2RulePage.First(a => a.ObjId == nodeInstance.ObjId);
+
+                page.NodeInstance2RulePage.Remove(existing);
+            }
+        }
+
+        public void RemoveRuleInstance(RuleInstance ruleInstance)
+        {
+            if (_ruleInstanceCache.ContainsKey(ruleInstance.This2RulePage))
+            {
+                if (_ruleInstanceCache[ruleInstance.This2RulePage].ContainsKey(ruleInstance.ObjId))
+                {
+                    _ruleInstanceCache[ruleInstance.This2RulePage].Remove(ruleInstance.ObjId);
+                }
+            }
+
+            if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
+            {
+                var page = _rulePageCache[ruleInstance.This2RulePage];
+                var existing = page.RuleInstance.First(a => a.ObjId == ruleInstance.ObjId);
+
+                page.RuleInstance.Remove(existing);
+            }
+        }
+
+        public void RemoveLink(Link link)
+        {
+            if (_linkCache.ContainsKey(link.This2RulePage))
+            {
+                if (_linkCache[link.This2RulePage].ContainsKey(link.ObjId))
+                {
+                    _linkCache[link.This2RulePage][link.ObjId] = link;
+                }
+            }
+            if (_rulePageCache.ContainsKey(link.This2RulePage))
+            {
+                var page = _rulePageCache[link.This2RulePage];
+                var existing = page.Link.First(a => a.ObjId == link.ObjId);
+
+                page.Link.Remove(existing);
+            }
         }
     }
 }

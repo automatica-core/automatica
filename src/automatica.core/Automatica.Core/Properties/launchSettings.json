@@ -1,12 +1,7 @@
 {
   "profiles": {
     "Automatica.Core": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "ConnectionStrings:AutomaticaDatabaseSqlite": "Data Source=test.db",
-        "DATABASE_LOGS": "True",
-        "DATABASE_TYPE": "sqlite"
-      }
+      "commandName": "Project"
     }
   }
 }

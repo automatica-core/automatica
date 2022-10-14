@@ -35,6 +35,8 @@ namespace P3.Driver.MBus.ConsoleTest
             _aesKey = Utils.StringToByteArray(key);
 
 
+
+
         }
 
         public void Start()

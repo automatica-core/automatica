@@ -1,13 +1,10 @@
 version: '3'
  
 services:
-  automatica_demo:
-    build:
-      context:  ./
-      dockerfile: ./Dockerfile
+  automatica:
+    image: automaticacore/automatica-demo:latest-develop
     ports:
       - "5001:5001"
-      - "5000:5000"
  
   nginx:
     image: automaticacore/automaticacore_proxy:develop-latest
@@ -15,7 +12,7 @@ services:
     ports:
       - "80:80"
     links:
-      - automatica_demo
+      - automatica
       
       
       

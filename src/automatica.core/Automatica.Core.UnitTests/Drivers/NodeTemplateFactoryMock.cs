@@ -115,6 +115,16 @@ namespace Automatica.Core.UnitTests.Drivers
             return CreateNodeInstance(GetNodeTemplateById(template));
         }
 
+        public NodeInstance CreateNodeInstance(string locale, Guid template)
+        {
+            return CreateNodeInstance(GetNodeTemplateById(template));
+        }
+
+        public NodeInstance CreateNodeInstance(string locale, NodeTemplate template)
+        {
+            return CreateNodeInstance(template);
+        }
+
         public NodeTemplate GetNodeTemplateByKey(string key)
         {
             foreach(var t in _nodeTemplates)

@@ -1,9 +1,8 @@
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Xunit;
 using P3.Rule.Math.BasicOperations.Floor;
+using Xunit;
 
-namespace P3.Rule.Math.BasicOperations.Test.Floor
+namespace P3.Rule.Math.BasicOperations.Tests.Floor
 {
     
     public class FloorTests : RuleTest<FloorRuleFactory>

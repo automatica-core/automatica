@@ -2,13 +2,13 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
-import { Link } from "src/app/base/model/link";
+import { RuleEngineService } from "src/app/services/ruleengine.service";
 
 declare var draw2d: any;
 declare var $: any;
 
 export class LogicShapes {
-    public static addShape(logic) {
+    public static addShape(logic, ruleEngineService: RuleEngineService) {
 
         logic.LogicShape = draw2d.shape.layout.VerticalLayout.extend({
             init: function (attr, element: RuleInstance, linkService: LinkService) {
@@ -17,7 +17,7 @@ export class LogicShapes {
                 } if (element.X < 0) {
                     element.X *= -1;
                 }
-                this._super($.extend({ id: element.key, bgColor: "#FFFFFF", alpha: 1, color: "#325862", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 150 }, attr));
+                this._super($.extend({ id: element.key, bgColor: "#d7d7d7", alpha: 1, color: "#325862", stroke: 0, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false }, attr));
 
                 this.setUserData(element);
 
@@ -32,7 +32,7 @@ export class LogicShapes {
                     minWidth: 150
                 });
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
-                const logicName = new logic.Label({
+                this.logicName = new logic.Label({
                     text: translatedName,
                     stroke: 0,
                     fontColor: "#000000",
@@ -49,13 +49,28 @@ export class LogicShapes {
                     element.Y = context.y;
                 });
 
+                this.on("dragEnd", async (context, data) => {
+                    await ruleEngineService.updateItem(element);
+                });
+
                 this.add(this.classLabel);
-                this.add(logicName);
+                this.add(this.logicName);
 
                 this.add(new logic.PortShape({}, element, this, linkService));
             },
-            getWidth() {
-                return Math.max(this.width, this.minWidth);
+            getMinWidth() {
+                if (this.classLabel) {
+                    if (this.classLabel.cachedMinWidth > 150) {
+                        return this.classLabel.cachedMinWidth;
+                    }
+                }
+                return 150;
+            },
+            onDragEnd(x, y, shiftKey, ctrlKey) {
+                this._super();
+
+                this.fireEvent("dragEnd", { x: x, y: y });
+
             }
         });
 
@@ -70,14 +85,15 @@ export class LogicShapes {
                     {
                         bgColor: "#dbddde",
                         color: "#d7d7d7",
-                        stroke: 1,
+                        stroke: 0,
                         radius: 0,
+                        padding: 0,
                         x: element.X,
                         y: element.Y,
                         keepAspectRatio: false,
                         width: realParent.width,
                         id: element.key,
-                        minWidth: 150
+                        minWidth: realParent.minWidth
                     }, attr));
                 this.realParent = realParent;
                 this.linkService = linkService;
@@ -131,60 +147,65 @@ export class LogicShapes {
                     port.setMaxFanOut(portInstance.FromMaxLinks);
                     port.setUserData(portInstance);
 
-                    port.on("connect", function (emitterPort, connection) {
-                        LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance);
+                    port.on("connect", async function (emitterPort, connection) {
+                        await LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance, ruleEngineService);
 
                     });
 
-                    port.on("disconnect", function (emitterPort, connection) {
-                        LinkService.handleOnDisconnection(linkService, connection);
+                    port.on("disconnect", async function (emitterPort, connection) {
+                        await LinkService.handleOnDisconnection(linkService, connection, isInput);
                     });
 
                     data.push(label);
                 }
 
                 this.addRow(...data);
-            },
-            getWidth() {
-                return Math.max(this.width, this.minWidth);
             }
         });
 
 
 
         logic.ItemShape = draw2d.shape.layout.VerticalLayout.extend({
+
+
             init: function (attr, element: NodeInstance2RulePage, linkService: LinkService) {
                 if (element.Y < 0) {
                     element.Y *= -1;
                 } if (element.X < 0) {
                     element.X *= -1;
                 }
-                this._super($.extend({ id: element.key, bgColor: "#EEEEEE", alpha: 1, color: "#000000", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 150, width: 150 }, attr));
+                this._super($.extend({ id: element.key, bgColor: "#EEEEEE", alpha: 1, color: "#000000", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 150 }, attr));
+
+                this.setMinWidth(100);
 
                 this.setUserData(element);
-                const label = new draw2d.shape.basic.Label({
+                this.label = new draw2d.shape.basic.Label({
                     text: element.Name,
+                    textLength: "100%",
                     stroke: 0,
                     radius: 0,
                     bgColor: null,
                     padding: 5,
+                    paddingLeft: 10,
+                    paddingRight: 10,
                     fontColor: "#4a4a4a",
                     resizeable: true
                 });
 
+                this.label.setMinWidth(100);
 
                 if (element.Inputs.length > 0) {
                     const input = this.createPort("input");
                     input.setName(element.Inputs[0].PortId);
                     input.setId(element.Inputs[0].PortId);
 
-                    input.on("connect", function (emitterPort, connection) {
-                        LinkService.handleOnConnection(linkService, input, connection, true, element);
+                    input.on("connect", async function (emitterPort, connection) {
+                        await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
 
                     });
 
-                    input.on("disconnect", function (emitterPort, connection) {
-                        LinkService.handleOnDisconnection(linkService, connection);
+                    input.on("disconnect", async function (emitterPort, connection) {
+                        await LinkService.handleOnDisconnection(linkService, connection, true);
                     });
                 }
                 if (element.Outputs.length > 0) {
@@ -193,12 +214,12 @@ export class LogicShapes {
                     output.setName(element.Outputs[0].PortId);
                     output.setId(element.Outputs[0].PortId);
 
-                    output.on("connect", function (emitterPort, connection) {
-                        LinkService.handleOnConnection(linkService, output, connection, false, element);
+                    output.on("connect", async function (emitterPort, connection) {
+                        await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
                     });
 
-                    output.on("disconnect", function (emitterPort, connection) {
-                        LinkService.handleOnDisconnection(linkService, connection);
+                    output.on("disconnect", async function (emitterPort, connection) {
+                        await LinkService.handleOnDisconnection(linkService, connection, false);
                     });
                 }
 
@@ -208,10 +229,29 @@ export class LogicShapes {
                 });
 
 
-                this.add(label);
+                this.on("dragEnd", async (context, data) => {
+                    try {
+                        await ruleEngineService.updateItem(element);
+                    } catch (error) {
+
+                    }
+                });
+
+
+
+                this.add(this.label);
             },
-            getWidth() {
-                return 130;
+            getMinWidth() {
+                if (this.label) {
+                    return Math.max(this.label.cachedMinWidth, 100);;
+                }
+                return 100;
+            },
+            onDragEnd(x, y, shiftKey, ctrlKey) {
+                this._super();
+
+                this.fireEvent("dragEnd", { x: x, y: y });
+
             }
         });
 

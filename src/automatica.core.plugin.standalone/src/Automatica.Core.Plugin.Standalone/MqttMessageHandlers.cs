@@ -13,6 +13,7 @@ using MQTTnet.Client.Receiving;
 using MQTTnet.Server;
 using Newtonsoft.Json;
 using MQTTnet.Client;
+using MQTTnet.Server.Internal;
 
 namespace Automatica.Core.Plugin.Standalone
 {

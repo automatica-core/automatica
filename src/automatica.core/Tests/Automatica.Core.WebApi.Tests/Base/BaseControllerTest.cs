@@ -35,7 +35,18 @@ namespace Automatica.Core.WebApi.Tests.Base
         protected T Controller { get; private set; }
         public BaseControllerTest()
         {
-            var tmpFolder = Path.Combine(Path.GetTempPath(), DatabaseFilePath);
+            var tmpFolder = Path.Combine(Path.GetTempPath(), DatabaseFilePath, Guid.NewGuid().ToString());
+            var dbName = Path.Combine(tmpFolder, $"{DatabaseFilePath}.db");
+            if (File.Exists(dbName))
+            {
+                File.Delete(dbName);
+            }
+
+            if (Directory.Exists(tmpFolder))
+            {
+                Directory.Delete(tmpFolder, true);
+            }
+
             Directory.CreateDirectory(tmpFolder);
 
             var mockConfSection = new Mock<IConfigurationSection>();
@@ -91,17 +102,7 @@ namespace Automatica.Core.WebApi.Tests.Base
 
         public void Dispose()
         {
-            var tmpFolder = Path.Combine(Path.GetTempPath(), DatabaseFilePath);
-            var dbName = Path.Combine(tmpFolder, $"{DatabaseFilePath}.db");
-            if (File.Exists(dbName))
-            {
-                File.Delete(dbName);
-            }
-
-            if (Directory.Exists(tmpFolder))
-            {
-                Directory.Delete(tmpFolder, true);
-            }
+           
         }
     }
 }

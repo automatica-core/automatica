@@ -1,5 +1,5 @@
 using Automatica.Core.Base.IO;
-using Automatica.Core.UnitTests.Rules;
+using Automatica.Core.UnitTests.Base.Rules;
 using P3.Rule.Surveillance.WindowMonitor;
 using System;
 using System.Collections.Generic;

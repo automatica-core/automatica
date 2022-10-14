@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { DndModule } from "p3root-angular-dnd";
 import { DxLoadPanelModule, DxButtonModule } from "devextreme-angular";
 import { RouterModule } from "@angular/router";
-import { LocalizationModule, TranslationModule } from "angular-l10n";
+import { L10nIntlModule, L10nTranslationModule } from "angular-l10n";
 import { ControlsModule } from "src/app/base/visu/controls/controls.module";
 
 
@@ -14,8 +14,8 @@ import { ControlsModule } from "src/app/base/visu/controls/controls.module";
     ControlsModule,
     DndModule,
     DxLoadPanelModule,
-    LocalizationModule,
-    TranslationModule,
+    L10nIntlModule,
+    L10nTranslationModule,
     DxButtonModule
   ]
 })

@@ -6,7 +6,7 @@ import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { DxPopupModule } from "devextreme-angular/ui/popup";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
-import { TranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 import { LoginService } from "src/app/services/login.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 import { DxSpeedDialActionModule } from "devextreme-angular";
@@ -99,7 +99,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         DxPopupModule,
         DxButtonModule,
         DxToolbarModule,
-        TranslationModule,
+        L10nTranslationModule,
         DxSpeedDialActionModule
     ],
     declarations: [HeaderComponent],

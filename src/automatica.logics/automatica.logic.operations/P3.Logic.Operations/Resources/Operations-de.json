@@ -1,0 +1,49 @@
+﻿{
+  "OPERATIONS": {
+    "NAME": "Bedienung",
+    "SWITCH": {
+      "NAME": "Taster",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "I",
+        "DESCRIPTION": "Eingangswert (Ein/Aus)",
+        "VALUE": {
+          "NAME": "I",
+          "DESCRIPTION": "Eingangswert (Ein/Aus)"
+        },
+        "STATE": {
+          "NAME": "V",
+          "DESCRIPTION": "Absoluter Wert (0-100%)"
+        },
+        "RESET": {
+          "NAME": "R",
+          "DESCRIPTION": "Reset (Setzt den Wert auf 0%)"
+        }
+      },
+      "STATE": {
+        "NAME": "S",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "O",
+        "DESCRIPTION": ""
+      }
+    },
+    "DIMMER": {
+      "NAME": "Dimmer",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "I",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "S",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "O",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

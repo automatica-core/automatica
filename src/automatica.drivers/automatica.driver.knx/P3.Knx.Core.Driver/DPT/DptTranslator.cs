@@ -36,6 +36,7 @@ namespace P3.Knx.Core.DPT
                 typeof(Dpt9Translator),
                 typeof(Dpt10Translator),
                 typeof(Dpt11Translator),
+                typeof(Dpt13Translator),
                 typeof(Dpt16_000_Translator),
                 typeof(Dpt16_001_Translator)
             };

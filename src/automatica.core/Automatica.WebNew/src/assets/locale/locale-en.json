@@ -28,6 +28,7 @@
         "RULES": "Logic blocks",
         "CONNECT": "Connect",
         "SAVED": "Configuration saved",
+        "RELOADED": "Configuration reloaded",
         "REINIT": "Reload config to server",
         "LOGOUT": "Logout",
         "FIRSTNAME": "Firstname",
@@ -69,6 +70,16 @@
         "TYPE": "Type",
         "FAVORITES": "Favorites",
         "HOME": "Home",
+        "RELOAD": "Reload",
+        "SLAVES": "Slaves (Preview)",
+        "SWITCH": {
+            "ON": "Turn on",
+            "OFF": "Turn off"
+        },
+        "TOGGLE": {
+            "ON": "On",
+            "OFF": "Off"
+        },
         "DATETIMEFORMAT": {
             "DATE": "MM/DD/YYYY",
             "TIME": "hh.mm.ss a",
@@ -302,17 +313,17 @@
             },
             "CLOUDENVIRONMENT": {
                 "NAME": "Cloud environment",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "PROJECTNAME": {
                 "NAME": "Project name",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             },
             "TRENDING": {
                 "NAME": "Trending",
                 "DESCRIPTION": ""
             },
-            "TRENDING_TYPE":{
+            "TRENDING_TYPE": {
                 "NAME": "Type",
                 "DESCRIPTION": ""
             },
@@ -320,13 +331,13 @@
                 "NAME": "Interval [s]",
                 "DESCRIPTION": ""
             },
-            "OBJID":{
+            "OBJID": {
                 "NAME": "ID",
                 "DESCRIPTION": ""
             },
             "SLAVE": {
                 "NAME": "Slave",
-                "DESCRIPTION":""
+                "DESCRIPTION": ""
             }
         },
         "CATEGORY_INSTANCE": {
@@ -486,7 +497,8 @@
         "PROGRESS": "Progress",
         "UPDATE_ALL": "Update all",
         "INSTALL_ALL": "Install all",
-        "INSTALL_UPDATE_ALL": "Update & install all"
+        "INSTALL_UPDATE_ALL": "Update & install all",
+        "RELOAD": "Refresh"
     },
     "VALIDATION": {
         "DATE_END_AFTER_START": "Enddate must be after startdate",

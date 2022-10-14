@@ -43,6 +43,21 @@ namespace Automatica.Core.Base.Cache
             return default(T2);
         }
 
+        public ICollection<T2> Get(params T1[] keys)
+        {
+            var ret = new List<T2>();
+
+            foreach (var key in keys)
+            {
+                if (Contains(key))
+                {
+                    ret.Add(_store[key]);
+                }
+            }
+
+            return ret;
+        }
+
         public virtual ICollection<T2> All()
         {
             return _store.Values;

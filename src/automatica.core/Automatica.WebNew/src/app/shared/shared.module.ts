@@ -6,9 +6,9 @@ import { ConfigTreeComponent } from "./config-tree/config-tree.component";
 import { RuleEditorComponent } from "./ruleeditor/ruleeditor.component";
 import { PropertyEditorComponent } from "./propertyeditor/propertyeditor.component";
 import { ConfigMenuComponent } from "./config-menu/config-menu.component";
-import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule } from "devextreme-angular";
+import { DxMenuModule, DxTreeViewModule, DxTemplateModule, DxTreeListModule, DxDataGridModule, DxTextBoxModule, DxCheckBoxModule, DxButtonModule, DxSelectBoxModule, DxNumberBoxModule, DxPopoverComponent, DxPopoverModule, DxValidatorModule, DxColorBoxModule, DxPopupModule, DxBoxModule, DxDropDownBoxModule, DxListModule, DxLoadPanelModule, DxFileUploaderModule, DxDateBoxModule, DxScrollViewModule, DxContextMenuModule } from "devextreme-angular";
 import { DndModule } from "p3root-angular-dnd";
-import { TranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 import { NodeValueSelectorComponent } from "./node-value-selector/node-value-selector.component";
 import { VisuPageSelectorComponent } from "./visu-page-selector/visu-page-selector.component";
 import { VisuPageListComponent } from "./visu-page-list/visu-page-list.component";
@@ -32,7 +32,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
         DxButtonModule,
         DxSelectBoxModule,
         DxNumberBoxModule,
-        TranslationModule,
+        L10nTranslationModule,
         DxPopoverModule,
         DxValidatorModule,
         DxColorBoxModule,
@@ -45,7 +45,8 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
         DxFileUploaderModule,
         FontAwesomeModule,
         DxDateBoxModule,
-        DxScrollViewModule
+        DxScrollViewModule,
+        DxContextMenuModule
     ],
     declarations: [
         PropertyEditorComponent,

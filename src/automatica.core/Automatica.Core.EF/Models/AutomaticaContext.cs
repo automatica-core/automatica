@@ -10,13 +10,13 @@ using System;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.EF.Models
 {
     public class AutomaticaContext : DbContext
     {
         private readonly bool _extendedLogs;
+
         public virtual DbSet<BoardInterface> BoardInterfaces { get; set; }
         public virtual DbSet<BoardType> BoardTypes { get; set; }
         public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
@@ -86,8 +86,8 @@ namespace Automatica.Core.EF.Models
             {
                 var logger = new DatabaseLoggerFactory();
                 var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
-                var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
-                var loggerInstance = NullLogger.Instance; // logger.CreateLogger("database");
+                var envDbType = Configuration["DATABASE_TYPE"];
+                var loggerInstance = logger.CreateLogger("database");
 
                 string useDbType = envDbType;
 
@@ -124,12 +124,13 @@ namespace Automatica.Core.EF.Models
                 }
 
 
-                if (_extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")))
+                if (_extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")) || !string.IsNullOrEmpty(Configuration["server:database_logs"]))
                 {
                     optionsBuilder.UseLoggerFactory(logger);
+                   
                 }
             }
-
+            optionsBuilder.EnableDetailedErrors();
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
@@ -137,15 +138,15 @@ namespace Automatica.Core.EF.Models
         {
             logger.LogInformation($"Using MariaDB database engine...");
 
-            var mariaDbConString = $"Server={Environment.GetEnvironmentVariable("MARIADB_HOST")};User Id={Environment.GetEnvironmentVariable("MARIADB_USER")};Password={Environment.GetEnvironmentVariable("MARIADB_PASSWORD")};Database=automatica";
+            var mariaDbConString = $"Server={Configuration["MARIADB_HOST"]};User Id={Configuration["MARIADB_USER"]};Password={Configuration["MARIADB_PASSWORD"]};Database={Configuration["MARIADB_DATABASE"]}";
 
-            if(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MARIADB_HOST")))
+            if(string.IsNullOrEmpty(Configuration["MARIADB_HOST"]))
             {
                 mariaDbConString = Configuration.GetConnectionString($"AutomaticaDatabaseMaria");
                 logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
             }
-
-            optionsBuilder.UseMySql(mariaDbConString);
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+            optionsBuilder.UseMySql(mariaDbConString, serverVersion);
         }
 
         private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
@@ -163,7 +164,6 @@ namespace Automatica.Core.EF.Models
             {
                 File.Copy(dbInitFile, dbFile);
             }
-
             optionsBuilder.UseSqlite(conString);
         }
 
