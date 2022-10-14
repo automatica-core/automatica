@@ -40,7 +40,7 @@ steps:
   displayName: Plugin build
   inputs:
     manifest_path: 'P3.Driver.Knx.DriverFactory/automatica-manifest.json'
-    version: '$(AUTOMATICA_VERSION).$(Build.BuildNumber)'
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
     api_key: '$(CLOUD_API_KEY)'
     cloud_url: '$(CLOUD_URL)'
     configuration: 'Debug$(BuildConfiguration)'
@@ -57,9 +57,9 @@ steps:
     imageName: 'automaticacore/plugin-p3.driver.knx'
     buildArgs: |
       MANIFEST_DIR=P3.Driver.Knx.DriverFactory/
-      VERSION=$(AUTOMATICA_VERSION).$(Build.BuildNumber)
+      VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
       CONFIG=$(BuildConfiguration)
-    version: '$(AUTOMATICA_VERSION).$(Build.BuildNumber)'
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
 
 - task: PublishBuildArtifacts@1
   inputs:
