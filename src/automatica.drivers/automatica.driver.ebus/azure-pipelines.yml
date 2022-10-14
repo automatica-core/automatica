@@ -40,7 +40,7 @@ steps:
 - task: Automatica.Core Plugin build@6
   displayName: Plugin build
   inputs:
-    manifest_path: 'P3.Driver.Knx.DriverFactory/automatica-manifest.json'
+    manifest_path: 'P3.Driver.EBusFactory/automatica-manifest.json'
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
     api_key: '$(CLOUD_API_KEY)'
     cloud_url: '$(CLOUD_URL)'
@@ -55,9 +55,9 @@ steps:
     dockerRegistryEndpoint: 'DockerHub'
     dockerfile_amd64: 'Dockerfile'
     dockerfile_arm32: 'Dockerfile.arm32'
-    imageName: 'automaticacore/plugin-p3.driver.knx'
+    imageName: 'automaticacore/plugin-p3.driver.ebus'
     buildArgs: |
-      MANIFEST_DIR=P3.Driver.Knx.DriverFactory/
+      MANIFEST_DIR=P3.Driver.EBusFactory/
       VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
       CONFIG=$(BuildConfiguration)
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'

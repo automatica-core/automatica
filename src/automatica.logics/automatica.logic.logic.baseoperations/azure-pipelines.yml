@@ -1,51 +1,58 @@
+trigger:
+  - master  
+  - develop
+  
 pool:
-  name: Azure Pipelines
-#Your build pipeline references an undefined variable named ‘SDK_VERSION’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘MYGET_API_KEY’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘MYGET_API_KEY’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘AUTOMATICA_VERSION’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘CLOUD_API_KEY’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘CLOUD_URL’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+  vmImage: ubuntu-latest
+
 variables:
-- group: automatica.core variables
- - name: BuildConfiguration: 
-   value:'Release'
+  - group: automatica.core variables
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET Core sdk $(SDK_VERSION)'
   inputs:
+    packageType: 'sdk'
     version: '$(SDK_VERSION)'
 
-- bash: |
-   dotnet tool install automatica-cli --global  2>/dev/null
-   dotnet tool update automatica-cli --global 2>/dev/null
-  displayName: 'Install tools'
+- task: Bash@3
+  displayName:  Install tools
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet tool install automatica-cli --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json --global  2>/dev/null
+      dotnet tool update automatica-cli -g --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json 2>/dev/null
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet restore'
+  displayName: Restore
   inputs:
-    command: restore
+    command: 'restore'
     projects: '**/*.csproj'
-    feedsToUse: config
-    nugetConfigPath: NuGet.config
+    feedsToUse: 'config'
+    nugetConfigPath: 'NuGet.config'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet test'
+  displayName: Test
   inputs:
-    command: test
+    command: 'test'
     projects: '**/*[Tt]ests.csproj'
     arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
-- task: p3root.automatica-core-vsts-build.custom-automatica-core-plugin-build.Automatica.Core Plugin build@4
-  displayName: 'Automatica.Core Plugin build'
+- task: Automatica.Core Plugin build@6
+  displayName: Plugin build
   inputs:
-    manifest_path: 'P3.Rule.Compare.BaseOperations/automatica-manifest.json'
-    version: '$(AUTOMATICA_VERSION).$(Build.BuildNumber)'
+    manifest_path: 'P3.Rule.Logic.BaseOperations/automatica-manifest.json'
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
     api_key: '$(CLOUD_API_KEY)'
     cloud_url: '$(CLOUD_URL)'
-    configuration: '$(BuildConfiguration)'
+    configuration: 'Debug$(BuildConfiguration)'
     publish: true
+    dockerize: true
+    outputdirectory: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  
+  
