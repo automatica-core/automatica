@@ -3,7 +3,6 @@ ARG BRANCH
 FROM automaticacore/automatica:latest-develop AS automatica
 WORKDIR /app
 
-RUN cat /app/automatica/appsettings.json
 RUN rm -f /app/automatica/automatica.core.db
 RUN rm -f /app/automatica/automatica.core.init.db
 
