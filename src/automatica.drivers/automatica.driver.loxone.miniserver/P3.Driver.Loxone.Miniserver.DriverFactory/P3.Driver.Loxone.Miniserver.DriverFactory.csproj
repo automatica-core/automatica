@@ -26,9 +26,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.827" />
-    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.827" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.10" />
     <PackageReference Include="PureWebSockets" Version="4.0.0" />
   </ItemGroup>

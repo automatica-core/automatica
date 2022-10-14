@@ -29,9 +29,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.827" />
-    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.827" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
   </ItemGroup>
   <ItemGroup>

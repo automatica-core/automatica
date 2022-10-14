@@ -5,6 +5,6 @@
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
   </ItemGroup>
 </Project>

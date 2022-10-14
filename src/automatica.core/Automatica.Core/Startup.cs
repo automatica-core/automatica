@@ -145,6 +145,7 @@ namespace Automatica.Core
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
+                .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();

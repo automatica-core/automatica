@@ -10,6 +10,6 @@
   <ItemGroup>
     <PackageReference Include="BouncyCastle.NetCore" Version="1.8.10" />
     <PackageReference Include="PureWebSockets" Version="4.0.0" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.827" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
   </ItemGroup>
 </Project>

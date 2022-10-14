@@ -27,6 +27,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INodeTemplateCache _templateCache;
         private readonly IDriverNodesStore _driverNodeStore;
         private readonly INodeInstanceService _nodeInstanceService;
+        private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
             AutomaticaContext dbContext, 
@@ -35,7 +36,8 @@ namespace Automatica.Core.WebApi.Controllers
             ICoreServer coreServer, 
             INodeTemplateCache templateCache,
             IDriverNodesStore driverNodeStore,
-            INodeInstanceService nodeInstanceService) : base(dbContext)
+            INodeInstanceService nodeInstanceService,
+            ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
             _notifyDriver = notifyDriver;
@@ -43,6 +45,7 @@ namespace Automatica.Core.WebApi.Controllers
             _templateCache = templateCache;
             _driverNodeStore = driverNodeStore;
             _nodeInstanceService = nodeInstanceService;
+            _logger = logger;
         }
 
         private async Task<EntityState> AddOrUpdateNodeInstance(NodeInstance node)
@@ -148,7 +151,10 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("add")]
         public async Task<NodeInstance> AddNode([FromBody]NodeInstance node)
         {
+            _logger.LogDebug($"Add Node...");
+
             var newNode = await AddNodeInternal(node);
+            
 
             if (node.This2NodeTemplateNavigation.IsAdapterInterface.HasValue && node.This2NodeTemplateNavigation.IsAdapterInterface.Value && newNode.node.This2ParentNodeInstance.HasValue)
             {
@@ -159,6 +165,8 @@ namespace Automatica.Core.WebApi.Controllers
             async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
             ReloadAndForget();
 
+
+            _logger.LogDebug($"Add Node...done");
             return newNode.node;
         }
 
