@@ -209,12 +209,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.WakeOnLan.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.driver.zwave", "automatica.driver.zwave", "{EE02B974-DF81-4B6C-B1DA-E29212B471B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ZWave.ConsoleTest", "automatica.driver.zwave\P3.Driver.ZWave.Console\P3.Driver.ZWave.ConsoleTest.csproj", "{1FFA2FE2-C432-4D51-8261-E2B8C61CFFEF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ZWaveAeon", "automatica.driver.zwave\P3.Driver.ZWaveAeon\P3.Driver.ZWaveAeon.csproj", "{D15A4352-1BD2-4C85-9317-ED8A9798A355}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ZWaveFactory", "automatica.driver.zwave\P3.Driver.ZWaveFactory\P3.Driver.ZWaveFactory.csproj", "{7D3D1743-8886-40C8-A506-F844F929B503}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -493,18 +487,6 @@ Global
 		{28755482-D6EA-4DCA-8ADF-7A8488B8D2C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28755482-D6EA-4DCA-8ADF-7A8488B8D2C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28755482-D6EA-4DCA-8ADF-7A8488B8D2C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1FFA2FE2-C432-4D51-8261-E2B8C61CFFEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1FFA2FE2-C432-4D51-8261-E2B8C61CFFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1FFA2FE2-C432-4D51-8261-E2B8C61CFFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1FFA2FE2-C432-4D51-8261-E2B8C61CFFEF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D15A4352-1BD2-4C85-9317-ED8A9798A355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D15A4352-1BD2-4C85-9317-ED8A9798A355}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D15A4352-1BD2-4C85-9317-ED8A9798A355}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D15A4352-1BD2-4C85-9317-ED8A9798A355}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D3D1743-8886-40C8-A506-F844F929B503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D3D1743-8886-40C8-A506-F844F929B503}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D3D1743-8886-40C8-A506-F844F929B503}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D3D1743-8886-40C8-A506-F844F929B503}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -592,9 +574,6 @@ Global
 		{EB9A2D3E-A62B-4A5A-845C-78A4092B7D4C} = {8BD920A1-BEF6-4AE4-8AE9-6E5DAC2569B9}
 		{5CED40E6-E492-476A-8E64-BA4E5222D053} = {8BD920A1-BEF6-4AE4-8AE9-6E5DAC2569B9}
 		{28755482-D6EA-4DCA-8ADF-7A8488B8D2C2} = {5CED40E6-E492-476A-8E64-BA4E5222D053}
-		{1FFA2FE2-C432-4D51-8261-E2B8C61CFFEF} = {EE02B974-DF81-4B6C-B1DA-E29212B471B6}
-		{D15A4352-1BD2-4C85-9317-ED8A9798A355} = {EE02B974-DF81-4B6C-B1DA-E29212B471B6}
-		{7D3D1743-8886-40C8-A506-F844F929B503} = {EE02B974-DF81-4B6C-B1DA-E29212B471B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D30217E-B9BC-435D-BF37-9207D7EEB45C}
