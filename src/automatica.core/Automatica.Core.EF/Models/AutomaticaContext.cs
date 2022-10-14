@@ -16,8 +16,6 @@ namespace Automatica.Core.EF.Models
     public class AutomaticaContext : DbContext
     {
         private readonly bool _extendedLogs;
-        private readonly string? _dbType;
-        private readonly string? _connectionString;
 
         public virtual DbSet<BoardInterface> BoardInterfaces { get; set; }
         public virtual DbSet<BoardType> BoardTypes { get; set; }
@@ -81,11 +79,6 @@ namespace Automatica.Core.EF.Models
         {
             _extendedLogs = extendedLogs;
         }
-        public AutomaticaContext(IConfiguration configuration, string dbType, string connectionString) : this(configuration)
-        {
-            _dbType = dbType;
-            _connectionString = connectionString;
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -93,15 +86,10 @@ namespace Automatica.Core.EF.Models
             {
                 var logger = new DatabaseLoggerFactory();
                 var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
-                var envDbType = Environment.GetEnvironmentVariable("DATABASE_TYPE");
+                var envDbType = Configuration["DATABASE_TYPE"];
                 var loggerInstance = logger.CreateLogger("database");
 
                 string useDbType = envDbType;
-
-                if(_dbType != null)
-                {
-                    useDbType = _dbType;
-                }
 
                 if (string.IsNullOrEmpty(envDbType))
                 {
@@ -150,20 +138,14 @@ namespace Automatica.Core.EF.Models
         {
             logger.LogInformation($"Using MariaDB database engine...");
 
-            var mariaDbConString = $"Server={Environment.GetEnvironmentVariable("MARIADB_HOST")};User Id={Environment.GetEnvironmentVariable("MARIADB_USER")};Password={Environment.GetEnvironmentVariable("MARIADB_PASSWORD")};Database={Environment.GetEnvironmentVariable("MARIADB_DATABASE")}";
+            var mariaDbConString = $"Server={Configuration["MARIADB_HOST"]};User Id={Configuration["MARIADB_USER"]};Password={Configuration["MARIADB_PASSWORD"]};Database={Configuration["MARIADB_DATABASE"]}";
 
-            if(string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MARIADB_HOST")))
+            if(string.IsNullOrEmpty(Configuration["MARIADB_HOST"]))
             {
                 mariaDbConString = Configuration.GetConnectionString($"AutomaticaDatabaseMaria");
                 logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
             }
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
-
-            if(_connectionString != null && _dbType != null)
-            {
-                mariaDbConString = _connectionString;
-            }
-
             optionsBuilder.UseMySql(mariaDbConString, serverVersion);
         }
 
@@ -182,12 +164,6 @@ namespace Automatica.Core.EF.Models
             {
                 File.Copy(dbInitFile, dbFile);
             }
-
-            if (_connectionString != null && _dbType != null)
-            {
-                conString = _connectionString;
-            }
-
             optionsBuilder.UseSqlite(conString);
         }
 
