@@ -10,13 +10,15 @@ using System;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.EF.Models
 {
     public class AutomaticaContext : DbContext
     {
         private readonly bool _extendedLogs;
+        private readonly string? _dbType;
+        private readonly string? _connectionString;
+
         public virtual DbSet<BoardInterface> BoardInterfaces { get; set; }
         public virtual DbSet<BoardType> BoardTypes { get; set; }
         public virtual DbSet<InterfaceType> InterfaceTypes { get; set; }
@@ -79,6 +81,11 @@ namespace Automatica.Core.EF.Models
         {
             _extendedLogs = extendedLogs;
         }
+        public AutomaticaContext(IConfiguration configuration, string dbType, string connectionString) : this(configuration)
+        {
+            _dbType = dbType;
+            _connectionString = connectionString;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -90,6 +97,11 @@ namespace Automatica.Core.EF.Models
                 var loggerInstance = logger.CreateLogger("database");
 
                 string useDbType = envDbType;
+
+                if(_dbType != null)
+                {
+                    useDbType = _dbType;
+                }
 
                 if (string.IsNullOrEmpty(envDbType))
                 {
@@ -124,12 +136,13 @@ namespace Automatica.Core.EF.Models
                 }
 
 
-                if (_extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")))
+                if (_extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")) || !string.IsNullOrEmpty(Configuration["server:database_logs"]))
                 {
                     optionsBuilder.UseLoggerFactory(logger);
+                   
                 }
             }
-
+            optionsBuilder.EnableDetailedErrors();
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
@@ -145,6 +158,12 @@ namespace Automatica.Core.EF.Models
                 logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
             }
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+
+            if(_connectionString != null && _dbType != null)
+            {
+                mariaDbConString = _connectionString;
+            }
+
             optionsBuilder.UseMySql(mariaDbConString, serverVersion);
         }
 
@@ -162,6 +181,11 @@ namespace Automatica.Core.EF.Models
             if (File.Exists(dbInitFile) && !File.Exists(dbFile))
             {
                 File.Copy(dbInitFile, dbFile);
+            }
+
+            if (_connectionString != null && _dbType != null)
+            {
+                conString = _connectionString;
             }
 
             optionsBuilder.UseSqlite(conString);
