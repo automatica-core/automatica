@@ -48,7 +48,7 @@ RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $AUTOMATICA_VERSION -
 
 RUN rm -rf /src
 
-FROM automaticacore/automatica-plugin-runtime:amd64 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-6 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
