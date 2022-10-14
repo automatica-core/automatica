@@ -35,7 +35,7 @@ COPY --from=node /src/dist /app/automatica/wwwroot
 RUN dotnet test /src/
 
 RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/
-RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-x64
+RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-x64 --self-contained
 
 COPY ./Automatica.Core/appsettings.json /app/automatica/appsettings.json
 RUN echo docker has some strange errors sometimes
