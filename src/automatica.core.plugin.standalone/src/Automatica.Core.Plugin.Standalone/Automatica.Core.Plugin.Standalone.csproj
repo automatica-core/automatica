@@ -5,12 +5,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>automatica-plugin-standalone</AssemblyName>
     <PackageId>automatica-plugin-standalone</PackageId>
-    <PackageVersion>0.14.0.1</PackageVersion>
+	  
+    <PackageVersion>6.0.0.835</PackageVersion>
     <Authors>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Authors>
     <Description>Tool for running a automatica.core plugin standalone</Description>
     <Copyright>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Copyright>
     <LangVersion>7.3</LangVersion>
-    <Version>0.14.0.1</Version>
+    <Version>6.0.0.835</Version>
+	
+	<PackageType>DotnetCliTool</PackageType>
+	  <PackAsTool>true</PackAsTool>
+    
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Base" Version="6.0.0.834" />
