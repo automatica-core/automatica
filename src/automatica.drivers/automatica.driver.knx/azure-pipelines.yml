@@ -1,0 +1,64 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  - master
+  
+  pool:
+    vmImage: ubuntu-latest
+  
+  variables:
+    buildConfiguration: 'Release'
+  
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '$(SDK_VERSION)'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        dotnet tool install automatica-cli --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json --global  2>/dev/null
+        dotnet tool update automatica-cli -g --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json 2>/dev/null
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'
+      feedsToUse: 'config'
+      nugetConfigPath: 'NuGet.config'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: '**/*[Tt]ests.csproj'
+      arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
+  - task: Automatica.Core Plugin build@6
+    inputs:
+      manifest_path: 'P3.Driver.Knx.DriverFactory/automatica-manifest.json'
+      version: '$(AUTOMATICA_VERSION).$(Build.BuildNumber)'
+      api_key: '$(CLOUD_API_KEY)'
+      cloud_url: '$(CLOUD_URL)'
+      configuration: 'Debug$(BuildConfiguration)'
+      publish: true
+      dockerize: true
+      outputdirectory: '$(build.artifactstagingdirectory)'
+  - task: Automatica.Core docker multi-arch@6
+    inputs:
+      dockerRegistryEndpoint: 'DockerHub'
+      dockerfile_amd64: 'Dockerfile'
+      dockerfile_arm32: 'Dockerfile.arm32'
+      imageName: 'automaticacore/plugin-p3.driver.knx'
+      buildArgs: |
+        MANIFEST_DIR=P3.Driver.Knx.DriverFactory/
+        VERSION=$(AUTOMATICA_VERSION).$(Build.BuildNumber)
+        CONFIG=$(BuildConfiguration)
+      version: '$(AUTOMATICA_VERSION).$(Build.BuildNumber)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+  
+  
