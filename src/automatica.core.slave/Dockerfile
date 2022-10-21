@@ -6,7 +6,7 @@ RUN rm -rf /www/node_modules
 RUN npm install
 RUN npm run build-docker
 
-FROM microsoft/dotnet:latest AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 ARG VERSION
