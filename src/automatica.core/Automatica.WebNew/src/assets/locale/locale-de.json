@@ -338,6 +338,10 @@
             "SLAVE": {
                 "NAME": "Slave",
                 "DESCRIPTION": ""
+            },
+            "TIMEZONEOFFSET": {
+              "NAME": "Zeitzone Differenz [h]",
+              "DESCRIPTION": ""
             }
         },
         "CATEGORY_INSTANCE": {
