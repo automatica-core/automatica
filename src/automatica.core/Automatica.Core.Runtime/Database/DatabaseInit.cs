@@ -269,6 +269,23 @@ namespace Automatica.Core.Runtime.Database
                 });
             }
 
+
+            var timezoneOffset = context.Settings.SingleOrDefault(a => a.ValueKey == "timezoneOffset");
+
+            if (timezoneOffset == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "timezoneOffset",
+                    Type = (long)PropertyTemplateType.Integer,
+                    Value = 0,
+                    Group = "SERVER.SETTINGS",
+                    IsVisible = true,
+                    Order = 1
+                });
+
+            }
+
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
             foreach (var propertyType in propertyTypes)
