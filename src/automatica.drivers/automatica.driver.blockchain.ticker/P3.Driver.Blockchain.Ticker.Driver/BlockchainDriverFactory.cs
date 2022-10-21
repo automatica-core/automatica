@@ -14,6 +14,8 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         public override Version DriverVersion => new Version(0, 2, 1, 0);
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.blockchain.ticker";
+
         public override bool InDevelopmentMode => false;
         public override IDriver CreateDriver(IDriverContext config)
         {

@@ -57,7 +57,7 @@ steps:
     dockerfile_arm32: 'Dockerfile.arm32'
     imageName: 'automaticacore/plugin-p3.driver.ping'
     buildArgs: |
-      MANIFEST_DIR=P3.Driver.Ping/
+      MANIFEST_DIR=P3.Driver.PingFactory/
       VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
       CONFIG=$(BuildConfiguration)
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'

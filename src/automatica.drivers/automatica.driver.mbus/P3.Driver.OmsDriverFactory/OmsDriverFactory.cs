@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -17,6 +13,7 @@ namespace P3.Driver.OmsDriverFactory
         public static readonly Guid DeviceDriverGuid = new Guid("aa514f7d-4cc0-44a0-831d-26493dd159d4");
         public override Guid DriverGuid => DeviceDriverGuid;
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.oms";
         public override Version DriverVersion => new Version(0, 1, 0, 2);
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {

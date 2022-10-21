@@ -18,6 +18,7 @@ namespace P3.Driver.WakeOnLan
         public override string DriverName => "wake-on-lan";
         public override Guid DriverGuid => BusId;
         public override Version DriverVersion => new Version(0, 1, 0, 2);
+        public override string ImageName => "automaticacore/plugin-p3.driver.wake-on-lan";
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {

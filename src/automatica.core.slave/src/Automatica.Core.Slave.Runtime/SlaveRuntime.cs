@@ -39,6 +39,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         private readonly Timer _timer = new Timer(5000);
+        private bool _connected;
 
         public SlaveRuntime(IServiceProvider services, ILogger<SlaveRuntime> logger)
         {
@@ -107,7 +108,7 @@ namespace Automatica.Core.Slave.Runtime
 
         private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (!_mqttClient.IsConnected)
+            if (!_connected)
             {
                 await StopInternal();
                 await StartInternal();
@@ -133,9 +134,7 @@ namespace Automatica.Core.Slave.Runtime
 
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topics).WithExactlyOnceQoS().Build());
-
-
-                
+                _connected = true;
             }
             catch (HttpRequestException e)
             {

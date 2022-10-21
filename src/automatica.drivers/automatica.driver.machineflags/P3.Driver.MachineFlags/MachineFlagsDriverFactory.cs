@@ -18,7 +18,7 @@ namespace P3.Driver.MachineFlags
         public static readonly Guid BusId = new Guid("cb1c7119-6d3a-4085-8094-a85f63d11dd1");
         public static readonly Guid ValueId = new Guid("9fa0dbb7-4603-44bb-9699-89910fa36858");
 
-        
+        public override string ImageName => "automaticacore/plugin-p3.driver.machine-flags";
 
         public override string DriverName => "machine-flags";
         public override Guid DriverGuid => BusId;

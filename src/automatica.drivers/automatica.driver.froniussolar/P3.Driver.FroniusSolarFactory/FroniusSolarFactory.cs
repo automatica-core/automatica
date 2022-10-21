@@ -14,6 +14,8 @@ namespace P3.Driver.FroniusSolarFactory
 
         public override bool InDevelopmentMode => false;
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.froniussolar";
+
         public override IDriver CreateDriver(IDriverContext config)
         {
             return new FroniusSolarDriver(config);

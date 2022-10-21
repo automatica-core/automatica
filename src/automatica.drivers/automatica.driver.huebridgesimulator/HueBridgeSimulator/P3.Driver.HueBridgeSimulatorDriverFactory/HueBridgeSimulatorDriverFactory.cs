@@ -24,6 +24,7 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
         
 
         public override string DriverName => "hue-bridge-simulator";
+        public override string ImageName => "automaticacore/plugin-p3.driver.huebridge";
         public override Guid DriverGuid => BusId;
         public override Version DriverVersion => new Version(0, 1, 0, 4);
         public override void InitNodeTemplates(INodeTemplateFactory factory)

@@ -14,6 +14,8 @@ namespace P3.Driver.EBusFactory
 
         public override bool InDevelopmentMode => false;
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.ebus";
+
         public override IDriver CreateDriver(IDriverContext config)
         {
             return new EBusDriver(config);

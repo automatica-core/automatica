@@ -28,6 +28,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         public const string DeviceIdPropertyKey = "id";
 
         public override string DriverName => "Ikea.Tradfri";
+        public override string ImageName => "automaticacore/plugin-p3.driver.ikea.tradfri";
 
         public override Guid DriverGuid => GatewayContainerGuid;
 

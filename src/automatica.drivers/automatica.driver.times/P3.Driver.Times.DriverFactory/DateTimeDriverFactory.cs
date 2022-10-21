@@ -31,6 +31,8 @@ namespace P3.Driver.Times.DriverFactory
 
         public static readonly Guid SecondsSinceBoot = new Guid("f4a6fe61-bbff-4da9-87d5-9b97e9b0037a");
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.times";
+
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
             base.InitNodeTemplates(factory);
