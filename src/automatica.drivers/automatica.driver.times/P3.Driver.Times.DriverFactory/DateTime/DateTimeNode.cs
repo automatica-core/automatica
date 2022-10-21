@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Automatica.Core.EF.Models;
 
 namespace P3.Driver.Times.DriverFactory.DateTime
 {
@@ -9,6 +10,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
     {
         private readonly Func<object> _getValue;
         private readonly Timer _timer = new Timer(1000);
+
         public DateTimeNode(IDriverContext driverContext, Func<object> getValue) : base(driverContext)
         {
             _getValue = getValue;

@@ -37,7 +37,7 @@ steps:
     projects: '**/*[Tt]ests.csproj'
     arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
-- task: Automatica.Core Plugin build@6
+- task: AutomaticaCorePluginCli@7
   displayName: Plugin build
   inputs:
     manifest_path: 'P3.Driver.ModBusDriverFactory/automatica-manifest.json'
@@ -49,7 +49,7 @@ steps:
     dockerize: true
     outputdirectory: '$(build.artifactstagingdirectory)'
 
-- task: Automatica.Core docker multi-arch@6
+- task: AutomaticaCoreDockerMultiArchCli@7
   displayName: Docker multi-arch
   inputs:
     dockerRegistryEndpoint: 'DockerHub'

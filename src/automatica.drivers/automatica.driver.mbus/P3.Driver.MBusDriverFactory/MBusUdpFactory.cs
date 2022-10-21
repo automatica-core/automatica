@@ -46,7 +46,7 @@ namespace P3.Driver.MBusDriverFactory
         public static readonly Guid MbusFabricationNumber = new Guid("34e6d638-dce1-4fbb-bf91-79c07c901937");
         public static readonly Guid MbusManufacturerSpecific = new Guid("0c473f60-8597-4161-b9e6-25e378ec8a1b");
 
-
+        public override string ImageName => "automaticacore/plugin-p3.driver.mbus";
         public override string DriverName => "MBus";
         public override Version DriverVersion => new Version(0, 1, 0, 1);
         public override Guid DriverGuid => _mbusUdpNode;

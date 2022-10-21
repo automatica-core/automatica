@@ -1,4 +1,4 @@
-FROM node:8.11.2-alpine as node
+FROM node:18-alpine as node
 WORKDIR /www
 
 COPY ./src/Automatica.Core.Slave.Web /www
@@ -6,7 +6,7 @@ RUN rm -rf /www/node_modules
 RUN npm install
 RUN npm run build-docker
 
-FROM microsoft/dotnet:latest AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 ARG VERSION

@@ -2,8 +2,6 @@ using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace P3.Driver.PingFactory
@@ -15,6 +13,8 @@ namespace P3.Driver.PingFactory
         public override string DriverName => "Ping";
 
         public override Guid DriverGuid => DriverId;
+
+        public override string ImageName => "automaticacore/plugin-p3.driver.ping";
 
 
         public override Version DriverVersion => new Version(0, 0, 0, 2);

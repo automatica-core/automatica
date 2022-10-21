@@ -14,6 +14,8 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         public override Version DriverVersion => new Version(0, 3, 0, 0);
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.open-weather-map";
+
         public override bool InDevelopmentMode => false;
         public override IDriver CreateDriver(IDriverContext config)
         {

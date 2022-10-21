@@ -14,6 +14,7 @@ namespace P3.Driver.ModBusDriverFactory
 
         public static readonly Guid ModBusMasterTcpGuid = new Guid("c7854e79-4483-4131-8c26-99ed227f2163");
         public override Guid DriverGuid => ModBusMasterTcpGuid;
+        public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
 
         public override Version DriverVersion => new Version(0, 1, 0, 2);
 

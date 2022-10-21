@@ -1,33 +1,51 @@
 ﻿using Automatica.Core.Driver;
-using Innovative.SolarCalculator;
 
 namespace P3.Driver.Times.DriverFactory.Sun
 {
     public class SunDriver : DriverBase
 
     {
+        private int _timeZoneOffset  = 0;
+
         public SunDriver(IDriverContext driverContext) : base(driverContext)
         {
+            var timeZoneOffset = driverContext.NodeTemplateFactory.GetSetting("timezoneOffset");
+
+            try
+            {
+                if (timeZoneOffset != null)
+                {
+                    _timeZoneOffset = timeZoneOffset.ValueInt.Value;
+                }
+                else
+                {
+                    _timeZoneOffset = 0;
+                }
+            }
+            catch
+            {
+
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunSetGuid)
             {
-                return new SunDriverNode(ctx, (a, b) => a.Sunset);
+                return new SunDriverNode(ctx, (a, b) => a.Sunset.AddHours(_timeZoneOffset));
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunRiseGuid)
             {
-                return new SunDriverNode(ctx, (a, b) => a.Sunrise);
+                return new SunDriverNode(ctx, (a, b) => a.Sunrise.AddHours(_timeZoneOffset));
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunDusk)
             {
-                return new SunDriverNode(ctx, (a, b) => a.Sunset.AddMinutes(30) > b && b < a.Sunrise.AddMinutes(30));
+                return new SunDriverNode(ctx, (a, b) => a.Sunset.AddHours(_timeZoneOffset).AddMinutes(30) > b && b < a.Sunrise.AddMinutes(30));
             }
 
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunDawn)
             {
-                return new SunDriverNode(ctx, (a, b) => a.Sunrise.AddMinutes(30) > b && b < a.Sunset.AddMinutes(30));
+                return new SunDriverNode(ctx, (a, b) => a.Sunrise.AddHours(_timeZoneOffset).AddMinutes(30) > b && b < a.Sunset.AddMinutes(30));
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunIsRiseGuid)
             {

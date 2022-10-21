@@ -23,6 +23,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         public static Guid BusId => new Guid("ad2f16c2-3a4a-4de4-8768-caa766b02810");
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.loxone";
         public override bool InDevelopmentMode => false;
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)

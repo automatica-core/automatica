@@ -10,6 +10,8 @@ namespace P3.Driver.MBusDriverFactory
 
         public override string DriverName => "MBus";
         public override Guid DriverGuid => MBusUdpFactory.MbusSerialNode;
+
+        public override string ImageName => "automaticacore/plugin-p3.driver.mbus";
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
            

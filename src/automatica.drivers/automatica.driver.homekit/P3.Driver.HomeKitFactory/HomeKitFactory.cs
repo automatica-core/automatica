@@ -14,6 +14,8 @@ namespace P3.Driver.HomeKitFactory
         public const string AidPropertyKey = "aid";
         public const string ClearPairingsKey = "clean_pairings";
 
+        public override string ImageName => "automaticacore/plugin-p3.driver.homekit";
+
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
         public override Version DriverVersion => new Version(0, 7, 0, 5);
