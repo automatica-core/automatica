@@ -1,4 +1,4 @@
-FROM node:8.11.2-alpine as node
+FROM node:18-alpine as node
 WORKDIR /www
 
 COPY ./src/Automatica.Core.Slave.Web /www
