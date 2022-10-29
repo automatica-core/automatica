@@ -14,6 +14,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
+using MQTTnet.Diagnostics.Logger;
 using MQTTnet.Protocol;
 using Newtonsoft.Json;
 
@@ -75,7 +76,7 @@ namespace Automatica.Core.Plugin.Standalone
             NodeStore = serviceProvider.GetRequiredService<IDriverNodesStore>();
             DriverStore = serviceProvider.GetRequiredService<IDriverStore>();
 
-            _mqttClient = new MqttFactory().CreateMqttClient();
+            _mqttClient = new MqttFactory().CreateMqttClient(new MqttLogger(logger));
             Dispatcher = new MqttDispatcher(_mqttClient);
         }
 
@@ -93,6 +94,7 @@ namespace Automatica.Core.Plugin.Standalone
                     .Build();
                 _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
 
+                _mqttClient.ApplicationMessageReceivedHandler = new MqttMessageHandlers(Logger, this);
                 await _mqttClient.ConnectAsync(options);
 
                 Logger.LogInformation($"Connected to mqtt broker {MasterAddress} with clientId {NodeId}");

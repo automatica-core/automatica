@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet.Client.Options;
 using Timer = System.Timers.Timer;
+using System.Net;
 
 namespace Automatica.Core.Slave.Runtime
 {
@@ -217,16 +218,6 @@ namespace Automatica.Core.Slave.Runtime
                 await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(),
                     new ImageProgress(_logger));
 
-
-                var portBindings = new Dictionary<string, IList<PortBinding>>();
-                portBindings.Add("1883/tcp", new List<PortBinding>()
-                {
-                    new PortBinding()
-                    {
-                        HostPort = "1883"
-                    }
-                });
-
                 var createContainerParams = new CreateContainerParameters()
                 {
                     Image = imageFullName,
@@ -235,17 +226,17 @@ namespace Automatica.Core.Slave.Runtime
                     AttachStdout = false,
                     HostConfig = new HostConfig
                     {
-                        PortBindings = portBindings
+                        DNS = new[] { "8.8.8.8", "8.8.4.4" },
+                        NetworkMode = "host",
+                        Mounts = new List<Mount>()
                     },
                     Env = new[]
                     {
                         $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}",
-                        $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id.ToString()}"
+                        $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id.ToString()}", 
+                        $"MQTT_LOG_VERBOSE=asdf"
                     },
                 };
-
-                createContainerParams.HostConfig.Mounts = new List<Mount>();
-                createContainerParams.HostConfig.NetworkMode = "host";
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
                     RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
