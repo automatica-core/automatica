@@ -91,7 +91,14 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 return false;
             }
 
-            var scan = await IkeaTradfriDriver.Discover();
+            var scan = (await IkeaTradfriDriver.Discover()).ToList();
+
+            if(scan.Count == 0)
+            {
+                DriverContext.Logger.LogError("Could not find any gateway!");
+                return false;
+            }
+
             var gw = scan.Single(a => a.Item1 == _id.ToLowerInvariant());
 
             if (gw == null)
