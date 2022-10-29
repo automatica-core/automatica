@@ -3,6 +3,7 @@ WORKDIR /www
 
 COPY ./src/Automatica.Core.Slave.Web /www
 RUN rm -rf /www/node_modules
+RUN npm install --global devextreme
 RUN npm install
 RUN npm run build-docker
 
