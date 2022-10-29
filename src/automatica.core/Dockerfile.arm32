@@ -19,7 +19,7 @@ WORKDIR /app
 RUN apt-get update 
 RUN apt-get install zip net-tools -y
 
-ARG AUTOMATICA_VERSION
+ARG VERSION
 ARG CLOUD_API_KEY
 ARG CLOUD_URL
 
@@ -34,15 +34,15 @@ COPY --from=node /src/dist /app/automatica/wwwroot
 
 RUN dotnet test /src/
 
-RUN automatica-cli setversion $AUTOMATICA_VERSION -W /src/
+RUN automatica-cli setversion $VERSION -W /src/
 RUN dotnet publish -c Release -o /app/automatica /src/ -r linux-arm --self-contained
 
 COPY ./Automatica.Core/appsettings.json /app/automatica/appsettings.json
 RUN echo docker has some strange errors sometimes
 COPY ./Automatica.Core/appsettings.json .
 
-RUN echo $AUTOMATICA_VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $AUTOMATICA_VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+RUN echo $VERSION
+RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
 RUN rm -rf /src
 
