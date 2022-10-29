@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "automaticacoreslave": {
+    "slave-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -42,7 +42,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/automaticacoreslave",
+            "outputPath": "dist/slave-web",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -53,10 +53,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/devextreme/dist/css/dx.common.css",
-              "src/themes/generated/theme.base.css",
-              "src/themes/generated/theme.additional.css",
-              "src/dx-styles.scss",
               "src/styles.scss"
             ],
             "scripts": []
@@ -66,8 +62,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "7mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -98,10 +94,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "automaticacoreslave:build:production"
+              "browserTarget": "slave-web:build:production"
             },
             "development": {
-              "browserTarget": "automaticacoreslave:build:development"
+              "browserTarget": "slave-web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -109,7 +105,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "automaticacoreslave:build"
+            "browserTarget": "slave-web:build"
           }
         },
         "test": {
@@ -133,5 +129,5 @@
       }
     }
   },
-  "defaultProject": "automaticacoreslave"
+  "defaultProject": "slave-web"
 }
