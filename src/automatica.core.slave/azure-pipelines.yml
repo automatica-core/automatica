@@ -28,7 +28,7 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
     feedsToUse: 'config'
-    nugetConfigPath: 'NuGet.config'
+    nugetConfigPath: 'NuGet.Config'
 
 - task: DotNetCoreCLI@2
   displayName: Test
