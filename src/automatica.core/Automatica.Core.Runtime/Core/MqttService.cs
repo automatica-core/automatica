@@ -151,11 +151,11 @@ namespace Automatica.Core.Runtime.Core
             return Task.CompletedTask;
         }
 
-        public Task AddNode(string id, NodeInstance node)
+        public async Task AddNode(string id, NodeInstance node)
         {
             _mqttNodes.Add(id, node);
 
-            return Task.CompletedTask;
+            await PublishConfig(id, node);
         }
 
         public async Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance)
