@@ -236,7 +236,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not publish config...");
+                _logger.LogError(e, "Could not publish config..."); 
             }
         }
 

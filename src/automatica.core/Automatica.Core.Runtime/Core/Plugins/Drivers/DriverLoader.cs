@@ -88,7 +88,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 }
 
                 _localizationProvider.LoadFromAssembly(factory.GetType().Assembly);
-                if (initNodeTemplates || factory.InDevelopmentMode || factory.GetType().Assembly.GetName().Version < new Version(2, 3))
+                 if (initNodeTemplates || factory.InDevelopmentMode || factory.GetType().Assembly.GetName().Version < new Version(2, 3))
                 {
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
                     using (var db = new AutomaticaContext(_config))
@@ -101,7 +101,10 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 }
                 else
                 {
-                    factory.InitNodeTemplates(new DoNothingNodeTemplateFactory());
+                    using (var db = new AutomaticaContext(_config))
+                    {
+                        factory.InitNodeTemplates(new DoNothingNodeTemplateFactory(db, _config));
+                    }
                 }
 
 

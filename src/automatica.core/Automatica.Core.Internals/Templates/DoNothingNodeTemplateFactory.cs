@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
+using Microsoft.Extensions.Configuration;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace Automatica.Core.Internals.Templates
 {
-    public class DoNothingNodeTemplateFactory : INodeTemplateFactory
+    public class DoNothingNodeTemplateFactory : SettingsFactory, INodeTemplateFactory
     {
-        public void AddSettingsEntry(string key, object value, string @group, PropertyTemplateType type, bool isVisible)
+        public DoNothingNodeTemplateFactory(AutomaticaContext database, IConfiguration config) : base(database, config)
         {
-            
-        }
-
-        public Setting GetSetting(string key)
-        {
-            return null;
         }
 
         public CreateTemplateCode CreatePropertyTemplate(Guid uid, string name, string description, string key,

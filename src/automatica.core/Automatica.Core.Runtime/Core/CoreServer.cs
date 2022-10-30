@@ -432,7 +432,7 @@ namespace Automatica.Core.Runtime.Core
 
                 if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
                 {
-                   await _remoteServerHandler.AddNode(nodeInstance.ObjId.ToString(), nodeInstance);
+                   //await _remoteServerHandler.AddNode(nodeInstance.ObjId.ToString(), nodeInstance);
                    await _remoteServerHandler.AddSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId), nodeInstance);
 
 
