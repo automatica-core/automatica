@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Diagnostics;
 
@@ -37,6 +40,10 @@ namespace Automatica.Core.Plugin.Standalone
             var bitValue = Driver.Utility.Utils.BitValue(1, 1);
             Console.WriteLine($"{bitValue}");
 
+
+            Console.WriteLine($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
+
+
             var logger = new ConsoleLogger();
 
             while (true)
@@ -68,6 +75,15 @@ namespace Automatica.Core.Plugin.Standalone
                     await Task.Delay(10000);
                 }
             }
+        }
+
+        public static string GetNetCoreVersion()
+        {
+            var framework = Assembly
+                .GetEntryAssembly()?
+                .GetCustomAttribute<TargetFrameworkAttribute>()?
+                .FrameworkName;
+            return framework;
         }
     }
 }
