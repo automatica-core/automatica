@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Diagnostics;
 
@@ -37,21 +40,11 @@ namespace Automatica.Core.Plugin.Standalone
             var bitValue = Driver.Utility.Utils.BitValue(1, 1);
             Console.WriteLine($"{bitValue}");
 
-            var logger = new ConsoleLogger();
-            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
-            {
-                //MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
-                //{
-                //    var trace =
-                //        $"mqtt >> [{e.TraceMessage.ThreadId}] [{e.TraceMessage.Source}] [{e.TraceMessage.Level}]: {e.TraceMessage.Message}";
-                //    if (e.TraceMessage.Exception != null)
-                //    {
-                //        trace += Environment.NewLine + e.TraceMessage.Exception.ToString();
-                //    }
 
-                //    logger.LogDebug(trace);
-                //};
-            }
+            Console.WriteLine($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
+
+
+            var logger = new ConsoleLogger();
 
             while (true)
             {
@@ -82,6 +75,15 @@ namespace Automatica.Core.Plugin.Standalone
                     await Task.Delay(10000);
                 }
             }
+        }
+
+        public static string GetNetCoreVersion()
+        {
+            var framework = Assembly
+                .GetEntryAssembly()?
+                .GetCustomAttribute<TargetFrameworkAttribute>()?
+                .FrameworkName;
+            return framework;
         }
     }
 }

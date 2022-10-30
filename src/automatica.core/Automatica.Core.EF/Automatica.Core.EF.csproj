@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>6.0.0.827</Version>
+    <Version>6.0.0.834</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>CB99914A-2CF8-4047-8D63-8E760BA303A1</ProjectGuid>
     <Authors>p3root</Authors>

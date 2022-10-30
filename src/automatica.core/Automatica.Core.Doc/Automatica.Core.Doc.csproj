@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>6.0.0.827</Version>
+    <Version>6.0.0.834</Version>
   </PropertyGroup>
   <ItemGroup>
     <!--PackageReference Include="docfx.console" Version="2.39.2">

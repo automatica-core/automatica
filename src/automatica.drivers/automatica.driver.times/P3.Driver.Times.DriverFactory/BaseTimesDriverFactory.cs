@@ -15,8 +15,12 @@ namespace P3.Driver.Times.DriverFactory
             factory.AddSettingsEntry("Longitude", null, "Geo", PropertyTemplateType.Numeric, true);
             factory.AddSettingsEntry("Latitude", null, "Geo", PropertyTemplateType.Numeric, true);
 
-
-            var valueDouble = factory.GetSetting("Latitude").ValueDouble;
+            var lat = factory.GetSetting("Latitude");
+            if(lat == null)
+            {
+                return;
+            }
+            var valueDouble = lat.ValueDouble;
             if (valueDouble != null)
             {
                 Latitude = valueDouble.Value;
