@@ -1,10 +1,10 @@
 ﻿using Automatica.Core.Runtime.Abstraction.Remote;
-using MQTTnet.Client.Disconnecting;
+using MQTTnet.Server;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.Runtime.Mqtt
 {
-    internal class ClientDisconnectedHandler : IMqttClientDisconnectedHandler
+    internal class ClientDisconnectedHandler : IMqttServerClientDisconnectedHandler
     {
         private readonly IRemoteHandler _handlerInstance;
         public ClientDisconnectedHandler(IRemoteHandler handler)
@@ -12,9 +12,10 @@ namespace Automatica.Core.Runtime.Mqtt
             _handlerInstance = handler;
         }
 
-        public async Task HandleDisconnectedAsync(MqttClientDisconnectedEventArgs eventArgs)
+        public async Task HandleClientDisconnectedAsync(MqttServerClientDisconnectedEventArgs eventArgs)
         {
-            await _handlerInstance.ClientDisconnected(new RemoteDisconnectedEvent(eventArgs.ConnectResult.AssignedClientIdentifier));
+            await _handlerInstance.ClientDisconnected(new RemoteDisconnectedEvent(eventArgs.ClientId));
         }
+
     }
 }

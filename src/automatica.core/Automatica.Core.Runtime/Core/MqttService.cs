@@ -83,7 +83,7 @@ namespace Automatica.Core.Runtime.Core
             return Task.CompletedTask;
         }
 
-        public Task ClientDiscnnected(RemoteDisconnectedEvent disconnectedEvent)
+        public Task ClientDisconnected(RemoteDisconnectedEvent disconnectedEvent)
         {
             _logger.LogDebug($"Client {disconnectedEvent.ClientId} disconnected...");
 
