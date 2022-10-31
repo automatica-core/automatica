@@ -40,6 +40,7 @@ namespace Automatica.Core.Runtime.Core
 
             _mqttServer = services.GetRequiredService<IMqttServer>();
             _mqttServer.ClientConnectedHandler = new ClientConnectedHandler(this);
+            _mqttServer.ClientDisconnectedHandler = new ClientDisconnectedHandler(this);
             _mqttServer.ClientSubscribedTopicHandler = new ClientSubscribedHandler(this);
             _mqttServer.ApplicationMessageReceivedHandler = new ApplicationMessageHandler(this);
             _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
@@ -78,6 +79,18 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogDebug($"Client {connectedEvent.ClientId} connected...");
             _connectedMqttClients.Add(connectedEvent.ClientId);
+
+            return Task.CompletedTask;
+        }
+
+        public Task ClientDiscnnected(RemoteDisconnectedEvent disconnectedEvent)
+        {
+            _logger.LogDebug($"Client {disconnectedEvent.ClientId} disconnected...");
+
+            if (_connectedMqttClients.Contains(disconnectedEvent.ClientId))
+            {
+                _connectedMqttClients.Remove(disconnectedEvent.ClientId);
+            }
 
             return Task.CompletedTask;
         }

@@ -7,6 +7,7 @@ namespace Automatica.Core.Runtime.Abstraction.Remote
     internal interface IRemoteHandler
     {
         Task ClientConnected(RemoteConnectedEvent connectedEvent);
+        Task ClientDisconnected(RemoteDisconnectedEvent connectedEvent);
         Task ClientSubscribedTopic(RemoteSubscribedEvent subscribedEvent);
 
         Task MessageReceived(RemoteMessageEvent messageEvent);
