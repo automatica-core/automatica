@@ -9,21 +9,43 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using Automatica.Core.Internals.Core;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
     [Route("webapi/slave")]
     public class SlaveController : BaseController
     {
-        public SlaveController(AutomaticaContext dbContext) : base(dbContext)
+        private readonly IRemoteServerHandler _remoteServerHandler;
+
+        public SlaveController(AutomaticaContext dbContext, IRemoteServerHandler remoteServerHandler) : base(dbContext)
         {
+            _remoteServerHandler = remoteServerHandler;
         }
 
         [HttpGet]
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<Slave> GetSlaves()
         {
-            return DbContext.Slaves.AsNoTracking();
+            var slaves = DbContext.Slaves.AsNoTracking().ToList();
+
+            var connectedSlaves = _remoteServerHandler.GetConnectedClients();
+
+            foreach(var slave in slaves)
+            {
+                if(slave.ObjId == ServerInfo.SelfSlaveGuid)
+                {
+                    slave.Connected = true;
+                    continue;
+                }
+                if(connectedSlaves.Contains(slave.ClientKey))
+                {
+                    slave.Connected = true;
+                }
+            }
+
+            return slaves;
         }
 
         [HttpPost]

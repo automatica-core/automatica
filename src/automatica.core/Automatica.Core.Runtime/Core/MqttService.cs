@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
-using Automatica.Core.Base.Serialization;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;
@@ -290,6 +289,11 @@ namespace Automatica.Core.Runtime.Core
             {
                 _logger.LogError(e, "Could not send start instances message...");
             }
+        }
+
+        public IList<string> GetConnectedClients()
+        {
+            return _connectedMqttClients;
         }
     }
 }
