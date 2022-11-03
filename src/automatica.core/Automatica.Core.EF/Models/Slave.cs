@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Model;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Automatica.Core.EF.Models
 {
@@ -11,5 +12,8 @@ namespace Automatica.Core.EF.Models
 
         public string ClientId { get; set; }
         public string ClientKey { get; set; }
+
+        [NotMapped]
+        public bool Connected { get; set; }
     }
 }

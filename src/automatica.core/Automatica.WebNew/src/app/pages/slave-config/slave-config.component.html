@@ -1,8 +1,8 @@
 <div class="content-block">
     <div class="dx-card wide-card panel-height">
         <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false" (onItemClick)="itemClick($event)"
-            itemTemplate="items">
+            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false"
+            (onItemClick)="itemClick($event)" itemTemplate="items">
             <div *dxTemplate="let item of 'items'">
                 <div *ngIf="item.color">
                     <i class="dx-icon {{ item.Icon }}"></i>
@@ -21,23 +21,30 @@
             </as-split-area>
             <as-split-area [size]="70">
                 <dx-data-grid [dataSource]="slaves" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-                    (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)" (onRowInserting)="onRowInserting($event)"
-                    (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
+                    (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
+                    (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
+                    (onInitialized)="onInitialized($event)">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
-                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}" deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
+                        <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"
+                            deleteRow="{{ 'COMMON.DELETE' | translateAsync }}"
                             cancelRowChanges="{{ 'COMMON.CANCEL' | translateAsync }}"></dxo-texts>
                     </dxo-editing>
                     <dxo-selection mode="single"></dxo-selection>
 
                     <dxi-column dataField="DisplayName" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-                    <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
-                    
-                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SLAVE.CLIENTID' | translateAsync }}"></dxi-column>
-                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SLAVE.CLIENTKEY' | translateAsync }}"></dxi-column>
+                    <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
+                    </dxi-column>
+
+                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SLAVE.CLIENTID' | translateAsync }}">
+                    </dxi-column>
+                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SLAVE.CLIENTKEY' | translateAsync }}">
+                    </dxi-column>
+                    <dxi-column dataField="Connected" dataType="string" [allowEditing]="false" caption="{{ 'COMMON.SLAVE.CONNECTED' | translateAsync }}">
+                    </dxi-column>
 
 
-                 
+
                 </dx-data-grid>
             </as-split-area>
         </as-split>

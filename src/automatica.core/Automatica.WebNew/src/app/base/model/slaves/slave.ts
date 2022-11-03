@@ -1,11 +1,8 @@
 import { Model, BaseModel, JsonFieldInfo, JsonProperty } from "../base-model";
-import { Guid } from "../../utils/Guid";
 import { IPropertyModel } from "../interfaces/ipropertyModel";
 import { INameModel } from "../INameModel";
 import { IDescriptionModel } from "../IDescriptionModel";
 import { PropertyInstance } from "../property-instance";
-import { VirtualNamePropertyInstance } from "../virtual-props/virtual-name-property-instance";
-import { VirtualDescriptionPropertyInstance } from "../virtual-props/virtual-description-property-instance";
 import { VirtualDisplayNamePropertyInstance } from "../virtual-props/virtual-display-name-property-instance";
 import { VirtualDisplayDescriptionPropertyInstance } from "../virtual-props";
 import { VirtualGenericPropertyInstance } from "../virtual-props/virtual-generic-property-instance";
@@ -46,6 +43,9 @@ export class Slave extends BaseModel implements IPropertyModel, INameModel, IDes
     @JsonProperty()
     ClientKey: string;
 
+    @JsonProperty()
+    Connected: boolean;
+
     constructor() {
         super();
 
@@ -61,8 +61,8 @@ export class Slave extends BaseModel implements IPropertyModel, INameModel, IDes
         this.Properties.push(new VirtualDisplayNamePropertyInstance(this, false));
         this.Properties.push(new VirtualDisplayDescriptionPropertyInstance(this, false));
 
-        this.Properties.push(new VirtualGenericPropertyInstance("COMMON.SLAVE.CLIENTID", 3, this, () => this.ClientId, (v) => this.ClientId = v, false, PropertyTemplateType.Text));
-        this.Properties.push(new VirtualGenericPropertyInstance("COMMON.SLAVE.CLIENTKEY", 3, this, () => this.ClientKey, (v) => this.ClientKey = v, false, PropertyTemplateType.Text));
+        this.Properties.push(new VirtualGenericPropertyInstance("SLAVE.CLIENTID", 3, this, () => this.ClientId, (v) => this.ClientId = v, false, PropertyTemplateType.Text));
+        this.Properties.push(new VirtualGenericPropertyInstance("SLAVE.CLIENTKEY", 3, this, () => this.ClientKey, (v) => this.ClientKey = v, false, PropertyTemplateType.Text));
 
     }
 

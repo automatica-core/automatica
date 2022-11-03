@@ -2,13 +2,13 @@
   "profiles": {
     "Automatica.Core.Plugin.Dockerize": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net6.0\\Drivers\\ping",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net6.0\\Drivers\\oms",
       "environmentVariables": {
-        "AUTOMATICA_SLAVE_MASTER": "localhost",
+        "AUTOMATICA_SLAVE_MASTER": "192.168.8.15",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
         "MQTT_LOG_VERBOSE": "true",
         "AUTOMATICA_SLAVE_USER": "rm1",
-        "AUTOMATICA_NODE_ID": "3fed6919-4f43-41f4-bb52-887f34956128"
+        "AUTOMATICA_NODE_ID": "346f9d5c-f84a-b3e6-1d68-c36965cb3129"
       }
     }
   }

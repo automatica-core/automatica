@@ -1,11 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { CategoryService } from "src/app/services/categories.service";
 import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
-import { CategoryGroup, CategoryInstance } from "src/app/base/model/categories";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { Slave } from "src/app/base/model/slaves/slave";
 import { SlavesService } from "src/app/services/slaves.services";
@@ -28,6 +26,14 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
     icon: "fa-save",
     items: undefined,
     command: (event) => { this.save(); }
+  }  
+  
+  menuReload: CustomMenuItem = {
+    id: "reload",
+    label: "Reload",
+    icon: "fa-save",
+    items: undefined,
+    command: (event) => { this.load(); }
   }
 
   constructor(
@@ -40,6 +46,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
     appService.setAppTitle("CATEGORIES.NAME");
 
     this.menuItems.push(this.menuSave);
+    this.menuItems.push(this.menuReload);
 
     this.translate.onChange().subscribe({
       next: () => {
@@ -50,6 +57,10 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.load();
+  }
+
+  async load() {
     this.appService.isLoading = true;
 
     try {

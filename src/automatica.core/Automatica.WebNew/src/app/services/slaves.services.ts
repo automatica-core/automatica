@@ -4,7 +4,6 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { L10nTranslationService } from "angular-l10n";
 import { DesignTimeDataService } from "./design-time-data.service";
-import { CategoryGroup, CategoryInstance } from "../base/model/categories";
 import { Slave } from "../base/model/slaves/slave";
 
 @Injectable()

@@ -34,7 +34,13 @@ namespace Automatica.Core.Plugin.Standalone
 
         public void Publish(MqttNetLogLevel logLevel, string source, string message, object[] parameters, Exception exception)
         {
-            _logger.Log(Convert(logLevel), message, parameters);
+            var msg = message;
+
+            if(exception != null)
+            {
+                msg += Environment.NewLine + exception;
+            }
+            _logger.Log(Convert(logLevel), msg, parameters);
         }
     }
 }

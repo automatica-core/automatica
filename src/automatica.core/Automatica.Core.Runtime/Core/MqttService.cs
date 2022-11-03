@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
-using Automatica.Core.Base.Serialization;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;
@@ -41,6 +40,7 @@ namespace Automatica.Core.Runtime.Core
 
             _mqttServer = services.GetRequiredService<IMqttServer>();
             _mqttServer.ClientConnectedHandler = new ClientConnectedHandler(this);
+            _mqttServer.ClientDisconnectedHandler = new ClientDisconnectedHandler(this);
             _mqttServer.ClientSubscribedTopicHandler = new ClientSubscribedHandler(this);
             _mqttServer.ApplicationMessageReceivedHandler = new ApplicationMessageHandler(this);
             _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
@@ -79,6 +79,18 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogDebug($"Client {connectedEvent.ClientId} connected...");
             _connectedMqttClients.Add(connectedEvent.ClientId);
+
+            return Task.CompletedTask;
+        }
+
+        public Task ClientDisconnected(RemoteDisconnectedEvent disconnectedEvent)
+        {
+            _logger.LogDebug($"Client {disconnectedEvent.ClientId} disconnected...");
+
+            if (_connectedMqttClients.Contains(disconnectedEvent.ClientId))
+            {
+                _connectedMqttClients.Remove(disconnectedEvent.ClientId);
+            }
 
             return Task.CompletedTask;
         }
@@ -151,11 +163,11 @@ namespace Automatica.Core.Runtime.Core
             return Task.CompletedTask;
         }
 
-        public Task AddNode(string id, NodeInstance node)
+        public async Task AddNode(string id, NodeInstance node)
         {
             _mqttNodes.Add(id, node);
 
-            return Task.CompletedTask;
+            await PublishConfig(id, node);
         }
 
         public async Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance)
@@ -290,6 +302,11 @@ namespace Automatica.Core.Runtime.Core
             {
                 _logger.LogError(e, "Could not send start instances message...");
             }
+        }
+
+        public IList<string> GetConnectedClients()
+        {
+            return _connectedMqttClients;
         }
     }
 }

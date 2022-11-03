@@ -1,513 +1,524 @@
 {
-    "ERROR": {
-        "UNAUTHORISED": "Not authorised"
+  "ERROR": {
+    "UNAUTHORISED": "Not authorised"
+  },
+  "COMMON": {
+    "ADMIN": "Administration",
+    "VISUALIZATION": "Visualisierung",
+    "ADD": "Hinzufügen",
+    "CANCEL": "Abbrechen",
+    "CONFIGURATION": "Config",
+    "RULEENGINE": "Logikeditor",
+    "LICENSE": "Lizenz",
+    "SYSTEM": "System",
+    "PLUGINS": "Erweiterungen",
+    "DASHBOARD": "Dashboard",
+    "VISU": "Visualisierung",
+    "AREAS": "Bereiche",
+    "CATEGORIES": "Kategorien",
+    "SAVE": "Speichern",
+    "NEW": "Neu",
+    "COPY": "Kopieren",
+    "PASTE": "Einfügen",
+    "DELETE": "Löschen",
+    "CONFIRM_DELETE": "Bist du sicher diesen Eintrag zu löschen?",
+    "GROUP": "Gruppe",
+    "NAME": "Name",
+    "VALUE": "Wert",
+    "CONNECT": "Verbinden",
+    "SAVED": "Konfiguration gespeichert",
+    "RELOADED": "Konfiguration neu geladen",
+    "REINIT": "Konfiguration in server laden",
+    "LOGOUT": "Abmelden",
+    "FIRSTNAME": "Vorname",
+    "LASTNAME": "Nachname",
+    "USERNAME": "Benutzername",
+    "DESCRIPTION": "Beschreibung",
+    "TELEGRAM_MONITOR": "Telegram Monitor",
+    "DIRECTION": "Richtung",
+    "SOURCE_ADDRESS": "Quelladresse",
+    "TARGET_ADDRESS": "Zieladresse",
+    "DATA": "Daten",
+    "ADDITIONAL_DATA": "Zusätzliche Daten",
+    "TIMESTAMP": "Zeitpunkt",
+    "ETS_IMPORT": "ETS Import",
+    "SELECT_FILE": "Datei auswählen...",
+    "IMPORT_ETS_STRUCTURE": "Import ETS Struktur",
+    "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
+    "READ": "Lesen",
+    "SERVER_STARTING": "Automatica.Core Server fährt hoch...",
+    "SIGNALR_CONNECTION": "SignalR Verbindung",
+    "LOADING_PLUGINS": "Lade Erweiterungen",
+    "STARTED": "Gestartet",
+    "CONFIGURE_PLUGINS": "Konfiguriere Plugins",
+    "SERVER_STATE": "Automatica.Core Server Status",
+    "EXPORT": "Export",
+    "IMPORT": "Import",
+    "INSTALL": "Installieren",
+    "DOWNLOADING": "Wird heruntergeladen...",
+    "DOWNLOADED": "Heruntergeladen...",
+    "DOWNLOAD": "Herunterladen",
+    "VERSION": "Version",
+    "TEMPLATE": "Template",
+    "SELECT": "Auswählen...",
+    "RESTART": "Neustart",
+    "LOGIC_PAGE": "Logik Seite",
+    "PAGES": "Seiten",
+    "EDIT": "Bearbeiten...",
+    "TYPES": "Type",
+    "TYPE": "Type",
+    "FAVORITES": "Favoriten",
+    "HOME": "Home",
+    "RELOAD": "Aktualisieren",
+    "SLAVES": "Slaves (Preview)",
+    "SWITCH": {
+      "ON": "Einschalten",
+      "OFF": "Ausschalten"
     },
-    "COMMON": {
-        "ADMIN": "Administration",
-        "VISUALIZATION": "Visualisierung",
-        "ADD": "Hinzufügen",
-        "CANCEL": "Abbrechen",
-        "CONFIGURATION": "Config",
-        "RULEENGINE": "Logikeditor",
-        "LICENSE": "Lizenz",
-        "SYSTEM": "System",
-        "PLUGINS": "Erweiterungen",
-        "DASHBOARD": "Dashboard",
-        "VISU": "Visualisierung",
-        "AREAS": "Bereiche",
-        "CATEGORIES": "Kategorien",
-        "SAVE": "Speichern",
-        "NEW": "Neu",
-        "COPY": "Kopieren",
-        "PASTE": "Einfügen",
-        "DELETE": "Löschen",
-        "CONFIRM_DELETE": "Bist du sicher diesen Eintrag zu löschen?",
-        "GROUP": "Gruppe",
+    "TOGGLE": {
+      "ON": "Ein",
+      "OFF": "Aus"
+    },
+    "DATETIMEFORMAT": {
+      "DATE": "DD.MM.YYYY",
+      "TIME": "HH.mm.ss",
+      "DATETIME": "DD.MM.YYYY HH.mm.ss"
+    },
+    "NODE_INSTANCE_SELECT": "Item auswahl...",
+    "SELECT_SERVER": {
+      "NAME": "Server Auswählen",
+      "DESCRIPTION": "Wähle deinen Automatica.Server aus",
+      "NOT_IN_LIST": "Nicht in der Liste?"
+    },
+    "NODE_IMPORT": {
+      "INVALID_ZIP": "Datei ist ungültig.",
+      "INVALID_VERSION": "Ungültige Version",
+      "UNSUPPORTED_NODE": "Ungültiger Import Knoten ausgewählt",
+      "MAX_CHILDS_REACHED": "Maximale Anzahl an Knoten erreicht."
+    },
+    "RULES": "Logik Bausteine",
+    "CATEGORY": {
+      "ADDRESS": "Adresse",
+      "ADRESS": "Adresse",
+      "TRANSFORM": "Transform",
+      "MISC": "Allgemein",
+      "PARAMETERS": "Parameter",
+      "VISU": "Visualisierung",
+      "USER2GROUP": "Benutzergruppen",
+      "USER2ROLE": "Rollen",
+      "USERGROUP2ROLE": "Rollen",
+      "IMPORT": "Import",
+      "SETTING": "Einstellungen",
+      "DISCOVERY": "Suchen",
+      "TRENDING": "Datenaufzeichnung"
+    },
+    "FACTOR": {
+      "NAME": "Faktor",
+      "DESCRIPTION": "*= faktor"
+    },
+    "OFFSET": {
+      "NAME": "Offset",
+      "DESCRIPTION": "+= offset"
+    },
+    "PROPERTY": {
+      "SERVERUID": {
+        "NAME": "Server UID",
+        "DESCRIPTION": ""
+      },
+      "REPORTCRASHLOGS": {
+        "NAME": "Crash logs übertragen",
+        "DESCRIPTION": ""
+      },
+      "AUTOUPDATETIME": {
+        "NAME": "Update Zeit",
+        "DESCRIPTION": ""
+      },
+      "AUTOUPDATE": {
+        "NAME": "Automatische Updates",
+        "DESCRIPTION": ""
+      },
+      "FIRSTNAME": {
+        "NAME": "Vorname",
+        "DESCRIPTION": ""
+      },
+      "LASTNAME": {
+        "NAME": "Nachname",
+        "DESCRIPTION": ""
+      },
+      "USERNAME": {
+        "NAME": "Benutzername",
+        "DESCRIPTION": ""
+      },
+      "PASSWORD": {
+        "NAME": "Passwort",
+        "DESCRIPTION": ""
+      },
+      "PASSWORD_CONFIRM": {
+        "NAME": "Passwort bestätigung",
+        "DESCRIPTION": ""
+      },
+      "NAME": {
         "NAME": "Name",
-        "VALUE": "Wert",
-        "CONNECT": "Verbinden",
-        "SAVED": "Konfiguration gespeichert",
-        "RELOADED": "Konfiguration neu geladen",
-        "REINIT": "Konfiguration in server laden",
-        "LOGOUT": "Abmelden",
-        "FIRSTNAME": "Vorname",
-        "LASTNAME": "Nachname",
-        "USERNAME": "Benutzername",
-        "DESCRIPTION": "Beschreibung",
-        "TELEGRAM_MONITOR": "Telegram Monitor",
-        "DIRECTION": "Richtung",
-        "SOURCE_ADDRESS": "Quelladresse",
-        "TARGET_ADDRESS": "Zieladresse",
-        "DATA": "Daten",
-        "ADDITIONAL_DATA": "Zusätzliche Daten",
-        "TIMESTAMP": "Zeitpunkt",
-        "ETS_IMPORT": "ETS Import",
-        "SELECT_FILE": "Datei auswählen...",
-        "IMPORT_ETS_STRUCTURE": "Import ETS Struktur",
-        "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
-        "READ": "Lesen",
-        "SERVER_STARTING": "Automatica.Core Server fährt hoch...",
-        "SIGNALR_CONNECTION": "SignalR Verbindung",
-        "LOADING_PLUGINS": "Lade Erweiterungen",
-        "STARTED": "Gestartet",
-        "CONFIGURE_PLUGINS": "Konfiguriere Plugins",
-        "SERVER_STATE": "Automatica.Core Server Status",
-        "EXPORT": "Export",
-        "IMPORT": "Import",
-        "INSTALL": "Installieren",
-        "DOWNLOADING": "Wird heruntergeladen...",
-        "DOWNLOADED": "Heruntergeladen...",
-        "DOWNLOAD": "Herunterladen",
-        "VERSION": "Version",
-        "TEMPLATE": "Template",
-        "SELECT": "Auswählen...",
-        "RESTART": "Neustart",
-        "LOGIC_PAGE": "Logik Seite",
-        "PAGES": "Seiten",
-        "EDIT": "Bearbeiten...",
-        "TYPES": "Type",
-        "TYPE": "Type",
-        "FAVORITES": "Favoriten",
-        "HOME": "Home",
-        "RELOAD": "Aktualisieren",
-        "SLAVES": "Slaves (Preview)",
-        "SWITCH": {
-            "ON": "Einschalten",
-            "OFF": "Ausschalten"
-        },
-        "TOGGLE": {
-            "ON": "Ein",
-            "OFF": "Aus"
-        },
-        "DATETIMEFORMAT": {
-            "DATE": "DD.MM.YYYY",
-            "TIME": "HH.mm.ss",
-            "DATETIME": "DD.MM.YYYY HH.mm.ss"
-        },
-        "NODE_INSTANCE_SELECT": "Item auswahl...",
-        "SELECT_SERVER": {
-            "NAME": "Server Auswählen",
-            "DESCRIPTION": "Wähle deinen Automatica.Server aus",
-            "NOT_IN_LIST": "Nicht in der Liste?"
-        },
-        "NODE_IMPORT": {
-            "INVALID_ZIP": "Datei ist ungültig.",
-            "INVALID_VERSION": "Ungültige Version",
-            "UNSUPPORTED_NODE": "Ungültiger Import Knoten ausgewählt",
-            "MAX_CHILDS_REACHED": "Maximale Anzahl an Knoten erreicht."
-        },
-        "RULES": "Logik Bausteine",
-        "CATEGORY": {
-            "ADDRESS": "Adresse",
-            "ADRESS": "Adresse",
-            "TRANSFORM": "Transform",
-            "MISC": "Allgemein",
-            "PARAMETERS": "Parameter",
-            "VISU": "Visualisierung",
-            "USER2GROUP": "Benutzergruppen",
-            "USER2ROLE": "Rollen",
-            "USERGROUP2ROLE": "Rollen",
-            "IMPORT": "Import",
-            "SETTING": "Einstellungen",
-            "DISCOVERY": "Suchen",
-            "TRENDING": "Datenaufzeichnung"
-        },
-        "FACTOR": {
-            "NAME": "Faktor",
-            "DESCRIPTION": "*= faktor"
-        },
-        "OFFSET": {
-            "NAME": "Offset",
-            "DESCRIPTION": "+= offset"
-        },
-        "PROPERTY": {
-            "SERVERUID": {
-                "NAME": "Server UID",
-                "DESCRIPTION": ""
-            },
-            "REPORTCRASHLOGS": {
-                "NAME": "Crash logs übertragen",
-                "DESCRIPTION": ""
-            },
-            "AUTOUPDATETIME": {
-                "NAME": "Update Zeit",
-                "DESCRIPTION": ""
-            },
-            "AUTOUPDATE": {
-                "NAME": "Automatische Updates",
-                "DESCRIPTION": ""
-            },
-            "FIRSTNAME": {
-                "NAME": "Vorname",
-                "DESCRIPTION": ""
-            },
-            "LASTNAME": {
-                "NAME": "Nachname",
-                "DESCRIPTION": ""
-            },
-            "USERNAME": {
-                "NAME": "Benutzername",
-                "DESCRIPTION": ""
-            },
-            "PASSWORD": {
-                "NAME": "Passwort",
-                "DESCRIPTION": ""
-            },
-            "PASSWORD_CONFIRM": {
-                "NAME": "Passwort bestätigung",
-                "DESCRIPTION": ""
-            },
-            "NAME": {
-                "NAME": "Name",
-                "DESCRIPTION": ""
-            },
-            "HEIGHT": {
-                "NAME": "Höhe",
-                "DESCRIPTION": ""
-            },
-            "WIDTH": {
-                "NAME": "Breite",
-                "DESCRIPTION": ""
-            },
-            "DESCRIPTION": {
-                "NAME": "Beschreibung",
-                "DESCRIPTION": ""
-            },
-            "BAUDRATE": {
-                "NAME": "Baudrate",
-                "DESCRIPTION": ""
-            },
-            "PARITY": {
-                "NAME": "Parity",
-                "DESCRIPTION": ""
-            },
-            "DATABITS": {
-                "NAME": "Databits",
-                "DESCRIPTION": ""
-            },
-            "STOPBITS": {
-                "NAME": "Stopbits",
-                "DESCRIPTION": ""
-            },
-            "IP": {
-                "NAME": "IP Adresse",
-                "DESCRIPTION": ""
-            },
-            "IPPORT": {
-                "NAME": "Port",
-                "DESCRIPTION": ""
-            },
-            "ISREADABLE": {
-                "NAME": "Lesbar",
-                "DESCRIPTION": ""
-            },
-            "ISWRITEABLE": {
-                "NAME": "Schreibbar",
-                "DESCRIPTION": ""
-            },
-            "SCAN": {
-                "NAME": "Scan",
-                "DESCRIPTION": ""
-            },
-            "AREA_ICON": {
-                "NAME": "Icon",
-                "DESCRIPTION": ""
-            },
-            "COLOR": {
-                "NAME": "Farbe",
-                "DESCRIPTION": ""
-            },
-            "USE_IN_VISU": {
-                "NAME": "In Visu verwenden",
-                "DESCRIPTION": ""
-            },
-            "IS_FAVORITE": {
-                "NAME": "Favorit",
-                "DESCRIPTION": ""
-            },
-            "AREA": {
-                "NAME": "Bereich",
-                "DESCRIPTION": ""
-            },
-            "CATEGORY": {
-                "NAME": "Kategorie",
-                "DESCRIPTION": ""
-            },
-            "USER2GROUP": {
-                "NAME": "Gruppen",
-                "DESCRIPTION": ""
-            },
-            "USER2ROLE": {
-                "NAME": "Rollen",
-                "DESCRIPTION": ""
-            },
-            "USERGROUP2ROLE": {
-                "NAME": "Rollen",
-                "DESCRIPTION": ""
-            },
-            "USER_GROUP": {
-                "NAME": "Erlaubte Benutzergruppe",
-                "DESCRIPTION": ""
-            },
-            "USE_NAT": {
-                "NAME": "Verbinden im NAT Modus",
-                "DESCRIPTION": ""
-            },
-            "IMPORT": {
-                "NAME": "Import (*.knxproj)",
-                "DESCRIPTION": ""
-            },
-            "STATUS_TEXT_TRUE": {
-                "NAME": "Statustext True",
-                "DESCRIPTION": ""
-            },
-            "STATUS_TEXT_FALSE": {
-                "NAME": "Statustext False",
-                "DESCRIPTION": ""
-            },
-            "STATUS_COLOR_TRUE": {
-                "NAME": "Statusfarbe True",
-                "DESCRIPTION": ""
-            },
-            "STATUS_COLOR_FALSE": {
-                "NAME": "Statusfarbe False",
-                "DESCRIPTION": ""
-            },
-            "VISU_NAME": {
-                "NAME": "Anzeige Name",
-                "DESCRIPTION": ""
-            },
-            "LATITUDE": {
-                "NAME": "Latitude",
-                "DESCRIPTION": ""
-            },
-            "LONGITUDE": {
-                "NAME": "Longitude",
-                "DESCRIPTION": ""
-            },
-            "APIKEY": {
-                "NAME": "Cloud API Key",
-                "DESCRIPTION": ""
-            },
-            "LEARN": {
-                "NAME": "Lernmodus",
-                "DESCRIPTION": ""
-            },
-            "TIMER": {
-                "NAME": "Zeitschaltuhr",
-                "START_TIME": "Startzeit",
-                "END_TIME": "Endzeit",
-                "WEEKDAYS": {
-                    "MONDAY": "Montag",
-                    "TUESDAY": "Dienstag",
-                    "WEDNESDAY": "Mittwoch",
-                    "THURSDAY": "Donnerstag",
-                    "FRIDAY": "Freitag",
-                    "SATURDAY": "Samstag",
-                    "SUNDAY": "Sonntag"
-                }
-            },
-            "CLOUDURL": {
-                "NAME": "Cloud Url",
-                "DESCRIPTION": ""
-            },
-            "CLOUDENVIRONMENT": {
-                "NAME": "Cloud Umgebung",
-                "DESCRIPTION":""
-            },
-            "PROJECTNAME": {
-                "NAME": "Projekt Name",
-                "DESCRIPTION":""
-            },
-            "TRENDING": {
-                "NAME": "Datenaufzeichnung",
-                "DESCRIPTION": ""
-            },
-            "TRENDING_TYPE": {
-                "NAME": "Aufzeichnungstyp",
-                "DESCRIPTION": ""
-            },
-            "TRENDING_INTERVAL": {
-                "NAME": "Intervall [s]",
-                "DESCRIPTION": ""
-            },
-            "OBJID": {
-                "NAME": "ID",
-                "DESCRIPTION": ""
-            },
-            "SLAVE": {
-                "NAME": "Slave",
-                "DESCRIPTION": ""
-            },
-            "TIMEZONEOFFSET": {
-              "NAME": "Zeitzone Differenz [h]",
-              "DESCRIPTION": ""
-            }
-        },
-        "CATEGORY_INSTANCE": {
-            "ALARM": {
-                "NAME": "Alarm",
-                "DESCRIPTION": ""
-            },
-            "AUDIO": {
-                "NAME": "Audio",
-                "DESCRIPTION": ""
-            },
-            "LIGHTNING": {
-                "NAME": "Licht",
-                "DESCRIPTION": ""
-            },
-            "SHADING": {
-                "NAME": "Beschattung",
-                "DESCRIPTION": ""
-            },
-            "ENERGY": {
-                "NAME": "Energie",
-                "DESCRIPTION": ""
-            },
-            "WINDOW": {
-                "NAME": "Fenster",
-                "DESCRIPTION": ""
-            },
-            "HEATING": {
-                "NAME": "Heizung",
-                "DESCRIPTION": ""
-            },
-            "CLIMATE": {
-                "NAME": "Kühlung",
-                "DESCRIPTION": ""
-            },
-            "MULTIMEDIA": {
-                "NAME": "Multimedia",
-                "DESCRIPTION": ""
-            },
-            "PHOTOVOLTAIC": {
-                "NAME": "Photovoltaik",
-                "DESCRIPTION": ""
-            },
-            "POWER": {
-                "NAME": "Power",
-                "DESCRIPTION": ""
-            },
-            "TECHNOLOGY": {
-                "NAME": "Technik",
-                "DESCRIPTION": ""
-            },
-            "TEMPERATURE": {
-                "NAME": "Temperatur",
-                "DESCRIPTION": ""
-            },
-            "WEATHER": {
-                "NAME": "Wetter",
-                "DESCRIPTION": ""
-            }
-        },
-        "CATEGORY_GROUP": {
-            "SHADING": {
-                "NAME": "Beschattung",
-                "DESCRIPTION": ""
-            },
-            "LIGHTNING": {
-                "NAME": "Licht",
-                "DESCRIPTION": ""
-            },
-            "HVAC": {
-                "NAME": "Heizen/Kühlen",
-                "DESCRIPTION": ""
-            },
-            "MULTIMEDIA": {
-                "NAME": "Multimedia",
-                "DESCRIPTION": ""
-            },
-            "OTHER": {
-                "NAME": "Andere",
-                "DESCRIPTION": ""
-            }
-        },
-        "INTERFACES": {
-            "RS232": {
-                "NAME": "RS232",
-                "DESCRIPTION": ""
-            },
-            "RS485": {
-                "NAME": "RS485",
-                "DESCRIPTION": ""
-            },
-            "USB_IR": {
-                "NAME": "USB IR",
-                "DESCRIPTION": ""
-            }
+        "DESCRIPTION": ""
+      },
+      "HEIGHT": {
+        "NAME": "Höhe",
+        "DESCRIPTION": ""
+      },
+      "WIDTH": {
+        "NAME": "Breite",
+        "DESCRIPTION": ""
+      },
+      "DESCRIPTION": {
+        "NAME": "Beschreibung",
+        "DESCRIPTION": ""
+      },
+      "BAUDRATE": {
+        "NAME": "Baudrate",
+        "DESCRIPTION": ""
+      },
+      "PARITY": {
+        "NAME": "Parity",
+        "DESCRIPTION": ""
+      },
+      "DATABITS": {
+        "NAME": "Databits",
+        "DESCRIPTION": ""
+      },
+      "STOPBITS": {
+        "NAME": "Stopbits",
+        "DESCRIPTION": ""
+      },
+      "IP": {
+        "NAME": "IP Adresse",
+        "DESCRIPTION": ""
+      },
+      "IPPORT": {
+        "NAME": "Port",
+        "DESCRIPTION": ""
+      },
+      "ISREADABLE": {
+        "NAME": "Lesbar",
+        "DESCRIPTION": ""
+      },
+      "ISWRITEABLE": {
+        "NAME": "Schreibbar",
+        "DESCRIPTION": ""
+      },
+      "SCAN": {
+        "NAME": "Scan",
+        "DESCRIPTION": ""
+      },
+      "AREA_ICON": {
+        "NAME": "Icon",
+        "DESCRIPTION": ""
+      },
+      "COLOR": {
+        "NAME": "Farbe",
+        "DESCRIPTION": ""
+      },
+      "USE_IN_VISU": {
+        "NAME": "In Visu verwenden",
+        "DESCRIPTION": ""
+      },
+      "IS_FAVORITE": {
+        "NAME": "Favorit",
+        "DESCRIPTION": ""
+      },
+      "AREA": {
+        "NAME": "Bereich",
+        "DESCRIPTION": ""
+      },
+      "CATEGORY": {
+        "NAME": "Kategorie",
+        "DESCRIPTION": ""
+      },
+      "USER2GROUP": {
+        "NAME": "Gruppen",
+        "DESCRIPTION": ""
+      },
+      "USER2ROLE": {
+        "NAME": "Rollen",
+        "DESCRIPTION": ""
+      },
+      "USERGROUP2ROLE": {
+        "NAME": "Rollen",
+        "DESCRIPTION": ""
+      },
+      "USER_GROUP": {
+        "NAME": "Erlaubte Benutzergruppe",
+        "DESCRIPTION": ""
+      },
+      "USE_NAT": {
+        "NAME": "Verbinden im NAT Modus",
+        "DESCRIPTION": ""
+      },
+      "IMPORT": {
+        "NAME": "Import (*.knxproj)",
+        "DESCRIPTION": ""
+      },
+      "STATUS_TEXT_TRUE": {
+        "NAME": "Statustext True",
+        "DESCRIPTION": ""
+      },
+      "STATUS_TEXT_FALSE": {
+        "NAME": "Statustext False",
+        "DESCRIPTION": ""
+      },
+      "STATUS_COLOR_TRUE": {
+        "NAME": "Statusfarbe True",
+        "DESCRIPTION": ""
+      },
+      "STATUS_COLOR_FALSE": {
+        "NAME": "Statusfarbe False",
+        "DESCRIPTION": ""
+      },
+      "VISU_NAME": {
+        "NAME": "Anzeige Name",
+        "DESCRIPTION": ""
+      },
+      "LATITUDE": {
+        "NAME": "Latitude",
+        "DESCRIPTION": ""
+      },
+      "LONGITUDE": {
+        "NAME": "Longitude",
+        "DESCRIPTION": ""
+      },
+      "APIKEY": {
+        "NAME": "Cloud API Key",
+        "DESCRIPTION": ""
+      },
+      "LEARN": {
+        "NAME": "Lernmodus",
+        "DESCRIPTION": ""
+      },
+      "TIMER": {
+        "NAME": "Zeitschaltuhr",
+        "START_TIME": "Startzeit",
+        "END_TIME": "Endzeit",
+        "WEEKDAYS": {
+          "MONDAY": "Montag",
+          "TUESDAY": "Dienstag",
+          "WEDNESDAY": "Mittwoch",
+          "THURSDAY": "Donnerstag",
+          "FRIDAY": "Freitag",
+          "SATURDAY": "Samstag",
+          "SUNDAY": "Sonntag"
         }
-    },
-    "AREA_TEMPLATE": {
-        "BUILDING": {
-            "NAME": "Gebäude",
-            "DESCRIPTION": ""
+      },
+      "CLOUDURL": {
+        "NAME": "Cloud Url",
+        "DESCRIPTION": ""
+      },
+      "CLOUDENVIRONMENT": {
+        "NAME": "Cloud Umgebung",
+        "DESCRIPTION": ""
+      },
+      "PROJECTNAME": {
+        "NAME": "Projekt Name",
+        "DESCRIPTION": ""
+      },
+      "TRENDING": {
+        "NAME": "Datenaufzeichnung",
+        "DESCRIPTION": ""
+      },
+      "TRENDING_TYPE": {
+        "NAME": "Aufzeichnungstyp",
+        "DESCRIPTION": ""
+      },
+      "TRENDING_INTERVAL": {
+        "NAME": "Intervall [s]",
+        "DESCRIPTION": ""
+      },
+      "OBJID": {
+        "NAME": "ID",
+        "DESCRIPTION": ""
+      },
+      "SLAVE": {
+        "NAME": "Slave",
+        "DESCRIPTION": "",
+        "CLIENTID": {
+            "NAME":  "Client Id"
         },
-        "BUILDINGPART": {
-            "NAME": "Gebäudeteil",
-            "DESCRIPTION": ""
-        },
-        "ROOM": {
-            "NAME": "Raum",
-            "DESCRIPTION": ""
-        },
-        "STAIRCASE": {
-            "NAME": "Stiegenhaus",
-            "DESCRIPTION": ""
-        },
-        "HALLWAY": {
-            "NAME": "Flur",
-            "DESCRIPTION": ""
+        "CLIENTKEY": {
+            "NAME": "Client Key"
         }
+      },
+      "TIMEZONEOFFSET": {
+        "NAME": "Zeitzone Differenz [h]",
+        "DESCRIPTION": ""
+      }
     },
-    "AREAS": {
-        "NAME": "Bereiche"
+    "CATEGORY_INSTANCE": {
+      "ALARM": {
+        "NAME": "Alarm",
+        "DESCRIPTION": ""
+      },
+      "AUDIO": {
+        "NAME": "Audio",
+        "DESCRIPTION": ""
+      },
+      "LIGHTNING": {
+        "NAME": "Licht",
+        "DESCRIPTION": ""
+      },
+      "SHADING": {
+        "NAME": "Beschattung",
+        "DESCRIPTION": ""
+      },
+      "ENERGY": {
+        "NAME": "Energie",
+        "DESCRIPTION": ""
+      },
+      "WINDOW": {
+        "NAME": "Fenster",
+        "DESCRIPTION": ""
+      },
+      "HEATING": {
+        "NAME": "Heizung",
+        "DESCRIPTION": ""
+      },
+      "CLIMATE": {
+        "NAME": "Kühlung",
+        "DESCRIPTION": ""
+      },
+      "MULTIMEDIA": {
+        "NAME": "Multimedia",
+        "DESCRIPTION": ""
+      },
+      "PHOTOVOLTAIC": {
+        "NAME": "Photovoltaik",
+        "DESCRIPTION": ""
+      },
+      "POWER": {
+        "NAME": "Power",
+        "DESCRIPTION": ""
+      },
+      "TECHNOLOGY": {
+        "NAME": "Technik",
+        "DESCRIPTION": ""
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperatur",
+        "DESCRIPTION": ""
+      },
+      "WEATHER": {
+        "NAME": "Wetter",
+        "DESCRIPTION": ""
+      }
     },
-    "CATEGORIES": {
-        "NAME": "Kategorien"
+    "CATEGORY_GROUP": {
+      "SHADING": {
+        "NAME": "Beschattung",
+        "DESCRIPTION": ""
+      },
+      "LIGHTNING": {
+        "NAME": "Licht",
+        "DESCRIPTION": ""
+      },
+      "HVAC": {
+        "NAME": "Heizen/Kühlen",
+        "DESCRIPTION": ""
+      },
+      "MULTIMEDIA": {
+        "NAME": "Multimedia",
+        "DESCRIPTION": ""
+      },
+      "OTHER": {
+        "NAME": "Andere",
+        "DESCRIPTION": ""
+      }
     },
-    "DASHBOARD": {
-        "NAME": "Dashboard"
+    "INTERFACES": {
+      "RS232": {
+        "NAME": "RS232",
+        "DESCRIPTION": ""
+      },
+      "RS485": {
+        "NAME": "RS485",
+        "DESCRIPTION": ""
+      },
+      "USB_IR": {
+        "NAME": "USB IR",
+        "DESCRIPTION": ""
+      }
     },
-    "CONFIGURATION": {
-        "NAME": "Schnittstellen Konfiguration"
-    },
-    "RULEENGINE": {
-        "NAME": "Logik Konfiguration"
-    },
-    "USERS": {
-        "NAME": "Benutzerverwaltung"
-    },
-    "USER_GROUPS": {
-        "NAME": "Benutzer-Gruppenverwaltung"
-    },
-    "SYSTEM": {
-        "NAME": "System",
-        "UPDATE_AVAILABLE": "Update verfügbar",
-        "NO_UPDATE_AVAILABLE": "Kein Update verfügbar"
-    },
-    "LICENSE": {
-        "NAME": "Lizenz"
-    },
-    "LEARN_MODE": {
-        "NAME": "Lernmodus"
-    },
-    "PLUGINS": {
-        "NAME": "Erweiterungen",
-        "VERSION": "Cloud Version",
-        "INSTALLED_VERSION": "Installierte Version",
-        "ACTION": "Aktionen",
-        "PROGRESS": "Status",
-        "UPDATE_ALL": "Alle updaten",
-        "INSTALL_ALL": "Alle installieren",
-        "INSTALL_UPDATE_ALL": "Alle updaten & installieren",
-        "RELOAD": "Aktualisieren"
-    },
-    "VALIDATION": {
-        "DATE_END_AFTER_START": "Enddatum darf nicht vor dem Startdatum sein",
-        "DATE_START_BEFORE_END": "Startdatum darf nicht nach dem Enddatum sein",
-        "TIME_END_AFTER_START": "Endzeit darf nicht vor der Startzeit sein",
-        "TIME_START_BEFORE_END": "Startzeit darf nicht nach der Endzeit sein"
+    "SLAVE": {
+      "CLIENTID": "Client Id",
+      "CLIENTKEY": "Client Key",
+      "CONNECTED": "Verbunden"
     }
+  },
+  "AREA_TEMPLATE": {
+    "BUILDING": {
+      "NAME": "Gebäude",
+      "DESCRIPTION": ""
+    },
+    "BUILDINGPART": {
+      "NAME": "Gebäudeteil",
+      "DESCRIPTION": ""
+    },
+    "ROOM": {
+      "NAME": "Raum",
+      "DESCRIPTION": ""
+    },
+    "STAIRCASE": {
+      "NAME": "Stiegenhaus",
+      "DESCRIPTION": ""
+    },
+    "HALLWAY": {
+      "NAME": "Flur",
+      "DESCRIPTION": ""
+    }
+  },
+  "AREAS": {
+    "NAME": "Bereiche"
+  },
+  "CATEGORIES": {
+    "NAME": "Kategorien"
+  },
+  "DASHBOARD": {
+    "NAME": "Dashboard"
+  },
+  "CONFIGURATION": {
+    "NAME": "Schnittstellen Konfiguration"
+  },
+  "RULEENGINE": {
+    "NAME": "Logik Konfiguration"
+  },
+  "USERS": {
+    "NAME": "Benutzerverwaltung"
+  },
+  "USER_GROUPS": {
+    "NAME": "Benutzer-Gruppenverwaltung"
+  },
+  "SYSTEM": {
+    "NAME": "System",
+    "UPDATE_AVAILABLE": "Update verfügbar",
+    "NO_UPDATE_AVAILABLE": "Kein Update verfügbar"
+  },
+  "LICENSE": {
+    "NAME": "Lizenz"
+  },
+  "LEARN_MODE": {
+    "NAME": "Lernmodus"
+  },
+  "PLUGINS": {
+    "NAME": "Erweiterungen",
+    "VERSION": "Cloud Version",
+    "INSTALLED_VERSION": "Installierte Version",
+    "ACTION": "Aktionen",
+    "PROGRESS": "Status",
+    "UPDATE_ALL": "Alle updaten",
+    "INSTALL_ALL": "Alle installieren",
+    "INSTALL_UPDATE_ALL": "Alle updaten & installieren",
+    "RELOAD": "Aktualisieren"
+  },
+  "VALIDATION": {
+    "DATE_END_AFTER_START": "Enddatum darf nicht vor dem Startdatum sein",
+    "DATE_START_BEFORE_END": "Startdatum darf nicht nach dem Enddatum sein",
+    "TIME_END_AFTER_START": "Endzeit darf nicht vor der Startzeit sein",
+    "TIME_START_BEFORE_END": "Startzeit darf nicht nach der Endzeit sein"
+  }
 }
