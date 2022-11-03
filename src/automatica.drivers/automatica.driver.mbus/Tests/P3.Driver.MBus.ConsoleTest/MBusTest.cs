@@ -27,7 +27,7 @@ namespace P3.Driver.MBus.ConsoleTest
                 Baudrate = 9600,
                 Timeout = 2000,
                 ResetBeforeRead = true,
-                Port = "COM6"
+                Port = "/dev/ttyUSB0"
             }, new EmptyTelegramMonitorInstance(), NullLogger.Instance);
 
             _timer.Elapsed += _timer_Elapsed;
