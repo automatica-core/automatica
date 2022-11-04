@@ -624,6 +624,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ReInit()
         {
+            await _remoteServerHandler.ReInit();
             await _driverNodesStore.ReInitialize();
 
             await Stop();

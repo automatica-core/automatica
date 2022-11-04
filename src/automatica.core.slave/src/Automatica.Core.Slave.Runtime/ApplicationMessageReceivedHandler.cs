@@ -18,6 +18,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly ILogger _logger;
         private readonly string _actionTopic;
         private readonly string _actionTopics;
+        private readonly string _reinitTopic;
 
         public ApplicationMessageReceivedHandler(SlaveRuntime slave, ILogger logger)
         {
@@ -26,6 +27,7 @@ namespace Automatica.Core.Slave.Runtime
 
             _actionTopic = $"slave/{_slave.SlaveId}/action";
             _actionTopics = $"slave/{_slave.SlaveId}/actions";
+            _reinitTopic = $"slave/{_slave.SlaveId}/reinit";
 
         }
 
@@ -63,6 +65,10 @@ namespace Automatica.Core.Slave.Runtime
                 {
                     _logger.LogError(ex, $"Could not execute request");
                 }
+            }
+            else if (MqttTopicFilterComparer.IsMatch(_reinitTopic, e.ApplicationMessage.Topic))
+            {
+                await _slave.ReInit();
             }
 
         }

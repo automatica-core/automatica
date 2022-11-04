@@ -14,5 +14,6 @@ namespace Automatica.Core.Internals.Core
         Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance);
 
         Task Stop();
+        Task ReInit();
     }
 }

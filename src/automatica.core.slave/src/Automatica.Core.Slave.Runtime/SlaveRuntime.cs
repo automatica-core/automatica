@@ -118,23 +118,41 @@ namespace Automatica.Core.Slave.Runtime
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            await StartAsync();
+        }
+
+        public async Task StartAsync()
+        {
             await StartInternal();
             _timer.Start();
         }
+
 
         private async Task StartInternal()
         {
             try
             {
+                _logger.LogInformation($"Try fetch docker images...");
                 await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
+                _logger.LogInformation($"Try fetch docker images...done");
 
-                await _mqttClient.ConnectAsync(_options);
+
+                _logger.LogInformation($"Try connect to mqtt broker...");
+                await _mqttClient.ConnectAsync(_options); 
+                _logger.LogInformation($"Try connect to mqtt broker...done");
 
                 var topic = $"slave/{_slaveId}/action";
                 var topics = $"slave/{_slaveId}/actions";
+                var reinit = $"slave/{_slaveId}/reinit";
 
+                _logger.LogInformation($"Try subscribe to mqtt topics...");
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
                 await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topics).WithExactlyOnceQoS().Build());
+                await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(reinit).WithExactlyOnceQoS().Build());
+
+                _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
+
+                _logger.LogInformation($"Try subscribe to mqtt topics...done");
                 _connected = true;
             }
             catch (HttpRequestException e)
@@ -275,16 +293,44 @@ namespace Automatica.Core.Slave.Runtime
 
         }
 
+        internal async Task ReInit()
+        {
+            await StopAllContainers();
+        }
+        internal async Task Restart()
+        {
+            await StopInternal();
+            await StartAsync();
+        }
+
+        private async Task StopAllContainers()
+        {
+            foreach (var id in _runningImages)
+            {
+                _logger.LogInformation($"Stopping container instance {id.Value}");
+                try
+                {
+                    await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
+
+                    await _dockerClient.Containers.RemoveContainerAsync(id.Value, new ContainerRemoveParameters()
+                    {
+                        Force = true
+                    });
+                }
+                catch(Exception e)
+                {
+                    _logger.LogError(e, $"Could not stop/delete container {e}");
+                }
+            }
+            _runningImages.Clear();
+        }
+
         private async Task StopInternal()
         {
             try
             {
-                foreach (var id in _runningImages)
-                {
-                    await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
-                }
+                await StopAllContainers();
 
-                _runningImages.Clear();
                 await _mqttClient.DisconnectAsync();
             }
             catch (Exception e)
@@ -301,5 +347,6 @@ namespace Automatica.Core.Slave.Runtime
 
             _timer.Elapsed -= _timer_Elapsed;
         }
+
     }
 }

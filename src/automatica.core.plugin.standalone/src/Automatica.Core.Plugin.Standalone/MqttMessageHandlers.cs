@@ -12,6 +12,8 @@ using MQTTnet.Server;
 using Newtonsoft.Json;
 using MQTTnet.Client;
 using MQTTnet.Server.Internal;
+using Automatica.Core.Base.Common;
+using System;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -63,6 +65,10 @@ namespace Automatica.Core.Plugin.Standalone
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
                 _connection.Dispatcher.MqttDispatch(e.ApplicationMessage.Topic, json);
+            }
+            else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/*/reinit"))
+            {
+                Environment.Exit(0);
             }
             else if (_connection.DriverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/#"))
             {

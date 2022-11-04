@@ -106,7 +106,10 @@ namespace Automatica.Core.Plugin.Standalone
                     new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
                         .WithExactlyOnceQoS().Build(),
                     new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#")
-                        .WithAtLeastOnceQoS().Build());
+                        .WithAtLeastOnceQoS().Build(),
+                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.SLAVE_TOPIC}/{NodeId}/reinit")
+                        .WithAtLeastOnceQoS().Build()); 
+
             }
             catch (Exception e)
             {
