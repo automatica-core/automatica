@@ -10,6 +10,9 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
@@ -17,8 +20,14 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**automatica.core version**
+Tell me which version of the system do you use.
+
+**plugin version**
+If the bug depends on a plugin - tell me know this version.
+
+**system**
+On which system does automatica.core run. Eg Raspberry Pi 3+
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.

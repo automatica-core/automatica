@@ -163,6 +163,23 @@ namespace Automatica.Core.Runtime.Core
             return Task.CompletedTask;
         }
 
+
+        public async Task ReInit()
+        {
+            foreach(var client in _connectedMqttClients)
+            {
+                await _mqttServer.PublishAsync(new MqttApplicationMessage
+                {
+                    Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{client}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}",
+                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
+                    Payload = Encoding.UTF8.GetBytes(""),
+                    Retain = true
+                });
+            }
+
+           
+        }
+
         public async Task AddNode(string id, NodeInstance node)
         {
             _mqttNodes.Add(id, node);
@@ -308,5 +325,6 @@ namespace Automatica.Core.Runtime.Core
         {
             return _connectedMqttClients;
         }
+
     }
 }
