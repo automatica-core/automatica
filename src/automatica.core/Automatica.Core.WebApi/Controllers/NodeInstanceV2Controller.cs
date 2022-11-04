@@ -310,6 +310,14 @@ namespace Automatica.Core.WebApi.Controllers
             var transaction = DbContext.Database.BeginTransaction();
             try
             {
+                var existingNode = _nodeInstanceCache.Get(node.ObjId);
+                var reloadServer = false;
+                if(existingNode.This2Slave != node.This2Slave)
+                {
+                    //slave changed, we need to reload all drivers!
+                    reloadServer = true;
+                }
+
                 var entityState = await AddOrUpdateNodeInstance(node);
 
                 await DbContext.SaveChangesAsync();
@@ -317,15 +325,22 @@ namespace Automatica.Core.WebApi.Controllers
 
                 _nodeInstanceCache.Clear();
 
-                async void ReloadAndForget() => await ReloadDriver(node, entityState);
-                ReloadAndForget();
+                if(reloadServer)
+                {
+                    await _coreServer.ReInit();
+                }
+                else
+                {
+                    async void ReloadAndForget() => await ReloadDriver(node, entityState);
+                    ReloadAndForget();
+                }
 
                 return _nodeInstanceCache.Get(node.ObjId);
             }
             catch (Exception e)
             {
                 transaction.Rollback();
-                SystemLogger.Instance.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
+                SystemLogger.Instance.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
                 throw;
             }
         }

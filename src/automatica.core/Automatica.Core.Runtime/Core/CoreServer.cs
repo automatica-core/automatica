@@ -429,20 +429,6 @@ namespace Automatica.Core.Runtime.Core
                     continue;
                 }
 
-
-                if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
-                {
-                   await _remoteServerHandler.AddNode(nodeInstance.ObjId.ToString(), nodeInstance);
-                   await _remoteServerHandler.AddSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId), nodeInstance);
-
-
-                   _driverNodesStore.Add(new RemoteNodeInstance(nodeInstance.ObjId, nodeInstance, _remoteHandler));
-
-                    AddRemoteDriverRecursive(nodeInstance.ObjId, nodeInstance);
-                    continue;
-                }
-
-
                 try
                 {
                     if (LicenseExceeded())
@@ -651,6 +637,18 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task<IDriver> InitializeDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
         {
+            if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
+            {
+                await _remoteServerHandler.AddNode(nodeInstance.ObjId.ToString(), nodeInstance);
+                await _remoteServerHandler.AddSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId), nodeInstance);
+
+
+                _driverNodesStore.Add(new RemoteNodeInstance(nodeInstance.ObjId, nodeInstance, _remoteHandler));
+
+                AddRemoteDriverRecursive(nodeInstance.ObjId, nodeInstance);
+                return null;
+            }
+
             var factory = _driverFactoryStore.Get(nodeTemplate.ObjId);
 
             if(factory == null)
