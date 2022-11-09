@@ -123,6 +123,11 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogDebug($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}");
 
+            if(!_connectedMqttClients.Contains(messageEvent.ClientId))
+            {
+                _connectedMqttClients.Add(messageEvent.ClientId);
+            }
+
             if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
                 _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
