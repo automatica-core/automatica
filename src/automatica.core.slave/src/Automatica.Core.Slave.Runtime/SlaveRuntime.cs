@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using MQTTnet.Client.Options;
 using Timer = System.Timers.Timer;
 using System.Net;
+using MQTTnet.Protocol;
 
 namespace Automatica.Core.Slave.Runtime
 {
