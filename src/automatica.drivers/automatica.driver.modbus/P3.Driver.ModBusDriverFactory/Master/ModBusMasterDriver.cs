@@ -5,6 +5,7 @@ using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master;
+using P3.Driver.ModBusDriver.Master.Rtu;
 using P3.Driver.ModBusDriver.Master.Tcp;
 
 namespace P3.Driver.ModBusDriverFactory.Master
@@ -39,7 +40,24 @@ namespace P3.Driver.ModBusDriverFactory.Master
                     Timeout = 5000
                 }, TelegramMonitor);
             }
+            else
+            {
+                var baud = GetProperty("modbus-baudrate").Value as int?;
+                var port = GetProperty("modbus-port").Value as string;
+                var dataBits = GetProperty("modbus-databits").Value as int?;
+                var stopBits = GetProperty("modbus-stopbits").Value as double?;
+                var parity = GetProperty("modbus-parity").Value as string;
 
+                _modBusDriver = new ModBusMasterRtuDriver(new ModBusMasterRtuConfig()
+                {
+                    Port = port,
+                    Baud = baud.Value,
+                    DataBits = dataBits.Value,
+                    Parity =parity,
+                    StopBits = stopBits.Value,
+                    Timeout = 5000
+                }, TelegramMonitor);
+            }
             return base.Init();
         }
 

@@ -69,6 +69,11 @@ namespace P3.Driver.MBus.Udp
         {
             OpenConnection();
             var data = frame.ToByteFrame();
+            await WriteRaw(data);
+        }
+
+        public override async Task WriteRaw(ReadOnlyMemory<byte> data)
+        {
             Logger.LogHexOut(data);
             await _udpClient.SendAsync(data.Span.ToArray(), data.Length);
         }

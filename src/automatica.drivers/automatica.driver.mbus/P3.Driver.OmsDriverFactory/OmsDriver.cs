@@ -38,7 +38,7 @@ namespace P3.Driver.OmsDriverFactory
             _mbus = new MBusSerial(new MBusSerialConfig
             {
                 Baudrate = 9600,
-                Timeout = 1500,
+                Timeout = 2000,
                 ResetBeforeRead = true,
                 Port = port
             }, TelegramMonitor, _logger);
@@ -75,6 +75,8 @@ namespace P3.Driver.OmsDriverFactory
             _timer.Stop();
 
             await _waitSemaphore.WaitAsync();
+
+            await _mbus.SendAck();
             try
             {
                 DriverContext.Logger.LogTrace("Try read oms device...");

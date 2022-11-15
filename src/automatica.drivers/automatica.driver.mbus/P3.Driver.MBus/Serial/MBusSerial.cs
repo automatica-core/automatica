@@ -64,13 +64,18 @@ namespace P3.Driver.MBus.Serial
             {
                 _stream.DiscardOutBuffer();
                 var buffer = frame.ToByteFrame();
-                Logger.LogHexOut(buffer);
-                await _stream.WriteAsync(buffer);
+                await WriteRaw(buffer);
             }
             catch (Exception e)
             {
                 Logger.LogError($"Could not write frame {e}", e);
             }
+        }
+
+        public override async Task WriteRaw(ReadOnlyMemory<byte> data)
+        {
+            Logger.LogHexOut(data);
+            await _stream.WriteAsync(data);
         }
 
         protected override Task<MBusFrame> ReadFrame()

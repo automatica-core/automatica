@@ -15,27 +15,27 @@ namespace P3.Driver.MBus.ConsoleTest
     {
         static async Task Main(string[] args)
         {
-            var mbusUdp = new MBusUdp(new MBusUdpConfig
-            {
-                IpAddress = IPAddress.Parse("192.168.8.32"),
-                Port = 10030
-            }, new EmptyTelegramMonitorInstance(), NullLogger.Instance);
+            //var mbusUdp = new MBusUdp(new MBusUdpConfig
+            //{
+            //    IpAddress = IPAddress.Parse("192.168.8.32"),
+            //    Port = 10030
+            //}, new EmptyTelegramMonitorInstance(), NullLogger.Instance);
 
-            while (true)
-            {
-                var frame = await mbusUdp.ReadDevice(20, false, 5000);
+            //while (true)
+            //{
+            //    var frame = await mbusUdp.ReadDevice(20, false, 5000);
 
-                if(frame is VariableDataFrame vdf)
-                    foreach (var data in vdf.DataBlocks)
-                    {
-                        Console.WriteLine($"{data.DataInformationField.DataFieldType}: {Convert.ToDouble(data.Value)} {data.ValueInformationField.Unit} ({Utils.ByteArrayToString(data.Data)})");
-                    }
+            //    if(frame is VariableDataFrame vdf)
+            //        foreach (var data in vdf.DataBlocks)
+            //        {
+            //            Console.WriteLine($"{data.DataInformationField.DataFieldType}: {Convert.ToDouble(data.Value)} {data.ValueInformationField.Unit} ({Utils.ByteArrayToString(data.Data)})");
+            //        }
                 
                 
-                await Task.Delay(1000);
-            }
+            //    await Task.Delay(1000);
+            //}
 
-            var mbusTest = new MBusTest();
+            var mbusTest = new MBusTest(args[0]);
             mbusTest.Start();
 
             Console.ReadLine();

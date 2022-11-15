@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Text;
+using System.Threading;
 using System.Timers;
 using Automatica.Core.Base.TelegramMonitor;
 using P3.Driver.MBus.Config;
@@ -6,7 +8,10 @@ using P3.Driver.MBus.Frames;
 using P3.Driver.MBus.Serial;
 using P3.Driver.OmsDriverFactory.Helper;
 using Automatica.Core.Driver.Utility;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Automatica.Core.Driver;
 
 namespace P3.Driver.MBus.ConsoleTest
 {
@@ -19,7 +24,7 @@ namespace P3.Driver.MBus.ConsoleTest
         private readonly byte[] _aesKey;
 
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
-        public MBusTest()
+        public MBusTest(string port)
         {
             var key = "57B7CBDF2154C01795C75CCCEAD572CF";
             _mbus = new MBusSerial(new MBusSerialConfig
@@ -27,8 +32,8 @@ namespace P3.Driver.MBus.ConsoleTest
                 Baudrate = 9600,
                 Timeout = 2000,
                 ResetBeforeRead = true,
-                Port = "/dev/ttyUSB0"
-            }, new EmptyTelegramMonitorInstance(), NullLogger.Instance);
+                Port = port
+            }, new EmptyTelegramMonitorInstance(), new ConsoleLogger());
 
             _timer.Elapsed += _timer_Elapsed;
 
@@ -41,9 +46,12 @@ namespace P3.Driver.MBus.ConsoleTest
 
         public void Start()
         {
-             _mbus.Open();
+            if (!_mbus.Open())
+            {
+                Console.Error.WriteLine("Could not open interface...");
+                throw new Exception("Error not handleded...");
 
-         
+            }
             _timer.Start();
         }
 
@@ -74,11 +82,39 @@ namespace P3.Driver.MBus.ConsoleTest
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             await _waitSemaphore.WaitAsync();
+            
             try
             {
-                var data = await _mbus.SendAck();
-                DecryptFrame(data);
-               
+                Console.WriteLine($"try read oms frame...");
+                var frame = await _mbus.TryReadFrame();
+                if (frame != null)
+                {
+                    Console.WriteLine($"Read frame...1({frame.GetType()})");
+
+                    MBusFrame data = null;
+                    if (frame is ShortFrame)
+                    {
+
+                        await _mbus.SendAck();
+                        data = await _mbus.TryReadFrame();
+                    }
+                    else
+                    {
+                        data = frame;
+                    }
+                    if (data != null)
+                    {
+                        Console.WriteLine($"Read frame...2({data.GetType()})");
+                        DecryptFrame(data);
+                        await _mbus.SendAck();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"could not read frame");
+                    }
+
+                }
+
             }
             finally
             {

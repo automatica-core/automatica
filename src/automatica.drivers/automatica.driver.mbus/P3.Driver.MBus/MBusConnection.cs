@@ -66,6 +66,7 @@ namespace P3.Driver.MBus
         }
 
         protected abstract Task WriteFrame(MBusFrame frame);
+        public abstract Task WriteRaw(ReadOnlyMemory<byte> data);
         protected abstract Task<MBusFrame> ReadFrame();
 
         public Task<MBusFrame> TryReadFrame()
