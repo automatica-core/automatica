@@ -12,9 +12,6 @@
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Master\Rtu\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="SerialPortStream" Version="2.4.0" />
   </ItemGroup>
 </Project>

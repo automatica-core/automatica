@@ -2,6 +2,8 @@
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using P3.Driver.ModBusDriver;
+using P3.Driver.ModBusDriverFactory.Slave;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace P3.Driver.ModBusDriverFactory
@@ -10,7 +12,7 @@ namespace P3.Driver.ModBusDriverFactory
     {
         public override string DriverName => "ModBus.Rtu.Slave";
         public override Guid DriverGuid => new Guid("7a284855-4435-4c38-8144-bb7908d4ccf6");
-        public override Version DriverVersion => new Version(0, 1, 0, 2);
+        public override Version DriverVersion => new Version(1, 1, 0, 2);
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
 
         public override void InitTemplates(INodeTemplateFactory factory)
@@ -33,11 +35,15 @@ namespace P3.Driver.ModBusDriverFactory
             factory.CreatePropertyTemplate(new Guid("091a44cd-9f58-4769-9341-bb84329f51ba"), "type", "type", "modbus-type", PropertyTemplateType.Text,
                 DriverGuid, "", false, true, null, "MODBUS-SLAVE", 0, 0);
 
+            factory.CreatePropertyTemplate(new Guid("0e84243a-a320-4f33-82ab-d108660322d7"), "COMMON.PROPERTY.ADDRESS.NAME", "COMMON.PROPERTY.ADDRESS.DESCRIPTION", "modbus-port",
+                PropertyTemplateType.Interface, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", 1, 0, 0);
+
         }
 
         public override IDriver CreateDriver(IDriverContext config)
         {
-            throw new NotImplementedException();
+            ModBus.Logger = config.Logger;
+            return new ModBusSlaveDriver(config, config.Logger, false);
         }
     }
 }
