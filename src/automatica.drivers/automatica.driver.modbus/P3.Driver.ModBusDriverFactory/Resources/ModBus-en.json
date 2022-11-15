@@ -19,7 +19,11 @@
       "POLL_INTERVAL": {
         "NAME": "Polling interval [ms]",
         "DESCRIPTION": "Polling interval in ms"
-      }
+      },
+	  "PORT": {
+		  "NAME": "Serial Port",
+		  "DESCRIPTION": "Serial Port"
+	  }
     },
     "ATTRIBUTE": {
       "INTEGER": {
