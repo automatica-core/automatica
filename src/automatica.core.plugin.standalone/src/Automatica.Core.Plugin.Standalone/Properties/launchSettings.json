@@ -2,7 +2,7 @@
   "profiles": {
     "Automatica.Core.Plugin.Dockerize": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net6.0\\Drivers\\oms",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net6.0\\Drivers\\ModBus",
       "environmentVariables": {
         "AUTOMATICA_SLAVE_MASTER": "192.168.8.15",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",

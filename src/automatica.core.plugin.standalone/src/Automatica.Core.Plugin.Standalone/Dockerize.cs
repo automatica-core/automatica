@@ -141,6 +141,10 @@ namespace Automatica.Core.Plugin.Standalone
 
                     foreach (var driver in drivers)
                     {
+                        if (driver.IsAbstract)
+                        {
+                            continue;
+                        }
                         if (assembly.CreateInstance(driver.FullName) is T factory)
                         {
                             retT.Add(factory);

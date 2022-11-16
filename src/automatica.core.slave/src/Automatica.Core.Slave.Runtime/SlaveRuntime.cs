@@ -37,6 +37,9 @@ namespace Automatica.Core.Slave.Runtime
 
         private readonly string _masterAddress;
         private readonly string _clientKey;
+
+        private readonly string _useDockerTag;
+
         private readonly ILogger _logger;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
@@ -53,6 +56,10 @@ namespace Automatica.Core.Slave.Runtime
             _clientKey = config["server:clientKey"];
 
             _slaveId = config["server:clientId"];
+
+            _useDockerTag = config["server:dockerTag"];
+
+
             _options = new MqttClientOptionsBuilder()
                    .WithClientId(_slaveId)
                    //   .WithWebSocketServer("localhost:5001/mqtt")
@@ -181,7 +188,7 @@ namespace Automatica.Core.Slave.Runtime
 
         private async Task StopImage(ActionRequest request)
         {
-            var imageFullName = $"{request.ImageName}:{request.Tag}";
+            var imageFullName = $"{request.ImageName}:{_useDockerTag ?? request.Tag}";
             _logger.LogInformation($"Stop Image {imageFullName}");
 
             if (_runningImages.ContainsKey(request.Id.ToString()))
@@ -211,7 +218,7 @@ namespace Automatica.Core.Slave.Runtime
         {
             await _semaphore.WaitAsync();
 
-            var imageFullName = $"{request.ImageName}:{request.Tag}";
+            var imageFullName = $"{request.ImageName}:{_useDockerTag ?? request.Tag}";
 
             try
             {
@@ -226,7 +233,7 @@ namespace Automatica.Core.Slave.Runtime
                 var imageCreateParams = new ImagesCreateParameters()
                 {
                     FromImage = request.ImageName,
-                    Tag = request.Tag
+                    Tag = _useDockerTag ?? request.Tag
                 };
 
                 if (!String.IsNullOrEmpty(request.ImageSource))
