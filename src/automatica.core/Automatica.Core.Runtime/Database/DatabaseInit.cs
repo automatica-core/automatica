@@ -430,7 +430,7 @@ namespace Automatica.Core.Runtime.Database
                 context.NodeInstances.Add(rootNode);
             }
 
-            var childs = context.NodeTemplates.Where(a => a.NeedsInterface2InterfacesType == rootNodeTemplate.ObjId);
+            var childs = context.NodeTemplates.Where(a => a.NeedsInterface2InterfacesType == rootNodeTemplate.ObjId).ToList();
 
             foreach (var child in childs)
             {
