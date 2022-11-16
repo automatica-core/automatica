@@ -8,28 +8,28 @@ namespace P3.Driver.PingTests
 {
     public class PingTests : DriverFactoryTestBase<PingFactory.PingFactory>
     {
-        [Fact]
-        public async Task Test_PingOk()
-        {
-            await Test_Ping("127.0.0.1", 0, true, 0, 1500);
-        }
+    //    [Fact]
+    //    public async Task Test_PingOk()
+    //    {
+    //        await Test_Ping("127.0.0.1", 0, true, 0, 1500);
+    //    }
 
-        [Fact]
-        public async Task Test_PingFail()
-        {
-            await Test_Ping("remote-host", 0, false, 0,  1500);
-        }
+    //    [Fact]
+    //    public async Task Test_PingFail()
+    //    {
+    //        await Test_Ping("remote-host", 0, false, 0,  1500);
+    //    }
 
-        [Fact]
-        public async Task Test_PingSuccess2()
-        {
-            await Test_Ping("127.0.0.1", 1, true, 1, 3500);
-        }
-        [Fact]
-        public async Task Test_PingFail2()
-        {
-            await Test_Ping("127.0.0.1", 1, false, 5, 1000);
-        }
+    //    [Fact]
+    //    public async Task Test_PingSuccess2()
+    //    {
+    //        await Test_Ping("127.0.0.1", 1, true, 1, 3500);
+    //    }
+    //    [Fact]
+    //    public async Task Test_PingFail2()
+    //    {
+    //        await Test_Ping("127.0.0.1", 1, false, 5, 1000);
+    //    }
 
         private async Task Test_Ping(string device, int intervalValue, bool result, int minSuccessCount, int delay)
         {
