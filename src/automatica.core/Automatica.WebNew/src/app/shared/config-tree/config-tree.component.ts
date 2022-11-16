@@ -100,6 +100,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
           if (data[0] === 0) { // 0 = nodeinstance value
             const id = data[1];
             this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
+            this.changeRef.detectChanges();
           }
 
         });
@@ -370,7 +371,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     };
   }
 
-  dropSuccess($event, dropTarget: any) {
+  async dropSuccess($event, dropTarget: any) {
     const dragData = $event.dragData;
 
     const drop = this.nodeInstanceService.getNodeInstance(dropTarget.Id);
@@ -378,14 +379,18 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (drag instanceof NodeInstance) {
       const parentDrag = this.nodeInstanceService.getNodeInstance(drag.ParentId);
-      parentDrag.Children = [];
+      parentDrag.Children = parentDrag.Children.filter(a => a.ObjId != drag.ObjId);
 
       drag.setParent(drop);
       drop.Children = [...drop.Children, drag];
+      drag.This2ParentNodeInstance = drop.ObjId;
 
       this.selectNode(drag);
 
+      this.appService.isLoading = true;
       this.tree.instance.refresh();
+      await this.configService.update(drop);
+      this.appService.isLoading = false;
     }
   }
 
