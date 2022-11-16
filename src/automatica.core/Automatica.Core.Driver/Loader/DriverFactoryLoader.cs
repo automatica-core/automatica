@@ -40,7 +40,7 @@ namespace Automatica.Core.Driver.Loader
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error initialize driver {factory.DriverName}");
+                _logger.LogError(e, $"Error initialize driver {factory.DriverName} {e}");
                 nodeInstance.State = NodeInstanceState.UnknownError;
             }
 

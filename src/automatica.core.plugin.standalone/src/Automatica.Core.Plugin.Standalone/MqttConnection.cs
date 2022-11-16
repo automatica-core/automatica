@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,7 +60,7 @@ namespace Automatica.Core.Plugin.Standalone
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         public MqttConnection(ILogger logger, string host, string nodeId, string username, string password,
-            IDriverFactory factory,
+            IList<IDriverFactory> factories,
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -69,7 +70,7 @@ namespace Automatica.Core.Plugin.Standalone
             NodeId = nodeId;
             Username = username;
             Password = password;
-            Factory = factory;
+            Factories = factories;
 
             NodeTemplateFactory = serviceProvider.GetRequiredService<INodeTemplateFactory>();
             Loader = _serviceProvider.GetRequiredService<IDriverFactoryLoader>();
@@ -80,14 +81,14 @@ namespace Automatica.Core.Plugin.Standalone
             Dispatcher = new MqttDispatcher(_mqttClient);
         }
 
-        public IDriverFactory Factory { get; }
+        public IList<IDriverFactory> Factories { get; }
 
         public async Task<bool> Start()
         {
             try
             {
                 var options = new MqttClientOptionsBuilder()
-                    .WithClientId(NodeId)
+                    .WithClientId($"{NodeId}") //must be unique, if we have several factories in one dll, this crashed otherwise!
                     .WithTcpServer(MasterAddress)
                     .WithCredentials(Username, Password)
                     .WithCleanSession()

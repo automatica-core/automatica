@@ -69,7 +69,7 @@ namespace Automatica.Core.Plugin.Standalone
             factory.InitTemplates(templateFactory);
         }
 
-        internal static void InitDriverFactory<T2>(DriverFactory factory, T2 templateFactory) where T2 : INodeTemplateFactory
+        internal static void InitDriverFactory<T2>(IDriverFactory factory, T2 templateFactory) where T2 : INodeTemplateFactory
         {
             factory.InitTemplates(templateFactory);
         }
