@@ -20,10 +20,10 @@
     <EmbeddedResource Include="Resources\Knx-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.834" />
-    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.834" />
-    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.834" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.874" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Knx.Core.Abstractions\P3.Knx.Core.Abstractions.csproj" />

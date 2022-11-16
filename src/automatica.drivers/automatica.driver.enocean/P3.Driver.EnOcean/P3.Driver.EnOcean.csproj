@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="SerialPortStream" Version="2.4.0" />
-    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.834" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.874" />
   </ItemGroup>
 </Project>

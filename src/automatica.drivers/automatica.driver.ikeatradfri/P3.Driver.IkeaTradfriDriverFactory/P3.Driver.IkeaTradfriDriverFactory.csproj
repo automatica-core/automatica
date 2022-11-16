@@ -18,7 +18,7 @@
     <EmbeddedResource Include="Resources\Ikea.Tradfri-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.874" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.IkeaTradfri\P3.Driver.IkeaTradfri.csproj" />
