@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Driver;
@@ -53,26 +54,29 @@ namespace Automatica.Core.Runtime.Core
         public static void ValidateConnection(MqttConnectionValidatorContext context, IConfiguration config, ILogger logger)
         {
             logger.LogInformation($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, password: *****");
-            using (var db = new AutomaticaContext(config))
+            using var db = new AutomaticaContext(config);
+            if (db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
             {
-                if (db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
-                {
-                    //leave for compatibility reasons
+                //leave for compatibility reasons
 #pragma warning disable 618
-                    context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
+                context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
 #pragma warning restore 618
-                    context.ReasonCode = MqttConnectReasonCode.Success;
-                }
-                else
-                {
-                    //leave for compatibility reasons
+                context.ReasonCode = MqttConnectReasonCode.Success;
+            }
+            else
+            {
+                //leave for compatibility reasons
 #pragma warning disable 618
-                    context.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
+                context.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
 #pragma warning restore 618
 
-                    context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
-                }
+                context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
             }
+
+            //leave for compatibility reasons
+#pragma warning disable 618
+            logger.LogInformation($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, returnCode: {context.ReasonCode} ({context.ReturnCode})");
+#pragma warning restore 618
         }
 
         public Task ClientConnected(RemoteConnectedEvent connectedEvent)
@@ -190,6 +194,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task AddNode(string id, NodeInstance node)
         {
+            _logger.LogInformation($"Add node for {id}, NodeInstance is {node.ObjId}");
             _mqttNodes.Add(id, node);
 
             await PublishConfig(id, node);
@@ -197,6 +202,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance)
         {
+            _logger.LogInformation($"Add slave with {id}, NodeInstance is {nodeInstance.ObjId}");
             if (!_mqttSlaves.ContainsKey(id))
             {
                 _mqttSlaves.Add(id, new Dictionary<NodeInstance, IDriverFactory>());
