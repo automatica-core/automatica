@@ -14,12 +14,12 @@ namespace P3.Driver.ModBusDriverFactory
         public override Guid DriverGuid => new Guid("3e967c47-dad2-4ce5-9a42-7a346facd2fb");
 
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
-        public override Version DriverVersion => new Version(1, 1, 0, 2);
+        public override Version DriverVersion => new Version(1, 3, 0, 2);
 
         public override void InitTemplates(INodeTemplateFactory factory)
         {
             factory.CreateNodeTemplate(DriverGuid, "MODBUS.MASTER.RTU.NAME", "MODBUS.MASTER.RTU.DESCRIPTION", "modbus-master-rtu", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs485),
-                DeviceInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, true);
+                DeviceInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
 
             factory.CreatePropertyTemplate(new Guid("f94b50da-c1f1-463f-a3ec-bd61a6ecc514"), "COMMON.PROPERTY.BAUDRATE.NAME", "COMMON.PROPERTY.BAUDRATE.DESCRIPTION", "modbus-baudrate",
                 PropertyTemplateType.Baudrate, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, "", 9600, 0, 0);
