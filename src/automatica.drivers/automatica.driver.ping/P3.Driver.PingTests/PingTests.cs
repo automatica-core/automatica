@@ -11,7 +11,7 @@ namespace P3.Driver.PingTests
         [Fact]
         public async Task Test_PingOk()
         {
-            await Test_Ping("localhost", 0, true, 0, 1500);
+            await Test_Ping("127.0.0.1", 0, true, 0, 1500);
         }
 
         [Fact]
@@ -23,12 +23,12 @@ namespace P3.Driver.PingTests
         [Fact]
         public async Task Test_PingSuccess2()
         {
-            await Test_Ping("localhost", 1, true, 1, 3500);
+            await Test_Ping("127.0.0.1", 1, true, 1, 3500);
         }
         [Fact]
         public async Task Test_PingFail2()
         {
-            await Test_Ping("localhost", 1, false, 5, 1000);
+            await Test_Ping("127.0.0.1", 1, false, 5, 1000);
         }
 
         private async Task Test_Ping(string device, int intervalValue, bool result, int minSuccessCount, int delay)
