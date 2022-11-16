@@ -1,4 +1,4 @@
-FROM  mcr.microsoft.com/dotnet/core/sdk:3.1.100 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
 ARG VERSION
@@ -17,7 +17,7 @@ RUN cp /src/Automatica.Core.Supervisor/Automatica.Core.Supervisor/appsettings.js
 RUN rm -rf /src
 
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
+FROM automaticacore/automatica-plugin-standalone:amd64-latest AS runtime
 WORKDIR /app/supervisor
 
 COPY --from=build /app/supervisor ./

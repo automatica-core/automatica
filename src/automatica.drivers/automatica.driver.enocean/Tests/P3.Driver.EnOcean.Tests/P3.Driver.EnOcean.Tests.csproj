@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -19,8 +19,8 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.0.0.876" />
     <PackageReference Include="coverlet.msbuild" Version="3.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

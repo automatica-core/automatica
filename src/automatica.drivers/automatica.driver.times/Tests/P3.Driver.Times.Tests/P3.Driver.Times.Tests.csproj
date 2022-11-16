@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>B58486A1-6905-4A9E-ABB1-6053E795F529</ProjectGuid>

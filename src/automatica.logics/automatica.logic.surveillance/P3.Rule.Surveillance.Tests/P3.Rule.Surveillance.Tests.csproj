@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
@@ -37,12 +37,12 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.0.0.876" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="Automatica.Core.Rule" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Rule" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.0.0.876" />
     <ProjectReference Include="..\P3.Rule.Surveillance\P3.Rule.Surveillance.csproj" />
   </ItemGroup>
 </Project>

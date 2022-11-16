@@ -26,7 +26,7 @@ RUN for file in /build/*.acpkg; do mv $file /build/pluginFile.acpkg; break; done
 
 RUN automatica-cli InstallPlugin -p /build/pluginFile.acpkg -I /plugin
 
-FROM automaticacore/automatica-cli-tools:arm-develop-latest AS runtime
+FROM automaticacore/automatica-cli-tools:arm-latest AS runtime
 COPY --from=build /plugin /plugin
 
 ENTRYPOINT ["automatica-plugin-standalone", "/plugin"]
