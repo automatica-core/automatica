@@ -18,6 +18,20 @@ namespace Automatica.Core.Internals
             }
         }
 
+        private static ILogger _mqtt;
+        public static ILogger Mqtt
+        {
+            get
+            {
+                if (_mqtt == null)
+                {
+                    _mqtt = CoreLoggerFactory.GetLogger("mqtt");
+                }
+                return _mqtt;
+            }
+        }
+
+
 
         private static ILogger _dispatcherLogger;
         public static ILogger DispatcherLogger

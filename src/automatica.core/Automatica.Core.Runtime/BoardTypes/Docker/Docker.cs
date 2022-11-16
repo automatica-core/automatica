@@ -9,7 +9,7 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
     public sealed class Docker : IDatabaseBoardType
     {
         public BoardTypeEnum BoardType => BoardTypeEnum.Docker;
-        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual};
+        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual, InterfaceTypeEnum.RemoteUsb};
 
         public static bool InDocker => ServerInfo.InDocker;
 
@@ -39,9 +39,19 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
                 Description = "Ethernet",
                 Meta = "eth://"
             };
+            var remote = new BoardInterface
+            {
+                ObjId = new Guid("c4f2acd0-051e-4a1b-9222-55c8bd4d1183"),
+                This2BoardType = this2BoardType,
+                This2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
+                Name = "Remote",
+                Description = "Remote",
+                Meta = "remote://"
+            };
 
             list.Add(virt);
             list.Add(eth);
+            list.Add(remote);
 
             return list;
         }

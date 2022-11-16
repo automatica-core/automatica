@@ -8,7 +8,7 @@ namespace Automatica.Core.Runtime.BoardTypes.RaspberryPi
     public sealed class RaspberryPi : IDatabaseBoardType
     {
         public BoardTypeEnum BoardType => BoardTypeEnum.RaspberryPi3;
-        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[] { InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual, InterfaceTypeEnum.Usb };
+        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[] { InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual, InterfaceTypeEnum.Usb, InterfaceTypeEnum.RemoteUsb };
         public string Name => "RaspberryPi";
 
         public IList<BoardInterface> GetBoardInterfaces()
@@ -73,6 +73,15 @@ namespace Automatica.Core.Runtime.BoardTypes.RaspberryPi
                 Description = "Ethernet",
                 Meta = "eth://"
             };
+            var remote = new BoardInterface
+            {
+                ObjId = new Guid("b5a29960-45a9-40b1-a656-8adcbb110039"),
+                This2BoardType = this2BoardType,
+                This2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
+                Name = "Remote",
+                Description = "Remote",
+                Meta = "remote://"
+            };
 
             list.Add(virt);
             list.Add(usb1);
@@ -80,6 +89,7 @@ namespace Automatica.Core.Runtime.BoardTypes.RaspberryPi
             list.Add(usb3);
             list.Add(usb4);
             list.Add(eth);
+            list.Add(remote);
 
             return list;
         }
