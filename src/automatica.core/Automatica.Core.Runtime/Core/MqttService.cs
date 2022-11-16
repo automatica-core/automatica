@@ -36,7 +36,7 @@ namespace Automatica.Core.Runtime.Core
 
         public MqttService(IServiceProvider services)
         {
-            _logger = SystemLogger.Instance;
+            _logger = SystemLogger.Mqtt;
 
             _mqttServer = services.GetRequiredService<IMqttServer>();
             _mqttServer.ClientConnectedHandler = new ClientConnectedHandler(this);
@@ -52,7 +52,7 @@ namespace Automatica.Core.Runtime.Core
 
         public static void ValidateConnection(MqttConnectionValidatorContext context, IConfiguration config, ILogger logger)
         {
-            logger.LogDebug($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, password: *****");
+            logger.LogInformation($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, password: *****");
             using (var db = new AutomaticaContext(config))
             {
                 if (db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
@@ -77,7 +77,7 @@ namespace Automatica.Core.Runtime.Core
 
         public Task ClientConnected(RemoteConnectedEvent connectedEvent)
         {
-            _logger.LogDebug($"Client {connectedEvent.ClientId} connected...");
+            _logger.LogInformation($"Client {connectedEvent.ClientId} connected...");
             _connectedMqttClients.Add(connectedEvent.ClientId);
 
             return Task.CompletedTask;
@@ -85,7 +85,7 @@ namespace Automatica.Core.Runtime.Core
 
         public Task ClientDisconnected(RemoteDisconnectedEvent disconnectedEvent)
         {
-            _logger.LogDebug($"Client {disconnectedEvent.ClientId} disconnected...");
+            _logger.LogInformation($"Client {disconnectedEvent.ClientId} disconnected...");
 
             if (_connectedMqttClients.Contains(disconnectedEvent.ClientId))
             {
@@ -97,7 +97,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ClientSubscribedTopic(RemoteSubscribedEvent subscribedEvent)
         {
-            _logger.LogDebug($"Client {subscribedEvent.ClientId} subscribed to {subscribedEvent.Topic}");
+            _logger.LogInformation($"Client {subscribedEvent.ClientId} subscribed to {subscribedEvent.Topic}");
 
             if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.CONFIG_TOPIC}/#"))
             {
@@ -121,7 +121,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task MessageReceived(RemoteMessageEvent messageEvent)
         {
-            _logger.LogDebug($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}");
+            _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}");
 
             if(!_connectedMqttClients.Contains(messageEvent.ClientId))
             {
@@ -137,7 +137,7 @@ namespace Automatica.Core.Runtime.Core
                 var learnModeDtoJson = messageEvent.Message;
                 var learnModeDto = JsonConvert.DeserializeObject<LearnModeDto>(learnModeDtoJson);
 
-                _logger.LogDebug($"Received LearnMode message");
+                _logger.LogInformation($"{messageEvent.ClientId} Received LearnMode message");
                 await _learnModeHandler.NotifyLearnNode(learnModeDto.Name, learnModeDto.Description, learnModeDto.Self,
                     learnModeDto.Templates, learnModeDto.PropertyInstances);
             }
@@ -157,6 +157,7 @@ namespace Automatica.Core.Runtime.Core
                 msg.Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
             }
 
+            _logger.LogInformation($"Send action {action} to {client} {JsonConvert.SerializeObject(data)}");
             await _mqttServer.PublishAsync(msg);
         }
 
@@ -173,6 +174,8 @@ namespace Automatica.Core.Runtime.Core
         {
             foreach(var client in _connectedMqttClients)
             {
+
+                _logger.LogInformation($"Send reinit to client {client}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{client}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}",
@@ -241,6 +244,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
+                _logger.LogInformation($"Send action to client {clientId} {JsonConvert.SerializeObject(actionRequest)}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTION_TOPIC_START}",
@@ -259,7 +263,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogDebug($"Publish to {RemoteTopicConstants.CONFIG_TOPIC}/{clientId}");
+                _logger.LogInformation($"Publish to {RemoteTopicConstants.CONFIG_TOPIC}/{clientId}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.CONFIG_TOPIC}/{clientId}",
@@ -279,19 +283,20 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 var actionRequests = new List<ActionRequest>();
-                    _logger.LogDebug($"Publish to slave/{clientId}/actions (Start {factory.ImageName}:{factory.Tag})");
+                _logger.LogInformation(
+                    $"Publish to slave/{clientId}/actions (Start {factory.ImageName}:{factory.Tag})");
 
-                    var actionRequest = new ActionRequest
-                    {
-                        Action = SlaveAction.Start,
-                        ImageSource = factory.ImageSource,
-                        ImageName = factory.ImageName,
-                        Tag = factory.Tag,
-                        Id = nodeInstance.ObjId
-                    };
+                var actionRequest = new ActionRequest
+                {
+                    Action = SlaveAction.Start,
+                    ImageSource = factory.ImageSource,
+                    ImageName = factory.ImageName,
+                    Tag = factory.Tag,
+                    Id = nodeInstance.ObjId
+                };
 
-                    actionRequests.Add(actionRequest);
-               
+                actionRequests.Add(actionRequest);
+
                 await SendAction(clientId, actionRequest);
             }
             catch (Exception e)
@@ -300,13 +305,11 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-
-
         private async Task StopInstance(string clientId, IDriverFactory factory, NodeInstance nodeInstance)
         {
             try
             {
-                _logger.LogDebug($"Publish to slave/{clientId}/action");
+                _logger.LogInformation($"Publish StopInstance to slave/{clientId}/action");
 
                 var actionRequest = new ActionRequest()
                 {
