@@ -49,7 +49,9 @@ namespace Automatica.Core.Base.Templates
         [GuidTemplateType("8cfc6b92-0f68-44d4-8709-f340ce48ff1c", 1)]
         UsbIr,
         [GuidTemplateType("4ff72aff-1604-4865-8d40-4d11bbbe2c56", 1)]
-        Board
+        Board,
+        [GuidTemplateType("2ab266e9-c16e-462d-a98d-a9c4da55dff0", int.MaxValue)]
+        RemoteUsb
     }
 
     public enum BoardTypeEnum

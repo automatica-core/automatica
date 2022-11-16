@@ -16,6 +16,7 @@ using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -128,12 +129,12 @@ namespace Automatica.Core.Runtime.Database
             {
                 var longi = context.Settings.SingleOrDefault(a => a.ValueKey == "Longitude");
 
-                if(lat.ValueDouble == null)
+                if (lat.ValueDouble == null)
                 {
                     lat.ValueDouble = 0;
                 }
 
-                if(longi.ValueDouble == null)
+                if (longi.ValueDouble == null)
                 {
                     longi.ValueDouble = 0;
                 }
@@ -144,7 +145,7 @@ namespace Automatica.Core.Runtime.Database
 
             var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "apiKey");
 
-            if(apiKey == null)
+            if (apiKey == null)
             {
                 context.Settings.Add(new Setting
                 {
@@ -166,7 +167,7 @@ namespace Automatica.Core.Runtime.Database
                 context.Settings.Add(new Setting
                 {
                     ValueKey = "autoUpdate",
-                    Type = (long) PropertyTemplateType.Bool,
+                    Type = (long)PropertyTemplateType.Bool,
                     Value = false,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
@@ -184,7 +185,7 @@ namespace Automatica.Core.Runtime.Database
                 context.Settings.Add(new Setting
                 {
                     ValueKey = "autoUpdateTime",
-                    Type = (long) PropertyTemplateType.Time,
+                    Type = (long)PropertyTemplateType.Time,
                     Value = new DateTime(2000, 12, 31, 2, 0, 0),
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
@@ -194,7 +195,7 @@ namespace Automatica.Core.Runtime.Database
             else
             {
                 autoUpdateTime.Order = 21;
-                autoUpdateTime.Type = (long) PropertyTemplateType.Time;
+                autoUpdateTime.Type = (long)PropertyTemplateType.Time;
                 context.Update(autoUpdateTime);
             }
 
@@ -203,7 +204,7 @@ namespace Automatica.Core.Runtime.Database
                 context.Settings.Add(new Setting
                 {
                     ValueKey = "reportCrashLogs",
-                    Type = (long) PropertyTemplateType.Bool,
+                    Type = (long)PropertyTemplateType.Bool,
                     Value = false,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
@@ -290,11 +291,12 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var propertyType in propertyTypes)
             {
-                var propertyTypeDb = context.PropertyTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(propertyType));
+                var propertyTypeDb =
+                    context.PropertyTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(propertyType));
                 var isNewObject = false;
                 if (propertyTypeDb == null)
                 {
-                    propertyTypeDb = new PropertyType {Type = (int) propertyType};
+                    propertyTypeDb = new PropertyType { Type = (int)propertyType };
                     isNewObject = true;
                 }
 
@@ -329,7 +331,8 @@ namespace Automatica.Core.Runtime.Database
 
             foreach (var nodeDataType in nodeDataTypes)
             {
-                var nodeDataTypeDb = context.NodeDataTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(nodeDataType));
+                var nodeDataTypeDb =
+                    context.NodeDataTypes.SingleOrDefault(a => a.Type == Convert.ToInt64(nodeDataType));
                 var isNewObject = false;
                 if (nodeDataTypeDb == null)
                 {
@@ -372,9 +375,10 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
             AddSystemTemplates(context);
+            AddSystemRemoteTemplates(context);
 
             IDatabaseBoardType boardType = null;
-            
+
             if (BoardTypes.Docker.Docker.InDocker)
             {
                 boardType = new BoardTypes.Docker.Docker();
@@ -410,30 +414,43 @@ namespace Automatica.Core.Runtime.Database
                 context.AreaInstances.Add(projectInstance);
             }
 
-            if(dbCreated)
+
+            var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a =>
+                a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
+
+            var rootNode = context.NodeInstances.SingleOrDefault(a => a.This2NodeTemplate == rootNodeTemplate.ObjId);
+
+            if (rootNode == null)
             {
-                var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
-                var rootNode = NodeInstanceFactory.CreateNodeInstanceFromTemplate(rootNodeTemplate);
+                rootNode = NodeInstanceFactory.CreateNodeInstanceFromTemplate(rootNodeTemplate);
 
                 rootNode.Name = boardType.Name;
                 rootNode.Description = "";
 
                 context.NodeInstances.Add(rootNode);
+            }
 
-                var childs = context.NodeTemplates.Where(a => a.NeedsInterface2InterfacesType == rootNodeTemplate.ObjId);
+            var childs = context.NodeTemplates.Where(a => a.NeedsInterface2InterfacesType == rootNodeTemplate.ObjId);
 
-                foreach(var child in childs)
+            foreach (var child in childs)
+            {
+                if (child.NeedsInterface2InterfacesType == child.ProvidesInterface2InterfaceType)
                 {
-                    if (child.NeedsInterface2InterfacesType == child.ProvidesInterface2InterfaceType)
-                    {
-                        continue;
-                    }
-                    var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(child);
+                    continue;
+                }
+
+                var node = NodeInstanceFactory.CreateNodeInstanceFromTemplate(child);
+                var existingNode = context.NodeInstances.SingleOrDefault(a => a.This2NodeTemplate == child.ObjId);
+
+                if (existingNode == null)
+                {
                     node.This2ParentNodeInstance = rootNode.ObjId;
                     context.NodeInstances.Add(node);
                 }
+            }
 
-
+            if (!context.RulePages.Any())
+            {
                 var rulePage = new RulePage
                 {
                     ObjId = Guid.NewGuid(),
@@ -443,8 +460,10 @@ namespace Automatica.Core.Runtime.Database
                 };
 
                 context.RulePages.Add(rulePage);
+            }
 
-
+            if (!context.VisuPages.Any())
+            {
                 var visuPage = new VisuPage
                 {
                     ObjId = Guid.NewGuid(),
@@ -455,12 +474,12 @@ namespace Automatica.Core.Runtime.Database
                 };
 
                 context.VisuPages.Add(visuPage);
-
-                AddInitUserManagementData(context);
-
-                context.SaveChanges();
             }
 
+            if (!context.Users.Any())
+            {
+                AddInitUserManagementData(context);
+            }
 
             context.SaveChanges();
         }
@@ -755,8 +774,91 @@ namespace Automatica.Core.Runtime.Database
                 Name = "COMMON.INTERFACES.RS232.NAME",
                 Description = "COMMON.INTERFACES.RS232.DESCRIPTION",
                 Key = "usbrs232",
-                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Usb),
+                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
                 ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232),This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                IsDeleteable = true,
+                DefaultCreated = false,
+                IsReadable = false,
+                IsReadableFixed = true,
+                IsWriteable = false,
+                IsWriteableFixed = true,
+                MaxInstances = int.MaxValue,
+                This2NodeDataType = (int)NodeDataType.NoAttribute,
+                IsAdapterInterface = true
+            };
+
+            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs232.ObjId) == null)
+            {
+                context.NodeTemplates.Add(usbrs232);
+                context.SaveChanges();
+            }
+
+        }
+
+        private static void AddSystemRemoteTemplates(AutomaticaContext context)
+        {
+            var usbIr = new NodeTemplate
+            {
+                ObjId = new Guid("cd80a322-cd07-45ed-b33f-a17c2a7c78e5"),
+                Name = "COMMON.INTERFACES.USB_IR.NAME",
+                Description = "COMMON.INTERFACES.USB_IR.DESCRIPTION",
+                Key = "usbir",
+                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
+                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.UsbIr),
+                This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                IsDeleteable = true,
+                DefaultCreated = false,
+                IsReadable = false,
+                IsReadableFixed = true,
+                IsWriteable = false,
+                IsWriteableFixed = true,
+                MaxInstances = int.MaxValue,
+                This2NodeDataType = (int)NodeDataType.NoAttribute,
+                IsAdapterInterface = true
+            };
+
+            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbIr.ObjId) == null)
+            {
+                context.NodeTemplates.Add(usbIr);
+                context.SaveChanges();
+            }
+
+
+            var usbrs485 = new NodeTemplate
+            {
+                ObjId = new Guid("d4515e26-8fd0-412b-aeac-7ae8fb9fff8d"),
+                Name = "COMMON.INTERFACES.RS485.NAME",
+                Description = "COMMON.INTERFACES.RS485.DESCRIPTION",
+                Key = "usbrs485",
+                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
+                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs485),
+                This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                IsDeleteable = true,
+                DefaultCreated = false,
+                IsReadable = false,
+                IsReadableFixed = true,
+                IsWriteable = false,
+                IsWriteableFixed = true,
+                MaxInstances = int.MaxValue,
+                This2NodeDataType = (int)NodeDataType.NoAttribute,
+                IsAdapterInterface = true
+            };
+
+            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs485.ObjId) == null)
+            {
+                context.NodeTemplates.Add(usbrs485);
+                context.SaveChanges();
+            }
+
+            var usbrs232 = new NodeTemplate
+            {
+                ObjId = new Guid("ea5f9a3f-ce55-4893-894f-0429a171eab0"),
+                Name = "COMMON.INTERFACES.RS232.NAME",
+                Description = "COMMON.INTERFACES.RS232.DESCRIPTION",
+                Key = "usbrs232",
+                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
+                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232),
+                This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
                 IsDeleteable = true,
                 DefaultCreated = false,
                 IsReadable = false,
