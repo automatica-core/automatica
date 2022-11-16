@@ -117,7 +117,7 @@ namespace Automatica.Core.Plugin.Standalone
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not init plugins..");
+                _logger.LogError(e, $"Could not init plugins..{e}");
             }
 
             return false;
