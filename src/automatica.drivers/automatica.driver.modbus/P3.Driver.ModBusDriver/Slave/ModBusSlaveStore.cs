@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using P3.Driver.ModBusDriver.Exceptions;
 
 namespace P3.Driver.ModBusDriver.Slave

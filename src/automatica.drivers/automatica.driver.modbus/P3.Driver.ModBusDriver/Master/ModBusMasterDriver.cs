@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.Driver.Monitor;
 using Automatica.Core.Driver.Utility;
 
 namespace P3.Driver.ModBusDriver.Master

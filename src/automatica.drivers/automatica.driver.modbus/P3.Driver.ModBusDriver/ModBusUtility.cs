@@ -1,8 +1,4 @@
-﻿using Docker.DotNet.Models;
-using System;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System;
 
 namespace NModbus.Utility
 {

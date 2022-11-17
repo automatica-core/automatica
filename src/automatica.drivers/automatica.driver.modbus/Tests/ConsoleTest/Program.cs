@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.Driver.Monitor;
-using Microsoft.Extensions.Logging.Abstractions;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master.Rtu;
-using P3.Driver.ModBusDriver.Slave.Tcp;
 
 namespace ConsoleTest
 {

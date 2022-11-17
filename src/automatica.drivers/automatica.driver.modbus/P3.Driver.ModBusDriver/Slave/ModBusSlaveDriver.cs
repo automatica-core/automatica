@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.Driver.Monitor;
 using P3.Driver.ModBusDriver.Exceptions;
 using Automatica.Core.Driver.Utility;
 [assembly: InternalsVisibleTo("P3.Driver.ModBus.Tests")]

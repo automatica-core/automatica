@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.ModBusDriver;
