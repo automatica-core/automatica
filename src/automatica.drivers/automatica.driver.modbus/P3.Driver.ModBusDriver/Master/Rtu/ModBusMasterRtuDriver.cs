@@ -65,8 +65,6 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             _cts?.Cancel(true);
             _receiveTimeoutTimer.Stop();
-            _connected = false;
-
         }
 
         protected override byte[] UpdateWriteFrame(byte[] frame)
@@ -207,6 +205,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 
         protected override async Task<bool> Close()
         {
+            _connected = false;
             _serialPortStream.Close();
             await _serialPortStream.DisposeAsync();
             

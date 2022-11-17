@@ -40,6 +40,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   copyItem: NodeInstance;
 
   private _selectedNode: ITreeNode;
+  refreshTimeout: NodeJS.Timeout;
   public get selectedNode(): ITreeNode {
     return this._selectedNode;
   }
@@ -92,6 +93,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     super.baseOnInit();
 
+    this.refreshTimeout = setInterval(() => {
+      this.changeRef.detectChanges();
+    }, 1000);
+
     try {
       super.registerEvent(this.hub.dispatchValue, (data) => {
 
@@ -100,7 +105,6 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
           if (data[0] === 0) { // 0 = nodeinstance value
             const id = data[1];
             this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
-            // this.changeRef.detectChanges();
           }
 
         });
@@ -121,6 +125,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   async ngOnDestroy() {
+    clearTimeout(this.refreshTimeout);
     super.baseOnDestroy();
   }
 
