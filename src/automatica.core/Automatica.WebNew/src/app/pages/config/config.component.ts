@@ -113,8 +113,8 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     await this.dataHub.unSubscribeForAll();
   }
 
-  onImportData($event) {
-    this.configTree.add($event, this.selectedItem);
+  async onImportData($event) {
+    await this.configTree.tree.instance.refresh();
   }
 
   saveLearnedNodes($event: any) {

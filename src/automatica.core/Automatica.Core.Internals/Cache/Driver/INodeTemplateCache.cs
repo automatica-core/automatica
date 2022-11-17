@@ -9,6 +9,7 @@ namespace Automatica.Core.Internals.Cache.Driver
     {
         void InitCache();
 
+        NodeTemplate GetByKey(Guid key);
         NodeTemplate GetByKey(string key);
 
         ICollection<NodeTemplate> GetSupportedTemplates(NodeInstance targetNodeInstance, Guid neededInterfaceType);
