@@ -71,6 +71,20 @@
                   "maximumWarning": "6kb"
                 }
               ]
+            },
+            "development": {
+              "sourceMap": true,
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "outputPath": "dist-dev/",
+              "outputHashing": "all",
+              "namedChunks": false,
+              "vendorChunk": false,
+              "fileReplacements": []
             }
           }
         },
@@ -82,6 +96,9 @@
           "configurations": {
             "production": {
               "browserTarget": "automatica-web:build:production"
+            },
+            "development": {
+              "browserTarget": "automatica-web:build:development"
             }
           }
         },

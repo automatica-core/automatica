@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng b --watch",
-    "build": "ng build",
-    "build-docker": "ng build --output-path ./dist",
+    "start": "ng b --watch --configuration=development",
+    "build": "ng build --configuration=",
+    "build-docker": "ng build --configuration= --prod --output-path ./dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

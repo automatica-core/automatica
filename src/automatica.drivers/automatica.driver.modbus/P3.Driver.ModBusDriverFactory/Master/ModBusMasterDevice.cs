@@ -93,10 +93,11 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
         }
 
-        public override Task<bool> Stop()
+        public override async Task<bool> Stop()
         {
             _pollTimer.Elapsed -= PollTimerOnElapsed;
-            return base.Stop();
+            
+            return await base.Stop();
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

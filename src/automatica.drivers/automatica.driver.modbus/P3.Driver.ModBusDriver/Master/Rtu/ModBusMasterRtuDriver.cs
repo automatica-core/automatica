@@ -136,6 +136,10 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             ModBus.Logger.LogHexOut(data);
 
+            if (_serialPortStream.IsDisposed)
+            {
+                return false;
+            }
             await _serialPortStream.WriteAsync(data, 0, data.Length);
             return true;
         }
@@ -201,10 +205,12 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             return null;
         }
 
-        protected override Task<bool> Close()
+        protected override async Task<bool> Close()
         {
-            _serialPortStream.Dispose();
-            return new Task<bool>(() => true);
+            _serialPortStream.Close();
+            await _serialPortStream.DisposeAsync();
+            
+            return true;
         }
     }
 }

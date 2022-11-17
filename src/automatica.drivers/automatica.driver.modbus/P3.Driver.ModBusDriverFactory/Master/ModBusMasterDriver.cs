@@ -65,6 +65,12 @@ namespace P3.Driver.ModBusDriverFactory.Master
             return base.Start();
         }
 
+        public override async Task<bool> Stop()
+        {
+            await _modBusDriver.Stop();
+            return await base.Stop();
+        }
+
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             var dev = new ModBusMasterDevice(ctx, _modBusDriver);

@@ -116,6 +116,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         protected override async Task<bool> WriteFrame(byte[] data)
         {
+            ModBus.Logger.LogHexOut(data);
             await _networkStream.WriteAsync(data, 0, data.Length);
             return true;
         }
@@ -144,6 +145,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
                     if (read == lengthToRead)
                     {
+                        ModBus.Logger.LogHexIn(data);
                         return data;
                     }
                 }

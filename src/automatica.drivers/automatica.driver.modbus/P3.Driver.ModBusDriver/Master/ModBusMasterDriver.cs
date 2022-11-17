@@ -94,7 +94,12 @@ namespace P3.Driver.ModBusDriver.Master
         {
             return OpenConnection();
         }
-       
+
+        public async Task<bool> Stop()
+        {
+            return await Close();
+        }
+
         public async Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort addr, int numberOfRegisters)
         {
             return await ReadRegisters(slaveId, addr, numberOfRegisters, ModBusFunction.ReadInputRegisters);
@@ -374,6 +379,7 @@ namespace P3.Driver.ModBusDriver.Master
             }
             return new ModBusFrameReturn(ModBusRequestStatus.Success, readFrame.ToList());
         }
+        
 
         protected abstract byte[] BuildReadFrame(byte slaveId, int addr, int numberOfRegister, ModBusFunction function);
 
