@@ -114,6 +114,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   async onImportData($event) {
+    await this.configTree.load();
     await this.configTree.tree.instance.refresh();
   }
 

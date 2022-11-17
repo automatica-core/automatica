@@ -116,7 +116,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   }
 
-  protected async load(): Promise<any> {
+  public async load(): Promise<any> {
     await this.nodeInstanceService.load();
   }
 
@@ -290,11 +290,15 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     try {
       this.configService.delete(<NodeInstance>item);
+      if(item.Parent.Children && item.Parent.Children.length > 0) {
+        item.Parent.Children = item.Parent.Children.filter(a => a.Id != item.Id);
+      }
     } catch (error) {
       super.handleError(error);
 
       await this.load();
     }
+    this.selectedNode = item.Parent;
     this.appService.isLoading = false;
 
   }
