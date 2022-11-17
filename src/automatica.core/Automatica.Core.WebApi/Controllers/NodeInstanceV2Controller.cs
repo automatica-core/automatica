@@ -312,10 +312,14 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 var existingNode = _nodeInstanceCache.Get(node.ObjId);
                 var reloadServer = false;
-                if(existingNode.This2Slave != node.This2Slave)
+
+                if (existingNode != null)
                 {
-                    //slave changed, we need to reload all drivers!
-                    reloadServer = true;
+                    if (existingNode.This2Slave != node.This2Slave)
+                    {
+                        //slave changed, we need to reload all drivers!
+                        reloadServer = true;
+                    }
                 }
 
                 var entityState = await AddOrUpdateNodeInstance(node);
