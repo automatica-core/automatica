@@ -151,11 +151,12 @@ namespace P3.Driver.ModBusDriver.Master
             }
 
             var frame = BuildHeaderFromDataFrame(dataFrame, (byte)deviceId, functionCode);
+            frame = UpdateWriteFrame(frame);
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", deviceId.ToString(), Utils.ByteArrayToString(frame), $"WriteMultipleRegisters from {startRegister} values {String.Join(',', values)}");
             await WriteFrame(frame);
 
-            var readFrame = await RequestFrame((byte)deviceId, functionCode);
+            var readFrame = await RequestFrame((byte)deviceId, functionCode, values.Length);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -203,11 +204,12 @@ namespace P3.Driver.ModBusDriver.Master
             }
 
             var frame = BuildHeaderFromDataFrame(dataFrame, (byte)deviceId, functionCode);
+            frame = UpdateWriteFrame(frame);
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", deviceId.ToString(), Utils.ByteArrayToString(frame), $"WriteMultipleCoils from {startRegister} values {String.Join(',', values)}");
             await WriteFrame(frame);
 
-            var readFrame = await RequestFrame((byte)deviceId, functionCode);
+            var readFrame = await RequestFrame((byte)deviceId, functionCode, values.Length);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -269,12 +271,13 @@ namespace P3.Driver.ModBusDriver.Master
             dataFrame[4] = 0;
 
             var frame = BuildHeaderFromDataFrame(dataFrame, slaveId, ModBusFunction.WriteSingleCoil);
+            frame = UpdateWriteFrame(frame);
 
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(), Utils.ByteArrayToString(frame), $"WriteSingleCoil at {addr} value {value}");
             await WriteFrame(frame);
 
-            var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleCoil);
+            var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleCoil, 1);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -297,11 +300,12 @@ namespace P3.Driver.ModBusDriver.Master
             dataFrame[4] = (byte)(value & 0x00FF);
 
             var frame = BuildHeaderFromDataFrame(dataFrame, slaveId, ModBusFunction.WriteSingleRegister);
+            frame = UpdateWriteFrame(frame);
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(), Utils.ByteArrayToString(frame), $"WriteSingleRegister at {addr} value {value}");
             await WriteFrame(frame);
 
-            var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleRegister);
+            var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleRegister, 1);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -338,21 +342,16 @@ namespace P3.Driver.ModBusDriver.Master
         private async Task<ModBusFrameReturn> GetFrame(byte slaveId, ushort addr, int numberOfRegisters, ModBusFunction function)
         {
             var frame = BuildReadFrame(slaveId, addr, numberOfRegisters, function);
-            var length = GetRequestLength(frame);
-
-            frame[4] = Utils.ShiftRight(length, 8);
-            frame[5] = (byte)(length & 0x00FF);
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(), Utils.ByteArrayToString(frame), $"GetFrame Addr: {addr} number{numberOfRegisters} function {function}");
             await WriteFrame(frame);
 
-
-            return await RequestFrame(slaveId, function);
+            return await RequestFrame(slaveId, function, numberOfRegisters);
         }
 
-        private async Task<ModBusFrameReturn> RequestFrame(byte slaveId, ModBusFunction function)
+        private async Task<ModBusFrameReturn> RequestFrame(byte slaveId, ModBusFunction function, int numberOfRegisters)
         {
-            var readFrame = await ReadFrame();
+            var readFrame = await ReadFrame(function, numberOfRegisters);
 
             await Monitor.NotifyTelegram(TelegramDirection.Input, slaveId.ToString(), "MASTER", Utils.ByteArrayToString(readFrame), null);
 
@@ -378,13 +377,15 @@ namespace P3.Driver.ModBusDriver.Master
         }
 
         protected abstract byte[] BuildReadFrame(byte slaveId, int addr, int numberOfRegister, ModBusFunction function);
+
+        protected abstract byte[] UpdateWriteFrame(byte[] frame);
         protected abstract byte[] BuildHeaderFromDataFrame(byte[] dataFrame, byte slaveId, ModBusFunction function);
 
         protected abstract short GetRequestLength(byte[] request);
 
         protected abstract bool OpenConnection();
         protected abstract Task<bool> WriteFrame(byte[] data);
-        protected abstract Task<byte[]> ReadFrame();
+        protected abstract Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters);
 
         protected abstract Task<bool> Close();
     }

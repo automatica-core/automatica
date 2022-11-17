@@ -53,15 +53,16 @@ namespace P3.Driver.ModBusDriverFactory.Master
         private async void PollTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             await _waitSemaphore.WaitAsync();
-            if (!_modBusDriver.Connected)
-            {
-                DriverContext.Logger
-                    .LogWarning($"Could not read device {DeviceId}, connection state is false");
-
-                return;
-            }
             try
             {
+                if (!_modBusDriver.Connected)
+                {
+                    DriverContext.Logger
+                        .LogWarning($"Could not read device {DeviceId}, connection state is false");
+
+                    return;
+                }
+           
                 await PollAttributes();
             }
             finally
