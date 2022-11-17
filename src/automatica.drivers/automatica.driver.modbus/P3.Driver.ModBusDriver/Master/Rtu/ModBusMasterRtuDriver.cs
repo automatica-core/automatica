@@ -173,6 +173,11 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                 _cts = new CancellationTokenSource();
 
                 var data = new byte[readLength];
+                if (_serialPortStream.IsDisposed)
+                {
+                    _connected = false;
+                    throw new Exception("object disposed...");
+                }
                 var read = await _serialPortStream.ReadAsync(data, 0, readLength);
                 ModBus.Logger.LogHexIn(data);
                 if (read == readLength)
