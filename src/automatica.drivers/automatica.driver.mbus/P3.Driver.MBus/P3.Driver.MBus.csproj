@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>P3.Driver.MBus</AssemblyName>
     <RootNamespace>P3.Driver.MBus</RootNamespace>
     <Version>0.14.0.1</Version>
@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="SerialPortStream" Version="2.4.0" />
-    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.834" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.834" />
+    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.874" />
   </ItemGroup>
 </Project>

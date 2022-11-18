@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -8,16 +8,18 @@ using Automatica.Core.Base.TelegramMonitor;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility;
 using RJCP.IO.Ports;
+using NModbus.Utility;
 
 namespace P3.Driver.ModBusDriver.Master.Rtu
 {
     public class ModBusMasterRtuDriver : ModBusMasterDriver<ModBusMasterRtuConfig>
     {
         private readonly SerialPortStream _serialPortStream;
-        private bool _connected = false;
-        private ushort _transactionId = 0;
+        private bool _connected;
         private readonly System.Timers.Timer _receiveTimeoutTimer = new System.Timers.Timer();
         private CancellationTokenSource _cts;
+
+        private Semaphore _semaphore = new Semaphore(1, 1);
 
         public override bool Connected => _connected;
 
@@ -25,6 +27,10 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             _serialPortStream = new SerialPortStream(config.Port, config.Baud, config.DataBits,
                 FromString(config.Parity), FromString(config.StopBits));
+
+            _serialPortStream.ReadTimeout = 1000;
+            _serialPortStream.WriteTimeout = 1000;
+
             _receiveTimeoutTimer.Elapsed += _receiveTimeoutTimer_Elapsed;
             _receiveTimeoutTimer.Interval = config.Timeout;
         }
@@ -61,42 +67,33 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             _cts?.Cancel(true);
             _receiveTimeoutTimer.Stop();
-            _connected = false;
+        }
 
+        protected override byte[] UpdateWriteFrame(byte[] frame)
+        {
+            var crc = ModbusUtility.CalculateCrc(frame);
+
+            var retFrame = new byte[frame.Length + 2];
+
+            Array.Copy(frame, retFrame, frame.Length);
+
+            Array.Copy(crc, 0, retFrame, frame.Length, 2);
+
+            return retFrame;
         }
 
         protected override byte[] BuildHeaderFromDataFrame(byte[] dataFrame, byte slaveId, ModBusFunction function)
         {
-            _transactionId++;
             var frame = new List<byte>
             {
-                Utils.ShiftRight(_transactionId, 8),
-                (byte) (_transactionId & 0x00FF),
-                0,
-                0,
-                0,
-                0,
                 slaveId
             };
-
-
-            //length will be set later
-            //length will be set later
-
             frame.AddRange(dataFrame);
-
-            var length = GetRequestLength(frame.ToArray());
-
-            frame[4] = Utils.ShiftRight(length, 8);
-            frame[5] = (byte)(length & 0x00FF);
-
             return frame.ToArray();
         }
 
         protected override byte[] BuildReadFrame(byte slaveId, int addr, int numberOfRegister, ModBusFunction function)
         {
-            _transactionId++;
-
             var headerFrame = BuildHeaderFromDataFrame(new byte[]{}, slaveId, function);
             var dataFrame = new List<byte>();
             dataFrame.AddRange(headerFrame);
@@ -107,14 +104,17 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             dataFrame.Add(Utils.ShiftRight(numberOfRegister, 8));
             dataFrame.Add((byte)(numberOfRegister & 0x00FF));
 
+            var crc = ModbusUtility.CalculateCrc(dataFrame.ToArray());
+
+            dataFrame.AddRange(crc);
+
             return dataFrame.ToArray();
 
         }
 
         protected override short GetRequestLength(byte[] request)
         {
-            var length = request.Length - 6;
-            return (short)length;
+            return -1;
         }
 
         protected override bool OpenConnection()
@@ -134,49 +134,104 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 
         protected override async Task<bool> WriteFrame(byte[] data)
         {
+            ModBus.Logger.LogHexOut(data);
+
+            if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
+            {
+                return false;
+            }
             await _serialPortStream.WriteAsync(data, 0, data.Length);
             return true;
         }
 
-        protected override async Task<byte[]> ReadFrame()
+        protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters)
         {
+            if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
+            {
+                return Array.Empty<byte>();
+            }
+
+            _semaphore.WaitOne();
+
             try
             {
+                var readLength = 5;
+
+                if (function == ModBusFunction.ReadInputRegisters ||
+                    function == ModBusFunction.ReadHoldingRegisters)
+                {
+                    readLength += numberOfRegisters * 2;
+                }
+                else if (function == ModBusFunction.ReadDiscreteInputs ||
+                         function == ModBusFunction.ReadCoils)
+                {
+                    readLength += (numberOfRegisters + 7) / 8;
+                }
+                else if (function == ModBusFunction.WriteMultipleRegisters ||
+                         function == ModBusFunction.WriteSingleRegister)
+                {
+                    readLength += 3;
+                }
+                else if (function == ModBusFunction.WriteMultipleCoils ||
+                         function == ModBusFunction.WriteSingleCoil)
+                {
+                    readLength += 3;
+                }
+
                 _receiveTimeoutTimer.Start();
                 _cts = new CancellationTokenSource();
 
-                byte[] buffer = new byte[7];
-                var read = await _serialPortStream.ReadAsync(buffer, 0, 6, _cts.Token);
-                _receiveTimeoutTimer.Stop();
-                _cts = null;
-
-                if (read == 6)
+                var data = new byte[readLength];
+                if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
                 {
-                    var lengthToRead = Utils.GetUShort(buffer[4], buffer[5]);
-                    _receiveTimeoutTimer.Start();
-                    byte[] data = new byte[lengthToRead];
-                    _cts = new CancellationTokenSource();
-                    read = await _serialPortStream.ReadAsync(data, 0, lengthToRead, _cts.Token);
-                    _cts = null;
-                    _receiveTimeoutTimer.Stop();
+                    _connected = false;
+                    throw new Exception("object disposed or closed...");
+                }
 
-                    if (read == lengthToRead)
+                var read = await _serialPortStream.ReadAsync(data, 0, readLength);
+                ModBus.Logger.LogHexIn(data);
+                if (read == readLength)
+                {
+
+                    var readCrc = data.Skip(data.Length - 2);
+                    var calcCrc = ModbusUtility.CalculateCrc(data.SkipLast(2).ToArray());
+                    if (!readCrc.SequenceEqual(calcCrc))
                     {
-                        return data;
+                        throw new Exception("Invalid crc...");
                     }
+
+                    return data;
+                }
+                else
+                {
+                    if (readLength == 5 && data[1] == 0x86)
+                    {
+                        throw new Exception($"modbus exception thrown..({data[3]})");
+                    }
+
+                    throw new Exception("modbus exception thrown..");
                 }
             }
             catch (Exception e)
             {
-                ModBus.Logger.LogError(e, "Error reading ModBus frame");
+                ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
             }
+            finally
+            {
+                _semaphore.Release(1);
+            }
+
             return null;
+            
         }
 
-        protected override Task<bool> Close()
+        protected override async Task<bool> Close()
         {
-            _serialPortStream.Dispose();
-            return new Task<bool>(() => true);
+            _connected = false;
+            _serialPortStream.Close();
+            await _serialPortStream.DisposeAsync();
+            
+            return true;
         }
     }
 }

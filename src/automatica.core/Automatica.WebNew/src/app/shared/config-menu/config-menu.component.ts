@@ -14,6 +14,8 @@ import { NodeTemplate } from "src/app/base/model/node-template";
 import { RuleTemplate } from "src/app/base/model/rule-template";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
+import { ConfigService } from "src/app/services/config.service";
+import { AppService } from "src/app/services/app.service";
 
 @Component({
   selector: "p3-config-menu",
@@ -128,8 +130,10 @@ export class ConfigMenuComponent implements OnInit {
     command: (event) => { this.importNode(); }
   };
 
-  constructor(private translate: L10nTranslationService,
-    private notify: NotifyService,
+  constructor(private configService: ConfigService,
+    private translate: L10nTranslationService,
+    private notify: NotifyService, 
+    private appService: AppService,
     private designTimeDataService: DesignTimeDataService,
     private changeRef: ChangeDetectorRef) {
     this.menuItems = [];
@@ -173,74 +177,86 @@ export class ConfigMenuComponent implements OnInit {
   }
 
   async onImportFileChanged($event, that: ConfigMenuComponent) {
-    if (that.selectedItem instanceof NodeInstance) {
-      const files = $event.target.files;
+    this.appService.isLoading = true;
+    try {
+      if (that.selectedItem instanceof NodeInstance) {
+        const files = $event.target.files;
 
-      if (files.length > 0) {
-        const file = files[0];
+        if (files.length > 0) {
+          const file = files[0];
 
-        const zip = await JSZip.loadAsync(file);
-        const manifestoFile = zip.files["manifest.json"];
-        const nodesFile = zip.files["nodes.json"];
+          const zip = await JSZip.loadAsync(file);
+          const manifestoFile = zip.files["manifest.json"];
+          const nodesFile = zip.files["nodes.json"];
 
-        if (!manifestoFile || !nodesFile) {
-          that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.INVALID_ZIP"));
-          return;
+          if (!manifestoFile || !nodesFile) {
+            that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.INVALID_ZIP"));
+            return;
+          }
+
+          const manifesto = JSON.parse(await manifestoFile.async("text"));
+          const node = new NodeInstance(void 0);
+          const jsonData = await nodesFile.async("text");
+          NodeInstance.fromJson(JSON.parse(jsonData), node, that.translate);
+
+
+          if (!manifesto || manifesto.crypto !== "cDNyb290IGlzIHRoZSBhd2Vzb21lbmVzcyBpbiBwZXJzb24=") {
+            that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.INVALID_ZIP"));
+            return;
+          }
+          if (!manifesto || manifesto.version !== 1.0) {
+            that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.INVALID_VERSION"));
+            return;
+          }
+
+          const targetNodeTemplate = await that.designTimeDataService.getNodeTemplate(that.selectedItem.This2NodeTemplate);
+          const sourceNodeTemplate = await that.designTimeDataService.getNodeTemplate(node.This2NodeTemplate);
+
+          if (!targetNodeTemplate || !sourceNodeTemplate) {
+            that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.UNSUPPORTED_NODE"));
+            return;
+          }
+
+          if (targetNodeTemplate.ProvidesInterface2InterfaceType !== sourceNodeTemplate.NeedsInterface2InterfacesType) {
+            that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.UNSUPPORTED_NODE"));
+            return;
+          }
+
+          if (targetNodeTemplate.ProvidesInterface.MaxChilds === that.selectedItem.Children.length) {
+            that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.MAX_CHILDS_REACHED"));
+            return;
+          }
+
+
+          const newNode = await that.importRecursive(node, that.selectedItem);
+          that.selectedItem.Children.push(newNode);
+          that.onImportData.emit(newNode);
         }
-
-        const manifesto = JSON.parse(await manifestoFile.async("text"));
-        const node = new NodeInstance(void 0);
-        const jsonData = await nodesFile.async("text");
-        NodeInstance.fromJson(JSON.parse(jsonData), node, that.translate);
-
-
-        if (!manifesto || manifesto.crypto !== "cDNyb290IGlzIHRoZSBhd2Vzb21lbmVzcyBpbiBwZXJzb24=") {
-          that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.INVALID_ZIP"));
-          return;
-        }
-        if (!manifesto || manifesto.version !== 1.0) {
-          that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.INVALID_VERSION"));
-          return;
-        }
-
-        const targetNodeTemplate = that.designTimeDataService.getNodeTemplate(that.selectedItem.This2NodeTemplate);
-        const sourceNodeTemplate = that.designTimeDataService.getNodeTemplate(node.This2NodeTemplate);
-
-        if (targetNodeTemplate.ProvidesInterface2InterfaceType !== sourceNodeTemplate.NeedsInterface2InterfacesType) {
-          that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.UNSUPPORTED_NODE"));
-          return;
-        }
-
-        if (targetNodeTemplate.ProvidesInterface.MaxChilds === that.selectedItem.Children.length) {
-          that.notify.notifyError(this.translate.translate("COMMON.NODE_IMPORT.MAX_CHILDS_REACHED"));
-          return;
-        }
-
-        const newNode = that.importRecursive(node, that.selectedItem);
-        that.onImportData.emit(newNode);
       }
+    }
+    finally {
+      this.appService.isLoading = false;
     }
   }
 
-  private importRecursive(nodeInstance: NodeInstance, parent: NodeInstance): NodeInstance {
-    // const newNodeInstance = NodeInstance.createForNodeInstanceFromTemplate(this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate), parent);
-    // newNodeInstance.Name = nodeInstance.Name;
-    // newNodeInstance.Description = nodeInstance.Description;
+  private async importRecursive(nodeInstance: NodeInstance, parent: NodeInstance): Promise<NodeInstance> {
+    const newNodeInstance = await this.configService.createFromTemplate(parent, await this.designTimeDataService.getNodeTemplate(nodeInstance.This2NodeTemplate));
+    newNodeInstance.Name = nodeInstance.Name;
+    newNodeInstance.Description = nodeInstance.Description;
 
-    // newNodeInstance.This2ParentNodeInstance = parent.ObjId;
+    newNodeInstance.This2ParentNodeInstance = parent.ObjId;
 
-    // for (const p of nodeInstance.Properties) {
-    //   newNodeInstance.setPropertyValueIfPresent(p.PropertyTemplate.Key, p.Value);
-    // }
+    for (const p of nodeInstance.Properties) {
+      newNodeInstance.setPropertyValueIfPresent(p.PropertyTemplate.Key, p.Value);
+    }
 
-    // for (const x of nodeInstance.Children) {
-    //   const child = this.importRecursive(x, newNodeInstance);
-    //   newNodeInstance.Children.push(child);
-    // }
-    // return newNodeInstance;
+    for (const x of nodeInstance.Children) {
+      const child = await this.importRecursive(x, newNodeInstance);
+      newNodeInstance.Children.push(child);
+    }
 
-    // TODO
-    return void 0;
+    await this.configService.update(newNodeInstance);
+    return newNodeInstance;
   }
 
 

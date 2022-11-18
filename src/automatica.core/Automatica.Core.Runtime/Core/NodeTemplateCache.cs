@@ -19,6 +19,9 @@ namespace Automatica.Core.Runtime.Core
 
         private readonly IDictionary<Guid, IList<NodeTemplate>> _neededTemplateKeyDictionary =
             new Dictionary<Guid, IList<NodeTemplate>>();
+        
+        private readonly IDictionary<Guid, NodeTemplate> _templatesKeyDictionary =
+            new Dictionary<Guid, NodeTemplate>();
 
         private readonly IDictionary<Guid, IList<NodeTemplate>> _defaultTemplateItemsKeyDictionary =
             new Dictionary<Guid, IList<NodeTemplate>>();
@@ -41,6 +44,13 @@ namespace Automatica.Core.Runtime.Core
                 .Include(a => a.PropertyTemplate).ThenInclude(b => b.This2PropertyTypeNavigation)
                 .Include(a => a.PropertyTemplate).ThenInclude(b => b.Constraints).ThenInclude(c => c.ConstraintData);
 
+            foreach (var nodeTemplate in x)
+            {
+                if (!_templatesKeyDictionary.ContainsKey(nodeTemplate.ObjId))
+                {
+                    _templatesKeyDictionary.Add(nodeTemplate.ObjId, nodeTemplate);
+                }
+            }
             return x;
         }
 
@@ -86,7 +96,23 @@ namespace Automatica.Core.Runtime.Core
 
         public NodeTemplate GetByKey(string key)
         {
-            return All().SingleOrDefault(a => a.Key == key);
+            var id = Guid.Parse(key);
+            return GetByKey(id);
+        }
+
+        public NodeTemplate GetByKey(Guid key)
+        {
+            if (_templatesKeyDictionary.Count == 0)
+            {
+                InitCache();
+            }
+
+            if(_templatesKeyDictionary.ContainsKey(key))
+            {
+                return _templatesKeyDictionary[key];
+            }
+
+            return null;
         }
 
         public ICollection<NodeTemplate> GetSupportedTemplates(NodeInstance targetNodeInstance, Guid neededInterfaceType)

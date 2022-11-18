@@ -1,5 +1,5 @@
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:7.0 AS build
 WORKDIR /src
 
 ARG MANIFEST_DIR
@@ -29,7 +29,7 @@ RUN ls /build
 RUN automatica-cli InstallPlugin -p /build/pluginFile.acpkg -I /plugin
 
 
-FROM mcr.microsoft.com/dotnet/core/sdk:6.0 AS runtime
+FROM mcr.microsoft.com/dotnet/core/sdk:7.0 AS runtime
 COPY --from=build /plugin /plugin
 
 RUN dotnet --list-sdks

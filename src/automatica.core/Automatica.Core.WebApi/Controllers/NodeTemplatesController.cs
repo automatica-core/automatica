@@ -31,6 +31,13 @@ namespace Automatica.Core.WebApi.Controllers
         {
             return _nodeTemplateCache.All();
         }
+        [HttpGet]
+        [Authorize(Roles = Role.AdminRole)]
+        [Route("{id}")]
+        public NodeTemplate GetById(Guid id)
+        {
+            return _nodeTemplateCache.GetByKey(id);
+        }
 
         [HttpGet]
         [Authorize(Roles = Role.AdminRole)]

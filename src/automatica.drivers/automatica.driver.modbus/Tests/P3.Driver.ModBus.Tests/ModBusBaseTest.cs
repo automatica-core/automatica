@@ -2,7 +2,6 @@
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Automatica.Core.UnitTests.Drivers;
-using P3.Driver.ModBusDriver.Slave.Tcp;
 using P3.Driver.ModBusDriverFactory;
 using P3.Driver.ModBusDriverFactory.Master;
 using P3.Driver.ModBusDriverFactory.Slave;

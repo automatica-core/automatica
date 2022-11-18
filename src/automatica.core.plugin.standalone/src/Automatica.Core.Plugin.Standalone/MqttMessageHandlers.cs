@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using MQTTnet.Client;
 using MQTTnet.Server.Internal;
 using System;
+using System.Linq;
+using Automatica.Core.Plugin.Standalone.Dispatcher;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -30,7 +32,12 @@ namespace Automatica.Core.Plugin.Standalone
 
         public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
         {
-            var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+            var json = "";
+
+            if (e.ApplicationMessage.Payload.Length > 0)
+            {
+                json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+            }
             Logger.LogDebug($"received topic {e.ApplicationMessage.Topic} with data {json}...");
 
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{_connection.NodeId}")
@@ -46,13 +53,19 @@ namespace Automatica.Core.Plugin.Standalone
                 var context = new DriverContext(dto, _connection.Dispatcher, _connection.NodeTemplateFactory,
                     new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(_connection),
                     new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
-                _connection.DriverInstance = _connection.Factory.CreateDriver(context);
 
-                await _connection.Loader.LoadDriverFactory(dto, _connection.Factory, context);
+                var factory = _connection.Factories.First(a => a.DriverGuid == dto.This2NodeTemplate);
+
+                _connection.DriverInstance = factory.CreateDriver(context);
+
+                var driverInstance = await _connection.Loader.LoadDriverFactory(dto, factory, context);
 
                 foreach (var driver in _connection.DriverStore.All())
                 {
-                    await driver.Start();
+                    if (!await driver.Start())
+                    {
+                        Logger.LogError($"Could not start driver...");
+                    }
                 }
 
                 await _connection.MqttClient.SubscribeAsync(new TopicFilterBuilder()
@@ -63,6 +76,13 @@ namespace Automatica.Core.Plugin.Standalone
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
+                var remoteDispatchValue = JsonConvert.DeserializeObject<RemoteDispatchValue>(json);
+
+                if (_connection.MqttClient.Options.ClientId == remoteDispatchValue.Source)
+                {
+                    return;
+                }
+
                 _connection.Dispatcher.MqttDispatch(e.ApplicationMessage.Topic, json);
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/*/reinit"))

@@ -36,6 +36,11 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         }
 
+        protected override byte[] UpdateWriteFrame(byte[] frame)
+        {
+            return frame;
+        }
+
         protected override byte[] BuildHeaderFromDataFrame(byte[] dataFrame, byte slaveId, ModBusFunction function)
         {
             _transactionId++;
@@ -78,7 +83,12 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             dataFrame.Add(Utils.ShiftRight(numberOfRegister, 8));
             dataFrame.Add((byte)(numberOfRegister & 0x00FF));
 
-            return dataFrame.ToArray();
+            var frame = dataFrame.ToArray();
+            var length = GetRequestLength(frame);
+            frame[4] = Utils.ShiftRight(length, 8);
+            frame[5] = (byte)(length & 0x00FF);
+
+            return frame;
 
         }
 
@@ -106,11 +116,12 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         protected override async Task<bool> WriteFrame(byte[] data)
         {
+            ModBus.Logger.LogHexOut(data);
             await _networkStream.WriteAsync(data, 0, data.Length);
             return true;
         }
 
-        protected override async Task<byte[]> ReadFrame()
+        protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters)
         {
             try
             {
@@ -134,6 +145,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
                     if (read == lengthToRead)
                     {
+                        ModBus.Logger.LogHexIn(data);
                         return data;
                     }
                 }

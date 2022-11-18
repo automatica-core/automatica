@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace P3.Driver.ModBusDriver.Master
 {
@@ -10,6 +7,7 @@ namespace P3.Driver.ModBusDriver.Master
         bool Connected { get; }
 
         bool Open();
+        Task<bool> Stop();
         Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort addr, int numberOfRegisters);
         Task<ModBusReturn> ReadRegisters(byte slaveId, ushort addr, int numberOfRegisters);
         Task<ModBusReturn> ReadCoils(byte slaveId, ushort addr, int numberOfRegisters);

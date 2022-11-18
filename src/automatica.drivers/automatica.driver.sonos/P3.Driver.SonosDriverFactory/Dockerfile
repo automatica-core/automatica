@@ -1,5 +1,5 @@
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0
 WORKDIR /src
 
 ARG MANIFEST_DIR

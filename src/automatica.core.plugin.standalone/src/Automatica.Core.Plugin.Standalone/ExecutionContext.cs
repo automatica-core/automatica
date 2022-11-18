@@ -8,6 +8,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Plugin.Standalone.Abstraction;
 using Automatica.Core.Plugin.Standalone.Factories;
+using Docker.DotNet.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -18,7 +19,7 @@ namespace Automatica.Core.Plugin.Standalone
     {
         private readonly ILogger _logger;
         private readonly string _pluginDir;
-        private IList<DriverFactory> _factories;
+        private IList<IDriverFactory> _factories = new List<IDriverFactory>();
         private readonly string _masterAddress = "localhost";
         private readonly string _user;
         private readonly string _password;
@@ -35,7 +36,7 @@ namespace Automatica.Core.Plugin.Standalone
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddAutomaticaDrivers();
-            serviceCollection.AddSingleton<ILogger>(a => NullLogger.Instance);
+            serviceCollection.AddSingleton<ILogger>(a => logger);
             serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
             serviceCollection.AddSingleton<INodeTemplateFactory, RemoteNodeTemplatesFactory>();
 
@@ -77,16 +78,14 @@ namespace Automatica.Core.Plugin.Standalone
             Console.WriteLine($"Trying to connect to {_masterAddress} with user {_user} and clientId {_nodeId}");
             try
             {
-                foreach (var factory in _factories)
+                var connection = new MqttConnection(_logger, _masterAddress,  _nodeId, _user, _password, _factories, _serviceProvider);
+                if (!await connection.Start())
                 {
-                    var connection = new MqttConnection(_logger, _masterAddress, _nodeId, _user, _password, factory, _serviceProvider);
-                    if (!await connection.Start())
-                    {
-                        return false;
-                    }
-
-                    _connections.Add(connection);
+                    return false;
                 }
+
+                _connections.Add(connection);
+
             }
             catch (Exception e)
             {
@@ -102,15 +101,19 @@ namespace Automatica.Core.Plugin.Standalone
             try
             {
                 var localization = new LocalizationProvider(_logger);
-                _factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
+                var factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
                 var templateFactory = _serviceProvider.GetRequiredService<INodeTemplateFactory>();
 
-                foreach (var factory in _factories)
+                foreach (var factory in factories)
                 {
                     _logger.LogDebug($"Loaded {factory}");
 
                     _logger.LogDebug($"Init templates for {factory}");
                     Dockerize.InitDriverFactory(factory, templateFactory);
+                }
+                foreach (var factory in factories)
+                {
+                    _factories.Add(factory);
                 }
 
                 return true;

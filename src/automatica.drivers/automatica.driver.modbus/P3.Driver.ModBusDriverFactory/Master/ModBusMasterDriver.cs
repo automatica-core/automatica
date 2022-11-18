@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master;
 using P3.Driver.ModBusDriver.Master.Rtu;
@@ -32,6 +32,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             {
                 var ip = GetProperty("modbus-master-ip").ValueString;
                 var port = GetProperty("modbus-master-port").ValueInt.Value;
+                ModBus.Logger.LogInformation($"Connecting to {ip}:{port}...");
 
                 _modBusDriver = new ModBusMasterTcpDriver(new ModBusMasterTcpConfig()
                 {
@@ -42,18 +43,20 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
             else
             {
-                var baud = GetProperty("modbus-baudrate").Value as int?;
-                var port = GetProperty("modbus-port").Value as string;
-                var dataBits = GetProperty("modbus-databits").Value as int?;
-                var stopBits = GetProperty("modbus-stopbits").Value as double?;
-                var parity = GetProperty("modbus-parity").Value as string;
+                var baud = GetProperty("modbus-baudrate").ValueInt;
+                var port = GetProperty("modbus-port").ValueString;
+                var dataBits = GetProperty("modbus-databits").ValueInt;
+                var stopBits = GetProperty("modbus-stopbits").ValueDouble;
+                var parity = GetProperty("modbus-parity").ValueString;
+
+                ModBus.Logger.LogInformation($"Connecting to {port} {baud} {dataBits} {parity} {stopBits}...");
 
                 _modBusDriver = new ModBusMasterRtuDriver(new ModBusMasterRtuConfig()
                 {
                     Port = port,
                     Baud = baud.Value,
                     DataBits = dataBits.Value,
-                    Parity =parity,
+                    Parity = parity,
                     StopBits = stopBits.Value,
                     Timeout = 5000
                 }, TelegramMonitor);
@@ -65,6 +68,12 @@ namespace P3.Driver.ModBusDriverFactory.Master
         {
             _modBusDriver.Open();
             return base.Start();
+        }
+
+        public override async Task<bool> Stop()
+        {
+            await _modBusDriver.Stop();
+            return await base.Stop();
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

@@ -2,8 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <Version>6.0.0.834</Version>
+    <TargetFramework>net7.0</TargetFramework>
+    <Version>7.0.0.900</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>78F9C09E-3660-4EDA-8FA7-19AC110D78D3</ProjectGuid>
   </PropertyGroup>

@@ -1,5 +1,5 @@
 #build libserialport
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS libnserial
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS libnserial
 WORKDIR /app
 
 RUN apt-get -y update && apt-get -y upgrade
@@ -73,7 +73,7 @@ RUN dotnet /tmp/db/Automatica.Core.CI.CreateDatabase.dll /app/automatica
 RUN rm -rf /src
 RUN rm -rf /tmp/db 
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./

@@ -40,6 +40,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   copyItem: NodeInstance;
 
   private _selectedNode: ITreeNode;
+  refreshTimeout: NodeJS.Timeout;
   public get selectedNode(): ITreeNode {
     return this._selectedNode;
   }
@@ -92,6 +93,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     super.baseOnInit();
 
+    this.refreshTimeout = setInterval(() => {
+      this.changeRef.detectChanges();
+    }, 1000);
+
     try {
       super.registerEvent(this.hub.dispatchValue, (data) => {
 
@@ -115,11 +120,12 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   }
 
-  protected async load(): Promise<any> {
+  public async load(): Promise<any> {
     await this.nodeInstanceService.load();
   }
 
   async ngOnDestroy() {
+    clearTimeout(this.refreshTimeout);
     super.baseOnDestroy();
   }
 
@@ -289,11 +295,15 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     try {
       this.configService.delete(<NodeInstance>item);
+      if(item.Parent.Children && item.Parent.Children.length > 0) {
+        item.Parent.Children = item.Parent.Children.filter(a => a.Id != item.Id);
+      }
     } catch (error) {
       super.handleError(error);
 
       await this.load();
     }
+    this.selectedNode = item.Parent;
     this.appService.isLoading = false;
 
   }
@@ -370,7 +380,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     };
   }
 
-  dropSuccess($event, dropTarget: any) {
+  async dropSuccess($event, dropTarget: any) {
     const dragData = $event.dragData;
 
     const drop = this.nodeInstanceService.getNodeInstance(dropTarget.Id);
@@ -378,14 +388,18 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (drag instanceof NodeInstance) {
       const parentDrag = this.nodeInstanceService.getNodeInstance(drag.ParentId);
-      parentDrag.Children = [];
+      parentDrag.Children = parentDrag.Children.filter(a => a.ObjId != drag.ObjId);
 
       drag.setParent(drop);
       drop.Children = [...drop.Children, drag];
+      drag.This2ParentNodeInstance = drop.ObjId;
 
       this.selectNode(drag);
 
+      this.appService.isLoading = true;
       this.tree.instance.refresh();
+      await this.configService.update(drop);
+      this.appService.isLoading = false;
     }
   }
 

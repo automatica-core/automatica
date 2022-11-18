@@ -54,7 +54,7 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         }
 
         public CreateTemplateCode CreateInterfaceType(Guid uid, string name, string description, int maxChilds, int maxInstances, bool isDriverInterface)
-        {
+        { 
             var interfaceType = new InterfaceType
             {
                 Type = uid,
@@ -65,8 +65,8 @@ namespace Automatica.Core.Plugin.Standalone.Factories
                 IsDriverInterface = isDriverInterface
             };
 
-
-            _interfaceTypes.Add(uid, interfaceType);
+            if(!_interfaceTypes.ContainsKey(uid))
+                _interfaceTypes.Add(uid, interfaceType);
 
             return CreateTemplateCode.Created;
         }
@@ -110,7 +110,7 @@ namespace Automatica.Core.Plugin.Standalone.Factories
         {
             return CreateNodeInstance(GetNodeTemplateById(template));
         }
-
+            
         public CreateTemplateCode CreateNodeTemplate(Guid uid, string name, string description, string key, Guid needsInterface, Guid providesInterface, 
             bool defaultCreated, bool isReadable, bool isReadableFixed, bool isWriteable, bool isWriteableFixed, Base.Templates.NodeDataType dataType, 
             int maxInstances, bool isAdapterInterface)
@@ -146,8 +146,8 @@ namespace Automatica.Core.Plugin.Standalone.Factories
             };
 
 
-
-            _nodeTemplates.Add(uid, nodeTemplate);
+            if(!_nodeTemplates.ContainsKey(uid))
+                _nodeTemplates.Add(uid, nodeTemplate);
             return CreateTemplateCode.Created;
         }
 
@@ -164,8 +164,8 @@ namespace Automatica.Core.Plugin.Standalone.Factories
             };
 
 
-
-            _propertyConstraintTemplates.Add(constraintId, constraint);
+            if(!_propertyConstraintTemplates.ContainsKey(constraintId))
+                _propertyConstraintTemplates.Add(constraintId, constraint);
 
             return CreateTemplateCode.Created;
         }
@@ -184,7 +184,8 @@ namespace Automatica.Core.Plugin.Standalone.Factories
             };
 
 
-            _propertyConstraintDataTemplates.Add(constraintData, constraint);
+            if(!_propertyConstraintDataTemplates.ContainsKey(constraintData))
+                _propertyConstraintDataTemplates.Add(constraintData, constraint);
 
             return CreateTemplateCode.Created;
         }
@@ -211,8 +212,8 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
 
 
-
-            _propertyTemplates.Add(uid, propertyTemplate);
+            if(!_propertyTemplates.ContainsKey(uid))
+                _propertyTemplates.Add(uid, propertyTemplate);
 
             return CreateTemplateCode.Created;
         }

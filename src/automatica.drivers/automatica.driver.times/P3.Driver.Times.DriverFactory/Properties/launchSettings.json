@@ -6,8 +6,8 @@
     },
     "Profile 1": {
       "commandName": "Executable",
-      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net6.0\\Automatica.Core.exe",
-      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net6.0"
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0"
     }
   }
 }

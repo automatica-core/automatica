@@ -15,13 +15,22 @@ export class DesignTimeDataService extends BaseService {
     private _ruleTemplates: RuleTemplate[];
     private _categoryGroups: CategoryGroup[];
 
+    private _nodeTemplateCache: Map<string, NodeTemplate> = new Map<string, NodeTemplate>();
+
     constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(http, pRouter, translationService);
     }
 
-    public getNodeTemplate(id: string): NodeTemplate {
-        return void 0;
-//         return this._nodeTemplatesMap.get(id);
+    public async getNodeTemplate(id: string): Promise<NodeTemplate> {
+
+        if(this._nodeTemplateCache.has(id)) {
+            return this._nodeTemplateCache.get(id);
+        }
+        var template = await super.get<NodeTemplate>(`nodeTemplates/${id}`);
+
+        this._nodeTemplateCache.set(id, template);
+
+        return template;
     }
 
     async getAreaTemplates(): Promise<AreaTemplate[]> {
