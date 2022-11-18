@@ -2,6 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
+using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master;
 using P3.Driver.ModBusDriver.Master.Rtu;
 using P3.Driver.ModBusDriver.Master.Tcp;
@@ -30,6 +32,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             {
                 var ip = GetProperty("modbus-master-ip").ValueString;
                 var port = GetProperty("modbus-master-port").ValueInt.Value;
+                ModBus.Logger.LogInformation($"Connecting to {ip}:{port}...");
 
                 _modBusDriver = new ModBusMasterTcpDriver(new ModBusMasterTcpConfig()
                 {
@@ -45,6 +48,8 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 var dataBits = GetProperty("modbus-databits").ValueInt;
                 var stopBits = GetProperty("modbus-stopbits").ValueDouble;
                 var parity = GetProperty("modbus-parity").ValueString;
+
+                ModBus.Logger.LogInformation($"Connecting to {port} {baud} {dataBits} {parity} {stopBits}...");
 
                 _modBusDriver = new ModBusMasterRtuDriver(new ModBusMasterRtuConfig()
                 {

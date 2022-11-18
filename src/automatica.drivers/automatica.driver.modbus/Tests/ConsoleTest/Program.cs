@@ -42,9 +42,9 @@ namespace ConsoleTest
 
             while (true)
             {
-              //  var response = await modBusDriver.ReadInputRegisters(23, 8260, 2);
+                var response = await modBusDriver.ReadInputRegisters(23, 8260, 2);
 
-                var res = await modBusDriver.WriteHoldingRegister(23, 1, 701);
+                //var res = await modBusDriver.WriteHoldingRegister(23, 1, 701);
 
                 await Task.Delay(1000);
             }

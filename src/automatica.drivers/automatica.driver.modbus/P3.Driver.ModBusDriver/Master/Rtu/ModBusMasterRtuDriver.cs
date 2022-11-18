@@ -19,6 +19,8 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         private readonly System.Timers.Timer _receiveTimeoutTimer = new System.Timers.Timer();
         private CancellationTokenSource _cts;
 
+        private Semaphore _semaphore = new Semaphore(1, 1);
+
         public override bool Connected => _connected;
 
         public ModBusMasterRtuDriver(ModBusMasterRtuConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
@@ -134,7 +136,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             ModBus.Logger.LogHexOut(data);
 
-            if (_serialPortStream.IsDisposed)
+            if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
             {
                 return false;
             }
@@ -144,12 +146,19 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 
         protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters)
         {
+            if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
+            {
+                return Array.Empty<byte>();
+            }
+
+            _semaphore.WaitOne();
+
             try
             {
                 var readLength = 5;
 
-                if(function == ModBusFunction.ReadInputRegisters ||
-                   function == ModBusFunction.ReadHoldingRegisters)
+                if (function == ModBusFunction.ReadInputRegisters ||
+                    function == ModBusFunction.ReadHoldingRegisters)
                 {
                     readLength += numberOfRegisters * 2;
                 }
@@ -168,16 +177,17 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                 {
                     readLength += 3;
                 }
-                
+
                 _receiveTimeoutTimer.Start();
                 _cts = new CancellationTokenSource();
 
                 var data = new byte[readLength];
-                if (_serialPortStream.IsDisposed)
+                if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
                 {
                     _connected = false;
-                    throw new Exception("object disposed...");
+                    throw new Exception("object disposed or closed...");
                 }
+
                 var read = await _serialPortStream.ReadAsync(data, 0, readLength);
                 ModBus.Logger.LogHexIn(data);
                 if (read == readLength)
@@ -189,6 +199,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                     {
                         throw new Exception("Invalid crc...");
                     }
+
                     return data;
                 }
                 else
@@ -205,7 +216,13 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             {
                 ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
             }
+            finally
+            {
+                _semaphore.Release(1);
+            }
+
             return null;
+            
         }
 
         protected override async Task<bool> Close()
