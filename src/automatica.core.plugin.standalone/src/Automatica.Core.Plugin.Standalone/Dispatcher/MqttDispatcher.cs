@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
@@ -16,6 +17,8 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
         private readonly IMqttClient _mqttClient;
         private readonly IList<string> _subscriptions = new List<string>();
         private readonly object _lock = new object();
+
+        private readonly Semaphore _semaphore = new Semaphore(1, 1);
 
         protected readonly IDictionary<DispatchableType, IDictionary<Guid, object>> NodeValues =
            new ConcurrentDictionary<DispatchableType, IDictionary<Guid, object>>();
@@ -158,21 +161,32 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
 
         public async Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
         {
-            var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{type}/{id}";
-            _subscriptions.Add(topic);
 
-            await _mqttClient.SubscribeAsync(topic, MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce);
+            _semaphore.WaitOne();
 
-            if (!_registrationMap.ContainsKey(type))
+            try
             {
-                _registrationMap.Add(type, new ConcurrentDictionary<Guid, IList<Action<IDispatchable, object>>>());
-            }
-            if (!_registrationMap[type].ContainsKey(id))
-            {
-                _registrationMap[type].Add(id, new List<Action<IDispatchable, object>>());
-            }
+                var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{type}/{id}";
+                _subscriptions.Add(topic);
 
-            _registrationMap[type][id].Add(callback);
+                await _mqttClient.SubscribeAsync(topic, MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce);
+
+                if (!_registrationMap.ContainsKey(type))
+                {
+                    _registrationMap.Add(type, new ConcurrentDictionary<Guid, IList<Action<IDispatchable, object>>>());
+                }
+
+                if (!_registrationMap[type].ContainsKey(id))
+                {
+                    _registrationMap[type].Add(id, new List<Action<IDispatchable, object>>());
+                }
+
+                _registrationMap[type][id].Add(callback);
+            }
+            finally
+            {
+                _semaphore.Release(1);
+            }
         }
     }
 }

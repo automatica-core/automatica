@@ -2,28 +2,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>automatica-plugin-standalone</AssemblyName>
     <PackageId>automatica-plugin-standalone</PackageId>
 	  
-    <PackageVersion>6.0.0.835</PackageVersion>
+    <PackageVersion>7.0.0.835</PackageVersion>
     <Authors>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Authors>
     <Description>Tool for running a automatica.core plugin standalone</Description>
     <Copyright>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Copyright>
     <LangVersion>7.3</LangVersion>
-    <Version>6.0.0.835</Version>
+    <Version>7.0.0.835</Version>
 	
 	<PackageType>DotnetCliTool</PackageType>
 	  <PackAsTool>true</PackAsTool>
     
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.Common.Update" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.Driver" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.EF" Version="6.0.0.874" />
-    <PackageReference Include="Automatica.Core.Rule" Version="6.0.0.874" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Common.Update" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Rule" Version="7.0.0.876" />
     <PackageReference Include="MQTTnet" Version="3.1.2" />
     <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.1.2" />
     <PackageReference Include="NetStandardUtils" Version="1.0.0" />
