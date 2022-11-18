@@ -2,6 +2,7 @@
 using System.Text;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Serialization;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.Base.Remote
 {
@@ -34,7 +35,10 @@ namespace Automatica.Core.Base.Remote
                     Name = "RemoteUnknown"
                 };
 
-                self.DispatchValue(remoteDispatch, BinarySerializer.Deserialize(Encoding.UTF8.GetBytes(data)));
+                var remoteDispatchValue =
+                    JsonConvert.DeserializeObject<RemoteDispatchValue>(data);
+
+                self.DispatchValue(remoteDispatch, remoteDispatchValue.Value);
             }
         }
     }

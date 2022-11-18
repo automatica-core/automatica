@@ -14,6 +14,7 @@ using MQTTnet.Client;
 using MQTTnet.Server.Internal;
 using System;
 using System.Linq;
+using Automatica.Core.Plugin.Standalone.Dispatcher;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -75,6 +76,13 @@ namespace Automatica.Core.Plugin.Standalone
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
             {
+                var remoteDispatchValue = JsonConvert.DeserializeObject<RemoteDispatchValue>(json);
+
+                if (_connection.MqttClient.Options.ClientId == remoteDispatchValue.Source)
+                {
+                    return;
+                }
+
                 _connection.Dispatcher.MqttDispatch(e.ApplicationMessage.Topic, json);
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/*/reinit"))
