@@ -28,5 +28,10 @@ namespace Automatica.Core.Tests.Model
         {
             throw new NotImplementedException();
         }
+
+        public NodeInstance GetSingle(Guid objId, AutomaticaContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
