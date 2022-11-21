@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
         private readonly List<ModBusMasterDevice> _childs = new List<ModBusMasterDevice>();
         private IModBusMasterDriver _modBusDriver;
 
+        private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
         public ModBusMasterDriver(IDriverContext driverContext, bool isTcp=true) : base(driverContext)
         {
             _isTcp = isTcp;
@@ -78,7 +80,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            var dev = new ModBusMasterDevice(ctx, _modBusDriver);
+            var dev = new ModBusMasterDevice(ctx, _modBusDriver, _waitSemaphore);
 
             _childs.Add(dev);
             return dev;
