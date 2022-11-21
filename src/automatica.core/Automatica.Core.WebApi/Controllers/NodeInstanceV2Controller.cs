@@ -172,19 +172,20 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task<(NodeInstance node, EntityState entityState)> AddNodeInternal(NodeInstance node)
         {
-            var transaction = DbContext.Database.BeginTransaction();
+            var transaction = await DbContext.Database.BeginTransactionAsync();
             try
             {
                 var entityState = await AddOrUpdateNodeInstance(node);
                 await DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                _nodeInstanceCache.Clear();
+                _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
+
                 return (_nodeInstanceCache.Get(node.ObjId), entityState);
             }
             catch (Exception e)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 SystemLogger.Instance.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
                 throw;
             }
@@ -300,6 +301,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         public async Task ReInit()
         {
+            _nodeInstanceCache.Clear();
             await _coreServer.ReInit();
         }
 
@@ -327,9 +329,9 @@ namespace Automatica.Core.WebApi.Controllers
                 await DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                _nodeInstanceCache.Clear();
+                _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
 
-                if(reloadServer)
+                if (reloadServer)
                 {
                     await _coreServer.ReInit();
                 }
