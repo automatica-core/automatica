@@ -109,6 +109,7 @@ namespace Automatica.Core.Internals.Cache.Driver
 
         public NodeInstance GetSingle(Guid objId, AutomaticaContext context)
         {
+
             var item = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
                .Include(a => a.PropertyInstance)
                .ThenInclude(a => a.This2PropertyTemplateNavigation)
@@ -147,10 +148,16 @@ namespace Automatica.Core.Internals.Cache.Driver
             if (_allCache.ContainsKey(item.ObjId))
             {
                 _allCache[item.ObjId] = item;
+                item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
             }
             else
             {
                 _allCache.Add(item.ObjId, item);
+
+                item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
+
+                item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance!.Value];
+                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
             }
 
             if (item.This2AreaInstance.HasValue)
