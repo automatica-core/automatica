@@ -1,0 +1,9 @@
+﻿{
+  "SONOS_CONTROL": {
+    "NAME": "Sonos Control",
+    "DESCRIPTION": "Controls a sonos wireless speaker"
+  },
+  "SONOS": {
+    "NAME": "Sonos Controls"
+  }
+}

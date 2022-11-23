@@ -1,0 +1,9 @@
+﻿{
+  "SONOS_CONTROL": {
+    "NAME": "Sonos Steuerung",
+    "DESCRIPTION": "Steuert eine Sonos Wireless Lautsprecher"
+  },
+  "SONOS":  {
+    "NAME": "Sonos Regeln" 
+  }
+}
