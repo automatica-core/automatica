@@ -29,8 +29,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.0.0.876" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.0.0.899" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.0.0.899" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
   </ItemGroup>
   <ItemGroup>
