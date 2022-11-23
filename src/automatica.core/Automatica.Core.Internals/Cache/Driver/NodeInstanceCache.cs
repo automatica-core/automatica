@@ -149,6 +149,15 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 _allCache[item.ObjId] = item;
                 item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
+
+                item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance!.Value];
+                var oldItem = _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                    .Single(a => a.ObjId == item.ObjId);
+                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Remove(oldItem);
+
+
+                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+
             }
             else
             {
