@@ -1,7 +1,59 @@
 ﻿{
   "SONOS_CONTROL": {
     "NAME": "Sonos Steuerung",
-    "DESCRIPTION": "Steuert eine Sonos Wireless Lautsprecher"
+    "DESCRIPTION": "Steuert eine Sonos Wireless Lautsprecher",
+    "PLAY_PAUSE": {
+      "NAME": "Play/Pause",
+      "DESCRIPTION": ""
+    },
+    "PAUSE_INPUT_STATUS": {
+      "NAME": "Pause",
+      "DESCRIPTION": ""
+    },
+    "VOLUME": {
+      "NAME": "Lautsträke",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_INCREMENT": {
+      "NAME": "Lautsträke+",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_DECREMENT": {
+      "NAME": "Lautsträke-",
+      "DESCRIPTION": ""
+    },
+    "NEXT": {
+      "NAME": "Next",
+      "DESCRIPTION": ""
+    },
+    "RADIO_STATION": {
+      "NAME": "Radiosender",
+      "DESCRIPTION": ""
+    },
+    "PLAY_OUTPUT_STATE": {
+      "NAME": "Play",
+      "DESCRIPTION": ""
+    },
+    "PAUSE_OUTPUT_STATE": {
+      "NAME": "Pause",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_OUTPUT_STATE": {
+      "NAME": "Lautsträke",
+      "DESCRIPTION": ""
+    },
+    "RADIO_STATION_OUTPUT_VALUE": {
+      "NAME": "Radiosender",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_ON_START": {
+      "NAME": "Lautstärke beim Start",
+      "DESCRIPTION": ""
+    },
+    "MAX_VOLUME": {
+      "NAME": "Maximale Lautstärke",
+      "DESCRIPTION": ""
+    }
   },
   "SONOS":  {
     "NAME": "Sonos Regeln" 

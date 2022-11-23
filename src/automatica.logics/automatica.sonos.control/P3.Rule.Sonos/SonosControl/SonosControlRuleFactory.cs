@@ -46,11 +46,11 @@ public class SonosControlRuleFactory : RuleFactory
         factory.CreateParameterRuleInterfaceTemplate(VolumeOnPlay, "SONOS_CONTROL.VOLUME_ON_START.NAME",
             "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", RuleGuid, 2, RuleInterfaceParameterDataType.Integer, 10);
         factory.CreateParameterRuleInterfaceTemplate(MaxVolume, "SONOS_CONTROL.MAX_VOLUME.NAME",
-            "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", RuleGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
+            "SONOS_CONTROL.MAX_VOLUME.DESCRIPTION", RuleGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
 
 
-        factory.CreateRuleInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.TRIGGER.NAME", "SONOS_CONTROL.TRIGGER.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 1);
-        factory.CreateRuleInterfaceTemplate(PauseTrigger, "SONOS_CONTROL.PLAY_PAUSE_INPUT_STATUS.NAME", "SONOS_CONTROL.PLAY_PAUSE_INPUT_STATUS.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 2);
+        factory.CreateRuleInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 1);
+        factory.CreateRuleInterfaceTemplate(PauseTrigger, "SONOS_CONTROL.PAUSE_INPUT_STATUS.NAME", "SONOS_CONTROL.PAUSE_INPUT_STATUS.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 2);
         factory.CreateRuleInterfaceTemplate(Volume, "SONOS_CONTROL.VOLUME.NAME", "SONOS_CONTROL.VOLUME.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 3);
         factory.CreateRuleInterfaceTemplate(VolumeIncrement, "SONOS_CONTROL.VOLUME_INCREMENT.NAME", "SONOS_CONTROL.VOLUME_INCREMENT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 4);
         factory.CreateRuleInterfaceTemplate(VolumeDecrement, "SONOS_CONTROL.VOLUME_DECREMENT.NAME", "SONOS_CONTROL.VOLUME_DECREMENT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 5);

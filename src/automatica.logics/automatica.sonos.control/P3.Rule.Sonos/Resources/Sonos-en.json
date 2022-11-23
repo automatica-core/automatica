@@ -1,7 +1,59 @@
 ﻿{
   "SONOS_CONTROL": {
     "NAME": "Sonos Control",
-    "DESCRIPTION": "Controls a sonos wireless speaker"
+    "DESCRIPTION": "Controls a sonos wireless speaker",
+    "PLAY_PAUSE": {
+      "NAME": "Play/Pause",
+      "DESCRIPTION": ""
+    },
+    "PAUSE_INPUT_STATUS": {
+      "NAME": "Pause",
+      "DESCRIPTION": ""
+    },
+    "VOLUME": {
+      "NAME": "Volume",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_INCREMENT": {
+      "NAME": "Volume+",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_DECREMENT": {
+      "NAME": "Volume-",
+      "DESCRIPTION": ""
+    },
+    "NEXT": {
+      "NAME": "Next",
+      "DESCRIPTION": ""
+    },
+    "RADIO_STATION": {
+      "NAME": "Radio Station ID",
+      "DESCRIPTION": ""
+    },
+    "PLAY_OUTPUT_STATE": {
+      "NAME": "Play",
+      "DESCRIPTION": ""
+    },
+    "PAUSE_OUTPUT_STATE": {
+      "NAME": "Pause",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_OUTPUT_STATE": {
+      "NAME": "Volume",
+      "DESCRIPTION": ""
+    },
+    "RADIO_STATION_OUTPUT_VALUE": {
+      "NAME": "RAdio Station ID",
+      "DESCRIPTION": ""
+    },
+    "VOLUME_ON_START": {
+      "NAME": "Volume at start",
+      "DESCRIPTION": ""
+    },
+    "MAX_VOLUME": {
+      "NAME": "Max Volume",
+      "DESCRIPTION": ""
+    }
   },
   "SONOS": {
     "NAME": "Sonos Controls"
