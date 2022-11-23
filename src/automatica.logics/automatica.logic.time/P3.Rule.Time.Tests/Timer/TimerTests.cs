@@ -78,5 +78,30 @@ namespace P3.Rule.Time.Tests.Timer
             Assert.Equal(0, values.Count);
             await Rule.Stop();
         }
+
+
+
+
+        [Fact]
+        public async void TestTimerRule3()
+        {
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
+            await Rule.Stop();
+
+            var paramDelay = GetRuleInterfaceByTemplate(TimerRuleFactory.RuleTimerParameter);
+            var timerData =
+                @"{\""StartTime\"":\""2000-02-01T16:00:00.322Z\"",\""StopTime\"":\""2000-02-01T22:00:00.322Z\"",\""EnabledDays\"":[1,2,3,4,5,6,0],\""TrackingState\"":1}";
+            paramDelay.Value = timerData;
+
+            await Rule.Start();
+            await Task.Delay(1500);
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Equal(0, values.Count);
+            await Rule.Stop();
+        }
     }
 }
+

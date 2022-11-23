@@ -49,19 +49,23 @@ namespace Automatica.Core.EF.Models
                 {
                     return;
                 }
-                switch (this.This2RuleInterfaceTemplateNavigation.ParameterDataType)
+                switch (This2RuleInterfaceTemplateNavigation.ParameterDataType)
                 {
                     case RuleInterfaceParameterDataType.Double:
-                        this.ValueDouble = Convert.ToDouble(value);
+                        ValueDouble = Convert.ToDouble(value);
                         break;
                     case RuleInterfaceParameterDataType.Integer:
-                        this.ValueInteger = Convert.ToInt64(value);
+                        ValueInteger = Convert.ToInt64(value);
                         break;
                     case RuleInterfaceParameterDataType.Text:
-                        this.ValueString = value.ToString();
+                        ValueString = value.ToString();
                         break;
                     case RuleInterfaceParameterDataType.Timer:
-                        this.ValueString = JsonConvert.SerializeObject(value);
+                        if (value is string strValue)
+                        {
+                            ValueString = strValue;
+                        }
+                        ValueString = JsonConvert.SerializeObject(value);
                         break;
                 }
             }
