@@ -37,6 +37,11 @@ namespace P3.Rule.Time.Timer
             {
                 _timerPropertyData = (TimerPropertyData)_timerProperty.Value;
 
+                if (_timerPropertyData.EnabledDays == null)
+                {
+                    Context.Logger.LogError("No enabled days found..");
+                    return Task.FromResult(false);
+                }
             }
             else
             {

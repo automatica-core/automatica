@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Rules;
+using Newtonsoft.Json;
 using P3.Rule.Time.Timer;
 using Xunit;
 
@@ -90,8 +92,8 @@ namespace P3.Rule.Time.Tests.Timer
             await Rule.Stop();
 
             var paramDelay = GetRuleInterfaceByTemplate(TimerRuleFactory.RuleTimerParameter);
-            var timerData =
-                @"{\""StartTime\"":\""2000-02-01T16:00:00.322Z\"",\""StopTime\"":\""2000-02-01T22:00:00.322Z\"",\""EnabledDays\"":[1,2,3,4,5,6,0],\""TrackingState\"":1}";
+            var timerData = "{\"StartTime\":\"" + DateTime.Now.AddSeconds(1).ToString(CultureInfo.InvariantCulture) + "\",\"StopTime\":\"" + DateTime.Now.AddSeconds(2).ToString(CultureInfo.InvariantCulture) + "\",\"EnabledDays\":[1,2,3,4,5,6,0],\"TrackingState\":1}";
+            
             paramDelay.Value = timerData;
 
             await Rule.Start();
@@ -99,7 +101,7 @@ namespace P3.Rule.Time.Tests.Timer
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(0, values.Count);
+            Assert.Equal(1, values.Count);
             await Rule.Stop();
         }
     }
