@@ -65,7 +65,11 @@ namespace Automatica.Core.EF.Models
                         {
                             ValueString = strValue;
                         }
-                        ValueString = JsonConvert.SerializeObject(value);
+                        else
+                        {
+                            ValueString = JsonConvert.SerializeObject(value);
+                        }
+
                         break;
                 }
             }

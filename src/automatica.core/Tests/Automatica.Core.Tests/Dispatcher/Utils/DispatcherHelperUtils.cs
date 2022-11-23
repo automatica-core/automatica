@@ -12,7 +12,6 @@ using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Drivers;
-using Automatica.Core.UnitTests.Rules;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
 {
@@ -38,7 +37,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             return new DriverNodeMock(ctx);
         }
     }
-    public class LogicMock : Rule.Rule
+    public class LogicMock : Core.Rule.Rule
     {
         public bool WriteReceived { get; set; }
         public RuleInterfaceInstance Output { get; set; }
