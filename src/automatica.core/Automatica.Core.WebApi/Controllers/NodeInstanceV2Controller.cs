@@ -151,23 +151,40 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("add")]
         public async Task<NodeInstance> AddNode([FromBody]NodeInstance node)
         {
-            _logger.LogDebug($"Add Node...");
-
-            var newNode = await AddNodeInternal(node);
-            
-
-            if (node.This2NodeTemplateNavigation.IsAdapterInterface.HasValue && node.This2NodeTemplateNavigation.IsAdapterInterface.Value && newNode.node.This2ParentNodeInstance.HasValue)
+            var transaction = await DbContext.Database.BeginTransactionAsync();
+            try
             {
-                newNode.node.This2ParentNodeInstanceNavigation = _nodeInstanceCache.Get(newNode.node.This2ParentNodeInstance.Value);
+                _logger.LogDebug($"Add Node...");
+
+                var newNode = await AddNodeInternal(node);
+
+
+                if (node.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                    node.This2NodeTemplateNavigation.IsAdapterInterface.Value &&
+                    newNode.node.This2ParentNodeInstance.HasValue)
+                {
+                    newNode.node.This2ParentNodeInstanceNavigation =
+                        _nodeInstanceCache.Get(newNode.node.This2ParentNodeInstance.Value);
+                    return newNode.node;
+                }
+
+                async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
+                ReloadAndForget();
+
+
+                _logger.LogDebug($"Add Node...done");
+                
+                await DbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
                 return newNode.node;
             }
-            
-            async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
-            ReloadAndForget();
-
-
-            _logger.LogDebug($"Add Node...done");
-            return newNode.node;
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                SystemLogger.Instance.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
+                throw;
+            }
         }
 
         private async Task<(NodeInstance node, EntityState entityState)> AddNodeInternal(NodeInstance node)
