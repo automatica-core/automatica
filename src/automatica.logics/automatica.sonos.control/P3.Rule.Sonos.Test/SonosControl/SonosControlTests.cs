@@ -19,6 +19,6 @@ public class SonosControlTests : RuleTest<SonosControlRuleFactory>
 
         var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-
+        Assert.Equal(4, values.Count);
     }
 }
