@@ -34,6 +34,16 @@ namespace Automatica.Core.UnitTests.Base.Rules
             Rule.Start();
         }
 
+        public void RuleInputChanged(RuleInterfaceInstance instance, object value)
+        {
+            var valueChanges = Rule.ValueChanged(instance, Dispatchable, value);
+
+            foreach (var valueChange in valueChanges)
+            {
+                Context.Dispatcher.DispatchValue(valueChange.Instance, valueChange.Value);
+            }
+        }
+
         protected RuleInterfaceInstance GetRuleInterfaceByTemplate(Guid templateGuid)
         {
             foreach (var i in RuleInstance.RuleInterfaceInstance)
