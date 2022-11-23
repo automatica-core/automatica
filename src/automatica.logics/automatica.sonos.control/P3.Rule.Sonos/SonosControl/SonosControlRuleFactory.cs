@@ -8,7 +8,9 @@ namespace P3.Rule.Sonos.SonosControl;
 
 public class SonosControlRuleFactory : RuleFactory
 {
-    public override Version RuleVersion => new Version(0, 0, 0, 1);
+    public override Version RuleVersion => new Version(0, 2, 0, 1);
+
+    public override bool InDevelopmentMode => true;
 
     public override string RuleName => "SonosControl";
     public override Guid RuleGuid => new Guid("550c0290-40e3-4d60-b016-3588d2a367fe");
@@ -62,10 +64,6 @@ public class SonosControlRuleFactory : RuleFactory
         factory.CreateRuleInterfaceTemplate(VolumeOutputStatus, "SONOS_CONTROL.VOLUME_OUTPUT_STATE.NAME", "SONOS_CONTROL.VOLUME_OUTPUT_STATE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 3);
         factory.CreateRuleInterfaceTemplate(RadioStationOutputValue, "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.NAME", "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 4);
         factory.CreateRuleInterfaceTemplate(NextOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 5);
-
-
-
-
 
     }
 
