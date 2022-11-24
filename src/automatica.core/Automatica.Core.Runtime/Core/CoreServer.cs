@@ -527,7 +527,7 @@ namespace Automatica.Core.Runtime.Core
                 }
 
                 var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
-                var ruleContext = new RuleContext(ruleInstance, _dispatcher, _ruleInstanceVisuNotify, CoreLoggerFactory.GetLogger(factory.RuleName), _cloudApi, _licenseContext);
+                var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory),  _ruleInstanceVisuNotify, CoreLoggerFactory.GetLogger(factory.RuleName), _cloudApi, _licenseContext);
                 var rule = factory.CreateRuleInstance(ruleContext);
 
                 if (rule != null)
