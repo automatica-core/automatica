@@ -38,15 +38,18 @@ public class SonosControlRuleFactory : RuleFactory
     public static readonly Guid RadioStationOutputValue = new Guid("9a12a267-338c-4a48-9d7a-5af4fe8189be");
     public static readonly Guid NextOutput = new Guid("2aa90a39-8410-4e26-b707-96d7a5f10342");
 
+    public static readonly long DefaultVolume = 10;
+    public static readonly long DefaultRadioStation = 8007;
+
 
     public override void InitTemplates(IRuleTemplateFactory factory)
     {
         factory.CreateRuleTemplate(RuleGuid, "SONOS_CONTROL.NAME", "SONOS_CONTROL.DESCRIPTION", "sonos.control", "SONOS.NAME", 100, 100);
 
         factory.CreateParameterRuleInterfaceTemplate(RadioStation, "SONOS_CONTROL.RADIO_STATION.NAME",
-            "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", RuleGuid, 1, RuleInterfaceParameterDataType.Integer, 1);
+            "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", RuleGuid, 1, RuleInterfaceParameterDataType.Integer, DefaultRadioStation);
         factory.CreateParameterRuleInterfaceTemplate(VolumeOnPlay, "SONOS_CONTROL.VOLUME_ON_START.NAME",
-            "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", RuleGuid, 2, RuleInterfaceParameterDataType.Integer, 10);
+            "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", RuleGuid, 2, RuleInterfaceParameterDataType.Integer, DefaultVolume);
         factory.CreateParameterRuleInterfaceTemplate(MaxVolume, "SONOS_CONTROL.MAX_VOLUME.NAME",
             "SONOS_CONTROL.MAX_VOLUME.DESCRIPTION", RuleGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
 
