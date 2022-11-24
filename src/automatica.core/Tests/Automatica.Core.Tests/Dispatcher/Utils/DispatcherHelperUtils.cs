@@ -7,11 +7,13 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Internals.Templates;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Drivers;
+using Automatica.Core.UnitTests.Rules;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
 {
@@ -135,7 +137,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             ruleInstance.RuleInterfaceInstance.Add(input);
             ruleInstance.RuleInterfaceInstance.Add(output);
 
-            var mock = new LogicMock(new RuleContextMock(ruleInstance, dispatcher));
+            var mock = new LogicMock(new RuleContextMock(ruleInstance, new RuleTemplateFactoryMock(), dispatcher));
 
             await mock.Start();
 
