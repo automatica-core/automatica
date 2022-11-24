@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
-using Newtonsoft.Json;
 using P3.Rule.Time.Timer;
 using Xunit;
 

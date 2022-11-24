@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Time.DelayedOff;
 using Xunit;
 

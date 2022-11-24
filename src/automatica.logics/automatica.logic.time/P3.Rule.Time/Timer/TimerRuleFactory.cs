@@ -17,9 +17,10 @@ namespace P3.Rule.Time.Timer
         public override Guid RuleGuid => new Guid("297f00bd-5a99-45cc-8e6b-a6e8b6ae3c19");
         public override Version RuleVersion => new Version(1, 0, 0, 0);
         public override bool InDevelopmentMode => true;
-
+        
         public override void InitTemplates(IRuleTemplateFactory factory)
         {
+
             factory.CreateRuleTemplate(RuleGuid, "TIME.TIMER.NAME", "TIME.TIMER.DESCRIPTION",
                 "time.timer", "TIME.NAME", 100, 100);
 
@@ -28,7 +29,7 @@ namespace P3.Rule.Time.Timer
             factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "TIME.TIMER.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
 
             factory.CreateParameterRuleInterfaceTemplate(RuleTimerParameter, "TIME.TIMER.NAME", "TIME.TIMER.DESCRIPTION", RuleGuid, 1, RuleInterfaceParameterDataType.Timer, JsonConvert.SerializeObject(new TimerPropertyData()));
-
+            
         }
 
         public override IRule CreateRuleInstance(IRuleContext context)
