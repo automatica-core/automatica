@@ -28,7 +28,7 @@ namespace Automatica.Core.UnitTests.Base.Rules
 
             RuleInstance = Factory.CreateRuleInstanceFromTemplate(Instance.RuleGuid);
 
-            Context = new RuleContextMock(RuleInstance, DispatcherMock.Instance);
+            Context = new RuleContextMock(RuleInstance, Factory, DispatcherMock.Instance);
 
             Rule = Instance.CreateRuleInstance(Context);
             Rule.Start();

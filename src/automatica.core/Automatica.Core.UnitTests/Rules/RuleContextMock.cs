@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
 using Automatica.Core.UnitTests.Base.Common;
@@ -24,14 +25,16 @@ namespace Automatica.Core.UnitTests.Base.Rules
 
     public class RuleContextMock : IRuleContext
     {
-        public RuleContextMock(RuleInstance instance, IDispatcher dispatcher)
+        public RuleContextMock(RuleInstance instance, IRuleTemplateFactory factory, IDispatcher dispatcher)
         {
             RuleInstance = instance;
             Notify = new RuleInstanceVisuNotifyMock();
             Dispatcher = dispatcher;
+            Factory = factory;
         }
         public RuleInstance RuleInstance { get; }
         public IDispatcher Dispatcher { get; }
+        public IRuleTemplateFactory Factory { get; }
 
         public IRuleInstanceVisuNotify Notify { get; }
 
