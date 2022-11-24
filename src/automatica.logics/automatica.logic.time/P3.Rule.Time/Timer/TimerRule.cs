@@ -31,10 +31,10 @@ namespace P3.Rule.Time.Timer
 
             _timer = new System.Timers.Timer();
 
-            var timeZoneOffset = context.Factory.GetSetting("timezoneOffset");
 
             try
             {
+                var timeZoneOffset = context.Factory.GetSetting("timezoneOffset");
                 if (timeZoneOffset != null)
                 {
                     _timeZoneOffset = timeZoneOffset.ValueInt.Value;
