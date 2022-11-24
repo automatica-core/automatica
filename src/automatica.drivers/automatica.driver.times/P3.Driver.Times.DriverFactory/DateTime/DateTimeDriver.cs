@@ -6,7 +6,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
 {
     public class DateTimeDriver : DriverBase
     {
-        private int _timeZoneOffset = 0;
+        private readonly int _timeZoneOffset = 0;
 
         public DateTimeDriver(IDriverContext driverContext) : base(driverContext)
         {
