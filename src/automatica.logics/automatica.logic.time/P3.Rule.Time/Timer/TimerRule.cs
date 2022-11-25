@@ -104,9 +104,10 @@ namespace P3.Rule.Time.Timer
                 if (timerTickTime < 0)
                 {
                     _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime).TotalMilliseconds;
-                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
+                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
                     if (isStartup)
                     {
+                        Context.Logger.LogInformation($"Start event, set value to {_value}");
                         Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, false).Instance, false);
                     }
                     _value = false;
@@ -114,6 +115,7 @@ namespace P3.Rule.Time.Timer
                 }
                 if (isStartup)
                 {
+                    Context.Logger.LogInformation($"Start event, set value to {_value}");
                     Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, true).Instance, true);
                 }
 
@@ -131,7 +133,7 @@ namespace P3.Rule.Time.Timer
             }
 
             _timer.Interval = timerTickTime;
-            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
+            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
         }
 
