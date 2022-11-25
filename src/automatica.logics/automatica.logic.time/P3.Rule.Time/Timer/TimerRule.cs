@@ -16,8 +16,7 @@ namespace P3.Rule.Time.Timer
         private readonly RuleInterfaceInstance _output;
         private readonly System.Timers.Timer _timer;
         private readonly object _lock = new object();
-
-        private readonly int _timeZoneOffset = 0;
+        
 
         private bool _value = false;
 
@@ -30,24 +29,6 @@ namespace P3.Rule.Time.Timer
                 a.This2RuleInterfaceTemplate == TimerRuleFactory.RuleOutput);
 
             _timer = new System.Timers.Timer();
-
-
-            try
-            {
-                var timeZoneOffset = context.Factory.GetSetting("timezoneOffset");
-                if (timeZoneOffset != null)
-                {
-                    _timeZoneOffset = timeZoneOffset.ValueInt.Value;
-                }
-                else
-                {
-                    _timeZoneOffset = 0;
-                }
-            }
-            catch
-            {
-
-            }
 
         }
 
@@ -79,7 +60,7 @@ namespace P3.Rule.Time.Timer
 
         private void CalculateTickTime(bool isStartup=false)
         {
-            var now = DateTime.Now.AddHours(_timeZoneOffset);
+            var now = DateTime.UtcNow;
             var nowTime = now.TimeOfDay;
 
             Context.Logger.LogInformation($"Now is {nowTime}");
