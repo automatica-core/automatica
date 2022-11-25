@@ -155,6 +155,8 @@ namespace P3.Rule.Time.Timer
                 _value = !_value;
                 Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _value).Instance, _value);
 
+                Context.Logger.LogInformation($"Tick received, set value to {_value}");
+
                 CalculateTickTime(false);
             }
         }
