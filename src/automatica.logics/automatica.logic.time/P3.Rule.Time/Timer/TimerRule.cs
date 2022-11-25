@@ -77,10 +77,12 @@ namespace P3.Rule.Time.Timer
             return base.Start();
         }
 
-        private void CalculateTickTime(bool isStartup)
+        private void CalculateTickTime(bool isStartup=false)
         {
             var now = DateTime.Now.AddHours(_timeZoneOffset);
             var nowTime = now.TimeOfDay;
+
+            Context.Logger.LogInformation($"Now is {nowTime}");
             
 
             if (!_timerPropertyData.EnabledDays.Contains(now.DayOfWeek))
@@ -95,7 +97,7 @@ namespace P3.Rule.Time.Timer
             
 
             var tickTime = startTime - nowTime;
-            double timerTickTime = 0;
+            double timerTickTime;
 
             if (tickTime.TotalMilliseconds < 0)
             {
@@ -107,7 +109,7 @@ namespace P3.Rule.Time.Timer
                     Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
                     if (isStartup)
                     {
-                        Context.Logger.LogInformation($"Start event, set value to {_value}");
+                        Context.Logger.LogInformation($"Start event, set value to {false}");
                         Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, false).Instance, false);
                     }
                     _value = false;
@@ -115,7 +117,7 @@ namespace P3.Rule.Time.Timer
                 }
                 if (isStartup)
                 {
-                    Context.Logger.LogInformation($"Start event, set value to {_value}");
+                    Context.Logger.LogInformation($"Start event, set value to {true}");
                     Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, true).Instance, true);
                 }
 
@@ -126,6 +128,7 @@ namespace P3.Rule.Time.Timer
                 timerTickTime = tickTime.TotalMilliseconds;
                 if (isStartup)
                 {
+                    Context.Logger.LogInformation($"Start event, set value to {false}");
                     Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, false).Instance, false);
                 }
 
@@ -159,7 +162,7 @@ namespace P3.Rule.Time.Timer
 
                 Context.Logger.LogInformation($"Tick received, set value to {_value}");
 
-                CalculateTickTime(false);
+                CalculateTickTime();
             }
         }
 
