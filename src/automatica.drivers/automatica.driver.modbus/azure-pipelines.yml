@@ -38,7 +38,7 @@ steps:
     arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
 - task: AutomaticaCorePluginCli@7
-  displayName: Plugin build
+  displayName: Plugin ModBus build
   inputs:
     manifest_path: 'P3.Driver.ModBusDriverFactory/automatica-manifest.json'
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
@@ -50,7 +50,7 @@ steps:
     outputdirectory: '$(build.artifactstagingdirectory)'
 
 - task: AutomaticaCoreDockerMultiArchCli@7
-  displayName: Docker multi-arch
+  displayName: Docker modbus multi-arch
   inputs:
     dockerRegistryEndpoint: 'DockerHub'
     dockerfile_amd64: 'Dockerfile'
@@ -58,6 +58,32 @@ steps:
     imageName: 'automaticacore/plugin-p3.driver.modbus'
     buildArgs: |
       MANIFEST_DIR=P3.Driver.ModBusDriverFactory/
+      VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
+      CONFIG=$(BuildConfiguration)
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
+
+
+- task: AutomaticaCorePluginCli@7
+  displayName: Plugin solarman build
+  inputs:
+    manifest_path: 'Solarman/P3.Driver.ModBus.SolarmanV5.DriverFactory/automatica-manifest.json'
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
+    api_key: '$(CLOUD_API_KEY)'
+    cloud_url: '$(CLOUD_URL)'
+    configuration: 'Debug$(BuildConfiguration)'
+    publish: true
+    dockerize: true
+    outputdirectory: '$(build.artifactstagingdirectory)'
+
+- task: AutomaticaCoreDockerMultiArchCli@7
+  displayName: Docker solarman multi-arch
+  inputs:
+    dockerRegistryEndpoint: 'DockerHub'
+    dockerfile_amd64: 'Dockerfile'
+    dockerfile_arm32: 'Dockerfile.arm32'
+    imageName: 'automaticacore/plugin-p3.driver.modbus.solarman'
+    buildArgs: |
+      MANIFEST_DIR=Solarman/P3.Driver.ModBus.SolarmanV5.DriverFactory/
       VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
       CONFIG=$(BuildConfiguration)
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'

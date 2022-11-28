@@ -1,0 +1,9 @@
+﻿{
+  "SOLARMAN": {
+    "DEVICE": {
+      "NAME": "Solarman device",
+      "DESCRIPTION": "Represents a solarman v5 device",
+      "ID": "Devcie ID"
+    }
+  } 
+}

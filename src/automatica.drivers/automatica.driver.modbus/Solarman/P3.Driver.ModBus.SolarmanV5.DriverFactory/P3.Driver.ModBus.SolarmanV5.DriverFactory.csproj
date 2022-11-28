@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Solarman-de.json" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+		<EmbeddedResource Include="automatica-manifest.json" />
+		<EmbeddedResource Include="Resources\Solarman-de.json" />
+		<EmbeddedResource Include="Resources\Solarman-en.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Automatica.Core.EF" Version="7.0.0.899" />
+		<PackageReference Include="Automatica.Core.Driver" Version="7.0.0.899" />
+		<PackageReference Include="Automatica.Core.Driver.Utility" Version="7.0.0.899" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+﻿{
+  "SOLARMAN": {
+    "DEVICE": {
+      "NAME": "Solarman Gerät",
+      "DESCRIPTION": "Definiert ein Solarman Gerät",
+      "ID": "Geräte ID"
+    },
+    "CATEGORY": {
+      "DEVICE": "Gerät"
+    }
+  }
+}
