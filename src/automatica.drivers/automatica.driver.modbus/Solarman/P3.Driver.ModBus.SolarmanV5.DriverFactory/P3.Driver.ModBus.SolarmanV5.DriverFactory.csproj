@@ -21,5 +21,8 @@
 		<PackageReference Include="Automatica.Core.Driver" Version="7.0.0.899" />
 		<PackageReference Include="Automatica.Core.Driver.Utility" Version="7.0.0.899" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\P3.Driver.ModBus.SolarmanV5\P3.Driver.ModBus.SolarmanV5.csproj" />
+	</ItemGroup>
 
 </Project>
