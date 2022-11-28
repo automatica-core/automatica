@@ -18,7 +18,7 @@
     "Type": "driver",
     "Output": "P3.Driver.ModBus.SolarmanV5.DriverFactory.dll",
     "Resources": [],
-    "Dependencies": [ "P3.Driver.ModBus.SolarmanV5.dll" ],
+    "Dependencies": [ "P3.Driver.ModBus.SolarmanV5.dll", "P3.Driver.ModBusDriver.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.driver.modbus",
     "MinCoreServerVersion": {
       "Minor": 0,

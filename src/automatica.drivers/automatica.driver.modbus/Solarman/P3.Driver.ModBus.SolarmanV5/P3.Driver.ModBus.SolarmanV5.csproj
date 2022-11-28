@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj" />
+  </ItemGroup>
+
 </Project>
