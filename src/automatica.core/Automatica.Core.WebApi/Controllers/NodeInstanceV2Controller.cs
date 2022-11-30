@@ -187,6 +187,23 @@ namespace Automatica.Core.WebApi.Controllers
 
                 _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
 
+                var queue = new Queue<NodeInstance>();
+                queue.Enqueue(node);
+
+                while (queue.Count > 0)
+                {
+                    var item = queue.Dequeue();
+                    if (item.InverseThis2ParentNodeInstanceNavigation != null)
+                    {
+                        foreach (var child in item.InverseThis2ParentNodeInstanceNavigation)
+                        {
+                            queue.Enqueue(child);
+                            _nodeInstanceCache.GetSingle(child.ObjId, DbContext);
+                        }
+                    }
+
+                }
+
                 return (_nodeInstanceCache.Get(node.ObjId), entityState);
             }
             catch (Exception e)
