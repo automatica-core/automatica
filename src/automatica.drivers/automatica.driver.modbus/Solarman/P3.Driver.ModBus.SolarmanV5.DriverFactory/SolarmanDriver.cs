@@ -51,7 +51,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 Timeout = 5000
             }, TelegramMonitor);
 
-            _pollTimer.Interval = 100;
+            _pollTimer.Interval = PollInterval;
 
             return base.Init();
         }
