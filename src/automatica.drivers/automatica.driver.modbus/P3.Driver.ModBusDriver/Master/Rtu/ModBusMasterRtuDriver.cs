@@ -8,7 +8,6 @@ using Automatica.Core.Base.TelegramMonitor;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility;
 using RJCP.IO.Ports;
-using NModbus.Utility;
 
 namespace P3.Driver.ModBusDriver.Master.Rtu
 {

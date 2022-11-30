@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NModbus.Utility
+namespace P3.Driver.ModBusDriver
 {
     /// <summary>
     ///     Modbus utility methods.

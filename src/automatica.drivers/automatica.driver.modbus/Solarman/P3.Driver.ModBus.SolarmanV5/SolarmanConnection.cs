@@ -1,10 +1,8 @@
 ﻿using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver.Utility;
-using NModbus.Utility;
 using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master.Tcp;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace P3.Driver.ModBus.SolarmanV5
 {
@@ -123,15 +121,9 @@ namespace P3.Driver.ModBus.SolarmanV5
             frame[2] = Utils.ShiftRight(length, 8);
             frame[1] = (byte)(length & 0x00FF);
 
-            var frameHex = Utils.ByteArrayToString(in frame);
-
             var crc2 = ModbusUtility.CalculateCrc(frame, 1, frame.Length-1);
 
             frame[^2] = crc2;
-
-            
-           
-
 
             return frame;
 
