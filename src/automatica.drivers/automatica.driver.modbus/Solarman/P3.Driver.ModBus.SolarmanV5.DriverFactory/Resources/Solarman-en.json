@@ -1,9 +1,22 @@
 ﻿{
   "SOLARMAN": {
+    "PROPERTY": {
+      "POLL_INTERVAL": {
+        "NAME": "Polling interval [ms]",
+        "DESCRIPTION": ""
+      }
+    },
+    "CATEGORY": {
+      "DEVICE": "Device"
+    },
     "DEVICE": {
       "NAME": "Solarman device",
       "DESCRIPTION": "Represents a solarman v5 device",
-      "ID": "Devcie ID",
+      "ID": "Device ID",
+      "SERIAL": {
+        "NAME": "Serial Number",
+        "DESCRIPTION": ""
+      },
       "SG03LP3": {
         "NAME": "Hybrid Inverter Three Phase (SG03LP3)",
         "DESCRIPTION": "",
@@ -280,12 +293,6 @@
     "LOAD": {
       "NAME": "Load",
       "DESCRIPTION": ""
-    },
-    "PROPERTY": {
-      "POLL_INTERVAL": {
-        "NAME": "Polling interval [ms]",
-        "DESCRIPTION": ""
-      }
     }
   }
 }
