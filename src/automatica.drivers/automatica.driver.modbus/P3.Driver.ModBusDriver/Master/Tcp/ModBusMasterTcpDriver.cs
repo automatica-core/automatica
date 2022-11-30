@@ -94,7 +94,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         protected override short GetRequestLength(byte[] request)
         {
-            var length = request.Length - 6;
+            var length = request.Length - HeaderLength;
             return (short)length;
         }
 
@@ -121,6 +121,13 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             return true;
         }
 
+        protected virtual ushort GetLengthToRead(byte[] buffer)
+        {
+            return Utils.GetUShort(buffer[4], buffer[5]);
+        }
+
+        protected virtual int HeaderLength => 6;
+
         protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters)
         {
             try
@@ -128,14 +135,15 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                 _receiveTimeoutTimer.Start();
                 _cts = new CancellationTokenSource();
 
-                byte[] buffer = new byte[7];
-                var read = await _networkStream.ReadAsync(buffer, 0, 6, _cts.Token);
+                byte[] buffer = new byte[HeaderLength];
+                var read = await _networkStream.ReadAsync(buffer, 0, HeaderLength, _cts.Token);
                 _receiveTimeoutTimer.Stop();
                 _cts = null;
 
-                if (read == 6)
+                if (read == HeaderLength)
                 {
-                    var lengthToRead = Utils.GetUShort(buffer[4], buffer[5]);
+                    ModBus.Logger.LogHexIn(buffer);
+                    var lengthToRead = GetLengthToRead(buffer);
                     _receiveTimeoutTimer.Start();
                     byte[] data = new byte[lengthToRead];
                     _cts = new CancellationTokenSource();
@@ -143,9 +151,9 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                     _cts = null;
                     _receiveTimeoutTimer.Stop();
 
+                    ModBus.Logger.LogHexIn(data);
                     if (read == lengthToRead)
                     {
-                        ModBus.Logger.LogHexIn(data);
                         return data;
                     }
                 }

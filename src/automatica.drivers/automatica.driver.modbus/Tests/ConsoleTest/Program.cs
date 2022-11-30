@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
+using P3.Driver.ModBus.SolarmanV5;
+using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master.Rtu;
+using P3.Driver.ModBusDriver.Master.Tcp;
 
 namespace ConsoleTest
 {
@@ -12,6 +16,7 @@ namespace ConsoleTest
         {
             Console.WriteLine("Hello World!");
 
+            ModBus.Logger = new ConsoleLogger();
             //var slave = new ModBusSlaveTcpDriver(new ModBusSlaveTcpConfig
             //{
             //    DeviceId = 1, DeviceIds = new List<int>() {1}, IgnoreDeviceId = false, Port = 502
@@ -20,6 +25,28 @@ namespace ConsoleTest
 
             //slave.SetInputRegister(1, 0, 255);
 
+            var master = new ModBusMasterTcpDriver(new ModBusMasterTcpConfig
+            {
+                IpAddress = IPAddress.Parse("127.0.0.1"),
+                Port = 502,
+                Timeout = 5000
+            }, new EmptyTelegramMonitorInstance());
+            master.Open();
+
+            var value = await master.ReadRegisters(0, 0, 10);
+
+            //var solarmanDriver = new SolarmanConnection(new SolarmanConfig
+            //{
+            //    IpAddress = IPAddress.Parse("192.168.8.122"),
+            //    Port = 8899,
+            //    SolarmanSerialNumber = 2701730339,
+            //    Timeout = 5000
+            //}, new EmptyTelegramMonitorInstance());
+
+            //solarmanDriver.Open();
+            //var data = await solarmanDriver.ReadRegisters(1, 0x0268, 1);
+
+            return;
             var baud = 9600;
             var port = "COM10";
             var dataBits = 8;

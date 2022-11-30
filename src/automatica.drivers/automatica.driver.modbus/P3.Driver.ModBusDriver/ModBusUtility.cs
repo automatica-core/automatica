@@ -57,15 +57,47 @@ namespace NModbus.Utility
             }
 
             byte lrc = 0;
-
+            int i = 0;
+            int c = 0;
             foreach (byte b in data)
             {
+                c++;
+               
                 lrc += b;
             }
 
             lrc = (byte)((lrc ^ 0xFF) + 1);
 
             return lrc;
+        }
+
+        public static byte CalculateCrc(byte[] data, int start, int length)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            byte checksum = 0;
+            int c = 0;
+            foreach (byte b in data)
+            {
+                c++;
+                if (c <= start)
+                {
+                    continue;
+                }
+
+                if (c >= length)
+                {
+                    break;
+                }
+
+                checksum += b;
+            }
+
+
+            return checksum;
         }
 
         /// <summary>

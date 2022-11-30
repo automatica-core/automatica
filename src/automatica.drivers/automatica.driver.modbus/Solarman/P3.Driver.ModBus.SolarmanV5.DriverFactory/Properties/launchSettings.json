@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "P3.Driver.ModBus.SolarmanV5.DriverFactory": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\"
+    },
+    "AutomaticaCore": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\"
+    }
+  }
+}

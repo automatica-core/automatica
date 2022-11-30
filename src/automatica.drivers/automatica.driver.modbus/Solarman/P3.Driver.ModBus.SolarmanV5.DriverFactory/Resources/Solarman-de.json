@@ -1,12 +1,291 @@
 ﻿{
   "SOLARMAN": {
     "DEVICE": {
-      "NAME": "Solarman Gerät",
-      "DESCRIPTION": "Definiert ein Solarman Gerät",
-      "ID": "Geräte ID"
+      "NAME": "Solarman device",
+      "DESCRIPTION": "Represents a solarman v5 device",
+      "ID": "Devcie ID",
+      "SG03LP3": {
+        "NAME": "Hybrid Inverter Three Phase (SG03LP3)",
+        "DESCRIPTION": "",
+        "ALARM-0": {
+          "NAME": "Alarm 1",
+          "DESCRIPTION": ""
+        },
+        "ALARM-1": {
+          "NAME": "Alarm 2",
+          "DESCRIPTION": ""
+        },
+        "ALARM-2": {
+          "NAME": "Alarm 3",
+          "DESCRIPTION": ""
+        },
+        "ALARM-3": {
+          "NAME": "Alarm 4",
+          "DESCRIPTION": ""
+        },
+        "ALARM-4": {
+          "NAME": "Alarm 5",
+          "DESCRIPTION": ""
+        },
+        "ALARM-5": {
+          "NAME": "Alarm 6",
+          "DESCRIPTION": ""
+        },
+        "BATTERY-CURRENT": {
+          "NAME": "Battery Current [A]",
+          "DESCRIPTION": ""
+        },
+        "BATTERY-POWER": {
+          "NAME": "Battery Power [W]",
+          "DESCRIPTION": ""
+        },
+        "BATTERY-SOC": {
+          "NAME": "Battery SoC [%]",
+          "DESCRIPTION": ""
+        },
+        "BATTERY-TEMPERATURE": {
+          "NAME": "Battery Temperature [°C]",
+          "DESCRIPTION": ""
+        },
+        "BATTERY-VOLTAGE": {
+          "NAME": "Battery Voltage [V]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-BATTERY-CHARGE": {
+          "NAME": "Total Battery Charge [kWh]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-BATTERY-DISCHARGE": {
+          "NAME": "Total Battery Discharge [kWh]",
+          "DESCRIPTION": ""
+        },
+        "DAILY-ENERGY-BOUGHT": {
+          "NAME": "Daily Energy Bought [kWh]",
+          "DESCRIPTION": ""
+        },
+        "DAILY-ENERGY-SOLD": {
+          "NAME": "Daily Energy Sold [kWh]",
+          "DESCRIPTION": ""
+        },
+        "EXTERNAL-CT-L1-POWER": {
+          "NAME": "External L1 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "EXTERNAL-CT-L2-POWER": {
+          "NAME": "External L2 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "EXTERNAL-CT-L3-POWER": {
+          "NAME": "External L3 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "GRID-VOLTAGE-L1": {
+          "NAME": "Grid Voltage L1 [V]",
+          "DESCRIPTION": ""
+        },
+        "GRID-VOLTAGE-L2": {
+          "NAME": "Grid Voltage L2 [V]",
+          "DESCRIPTION": ""
+        },
+        "GRID-VOLTAGE-L3": {
+          "NAME": "Grid Voltage L3 [V]",
+          "DESCRIPTION": ""
+        },
+        "INTERNAL-CT-L1-POWER": {
+          "NAME": "Internal L1 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "INTERNAL-CT-L2-POWER": {
+          "NAME": "Internal L2 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "INTERNAL-CT-L3-POWER": {
+          "NAME": "Internal L3 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-ENERGY-BOUGHT": {
+          "NAME": "Total Energy Bought [kWh]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-ENERGY-SOLD": {
+          "NAME": "Total Energy Sold [kWh]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-GRID-POWER": {
+          "NAME": "Total Grid Power [W]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-GRID-PRODUCTION": {
+          "NAME": "Total Grid Production [kWh]",
+          "DESCRIPTION": ""
+        },
+        "AC-TEMPERATURE": {
+          "NAME": "AC Temperature [°C]",
+          "DESCRIPTION": ""
+        },
+        "COMMUNCATION-BOARD-VERSION": {
+          "NAME": "Communication Board Version",
+          "DESCRIPTION": ""
+        },
+        "CONTROL-BOARD-VERSION": {
+          "NAME": "Control Board Version",
+          "DESCRIPTION": ""
+        },
+        "CURRENT-L1": {
+          "NAME": "Current L1 [A]",
+          "DESCRIPTION": ""
+        },
+        "CURRENT-L2": {
+          "NAME": "Current L2 [A]",
+          "DESCRIPTION": ""
+        },
+        "CURRENT-L3": {
+          "NAME": "Current L3 [A]",
+          "DESCRIPTION": ""
+        },
+        "DC-TEMPERATURE": {
+          "NAME": "DC Temperature [°C]",
+          "DESCRIPTION": ""
+        },
+        "INVERTER-ID": {
+          "NAME": "Inverter ID",
+          "DESCRIPTION": ""
+        },
+        "INVERTER-L1-POWER": {
+          "NAME": "Inverter L1 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "INVERTER-L2-POWER": {
+          "NAME": "Inverter L2 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "INVERTER-L3-POWER": {
+          "NAME": "Inverter L3 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "RUNNING": {
+          "NAME": "Running",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-POWER": {
+          "NAME": "Total Power [W]",
+          "DESCRIPTION": ""
+        },
+        "DAILY-PRODUCTION": {
+          "NAME": "Daily Production [kWh]",
+          "DESCRIPTION": ""
+        },
+        "PV1-CURRENT": {
+          "NAME": "PV1 Current [A]",
+          "DESCRIPTION": ""
+        },
+        "PV2-CURRENT": {
+          "NAME": "PV2 Current [A]",
+          "DESCRIPTION": ""
+        },
+        "PV1-VOLTAGE": {
+          "NAME": "PV1 Voltage [V]",
+          "DESCRIPTION": ""
+        },
+        "PV2-VOLTAGE": {
+          "NAME": "PV2 Voltage [V]",
+          "DESCRIPTION": ""
+        },
+        "PV1-POWER": {
+          "NAME": "PV1 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "PV2-POWER": {
+          "NAME": "PV2 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-PRODUCTION": {
+          "NAME": "Total Production [kWh]",
+          "DESCRIPTION": ""
+        },
+        "DAILY-LOAD-CONSUMPTION": {
+          "NAME": "Daily Load Consumption [kWh]",
+          "DESCRIPTION": ""
+        },
+        "LOAD-L1-POWER": {
+          "NAME": "Load L1 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "LOAD-L2-POWER": {
+          "NAME": "Load L2 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "LOAD-L3-POWER": {
+          "NAME": "Load L3 Power [W]",
+          "DESCRIPTION": ""
+        },
+        "LOAD-VOLTAGE-L1": {
+          "NAME": "Load L1 Voltage [V]",
+          "DESCRIPTION": ""
+        },
+        "LOAD-VOLTAGE-L2": {
+          "NAME": "Load L2 Voltage [V]",
+          "DESCRIPTION": ""
+        },
+        "LOAD-VOLTAGE-L3": {
+          "NAME": "Load L3 Voltage [V]",
+          "DESCRIPTION": ""
+        },
+        "SMARTLOAD-ENABLED-STATUS": {
+          "NAME": "Smartload Enabled",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-LOAD-CONSUMPTION": {
+          "NAME": "Total Load Consumption [kWh]",
+          "DESCRIPTION": ""
+        },
+        "TOTAL-LOAD-POWER": {
+          "NAME": "Total Load Power [W]",
+          "DESCRIPTION": ""
+        },
+        "GRID-STATUS": {
+          "NAME": "Grid Status",
+          "DESCRIPTION": ""
+        },
+        "BOOTLOADER-VERSION": {
+          "NAME": "Bootloader Version",
+          "DESCRIPTION": ""
+        },
+        "GRID-CONNECTED-STATUS": {
+          "NAME": "Grid Connected Status",
+          "DESCRIPTION": ""
+        }
+      }
     },
-    "CATEGORY": {
-      "DEVICE": "Gerät"
+    "ALERT": {
+      "NAME": "Alerts",
+      "DESCRIPTION": ""
+    },
+    "BATTERY": {
+      "NAME": "Battery",
+      "DESCRIPTION": ""
+    },
+    "GRID": {
+      "NAME": "Grid",
+      "DESCRIPTION": ""
+    },
+    "INVERTER": {
+      "NAME": "Inverter",
+      "DESCRIPTION": ""
+    },
+    "SOLAR": {
+      "NAME": "Solar",
+      "DESCRIPTION": ""
+    },
+    "LOAD": {
+      "NAME": "Load",
+      "DESCRIPTION": ""
+    },
+    "PROPERTY": {
+      "POLL_INTERVAL": {
+        "NAME": "Polling interval [ms]",
+        "DESCRIPTION": ""
+      }
     }
   }
 }

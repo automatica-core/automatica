@@ -353,6 +353,11 @@ namespace P3.Driver.ModBusDriver.Master
             return await RequestFrame(slaveId, function, numberOfRegisters);
         }
 
+        protected virtual byte[] ParseFrame(byte slaveId, ModBusFunction function, int numberOfRegisters, byte[] input)
+        {
+            return input;
+        }
+
         private async Task<ModBusFrameReturn> RequestFrame(byte slaveId, ModBusFunction function, int numberOfRegisters)
         {
             var readFrame = await ReadFrame(function, numberOfRegisters);
@@ -363,6 +368,9 @@ namespace P3.Driver.ModBusDriver.Master
             {
                 return new ModBusFrameReturn(ModBusRequestStatus.InvalidDataRead, null);
             }
+
+            readFrame = ParseFrame(slaveId, function, numberOfRegisters, readFrame);
+
             if (slaveId != readFrame[0])
             {
                 return new ModBusFrameReturn(ModBusRequestStatus.InvalidSlaveAnswered, null);

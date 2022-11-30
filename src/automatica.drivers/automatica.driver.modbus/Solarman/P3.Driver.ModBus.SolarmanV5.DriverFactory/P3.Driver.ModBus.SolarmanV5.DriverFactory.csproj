@@ -1,14 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	  <TargetFramework>net7.0</TargetFramework>
+	  <AssemblyName>P3.Driver.ModBus.SolarmanV5.DriverFactory</AssemblyName>
+	  <RootNamespace>P3.Driver.ModBus.SolarmanV5.DriverFactory</RootNamespace>
+	  <Version>1.0.0.0</Version>
+	  <Configurations>Debug;Release;DebugLocal</Configurations>
+	  <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Drivers\SolarmanV5</BaseOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\Solarman-de.json" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Drivers\SolarmanV5</OutputPath>
+	</PropertyGroup>
 
 
 	<ItemGroup>
