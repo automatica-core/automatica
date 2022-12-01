@@ -6,7 +6,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
 {
     internal class SolarmanBooleanAttribute : SolarmanAttrribute
     {
-        public SolarmanBooleanAttribute(IDriverContext driverContext, SolarmanDriver parent) : base(driverContext, parent)
+        public SolarmanBooleanAttribute(IDriverContext driverContext, SolarmanGroupAttribute parent) : base(driverContext, parent)
         {
         }
 

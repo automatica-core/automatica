@@ -72,11 +72,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             {
                 if (attributeMap.Count == 1)
                 {
-                    attribute = new Solarman2ByteIntegerAttribute(ctx, _parent);
+                    attribute = new Solarman2ByteIntegerAttribute(ctx, this);
                 }
                 else if (attributeMap.Count == 2)
                 {
-                    attribute = new Solarman4ByteIntegerAttribute(ctx, _parent);
+                    attribute = new Solarman4ByteIntegerAttribute(ctx, this);
                 }
             }
             else if (ctx.NodeInstance.This2NodeTemplateNavigation.This2NodeDataType ==
@@ -84,22 +84,22 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             {
                 if (attributeMap.Count == 1)
                 {
-                    attribute = new Solarman2ByteIntegerAttribute(ctx, _parent);
+                    attribute = new Solarman2ByteIntegerAttribute(ctx, this);
                 }
                 else if (attributeMap.Count == 2)
                 {
-                    attribute = new Solarman4ByteIntegerAttribute(ctx, _parent);
+                    attribute = new Solarman4ByteIntegerAttribute(ctx, this);
                 }
             }
             else if (ctx.NodeInstance.This2NodeTemplateNavigation.This2NodeDataType ==
                 (long)NodeDataType.String)
             {
-                attribute = new SolarmanStringAttribute(ctx, _parent);
+                attribute = new SolarmanStringAttribute(ctx, this);
             }
             else if (ctx.NodeInstance.This2NodeTemplateNavigation.This2NodeDataType ==
                      (long)NodeDataType.Boolean)
             {
-                attribute = new SolarmanBooleanAttribute(ctx, _parent);
+                attribute = new SolarmanBooleanAttribute(ctx, this);
             }
 
             if (attribute == null)

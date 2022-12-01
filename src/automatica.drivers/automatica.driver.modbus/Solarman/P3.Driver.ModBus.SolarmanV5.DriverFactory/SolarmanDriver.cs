@@ -40,7 +40,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             DeviceId = (byte)GetPropertyValueInt("solarman-device-id");
 
             var ip = GetPropertyValueString("solarman-ip");
-            var port =GetProperty("solarman-port").ValueInt.Value;
+            var port = GetProperty("solarman-port").ValueInt.Value;
             var serial = GetPropertyValueString("solarman-serial");
 
             _driver = new SolarmanConnection(new SolarmanConfig
@@ -66,11 +66,18 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
 
+            PollAll().ConfigureAwait(false);
+
             return base.Start();
         }
 
-        private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
+        private async Task PollAll()
         {
+            if (_waitSemaphore.CurrentCount == 0)
+            {
+                return;
+            }
+
             await _waitSemaphore.WaitAsync();
             try
             {
@@ -78,12 +85,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 {
                     throw new ArgumentException("Driver not initialized...");
                 }
-                if (_driver.Connected)
+                foreach (var group in _groups)
                 {
-                    foreach (var group in _groups)
-                    {
-                        await group.PollAttributes();
-                    }
+                    await group.PollAttributes();
                 }
             }
             finally
@@ -91,7 +95,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 _waitSemaphore.Release(1);
 
             }
+        }
 
+        private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
+        {
+            await PollAll();
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

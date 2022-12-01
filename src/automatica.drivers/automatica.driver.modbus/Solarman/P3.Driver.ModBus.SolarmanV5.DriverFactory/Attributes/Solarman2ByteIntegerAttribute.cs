@@ -7,7 +7,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
 {
     internal class Solarman2ByteIntegerAttribute : SolarmanAttrribute
     {
-        public Solarman2ByteIntegerAttribute(IDriverContext driverContext, SolarmanDriver parent) : base(driverContext, parent)
+        public Solarman2ByteIntegerAttribute(IDriverContext driverContext, SolarmanGroupAttribute parent) : base(driverContext, parent)
         {
         }
 
