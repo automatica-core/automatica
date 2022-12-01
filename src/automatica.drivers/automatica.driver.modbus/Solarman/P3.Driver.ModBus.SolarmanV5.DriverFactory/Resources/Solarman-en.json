@@ -4,6 +4,10 @@
       "POLL_INTERVAL": {
         "NAME": "Polling interval [ms]",
         "DESCRIPTION": ""
+      },
+      "DEVICE_ID": {
+        "NAME": "Device Id",
+        "DESCRIPTION": ""
       }
     },
     "CATEGORY": {
@@ -18,7 +22,7 @@
         "DESCRIPTION": ""
       },
       "SG03LP3": {
-        "NAME": "Hybrid Inverter Three Phase (SG03LP3)",
+        "NAME": "Deye Hybrid Inverter Three Phase (SG03LP3)",
         "DESCRIPTION": "",
         "ALARM-0": {
           "NAME": "Alarm 1",

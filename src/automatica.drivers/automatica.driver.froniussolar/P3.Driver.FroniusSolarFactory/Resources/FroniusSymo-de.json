@@ -1,6 +1,155 @@
 {
   "FRONIUS_SOLAR": {
-    "NAME": "FRONIUSSYMO",
-    "DESCRIPTION":  ""
+    "PROPERTY": {
+      "POLL_INTERVAL": {
+        "NAME": "Polling interval [ms]",
+        "DESCRIPTION": ""
+      },
+      "DEVICE_ID": {
+        "NAME": "Device Id",
+        "DESCRIPTION": ""
+      }
+    },
+    "CATEGORY": {
+      "DEVICE": "Device"
+    },
+    "NAME": "Fronius Solar",
+    "DESCRIPTION": "",
+    "COMMON_INVERTER_DATA": {
+      "NAME": "Common Inverter Data",
+      "DESCRIPTION": ""
+    },
+    "P3_INVERTER_DATA": {
+      "NAME": "3-Phase Data",
+      "DESCRIPTION": ""
+    },
+    "POWER_FLOW_REALTIME_DATA": {
+      "NAME": "Power Flow Data",
+      "DESCRIPTION": ""
+    },
+    "LAST_POLL_TIMESTAMP": {
+      "NAME": "Last poll timestamp",
+      "DESCRIPTION": ""
+    },
+    "DEVICE_STATE": {
+      "NAME": "Device Status",
+      "DESCRIPTION": ""
+    },
+    "DEVICE": {
+      "NAME": "Fronius Symo",
+      "DESCRIPTION": "",
+      "AC-CURRENT": {
+        "NAME": "AC Current [A]",
+        "DESCRIPTION": ""
+      },
+      "AC-FREQUENCY": {
+        "NAME": "AC Frequency [Hz]",
+        "DESCRIPTION": ""
+      },
+      "AC-POWER": {
+        "NAME": "AC Power [W]",
+        "DESCRIPTION": ""
+      },
+      "AC-VOLTAGE": {
+        "NAME": "AC Voltage [V]",
+        "DESCRIPTION": ""
+      },
+      "CURRENT-DAY-ENERGY": {
+        "NAME": "Current Day Energy [Wh]",
+        "DESCRIPTION": ""
+      },
+      "CURRENT-YEAR-ENERGY": {
+        "NAME": "Current Year Energy [Wh]",
+        "DESCRIPTION": ""
+      },
+      "DC-CURRENT": {
+        "NAME": "DC Current [A]",
+        "DESCRIPTION": ""
+      },
+      "DC-VOLTAGE": {
+        "NAME": "DC Voltage [V]",
+        "DESCRIPTION": ""
+      },
+      "DEVICE-STATUS": {
+        "NAME": "Device Status",
+        "DESCRIPTION": ""
+      },
+      "TOTAL-ENERGY": {
+        "NAME": "Total Energy [Wh]",
+        "DESCRIPTION": ""
+      },
+      "AMBIENT-TEMPERATURE": {
+        "NAME": "Ambient Temperature [°C]",
+        "DESCRIPTION": ""
+      },
+      "FAN-BACK-LEFT-SPEED": {
+        "NAME": "Fan Back Left Speed [RPM]",
+        "DESCRIPTION": ""
+      },
+      "FAN-BACK-RIGHT-SPEED": {
+        "NAME": "Fan Back Right Speed [RPM]",
+        "DESCRIPTION": ""
+      },
+      "FAN-FRONT-LEFT-SPEED": {
+        "NAME": "Fan Front Left Speed [RPM]",
+        "DESCRIPTION": ""
+      },
+      "FAN-FRONT-RIGHT-SPEED": {
+        "NAME": "Fan Front Right Speed [RPM]",
+        "DESCRIPTION": ""
+      },
+      "L1-AC-CURRENT": {
+        "NAME": "AC L1 Current [A]",
+        "DESCRIPTION": ""
+      },
+      "L2-AC-CURRENT": {
+        "NAME": "AC L2 Current [A]",
+        "DESCRIPTION": ""
+      },
+      "L3-AC-CURRENT": {
+        "NAME": "AC L3 Current [A]",
+        "DESCRIPTION": ""
+      },
+      "L1-AC-VOLTAGE": {
+        "NAME": "AC L1 Voltage [V]",
+        "DESCRIPTION": ""
+      },
+      "L2-AC-VOLTAGE": {
+        "NAME": "AC L2 Voltage [V]",
+        "DESCRIPTION": ""
+      },
+      "L3-AC-VOLTAGE": {
+        "NAME": "AC L3 Voltage [V]",
+        "DESCRIPTION": ""
+      },
+      "AC-ENERGY-TODAY": {
+        "NAME": "AC Energy Today [Wh]",
+        "DESCRIPTION": ""
+      },
+      "AC-ENERGY-TOTAL": {
+        "NAME": "AC Energy Total [Wh]",
+        "DESCRIPTION": ""
+      },
+      "AC-ENERGY-YEAR": {
+        "NAME": "AC Energy Year [Wh]",
+        "DESCRIPTION": ""
+      },
+      "CURRENT-POWER": {
+        "NAME": "Current Power [W]",
+        "DESCRIPTION": ""
+      },
+      "DEVICE-TYPE": {
+        "NAME": "Device Type",
+        "DESCRIPTION": ""
+      },
+      "MGM-TIMER-REMAINING-TIME": {
+        "NAME": "Management Timer Remaining Time",
+        "DESCRIPTION": ""
+      },
+      "ERROR-CODE": {
+        "NAME": "Error Code",
+        "DESCRIPTION": ""
+      }
+    }
   }
 }
