@@ -82,6 +82,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
 
             await _waitSemaphore.WaitAsync();
+            _timestampAttribute?.DispatchTimestamp();
             try
             {
                 if (_driver == null)
@@ -102,7 +103,6 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
         {
-            _timestampAttribute?.DispatchTimestamp();
             await PollAll();
         }
 
