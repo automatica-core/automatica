@@ -270,10 +270,15 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         public async Task DeleteNode([FromBody]NodeInstance node)
         {
-            var transaction = DbContext.Database.BeginTransaction();
+            var transaction = await DbContext.Database.BeginTransactionAsync();
+            var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation)
+                .SingleOrDefault(a => a.ObjId == node.ObjId);
             try
             {
-                var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation).SingleOrDefault(a => a.ObjId == node.ObjId);
+                if (existingNode == null)
+                {
+                    return;
+                }
                 if (existingNode != null)
                 {
                     DbContext.Entry(existingNode).State = EntityState.Deleted;
@@ -287,9 +292,9 @@ namespace Automatica.Core.WebApi.Controllers
                     if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
                         existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
                     {
-                        _nodeInstanceCache.Clear();
                         return;
                     }
+
                     var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
 
                     if (rootNode.ObjId == node.ObjId)
@@ -310,13 +315,17 @@ namespace Automatica.Core.WebApi.Controllers
                     SystemLogger.Instance.LogError(e, $"Error stopping driver {node.Name}...");
                 }
 
-                _nodeInstanceCache.Clear();
             }
             catch (Exception e)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 SystemLogger.Instance.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
                 throw;
+            }
+            finally
+            {
+
+                _nodeInstanceCache.Remove(existingNode);
             }
         }
 
@@ -332,7 +341,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node)
         {
-            var transaction = DbContext.Database.BeginTransaction();
+            var transaction = await DbContext.Database.BeginTransactionAsync();
             try
             {
                 var existingNode = _nodeInstanceCache.Get(node.ObjId);
@@ -368,7 +377,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 SystemLogger.Instance.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
                 throw;
             }

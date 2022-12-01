@@ -209,6 +209,23 @@ namespace Automatica.Core.Internals.Cache.Driver
             return item;
         }
 
+        public void Remove(NodeInstance existingNode)
+        {
+            _allCache.Remove(existingNode.ObjId);
+            if (existingNode.This2ParentNodeInstance.HasValue)
+            {
+                var parent = _allCache[existingNode.This2ParentNodeInstance.Value];
+
+                if (parent.InverseThis2ParentNodeInstanceNavigation != null)
+                {
+                    var parentExistingChild = parent.InverseThis2ParentNodeInstanceNavigation
+                        .Find(a => a.ObjId == existingNode.ObjId);
+
+                    parent.InverseThis2ParentNodeInstanceNavigation.Remove(parentExistingChild);
+                }
+            }
+        }
+
         private void GetNodeInstanceStateRec(NodeInstance node)
         {
             node.State = _nodeInstanceStateHandler.GetNodeInstanceState(node.ObjId);
