@@ -13,7 +13,7 @@ namespace P3.Driver.FroniusSolarFactory
 
         public override Guid DriverGuid => new Guid("d0f5650d-f786-4a08-8360-03fada6d4b29");
         
-        public override Version DriverVersion => new Version(0, 0, 0, 2);
+        public override Version DriverVersion => new Version(0, 1, 0, 2);
 
         public override bool InDevelopmentMode => false;
 
