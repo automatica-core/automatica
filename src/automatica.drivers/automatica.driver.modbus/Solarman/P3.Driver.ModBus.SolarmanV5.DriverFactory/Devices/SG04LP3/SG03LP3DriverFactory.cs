@@ -19,7 +19,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
-            factory.CreateInterfaceType(DeviceTypeGuid, "SOLARMAN.DEVICE.NAME", "SOLARMAN.DEVICE.DESCRIPTION", 1, 1,
+            factory.CreateInterfaceType(DeviceTypeGuid, "SOLARMAN.DEVICE.NAME", "SOLARMAN.DEVICE.DESCRIPTION", 7, 1,
                 true);
             factory.CreateInterfaceType(BatteryTypeGuid, "SOLARMAN.BATTERY.NAME", "SOLARMAN.BATTERY.DESCRIPTION", int.MaxValue, 1,
                 true);
