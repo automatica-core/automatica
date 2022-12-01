@@ -293,6 +293,10 @@
     "LOAD": {
       "NAME": "Load",
       "DESCRIPTION": ""
-    }
+    },
+    "LAST_POLL_TIMESTAMP": {
+      "NAME": "Last poll timestamp",
+      "DESCRIPTION": "" 
+    } 
   }
 }

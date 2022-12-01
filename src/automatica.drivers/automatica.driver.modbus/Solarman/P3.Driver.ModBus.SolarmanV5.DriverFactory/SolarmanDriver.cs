@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         private readonly List<SolarmanGroupAttribute> _groups = new();
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap = new();
+
+        private SolarmanPollTimestampAttribute? _timestampAttribute;
 
         internal SolarmanDriver(IDriverContext driverContext, DeviceMap map) : base(driverContext)
         {
@@ -99,11 +102,19 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
         {
+            _timestampAttribute?.DispatchTimestamp();
             await PollAll();
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
+            var key = ctx.NodeInstance.This2NodeTemplateNavigation.Key;
+            if (key == "last-poll-timestamp")
+            {
+                _timestampAttribute = new SolarmanPollTimestampAttribute(ctx);
+                return _timestampAttribute;
+            }
+
             var groupAttribute = new SolarmanGroupAttribute(ctx, _map, _driver, this, _nameMap);
             _groups.Add(groupAttribute);
             return groupAttribute;

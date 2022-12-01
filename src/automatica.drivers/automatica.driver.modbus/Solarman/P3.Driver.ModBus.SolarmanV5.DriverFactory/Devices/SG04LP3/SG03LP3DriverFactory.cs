@@ -76,6 +76,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
                 "solarman-group.inverter", DeviceTypeGuid, InverterTypeGuid, true, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
+            factory.CreateNodeTemplate(new Guid("a548fcc3-e0e0-43cb-80c0-390bf23317b7"), "SOLARMAN.LAST_POLL_TIMESTAMP.NAME", "SOLARMAN.LAST_POLL_TIMESTAMP.DESCRIPTION",
+                "last-poll-timestamp", DeviceTypeGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, false, true,
+                NodeDataType.DateTime, 1, false);
 
             CreateValueTemplate(factory, SolarTypeGuid, new Guid("9b981673-466f-4b89-be49-4d3dfe6db799"), "pv1-power", NodeDataType.Double);
             CreateValueTemplate(factory, SolarTypeGuid, new Guid("992e1e54-9354-45df-b37b-47a138ea6668"), "pv2-power", NodeDataType.Double);
