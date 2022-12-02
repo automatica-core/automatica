@@ -428,12 +428,18 @@ namespace Automatica.Core.WebApi.Controllers
                 SystemLogger.Instance.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
                 var scan = await _notifyDriver.ScanBus(instance);
 
-                foreach (var s in scan)
+                if (scan != null)
                 {
-                    s.This2ParentNodeInstance = instance.ObjId;
-                }
+                    foreach (var s in scan)
+                    {
+                        s.This2ParentNodeInstance = instance.ObjId;
+                    }
 
-                return await SaveAndReloadNodeInstances(scan);
+                    return await SaveAndReloadNodeInstances(scan);
+                }
+                
+                return new List<NodeInstance>();
+                
             }
             catch (Exception e)
             {
