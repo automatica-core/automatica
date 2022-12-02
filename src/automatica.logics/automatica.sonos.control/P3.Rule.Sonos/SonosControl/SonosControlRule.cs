@@ -121,6 +121,7 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
     protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
     {
         var ret = new List<IRuleOutputChanged>();
+        
 
         if (instance.This2RuleInterfaceTemplate == _volume.This2RuleInterfaceTemplate)
         {
@@ -136,16 +137,16 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
                 _currentVolume = _volumeOnPlayValue;
                 _currentlyPlaying = true;
 
-                ret.Add(new RuleOutputChanged(_playOutputStatus, true)); 
-                ret.Add(new RuleOutputChanged(_volumeOutputStatus, _currentVolume));
-                ret.Add(new RuleOutputChanged(_radioStationOutputValue, _radioStationValue));
                 ret.Add(new RuleOutputChanged(_pauseOutputStatus, false));
+                ret.Add(new RuleOutputChanged(_radioStationOutputValue, _radioStationValue));
+                ret.Add(new RuleOutputChanged(_volumeOutputStatus, _currentVolume));
+                ret.Add(new RuleOutputChanged(_playOutputStatus, true));
             }
             else
             {
-                ret.Add(new RuleOutputChanged(_playOutputStatus, false));
                 ret.Add(new RuleOutputChanged(_pauseOutputStatus, true));
                 ret.Add(new RuleOutputChanged(_radioStationOutputValue, null));
+                ret.Add(new RuleOutputChanged(_playOutputStatus, false));
             }
         }
         if (instance.This2RuleInterfaceTemplate == _playPauseInputState.This2RuleInterfaceTemplate)
@@ -171,7 +172,7 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
         {
             if (_currentlyPlaying)
             {
-                if (_currentVolume - 1 > 0)
+                if (_currentVolume - 1 < 0)
                 {
                     return ret;
                 }
