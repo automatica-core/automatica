@@ -20,6 +20,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Loxone.Miniserver.Driver
 {
@@ -37,6 +38,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
     public class LoxoneMiniserverConnection
     {
         private readonly string password;
+        private readonly ILogger _logger;
         private readonly LoxoneWebApi webApi;
 
         public const string LoxoneUuid = "FF88FFe1-02b4-FFFF-ffffeee000d80cff";
@@ -62,13 +64,14 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         public event EventHandler<System.EventArgs> OnConnectionClosed;
 
-        public LoxoneMiniserverConnection(string address, int port, string username, string password)
+        public LoxoneMiniserverConnection(string address, int port, string username, string password, ILogger logger)
         {
             _keepAliveTimer = new Timer(TimeSpan.FromMinutes(4).TotalMilliseconds);
             Address = address;
             Port = port;
             Username = username;
             this.password = password;
+            _logger = logger;
 
             webApi = new LoxoneWebApi($"http://{address}:{port}", username, password);
             var socketOptions = new PureWebSocketOptions()
@@ -115,6 +118,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
         {
             try
             {
+                _logger.LogInformation($"Try to connect to miniserver {Address}:{Port}");
                 _webSocket.OnStateChanged += _webSocket_OnStateChanged;
                 _webSocket.OnMessage += _webSocket_OnMessage;
                 _webSocket.OnClosed += _webSocket_OnClosed;
@@ -126,10 +130,11 @@ namespace P3.Driver.Loxone.Miniserver.Driver
                 }
                 catch
                 {
+                    _logger.LogInformation("Could not connect to miniserver...");
                     return false;
                 }
                 _keepAliveTimer.Start();
-                var connect = _webSocket.Connect();
+                var connect = await _webSocket.ConnectAsync();
 
                 if(connect)
                 {
@@ -139,6 +144,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             }
             catch (Exception e)
             {
+                _logger.LogError(e, $"Error occurred {e}");
                 throw;
             }
         }
@@ -225,7 +231,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         public static RSAParameters ToRSAParameters(RsaKeyParameters rsaKey)
         {
-            RSAParameters rp = new RSAParameters();
+            var rp = new RSAParameters();
             rp.Modulus = rsaKey.Modulus.ToByteArrayUnsigned();
             if (rsaKey.IsPrivate)
                 rp.D = rsaKey.Exponent.ToByteArrayUnsigned();
@@ -236,16 +242,18 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         private void _webSocket_OnSendFailed(object sender, string data, Exception ex)
         {
-            throw new NotImplementedException();
+            _logger.LogError(ex, $"Failed to send data via websocket...{ex}");
         }
 
         private void _webSocket_OnClosed(object sender, System.Net.WebSockets.WebSocketCloseStatus reason)
         {
             OnConnectionClosed?.Invoke(this, System.EventArgs.Empty);   
+            _logger.LogInformation($"Websocket closed {reason}");
         }
 
         private void _webSocket_OnMessage(object sender, string message)
         {
+            _logger.LogTrace($"WebSocket received: {message}");
             if (_encrypted)
             {
                 var encrypted = DecryptMessage(message);
@@ -309,7 +317,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
         {
             if (_salt == null)
             {
-                SecureRandom random = new SecureRandom();
+                var random = new SecureRandom();
                 var byteArray = new byte[2];
                 random.NextBytes(byteArray);
                 _salt = byteArray.ToHex(false);
@@ -346,7 +354,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             {
                 aes.Padding = PaddingMode.None;
                 aes.Mode = CipherMode.CBC;
-                using (ICryptoTransform encryptor = aes.CreateEncryptor(_aesKey, _aesIv))
+                using (var encryptor = aes.CreateEncryptor(_aesKey, _aesIv))
                 {
                     using (var memoryStream = new MemoryStream())
                     {
@@ -373,7 +381,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             {
                 aes.Padding = PaddingMode.None;
                 aes.Mode = CipherMode.CBC;
-                using (ICryptoTransform encryptor = aes.CreateDecryptor(_aesKey, _aesIv))
+                using (var encryptor = aes.CreateDecryptor(_aesKey, _aesIv))
                 {
                     using (var memoryStream = new MemoryStream())
                     {
@@ -390,7 +398,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         public byte[] GenerateAesKey(string key)
         {
-            byte[] salt = new byte[128 / 8];
+            var salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);
@@ -409,6 +417,8 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         private async void _webSocket_OnStateChanged(object sender, System.Net.WebSockets.WebSocketState newState, System.Net.WebSockets.WebSocketState prevState)
         {
+            _logger.LogInformation($"Websocket state changed from {prevState} to {newState}");
+
             if(newState == System.Net.WebSockets.WebSocketState.Open)
             {
             
@@ -423,7 +433,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver
             _pubKey = Convert.FromBase64String(publicKey.Data.PublicKey.Replace("-----END CERTIFICATE-----", "").Replace("-----BEGIN CERTIFICATE-----", ""));
             string stringDataToEncrypt;
 
-            SecureRandom random = new SecureRandom();
+            var random = new SecureRandom();
             _aesKey = GenerateAesKey(LoxoneUuid);
 
             _aesIv = new byte[128 / 8];
@@ -431,25 +441,26 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
             stringDataToEncrypt = $"{_aesKey.ToHex(false)}:{_aesIv.ToHex(false)}";
 
-            Asn1Object obj = Asn1Object.FromByteArray(_pubKey);
-            DerSequence publicKeySequence = (DerSequence)obj;
+            var obj = Asn1Object.FromByteArray(_pubKey);
+            var publicKeySequence = (DerSequence)obj;
 
-            DerBitString encodedPublicKey = (DerBitString)publicKeySequence[1];
-            DerSequence publicKeyDer = (DerSequence)Asn1Object.FromByteArray(encodedPublicKey.GetBytes());
+            var encodedPublicKey = (DerBitString)publicKeySequence[1];
+            var publicKeyDer = (DerSequence)Asn1Object.FromByteArray(encodedPublicKey.GetBytes());
 
-            DerInteger modulus = (DerInteger)publicKeyDer[0];
-            DerInteger exponent = (DerInteger)publicKeyDer[1];
+            var modulus = (DerInteger)publicKeyDer[0];
+            var exponent = (DerInteger)publicKeyDer[1];
 
-            RsaKeyParameters keyParameters = new RsaKeyParameters(false, modulus.PositiveValue, exponent.PositiveValue);
+            var keyParameters = new RsaKeyParameters(false, modulus.PositiveValue, exponent.PositiveValue);
             var encryptEngine = new Pkcs1Encoding(new RsaEngine());
             encryptEngine.Init(true, keyParameters);
 
-            byte[] dataToEncrypt = Encoding.UTF8.GetBytes(stringDataToEncrypt);
-            byte[] encryptedData = encryptEngine.ProcessBlock(dataToEncrypt, 0, dataToEncrypt.Length);
+            var dataToEncrypt = Encoding.UTF8.GetBytes(stringDataToEncrypt);
+            var encryptedData = encryptEngine.ProcessBlock(dataToEncrypt, 0, dataToEncrypt.Length);
 
             var publicKeySelf = Convert.ToBase64String(encryptedData);
             _connectionState = ConnectionState.ExchangeKeys;
 
+            _logger.LogInformation($"Send connection info to websocket...");
             _webSocket.Send($"jdev/sys/keyexchange/{publicKeySelf}");
         }
 

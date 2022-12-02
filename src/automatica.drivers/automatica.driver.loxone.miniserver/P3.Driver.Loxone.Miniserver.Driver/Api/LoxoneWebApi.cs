@@ -34,8 +34,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Api
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(
-            Encoding.ASCII.GetBytes(
-                string.Format("{0}:{1}", User, _password))));
+            Encoding.ASCII.GetBytes($"{User}:{_password}")));
             
 
             return client;
@@ -137,8 +136,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Api
                 }
             }
 
-            var resultBase64 = Convert.ToBase64String(result);
-
+            
             var cert = new X509Certificate2(Encoding.UTF8.GetBytes(pubKey));
             string aesData = aesKey.ToHex(true) + ":" + aesIv.ToHex(true);
             using (RSA rsa = cert.GetRSAPublicKey())
