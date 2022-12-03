@@ -36,12 +36,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override bool ValueRead(object value)
         {
-            var newValue = Convert.ToBoolean(value);
-            var ret = newValue != _value;
-
-            _value = newValue;
-
-            return ret;
+            return true; //always dispatch dpt1 values...
         }
 
         protected override string GetDptString(int dpt)
