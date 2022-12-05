@@ -16,7 +16,7 @@ namespace P3.Driver.OmsDriverFactory
     {
         private MBusSerial _mbus;
 
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(2000);
+        private readonly System.Timers.Timer _timer = new System.Timers.Timer(1000);
 
         private byte[] _aesKey;
 
