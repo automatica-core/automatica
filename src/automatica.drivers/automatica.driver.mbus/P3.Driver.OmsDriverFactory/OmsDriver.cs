@@ -52,9 +52,9 @@ namespace P3.Driver.OmsDriverFactory
             return base.Init();
         }
 
-        private async void DataReceived()
+        private void DataReceived()
         {
-            await ReadData();
+            _logger.LogDebug("Received data...");
         }
 
         public override async Task<bool> Start()
@@ -81,12 +81,6 @@ namespace P3.Driver.OmsDriverFactory
         }
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-           
-
-        }
-
-        private async Task ReadData()
         {
             try
             {
@@ -138,6 +132,7 @@ namespace P3.Driver.OmsDriverFactory
                 _waitSemaphore.Release(1);
                 _timer.Start();
             }
+
         }
 
         private void DecryptFrame(MBusFrame data)
