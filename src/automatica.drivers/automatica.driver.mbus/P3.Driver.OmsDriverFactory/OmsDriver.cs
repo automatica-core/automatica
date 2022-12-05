@@ -9,6 +9,7 @@ using P3.Driver.MBus.Serial;
 using P3.Driver.OmsDriverFactory.Helper;
 using System.Threading.Tasks;
 using Automatica.Core.Driver.Utility;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace P3.Driver.OmsDriverFactory
 {
@@ -16,14 +17,12 @@ namespace P3.Driver.OmsDriverFactory
     {
         private MBusSerial _mbus;
 
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(1000);
+        private readonly System.Timers.Timer _timer = new System.Timers.Timer(2000);
 
         private byte[] _aesKey;
 
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
-        private ILogger _logger;
-
-        private int _readCounter = 0;
+        private readonly ILogger _logger;
 
         public OmsDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -41,7 +40,7 @@ namespace P3.Driver.OmsDriverFactory
             _mbus = new MBusSerial(new MBusSerialConfig
             {
                 Baudrate = 9600,
-                Timeout = 1000,
+                Timeout = 500,
                 ResetBeforeRead = true,
                 Port = port
             }, TelegramMonitor, _logger);
@@ -82,13 +81,7 @@ namespace P3.Driver.OmsDriverFactory
                 _timer.Stop();
 
                 await _waitSemaphore.WaitAsync();
-
-                _readCounter++;
-
-                if (_readCounter >= 10)
-                {
-                    await _mbus.SendAckWithoutRead();
-                }
+                await _mbus.SendAckWithoutRead();
 
                 DriverContext.Logger.LogDebug("Try read oms device...");
                 var frame = await _mbus.TryReadFrame();
