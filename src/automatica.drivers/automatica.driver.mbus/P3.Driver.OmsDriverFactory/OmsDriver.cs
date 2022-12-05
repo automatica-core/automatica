@@ -60,6 +60,7 @@ namespace P3.Driver.OmsDriverFactory
             }
 
             _timer.Start();
+            DriverContext.Logger.LogInformation($"Start checking for messages....");
             return base.Start();
         }
 
@@ -80,7 +81,7 @@ namespace P3.Driver.OmsDriverFactory
             await _mbus.SendAck();
             try
             {
-                DriverContext.Logger.LogTrace("Try read oms device...");
+                DriverContext.Logger.LogDebug("Try read oms device...");
                 var frame = await _mbus.TryReadFrame();
 
                 if (frame != null)
