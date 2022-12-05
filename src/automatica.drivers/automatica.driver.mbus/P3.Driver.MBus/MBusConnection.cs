@@ -80,6 +80,11 @@ namespace P3.Driver.MBus
 
             return await ReadFrame();
         }
+        public async Task SendAckWithoutRead()
+        {
+            await WriteFrame(new AckFrame());
+            
+        }
 
         public virtual async Task<MBusFrame> SetPrimaryAddres(int deviceId, int newDeviceId)
         {

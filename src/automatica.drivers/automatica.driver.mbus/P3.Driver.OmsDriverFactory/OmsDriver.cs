@@ -39,7 +39,7 @@ namespace P3.Driver.OmsDriverFactory
             _mbus = new MBusSerial(new MBusSerialConfig
             {
                 Baudrate = 9600,
-                Timeout = 2000,
+                Timeout = 1000,
                 ResetBeforeRead = true,
                 Port = port
             }, TelegramMonitor, _logger);
@@ -80,7 +80,7 @@ namespace P3.Driver.OmsDriverFactory
 
                 await _waitSemaphore.WaitAsync();
 
-                await _mbus.SendAck();
+                await _mbus.SendAckWithoutRead();
 
                 DriverContext.Logger.LogDebug("Try read oms device...");
                 var frame = await _mbus.TryReadFrame();
@@ -93,7 +93,7 @@ namespace P3.Driver.OmsDriverFactory
                     if (frame is ShortFrame)
                     {
 
-                        await _mbus.SendAck();
+                        await _mbus.SendAckWithoutRead();
 
 
                         data = await _mbus.TryReadFrame();
@@ -107,7 +107,7 @@ namespace P3.Driver.OmsDriverFactory
                     {
                         DriverContext.Logger.LogDebug($"Read frame...2({data.GetType()})");
                         DecryptFrame(data);
-                        await _mbus.SendAck();
+                        await _mbus.SendAckWithoutRead();
                     }
                     else
                     {
