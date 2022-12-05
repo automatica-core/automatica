@@ -38,7 +38,7 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
             }
-            Logger.LogDebug($"received topic {e.ApplicationMessage.Topic} with data {json}...");
+            Logger.LogTrace($"received topic {e.ApplicationMessage.Topic} with data {json}...");
 
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{_connection.NodeId}")
             {
