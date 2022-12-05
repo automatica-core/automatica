@@ -74,13 +74,14 @@ namespace P3.Driver.OmsDriverFactory
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            _timer.Stop();
-
-            await _waitSemaphore.WaitAsync();
-
-            await _mbus.SendAck();
             try
             {
+                _timer.Stop();
+
+                await _waitSemaphore.WaitAsync();
+
+                await _mbus.SendAck();
+
                 DriverContext.Logger.LogDebug("Try read oms device...");
                 var frame = await _mbus.TryReadFrame();
 
@@ -95,12 +96,13 @@ namespace P3.Driver.OmsDriverFactory
                         await _mbus.SendAck();
 
 
-                         data = await _mbus.TryReadFrame();
+                        data = await _mbus.TryReadFrame();
                     }
                     else
                     {
                         data = frame;
                     }
+
                     if (data != null)
                     {
                         DriverContext.Logger.LogDebug($"Read frame...2({data.GetType()})");
@@ -111,15 +113,19 @@ namespace P3.Driver.OmsDriverFactory
                     {
                         DriverContext.Logger.LogError($"Could not read frame...");
                     }
-                    
+
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error reading package...{ex}");
             }
             finally
             {
                 _waitSemaphore.Release(1);
+                _timer.Start();
             }
 
-            _timer.Start();
         }
 
         private void DecryptFrame(MBusFrame data)
