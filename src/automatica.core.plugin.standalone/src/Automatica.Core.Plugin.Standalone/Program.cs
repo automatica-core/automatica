@@ -25,11 +25,14 @@ namespace Automatica.Core.Plugin.Standalone
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return logLevel <= _logLevel;
+            return logLevel >= _logLevel;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
+            if (!IsEnabled(logLevel))
+                return;
+
             var msg = formatter(state, exception);
             Console.WriteLine($"{DateTime.Now}: {msg}");   
         }
@@ -48,10 +51,12 @@ namespace Automatica.Core.Plugin.Standalone
             Console.WriteLine($"{bitValue}");
 
 
-            Console.WriteLine($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
+           
 
 
             var logger = new ConsoleLogger(Enum.Parse<LogLevel>(Environment.GetEnvironmentVariable("LOG_LEVEL") ?? "Information"));
+
+            logger.LogInformation($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
 
             while (true)
             {
@@ -59,7 +64,7 @@ namespace Automatica.Core.Plugin.Standalone
                 {
                     await Semaphore.WaitAsync();
 
-                    Console.WriteLine($"Run plugin ({NetStandardUtils.Version.GetAssemblyVersion()})");
+                    logger.LogInformation($"Run plugin ({NetStandardUtils.Version.GetAssemblyVersion()})");
 
                     var execContext = new ExecutionContext(logger, args[0]);
 

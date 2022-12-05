@@ -2,14 +2,14 @@
   "profiles": {
     "Automatica.Core.Plugin.Dockerize": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Drivers\\ModBus\\net7.0",
+      "commandLineArgs": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Drivers\\Sonos",
       "environmentVariables": {
         "AUTOMATICA_SLAVE_MASTER": "localhost",
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
         "MQTT_LOG_VERBOSE": "true",
         "AUTOMATICA_SLAVE_USER": "rm1",
         "AUTOMATICA_NODE_ID": "20dbdd27-aded-4297-b52a-75f6e9204dfd",
-        "LOG_LEVEL":  "Trace" 
+        "LOG_LEVEL":  "Warning" 
       }
     }
   }
