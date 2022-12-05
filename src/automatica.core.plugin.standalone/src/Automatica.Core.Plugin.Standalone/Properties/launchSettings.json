@@ -8,7 +8,8 @@
         "AUTOMATICA_SLAVE_PASSWORD": "rm1",
         "MQTT_LOG_VERBOSE": "true",
         "AUTOMATICA_SLAVE_USER": "rm1",
-        "AUTOMATICA_NODE_ID": "20dbdd27-aded-4297-b52a-75f6e9204dfd"
+        "AUTOMATICA_NODE_ID": "20dbdd27-aded-4297-b52a-75f6e9204dfd",
+        "LOG_LEVEL":  "Trace" 
       }
     }
   }

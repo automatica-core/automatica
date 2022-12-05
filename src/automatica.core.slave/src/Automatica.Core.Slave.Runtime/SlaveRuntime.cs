@@ -39,6 +39,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly string _clientKey;
 
         private readonly string _useDockerTag;
+        private readonly string _logLevel;
 
         private readonly ILogger _logger;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
@@ -58,6 +59,8 @@ namespace Automatica.Core.Slave.Runtime
             _slaveId = config["server:clientId"];
 
             _useDockerTag = config["server:dockerTag"];
+            _logLevel = config["Logging:LogLevel:Default"];
+            
 
 
             _options = new MqttClientOptionsBuilder()
@@ -260,7 +263,8 @@ namespace Automatica.Core.Slave.Runtime
                     {
                         $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}",
                         $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id.ToString()}", 
-                        $"MQTT_LOG_VERBOSE=asdf"
+                        $"MQTT_LOG_VERBOSE=asdf",
+                        $"LOG_LEVEL=${_logLevel}"
                     },
                 };
 
