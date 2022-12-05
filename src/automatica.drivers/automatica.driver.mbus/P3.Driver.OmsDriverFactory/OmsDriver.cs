@@ -23,6 +23,8 @@ namespace P3.Driver.OmsDriverFactory
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
         private ILogger _logger;
 
+        private int _readCounter = 0;
+
         public OmsDriver(IDriverContext driverContext) : base(driverContext)
         {
             _logger = driverContext.Logger;
@@ -50,18 +52,19 @@ namespace P3.Driver.OmsDriverFactory
             return base.Init();
         }
 
-        public override Task<bool> Start()
+        public override async Task<bool> Start()
         {
             var mbus = _mbus.Open();
 
             if (!mbus)
             {
-                return Task.FromResult(false);
+                return false;
             }
+            await _mbus.SendAckWithoutRead();
 
             _timer.Start();
             DriverContext.Logger.LogInformation($"Start checking for messages....");
-            return base.Start();
+            return await base.Start();
         }
 
         public override Task<bool> Stop()
@@ -80,13 +83,19 @@ namespace P3.Driver.OmsDriverFactory
 
                 await _waitSemaphore.WaitAsync();
 
-                //await _mbus.SendAckWithoutRead();
+                _readCounter++;
+
+                if (_readCounter >= 10)
+                {
+                    await _mbus.SendAckWithoutRead();
+                }
 
                 DriverContext.Logger.LogDebug("Try read oms device...");
                 var frame = await _mbus.TryReadFrame();
 
                 if (frame != null)
                 {
+                    _readCounter = 0;
                     DriverContext.Logger.LogDebug($"Read frame...1({frame.GetType()})");
 
                     MBusFrame data = null;
