@@ -80,7 +80,7 @@ namespace P3.Driver.OmsDriverFactory
 
                 await _waitSemaphore.WaitAsync();
 
-                await _mbus.SendAckWithoutRead();
+                //await _mbus.SendAckWithoutRead();
 
                 DriverContext.Logger.LogDebug("Try read oms device...");
                 var frame = await _mbus.TryReadFrame();
