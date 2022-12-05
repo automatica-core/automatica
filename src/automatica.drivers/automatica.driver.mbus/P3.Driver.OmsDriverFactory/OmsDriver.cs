@@ -88,7 +88,6 @@ namespace P3.Driver.OmsDriverFactory
 
                 if (frame != null)
                 {
-                    _readCounter = 0;
                     DriverContext.Logger.LogDebug($"Read frame...1({frame.GetType()})");
 
                     MBusFrame data = null;
