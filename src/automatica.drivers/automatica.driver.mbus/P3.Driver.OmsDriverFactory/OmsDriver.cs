@@ -42,13 +42,19 @@ namespace P3.Driver.OmsDriverFactory
                 Baudrate = 9600,
                 Timeout = 500,
                 ResetBeforeRead = true,
-                Port = port
+                Port = port,
+                DataReceived = DataReceived
             }, TelegramMonitor, _logger);
 
             _timer.Elapsed += _timer_Elapsed;
 
             _aesKey = Automatica.Core.Driver.Utility.Utils.StringToByteArray(key);
             return base.Init();
+        }
+
+        private async void DataReceived()
+        {
+            await ReadData();
         }
 
         public override async Task<bool> Start()
@@ -75,6 +81,12 @@ namespace P3.Driver.OmsDriverFactory
         }
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+           
+
+        }
+
+        private async Task ReadData()
         {
             try
             {
@@ -126,7 +138,6 @@ namespace P3.Driver.OmsDriverFactory
                 _waitSemaphore.Release(1);
                 _timer.Start();
             }
-
         }
 
         private void DecryptFrame(MBusFrame data)
