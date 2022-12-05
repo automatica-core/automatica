@@ -8,6 +8,7 @@ using P3.Driver.MBus.Frames;
 using P3.Driver.MBus.Serial;
 using P3.Driver.OmsDriverFactory.Helper;
 using System.Threading.Tasks;
+using Automatica.Core.Driver.Utility;
 
 namespace P3.Driver.OmsDriverFactory
 {
@@ -84,7 +85,7 @@ namespace P3.Driver.OmsDriverFactory
 
                 if (frame != null)
                 {
-                    DriverContext.Logger.LogTrace($"Read frame...1({frame.GetType()})");
+                    DriverContext.Logger.LogDebug($"Read frame...1({frame.GetType()})");
 
                     MBusFrame data = null;
                     if (frame is ShortFrame)
@@ -101,13 +102,13 @@ namespace P3.Driver.OmsDriverFactory
                     }
                     if (data != null)
                     {
-                        DriverContext.Logger.LogTrace($"Read frame...2({data.GetType()})");
+                        DriverContext.Logger.LogDebug($"Read frame...2({data.GetType()})");
                         DecryptFrame(data);
                         await _mbus.SendAck();
                     }
                     else
                     {
-                        DriverContext.Logger.LogDebug($"could not read frame");
+                        DriverContext.Logger.LogError($"Could not read frame...");
                     }
                     
                 }
@@ -122,12 +123,12 @@ namespace P3.Driver.OmsDriverFactory
 
         private void DecryptFrame(MBusFrame data)
         {
-            DriverContext.Logger.LogTrace($"Check frame {data?.CiField}");
+            DriverContext.Logger.LogDebug($"Check frame {data?.CiField}");
             if (data != null && data.CiField == 0x5B)
             {
                 var controlHigh = data.RawData.Span[18];
 
-                DriverContext.Logger.LogTrace($"Check frame if frame is supported {controlHigh}");
+                DriverContext.Logger.LogDebug($"Check frame if frame is supported {controlHigh}");
 
                 switch (controlHigh & 0x0F)
                 {
