@@ -42,12 +42,15 @@ namespace Automatica.Core.Plugin.Standalone
 
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{_connection.NodeId}")
             {
+                Logger.LogDebug($"Received config event...");
+
                 if (!await _semaphore.WaitAsync(1000))
                 {
                     Logger.LogWarning($"Instance already running, ignoring second call...");
                     return;
                 }
 
+                Logger.LogInformation($"Init driver...");
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
 
                 var context = new DriverContext(dto, _connection.Dispatcher, _connection.NodeTemplateFactory,
@@ -59,6 +62,9 @@ namespace Automatica.Core.Plugin.Standalone
                 _connection.DriverInstance = factory.CreateDriver(context);
 
                 var driverInstance = await _connection.Loader.LoadDriverFactory(dto, factory, context);
+                Logger.LogInformation($"Init driver...done");
+
+                Logger.LogInformation($"Starting driver...");
 
                 foreach (var driver in _connection.DriverStore.All())
                 {
@@ -67,6 +73,8 @@ namespace Automatica.Core.Plugin.Standalone
                         Logger.LogError($"Could not start driver...");
                     }
                 }
+
+                Logger.LogInformation($"Starting driver...done");
 
                 await _connection.MqttClient.SubscribeAsync(new TopicFilterBuilder()
                     .WithTopic($"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/+")
@@ -87,6 +95,7 @@ namespace Automatica.Core.Plugin.Standalone
             }
             else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/*/reinit"))
             {
+                Logger.LogDebug($"Received re-init event...");
                 Environment.Exit(0);
             }
             else if (_connection.DriverInstance != null && MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/{_connection.DriverInstance.Id}/#"))
