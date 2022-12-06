@@ -29,8 +29,8 @@ namespace P3.Driver.ModBusDriverFactory.Master
         public override async Task WriteValue(IDispatchable source, object value)
         {
             await Task.CompletedTask;
-            var shortValue = _attribute.ConvertValueToBus(source, value);
-            DriverContext.Logger.LogInformation($"WRITE value ({value}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" +  Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
+            var shortValue = _attribute.ConvertValueToBus(source, value, out var convertedValue);
+            DriverContext.Logger.LogInformation($"WRITE value ({convertedValue}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" +  Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
             switch (_attribute.Table)
             {
                 case ModBusTable.Coil:

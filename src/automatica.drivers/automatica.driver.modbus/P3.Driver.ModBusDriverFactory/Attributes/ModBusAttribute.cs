@@ -28,7 +28,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         public abstract int RegisterLength { get; }
         public IDriverContext DriverContext { get; }
 
-        public abstract ushort[] ConvertValueToBus(IDispatchable source, object value);
+        public abstract ushort[] ConvertValueToBus(IDispatchable source, object value, out object convertedValue);
 
         public abstract object ConvertValueFromBus(IDispatchable source, ushort[] value);
     }

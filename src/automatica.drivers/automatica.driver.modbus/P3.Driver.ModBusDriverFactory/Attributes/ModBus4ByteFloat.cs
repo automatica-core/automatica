@@ -14,14 +14,14 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
      
         }
 
-        protected override byte[] ConvertToBus(IDispatchable source, object value)
+        protected override byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue)
         {
             try
             {
                 var dValue = Convert.ToSingle(value);
                 dValue = (float)(dValue * Factor - Offset);
-
-                DriverContext.Logger.LogDebug($"Converted value is {dValue} (raw value {value})");
+                
+                convertedValue = dValue;
 
                 var bytes = BitConverter.GetBytes(dValue);
 
@@ -45,8 +45,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             var val = BitConverter.ToSingle(bytes, 0);
 
             var conVal = (float)(val / Factor + Offset);
-
-            DriverContext.Logger.LogDebug($"Converted value is {conVal} (raw value {value})");
+            
             return conVal;
         }
     }

@@ -13,12 +13,13 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         }
 
         public override int RegisterLength => 1;
-        public override ushort[] ConvertValueToBus(IDispatchable source, object value)
+        public override ushort[] ConvertValueToBus(IDispatchable source, object value, out object convertedValue)
         {
             try
             {
                 var intValue = Convert.ToUInt16(value);
                 var shortValue = (ushort)(intValue * Factor - Offset);
+                convertedValue = shortValue;
                 return new[] { shortValue };
             }
             catch (Exception e)

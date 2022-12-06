@@ -24,12 +24,12 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         }
         public sealed override int RegisterLength => 2;
 
-        protected abstract byte[] ConvertToBus(IDispatchable source, object value);
+        protected abstract byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue);
         protected abstract object ConvertFromBus(IDispatchable source, byte[] value);
 
-        public sealed override ushort[] ConvertValueToBus(IDispatchable source, object value)
+        public sealed override ushort[] ConvertValueToBus(IDispatchable source, object value, out object convertedValue)
         {
-            var bytes = ConvertToBus(source, value);
+            var bytes = ConvertToBus(source, value, out convertedValue);
 
             switch (ByteOrder)
             {
