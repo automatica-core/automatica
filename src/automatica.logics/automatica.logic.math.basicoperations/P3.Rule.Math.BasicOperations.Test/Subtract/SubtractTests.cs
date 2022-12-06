@@ -8,7 +8,7 @@ namespace P3.Rule.Math.BasicOperations.Tests.Subtract
     public class SubtractTest : RuleTest<SubtractRuleFactory>
     {
         [Fact]
-        public void TestSubstractRule()
+        public void TestSubtractRule()
         {
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(SubtractRuleFactory.RuleInput1), Dispatchable, 1)[0].ValueInteger == 1);
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(SubtractRuleFactory.RuleInput2), Dispatchable, 10)[0].ValueInteger == -9);

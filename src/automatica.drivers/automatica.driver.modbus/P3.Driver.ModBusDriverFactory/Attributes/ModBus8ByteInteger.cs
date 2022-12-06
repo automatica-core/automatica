@@ -13,12 +13,13 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         {
         }
 
-        protected override byte[] ConvertToBus(IDispatchable source, object value)
+        protected override byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue)
         {
             try
             {
                 var intValue = Convert.ToUInt64(value);
                 intValue = ((UInt64)(intValue * Factor) - (UInt64)Offset);
+                convertedValue = intValue;
 
                 var firstQ = (ushort)(intValue >> 48);
                 var secondQ = (ushort)(intValue >> 32);

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.EF.Helper;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
@@ -104,6 +105,125 @@ namespace Automatica.Core.Internals.Cache.Driver
 
 
             return items.AsQueryable();
+        }
+
+        public NodeInstance GetSingle(Guid objId, AutomaticaContext context)
+        {
+
+            var item = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
+               .Include(a => a.PropertyInstance)
+               .ThenInclude(a => a.This2PropertyTemplateNavigation)
+               .ThenInclude(a => a.This2PropertyTypeNavigation)
+               .Include(a => a.This2NodeTemplateNavigation)
+               .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
+               .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
+               .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
+               .ThenInclude(b => b.This2PropertyTypeNavigation)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
+               .ThenInclude(a => a.This2NodeTemplateNavigation)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
+                   a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
+                   a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
+               .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
+               .ThenInclude(b => b.This2PropertyTypeNavigation)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
+               .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
+               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
+               .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
+               .ThenInclude(a => a.ConstraintData)
+               .Include(a => a.This2AreaInstanceNavigation)
+               .Include(a => a.This2SlaveNavigation)
+               .Include(a => a.This2CategoryInstanceNavigation)
+               .FirstOrDefault(a => a.ObjId == objId);
+
+            if (item == null)
+            {
+                return null;
+
+            }
+
+            if (_allCache.ContainsKey(item.ObjId))
+            {
+                _allCache[item.ObjId] = item;
+                item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
+
+                item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance!.Value];
+                var oldItem = _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                    .Single(a => a.ObjId == item.ObjId);
+                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Remove(oldItem);
+
+
+                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+
+            }
+            else
+            {
+                _allCache.Add(item.ObjId, item);
+
+                item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
+
+                item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance!.Value];
+                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+            }
+
+            if (item.This2AreaInstance.HasValue)
+            {
+                if (!_areaCache.ContainsKey(item.This2AreaInstance.Value))
+                {
+                    _areaCache.Add(item.This2AreaInstance.Value, new List<NodeInstance>());
+                }
+
+                var existing = _areaCache[item.This2AreaInstance.Value].FirstOrDefault(a => a.ObjId == item.ObjId);
+                if (existing != null)
+                {
+                    _areaCache[item.This2AreaInstance.Value].Remove(existing);
+                }
+
+                _areaCache[item.This2AreaInstance.Value].Add(item);
+            }
+
+            if (item.This2CategoryInstance.HasValue)
+            {
+                if (!_categoryCache.ContainsKey(item.This2CategoryInstance.Value))
+                {
+                    _categoryCache.Add(item.This2CategoryInstance.Value, new List<NodeInstance>());
+                }
+
+                var existing = _categoryCache[item.This2CategoryInstance.Value].FirstOrDefault(a => a.ObjId == item.ObjId);
+                if (existing != null)
+                {
+                    _categoryCache[item.This2CategoryInstance.Value].Remove(existing);
+                }
+
+                _categoryCache[item.This2CategoryInstance.Value].Add(item);
+            }
+
+            if (item.IsFavorite)
+            {
+                _favorites.Add(item);
+            }
+
+            return item;
+        }
+
+        public void Remove(NodeInstance existingNode)
+        {
+            _allCache.Remove(existingNode.ObjId);
+            if (existingNode.This2ParentNodeInstance.HasValue)
+            {
+                var parent = _allCache[existingNode.This2ParentNodeInstance.Value];
+
+                if (parent.InverseThis2ParentNodeInstanceNavigation != null)
+                {
+                    var parentExistingChild = parent.InverseThis2ParentNodeInstanceNavigation
+                        .Find(a => a.ObjId == existingNode.ObjId);
+
+                    parent.InverseThis2ParentNodeInstanceNavigation.Remove(parentExistingChild);
+                }
+            }
         }
 
         private void GetNodeInstanceStateRec(NodeInstance node)

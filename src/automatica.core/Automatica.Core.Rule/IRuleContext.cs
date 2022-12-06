@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 
@@ -19,6 +20,11 @@ namespace Automatica.Core.Rule
         /// The <see cref="IDispatcher"/> instance
         /// </summary>
         IDispatcher Dispatcher { get; }
+
+        /// <summary>
+        /// Rule Template Factory
+        /// </summary>
+        IRuleTemplateFactory Factory { get; }
 
         /// <summary>
         /// Communication to the UI

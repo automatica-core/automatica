@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Rules;
-using Automatica.Core.UnitTests.Rules;
 using P3.Rule.Time.Timer;
 using Xunit;
 
@@ -78,5 +78,30 @@ namespace P3.Rule.Time.Tests.Timer
             Assert.Equal(0, values.Count);
             await Rule.Stop();
         }
+
+
+
+
+        [Fact]
+        public async void TestTimerRule3()
+        {
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
+            await Rule.Stop();
+
+            var paramDelay = GetRuleInterfaceByTemplate(TimerRuleFactory.RuleTimerParameter);
+            var timerData = "{\"StartTime\":\"" + DateTime.Now.AddSeconds(1).ToString(CultureInfo.InvariantCulture) + "\",\"StopTime\":\"" + DateTime.Now.AddSeconds(2).ToString(CultureInfo.InvariantCulture) + "\",\"EnabledDays\":[1,2,3,4,5,6,0],\"TrackingState\":1}";
+            
+            paramDelay.Value = timerData;
+
+            await Rule.Start();
+            await Task.Delay(1500);
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Equal(1, values.Count);
+            await Rule.Stop();
+        }
     }
 }
+

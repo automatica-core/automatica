@@ -28,8 +28,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             {
                 var currentMediaInfo = await Device.Controller.GetMediaInfoAsync();
                 _currentMediaUrl = currentMediaInfo.CurrentUri;
-
-                DriverContext.Logger.LogDebug($"Current media url is {_currentMediaUrl}");
+                
             }
             catch (Exception ex)
             {

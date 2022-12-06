@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core";
-import * as signalR from "@aspnet/signalr";
+import * as signalR from "@microsoft/signalr";
 
 const METHODS = new Map<string, Array<string>>();
 export function SignalRMethod(target: any, propertyKey: string) {

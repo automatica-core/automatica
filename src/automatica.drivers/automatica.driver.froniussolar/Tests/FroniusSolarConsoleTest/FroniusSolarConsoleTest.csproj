@@ -6,6 +6,6 @@
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\P3.Driver.FroniusSolar\P3.Driver.FroniusSolar.csproj" />
+    <PackageReference Include="FroniusSolarClient.Core" Version="0.6.2" />
   </ItemGroup>
 </Project>

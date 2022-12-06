@@ -12,12 +12,13 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         {
         }
         
-        protected override byte[] ConvertToBus(IDispatchable source, object value)
+        protected override byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue)
         {
             try
             {
                 var dblValue = Convert.ToDouble(value);
                 dblValue = dblValue * Factor - Offset;
+                convertedValue = dblValue;
 
                 var bytes = BitConverter.GetBytes(dblValue);
 

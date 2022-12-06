@@ -79,8 +79,11 @@ namespace P3.Driver.SonosDriverFactory
                     return value;
                 }, async o =>
                 {
-                    DriverContext.Logger.LogDebug($"Sonos play...");
-                    await _controller.PlayAsync();
+                    if (o is true)
+                    {
+                        DriverContext.Logger.LogDebug($"Sonos play...");
+                        await _controller.PlayAsync();
+                    }
                 });
             }
             if (nodeId == SonosDriverFactory.PauseGuid)
@@ -91,8 +94,11 @@ namespace P3.Driver.SonosDriverFactory
                     return !value;
                 }, async o =>
                 {
-                    DriverContext.Logger.LogDebug($"Sonos pause...");
-                    await _controller.PauseAsync();
+                    if (o is true)
+                    {
+                        DriverContext.Logger.LogDebug($"Sonos pause...");
+                        await _controller.PauseAsync();
+                    }
                 });
             }
             if (nodeId == SonosDriverFactory.NextTrack)
@@ -100,7 +106,10 @@ namespace P3.Driver.SonosDriverFactory
                 return new SonosAttribute(ctx, this, null, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos next track...");
-                    await _controller.NextTrackAsync();
+                    if (o is true)
+                    {
+                        await _controller.NextTrackAsync();
+                    }
                 });
             }
             if (nodeId == SonosDriverFactory.VolumeGuid)

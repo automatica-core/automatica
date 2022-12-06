@@ -16,6 +16,7 @@ namespace P3.Rule.Time.Timer
         private readonly RuleInterfaceInstance _output;
         private readonly System.Timers.Timer _timer;
         private readonly object _lock = new object();
+        
 
         private bool _value = false;
 
@@ -37,6 +38,11 @@ namespace P3.Rule.Time.Timer
             {
                 _timerPropertyData = (TimerPropertyData)_timerProperty.Value;
 
+                if (_timerPropertyData.EnabledDays == null)
+                {
+                    Context.Logger.LogError("No enabled days found..");
+                    return Task.FromResult(false);
+                }
             }
             else
             {
@@ -44,7 +50,7 @@ namespace P3.Rule.Time.Timer
                 return Task.FromResult(false);
             }
 
-           CalculateTickTime(true);
+            CalculateTickTime(true);
 
             
             _timer.Elapsed += _timer_Elapsed;
@@ -52,10 +58,13 @@ namespace P3.Rule.Time.Timer
             return base.Start();
         }
 
-        private void CalculateTickTime(bool isStartup)
+        private void CalculateTickTime(bool isStartup=false)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var nowTime = now.TimeOfDay;
+
+            Context.Logger.LogInformation($"Now is {nowTime}");
+            
 
             if (!_timerPropertyData.EnabledDays.Contains(now.DayOfWeek))
             {
@@ -69,7 +78,7 @@ namespace P3.Rule.Time.Timer
             
 
             var tickTime = startTime - nowTime;
-            double timerTickTime = 0;
+            double timerTickTime;
 
             if (tickTime.TotalMilliseconds < 0)
             {
@@ -78,9 +87,10 @@ namespace P3.Rule.Time.Timer
                 if (timerTickTime < 0)
                 {
                     _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime).TotalMilliseconds;
-                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
+                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
                     if (isStartup)
                     {
+                        Context.Logger.LogInformation($"Start event, set value to {false}");
                         Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, false).Instance, false);
                     }
                     _value = false;
@@ -88,6 +98,7 @@ namespace P3.Rule.Time.Timer
                 }
                 if (isStartup)
                 {
+                    Context.Logger.LogInformation($"Start event, set value to {true}");
                     Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, true).Instance, true);
                 }
 
@@ -98,6 +109,7 @@ namespace P3.Rule.Time.Timer
                 timerTickTime = tickTime.TotalMilliseconds;
                 if (isStartup)
                 {
+                    Context.Logger.LogInformation($"Start event, set value to {false}");
                     Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, false).Instance, false);
                 }
 
@@ -105,7 +117,7 @@ namespace P3.Rule.Time.Timer
             }
 
             _timer.Interval = timerTickTime;
-            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
+            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
         }
 
@@ -129,7 +141,9 @@ namespace P3.Rule.Time.Timer
                 _value = !_value;
                 Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _value).Instance, _value);
 
-                CalculateTickTime(false);
+                Context.Logger.LogInformation($"Tick received, set value to {_value}");
+
+                CalculateTickTime();
             }
         }
 

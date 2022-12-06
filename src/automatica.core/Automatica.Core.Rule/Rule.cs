@@ -15,6 +15,9 @@ namespace Automatica.Core.Rule
     {
         private readonly Dictionary<RuleInterfaceInstance, object> _valueDictionary =
             new Dictionary<RuleInterfaceInstance, object>();
+
+        private readonly Dictionary<RuleInterfaceInstance, object> _inputValueDictionary =
+            new Dictionary<RuleInterfaceInstance, object>();
         private readonly object _lock = new object();
 
         /// <summary>
@@ -30,6 +33,8 @@ namespace Automatica.Core.Rule
         /// Returns the given instance of the <see cref="IRuleContext"/>
         /// </summary>
         public IRuleContext Context { get; }
+
+        public virtual bool IgnoreDuplicateValues => false;
 
 
         /// <summary>
@@ -84,6 +89,23 @@ namespace Automatica.Core.Rule
                     return new List<IRuleOutputChanged>();
                 }
                 Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}) value {value}");
+
+                object prevValue = null;
+                if (_inputValueDictionary.ContainsKey(instance))
+                {
+                    prevValue = _inputValueDictionary[instance];
+                    _inputValueDictionary[instance] = value;
+                }
+                else
+                {
+                    _inputValueDictionary.Add(instance, value);
+                }
+
+                if (IgnoreDuplicateValues && _inputValueDictionary[instance] == prevValue)
+                {
+                    Context.Logger.LogDebug($"Input value did not change, ignore value change...");
+                    return new List<IRuleOutputChanged>();
+                }
 
                 var values = InputValueChanged(instance, source, value);
 

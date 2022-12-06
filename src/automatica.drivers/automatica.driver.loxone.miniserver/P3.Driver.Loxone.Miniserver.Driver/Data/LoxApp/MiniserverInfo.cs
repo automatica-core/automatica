@@ -11,7 +11,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Data.LoxApp
         public string Uuid { get; set; }
         public bool isAdmin { get; set; }
         public bool changePassword { get; set; }
-        public int UserRights { get; set; }
+        public long UserRights { get; set; }
     }
     public class MiniserverInfo
     {

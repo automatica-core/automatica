@@ -17,6 +17,6 @@
     <EmbeddedResource Include="Resources\Surveillance-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="7.0.0.876" />
+    <PackageReference Include="Automatica.Core.Rule" Version="7.0.0.899" />
   </ItemGroup>
 </Project>

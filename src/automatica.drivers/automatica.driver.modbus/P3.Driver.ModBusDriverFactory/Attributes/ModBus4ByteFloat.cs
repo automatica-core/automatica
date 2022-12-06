@@ -3,6 +3,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Exceptions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace P3.Driver.ModBusDriverFactory.Attributes
 {
@@ -13,12 +14,15 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
      
         }
 
-        protected override byte[] ConvertToBus(IDispatchable source, object value)
+        protected override byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue)
         {
             try
             {
                 var dValue = Convert.ToSingle(value);
                 dValue = (float)(dValue * Factor - Offset);
+                
+                convertedValue = dValue;
+
                 var bytes = BitConverter.GetBytes(dValue);
 
                 return new[] { bytes[2], bytes[3], bytes[0], bytes[1] };
@@ -40,9 +44,9 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             
             var val = BitConverter.ToSingle(bytes, 0);
 
-            val = (float)(val / Factor + Offset);
-
-            return val;
+            var conVal = (float)(val / Factor + Offset);
+            
+            return conVal;
         }
     }
 }

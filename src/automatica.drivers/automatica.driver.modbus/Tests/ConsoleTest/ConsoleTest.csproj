@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj" />
+    <ProjectReference Include="..\..\Solarman\P3.Driver.ModBus.SolarmanV5\P3.Driver.ModBus.SolarmanV5.csproj" />
   </ItemGroup>
 
 </Project>

@@ -24,10 +24,12 @@ namespace Automatica.Core.UnitTests.Rules
                 intInst.This2RuleInterfaceTemplateNavigation = i;
                 intInst.This2RuleInterfaceTemplate = i.ObjId;
                 intInst.Value = i.DefaultValue;
+                intInst.ObjId = i.ObjId;
 
                 rule.RuleInterfaceInstance.Add(intInst);
             }
 
+            rule.ObjId = template.ObjId;
             rule.Name = template.Name;
             rule.This2RuleTemplate = template.ObjId;
             rule.This2RuleTemplateNavigation = template;

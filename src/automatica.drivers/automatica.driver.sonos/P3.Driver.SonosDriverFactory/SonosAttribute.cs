@@ -38,12 +38,8 @@ namespace P3.Driver.SonosDriverFactory
             {
                 try
                 {
-                    DriverContext.Logger.LogDebug($"Sonos read value...");
-                    
                     var value = await _readAction.Invoke();
 
-                    DriverContext.Logger.LogDebug($"Sonos read value...{value}");
-   
                     if (value != null)
                     {
                         DispatchValue(value);

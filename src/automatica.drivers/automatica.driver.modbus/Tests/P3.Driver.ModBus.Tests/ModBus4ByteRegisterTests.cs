@@ -17,7 +17,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             } );
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
 
             Assert.True((uint)value == 123);
@@ -37,7 +37,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
 
             Assert.True((uint)value == 123);
@@ -58,7 +58,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
 
             Assert.True((uint)value == 123);
@@ -80,7 +80,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
 
             Assert.True((uint)value == 123);
@@ -102,7 +102,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue, out var convertedValue);
 
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToInt32(value) == int.MaxValue);
@@ -111,7 +111,7 @@ namespace P3.Driver.ModBus.Tests
             Assert.True(data[0] == short.MaxValue);
             Assert.True(data[1] == ushort.MaxValue);
 
-            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue);
+            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue, out var convertedValue1);
             value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
 
             Assert.True(data.Length == 2);
@@ -130,7 +130,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToInt32(value) == int.MaxValue);
 
@@ -138,7 +138,7 @@ namespace P3.Driver.ModBus.Tests
             Assert.True(data[1] == short.MaxValue);
             Assert.True(data[0] == ushort.MaxValue);
 
-            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue);
+            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue, out var convertedValue1);
             value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True((uint)value == uint.MaxValue);
 
@@ -157,7 +157,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue, out var convertedValue1);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToInt32(value) == int.MaxValue);
 
@@ -165,7 +165,7 @@ namespace P3.Driver.ModBus.Tests
             Assert.True(data[0] == 65407);
             Assert.True(data[1] == ushort.MaxValue);
 
-            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue);
+            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue, out var convertedValue);
             value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True((uint)value == uint.MaxValue);
 
@@ -185,7 +185,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, int.MaxValue, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToInt32(value) == int.MaxValue);
 
@@ -193,7 +193,7 @@ namespace P3.Driver.ModBus.Tests
             Assert.True(data[1] == 65407);
             Assert.True(data[0] == ushort.MaxValue);
 
-            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue);
+            data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, uint.MaxValue, out var convertedValue1);
             value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True((uint)value == uint.MaxValue);
 
@@ -213,7 +213,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToDouble(value) == 1234567.875d);
 
@@ -233,7 +233,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToDouble(value) == 1234567.875d);
 
@@ -252,7 +252,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToDouble(value) == 1234567.875d);
 
@@ -272,7 +272,7 @@ namespace P3.Driver.ModBus.Tests
                 return instance;
             });
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912);
+            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 1234567.8912, out var convertedValue);
             var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
             Assert.True(Convert.ToDouble(value) == 1234567.875d);
 

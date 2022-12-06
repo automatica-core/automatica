@@ -14,5 +14,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         NodeInstance Root { get; }
 
         NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child);
+        NodeInstance GetSingle(Guid objId, AutomaticaContext context);
+        void Remove(NodeInstance existingNode);
     }
 }

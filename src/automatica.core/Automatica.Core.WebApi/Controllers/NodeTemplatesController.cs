@@ -41,10 +41,10 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Roles = Role.AdminRole)]
-        [Route("supported/{targetNodeTemplate}/{neededInterface}")]
-        public ICollection<NodeTemplate> GetSupportedTemplates(Guid targetNodeTemplate, Guid neededInterface)
+        [Route("supported/{targetNode}/{neededInterface}")]
+        public ICollection<NodeTemplate> GetSupportedTemplates(Guid targetNode, Guid neededInterface)
         {
-            return _nodeTemplateCache.GetSupportedTemplates(_nodeInstanceCache.Get(targetNodeTemplate), neededInterface);
+            return _nodeTemplateCache.GetSupportedTemplates(_nodeInstanceCache.Get(targetNode), neededInterface);
         }
 
 

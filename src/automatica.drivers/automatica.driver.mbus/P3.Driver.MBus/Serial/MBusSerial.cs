@@ -24,7 +24,12 @@ namespace P3.Driver.MBus.Serial
 
         public override bool Close()
         {
-            _stream?.Close();
+            if (_stream != null)
+            {
+                _stream.DataReceived -= StreamOnDataReceived;
+                _stream.Close();
+            }
+
             _connected = false;
             return true;
         }
@@ -40,6 +45,8 @@ namespace P3.Driver.MBus.Serial
                     WriteTimeout = _config.Timeout
                 };
 
+                _stream.DataReceived += StreamOnDataReceived;
+
                 _stream.Open();
                 _connected = true;
 
@@ -53,6 +60,11 @@ namespace P3.Driver.MBus.Serial
             return true;
         }
 
+        private void StreamOnDataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            _config.DataReceived.Invoke();
+        }
+
         public override bool IsConnected()
         {
             return _connected;
@@ -62,7 +74,6 @@ namespace P3.Driver.MBus.Serial
         {
             try
             {
-                _stream.DiscardOutBuffer();
                 var buffer = frame.ToByteFrame();
                 await WriteRaw(buffer);
             }
@@ -80,7 +91,6 @@ namespace P3.Driver.MBus.Serial
 
         protected override Task<MBusFrame> ReadFrame()
         {
-            _stream.DiscardInBuffer();
             return ReadFrameInternal();
         }
 

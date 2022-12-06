@@ -7,6 +7,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Internals.Templates;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.UnitTests.Base.Drivers;
@@ -38,7 +39,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             return new DriverNodeMock(ctx);
         }
     }
-    public class LogicMock : Rule.Rule
+    public class LogicMock : Core.Rule.Rule
     {
         public bool WriteReceived { get; set; }
         public RuleInterfaceInstance Output { get; set; }
@@ -136,7 +137,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             ruleInstance.RuleInterfaceInstance.Add(input);
             ruleInstance.RuleInterfaceInstance.Add(output);
 
-            var mock = new LogicMock(new RuleContextMock(ruleInstance, dispatcher));
+            var mock = new LogicMock(new RuleContextMock(ruleInstance, new RuleTemplateFactoryMock(), dispatcher));
 
             await mock.Start();
 

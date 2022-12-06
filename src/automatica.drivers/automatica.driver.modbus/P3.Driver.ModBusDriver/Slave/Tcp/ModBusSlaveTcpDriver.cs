@@ -21,6 +21,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private readonly Thread _listenerThread;
         private readonly object _lock = new object();
+        private bool _isClosing;
 
         public ModBusSlaveTcpDriver(ModBusSlaveTcpConfig config, ITelegramMonitorInstance telegramMonitor, ILogger logger) : base(config, telegramMonitor)
         {
@@ -34,7 +35,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private void Start()
         {
-
+            _isClosing  = false;
             ModBus.Logger.LogInformation($"Start tcp listener on port {_config.Port}");
             while (_running)
             {
@@ -98,7 +99,11 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                     }
                 }
             }
-            _connections.Remove(client);
+
+            if (!_isClosing)
+            {
+                _connections.Remove(client);
+            }
         }
 
         protected void InitStore(ModBusSlaveTcpConfig config)
@@ -139,6 +144,7 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         protected override bool CloseConnection()
         {
+            _isClosing = true;
             foreach (var c in _connections)
             {
                 c.Close();

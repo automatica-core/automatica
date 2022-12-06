@@ -1,58 +1,40 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
-using System.Timers;
+using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
-using P3.Driver.MBus.Config;
 using P3.Driver.MBus.Frames;
-using P3.Driver.MBus.Serial;
 using P3.Driver.OmsDriverFactory.Helper;
 using Automatica.Core.Driver.Utility;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
+using P3.Driver.Oms;
 
 namespace P3.Driver.MBus.ConsoleTest
 {
     public class MBusTest
     {
-        private readonly MBusSerial _mbus;
-
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(1000);
-
+        private readonly ConsoleLogger _logger;
         private readonly byte[] _aesKey;
+        private readonly OmsDevice _omsDevice;
 
-        private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
         public MBusTest(string port)
-        {
+        { 
+            _logger = new ConsoleLogger();
             var key = "57B7CBDF2154C01795C75CCCEAD572CF";
-            _mbus = new MBusSerial(new MBusSerialConfig
-            {
-                Baudrate = 9600,
-                Timeout = 2000,
-                ResetBeforeRead = true,
-                Port = port
-            }, new EmptyTelegramMonitorInstance(), new ConsoleLogger());
-
-            _timer.Elapsed += _timer_Elapsed;
 
             _aesKey = Utils.StringToByteArray(key);
-
-
-
-
+            _omsDevice = new OmsDevice(port, _logger, new EmptyTelegramMonitorInstance(), DecryptFrame);
         }
 
-        public void Start()
+    
+
+        public async Task Start()
         {
-            if (!_mbus.Open())
+            if (!await _omsDevice.Start())
             {
-                Console.Error.WriteLine("Could not open interface...");
-                throw new Exception("Error not handleded...");
+                _logger.LogDebug("Could not open interface...");
+                throw new Exception("Error not handled...");
 
             }
-            _timer.Start();
         }
 
         private const int OffsetUserData = 7;
@@ -69,7 +51,7 @@ namespace P3.Driver.MBus.ConsoleTest
                     case 5:
                     {
                         int countEncBlocks = controlLow >> 4;
-                        System.Console.WriteLine(
+                        _logger.LogDebug(
                             $"AES with dyn.init vector  {countEncBlocks} d 16 byte blocks plus % d unencrypted data {data.RawData.Length - 12 - 16 * countEncBlocks}");
                             
                         var encrypted = OmsHelper.AesDecrypt(_aesKey, data, NullLogger.Instance);
@@ -79,56 +61,12 @@ namespace P3.Driver.MBus.ConsoleTest
             }
         }
 
-        private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
+
+      
+
+        public async Task Stop()
         {
-            await _waitSemaphore.WaitAsync();
-            
-            try
-            {
-                Console.WriteLine($"try read oms frame...");
-                var frame = await _mbus.TryReadFrame();
-                if (frame != null)
-                {
-                    Console.WriteLine($"Read frame...1({frame.GetType()})");
-
-                    MBusFrame data = null;
-                    if (frame is ShortFrame)
-                    {
-
-                        await _mbus.SendAck();
-                        data = await _mbus.TryReadFrame();
-                    }
-                    else
-                    {
-                        data = frame;
-                    }
-                    if (data != null)
-                    {
-                        Console.WriteLine($"Read frame...2({data.GetType()})");
-                        DecryptFrame(data);
-                        await _mbus.SendAck();
-                    }
-                    else
-                    {
-                        Console.WriteLine($"could not read frame");
-                    }
-
-                }
-
-            }
-            finally
-            {
-                _waitSemaphore.Release(1);
-            }
-
-        }
-
-
-
-        public void Stop()
-        {
-            _timer.Stop();
-            _timer.Elapsed -= _timer_Elapsed;
+            await _omsDevice.Stop();
         }
     }
 }

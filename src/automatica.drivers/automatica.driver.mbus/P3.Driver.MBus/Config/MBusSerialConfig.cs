@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace P3.Driver.MBus.Config
 {
@@ -10,5 +11,7 @@ namespace P3.Driver.MBus.Config
         public int Baudrate { get; set; }
 
         public bool WaitForShortFrame { get; set; }
+
+        public Action DataReceived = () => {};
     }
 }

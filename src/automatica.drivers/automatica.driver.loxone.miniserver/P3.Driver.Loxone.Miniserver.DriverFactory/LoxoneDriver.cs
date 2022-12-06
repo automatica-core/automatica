@@ -27,7 +27,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         public override bool Init()
         {
-            _miniserver = new LoxoneMiniserverConnection(GetPropertyValueString("ip-address"), GetPropertyValueInt("port"), GetPropertyValueString("user"), GetPropertyValueString("password"));
+            _miniserver = new LoxoneMiniserverConnection(GetPropertyValueString("ip-address"), GetPropertyValueInt("port"), GetPropertyValueString("user"), GetPropertyValueString("password"), DriverContext.Logger);
             _miniserver.OnConnectionEstablished += _miniserver_OnConnectionEstablished;
             _miniserver.OnConnectionClosed += _miniserver_OnConnectionClosed;
             _miniserver.OnMessage += _miniserver_OnMessage;

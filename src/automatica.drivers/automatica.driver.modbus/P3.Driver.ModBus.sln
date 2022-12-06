@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30709.132
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ModBusDriverFactory", "P3.Driver.ModBusDriverFactory\P3.Driver.ModBusDriverFactory.csproj", "{1384CF90-B3A1-483E-87DE-97FBD28D3AFC}"
 EndProject
@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ModBusDriver", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.ModBus.Tests", "Tests\P3.Driver.ModBus.Tests\P3.Driver.ModBus.Tests.csproj", "{D30AECB5-E1B8-4641-8D5A-D77B0C81ECAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "Tests\ConsoleTest\ConsoleTest.csproj", "{B913E726-0F5C-4192-81FA-A81F5B5C57BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "Tests\ConsoleTest\ConsoleTest.csproj", "{B913E726-0F5C-4192-81FA-A81F5B5C57BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solarman V5", "Solarman V5", "{A1B9D7B6-F482-436F-8558-47FA3D4FAFF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.ModBus.SolarmanV5", "Solarman\P3.Driver.ModBus.SolarmanV5\P3.Driver.ModBus.SolarmanV5.csproj", "{F796A363-AF9A-45BC-8380-04F11152C1FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.ModBus.SolarmanV5.DriverFactory", "Solarman\P3.Driver.ModBus.SolarmanV5.DriverFactory\P3.Driver.ModBus.SolarmanV5.DriverFactory.csproj", "{D45732ED-139B-4EDC-A2BB-8138BDC229FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,9 +48,25 @@ Global
 		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
 		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B913E726-0F5C-4192-81FA-A81F5B5C57BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F796A363-AF9A-45BC-8380-04F11152C1FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F796A363-AF9A-45BC-8380-04F11152C1FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F796A363-AF9A-45BC-8380-04F11152C1FE}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{F796A363-AF9A-45BC-8380-04F11152C1FE}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{F796A363-AF9A-45BC-8380-04F11152C1FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F796A363-AF9A-45BC-8380-04F11152C1FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F796A363-AF9A-45BC-8380-04F11152C1FE} = {A1B9D7B6-F482-436F-8558-47FA3D4FAFF5}
+		{D45732ED-139B-4EDC-A2BB-8138BDC229FC} = {A1B9D7B6-F482-436F-8558-47FA3D4FAFF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C570E20A-C00A-453A-A0DF-6E871A2D3102}

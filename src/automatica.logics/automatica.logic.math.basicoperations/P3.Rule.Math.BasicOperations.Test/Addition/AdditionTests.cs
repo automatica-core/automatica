@@ -1,3 +1,5 @@
+using System.Linq;
+using Automatica.Core.Base.IO;
 using Automatica.Core.UnitTests.Base.Rules;
 using P3.Rule.Math.BasicOperations.Addition;
 using Xunit;
@@ -9,16 +11,17 @@ namespace P3.Rule.Math.BasicOperations.Tests.Addition
         [Fact]
         public void TestAdditionRule()
         {
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), Dispatchable, 1)[0].ValueInteger == 1);
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput2), Dispatchable, 10)[0].ValueInteger == 11);
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput3), Dispatchable, 1)[0].ValueInteger == 12);
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput4), Dispatchable, 10)[0].ValueInteger == 22);
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), Dispatchable, 0)[0].ValueInteger == 21);
+            RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), 1);
+            Assert.Equal(1.0, Context.Dispatcher.GetValues(DispatchableType.RuleInstance).Values.First());
+
+            RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput2), 10);
+            RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput3),  1);
+            RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput4),  10);
+            RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1),  0);
 
 
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), Dispatchable, null)[0].ValueInteger == 21);
-
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleOutput);
+            RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), null);
+            Assert.Equal(21.0, Context.Dispatcher.GetValues(DispatchableType.RuleInstance).Values.First());
         }
     }
 }

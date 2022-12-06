@@ -21,11 +21,12 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         private readonly System.Timers.Timer _pollTimer = new System.Timers.Timer();
 
-        private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _waitSemaphore;
 
-        public ModBusMasterDevice(IDriverContext driverContext, IModBusMasterDriver modBusDriver) : base(driverContext)
+        public ModBusMasterDevice(IDriverContext driverContext, IModBusMasterDriver modBusDriver, SemaphoreSlim semaphore) : base(driverContext)
         {
             _modBusDriver = modBusDriver;
+            _waitSemaphore = semaphore;
         }
 
         public override bool Init()
@@ -34,6 +35,8 @@ namespace P3.Driver.ModBusDriverFactory.Master
             DeviceId = (byte)GetPropertyValueInt("modbus-device-id");
 
             _pollTimer.Interval = PollInterval;
+
+            DriverContext.Logger.LogInformation($"Polling {DriverContext.NodeInstance.Name} (Address: {DeviceId}) every {PollInterval/60}seconds...");
 
             return base.Init();
         }
@@ -62,7 +65,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
                     return;
                 }
-           
+                DriverContext.Logger.LogInformation($"Start polling {DriverContext.NodeInstance.Name} at address: {DeviceId}...");
                 await PollAttributes();
             }
             finally
