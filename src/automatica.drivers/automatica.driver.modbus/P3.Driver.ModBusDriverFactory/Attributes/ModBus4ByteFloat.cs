@@ -3,6 +3,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Exceptions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace P3.Driver.ModBusDriverFactory.Attributes
 {
@@ -19,6 +20,9 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             {
                 var dValue = Convert.ToSingle(value);
                 dValue = (float)(dValue * Factor - Offset);
+
+                DriverContext.Logger.LogDebug($"Converted value is {dValue} (raw value {value})");
+
                 var bytes = BitConverter.GetBytes(dValue);
 
                 return new[] { bytes[2], bytes[3], bytes[0], bytes[1] };
@@ -40,9 +44,10 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             
             var val = BitConverter.ToSingle(bytes, 0);
 
-            val = (float)(val / Factor + Offset);
+            var conVal = (float)(val / Factor + Offset);
 
-            return val;
+            DriverContext.Logger.LogDebug($"Converted value is {conVal} (raw value {value})");
+            return conVal;
         }
     }
 }

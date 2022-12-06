@@ -25,8 +25,9 @@ namespace P3.Driver.ModBusDriverFactory.Slave
             _attribute = attribute;
         }
         
-        public override Task WriteValue(IDispatchable source, object value)
+        public override async Task WriteValue(IDispatchable source, object value)
         {
+            await Task.CompletedTask;
             var shortValue = _attribute.ConvertValueToBus(source, value);
 
             DriverContext.Logger.LogInformation($"Get value ({value} - {String.Join("-", shortValue)}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" +  Name} (Register: {_attribute.Register}, Lenght: {_attribute.RegisterLength}, Table: {_attribute.Table})");
@@ -34,10 +35,10 @@ namespace P3.Driver.ModBusDriverFactory.Slave
             {
                 case ModBusTable.Coil:
                     Driver.SetCoil(_parent.DeviceId, _attribute.Register, shortValue[0] == 1);
-                    return Task.CompletedTask;
+                    return;
                 case ModBusTable.DiscreteInput:
                     Driver.SetDiscreteInput(_parent.DeviceId, _attribute.Register, shortValue[0] == 1);
-                    return Task.CompletedTask;
+                    return;
             }
             
             for (int i = 0; i < _attribute.RegisterLength; i++)
@@ -54,7 +55,6 @@ namespace P3.Driver.ModBusDriverFactory.Slave
                 }
             }
             DispatchValue(value);
-            return base.WriteValue(source, value);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

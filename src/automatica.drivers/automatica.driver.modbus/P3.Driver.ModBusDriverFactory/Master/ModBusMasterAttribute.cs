@@ -26,21 +26,21 @@ namespace P3.Driver.ModBusDriverFactory.Master
             _attribute = attribute;
         }
         
-        public override Task WriteValue(IDispatchable source, object value)
+        public override async Task WriteValue(IDispatchable source, object value)
         {
+            await Task.CompletedTask;
             var shortValue = _attribute.ConvertValueToBus(source, value);
             DriverContext.Logger.LogInformation($"WRITE value ({value}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" +  Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
             switch (_attribute.Table)
             {
                 case ModBusTable.Coil:
-                    Driver.WriteCoil(_parent.DeviceId, _attribute.Register, shortValue[0] == 1);
+                    await Driver.WriteCoil(_parent.DeviceId, _attribute.Register, shortValue[0] == 1);
 
-                    return Task.CompletedTask;
+                    return;
                 case ModBusTable.DiscreteInput:
                 case ModBusTable.InputRegister:
                     //not writeable
-
-                    return Task.CompletedTask;
+                    return;
 
             }
             
@@ -50,11 +50,10 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 switch (_attribute.Table)
                 {
                     case ModBusTable.HoldingRegister:
-                        Driver.WriteHoldingRegister(_parent.DeviceId, registerAddress, shortValue[i]);
+                        await Driver.WriteHoldingRegister(_parent.DeviceId, registerAddress, shortValue[i]);
                         break;
                 }
             }
-            return base.WriteValue(source, value);
         }
 
         public async Task<object> ReadValue()
