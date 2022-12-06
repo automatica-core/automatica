@@ -4,6 +4,7 @@ using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Rule.Math.BasicOperations.Subtract
 {
@@ -32,8 +33,11 @@ namespace P3.Rule.Math.BasicOperations.Subtract
                 _i2 = Convert.ToDouble(value);
             }
 
+            var result = _i1 - _i2;
 
-            return SingleOutputChanged(new RuleOutputChanged(_output,  (_i1 - _i2)));
+            Context.Logger.LogDebug($"Subtract {_i1} - {_i2} = {result}");
+
+            return SingleOutputChanged(new RuleOutputChanged(_output, result));
         }
 
     }
