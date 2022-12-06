@@ -10,5 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.MBus\P3.Driver.MBus.csproj" />
     <ProjectReference Include="..\..\P3.Driver.OmsDriverFactory\P3.Driver.OmsDriverFactory.csproj" />
+    <ProjectReference Include="..\..\P3.Driver.Oms\P3.Driver.Oms.csproj" />
   </ItemGroup>
 </Project>

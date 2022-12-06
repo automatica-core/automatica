@@ -74,7 +74,6 @@ namespace P3.Driver.MBus.Serial
         {
             try
             {
-                _stream.DiscardOutBuffer();
                 var buffer = frame.ToByteFrame();
                 await WriteRaw(buffer);
             }
@@ -92,7 +91,6 @@ namespace P3.Driver.MBus.Serial
 
         protected override Task<MBusFrame> ReadFrame()
         {
-            _stream.DiscardInBuffer();
             return ReadFrameInternal();
         }
 

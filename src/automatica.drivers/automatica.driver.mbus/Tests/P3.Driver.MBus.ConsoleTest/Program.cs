@@ -36,12 +36,12 @@ namespace P3.Driver.MBus.ConsoleTest
             //}
 
             var mbusTest = new MBusTest(args[0]);
-            mbusTest.Start();
+            await mbusTest.Start();
 
             Console.ReadLine();
 
-            
-            mbusTest.Stop();
+
+            await mbusTest.Stop();
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.MBus", "P3.Driver.MBus\P3.Driver.MBus.csproj", "{72081B47-C56D-454B-8D60-63EC756EB31E}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 Tests", "99 Tests", "{955A1222-8966-43E3-A9D2-D07936E128B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.MBus.ConsoleTest", "Tests\P3.Driver.MBus.ConsoleTest\P3.Driver.MBus.ConsoleTest.csproj", "{DFF3A848-D126-4747-AA3D-CE989EF1C189}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.Driver.Oms", "P3.Driver.Oms\P3.Driver.Oms.csproj", "{1E83C289-62AE-4111-8C29-70B4AD68831C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,12 @@ Global
 		{DFF3A848-D126-4747-AA3D-CE989EF1C189}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
 		{DFF3A848-D126-4747-AA3D-CE989EF1C189}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFF3A848-D126-4747-AA3D-CE989EF1C189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E83C289-62AE-4111-8C29-70B4AD68831C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E83C289-62AE-4111-8C29-70B4AD68831C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E83C289-62AE-4111-8C29-70B4AD68831C}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E83C289-62AE-4111-8C29-70B4AD68831C}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{1E83C289-62AE-4111-8C29-70B4AD68831C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E83C289-62AE-4111-8C29-70B4AD68831C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +81,7 @@ Global
 		{3E703B9A-D5E9-46DC-B996-DD99651D3DB1} = {955A1222-8966-43E3-A9D2-D07936E128B9}
 		{F5B1C5C2-5D6B-41CA-8052-C6AF2DCF3E06} = {955A1222-8966-43E3-A9D2-D07936E128B9}
 		{DFF3A848-D126-4747-AA3D-CE989EF1C189} = {955A1222-8966-43E3-A9D2-D07936E128B9}
+		{1E83C289-62AE-4111-8C29-70B4AD68831C} = {237840FB-2F00-4A88-9422-406527B824C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B57AEC90-9554-4481-ABD2-161F4338F6EA}

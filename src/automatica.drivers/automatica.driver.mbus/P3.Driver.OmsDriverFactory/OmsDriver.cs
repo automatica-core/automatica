@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Threading;
-using System.Timers;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using P3.Driver.MBus.Config;
 using P3.Driver.MBus.Frames;
-using P3.Driver.MBus.Serial;
 using P3.Driver.OmsDriverFactory.Helper;
 using System.Threading.Tasks;
 using Automatica.Core.Driver.Utility;
-using Microsoft.Extensions.Logging.Abstractions;
+using P3.Driver.Oms;
 
 namespace P3.Driver.OmsDriverFactory
 {
     public class OmsDriver : DriverBase
     {
-        private MBusSerial _mbus;
-
-        private readonly System.Timers.Timer _timer = new System.Timers.Timer(2000);
 
         private byte[] _aesKey;
-
-        private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
         private readonly ILogger _logger;
+        private OmsDevice _omsDevice;
 
         public OmsDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -32,23 +24,13 @@ namespace P3.Driver.OmsDriverFactory
         public override bool Init()
         {
             var key = GetProperty("mbus-oms-key").ValueString;
-
             var port = GetProperty("mbus-oms-port").ValueString;
 
             DriverContext.Logger.LogInformation($"Trying to open {port}");
 
-            _mbus = new MBusSerial(new MBusSerialConfig
-            {
-                Baudrate = 9600,
-                Timeout = 500,
-                ResetBeforeRead = true,
-                Port = port,
-                DataReceived = DataReceived
-            }, TelegramMonitor, _logger);
+            _aesKey = Utils.StringToByteArray(key);
+            _omsDevice = new OmsDevice(port, _logger, TelegramMonitor, DecryptFrame);
 
-            _timer.Elapsed += _timer_Elapsed;
-
-            _aesKey = Automatica.Core.Driver.Utility.Utils.StringToByteArray(key);
             return base.Init();
         }
 
@@ -59,80 +41,21 @@ namespace P3.Driver.OmsDriverFactory
 
         public override async Task<bool> Start()
         {
-            var mbus = _mbus.Open();
+            var mbus = await _omsDevice.Start();
 
             if (!mbus)
             {
                 return false;
             }
-            await _mbus.SendAckWithoutRead();
-
-            _timer.Start();
             DriverContext.Logger.LogInformation($"Start checking for messages....");
             return await base.Start();
         }
 
-        public override Task<bool> Stop()
+        public override async Task<bool> Stop()
         {
-            _timer.Elapsed -= _timer_Elapsed;
-            _mbus.Close();
+            await _omsDevice.Stop();
 
-            return base.Stop();
-        }
-
-        private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                _timer.Stop();
-
-                await _waitSemaphore.WaitAsync();
-                await _mbus.SendAckWithoutRead();
-
-                DriverContext.Logger.LogDebug("Try read oms device...");
-                var frame = await _mbus.TryReadFrame();
-
-                if (frame != null)
-                {
-                    DriverContext.Logger.LogDebug($"Read frame...1({frame.GetType()})");
-
-                    MBusFrame data = null;
-                    if (frame is ShortFrame)
-                    {
-
-                        await _mbus.SendAckWithoutRead();
-
-
-                        data = await _mbus.TryReadFrame();
-                    }
-                    else
-                    {
-                        data = frame;
-                    }
-
-                    if (data != null)
-                    {
-                        DriverContext.Logger.LogDebug($"Read frame...2({data.GetType()})");
-                        DecryptFrame(data);
-                        await _mbus.SendAckWithoutRead();
-                    }
-                    else
-                    {
-                        DriverContext.Logger.LogError($"Could not read frame...");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error reading package...{ex}");
-            }
-            finally
-            {
-                _waitSemaphore.Release(1);
-                _timer.Start();
-            }
-
+            return await base.Stop();
         }
 
         private void DecryptFrame(MBusFrame data)
