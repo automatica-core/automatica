@@ -25,7 +25,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
             }
             catch
             {
-
+                //ignore exception
             }
         }
 
