@@ -12,12 +12,12 @@ namespace P3.Driver.SonosDriverFactory
     {
         private readonly SonosDevice _device;
         private readonly Func<Task<object>> _readAction;
-        private readonly Action<object> _writeAction;
+        private readonly Func<object, Task> _writeAction;
         private readonly Timer _readTimer = new Timer();
 
 
 
-        public SonosAttribute(IDriverContext ctx, SonosDevice device, Func<Task<object>> readAction, Action<object> writeAction) : base(ctx)
+        public SonosAttribute(IDriverContext ctx, SonosDevice device, Func<Task<object>> readAction, Func<object, Task> writeAction) : base(ctx)
         {
             _device = device;
             _readAction = readAction;
@@ -52,18 +52,16 @@ namespace P3.Driver.SonosDriverFactory
             }
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        public override async Task WriteValue(IDispatchable source, object value)
         {
             try
             {
-                _writeAction.Invoke(value);
+                await _writeAction.Invoke(value);
             }
             catch (Exception e)
             {
                 DriverContext.Logger.LogError(e, "Error write value to sonos...");
             }
-
-            return Task.CompletedTask;
         }
 
         public override async Task<bool> Start()
