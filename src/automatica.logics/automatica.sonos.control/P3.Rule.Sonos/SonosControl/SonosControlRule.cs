@@ -145,7 +145,6 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
             else
             {
                 ret.Add(new RuleOutputChanged(_pauseOutputStatus, true));
-                ret.Add(new RuleOutputChanged(_radioStationOutputValue, null));
                 ret.Add(new RuleOutputChanged(_playOutputStatus, false));
             }
         }
