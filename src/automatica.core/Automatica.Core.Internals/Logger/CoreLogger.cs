@@ -54,16 +54,26 @@ namespace Automatica.Core.Internals.Logger
 
             if (isFrameworkLog)
             { 
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30));
+                logBuild.
+                    WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
+                        retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                        fileSizeLimitBytes: 134217728,//128mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
+                        flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             else
             {
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"),
-                    fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30));
+                logBuild
+                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"),
+                        fileSizeLimitBytes: 31457280, //~32mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                        fileSizeLimitBytes: 134217728 ,//128mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
+                        flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
