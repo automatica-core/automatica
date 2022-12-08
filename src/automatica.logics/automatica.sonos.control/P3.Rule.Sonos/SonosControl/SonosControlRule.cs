@@ -137,10 +137,10 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
                 _currentVolume = _volumeOnPlayValue;
                 _currentlyPlaying = true;
 
+                ret.Add(new RuleOutputChanged(_playOutputStatus, true));
                 ret.Add(new RuleOutputChanged(_pauseOutputStatus, false));
                 ret.Add(new RuleOutputChanged(_radioStationOutputValue, _radioStationValue));
                 ret.Add(new RuleOutputChanged(_volumeOutputStatus, _currentVolume));
-                ret.Add(new RuleOutputChanged(_playOutputStatus, true));
             }
             else
             {
