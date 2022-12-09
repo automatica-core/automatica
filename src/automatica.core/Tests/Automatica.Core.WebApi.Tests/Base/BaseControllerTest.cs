@@ -88,6 +88,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton<ILogger<PluginHandler>>(NullLogger<PluginHandler>.Instance);
             services.AddSingleton<ILogger<LearnMode>>(NullLogger<LearnMode>.Instance);
             services.AddSingleton<ILogger>(NullLogger.Instance);
+            services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
 
             var mqttServerMock = new Mock<IMqttServer>();
             services.AddSingleton<IMqttServer>(mqttServerMock.Object);
