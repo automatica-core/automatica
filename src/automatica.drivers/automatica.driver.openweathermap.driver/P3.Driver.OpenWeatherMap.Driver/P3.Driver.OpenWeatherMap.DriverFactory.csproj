@@ -20,7 +20,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="7.0.0.899" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.1.0.919" />
     <PackageReference Include="OpenWeatherMap" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
