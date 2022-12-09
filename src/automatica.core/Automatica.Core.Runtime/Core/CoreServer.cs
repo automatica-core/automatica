@@ -100,6 +100,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILocalizationProvider _localizationProvider;
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly INodeTemplateCache _nodeTemplateCache;
+        private readonly ILoggerFactory _loggerFactory;
 
 
         public RunState RunState
@@ -172,6 +173,8 @@ namespace Automatica.Core.Runtime.Core
             _nodeTemplateCache = services.GetRequiredService<INodeTemplateCache>();
 
             _localizationProvider.LoadFromAssembly(GetType().Assembly);
+
+            _loggerFactory = services.GetRequiredService<ILoggerFactory>();
             InitInternals();
         }
 
@@ -658,8 +661,9 @@ namespace Automatica.Core.Runtime.Core
                 return null;
             }
 
-            var config = new DriverContext(nodeInstance,
-                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), CoreLoggerFactory.GetLogger(factory.DriverName), _learnMode, _cloudApi, _licenseContext, false);
+            var logger = CoreLoggerFactory.GetLogger(factory.DriverName + $"{nodeInstance.Name.Replace(" ", "_")}");
+            var config = new DriverContext(nodeInstance, factory,
+                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), logger, _learnMode, _cloudApi, _licenseContext, _loggerFactory, false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
 

@@ -80,17 +80,25 @@ namespace Automatica.Core.Driver
             {
                 node.State = NodeInstanceState.Loaded;
 
+                var logger = DriverContext.Logger;
+                if (CreateCustomLogger())
+                {
+                    logger = DriverContext.LoggerFactory.CreateLogger(DriverContext.Factory.DriverName + $"{DriverContext.NodeInstance.Name.Replace(" ", "_")}");
+                }
+
                 var driverNode = CreateDriverNode(
                     new DriverContext(
                         node, 
+                        DriverContext.Factory,
                         DriverContext.Dispatcher, 
                         DriverContext.NodeTemplateFactory, 
                         DriverContext.TelegramMonitor, 
                         DriverContext.LicenseState,
-                        DriverContext.Logger,
+                        logger,
                         DriverContext.LearnMode,
                         DriverContext.CloudApi,
                         DriverContext.LicenseContract,
+                        DriverContext.LoggerFactory,
                         DriverContext.IsTest));
 
                 ChildrensCreated += 1;
@@ -147,10 +155,9 @@ namespace Automatica.Core.Driver
             return true;
         }
 
-        protected virtual bool CreateTelegramMonitor()
-        {
-            return false;
-        }
+        protected virtual bool CreateTelegramMonitor() => false;
+
+        protected virtual bool CreateCustomLogger() => false;
 
         protected virtual void ChildrenCreated(IDriverNode child)
         {

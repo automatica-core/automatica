@@ -4,6 +4,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Drivers;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.UnitTests.Base.Drivers
 {
@@ -32,7 +33,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
 
         protected IDriver CreateDriver(NodeInstance node)
         {
-            var driverContext = new DriverContextMock(node, Factory, Dispatcher);
+            var driverContext = new DriverContextMock(node, DriverFactory, Factory, Dispatcher, new NullLoggerFactory());
             var driver = DriverFactory.CreateDriver(driverContext);
 
             driver.Configure();

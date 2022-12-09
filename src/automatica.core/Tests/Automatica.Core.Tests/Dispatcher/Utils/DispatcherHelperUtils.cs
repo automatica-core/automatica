@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
@@ -14,6 +15,7 @@ using Automatica.Core.UnitTests.Base.Drivers;
 using Automatica.Core.UnitTests.Base.Rules;
 using Automatica.Core.UnitTests.Drivers;
 using Automatica.Core.UnitTests.Rules;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
 {
@@ -57,6 +59,38 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             return new List<IRuleOutputChanged>() {new RuleOutputChanged(Output, true)};
         }
     }
+
+    internal class DriverFactoryMock : IDriverFactory
+    {
+        public void InitTemplates(INodeTemplateFactory factory)
+        {
+        }
+
+        public Guid FactoryGuid => Guid.NewGuid();
+        public string DriverName => "Mock";
+        public Guid DriverGuid => Guid.NewGuid();
+        public Version DriverVersion => new Version(0, 0, 0, 1);
+        public InterfaceTypeEnum[] UsesInterfaces => new[] { InterfaceTypeEnum.Board };
+        public bool InDevelopmentMode => true;
+        public void InitNodeTemplates(INodeTemplateFactory factory)
+        {
+        }
+
+        public IDriver CreateDriver(IDriverContext config)
+        {
+            return null;
+        }
+
+        public void Scan(NodeInstance instance)
+        {
+
+        }
+
+        public string ImageSource => "";
+        public string ImageName => "";
+        public string Tag  => "";
+    }
+
     internal static class DispatcherHelperUtils
     {
         public static async Task<DriverNodeMock> CreateNodeMock(Guid guid, string name, IDispatcher dispatcher, INodeInstanceCache cache=null, IDriverNodesStore store = null)
@@ -76,7 +110,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             cache?.Add(mockNodeChild.ObjId, mockNodeChild);
 
             mockNode.InverseThis2ParentNodeInstanceNavigation.Add(mockNodeChild);
-            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new NodeTemplateFactoryMock(), dispatcher));
+            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory()));
 
             mock.Configure();
             await mock.Start();

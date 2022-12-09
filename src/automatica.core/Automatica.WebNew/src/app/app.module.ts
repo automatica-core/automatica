@@ -39,6 +39,7 @@ import { SlavesService } from "./services/slaves.services";
 import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
 import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
+import { ThemeService } from "./services/theme.service";
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -112,6 +113,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
       provide: DeviceDetectorService,
       useClass: DeviceDetectorService
     },
+    ThemeService
   ],
   bootstrap: [
     AppComponent

@@ -11,6 +11,7 @@ import { FooterModule } from "src/app/shared/components/footer/footer.component"
 import { Subscription } from "rxjs";
 import { DeviceService } from "src/app/services/device/device.service";
 import { DxTooltipModule } from "devextreme-angular";
+import { ThemeService } from "src/app/services/theme.service";
 
 @Component({
     selector: "app-side-nav-inner-toolbar",
@@ -37,6 +38,8 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
 
     @Input()
     backgroundColor = "white";
+    @Output()
+    backgroundColorChanged = new EventEmitter<any>();
 
 
     @Output()
@@ -51,6 +54,8 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     shaderEnabled = true;
     routerSub: Subscription;
 
+    themeChangedSub: Subscription;
+
     public get isMobile() {
         return this.deviceService.isMobile();
     }
@@ -59,9 +64,18 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private deviceService: DeviceService,
-        private changeRef: ChangeDetectorRef) { }
+        private changeRef: ChangeDetectorRef,
+        private themeService: ThemeService) { }
 
     ngOnInit() {
+        this.backgroundColor = this.themeService.getBackgroundColor();
+        this.themeChangedSub = this.themeService.themeChanged.subscribe(a => {
+            this.backgroundColor = this.themeService.getBackgroundColor();
+            this.backgroundColorChanged.emit(this.backgroundColor);
+
+            this.changeRef.detectChanges();
+        });
+
         this.selectedRoute = "";
         this.routerSub = this.router.events.subscribe(val => {
             if (val instanceof NavigationEnd) {
@@ -79,6 +93,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.routerSub.unsubscribe();
+        this.themeChangedSub.unsubscribe();
     }
 
 

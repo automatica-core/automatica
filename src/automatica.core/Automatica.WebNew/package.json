@@ -39,7 +39,7 @@
     "devextreme": "22.1.5",
     "devextreme-angular": "22.1.5",
     "devextreme-schematics": "^1.4.2",
-    "draw2d": "^1.0.38",
+    "automatica-draw2d": "^1.0.39",
     "file-saver": "^2.0.2",
     "jquery": "^3.5.0",
     "jquery-ui-dist": "^1.12.1",

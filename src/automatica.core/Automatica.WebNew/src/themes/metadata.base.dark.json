@@ -13,24 +13,16 @@
       "value": "#325862"
     },
     {
-      "key": "$base-border-color",
-      "value": "#e0e0e0"
-    },
-    {
       "key": "$base-border-radius",
       "value": "4px"
     },
     {
-      "key": "$base-text-color",
-      "value": "rgba(0, 0, 0, 0.87)"
-    },
-    {
       "key": "$base-bg",
-      "value": "#fff"
+      "value": "#2a2a2a"
     }
   ],
-  "baseTheme": "generic.light.compact",
-  "outputColorScheme": "automatica-light",
+  "baseTheme": "generic.dark.compact",
+  "outputColorScheme": "automatica-dark",
   "makeSwatch": false,
   "widgets": [],
   "removeExternalResources": false

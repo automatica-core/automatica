@@ -8,6 +8,7 @@ import { L10nTranslationService, L10nLocale } from "angular-l10n";
 import { BaseComponent } from "./base/base-component";
 import { FaIconLibrary, FaConfig } from "@fortawesome/angular-fontawesome";
 import { DxLoadPanelComponent } from "devextreme-angular";
+import { ThemeService } from "./services/theme.service";
 
 @Component({
   selector: "app-root",
@@ -27,7 +28,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     private changeDet: ChangeDetectorRef,
     library: FaIconLibrary,
     private ngZone: NgZone,
-    private iconConfig: FaConfig) {
+    private iconConfig: FaConfig,
+    private themeService: ThemeService) {
     super(notify, translate, appService);
 
     const automaticaLogo = {
@@ -102,6 +104,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.themeService.applyTheme();
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
       if (v) {
         this.dxLoadPanel.instance.show();
