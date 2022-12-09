@@ -83,7 +83,7 @@ namespace Automatica.Core.Driver
                 var logger = DriverContext.Logger;
                 if (CreateCustomLogger())
                 {
-                    logger = DriverContext.LoggerFactory.CreateLogger(DriverContext.Factory.DriverName + $"{DriverContext.NodeInstance.Name.Replace(" ", "_")}");
+                    logger = DriverContext.LoggerFactory.CreateLogger(DriverContext.Factory.DriverName + $"{node.Name.Replace(" ", "_")}");
                 }
 
                 var driverNode = CreateDriverNode(

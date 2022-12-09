@@ -34,6 +34,10 @@ namespace P3.Driver.MBusDriverFactory
         {
             return true;
         }
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
 
         public override bool Init()
         {

@@ -27,6 +27,7 @@ namespace P3.Driver.MBusDriverFactory
             _logger = driverContext.Logger;
         }
 
+
         public override Task<bool> Start()
         {
             _pollTimer?.Start();
