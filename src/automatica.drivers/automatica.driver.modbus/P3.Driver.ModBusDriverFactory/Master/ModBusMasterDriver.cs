@@ -28,6 +28,11 @@ namespace P3.Driver.ModBusDriverFactory.Master
             return true;
         }
 
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
+
         public override bool Init()
         {
             if (_isTcp)

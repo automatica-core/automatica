@@ -27,6 +27,10 @@ namespace P3.Driver.ModBusDriverFactory.Slave
         {
             return true;
         }
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
 
         public override bool Init()
         {

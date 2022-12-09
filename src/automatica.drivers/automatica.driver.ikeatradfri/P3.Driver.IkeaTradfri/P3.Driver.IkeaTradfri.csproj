@@ -7,7 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Com.AugustCellars.CoAP" Version="1.10.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Tomidix.CSharpTradFriLibrary" Version="1.5.0.43" />
     <PackageReference Include="Zeroconf" Version="3.6.11" />
   </ItemGroup>
