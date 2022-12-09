@@ -41,6 +41,7 @@ using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
+using Automatica.Core.Base.Logger;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -530,7 +531,8 @@ namespace Automatica.Core.Runtime.Core
                 }
 
                 var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
-                var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory),  _ruleInstanceVisuNotify, CoreLoggerFactory.GetLogger(factory.RuleName), _cloudApi, _licenseContext);
+                var logger = CoreLoggerFactory.GetLogger($"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
+                var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory),  _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
                 var rule = factory.CreateRuleInstance(ruleContext);
 
                 if (rule != null)
@@ -661,7 +663,7 @@ namespace Automatica.Core.Runtime.Core
                 return null;
             }
 
-            var logger = CoreLoggerFactory.GetLogger(factory.DriverName + $"{nodeInstance.Name.Replace(" ", "_")}");
+            var logger = CoreLoggerFactory.GetLogger($"{factory.DriverName}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_")}");
             var config = new DriverContext(nodeInstance, factory,
                 _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), logger, _learnMode, _cloudApi, _licenseContext, _loggerFactory, false);
 

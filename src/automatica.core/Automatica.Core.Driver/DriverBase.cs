@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
@@ -81,9 +83,9 @@ namespace Automatica.Core.Driver
                 node.State = NodeInstanceState.Loaded;
 
                 var logger = DriverContext.Logger;
-                if (CreateCustomLogger())
+                if (CreateCustomLogger() || true)
                 {
-                    logger = DriverContext.LoggerFactory.CreateLogger(DriverContext.Factory.DriverName + $"{node.Name.Replace(" ", "_")}");
+                    logger = DriverContext.LoggerFactory.CreateLogger($"{DriverContext.Factory.DriverName}{LoggerConstants.FileSeparator}{node.Name.Replace(" ", "_")}");
                 }
 
                 var driverNode = CreateDriverNode(

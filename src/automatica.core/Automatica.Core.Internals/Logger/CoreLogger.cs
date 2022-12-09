@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Base.Logger;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -65,8 +67,18 @@ namespace Automatica.Core.Internals.Logger
             }
             else
             {
+                var fileName = Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log");
+                if (facility.Contains(LoggerConstants.FileSeparator))
+                {
+                    var split = facility.Split(LoggerConstants.FileSeparator).ToList();
+                    split.Insert(0, ServerInfo.GetLogDirectory());
+                    split[^1] += ".log";
+
+                    fileName = Path.Combine(split.ToArray());
+                }
+
                 logBuild
-                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"),
+                    .WriteTo.RollingFile(fileName,
                         fileSizeLimitBytes: 31457280, //~32mb
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
                         flushToDiskInterval: TimeSpan.FromSeconds(30))

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Automatica.Core.Base.Logger;
 
 namespace Automatica.Core.Internals.Logger
 {
@@ -45,7 +46,7 @@ namespace Automatica.Core.Internals.Logger
 
         public ILogger CreateLogger(string categoryName)
         {
-            return GetLogger(categoryName, LogLevel.Error, true);
+            return GetLogger(categoryName, LogLevel.Error, !categoryName.Contains(LoggerConstants.FileSeparator));
         }
 
         public void AddProvider(ILoggerProvider provider)
