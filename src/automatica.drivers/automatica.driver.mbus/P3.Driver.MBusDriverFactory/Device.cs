@@ -26,7 +26,10 @@ namespace P3.Driver.MBusDriverFactory
             _parent = parent;
             _logger = driverContext.Logger;
         }
-
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
 
         public override Task<bool> Start()
         {
