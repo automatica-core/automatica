@@ -60,7 +60,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         }
     }
 
-    internal class DriverFactoryMock : IDriverFactory
+    public class DriverFactoryMock : IDriverFactory
     {
         public void InitTemplates(INodeTemplateFactory factory)
         {
