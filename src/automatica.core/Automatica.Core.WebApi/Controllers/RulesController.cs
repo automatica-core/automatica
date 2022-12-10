@@ -177,6 +177,11 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            if (!dbContext.NodeInstance2RulePages.Any(a => a.ObjId == nodeInstance.ObjId))
+            {
+                return null;
+            }
+
             var existingInstance = dbContext.NodeInstance2RulePages.Single(a => a.ObjId == nodeInstance.ObjId);
 
             existingInstance.X = nodeInstance.X;
@@ -258,9 +263,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-            var this2RuleOutput = link.This2RuleInterfaceInstanceOutputNavigation;
-            var this2RuleInput = link.This2RuleInterfaceInstanceInputNavigation;
-
+          
             link.This2RuleInterfaceInstanceOutputNavigation = null;
             link.This2RuleInterfaceInstanceInputNavigation = null;
             link.This2NodeInstance2RulePageInputNavigation = null;
@@ -282,14 +285,16 @@ namespace Automatica.Core.WebApi.Controllers
                 await dbContext.SaveChangesAsync();
                 _logicCacheFacade.PageCache.UpdateLink(link);
             }
+            var this2RuleOutputRuleId = link.This2RuleInterfaceInstanceOutputNavigation?.This2RuleInstance;
+            var this2RuleInputRuleId = link.This2RuleInterfaceInstanceInputNavigation?.This2RuleInstance;
 
-            if (link.This2RuleInterfaceInstanceOutput.HasValue)
+            if (this2RuleOutputRuleId.HasValue)
             {
-                await _coreServer.ReloadLogic(this2RuleOutput.This2RuleInstance);
+                await _coreServer.ReloadLogic(this2RuleOutputRuleId.Value);
             }
-            if (link.This2RuleInterfaceInstanceInput.HasValue)
+            if (this2RuleInputRuleId.HasValue)
             {
-                await _coreServer.ReloadLogic(this2RuleInput.This2RuleInstance);
+                await _coreServer.ReloadLogic(this2RuleInputRuleId.Value);
             }
             
             await _logicCacheFacade.AddOrUpdateLink(link.ObjId, dbContext);

@@ -146,11 +146,16 @@ namespace Automatica.Core.Internals.Cache.Logic
             if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
             {
                 var page = _rulePageCache[ruleInstance.This2RulePage];
-                var existing = page.RuleInstance.First(a => a.ObjId == ruleInstance.ObjId);
 
-                existing.X = ruleInstance.X;
-                existing.Y = ruleInstance.Y;
-                existing.Name = ruleInstance.Name;
+                if(page.RuleInstance.Any(a => a.ObjId == ruleInstance.ObjId)) {
+
+                    var existing = page.RuleInstance.First(a => a.ObjId == ruleInstance.ObjId);
+
+                    existing.X = ruleInstance.X;
+                    existing.Y = ruleInstance.Y;
+
+                    existing.Name = ruleInstance.Name;
+                }
 
             }
         }

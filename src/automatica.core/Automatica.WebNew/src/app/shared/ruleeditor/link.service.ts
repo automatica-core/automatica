@@ -79,7 +79,7 @@ export class LinkService {
             }
         }
 
-        if (!linkService.isInit && isInput) {
+        if (!linkService.isInit && userData.isValid && isInput) {
             await ruleEngineService.addOrUpdateLink(userData);
         }
 

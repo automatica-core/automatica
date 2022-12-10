@@ -158,8 +158,12 @@ namespace Automatica.Core.Runtime.IO
 
         public async Task Unlink(Guid linkId)
         {
-            await Task.CompletedTask;
             var entry = _linkCache.Get(linkId);
+
+            if (entry == null)
+            {
+                return;
+            }
 
             if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 node
             {
