@@ -10,7 +10,7 @@ namespace P3.Rule.Logic.BaseOperations.Tests.Or
         [Fact]
         public void TestRule()
         {
-            Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(OrRuleFactory.RuleInput1), Dispatchable, 1)[0].Value == null);
+            Assert.Empty(Rule.ValueChanged(GetRuleInterfaceByTemplate(OrRuleFactory.RuleInput1), Dispatchable, 1));
             Assert.True(Rule.ValueChanged(GetRuleInterfaceByTemplate(OrRuleFactory.RuleInput2), Dispatchable, 11)[0].ValueBoolean);
 
 

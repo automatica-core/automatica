@@ -39,13 +39,13 @@ namespace P3.Rule.Logic.BaseOperations.Or
 
             if (_i1.HasValue && _i2.HasValue)
             {
-                _o = _i1.Value || _i2.Value;
+                _o = _i1.Value || _i2.Value; return new List<IRuleOutputChanged>
+                {
+                    new RuleOutputChanged(_output1, _o)
+                };
             }
 
-            return new List<IRuleOutputChanged>
-            {
-                new RuleOutputChanged(_output1, _o)
-            };
+            return new List<IRuleOutputChanged>();
         }
 
     }
