@@ -13,6 +13,7 @@ namespace Automatica.Core.Internals.Logger
     public class CoreLogger : Microsoft.Extensions.Logging.ILogger
     {
         private readonly string _facility;
+        private readonly string _logNameFacility;
         private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
 
@@ -51,6 +52,7 @@ namespace Automatica.Core.Internals.Logger
                facility = "dotnet"; 
             }
             facility = facility.ToLower();
+            _logNameFacility = facility;
 
             var logBuild = new LoggerConfiguration();
 
@@ -75,6 +77,8 @@ namespace Automatica.Core.Internals.Logger
                     split[^1] += ".log";
 
                     fileName = Path.Combine(split.ToArray());
+
+                    _logNameFacility = split[^1];
                 }
 
                 logBuild
@@ -193,7 +197,7 @@ namespace Automatica.Core.Internals.Logger
             Func<TState, Exception, string> formatter)
         {
             var level = ConvertLogLevel(logLevel);
-            var msg = $"{_facility.ToLower()}: {formatter.Invoke(state, exception)}";
+            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception)}";
             _logger.Write(level, exception, msg);
         }
     }
