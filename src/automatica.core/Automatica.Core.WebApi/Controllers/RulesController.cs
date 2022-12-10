@@ -311,9 +311,8 @@ namespace Automatica.Core.WebApi.Controllers
 
                 dbContext.Remove(link);
                 await dbContext.SaveChangesAsync();
-                _logicCacheFacade.PageCache.RemoveLink(link);
+                await _logicCacheFacade.RemoveLink(objId);
             }
-            await _logicCacheFacade.RemoveLink(objId);
             
         }
 
