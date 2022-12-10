@@ -33,6 +33,12 @@ namespace P3.Rule.Logic.BaseOperations.If
             _output1 = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == IfRuleFactory.RuleOutput);
         }
+        public override Task<bool> Start()
+        {
+            _i1 = null;
+            _i2 = null;
+            return base.Start();
+        }
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {

@@ -24,6 +24,12 @@ namespace P3.Rule.Logic.BaseOperations.And
   
         }
 
+        public override Task<bool> Start()
+        {
+            _i1 = null;
+            _i2 = null;
+            return base.Start();
+        }
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (value != null)

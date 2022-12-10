@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -41,6 +42,12 @@ namespace P3.Rule.Logic.BaseOperations.BinaryDecoder
                 a.This2RuleInterfaceTemplate == BinaryDecoderRuleFactory.RuleOutput8);
 
 
+        }
+
+        public override Task<bool> Start()
+        {
+            _b1 = null;
+            return base.Start();
         }
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
