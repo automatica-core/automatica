@@ -307,6 +307,16 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (link != null)
             {
+                var instance = _logicCacheFacade.LinkCache.Get(objId);
+                if (link.This2RuleInterfaceInstanceOutput.HasValue)
+                {
+                    await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
+                }
+                if (link.This2RuleInterfaceInstanceInput.HasValue)
+                {
+                    await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
+                }
+
                 await _coreServer.RemoveLink(objId);
 
                 dbContext.Remove(link);
