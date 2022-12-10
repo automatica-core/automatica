@@ -21,7 +21,15 @@ namespace Automatica.Core.Base.Cache
             }
         }
 
-        protected void Remove(T1 key)
+        public virtual void Update(T1 key, T2 value)
+        {
+            if (_store.ContainsKey(key))
+            {
+                _store[key] = value;
+            }
+        }
+
+        public virtual void Remove(T1 key)
         {
             if (Contains(key))
             {

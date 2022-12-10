@@ -247,6 +247,16 @@ namespace Automatica.Core.Base.IO
             await Dispatch(self, value, async (a, b, c) => { await DispatchValueInternal(self, value, c); });
         }
 
+        public Task UnRegisterDispatch(DispatchableType type, Guid id)
+        {
+            if (_registrationMap.ContainsKey(type) && _registrationMap[type].ContainsKey(id))
+            {
+                _registrationMap[type].Remove(id);
+            }
+
+            return Task.CompletedTask;
+        }
+
 
         protected virtual Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
         {

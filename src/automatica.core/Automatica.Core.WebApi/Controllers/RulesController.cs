@@ -92,7 +92,10 @@ namespace Automatica.Core.WebApi.Controllers
 
 
             _logicCacheFacade.PageCache.AddRuleInstance(ruleInstance);
+            _logicCacheFacade.InstanceCache.Add(ruleInstance.ObjId, ruleInstance);
             _logicCacheFacade.ClearInstances();
+
+            await _coreServer.ReloadLogic(ruleInstance.ObjId);
 
             return ruleInstance;
         }
@@ -135,6 +138,8 @@ namespace Automatica.Core.WebApi.Controllers
             await dbContext.SaveChangesAsync();
 
             _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
+            _logicCacheFacade.InstanceCache.Update(ruleInstance.ObjId, ruleInstance);
+            await _coreServer.ReloadLogic(ruleInstance.ObjId);
             _logicCacheFacade.ClearInstances();
             return ruleInstance;
         }
@@ -201,6 +206,7 @@ namespace Automatica.Core.WebApi.Controllers
                 dbContext.RulePages.Remove(rulePage);
                 await dbContext.SaveChangesAsync();
             }
+            
             _logicCacheFacade.ClearInstances();
         }
 
@@ -215,6 +221,8 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (ruleInstance != null)
             {
+                await _coreServer.StopLogic(instanceId);
+
                 _logicCacheFacade.PageCache.RemoveRuleInstance(ruleInstance);
                 dbContext.RuleInstances.Remove(ruleInstance);
                 await dbContext.SaveChangesAsync();
@@ -250,6 +258,9 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            var this2RuleOutput = link.This2RuleInterfaceInstanceOutputNavigation;
+            var this2RuleInput = link.This2RuleInterfaceInstanceInputNavigation;
+
             link.This2RuleInterfaceInstanceOutputNavigation = null;
             link.This2RuleInterfaceInstanceInputNavigation = null;
             link.This2NodeInstance2RulePageInputNavigation = null;
@@ -272,8 +283,17 @@ namespace Automatica.Core.WebApi.Controllers
                 _logicCacheFacade.PageCache.UpdateLink(link);
             }
 
-
-            _logicCacheFacade.ClearInstances();
+            if (link.This2RuleInterfaceInstanceOutput.HasValue)
+            {
+                await _coreServer.ReloadLogic(this2RuleOutput.This2RuleInstance);
+            }
+            if (link.This2RuleInterfaceInstanceInput.HasValue)
+            {
+                await _coreServer.ReloadLogic(this2RuleInput.This2RuleInstance);
+            }
+            
+            await _logicCacheFacade.AddOrUpdateLink(link.ObjId, dbContext);
+            await _coreServer.ReloadLinks();
             return link;
         }
 
@@ -287,12 +307,14 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (link != null)
             {
+                await _coreServer.RemoveLink(objId);
+
                 dbContext.Remove(link);
                 await dbContext.SaveChangesAsync();
                 _logicCacheFacade.PageCache.RemoveLink(link);
             }
-
-            _logicCacheFacade.ClearInstances();
+            await _logicCacheFacade.RemoveLink(objId);
+            
         }
 
         [HttpPost]

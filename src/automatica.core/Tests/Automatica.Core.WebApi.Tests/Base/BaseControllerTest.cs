@@ -82,7 +82,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton(telegramHubMoq.Object);
 
             services.AddSingleton<ILogger<NotifyDriverHandler>>(NullLogger<NotifyDriverHandler>.Instance);
-            services.AddSingleton<ILogger<RuleEngineDispatcher>>(NullLogger<RuleEngineDispatcher>.Instance);
+            services.AddSingleton<ILogger<LogicEngineDispatcher>>(NullLogger<LogicEngineDispatcher>.Instance);
             services.AddSingleton<ILogger<LogicLoader>>(NullLogger<LogicLoader>.Instance);
             services.AddSingleton<ILogger<DriverLoader>>(NullLogger<DriverLoader>.Instance);
             services.AddSingleton<ILogger<PluginHandler>>(NullLogger<PluginHandler>.Instance);

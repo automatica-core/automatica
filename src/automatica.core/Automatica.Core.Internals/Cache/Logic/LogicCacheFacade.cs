@@ -1,4 +1,7 @@
-﻿using Automatica.Core.Internals.Cache.Common;
+﻿using System;
+using System.Threading.Tasks;
+using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Common;
 
 namespace Automatica.Core.Internals.Cache.Logic
 {
@@ -27,6 +30,19 @@ namespace Automatica.Core.Internals.Cache.Logic
             _linkCache.Clear();
 
             LogicNodeInstanceCache.Clear();
+        }
+
+        public Task RemoveLink(Guid linkId)
+        {
+            _linkCache.Remove(linkId);
+
+            return Task.CompletedTask;
+        }
+
+        public Task AddOrUpdateLink(Guid objId, AutomaticaContext dbContext)
+        {
+            _linkCache.GetSingle(objId, dbContext);
+            return Task.CompletedTask;
         }
     }
 }

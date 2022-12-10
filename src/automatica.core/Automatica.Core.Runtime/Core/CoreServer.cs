@@ -42,6 +42,7 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
+using System.Data;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -69,7 +70,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ICloudApi _cloudApi;
         private readonly ILicenseContext _licenseContext;
         private readonly ITelegramMonitor _telegramMonitor;
-        private readonly IRuleEngineDispatcher _ruleEngineDispatcher;
+        private readonly ILogicEngineDispatcher _logicEngineDispatcher;
         private RunState _runState;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotify;
         private readonly ILearnMode _learnMode;
@@ -166,7 +167,7 @@ namespace Automatica.Core.Runtime.Core
             _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher));
             _trendingRecorder.Add(new FileDataRecorderWriter(_nodeInstanceCache, _dispatcher));
 
-            _ruleEngineDispatcher = services.GetRequiredService<IRuleEngineDispatcher>();
+            _logicEngineDispatcher = services.GetRequiredService<ILogicEngineDispatcher>();
 
             _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
             _nodeInstanceService = services.GetRequiredService<INodeInstanceService>();
@@ -270,29 +271,93 @@ namespace Automatica.Core.Runtime.Core
         private async Task StartLogicEngine()
         {
             _logger.LogInformation("Loading logic engine connections...");
-            _ruleEngineDispatcher.Load();
+            _logicEngineDispatcher.Load();
             _logger.LogInformation("Loading logic engine connections...done");
 
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
-                _logger.LogInformation($"Starting logic {rule.Key.Name}...");
-                try
-                {
-                    if (await rule.Value.Start())
-                    {
-                        _logger.LogInformation($"Starting logic {rule.Key.Name}...success");
-                    }
-                    else
-                    {
-                        _logger.LogError($"Starting logic {rule.Key.Name}...error");
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"Starting logic {rule.Key.Name}...error {e}");
-                }
+                await StartLogic(rule.Value, rule.Key);
             }
 
+        }
+        private async Task StopLogicEngine()
+        {
+            foreach (var rule in _logicInstanceStore.Dictionary())
+            {
+                await StopLogic(rule.Value, rule.Key);
+            }
+        }
+
+        private async Task StartLogic(IRule rule, RuleInstance ruleInstance)
+        {
+            _logger.LogInformation($"Starting logic {ruleInstance.Name}...");
+            try
+            {
+                if (await rule.Start())
+                {
+                    _logger.LogInformation($"Starting logic {ruleInstance.Name}...success");
+                }
+                else
+                {
+                    _logger.LogError($"Starting logic {ruleInstance.Name}...error");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Starting logic {ruleInstance.Name}...error {e}");
+            }
+        }
+
+        private async Task StopLogic(IRule rule, RuleInstance ruleInstance)
+        {
+            try
+            {
+                _logger.LogInformation($"Stopping logic {ruleInstance.Name}...");
+
+                if (await rule.Stop())
+                {
+                    _logger.LogInformation($"Stopping logic {ruleInstance.Name}...success");
+                }
+                else
+                {
+                    _logger.LogError($"Stopping logic {ruleInstance.Name}...error");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Stopping logic {ruleInstance.Name}...error");
+            }
+        }
+
+        public async Task ReloadLogic(Guid ruleInstanceId)
+        {
+            KeyValuePair<RuleInstance, IRule> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitRuleInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+
+            await StopLogic(rule.Value, rule.Key);
+            await StartLogic(rule.Value, rule.Key);
+            
+        }
+
+        public async Task StopLogic(Guid ruleInstanceId)
+        {
+            if (!_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId))
+            {
+                return;
+            }
+            var rule = _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+            await StopLogic(rule.Value, rule.Key);
+            
+        }
+
+        public Task RemoveLink(Guid linkId)
+        {
+            return _logicEngineDispatcher.Unlink(linkId);
+        }
+
+        public Task ReloadLinks()
+        {
+            _logicEngineDispatcher.Load();
+            return Task.CompletedTask;
         }
 
         public async Task ReloadLogicServices()
@@ -325,29 +390,7 @@ namespace Automatica.Core.Runtime.Core
             _driverNodesStore.RemoveDriver(driver);
         }
 
-        private async Task StopLogicEngine()
-        {
-            foreach (var rule in _logicInstanceStore.Dictionary())
-            {
-                try
-                {
-                    _logger.LogInformation($"Stopping logic {rule.Key.Name}...");
-
-                    if (await rule.Value.Stop())
-                    {
-                        _logger.LogInformation($"Stopping logic {rule.Key.Name}...success");
-                    }
-                    else
-                    {
-                        _logger.LogError($"Stopping logic {rule.Key.Name}...error");
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Stopping logic {rule.Key.Name}...error");
-                }
-            }
-        }
+        
 
         private async Task Stop()
         {
@@ -379,7 +422,7 @@ namespace Automatica.Core.Runtime.Core
                 await rec.Stop();
             }
 
-            _ruleEngineDispatcher.Dispose();
+            _logicEngineDispatcher.Dispose();
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
@@ -501,6 +544,22 @@ namespace Automatica.Core.Runtime.Core
 
         }
 
+        private KeyValuePair<RuleInstance, IRule> InitRuleInstance(Guid ruleInstanceId)
+        {
+            var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
+            var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
+            var logger = CoreLoggerFactory.GetLogger($"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
+            var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
+            var rule = factory.CreateRuleInstance(ruleContext);
+
+            if (rule != null)
+            {
+                _logicInstanceStore.Add(ruleInstance, rule);
+            }
+
+            return new KeyValuePair<RuleInstance, IRule>(ruleInstance, rule);
+        }
+
 
         private async Task Configure()
         {
@@ -530,15 +589,7 @@ namespace Automatica.Core.Runtime.Core
                     continue;
                 }
 
-                var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
-                var logger = CoreLoggerFactory.GetLogger($"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
-                var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory),  _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
-                var rule = factory.CreateRuleInstance(ruleContext);
-
-                if (rule != null)
-                {
-                    _logicInstanceStore.Add(ruleInstance, rule);
-                }
+                InitRuleInstance(ruleInstance.ObjId);
             }
 
 

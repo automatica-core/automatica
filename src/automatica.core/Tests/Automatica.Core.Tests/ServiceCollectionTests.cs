@@ -127,7 +127,7 @@ namespace Automatica.Core.Tests
 
             AssertLifecycle<INotifyDriver>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IDispatcher>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<IRuleEngineDispatcher>(moq, ServiceLifetime.Singleton);
+            AssertLifecycle<ILogicEngineDispatcher>(moq, ServiceLifetime.Singleton);
             
         }
 
@@ -189,7 +189,7 @@ namespace Automatica.Core.Tests
 
             AssertImplementationType<INotifyDriver, NotifyDriverHandler>(moq);
             AssertImplementationType<IDispatcher, Base.IO.Dispatcher>(moq);
-            AssertImplementationType<IRuleEngineDispatcher, RuleEngineDispatcher>(moq);
+            AssertImplementationType<ILogicEngineDispatcher, LogicEngineDispatcher>(moq);
         }
 
 

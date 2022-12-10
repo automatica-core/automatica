@@ -12,7 +12,7 @@ namespace P3.Rule.Logic.BaseOperations.Or
         private bool? _i1 = null;
         private bool? _i2 = null;
 
-        private bool? _o = null;
+        private bool _o;
 
         private readonly RuleInterfaceInstance _output1;
 
