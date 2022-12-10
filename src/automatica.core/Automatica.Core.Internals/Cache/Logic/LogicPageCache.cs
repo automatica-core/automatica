@@ -289,9 +289,12 @@ namespace Automatica.Core.Internals.Cache.Logic
             if (_rulePageCache.ContainsKey(link.This2RulePage))
             {
                 var page = _rulePageCache[link.This2RulePage];
-                var existing = page.Link.First(a => a.ObjId == link.ObjId);
+                if (page.Link.Any(a => a.ObjId == link.ObjId))
+                {
+                    var existing = page.Link.First(a => a.ObjId == link.ObjId);
 
-                page.Link.Remove(existing);
+                    page.Link.Remove(existing);
+                }
             }
         }
     }
