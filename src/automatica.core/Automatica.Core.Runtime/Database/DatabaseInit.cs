@@ -762,20 +762,21 @@ namespace Automatica.Core.Runtime.Database
                 IsAdapterInterface = true
             };
 
+
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs485.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbrs485);
                 context.SaveChanges();
             }
-
-            var usbrs232 = new NodeTemplate
+            var usb232 = new NodeTemplate
             {
-                ObjId = new Guid("09d3b6b4391847e091aa5a540a7bd67f"),
+                ObjId = new Guid("56557e48cf1b4177a61c71157aa03cc4"),
                 Name = "COMMON.INTERFACES.RS232.NAME",
                 Description = "COMMON.INTERFACES.RS232.DESCRIPTION",
                 Key = "usbrs232",
-                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
-                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232),This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Usb),
+                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232),
+                This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
                 IsDeleteable = true,
                 DefaultCreated = false,
                 IsReadable = false,
@@ -787,12 +788,11 @@ namespace Automatica.Core.Runtime.Database
                 IsAdapterInterface = true
             };
 
-            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs232.ObjId) == null)
+            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usb232.ObjId) == null)
             {
-                context.NodeTemplates.Add(usbrs232);
+                context.NodeTemplates.Add(usb232);
                 context.SaveChanges();
             }
-
         }
 
         private static void AddSystemRemoteTemplates(AutomaticaContext context)

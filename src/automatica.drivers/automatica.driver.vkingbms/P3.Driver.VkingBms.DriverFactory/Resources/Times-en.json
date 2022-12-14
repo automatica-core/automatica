@@ -1,0 +1,70 @@
+﻿{
+  "TIMES": {
+    "NAME": "Sun & Times",
+    "DESCRIPTION": "Provides and interface for time and sun data",
+    "BOARD_INTERFACE": {
+      "NAME": "Sun & Time",
+      "DESCRIPTION": "Provides and interface for time and sun data"
+    },
+    "SUN": {
+      "NAME": "Sun",
+      "SUNRISE": {
+        "NAME": "Sunrise"
+      },
+      "SUNSET": {
+        "NAME": "Sunset"
+      },
+      "DUSK": {
+        "NAME": "Dusk"
+      },
+      "DAWN": {
+        "NAME": "Dawn"
+      },
+      "IS_SUNSET": {
+        "NAME": "Is sunset"
+      },
+      "IS_SUNRISE": {
+        "NAME": "Is runrise"
+      }
+    },
+    "DATETIME": {
+      "NAME": "Date/Time",
+      "DATETIME": {
+        "NAME": "Date & time"
+      },
+      "DATE": {
+        "NAME": "Date"
+      },
+      "TIME": {
+        "NAME": "Time"
+      },
+      "DAY_OF_WEEK": {
+        "NAME": "Day of week"
+      },
+      "DAY_OF_MONTH": {
+        "NAME": "Day"
+      },
+      "MONTH": {
+        "NAME": "Month"
+      },
+      "YEAR": {
+        "NAME": "Year"
+      },
+      "MILLISECONDS": {
+        "NAME": "Millisecond"
+      },
+      "SECONDS": {
+        "NAME": "Second"
+      },
+      "MINUTES": {
+        "NAME": "Minute"
+      },
+      "HOURS": {
+        "NAME": "Hour"
+      },
+      "SECONDS_SINCE_BOOT": {
+        "NAME": "Seconds since boot"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+﻿{
+  "TIMES": {
+    "NAME": "Sonne & Zeiten",
+    "DESCRIPTION": "Bietet Datenpunkte für Zeit und Sonnenstand",
+    "BOARD_INTERFACE": {
+      "NAME": "Sonne & Zeit",
+      "DESCRIPTION": "Bietet Datenpunkte für Zeit und Sonnenstand"
+    },
+    "SUN": {
+      "NAME": "Sonne",
+      "SUNRISE": {
+        "NAME": "Sonnenaufgang"
+      },
+      "SUNSET": {
+        "NAME": "Sonnenuntergang"
+      },
+      "DUSK": {
+        "NAME": "Abenddämmerung"
+      },
+      "DAWN": {
+        "NAME": "Morgendämmerung"
+      },
+      "IS_SUNSET": {
+        "NAME": "Ist Sonnenuntergang"
+      },
+      "IS_SUNRISE": {
+        "NAME": "Ist Sonnenaufgang"
+      }
+    },
+    "DATETIME": {
+      "NAME": "Datum/Zeit",
+      "DATETIME": {
+        "NAME": "Datum & Zeit"
+      },
+      "DATE": {
+        "NAME": "Datum"
+      },
+      "TIME": {
+        "NAME": "Zeit"
+      },
+      "DAY_OF_WEEK": {
+        "NAME": "Tag der Woche"
+      },
+      "DAY_OF_MONTH": {
+        "NAME": "Tag"
+      },
+      "MONTH": {
+        "NAME": "Monat"
+      },
+      "YEAR": {
+        "NAME": "Jahr"
+      },
+      "MILLISECONDS": {
+        "NAME": "Millisekunde"
+      },
+      "SECONDS": {
+        "NAME": "Sekunde"
+      },
+      "MINUTES": {
+        "NAME": "Minute"
+      },
+      "HOURS": {
+        "NAME": "Stunde"
+      },
+      "SECONDS_SINCE_BOOT": {
+        "NAME": "Sekunden seit Start"
+      }
+    } 
+  }
+}

@@ -73,6 +73,7 @@ remote automatica.driver.blockchain.ticker git@github.com:automatica-core/automa
 remote automatica.driver.ebus git@github.com:automatica-core/automatica.driver.ebus.git
 remote automatica.driver.ping git@github.com:automatica-core/automatica.driver.ping.git
 remote automatica.driver.sonos git@github.com:automatica-core/automatica.driver.sonos.git
+remote automatica.driver.vkingbms git@github.com:automatica-core/automatica.driver.vkingbms.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -113,6 +114,7 @@ split src/automatica.drivers/automatica.driver.blockchain.ticker automatica.driv
 split src/automatica.drivers/automatica.driver.ebus automatica.driver.ebus
 split src/automatica.drivers/automatica.driver.ping automatica.driver.ping
 split src/automatica.drivers/automatica.driver.sonos automatica.driver.sonos
+split src/automatica.drivers/automatica.driver.vkingbms automatica.driver.vkingbms
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
