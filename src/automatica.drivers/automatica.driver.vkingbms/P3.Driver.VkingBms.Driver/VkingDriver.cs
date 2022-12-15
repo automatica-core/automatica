@@ -13,7 +13,6 @@ namespace P3.Driver.VkingBms.Driver
         private readonly ITelegramMonitorInstance _monitor;
         private readonly ILogger _logger;
         private readonly SerialPortStream _serialPort;
-        private bool _open = false;
 
         public VkingDriver(string port, ITelegramMonitorInstance monitor, ILogger logger)
         {
@@ -24,15 +23,17 @@ namespace P3.Driver.VkingBms.Driver
             _serialPort.ReadTimeout = 1000;
         }
 
+        public bool IsOpen { get; private set; }
+
         public void Open()
         {
-            _open = true;
+            IsOpen = true;
             _serialPort.Open();
         }
 
         public void Close()
         {
-            _open = false;
+            IsOpen = false;
             _serialPort.Close();
             _serialPort.Dispose();
         }
@@ -84,7 +85,7 @@ namespace P3.Driver.VkingBms.Driver
 
         public async Task<IAnalogDataResponse> ReadAnalogValues(byte address)
         {
-            if (!_open)
+            if (!IsOpen)
             {
                 throw new ArgumentException("not opened!");
             }
@@ -98,7 +99,7 @@ namespace P3.Driver.VkingBms.Driver
 
         public async Task<IBmsInfoResponse> ReadBmsInfo(byte address)
         {
-            if (!_open)
+            if (!IsOpen)
             {
                 throw new ArgumentException("not opened!");
             }
@@ -111,7 +112,7 @@ namespace P3.Driver.VkingBms.Driver
         }
         public async Task<IVersionIdResponse> ReadVersionInfo(byte address)
         {
-            if (!_open)
+            if (!IsOpen)
             {
                 throw new ArgumentException("not opened!");
             }

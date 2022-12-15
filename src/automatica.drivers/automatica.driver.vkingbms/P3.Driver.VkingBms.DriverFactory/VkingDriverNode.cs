@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -46,15 +47,43 @@ namespace P3.Driver.VkingBms.DriverFactory
             return base.Stop(); 
         }
 
+        private void ReOpen()
+        {
+            _driver.Close();
+            _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
+            try
+            {
+                _driver.Open();
+            }
+            catch
+            {
+                //ignore, timer will recall it anyway
+            }
+        }
+
         private async void ReadPacks(object state)
         {
             await _semaphore.WaitAsync();
             try
             {
-                foreach (var pack in _packs)
+                if (_driver.IsOpen)
                 {
-                    await pack.Read();
+                    foreach (var pack in _packs)
+                    {
+                        var version = await _driver.ReadVersionInfo(pack.PackId);
+                        var analogData = await _driver.ReadAnalogValues(pack.PackId);
+
+                        pack.Read(analogData, version);
+                    }
                 }
+                else
+                {
+                    ReOpen();
+                }
+            }
+            catch (Exception)
+            {
+                ReOpen();
             }
             finally
             {
@@ -69,7 +98,7 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            var ret = new VkingBatteryPackNode(ctx, _driver);
+            var ret = new VkingBatteryPackNode(ctx);
             _packs.Add(ret);
             return ret;
         }

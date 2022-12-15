@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.VkingBms.Driver;
+using P3.Driver.VkingBms.Driver.Interfaces;
 
 namespace P3.Driver.VkingBms.DriverFactory.Nodes
 {
     internal class VkingBatteryPackNode : DriverBase
     {
-        private readonly VkingDriver _driver;
 
         private VkingBatteryCellsNode _cellsNode;
         private VkingBatteryTempsNode _tempsNode;
@@ -29,25 +29,21 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
         private VkingBatteryValueNode _cellDiff;
 
 
-        private byte _packId;
-        public VkingBatteryPackNode(IDriverContext driverContext, VkingDriver driver) : base(driverContext)
+        public byte PackId { get; private set; }
+        public VkingBatteryPackNode(IDriverContext driverContext) : base(driverContext)
         {
-            _driver = driver;
         }
 
         public override bool Init()
         {
-            _packId = (byte)GetProperty("vking-pack-id").ValueInt!.Value;
+            PackId = (byte)GetProperty("vking-pack-id").ValueInt!.Value;
             return base.Init();
         }
 
-        public override async Task<bool> Read()
+        public bool Read(IAnalogDataResponse analogData, IVersionIdResponse version)
         {
             try
             {
-                var analogData = await _driver.ReadAnalogValues(_packId);
-                var version = await _driver.ReadVersionInfo(_packId);
-
                 _voltage?.DispatchValue(Convert.ToDouble(analogData.Voltage) / 100);
                 _current?.DispatchValue(Convert.ToDouble(analogData.Current) / 100);
                 _soh?.DispatchValue(analogData.Soh);
@@ -92,7 +88,7 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
             }
             catch (Exception e)
             {
-                DriverContext.Logger.LogError(e, $"{e} {_packId}: could not read data...");
+                DriverContext.Logger.LogError(e, $"{e} {PackId}: could not read data...");
                 return false;
             }
 
