@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -12,7 +13,7 @@ namespace P3.Driver.VkingBms.DriverFactory
         public override Guid DriverGuid => new Guid("ad95d8f8-7393-4631-afba-7e241f1ecdd4");
         public override Version DriverVersion => new Version(0, 2, 0, 5);
 
-
+        public override string ImageName => "automaticacore/plugin-p3.driver.vking-bms";
         public Guid PackInterface => DriverGuid;
         public Guid BatteryPackTypeGuid => new("d1fc1ea8-da07-4880-a77b-a1348ddef349");
         public Guid BatteryPackCellTypeGuid => new("9426130a-f182-455d-be00-92c6bebc16a2");
