@@ -10,13 +10,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
-    <None Remove="Resources\Times-de.json" />
-    <None Remove="Resources\Times-en.json" />
+    <None Remove="Resources\VkingBms-de.json" />
+    <None Remove="Resources\VkingBms-en.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
-    <EmbeddedResource Include="Resources\Times-de.json" />
-    <EmbeddedResource Include="Resources\Times-en.json" />
+    <EmbeddedResource Include="Resources\VkingBms-de.json" />
+    <EmbeddedResource Include="Resources\VkingBms-en.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SolarCalculator" Version="3.1.0" />

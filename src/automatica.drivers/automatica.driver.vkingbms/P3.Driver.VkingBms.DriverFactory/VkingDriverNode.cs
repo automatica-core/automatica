@@ -15,6 +15,9 @@ namespace P3.Driver.VkingBms.DriverFactory
         private VkingDriver _driver;
         private List<VkingBatteryPackNode> _packs = new List<VkingBatteryPackNode>();
         private Timer _timer;
+        private string _port;
+
+        private SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         public VkingDriverNode(IDriverContext driverContext) : base(driverContext)
         {
@@ -23,8 +26,8 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         public override bool Init()
         {
-            var port = GetProperty("vking-pack-port").ValueString;
-            _driver = new VkingDriver(port, TelegramMonitor, DriverContext.Logger);
+            _port = GetProperty("vking-pack-port").ValueString;
+            _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
 
             return base.Init();
         }
@@ -32,15 +35,30 @@ namespace P3.Driver.VkingBms.DriverFactory
         public override async Task<bool> Start()
         {
             _driver.Open();
-            _timer = new Timer(ReadPacks, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
+            _timer = new Timer(ReadPacks, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
             return await base.Start();
+        }
+
+        public override Task<bool> Stop()
+        {
+            _timer?.Dispose();
+            _driver?.Close();
+            return base.Stop(); 
         }
 
         private async void ReadPacks(object state)
         {
-            foreach (var pack in _packs)
+            await _semaphore.WaitAsync();
+            try
             {
-                await pack.Read();
+                foreach (var pack in _packs)
+                {
+                    await pack.Read();
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 

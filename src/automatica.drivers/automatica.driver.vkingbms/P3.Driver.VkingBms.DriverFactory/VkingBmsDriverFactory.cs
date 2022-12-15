@@ -10,7 +10,7 @@ namespace P3.Driver.VkingBms.DriverFactory
     {
         public override string DriverName => "VkingBms";
         public override Guid DriverGuid => new Guid("ad95d8f8-7393-4631-afba-7e241f1ecdd4");
-        public override Version DriverVersion => new Version(0, 2, 0, 4);
+        public override Version DriverVersion => new Version(0, 2, 0, 5);
 
 
         public Guid PackInterface => DriverGuid;
@@ -23,11 +23,11 @@ namespace P3.Driver.VkingBms.DriverFactory
             factory.CreateInterfaceType(PackInterface, "VKING_BMS.DRIVER.NAME", "VKING_BMS.DRIVER.DESCRIPTION", 16, int.MaxValue,
                 true);
             factory.CreateInterfaceType(BatteryPackTypeGuid, "VKING_BMS.PACK.NAME", "VKING_BMS.PACK.DESCRIPTION", 12, 16,
-                true);
+                false);
             factory.CreateInterfaceType(BatteryPackCellTypeGuid, "VKING_BMS.PACK_CELL.NAME", "VKING_BMS.PACK_CELL.DESCRIPTION", 16, 1,
-                true);
+                false);
             factory.CreateInterfaceType(BatteryPackTemperatureTypeGuid, "VKING_BMS.PACK_TEMP.NAME", "VKING_BMS.PACK_TEMP.DESCRIPTION", 6, 1,
-                true);
+                false);
 
             factory.CreateNodeTemplate(PackInterface, "VKING_BMS.DRIVER.NAME", "VKING_BMS.DRIVER.DESCRIPTION",
                 "vking-bms-pack", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232), PackInterface, false, false, true, false, true,

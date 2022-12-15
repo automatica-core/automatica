@@ -1,0 +1,164 @@
+﻿{
+  "VKING_BMS": {
+    "DRIVER": {
+      "NAME": "Vking BMS",
+      "DESCRIPTION": "Vking BMS"
+    },
+    "PACK": {
+      "NAME": "Battery Pack",
+      "DESCRIPTION": ""
+    },
+    "CELL": {
+      "NAME": "Cells",
+      "DESCRIPTION": "",
+      "VOLTAGE": {
+        "NAME": "Voltage [V]",
+        "DESCRIPTION": ""
+      },
+      "CURRENT": {
+        "NAME": "Current [A]",
+        "DESCRIPTION": ""
+      },
+      "SOC": {
+        "NAME": "SOC [%]",
+        "DESCRIPTION": ""
+      },
+      "SOH": {
+        "NAME": "SOH [%]",
+        "DESCRIPTION": ""
+      },
+      "REMAIN_CAPACITY": {
+        "NAME": "Remaining Capacity [Wh]",
+        "DESCRIPTION": ""
+      },
+      "FULL_CHARGE": {
+        "NAME": "Full Capacity [Wh]",
+        "DESCRIPTION": ""
+      },
+      "CYCLE_TIMES": {
+        "NAME": "Cycles",
+        "DESCRIPTION": ""
+      },
+      "LAST_UPDATE": {
+        "NAME": "Last Update",
+        "DESCRIPTION": ""
+      },
+      "VOLTAGE": {
+        "NAME": "Voltage",
+        "DESCRIPTION": ""
+      },
+      "VERSION": {
+        "NAME": "Version",
+        "DESCRIPTION": ""
+      },
+      "BMS_TIME": {
+        "NAME": "BMS Time",
+        "DESCRIPTION": ""
+      },
+      "CELL_MIN": {
+        "NAME": "Cell Min [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_MAX": {
+        "NAME": "Cell Max [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_DIFFERENCE": {
+        "NAME": "Cell Difference [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_1": {
+        "NAME": "Cell 01 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_2": {
+        "NAME": "Cell 02 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_3": {
+        "NAME": "Cell 03 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_4": {
+        "NAME": "Cell 04 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_5": {
+        "NAME": "Cell 05 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_6": {
+        "NAME": "Cell 06 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_7": {
+        "NAME": "Cell 07 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_8": {
+        "NAME": "Cell 08 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_9": {
+        "NAME": "Cell 09 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_10": {
+        "NAME": "Cell 10 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_11": {
+        "NAME": "Cell 11 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_12": {
+        "NAME": "Cell 12 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_13": {
+        "NAME": "Cell 13 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_14": {
+        "NAME": "Cell 14 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_15": {
+        "NAME": "Cell 15 [mV]",
+        "DESCRIPTION": ""
+      },
+      "CELL_16": {
+        "NAME": "Cell 16 [mV]",
+        "DESCRIPTION": ""
+      },
+      "TEMP_ENV": {
+        "NAME": "Environment [°C]",
+        "DESCRIPTION": ""
+      },
+      "TEMP_MOS": {
+        "NAME": "MOS [°C]",
+        "DESCRIPTION": ""
+      },
+      "TEMP_CELL_T1": {
+        "NAME": "T1 [°C]",
+        "DESCRIPTION": ""
+      },
+      "TEMP_CELL_T2": {
+        "NAME": "T2 [°C]",
+        "DESCRIPTION": ""
+      },
+      "TEMP_CELL_T3": {
+        "NAME": "T3 [°C]",
+        "DESCRIPTION": ""
+      },
+      "TEMP_CELL_T4": {
+        "NAME": "T4 [°C]",
+        "DESCRIPTION": ""
+      }
+    },
+    "TEMPERATURE": {
+      "NAME": "Temperatures",
+      "DESCRIPTION": ""
+    }
+  }
+}

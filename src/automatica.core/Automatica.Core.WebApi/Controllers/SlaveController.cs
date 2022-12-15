@@ -77,12 +77,12 @@ namespace Automatica.Core.WebApi.Controllers
                 DbContext.RemoveRange(removedList);
 
                 await DbContext.SaveChangesAsync();
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch (Exception e)
             {
                 SystemLogger.Instance.LogError(e, "Could not save data");
-                transaction.Rollback();
+                await transaction.RollbackAsync();
             }
 
             return GetSlaves();
