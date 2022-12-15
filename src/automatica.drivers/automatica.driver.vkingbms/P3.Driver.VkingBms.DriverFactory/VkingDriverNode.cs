@@ -66,19 +66,17 @@ namespace P3.Driver.VkingBms.DriverFactory
             await _semaphore.WaitAsync();
             try
             {
-                if (_driver.IsOpen)
-                {
-                    foreach (var pack in _packs)
-                    {
-                        var version = await _driver.ReadVersionInfo(pack.PackId);
-                        var analogData = await _driver.ReadAnalogValues(pack.PackId);
-
-                        pack.Read(analogData, version);
-                    }
-                }
-                else
+                if (!_driver.IsOpen)
                 {
                     ReOpen();
+                }
+
+                foreach (var pack in _packs)
+                {
+                    var version = await _driver.ReadVersionInfo(pack.PackId);
+                    var analogData = await _driver.ReadAnalogValues(pack.PackId);
+
+                    pack.Read(analogData, version);
                 }
             }
             catch (Exception)
