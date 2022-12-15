@@ -18,7 +18,7 @@
     "Type": "driver",
     "Output": "P3.Driver.VkingBms.DriverFactory.dll",
     "Resources": [],
-    "Dependencies": [ "P3.Driver.VkingBms.Driver.dll" ],
+    "Dependencies": [ "P3.Driver.VkingBms.Driver.dll", "RJCP.SerialPortStream.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.driver.vkingbms",
     "MinCoreServerVersion": {
       "Minor": 1,
