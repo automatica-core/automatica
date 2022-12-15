@@ -43,6 +43,7 @@ namespace P3.Driver.VkingBms.Driver
             var input = cmd.ToByteArray();
             var ret = new List<byte>();
 
+            _serialPort.DiscardInBuffer();
             _logger.LogHexOut(input);
             _monitor.NotifyTelegram(TelegramDirection.Output, cmd.Address.ToString(), cmd.Address.ToString(),
                 Utils.ByteArrayToString(in input), "").ConfigureAwait(false).GetAwaiter();
