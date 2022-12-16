@@ -12,7 +12,7 @@ namespace Automatica.Core.Internals
             {
                 if (_instance == null)
                 {
-                    _instance = CoreLoggerFactory.GetLogger("system");
+                    _instance = CoreLoggerFactory.GetLogger(null, "system");
                 }
                 return _instance;
             }
@@ -25,7 +25,7 @@ namespace Automatica.Core.Internals
             {
                 if (_mqtt == null)
                 {
-                    _mqtt = CoreLoggerFactory.GetLogger("mqtt");
+                    _mqtt = CoreLoggerFactory.GetLogger(null, "mqtt");
                 }
                 return _mqtt;
             }
@@ -40,7 +40,7 @@ namespace Automatica.Core.Internals
             {
                 if (_dispatcherLogger == null)
                 {
-                    _dispatcherLogger = CoreLoggerFactory.GetLogger("Dispatcher");
+                    _dispatcherLogger = CoreLoggerFactory.GetLogger(null, "Dispatcher");
                 }
                 return _dispatcherLogger;
             }

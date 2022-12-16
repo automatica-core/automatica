@@ -7,6 +7,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Plugins;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Plugin = Automatica.Core.EF.Models.Plugin;
 
@@ -16,9 +17,9 @@ namespace Automatica.Core.Runtime.Core.Plugins
     {
         private readonly ILogger _logger;
 
-        public PluginInstaller()
+        public PluginInstaller(IConfiguration config)
         {
-            _logger = CoreLoggerFactory.GetLogger("PluginInstaller");
+            _logger = CoreLoggerFactory.GetLogger(config, "PluginInstaller");
         }
         public Task<bool> InstallPlugin(Plugin plugin, string acPkgFilePath)
         {

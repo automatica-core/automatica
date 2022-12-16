@@ -8,34 +8,39 @@ namespace Automatica.Core.Internals.Logger
 {
     public class CoreLoggerFactory : ILoggerFactory
     {
-        private static readonly object _lock = new object();
-        private static readonly IDictionary<string, ILogger> _loggerInstances = new ConcurrentDictionary<string, ILogger>();
+        private static readonly object Lock = new();
+        private static readonly IDictionary<string, ILogger> LoggerInstances = new ConcurrentDictionary<string, ILogger>();
         
-        public static IConfiguration Configuration { get; set; }
+        public IConfiguration Configuration { get; }
 
-        public static ILogger GetLogger(string name)
+        public CoreLoggerFactory(IConfiguration config)
         {
-            lock (_lock)
+            Configuration = config;
+        }
+
+        public static ILogger GetLogger(IConfiguration config, string name)
+        {
+            lock (Lock)
             {
-                if (!_loggerInstances.ContainsKey(name))
+                if (!LoggerInstances.ContainsKey(name))
                 {
-                    _loggerInstances.Add(name, new CoreLogger(name));
+                    LoggerInstances.Add(name, new CoreLogger(config, name));
                 }
 
-                return _loggerInstances[name];
+                return LoggerInstances[name];
 
             }
         }
-        public static ILogger GetLogger(string name, LogLevel level, bool isFrameworkLog)
+        public static ILogger GetLogger(IConfiguration config, string name, LogLevel level, bool isFrameworkLog)
         {
-            lock (_lock)
+            lock (Lock)
             {
-                if (!_loggerInstances.ContainsKey(name))
+                if (!LoggerInstances.ContainsKey(name))
                 {
-                    _loggerInstances.Add(name, new CoreLogger(name, level, isFrameworkLog));
+                    LoggerInstances.Add(name, new CoreLogger(config, name, level, isFrameworkLog));
                 }
 
-                return _loggerInstances[name];
+                return LoggerInstances[name];
             }
         }
 
@@ -46,7 +51,7 @@ namespace Automatica.Core.Internals.Logger
 
         public ILogger CreateLogger(string categoryName)
         {
-            return GetLogger(categoryName, LogLevel.Error, !categoryName.Contains(LoggerConstants.FileSeparator));
+            return GetLogger(Configuration, categoryName, LogLevel.Trace, !categoryName.Contains(LoggerConstants.FileSeparator));
         }
 
         public void AddProvider(ILoggerProvider provider)

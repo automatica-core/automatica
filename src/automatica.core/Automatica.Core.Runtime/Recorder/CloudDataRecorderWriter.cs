@@ -8,7 +8,7 @@ namespace Automatica.Core.Runtime.Recorder
 {
     internal class CloudDataRecorderWriter : BaseDataRecorderWriter
     {
-        public CloudDataRecorderWriter(INodeInstanceCache nodeCache, IDispatcher dispatcher) : base("CloudDataRecorderWriter", nodeCache, dispatcher)
+        public CloudDataRecorderWriter(INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base("CloudDataRecorderWriter", nodeCache, dispatcher, factory)
         {
         }
 

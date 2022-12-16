@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Logger;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -12,22 +13,22 @@ namespace Automatica.Core.Internals.Logger
 {
     public class CoreLogger : Microsoft.Extensions.Logging.ILogger
     {
+        private readonly IConfiguration _config;
         private readonly string _facility;
         private readonly string _logNameFacility;
         private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
 
-        public CoreLogger() : this("core")
+        public CoreLogger(IConfiguration config) : this(config, "core")
         {
-
         }
 
-        public CoreLogger(string facility) : this(facility, null)
+        public CoreLogger(IConfiguration config, string facility) : this(config, facility, null)
         {
             
         }
 
-        public CoreLogger(string facility, LogLevel? level, bool isFrameworkLog = false) {
+        public CoreLogger(IConfiguration config, string facility, LogLevel? level, bool isFrameworkLog = false) {
             _facility = facility;
 
             if (level.HasValue)
@@ -36,13 +37,13 @@ namespace Automatica.Core.Internals.Logger
             }
             else
             {
-                if (CoreLoggerFactory.Configuration == null)
+                if (config == null)
                 {
                     _level = LogLevel.Information;
                 }
                 else
                 {
-                    _level = Parse(CoreLoggerFactory.Configuration["server:log_level"]);
+                    _level = Parse(config["server:log_level"]);
                 }
             }
             

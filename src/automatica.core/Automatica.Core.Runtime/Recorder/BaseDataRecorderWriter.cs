@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Logger;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Logger;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Automatica.Core.Tests")]
@@ -20,9 +22,9 @@ namespace Automatica.Core.Runtime.Recorder
 
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
 
-        internal BaseDataRecorderWriter(string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher)
+        internal BaseDataRecorderWriter(string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
         {
-            Logger = CoreLoggerFactory.GetLogger(recorderName);
+            Logger = factory.CreateLogger($"recording{LoggerConstants.FileSeparator}{recorderName}");
             _nodeCache = nodeCache;
             Dispatcher = dispatcher;
         }

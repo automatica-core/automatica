@@ -163,9 +163,9 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Constructed;
 
-            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, CoreLoggerFactory.GetLogger("Trending"))));
-            _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher));
-            _trendingRecorder.Add(new FileDataRecorderWriter(_nodeInstanceCache, _dispatcher));
+            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, CoreLoggerFactory.GetLogger(_config, "Trending")), services.GetRequiredService<ILoggerFactory>()));
+            _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher, services.GetRequiredService<ILoggerFactory>()));
+            _trendingRecorder.Add(new FileDataRecorderWriter(_nodeInstanceCache, _dispatcher, services.GetRequiredService<ILoggerFactory>()));
 
             _logicEngineDispatcher = services.GetRequiredService<ILogicEngineDispatcher>();
 
@@ -548,7 +548,7 @@ namespace Automatica.Core.Runtime.Core
         {
             var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
             var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
-            var logger = CoreLoggerFactory.GetLogger($"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
+            var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
             var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
             var rule = factory.CreateRuleInstance(ruleContext);
 
@@ -716,7 +716,7 @@ namespace Automatica.Core.Runtime.Core
 
             var loggerName =
                 $"{factory.DriverName.ToLowerInvariant()}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_").ToLowerInvariant()}";
-            var logger = CoreLoggerFactory.GetLogger(loggerName);
+            var logger = CoreLoggerFactory.GetLogger(_config, loggerName);
             _logger.LogInformation($"Using logger {loggerName} for driver {nodeInstance.Name}");
 
             var config = new DriverContext(nodeInstance, factory,

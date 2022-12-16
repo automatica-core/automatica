@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Internals.Logger;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Watchdog
 {
@@ -18,6 +19,12 @@ namespace Automatica.Core.Watchdog
     {
         static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(ServerInfo.GetConfigDirectory())
+                .AddJsonFile("appsettings.json", false)
+                .AddEnvironmentVariables()
+                .Build();
+
             Console.Title = "Automatica.Core.Watchdog";
             Log.Logger = new LoggerConfiguration()
               .Enrich.FromLogContext()
@@ -26,7 +33,7 @@ namespace Automatica.Core.Watchdog
               .Filter.ByExcluding(Matching.FromSource("Microsoft"))
               .CreateLogger();
 
-            var logger = CoreLoggerFactory.GetLogger("Watchdog");
+            var logger = CoreLoggerFactory.GetLogger(config, "Watchdog");
             logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
 
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
