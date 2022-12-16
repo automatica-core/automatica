@@ -715,7 +715,7 @@ namespace Automatica.Core.Runtime.Core
             }
 
             var loggerName =
-                $"{factory.DriverName}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_")}";
+                $"{factory.DriverName.ToLowerInvariant()}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_").ToLowerInvariant()}";
             var logger = CoreLoggerFactory.GetLogger(loggerName);
             _logger.LogInformation($"Using logger {loggerName} for driver {nodeInstance.Name}");
 
