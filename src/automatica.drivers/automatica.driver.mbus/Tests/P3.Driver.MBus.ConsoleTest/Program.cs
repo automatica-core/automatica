@@ -23,11 +23,12 @@ namespace P3.Driver.MBus.ConsoleTest
 
             while (true)
             {
-                var frame = await mbusUdp.ReadDevice(2, false, 5000);
+                var frame = await mbusUdp.ReadDevice(20, false, 5000);
 
                 if (frame is VariableDataFrame vdf)
                     foreach (var data in vdf.DataBlocks)
                     {
+                        
                         Console.WriteLine($"{data.DataInformationField.DataFieldType}: {data.Value} {data.ValueInformationField.Unit} ({Utils.ByteArrayToString(data.Data)})");
                     }
 

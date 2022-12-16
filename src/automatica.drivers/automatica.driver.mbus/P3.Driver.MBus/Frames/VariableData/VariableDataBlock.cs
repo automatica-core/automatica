@@ -171,7 +171,7 @@ namespace P3.Driver.MBus.Frames.VariableData
             switch (DataInformationField.DataFieldType)
             {
                 case DataFieldType.Integer8Bit:
-                    return BitConverter.ToChar(_data, 0);
+                    return _data[0];
                 case DataFieldType.Integer16Bit:
                     return BitConverter.ToInt16(_data, 0);
                 case DataFieldType.Integer24Bit:

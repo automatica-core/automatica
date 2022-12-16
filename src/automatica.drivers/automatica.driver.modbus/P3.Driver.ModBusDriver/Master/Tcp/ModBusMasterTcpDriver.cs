@@ -160,7 +160,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             }
             catch (Exception e)
             {
-                ModBus.Logger.LogError(e, "Error reading ModBus frame");
+                ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
             }
             return null;
         }

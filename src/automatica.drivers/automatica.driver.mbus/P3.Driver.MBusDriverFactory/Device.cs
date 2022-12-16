@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Automatica.Core.Driver.Utility;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Frames;
 using P3.Driver.MBus.Frames.VariableData;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace P3.Driver.MBusDriverFactory
 {
@@ -126,15 +128,14 @@ namespace P3.Driver.MBusDriverFactory
                 {
                     var address = $"{(int) vdb.ValueInformationField.Unit}-{vdb.StorageNumber}-{vdb.Tariff}";
                     SetValue(address, vdb.Value);
+                    _logger.LogDebug($"{vdb.DataInformationField.DataFieldType}: {vdb.Value} {vdb.ValueInformationField.Unit} ({Utils.ByteArrayToString(vdb.Data)})");
                 }
             }
             else
             {
                 _logger.LogWarning($"Could not read device {Name} with ID {DeviceId}");
             }
-
         }
-
         private void SetValue(string address, object value)
         {
             foreach (var att in _attributes)
