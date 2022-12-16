@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;

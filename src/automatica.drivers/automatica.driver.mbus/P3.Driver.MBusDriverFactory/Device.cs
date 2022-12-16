@@ -8,7 +8,6 @@ using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Frames;
 using P3.Driver.MBus.Frames.VariableData;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace P3.Driver.MBusDriverFactory
 {

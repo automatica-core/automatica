@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver.Utility;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using P3.Driver.MBus.Config;
 using P3.Driver.MBus.Frames;
