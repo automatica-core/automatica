@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace P3.Driver.MBus.Config
+﻿namespace P3.Driver.MBus.Config
 {
     public class MBusConfig
     {

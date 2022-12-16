@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Microsoft.Extensions.Logging;
@@ -86,7 +85,7 @@ namespace P3.Driver.MBus
             
         }
 
-        public virtual async Task<MBusFrame> SetPrimaryAddres(int deviceId, int newDeviceId)
+        public virtual async Task<MBusFrame> SetPrimaryAddress(int deviceId, int newDeviceId)
         {
             try
             {
@@ -94,7 +93,7 @@ namespace P3.Driver.MBus
 
                 var frame = MBusFrame.CreateChangePrimaryAddressFrame((byte) deviceId, (byte) newDeviceId);
                 Console.WriteLine(ByteArrayToString(frame.ToByteFrame()));
-               await  WriteFrame(frame);
+                await  WriteFrame(frame);
 
                 return await ReadFrame();
             }
@@ -115,16 +114,20 @@ namespace P3.Driver.MBus
         {
             try
             {
+                Logger.LogDebug($"Init device {deviceId}...");
                 Open();
                 MBusFrame readFrame = MBusFrame.CreateShortFrame(MBus.ControlMaskSndNke, (byte) deviceId);
 
                 Console.WriteLine(ByteArrayToString(readFrame.ToByteFrame()));
                 await WriteFrame(readFrame);
 
-                return await ReadFrame();
+                var frame = await ReadFrame();
+                Logger.LogDebug($"Init device {deviceId}...done");
+                return frame;
             }
-            catch
+            catch(Exception ex)
             {
+                Logger.LogError(ex, $"Could not init device {deviceId}: {ex}");
                 Close();
                 throw;
             }
@@ -134,16 +137,21 @@ namespace P3.Driver.MBus
         {
             try
             {
+                Logger.LogDebug($"Reset device {deviceId}...");
                 Open();
                 MBusFrame readFrame = MBusFrame.CreateShortFrame(MBus.ControlMaskSndUd, (byte) deviceId);
 
                 Console.WriteLine(ByteArrayToString(readFrame.ToByteFrame()));
                 await WriteFrame(readFrame);
 
-                return await ReadFrame();
+                var frame = await ReadFrame();
+
+                Logger.LogDebug($"Reset device {deviceId}...done");
+                return frame;
             }
-            catch
+            catch(Exception ex)
             {
+                Logger.LogError(ex, $"Could not reset device {deviceId}: {ex}");
                 Close();
                 throw;
             }
@@ -155,6 +163,8 @@ namespace P3.Driver.MBus
             try
             {
                 Open();
+
+                Logger.LogDebug($"Read device {deviceId}...");
                 if (_config.ResetBeforeRead || resetBeforeRead)
                 {
                     var init = await ResetDevice(deviceId);
@@ -175,10 +185,12 @@ namespace P3.Driver.MBus
                     await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, res.AddressField.ToString(), "SELF", res.ToString(), "");
                 }
 
+                Logger.LogDebug($"Read device {deviceId}...done");
                 return res;
             }
-            catch
+            catch(Exception ex)
             {
+                Logger.LogError(ex, $"Could not read device {deviceId}: {ex}");
                 Close();
                 throw;
             }

@@ -98,22 +98,25 @@ namespace P3.Driver.MBus.Frames.VariableData
                 
                 index += valueLength;
                 var value = ConvertValue();
-                if (double.TryParse(value.ToString(), out var dblValue))
+                if (value != null)
                 {
-                    if (ValueInformationField.Multiplier > 0)
+                    if (double.TryParse(value.ToString(), out var dblValue))
                     {
-                        value =dblValue* Math.Pow(10, ValueInformationField.Multiplier);
+                        if (ValueInformationField.Multiplier > 0)
+                        {
+                            value = dblValue * Math.Pow(10, ValueInformationField.Multiplier);
+                        }
+                        else if (ValueInformationField.Multiplier < 0)
+                        {
+                            value = dblValue * Math.Pow(10, ValueInformationField.Multiplier);
+                        }
                     }
-                    else if (ValueInformationField.Multiplier < 0)
-                    {
-                        value = dblValue * Math.Pow(10, ValueInformationField.Multiplier);
-                    }
-                }
-                Value = value;
 
+                    Value = value;
+                }
             }
 
-            if (! usedStorageMap.ContainsKey(ValueInformationField.Unit))
+            if (!usedStorageMap.ContainsKey(ValueInformationField.Unit))
             {
                 usedStorageMap.Add(ValueInformationField.Unit, 0);
             }
@@ -134,6 +137,10 @@ namespace P3.Driver.MBus.Frames.VariableData
 
         private object ConvertValue()
         {
+            if (_data.Length == 0)
+            {
+                return null;
+            }
             switch (ValueInformationField.Unit)
             {
                 case Unit.TimePoint:

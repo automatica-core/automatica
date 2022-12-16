@@ -18,7 +18,7 @@ namespace P3.Driver.MBusDriverFactory
         private readonly List<Attribute> _attributes = new List<Attribute>();
         private readonly Dictionary<string, Attribute> _attributeMap = new Dictionary<string, Attribute>();
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
 
         public Device(IDriverContext driverContext, Driver parent) : base(driverContext)

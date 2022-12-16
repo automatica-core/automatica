@@ -22,7 +22,7 @@ namespace P3.Driver.MBusDriverFactory
         private MBusConnection _connection;
 
         private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public Driver(IDriverContext ctx, MBusType connection) : base(ctx)
         {
