@@ -125,7 +125,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task MessageReceived(RemoteMessageEvent messageEvent)
         {
-            _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message.Substring(0, 100)}...");
+            _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}...");
 
             if(!_connectedMqttClients.Contains(messageEvent.ClientId))
             {

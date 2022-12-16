@@ -31,7 +31,7 @@ namespace Automatica.Core.Internals.Logger
 
             }
         }
-        public static ILogger GetLogger(IConfiguration config, string name, LogLevel level, bool isFrameworkLog)
+        public static ILogger GetLogger(IConfiguration config, string name, LogLevel? level, bool isFrameworkLog)
         {
             lock (Lock)
             {
@@ -51,7 +51,7 @@ namespace Automatica.Core.Internals.Logger
 
         public ILogger CreateLogger(string categoryName)
         {
-            return GetLogger(Configuration, categoryName, LogLevel.Trace, !categoryName.Contains(LoggerConstants.FileSeparator));
+            return GetLogger(Configuration, categoryName, null, categoryName.Contains("Microsoft") || categoryName.Contains("System"));
         }
 
         public void AddProvider(ILoggerProvider provider)

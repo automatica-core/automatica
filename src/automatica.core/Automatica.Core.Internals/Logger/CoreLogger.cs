@@ -31,7 +31,11 @@ namespace Automatica.Core.Internals.Logger
         public CoreLogger(IConfiguration config, string facility, LogLevel? level, bool isFrameworkLog = false) {
             _facility = facility;
 
-            if (level.HasValue)
+            if (isFrameworkLog)
+            {
+                _level = LogLevel.Error;
+            }
+            else if (level.HasValue)
             {
                 _level = level.Value;
             }
