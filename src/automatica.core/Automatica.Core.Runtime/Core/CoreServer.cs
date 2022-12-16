@@ -714,7 +714,11 @@ namespace Automatica.Core.Runtime.Core
                 return null;
             }
 
-            var logger = CoreLoggerFactory.GetLogger($"{factory.DriverName}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_")}");
+            var loggerName =
+                $"{factory.DriverName}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_")}";
+            var logger = CoreLoggerFactory.GetLogger(loggerName);
+            _logger.LogInformation($"Using logger {loggerName} for driver {nodeInstance.Name}");
+
             var config = new DriverContext(nodeInstance, factory,
                 _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), logger, _learnMode, _cloudApi, _licenseContext, _loggerFactory, false);
 
