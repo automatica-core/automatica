@@ -58,31 +58,12 @@ namespace Automatica.Core.Runtime.Recorder
 
         internal override void Save(Trending trend, NodeInstance nodeInstance)
         {
-
-            var nameList = new List<string>();
-            nameList.Add(nodeInstance.Name);
-            GetFullNameRecursive(nodeInstance, ref nameList);
-            nameList.Reverse();
-            var name = String.Join("-", nameList);
-            
-            name = name.Replace("*", "").Replace(" ", "_").Replace("/", "_").Replace("-", "_").ToLowerInvariant();
-            name = "node_" + name;
+            var name = MetricName[nodeInstance.ObjId];
 
             _client.Send(name, f => f.Field("value", Math.Round(trend.Value, 2)), t => t.Tag("nodeId", nodeInstance.ObjId.ToString().Replace("-", "_")).Tag("source", trend.Source).Tag("name", nodeInstance.Name));
         }
 
 
-        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
-        {
-
-            if (!instance.This2ParentNodeInstance.HasValue)
-            {
-                return;
-            }
-            var parent = _nodeCache.Get(instance.This2ParentNodeInstance.Value);
-
-            names.Add(parent.Name);
-            GetFullNameRecursive(parent, ref names);
-        }
+       
     }
 }

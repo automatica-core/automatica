@@ -21,6 +21,7 @@ namespace Automatica.Core.Runtime.Recorder
         private readonly INodeInstanceCache _nodeCache;
 
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
+        protected readonly Dictionary<Guid, string> MetricName = new Dictionary<Guid, string>();
 
         internal BaseDataRecorderWriter(IConfiguration config, DataRecorderType recorderType, string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
         {
@@ -50,12 +51,51 @@ namespace Automatica.Core.Runtime.Recorder
                 _recorders.Add(nodeInstance, new List<IDataRecorder>());
             }
 
+            if (!MetricName.ContainsKey(nodeInstance))
+            {
+                MetricName.Add(nodeInstance, GetFullNodeName(node));
+            }
+            
             _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
-
             await Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
         }
 
+        private string GetFullNodeName(NodeInstance nodeInstance)
+        {
+            var nameList = new List<string>();
+            nameList.Add(nodeInstance.Name);
+            GetFullNameRecursive(nodeInstance, ref nameList);
+            nameList.Reverse();
+            var name = String.Join("-", nameList);
 
+            name = name.Replace("*", "").Replace(" ", "_").Replace("/", "_").Replace("-", "_").ToLowerInvariant();
+            name = "node_" + name;
+            return name;
+        }
+
+        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
+        {
+
+            if (!instance.This2ParentNodeInstance.HasValue)
+            {
+                return;
+            }
+            var parent = _nodeCache.Get(instance.This2ParentNodeInstance.Value);
+            if (parent == null)
+            {
+                return;
+            }
+
+            if (instance.This2NodeTemplateNavigation is not null &&
+                instance.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                instance.This2NodeTemplateNavigation.IsAdapterInterface.Value)
+            {
+                return;
+            }
+
+            names.Add(parent.Name);
+            GetFullNameRecursive(parent, ref names);
+        }
         private void DataCallback(IDispatchable dispatchable, object value)
         {
             if(_recorders.ContainsKey(dispatchable.Id))
