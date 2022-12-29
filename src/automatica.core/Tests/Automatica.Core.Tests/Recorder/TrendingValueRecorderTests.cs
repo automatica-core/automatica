@@ -19,6 +19,7 @@ namespace Automatica.Core.Tests.Recorder
             var dispatcherMock = new Mock<IDispatcher>();
             var nodeInstanceCache = new Mock<INodeInstanceCache>();
             nodeInstanceCache.Setup(a => a.Get(It.IsAny<Guid>())).Returns(node);
+            nodeInstanceCache.Setup(a => a.GetSingle(It.IsAny<Guid>(), It.IsAny<AutomaticaContext>())).Returns(node);
 
             var recorder = new MemoryDataRecorderWriter(new Mock<IConfiguration>().Object, "testRecorder", nodeInstanceCache.Object, dispatcherMock.Object, new Mock<ILoggerFactory>().Object);
 
