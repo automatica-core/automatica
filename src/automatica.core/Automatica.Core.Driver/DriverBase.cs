@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Extensions;
@@ -27,16 +26,7 @@ namespace Automatica.Core.Driver
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private Task _writeTask;
 
-        public string FullName
-        {
-            get
-            {
-                var list = new List<string>();
-                GetFullNameRecursive(DriverContext.NodeInstance, ref list);
-                list.Reverse();
-                return String.Join("-", list);
-            }
-        }
+        public string FullName => DriverContext.NodeInstance.FullName;
 
 
         public IDriverNode Parent { get; set; }
@@ -59,16 +49,6 @@ namespace Automatica.Core.Driver
             ChildrensCreated = 0;
         }
 
-        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
-        {
-            if (instance.This2ParentNodeInstanceNavigation == null)
-            {
-                return;
-            }
-
-            names.Add(instance.Name);
-            GetFullNameRecursive(instance.This2ParentNodeInstanceNavigation, ref names);
-        }
 
         private void Enqueue(IDispatchable source, object value)
         {

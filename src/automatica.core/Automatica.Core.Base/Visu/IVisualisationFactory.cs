@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.EF.Models;
-using System;
 using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Base.Visu

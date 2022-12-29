@@ -770,7 +770,7 @@ namespace Automatica.Core.EF.Migrations
                     Key = table.Column<string>(maxLength: 1024, nullable: false),
                     This2PropertyType = table.Column<long>(nullable: false),
                     This2NodeTemplate = table.Column<Guid>(nullable: true),
-                    This2VisuObjectTemplate = table.Column<Guid>(nullable: true),
+                    This2VisuObjectTemplate = table.Column<Guid>(nullable: true, defaultValue: null),
                     Group = table.Column<string>(maxLength: 1024, nullable: false),
                     IsVisible = table.Column<bool>(nullable: false, defaultValue: false),
                     IsReadonly = table.Column<bool>(nullable: false, defaultValue: false),

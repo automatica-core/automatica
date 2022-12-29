@@ -32,6 +32,9 @@ export class Setting extends BaseModel {
     @JsonProperty()
     IsReadonly: boolean;
 
+    @JsonProperty()
+    Meta: string;
+
     get Value(): any {
         switch (this.Type) {
             case PropertyTemplateType.Long:
@@ -45,6 +48,10 @@ export class Setting extends BaseModel {
             case PropertyTemplateType.AreaIcon:
             case PropertyTemplateType.Password:
                 return this.ValueText;
+
+            case PropertyTemplateType.MultiSelect:
+                return JSON.parse(this.ValueText);
+                
             case PropertyTemplateType.Time:
                 return moment(this.ValueText).toDate();
             case PropertyTemplateType.Integer:
@@ -78,6 +85,9 @@ export class Setting extends BaseModel {
             case PropertyTemplateType.AreaIcon:
             case PropertyTemplateType.Password:
                 this.ValueText = value;
+                break;
+            case PropertyTemplateType.MultiSelect:
+                this.ValueText = JSON.stringify(value);
                 break;
             case PropertyTemplateType.Time:
                 this.ValueText = moment(value).toISOString(true);

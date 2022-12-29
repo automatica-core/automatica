@@ -7,15 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Recorder
 {
-    internal class CloudDataRecorderWriter : BaseDataRecorderWriter
+    internal class GraphiteDataRecorderWriter : BaseDataRecorderWriter
     {
-        public CloudDataRecorderWriter(IConfiguration config, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.CloudRecorder, "CloudDataRecorderWriter", nodeCache, dispatcher, factory)
+        public GraphiteDataRecorderWriter(IConfiguration config, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.GraphiteRecorder, "GraphiteDataRecorderWriter", nodeCache, dispatcher, factory)
         {
         }
+        
 
         internal override void Save(Trending trend, NodeInstance nodeInstance)
         {
-            Logger.LogInformation($"CloudLogger save is not implemented...");
+
+        
         }
     }
 }

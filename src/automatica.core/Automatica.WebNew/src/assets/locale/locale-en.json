@@ -2,6 +2,11 @@
   "ERROR": {
     "UNAUTHORISED": "Nicht berechtigt"
   },
+  "SERVER":{
+    "RECORDERS": {
+      "HOSTED_GRAFANA": "Hosted Grafana Recorder"
+    }
+  },
   "COMMON": {
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualization",
@@ -348,6 +353,18 @@
       "TIMEZONEOFFSET": {
         "NAME": "Timezone offset [h]",
         "DESCRIPTION": ""
+      },
+      "TRENDINGRECORDERS":{
+        "NAME": "Trending Destinations"
+      },
+      "HOSTEDGRAFANAAPIKEY": {
+        "NAME": "Api Key"
+      },
+      "HOSTEDGRAFANAHOST": {
+        "NAME": "URL"
+      },
+      "HOSTEDGRAFANAUSERID": {
+        "NAME": "User ID"
       }
     },
     "CATEGORY_INSTANCE": {

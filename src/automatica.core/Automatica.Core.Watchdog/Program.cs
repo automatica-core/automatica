@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Base.Common;
-using Automatica.Core.Internals;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Filters;

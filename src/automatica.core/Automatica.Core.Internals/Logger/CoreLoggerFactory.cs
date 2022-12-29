@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using Automatica.Core.Base.Logger;
 
 namespace Automatica.Core.Internals.Logger
 {

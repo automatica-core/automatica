@@ -4,7 +4,6 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Remote;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
@@ -15,7 +14,6 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Plugins;
-using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
@@ -28,13 +26,13 @@ using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
+using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MQTTnet.AspNetCore;
 using MQTTnet.AspNetCore.Extensions;
 using MQTTnet.Server;
 
@@ -59,6 +57,7 @@ namespace Automatica.Core.Runtime
             services.AddAutomaticaPushServices(configuration, isElectronActive);
 
             services.AddSingleton<IPluginInstaller, PluginInstaller>();
+            services.AddSingleton<IRecorderFactory, RecorderFactory>();
 
             if (!isElectronActive)
             {

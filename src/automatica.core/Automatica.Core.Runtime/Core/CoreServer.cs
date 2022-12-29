@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +43,8 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
-using System.Data;
+using Newtonsoft.Json;
+using String = System.String;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -77,6 +79,7 @@ namespace Automatica.Core.Runtime.Core
 
         private readonly IUpdateHandler _updateHandler;
         private readonly IList<IDataRecorderWriter> _trendingRecorder = new List<IDataRecorderWriter>();
+        private readonly IRecorderFactory _recorderFactory;
 
         private readonly IRemoteServerHandler _remoteServerHandler;
         private readonly IRemoteHandler _remoteHandler;
@@ -163,10 +166,7 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Constructed;
 
-            _trendingRecorder.Add(new DatabaseDataRecorderWriter(_nodeInstanceCache, _dispatcher, new DatabaseTrendingValueStore(_config, CoreLoggerFactory.GetLogger(_config, "Trending")), services.GetRequiredService<ILoggerFactory>()));
-            _trendingRecorder.Add(new CloudDataRecorderWriter(_nodeInstanceCache, _dispatcher, services.GetRequiredService<ILoggerFactory>()));
-            _trendingRecorder.Add(new FileDataRecorderWriter(_nodeInstanceCache, _dispatcher, services.GetRequiredService<ILoggerFactory>()));
-
+            
             _logicEngineDispatcher = services.GetRequiredService<ILogicEngineDispatcher>();
 
             _localizationProvider = services.GetRequiredService<ILocalizationProvider>();
@@ -177,6 +177,8 @@ namespace Automatica.Core.Runtime.Core
             _localizationProvider.LoadFromAssembly(GetType().Assembly);
 
             _loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+            _recorderFactory = services.GetRequiredService<IRecorderFactory>();
             InitInternals();
         }
 
@@ -592,6 +594,21 @@ namespace Automatica.Core.Runtime.Core
                 InitRuleInstance(ruleInstance.ObjId);
             }
 
+            _logger.LogInformation($"Loading enabled recorders...");
+            var trendingRecorder = _settingsCache.GetByKey("trendingRecorders");
+            _trendingRecorder.Clear();
+            if (!String.IsNullOrEmpty(trendingRecorder.ValueText))
+            {
+                var trendingKvp = JsonConvert.DeserializeObject<IList<KeyValuePair<DataRecorderType, String>>>(trendingRecorder.ValueText);
+
+                foreach (var kvp in trendingKvp)
+                {
+                    _trendingRecorder.Add(_recorderFactory.GetRecorder(kvp.Key));
+                    _logger.LogInformation($"Added recorder for {kvp.Value}...");
+                }
+            }
+
+            _logger.LogInformation($"Loading enabled recorders...done");
 
             _logger.LogInformation("Loading recording data-points...");
             int recordingDataPointCount = 0;

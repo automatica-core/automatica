@@ -8,7 +8,6 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
-using Automatica.Core.Internals.Logger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -18,23 +17,27 @@ namespace Automatica.Core.Runtime.Recorder
 {
     internal abstract class BaseDataRecorderWriter : IDataRecorderWriter
     {
+        private readonly IConfiguration _config;
         private readonly INodeInstanceCache _nodeCache;
 
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
 
-        internal BaseDataRecorderWriter(string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
+        internal BaseDataRecorderWriter(IConfiguration config, DataRecorderType recorderType, string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
         {
             Logger = factory.CreateLogger($"recording{LoggerConstants.FileSeparator}{recorderName}");
+            _config = config;
             _nodeCache = nodeCache;
+            RecorderType = recorderType;
             Dispatcher = dispatcher;
         }
 
         public ILogger Logger { get; }
+        public DataRecorderType RecorderType { get; }
         public IDispatcher Dispatcher { get; }
 
         public async Task AddTrend(Guid nodeInstance)
         {
-            var node = _nodeCache.Get(nodeInstance);
+            var node = _nodeCache.GetSingle(nodeInstance, new AutomaticaContext(_config));
 
             if (node == null)
             {
@@ -105,7 +108,7 @@ namespace Automatica.Core.Runtime.Recorder
             _recorders.Remove(nodeInstance);
         }
 
-        public async Task Start()
+        public virtual async Task Start()
         {
             foreach(var ls in _recorders.Values)
             {
@@ -116,7 +119,7 @@ namespace Automatica.Core.Runtime.Recorder
             }
         }
 
-        public async Task Stop()
+        public virtual async Task Stop()
         {
             await RemoveAll();
         }

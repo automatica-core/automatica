@@ -20,6 +20,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
     <PackageReference Include="MQTTnet" Version="3.1.2" />
     <PackageReference Include="MQTTnet.AspNetCore" Version="3.1.2" />
+    <PackageReference Include="Telegraf.Channel.Http" Version="1.0.3" />
+    <PackageReference Include="Telegraf.Infux.Client" Version="1.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />

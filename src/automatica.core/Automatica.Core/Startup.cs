@@ -27,7 +27,6 @@ using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
-using MQTTnet.AspNetCore;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
 using Microsoft.AspNetCore.Mvc;

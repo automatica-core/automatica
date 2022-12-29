@@ -1,6 +1,5 @@
 ﻿using Automatica.Core.Model;
 using System;
-using System.Globalization;
 
 namespace Automatica.Core.EF.Models.Trendings
 {

@@ -8,7 +8,6 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Internals.Templates;
 using Automatica.Core.Rule;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.UnitTests.Base.Drivers;

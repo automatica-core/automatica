@@ -18,6 +18,7 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.Interface:
                     case PropertyTemplateType.Ip:
                     case PropertyTemplateType.Color:
+                    case PropertyTemplateType.MultiSelect:
                         return ValueText;
                     case PropertyTemplateType.Time:
                         return DateTime.Parse(ValueText);
@@ -63,6 +64,7 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.Ip:
                     case PropertyTemplateType.Color:
                     case PropertyTemplateType.Time:
+                    case PropertyTemplateType.MultiSelect:
                         if (value is DateTime dt)
                         {
                             ValueText = dt.ToString("o");

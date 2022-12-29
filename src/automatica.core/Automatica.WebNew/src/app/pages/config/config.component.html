@@ -6,7 +6,7 @@
 
         <as-split direction="horizontal">
             <as-split-area [size]="30">
-                <p3-propertyeditor #propertyEditor (validate)="validate($event)" (fileUploaded)="fileUploaded($event)"
+                <p3-propertyeditor height="100%" #propertyEditor (validate)="validate($event)" (fileUploaded)="fileUploaded($event)"
                     (scan)="scan($event)" [userGroups]="userGroups" [item]="selectedItem"
                     [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
                     (saveLearnedNodes)="saveLearnedNodes($event)" [isLoading]="isLoading"></p3-propertyeditor>

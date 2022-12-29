@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Cache;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.EF.Models;

@@ -16,7 +16,8 @@ using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
-using Org.BouncyCastle.Asn1.Ocsp;
+using Automatica.Core.Runtime.Recorder;
+using Docker.DotNet.Models;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -287,6 +288,29 @@ namespace Automatica.Core.Runtime.Database
 
             }
 
+            var trendingRecorder = context.Settings.SingleOrDefault(a => a.ValueKey == "trendingRecorders");
+
+            if (trendingRecorder == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "trendingRecorders",
+                    Type = (long)PropertyTemplateType.MultiSelect,
+                    Value = "",
+                    Group = "SERVER.SETTINGS",
+                    IsVisible = true,
+                    Order = 0,
+                    Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType))
+                });
+            }
+            else
+            {
+                trendingRecorder.Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType));
+                context.Update(trendingRecorder);
+            }
+
+            AddHostedGrafanaRecorderSettings(context);
+
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
             foreach (var propertyType in propertyTypes)
@@ -482,6 +506,52 @@ namespace Automatica.Core.Runtime.Database
             }
 
             context.SaveChanges();
+        }
+
+        private static void AddHostedGrafanaRecorderSettings(AutomaticaContext context)
+        {
+            var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaHost");
+
+            if (host == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hostedGrafanaHost",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
+                    IsVisible = true,
+                    Order = 0
+                });
+            }
+            var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaApiKey");
+
+            if (apiKey == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hostedGrafanaApiKey",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
+                    IsVisible = true,
+                    Order = 1
+                });
+            }
+            var userId = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaUserId");
+
+            if (userId == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hostedGrafanaUserId",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
+                    IsVisible = true,
+                    Order = 1
+                });
+            }
         }
 
         private static void AddInitUserManagementData(AutomaticaContext context)

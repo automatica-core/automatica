@@ -180,6 +180,7 @@ namespace Automatica.Core.EF.Models
                 entity.Property(e => e.ValueDouble);
                 entity.Property(e => e.Type);
                 entity.Property(e => e.IsVisible).HasDefaultValue(false);
+                entity.Property(e => e.Meta).HasDefaultValue(String.Empty);
 
                 entity.Property(e => e.Group).HasDefaultValue("System");
                 entity.Ignore(e => e.TypeInfo);
@@ -642,8 +643,8 @@ namespace Automatica.Core.EF.Models
                 entity.Property(e => e.Order)
                     .HasDefaultValueSql("1");
 
-                entity.Property(e => e.This2NodeTemplate).HasDefaultValue();
-                entity.Property(e => e.This2VisuObjectTemplate).HasDefaultValue();
+                entity.Property(e => e.This2NodeTemplate).HasDefaultValue(null);
+                entity.Property(e => e.This2VisuObjectTemplate).HasDefaultValue(null);
 
                 entity.Property(e => e.This2PropertyType);
 

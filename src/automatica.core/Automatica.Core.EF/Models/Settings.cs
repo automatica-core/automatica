@@ -17,5 +17,7 @@ namespace Automatica.Core.EF.Models
         public int Order { get; set; }
 
         public bool IsReadonly { get; set; }
+
+        public string Meta { get; set; }
     }
 }

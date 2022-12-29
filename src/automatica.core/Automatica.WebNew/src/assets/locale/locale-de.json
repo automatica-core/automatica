@@ -2,6 +2,11 @@
   "ERROR": {
     "UNAUTHORISED": "Not authorised"
   },
+  "SERVER":{
+    "RECORDERS": {
+      "HOSTED_GRAFANA": "Hosted Grafana Recorder"
+    }
+  },
   "COMMON": {
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualisierung",
@@ -348,6 +353,18 @@
       "TIMEZONEOFFSET": {
         "NAME": "Zeitzone Differenz [h]",
         "DESCRIPTION": ""
+      },
+      "TRENDINGRECORDERS":{
+        "NAME": "Trending Ziele"
+      },
+      "HOSTEDGRAFANAAPIKEY": {
+        "NAME": "Api Key"
+      },
+      "HOSTEDGRAFANAHOST": {
+        "NAME": "URL"
+      },
+      "HOSTEDGRAFANAUSERID": {
+        "NAME": "User ID"
       }
     },
     "CATEGORY_INSTANCE": {

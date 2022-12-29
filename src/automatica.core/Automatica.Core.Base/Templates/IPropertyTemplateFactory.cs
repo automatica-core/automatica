@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Base.Templates
@@ -102,6 +105,39 @@ namespace Automatica.Core.Base.Templates
         public static string CreateMaxLengthMetaString(int length)
         {
             return $"LENGTH({length})";
+        }
+
+
+        /// <summary>
+        /// Creates a <see cref="PropertyTemplate.Meta"/> or <see cref="Setting.Meta"/> for checklist property
+        /// </summary>
+        /// <param name="keyValues">Key value list of the items</param>
+        /// <returns>The meta string</returns>
+        public static string CreateMultiSelect(List<KeyValuePair<int, string>> keyValues)
+        {
+            var strings = keyValues.Select(kvp => $"{kvp.Key}={kvp.Value}");
+            return $"MULTI_SELECT({String.Join("|", strings)})";
+        }
+
+        /// <summary>
+        /// Creates a <see cref="PropertyTemplate.Meta"/> or <see cref="Setting.Meta"/> for checklist property
+        /// </summary>
+        /// <param name="enumType">Type of the enum</param>
+        /// <returns>The meta string</returns>
+        public static string CreateMultiSelect(Type enumType)
+        {
+            var values = Enum.GetValues(enumType);
+            var names = Enum.GetNames(enumType);
+
+            var kvpList = new List<KeyValuePair<int, string>>();
+
+            foreach (var value in values)
+            {
+                var intValue = (int)value;
+                kvpList.Add(new KeyValuePair<int, string>(intValue, names[intValue]));
+            }
+
+            return CreateMultiSelect(kvpList);
         }
 
         public static EnumNameAttribute GetNameAttributeFromEnumValue(Enum value)

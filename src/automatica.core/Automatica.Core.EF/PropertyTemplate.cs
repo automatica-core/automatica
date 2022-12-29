@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Automatica.Core.Model;
-using Newtonsoft.Json;
+﻿using Automatica.Core.Model;
 
 namespace Automatica.Core.EF.Models
 {

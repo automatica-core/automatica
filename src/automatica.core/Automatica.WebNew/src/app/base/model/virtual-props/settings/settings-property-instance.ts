@@ -1,5 +1,5 @@
 import { PropertyInstance } from "../../property-instance"
-import { PropertyTemplate, PropertyTemplateType } from "../../property-template"
+import { MultiSelectPropertyTemplate, PropertyTemplate, PropertyTemplateType } from "../../property-template"
 import { PropertyType } from "../../property-type"
 import { VirtualPropertyInstance } from "./../virtual-property-instance"
 import { INameModel } from "../../INameModel";
@@ -20,12 +20,20 @@ export class VirtualSettingsPropertyInstance extends VirtualPropertyInstance {
             this.PropertyTemplate.Order = 1;
             this.PropertyTemplate.Group = "COMMON.CATEGORY.MISC";
         } else {
-            this.PropertyTemplate.Group = "COMMON.CATEGORY.SETTING";
+            this.PropertyTemplate.Group = setting.Group;
         }
         this.PropertyTemplate.Order = 3;
         this.PropertyTemplate.PropertyType.Type = setting.Type;
 
         this.PropertyTemplate.IsReadonly = setting.IsReadonly;
+        this.PropertyTemplate.Meta = setting.Meta;
+
+        if(setting.Type == PropertyTemplateType.MultiSelect) {
+            this.PropertyTemplate.ExtendedType = new MultiSelectPropertyTemplate(this.PropertyTemplate);
+        }
+
+        console.log(this);
+    
     }
 
     get Value(): any {

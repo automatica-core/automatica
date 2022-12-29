@@ -3,6 +3,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Database;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Recorder
@@ -11,9 +12,9 @@ namespace Automatica.Core.Runtime.Recorder
     {
         private readonly DatabaseTrendingValueStore _databaseTrendingValueStore;
 
-        public DatabaseDataRecorderWriter(INodeInstanceCache nodeCache, IDispatcher dispatcher, DatabaseTrendingValueStore databaseTrendingValueStore, ILoggerFactory factory) : base("DatabaseDataRecorderWriter", nodeCache, dispatcher, factory)
+        public DatabaseDataRecorderWriter(IConfiguration config, INodeInstanceCache nodeCache, IDispatcher dispatcher,ILoggerFactory factory) : base(config, DataRecorderType.DatabaseRecorder, "DatabaseDataRecorderWriter", nodeCache, dispatcher, factory)
         {
-            _databaseTrendingValueStore = databaseTrendingValueStore;
+            _databaseTrendingValueStore = new DatabaseTrendingValueStore(config, factory.CreateLogger("Trending"));
         }
 
         internal override void Save(Trending trend, NodeInstance nodeInstance)
