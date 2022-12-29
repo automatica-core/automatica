@@ -7,6 +7,6 @@
         FileRecorder = 2,
         GraphiteRecorder = 3,
         HostedGrafanaRecorder = 4,
-        MemoryRecorder = 4
+        MemoryRecorder = 5
     }
 }

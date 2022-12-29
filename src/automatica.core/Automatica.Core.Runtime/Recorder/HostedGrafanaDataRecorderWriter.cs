@@ -9,6 +9,7 @@ using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Telegraf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc;
 using Telegraf.Channel;
 using Telegraf.Infux.Client.Impl;
 
@@ -17,6 +18,8 @@ namespace Automatica.Core.Runtime.Recorder
     internal class HostedGrafanaDataRecorderWriter : BaseDataRecorderWriter
     {
         private readonly ISettingsCache _settingsCache;
+        private readonly INodeInstanceCache _nodeCache;
+
         private TelegrafInfuxClient _client
             ;
 
@@ -24,6 +27,7 @@ namespace Automatica.Core.Runtime.Recorder
         public HostedGrafanaDataRecorderWriter(IConfiguration config, ISettingsCache settingsCache, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.HostedGrafanaRecorder, "HostedGrafanaDataRecorderWriter", nodeCache, dispatcher, factory)
         {
             _settingsCache = settingsCache;
+            _nodeCache = nodeCache;
         }
 
         public override Task Start()
@@ -32,6 +36,9 @@ namespace Automatica.Core.Runtime.Recorder
             var apiKey = _settingsCache.GetByKey("hostedGrafanaApiKey").ValueText;
             var userId = _settingsCache.GetByKey("hostedGrafanaUserId").ValueText;
 
+            apiKey = "eyJrIjoiMTE0YWM0YmU3YjAwOTBlYjJmZWRkNTZhMGVlMThmNGQ1NWE0ODUzZCIsIm4iOiJBU0RGIiwiaWQiOjc2NDg2N30=";
+            userId = "701959";
+            host = "https://influx-prod-01-eu-west-0.grafana.net/api/v1/push/influx/write";
             if (String.IsNullOrEmpty(host) || String.IsNullOrEmpty(apiKey) || String.IsNullOrEmpty(userId))
             {
                 Logger.LogError($"Host, UserId or ApiKey is empty, cannot start {nameof(HostedGrafanaDataRecorderWriter)}");
@@ -51,11 +58,31 @@ namespace Automatica.Core.Runtime.Recorder
 
         internal override void Save(Trending trend, NodeInstance nodeInstance)
         {
-            var name = nodeInstance.FullName;
+
+            var nameList = new List<string>();
+            nameList.Add(nodeInstance.Name);
+            GetFullNameRecursive(nodeInstance, ref nameList);
+            nameList.Reverse();
+            var name = String.Join("-", nameList);
+            
             name = name.Replace("*", "").Replace(" ", "_").Replace("/", "_").Replace("-", "_").ToLowerInvariant();
             name = "node_" + name;
 
             _client.Send(name, f => f.Field("value", Math.Round(trend.Value, 2)), t => t.Tag("nodeId", nodeInstance.ObjId.ToString().Replace("-", "_")).Tag("source", trend.Source).Tag("name", nodeInstance.Name));
+        }
+
+
+        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
+        {
+
+            if (!instance.This2ParentNodeInstance.HasValue)
+            {
+                return;
+            }
+            var parent = _nodeCache.Get(instance.This2ParentNodeInstance.Value);
+
+            names.Add(parent.Name);
+            GetFullNameRecursive(parent, ref names);
         }
     }
 }
