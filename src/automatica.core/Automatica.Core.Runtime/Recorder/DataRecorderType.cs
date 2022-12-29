@@ -6,6 +6,7 @@
         CloudRecorder = 1,
         FileRecorder = 2,
         GraphiteRecorder = 3,
-        HostedGrafanaRecorder = 4
+        HostedGrafanaRecorder = 4,
+        MemoryRecorder = 4
     }
 }
