@@ -50,8 +50,13 @@ export class Setting extends BaseModel {
                 return this.ValueText;
 
             case PropertyTemplateType.MultiSelect:
-                return JSON.parse(this.ValueText);
-                
+                try {
+                    return JSON.parse(this.ValueText);
+                }
+                catch {
+                    return this.ValueText;
+                }
+
             case PropertyTemplateType.Time:
                 return moment(this.ValueText).toDate();
             case PropertyTemplateType.Integer:
