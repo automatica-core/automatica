@@ -16,6 +16,8 @@ namespace Automatica.Core.Watchdog
 {
     static class Program
     {
+        private static ILogger _logger;
+
         static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()
@@ -32,8 +34,8 @@ namespace Automatica.Core.Watchdog
               .Filter.ByExcluding(Matching.FromSource("Microsoft"))
               .CreateLogger();
 
-            var logger = CoreLoggerFactory.GetLogger(config, "Watchdog");
-            logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
+            _logger = CoreLoggerFactory.GetLogger(config, "Watchdog");
+            _logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
 
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             var appName = Path.Combine(fi.DirectoryName, ServerInfo.ServerExecutable);
@@ -66,10 +68,10 @@ namespace Automatica.Core.Watchdog
             {
                 if (!File.Exists(appName + ".dll"))
                 {
-                    logger.LogError($"Could not fine {appName} or {appName}.dll - exiting startup...");
+                    _logger.LogError($"Could not fine {appName} or {appName}.dll - exiting startup...");
                     return;
                 }
-                logger.LogInformation($"Starting with dotnet {appName}.dll");
+                _logger.LogInformation($"Starting with dotnet {appName}.dll");
                 processInfo = new ProcessStartInfo("dotnet", appName + ".dll");
             }
             else
@@ -85,16 +87,19 @@ namespace Automatica.Core.Watchdog
 
                 while (true)
                 {
-                    logger.LogInformation($"Starting {appName}");
+                    _logger.LogInformation($"Starting {appName}");
                     
                     process = Process.Start(processInfo);
+                    process.ErrorDataReceived += ProcessOnErrorDataReceived;
 
                     process.WaitForExit();
 
-                    var exitCode = process.ExitCode;
-                    logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
-                    if (PrepareUpdateIfExists(logger))
+                    process.ErrorDataReceived -= ProcessOnErrorDataReceived;
+                    var exitCode = process.ExitCode;
+                    _logger.LogInformation($"{appName} stopped with exit code {exitCode}");
+
+                    if (PrepareUpdateIfExists())
                     {
                         Environment.Exit(2); //restart
                         return;
@@ -114,10 +119,15 @@ namespace Automatica.Core.Watchdog
             //cancelToken.Cancel();
         }
 
-        private static bool PrepareUpdateIfExists(ILogger logger)
+        private static void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            _logger.LogError(e.Data);
+        }
+
+        private static bool PrepareUpdateIfExists()
         {
             var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
-            logger.LogInformation($"See if we have an update pending...");
+            _logger.LogInformation($"See if we have an update pending...");
 
             if (Directory.Exists(tmpPath))
             {
@@ -128,29 +138,29 @@ namespace Automatica.Core.Watchdog
 
             if (!File.Exists(updateFile))
             {
-                logger.LogError("no update file found...");
+                _logger.LogError("no update file found...");
                 return false;
             }
-            logger.LogInformation($"Update file found, prepare it...");
+            _logger.LogInformation($"Update file found, prepare it...");
 
             try
             {
-                var manifest = Common.Update.Update.GetUpdateManifest(logger, updateFile, tmpPath);
+                var manifest = Common.Update.Update.GetUpdateManifest(_logger, updateFile, tmpPath);
                 if (manifest == null)
                 {
-                    logger.LogError("Invalid update package");
+                    _logger.LogError("Invalid update package");
                     File.Delete(updateFile);
                     return false;
                 }
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Could not unpack update package");
+                _logger.LogError(e, "Could not unpack update package");
                 File.Delete(updateFile);
                 return false;
             }
 
-            logger.LogInformation($"Updated prepared, restarting to install it");
+            _logger.LogInformation($"Updated prepared, restarting to install it");
 
             return true;
         }
