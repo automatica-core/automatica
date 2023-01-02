@@ -58,7 +58,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
                 case "times-running":
                     return new DateTimeNode(ctx, () => Math.Floor((System.DateTime.Now.AddHours(_timeZoneOffset) - ServerInfo.StartupTime).TotalSeconds));
                 case "boot-time":
-                    return new DateTimeNode(ctx, () => ServerInfo.StartupTime);
+                    return new DateTimeNode(ctx, () => ServerInfo.StartupTime.AddHours(_timeZoneOffset));
                 default:
                     return null;
             }
