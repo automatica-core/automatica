@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices;
 
@@ -103,7 +104,14 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
         {
-            await PollAll();
+            try
+            {
+                await PollAll();
+            }
+            catch(Exception ex)
+            {
+                DriverContext.Logger.LogError($"Could not poll solarman {ex}");
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

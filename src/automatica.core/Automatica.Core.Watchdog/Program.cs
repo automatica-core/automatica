@@ -90,7 +90,7 @@ namespace Automatica.Core.Watchdog
                     _logger.LogInformation($"Starting {appName}");
                     
                     process = Process.Start(processInfo);
-                    process.ErrorDataReceived += ProcessOnErrorDataReceived;
+                    process!.ErrorDataReceived += ProcessOnErrorDataReceived;
 
                     process.WaitForExit();
 
