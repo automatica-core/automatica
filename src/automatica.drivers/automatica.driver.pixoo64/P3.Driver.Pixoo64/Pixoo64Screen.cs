@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using P3.Driver.Pixoo64.Screens;
@@ -7,12 +8,38 @@ namespace P3.Driver.Pixoo64
 {
     internal abstract class Pixoo64Screen : DriverBase
     {
-        public abstract Task SetScreenValue(object value, NodeInstance node);
+        private readonly int _timeZoneOffset = 0;
+
+        public async Task SetValue(object value, NodeInstance node)
+        {
+            BaseScreen.DateTime = DateTime.Now.AddHours(_timeZoneOffset);
+            await SetScreenValue(value, node);
+        }
+
+
+        protected abstract Task SetScreenValue(object value, NodeInstance node);
 
         public virtual BaseScreen BaseScreen { get; protected set; }
 
         protected Pixoo64Screen(IDriverContext driverContext) : base(driverContext)
         {
+            var timeZoneOffset = driverContext.NodeTemplateFactory.GetSetting("timezoneOffset");
+
+            try
+            {
+                if (timeZoneOffset != null)
+                {
+                    _timeZoneOffset = timeZoneOffset.ValueInt.Value;
+                }
+                else
+                {
+                    _timeZoneOffset = 0;
+                }
+            }
+            catch
+            {
+                //ignore exception
+            }
         }
     }
 
