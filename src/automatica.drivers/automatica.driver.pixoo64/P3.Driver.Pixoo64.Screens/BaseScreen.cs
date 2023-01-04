@@ -54,7 +54,7 @@ namespace P3.Driver.Pixoo64.Screens
 
             if (ShowTicksUntilNextFrame && TimeForNextScreen.ToString().Length == 1)
             {
-                Pixoo.DrawText(59, 2, ColorText, TimeForNextScreen.ToString());
+                Pixoo.DrawText(59, 2, Palette.White, TimeForNextScreen.ToString());
             }
             
             TimeForNextScreen--;
@@ -63,7 +63,7 @@ namespace P3.Driver.Pixoo64.Screens
 
             if (ShowClock)
             {
-                Pixoo.DrawText(44, 58, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
+                Pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
             }
 
             await Pixoo.SendResetGif();

@@ -32,28 +32,28 @@ namespace P3.Driver.Pixoo64.Screens
             if (V1.HasValue || V2.HasValue)
                 Pixoo.DrawText(5, 12, Palette.White, "V");
             if (V1.HasValue)
-                Pixoo.DrawText(10, 12, Palette.White, V1.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(10, 12, Palette.White, V1.Value.ToString("0.00", CultureInfo.InvariantCulture));
             if (V2.HasValue)
-                Pixoo.DrawText(35, 12, Palette.White, V2.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(35, 12, Palette.White, V2.Value.ToString("0.00", CultureInfo.InvariantCulture));
             if (V3.HasValue || V4.HasValue)
                 Pixoo.DrawText(5, 20, Palette.White, "V");
             if (V3.HasValue)
-                Pixoo.DrawText(10, 20, Palette.White, V3.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(10, 20, Palette.White, V3.Value.ToString("0.00", CultureInfo.InvariantCulture));
             if (V4.HasValue)
-                Pixoo.DrawText(35, 20, Palette.White, V4.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(35, 20, Palette.White, V4.Value.ToString("0.00", CultureInfo.InvariantCulture));
 
             if (A1.HasValue || A2.HasValue)
                 Pixoo.DrawText(5, 28, Palette.White, "A");
             if (A1.HasValue)
-                Pixoo.DrawText(10, 28, GetAmpereColor(A1.Value), A1.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(10, 28, GetAmpereColor(A1.Value), A1.Value.ToString("0.00", CultureInfo.InvariantCulture));
             if (A2.HasValue)
-                Pixoo.DrawText(35, 28, GetAmpereColor(A2.Value), A2.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(35, 28, GetAmpereColor(A2.Value), A2.Value.ToString("0.00", CultureInfo.InvariantCulture));
             if (A3.HasValue || A4.HasValue)
                 Pixoo.DrawText(5, 36, Palette.White, "A");
             if (A3.HasValue)
-                Pixoo.DrawText(10, 36, GetAmpereColor(A3.Value), A3.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(10, 36, GetAmpereColor(A3.Value), A3.Value.ToString("0.00", CultureInfo.InvariantCulture));
             if (A4.HasValue)
-                Pixoo.DrawText(35, 36, GetAmpereColor(A4.Value), A4.Value.ToString("0.##", CultureInfo.InvariantCulture));
+                Pixoo.DrawText(35, 36, GetAmpereColor(A4.Value), A4.Value.ToString("0.00", CultureInfo.InvariantCulture));
 
             if(Soc1.HasValue || Soc2.HasValue) 
                 Pixoo.DrawText(5, 44, Palette.White, "%");
