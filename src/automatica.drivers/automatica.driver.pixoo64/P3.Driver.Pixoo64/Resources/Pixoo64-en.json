@@ -85,6 +85,10 @@
     "METERSCREEN": {
       "NAME": "Meter",
       "DESCRIPTION": "",
+      "METER": {
+        "NAME": "Meter Name",
+        "DESCRIPTION": ""
+      },
       "METER1": {
         "NAME": "Meter1",
         "DESCRIPTION": ""
