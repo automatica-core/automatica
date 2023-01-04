@@ -49,7 +49,7 @@ namespace P3.Driver.Pixoo64.Screens
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter1Name}");
                 Pixoo.DrawText(30, meterPos, Meter1 < 0 ? Palette.Green : Palette.White,
-                    Meter1.Value.ToString(CultureInfo.InvariantCulture));
+                    Meter1.Value.ToString("0.##", CultureInfo.InvariantCulture));
 
                 meterPos += 8;
             }
@@ -58,7 +58,7 @@ namespace P3.Driver.Pixoo64.Screens
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter2Name}");
                 Pixoo.DrawText(30, meterPos, Meter2 < 0 ? Palette.Green : Palette.White,
-                    Meter2.Value.ToString(CultureInfo.InvariantCulture));
+                    Meter2.Value.ToString("0.##", CultureInfo.InvariantCulture));
                 meterPos += 8;
             }
 
@@ -66,7 +66,7 @@ namespace P3.Driver.Pixoo64.Screens
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter3Name}");
                 Pixoo.DrawText(30, meterPos, Meter3 < 0 ? Palette.Green : Palette.White,
-                    Meter3.Value.ToString(CultureInfo.InvariantCulture));
+                    Meter3.Value.ToString("0.##", CultureInfo.InvariantCulture));
                 meterPos += 8;
             }
 
@@ -74,7 +74,7 @@ namespace P3.Driver.Pixoo64.Screens
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter4Name}");
                 Pixoo.DrawText(30, meterPos, Meter4 < 0 ? Palette.Green : Palette.White,
-                    Meter4.Value.ToString(CultureInfo.InvariantCulture));
+                    Meter4.Value.ToString("0.##", CultureInfo.InvariantCulture));
                 meterPos += 8;
             }
 
@@ -82,14 +82,14 @@ namespace P3.Driver.Pixoo64.Screens
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter5Name}");
                 Pixoo.DrawText(30, meterPos, Meter5 < 0 ? Palette.Green : Palette.White,
-                    Meter5.Value.ToString(CultureInfo.InvariantCulture));
+                    Meter5.Value.ToString("0.##", CultureInfo.InvariantCulture));
                 meterPos += 8;
             }
             if (Meter6.HasValue)
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter6Name}");
                 Pixoo.DrawText(30, meterPos, Meter5 < 0 ? Palette.Green : Palette.White,
-                    Meter6.Value.ToString(CultureInfo.InvariantCulture));
+                    Meter6.Value.ToString("0.##", CultureInfo.InvariantCulture));
             }
 
         }
