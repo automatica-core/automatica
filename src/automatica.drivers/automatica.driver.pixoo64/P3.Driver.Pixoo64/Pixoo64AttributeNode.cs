@@ -26,8 +26,6 @@ namespace P3.Driver.Pixoo64
             {
                 DriverContext.Logger.LogError($"Could not set screen value {e}");
             }
-
-            await base.WriteValue(source, value);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
