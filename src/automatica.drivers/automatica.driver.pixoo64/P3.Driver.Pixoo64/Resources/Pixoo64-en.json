@@ -1,0 +1,116 @@
+﻿{
+  "PIXOO64": {
+    "NAME": "Pixoo64",
+    "DESCRIPTION": "Provides an interface to show different pages on a pixoo64 screen",
+    "BATTERYSCREEN": {
+      "NAME": "Battery",
+      "DESCRIPTION": "",
+      "A1": {
+        "NAME": "A1",
+        "DESCRIPTION": ""
+      },
+      "A2": {
+        "NAME": "A2",
+        "DESCRIPTION": ""
+      },
+      "A3": {
+        "NAME": "A3",
+        "DESCRIPTION": ""
+      },
+      "A4": {
+        "NAME": "A4",
+        "DESCRIPTION": ""
+      },
+      "V1": {
+        "NAME": "V1",
+        "DESCRIPTION": ""
+      },
+      "V2": {
+        "NAME": "V2",
+        "DESCRIPTION": ""
+      },
+      "V3": {
+        "NAME": "V3",
+        "DESCRIPTION": ""
+      },
+      "V4": {
+        "NAME": "V4",
+        "DESCRIPTION": ""
+      },
+      "SOC1": {
+        "NAME": "SOC1",
+        "DESCRIPTION": ""
+      },
+      "SOC2": {
+        "NAME": "SOC2",
+        "DESCRIPTION": ""
+      },
+      "SOC3": {
+        "NAME": "SOC3",
+        "DESCRIPTION": ""
+      },
+      "SOC4": {
+        "NAME": "SOC4",
+        "DESCRIPTION": ""
+      }
+    },
+    "CRYPTOSCREEN": {
+      "NAME": "Crypto",
+      "DESCRIPTION": "",
+      "BITCOIN": {
+        "NAME": "Bitcoin",
+        "DESCRIPTION": ""
+      },
+      "ETHEREUM": {
+        "NAME": "Ethereum",
+        "DESCRIPTION": ""
+      },
+      "CARDANO": {
+        "NAME": "Cardano",
+        "DESCRIPTION": ""
+      }
+    },
+    "INFOSCREEN": {
+      "NAME": "Info",
+      "DESCRIPTION": "",
+      "INSIDE": {
+        "NAME": "Inside [°C]",
+        "DESCRIPTION": ""
+      },
+      "OUTSIDE": {
+        "NAME": "Outside [°C]",
+        "DESCRIPTION": ""
+      }
+    },
+    "METERSCREEN": {
+      "NAME": "Meter",
+      "DESCRIPTION": "",
+      "METER1": {
+        "NAME": "Meter1",
+        "DESCRIPTION": ""
+      },
+      "METER2": {
+        "NAME": "Meter2",
+        "DESCRIPTION": ""
+      },
+      "METER3": {
+        "NAME": "Meter3",
+        "DESCRIPTION": ""
+      },
+      "METER4": {
+        "NAME": "Meter4",
+        "DESCRIPTION": ""
+      },
+      "METER5": {
+        "NAME": "Meter5",
+        "DESCRIPTION": ""
+      }
+    },
+    "PROPERTY": {
+      "SIZE": {
+        "NAME": "Size",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

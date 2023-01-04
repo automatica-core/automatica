@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "P3.Driver.Pixoo64": {
+      "commandName": "Project"
+    },
+    "AutomaticaCore": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\"
+    }
+  }
+}

@@ -20,7 +20,8 @@ namespace P3.Driver.VkingBms.Driver
             _logger = logger;
             _serialPort = new
                 SerialPortStream(port, 9600, 8, Parity.None, StopBits.One);
-            _serialPort.ReadTimeout = 1000;
+            _serialPort.ReadTimeout = 1000; 
+            _serialPort.WriteTimeout = 1000;
         }
 
         public bool IsOpen { get; private set; }

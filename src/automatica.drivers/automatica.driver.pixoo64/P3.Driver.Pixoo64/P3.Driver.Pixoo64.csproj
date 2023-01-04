@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Version>6.0.0.1</Version>
+	<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>42B32C71-399D-499A-BA0C-72F46A498EDE</ProjectGuid>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Drivers\Pixoo64</BaseOutputPath>
+  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Drivers\Pixoo64</OutputPath>
+	</PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Pixoo64-de.json" />
+    <EmbeddedResource Include="Resources\Pixoo64-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Base" Version="7.1.0.919" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.1.0.919" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.1.0.919" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Driver.Pixoo64.Screens\P3.Driver.Pixoo64.Screens.csproj" />
+    <ProjectReference Include="..\P3.PixooSharp\P3.PixooSharp.csproj" />
+  </ItemGroup>
+</Project>
