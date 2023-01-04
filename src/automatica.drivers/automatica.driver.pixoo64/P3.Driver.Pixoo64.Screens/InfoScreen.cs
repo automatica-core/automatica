@@ -12,6 +12,12 @@ namespace P3.Driver.Pixoo64.Screens
             Title = "Infos";
         }
 
+        protected override void Init()
+        {
+            ShowClock = false;
+            base.Init();
+        }
+
         protected override async Task PaintInternal()
         {
             await Task.CompletedTask;
@@ -21,7 +27,9 @@ namespace P3.Driver.Pixoo64.Screens
                 Pixoo.DrawText(5, 12, Palette.White, $"Out: {Outside}°C");
             if(Inside.HasValue)
                 Pixoo.DrawText(5, 22, Palette.White, $"In:  {Inside}°C");
-            Pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
+
+            Pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
+            Pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
         }
     }
 }
