@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Pixoo64.Screens
 {
@@ -43,6 +42,10 @@ namespace P3.Driver.Pixoo64.Screens
                 case "meterscreen-meter5":
                     Screen.Meter5 = dValue;
                     Screen.Meter5Name = node.GetPropertyValueString("meter-name");
+                    break;
+                case "meterscreen-meter6":
+                    Screen.Meter6 = dValue;
+                    Screen.Meter6Name = node.GetPropertyValueString("meter-name");
                     break;
             }
         }

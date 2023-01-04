@@ -13,7 +13,7 @@ namespace P3.Driver.Pixoo64
         public override Guid DriverGuid => new Guid("235b8a64-853a-498b-a0f9-077bec05eb1f");
 
 
-        public override Version DriverVersion => new Version(0, 8, 0, 2);
+        public override Version DriverVersion => new Version(0, 9, 0, 2);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.pixoo64";
         
@@ -213,6 +213,16 @@ namespace P3.Driver.Pixoo64
             factory.CreatePropertyTemplate(new Guid("290d21fc-a941-4942-8bea-6be9f9414e91"), "PIXOO64.METERSCREEN.METER.NAME",
                 "PIXOO64.METERSCREEN.METER.DESCRIPTION", "meter-name", PropertyTemplateType.Text, meter5,
                 "COMMON.CATEGORY.ADDRESS", true, false, "", "Meter5", 1, 1);
+
+
+            var meter6 = new Guid("d4e21c29-5316-496c-a7d8-5aaf3a223698");
+            factory.CreateNodeTemplate(meter6, "PIXOO64.METERSCREEN.METER6.NAME",
+                "PIXOO64.METERSCREEN.METER6.DESCRIPTION", "meterscreen-meter6", meterScreen,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.Double, 1, false);
+            factory.CreatePropertyTemplate(new Guid("e2c52b88-7f3b-4de6-97eb-bace20e85b11"), "PIXOO64.METERSCREEN.METER.NAME",
+                "PIXOO64.METERSCREEN.METER.DESCRIPTION", "meter-name", PropertyTemplateType.Text, meter6,
+                "COMMON.CATEGORY.ADDRESS", true, false, "", "Meter6", 1, 1);
         }
 
         public override IDriver CreateDriver(IDriverContext config)

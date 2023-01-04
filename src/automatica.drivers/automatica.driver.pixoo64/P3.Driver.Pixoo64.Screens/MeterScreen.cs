@@ -10,6 +10,7 @@ namespace P3.Driver.Pixoo64.Screens
         public double? Meter3 { get; set; }
         public double? Meter4 { get; set; }
         public double? Meter5 { get; set; }
+        public double? Meter6 { get; set; }
 
 
         public string Meter1Name { get; set; }
@@ -17,6 +18,7 @@ namespace P3.Driver.Pixoo64.Screens
         public string Meter3Name { get; set; }
         public string Meter4Name { get; set; }
         public string Meter5Name { get; set; }
+        public string Meter6Name { get; set; }
 
         public MeterScreen(PixooSharp.Pixoo64 Pixoo) : base(Pixoo)
         {
@@ -25,6 +27,13 @@ namespace P3.Driver.Pixoo64.Screens
             Meter3Name = "M3";
             Meter4Name = "M4";
             Meter5Name = "M5";
+            Meter6Name = "M6";
+        }
+
+        protected override void Init()
+        {
+            ShowClock = false;
+            base.Init();
         }
 
         protected override async Task PaintInternal()
@@ -66,12 +75,19 @@ namespace P3.Driver.Pixoo64.Screens
                     Meter4.Value.ToString(CultureInfo.InvariantCulture));
                 meterPos += 8;
             }
-            
+
             if (Meter5.HasValue)
             {
                 Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter5Name}");
                 Pixoo.DrawText(30, meterPos, Meter5 < 0 ? Palette.Green : Palette.White,
                     Meter5.Value.ToString(CultureInfo.InvariantCulture));
+                meterPos += 8;
+            }
+            if (Meter6.HasValue)
+            {
+                Pixoo.DrawText(5, meterPos, Palette.White, $"{Meter6Name}");
+                Pixoo.DrawText(30, meterPos, Meter5 < 0 ? Palette.Green : Palette.White,
+                    Meter6.Value.ToString(CultureInfo.InvariantCulture));
             }
 
         }

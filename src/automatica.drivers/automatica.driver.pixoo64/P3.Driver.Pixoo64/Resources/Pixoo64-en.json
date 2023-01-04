@@ -108,6 +108,10 @@
       "METER5": {
         "NAME": "Meter5",
         "DESCRIPTION": ""
+      },
+      "METER6": {
+        "NAME": "Meter6",
+        "DESCRIPTION": ""
       }
     },
     "PROPERTY": {

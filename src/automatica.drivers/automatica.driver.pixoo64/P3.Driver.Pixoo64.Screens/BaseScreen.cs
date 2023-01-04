@@ -11,6 +11,7 @@ namespace P3.Driver.Pixoo64.Screens
         public int ScreenTime { get; set; } = 10;
 
         protected bool ShowFrame { get; set; } = true;
+        protected bool ShowClock { get; set; } = true;
         protected bool ShowTicksUntilNextFrame { get; set; } = true;
         protected Rgb FrameColor { get; set; } = Palette.White;
         protected Rgb BackgroundColor { get; set; } = Palette.Black;
@@ -56,7 +57,10 @@ namespace P3.Driver.Pixoo64.Screens
             await PaintInternal();
 
 
-            Pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now:HH:mm}");
+            if (ShowClock)
+            {
+                Pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now:HH:mm}");
+            }
 
             await Pixoo.SendResetGif();
             await Pixoo.SendBufferAsync(0);
