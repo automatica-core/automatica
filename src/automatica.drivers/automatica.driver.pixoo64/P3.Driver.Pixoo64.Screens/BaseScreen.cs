@@ -19,7 +19,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         protected Rgb ColorText { get; set; } = Palette.White;
 
-        public DateTime DateTime { get; set; } = DateTime.Now;
+        public int DateTimeHourOffset = 0;
 
         protected BaseScreen(PixooSharp.Pixoo64 pixoo)
         {
@@ -63,7 +63,7 @@ namespace P3.Driver.Pixoo64.Screens
 
             if (ShowClock)
             {
-                Pixoo.DrawText(43, 57, ColorText, $"{DateTime:HH:mm}");
+                Pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
             }
 
             await Pixoo.SendResetGif();

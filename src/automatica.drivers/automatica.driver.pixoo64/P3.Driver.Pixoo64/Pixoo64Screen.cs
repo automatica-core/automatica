@@ -12,7 +12,6 @@ namespace P3.Driver.Pixoo64
 
         public async Task SetValue(object value, NodeInstance node)
         {
-            BaseScreen.DateTime = DateTime.Now.AddHours(TimeZoneOffset);
             await SetScreenValue(value, node);
         }
 
@@ -66,7 +65,7 @@ namespace P3.Driver.Pixoo64
             Screen.ScreenTime = screenTime;
 
             Screen.Title = DriverContext.NodeInstance.Name;
-            Screen.DateTime = DateTime.Now.AddHours(TimeZoneOffset);
+            Screen.DateTimeHourOffset = TimeZoneOffset;
 
 
             return base.Init();

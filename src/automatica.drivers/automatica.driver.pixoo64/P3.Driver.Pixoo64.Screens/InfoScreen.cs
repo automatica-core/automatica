@@ -30,7 +30,7 @@ namespace P3.Driver.Pixoo64.Screens
                 Pixoo.DrawText(5, 12, Palette.White, $"Out: {Outside}°C");
             if(Inside.HasValue)
                 Pixoo.DrawText(5, 22, Palette.White, $"In:  {Inside}°C");
-            Pixoo.DrawText(5, 32, Palette.White, $"{DateTime:dd.MM.yyyy}");
+            Pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
         }
 
         private static Rgb GetAmpereColor(double value)
