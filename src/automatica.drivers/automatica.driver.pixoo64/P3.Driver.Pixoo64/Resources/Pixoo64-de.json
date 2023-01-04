@@ -117,6 +117,10 @@
     "PROPERTY": {
       "SIZE": {
         "NAME": "Size",
+        "DESCRIPTION": ""
+      },
+      "SCREENTIME": {
+        "NAME": "Screentime [s]",
         "DESCRIPTION": "" 
       } 
     } 
