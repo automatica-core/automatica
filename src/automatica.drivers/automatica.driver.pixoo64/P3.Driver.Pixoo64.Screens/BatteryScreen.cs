@@ -34,7 +34,7 @@ namespace P3.Driver.Pixoo64.Screens
             if (V1.HasValue)
                 Pixoo.DrawText(10, 12, Palette.White, V1.Value.ToString(CultureInfo.InvariantCulture));
             if (V2.HasValue)
-                Pixoo.DrawText(30, 12, Palette.White, V2.Value.ToString(CultureInfo.InvariantCulture));
+                Pixoo.DrawText(35, 12, Palette.White, V2.Value.ToString(CultureInfo.InvariantCulture));
             if (V3.HasValue || V4.HasValue)
                 Pixoo.DrawText(5, 20, Palette.White, "V");
             if (V3.HasValue)
