@@ -31,22 +31,22 @@ namespace P3.Driver.Pixoo64.Screens
             Pixoo.DrawText(10, 12, Palette.White, V1.ToString(CultureInfo.InvariantCulture));
             Pixoo.DrawText(30, 12, Palette.White, V2.ToString(CultureInfo.InvariantCulture));
             Pixoo.DrawText(5, 20, Palette.White, "V");
-            Pixoo.DrawText(10, 20, Palette.White, V3.ToString(CultureInfo.InvariantCulture));
-            Pixoo.DrawText(30, 20, Palette.White, V4.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(15, 20, Palette.White, V3.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(35, 20, Palette.White, V4.ToString(CultureInfo.InvariantCulture));
 
             Pixoo.DrawText(5, 28, Palette.White, "A");
-            Pixoo.DrawText(10, 28, GetAmpereColor(A1), A1.ToString(CultureInfo.InvariantCulture));
-            Pixoo.DrawText(30, 28, GetAmpereColor(A2), A2.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(15, 28, GetAmpereColor(A1), A1.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(35, 28, GetAmpereColor(A2), A2.ToString(CultureInfo.InvariantCulture));
             Pixoo.DrawText(5, 36, Palette.White, "A");
-            Pixoo.DrawText(10, 36, GetAmpereColor(A3), A3.ToString(CultureInfo.InvariantCulture));
-            Pixoo.DrawText(30, 36, GetAmpereColor(A4), A4.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(15, 36, GetAmpereColor(A3), A3.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(35, 36, GetAmpereColor(A4), A4.ToString(CultureInfo.InvariantCulture));
 
             Pixoo.DrawText(5, 44, Palette.White, "%");
-            Pixoo.DrawText(10, 44, GetSocColor(Soc1), Soc1.ToString(CultureInfo.InvariantCulture));
-            Pixoo.DrawText(30, 44, GetSocColor(Soc2), Soc2.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(15, 44, GetSocColor(Soc1), Soc1.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(35, 44, GetSocColor(Soc2), Soc2.ToString(CultureInfo.InvariantCulture));
             Pixoo.DrawText(5, 52, Palette.White, "%");
-            Pixoo.DrawText(10, 52, GetSocColor(Soc3), Soc3.ToString(CultureInfo.InvariantCulture));
-            Pixoo.DrawText(30, 52, GetSocColor(Soc4), Soc4.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(15, 52, GetSocColor(Soc3), Soc3.ToString(CultureInfo.InvariantCulture));
+            Pixoo.DrawText(35, 52, GetSocColor(Soc4), Soc4.ToString(CultureInfo.InvariantCulture));
 
         }
 
