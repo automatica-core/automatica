@@ -26,13 +26,14 @@ namespace P3.Driver.Pixoo64
                 screenSize = size.ValueInt.Value;
             }
             _pixoo64 = new PixooSharp.Pixoo64(ip, screenSize);
-            _mainLoop = new PixooMainLoop(_pixoo64);
+            
 
             return base.Init();
         }
 
         public override async Task<bool> Start()
         {
+            _mainLoop = new PixooMainLoop(_pixoo64);
             foreach (var screen in _screens)
             {
                 _mainLoop.AddScreen(screen.BaseScreen);
