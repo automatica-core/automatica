@@ -33,7 +33,7 @@ namespace P3.Driver.Pixoo64
 
         public override async Task<bool> Start()
         {
-            _mainLoop = new PixooMainLoop(_pixoo64);
+            _mainLoop = new PixooMainLoop(_pixoo64, DriverContext.Logger);
             foreach (var screen in _screens)
             {
                 _mainLoop.AddScreen(screen.BaseScreen);

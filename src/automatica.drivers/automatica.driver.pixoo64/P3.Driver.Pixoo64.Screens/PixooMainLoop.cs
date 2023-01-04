@@ -9,6 +9,7 @@ namespace P3.Driver.Pixoo64.Screens
         private readonly List<BaseScreen> _screens = new List<BaseScreen>();
 
         private CancellationTokenSource _cancellationTokenSource = new();
+        private bool _isRunning = false;
 
         public PixooMainLoop(PixooSharp.Pixoo64 pixoo, ILogger logger)
         {
@@ -23,6 +24,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         public async Task Start()
         {
+            _isRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             await Task.CompletedTask;
 
@@ -33,7 +35,7 @@ namespace P3.Driver.Pixoo64.Screens
                     int i = 0;
                     while (true)
                     {
-                        if (_cancellationTokenSource.IsCancellationRequested)
+                        if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
                         {
                             break;
                         }
@@ -43,7 +45,7 @@ namespace P3.Driver.Pixoo64.Screens
 
                         do
                         {
-                            if (_cancellationTokenSource.IsCancellationRequested)
+                            if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
                             {
                                 break;
                             }
@@ -70,6 +72,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         public async Task Stop()
         {
+            _isRunning = false;
             await Task.CompletedTask;
             _cancellationTokenSource.Cancel();
         }
