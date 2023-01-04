@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Pixoo64.Screens
 {
@@ -12,7 +11,6 @@ namespace P3.Driver.Pixoo64.Screens
         public BatteryScreenDriverNode(IDriverContext driverContext, PixooSharp.Pixoo64 pixoo) : base(driverContext, pixoo)
         {
         }
-
 
         protected override BatteryScreen CreateScreen()
         {

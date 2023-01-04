@@ -10,6 +10,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         public InfoScreen(PixooSharp.Pixoo64 Pixoo) : base(Pixoo)
         {
+            Title = "Infos";
         }
 
         protected override void Init()
@@ -23,7 +24,7 @@ namespace P3.Driver.Pixoo64.Screens
             await Task.CompletedTask;
 
 
-            Pixoo.DrawText(5, 5, Palette.Green, "Infos");
+            Pixoo.DrawText(5, 5, Palette.Green, Title);
 
             Pixoo.DrawText(5, 12, Palette.White, $"Outside: {Outside}°C");
             Pixoo.DrawText(5, 22, Palette.White, $"Inside: {Inside}°C");

@@ -28,6 +28,8 @@ namespace P3.Driver.Pixoo64.Screens
             Meter4Name = "M4";
             Meter5Name = "M5";
             Meter6Name = "M6";
+
+            Title = "Meter Info";
         }
 
         protected override void Init()
@@ -40,7 +42,7 @@ namespace P3.Driver.Pixoo64.Screens
         {
             await Task.CompletedTask;
 
-            Pixoo.DrawText(5, 5, Palette.Green, "Meter Info");
+            Pixoo.DrawText(5, 5, Palette.Green, Title);
 
             int meterPos = 12;
             if (Meter1.HasValue)

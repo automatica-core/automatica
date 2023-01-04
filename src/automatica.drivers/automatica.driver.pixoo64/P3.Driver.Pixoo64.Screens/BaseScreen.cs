@@ -4,6 +4,7 @@ namespace P3.Driver.Pixoo64.Screens
 {
     public abstract class BaseScreen
     {
+        public string Title { get; set; }
         public PixooSharp.Pixoo64 Pixoo { get; }
 
         public int TimeForNextScreen { get; private set; }

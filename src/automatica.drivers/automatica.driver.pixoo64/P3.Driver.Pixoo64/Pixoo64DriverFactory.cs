@@ -44,7 +44,7 @@ namespace P3.Driver.Pixoo64
         {
             var batteryGuid = new Guid("81f2daaf-0bb9-4ea5-9c93-1b476f6ee952");
             factory.CreateInterfaceType(batteryGuid, "PIXOO64.BATTERYSCREEN.NAME", "PIXOO64.BATTERYSCREEN.DESCRIPTION",
-                int.MaxValue, 1, false);
+                int.MaxValue, int.MaxValue, false);
             factory.CreateNodeTemplate(batteryGuid, "PIXOO64.BATTERYSCREEN.NAME", "PIXOO64.BATTERYSCREEN.DESCRIPTION",
                 "pixoo64-batteryscreen", DriverGuid, batteryGuid, false, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
@@ -160,7 +160,7 @@ namespace P3.Driver.Pixoo64
         {
             var meterScreen = new Guid("f511f977-f238-4f41-8e4c-e2dbdcaa9256");
             factory.CreateInterfaceType(meterScreen, "PIXOO64.METERSCREEN.NAME", "PIXOO64.METERSCREEN.DESCRIPTION",
-                int.MaxValue, 1, false);
+                int.MaxValue, int.MaxValue, false);
             factory.CreateNodeTemplate(meterScreen, "PIXOO64.METERSCREEN.NAME", "PIXOO64.METERSCREEN.DESCRIPTION",
                 "pixoo64-meterscreen", DriverGuid, meterScreen, false, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);

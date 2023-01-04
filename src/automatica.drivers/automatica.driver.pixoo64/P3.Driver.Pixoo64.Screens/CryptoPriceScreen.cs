@@ -13,13 +13,14 @@ namespace P3.Driver.Pixoo64.Screens
 
         public CryptoPriceScreen(PixooSharp.Pixoo64 pixoo) : base(pixoo)
         {
+            Title = "Crypto Prices";
         }
 
         protected override async Task PaintInternal()
         {
             await Task.CompletedTask;
 
-            Pixoo.DrawText(5, 5, Palette.Red, "Crypto Prices");
+            Pixoo.DrawText(5, 5, Palette.Red, Title);
 
             var textPos = 12;
             var pricePos = 20;
