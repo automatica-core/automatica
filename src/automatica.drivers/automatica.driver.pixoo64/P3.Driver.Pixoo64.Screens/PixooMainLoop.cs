@@ -30,43 +30,45 @@ namespace P3.Driver.Pixoo64.Screens
 
             var task = Task.Run(function: async () =>
             {
-                try
-                {
+                
                     int i = 0;
                     while (true)
                     {
-                        if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
-                        {
-                            break;
-                        }
-
-                        var screen = _screens[i];
-                        screen.Start();
-
-                        do
+                        try
                         {
                             if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
                             {
                                 break;
                             }
 
-                            await screen.Paint();
-                            Thread.Sleep(1000);
-                        } while (screen.TimeForNextScreen > 0);
+                            var screen = _screens[i];
+                            screen.Start();
+
+                            do
+                            {
+                                if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
+                                {
+                                    break;
+                                }
+
+                                await screen.Paint();
+                                Thread.Sleep(1000);
+                            } while (screen.TimeForNextScreen > 0);
 
 
-                        i++;
+                            i++;
 
-                        if (i >= _screens.Count)
+                            if (i >= _screens.Count)
+                            {
+                                i = 0;
+                            }
+                        }
+                        catch (Exception ex)
                         {
-                            i = 0;
+                            _logger.LogError(ex, $"Exception occurred {ex}");
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Exception occured {ex}");
-                }
+           
             }, _cancellationTokenSource.Token).ConfigureAwait(false);
         }
 
