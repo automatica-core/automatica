@@ -18,7 +18,7 @@ namespace P3.Driver.Pixoo64.Screens
             return new CryptoPriceScreen(Pixoo);
         }
 
-        public override async Task SetScreenValue(object value, NodeInstance node)
+        protected override async Task SetScreenValue(object value, NodeInstance node)
         {
             await Task.CompletedTask;
             var dValue = Convert.ToDouble(value);
