@@ -31,13 +31,6 @@ namespace P3.Driver.Pixoo64.Screens
 
             Title = "Meter Info";
         }
-
-        protected override void Init()
-        {
-            ShowClock = false;
-            base.Init();
-        }
-
         protected override async Task PaintInternal()
         {
             await Task.CompletedTask;
