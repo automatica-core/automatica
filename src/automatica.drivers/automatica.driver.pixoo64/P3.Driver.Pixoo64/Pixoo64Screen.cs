@@ -38,6 +38,8 @@ namespace P3.Driver.Pixoo64
 
             Screen.ScreenTime = screenTime;
 
+            Screen.Title = DriverContext.NodeInstance.Name;
+
 
             return base.Init();
         }
