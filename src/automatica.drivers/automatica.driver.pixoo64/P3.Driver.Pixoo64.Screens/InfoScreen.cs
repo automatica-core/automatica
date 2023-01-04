@@ -5,8 +5,8 @@ namespace P3.Driver.Pixoo64.Screens
     public class InfoScreen : BaseScreen
     {
        
-        public double Outside { get; set; }
-        public double Inside { get; set; }
+        public double? Outside { get; set; }
+        public double? Inside { get; set; }
 
         public InfoScreen(PixooSharp.Pixoo64 Pixoo) : base(Pixoo)
         {
@@ -26,8 +26,10 @@ namespace P3.Driver.Pixoo64.Screens
 
             Pixoo.DrawText(5, 5, Palette.Green, Title);
 
-            Pixoo.DrawText(5, 12, Palette.White, $"Outside: {Outside}°C");
-            Pixoo.DrawText(5, 22, Palette.White, $"Inside: {Inside}°C");
+            if(Outside.HasValue) 
+                Pixoo.DrawText(5, 12, Palette.White, $"Out: {Outside}°C");
+            if(Inside.HasValue)
+                Pixoo.DrawText(5, 22, Palette.White, $"In:  {Inside}°C");
             Pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now:dd.MM.yyyy}");
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Metrics;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -13,7 +12,7 @@ namespace P3.Driver.Pixoo64
         public override Guid DriverGuid => new Guid("235b8a64-853a-498b-a0f9-077bec05eb1f");
 
 
-        public override Version DriverVersion => new Version(0, 9, 0, 2);
+        public override Version DriverVersion => new Version(0, 10, 0, 2);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.pixoo64";
         
@@ -151,7 +150,7 @@ namespace P3.Driver.Pixoo64
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
                 NodeDataType.Double, 1, false);
             factory.CreateNodeTemplate(new Guid("5aa2976d-aab5-41f8-abcf-de9fc8bf4d09"), "PIXOO64.INFOSCREEN.INSIDE.NAME",
-                "PIXOO64.INFOSCREEN.INSIDE.DESCRIPTION", "info-outside", infoScreen,
+                "PIXOO64.INFOSCREEN.INSIDE.DESCRIPTION", "info-inside", infoScreen,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
                 NodeDataType.Double, 1, false);
         }
