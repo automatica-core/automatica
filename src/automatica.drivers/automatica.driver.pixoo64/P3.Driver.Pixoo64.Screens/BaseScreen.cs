@@ -19,7 +19,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         protected Rgb ColorText { get; set; } = Palette.White;
 
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
 
         protected BaseScreen(PixooSharp.Pixoo64 pixoo)
         {

@@ -8,11 +8,11 @@ namespace P3.Driver.Pixoo64
 {
     internal abstract class Pixoo64Screen : DriverBase
     {
-        private readonly int _timeZoneOffset = 0;
+        protected readonly int TimeZoneOffset = 0;
 
         public async Task SetValue(object value, NodeInstance node)
         {
-            BaseScreen.DateTime = DateTime.Now.AddHours(_timeZoneOffset);
+            BaseScreen.DateTime = DateTime.Now.AddHours(TimeZoneOffset);
             await SetScreenValue(value, node);
         }
 
@@ -29,11 +29,11 @@ namespace P3.Driver.Pixoo64
             {
                 if (timeZoneOffset != null)
                 {
-                    _timeZoneOffset = timeZoneOffset.ValueInt.Value;
+                    TimeZoneOffset = timeZoneOffset.ValueInt.Value;
                 }
                 else
                 {
-                    _timeZoneOffset = 0;
+                    TimeZoneOffset = 0;
                 }
             }
             catch
@@ -66,6 +66,7 @@ namespace P3.Driver.Pixoo64
             Screen.ScreenTime = screenTime;
 
             Screen.Title = DriverContext.NodeInstance.Name;
+            Screen.DateTime = DateTime.Now.AddHours(TimeZoneOffset);
 
 
             return base.Init();
