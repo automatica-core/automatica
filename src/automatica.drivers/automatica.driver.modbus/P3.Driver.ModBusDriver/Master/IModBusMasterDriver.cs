@@ -8,7 +8,7 @@ namespace P3.Driver.ModBusDriver.Master
 
         bool Open();
         Task<bool> Stop();
-        Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort addr, int numberOfRegisters);
+        Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort address, int numberOfRegisters);
         Task<ModBusReturn> ReadRegisters(byte slaveId, ushort addr, int numberOfRegisters);
         Task<ModBusReturn> ReadCoils(byte slaveId, ushort addr, int numberOfRegisters);
         Task<ModBusReturn> ReadDiscreteInputs(byte slaveId, ushort addr, int numberOfRegisters);
