@@ -32,8 +32,6 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
 
         public void UpdateValue(List<TickerPriceValue> values)
         {
-
-
             if(values.Any(a => a.Symbol == _currency))
             {
                 
