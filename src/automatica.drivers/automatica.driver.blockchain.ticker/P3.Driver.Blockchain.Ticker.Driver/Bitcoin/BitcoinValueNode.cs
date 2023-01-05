@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -45,7 +46,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
 
                 var blockChainValue = JsonConvert.DeserializeObject<BlockchainValue>(valueEntry);
 
-                var value = $"{blockChainValue.Last}";
+                var value = $"{blockChainValue!.Last.ToString(CultureInfo.InvariantCulture)}";
 
                 if (_addSymbol)
                 {
