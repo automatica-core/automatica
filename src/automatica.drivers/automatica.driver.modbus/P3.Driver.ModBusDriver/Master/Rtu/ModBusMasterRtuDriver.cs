@@ -131,7 +131,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             return true;
         }
 
-        protected override async Task<bool> WriteFrame(byte[] data)
+        protected override async Task<bool> WriteFrame(byte[] data, CancellationToken cts = default)
         {
             ModBus.Logger.LogHexOut(data);
 
@@ -139,11 +139,11 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             {
                 return false;
             }
-            await _serialPortStream.WriteAsync(data, 0, data.Length);
+            await _serialPortStream.WriteAsync(data, 0, data.Length, cts);
             return true;
         }
 
-        protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters)
+        protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters, CancellationToken cts = default)
         {
             if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
             {
@@ -187,7 +187,7 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                     throw new Exception("object disposed or closed...");
                 }
 
-                var read = await _serialPortStream.ReadAsync(data, 0, readLength);
+                var read = await _serialPortStream.ReadAsync(data, 0, readLength, cts);
                 ModBus.Logger.LogHexIn(data);
                 if (read == readLength)
                 {

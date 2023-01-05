@@ -103,12 +103,12 @@ namespace P3.Driver.ModBusDriver.Master
             return await Close();
         }
 
-        public async Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort address, int numberOfRegisters)
+        public async Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
-                return await ReadRegisters(slaveId, address, numberOfRegisters, ModBusFunction.ReadInputRegisters);
+                return await ReadRegisters(slaveId, address, numberOfRegisters, ModBusFunction.ReadInputRegisters, cts);
             }
             finally
             {
@@ -116,12 +116,12 @@ namespace P3.Driver.ModBusDriver.Master
             }
         }
 
-        public async Task<ModBusReturn> ReadRegisters(byte slaveId, ushort address, int numberOfRegisters)
+        public async Task<ModBusReturn> ReadRegisters(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
-                return await ReadRegisters(slaveId, address, numberOfRegisters, ModBusFunction.ReadHoldingRegisters);
+                return await ReadRegisters(slaveId, address, numberOfRegisters, ModBusFunction.ReadHoldingRegisters, cts);
             }
             finally
             {
@@ -129,12 +129,12 @@ namespace P3.Driver.ModBusDriver.Master
             }
         }
 
-        public async Task<ModBusReturn> ReadCoils(byte slaveId, ushort address, int numberOfRegisters)
+        public async Task<ModBusReturn> ReadCoils(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
-                return await ReadCoils(slaveId, address, numberOfRegisters, ModBusFunction.ReadCoils);
+                return await ReadCoils(slaveId, address, numberOfRegisters, ModBusFunction.ReadCoils, cts);
             }
             finally
             {
@@ -142,12 +142,12 @@ namespace P3.Driver.ModBusDriver.Master
             }
         }
 
-        public async Task<ModBusReturn> ReadDiscreteInputs(byte slaveId, ushort address, int numberOfRegisters)
+        public async Task<ModBusReturn> ReadDiscreteInputs(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
-                return await ReadCoils(slaveId, address, numberOfRegisters, ModBusFunction.ReadDiscreteInputs);
+                return await ReadCoils(slaveId, address, numberOfRegisters, ModBusFunction.ReadDiscreteInputs, cts);
             }
             finally
             {
@@ -156,9 +156,9 @@ namespace P3.Driver.ModBusDriver.Master
         }
 
 
-        public async Task<ModBusReturn> WriteHoldingRegister(int deviceId, ushort register, ushort value)
+        public async Task<ModBusReturn> WriteHoldingRegister(int deviceId, ushort register, ushort value, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
                 return await WriteSingleRegister((byte)deviceId, register, value);
@@ -170,12 +170,12 @@ namespace P3.Driver.ModBusDriver.Master
         }
 
 
-        public async Task<ModBusReturn> WriteCoil(int deviceId, ushort register, bool value)
+        public async Task<ModBusReturn> WriteCoil(int deviceId, ushort register, bool value, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
-                return await WriteSingleCoil((byte)deviceId, register, value);
+                return await WriteSingleCoil((byte)deviceId, register, value, cts);
             }
             finally
             {
@@ -184,9 +184,9 @@ namespace P3.Driver.ModBusDriver.Master
         }
 
         public async Task<ModBusReturn> WriteMultipleHoldingRegisters(int deviceId, ushort startRegister,
-            ushort[] values)
+            ushort[] values, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
                 var functionCode = ModBusFunction.WriteMultipleRegisters;
@@ -215,9 +215,9 @@ namespace P3.Driver.ModBusDriver.Master
                 await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", deviceId.ToString(),
                     Utils.ByteArrayToString(frame),
                     $"WriteMultipleRegisters from {startRegister} values {String.Join(',', values)}");
-                await WriteFrame(frame);
+                await WriteFrame(frame, cts);
 
-                var readFrame = await RequestFrame((byte)deviceId, functionCode, values.Length);
+                var readFrame = await RequestFrame((byte)deviceId, functionCode, values.Length, cts);
 
                 if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
                 {
@@ -233,9 +233,9 @@ namespace P3.Driver.ModBusDriver.Master
 
         }
 
-        public async Task<ModBusReturn> WriteMultipleCoils(int deviceId, ushort startRegister, bool[] values)
+        public async Task<ModBusReturn> WriteMultipleCoils(int deviceId, ushort startRegister, bool[] values, CancellationToken cts = default)
         {
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(cts);
             try
             {
                 var functionCode = ModBusFunction.WriteMultipleCoils;
@@ -280,9 +280,9 @@ namespace P3.Driver.ModBusDriver.Master
                 await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", deviceId.ToString(),
                     Utils.ByteArrayToString(frame),
                     $"WriteMultipleCoils from {startRegister} values {String.Join(',', values)}");
-                await WriteFrame(frame);
+                await WriteFrame(frame, cts);
 
-                var readFrame = await RequestFrame((byte)deviceId, functionCode, values.Length);
+                var readFrame = await RequestFrame((byte)deviceId, functionCode, values.Length, cts);
 
                 if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
                 {
@@ -297,10 +297,10 @@ namespace P3.Driver.ModBusDriver.Master
             }
         }
 
-        private async Task<ModBusReturn> ReadCoils(byte slaveId, ushort addr, int numberOfRegisters,
-            ModBusFunction function)
+        private async Task<ModBusReturn> ReadCoils(byte slaveId, ushort address, int numberOfRegisters,
+            ModBusFunction function, CancellationToken cts = default)
         {
-            var readFrame = await GetFrame(slaveId, addr, numberOfRegisters, function);
+            var readFrame = await GetFrame(slaveId, address, numberOfRegisters, function, cts);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -340,14 +340,14 @@ namespace P3.Driver.ModBusDriver.Master
             return new ModBusIoStateValueReturn(ModBusRequestStatus.Success, data, dataShort);
         }
 
-        private async Task<ModBusReturn> WriteSingleCoil(byte slaveId, int addr, bool value)
+        private async Task<ModBusReturn> WriteSingleCoil(byte slaveId, int address, bool value, CancellationToken cts = default)
         {
             var dataFrame = new byte[5];
 
             dataFrame[0] = (byte)ModBusFunction.WriteSingleCoil;
 
-            dataFrame[1] = Utils.ShiftRight(addr, 8);
-            dataFrame[2] = (byte)(addr & 0x00FF);
+            dataFrame[1] = Utils.ShiftRight(address, 8);
+            dataFrame[2] = (byte)(address & 0x00FF);
             dataFrame[3] = value ? (byte)0xff : (byte)0x00;
             dataFrame[4] = 0;
 
@@ -356,10 +356,10 @@ namespace P3.Driver.ModBusDriver.Master
 
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(),
-                Utils.ByteArrayToString(frame), $"WriteSingleCoil at {addr} value {value}");
-            await WriteFrame(frame);
+                Utils.ByteArrayToString(frame), $"WriteSingleCoil at {address} value {value}");
+            await WriteFrame(frame, cts);
 
-            var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleCoil, 1);
+            var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleCoil, 1, cts);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -370,14 +370,14 @@ namespace P3.Driver.ModBusDriver.Master
         }
 
 
-        private async Task<ModBusReturn> WriteSingleRegister(byte slaveId, ushort addr, ushort value)
+        private async Task<ModBusReturn> WriteSingleRegister(byte slaveId, ushort address, ushort value)
         {
             var dataFrame = new byte[5];
 
             dataFrame[0] = (byte)ModBusFunction.WriteSingleRegister;
 
-            dataFrame[1] = Utils.ShiftRight(addr, 8);
-            dataFrame[2] = (byte)(addr & 0x00FF);
+            dataFrame[1] = Utils.ShiftRight(address, 8);
+            dataFrame[2] = (byte)(address & 0x00FF);
             dataFrame[3] = Utils.ShiftRight(value, 8);
             dataFrame[4] = (byte)(value & 0x00FF);
 
@@ -385,7 +385,7 @@ namespace P3.Driver.ModBusDriver.Master
             frame = UpdateWriteFrame(frame);
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(),
-                Utils.ByteArrayToString(frame), $"WriteSingleRegister at {addr} value {value}");
+                Utils.ByteArrayToString(frame), $"WriteSingleRegister at {address} value {value}");
             await WriteFrame(frame);
 
             var readFrame = await RequestFrame(slaveId, ModBusFunction.WriteSingleRegister, 1);
@@ -398,10 +398,10 @@ namespace P3.Driver.ModBusDriver.Master
             return new ModBusReturn(ModBusRequestStatus.Success);
         }
 
-        private async Task<ModBusReturn> ReadRegisters(byte slaveId, ushort addr, int numberOfRegisters,
-            ModBusFunction function)
+        private async Task<ModBusReturn> ReadRegisters(byte slaveId, ushort address, int numberOfRegisters,
+            ModBusFunction function, CancellationToken cts = default)
         {
-            var readFrame = await GetFrame(slaveId, addr, numberOfRegisters, function);
+            var readFrame = await GetFrame(slaveId, address, numberOfRegisters, function, cts);
 
             if (readFrame.ModBusRequestStatus != ModBusRequestStatus.Success)
             {
@@ -423,16 +423,16 @@ namespace P3.Driver.ModBusDriver.Master
             return new ModBusRegisterValueReturn(ModBusRequestStatus.Success, data, dataShort);
         }
 
-        private async Task<ModBusFrameReturn> GetFrame(byte slaveId, ushort addr, int numberOfRegisters,
-            ModBusFunction function)
+        private async Task<ModBusFrameReturn> GetFrame(byte slaveId, ushort address, int numberOfRegisters,
+            ModBusFunction function, CancellationToken cts = default)
         {
-            var frame = BuildReadFrame(slaveId, addr, numberOfRegisters, function);
+            var frame = BuildReadFrame(slaveId, address, numberOfRegisters, function);
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(),
-                Utils.ByteArrayToString(frame), $"GetFrame Addr: {addr} number{numberOfRegisters} function {function}");
-            await WriteFrame(frame);
+                Utils.ByteArrayToString(frame), $"GetFrame Address: {address} number{numberOfRegisters} function {function}");
+            await WriteFrame(frame, cts);
 
-            return await RequestFrame(slaveId, function, numberOfRegisters);
+            return await RequestFrame(slaveId, function, numberOfRegisters, cts);
         }
 
         protected virtual byte[] ParseFrame(byte slaveId, ModBusFunction function, int numberOfRegisters, byte[] input)
@@ -440,9 +440,9 @@ namespace P3.Driver.ModBusDriver.Master
             return input;
         }
 
-        private async Task<ModBusFrameReturn> RequestFrame(byte slaveId, ModBusFunction function, int numberOfRegisters)
+        private async Task<ModBusFrameReturn> RequestFrame(byte slaveId, ModBusFunction function, int numberOfRegisters, CancellationToken cts = default)
         {
-            var readFrame = await ReadFrame(function, numberOfRegisters);
+            var readFrame = await ReadFrame(function, numberOfRegisters, cts);
 
             await Monitor.NotifyTelegram(TelegramDirection.Input, slaveId.ToString(), "MASTER",
                 Utils.ByteArrayToString(readFrame), null);
@@ -475,7 +475,7 @@ namespace P3.Driver.ModBusDriver.Master
         }
 
 
-        protected abstract byte[] BuildReadFrame(byte slaveId, int addr, int numberOfRegister, ModBusFunction function);
+        protected abstract byte[] BuildReadFrame(byte slaveId, int address, int numberOfRegister, ModBusFunction function);
 
         protected abstract byte[] UpdateWriteFrame(byte[] frame);
         protected abstract byte[] BuildHeaderFromDataFrame(byte[] dataFrame, byte slaveId, ModBusFunction function);
@@ -483,8 +483,8 @@ namespace P3.Driver.ModBusDriver.Master
         protected abstract short GetRequestLength(byte[] request);
 
         protected abstract bool OpenConnection();
-        protected abstract Task<bool> WriteFrame(byte[] data);
-        protected abstract Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters);
+        protected abstract Task<bool> WriteFrame(byte[] data, CancellationToken cts = default);
+        protected abstract Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters, CancellationToken cts = default);
 
         protected abstract Task<bool> Close();
     }

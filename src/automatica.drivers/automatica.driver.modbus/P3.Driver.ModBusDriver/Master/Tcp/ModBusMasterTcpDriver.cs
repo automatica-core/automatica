@@ -14,10 +14,9 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
     {
         private readonly TcpClient _tcpClient;
         private NetworkStream _networkStream;
-        private bool _connected = false;
-        private ushort _transactionId = 0;
+        private bool _connected;
+        private ushort _transactionId;
         private readonly System.Timers.Timer _receiveTimeoutTimer = new System.Timers.Timer();
-        private CancellationTokenSource _cts;
 
         public override bool Connected => _connected;
 
@@ -30,10 +29,8 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         private void _receiveTimeoutTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            _cts?.Cancel(true);
             _receiveTimeoutTimer.Stop();
             _connected = false;
-
         }
 
         protected override byte[] UpdateWriteFrame(byte[] frame)
@@ -69,7 +66,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             return frame.ToArray();
         }
 
-        protected override byte[] BuildReadFrame(byte slaveId, int addr, int numberOfRegister, ModBusFunction function)
+        protected override byte[] BuildReadFrame(byte slaveId, int address, int numberOfRegister, ModBusFunction function)
         {
             _transactionId++;
 
@@ -78,8 +75,8 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             dataFrame.AddRange(headerFrame);
             dataFrame.Add((byte)function);
 
-            dataFrame.Add(Utils.ShiftRight(addr, 8));
-            dataFrame.Add((byte)(addr & 0x00FF));
+            dataFrame.Add(Utils.ShiftRight(address, 8));
+            dataFrame.Add((byte)(address & 0x00FF));
             dataFrame.Add(Utils.ShiftRight(numberOfRegister, 8));
             dataFrame.Add((byte)(numberOfRegister & 0x00FF));
 
@@ -114,10 +111,10 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             return true;
         }
 
-        protected override async Task<bool> WriteFrame(byte[] data)
+        protected override async Task<bool> WriteFrame(byte[] data, CancellationToken cts = default)
         {
             ModBus.Logger.LogHexOut(data);
-            await _networkStream.WriteAsync(data, 0, data.Length);
+            await _networkStream.WriteAsync(data, 0, data.Length, cts);
             return true;
         }
 
@@ -128,17 +125,15 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         protected virtual int HeaderLength => 6;
 
-        protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters)
+        protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters, CancellationToken cts = default)
         {
             try
             {
                 _receiveTimeoutTimer.Start();
-                _cts = new CancellationTokenSource();
 
                 byte[] buffer = new byte[HeaderLength];
-                var read = await _networkStream.ReadAsync(buffer, 0, HeaderLength, _cts.Token);
+                var read = await _networkStream.ReadAsync(buffer, 0, HeaderLength, cts);
                 _receiveTimeoutTimer.Stop();
-                _cts = null;
 
                 if (read == HeaderLength)
                 {
@@ -146,9 +141,9 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                     var lengthToRead = GetLengthToRead(buffer);
                     _receiveTimeoutTimer.Start();
                     byte[] data = new byte[lengthToRead];
-                    _cts = new CancellationTokenSource();
-                    read = await _networkStream.ReadAsync(data, 0, lengthToRead, _cts.Token);
-                    _cts = null;
+                   
+                    read = await _networkStream.ReadAsync(data, 0, lengthToRead, cts);
+                    
                     _receiveTimeoutTimer.Stop();
 
                     ModBus.Logger.LogHexIn(data);
