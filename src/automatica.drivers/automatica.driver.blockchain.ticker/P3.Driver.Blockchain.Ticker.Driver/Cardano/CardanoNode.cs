@@ -63,10 +63,10 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
             CardanoValueNode node = null;
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
-                case "blockchain-eth-usd":
+                case "blockchain-ada-usd":
                     node = new CardanoValueNode(ctx, "ADA-USD", false, "", this);
                     break;
-                case "blockchain-eth-usd-with-symbol":
+                case "blockchain-ada-usd-with-symbol":
                     node = new CardanoValueNode(ctx, "ADA-USD", true, "USD", this);
                     break;
                 

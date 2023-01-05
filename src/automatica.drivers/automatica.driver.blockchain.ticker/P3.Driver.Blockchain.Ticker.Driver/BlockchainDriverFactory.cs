@@ -67,19 +67,19 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             var ethGuid = new Guid("8d522b59-5d27-410f-8382-74ffcdbed8d3");
             factory.CreateInterfaceType(ethGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.ETH.DESCRIPTION", int.MaxValue, 1, true);
 
-            factory.CreateNodeTemplate(new Guid("f9541784-5107-4832-998e-049bec427ca1"), "BLOCKCHAIN_TICKER.ETH.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-etc", DriverGuid,
+            factory.CreateNodeTemplate(new Guid("f9541784-5107-4832-998e-049bec427ca1"), "BLOCKCHAIN_TICKER.ETH.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-eth", DriverGuid,
                 ethGuid, true, true, true, false, true, NodeDataType.Date, 1, false);
 
-            factory.CreateNodeTemplate(new Guid("8405e11c-a088-4709-9892-8c009683eeda"), "BLOCKCHAIN_TICKER.ETH.USD.NAME", "BLOCKCHAIN_TICKER.ETH.USD.DESCRIPTION", "blockchain-etc-usd", ethGuid,
+            factory.CreateNodeTemplate(new Guid("8405e11c-a088-4709-9892-8c009683eeda"), "BLOCKCHAIN_TICKER.ETH.USD.NAME", "BLOCKCHAIN_TICKER.ETH.USD.DESCRIPTION", "blockchain-eth-usd", ethGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
-            factory.CreateNodeTemplate(new Guid("a01a01a3-0fba-4538-8dc9-a891ae420d0a"), "BLOCKCHAIN_TICKER.ETH.USD_WITH_SYMBOL.NAME", "BLOCKCHAIN_TICKER.ETH.USD_WITH_SYMBOL.DESCRIPTION", "blockchain-etc-usd-with-symbol", ethGuid,
-                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
-
-
-            factory.CreateNodeTemplate(new Guid("4e587f00-33f9-4a70-af35-ea687aa7c087"), "BLOCKCHAIN_TICKER.ETH.EUR.NAME", "BLOCKCHAIN_TICKER.ETH.EUR.DESCRIPTION", "blockchain-btc-eur", ethGuid,
+            factory.CreateNodeTemplate(new Guid("a01a01a3-0fba-4538-8dc9-a891ae420d0a"), "BLOCKCHAIN_TICKER.ETH.USD_WITH_SYMBOL.NAME", "BLOCKCHAIN_TICKER.ETH.USD_WITH_SYMBOL.DESCRIPTION", "blockchain-eth-usd-with-symbol", ethGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
 
-            factory.CreateNodeTemplate(new Guid("0f90d2f5-672c-4746-9ec3-66060e88462c"), "BLOCKCHAIN_TICKER.ETH.EUR_WITH_SYMBOL.NAME", "BLOCKCHAIN_TICKER.ETH.EUR_WITH_SYMBOL.DESCRIPTION", "blockchain-etc-eur-with-symbol", ethGuid,
+
+            factory.CreateNodeTemplate(new Guid("4e587f00-33f9-4a70-af35-ea687aa7c087"), "BLOCKCHAIN_TICKER.ETH.EUR.NAME", "BLOCKCHAIN_TICKER.ETH.EUR.DESCRIPTION", "blockchain-eth-eur", ethGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("0f90d2f5-672c-4746-9ec3-66060e88462c"), "BLOCKCHAIN_TICKER.ETH.EUR_WITH_SYMBOL.NAME", "BLOCKCHAIN_TICKER.ETH.EUR_WITH_SYMBOL.DESCRIPTION", "blockchain-eth-eur-with-symbol", ethGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
         }
         private void CreateCardano(INodeTemplateFactory factory)
