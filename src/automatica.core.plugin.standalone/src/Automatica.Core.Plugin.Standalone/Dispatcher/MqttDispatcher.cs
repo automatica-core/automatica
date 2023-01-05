@@ -131,6 +131,11 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             }
         }
 
+        public Task UnRegisterDispatch(DispatchableType type, Guid id)
+        {
+            return Task.CompletedTask;
+        }
+
 
         public object GetValue(Guid id)
         {
