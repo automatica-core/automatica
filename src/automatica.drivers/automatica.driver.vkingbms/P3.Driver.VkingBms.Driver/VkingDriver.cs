@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.VkingBms.Driver.Data;
 using P3.Driver.VkingBms.Driver.Interfaces;
 using RJCP.IO.Ports;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace P3.Driver.VkingBms.Driver
 {
@@ -39,7 +38,7 @@ namespace P3.Driver.VkingBms.Driver
             _serialPort.Dispose();
         }
 
-        private async Task<byte[]> ReadData(Command cmd)
+        private async Task<byte[]> ReadData(Command cmd, CancellationToken token)
         {
             var input = cmd.ToByteArray();
             var ret = new List<byte>();
@@ -49,10 +48,10 @@ namespace P3.Driver.VkingBms.Driver
             _monitor.NotifyTelegram(TelegramDirection.Output, cmd.Address.ToString(), cmd.Address.ToString(),
                 Utils.ByteArrayToString(in input), "").ConfigureAwait(false).GetAwaiter();
 
-            await _serialPort.WriteAsync(input, 0, input.Length);
+            await _serialPort.WriteAsync(input, 0, input.Length, token);
 
             var header = new byte[13];
-            var read = await _serialPort.ReadAsync(header);
+            var read = await _serialPort.ReadAsync(header, token);
 
             if (read != 13)
             {
@@ -85,7 +84,7 @@ namespace P3.Driver.VkingBms.Driver
             return retArray;
         }
 
-        public async Task<IAnalogDataResponse> ReadAnalogValues(byte address)
+        public async Task<IAnalogDataResponse> ReadAnalogValues(byte address, CancellationToken token)
         {
             if (!IsOpen)
             {
@@ -94,12 +93,12 @@ namespace P3.Driver.VkingBms.Driver
             var readCmd = new Command(address, 66);
             readCmd.SetBody(new[] { address });
 
-            var data = await ReadData(readCmd);
+            var data = await ReadData(readCmd, token);
 
             return new AnalogDataResponse(data);
         }
 
-        public async Task<IBmsInfoResponse> ReadBmsInfo(byte address)
+        public async Task<IBmsInfoResponse> ReadBmsInfo(byte address, CancellationToken token)
         {
             if (!IsOpen)
             {
@@ -108,11 +107,11 @@ namespace P3.Driver.VkingBms.Driver
             var readCmd = new Command(address, 241);
             readCmd.SetBody(new[] { address });
 
-            var data = await ReadData(readCmd);
+            var data = await ReadData(readCmd, token);
 
             return new BmsInfoResponse(data);
         }
-        public async Task<IVersionIdResponse> ReadVersionInfo(byte address)
+        public async Task<IVersionIdResponse> ReadVersionInfo(byte address, CancellationToken token)
         {
             if (!IsOpen)
             {
@@ -121,7 +120,7 @@ namespace P3.Driver.VkingBms.Driver
             var readCmd = new Command(address, 233);
             readCmd.SetBody(new[] { address });
 
-            var data = await ReadData(readCmd);
+            var data = await ReadData(readCmd, token);
 
             return new VersionIdResponse(data);
         }

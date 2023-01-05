@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.VkingBms.Driver;
 using P3.Driver.VkingBms.DriverFactory.Nodes;
 using Timer = System.Threading.Timer;
@@ -63,7 +64,9 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         private async void ReadPacks(object state)
         {
-            await _semaphore.WaitAsync();
+            DriverContext.Logger.LogInformation($"Start read...");
+            var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+            await _semaphore.WaitAsync(cancellationTokenSource.Token);
             try
             {
                 if (!_driver.IsOpen)
@@ -73,8 +76,8 @@ namespace P3.Driver.VkingBms.DriverFactory
 
                 foreach (var pack in _packs)
                 {
-                    var version = await _driver.ReadVersionInfo(pack.PackId);
-                    var analogData = await _driver.ReadAnalogValues(pack.PackId);
+                    var version = await _driver.ReadVersionInfo(pack.PackId, cancellationTokenSource.Token);
+                    var analogData = await _driver.ReadAnalogValues(pack.PackId, cancellationTokenSource.Token);
 
                     pack.Read(analogData, version);
                 }
@@ -85,6 +88,7 @@ namespace P3.Driver.VkingBms.DriverFactory
             }
             finally
             {
+                DriverContext.Logger.LogInformation($"Done read...");
                 _semaphore.Release();
             }
         }
