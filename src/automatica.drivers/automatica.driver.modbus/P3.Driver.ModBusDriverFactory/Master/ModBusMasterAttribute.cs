@@ -56,6 +56,11 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
         }
 
+        public override async Task<bool> Read()
+        {
+            return await ReadValue() != null;
+        }
+
         public async Task<object> ReadValue()
         {
             ModBusReturn modbusReturn = null;
