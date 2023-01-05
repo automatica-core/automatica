@@ -75,6 +75,7 @@ namespace Automatica.Core.Runtime.RemoteNode
 
         public Task<bool> Read()
         {
+            _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.Read, _node);
             return Task.FromResult(true);
         }
 
