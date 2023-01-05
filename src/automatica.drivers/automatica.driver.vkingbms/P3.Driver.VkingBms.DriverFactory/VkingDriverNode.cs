@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.VkingBms.Driver;
@@ -15,11 +13,11 @@ namespace P3.Driver.VkingBms.DriverFactory
     internal class VkingDriverNode : DriverBase
     {
         private VkingDriver _driver;
-        private List<VkingBatteryPackNode> _packs = new List<VkingBatteryPackNode>();
+        private readonly List<VkingBatteryPackNode> _packs = new();
         private Timer _timer;
         private string _port;
 
-        private SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _semaphore = new(1);
 
         public VkingDriverNode(IDriverContext driverContext) : base(driverContext)
         {
@@ -64,7 +62,7 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         private async void ReadPacks(object state)
         {
-            DriverContext.Logger.LogInformation($"Start read...");
+            DriverContext.Logger.LogInformation("Start read...");
             var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
             await _semaphore.WaitAsync(cancellationTokenSource.Token);
             try
@@ -82,13 +80,14 @@ namespace P3.Driver.VkingBms.DriverFactory
                     pack.Read(analogData, version);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                DriverContext.Logger.LogError(ex, $"Error reading...{ex}");
                 ReOpen();
             }
             finally
             {
-                DriverContext.Logger.LogInformation($"Done read...");
+                DriverContext.Logger.LogInformation("Done read...");
                 _semaphore.Release();
             }
         }
