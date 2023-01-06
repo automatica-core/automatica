@@ -62,11 +62,12 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         private async void ReadPacks(object state)
         {
-            DriverContext.Logger.LogInformation("Start read...");
-            var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
-            await _semaphore.WaitAsync(cancellationTokenSource.Token);
+
             try
             {
+                DriverContext.Logger.LogInformation("Start read...");
+                var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+                await _semaphore.WaitAsync(cancellationTokenSource.Token);
                 if (!_driver.IsOpen)
                 {
                     ReOpen();
@@ -79,6 +80,10 @@ namespace P3.Driver.VkingBms.DriverFactory
 
                     pack.Read(analogData, version);
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                DriverContext.Logger.LogError("Operation cancelled...");
             }
             catch (Exception ex)
             {
