@@ -12,6 +12,7 @@ using MQTTnet.Server;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -46,6 +47,7 @@ namespace Automatica.Core.Slave.Runtime
 
         private readonly Timer _timer = new Timer(5000);
         private bool _connected;
+        private bool _containerStarted;
 
         public SlaveRuntime(IServiceProvider services, ILogger<SlaveRuntime> logger)
         {
@@ -124,6 +126,30 @@ namespace Automatica.Core.Slave.Runtime
             {
                 await StopInternal();
                 await StartInternal();
+            }
+            else if(_containerStarted)
+            {
+                var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
+                {
+                    Filters = new Dictionary<string, IDictionary<string, bool>>
+                    {
+                        {
+                            "status", new Dictionary<string, bool>
+                            {
+                                {"running", true}
+                            }
+                        }
+                    }
+                });
+
+                foreach (var running in _runningImages)
+                {
+                    if (containers.All(a => a.ID != running.Value))
+                    {
+                        await StopInternal();
+                        await StartInternal();
+                    }
+                }
             }
         }
 
@@ -244,6 +270,45 @@ namespace Automatica.Core.Slave.Runtime
                     imageCreateParams.FromSrc = request.ImageSource;
                 }
 
+                try
+                {
+                    await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters
+                    {
+                        Force = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Could not delete image...{ex}");
+                }
+                try
+                {
+                    var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
+                    {
+                        Filters = new Dictionary<string, IDictionary<string, bool>>
+                        {
+                            {
+                                "name", new Dictionary<string, bool>
+                                {
+                                    { $"/{request.Id}", true }
+                                }
+                            }
+                        }
+                    });
+                    foreach (var c in containers)
+                    {
+                        await _dockerClient.Containers.RemoveContainerAsync(c.ID,
+                            new ContainerRemoveParameters
+                            {
+                                Force = true
+                            });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Could not delete container...{ex}");
+                }
+
                 await _dockerClient.Images.CreateImageAsync(imageCreateParams, new AuthConfig(),
                     new ImageProgress(_logger));
 
@@ -251,6 +316,7 @@ namespace Automatica.Core.Slave.Runtime
                 {
                     Image = imageFullName,
                     AttachStderr = false,
+                    Name = $"{request.Id}",
                     AttachStdin = false,
                     AttachStdout = false,
                     HostConfig = new HostConfig
@@ -262,7 +328,7 @@ namespace Automatica.Core.Slave.Runtime
                     Env = new[]
                     {
                         $"AUTOMATICA_SLAVE_MASTER={_masterAddress}", $"AUTOMATICA_SLAVE_USER={_slaveId}",
-                        $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id.ToString()}", 
+                        $"AUTOMATICA_SLAVE_PASSWORD={_clientKey}", $"AUTOMATICA_NODE_ID={request.Id}", 
                         $"MQTT_LOG_VERBOSE=asdf",
                         $"LOG_LEVEL={_logLevel}"
                     },
@@ -292,6 +358,8 @@ namespace Automatica.Core.Slave.Runtime
 
                 _runningImages.Add(request.Id.ToString(), response.ID);
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
+
+                _containerStarted = true;
 
             }
             catch (Exception e)
