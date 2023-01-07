@@ -7,21 +7,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Diagnostics;
-using MQTTnet.Server;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet.Client.Options;
 using Timer = System.Timers.Timer;
-using System.Net;
-using MQTTnet.Protocol;
 
 namespace Automatica.Core.Slave.Runtime
 {
@@ -207,7 +201,11 @@ namespace Automatica.Core.Slave.Runtime
             switch (action.Action)
             {
                 case SlaveAction.Start:
-                    await StartImage(action);
+                    if (!await StartImage(action))
+                    {
+                        await StopInternal();
+                        await StartInternal();
+                    }
                     break;
                 case SlaveAction.Stop:
                     await StopImage(action);
@@ -220,30 +218,33 @@ namespace Automatica.Core.Slave.Runtime
             var imageFullName = $"{request.ImageName}:{_useDockerTag ?? request.Tag}";
             _logger.LogInformation($"Stop Image {imageFullName}");
 
-            if (_runningImages.ContainsKey(request.Id.ToString()))
+            try
             {
-                await _dockerClient.Containers.StopContainerAsync(_runningImages[request.Id.ToString()], new ContainerStopParameters());
-                try
-                {
-                    await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters
-                    {
-                        Force = true
-                    });
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Could not delete image");
-                }
+                await _dockerClient.Containers.StopContainerAsync(request.Id.ToString(),
+                    new ContainerStopParameters { WaitBeforeKillSeconds = 120 });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Could not stop container");
+            }
 
-                _runningImages.Remove(request.Id.ToString());
-            }
-            else
+            try
             {
-                _logger.LogError($"Could not stop image, image {imageFullName} not found");
+                await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters
+                {
+                    Force = true
+                });
             }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not delete image");
+            }
+
+            _runningImages.Remove(request.Id.ToString());
+
         }
 
-        private async Task StartImage(ActionRequest request)
+        private async Task<bool> StartImage(ActionRequest request)
         {
             await _semaphore.WaitAsync();
 
@@ -254,7 +255,7 @@ namespace Automatica.Core.Slave.Runtime
                 if (_runningImages.ContainsKey(request.Id.ToString()))
                 {
                     _logger.LogWarning($"Image id {request.Id.ToString()} with image {imageFullName} already running, ignore now!");
-                    return;
+                    return true;
                 }
 
                 _logger.LogInformation($"Start Image {imageFullName}");
@@ -272,37 +273,12 @@ namespace Automatica.Core.Slave.Runtime
 
                 try
                 {
-                    await _dockerClient.Images.DeleteImageAsync(imageFullName, new ImageDeleteParameters
-                    {
-                        Force = true
-                    });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Could not delete image...{ex}");
-                }
-                try
-                {
-                    var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
-                    {
-                        Filters = new Dictionary<string, IDictionary<string, bool>>
+                    _logger.LogInformation($"Remove old container with name {request.Id}");
+                    await _dockerClient.Containers.RemoveContainerAsync(request.Id.ToString(),
+                        new ContainerRemoveParameters
                         {
-                            {
-                                "name", new Dictionary<string, bool>
-                                {
-                                    { $"/{request.Id}", true }
-                                }
-                            }
-                        }
-                    });
-                    foreach (var c in containers)
-                    {
-                        await _dockerClient.Containers.RemoveContainerAsync(c.ID,
-                            new ContainerRemoveParameters
-                            {
-                                Force = true
-                            });
-                    }
+                            Force = true
+                        });
                 }
                 catch (Exception ex)
                 {
@@ -360,7 +336,22 @@ namespace Automatica.Core.Slave.Runtime
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
 
                 _containerStarted = true;
-
+                return true;
+            }
+            catch (DockerApiException ex)
+            {
+                if (ex.Message.Contains("already in use by container"))
+                {
+                    await _dockerClient.Containers.RemoveContainerAsync(request.Id.ToString(),
+                        new ContainerRemoveParameters
+                        {
+                            Force = true
+                        });
+                }
+                else
+                {
+                    _logger.LogError(ex, $"Could not delete container...{ex}");
+                }
             }
             catch (Exception e)
             {
@@ -371,6 +362,7 @@ namespace Automatica.Core.Slave.Runtime
                 _semaphore.Release(1);
             }
 
+            return false;
         }
 
         internal async Task ReInit()
