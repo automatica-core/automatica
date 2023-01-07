@@ -18,7 +18,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
-        private readonly IDictionary<Guid, NodeInstance> _favorites = new ConcurrentDictionary<Guid, NodeInstance>();
+        private readonly ConcurrentDictionary<Guid, NodeInstance> _favorites = new ConcurrentDictionary<Guid, NodeInstance>();
         private NodeInstance _root;
 
         public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache) : base(configuration)
@@ -99,7 +99,7 @@ namespace Automatica.Core.Internals.Cache.Driver
                 {
                     if (!_favorites.ContainsKey(item.ObjId))
                     {
-                        _favorites.Add(item.ObjId, item);
+                        _favorites.TryAdd(item.ObjId, item);
                     }
                     else
                     {
@@ -110,7 +110,7 @@ namespace Automatica.Core.Internals.Cache.Driver
                 {
                     if (_favorites.ContainsKey(item.ObjId))
                     {
-                        _favorites.Remove(item.ObjId);
+                        _favorites.TryRemove(item.ObjId, out var node);
                     }
                 }
             }
@@ -223,7 +223,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 if (!_favorites.ContainsKey(item.ObjId))
                 {
-                    _favorites.Add(item.ObjId, item);
+                    _favorites.TryAdd(item.ObjId, item);
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 if (_favorites.ContainsKey(item.ObjId))
                 {
-                    _favorites.Remove(item.ObjId);
+                    _favorites.TryRemove(item.ObjId, out var node);
                 }
             }
 
