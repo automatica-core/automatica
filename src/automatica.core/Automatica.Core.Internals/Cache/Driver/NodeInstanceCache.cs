@@ -18,7 +18,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
-        private readonly IList<NodeInstance> _favorites = new List<NodeInstance>();
+        private readonly IDictionary<Guid, NodeInstance> _favorites = new ConcurrentDictionary<Guid, NodeInstance>();
         private NodeInstance _root;
 
         public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache) : base(configuration)
@@ -98,7 +98,7 @@ namespace Automatica.Core.Internals.Cache.Driver
 
                 if (item.IsFavorite)
                 {
-                    _favorites.Add(item);
+                    _favorites.Add(item.ObjId, item);
                 }
             }
 
@@ -208,14 +208,20 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             if (item.IsFavorite)
             {
-                _favorites.Add(item);
+                if (_favorites.ContainsKey(item.ObjId))
+                {
+                    _favorites.Add(item.ObjId, item);
+                }
+                else
+                {
+                    _favorites[item.ObjId] = item;
+                }
             }
             else
             {
-                var fav = _favorites.SingleOrDefault(a => a.ObjId == item.ObjId);
-                if (fav != null)
+                if (_favorites.ContainsKey(item.ObjId))
                 {
-                    _favorites.Remove(fav);
+                    _favorites.Remove(item.ObjId);
                 }
             }
 
@@ -284,7 +290,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         {
             Initialize();
 
-            return _favorites.Where(a => a.UseInVisu).ToList();
+            return _favorites.Values.Where(a => a.UseInVisu).ToList();
         }
 
         public IList<NodeInstance> ByCategory(Guid category)
