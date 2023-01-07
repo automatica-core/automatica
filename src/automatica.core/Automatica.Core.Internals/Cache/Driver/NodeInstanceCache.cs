@@ -95,10 +95,23 @@ namespace Automatica.Core.Internals.Cache.Driver
 
                     _categoryCache[item.This2CategoryInstance.Value].Add(item);
                 }
-
                 if (item.IsFavorite)
                 {
-                    _favorites.Add(item.ObjId, item);
+                    if (!_favorites.ContainsKey(item.ObjId))
+                    {
+                        _favorites.Add(item.ObjId, item);
+                    }
+                    else
+                    {
+                        _favorites[item.ObjId] = item;
+                    }
+                }
+                else
+                {
+                    if (_favorites.ContainsKey(item.ObjId))
+                    {
+                        _favorites.Remove(item.ObjId);
+                    }
                 }
             }
 
@@ -208,7 +221,7 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             if (item.IsFavorite)
             {
-                if (_favorites.ContainsKey(item.ObjId))
+                if (!_favorites.ContainsKey(item.ObjId))
                 {
                     _favorites.Add(item.ObjId, item);
                 }
