@@ -210,6 +210,14 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 _favorites.Add(item);
             }
+            else
+            {
+                var fav = _favorites.SingleOrDefault(a => a.ObjId == item.ObjId);
+                if (fav != null)
+                {
+                    _favorites.Remove(fav);
+                }
+            }
 
             return item;
         }
