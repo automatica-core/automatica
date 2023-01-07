@@ -284,7 +284,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         {
             Initialize();
 
-            return _favorites;
+            return _favorites.Where(a => a.UseInVisu).ToList();
         }
 
         public IList<NodeInstance> ByCategory(Guid category)
