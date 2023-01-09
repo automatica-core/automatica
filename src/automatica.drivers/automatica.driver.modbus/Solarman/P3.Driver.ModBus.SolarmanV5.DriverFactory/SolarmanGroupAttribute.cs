@@ -26,6 +26,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         internal async Task PollAttributes()
         {
+            DriverContext.Logger.LogInformation($"Polling solarman device...");
             if (_driver == null)
             {
                 throw new ArgumentException("Driver not initialized...");
