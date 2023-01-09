@@ -20,7 +20,7 @@
             <as-split-area [size]="60">
                 <div class="logic-tab-panel">
                     <dx-tab-panel #tabPanel height="100%" width="100%" [dataSource]="pages" [(selectedIndex)]="selectedPageIndex" [loop]="false"
-                        [animationEnabled]="false" [swipeEnabled]="true" [showNavButtons]="true"
+                        [animationEnabled]="false" [swipeEnabled]="false" [showNavButtons]="true"
                         (onSelectionChanged)="onTabSelectionChanged($event)">
                         <div *dxTemplate="let page of 'title'">
                             <span>{{page.Name}}</span>
