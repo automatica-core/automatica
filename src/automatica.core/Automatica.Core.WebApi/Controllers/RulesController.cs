@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
@@ -202,10 +203,24 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-            var rulePage = dbContext.RulePages.SingleOrDefault(a => a.ObjId == pageId);
+            var rulePage = dbContext.RulePages.Include(a => a.RuleInstance).Include(a => a.NodeInstance2RulePage).Include(a => a.Link).SingleOrDefault(a => a.ObjId == pageId);
 
             if (rulePage != null)
             {
+                foreach (var link in rulePage.Link)
+                {
+                    await RemoveLinkInternal(link.ObjId, dbContext);
+                }
+                foreach (var nodeInstance in rulePage.NodeInstance2RulePage)
+                {
+                    await RemoveNodeInstanceInternal(nodeInstance.ObjId, dbContext);
+                }
+                foreach (var ruleInstance in rulePage.RuleInstance)
+                {
+                    await RemoveRuleInstanceInternal(ruleInstance.ObjId, dbContext);
+                }
+
+
                 dbContext.RulePages.Remove(rulePage);
                 await dbContext.SaveChangesAsync();
             }
@@ -220,6 +235,14 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            await RemoveRuleInstanceInternal(instanceId, dbContext);
+            await dbContext.SaveChangesAsync();
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        private async Task RemoveRuleInstanceInternal(Guid instanceId, AutomaticaContext dbContext)
+        {
             var ruleInstance = dbContext.RuleInstances.SingleOrDefault(a => a.ObjId == instanceId);
 
             if (ruleInstance != null)
@@ -228,10 +251,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 _logicCacheFacade.PageCache.RemoveRuleInstance(ruleInstance);
                 dbContext.RuleInstances.Remove(ruleInstance);
-                await dbContext.SaveChangesAsync();
             }
-
-            _logicCacheFacade.ClearInstances();
         }
 
         [HttpDelete]
@@ -241,6 +261,15 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            await RemoveNodeInstanceInternal(instanceId, dbContext);
+            await dbContext.SaveChangesAsync();
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        private async Task RemoveNodeInstanceInternal(Guid instanceId, AutomaticaContext dbContext)
+        {
+            await Task.CompletedTask;
             var nodeInstance = dbContext.NodeInstance2RulePages.SingleOrDefault(a => a.ObjId == instanceId);
 
             if (nodeInstance != null)
@@ -248,10 +277,8 @@ namespace Automatica.Core.WebApi.Controllers
                 dbContext.NodeInstance2RulePages.Remove(nodeInstance);
 
                 _logicCacheFacade.PageCache.RemoveNodeInstance(nodeInstance);
-                await dbContext.SaveChangesAsync();
             }
 
-            _logicCacheFacade.ClearInstances();
         }
 
         [HttpPost]
@@ -306,6 +333,16 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task RemoveLink(Guid objId)
         {
             await using var dbContext = new AutomaticaContext(_config);
+
+            await RemoveLinkInternal(objId, dbContext);
+
+            await dbContext.SaveChangesAsync();
+            await _logicCacheFacade.RemoveLink(objId);
+
+        }
+
+        private async Task RemoveLinkInternal(Guid objId, AutomaticaContext dbContext)
+        {
             var link = dbContext.Links.SingleOrDefault(a => a.ObjId == objId);
 
             if (link != null)
@@ -322,11 +359,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 await _coreServer.RemoveLink(objId);
 
-                dbContext.Remove(link);
-                await dbContext.SaveChangesAsync();
-                await _logicCacheFacade.RemoveLink(objId);
             }
-            
         }
 
         [HttpPost]

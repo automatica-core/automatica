@@ -2,7 +2,7 @@
     <div class="dx-card wide-card panel-height">
         <p3-config-menu *ngIf="ruleTemplates" #configMenu (onSave)="save($event)" 
             (onDelete)="delete($event)" [showRuleMenu]="true"
-            [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)" (onAddRulePage)="addRulePage($event)"
+            [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)" (onAddRulePage)="addRulePage($event)" (onRemoveRulePage)="removeRulePage($event)"
             (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" [isLoading]="isLoading">
         </p3-config-menu>
 
