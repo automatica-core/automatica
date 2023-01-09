@@ -20,6 +20,7 @@ namespace P3.Driver.Pixoo64.Screens
         public void AddScreen(BaseScreen screen)
         {
             _screens.Add(screen);
+            _logger.LogInformation($"{GetHashCode()} Add Screen {screen.GetType().Name}...");
         }
 
         public async Task Start()
@@ -27,6 +28,8 @@ namespace P3.Driver.Pixoo64.Screens
             _isRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             await Task.CompletedTask;
+
+            _logger.LogInformation($"{GetHashCode()} Loop started...");
 
             var task = Task.Run(function: async () =>
             {
@@ -70,10 +73,15 @@ namespace P3.Driver.Pixoo64.Screens
                     }
            
             }, _cancellationTokenSource.Token).ConfigureAwait(false);
+
+
+            _logger.LogInformation($"{GetHashCode()} Loop exited...");
         }
 
         public async Task Stop()
         {
+            _screens.Clear();
+            _logger.LogInformation($"{GetHashCode()} Stop loop...");
             _isRunning = false;
             await Task.CompletedTask;
             _cancellationTokenSource.Cancel();

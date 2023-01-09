@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.Pixoo64.Screens;
 
 namespace P3.Driver.Pixoo64
@@ -33,6 +34,7 @@ namespace P3.Driver.Pixoo64
 
         public override async Task<bool> Start()
         {
+            DriverContext.Logger.LogInformation($"Starting pixoo64 main loop");
             _mainLoop = new PixooMainLoop(_pixoo64, DriverContext.Logger);
             foreach (var screen in _screens)
             {
@@ -45,6 +47,7 @@ namespace P3.Driver.Pixoo64
 
         public override async Task<bool> Stop()
         {
+            DriverContext.Logger.LogInformation($"Stopping pixoo64 main loop");
             await _mainLoop.Stop();
             return await base.Stop();
         }
