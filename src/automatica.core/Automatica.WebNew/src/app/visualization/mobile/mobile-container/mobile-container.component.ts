@@ -56,8 +56,6 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       this.visuTemplatesMap.set(v.ObjId, v);
     }
     this.version = await this.configService.getVersion();
-
-    this.appService.isLoading = true;
     try {
 
 
@@ -117,6 +115,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
         if (x.NodeTemplate.This2DefaultMobileVisuTemplate && this.visuTemplatesMap.has(x.NodeTemplate.This2DefaultMobileVisuTemplate)) {
           const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x, VisuObjectSourceType.NodeInstance);
 
+          instance.ObjId = x.ObjId;
           this.getAndSetProperty(instance, "nodeInstance", x.ObjId);
           this.getAndSetProperty(instance, "text", x.Name);
           this.getAndSetProperty(instance, "readonly", !x.IsWriteable);
