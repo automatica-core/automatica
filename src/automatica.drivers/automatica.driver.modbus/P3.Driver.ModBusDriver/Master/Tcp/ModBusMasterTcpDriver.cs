@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.TelegramMonitor;
+using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility;
 
@@ -12,7 +13,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 {
     public class ModBusMasterTcpDriver : ModBusMasterDriver<ModBusMasterTcpConfig>
     {
-        private readonly TcpClient _tcpClient;
+        private TcpClient _tcpClient;
         private NetworkStream _networkStream;
         private bool _connected;
         private ushort _transactionId;
@@ -22,9 +23,38 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         public ModBusMasterTcpDriver(ModBusMasterTcpConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
         {
-            _tcpClient = new TcpClient();
             _receiveTimeoutTimer.Elapsed += _receiveTimeoutTimer_Elapsed;
             _receiveTimeoutTimer.Interval = config.Timeout;
+        }
+        protected override bool OpenConnection()
+        {
+            try
+            {
+                _tcpClient = new TcpClient();
+                _tcpClient.Connect(Config.IpAddress, Config.Port);
+                _networkStream = new NetworkStream(_tcpClient.Client);
+                _connected = true;
+            }
+            catch (Exception e)
+            {
+                ModBus.Logger.LogError($"Could not connect to modbus tcp slave {Config.IpAddress}:{Config.Port}\n{e}");
+                return false;
+            }
+            return true;
+        }
+        protected override Task<bool> Close()
+        {
+            try
+            {
+                _tcpClient.Close();
+                _tcpClient.Dispose();
+            }
+            catch (Exception e)
+            {
+                ModBus.Logger.LogError(e, $"Could not close tcp connection {e}");
+            }
+
+            return new Task<bool>(() => true);
         }
 
         private void _receiveTimeoutTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -95,21 +125,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             return (short)length;
         }
 
-        protected override bool OpenConnection()
-        {
-            try
-            {
-                _tcpClient.Connect(Config.IpAddress, Config.Port);
-                _networkStream = new NetworkStream(_tcpClient.Client);
-                _connected = true;
-            }
-            catch (Exception e)
-            {
-                ModBus.Logger.LogError($"Could not connect to modbus tcp slave {Config.IpAddress}:{Config.Port}\n{e}");
-                return false;
-            }
-            return true;
-        }
+      
 
         protected override async Task<bool> WriteFrame(byte[] data, CancellationToken cts = default)
         {
@@ -160,10 +176,6 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             return null;
         }
 
-        protected override Task<bool> Close()
-        {
-            _tcpClient.Dispose();
-            return new Task<bool>(() => true);
-        }
+
     }
 }

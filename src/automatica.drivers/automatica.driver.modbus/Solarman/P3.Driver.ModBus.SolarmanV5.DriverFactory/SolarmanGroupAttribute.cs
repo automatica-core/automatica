@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
@@ -58,6 +59,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                     {
                         DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
                     }
+                }
+                catch (IOException)
+                {
+                    throw;
                 }
                 catch (Exception e)
                 {

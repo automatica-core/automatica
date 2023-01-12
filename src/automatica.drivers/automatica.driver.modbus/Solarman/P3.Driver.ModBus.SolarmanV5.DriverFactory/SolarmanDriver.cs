@@ -111,6 +111,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
             catch (IOException)
             {
+                DriverContext.Logger.LogInformation("Error polling data, try to reconnect...");
                 await _driver!.Stop();
                 _driver!.Open();
             }
