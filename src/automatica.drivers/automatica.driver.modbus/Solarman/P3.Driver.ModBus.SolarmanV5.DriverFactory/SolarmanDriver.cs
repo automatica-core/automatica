@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -107,6 +108,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             try
             {
                 await PollAll();
+            }
+            catch (IOException)
+            {
+                await _driver!.Stop();
+                _driver!.Open();
             }
             catch(Exception ex)
             {
