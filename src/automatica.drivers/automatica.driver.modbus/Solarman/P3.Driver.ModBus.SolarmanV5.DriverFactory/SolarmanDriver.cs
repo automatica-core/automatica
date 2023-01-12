@@ -72,12 +72,12 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         public override Task<bool> Start()
         {
+            Open();
+
             if (_driver == null)
             {
                 throw new ArgumentException("Init must be called before start..");
             }
-
-            Open();
 
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
