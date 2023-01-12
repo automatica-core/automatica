@@ -68,7 +68,15 @@ namespace Automatica.Core.Runtime.Recorder
             nameList.Reverse();
             var name = String.Join("-", nameList);
 
-            name = name.Replace("*", "").Replace(" ", "_").Replace("/", "_").Replace("-", "_").Replace("(", "").Replace(")", "").ToLowerInvariant();
+            name = name
+                .Replace("*", "")
+                .Replace(" ", "_")
+                .Replace("/", "_")
+                .Replace("-", "_")
+                .Replace("(", "")
+                .Replace(")", "")
+                .Replace("[", "")
+                .Replace("]", "").ToLowerInvariant();
             name = "node_" + name;
             return name;
         }
