@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -25,34 +27,44 @@ namespace P3.Driver.ModBusDriverFactory.Master
             _parent = parent;
             _attribute = attribute;
         }
-        
+
         public override async Task WriteValue(IDispatchable source, object value)
         {
-            await Task.CompletedTask;
-            var shortValue = _attribute.ConvertValueToBus(source, value, out var convertedValue);
-            DriverContext.Logger.LogInformation($"WRITE value ({convertedValue}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" +  Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
-            switch (_attribute.Table)
+            try
             {
-                case ModBusTable.Coil:
-                    await Driver.WriteCoil(_parent.DeviceId, _attribute.Register, shortValue[0] == 1);
+                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-                    return;
-                case ModBusTable.DiscreteInput:
-                case ModBusTable.InputRegister:
-                    //not writeable
-                    return;
-
-            }
-            
-            for (int i = 0; i < _attribute.RegisterLength; i++)
-            {
-                var registerAddress = (ushort) (_attribute.Register + i);
+                var shortValue = _attribute.ConvertValueToBus(source, value, out var convertedValue);
+                DriverContext.Logger.LogInformation(
+                    $"WRITE value ({convertedValue}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" + Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
                 switch (_attribute.Table)
                 {
-                    case ModBusTable.HoldingRegister:
-                        await Driver.WriteHoldingRegister(_parent.DeviceId, registerAddress, shortValue[i]);
-                        break;
+                    case ModBusTable.Coil:
+                        await Driver.WriteCoil(_parent.DeviceId, _attribute.Register, shortValue[0] == 1, cts.Token);
+
+                        return;
+                    case ModBusTable.DiscreteInput:
+                    case ModBusTable.InputRegister:
+                        //not writeable
+                        return;
+
                 }
+
+                for (int i = 0; i < _attribute.RegisterLength; i++)
+                {
+                    var registerAddress = (ushort)(_attribute.Register + i);
+                    switch (_attribute.Table)
+                    {
+                        case ModBusTable.HoldingRegister:
+                            await Driver.WriteHoldingRegister(_parent.DeviceId, registerAddress, shortValue[i],
+                                cts.Token);
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Could not write value...{e}");
             }
         }
 
@@ -63,50 +75,64 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         public async Task<object> ReadValue()
         {
-            ModBusReturn modbusReturn = null;
-            switch (_attribute.Table)
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            try
             {
-                case ModBusTable.Coil:
-                    modbusReturn = await Driver.ReadCoils(_parent.DeviceId, _attribute.Register, _attribute.RegisterLength);
-                    break;
-                case ModBusTable.HoldingRegister:
-                    modbusReturn = await Driver.ReadRegisters(_parent.DeviceId, _attribute.Register, _attribute.RegisterLength);
-                    break;
-                case ModBusTable.InputRegister:
-                    modbusReturn = await Driver.ReadInputRegisters(_parent.DeviceId, _attribute.Register, _attribute.RegisterLength);
-                    break;
-                case ModBusTable.DiscreteInput:
-                    modbusReturn = await Driver.ReadDiscreteInputs(_parent.DeviceId, _attribute.Register, _attribute.RegisterLength);
-                    break;
-            }
-
-            if (modbusReturn != null)
-            {
-                if (modbusReturn is ModBusExceptionReturn excReturn)
-                {
-                    DriverContext.Logger.LogError(
-                        $"{Parent.Parent.Name} - {Parent.Name} - {Name}: Could not read register {Attribute.Register} - Error {excReturn}");
-                    throw new ModBusException(excReturn.Exception);
-                }
-
+                ModBusReturn modbusReturn = null;
                 switch (_attribute.Table)
                 {
                     case ModBusTable.Coil:
-                    case ModBusTable.DiscreteInput:
-                        if (modbusReturn is ModBusIoStateValueReturn ioStateReturn)
-                        {
-                            return _attribute.ConvertValueFromBus(this, ioStateReturn.DataShort.ToArray());
-                        }
+                        modbusReturn = await Driver.ReadCoils(_parent.DeviceId, _attribute.Register,
+                            _attribute.RegisterLength, cts.Token);
                         break;
                     case ModBusTable.HoldingRegister:
+                        modbusReturn = await Driver.ReadRegisters(_parent.DeviceId, _attribute.Register,
+                            _attribute.RegisterLength, cts.Token);
+                        break;
                     case ModBusTable.InputRegister:
-                        if (modbusReturn is ModBusRegisterValueReturn registerStateReturn)
-                        {
-                            return _attribute.ConvertValueFromBus(this, registerStateReturn.DataShort.ToArray());
-                        }
+                        modbusReturn = await Driver.ReadInputRegisters(_parent.DeviceId, _attribute.Register,
+                            _attribute.RegisterLength, cts.Token);
+                        break;
+                    case ModBusTable.DiscreteInput:
+                        modbusReturn = await Driver.ReadDiscreteInputs(_parent.DeviceId, _attribute.Register,
+                            _attribute.RegisterLength, cts.Token);
                         break;
                 }
-                
+
+                if (modbusReturn != null)
+                {
+                    if (modbusReturn is ModBusExceptionReturn excReturn)
+                    {
+                        DriverContext.Logger.LogError(
+                            $"{Parent.Parent.Name} - {Parent.Name} - {Name}: Could not read register {Attribute.Register} - Error {excReturn}");
+                        throw new ModBusException(excReturn.Exception);
+                    }
+
+                    switch (_attribute.Table)
+                    {
+                        case ModBusTable.Coil:
+                        case ModBusTable.DiscreteInput:
+                            if (modbusReturn is ModBusIoStateValueReturn ioStateReturn)
+                            {
+                                return _attribute.ConvertValueFromBus(this, ioStateReturn.DataShort.ToArray());
+                            }
+
+                            break;
+                        case ModBusTable.HoldingRegister:
+                        case ModBusTable.InputRegister:
+                            if (modbusReturn is ModBusRegisterValueReturn registerStateReturn)
+                            {
+                                return _attribute.ConvertValueFromBus(this, registerStateReturn.DataShort.ToArray());
+                            }
+
+                            break;
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Could not read value...{e}");
             }
 
             return null;
