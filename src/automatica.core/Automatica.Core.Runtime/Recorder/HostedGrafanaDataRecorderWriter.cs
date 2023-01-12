@@ -18,9 +18,7 @@ namespace Automatica.Core.Runtime.Recorder
         private readonly ISettingsCache _settingsCache;
         private readonly INodeInstanceCache _nodeCache;
 
-        private TelegrafInfuxClient _client
-            ;
-
+        private TelegrafInfuxClient _client;
 
         public HostedGrafanaDataRecorderWriter(IConfiguration config, ISettingsCache settingsCache, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.HostedGrafanaRecorder, "HostedGrafanaDataRecorderWriter", nodeCache, dispatcher, factory)
         {
@@ -57,6 +55,8 @@ namespace Automatica.Core.Runtime.Recorder
         internal override void Save(Trending trend, NodeInstance nodeInstance)
         {
             var name = MetricName[nodeInstance.ObjId];
+
+            Logger?.LogDebug($"Saving value for {name}: {trend.Value}");
 
             _client.Send(name, f => f.Field("value", Math.Round(trend.Value, 2)), t => t.Tag("nodeId", nodeInstance.ObjId.ToString().Replace("-", "_")).Tag("source", trend.Source).Tag("name", nodeInstance.Name));
         }
