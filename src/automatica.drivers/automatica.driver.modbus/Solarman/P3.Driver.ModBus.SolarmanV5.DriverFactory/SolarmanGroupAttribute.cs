@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices;
 using P3.Driver.ModBusDriver.Master;
+using Exception = System.Exception;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
@@ -34,22 +36,34 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
             foreach (var register in _map.NameRegisterMap)
             {
-                if (_nameMap.ContainsKey(register.Key))
+                try
                 {
-                    DriverContext.Logger.LogInformation($"Read value for {register.Key}");
-
-                    var value = await _driver.ReadRegisters(_parent.DeviceId, (ushort)register.Value[0], register.Value.Count);
-
-                    if (value is { ModBusRequestStatus: ModBusRequestStatus.Success } and ModBusRegisterValueReturn modbusRegisterValue)
+                    if (_nameMap.ContainsKey(register.Key))
                     {
-                        var val = await _nameMap[register.Key].ConvertValue(modbusRegisterValue);
-                        _nameMap[register.Key].DispatchValue(val);
+                        DriverContext.Logger.LogInformation($"Read value for {register.Key}");
+
+                        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+                        var value = await _driver.ReadRegisters(_parent.DeviceId, (ushort)register.Value[0],
+                            register.Value.Count, cancellationTokenSource.Token);
+
+                        if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }
+                            and ModBusRegisterValueReturn modbusRegisterValue)
+                        {
+                            var val = await _nameMap[register.Key].ConvertValue(modbusRegisterValue);
+                            _nameMap[register.Key].DispatchValue(val);
+                        }
+                    }
+                    else
+                    {
+                        DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
+                    DriverContext.Logger.LogError(e, $"Could not poll attribute {e}");
                 }
+
             }
         }
 
