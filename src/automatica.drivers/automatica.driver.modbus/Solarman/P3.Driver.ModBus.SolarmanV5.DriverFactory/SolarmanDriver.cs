@@ -28,6 +28,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap = new();
 
         private SolarmanPollTimestampAttribute? _timestampAttribute;
+        private string _ip;
+        private int _port;
+        private string _serial;
 
         internal SolarmanDriver(IDriverContext driverContext, DeviceMap map) : base(driverContext)
         {
@@ -44,21 +47,27 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             PollInterval = GetPropertyValueInt("solarman-poll-interval"); 
             DeviceId = (byte)GetPropertyValueInt("solarman-device-id");
 
-            var ip = GetPropertyValueString("solarman-ip");
-            var port = GetProperty("solarman-port").ValueInt.Value;
-            var serial = GetPropertyValueString("solarman-serial");
+            _ip = GetPropertyValueString("solarman-ip");
+            _port = GetProperty("solarman-port")!.ValueInt!.Value;
+            _serial = GetPropertyValueString("solarman-serial");
 
-            _driver = new SolarmanConnection(new SolarmanConfig
-            {
-                IpAddress = IPAddress.Parse(ip),
-                Port = Convert.ToInt16(port),
-                SolarmanSerialNumber = Convert.ToUInt32(serial),
-                Timeout = 5000
-            }, TelegramMonitor);
+          
 
             _pollTimer.Interval = PollInterval;
 
             return base.Init();
+        }
+
+        private void Open()
+        {
+            _driver = new SolarmanConnection(new SolarmanConfig
+            {
+                IpAddress = IPAddress.Parse(_ip),
+                Port = Convert.ToInt16(_port),
+                SolarmanSerialNumber = Convert.ToUInt32(_serial),
+                Timeout = 5000
+            }, TelegramMonitor);
+            _driver.Open();
         }
 
         public override Task<bool> Start()
@@ -67,7 +76,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             {
                 throw new ArgumentException("Init must be called before start..");
             }
-            _driver.Open();
+
+            Open();
+
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
 
@@ -103,17 +114,17 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
         }
 
-        private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
+        private async void PollTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
                 await PollAll();
             }
-            catch (IOException)
+            catch (IOException ioe)
             {
-                DriverContext.Logger.LogInformation("Error polling data, try to reconnect...");
+                DriverContext.Logger.LogError(ioe,$"Error polling data, try to reconnect...{ioe}");
                 await _driver!.Stop();
-                _driver!.Open();
+                Open();
             }
             catch(Exception ex)
             {
