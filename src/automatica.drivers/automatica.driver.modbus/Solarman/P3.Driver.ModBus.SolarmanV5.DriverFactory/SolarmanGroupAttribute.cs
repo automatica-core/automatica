@@ -15,13 +15,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
     internal class SolarmanGroupAttribute : DriverBase
     {
-        private readonly SolarmanConnection _driver;
         private readonly SolarmanDriver _parent;
         private readonly DeviceMap _map;
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap;
-        public SolarmanGroupAttribute(IDriverContext driverContext, DeviceMap map, SolarmanConnection driver, SolarmanDriver parent, Dictionary<string, SolarmanAttrribute> nameMap) : base(driverContext)
+        public SolarmanGroupAttribute(IDriverContext driverContext, DeviceMap map,  SolarmanDriver parent, Dictionary<string, SolarmanAttrribute> nameMap) : base(driverContext)
         {
-            _driver = driver;
             _parent = parent;
             _nameMap = nameMap;
             _map = map;
@@ -30,7 +28,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         internal async Task PollAttributes()
         {
             DriverContext.Logger.LogInformation($"Polling solarman device...");
-            if (_driver == null)
+            if (_parent.Driver == null)
             {
                 throw new ArgumentException("Driver not initialized...");
             }
@@ -45,7 +43,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
                         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-                        var value = await _driver.ReadRegisters(_parent.DeviceId, (ushort)register.Value[0],
+                        var value = await _parent.Driver.ReadRegisters(_parent.DeviceId, (ushort)register.Value[0],
                             register.Value.Count, cancellationTokenSource.Token);
 
                         if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }

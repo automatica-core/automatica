@@ -32,6 +32,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         private int _port;
         private string _serial;
 
+        internal SolarmanConnection Driver {
+            get => _driver;
+        } 
+
         internal SolarmanDriver(IDriverContext driverContext, DeviceMap map) : base(driverContext)
         {
             _map = map;
@@ -141,7 +145,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 return _timestampAttribute;
             }
 
-            var groupAttribute = new SolarmanGroupAttribute(ctx, _map, _driver, this, _nameMap);
+            var groupAttribute = new SolarmanGroupAttribute(ctx, _map, this, _nameMap);
             _groups.Add(groupAttribute);
             return groupAttribute;
             
