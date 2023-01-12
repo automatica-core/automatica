@@ -21,7 +21,7 @@ namespace Automatica.Core.Runtime.Recorder
         private readonly INodeInstanceCache _nodeCache;
 
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
-        protected readonly Dictionary<Guid, string> MetricName = new Dictionary<Guid, string>();
+        protected readonly Dictionary<Guid, string> MetricName = new();
 
         internal BaseDataRecorderWriter(IConfiguration config, DataRecorderType recorderType, string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
         {
@@ -68,7 +68,7 @@ namespace Automatica.Core.Runtime.Recorder
             nameList.Reverse();
             var name = String.Join("-", nameList);
 
-            name = name.Replace("*", "").Replace(" ", "_").Replace("/", "_").Replace("-", "_").ToLowerInvariant();
+            name = name.Replace("*", "").Replace(" ", "_").Replace("/", "_").Replace("-", "_").Replace("(", "").Replace(")", "").ToLowerInvariant();
             name = "node_" + name;
             return name;
         }

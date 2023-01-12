@@ -9,8 +9,6 @@ using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Telegraf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc;
-using Telegraf.Channel;
 using Telegraf.Infux.Client.Impl;
 
 namespace Automatica.Core.Runtime.Recorder
