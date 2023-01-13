@@ -32,9 +32,7 @@ namespace Automatica.Core.Runtime.Recorder
             var apiKey = _settingsCache.GetByKey("hostedGrafanaApiKey").ValueText;
             var userId = _settingsCache.GetByKey("hostedGrafanaUserId").ValueText;
 
-            apiKey = "eyJrIjoiMTE0YWM0YmU3YjAwOTBlYjJmZWRkNTZhMGVlMThmNGQ1NWE0ODUzZCIsIm4iOiJBU0RGIiwiaWQiOjc2NDg2N30=";
-            userId = "701959";
-            host = "https://influx-prod-01-eu-west-0.grafana.net/api/v1/push/influx/write";
+           
             if (String.IsNullOrEmpty(host) || String.IsNullOrEmpty(apiKey) || String.IsNullOrEmpty(userId))
             {
                 Logger.LogError($"Host, UserId or ApiKey is empty, cannot start {nameof(HostedGrafanaDataRecorderWriter)}");
