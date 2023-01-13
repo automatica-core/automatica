@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver.Utility;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.ModBusDriver.Master
 {
@@ -100,7 +101,15 @@ namespace P3.Driver.ModBusDriver.Master
 
         public async Task<bool> Stop()
         {
-            return await Close();
+            try
+            {
+                return await Close();
+            }
+            catch(Exception e)
+            {
+                ModBus.Logger.LogError(e, $"Could not close connection...{e}");
+                return false;
+            }
         }
 
         public async Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default)

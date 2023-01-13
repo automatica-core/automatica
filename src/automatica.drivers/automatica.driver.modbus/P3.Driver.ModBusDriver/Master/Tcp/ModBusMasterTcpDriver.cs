@@ -54,7 +54,7 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                 ModBus.Logger.LogError(e, $"Could not close tcp connection {e}");
             }
 
-            return new Task<bool>(() => true);
+            return Task.FromResult(true);
         }
 
         private void _receiveTimeoutTimer_Elapsed(object sender, ElapsedEventArgs e)

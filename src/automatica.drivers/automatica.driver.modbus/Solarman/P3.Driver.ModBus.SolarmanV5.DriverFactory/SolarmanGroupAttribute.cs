@@ -18,6 +18,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         private readonly SolarmanDriver _parent;
         private readonly DeviceMap _map;
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap;
+        private int _failCount;
+        private int _successCount;
+
         public SolarmanGroupAttribute(IDriverContext driverContext, DeviceMap map,  SolarmanDriver parent, Dictionary<string, SolarmanAttrribute> nameMap) : base(driverContext)
         {
             _parent = parent;
@@ -25,8 +28,8 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _map = map;
         }
 
-        internal async Task PollAttributes()
-        {
+        internal async Task<bool> PollAttributes()
+        { 
             DriverContext.Logger.LogInformation($"Polling solarman device...");
             if (_parent.Driver == null)
             {
@@ -37,6 +40,13 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             {
                 try
                 {
+                    if (_parent.Driver == null)
+                    {
+
+                        DriverContext.Logger.LogInformation($"Driver is not initialized!");
+                        break;
+                    }
+
                     if (_nameMap.ContainsKey(register.Key))
                     {
                         DriverContext.Logger.LogInformation($"Read value for {register.Key}");
@@ -51,12 +61,33 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                         {
                             var val = await _nameMap[register.Key].ConvertValue(modbusRegisterValue);
                             _nameMap[register.Key].DispatchValue(val);
+                            _successCount++;
+
+                            if (_successCount >= 10)
+                            {
+                                _failCount = 0;
+                                _successCount = 0;
+                            }
+                        }
+                        else
+                        {
+                            _failCount++;
+                        }
+
+                        if (_failCount >= 20)
+                        {
+                            _failCount = 0;
+                            return false;
                         }
                     }
                     else
                     {
                         DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
                     }
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
                 }
                 catch (IOException)
                 {
@@ -68,6 +99,8 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 }
 
             }
+
+            return true;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

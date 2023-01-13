@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -71,7 +72,12 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 SolarmanSerialNumber = Convert.ToUInt32(_serial),
                 Timeout = 5000
             }, TelegramMonitor);
-            _driver.Open();
+            if (!_driver.Open())
+            {
+                _driver = null;
+
+                DriverContext.Logger.LogError($"Could not open connection to {_ip}:{_port}");
+            }
         }
 
         public override Task<bool> Start()
@@ -108,8 +114,21 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 }
                 foreach (var group in _groups)
                 {
-                    await group.PollAttributes();
+                    if (!await group.PollAttributes())
+                    {
+                        throw new ArgumentException("need to reconnect, can't handle so many errors...");
+                    }
                 }
+            }
+            catch (Exception e) when (e is SocketException or IOException or ArgumentException or OperationCanceledException)
+            {
+                DriverContext.Logger.LogError(e, $"Error polling data, try to reconnect...{e}");
+                if (_driver != null)
+                {
+                    await _driver.Stop();
+                }
+
+                Open();
             }
             finally
             {
@@ -123,12 +142,6 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             try
             {
                 await PollAll();
-            }
-            catch (IOException ioe)
-            {
-                DriverContext.Logger.LogError(ioe,$"Error polling data, try to reconnect...{ioe}");
-                await _driver!.Stop();
-                Open();
             }
             catch(Exception ex)
             {
