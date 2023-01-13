@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.NamedPipeSink;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -70,11 +71,13 @@ namespace Automatica.Core.Internals.Logger
                     .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728,//128mb
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
-                        flushToDiskInterval: TimeSpan.FromSeconds(30));
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.NamedPipe(Path.Combine(ServerInfo.GetLogDirectory(), "all.pipe"));
             }
             else
             {
                 var fileName = Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log");
+                var pipeName = Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.pipe");
                 if (facility.Contains(LoggerConstants.FileSeparator))
                 {
                     var split = facility.Split(LoggerConstants.FileSeparator).ToList();
@@ -94,7 +97,9 @@ namespace Automatica.Core.Internals.Logger
                     .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728 ,//128mb
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
-                        flushToDiskInterval: TimeSpan.FromSeconds(30));
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.NamedPipe(pipeName)
+                    .WriteTo.NamedPipe(Path.Combine(ServerInfo.GetLogDirectory(), "all.pipe"));
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
