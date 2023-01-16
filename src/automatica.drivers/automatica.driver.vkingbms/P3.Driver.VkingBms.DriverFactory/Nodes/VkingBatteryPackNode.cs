@@ -51,7 +51,6 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
                 _version?.DispatchValue(version.VersionId.Substring(1, version.VersionId.IndexOf('\0') - 2));
                 _remainCapacity?.DispatchValue(analogData.RemainingCapacity);
                 _fullCharge?.DispatchValue(analogData.FullCapacity);
-                _lastUpdate?.DispatchValue(DateTime.Now);
                 _cycleTimes?.DispatchValue(analogData.CycleNumber);
                 //_bmsTime?.DispatchValue(analogData.Voltage);
 
@@ -85,6 +84,9 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
                 _tempsNode.CellT2?.DispatchValue(analogData.Temperatures[3]);
                 _tempsNode.CellT3?.DispatchValue(analogData.Temperatures[4]);
                 _tempsNode.CellT4?.DispatchValue(analogData.Temperatures[5]);
+
+
+                _lastUpdate?.DispatchValue(DateTime.Now);
             }
             catch (Exception e)
             {

@@ -41,7 +41,7 @@ namespace Automatica.Core.NamedPipeSink
             while (true)
             {
                 _readyToEmit = false;
-                using NamedPipeServerStream pipe = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, 254);
+                using NamedPipeServerStream pipe = new NamedPipeServerStream(_pipeName, PipeDirection.Out, 254);
                 pipe.WaitForConnection();
 
                 _readyToEmit = true;
