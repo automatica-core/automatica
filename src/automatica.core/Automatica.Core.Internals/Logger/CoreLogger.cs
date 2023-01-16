@@ -77,7 +77,9 @@ namespace Automatica.Core.Internals.Logger
             else
             {
                 var fileName = Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log");
-                var pipeName = Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.pipe");
+                var pipeName = $"{facility}.pipe";
+                var allPipeName = "all.pipe";
+
                 if (facility.Contains(LoggerConstants.FileSeparator))
                 {
                     var split = facility.Split(LoggerConstants.FileSeparator).ToList();
@@ -99,7 +101,7 @@ namespace Automatica.Core.Internals.Logger
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
                     .WriteTo.NamedPipe(pipeName)
-                    .WriteTo.NamedPipe(Path.Combine(ServerInfo.GetLogDirectory(), "all.pipe"));
+                    .WriteTo.NamedPipe(allPipeName);
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
