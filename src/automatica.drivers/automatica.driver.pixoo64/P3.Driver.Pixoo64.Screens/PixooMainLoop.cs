@@ -69,9 +69,10 @@ namespace P3.Driver.Pixoo64.Screens
                         catch (Exception ex)
                         {
                             _logger.LogError(ex, $"Exception occurred {ex}");
+                            Thread.Sleep(2000);
                         }
                     }
-           
+
             }, _cancellationTokenSource.Token).ConfigureAwait(false);
 
 

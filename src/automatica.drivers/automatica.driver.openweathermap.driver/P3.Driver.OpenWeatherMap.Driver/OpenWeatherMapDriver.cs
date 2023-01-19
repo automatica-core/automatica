@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Driver;
+﻿using System;
+using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using OpenWeatherMap;
 using System.Collections.Generic;
@@ -78,8 +79,14 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            await ReadValues();
-
+            try
+            {
+                await ReadValues();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error reading values...{e}");
+            }
         }
 
         public override async Task<bool> Read()
