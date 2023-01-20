@@ -13,6 +13,8 @@ import { VisuPageGroupType } from "../../model/visu-page";
 import { DimmerComponent } from "./dimmer/dimmer.component";
 import { VisuObjectSourceType } from "../../model/visu-object-instance";
 import { LogicDefaultComponent } from "./logic-default/logic-default.component";
+import { RuleInstance } from "../../model/rule-instance";
+import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
 
 @Component({
   selector: "visu-component",
@@ -73,7 +75,12 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         break;
       }
       case "toggle-button": {
-        this.component = ToggleComponent;
+        if (this.item.objectType instanceof RuleInstance) {
+          this.component = ToggleComponent;
+        }
+        else {
+          this.component = ToggleNodeComponent;
+        }
         break;
       }
       case "dimmer": {

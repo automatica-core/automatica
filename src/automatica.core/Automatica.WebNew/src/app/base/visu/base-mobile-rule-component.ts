@@ -43,7 +43,6 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
                 this.onRuleInstanceValueChanged(data[0], data[1]);
             }
         });
-        super.baseOnInit();
     }
 
     protected abstract onRuleInstanceValueChanged(ruleInterfaceId, value);

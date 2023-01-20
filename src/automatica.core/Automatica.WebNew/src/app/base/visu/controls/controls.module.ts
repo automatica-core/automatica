@@ -14,6 +14,7 @@ import { DimmerComponent } from "./dimmer/dimmer.component";
 import { L10nTranslationModule } from "angular-l10n";
 import { ComponentsModule } from "../components/components.module";
 import { LogicDefaultComponent } from "./logic-default/logic-default.component";
+import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { LogicDefaultComponent } from "./logic-default/logic-default.component";
     DefaultComponent,
     LinkComponent,
     ToggleComponent,
+    ToggleNodeComponent,
     DimmerComponent,
     LogicDefaultComponent
   ],

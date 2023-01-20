@@ -118,7 +118,16 @@ namespace Automatica.Core.Base.IO
                 if (!NodeValues[self.Type].ContainsKey(self.Id))
                 {
                     NodeValues[self.Type].Add(self.Id, value);
-                    Values.Add(self.Id, value);
+
+                    if (!Values.ContainsKey(self.Id))
+                    {
+                        Values.Add(self.Id, value);
+                    }
+                    else
+                    {
+                        Values[self.Id] = value;
+                    }
+                    
                 }
                 else
                 {
