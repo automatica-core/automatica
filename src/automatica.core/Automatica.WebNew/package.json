@@ -45,7 +45,7 @@
     "jquery-ui-dist": "^1.12.1",
     "json": "^9.0.6",
     "jszip": "^3.4.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "msgpack-lite": "^0.1.26",
     "ng-dynamic-component": "^10.5.1",
     "ngx-cookie-service": "^15.0.0",
