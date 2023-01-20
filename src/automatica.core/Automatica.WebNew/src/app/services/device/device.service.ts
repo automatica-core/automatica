@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from "@angular/core";
-import { DeviceDetectorService } from "ngx-device-detector";
+import { DeviceDetectorService } from "automatica-ngx-device-detector";
 
 export enum Orientation {
     Unknown,

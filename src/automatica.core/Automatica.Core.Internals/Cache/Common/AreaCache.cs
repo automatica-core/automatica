@@ -64,6 +64,18 @@ namespace Automatica.Core.Internals.Cache.Common
             return loaded;
         }
 
+        public AreaInstance GetSingle(AutomaticaContext context, Guid guid)
+        {
+            return context.AreaInstances.AsNoTracking()
+                .Include(a => a.InverseThis2ParentNavigation)
+                .Include(a => a.This2AreaTemplateNavigation)
+                .ThenInclude(a => a.This2AreaTypeNavigation)
+                .Include(a => a.This2AreaTemplateNavigation)
+                .ThenInclude(a => a.NeedsThis2AreaTypeNavigation)
+                .Include(a => a.This2AreaTemplateNavigation)
+                .ThenInclude(a => a.ProvidesThis2AreayTypeNavigation).SingleOrDefault(a => a.ObjId == guid);
+        }
+
         protected override Guid GetKey(AreaInstance obj)
         {
             return obj.ObjId;

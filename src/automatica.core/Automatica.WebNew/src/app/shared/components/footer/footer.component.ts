@@ -3,7 +3,7 @@ import { ConfigService } from "src/app/services/config.service";
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
-import { DeviceDetectorService } from "ngx-device-detector";
+import { DeviceDetectorService } from "automatica-ngx-device-detector";
 
 @Component({
     selector: "app-footer",

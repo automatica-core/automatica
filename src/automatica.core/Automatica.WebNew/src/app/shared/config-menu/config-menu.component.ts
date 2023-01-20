@@ -1,5 +1,3 @@
-/// <reference path="../../../../node_modules/@types/jszip/index.d.ts" />
-
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";

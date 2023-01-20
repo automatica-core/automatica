@@ -79,7 +79,7 @@ namespace Automatica.Core.WebApi.Controllers
             // Uncomment to save the file
             await using (var fileStream = System.IO.File.Create(path))
             {
-                formFile.CopyTo(fileStream);
+                await formFile.CopyToAsync(fileStream);
             }
 
 
@@ -165,15 +165,15 @@ namespace Automatica.Core.WebApi.Controllers
                     instance.InverseThis2ParentNavigation = null;
                     instance.This2ParentNavigation = null;
                     await DbContext.AreaInstances.AddAsync(instance);
-                   
                 }
 
                 await DbContext.SaveChangesAsync();
-                _areaCache.Clear();
+                
             }
             finally
             {
-                DbContext.Database.CommitTransaction();
+                await DbContext.Database.CommitTransactionAsync();
+                _areaCache.Clear();
             }
             return GetInstances();
         }
@@ -189,6 +189,12 @@ namespace Automatica.Core.WebApi.Controllers
         private async Task SaveAreaInstanceRec(AreaInstance instance)
         {
             var existingArea = await DbContext.AreaInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
+            var childrens = instance.InverseThis2ParentNavigation; 
+
+            instance.InverseThis2ParentNavigation = null;
+            instance.This2ParentNavigation = null;
+            instance.This2UserGroupNavigation = null;
+            instance.This2AreaTemplateNavigation = null;
 
             if (existingArea == null)
             {
@@ -196,10 +202,10 @@ namespace Automatica.Core.WebApi.Controllers
             }
             else
             {
-                DbContext.Entry(existingArea).CurrentValues.SetValues(instance);
+                DbContext.AreaInstances.Update(instance);
             }
 
-            foreach (var child in instance.InverseThis2ParentNavigation)
+            foreach (var child in childrens)
             {
                 await SaveAreaInstanceRec(child);
             }
@@ -224,21 +230,26 @@ namespace Automatica.Core.WebApi.Controllers
                 var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
 
 
-                var removedNodes = from c in DbContext.AreaInstances
+                var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()
                     where !(from o in flatList select o.ObjId).Contains(c.ObjId)
                     select c;
                 var removedAreasList = removedNodes.ToList();
                 DbContext.RemoveRange(removedAreasList);
+                removedAreasList.ForEach(a => { _areaCache.Remove(a.ObjId); });
 
 
                 await DbContext.SaveChangesAsync(true);
-                transaction.Commit();
-                _areaCache.Clear();
+                await transaction.CommitAsync();
             }
             catch (Exception e)
             {
                 SystemLogger.Instance.LogError(e, "Could not save data");
-                transaction.Rollback();
+                await transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                _areaCache.Clear();
             }
 
             return GetInstances();

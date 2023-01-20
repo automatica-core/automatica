@@ -424,7 +424,7 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
 
-            if (!context.AreaInstances.Any())
+            if (!context.AreaInstances.AsNoTracking().Any())
             {
                 var projectInstance = new AreaInstance
                 {

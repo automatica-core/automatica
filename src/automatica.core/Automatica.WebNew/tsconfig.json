@@ -11,12 +11,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "target": "es5",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2020",
+      "es2022",
       "dom"
     ],
     "paths": {
@@ -35,6 +35,7 @@
       "cldr/*": [
         "node_modules/cldrjs/dist/cldr/*"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   }
 }
