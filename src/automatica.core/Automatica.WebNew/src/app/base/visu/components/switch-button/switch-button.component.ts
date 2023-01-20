@@ -23,7 +23,7 @@ export class SwitchButtonComponent {
   }
 
   @Input()
-  readOnly: boolean = false;
+  disabled: boolean = false;
 
 
   @Output()
