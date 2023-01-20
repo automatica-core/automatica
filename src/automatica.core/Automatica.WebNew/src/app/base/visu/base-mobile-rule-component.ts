@@ -27,9 +27,11 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
     }
 
     protected getInterfaceByType(type: RuleInterfaceType) {
-        for (const interf of this.ruleInstance.Interfaces) {
-            if (interf.Template.InterfaceType === type) {
-                return interf;
+        if (this.ruleInstance && this.ruleInstance.Interfaces) {
+            for (const interf of this.ruleInstance.Interfaces) {
+                if (interf.Template.InterfaceType === type) {
+                    return interf;
+                }
             }
         }
         return void 0;
@@ -37,7 +39,7 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
 
     protected async mobileRuleInit() {
         this.registerEvent(this.dataHubService.ruleInstanceValueChanged, (data) => {
-            if (this.ruleInstance.Interfaces.filter(a => a.ObjId === data[0]).length > 0) {
+            if (this.ruleInstance && this.ruleInstance.Interfaces && this.ruleInstance.Interfaces.filter(a => a.ObjId === data[0]).length > 0) {
                 this.onRuleInstanceValueChanged(data[0], data[1]);
             }
         });

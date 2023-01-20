@@ -28,6 +28,9 @@ export class BaseControlComponent implements OnInit {
   @Input()
   hasPopup: boolean = false;
 
+  @Input()
+  textColor: string;
+
   popupVisible = false;
 
   public get valueHidden(): boolean {

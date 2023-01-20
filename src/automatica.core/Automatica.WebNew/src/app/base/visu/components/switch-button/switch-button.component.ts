@@ -22,12 +22,14 @@ export class SwitchButtonComponent {
     this.stateChanged.emit(v);
   }
 
+  @Input()
+  readOnly: boolean = false;
+
 
   @Output()
   stateChanged = new EventEmitter<boolean>();
 
   switch(value) {
     this.state = value;
-
   }
 }

@@ -15,6 +15,8 @@ import { VisualizationDataFacade } from "src/app/base/model/visualization-data-f
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { DataService } from "src/app/services/data.service";
+import { VirtualPropertyInstance } from "src/app/base/model/virtual-props";
+import { PropertyTemplateType } from "src/app/base/model/property-template";
 
 @Component({
   selector: "app-mobile-container",

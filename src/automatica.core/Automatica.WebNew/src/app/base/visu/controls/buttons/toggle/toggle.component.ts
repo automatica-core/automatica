@@ -9,29 +9,19 @@ import { AppService } from "src/app/services/app.service";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 
-interface IToggleComponent {
-  state: boolean;
-}
 
 @Component({
   selector: "visu-toggle",
   templateUrl: "./toggle.component.html",
   styleUrls: ["./toggle.component.scss"]
 })
-export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy, IToggleComponent {
+export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 
-  private _state: boolean;
   stateType: RuleInterfaceInstance;
   inputType: RuleInterfaceInstance;
   outputType: RuleInterfaceInstance;
-  displayValue: any;
 
-  public get state(): boolean {
-    return this._state;
-  }
-  public set state(v: boolean) {
-    this._state = v;
-  }
+  readOnly: boolean = false;
 
   constructor(
     dataHubService: DataHubService,
@@ -53,16 +43,28 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     this.inputType = this.getInterfaceByType(RuleInterfaceType.Input);
     this.outputType = this.getInterfaceByType(RuleInterfaceType.Output);
 
+    this.readOnly = this.getReadOnly() ?? false;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    console.log("ruleinterfacevalue changed", interfaceId, value);
-
     if (this.outputType.ObjId === interfaceId) {
-      this.state = value;
-      this.displayValue = this.translate.translate(value ? "COMMON.TOGGLE.ON" : "COMMON.TOGGLE.OFF");
+      this.value = value;
     }
   }
+
+  public get displayValue() {
+    if (this.value === void 0) {
+      return void 0;
+    }
+
+    if (this.inputType) {
+      return this.translate.translate(this.value ? "COMMON.TOGGLE.ON" : "COMMON.TOGGLE.OFF");;
+    }
+    else {
+      return this.value;
+    }
+  }
+
 
   onValueChanged($event) {
     this.switch($event.value);
@@ -74,7 +76,9 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
 
   switch(value) {
-    this.dataHub.setValue(this.inputType.ObjId, value);
+    if (this.inputType) {
+      this.dataHub.setValue(this.inputType.ObjId, value);
+    }
   }
 
 }
