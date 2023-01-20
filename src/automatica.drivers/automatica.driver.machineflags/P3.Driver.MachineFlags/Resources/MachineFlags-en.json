@@ -5,6 +5,18 @@
     "NODE": {
       "NAME": "Flag",
       "DESCRIPTION": ""
+    },
+    "BINARY": {
+      "NAME": "Binary",
+      "DESCRIPTION": ""
+    },
+    "NUMBER": {
+      "NAME": "Number",
+      "DESCRIPTION": ""
+    },
+    "STRING": {
+      "NAME": "String",
+      "DESCRIPTION": ""
     }
   }
 }

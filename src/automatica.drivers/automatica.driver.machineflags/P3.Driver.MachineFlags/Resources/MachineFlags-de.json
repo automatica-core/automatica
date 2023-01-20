@@ -5,6 +5,18 @@
     "NODE": {
       "NAME": "Merker",
       "DESCRIPTION": "Merkt sich einen Wert"
+    },
+    "BINARY": {
+      "NAME": "Binär",
+      "DESCRIPTION": "Merkt sich einen binären Wert"
+    },
+    "NUMBER": {
+      "NAME": "Nummer",
+      "DESCRIPTION": "Merkt sich einen dezimal Wert"
+    },
+    "STRING": {
+      "NAME": "Text",
+      "DESCRIPTION": "Merkt sich einen text Wert"
     }
   }
 }
