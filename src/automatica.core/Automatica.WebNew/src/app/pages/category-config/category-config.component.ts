@@ -131,4 +131,12 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
   onInitialized($event) {
     $event.component.columnOption("command:edit", "width", 150);
   }
+
+  onCellPrepared(e) {
+    if (e.rowType === 'data' && e.column.command === 'edit')
+      if (e.row.data != null && !e.row.data.IsDeleteable) {
+        let editLink = e.cellElement.querySelector(".dx-link-delete");
+        editLink?.remove();
+      }
+  }
 }

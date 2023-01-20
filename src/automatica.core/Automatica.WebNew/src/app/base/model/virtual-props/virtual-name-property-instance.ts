@@ -13,6 +13,8 @@ export class VirtualNamePropertyInstance extends VirtualPropertyInstance {
         this.PropertyTemplate.Description = "COMMON.PROPERTY.NAME.DESCRIPTION";
         this.PropertyTemplate.Key = "name";
         this.PropertyTemplate.IsReadonly = isReadonly;
+
+        this.PropertyTemplate.GroupOrder = -100;
     }
 
     get Value(): any {

@@ -13,7 +13,7 @@ export class VirtualSlavePropertyInstance extends VirtualPropertyInstance {
         this.PropertyTemplate.Description = "COMMON.PROPERTY.SLAVE.DESCRIPTION";
         this.PropertyTemplate.Key = "slave";
 
-        this.PropertyTemplate.Group = "COMMON.CATEGORY.VISU";
+        this.PropertyTemplate.Group = "COMMON.CATEGORY.SLAVE";
         this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Slave;
         this.PropertyTemplate.IsReadonly = false;
 

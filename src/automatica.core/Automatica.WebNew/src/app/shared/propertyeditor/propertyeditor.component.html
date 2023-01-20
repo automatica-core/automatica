@@ -1,6 +1,6 @@
-<div style="height: 100%">
+<div class="property-editor" style="height: 100%">
     <dx-data-grid #dataTable [twoWayBindingEnabled]="false" id="gridContainer" [dataSource]="Properties"
-        [allowColumnReordering]="false">
+        [allowColumnReordering]="false" height="100%">
 
         <dxi-column dataField="PropertyTemplate.GroupOrder" [calculateGroupValue]="groupName"
             caption="{{ 'COMMON.GROUP' | translateAsync }}" [groupIndex]="0" [allowSorting]="false"></dxi-column>

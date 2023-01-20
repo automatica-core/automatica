@@ -36,7 +36,7 @@ import { HasRoleGuard } from "./services/login.service";
 import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
 import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
-import { DeviceDetectorService  } from "automatica-ngx-device-detector";
+import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 import { ThemeService } from "./services/theme.service";
 
