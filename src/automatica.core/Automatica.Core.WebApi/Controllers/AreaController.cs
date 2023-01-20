@@ -189,7 +189,7 @@ namespace Automatica.Core.WebApi.Controllers
         private async Task SaveAreaInstanceRec(AreaInstance instance)
         {
             var existingArea = await DbContext.AreaInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
-            var childrens = instance.InverseThis2ParentNavigation; 
+            var childrens = instance.InverseThis2ParentNavigation ?? new List<AreaInstance>(); 
 
             instance.InverseThis2ParentNavigation = null;
             instance.This2ParentNavigation = null;
@@ -202,6 +202,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             else
             {
+                DbContext.Entry(instance).State = EntityState.Modified;
                 DbContext.AreaInstances.Update(instance);
             }
 
@@ -220,6 +221,7 @@ namespace Automatica.Core.WebApi.Controllers
             try
             {
                 var areaInstances = areas as AreaInstance[] ?? areas.ToArray();
+                var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
                 foreach (var area in areaInstances)
                 {
                     await SaveAreaInstanceRec(area);
@@ -227,7 +229,6 @@ namespace Automatica.Core.WebApi.Controllers
 
                 await DbContext.SaveChangesAsync();
 
-                var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
 
 
                 var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()

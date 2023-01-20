@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.WebApi.Controllers;
@@ -34,6 +35,8 @@ namespace Automatica.Core.WebApi.Tests.Area
             var templates = Controller.GetTemplates().ToList();
             var instances = Controller.GetInstances().ToList();
 
+            Controller.DbContext.ChangeTracker.Clear();
+
             var rootInstance = instances.First();
             var template = templates.First();
 
@@ -63,8 +66,6 @@ namespace Automatica.Core.WebApi.Tests.Area
             Assert.Equal(newInstance.This2Parent, rootInstance.ObjId);
 
             Assert.Equal(template.ObjId, saved.First().InverseThis2ParentNavigation.First().This2AreaTemplate);
-
-            rootInstance.InverseThis2ParentNavigation.Clear(); 
 
             saved = (await Controller.SaveInstances(instances)).ToList();
 
@@ -105,10 +106,10 @@ namespace Automatica.Core.WebApi.Tests.Area
         {
             var formFileMoq = new Mock<IFormFile>();
 
-            formFileMoq.Setup(a => a.CopyTo(It.IsAny<Stream>())).Callback((Stream s) =>
+            formFileMoq.Setup(a => a.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).Callback(async (Stream s, CancellationToken cts) =>
             {
-                using var proj = File.Open(Path.Combine("Area", "ETS5_Simple_ThreeLevel.knxproj"), FileMode.Open);
-                proj.CopyTo(s);
+                await using var proj = File.Open(Path.Combine("Area", "ETS5_Simple_ThreeLevel.knxproj"), FileMode.Open);
+                await proj.CopyToAsync(s, cts);
             });
             formFileMoq.SetupGet(a => a.FileName).Returns("Upload.knxproj");
 

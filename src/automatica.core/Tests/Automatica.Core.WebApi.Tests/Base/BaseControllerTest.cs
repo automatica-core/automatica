@@ -99,6 +99,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             DatabaseInit.EnsureDatabaseCreated(ServiceProvider);
 
             Controller = ServiceProvider.GetRequiredService<T>();
+            
         }
 
         public void Dispose()
