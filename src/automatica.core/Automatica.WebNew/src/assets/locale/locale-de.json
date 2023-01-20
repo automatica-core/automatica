@@ -5,7 +5,8 @@
   "SERVER":{
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder"
-    }
+    },
+    "SETTINGS": "Server Einstellungen"
   },
   "COMMON": {
     "ADMIN": "Administration",
