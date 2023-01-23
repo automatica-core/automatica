@@ -64,7 +64,7 @@ export class ThemeService {
     applyTheme(theme?: string) {
         let themeMarker = "generic.",
             storageKey = "automaticaTheme";
-        theme = theme || window.localStorage[storageKey] || "light";
+        theme = theme || window.localStorage[storageKey] || "dark";
 
 
         for (let index in document.styleSheets) {
