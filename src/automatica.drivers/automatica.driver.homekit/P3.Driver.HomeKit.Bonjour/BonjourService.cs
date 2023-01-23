@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -52,7 +51,7 @@ namespace P3.Driver.HomeKit.Bonjour
             txtList.AddProperty("c#", _configVersion.ToString());
             txtList.AddProperty("s#", "1");
             txtList.AddProperty("md", _name);
-            txtList.AddProperty("ff", "00");
+            txtList.AddProperty("ff", "0");
             txtList.AddProperty("id", _hapId);
             txtList.AddProperty("ci", "2");
             txtList.AddProperty("pv", "1.1");
