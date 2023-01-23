@@ -67,7 +67,7 @@
     "@types/node": "^18.11.18",
     "codelyzer": "^6.0.2",
     "devextreme-cldr-data": "^1.0.3",
-    "devextreme-cli": "^1.1.13",
+    "devextreme-cli": "^1.5.0",
     "globalize": "^1.7.0",
     "jasmine-core": "~4.5.0",
     "jasmine-spec-reporter": "~7.0.0",
