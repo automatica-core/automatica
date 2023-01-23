@@ -159,7 +159,7 @@ NOTE: Be sure to merge the latest from "upstream" before making a pull request! 
 Any help is appreciated!
 
 # Online Demo
-The current demo can be found [here](https://automatica-test.azurewebsites.net/).
+The current demo can be found [here](https://demo.automaticacore.com/).
 
 Login with 
 User: sa
