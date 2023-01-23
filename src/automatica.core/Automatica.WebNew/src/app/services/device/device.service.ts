@@ -36,18 +36,23 @@ export class DeviceService {
 
         console.log(screen);
         console.log(screen.orientation);
-        const orientation = <string><unknown>screen.orientation.type;
+        try {
+            const orientation = <string><unknown>screen.orientation.type;
 
-        if (orientation === "landscape-primary" || orientation === "landscape-secondary") {
-            this.orientation = Orientation.Landscape;
-        } else if (orientation === "portrait-secondary" || orientation === "portrait-primary") {
-            this.orientation = Orientation.Portrait;
-        } else if (orientation === undefined) {
-            this.orientation = Orientation.Unknown;
+            if (orientation === "landscape-primary" || orientation === "landscape-secondary") {
+                this.orientation = Orientation.Landscape;
+            } else if (orientation === "portrait-secondary" || orientation === "portrait-primary") {
+                this.orientation = Orientation.Portrait;
+            } else if (orientation === undefined) {
+                this.orientation = Orientation.Unknown;
+            }
+
+            if (currentOrientation !== this.orientation) {
+                this.orientationChange.emit(this.orientation);
+            }
         }
-
-        if (currentOrientation !== this.orientation) {
-            this.orientationChange.emit(this.orientation);
+        catch (error) {
+            this.orientation = Orientation.Unknown;
         }
 
     }
