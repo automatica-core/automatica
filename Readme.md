@@ -175,7 +175,7 @@ There is also a automaticacore_proxy image which represents an nginx reverse pro
 
 ## How to use this image
 ```console
-docker run -it -p 5001:5001 automaticacore/automatica:latest-develop --name automatica
+docker run -it -p 5001:5001 -p 5002:5002 --env server:port=5001 --env server:ssl_port=5002 automaticacore/automatica:latest-develop --name automatica
 ```
 
 ## Database
