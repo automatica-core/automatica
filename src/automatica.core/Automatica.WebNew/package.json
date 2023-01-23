@@ -43,7 +43,7 @@
     "file-saver": "^2.0.5",
     "jquery": "^3.5.0",
     "jquery-ui-dist": "^1.12.1",
-    "json": "^9.0.6",
+    "json": "^10.0.0",
     "jszip": "^3.4.0",
     "moment": "^2.29.4",
     "msgpack-lite": "^0.1.26",
