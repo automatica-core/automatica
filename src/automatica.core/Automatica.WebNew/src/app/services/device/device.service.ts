@@ -34,6 +34,8 @@ export class DeviceService {
     private setOrientation() {
         const currentOrientation = this.orientation;
 
+        console.log(screen);
+        console.log(screen.orientation);
         const orientation = <string><unknown>screen.orientation.type;
 
         if (orientation === "landscape-primary" || orientation === "landscape-secondary") {
