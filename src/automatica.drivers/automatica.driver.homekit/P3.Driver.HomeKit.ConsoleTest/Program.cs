@@ -60,7 +60,7 @@ namespace P3.Driver.HomeKit.ConsoleTest
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
             var homekit = new HomeKitServer(logger, 54321, "AAAAA", ltsk, ltpk, homekitId,
-                code, "demo", homekitId, 7, "0.0.1");
+                code, "demo", homekitId, 8, "0.0.1");
 
             homekit.PairingCompleted += Homekit_PairingCompleted;
 
@@ -75,15 +75,15 @@ namespace P3.Driver.HomeKit.ConsoleTest
             var lightAccessory4 = AccessoryFactory.CreateLightBulbAccessory(10, "Light4", "AutomaticaCore", "asdf1234567", false);
 
             homekit.AddAccessory(lightAccessory);
-            //homekit.AddAccessory(lightAccessory2);
-            //homekit.AddAccessory(lightAccessory3);
-            //homekit.AddAccessory(lightAccessory4);
+            homekit.AddAccessory(lightAccessory2);
+            homekit.AddAccessory(lightAccessory3);
+            homekit.AddAccessory(lightAccessory4);
             homekit.AddAccessory(outletAccessory);
             homekit.AddAccessory(switchAccessory);
             homekit.AddAccessory(contactSensorAcceessory);
-            //homekit.AddAccessory(contactSensorAcceessory2);
-            //homekit.AddAccessory(contactSensorAcceessory3);
-            //homekit.AddAccessory(AccessoryFactory.CreateTemperatureSensorAccessory(8, "Temperature1", "AutomaticaCore", "asdfasdf", 22.9));
+            homekit.AddAccessory(contactSensorAcceessory2);
+            homekit.AddAccessory(contactSensorAcceessory3);
+            homekit.AddAccessory(AccessoryFactory.CreateTemperatureSensorAccessory(11, "Temperature1", "AutomaticaCore", "asdfasdf", 22.9));
 
             homekit.ValueChanged += (sender, eventArgs) =>
                 Console.WriteLine($"Value changed {eventArgs.Characteristic.Value}");
