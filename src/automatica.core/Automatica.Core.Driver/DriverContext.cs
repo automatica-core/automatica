@@ -14,6 +14,7 @@ namespace Automatica.Core.Driver
     public class DriverContext : IDriverContext
     {
         public NodeInstance NodeInstance { get; }
+        public IDriverFactory Factory { get; }
         public IDispatcher Dispatcher { get; }
         public INodeTemplateFactory NodeTemplateFactory { get; }
         public bool IsTest { get; }
@@ -28,12 +29,14 @@ namespace Automatica.Core.Driver
         public IServerCloudApi CloudApi { get; }
 
         public ILicenseContract LicenseContract { get; }
+        public ILoggerFactory LoggerFactory { get; }
 
-        public DriverContext(NodeInstance nodeInstance, IDispatcher dispatcher,
+        public DriverContext(NodeInstance nodeInstance, IDriverFactory factory, IDispatcher dispatcher,
             INodeTemplateFactory nodeTemplateFactory, ITelegramMonitor telegramMonitor, ILicenseState licenseState,
-            ILogger logger, ILearnMode learnMode, IServerCloudApi api, ILicenseContract licenseContract, bool isTest)
+            ILogger logger, ILearnMode learnMode, IServerCloudApi api, ILicenseContract licenseContract, ILoggerFactory loggerFactory, bool isTest)
         {
             NodeInstance = nodeInstance;
+            Factory = factory;
             Dispatcher = dispatcher;
             NodeTemplateFactory = nodeTemplateFactory;
             IsTest = isTest;
@@ -43,6 +46,7 @@ namespace Automatica.Core.Driver
             CloudApi = api;
             LearnMode = learnMode;
             LicenseContract = licenseContract;
+            LoggerFactory = loggerFactory;
         }
     }
 }

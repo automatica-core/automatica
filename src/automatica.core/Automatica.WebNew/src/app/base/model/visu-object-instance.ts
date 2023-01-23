@@ -5,6 +5,7 @@ import { PropertyInstance } from "./property-instance";
 import { Guid } from "../utils/Guid";
 import { VirtualUserGroupPropertyInstance } from "./virtual-props/virtual-usergroup-property-instance";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
+import { VirtualReadonlyPropertyInstance } from "./virtual-props/virtual-readonly-property-instance";
 
 export enum VisuObjectSourceType {
 
@@ -116,6 +117,7 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     addVirtualProperties() {
         this.Properties = [...this.ObjectProperties];
         this.Properties.push(new VirtualUserGroupPropertyInstance(this));
+        this.Properties.push(new VirtualReadonlyPropertyInstance(this));
     }
 
     protected afterFromJson() {
@@ -132,7 +134,7 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
     }
 
     public getPropertyValue(key: string) {
-        for (const x of this.ObjectProperties) {
+        for (const x of this.Properties) {
             if (x.PropertyTemplate.Key === key) {
                 return x.Value;
             }
@@ -142,7 +144,7 @@ export class VisuObjectInstance extends BaseModel implements IPropertyModel {
 
 
     public getProperty(key: string): PropertyInstance {
-        for (const x of this.ObjectProperties) {
+        for (const x of this.Properties) {
             if (x.PropertyTemplate.Key === key) {
                 return x;
             }

@@ -21,5 +21,23 @@ namespace P3.Rule.Logic.BaseOperations
             }
             throw new NotImplementedException();
         }
+
+        internal static bool ConvertValueToBool(object value)
+        {
+            if (value is int intValue)
+            {
+                return intValue >= 1;
+            }
+            if (value is bool boolValue2)
+            {
+                return boolValue2 ? true : false;
+            }
+
+            if (int.TryParse(value.ToString(), out int result))
+            {
+                return result >= 1;
+            }
+            throw new NotImplementedException();
+        }
     }
 }

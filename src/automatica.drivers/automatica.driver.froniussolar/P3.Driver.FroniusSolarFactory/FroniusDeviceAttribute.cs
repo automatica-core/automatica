@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
 using FroniusSolarClient;
+using Microsoft.Extensions.Logging;
 using P3.Driver.FroniusSolarFactory.Categories;
 
 namespace P3.Driver.FroniusSolarFactory
@@ -93,7 +94,14 @@ namespace P3.Driver.FroniusSolarFactory
 
         private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
         {
-            await PollAll();
+            try
+            {
+                await PollAll();
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError($"Error polling inverter {ex}");
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

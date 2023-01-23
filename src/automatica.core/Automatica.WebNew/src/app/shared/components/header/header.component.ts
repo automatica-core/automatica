@@ -13,6 +13,7 @@ import { DxSpeedDialActionModule } from "devextreme-angular";
 
 import config from "devextreme/core/config";
 import { SettingsService } from "src/app/services/settings.service";
+import { ThemeService } from "src/app/services/theme.service";
 
 config({
     floatingActionButtonConfig: {
@@ -43,13 +44,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     private projectName: string;
 
+    public themes = [
+        {
+            name: "Dark",
+            theme: "dark"
+        }, {
+            name: "Light",
+            theme: "light"
+        }
+
+    ]
+
+    public currentTheme = "";
+
+    selectBoxOptions: any;
+
     constructor(private router: Router,
         private activatedRoute: ActivatedRoute,
         public appService: AppService,
         private loginService: LoginService,
         private hubService: HubConnectionService,
         private changeRef: ChangeDetectorRef,
-        private settingsService: SettingsService) { }
+        private settingsService: SettingsService,
+        private themeService: ThemeService) { }
 
     async ngOnInit() {
 
@@ -63,6 +80,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
             this.changeRef.detectChanges();
         }, 1000);
+
+        this.currentTheme = this.themeService.getCurrentTheme();
+
+        this.themeService.themeChanged.subscribe((a) => {
+            this.currentTheme = a;
+        });
+
+        this.selectBoxOptions = {
+            width: 140,
+            items: this.themes,
+            valueExpr: 'theme',
+            displayExpr: 'name',
+            value: this.currentTheme,
+            onValueChanged: (args) => {
+                this.themeService.applyTheme(args.value);
+            }
+        };
     }
 
     ngOnDestroy() {

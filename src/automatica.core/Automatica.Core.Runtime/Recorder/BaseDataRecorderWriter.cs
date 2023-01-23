@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Logger;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
-using Automatica.Core.Internals.Logger;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Automatica.Core.Tests")]
@@ -16,23 +17,28 @@ namespace Automatica.Core.Runtime.Recorder
 {
     internal abstract class BaseDataRecorderWriter : IDataRecorderWriter
     {
+        private readonly IConfiguration _config;
         private readonly INodeInstanceCache _nodeCache;
 
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
+        protected readonly Dictionary<Guid, string> MetricName = new();
 
-        internal BaseDataRecorderWriter(string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher)
+        internal BaseDataRecorderWriter(IConfiguration config, DataRecorderType recorderType, string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
         {
-            Logger = CoreLoggerFactory.GetLogger(recorderName);
+            Logger = factory.CreateLogger($"recording{LoggerConstants.FileSeparator}{recorderName}");
+            _config = config;
             _nodeCache = nodeCache;
+            RecorderType = recorderType;
             Dispatcher = dispatcher;
         }
 
         public ILogger Logger { get; }
+        public DataRecorderType RecorderType { get; }
         public IDispatcher Dispatcher { get; }
 
         public async Task AddTrend(Guid nodeInstance)
         {
-            var node = _nodeCache.Get(nodeInstance);
+            var node = _nodeCache.GetSingle(nodeInstance, new AutomaticaContext(_config));
 
             if (node == null)
             {
@@ -45,12 +51,59 @@ namespace Automatica.Core.Runtime.Recorder
                 _recorders.Add(nodeInstance, new List<IDataRecorder>());
             }
 
+            if (!MetricName.ContainsKey(nodeInstance))
+            {
+                MetricName.Add(nodeInstance, GetFullNodeName(node));
+            }
+            
             _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
-
             await Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
         }
 
+        private string GetFullNodeName(NodeInstance nodeInstance)
+        {
+            var nameList = new List<string>();
+            nameList.Add(nodeInstance.Name);
+            GetFullNameRecursive(nodeInstance, ref nameList);
+            nameList.Reverse();
+            var name = String.Join("-", nameList);
 
+            name = name
+                .Replace("*", "")
+                .Replace(" ", "_")
+                .Replace("/", "_")
+                .Replace("-", "_")
+                .Replace("(", "")
+                .Replace(")", "")
+                .Replace("[", "")
+                .Replace("]", "").ToLowerInvariant();
+            name = "node_" + name;
+            return name;
+        }
+
+        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
+        {
+
+            if (!instance.This2ParentNodeInstance.HasValue)
+            {
+                return;
+            }
+            var parent = _nodeCache.Get(instance.This2ParentNodeInstance.Value);
+            if (parent == null)
+            {
+                return;
+            }
+
+            if (instance.This2NodeTemplateNavigation is not null &&
+                instance.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                instance.This2NodeTemplateNavigation.IsAdapterInterface.Value)
+            {
+                return;
+            }
+
+            names.Add(parent.Name);
+            GetFullNameRecursive(parent, ref names);
+        }
         private void DataCallback(IDispatchable dispatchable, object value)
         {
             if(_recorders.ContainsKey(dispatchable.Id))
@@ -103,7 +156,7 @@ namespace Automatica.Core.Runtime.Recorder
             _recorders.Remove(nodeInstance);
         }
 
-        public async Task Start()
+        public virtual async Task Start()
         {
             foreach(var ls in _recorders.Values)
             {
@@ -114,7 +167,7 @@ namespace Automatica.Core.Runtime.Recorder
             }
         }
 
-        public async Task Stop()
+        public virtual async Task Stop()
         {
             await RemoveAll();
         }

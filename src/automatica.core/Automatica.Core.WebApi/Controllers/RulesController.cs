@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Core;
@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -92,7 +91,10 @@ namespace Automatica.Core.WebApi.Controllers
 
 
             _logicCacheFacade.PageCache.AddRuleInstance(ruleInstance);
+            _logicCacheFacade.InstanceCache.Add(ruleInstance.ObjId, ruleInstance);
             _logicCacheFacade.ClearInstances();
+
+            await _coreServer.ReloadLogic(ruleInstance.ObjId);
 
             return ruleInstance;
         }
@@ -135,6 +137,8 @@ namespace Automatica.Core.WebApi.Controllers
             await dbContext.SaveChangesAsync();
 
             _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
+            _logicCacheFacade.InstanceCache.Update(ruleInstance.ObjId, ruleInstance);
+            await _coreServer.ReloadLogic(ruleInstance.ObjId);
             _logicCacheFacade.ClearInstances();
             return ruleInstance;
         }
@@ -172,6 +176,11 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            if (!dbContext.NodeInstance2RulePages.Any(a => a.ObjId == nodeInstance.ObjId))
+            {
+                return null;
+            }
+
             var existingInstance = dbContext.NodeInstance2RulePages.Single(a => a.ObjId == nodeInstance.ObjId);
 
             existingInstance.X = nodeInstance.X;
@@ -194,13 +203,28 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-            var rulePage = dbContext.RulePages.SingleOrDefault(a => a.ObjId == pageId);
+            var rulePage = dbContext.RulePages.Include(a => a.RuleInstance).Include(a => a.NodeInstance2RulePage).Include(a => a.Link).SingleOrDefault(a => a.ObjId == pageId);
 
             if (rulePage != null)
             {
+                foreach (var link in rulePage.Link)
+                {
+                    await RemoveLinkInternal(link.ObjId, dbContext);
+                }
+                foreach (var nodeInstance in rulePage.NodeInstance2RulePage)
+                {
+                    await RemoveNodeInstanceInternal(nodeInstance.ObjId, dbContext);
+                }
+                foreach (var ruleInstance in rulePage.RuleInstance)
+                {
+                    await RemoveRuleInstanceInternal(ruleInstance.ObjId, dbContext);
+                }
+
+
                 dbContext.RulePages.Remove(rulePage);
                 await dbContext.SaveChangesAsync();
             }
+            
             _logicCacheFacade.ClearInstances();
         }
 
@@ -211,16 +235,23 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            await RemoveRuleInstanceInternal(instanceId, dbContext);
+            await dbContext.SaveChangesAsync();
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        private async Task RemoveRuleInstanceInternal(Guid instanceId, AutomaticaContext dbContext)
+        {
             var ruleInstance = dbContext.RuleInstances.SingleOrDefault(a => a.ObjId == instanceId);
 
             if (ruleInstance != null)
             {
+                await _coreServer.StopLogic(instanceId);
+
                 _logicCacheFacade.PageCache.RemoveRuleInstance(ruleInstance);
                 dbContext.RuleInstances.Remove(ruleInstance);
-                await dbContext.SaveChangesAsync();
             }
-
-            _logicCacheFacade.ClearInstances();
         }
 
         [HttpDelete]
@@ -230,6 +261,15 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            await RemoveNodeInstanceInternal(instanceId, dbContext);
+            await dbContext.SaveChangesAsync();
+
+            _logicCacheFacade.ClearInstances();
+        }
+
+        private async Task RemoveNodeInstanceInternal(Guid instanceId, AutomaticaContext dbContext)
+        {
+            await Task.CompletedTask;
             var nodeInstance = dbContext.NodeInstance2RulePages.SingleOrDefault(a => a.ObjId == instanceId);
 
             if (nodeInstance != null)
@@ -237,10 +277,8 @@ namespace Automatica.Core.WebApi.Controllers
                 dbContext.NodeInstance2RulePages.Remove(nodeInstance);
 
                 _logicCacheFacade.PageCache.RemoveNodeInstance(nodeInstance);
-                await dbContext.SaveChangesAsync();
             }
 
-            _logicCacheFacade.ClearInstances();
         }
 
         [HttpPost]
@@ -250,6 +288,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+          
             link.This2RuleInterfaceInstanceOutputNavigation = null;
             link.This2RuleInterfaceInstanceInputNavigation = null;
             link.This2NodeInstance2RulePageInputNavigation = null;
@@ -271,9 +310,20 @@ namespace Automatica.Core.WebApi.Controllers
                 await dbContext.SaveChangesAsync();
                 _logicCacheFacade.PageCache.UpdateLink(link);
             }
+            var this2RuleOutputRuleId = link.This2RuleInterfaceInstanceOutputNavigation?.This2RuleInstance;
+            var this2RuleInputRuleId = link.This2RuleInterfaceInstanceInputNavigation?.This2RuleInstance;
 
-
-            _logicCacheFacade.ClearInstances();
+            if (this2RuleOutputRuleId.HasValue)
+            {
+                await _coreServer.ReloadLogic(this2RuleOutputRuleId.Value);
+            }
+            if (this2RuleInputRuleId.HasValue)
+            {
+                await _coreServer.ReloadLogic(this2RuleInputRuleId.Value);
+            }
+            
+            await _logicCacheFacade.AddOrUpdateLink(link.ObjId, dbContext);
+            await _coreServer.ReloadLinks();
             return link;
         }
 
@@ -283,16 +333,33 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task RemoveLink(Guid objId)
         {
             await using var dbContext = new AutomaticaContext(_config);
+
+            await RemoveLinkInternal(objId, dbContext);
+
+            await dbContext.SaveChangesAsync();
+            await _logicCacheFacade.RemoveLink(objId);
+
+        }
+
+        private async Task RemoveLinkInternal(Guid objId, AutomaticaContext dbContext)
+        {
             var link = dbContext.Links.SingleOrDefault(a => a.ObjId == objId);
 
             if (link != null)
             {
-                dbContext.Remove(link);
-                await dbContext.SaveChangesAsync();
-                _logicCacheFacade.PageCache.RemoveLink(link);
-            }
+                var instance = _logicCacheFacade.LinkCache.Get(objId);
+                if (link.This2RuleInterfaceInstanceOutput.HasValue)
+                {
+                    await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
+                }
+                if (link.This2RuleInterfaceInstanceInput.HasValue)
+                {
+                    await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
+                }
 
-            _logicCacheFacade.ClearInstances();
+                await _coreServer.RemoveLink(objId);
+
+            }
         }
 
         [HttpPost]

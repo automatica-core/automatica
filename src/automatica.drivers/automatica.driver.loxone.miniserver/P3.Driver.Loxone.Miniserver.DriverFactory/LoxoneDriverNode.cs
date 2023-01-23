@@ -1,6 +1,5 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
-using P3.Driver.Loxone.Miniserver.Driver.Data.Message;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

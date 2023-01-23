@@ -3,7 +3,6 @@ using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.UnitTests.Drivers

@@ -1,8 +1,6 @@
 ﻿using P3.Driver.Loxone.Miniserver.Driver.Data.Message;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace P3.Driver.Loxone.Miniserver.Tests

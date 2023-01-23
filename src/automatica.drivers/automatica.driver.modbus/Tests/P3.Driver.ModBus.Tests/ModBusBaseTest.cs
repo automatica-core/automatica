@@ -2,6 +2,7 @@
 using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Automatica.Core.UnitTests.Drivers;
+using Microsoft.Extensions.Logging.Abstractions;
 using P3.Driver.ModBusDriverFactory;
 using P3.Driver.ModBusDriverFactory.Master;
 using P3.Driver.ModBusDriverFactory.Slave;
@@ -39,7 +40,7 @@ namespace P3.Driver.ModBus.Tests
             driverNode.InverseThis2ParentNodeInstanceNavigation.Add(device);
             device.InverseThis2ParentNodeInstanceNavigation.Add(attributeNode);
 
-            var driverContext = new DriverContextMock(driverNode, factory, Dispatcher);
+            var driverContext = new DriverContextMock(driverNode, DriverFactory, factory, Dispatcher, NullLoggerFactory.Instance);
             var driver = modbusDriverFactory.CreateDriver(driverContext) as ModBusMasterDriver;
             driver.Configure();
 
@@ -78,7 +79,7 @@ namespace P3.Driver.ModBus.Tests
             driverNode.InverseThis2ParentNodeInstanceNavigation.Add(device);
             device.InverseThis2ParentNodeInstanceNavigation.Add(attributeNode);
 
-            var driverContext = new DriverContextMock(driverNode, factory, Dispatcher);
+            var driverContext = new DriverContextMock(driverNode, DriverFactory, factory, Dispatcher, NullLoggerFactory.Instance);
             var driver = modbusTcpSlaveDriverFactory.CreateDriver(driverContext);
             driver.Init();
             driver.Configure();

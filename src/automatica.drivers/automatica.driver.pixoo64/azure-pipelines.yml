@@ -1,0 +1,71 @@
+trigger:
+  - master  
+  - develop
+  
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: automatica.core variables
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '$(SDK_VERSION)'
+
+- task: Bash@3
+  displayName:  Install tools
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet tool install automatica-cli --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json --global  2>/dev/null
+      dotnet tool update automatica-cli -g --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json 2>/dev/null
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'config'
+    nugetConfigPath: 'NuGet.config'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: 'test'
+    projects: '**/*[Tt]ests.csproj'
+    arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
+
+- task: AutomaticaCorePluginCli@7
+  displayName: Plugin build
+  inputs:
+    manifest_path: 'P3.Driver.Pixoo64/automatica-manifest.json'
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
+    api_key: '$(CLOUD_API_KEY)'
+    cloud_url: '$(CLOUD_URL)'
+    configuration: 'Debug$(BuildConfiguration)'
+    publish: true
+    dockerize: true
+    outputdirectory: '$(build.artifactstagingdirectory)'
+
+- task: AutomaticaCoreDockerMultiArchCli@7
+  displayName: Docker multi-arch
+  inputs:
+    dockerRegistryEndpoint: 'DockerHub'
+    dockerfile_amd64: 'Dockerfile'
+    dockerfile_arm32: 'Dockerfile.arm32'
+    imageName: 'automaticacore/plugin-p3.driver.pixoo64'
+    buildArgs: |
+      MANIFEST_DIR=P3.Driver.Pixoo64/
+      VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
+      CONFIG=$(BuildConfiguration)
+    version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  
+  

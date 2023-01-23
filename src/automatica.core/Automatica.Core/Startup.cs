@@ -27,7 +27,6 @@ using Automatica.Core.Internals;
 using Automatica.Core.Internals.Logger;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
-using MQTTnet.AspNetCore;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
 using Microsoft.AspNetCore.Mvc;
@@ -140,8 +139,6 @@ namespace Automatica.Core
 
             services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
             services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
-
-            CoreLoggerFactory.Configuration = Configuration;
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())

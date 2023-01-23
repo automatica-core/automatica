@@ -26,6 +26,7 @@ export class VisualizationComponent implements OnInit {
     private areaService: AreaService,
     private catService: CategoryService,
     appService: AppService,
+    private dataService: DataService,
     private serverStateService: ServerStateService) {
     appService.setAppTitle("Automatica.Core");
   }

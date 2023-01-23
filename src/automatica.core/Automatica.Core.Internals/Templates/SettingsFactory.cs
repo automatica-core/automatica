@@ -46,10 +46,8 @@ namespace Automatica.Core.Internals.Templates
 
         public Setting GetSetting(string key)
         {
-            using (var db = new AutomaticaContext(_config))
-            {
-                return db.Settings.SingleOrDefault(a => a.ValueKey == key);
-            }
+            using var db = new AutomaticaContext(_config);
+            return db.Settings.SingleOrDefault(a => a.ValueKey == key);
         }
     }
 }

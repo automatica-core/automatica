@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "P3.Driver.Times.DriverFactory": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false
+    },
+    "Automatica": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0"
+    }
+  }
+}

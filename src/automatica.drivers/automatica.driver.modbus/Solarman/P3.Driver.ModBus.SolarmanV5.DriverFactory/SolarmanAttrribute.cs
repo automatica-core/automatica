@@ -27,7 +27,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         public override Task<bool> Read()
         {
             _parent.PollAttributes().ConfigureAwait(false);
-            return base.Read();
+            return Task.FromResult(true);
         }
 
         public abstract Task<object> ConvertValue(ModBusRegisterValueReturn modbusReturn);

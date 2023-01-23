@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Automatica.Core.Driver.Utility;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Frames;
@@ -18,13 +19,17 @@ namespace P3.Driver.MBusDriverFactory
         private readonly List<Attribute> _attributes = new List<Attribute>();
         private readonly Dictionary<string, Attribute> _attributeMap = new Dictionary<string, Attribute>();
 
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
 
         public Device(IDriverContext driverContext, Driver parent) : base(driverContext)
         {
             _parent = parent;
             _logger = driverContext.Logger;
+        }
+        protected override bool CreateCustomLogger()
+        {
+            return true;
         }
 
         public override Task<bool> Start()
@@ -122,15 +127,14 @@ namespace P3.Driver.MBusDriverFactory
                 {
                     var address = $"{(int) vdb.ValueInformationField.Unit}-{vdb.StorageNumber}-{vdb.Tariff}";
                     SetValue(address, vdb.Value);
+                    _logger.LogDebug($"{vdb.DataInformationField.DataFieldType}: {vdb.Value} {vdb.ValueInformationField.Unit} ({Utils.ByteArrayToString(vdb.Data)})");
                 }
             }
             else
             {
                 _logger.LogWarning($"Could not read device {Name} with ID {DeviceId}");
             }
-
         }
-
         private void SetValue(string address, object value)
         {
             foreach (var att in _attributes)

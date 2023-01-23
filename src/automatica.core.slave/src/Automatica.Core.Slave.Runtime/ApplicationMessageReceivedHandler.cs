@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Slave.Abstraction;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client.Receiving;
-using MQTTnet.Server;
 using MQTTnet.Server.Internal;
 using Newtonsoft.Json;
 
@@ -34,8 +32,6 @@ namespace Automatica.Core.Slave.Runtime
         public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
         {
             _logger.LogDebug($"Mqtt message received for topic {e.ApplicationMessage.Topic}");
-
-
 
             if (MqttTopicFilterComparer.IsMatch(_actionTopic, e.ApplicationMessage.Topic))
             {

@@ -158,6 +158,10 @@ export abstract class BaseMobileComponent extends BaseComponent {
     getForegroundColor() {
         return this.getPropertyValue("foreground_color");
     }
+    
+    getReadOnly() {
+        return this.getPropertyValue("readonly");
+    }
 
     public get actualWidth(): number {
         return this.parent.nativeElement.offsetWidth;
@@ -166,10 +170,7 @@ export abstract class BaseMobileComponent extends BaseComponent {
     public baseOnInit() {
 
         if (this.item) {
-            super.registerEvent((this.item.notifyChangeEvent), (prop) => {
-                this.propertyChanged()
-            });
-
+            this.propertyChanged();
             this.value = this.dataHub.getCurrentValue(this.item.ObjId);
         }
     }

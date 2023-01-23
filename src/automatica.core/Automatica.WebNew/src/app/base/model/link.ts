@@ -52,6 +52,22 @@ export class Link extends BaseModel {
 
     }
 
+    get isValid() {
+        if (this.This2NodeInstance2RulePageOutput && this.This2NodeInstance2RulePageInput) {
+            return true;
+        }
+        if (this.This2RuleInterfaceInstanceOutput && this.This2RuleInterfaceInstanceInput) {
+            return true;
+        }
+        if ( this.This2RuleInterfaceInstanceOutput && this.This2NodeInstance2RulePageInput) {
+            return true;
+        }
+        if (this.This2NodeInstance2RulePageOutput && this.This2RuleInterfaceInstanceInput) {
+            return true;
+        }
+        return false;
+    }
+
 
     get fromPort() {
         if (this.This2RuleInterfaceInstanceOutput) {

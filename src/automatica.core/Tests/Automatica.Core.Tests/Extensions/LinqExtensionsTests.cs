@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Automatica.Core.Base.LinqExtensions;
 using Automatica.Core.EF.Models.Areas;
-using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace Automatica.Core.Tests.Extensions

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices;
 
@@ -26,6 +29,13 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap = new();
 
         private SolarmanPollTimestampAttribute? _timestampAttribute;
+        private string _ip;
+        private int _port;
+        private string _serial;
+
+        internal SolarmanConnection Driver {
+            get => _driver;
+        } 
 
         internal SolarmanDriver(IDriverContext driverContext, DeviceMap map) : base(driverContext)
         {
@@ -42,30 +52,43 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             PollInterval = GetPropertyValueInt("solarman-poll-interval"); 
             DeviceId = (byte)GetPropertyValueInt("solarman-device-id");
 
-            var ip = GetPropertyValueString("solarman-ip");
-            var port = GetProperty("solarman-port").ValueInt.Value;
-            var serial = GetPropertyValueString("solarman-serial");
+            _ip = GetPropertyValueString("solarman-ip");
+            _port = GetProperty("solarman-port")!.ValueInt!.Value;
+            _serial = GetPropertyValueString("solarman-serial");
 
-            _driver = new SolarmanConnection(new SolarmanConfig
-            {
-                IpAddress = IPAddress.Parse(ip),
-                Port = Convert.ToInt16(port),
-                SolarmanSerialNumber = Convert.ToUInt32(serial),
-                Timeout = 5000
-            }, TelegramMonitor);
+          
 
             _pollTimer.Interval = PollInterval;
 
             return base.Init();
         }
 
+        private void Open()
+        {
+            _driver = new SolarmanConnection(new SolarmanConfig
+            {
+                IpAddress = IPAddress.Parse(_ip),
+                Port = Convert.ToInt16(_port),
+                SolarmanSerialNumber = Convert.ToUInt32(_serial),
+                Timeout = 5000
+            }, TelegramMonitor);
+            if (!_driver.Open())
+            {
+                _driver = null;
+
+                DriverContext.Logger.LogError($"Could not open connection to {_ip}:{_port}");
+            }
+        }
+
         public override Task<bool> Start()
         {
+            Open();
+
             if (_driver == null)
             {
                 throw new ArgumentException("Init must be called before start..");
             }
-            _driver.Open();
+
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
 
@@ -91,8 +114,21 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 }
                 foreach (var group in _groups)
                 {
-                    await group.PollAttributes();
+                    if (!await group.PollAttributes())
+                    {
+                        throw new ArgumentException("need to reconnect, can't handle so many errors...");
+                    }
                 }
+            }
+            catch (Exception e) when (e is SocketException or IOException or ArgumentException or OperationCanceledException)
+            {
+                DriverContext.Logger.LogError(e, $"Error polling data, try to reconnect...{e}");
+                if (_driver != null)
+                {
+                    await _driver.Stop();
+                }
+
+                Open();
             }
             finally
             {
@@ -101,9 +137,16 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
         }
 
-        private async void PollTimerOnElapsed(object? sender, ElapsedEventArgs e)
+        private async void PollTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            await PollAll();
+            try
+            {
+                await PollAll();
+            }
+            catch(Exception ex)
+            {
+                DriverContext.Logger.LogError($"Could not poll solarman {ex}");
+            }
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -115,7 +158,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 return _timestampAttribute;
             }
 
-            var groupAttribute = new SolarmanGroupAttribute(ctx, _map, _driver, this, _nameMap);
+            var groupAttribute = new SolarmanGroupAttribute(ctx, _map, this, _nameMap);
             _groups.Add(groupAttribute);
             return groupAttribute;
             

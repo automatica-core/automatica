@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Base.Templates
 {

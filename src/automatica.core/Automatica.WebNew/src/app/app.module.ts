@@ -35,10 +35,10 @@ import { MobileModule } from "./visualization/mobile/mobile.module";
 import { HasRoleGuard } from "./services/login.service";
 import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
-import { SlavesService } from "./services/slaves.services";
 import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
 import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
+import { ThemeService } from "./services/theme.service";
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -112,6 +112,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
       provide: DeviceDetectorService,
       useClass: DeviceDetectorService
     },
+    ThemeService
   ],
   bootstrap: [
     AppComponent

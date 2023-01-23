@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-
-namespace P3.Driver.MBus
+﻿namespace P3.Driver.MBus
 {
     public enum Medium
     {

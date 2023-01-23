@@ -64,6 +64,9 @@
       },
       "SECONDS_SINCE_BOOT": {
         "NAME": "Sekunden seit Start"
+      },
+      "BOOT_TIME": {
+        "NAME": "Startzeit"
       }
     } 
   }

@@ -17,7 +17,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
         public int PollInterval { get; private set; }
         public byte DeviceId { get; private set; }
 
-        public List<ModBusMasterAttribute> Attributes { get; } = new List<ModBusMasterAttribute>();
+        public List<ModBusMasterAttribute> Attributes { get; } = new();
 
         private readonly System.Timers.Timer _pollTimer = new System.Timers.Timer();
 

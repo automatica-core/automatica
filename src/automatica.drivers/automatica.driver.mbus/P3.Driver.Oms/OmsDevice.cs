@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Config;
 using P3.Driver.MBus.Frames;

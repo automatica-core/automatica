@@ -19,6 +19,11 @@ namespace Automatica.Core.Driver
         NodeInstance NodeInstance { get; }
 
         /// <summary>
+        /// Corresponding driver factory
+        /// </summary>
+        IDriverFactory Factory { get; }
+
+        /// <summary>
         /// <see cref="IDispatcher"/> instance
         /// </summary>
         IDispatcher Dispatcher { get; }
@@ -62,6 +67,11 @@ namespace Automatica.Core.Driver
         /// Gives information about the current used license
         /// </summary>
         ILicenseContract LicenseContract { get; }
+
+        /// <summary>
+        /// Logger Factory to create custom logger instances
+        /// </summary>
+        ILoggerFactory LoggerFactory { get; }
     }
 
 }

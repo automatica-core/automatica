@@ -24,7 +24,7 @@
                     <dx-data-grid [dataSource]="categories" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
                         (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
                         (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
-                        (onInitialized)="onInitialized($event)">
+                        (onInitialized)="onInitialized($event)" (onCellPrepared)="onCellPrepared($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
                             <dxo-texts saveRowChanges="{{ 'COMMON.ADD' | translateAsync }}"

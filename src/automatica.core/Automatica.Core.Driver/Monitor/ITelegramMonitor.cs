@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.EF;
 using Automatica.Core.EF.Models;
 using System;
 using System.Collections.Generic;

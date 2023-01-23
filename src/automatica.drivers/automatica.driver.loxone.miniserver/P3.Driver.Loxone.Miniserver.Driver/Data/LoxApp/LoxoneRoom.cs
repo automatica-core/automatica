@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace P3.Driver.Loxone.Miniserver.Driver.Data.LoxApp
+﻿namespace P3.Driver.Loxone.Miniserver.Driver.Data.LoxApp
 {
     public class LoxoneRoom
     {

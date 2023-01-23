@@ -9,6 +9,23 @@ using MQTTnet.Diagnostics;
 
 namespace Automatica.Core.Plugin.Standalone
 {
+    internal class ConsoleLoggerFactory : ILoggerFactory
+    {
+        public void Dispose()
+        {
+            
+        }
+
+        public ILogger CreateLogger(string categoryName)
+        {
+            return new ConsoleLogger(Enum.Parse<LogLevel>(Environment.GetEnvironmentVariable("LOG_LEVEL") ?? "Information"));
+        }
+
+        public void AddProvider(ILoggerProvider provider)
+        {
+            
+        }
+    }
     internal class ConsoleLogger : ILogger
     {
         private readonly LogLevel _logLevel;

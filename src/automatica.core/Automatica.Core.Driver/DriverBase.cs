@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
@@ -25,16 +26,7 @@ namespace Automatica.Core.Driver
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private Task _writeTask;
 
-        public string FullName
-        {
-            get
-            {
-                var list = new List<string>();
-                GetFullNameRecursive(DriverContext.NodeInstance, ref list);
-                list.Reverse();
-                return String.Join("-", list);
-            }
-        }
+        public string FullName => DriverContext.NodeInstance.FullName;
 
 
         public IDriverNode Parent { get; set; }
@@ -57,16 +49,6 @@ namespace Automatica.Core.Driver
             ChildrensCreated = 0;
         }
 
-        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
-        {
-            if (instance.This2ParentNodeInstanceNavigation == null)
-            {
-                return;
-            }
-
-            names.Add(instance.Name);
-            GetFullNameRecursive(instance.This2ParentNodeInstanceNavigation, ref names);
-        }
 
         private void Enqueue(IDispatchable source, object value)
         {
@@ -80,17 +62,27 @@ namespace Automatica.Core.Driver
             {
                 node.State = NodeInstanceState.Loaded;
 
+                var logger = DriverContext.Logger;
+                if (CreateCustomLogger())
+                {
+                    var loggerName = $"{DriverContext.Factory.DriverName.ToLowerInvariant()}{LoggerConstants.FileSeparator}{node.ObjId.ToString().ToLowerInvariant()}";
+                    logger = DriverContext.LoggerFactory.CreateLogger(loggerName);
+                    DriverContext.Logger.LogInformation($"Using logger {loggerName} for node {node.Name}");
+                }
+
                 var driverNode = CreateDriverNode(
                     new DriverContext(
                         node, 
+                        DriverContext.Factory,
                         DriverContext.Dispatcher, 
                         DriverContext.NodeTemplateFactory, 
                         DriverContext.TelegramMonitor, 
                         DriverContext.LicenseState,
-                        DriverContext.Logger,
+                        logger,
                         DriverContext.LearnMode,
                         DriverContext.CloudApi,
                         DriverContext.LicenseContract,
+                        DriverContext.LoggerFactory,
                         DriverContext.IsTest));
 
                 ChildrensCreated += 1;
@@ -147,10 +139,9 @@ namespace Automatica.Core.Driver
             return true;
         }
 
-        protected virtual bool CreateTelegramMonitor()
-        {
-            return false;
-        }
+        protected virtual bool CreateTelegramMonitor() => false;
+
+        protected virtual bool CreateCustomLogger() => false;
 
         protected virtual void ChildrenCreated(IDriverNode child)
         {

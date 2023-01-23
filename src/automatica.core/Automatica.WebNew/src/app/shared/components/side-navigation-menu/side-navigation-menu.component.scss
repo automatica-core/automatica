@@ -28,7 +28,7 @@
             }
 
             &:not(.dx-state-focused)>.dx-treeview-item.dx-state-hover {
-                background-color: lighten($base-bg, 4.00);
+                // background-color: lighten($base-bg, 4.00);
             }
         }
     }

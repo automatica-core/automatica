@@ -25,7 +25,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
             }
             catch
             {
-
+                //ignore exception
             }
         }
 
@@ -57,6 +57,8 @@ namespace P3.Driver.Times.DriverFactory.DateTime
                     return new DateTimeNode(ctx, () => System.DateTime.Now.AddHours(_timeZoneOffset).Hour);
                 case "times-running":
                     return new DateTimeNode(ctx, () => Math.Floor((System.DateTime.Now.AddHours(_timeZoneOffset) - ServerInfo.StartupTime).TotalSeconds));
+                case "boot-time":
+                    return new DateTimeNode(ctx, () => ServerInfo.StartupTime.AddHours(_timeZoneOffset));
                 default:
                     return null;
             }

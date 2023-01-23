@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
@@ -119,7 +118,16 @@ namespace Automatica.Core.Base.IO
                 if (!NodeValues[self.Type].ContainsKey(self.Id))
                 {
                     NodeValues[self.Type].Add(self.Id, value);
-                    Values.Add(self.Id, value);
+
+                    if (!Values.ContainsKey(self.Id))
+                    {
+                        Values.Add(self.Id, value);
+                    }
+                    else
+                    {
+                        Values[self.Id] = value;
+                    }
+                    
                 }
                 else
                 {
@@ -245,6 +253,16 @@ namespace Automatica.Core.Base.IO
         public virtual async Task DispatchValue(IDispatchable self, object value)
         {
             await Dispatch(self, value, async (a, b, c) => { await DispatchValueInternal(self, value, c); });
+        }
+
+        public Task UnRegisterDispatch(DispatchableType type, Guid id)
+        {
+            if (_registrationMap.ContainsKey(type) && _registrationMap[type].ContainsKey(id))
+            {
+                _registrationMap[type].Remove(id);
+            }
+
+            return Task.CompletedTask;
         }
 
 

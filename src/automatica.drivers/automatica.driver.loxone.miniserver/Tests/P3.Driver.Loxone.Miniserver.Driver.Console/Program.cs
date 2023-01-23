@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace P3.Driver.Loxone.Miniserver.Driver.Console
 {
@@ -10,7 +8,7 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Console
         {
             System.Console.WriteLine("Hello World!");
 
-            var lox = new LoxoneMiniserverConnection("demominiserver.loxone.com", 7779, "web", "web", new ConsoleLogger();
+            var lox = new LoxoneMiniserverConnection("demominiserver.loxone.com", 7779, "web", "web", new ConsoleLogger());
             await lox.Connect();
 
             System.Console.ReadLine();

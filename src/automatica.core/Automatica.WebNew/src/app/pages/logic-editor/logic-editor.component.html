@@ -2,7 +2,7 @@
     <div class="dx-card wide-card panel-height">
         <p3-config-menu *ngIf="ruleTemplates" #configMenu (onSave)="save($event)" 
             (onDelete)="delete($event)" [showRuleMenu]="true"
-            [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)" (onAddRulePage)="addRulePage($event)"
+            [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)" (onAddRulePage)="addRulePage($event)" (onRemoveRulePage)="removeRulePage($event)"
             (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" [isLoading]="isLoading">
         </p3-config-menu>
 
@@ -19,8 +19,8 @@
             </as-split-area>
             <as-split-area [size]="60">
                 <div class="logic-tab-panel">
-                    <dx-tab-panel #tabPanel height="100%" [dataSource]="pages" [(selectedIndex)]="selectedPageIndex" [loop]="false"
-                        [animationEnabled]="false" [swipeEnabled]="false"
+                    <dx-tab-panel #tabPanel height="100%" width="100%" [dataSource]="pages" [(selectedIndex)]="selectedPageIndex" [loop]="false"
+                        [animationEnabled]="false" [swipeEnabled]="false" [showNavButtons]="true"
                         (onSelectionChanged)="onTabSelectionChanged($event)">
                         <div *dxTemplate="let page of 'title'">
                             <span>{{page.Name}}</span>

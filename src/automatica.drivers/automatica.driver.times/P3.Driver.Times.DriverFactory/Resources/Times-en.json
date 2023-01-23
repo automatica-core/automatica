@@ -64,6 +64,9 @@
       },
       "SECONDS_SINCE_BOOT": {
         "NAME": "Seconds since boot"
+      },
+      "BOOT_TIME": {
+        "NAME": "Boot time"
       }
     }
   }

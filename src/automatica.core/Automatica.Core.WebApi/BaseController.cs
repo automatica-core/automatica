@@ -8,7 +8,7 @@ namespace Automatica.Core.WebApi
 {
     public abstract class BaseController : Controller
     {
-        protected readonly AutomaticaContext DbContext;
+        public AutomaticaContext DbContext { get; }
         protected BaseController(AutomaticaContext dbContext)
         {
             DbContext = dbContext;

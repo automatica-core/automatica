@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using P3.Driver.MBus.Frames.VariableData;
 

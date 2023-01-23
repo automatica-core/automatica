@@ -16,7 +16,8 @@ using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
-using Org.BouncyCastle.Asn1.Ocsp;
+using Automatica.Core.Runtime.Recorder;
+using Docker.DotNet.Models;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -287,6 +288,29 @@ namespace Automatica.Core.Runtime.Database
 
             }
 
+            var trendingRecorder = context.Settings.SingleOrDefault(a => a.ValueKey == "trendingRecorders");
+
+            if (trendingRecorder == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "trendingRecorders",
+                    Type = (long)PropertyTemplateType.MultiSelect,
+                    Value = "",
+                    Group = "SERVER.SETTINGS",
+                    IsVisible = true,
+                    Order = 0,
+                    Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType))
+                });
+            }
+            else
+            {
+                trendingRecorder.Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType));
+                context.Update(trendingRecorder);
+            }
+
+            AddHostedGrafanaRecorderSettings(context);
+
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
             foreach (var propertyType in propertyTypes)
@@ -400,7 +424,7 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
 
 
-            if (!context.AreaInstances.Any())
+            if (!context.AreaInstances.AsNoTracking().Any())
             {
                 var projectInstance = new AreaInstance
                 {
@@ -482,6 +506,52 @@ namespace Automatica.Core.Runtime.Database
             }
 
             context.SaveChanges();
+        }
+
+        private static void AddHostedGrafanaRecorderSettings(AutomaticaContext context)
+        {
+            var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaHost");
+
+            if (host == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hostedGrafanaHost",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
+                    IsVisible = true,
+                    Order = 0
+                });
+            }
+            var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaApiKey");
+
+            if (apiKey == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hostedGrafanaApiKey",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
+                    IsVisible = true,
+                    Order = 1
+                });
+            }
+            var userId = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaUserId");
+
+            if (userId == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hostedGrafanaUserId",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
+                    IsVisible = true,
+                    Order = 1
+                });
+            }
         }
 
         private static void AddInitUserManagementData(AutomaticaContext context)
@@ -762,20 +832,21 @@ namespace Automatica.Core.Runtime.Database
                 IsAdapterInterface = true
             };
 
+
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs485.ObjId) == null)
             {
                 context.NodeTemplates.Add(usbrs485);
                 context.SaveChanges();
             }
-
-            var usbrs232 = new NodeTemplate
+            var usb232 = new NodeTemplate
             {
-                ObjId = new Guid("09d3b6b4391847e091aa5a540a7bd67f"),
+                ObjId = new Guid("56557e48cf1b4177a61c71157aa03cc4"),
                 Name = "COMMON.INTERFACES.RS232.NAME",
                 Description = "COMMON.INTERFACES.RS232.DESCRIPTION",
                 Key = "usbrs232",
-                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.RemoteUsb),
-                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232),This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                NeedsInterface2InterfacesType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Usb),
+                ProvidesInterface2InterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Rs232),
+                This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
                 IsDeleteable = true,
                 DefaultCreated = false,
                 IsReadable = false,
@@ -787,12 +858,11 @@ namespace Automatica.Core.Runtime.Database
                 IsAdapterInterface = true
             };
 
-            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs232.ObjId) == null)
+            if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usb232.ObjId) == null)
             {
-                context.NodeTemplates.Add(usbrs232);
+                context.NodeTemplates.Add(usb232);
                 context.SaveChanges();
             }
-
         }
 
         private static void AddSystemRemoteTemplates(AutomaticaContext context)

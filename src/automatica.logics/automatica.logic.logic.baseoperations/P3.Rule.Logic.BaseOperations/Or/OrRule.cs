@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -9,10 +10,10 @@ namespace P3.Rule.Logic.BaseOperations.Or
 {
     public class OrRule : Automatica.Core.Rule.Rule
     {
-        private int? _i1 = null;
-        private int? _i2 = null;
+        private bool? _i1 = null;
+        private bool? _i2 = null;
 
-        private double? _o = null;
+        private bool _o;
 
         private readonly RuleInterfaceInstance _output1;
 
@@ -22,30 +23,39 @@ namespace P3.Rule.Logic.BaseOperations.Or
                 a.This2RuleInterfaceTemplate == OrRuleFactory.RuleOutput);
         }
 
+        public override Task<bool> Start()
+        {
+            _i1 = null;
+            _i2 = null;
+            return base.Start();    
+        }
+
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (value != null)
             {
                 if (instance.This2RuleInterfaceTemplate == OrRuleFactory.RuleInput1)
                 {
-                    _i1 = Helper.ConvertValueToInt(value);
+                    _i1 = Helper.ConvertValueToBool(value);
                 }
 
                 if (instance.This2RuleInterfaceTemplate == OrRuleFactory.RuleInput2)
                 {
-                    _i2 = Helper.ConvertValueToInt(value);
+                    _i2 = Helper.ConvertValueToBool(value);
                 }
             }
 
-            if (_i1.HasValue && _i2.HasValue)
+            if (_i1.HasValue || _i2.HasValue)
             {
-                _o = _i1.Value | _i2.Value;
+                _o = (_i1 ?? false) || (_i2 ?? false); 
+                
+                return new List<IRuleOutputChanged>
+                {
+                    new RuleOutputChanged(_output1, _o)
+                };
             }
 
-            return new List<IRuleOutputChanged>
-            {
-                new RuleOutputChanged(_output1, _o)
-            };
+            return new List<IRuleOutputChanged>();
         }
 
     }

@@ -310,7 +310,6 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualGenericPropertyInstance("VISU_NAME", 5, this, () => this.VisuName, (value) => this.VisuName = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
 
             if (this.NodeTemplate.This2NodeDataType === NodeDataTypeEnum.Boolean) {
-
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_TEXT_TRUE", 6, this, () => this.StateTextValueTrue, (value) => this.StateTextValueTrue = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
                 this.Properties.push(new VirtualGenericPropertyInstance("STATUS_TEXT_FALSE", 7, this, () => this.StateTextValueFalse, (value) => this.StateTextValueFalse = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
 
@@ -320,9 +319,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualGenericPropertyInstance("TRENDING", 10, this, () => this.Trending, (value) => this.Trending = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.TRENDING"));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes)));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
-
         }
-
 
         this.updateDisplayName();
 
@@ -351,7 +348,6 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
         this.Parent = parent;
     }
-
 
     useBaseModelInstanceForJson(baseModel: BaseModel) {
         if (baseModel instanceof VirtualPropertyInstance) {
@@ -385,8 +381,6 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         return void 0;
     }
 
-
-
     public setPropertyValueIfPresent(property: string, value: any) {
         for (const e of this.Properties) {
             if (e.PropertyTemplate.Key === property) {
@@ -394,6 +388,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             }
         }
     }
+
     public getPropertyValue(property: string): any {
         for (const e of this.Properties) {
             if (e.PropertyTemplate && e.PropertyTemplate.Key === property) {
@@ -402,6 +397,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
         return void 0;
     }
+
     getPropertyValueById(id: string) {
         for (const e of this.Properties) {
             if (e.PropertyTemplate.ObjId === id) {
@@ -419,7 +415,6 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
         return result;
     }
-
 
     public hasPropertyValue(property: string): boolean {
         for (const e of this.Properties) {

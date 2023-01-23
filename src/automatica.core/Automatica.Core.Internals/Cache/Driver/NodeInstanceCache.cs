@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Automatica.Core.EF.Helper;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
@@ -19,7 +18,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
-        private readonly IList<NodeInstance> _favorites = new List<NodeInstance>();
+        private readonly ConcurrentDictionary<Guid, NodeInstance> _favorites = new ConcurrentDictionary<Guid, NodeInstance>();
         private NodeInstance _root;
 
         public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache) : base(configuration)
@@ -96,10 +95,23 @@ namespace Automatica.Core.Internals.Cache.Driver
 
                     _categoryCache[item.This2CategoryInstance.Value].Add(item);
                 }
-
                 if (item.IsFavorite)
                 {
-                    _favorites.Add(item);
+                    if (!_favorites.ContainsKey(item.ObjId))
+                    {
+                        _favorites.TryAdd(item.ObjId, item);
+                    }
+                    else
+                    {
+                        _favorites[item.ObjId] = item;
+                    }
+                }
+                else
+                {
+                    if (_favorites.ContainsKey(item.ObjId))
+                    {
+                        _favorites.TryRemove(item.ObjId, out var node);
+                    }
                 }
             }
 
@@ -149,14 +161,17 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 _allCache[item.ObjId] = item;
                 item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
+                if (item.This2ParentNodeInstance.HasValue)
+                {
+                    item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance.Value];
+                    var oldItem = _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                        .Single(a => a.ObjId == item.ObjId);
+                    _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                        .Remove(oldItem);
 
-                item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance!.Value];
-                var oldItem = _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
-                    .Single(a => a.ObjId == item.ObjId);
-                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Remove(oldItem);
 
-
-                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+                    _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+                }
 
             }
             else
@@ -165,8 +180,11 @@ namespace Automatica.Core.Internals.Cache.Driver
 
                 item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
 
-                item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance!.Value];
-                _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+                if(item.This2ParentNodeInstance.HasValue) 
+                {
+                    item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance.Value];
+                    _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);
+                }
             }
 
             if (item.This2AreaInstance.HasValue)
@@ -203,7 +221,21 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             if (item.IsFavorite)
             {
-                _favorites.Add(item);
+                if (!_favorites.ContainsKey(item.ObjId))
+                {
+                    _favorites.TryAdd(item.ObjId, item);
+                }
+                else
+                {
+                    _favorites[item.ObjId] = item;
+                }
+            }
+            else
+            {
+                if (_favorites.ContainsKey(item.ObjId))
+                {
+                    _favorites.TryRemove(item.ObjId, out var node);
+                }
             }
 
             return item;
@@ -271,7 +303,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         {
             Initialize();
 
-            return _favorites;
+            return _favorites.Values.Where(a => a.UseInVisu).ToList();
         }
 
         public IList<NodeInstance> ByCategory(Guid category)

@@ -1,5 +1,3 @@
-/// <reference path="../../../../node_modules/@types/jszip/index.d.ts" />
-
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";
@@ -46,6 +44,7 @@ export class ConfigMenuComponent implements OnInit {
   @Output() onDelete = new EventEmitter<any>();
   @Output() onAddRule = new EventEmitter<RuleTemplate>();
   @Output() onAddRulePage = new EventEmitter<void>();
+  @Output() onRemoveRulePage = new EventEmitter<void>();
   @Output() onImportData = new EventEmitter<NodeInstance>();
 
   @Input()
@@ -111,6 +110,12 @@ export class ConfigMenuComponent implements OnInit {
       icon: "fa-add",
       disabled: false,
       command: (event) => { this.onAddRulePage.emit(); }
+    }, {
+      id: "removedRulePage",
+      label: "Remove",
+      icon: "fa-remove",
+      disabled: false,
+      command: (event) => { this.onRemoveRulePage.emit(); }
     }]
   };
 
@@ -132,7 +137,7 @@ export class ConfigMenuComponent implements OnInit {
 
   constructor(private configService: ConfigService,
     private translate: L10nTranslationService,
-    private notify: NotifyService, 
+    private notify: NotifyService,
     private appService: AppService,
     private designTimeDataService: DesignTimeDataService,
     private changeRef: ChangeDetectorRef) {

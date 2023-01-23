@@ -112,7 +112,7 @@ export class LearnNodeInstance {
 @Component({
   selector: "p3-propertyeditor",
   templateUrl: "./propertyeditor.component.html",
-  styleUrls: ["./propertyeditor.component.sass"],
+  styleUrls: ["./propertyeditor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })

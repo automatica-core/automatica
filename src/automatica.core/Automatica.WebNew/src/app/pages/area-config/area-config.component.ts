@@ -191,11 +191,13 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   }
 
   addInstancesRec(instance: AreaInstance, tmpConfig: AreaInstance[]): any {
-    for (const x of instance.InverseThis2ParentNavigation) {
-      this.mapList.set(x.ObjId, x);
-      tmpConfig.push(x);
+    if (instance.InverseThis2ParentNavigation) {
+      for (const x of instance.InverseThis2ParentNavigation) {
+        this.mapList.set(x.ObjId, x);
+        tmpConfig.push(x);
 
-      this.addInstancesRec(x, tmpConfig);
+        this.addInstancesRec(x, tmpConfig);
+      }
     }
   }
 

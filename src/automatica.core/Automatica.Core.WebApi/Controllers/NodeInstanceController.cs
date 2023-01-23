@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.LinqExtensions;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;

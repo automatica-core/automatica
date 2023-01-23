@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Pixoo64", "P3.Driver.Pixoo64\P3.Driver.Pixoo64.csproj", "{42B32C71-399D-499A-BA0C-72F46A498EDE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Pixoo64.Screens", "P3.Driver.Pixoo64.Screens\P3.Driver.Pixoo64.Screens.csproj", "{0C6267AB-202C-4241-AD54-2658F6B50A9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.PixooSharp", "P3.PixooSharp\P3.PixooSharp.csproj", "{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{F8560ED8-5E41-479C-83AF-8CBE18738A4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{D81BEB43-79B3-4904-90E7-81AE78AE64C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.DebugLocal|Any CPU.ActiveCfg = DebugLocal|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.DebugLocal|Any CPU.Build.0 = DebugLocal|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42B32C71-399D-499A-BA0C-72F46A498EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C6267AB-202C-4241-AD54-2658F6B50A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C6267AB-202C-4241-AD54-2658F6B50A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C6267AB-202C-4241-AD54-2658F6B50A9E}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C6267AB-202C-4241-AD54-2658F6B50A9E}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{0C6267AB-202C-4241-AD54-2658F6B50A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C6267AB-202C-4241-AD54-2658F6B50A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63F4B7B1-2A00-4632-836B-CCB6EEAB6414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D81BEB43-79B3-4904-90E7-81AE78AE64C7} = {F8560ED8-5E41-479C-83AF-8CBE18738A4E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D98958DE-1953-4113-93A8-646F5E6CB51D}
+	EndGlobalSection
+EndGlobal

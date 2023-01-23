@@ -5,6 +5,8 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Recorder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -17,8 +19,9 @@ namespace Automatica.Core.Tests.Recorder
             var dispatcherMock = new Mock<IDispatcher>();
             var nodeInstanceCache = new Mock<INodeInstanceCache>();
             nodeInstanceCache.Setup(a => a.Get(It.IsAny<Guid>())).Returns(node);
+            nodeInstanceCache.Setup(a => a.GetSingle(It.IsAny<Guid>(), It.IsAny<AutomaticaContext>())).Returns(node);
 
-            var recorder = new MemoryDataRecorderWriter("testRecorder", nodeInstanceCache.Object, dispatcherMock.Object);
+            var recorder = new MemoryDataRecorderWriter(new Mock<IConfiguration>().Object, "testRecorder", nodeInstanceCache.Object, dispatcherMock.Object, new Mock<ILoggerFactory>().Object);
 
             await recorder.AddTrend(node.ObjId);
 

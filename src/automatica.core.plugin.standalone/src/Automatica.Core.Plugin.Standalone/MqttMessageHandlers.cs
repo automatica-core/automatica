@@ -8,13 +8,13 @@ using Automatica.Core.Plugin.Standalone.Factories;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client.Receiving;
-using MQTTnet.Server;
 using Newtonsoft.Json;
 using MQTTnet.Client;
 using MQTTnet.Server.Internal;
 using System;
 using System.Linq;
 using Automatica.Core.Plugin.Standalone.Dispatcher;
+using RemoteDispatchValue = Automatica.Core.Base.Remote.RemoteDispatchValue;
 
 namespace Automatica.Core.Plugin.Standalone
 {
@@ -56,12 +56,12 @@ namespace Automatica.Core.Plugin.Standalone
 
                 Logger.LogInformation($"Init driver...");
                 var dto = JsonConvert.DeserializeObject<NodeInstance>(json);
-
-                var context = new DriverContext(dto, _connection.Dispatcher, _connection.NodeTemplateFactory,
-                    new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(_connection),
-                    new RemoteServerCloudApi(), new RemoteLicenseContract(), false);
-
                 var factory = _connection.Factories.First(a => a.DriverGuid == dto.This2NodeTemplate);
+                var context = new DriverContext(dto, factory, _connection.Dispatcher, _connection.NodeTemplateFactory,
+                    new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(_connection),
+                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), false);
+
+             
 
                 _connection.DriverInstance = factory.CreateDriver(context);
 
@@ -120,6 +120,10 @@ namespace Automatica.Core.Plugin.Standalone
                 else if (e.ApplicationMessage.Topic.EndsWith(DriverNodeRemoteAction.StopLearnMode.ToString()))
                 {
                     await node.DisableLearnMode();
+                }
+                else if (e.ApplicationMessage.Topic.EndsWith(DriverNodeRemoteAction.Read.ToString()))
+                {
+                    await node.Read();
                 }
             }
         }

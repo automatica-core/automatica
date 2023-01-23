@@ -8,7 +8,7 @@ namespace P3.Driver.Times.DriverFactory
     public class DateTimeDriverFactory : BaseTimesDriverFactory
     {
         public static readonly Guid DriverGuidId = new Guid("7bda80c5-ef7f-41ea-b637-40718589bb9e");
-        public override Version DriverVersion => new Version(1, 0, 0, 0);
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
         public override Guid DriverGuid => DriverGuidId;
 
         public static readonly Guid DateTimeInterfaceGuid = new Guid("15ff46f8-e433-4707-913d-4ed9dac98d17");
@@ -29,6 +29,7 @@ namespace P3.Driver.Times.DriverFactory
 
 
 
+        public static readonly Guid BootDateTime = new Guid("8b3a0307-34dc-4ad5-b18e-792ee2f86113");
         public static readonly Guid SecondsSinceBoot = new Guid("f4a6fe61-bbff-4da9-87d5-9b97e9b0037a");
 
         public override string ImageName => "automaticacore/plugin-p3.driver.times";
@@ -58,6 +59,7 @@ namespace P3.Driver.Times.DriverFactory
             factory.CreateNodeTemplate(Hours, "TIMES.DATETIME.HOURS.NAME", "TIMES.DATETIME.HOURS.DESCRIPTION", "times-hours", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);
 
             factory.CreateNodeTemplate(SecondsSinceBoot, "TIMES.DATETIME.SECONDS_SINCE_BOOT.NAME", "TIMES.DATETIME.SECONDS_SINCE_BOOT.DESCRIPTION", "times-running", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);
+            factory.CreateNodeTemplate(BootDateTime, "TIMES.DATETIME.BOOT_TIME.NAME", "TIMES.DATETIME.BOOT_TIME.DESCRIPTION", "boot-time", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
 
         }
 

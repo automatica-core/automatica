@@ -48,6 +48,8 @@ export enum PropertyTemplateType {
     UserGroup = 203,
     Slave = 204,
 
+    MultiSelect = 300,
+
     CustomAction = 500,
 
     Invalid = 2147483647
@@ -57,6 +59,33 @@ export enum PropertyTemplateType {
 export class DefaultExtendedPropertyTemplate {
     constructor(protected template: PropertyTemplate) {
 
+    }
+}
+
+export class MultiSelectPropertyTemplate extends DefaultExtendedPropertyTemplate {
+    public items: any[] = [];
+
+    constructor(template: PropertyTemplate) {
+        super(template);
+
+        let meta = template.Meta;
+
+        if (!meta.startsWith("MULTI_SELECT(")) {
+            console.log("meta data error, enum metadata invalid (", meta, ")");
+        }
+
+        meta = meta.slice(13, meta.length - 1);
+
+        const split = meta.split("|");
+
+        split.forEach(v => {
+            const split2 = v.split("=");
+
+            this.items.push({
+                Key: +split2[0],
+                Value: split2[1]
+            });
+        });
     }
 }
 
@@ -262,6 +291,9 @@ export class PropertyTemplate extends BaseModel {
                 break;
             case PropertyTemplateType.AreaIcon:
                 this._ExtendedType = new ListExtendedPropertyTemplate(this);
+                break;
+            case PropertyTemplateType.MultiSelect:
+                this._ExtendedType = new MultiSelectPropertyTemplate(this);
                 break;
             case PropertyTemplateType.Text:
                 if (this.Meta && this.Meta.startsWith("LENGTH")) {

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Automatica.Core.Model;
-using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
 {
@@ -104,11 +102,15 @@ namespace Automatica.Core.EF.Models
         UserGroup = 203,
         [PropertyTemplateType("Slave")]
         Slave = 204,
+        
+        [PropertyTemplateType("MultiSelect")]
+        MultiSelect = 300,
 
         [PropertyTemplateType("CustomAction")]
         CustomAction = 500,
-
         
+
+
 
 
         [PropertyTemplateType("INVALID")]
@@ -149,6 +151,7 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.Password:
                     case PropertyTemplateType.UserGroup:
                     case PropertyTemplateType.Time:
+                    case PropertyTemplateType.MultiSelect:
                         return ValueString;
                     case PropertyTemplateType.DropDown:
                     case PropertyTemplateType.Baudrate:
@@ -216,6 +219,7 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.Password:
                     case PropertyTemplateType.Time:
                     case PropertyTemplateType.UserGroup:
+                    case PropertyTemplateType.MultiSelect:
                         ValueString = value.ToString();
                         break;
                     case PropertyTemplateType.NodeInstance:

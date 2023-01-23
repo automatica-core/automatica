@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using P3.Driver.MBus.Frames;
+﻿using P3.Driver.MBus.Frames;
 
 namespace P3.Driver.MBus.Scan
 {

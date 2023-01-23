@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Automatica.Core.Base.License;
+﻿using Automatica.Core.Base.License;
 
 namespace Automatica.Core.UnitTests.Base.Common
 {

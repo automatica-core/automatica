@@ -14,6 +14,8 @@ import { LogicLocators } from "./shapes/logic-locators";
 import { LogicLables } from "./shapes/logic-label";
 import { LinkService } from "./link.service";
 import { AppService } from "src/app/services/app.service";
+import { ThemeService } from "src/app/services/theme.service";
+import { Subscription } from "rxjs";
 
 declare var draw2d: any;
 
@@ -57,17 +59,22 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   private linkService: LinkService;
 
+  private themeChangedSubDraw2d: Subscription;
+
 
   constructor(private ruleEngineService: RuleEngineService,
     private dataHub: DataHubService,
     notify: NotifyService,
     translate: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
-    appService: AppService) {
+    appService: AppService,
+    private themeService: ThemeService) {
     super(notify, translate, appService);
   }
 
   async ngOnInit() {
+
+
     this.linkService = new LinkService(this.page, this.translate, this.ruleEngineService);
 
     super.registerEvent(this.ruleEngineService.add, (data: AddLogicData) => {
@@ -100,6 +107,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   }
 
   ngOnDestroy(): void {
+    this.themeChangedSubDraw2d?.unsubscribe();
     super.baseOnDestroy();
   }
 
@@ -159,7 +167,17 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     this.workplace = new draw2d.Canvas("ruleditor-" + this.page.ObjId);
 
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToGeometryEditPolicy());
-    this.workplace.installEditPolicy(new draw2d.policy.canvas.ShowGridEditPolicy());
+    this.workplace.installEditPolicy(new draw2d.policy.canvas.ZoomPolicy());
+    let gridPolicy = new draw2d.policy.canvas.ShowGridEditPolicy();
+
+    this.workplace.installEditPolicy(gridPolicy);
+    this.themeChangedSubDraw2d = this.themeService.themeChanged.subscribe(a => {
+      gridPolicy.setBackgroundColor(this.themeService.getBackgroundColor());
+      gridPolicy.setGridColor(this.themeService.getGridColor());
+    });
+
+    gridPolicy.setBackgroundColor(this.themeService.getBackgroundColor());
+    gridPolicy.setGridColor(this.themeService.getGridColor());
 
     this.workplace.on("select", (emitter, event) => {
       if (event.figure !== null) {

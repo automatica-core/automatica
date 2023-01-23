@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Automatica.Core.EF.Models;
-using Newtonsoft.Json.Converters;
 
 namespace Automatica.Core.Common.Update
 {

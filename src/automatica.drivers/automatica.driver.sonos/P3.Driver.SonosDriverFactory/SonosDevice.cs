@@ -63,7 +63,7 @@ namespace P3.Driver.SonosDriverFactory
                 ip = device.Location.Host;
             }
 
-            _controller = _sonosControllerFactory.Create(ip);
+            _controller = _sonosControllerFactory.Create(ip, DriverContext.Logger);
             return await base.Start();
         }
 

@@ -4,6 +4,8 @@ using System.Timers;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Blockchain.Ticker.Driver.Bitcoin;
+using P3.Driver.Blockchain.Ticker.Driver.Cardano;
+using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
 
 namespace P3.Driver.Blockchain.Ticker.Driver
 {
@@ -78,6 +80,12 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             {
                 case "blockchain-btc":
                     node = new BitcoinNode(ctx);
+                    break;
+                case "blockchain-eth":
+                    node = new EthereumNode(ctx);
+                    break;
+                case "blockchain-ada":
+                    node = new CardanoNode(ctx);
                     break;
             }
 

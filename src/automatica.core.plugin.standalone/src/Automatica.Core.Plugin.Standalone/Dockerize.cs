@@ -78,7 +78,7 @@ namespace Automatica.Core.Plugin.Standalone
         {
             
             IList<T> retT = new List<T>();
-            foreach (var file in Directory.GetFiles(workingDir, "*Factory*.dll"))
+            foreach (var file in Directory.GetFiles(workingDir, "*.dll"))
             {
 
                 var loader = new AssemblyLoader(workingDir, workingDir);

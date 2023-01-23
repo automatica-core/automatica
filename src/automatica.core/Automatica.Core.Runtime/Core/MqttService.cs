@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Driver;
@@ -125,7 +124,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task MessageReceived(RemoteMessageEvent messageEvent)
         {
-            _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}");
+            _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}...");
 
             if(!_connectedMqttClients.Contains(messageEvent.ClientId))
             {

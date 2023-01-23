@@ -5,6 +5,7 @@ using P3.Driver.Loxone.Miniserver.Driver;
 using P3.Driver.Loxone.Miniserver.Driver.Data.LoxApp;
 using P3.Driver.Loxone.Miniserver.Driver.Data.Message;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         public LoxApp3Data LoxData => _miniserver.LoxData;
 
-        public Dictionary<string, List<LoxoneDriverNode>> Nodes { get; } = new Dictionary<string, List<LoxoneDriverNode>>();
+        public IDictionary<string, List<LoxoneDriverNode>> Nodes { get; } = new ConcurrentDictionary<string, List<LoxoneDriverNode>>();
 
         public LoxoneDriver(IDriverContext driverContext) : base(driverContext)
         {

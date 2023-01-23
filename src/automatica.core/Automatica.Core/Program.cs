@@ -14,9 +14,7 @@ using System.Runtime.Versioning;
 using Automatica.Core.Runtime.Database;
 using Serilog;
 using Automatica.Core.Internals;
-using MQTTnet.Diagnostics;
 using System.Collections;
-using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Automatica.Core

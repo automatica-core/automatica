@@ -14,16 +14,19 @@ namespace Automatica.Core.UnitTests.Base.Drivers
 {
     public class DriverContextMock : IDriverContext
     {
-        public DriverContextMock(NodeInstance nodeInstance, INodeTemplateFactory nodeTemplateFactory, IDispatcher dispatcher)
+        public DriverContextMock(NodeInstance nodeInstance, IDriverFactory factory, INodeTemplateFactory nodeTemplateFactory, IDispatcher dispatcher, ILoggerFactory loggerFactory)
         {
             NodeInstance = nodeInstance;
             NodeTemplateFactory = nodeTemplateFactory;
             TelegramMonitor = new TelegramMonitorMock();
             LicenseState = new LicenseStateMock();
             Dispatcher = dispatcher;
+            LoggerFactory = loggerFactory;
+            Factory = factory;
         }
 
         public NodeInstance NodeInstance { get; }
+        public IDriverFactory Factory { get; }
         public IDispatcher Dispatcher { get; }
         public INodeTemplateFactory NodeTemplateFactory { get; }
         public bool IsTest => true;
@@ -36,5 +39,6 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public ILearnMode LearnMode => null;
         public IServerCloudApi CloudApi => new CloudApiMock();
         public ILicenseContract LicenseContract => new LicenseContractMock();
+        public ILoggerFactory LoggerFactory { get; }
     }
 }

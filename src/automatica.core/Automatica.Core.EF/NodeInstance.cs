@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
@@ -24,6 +25,29 @@ namespace Automatica.Core.EF.Models
         public bool IsRootInstance()
         {
             return This2ParentNodeInstance == null;
+        }
+
+        public string FullName
+        {
+            get
+            {
+                var list = new List<string>();
+                list.Add(Name);
+                GetFullNameRecursive(this, ref list);
+                list.Reverse();
+                return String.Join("-", list);
+            }
+        }
+
+        private void GetFullNameRecursive(NodeInstance instance, ref List<string> names)
+        {
+            if (instance.This2ParentNodeInstanceNavigation == null)
+            {
+                return;
+            }
+
+            names.Add(instance.This2ParentNodeInstanceNavigation.Name);
+            GetFullNameRecursive(instance.This2ParentNodeInstanceNavigation, ref names);
         }
 
         [NotMapped]

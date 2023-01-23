@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Base.Logger;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -10,36 +13,41 @@ namespace Automatica.Core.Internals.Logger
 {
     public class CoreLogger : Microsoft.Extensions.Logging.ILogger
     {
+        private readonly IConfiguration _config;
         private readonly string _facility;
+        private readonly string _logNameFacility;
         private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
 
-        public CoreLogger() : this("core")
+        public CoreLogger(IConfiguration config) : this(config, "core")
         {
-
         }
 
-        public CoreLogger(string facility) : this(facility, null)
+        public CoreLogger(IConfiguration config, string facility) : this(config, facility, null)
         {
             
         }
 
-        public CoreLogger(string facility, LogLevel? level, bool isFrameworkLog = false) {
+        public CoreLogger(IConfiguration config, string facility, LogLevel? level, bool isFrameworkLog = false) {
             _facility = facility;
 
-            if (level.HasValue)
+            if (isFrameworkLog)
+            {
+                _level = LogLevel.Error;
+            }
+            else if (level.HasValue)
             {
                 _level = level.Value;
             }
             else
             {
-                if (CoreLoggerFactory.Configuration == null)
+                if (config == null)
                 {
                     _level = LogLevel.Information;
                 }
                 else
                 {
-                    _level = Parse(CoreLoggerFactory.Configuration["server:log_level"]);
+                    _level = Parse(config["server:log_level"]);
                 }
             }
             
@@ -49,21 +57,46 @@ namespace Automatica.Core.Internals.Logger
                facility = "dotnet"; 
             }
             facility = facility.ToLower();
+            _logNameFacility = facility;
 
             var logBuild = new LoggerConfiguration();
 
             if (isFrameworkLog)
             { 
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30));
+                logBuild.
+                    WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
+                        retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                        fileSizeLimitBytes: 134217728,//128mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
+                        flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             else
             {
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log"),
-                    fileSizeLimitBytes: 31457280,
-                    retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
-                    flushToDiskInterval: TimeSpan.FromSeconds(30));
+                var fileName = Path.Combine(ServerInfo.GetLogDirectory(), $"{facility}.log");
+
+                if (facility.Contains(LoggerConstants.FileSeparator))
+                {
+                    var split = facility.Split(LoggerConstants.FileSeparator).ToList();
+                    split.Insert(0, ServerInfo.GetLogDirectory());
+                    split[^1] += ".log";
+
+                    fileName = Path.Combine(split.ToArray());
+
+                    _logNameFacility = split[^1];
+                }
+
+                logBuild
+                    .WriteTo.RollingFile(fileName,
+                        fileSizeLimitBytes: 31457280, //~32mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        flushToDiskInterval: TimeSpan.FromSeconds(30))
+                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                        fileSizeLimitBytes: 134217728, //128mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
+                        shared: true,
+                        flushToDiskInterval: TimeSpan.FromSeconds(30));
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
@@ -171,7 +204,7 @@ namespace Automatica.Core.Internals.Logger
             Func<TState, Exception, string> formatter)
         {
             var level = ConvertLogLevel(logLevel);
-            var msg = $"{_facility.ToLower()}: {formatter.Invoke(state, exception)}";
+            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception)}";
             _logger.Write(level, exception, msg);
         }
     }

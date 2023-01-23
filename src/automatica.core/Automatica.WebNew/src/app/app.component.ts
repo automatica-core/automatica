@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
-// import { fas } from "@fortawesome/free-solid-svg-icons";
-import { far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
+import { faClock, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { fas, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
@@ -8,6 +7,7 @@ import { L10nTranslationService, L10nLocale } from "angular-l10n";
 import { BaseComponent } from "./base/base-component";
 import { FaIconLibrary, FaConfig } from "@fortawesome/angular-fontawesome";
 import { DxLoadPanelComponent } from "devextreme-angular";
+import { ThemeService } from "./services/theme.service";
 
 @Component({
   selector: "app-root",
@@ -27,7 +27,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     private changeDet: ChangeDetectorRef,
     library: FaIconLibrary,
     private ngZone: NgZone,
-    private iconConfig: FaConfig) {
+    private iconConfig: FaConfig,
+    private themeService: ThemeService) {
     super(notify, translate, appService);
 
     const automaticaLogo = {
@@ -45,8 +46,12 @@ export class AppComponent extends BaseComponent implements OnInit {
 
     library.addIconPacks(fas);
     library.addIconPacks(far);
-    // library.addIcons(faCoffee);
-    // library.add(fas, far);
+
+    library.addIcons(<IconDefinition>{
+      prefix: "fas",
+      iconName: "alarm-clock",
+      icon: faClock.icon
+    });
 
     library.addIcons(<IconDefinition>automaticaLogo);
     library.addIcons(<IconDefinition>boothCurtain);
@@ -102,6 +107,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.themeService.applyTheme();
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
       if (v) {
         this.dxLoadPanel.instance.show();

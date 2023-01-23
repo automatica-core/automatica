@@ -1,17 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Recorder
 {
     internal class FileDataRecorderWriter : BaseDataRecorderWriter
     {
         private readonly object _lock = new object();
-        public FileDataRecorderWriter(INodeInstanceCache nodeCache, IDispatcher dispatcher) : base("FileDataRecorder", nodeCache, dispatcher)
+        public FileDataRecorderWriter(IConfiguration config, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.FileRecorder, "FileDataRecorder", nodeCache, dispatcher, factory)
         {
             if (!Directory.Exists(ServerInfo.GetTrendingDirectory()))
             {

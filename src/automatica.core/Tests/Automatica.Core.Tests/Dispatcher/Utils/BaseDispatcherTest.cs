@@ -23,7 +23,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         protected INodeInstanceCache NodeInstanceCache { get; set; }
         protected ILogicInterfaceInstanceCache LogicInterfaceInstanceCache { get; set; }
 
-        protected IRuleEngineDispatcher RuleEngineDispatcher { get; set; }
+        protected ILogicEngineDispatcher LogicEngineDispatcher { get; set; }
         protected IRuleInstanceVisuNotify RuleNotify { get; set; }
 
         protected BaseDispatcherTest(IDispatcher dispatcher)
@@ -40,14 +40,14 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             var notifyMock = new Mock<IRuleInstanceVisuNotify>();
             RuleNotify = notifyMock.Object;
 
-            RuleEngineDispatcher = new RuleEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
-                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<RuleEngineDispatcher>.Instance, RuleNotify);
+            LogicEngineDispatcher = new LogicEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
+                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<LogicEngineDispatcher>.Instance, RuleNotify);
         }
 
 
         ~BaseDispatcherTest()
         {
-            RuleEngineDispatcher.Dispose();
+            LogicEngineDispatcher.Dispose();
         }
 
         protected void CreateLink(Action<Link> action)

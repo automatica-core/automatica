@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
@@ -13,8 +15,7 @@ namespace Automatica.Core.EF.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
@@ -25,8 +26,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Icon")
@@ -38,8 +39,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
@@ -73,8 +74,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Icon")
@@ -88,8 +89,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("NeedsThis2AreaType")
                         .HasColumnType("TEXT");
@@ -120,14 +121,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -142,19 +143,19 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Meta")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("This2BoardType")
                         .HasColumnType("TEXT");
@@ -179,14 +180,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Type");
 
@@ -202,14 +203,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -225,21 +226,21 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Color")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(128)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("rgba(255, 255, 255, 1)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Icon")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleteable")
                         .ValueGeneratedOnAdd()
@@ -253,8 +254,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
@@ -287,8 +288,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<Guid>("FactoryReference")
@@ -307,8 +308,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Type");
 
@@ -363,14 +364,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Type");
 
@@ -385,8 +386,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<bool>("IsDeleted")
@@ -409,8 +410,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
@@ -534,8 +535,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<Guid>("FactoryReference")
@@ -573,16 +574,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MaxInstances")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NameMeta")
                         .HasColumnType("TEXT");
@@ -594,6 +595,7 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("This2DefaultMobileVisuTemplate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasDefaultValue(new Guid("16780dfd-887a-4a0a-9b2a-4d62ccc32c93"));
 
@@ -743,14 +745,14 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<Guid>("FactoryReference")
@@ -758,8 +760,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Group")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("GroupOrder")
                         .ValueGeneratedOnAdd()
@@ -778,8 +780,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Meta")
                         .IsRequired()
@@ -787,8 +789,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Order")
                         .ValueGeneratedOnAdd()
@@ -796,15 +798,13 @@ namespace Automatica.Core.EF.Migrations
                         .HasDefaultValueSql("1");
 
                     b.Property<Guid?>("This2NodeTemplate")
-                        .HasColumnType("TEXT")
-                        .HasDefaultValue(null);
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("This2PropertyType")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("This2VisuObjectTemplate")
-                        .HasColumnType("TEXT")
-                        .HasDefaultValue(null);
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -832,14 +832,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("This2PropertyTemplate")
                         .HasColumnType("TEXT");
@@ -891,18 +891,18 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Meta")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Type");
 
@@ -916,8 +916,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<bool>("IsDeleted")
@@ -930,8 +930,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
@@ -985,19 +985,19 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1049,8 +1049,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<int>("InterfaceType")
@@ -1064,8 +1064,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ParameterDataType")
                         .HasColumnType("INTEGER");
@@ -1096,8 +1096,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<bool>("IsDeleted")
@@ -1107,8 +1107,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("This2RulePageType")
                         .HasColumnType("INTEGER");
@@ -1128,19 +1128,19 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1155,29 +1155,30 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Group")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<float>("Height")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("This2DefaultMobileVisuTemplate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasDefaultValue(new Guid("16780dfd-887a-4a0a-9b2a-4d62ccc32c93"));
 
@@ -1209,6 +1210,9 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
+
+                    b.Property<string>("MetaData")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Order")
                         .HasColumnType("INTEGER");
@@ -1264,8 +1268,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Source")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("This2NodeInstance")
                         .HasColumnType("TEXT");
@@ -1290,21 +1294,21 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("DriverGuid")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(36);
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("RuleGuid")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(36);
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1318,8 +1322,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Description")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<float>("Height")
@@ -1330,8 +1334,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
@@ -1373,14 +1377,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Group")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<float>("Height")
                         .HasColumnType("REAL");
@@ -1392,8 +1396,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<float?>("MaxHeight")
                         .HasColumnType("REAL");
@@ -1409,8 +1413,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("This2VisuPageType")
                         .HasColumnType("INTEGER");
@@ -1436,8 +1440,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<double>("Height")
@@ -1450,8 +1454,8 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
@@ -1474,7 +1478,7 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("This2UserGroup");
 
                     b.HasIndex("This2VisuPageType")
-                        .HasName("This2VisuPageType");
+                        .HasDatabaseName("This2VisuPageType");
 
                     b.ToTable("VisuPages");
                 });
@@ -1487,19 +1491,19 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1515,19 +1519,19 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1558,8 +1562,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<bool>("IsDeleteable")
@@ -1569,13 +1573,13 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1591,34 +1595,34 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Salt")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(1024);
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1664,14 +1668,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
                         .HasMaxLength(1024)
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
@@ -1698,21 +1702,27 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.Areas.AreaTemplate", "This2AreaTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2AreaTemplate")
-                        .HasConstraintName("FK_AreaInstance_This2AreaTemplateNavigation")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_AreaInstance_This2AreaTemplateNavigation");
 
                     b.HasOne("Automatica.Core.EF.Models.Areas.AreaInstance", "This2ParentNavigation")
                         .WithMany("InverseThis2ParentNavigation")
                         .HasForeignKey("This2Parent")
-                        .HasConstraintName("FK_AreaInstance_This2ParentNavigation")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("FK_AreaInstance_This2ParentNavigation");
 
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
-                        .HasConstraintName("FK_AreaInstance_This2UserGroup")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK_AreaInstance_This2UserGroup");
+
+                    b.Navigation("This2AreaTemplateNavigation");
+
+                    b.Navigation("This2ParentNavigation");
+
+                    b.Navigation("This2UserGroupNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaTemplate", b =>
@@ -1720,23 +1730,29 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.Areas.AreaType", "NeedsThis2AreaTypeNavigation")
                         .WithMany()
                         .HasForeignKey("NeedsThis2AreaType")
-                        .HasConstraintName("FK_AreaTemplate_NeedsThis2AreaTypeNavigation")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_AreaTemplate_NeedsThis2AreaTypeNavigation");
 
                     b.HasOne("Automatica.Core.EF.Models.Areas.AreaType", "ProvidesThis2AreayTypeNavigation")
                         .WithMany()
                         .HasForeignKey("ProvidesThis2AreayType")
-                        .HasConstraintName("FK_AreaTemplate_ProvidesThis2AreayTypeNavigation")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_AreaTemplate_ProvidesThis2AreayTypeNavigation");
 
                     b.HasOne("Automatica.Core.EF.Models.Areas.AreaType", "This2AreaTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2AreaType")
-                        .HasConstraintName("FK_AreaTemplate_AreaType")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_AreaTemplate_AreaType");
+
+                    b.Navigation("NeedsThis2AreaTypeNavigation");
+
+                    b.Navigation("ProvidesThis2AreayTypeNavigation");
+
+                    b.Navigation("This2AreaTypeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardInterface", b =>
@@ -1744,14 +1760,18 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.BoardType", "This2BoardTypeNavigation")
                         .WithMany("BoardInterface")
                         .HasForeignKey("This2BoardType")
-                        .HasConstraintName("BoardInterface_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("BoardInterface_ibfk_1");
 
                     b.HasOne("Automatica.Core.EF.Models.InterfaceType", "This2InterfaceTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2InterfaceType")
-                        .HasConstraintName("BoardInterface_ibfk_2")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("BoardInterface_ibfk_2");
+
+                    b.Navigation("This2BoardTypeNavigation");
+
+                    b.Navigation("This2InterfaceTypeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Categories.CategoryInstance", b =>
@@ -1759,15 +1779,19 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.Categories.CategoryGroup", "This2CategoryGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2CategoryGroup")
-                        .HasConstraintName("FK_CategoryInstance_This2CategoryGroupNavigation")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_CategoryInstance_This2CategoryGroupNavigation");
 
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
-                        .HasConstraintName("FK_CategoryInstance_This2UserGroup")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK_CategoryInstance_This2UserGroup");
+
+                    b.Navigation("This2CategoryGroupNavigation");
+
+                    b.Navigation("This2UserGroupNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Link", b =>
@@ -1775,32 +1799,42 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance2RulePage", "This2NodeInstance2RulePageInputNavigation")
                         .WithMany()
                         .HasForeignKey("This2NodeInstance2RulePageInput")
-                        .HasConstraintName("Link_ibfk_2")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("Link_ibfk_2");
 
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance2RulePage", "This2NodeInstance2RulePageOutputNavigation")
                         .WithMany()
                         .HasForeignKey("This2NodeInstance2RulePageOutput")
-                        .HasConstraintName("Link_ibfk_5")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("Link_ibfk_5");
 
                     b.HasOne("Automatica.Core.EF.Models.RuleInterfaceInstance", "This2RuleInterfaceInstanceInputNavigation")
                         .WithMany()
                         .HasForeignKey("This2RuleInterfaceInstanceInput")
-                        .HasConstraintName("Link_ibfk_3")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("Link_ibfk_3");
 
                     b.HasOne("Automatica.Core.EF.Models.RuleInterfaceInstance", "This2RuleInterfaceInstanceOutputNavigation")
                         .WithMany()
                         .HasForeignKey("This2RuleInterfaceInstanceOutput")
-                        .HasConstraintName("Link_ibfk_4")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("Link_ibfk_4");
 
                     b.HasOne("Automatica.Core.EF.Models.RulePage", "This2RulePageNavigation")
                         .WithMany("Link")
                         .HasForeignKey("This2RulePage")
-                        .HasConstraintName("Link_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("Link_ibfk_1");
+
+                    b.Navigation("This2NodeInstance2RulePageInputNavigation");
+
+                    b.Navigation("This2NodeInstance2RulePageOutputNavigation");
+
+                    b.Navigation("This2RuleInterfaceInstanceInputNavigation");
+
+                    b.Navigation("This2RuleInterfaceInstanceOutputNavigation");
+
+                    b.Navigation("This2RulePageNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance", b =>
@@ -1823,8 +1857,8 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance", "This2ParentNodeInstanceNavigation")
                         .WithMany("InverseThis2ParentNodeInstanceNavigation")
                         .HasForeignKey("This2ParentNodeInstance")
-                        .HasConstraintName("NodeInstance_ibfk_3")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("NodeInstance_ibfk_3");
 
                     b.HasOne("Automatica.Core.EF.Models.Slave", "This2SlaveNavigation")
                         .WithMany()
@@ -1834,8 +1868,20 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
-                        .HasConstraintName("NodeInstance_This2UserGroup")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("NodeInstance_This2UserGroup");
+
+                    b.Navigation("This2AreaInstanceNavigation");
+
+                    b.Navigation("This2CategoryInstanceNavigation");
+
+                    b.Navigation("This2NodeTemplateNavigation");
+
+                    b.Navigation("This2ParentNodeInstanceNavigation");
+
+                    b.Navigation("This2SlaveNavigation");
+
+                    b.Navigation("This2UserGroupNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance2RulePage", b =>
@@ -1843,14 +1889,18 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance", "This2NodeInstanceNavigation")
                         .WithMany("NodeInstance2RulePage")
                         .HasForeignKey("This2NodeInstance")
-                        .HasConstraintName("NodeInstance2RulePage_ibfk_2")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("NodeInstance2RulePage_ibfk_2");
 
                     b.HasOne("Automatica.Core.EF.Models.RulePage", "This2RulePageNavigation")
                         .WithMany("NodeInstance2RulePage")
                         .HasForeignKey("This2RulePage")
-                        .HasConstraintName("NodeInstance2RulePage_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("NodeInstance2RulePage_ibfk_1");
+
+                    b.Navigation("This2NodeInstanceNavigation");
+
+                    b.Navigation("This2RulePageNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeTemplate", b =>
@@ -1858,27 +1908,35 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.InterfaceType", "NeedsInterface2InterfacesTypeNavigation")
                         .WithMany()
                         .HasForeignKey("NeedsInterface2InterfacesType")
-                        .HasConstraintName("NodeTemplate_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("NodeTemplate_ibfk_1");
 
                     b.HasOne("Automatica.Core.EF.Models.InterfaceType", "ProvidesInterface2InterfaceTypeNavigation")
                         .WithMany()
                         .HasForeignKey("ProvidesInterface2InterfaceType")
-                        .HasConstraintName("NodeTemplate_ibfk_2")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("NodeTemplate_ibfk_2");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuObjectTemplate", "THis2DefaultMobileVisuTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2DefaultMobileVisuTemplate")
-                        .HasConstraintName("NodeTemplate_DefaultVisuMobileTemplate")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("NodeTemplate_DefaultVisuMobileTemplate");
 
                     b.HasOne("Automatica.Core.EF.Models.NodeDataType", "This2NodeDataTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2NodeDataType")
-                        .HasConstraintName("NodeTemplate_ibfk_3")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("NodeTemplate_ibfk_3");
+
+                    b.Navigation("NeedsInterface2InterfacesTypeNavigation");
+
+                    b.Navigation("ProvidesInterface2InterfaceTypeNavigation");
+
+                    b.Navigation("THis2DefaultMobileVisuTemplateNavigation");
+
+                    b.Navigation("This2NodeDataTypeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyInstance", b =>
@@ -1886,44 +1944,44 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance", "This2NodeInstanceNavigation")
                         .WithMany("PropertyInstance")
                         .HasForeignKey("This2NodeInstance")
-                        .HasConstraintName("PropertyInstance_ibfk_2")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("PropertyInstance_ibfk_2");
 
                     b.HasOne("Automatica.Core.EF.Models.PropertyTemplate", "This2PropertyTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2PropertyTemplate")
-                        .HasConstraintName("PropertyInstance_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("PropertyInstance_ibfk_1");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuObjectInstance", "This2VisuObjectInstanceNavigation")
                         .WithMany("PropertyInstance")
                         .HasForeignKey("This2VisuObjectInstance")
-                        .HasConstraintName("PropertyInstance_VisuObjectInstance_ibfk_3")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("PropertyInstance_VisuObjectInstance_ibfk_3");
 
                     b.HasOne("Automatica.Core.EF.Models.Areas.AreaInstance", "ValueAreaInstanceNavigation")
                         .WithMany()
                         .HasForeignKey("ValueAreaInstance")
-                        .HasConstraintName("PropertyInstance_AreaInstance_ValueAreaInstance")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("PropertyInstance_AreaInstance_ValueAreaInstance");
 
                     b.HasOne("Automatica.Core.EF.Models.Categories.CategoryInstance", "ValueCategoryInstanceNavigation")
                         .WithMany()
                         .HasForeignKey("ValueCategoryInstance")
-                        .HasConstraintName("PropertyInstance_CategoryInstance_ValueCategoryInstance")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("PropertyInstance_CategoryInstance_ValueCategoryInstance");
 
                     b.HasOne("Automatica.Core.EF.Models.NodeInstance", "ValueNodeInstanceNavigation")
                         .WithMany()
                         .HasForeignKey("ValueNodeInstance")
-                        .HasConstraintName("PropertyInstance_NodeInstance_ValueNodeInstance")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("PropertyInstance_NodeInstance_ValueNodeInstance");
 
                     b.HasOne("Automatica.Core.EF.Models.RulePage", "ValueRulePageNavigation")
                         .WithMany()
                         .HasForeignKey("ValueRulePage")
-                        .HasConstraintName("PropertyInstance_RulePage_ValueRulePage")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("PropertyInstance_RulePage_ValueRulePage");
 
                     b.HasOne("Automatica.Core.EF.Models.Slave", "ValueSlaveNavigation")
                         .WithMany()
@@ -1933,8 +1991,26 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.VisuPage", "ValueVisuPageNavigation")
                         .WithMany()
                         .HasForeignKey("ValueVisuPage")
-                        .HasConstraintName("PropertyInstance_VisuPage_ValueVisuPage")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("PropertyInstance_VisuPage_ValueVisuPage");
+
+                    b.Navigation("This2NodeInstanceNavigation");
+
+                    b.Navigation("This2PropertyTemplateNavigation");
+
+                    b.Navigation("This2VisuObjectInstanceNavigation");
+
+                    b.Navigation("ValueAreaInstanceNavigation");
+
+                    b.Navigation("ValueCategoryInstanceNavigation");
+
+                    b.Navigation("ValueNodeInstanceNavigation");
+
+                    b.Navigation("ValueRulePageNavigation");
+
+                    b.Navigation("ValueSlaveNavigation");
+
+                    b.Navigation("ValueVisuPageNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplate", b =>
@@ -1947,13 +2023,19 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.PropertyType", "This2PropertyTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2PropertyType")
-                        .HasConstraintName("PropertyTemplate_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("PropertyTemplate_ibfk_1");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuObjectTemplate", "This2VisuObjectTemplateNavigation")
                         .WithMany("PropertyTemplate")
                         .HasForeignKey("This2VisuObjectTemplate")
                         .HasConstraintName("PropertyTemplate_ibfk_3");
+
+                    b.Navigation("This2NodeTemplateNavigation");
+
+                    b.Navigation("This2PropertyTypeNavigation");
+
+                    b.Navigation("This2VisuObjectTemplateNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraint", b =>
@@ -1961,9 +2043,11 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.PropertyTemplate", "This2PropertyTemplateNavigation")
                         .WithMany("Constraints")
                         .HasForeignKey("This2PropertyTemplate")
-                        .HasConstraintName("PropertyTemplateConstraint_PropertyTemplate_Navigation")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("PropertyTemplateConstraint_PropertyTemplate_Navigation");
+
+                    b.Navigation("This2PropertyTemplateNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraintData", b =>
@@ -1971,9 +2055,11 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.PropertyTemplateConstraint", "This2PropertyTemplateConstraintNavigation")
                         .WithMany("ConstraintData")
                         .HasForeignKey("This2PropertyTemplateConstraint")
-                        .HasConstraintName("This2PropertyTemplateConstraintNavigation_PropertyTemplate_Navigation")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("This2PropertyTemplateConstraintNavigation_PropertyTemplate_Navigation");
+
+                    b.Navigation("This2PropertyTemplateConstraintNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInstance", b =>
@@ -1991,22 +2077,32 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.RulePage", "This2RulePageNavigation")
                         .WithMany("RuleInstance")
                         .HasForeignKey("This2RulePage")
-                        .HasConstraintName("RuleInstance_ibfk_2")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleInstance_ibfk_2");
 
                     b.HasOne("Automatica.Core.EF.Models.RuleTemplate", "This2RuleTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2RuleTemplate")
-                        .HasConstraintName("RuleInstance_ibfk_1")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleInstance_ibfk_1");
 
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
-                        .HasConstraintName("RuleInstance_This2UserGroup")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("RuleInstance_This2UserGroup");
+
+                    b.Navigation("This2AreaInstanceNavigation");
+
+                    b.Navigation("This2CategoryInstanceNavigation");
+
+                    b.Navigation("This2RulePageNavigation");
+
+                    b.Navigation("This2RuleTemplateNavigation");
+
+                    b.Navigation("This2UserGroupNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceInstance", b =>
@@ -2014,16 +2110,20 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.RuleInstance", "This2RuleInstanceNavigation")
                         .WithMany("RuleInterfaceInstance")
                         .HasForeignKey("This2RuleInstance")
-                        .HasConstraintName("RuleInterfaceInstance_ibfk_1")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleInterfaceInstance_ibfk_1");
 
                     b.HasOne("Automatica.Core.EF.Models.RuleInterfaceTemplate", "This2RuleInterfaceTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2RuleInterfaceTemplate")
-                        .HasConstraintName("RuleInterfaceInstance_ibfk_2")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleInterfaceInstance_ibfk_2");
+
+                    b.Navigation("This2RuleInstanceNavigation");
+
+                    b.Navigation("This2RuleInterfaceTemplateNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceTemplate", b =>
@@ -2031,14 +2131,18 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.RuleInterfaceDirection", "This2RuleInterfaceDirectionNavigation")
                         .WithMany()
                         .HasForeignKey("This2RuleInterfaceDirection")
-                        .HasConstraintName("RuleInterfaceTemplate_ibfk_2")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleInterfaceTemplate_ibfk_2");
 
                     b.HasOne("Automatica.Core.EF.Models.RuleTemplate", "This2RuleTemplateNavigation")
                         .WithMany("RuleInterfaceTemplate")
                         .HasForeignKey("This2RuleTemplate")
-                        .HasConstraintName("RuleInterfaceTemplate_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleInterfaceTemplate_ibfk_1");
+
+                    b.Navigation("This2RuleInterfaceDirectionNavigation");
+
+                    b.Navigation("This2RuleTemplateNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RulePage", b =>
@@ -2046,8 +2150,10 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.RulePageType", "This2RulePageTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2RulePageType")
-                        .HasConstraintName("RulePage_ibfk_1")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RulePage_ibfk_1");
+
+                    b.Navigation("This2RulePageTypeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleTemplate", b =>
@@ -2055,9 +2161,11 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.VisuObjectTemplate", "This2DefaultMobileVisuTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2DefaultMobileVisuTemplate")
-                        .HasConstraintName("RuleTemplate_DefaultVisuMobileTemplate")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("RuleTemplate_DefaultVisuMobileTemplate");
+
+                    b.Navigation("This2DefaultMobileVisuTemplateNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>
@@ -2067,6 +2175,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("This2NodeInstance")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("This2NodeInstanceNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectInstance", b =>
@@ -2074,22 +2184,28 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
-                        .HasConstraintName("VisuObjectInstance_This2UserGroup")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("VisuObjectInstance_This2UserGroup");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuObjectTemplate", "This2VisuObjectTemplateNavigation")
                         .WithMany()
                         .HasForeignKey("This2VisuObjectTemplate")
-                        .HasConstraintName("VisuObjectInstance_ibfk_1")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("VisuObjectInstance_ibfk_1");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuPage", "This2VisuPageNavigation")
                         .WithMany("VisuObjectInstances")
                         .HasForeignKey("This2VisuPage")
-                        .HasConstraintName("VisuObjectInstance_ibfk_2")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("VisuObjectInstance_ibfk_2");
+
+                    b.Navigation("This2UserGroupNavigation");
+
+                    b.Navigation("This2VisuObjectTemplateNavigation");
+
+                    b.Navigation("This2VisuPageNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectTemplate", b =>
@@ -2097,9 +2213,11 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.EF.Models.VisuPageType", "This2VisuPageTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2VisuPageType")
-                        .HasConstraintName("FK_VisuObjectTemplates_VisuPageTypes_VisuPageTypeObjId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_VisuObjectTemplates_VisuPageTypes_VisuPageTypeObjId");
+
+                    b.Navigation("This2VisuPageTypeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuPage", b =>
@@ -2107,15 +2225,19 @@ namespace Automatica.Core.EF.Migrations
                     b.HasOne("Automatica.Core.Model.Models.User.UserGroup", "This2UserGroupNavigation")
                         .WithMany()
                         .HasForeignKey("This2UserGroup")
-                        .HasConstraintName("VisuPage_This2UserGroup")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("VisuPage_This2UserGroup");
 
                     b.HasOne("Automatica.Core.EF.Models.VisuPageType", "This2VisuPageTypeNavigation")
                         .WithMany()
                         .HasForeignKey("This2VisuPageType")
-                        .HasConstraintName("VisuPage_ibfk_1")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("VisuPage_ibfk_1");
+
+                    b.Navigation("This2UserGroupNavigation");
+
+                    b.Navigation("This2VisuPageTypeNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Priviledge2Role", b =>
@@ -2131,6 +2253,10 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("This2Role")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("This2PriviledgeNavigation");
+
+                    b.Navigation("This2RoleNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User2Group", b =>
@@ -2146,6 +2272,10 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("This2UserGroup")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("This2UserGroupNavigation");
+
+                    b.Navigation("This2UserNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User2Role", b =>
@@ -2161,6 +2291,10 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("This2User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("This2RoleNavigation");
+
+                    b.Navigation("This2UserNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.UserGroup2Role", b =>
@@ -2176,6 +2310,102 @@ namespace Automatica.Core.EF.Migrations
                         .HasForeignKey("This2UserGroup")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("This2RoleNavigation");
+
+                    b.Navigation("This2UserGroupNavigation");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
+                {
+                    b.Navigation("InverseThis2ParentNavigation");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.BoardType", b =>
+                {
+                    b.Navigation("BoardInterface");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance", b =>
+                {
+                    b.Navigation("InverseThis2ParentNodeInstanceNavigation");
+
+                    b.Navigation("NodeInstance2RulePage");
+
+                    b.Navigation("PropertyInstance");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.NodeTemplate", b =>
+                {
+                    b.Navigation("PropertyTemplate");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplate", b =>
+                {
+                    b.Navigation("Constraints");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraint", b =>
+                {
+                    b.Navigation("ConstraintData");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.RuleInstance", b =>
+                {
+                    b.Navigation("RuleInterfaceInstance");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.RulePage", b =>
+                {
+                    b.Navigation("Link");
+
+                    b.Navigation("NodeInstance2RulePage");
+
+                    b.Navigation("RuleInstance");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.RuleTemplate", b =>
+                {
+                    b.Navigation("RuleInterfaceTemplate");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectInstance", b =>
+                {
+                    b.Navigation("PropertyInstance");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectTemplate", b =>
+                {
+                    b.Navigation("PropertyTemplate");
+                });
+
+            modelBuilder.Entity("Automatica.Core.EF.Models.VisuPage", b =>
+                {
+                    b.Navigation("VisuObjectInstances");
+                });
+
+            modelBuilder.Entity("Automatica.Core.Model.Models.User.Priviledge", b =>
+                {
+                    b.Navigation("InverseThis2Roles");
+                });
+
+            modelBuilder.Entity("Automatica.Core.Model.Models.User.Role", b =>
+                {
+                    b.Navigation("InverseThis2Priviledges");
+                });
+
+            modelBuilder.Entity("Automatica.Core.Model.Models.User.User", b =>
+                {
+                    b.Navigation("InverseThis2Roles");
+
+                    b.Navigation("InverseThis2UserGroups");
+                });
+
+            modelBuilder.Entity("Automatica.Core.Model.Models.User.UserGroup", b =>
+                {
+                    b.Navigation("InverseThis2Roles");
+
+                    b.Navigation("InverseThis2Users");
                 });
 #pragma warning restore 612, 618
         }

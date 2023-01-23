@@ -38,7 +38,7 @@ namespace Automatica.Core.Tests.Dispatcher
 
             });
 
-            RuleEngineDispatcher.Load();
+            LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
             await Task.Delay(200);
@@ -73,7 +73,7 @@ namespace Automatica.Core.Tests.Dispatcher
                 };
             });
 
-            RuleEngineDispatcher.Load();
+            LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
             await Task.Delay(200);
@@ -112,7 +112,7 @@ namespace Automatica.Core.Tests.Dispatcher
                 a.This2RuleInterfaceInstanceOutput = outputInterface.ObjId;
             });
 
-            RuleEngineDispatcher.Load();
+            LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
             await Task.Delay(200);
@@ -151,7 +151,7 @@ namespace Automatica.Core.Tests.Dispatcher
                 };
             });
 
-            RuleEngineDispatcher.Load();
+            LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
             await Task.Delay(200);

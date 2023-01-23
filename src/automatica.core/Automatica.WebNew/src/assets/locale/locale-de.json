@@ -2,6 +2,12 @@
   "ERROR": {
     "UNAUTHORISED": "Not authorised"
   },
+  "SERVER":{
+    "RECORDERS": {
+      "HOSTED_GRAFANA": "Hosted Grafana Recorder"
+    },
+    "SETTINGS": "Server Einstellungen"
+  },
   "COMMON": {
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualisierung",
@@ -110,7 +116,8 @@
       "IMPORT": "Import",
       "SETTING": "Einstellungen",
       "DISCOVERY": "Suchen",
-      "TRENDING": "Datenaufzeichnung"
+      "TRENDING": "Datenaufzeichnung",
+      "SLAVE": "Slave"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -348,64 +355,76 @@
       "TIMEZONEOFFSET": {
         "NAME": "Zeitzone Differenz [h]",
         "DESCRIPTION": ""
+      },
+      "TRENDINGRECORDERS":{
+        "NAME": "Trending Ziele"
+      },
+      "HOSTEDGRAFANAAPIKEY": {
+        "NAME": "Api Key"
+      },
+      "HOSTEDGRAFANAHOST": {
+        "NAME": "URL"
+      },
+      "HOSTEDGRAFANAUSERID": {
+        "NAME": "User ID"
       }
     },
     "CATEGORY_INSTANCE": {
       "ALARM": {
         "NAME": "Alarm",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Alarme"
       },
       "AUDIO": {
         "NAME": "Audio",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Audo/Video"
       },
       "LIGHTNING": {
         "NAME": "Licht",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Licht"
       },
       "SHADING": {
         "NAME": "Beschattung",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Beschattung (Rollo, Jalousie,...)"
       },
       "ENERGY": {
         "NAME": "Energie",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Energie"
       },
       "WINDOW": {
         "NAME": "Fenster",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Fenster"
       },
       "HEATING": {
         "NAME": "Heizung",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Heizung"
       },
       "CLIMATE": {
         "NAME": "Kühlung",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Kühlung"
       },
       "MULTIMEDIA": {
         "NAME": "Multimedia",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Multimedia"
       },
       "PHOTOVOLTAIC": {
         "NAME": "Photovoltaik",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Photovoltaik"
       },
       "POWER": {
         "NAME": "Power",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Power"
       },
       "TECHNOLOGY": {
         "NAME": "Technik",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Technik"
       },
       "TEMPERATURE": {
         "NAME": "Temperatur",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Temperatur"
       },
       "WEATHER": {
         "NAME": "Wetter",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Wetter"
       }
     },
     "CATEGORY_GROUP": {

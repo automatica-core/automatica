@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Driver;
+﻿using System;
+using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using OpenWeatherMap;
 using System.Collections.Generic;
@@ -16,10 +17,29 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
         private List<OpenWeatherMapDriverNode> _nodes = new List<OpenWeatherMapDriverNode>();
 
         private ILogger _logger;
+        private readonly int _timeZoneOffset = 0;
 
         public OpenWeatherMapDriver(IDriverContext driverContext) : base(driverContext)
         {
             _logger = driverContext.Logger;
+
+            var timeZoneOffset = driverContext.NodeTemplateFactory.GetSetting("timezoneOffset");
+
+            try
+            {
+                if (timeZoneOffset != null)
+                {
+                    _timeZoneOffset = timeZoneOffset.ValueInt.Value;
+                }
+                else
+                {
+                    _timeZoneOffset = 0;
+                }
+            }
+            catch
+            {
+                //ignore exception
+            }
         }
 
         public override bool Init()
@@ -42,8 +62,8 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             };
 
             _logger.LogInformation($"Using longitude {longitude} latitude {latitude} refresh rate {_timer.Interval}ms");
+          
 
-            
 
             return base.Init();
         }
@@ -59,8 +79,14 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            await ReadValues();
-
+            try
+            {
+                await ReadValues();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error reading values...{e}");
+            }
         }
 
         public override async Task<bool> Read()
@@ -95,10 +121,10 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             switch(ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "openweathermap-sunrise":
-                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Rise.ToLocalTime());
+                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Rise.ToLocalTime().AddHours(_timeZoneOffset));
                     break;
                 case "openweathermap-sunset":
-                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Set.ToLocalTime());
+                    node = new OpenWeatherMapDriverNode(ctx, (x) => x.City.Sun.Set.ToLocalTime().AddHours(_timeZoneOffset));
                     break;
                 case "openweathermap-humidity":
                     node = new OpenWeatherMapDriverNode(ctx, (x) => x.Humidity.Value);

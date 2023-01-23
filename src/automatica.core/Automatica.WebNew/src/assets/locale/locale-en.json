@@ -2,6 +2,12 @@
   "ERROR": {
     "UNAUTHORISED": "Nicht berechtigt"
   },
+  "SERVER":{
+    "RECORDERS": {
+      "HOSTED_GRAFANA": "Hosted Grafana Recorder"
+    },
+    "SETTINGS": "Server Settings"
+  },
   "COMMON": {
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualization",
@@ -110,7 +116,8 @@
       "IMPORT": "Import",
       "SETTING": "Settings",
       "DISCOVERY": "Discovery",
-      "TRENDING": "Trendings"
+      "TRENDING": "Trendings",
+      "SLAVE": "Slave"
     },
     "FACTOR": {
       "NAME": "Factor",
@@ -348,64 +355,76 @@
       "TIMEZONEOFFSET": {
         "NAME": "Timezone offset [h]",
         "DESCRIPTION": ""
+      },
+      "TRENDINGRECORDERS":{
+        "NAME": "Trending Destinations"
+      },
+      "HOSTEDGRAFANAAPIKEY": {
+        "NAME": "Api Key"
+      },
+      "HOSTEDGRAFANAHOST": {
+        "NAME": "URL"
+      },
+      "HOSTEDGRAFANAUSERID": {
+        "NAME": "User ID"
       }
     },
     "CATEGORY_INSTANCE": {
       "ALARM": {
         "NAME": "Alarm",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Alarm"
       },
       "AUDIO": {
         "NAME": "Audio",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Audio"
       },
       "LIGHTNING": {
         "NAME": "Lightning",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Lightning"
       },
       "SHADING": {
         "NAME": "Shading",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Shading"
       },
       "ENERGY": {
         "NAME": "Energy",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Energy"
       },
       "WINDOW": {
         "NAME": "Window",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Window"
       },
       "HEATING": {
         "NAME": "Heating",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Heating"
       },
       "CLIMATE": {
         "NAME": "AC",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "AC"
       },
       "MULTIMEDIA": {
         "NAME": "Multimedia",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Multimedia"
       },
       "PHOTOVOLTAIC": {
         "NAME": "Photovoltaik",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Photovoltaik"
       },
       "POWER": {
         "NAME": "Power",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Power"
       },
       "TECHNOLOGY": {
         "NAME": "Technology",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Technology"
       },
       "TEMPERATURE": {
         "NAME": "Temperature",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Temperature"
       },
       "WEATHER": {
         "NAME": "Weather",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "Weather"
       }
     },
     "CATEGORY_GROUP": {

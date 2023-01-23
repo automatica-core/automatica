@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
+using Microsoft.Extensions.Logging;
 using P3.Driver.Sonos.Upnp.Proxy;
 using P3.Driver.Sonos.Upnp.Services.Factories;
 using P3.Driver.Sonos.Upnp.Services.Models;
@@ -11,6 +13,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 {
     public class AvTransportService : IAvTransportService
     {
+        private readonly ILogger _logger;
         private readonly IUpnpClient _upnpClient;
 
         private const string ControlUrl = "/MediaRenderer/AVTransport/Control";
@@ -18,60 +21,77 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         private static XNamespace ActionXNamespace => ActionNamespace;
 
-        public AvTransportService(string ipAddress)
+        public AvTransportService(string ipAddress, ILogger logger)
         {
+            _logger = logger;
             var upnpUri = new SonosUri(ipAddress, ControlUrl);
             _upnpClient = new UpnpClient(upnpUri.ToUri(), ActionNamespace);
         }
 
         public async Task StopAsync()
         {
-            await _upnpClient.InvokeActionAsync("Stop");
+            var response = await _upnpClient.InvokeActionAsync("Stop");
+            await LogResponse($"{nameof(StopAsync)}", response);
         }
 
         public async Task PauseAsync()
         {
-            await _upnpClient.InvokeActionAsync("Pause");
+            var response = await _upnpClient.InvokeActionAsync("Pause");
+            await LogResponse($"{nameof(PauseAsync)}", response);
         }
 
         public async Task PlayAsync(int playSpeed = 1)
         {
-            await _upnpClient.InvokeActionAsync("Play", new List<UpnpArgument>
+            var response = await _upnpClient.InvokeActionAsync("Play", new List<UpnpArgument>
             {
                 new UpnpArgument("Speed", playSpeed)
             });
+;
+            await LogResponse($"{nameof(PlayAsync)}", response);
+        }
+
+        private async Task LogResponse(string responseType, HttpResponseMessage response)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            _logger.LogTrace($"{responseType} returned {response.StatusCode} with body {body}");
         }
 
         public async Task NextTrackAsync()
         {
-            await _upnpClient.InvokeActionAsync("Next");
+            var response = await _upnpClient.InvokeActionAsync("Next");
+            await LogResponse($"{nameof(NextTrackAsync)}", response);
         }
 
         public async Task PreviousTrackAsync()
         {
-            await _upnpClient.InvokeActionAsync("Previous");
+            var response = await _upnpClient.InvokeActionAsync("Previous");
+            await LogResponse($"{nameof(PreviousTrackAsync)}", response);
         }
 
         public async Task SeekAsync(SeekUnit seekUnit, string position)           // (REL_TIME) position = hh:mm:ss, (TRACK_NR) position = track number
         {
-            await _upnpClient.InvokeActionAsync("Seek", new List<UpnpArgument>
+            var response = await _upnpClient.InvokeActionAsync("Seek", new List<UpnpArgument>
             {
                 new UpnpArgument("Unit", seekUnit.Value),
                 new UpnpArgument("Target", position)
             });
+            await LogResponse($"{nameof(SeekAsync)}", response);
         }
 
         public async Task ClearQueueAsync()
         {
-            await _upnpClient.InvokeActionAsync("RemoveAllTracksFromQueue");
+            var response = await _upnpClient.InvokeActionAsync("RemoveAllTracksFromQueue");
+            await LogResponse($"{nameof(ClearQueueAsync)}", response);
         }
 
         public async Task RemoveTrackFromQueueAsync(QueueItemId queueItemId)
         {
-            await _upnpClient.InvokeActionAsync("RemoveTrackFromQueue", new List<UpnpArgument>
+            var response = await _upnpClient.InvokeActionAsync("RemoveTrackFromQueue", new List<UpnpArgument>
             {
                 new UpnpArgument("ObjectID", queueItemId.ObjectId)
             });
+
+            await LogResponse($"{nameof(RemoveTrackFromQueueAsync)}", response);
         }
 
         public async Task<AddUriToQueueResponse> AddTrackToQueueAsync(string enqueuedUri, int desiredFirstTrackNumberEnqueued = 0, bool enqueueAsNext = false) 
@@ -115,10 +135,11 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetPlayModeAsync(PlayMode playMode)
         {
-            await _upnpClient.InvokeActionAsync("SetPlayMode", new List<UpnpArgument>
+            var response = await _upnpClient.InvokeActionAsync("SetPlayMode", new List<UpnpArgument>
             {
                 new UpnpArgument("NewPlayMode", playMode.Value)
             });
+            await LogResponse($"{nameof(SetPlayModeAsync)}", response);
         }
 
         /// <summary>

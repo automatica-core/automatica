@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Extensions.Logging.Abstractions;
 using P3.Driver.MBus.Frames;
 using P3.Driver.MBus.Frames.VariableData;

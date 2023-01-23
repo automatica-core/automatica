@@ -15,6 +15,8 @@ import { VisualizationDataFacade } from "src/app/base/model/visualization-data-f
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { DataService } from "src/app/services/data.service";
+import { VirtualPropertyInstance } from "src/app/base/model/virtual-props";
+import { PropertyTemplateType } from "src/app/base/model/property-template";
 
 @Component({
   selector: "app-mobile-container",
@@ -56,8 +58,6 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       this.visuTemplatesMap.set(v.ObjId, v);
     }
     this.version = await this.configService.getVersion();
-
-    this.appService.isLoading = true;
     try {
 
 
@@ -117,6 +117,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
         if (x.NodeTemplate.This2DefaultMobileVisuTemplate && this.visuTemplatesMap.has(x.NodeTemplate.This2DefaultMobileVisuTemplate)) {
           const instance = VisuObjectMobileInstance.CreateFromTemplate(this.visuTemplatesMap.get(x.NodeTemplate.This2DefaultMobileVisuTemplate), x, VisuObjectSourceType.NodeInstance);
 
+          instance.ObjId = x.ObjId;
           this.getAndSetProperty(instance, "nodeInstance", x.ObjId);
           this.getAndSetProperty(instance, "text", x.Name);
           this.getAndSetProperty(instance, "readonly", !x.IsWriteable);

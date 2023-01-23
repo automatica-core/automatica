@@ -214,10 +214,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.configTree.removeItem();
 
     } else if (this.selectedItem instanceof RulePage) {
-
-      this.pages = this.pages.filter(a => a.ObjId !== this.selectedItem.ObjId);
-
-      await this.ruleEngineService.removePage(this.selectedItem);
+      await this.removeRulePage();
     }
 
   }
@@ -244,6 +241,23 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
+  async removeRulePage() {
+    this.appService.isLoading = true;
+
+    try {
+      const currentPage = this.pages[this.selectedPageIndex];
+
+      await this.ruleEngineService.removePage(currentPage);
+
+      this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
+      this.changeRef.detectChanges();
+    } catch (error) {
+      this.handleError(error);
+    }
+
+    this.appService.isLoading = false;
+  }
+
   async addRulePage() {
 
     this.appService.isLoading = true;
@@ -252,10 +266,12 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     rulePage.ObjId = Guid.MakeNew().ToString();
     rulePage.Name = "Page " + (this.pages.length + 1);
     rulePage.Description = "Page " + (this.pages.length + 1);
-    this.pages.push(rulePage);
+    rulePage.afterFromJson();
 
     try {
       await this.ruleEngineService.addPage(rulePage);
+      this.pages.push(rulePage);
+      this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
       await this.load();

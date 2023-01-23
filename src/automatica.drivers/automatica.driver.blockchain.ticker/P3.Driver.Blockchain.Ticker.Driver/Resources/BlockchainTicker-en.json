@@ -24,6 +24,46 @@
         "NAME": "Price in USD with symbol",
         "DIRECTION": ""
       }
+    },
+    "ETH": {
+      "NAME": "Ethereum",
+      "DIRECTION": "",
+      "EUR": {
+        "NAME": "Price in EUR",
+        "DIRECTION": ""
+      },
+      "USD": {
+        "NAME": "Price in USD",
+        "DIRECTION": ""
+      },
+      "EUR_WITH_SYMBOL": {
+        "NAME": "Price in EUR with symbol",
+        "DIRECTION": ""
+      },
+      "USD_WITH_SYMBOL": {
+        "NAME": "Price in USD with symbol",
+        "DIRECTION": ""
+      }
+    },
+    "ADA": {
+      "NAME": "Cardano",
+      "DIRECTION": "",
+      "EUR": {
+        "NAME": "Price in EUR",
+        "DIRECTION": ""
+      },
+      "USD": {
+        "NAME": "Price in USD",
+        "DIRECTION": ""
+      },
+      "EUR_WITH_SYMBOL": {
+        "NAME": "Price in EUR with symbol",
+        "DIRECTION": ""
+      },
+      "USD_WITH_SYMBOL": {
+        "NAME": "Price in USD with symbol",
+        "DIRECTION": ""
+      }
     }
   }
 }
