@@ -5,42 +5,12 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Automatica.Core.Common.Update
 {
     public static class Plugin
     {
-        public static async Task<bool> DownloadForUpdate(string downloadUrl, string fileName)
-        {
-            using (var webClient = new WebClient())
-            {
-                var automaticaPluginUpdateDir = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
-                if (!Directory.Exists(automaticaPluginUpdateDir))
-                {
-                    Directory.CreateDirectory(automaticaPluginUpdateDir);
-                }
-
-                var tmpFile = Path.GetTempFileName();
-                try
-                {
-                    await webClient.DownloadFileTaskAsync(downloadUrl, Path.Combine(automaticaPluginUpdateDir, fileName));
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Console.Error.WriteLine($"Could not download file {e}");
-                }
-                finally
-                {
-                    File.Delete(tmpFile);
-                }
-                return false;
-            }
-        }
-
         public static void InstallPlugin(string pluginFile, string installDirectory)
         {
             ZipFile.ExtractToDirectory(pluginFile, installDirectory, true);

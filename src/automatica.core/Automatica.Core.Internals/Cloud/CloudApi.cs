@@ -251,7 +251,7 @@ namespace Automatica.Core.Internals.Cloud
             catch (Exception e)
             {
                 DownloadUpdateFailed?.Invoke(this, new AsyncCompletedEventArgs(e, false, null));
-                return new byte[0];
+                return Array.Empty<byte>();
             }
         }
 
