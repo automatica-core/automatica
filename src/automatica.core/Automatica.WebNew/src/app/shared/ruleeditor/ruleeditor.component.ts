@@ -220,7 +220,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
-
+    
     d.on("removed", async () => {
       page.removeRuleInstance(element.ObjId);
       await this.ruleEngineService.removeItem(element);

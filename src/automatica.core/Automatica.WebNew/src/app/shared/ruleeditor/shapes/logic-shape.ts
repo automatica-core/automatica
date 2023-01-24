@@ -31,6 +31,11 @@ export class LogicShapes {
                     resizeable: true,
                     minWidth: 150
                 });
+
+                element.onNameChanged.subscribe((v) => {
+                    this.classLabel.setText(v);
+                });
+
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
                 this.logicName = new logic.Label({
                     text: translatedName,
@@ -190,6 +195,12 @@ export class LogicShapes {
                     paddingRight: 10,
                     fontColor: "#4a4a4a",
                     resizeable: true
+                });
+
+                element.NodeInstance.notifyChangeEvent.subscribe((v) =>{
+                    if(v.propertyName === "Name") {
+                        this.label.setText((<any>v.object).Name);
+                    }
                 });
 
                 this.label.setMinWidth(100);

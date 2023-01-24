@@ -24,6 +24,7 @@ import { CategoryInstance } from "./categories"
 import { VisuObjectType } from "../visu/base-mobile-component"
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance"
 import { L10nTranslationService } from "angular-l10n"
+import { EventEmitter } from "@angular/core"
 
 function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
     if (!a.Template) {
@@ -38,11 +39,23 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
 
     public static KeyPrefix: string = "Rule";
 
+    
+
     @JsonProperty()
     ObjId: string;
 
+    public onNameChanged = new EventEmitter<string>();
+
+    private _name : string;
     @JsonProperty()
-    Name: string;
+    public get Name() : string {
+        return this._name;
+    }
+    public set Name(v : string) {
+        this._name = v;
+        this.onNameChanged?.emit(v);
+    }
+    
 
     @JsonProperty()
     Description: string;

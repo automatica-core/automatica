@@ -123,6 +123,13 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.categoryInstances = categoryInstances;
       this.userGroups = userGroups;
 
+      for(const page of this.pages) {
+
+        for(const nodeInstance of page.NodeInstances) {
+          nodeInstance.NodeInstance = this.nodeInstanceService.getNodeInstance(nodeInstance.This2NodeInstance);
+        }
+      }
+
       // await this.dataHub.subscribeForAll();
 
     } catch (error) {
@@ -158,7 +165,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
         if (item instanceof NodeInstance2RulePage) {
           this.configTree.selectNodeById(item.This2NodeInstance);
-          this.selectedItem = item; // this.configTree.selectNodeById(item.This2NodeInstance); // this class will set the selectedItem anyway
+
+          const node = this.nodeInstanceService.getNodeInstance(item.This2NodeInstance);
+          this.selectedItem = node; // this.configTree.selectNodeById(item.This2NodeInstance); // this class will set the selectedItem anyway
         } else if (item instanceof RuleInstance) {
           this.selectedItem = item;
         } else {
@@ -194,27 +203,32 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async delete() {
-    if (this.selectedItem instanceof NodeInstance2RulePage) {
-      const selectedPage = this.pages[this.selectedPageIndex];
-      selectedPage.NodeInstances = selectedPage.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
+    try {
+      if (this.selectedItem instanceof NodeInstance2RulePage) {
+        const selectedPage = this.pages[this.selectedPageIndex];
+        selectedPage.NodeInstances = selectedPage.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
 
-      this.ruleEngineService.reInit.emit(this.selectedPageIndex);
+        this.ruleEngineService.reInit.emit(this.selectedPageIndex);
 
-      await this.ruleEngineService.removeItem(this.selectedItem);
+        await this.ruleEngineService.removeItem(this.selectedItem);
 
-    } else if (this.selectedItem instanceof RuleInstance) {
-      const selectedPage = this.pages[this.selectedPageIndex];
-      selectedPage.RuleInstances = selectedPage.RuleInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
+      } else if (this.selectedItem instanceof RuleInstance) {
+        const selectedPage = this.pages[this.selectedPageIndex];
+        selectedPage.RuleInstances = selectedPage.RuleInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
 
-      this.ruleEngineService.reInit.emit(this.selectedPageIndex);
+        this.ruleEngineService.reInit.emit(this.selectedPageIndex);
 
-      await this.ruleEngineService.removeItem(this.selectedItem);
+        await this.ruleEngineService.removeItem(this.selectedItem);
 
-    } else if (this.selectedItem instanceof NodeInstance) {
-      this.configTree.removeItem();
+      } else if (this.selectedItem instanceof NodeInstance) {
+        this.configTree.removeItem();
 
-    } else if (this.selectedItem instanceof RulePage) {
-      await this.removeRulePage();
+      } else if (this.selectedItem instanceof RulePage) {
+        await this.removeRulePage();
+      }
+    }
+    catch (error) {
+      this.handleError(error);
     }
 
   }
@@ -286,27 +300,32 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async add(template: RuleTemplate | NodeInstance, rulePage: RulePage) {
-    if (template instanceof RuleTemplate) {
-      const rule = RuleInstance.fromRuleTemplate(template, this.translate);
+    try {
+      if (template instanceof RuleTemplate) {
+        const rule = RuleInstance.fromRuleTemplate(template, this.translate);
 
-      rule.Name = this.translate.translate(rule.Name);
-      rule.Description = this.translate.translate(rule.Description);
+        rule.Name = this.translate.translate(rule.Name);
+        rule.Description = this.translate.translate(rule.Description);
 
-      this.pages[this.selectedPageIndex].RuleInstances.push(rule);
+        this.pages[this.selectedPageIndex].RuleInstances.push(rule);
 
-      await this.ruleEngineService.addItem({
-        data: rule,
-        pageId: this.pages[this.selectedPageIndex].ObjId
-      });
+        await this.ruleEngineService.addItem({
+          data: rule,
+          pageId: this.pages[this.selectedPageIndex].ObjId
+        });
 
-    } else if (template instanceof NodeInstance) {
-      const node = NodeInstance2RulePage.createFromNodeInstance(template, rulePage);
+      } else if (template instanceof NodeInstance) {
+        const node = NodeInstance2RulePage.createFromNodeInstance(template, rulePage);
 
-      this.pages[this.selectedPageIndex].NodeInstances.push(node);
-      await this.ruleEngineService.addItem({
-        data: node,
-        pageId: this.pages[this.selectedPageIndex].ObjId
-      });
+        this.pages[this.selectedPageIndex].NodeInstances.push(node);
+        await this.ruleEngineService.addItem({
+          data: node,
+          pageId: this.pages[this.selectedPageIndex].ObjId
+        });
+      }
+    }
+    catch (error) {
+      this.handleError(error);
     }
   }
 
