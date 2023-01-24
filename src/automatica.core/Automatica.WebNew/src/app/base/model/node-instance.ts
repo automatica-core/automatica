@@ -52,7 +52,7 @@ class NodeInstanceMetaHelper {
                 let propValue = this.getValueForKey(key, value, nodeInstance);
                 if (typeof propValue === "number") {
                     propValue = propValue.toString();
-                    propValue = this.pad(propValue, 2);
+                    propValue = this.pad(propValue, 3);
 
                     addName += propValue;
                 } else {
