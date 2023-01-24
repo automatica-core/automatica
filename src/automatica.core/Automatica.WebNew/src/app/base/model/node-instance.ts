@@ -52,7 +52,8 @@ class NodeInstanceMetaHelper {
                 let propValue = this.getValueForKey(key, value, nodeInstance);
                 if (typeof propValue === "number") {
                     propValue = propValue.toString();
-                    propValue = this.pad(propValue, 3);
+                    const padSize = split.length >= 3 ? split[2] : 2;
+                    propValue = this.pad(propValue, padSize);
 
                     addName += propValue;
                 } else {
