@@ -67,6 +67,12 @@ namespace P3.Driver.SonosDriverFactory
             return await base.Start();
         }
 
+        public override async Task<bool> Stop()
+        {
+            await _controller.StopAsync();
+            return await base.Stop();
+        }
+
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             var nodeId = ctx.NodeInstance.This2NodeTemplateNavigation.ObjId;

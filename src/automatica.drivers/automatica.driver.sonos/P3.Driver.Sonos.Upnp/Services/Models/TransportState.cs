@@ -33,6 +33,8 @@ namespace P3.Driver.Sonos.Upnp.Services.Models
                 case "PAUSED_PLAYING":
                 case "PAUSED_PLAYBACK":
                     return TransportStateType.Paused;
+                case "TRANSITIONING"
+                    return TransportStateType.Transitioning;
                 default:
                     throw new ArgumentException($"Value unit: '{value}' is not valid.");
             }
@@ -63,6 +65,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Models
     {
         Stopped,
         Playing,
-        Paused
+        Paused,
+        Transitioning
     }
 }
