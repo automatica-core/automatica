@@ -17,7 +17,7 @@ namespace P3.Logic.StringOperations.Concat
 
         public static readonly Guid RuleOutput = new Guid("2b39db96-d482-4143-b02e-ced03bb90896");
 
-        public override Version RuleVersion => new Version(0, 0, 0, 1);
+        public override Version RuleVersion => new Version(0, 0, 0, 2);
 
         public override bool InDevelopmentMode => true;
 
@@ -29,7 +29,7 @@ namespace P3.Logic.StringOperations.Concat
         public override void InitTemplates(IRuleTemplateFactory factory)
         {
             factory.CreateRuleTemplate(RuleGuid, "STRING_OPERATIONS.CONCAT.NAME", "STRING_OPERATIONS.CONCAT.DESCRIPTION",
-               "string_operations_concat", "STRING_OPERATIONS.CONCAT.NAME", 100, 100);
+               "string_operations_concat", "STRING_OPERATIONS.NAME", 100, 100);
 
             factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "STRING_OPERATIONS.CONCAT.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
             factory.CreateRuleInterfaceTemplate(RuleInput2, "I2", "STRING_OPERATIONS.CONCAT.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);

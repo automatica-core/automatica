@@ -1,8 +1,9 @@
 {
   "STRING_OPERATIONS": {
+    "NAME":  "Text", 
     "CONCAT": {
       "NAME": "Text Verkettung",
-      "DESCRIPTION":  "" 
-    } 
+      "DESCRIPTION": ""
+    }
   }
 }
