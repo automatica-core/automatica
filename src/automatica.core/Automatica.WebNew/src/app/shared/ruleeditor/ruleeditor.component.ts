@@ -16,6 +16,7 @@ import { LinkService } from "./link.service";
 import { AppService } from "src/app/services/app.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { Subscription } from "rxjs";
+import { ILogicErrorHandler } from "./ilogicErrorHandler";
 
 declare var draw2d: any;
 
@@ -25,7 +26,7 @@ declare var draw2d: any;
   styleUrls: ["./ruleeditor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy, ILogicErrorHandler {
 
   @Input()
   page: RulePage;
@@ -70,6 +71,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     appService: AppService,
     private themeService: ThemeService) {
     super(notify, translate, appService);
+  }
+
+  notifyError(error: any) {
+    this.handleError(error);
   }
 
   async ngOnInit() {
@@ -160,7 +165,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   init(): any {
 
-    LogicShapes.addShape(this.logic, this.ruleEngineService);
+    LogicShapes.addShape(this.logic, this.ruleEngineService, this);
     LogicLocators.addLocators(this.logic);
     LogicLables.addLables(this.logic);
 
@@ -220,7 +225,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
-    
+
     d.on("removed", async () => {
       page.removeRuleInstance(element.ObjId);
       await this.ruleEngineService.removeItem(element);

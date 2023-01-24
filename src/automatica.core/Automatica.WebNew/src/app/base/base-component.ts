@@ -4,6 +4,7 @@ import { L10nTranslationService } from "angular-l10n";
 import { WebApiException, ExceptionSeverity } from "./model/web-api-exception";
 import { NotifyService } from "../services/notify.service";
 import { AppService } from "../services/app.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Directive()
 export class BaseComponent {
@@ -64,7 +65,10 @@ export class BaseComponent {
                     break;
             }
 
-        } else {
+        } else if(error instanceof HttpErrorResponse) {
+            this.notifyService.notifyError(error.message);
+        }
+        else {
             this.notifyService.notifyError(error);
         }
 

@@ -349,6 +349,7 @@ export class BaseService {
             BaseModel.fromJson(error.error, ex, this.translationService);
             return ex;
         }
+        return error;
     }
 
 }
