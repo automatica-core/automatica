@@ -83,7 +83,10 @@ namespace P3.Driver.SonosDriverFactory
                     {
                         DriverContext.Logger.LogDebug($"Sonos play...");
                         await _controller.PlayAsync();
+                        return true;
                     }
+
+                    return null;
                 });
             }
             if (nodeId == SonosDriverFactory.PauseGuid)
@@ -98,7 +101,9 @@ namespace P3.Driver.SonosDriverFactory
                     {
                         DriverContext.Logger.LogDebug($"Sonos pause...");
                         await _controller.PauseAsync();
+                        return true;
                     }
+                    return null;
                 });
             }
             if (nodeId == SonosDriverFactory.NextTrack)
@@ -109,7 +114,10 @@ namespace P3.Driver.SonosDriverFactory
                     if (o is true)
                     {
                         await _controller.NextTrackAsync();
+                        return true;
                     }
+
+                    return null;
                 });
             }
             if (nodeId == SonosDriverFactory.VolumeGuid)
@@ -125,11 +133,14 @@ namespace P3.Driver.SonosDriverFactory
                         DriverContext.Logger.LogDebug($"Sonos set volume to {o}...");
                         var volume = Convert.ToInt32(o);
                         await _controller.SetVolumeAsync(new SonosVolume(volume));
+                        return volume;
                     }
                     catch (Exception e)
                     {
                         DriverContext.Logger.LogError(e, "Could not set volume...");
                     }
+
+                    return null;
                 });
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadio)
