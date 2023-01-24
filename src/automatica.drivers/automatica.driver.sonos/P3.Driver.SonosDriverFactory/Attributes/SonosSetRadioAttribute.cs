@@ -61,6 +61,8 @@ namespace P3.Driver.SonosDriverFactory.Attributes
                     await Device.Controller.SetMediaUrl(mediaUrl);
                     _currentMediaUrl = mediaUrl;
 
+                    DispatchValue(value);
+
                     DriverContext.Logger.LogDebug($"Sonos set radio to {mediaUrl}...");
                 }
             }
