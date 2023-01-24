@@ -12,8 +12,8 @@
       }
     },
     "SUBTRACT": {
-      "NAME": "SUBTRACTion",
-      "DESCRIPTION": "Substraihiert die Eingangswerte und gibt den Wert beim Ausgang aus (O = - I1 - I2)",
+      "NAME": "Subtraction",
+      "DESCRIPTION": "Subtracts a value from the given inputs (O = - I1 - I2)",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
       },
@@ -23,7 +23,7 @@
     },
     "DIVISION": {
       "NAME": "Division",
-      "DESCRIPTION": "Dividiert die Eingangswerte und gibt den Wert beim Ausgang aus (O = I1 / I2)",
+      "DESCRIPTION": "Divides the inputs (O = I1 / I2)",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
       },
@@ -32,7 +32,7 @@
       }
     },
     "MULTIPLY": {
-      "NAME": "Multiplikation",
+      "NAME": "Multiplication",
       "DESCRIPTION": "Multipliziert die Eingangswerte und gibt den Wert beim Ausgang aus (O = I1 * I2)",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
@@ -42,7 +42,7 @@
       }
     },
     "CEILING": {
-      "NAME": "Aufrunden",
+      "NAME": "Ceil",
       "DESCRIPTION": "Runden den Eingangswert auf",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
@@ -52,7 +52,7 @@
       }
     },
     "FLOOR": {
-      "NAME": "Abrunden",
+      "NAME": "Floor",
       "DESCRIPTION": "Runden den Eingangswert ab",
       "INPUT": {
         "DESCRIPTION": "Eingangswert"
@@ -75,7 +75,7 @@
       }
     },
     "RANDOM": {
-      "NAME": "Zufallszahl",
+      "NAME": "Random",
       "DESCRIPTION": "Generiert eine Zufallszahl",
       "TRIGGER": {
         "DESCRIPTION": "Sobald ein Wert auf diesen Eingang geschrieben wird, wird eine neue Zufallszahl generiert"

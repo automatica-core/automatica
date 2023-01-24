@@ -6,8 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
-    <None Remove="Resources\P3.Logic.StringOperations-de.json" />
-    <None Remove="Resources\P3.Logic.StringOperations-en.json" />
+    <None Remove="Resources\StringOperations-de.json" />
+    <None Remove="Resources\StringOperations-en.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
