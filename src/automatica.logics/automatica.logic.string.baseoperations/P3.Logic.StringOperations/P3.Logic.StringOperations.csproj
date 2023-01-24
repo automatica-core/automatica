@@ -11,6 +11,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\StringOperations-de.json" />
+    <EmbeddedResource Include="Resources\StringOperations-en.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Rule" Version="7.0.0.899" />
