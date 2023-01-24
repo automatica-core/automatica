@@ -1,6 +1,7 @@
 ﻿{
   "OPERATIONS": {
     "NAME": "Bedienung",
+	"DESCRIPTION": "Bedienung",
     "SWITCH": {
       "NAME": "Schalter",
       "DESCRIPTION": "",
@@ -22,27 +23,27 @@
       },
       "STATE": {
         "NAME": "S",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "S"
       },
       "OUTPUT": {
         "NAME": "O",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "O"
       }
     },
     "DIMMER": {
       "NAME": "Dimmer",
-      "DESCRIPTION": "",
+      "DESCRIPTION": "Dimmer",
       "INPUT": {
         "NAME": "I",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "I"
       },
       "STATE": {
         "NAME": "S",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "S"
       },
       "OUTPUT": {
         "NAME": "O",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "O"
       }
     }
   }
