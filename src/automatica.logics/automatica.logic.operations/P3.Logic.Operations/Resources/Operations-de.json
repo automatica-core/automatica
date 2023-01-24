@@ -2,7 +2,7 @@
   "OPERATIONS": {
     "NAME": "Bedienung",
     "SWITCH": {
-      "NAME": "Taster",
+      "NAME": "Schalter",
       "DESCRIPTION": "",
       "INPUT": {
         "NAME": "I",
