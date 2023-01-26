@@ -8,7 +8,7 @@ namespace P3.Rule.Sonos.SonosControl;
 
 public class SonosControlRuleFactory : RuleFactory
 {
-    public override Version RuleVersion => new Version(0, 2, 0, 1);
+    public override Version RuleVersion => new Version(0, 3, 0, 1);
 
     public override bool InDevelopmentMode => true;
 
@@ -39,7 +39,7 @@ public class SonosControlRuleFactory : RuleFactory
     public static readonly Guid NextOutput = new Guid("2aa90a39-8410-4e26-b707-96d7a5f10342");
 
     public static readonly long DefaultVolume = 10;
-    public static readonly long DefaultRadioStation = 8007;
+    public static readonly string DefaultRadioStation = "s8007";
 
 
     public override void InitTemplates(IRuleTemplateFactory factory)
@@ -47,7 +47,7 @@ public class SonosControlRuleFactory : RuleFactory
         factory.CreateRuleTemplate(RuleGuid, "SONOS_CONTROL.NAME", "SONOS_CONTROL.DESCRIPTION", "sonos.control", "SONOS.NAME", 100, 100);
 
         factory.CreateParameterRuleInterfaceTemplate(RadioStation, "SONOS_CONTROL.RADIO_STATION.NAME",
-            "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", RuleGuid, 1, RuleInterfaceParameterDataType.Integer, DefaultRadioStation);
+            "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", RuleGuid, 1, RuleInterfaceParameterDataType.Text, DefaultRadioStation);
         factory.CreateParameterRuleInterfaceTemplate(VolumeOnPlay, "SONOS_CONTROL.VOLUME_ON_START.NAME",
             "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", RuleGuid, 2, RuleInterfaceParameterDataType.Integer, DefaultVolume);
         factory.CreateParameterRuleInterfaceTemplate(MaxVolume, "SONOS_CONTROL.MAX_VOLUME.NAME",
@@ -67,6 +67,8 @@ public class SonosControlRuleFactory : RuleFactory
         factory.CreateRuleInterfaceTemplate(VolumeOutputStatus, "SONOS_CONTROL.VOLUME_OUTPUT_STATE.NAME", "SONOS_CONTROL.VOLUME_OUTPUT_STATE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 3);
         factory.CreateRuleInterfaceTemplate(RadioStationOutputValue, "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.NAME", "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 4);
         factory.CreateRuleInterfaceTemplate(NextOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 5);
+
+        factory.ChangeDefaultVisuTemplate(RuleGuid, VisuMobileObjectTemplateTypes.Dimmer)
 
     }
 

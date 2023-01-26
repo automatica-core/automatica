@@ -15,6 +15,7 @@ import { L10nTranslationModule } from "angular-l10n";
 import { ComponentsModule } from "../components/components.module";
 import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
+import { MediaPlayerComponent } from './media-player/media-player.component';
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
     ToggleComponent,
     ToggleNodeComponent,
     DimmerComponent,
-    LogicDefaultComponent
+    LogicDefaultComponent,
+    MediaPlayerComponent
   ],
   exports: [
     VisuItemComponent
