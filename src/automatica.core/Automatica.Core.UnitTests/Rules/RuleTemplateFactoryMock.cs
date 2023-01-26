@@ -68,15 +68,22 @@ namespace Automatica.Core.UnitTests.Rules
             return retValue;
         }
 
-        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid ui, string name, string description,
+        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description,
             Guid ruleTemplate,
             RuleInterfaceDirection direction, int maxLinks, int sortOrder)
         {
-            return CreateRuleInterfaceTemplate(ui, name, description, ruleTemplate, direction, maxLinks, sortOrder,
+            return CreateRuleInterfaceTemplate(id, name, description, ruleTemplate, direction, maxLinks, sortOrder,
                 RuleInterfaceType.Unknown);
         }
 
         public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
+        {
+            return CreateRuleInterfaceTemplate(id, name, description, name, ruleTemplate, direction, maxLinks, sortOrder,
+                RuleInterfaceType.Unknown);
+        }
+
+        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
             RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
         {
             var interfaceType = new RuleInterfaceTemplate();
