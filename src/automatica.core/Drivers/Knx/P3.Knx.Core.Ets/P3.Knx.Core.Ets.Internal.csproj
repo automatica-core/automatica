@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.2.0.1019</Version>
+    <Version>7.2.0.1020</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>AF274AE7-266C-4ED5-B1F2-E2A1C852DABB</ProjectGuid>
   </PropertyGroup>

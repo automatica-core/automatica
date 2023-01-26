@@ -58,6 +58,13 @@ namespace Automatica.Core.Internals.Templates
                 RuleInterfaceType.Unknown);
         }
 
+        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
+            RuleInterfaceDirection direction, int maxLinks, int sortOrder)
+        {
+            return CreateRuleInterfaceTemplate(id, name, description, key, ruleTemplate, direction, maxLinks, sortOrder,
+                RuleInterfaceType.Unknown);
+        }
+
         public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
             RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
         {

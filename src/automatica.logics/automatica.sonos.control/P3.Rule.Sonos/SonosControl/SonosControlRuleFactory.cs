@@ -54,19 +54,20 @@ public class SonosControlRuleFactory : RuleFactory
             "SONOS_CONTROL.MAX_VOLUME.DESCRIPTION", RuleGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
 
 
-        factory.CreateRuleInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 1);
-        factory.CreateRuleInterfaceTemplate(PauseTrigger, "SONOS_CONTROL.PAUSE_INPUT_STATUS.NAME", "SONOS_CONTROL.PAUSE_INPUT_STATUS.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 2);
-        factory.CreateRuleInterfaceTemplate(Volume, "SONOS_CONTROL.VOLUME.NAME", "SONOS_CONTROL.VOLUME.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 3);
-        factory.CreateRuleInterfaceTemplate(VolumeIncrement, "SONOS_CONTROL.VOLUME_INCREMENT.NAME", "SONOS_CONTROL.VOLUME_INCREMENT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 4);
-        factory.CreateRuleInterfaceTemplate(VolumeDecrement, "SONOS_CONTROL.VOLUME_DECREMENT.NAME", "SONOS_CONTROL.VOLUME_DECREMENT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 5);
-        factory.CreateRuleInterfaceTemplate(Next, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 6);
-        factory.CreateRuleInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.RADIO_STATION.NAME", "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 0, 7);
+        factory.CreateRuleInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION","play_pause", RuleGuid, RuleInterfaceDirection.Input, 0, 1, RuleInterfaceType.Input);
+        factory.CreateRuleInterfaceTemplate(PauseTrigger, "SONOS_CONTROL.PAUSE_INPUT_STATUS.NAME", "SONOS_CONTROL.PAUSE_INPUT_STATUS.DESCRIPTION", "pause", RuleGuid, RuleInterfaceDirection.Input, 0, 2, RuleInterfaceType.Input);
+        factory.CreateRuleInterfaceTemplate(Volume, "SONOS_CONTROL.VOLUME.NAME", "SONOS_CONTROL.VOLUME.DESCRIPTION", "volume", RuleGuid, RuleInterfaceDirection.Input, 0, 3, RuleInterfaceType.Input);
+        factory.CreateRuleInterfaceTemplate(VolumeIncrement, "SONOS_CONTROL.VOLUME_INCREMENT.NAME", "SONOS_CONTROL.VOLUME_INCREMENT.DESCRIPTION", "volume+", RuleGuid, RuleInterfaceDirection.Input, 0, 4, RuleInterfaceType.Input);
+        factory.CreateRuleInterfaceTemplate(VolumeDecrement, "SONOS_CONTROL.VOLUME_DECREMENT.NAME", "SONOS_CONTROL.VOLUME_DECREMENT.DESCRIPTION", "volume-", RuleGuid, RuleInterfaceDirection.Input, 0, 5, RuleInterfaceType.Input);
+        factory.CreateRuleInterfaceTemplate(Next, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", RuleGuid, RuleInterfaceDirection.Input, 0, 6, RuleInterfaceType.Input);
+        factory.CreateRuleInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.RADIO_STATION.NAME", "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", "radio_station", RuleGuid, RuleInterfaceDirection.Input, 0, 7, RuleInterfaceType.Input);
 
-        factory.CreateRuleInterfaceTemplate(PlayOutputStatus, "SONOS_CONTROL.PLAY_OUTPUT_STATE.NAME", "SONOS_CONTROL.PLAY_OUTPUT_STATE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1);
-        factory.CreateRuleInterfaceTemplate(PauseOutputStatus, "SONOS_CONTROL.PAUSE_OUTPUT_STATE.NAME", "SONOS_CONTROL.PAUSE_OUTPUT_STATE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 2);
-        factory.CreateRuleInterfaceTemplate(VolumeOutputStatus, "SONOS_CONTROL.VOLUME_OUTPUT_STATE.NAME", "SONOS_CONTROL.VOLUME_OUTPUT_STATE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 3);
-        factory.CreateRuleInterfaceTemplate(RadioStationOutputValue, "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.NAME", "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 4);
-        factory.CreateRuleInterfaceTemplate(NextOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 5);
+        factory.CreateRuleInterfaceTemplate(PlayOutputStatus, "SONOS_CONTROL.PLAY_OUTPUT_STATE.NAME", "SONOS_CONTROL.PLAY_OUTPUT_STATE.DESCRIPTION", "play", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
+        factory.CreateRuleInterfaceTemplate(PauseOutputStatus, "SONOS_CONTROL.PAUSE_OUTPUT_STATE.NAME", "SONOS_CONTROL.PAUSE_OUTPUT_STATE.DESCRIPTION", "pause", RuleGuid, RuleInterfaceDirection.Output, 0, 2, RuleInterfaceType.Output);
+        factory.CreateRuleInterfaceTemplate(VolumeOutputStatus, "SONOS_CONTROL.VOLUME_OUTPUT_STATE.NAME", "SONOS_CONTROL.VOLUME_OUTPUT_STATE.DESCRIPTION", "volume", RuleGuid, RuleInterfaceDirection.Output, 0, 3, RuleInterfaceType.Output);
+        factory.CreateRuleInterfaceTemplate(RadioStationOutputValue, "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.NAME", "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.DESCRIPTION", "radio_station", RuleGuid, RuleInterfaceDirection.Output, 0, 4, RuleInterfaceType.Output);
+        factory.CreateRuleInterfaceTemplate(NextOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", RuleGuid, RuleInterfaceDirection.Output, 0, 5, RuleInterfaceType.Output);
+        //TOOD: factory.CreateRuleInterfaceTemplate(PreviousOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", RuleGuid, RuleInterfaceDirection.Output, 0, 5, RuleInterfaceType.Output);
 
         factory.ChangeDefaultVisuTemplate(RuleGuid, VisuMobileObjectTemplateTypes.MediaPlayer);
 

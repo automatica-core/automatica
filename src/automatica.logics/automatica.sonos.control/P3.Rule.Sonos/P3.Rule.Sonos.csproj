@@ -18,6 +18,6 @@
     <EmbeddedResource Include="Resources\Sonos-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Rule" Version="7.1.0.1018" />
+    <PackageReference Include="Automatica.Core.Rule" Version="7.2.0.1021" />
   </ItemGroup>
 </Project>
