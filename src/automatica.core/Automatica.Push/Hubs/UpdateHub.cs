@@ -35,7 +35,7 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-                using var releaser = (AsyncKeyedLockTimeoutReleaser<string>)await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
                 if (!releaser.EnteredSemaphore)
                 {
                     return;
@@ -71,7 +71,7 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-                using var releaser = (AsyncKeyedLockTimeoutReleaser<string>)await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
                 if (!releaser.EnteredSemaphore)
                 {
                     return;
@@ -110,7 +110,7 @@ namespace Automatica.Push.Hubs
 
         private async Task InstallOrUpdatePlugins(IList<Plugin> plugins)
         {
-            using var releaser = (AsyncKeyedLockTimeoutReleaser<string>)await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 100).ConfigureAwait(false);
+            using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 100).ConfigureAwait(false);
             if (!releaser.EnteredSemaphore)
             {
                 return;
