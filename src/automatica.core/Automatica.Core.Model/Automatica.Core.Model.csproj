@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.1.0.1018</Version>
+    <Version>7.2.0.1019</Version>
     <PackageProjectUrl>https://github.com/automatica-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/automatica-core</RepositoryUrl>
     <Copyright>p3root and automatica.core</Copyright>

@@ -62,6 +62,23 @@ namespace Automatica.Core.Base.Templates
             RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type);
 
         /// <summary>
+        /// Creates a <see cref="RuleInterfaceTemplate"/> for the <see cref="RuleTemplate"/>
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="name">Name of the <see cref="RuleInterfaceTemplate"/></param>
+        /// <param name="description">Description of the  <see cref="RuleInterfaceTemplate"/></param>
+        /// <param name="key">Defines a unique key for the interface template<see cref="RuleInterfaceTemplate"/></param>
+        /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
+        /// <param name="direction">The direction, <see cref="RuleInterfaceDirection"/></param>
+        /// <param name="maxLinks">Defines how many links can be made</param>
+        /// <param name="sortOrder">Sort order of all  <see cref="RuleInterfaceTemplate"/></param>
+        /// <param name="type">Type type of the interface <see cref="RuleInterfaceType"/></param>
+        /// <returns><see cref="CreateTemplateCode"/></returns>
+        CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate,
+            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type);
+
+        /// <summary>
         /// Creates a parameter for the  <see cref="RuleTemplate"/>
         /// </summary>
         /// <param name="id">Unique id for the parameter</param>
