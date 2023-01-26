@@ -360,6 +360,8 @@ namespace Automatica.Core.WebApi.Controllers
                 await _coreServer.RemoveLink(objId);
 
             }
+
+            _logicCacheFacade.LinkCache.Clear();
         }
 
         [HttpPost]

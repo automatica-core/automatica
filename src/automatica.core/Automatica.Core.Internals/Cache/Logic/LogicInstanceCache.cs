@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -10,12 +11,14 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     internal class LogicInstanceCache : AbstractCache<RuleInstance>, ILogicInstanceCache
     {
+        private readonly ILinkCache _linkCache;
         private readonly IDictionary<Guid, IList<RuleInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IDictionary<Guid, IList<RuleInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IList<RuleInstance> _favorites = new List<RuleInstance>();
 
-        public LogicInstanceCache(IConfiguration configuration) : base(configuration)
+        public LogicInstanceCache(IConfiguration configuration, ILinkCache linkCache) : base(configuration)
         {
+            _linkCache = linkCache;
         }
 
         protected override IQueryable<RuleInstance> GetAll(AutomaticaContext context)
@@ -54,6 +57,14 @@ namespace Automatica.Core.Internals.Cache.Logic
                 if (item.IsFavorite)
                 {
                     _favorites.Add(item);
+                }
+
+                foreach (var interfaceInstance in item.RuleInterfaceInstance)
+                {
+                    if (_linkCache.IsRuleInterfaceMapped(interfaceInstance.ObjId))
+                    {
+                        interfaceInstance.IsLinked = true;
+                    }
                 }
             }
 

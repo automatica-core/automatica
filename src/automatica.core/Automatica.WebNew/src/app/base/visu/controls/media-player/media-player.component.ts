@@ -54,6 +54,9 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   playPauseState: RuleInterfaceInstance;
   volumeState: RuleInterfaceInstance;
   radioStationState: RuleInterfaceInstance;
+  nextOutput: RuleInterfaceInstance;
+
+  volumeOutput: RuleInterfaceInstance;
 
 
   constructor(
@@ -78,11 +81,17 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     this.volumeState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "volume");
     this.radioStationState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "radio_station");
 
+    this.nextOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "next");
+    this.volumeOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "volume");
+
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
       const nodeId = args[1];
 
       this.onRuleInstanceValueChanged(nodeId, args[2]);
     });
+
+    this._isPlaying = this.dataHub.getCurrentValue(this.playPauseState.ObjId);
+    this._volume = this.dataHub.getCurrentValue(this.volumeState.ObjId);
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
@@ -90,7 +99,7 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
 
     if (interfaceId == this.playPauseState.ObjId) {
       this.isPlaying = value!!;
-    } else if (interfaceId == this.volumeState.ObjId) {
+    } else if (interfaceId == this.volumeState.ObjId || interfaceId == this.volumeOutput.ObjId) {
       this.volume = toNumber(value);
     } else if (interfaceId == this.radioStationState.ObjId) {
       this.radioStation = value;

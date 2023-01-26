@@ -20,7 +20,7 @@
                     <ng-container *ngIf="isPlaying">
                         <fa-icon icon="music" size="6x" animation="beat"></fa-icon>
                     </ng-container>
-                    <ng-container  *ngIf="!isPlaying">
+                    <ng-container *ngIf="!isPlaying">
                         <fa-icon icon="volume-xmark" size="6x"></fa-icon>
                     </ng-container>
                 </div>
@@ -29,7 +29,7 @@
             <dxi-item>
                 <dxi-location [row]="2" [col]="0"> </dxi-location>
                 <div *dxTemplate class="prev item">
-                    <dx-button [template]="'buttonTemplate'">
+                    <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked">
                         <div *dxTemplate="let buttonData of 'buttonTemplate'">
                             <fa-icon icon="backward" />
                         </div>
@@ -55,7 +55,7 @@
             <dxi-item>
                 <dxi-location [row]="2" [col]="2"> </dxi-location>
                 <div *dxTemplate class="next item">
-                    <dx-button [template]="'buttonTemplate'">
+                    <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked">
                         <div *dxTemplate="let buttonData of 'buttonTemplate'">
                             <fa-icon icon="forward" />
                         </div>
@@ -67,7 +67,8 @@
                 <dxi-location [row]="3" [col]="0" [colspan]="3"></dxi-location>
                 <div *dxTemplate class="volume item">
                     <dx-slider style="margin-left: 10px; margin-right:10px" [min]="0" [max]="100" [(value)]="volume"
-                        (onValueChanged)="onVolumeSliderChanged($event)" valueChangeMode="onHandleRelease">
+                        [disabled]="!volumeOutput.IsLinked" (onValueChanged)="onVolumeSliderChanged($event)"
+                        valueChangeMode="onHandleRelease">
                         <dxo-label [visible]="true" position="bottom"></dxo-label>
                         <dxo-tooltip [enabled]="true"></dxo-tooltip>
                     </dx-slider>

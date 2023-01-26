@@ -7,7 +7,10 @@ namespace Automatica.Core.EF.Models
 {
     public partial class RuleInterfaceInstance : TypedObject
     {
-        
+
+        [NotMapped]
+        public bool IsLinked { get; set; }
+
         [NotMapped]
         public object Value
         {
