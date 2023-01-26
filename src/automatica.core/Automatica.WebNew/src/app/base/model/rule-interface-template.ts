@@ -35,6 +35,9 @@ export class RuleInterfaceTemplate extends BaseModel {
     Description: string;
 
     @JsonProperty()
+    Key: string;
+
+    @JsonProperty()
     This2RuleTemplate: string;
 
     @JsonProperty()

@@ -45,16 +45,17 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
       const nodeId = args[1];
 
-      if(nodeId == this.stateType.ObjId) {
-        this.value = args[2];
-      }
+      this.onRuleInstanceValueChanged(nodeId, args[2]);
     });
 
     this.readOnly = this.getReadOnly() ?? false;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    if (this.outputType.ObjId === interfaceId) {
+    if (interfaceId == this.outputType.ObjId) {
+      this.value = value;
+    }
+    else if (interfaceId == this.stateType.ObjId) {
       this.value = value;
     }
   }
@@ -83,8 +84,14 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
 
   switch(value) {
+
+    if(this.value === undefined || this.value === void 0) {
+      return;
+    }
     if (this.inputType) {
-      this.dataHub.setValue(this.inputType.ObjId, value);
+      if (this.value != value) {
+        this.dataHub.setValue(this.inputType.ObjId, value);
+      }
     }
   }
 

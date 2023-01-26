@@ -37,10 +37,10 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
         return void 0;
     }
 
-    protected getInterfaceByTypeAndName(type: RuleInterfaceType, name: string) {
+    protected getInterfaceByTypeAndName(type: RuleInterfaceType, key: string) {
         if (this.ruleInstance && this.ruleInstance.Interfaces) {
             for (const interf of this.ruleInstance.Interfaces) {
-                if (interf.Template.InterfaceType === type) {
+                if (interf.Template.InterfaceType === type && interf.Template.Key == key) {
                     return interf;
                 }
             }

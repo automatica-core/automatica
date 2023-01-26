@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { L10nTranslationService } from 'angular-l10n';
+import { L10nTranslationService, toNumber } from 'angular-l10n';
 import { DataHubService } from 'src/app/base/communication/hubs/data-hub.service';
+import { RuleInterfaceInstance } from 'src/app/base/model/rule-interface-instance';
+import { RuleInterfaceType } from 'src/app/base/model/rule-interface-template';
 import { AppService } from 'src/app/services/app.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { NotifyService } from 'src/app/services/notify.service';
@@ -13,16 +15,46 @@ import { BaseMobileRuleComponent } from '../../base-mobile-rule-component';
   styleUrls: ['./media-player.component.scss']
 })
 export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
-  
-  
-  private _isPlaying : boolean;
-  public get isPlaying() : boolean {
+
+
+  private _isPlaying: boolean;
+  public get isPlaying(): boolean {
     return this._isPlaying;
   }
-  public set isPlaying(v : boolean) {
+  public set isPlaying(v: boolean) {
+    if (this._isPlaying == v) {
+      return;
+    }
     this._isPlaying = v;
   }
-  
+
+
+  private _volume: number;
+  public get volume(): number {
+    return this._volume;
+  }
+  public set volume(v: number) {
+    this._volume = v;
+
+  }
+
+
+  private _radioStation: string;
+  public get radioStation(): string {
+    return this._radioStation;
+  }
+  public set radioStation(v: string) {
+    this._radioStation = v;
+
+    this.dataHub.setValue(this.radioStationState.ObjId, v);
+  }
+
+
+
+  playPauseState: RuleInterfaceInstance;
+  volumeState: RuleInterfaceInstance;
+  radioStationState: RuleInterfaceInstance;
+
 
   constructor(
     dataHubService: DataHubService,
@@ -34,18 +66,52 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
   }
 
-  
-  protected onRuleInstanceValueChanged(ruleInterfaceId: any, value: any) {
-   
-  }
+
   ngOnDestroy(): void {
-   
+
   }
   ngOnInit(): void {
+    this.baseOnInit();
+    super.mobileRuleInit();
+
+    this.playPauseState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "play_pause");
+    this.volumeState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "volume");
+    this.radioStationState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "radio_station");
+
+    super.registerEvent(this.dataHub.dispatchValue, async (args) => {
+      const nodeId = args[1];
+
+      this.onRuleInstanceValueChanged(nodeId, args[2]);
+    });
+  }
+
+  onRuleInstanceValueChanged(interfaceId, value) {
+    console.log("rule value changed", interfaceId, value);
+
+    if (interfaceId == this.playPauseState.ObjId) {
+      this.isPlaying = value!!;
+    } else if (interfaceId == this.volumeState.ObjId) {
+      this.volume = toNumber(value);
+    } else if (interfaceId == this.radioStationState.ObjId) {
+      this.radioStation = value;
+    }
   }
 
 
   playPauseClick($event) {
     this.isPlaying = !this.isPlaying;
+
+
+    this.dataHub.setValue(this.playPauseState.ObjId, this.isPlaying);
+  }
+
+  onVolumeSliderChanged($event) {
+    console.log($event);
+    this.dataHub.setValue(this.volumeState.ObjId, $event.value);
+  }
+
+
+  format(value) {
+    return `${value}%`;
   }
 }

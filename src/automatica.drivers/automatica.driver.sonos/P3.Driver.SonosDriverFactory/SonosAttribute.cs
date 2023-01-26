@@ -24,7 +24,7 @@ namespace P3.Driver.SonosDriverFactory
             _writeAction = writeAction;
 
             _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Interval = TimeSpan.FromSeconds(2).TotalMilliseconds;
+            _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
         }
 
         private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
