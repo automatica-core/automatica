@@ -68,7 +68,7 @@ public class SonosControlRuleFactory : RuleFactory
         factory.CreateRuleInterfaceTemplate(RadioStationOutputValue, "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.NAME", "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 4);
         factory.CreateRuleInterfaceTemplate(NextOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 5);
 
-        factory.ChangeDefaultVisuTemplate(RuleGuid, VisuMobileObjectTemplateTypes.Dimmer)
+        factory.ChangeDefaultVisuTemplate(RuleGuid, VisuMobileObjectTemplateTypes.MediaPlayer);
 
     }
 
