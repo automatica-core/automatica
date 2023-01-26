@@ -1,31 +1,35 @@
 <div class="section_cell">
     <div class="cell_content" (click)="onCellClick($event)">
-        <div class="cell_icon_placeholder">
-            <span [style.color]="iconColor" style="vertical-align: middle;">
-                <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
-            </span>
-        </div>
-        <div class="cell_texts">
-            <div [hidden]="!location" class="cell_text_location cell_text_overflow">{{ location }}</div>
-            <div [hidden]="!hint" class="cell_text_hint cell_text_overflow">{{ hint }}</div>
-            <div [hidden]="valueHidden" class="cell_text_value cell_text_overflow">{{ value }}</div>
-            <div [hidden]="!subValue" class="cell_text_sub cell_text_overflow">{{ subValue }}</div>
-        </div>
-        <div class="cell_controls" (click)="preventDefault($event)">
-            <ng-content select="[control]"></ng-content>
-        </div>
+        <ng-container *ngIf="!useFullContainer">
+            <div class="cell_icon_placeholder" *ngIf="showIcon">
+                <span [style.color]="iconColor" style="vertical-align: middle;">
+                    <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
+                </span>
+            </div>
+            <div class="cell_texts">
+                <div [hidden]="!location" class="cell_text_location cell_text_overflow">{{ location }}</div>
+                <div [hidden]="!hint" class="cell_text_hint cell_text_overflow">{{ hint }}</div>
+                <div [hidden]="valueHidden" class="cell_text_value cell_text_overflow">{{ value }}</div>
+                <div [hidden]="!subValue" class="cell_text_sub cell_text_overflow">{{ subValue }}</div>
+            </div>
+            <div class="cell_controls" (click)="preventDefault($event)">
+                <ng-content select="[control]"></ng-content>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="useFullContainer">
+            <ng-content select="[control_full]"></ng-content>
+        </ng-container>
     </div>
 </div>
 
 <ng-container *ngIf="hasPopup">
-    <dx-popup [width]="'100%'" [height]="'100%'" [visible]="popupVisible" [showTitle]="true"
-        [closeOnOutsideClick]="false" [showCloseButton]="true" [title]="hint" [dragEnabled]="false"
-        (onHiding)="onPopupHiding($event)">
+    <dx-popup [width]="'95%'" [height]="'95%'" [visible]="popupVisible" [showTitle]="true" [closeOnOutsideClick]="false"
+        [showCloseButton]="true" [title]="hint" [dragEnabled]="false" (onHiding)="onPopupHiding($event)">
         <div *dxTemplate="let data of 'content'">
             <dx-scroll-view width="100%" height="100%">
                 <div class="overlay">
 
-                    <div [hidden]="valueHidden" class="overlay_value cell_text_overflow">{{ value  }}</div>
+                    <div [hidden]="valueHidden" class="overlay_value cell_text_overflow">{{ value }}</div>
 
                     <div class="overlay_icon">
                         <span [style.color]="iconColor" style="vertical-align: middle;">

@@ -15,6 +15,7 @@ import { VisuObjectSourceType } from "../../model/visu-object-instance";
 import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 import { RuleInstance } from "../../model/rule-instance";
 import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
+import { MediaPlayerComponent } from "./media-player/media-player.component";
 
 @Component({
   selector: "visu-component",
@@ -85,6 +86,10 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "dimmer": {
         this.component = DimmerComponent;
+        break;
+      } 
+      case "media_player": {
+        this.component = MediaPlayerComponent;
         break;
       }
       default: {

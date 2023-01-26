@@ -31,6 +31,12 @@ export class BaseControlComponent implements OnInit {
   @Input()
   textColor: string;
 
+  @Input()
+  showIcon: boolean = true;
+
+  @Input()
+  useFullContainer: boolean = false;
+
   popupVisible = false;
 
   public get valueHidden(): boolean {

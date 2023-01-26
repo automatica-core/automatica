@@ -34,6 +34,7 @@ namespace Automatica.Core.EF.Models
     {
         public Guid ObjId { get; set; }
         public string Name { get; set; }
+        public string Key { get; set; }
         public string Description { get; set; }
         public Guid This2RuleTemplate { get; set; }
         public long This2RuleInterfaceDirection { get; set; }

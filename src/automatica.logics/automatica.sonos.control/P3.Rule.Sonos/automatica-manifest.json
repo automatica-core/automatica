@@ -21,7 +21,7 @@
     "Dependencies": [],
     "ProjectPage": "https://github.com/automatica-core/automatica.logic.sonos",
     "MinCoreServerVersion": {
-      "Minor": 0,
+      "Minor": 1,
       "Major": 7,
       "Build": 0,
       "Revision": 1018

@@ -37,6 +37,17 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
         return void 0;
     }
 
+    protected getInterfaceByTypeAndName(type: RuleInterfaceType, name: string) {
+        if (this.ruleInstance && this.ruleInstance.Interfaces) {
+            for (const interf of this.ruleInstance.Interfaces) {
+                if (interf.Template.InterfaceType === type) {
+                    return interf;
+                }
+            }
+        }
+        return void 0;
+    }
+
     protected async mobileRuleInit() {
         this.registerEvent(this.dataHubService.ruleInstanceValueChanged, (data) => {
             if (this.ruleInstance && this.ruleInstance.Interfaces && this.ruleInstance.Interfaces.filter(a => a.ObjId === data[0]).length > 0) {
