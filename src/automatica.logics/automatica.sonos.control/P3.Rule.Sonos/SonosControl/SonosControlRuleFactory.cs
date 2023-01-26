@@ -8,7 +8,7 @@ namespace P3.Rule.Sonos.SonosControl;
 
 public class SonosControlRuleFactory : RuleFactory
 {
-    public override Version RuleVersion => new Version(0, 3, 0, 1);
+    public override Version RuleVersion => new Version(0, 4, 0, 1);
 
     public override bool InDevelopmentMode => true;
 
