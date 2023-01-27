@@ -26,6 +26,10 @@
       "NAME": "Next",
       "DESCRIPTION": ""
     },
+    "PREV": {
+      "NAME": "Previous",
+      "DESCRIPTION": ""
+    },
     "RADIO_STATION": {
       "NAME": "Radiosender",
       "DESCRIPTION": ""
