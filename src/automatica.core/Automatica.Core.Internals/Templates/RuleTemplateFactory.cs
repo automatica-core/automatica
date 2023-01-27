@@ -140,6 +140,8 @@ namespace Automatica.Core.Internals.Templates
             }
 
             interfaceType.Name = name;
+
+            interfaceType.Key = name;
             interfaceType.Description = description;
             interfaceType.This2RuleTemplate = ruleTemplate;
             interfaceType.This2RuleInterfaceDirection = (long)RuleInterfaceDirection.Param;
