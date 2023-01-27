@@ -10,7 +10,7 @@ namespace Automatica.Core.EF.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DELETE FROM [VersionInformations]");
+            migrationBuilder.Sql("DELETE FROM VersionInformations");
         }
 
         /// <inheritdoc />
