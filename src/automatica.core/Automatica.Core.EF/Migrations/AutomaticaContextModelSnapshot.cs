@@ -403,6 +403,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsRemanent")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsWriteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -414,9 +417,6 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Remanent")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StateColorValueFalse")

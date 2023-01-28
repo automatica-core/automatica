@@ -5,13 +5,13 @@
 namespace Automatica.Core.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRemananceProperty : Migration
+    public partial class AddIsRemanentProperty : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "Remanent",
+                name: "IsRemanent",
                 table: "NodeInstances",
                 type: "INTEGER",
                 nullable: false,
@@ -22,7 +22,7 @@ namespace Automatica.Core.EF.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Remanent",
+                name: "IsRemanent",
                 table: "NodeInstances");
         }
     }

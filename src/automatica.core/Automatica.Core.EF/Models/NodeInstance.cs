@@ -64,7 +64,7 @@ namespace Automatica.Core.EF.Models
 
         public Guid? This2Slave { get; set; }
 
-        public bool Remanent { get; set; }
+        public bool IsRemanent { get; set; }
 
         [JsonIgnore, IgnoreMember]
         public NodeInstance This2ParentNodeInstanceNavigation { get; set; }

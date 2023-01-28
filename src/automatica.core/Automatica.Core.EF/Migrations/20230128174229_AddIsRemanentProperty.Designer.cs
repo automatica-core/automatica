@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
-    [Migration("20230128173144_AddRemananceProperty")]
-    partial class AddRemananceProperty
+    [Migration("20230128174229_AddIsRemanentProperty")]
+    partial class AddIsRemanentProperty
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -406,6 +406,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsRemanent")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsWriteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -417,9 +420,6 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Remanent")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StateColorValueFalse")
