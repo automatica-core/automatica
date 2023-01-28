@@ -367,6 +367,9 @@
       },
       "HOSTEDGRAFANAUSERID": {
         "NAME": "User ID"
+      },
+      "REMANENT": {
+        "NAME": "Remanent"
       }
     },
     "CATEGORY_INSTANCE": {
