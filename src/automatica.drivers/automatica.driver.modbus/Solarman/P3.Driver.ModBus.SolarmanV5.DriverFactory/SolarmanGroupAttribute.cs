@@ -30,7 +30,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _map = map;
             _groupMap = groupMap;
         }
-
+        public override Task<bool> Read()
+        {
+            _parent.Read().ConfigureAwait(false);
+            return Task.FromResult(true);
+        }
 
         internal async Task FetchValues(ModBusRegisterValueReturn modbusRegisterValue, (int start, int end) groupRead)
         {
@@ -56,81 +60,6 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 }
             }
             
-        }
-
-        internal async Task<bool> PollAttributes()
-        { 
-            DriverContext.Logger.LogInformation($"Polling solarman device...");
-            if (_parent.Driver == null)
-            {
-                throw new ArgumentException("Driver not initialized...");
-            }
-
-            foreach (var register in _map.NameRegisterMap)
-            {
-                try
-                {
-                    if (_parent.Driver == null)
-                    {
-
-                        DriverContext.Logger.LogInformation($"Driver is not initialized!");
-                        break;
-                    }
-
-                    if (_nameMap.ContainsKey(register.Key))
-                    {
-                        DriverContext.Logger.LogInformation($"Read value for {register.Key}");
-
-                        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
-                        var value = await _parent.Driver.ReadRegisters(_parent.DeviceId, (ushort)register.Value[0],
-                            register.Value.Count, cancellationTokenSource.Token);
-
-                        if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }
-                            and ModBusRegisterValueReturn modbusRegisterValue)
-                        {
-                            var val = await _nameMap[register.Key].ConvertValue(modbusRegisterValue.Data.ToArray());
-                            _nameMap[register.Key].DispatchValue(val);
-                            _successCount++;
-
-                            if (_successCount >= 10)
-                            {
-                                _failCount = 0;
-                                _successCount = 0;
-                            }
-                        }
-                        else
-                        {
-                            _failCount++;
-                        }
-
-                        if (_failCount >= 20)
-                        {
-                            _failCount = 0;
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
-                    }
-                }
-                catch (OperationCanceledException)
-                {
-                    throw;
-                }
-                catch (IOException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    DriverContext.Logger.LogError(e, $"Could not poll attribute {e}");
-                }
-
-            }
-
-            return true;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

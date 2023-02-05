@@ -27,7 +27,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         public override Task<bool> Read()
         {
-            _parent.PollAttributes().ConfigureAwait(false);
+            _parent.Read().ConfigureAwait(false);
             return Task.FromResult(true);
         }
 

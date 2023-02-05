@@ -104,6 +104,13 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             return base.Start();
         }
 
+        public override Task<bool> Read()
+        {
+            PollAll().ConfigureAwait(false);
+
+            return Task.FromResult(true);
+        }
+
         private async Task PollAll()
         {
             if (_waitSemaphore.CurrentCount == 0)
