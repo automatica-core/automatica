@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -11,12 +10,14 @@ using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices;
+using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
     internal class SolarmanDriver : DriverBase
     {
         private readonly DeviceMap _map;
+        private readonly DeviceGroupMap _groupMap;
         private readonly System.Timers.Timer _pollTimer = new System.Timers.Timer();
         public int PollInterval { get; private set; }
         public byte DeviceId { get; private set; }
@@ -37,9 +38,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             get => _driver;
         } 
 
-        internal SolarmanDriver(IDriverContext driverContext, DeviceMap map) : base(driverContext)
+        internal SolarmanDriver(IDriverContext driverContext, DeviceMap map, DeviceGroupMap groupMap) : base(driverContext)
         {
             _map = map;
+            _groupMap = groupMap;
         }
 
         protected override bool CreateTelegramMonitor()
@@ -80,6 +82,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
         }
 
+        public override Task<bool> Stop()
+        {
+            return _driver?.Stop();
+        }
+
         public override Task<bool> Start()
         {
             Open();
@@ -112,13 +119,26 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 {
                     throw new ArgumentException("Driver not initialized...");
                 }
-                foreach (var group in _groups)
+
+                foreach (var groupRead in _groupMap.GroupRead)
                 {
-                    if (!await group.PollAttributes())
+                    var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                    var value = await Driver.ReadRegisters(DeviceId, (ushort)groupRead.start,
+                        groupRead.end - groupRead.start, cancellationTokenSource.Token);
+
+                    DriverContext.Logger.LogInformation($"Return status is {value.ModBusRequestStatus}");
+                    if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }
+                        and ModBusRegisterValueReturn modbusRegisterValue)
                     {
-                        throw new ArgumentException("need to reconnect, can't handle so many errors...");
+                        foreach (var group in _groups)
+                        {
+                            await group.FetchValues(modbusRegisterValue, groupRead);
+                        }
                     }
+
                 }
+
+                
             }
             catch (Exception e) when (e is SocketException or IOException or ArgumentException or OperationCanceledException)
             {
@@ -158,7 +178,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 return _timestampAttribute;
             }
 
-            var groupAttribute = new SolarmanGroupAttribute(ctx, _map, this, _nameMap);
+            var groupAttribute = new SolarmanGroupAttribute(ctx, _map, _groupMap, this, _nameMap);
             _groups.Add(groupAttribute);
             return groupAttribute;
             

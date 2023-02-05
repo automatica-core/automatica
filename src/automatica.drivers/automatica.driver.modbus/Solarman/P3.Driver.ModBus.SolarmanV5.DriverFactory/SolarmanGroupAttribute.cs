@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
@@ -17,15 +18,44 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
     {
         private readonly SolarmanDriver _parent;
         private readonly DeviceMap _map;
+        private readonly DeviceGroupMap _groupMap;
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap;
         private int _failCount;
         private int _successCount;
 
-        public SolarmanGroupAttribute(IDriverContext driverContext, DeviceMap map,  SolarmanDriver parent, Dictionary<string, SolarmanAttrribute> nameMap) : base(driverContext)
+        public SolarmanGroupAttribute(IDriverContext driverContext, DeviceMap map, DeviceGroupMap groupMap,  SolarmanDriver parent, Dictionary<string, SolarmanAttrribute> nameMap) : base(driverContext)
         {
             _parent = parent;
             _nameMap = nameMap;
             _map = map;
+            _groupMap = groupMap;
+        }
+
+
+        internal async Task FetchValues(ModBusRegisterValueReturn modbusRegisterValue, (int start, int end) groupRead)
+        {
+            foreach (var register in _map.NameRegisterMap)
+            {
+                if (_nameMap.ContainsKey(register.Key))
+                {
+                    if (register.Value[0] >= groupRead.start && register.Value[0] <= groupRead.end)
+                    {
+                        var offset = register.Value[0] - groupRead.start;
+                        var length = register.Value.Count;
+
+                        var data = new ushort[length];
+                        Array.Copy(modbusRegisterValue.Data.ToArray(), offset, data, 0, length);
+
+                        var val = await _nameMap[register.Key].ConvertValue(data);
+                        _nameMap[register.Key].DispatchValue(val);
+                    }
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Could not find instance for {register.Key}");
+                }
+            }
+            
         }
 
         internal async Task<bool> PollAttributes()
@@ -59,7 +89,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                         if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }
                             and ModBusRegisterValueReturn modbusRegisterValue)
                         {
-                            var val = await _nameMap[register.Key].ConvertValue(modbusRegisterValue);
+                            var val = await _nameMap[register.Key].ConvertValue(modbusRegisterValue.Data.ToArray());
                             _nameMap[register.Key].DispatchValue(val);
                             _successCount++;
 
@@ -163,5 +193,6 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
             return attribute;
         }
+
     }
 }

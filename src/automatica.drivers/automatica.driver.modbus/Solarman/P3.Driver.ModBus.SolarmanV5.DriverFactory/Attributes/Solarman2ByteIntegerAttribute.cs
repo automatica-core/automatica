@@ -11,11 +11,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
         {
         }
 
-        public override async Task<object> ConvertValue(ModBusRegisterValueReturn modbusReturn)
+        public override async Task<object> ConvertValue(ushort[] data)
         {
             await Task.CompletedTask;
 
-            int val = modbusReturn.Data[0];
+            int val = data[0];
 
             if (Offset > 0)
             {
