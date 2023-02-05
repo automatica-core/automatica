@@ -2,8 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
-using P3.Driver.ModBus.SolarmanV5;
-using P3.Driver.ModBus.SolarmanV5.Config;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Master.Rtu;
 using P3.Driver.ModBusDriver.Master.Tcp;

@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {

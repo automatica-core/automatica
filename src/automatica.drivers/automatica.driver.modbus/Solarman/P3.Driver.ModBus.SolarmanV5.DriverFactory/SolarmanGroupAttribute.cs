@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -10,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes;
 using P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices;
 using P3.Driver.ModBusDriver.Master;
-using Exception = System.Exception;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
@@ -20,8 +17,6 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
         private readonly DeviceMap _map;
         private readonly DeviceGroupMap _groupMap;
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap;
-        private int _failCount;
-        private int _successCount;
 
         public SolarmanGroupAttribute(IDriverContext driverContext, DeviceMap map, DeviceGroupMap groupMap,  SolarmanDriver parent, Dictionary<string, SolarmanAttrribute> nameMap) : base(driverContext)
         {

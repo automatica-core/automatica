@@ -3,7 +3,6 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Exceptions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 
 namespace P3.Driver.ModBusDriverFactory.Attributes
 {

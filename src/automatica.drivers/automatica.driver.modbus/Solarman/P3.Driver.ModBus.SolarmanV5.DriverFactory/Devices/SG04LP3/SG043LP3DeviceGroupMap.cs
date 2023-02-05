@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
+﻿namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
 {
     internal class SG043LP3DeviceGroupMap : DeviceGroupMap
     {
