@@ -37,7 +37,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             {
                 if (_nameMap.ContainsKey(register.Key))
                 {
-                    if (register.Value[0] >= groupRead.start && register.Value[0] < groupRead.end)
+                    if (register.Value[0] >= groupRead.start && register.Value[0] <= groupRead.end)
                     {
                         var offset = register.Value[0] - groupRead.start;
                         var length = register.Value.Count;

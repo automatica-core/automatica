@@ -131,7 +131,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 {
                     var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
                     var value = await Driver.ReadRegisters(DeviceId, (ushort)groupRead.start,
-                        groupRead.end - groupRead.start, cancellationTokenSource.Token);
+                        groupRead.end - groupRead.start + 1, cancellationTokenSource.Token);
 
                     DriverContext.Logger.LogInformation($"Return status is {value.ModBusRequestStatus}");
                     if (value is { ModBusRequestStatus: ModBusRequestStatus.Success }

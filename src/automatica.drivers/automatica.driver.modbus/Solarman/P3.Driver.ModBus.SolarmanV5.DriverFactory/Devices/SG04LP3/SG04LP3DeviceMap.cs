@@ -10,7 +10,7 @@
             NameRegisterMap.Add("solarman-sg03lp3-pv2-voltage", new() { 0x02A6 });
             NameRegisterMap.Add("solarman-sg03lp3-pv1-current", new() { 0x02A5 });
             NameRegisterMap.Add("solarman-sg03lp3-pv2-current", new() { 0x02A7 });
-            NameRegisterMap.Add("solarman-sg03lp3-daily-production", new() { 0x01F5 });
+            NameRegisterMap.Add("solarman-sg03lp3-daily-production", new() { 0x0211 });
             NameRegisterMap.Add("solarman-sg03lp3-total-production", new() { 0x0216, 0x217 });
 
 
