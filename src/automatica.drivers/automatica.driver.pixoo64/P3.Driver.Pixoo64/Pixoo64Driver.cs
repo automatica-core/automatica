@@ -29,7 +29,7 @@ namespace P3.Driver.Pixoo64
                 screenSize = size.ValueInt.Value;
             }
 
-            var ipSplit = ip.Split(";", StringSplitOptions.RemoveEmptyEntries);
+            var ipSplit = ip.Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             foreach (var ipAddress in ipSplit)
             {
@@ -43,9 +43,6 @@ namespace P3.Driver.Pixoo64
                     DriverContext.Logger.LogError($"Could not parse IPAddress ({ipAddress})");
                 }
             }
-
-            
-
 
             return base.Init();
         }
