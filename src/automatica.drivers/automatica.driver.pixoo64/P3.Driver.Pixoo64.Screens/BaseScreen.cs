@@ -5,7 +5,7 @@ namespace P3.Driver.Pixoo64.Screens
     public abstract class BaseScreen
     {
         public string Title { get; set; }
-        public PixooSharp.Pixoo64 Pixoo { get; }
+        public IList<PixooSharp.Pixoo64> Pixoos { get; } 
 
         public int TimeForNextScreen { get; private set; }
 
@@ -21,9 +21,9 @@ namespace P3.Driver.Pixoo64.Screens
 
         public int DateTimeHourOffset = 0;
 
-        protected BaseScreen(PixooSharp.Pixoo64 pixoo)
+        protected BaseScreen(IList<PixooSharp.Pixoo64> pixoo)
         {
-            Pixoo = pixoo;
+            Pixoos = pixoo;
             Title = "Base";
         }
 
@@ -40,34 +40,37 @@ namespace P3.Driver.Pixoo64.Screens
 
         public async Task Paint()
         {
-            Pixoo.Clear();
-            await Pixoo.SendClearTextAsync();
-
-            Pixoo.DrawFilledRectangle(0, 0, 63, 63, BackgroundColor);
-            if (ShowFrame)
+            foreach (var pixoo in Pixoos)
             {
-                Pixoo.DrawLine(0, 0, 63, 0, FrameColor);
-                Pixoo.DrawLine(63, 0, 63, 63, FrameColor);
-                Pixoo.DrawLine(63, 63, 0, 63, FrameColor);
-                Pixoo.DrawLine(0, 63, 0, 0, FrameColor);
+                pixoo.Clear();
+                await pixoo.SendClearTextAsync();
+
+                pixoo.DrawFilledRectangle(0, 0, 63, 63, BackgroundColor);
+                if (ShowFrame)
+                {
+                    pixoo.DrawLine(0, 0, 63, 0, FrameColor);
+                    pixoo.DrawLine(63, 0, 63, 63, FrameColor);
+                    pixoo.DrawLine(63, 63, 0, 63, FrameColor);
+                    pixoo.DrawLine(0, 63, 0, 0, FrameColor);
+                }
+
+                if (ShowTicksUntilNextFrame && TimeForNextScreen.ToString().Length == 1)
+                {
+                    pixoo.DrawText(59, 2, Palette.White, TimeForNextScreen.ToString());
+                }
+
+                TimeForNextScreen--;
+                await PaintInternal();
+
+
+                if (ShowClock)
+                {
+                    pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
+                }
+
+                await pixoo.SendResetGif();
+                await pixoo.SendBufferAsync(0);
             }
-
-            if (ShowTicksUntilNextFrame && TimeForNextScreen.ToString().Length == 1)
-            {
-                Pixoo.DrawText(59, 2, Palette.White, TimeForNextScreen.ToString());
-            }
-            
-            TimeForNextScreen--;
-            await PaintInternal();
-
-
-            if (ShowClock)
-            {
-                Pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
-            }
-
-            await Pixoo.SendResetGif();
-            await Pixoo.SendBufferAsync(0);
         }
 
         protected abstract Task PaintInternal();

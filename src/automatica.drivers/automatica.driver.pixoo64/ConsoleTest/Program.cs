@@ -8,10 +8,12 @@ Console.WriteLine("Hello, World!");
 
 var pixoo = new Pixoo64("192.168.8.118", 64, true);
 
-var batteryScreen = new BatteryScreen(pixoo);
-var cryptoScreen = new CryptoPriceScreen(pixoo);
-var meterScreen = new MeterScreen(pixoo);
-var infoScreen = new InfoScreen(pixoo);
+var pixooList = new List<Pixoo64> { pixoo };
+
+var batteryScreen = new BatteryScreen(pixooList);
+var cryptoScreen = new CryptoPriceScreen(pixooList);
+var meterScreen = new MeterScreen(pixooList);
+var infoScreen = new InfoScreen(pixooList);
 var screens = new List<BaseScreen>();
 
 screens.Add(batteryScreen);

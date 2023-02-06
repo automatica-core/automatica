@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -8,7 +9,7 @@ namespace P3.Driver.Pixoo64.Screens
     internal class BatteryScreenDriverNode : Pixoo64Screen<BatteryScreen>
     {
        
-        public BatteryScreenDriverNode(IDriverContext driverContext, PixooSharp.Pixoo64 pixoo) : base(driverContext, pixoo)
+        public BatteryScreenDriverNode(IDriverContext driverContext, IList<PixooSharp.Pixoo64> pixoo) : base(driverContext, pixoo)
         {
         }
 

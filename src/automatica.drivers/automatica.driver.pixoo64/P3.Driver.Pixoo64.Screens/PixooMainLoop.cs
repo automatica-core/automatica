@@ -4,14 +4,14 @@ namespace P3.Driver.Pixoo64.Screens
 {
     public class PixooMainLoop
     {
-        private readonly PixooSharp.Pixoo64 _pixoo;
+        private readonly IList<PixooSharp.Pixoo64> _pixoo;
         private readonly ILogger _logger;
         private readonly List<BaseScreen> _screens = new List<BaseScreen>();
 
         private CancellationTokenSource _cancellationTokenSource = new();
         private bool _isRunning = false;
 
-        public PixooMainLoop(PixooSharp.Pixoo64 pixoo, ILogger logger)
+        public PixooMainLoop(IList<PixooSharp.Pixoo64> pixoo, ILogger logger)
         {
             _pixoo = pixoo;
             _logger = logger;

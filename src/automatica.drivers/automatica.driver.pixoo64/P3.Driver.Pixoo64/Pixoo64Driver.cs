@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -8,7 +10,7 @@ namespace P3.Driver.Pixoo64
 {
     public class Pixoo64Driver : DriverBase
     {
-        private PixooSharp.Pixoo64 _pixoo64;
+        private readonly List<PixooSharp.Pixoo64> _pixoo64 = new List<PixooSharp.Pixoo64>();
         private PixooMainLoop _mainLoop;
 
         private readonly List<Pixoo64Screen> _screens = new List<Pixoo64Screen>();
@@ -26,8 +28,24 @@ namespace P3.Driver.Pixoo64
             {
                 screenSize = size.ValueInt.Value;
             }
-            _pixoo64 = new PixooSharp.Pixoo64(ip, screenSize);
+
+            var ipSplit = ip.Split(";", StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var ipAddress in ipSplit)
+            {
+                try
+                {
+                    IPAddress.Parse(ipAddress);
+                    _pixoo64.Add(new PixooSharp.Pixoo64(ipAddress, screenSize));
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError($"Could not parse IPAddress ({ipAddress})");
+                }
+            }
+
             
+
 
             return base.Init();
         }

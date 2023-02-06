@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -7,7 +8,7 @@ namespace P3.Driver.Pixoo64.Screens
 {
     internal class MeterScreenDriverNode : Pixoo64Screen<MeterScreen>
     {
-        public MeterScreenDriverNode(IDriverContext driverContext, PixooSharp.Pixoo64 pixoo) : base(driverContext, pixoo)
+        public MeterScreenDriverNode(IDriverContext driverContext, IList<PixooSharp.Pixoo64> pixoo) : base(driverContext, pixoo)
         {
         }
 
