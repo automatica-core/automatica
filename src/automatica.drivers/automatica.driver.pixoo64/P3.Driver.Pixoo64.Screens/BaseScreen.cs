@@ -46,49 +46,49 @@ namespace P3.Driver.Pixoo64.Screens
             var tasks = new List<Task>();
             foreach (var pixoo in _pixoos)
             {
-                async void Action()
-                {
-                    try
-                    {
-                        pixoo.Clear();
-                        await pixoo.SendClearTextAsync();
-
-                        pixoo.DrawFilledRectangle(0, 0, 63, 63, BackgroundColor);
-                        if (ShowFrame)
-                        {
-                            pixoo.DrawLine(0, 0, 63, 0, FrameColor);
-                            pixoo.DrawLine(63, 0, 63, 63, FrameColor);
-                            pixoo.DrawLine(63, 63, 0, 63, FrameColor);
-                            pixoo.DrawLine(0, 63, 0, 0, FrameColor);
-                        }
-
-                        if (ShowTicksUntilNextFrame && TimeForNextScreen.ToString().Length == 1)
-                        {
-                            pixoo.DrawText(59, 2, Palette.White, TimeForNextScreen.ToString());
-                        }
-
-                        TimeForNextScreen--;
-                        await PaintInternal(pixoo);
-
-
-                        if (ShowClock)
-                        {
-                            pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
-                        }
-
-                        await pixoo.SendResetGif();
-                        await pixoo.SendBufferAsync(0);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, $"{e}");
-                    }
-                }
-
-                tasks.Add(new Task(Action));
+                tasks.Add(Task.Run(() => DoPaint(pixoo)));
             }
 
             await Task.WhenAll(tasks);
+        }
+
+        private async Task DoPaint(PixooSharp.Pixoo64 pixoo)
+        {
+            try
+            {
+                pixoo.Clear();
+                await pixoo.SendClearTextAsync();
+
+                pixoo.DrawFilledRectangle(0, 0, 63, 63, BackgroundColor);
+                if (ShowFrame)
+                {
+                    pixoo.DrawLine(0, 0, 63, 0, FrameColor);
+                    pixoo.DrawLine(63, 0, 63, 63, FrameColor);
+                    pixoo.DrawLine(63, 63, 0, 63, FrameColor);
+                    pixoo.DrawLine(0, 63, 0, 0, FrameColor);
+                }
+
+                if (ShowTicksUntilNextFrame && TimeForNextScreen.ToString().Length == 1)
+                {
+                    pixoo.DrawText(59, 2, Palette.White, TimeForNextScreen.ToString());
+                }
+
+                TimeForNextScreen--;
+                await PaintInternal(pixoo);
+
+
+                if (ShowClock)
+                {
+                    pixoo.DrawText(43, 57, ColorText, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
+                }
+
+                await pixoo.SendResetGif();
+                await pixoo.SendBufferAsync(0);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"{e}");
+            }
         }
 
         protected abstract Task PaintInternal(PixooSharp.Pixoo64 pixoo);
