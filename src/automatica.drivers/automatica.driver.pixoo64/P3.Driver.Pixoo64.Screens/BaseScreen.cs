@@ -51,7 +51,7 @@ namespace P3.Driver.Pixoo64.Screens
             }
 
             await Task.WhenAll(tasks);
-            TimeForNextScreen--
+            TimeForNextScreen--;
         }
 
         private async Task DoPaint(PixooSharp.Pixoo64 pixoo)
