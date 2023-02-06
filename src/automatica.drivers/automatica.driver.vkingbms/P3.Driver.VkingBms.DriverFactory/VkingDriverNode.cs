@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.VkingBms.Driver;
+using P3.Driver.VkingBms.Driver.Exception;
 using P3.Driver.VkingBms.DriverFactory.Nodes;
 using Timer = System.Threading.Timer;
 
@@ -75,10 +76,17 @@ namespace P3.Driver.VkingBms.DriverFactory
 
                 foreach (var pack in _packs)
                 {
-                    var version = await _driver.ReadVersionInfo(pack.PackId, cancellationTokenSource.Token);
-                    var analogData = await _driver.ReadAnalogValues(pack.PackId, cancellationTokenSource.Token);
+                    try
+                    {
+                        var version = await _driver.ReadVersionInfo(pack.PackId, cancellationTokenSource.Token);
+                        var analogData = await _driver.ReadAnalogValues(pack.PackId, cancellationTokenSource.Token);
 
-                    pack.Read(analogData, version);
+                        pack.Read(analogData, version);
+                    }
+                    catch (DataReadException ex)
+                    {
+                        DriverContext.Logger.LogError(ex, $"Error reading pack {pack.PackId}...{ex}");
+                    }
                 }
             }
             catch (OperationCanceledException)

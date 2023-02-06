@@ -2,6 +2,7 @@
 using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
 using P3.Driver.VkingBms.Driver.Data;
+using P3.Driver.VkingBms.Driver.Exception;
 using P3.Driver.VkingBms.Driver.Interfaces;
 using RJCP.IO.Ports;
 
@@ -55,7 +56,7 @@ namespace P3.Driver.VkingBms.Driver
 
             if (read != 13)
             {
-                throw new ArgumentException("Could not read package...");
+                throw new DataReadException();
             }
 
             ret.AddRange(header);
