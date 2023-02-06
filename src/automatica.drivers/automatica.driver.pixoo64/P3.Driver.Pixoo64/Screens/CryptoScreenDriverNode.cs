@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Pixoo64.Screens
 {
@@ -16,7 +15,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         protected override CryptoPriceScreen CreateScreen()
         {
-            return new CryptoPriceScreen(Pixoo);
+            return new CryptoPriceScreen(Pixoo, DriverContext.Logger);
         }
 
         protected override async Task SetScreenValue(object value, NodeInstance node)

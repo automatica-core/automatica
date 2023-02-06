@@ -15,7 +15,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         protected override BatteryScreen CreateScreen()
         {
-            return new BatteryScreen(Pixoo);
+            return new BatteryScreen(Pixoo, DriverContext.Logger);
         }
 
         protected override async Task SetScreenValue(object value, NodeInstance node)

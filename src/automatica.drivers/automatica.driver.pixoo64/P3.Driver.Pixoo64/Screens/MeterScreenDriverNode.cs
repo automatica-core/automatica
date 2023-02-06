@@ -15,7 +15,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         protected override MeterScreen CreateScreen()
         {
-            return new MeterScreen(Pixoo);
+            return new MeterScreen(Pixoo, DriverContext.Logger);
         }
 
         protected override async Task SetScreenValue(object value, NodeInstance node)

@@ -1,4 +1,5 @@
-﻿using P3.PixooSharp.Assets;
+﻿using Microsoft.Extensions.Logging;
+using P3.PixooSharp.Assets;
 
 namespace P3.Driver.Pixoo64.Screens
 {
@@ -7,7 +8,7 @@ namespace P3.Driver.Pixoo64.Screens
         public double? Outside { get; set; }
         public double? Inside { get; set; }
 
-        public InfoScreen(IList<PixooSharp.Pixoo64> pixoo) : base(pixoo)
+        public InfoScreen(IList<PixooSharp.Pixoo64> pixoo, ILogger logger) : base(pixoo, logger)
         {
             Title = "Infos";
         }
@@ -18,22 +19,21 @@ namespace P3.Driver.Pixoo64.Screens
             base.Init();
         }
 
-        protected override async Task PaintInternal()
+        protected override async Task PaintInternal(PixooSharp.Pixoo64 pixoo)
         {
             await Task.CompletedTask;
 
-            foreach (var pixoo in Pixoos)
-            {
-                pixoo.DrawText(5, 5, Palette.Green, Title);
 
-                if (Outside.HasValue)
-                    pixoo.DrawText(5, 12, Palette.White, $"Out: {Outside}°C");
-                if (Inside.HasValue)
-                    pixoo.DrawText(5, 22, Palette.White, $"In:  {Inside}°C");
+            pixoo.DrawText(5, 5, Palette.Green, Title);
 
-                pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
-                pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
-            }
+            if (Outside.HasValue)
+                pixoo.DrawText(5, 12, Palette.White, $"Out: {Outside}°C");
+            if (Inside.HasValue)
+                pixoo.DrawText(5, 22, Palette.White, $"In:  {Inside}°C");
+
+            pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
+            pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
+
         }
     }
 }

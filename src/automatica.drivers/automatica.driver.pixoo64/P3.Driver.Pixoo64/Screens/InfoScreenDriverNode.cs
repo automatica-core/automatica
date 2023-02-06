@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Pixoo64.Screens
 {
@@ -15,7 +14,7 @@ namespace P3.Driver.Pixoo64.Screens
 
         protected override InfoScreen CreateScreen()
         {
-            return new InfoScreen(Pixoo);
+            return new InfoScreen(Pixoo, DriverContext.Logger);
         }
 
 
