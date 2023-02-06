@@ -44,14 +44,14 @@ namespace P3.Driver.Pixoo64.Screens
         public async Task Paint()
         {
             var tasks = new List<Task>();
-
-            TimeForNextScreen--;
+;
             foreach (var pixoo in _pixoos)
             {
                 tasks.Add(Task.Run(() => DoPaint(pixoo)));
             }
 
             await Task.WhenAll(tasks);
+            TimeForNextScreen--
         }
 
         private async Task DoPaint(PixooSharp.Pixoo64 pixoo)
