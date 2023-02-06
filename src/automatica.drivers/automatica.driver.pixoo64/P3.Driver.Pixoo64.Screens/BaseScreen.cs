@@ -44,6 +44,8 @@ namespace P3.Driver.Pixoo64.Screens
         public async Task Paint()
         {
             var tasks = new List<Task>();
+
+            TimeForNextScreen--;
             foreach (var pixoo in _pixoos)
             {
                 tasks.Add(Task.Run(() => DoPaint(pixoo)));
@@ -73,7 +75,6 @@ namespace P3.Driver.Pixoo64.Screens
                     pixoo.DrawText(59, 2, Palette.White, TimeForNextScreen.ToString());
                 }
 
-                TimeForNextScreen--;
                 await PaintInternal(pixoo);
 
 
