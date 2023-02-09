@@ -53,8 +53,8 @@ namespace P3.Driver.SonosDriverFactory.Attributes
         {
             try
             {
-                var intValue = Convert.ToInt32(value);
-                var mediaUrl = String.Format(SonosController.TuneInMediaUrl, intValue);
+                var strValue = value.ToString();
+                var mediaUrl = String.Format(SonosController.TuneInMediaUrl, strValue);
 
                 if (mediaUrl != _currentMediaUrl)
                 {
