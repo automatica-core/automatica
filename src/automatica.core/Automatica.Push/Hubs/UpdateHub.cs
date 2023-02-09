@@ -1,76 +1,68 @@
-﻿using Automatica.Core.EF.Models;
+﻿using AsyncKeyedLock;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Internals.Plugins;
 using Automatica.Push.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Automatica.Core.Internals.Plugins;
-using Automatica.Push.Concurrency;
 
 namespace Automatica.Push.Hubs
 {
     [Authorize]
-    public class UpdateHub : Hub 
+    public class UpdateHub : Hub
     {
         private readonly ICloudApi _api;
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
         private readonly IPluginLoader _loader;
-        private readonly IHubSemaphore _semaphore;
+        private readonly AsyncKeyedLocker<string> _asyncKeyedLocker;
 
-        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader, IHubSemaphoreFactory semaphoreFactory)
+        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader, AsyncKeyedLocker<string> asyncKeyedLocker)
         {
             _api = api;
             _updateHub = updateHub;
             _coreServer = coreServer;
             _loader = loader;
-
-            
-            _semaphore = semaphoreFactory.GetSemaphore(nameof(UpdateHub));
+            _asyncKeyedLocker = asyncKeyedLocker;
         }
         public Task StartUpdateDownload(ServerVersion version)
         {
             Task.Run(async () =>
             {
-                if (!await _semaphore.WaitAsync(10))
+                using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                if (!releaser.EnteredSemaphore)
                 {
                     return;
                 }
 
-                try
+                var previousState = 0;
+                _api.DownloadUpdateProgressChanged += (sender, e) =>
                 {
-                    var previousState = 0;
-                    _api.DownloadUpdateProgressChanged += (sender, e) =>
+                    if (previousState != e.ProgressPercentage)
                     {
-                        if (previousState != e.ProgressPercentage)
-                        {
-                            previousState = e.ProgressPercentage;
-                            _updateHub.Clients.All.SendAsync("UpdateDownloadProgressChanged",
-                                new object[] {e.BytesReceived, e.TotalBytesToReceive});
-                            SystemLogger.Instance.LogInformation(
-                                $"Downloading update {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
-                        }
+                        previousState = e.ProgressPercentage;
+                        _updateHub.Clients.All.SendAsync("UpdateDownloadProgressChanged",
+                            new object[] { e.BytesReceived, e.TotalBytesToReceive });
+                        SystemLogger.Instance.LogInformation(
+                            $"Downloading update {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
+                    }
 
-                    };
-                    _api.DownloadUpdateFinished += (sender, e) =>
-                    {
-                        _updateHub.Clients.All.SendAsync("UpdateFinished");
-                    };
-                    _api.DownloadUpdateFailed += (sender, e) =>
-                    {
-                        _updateHub.Clients.All.SendAsync("UpdateFailed", new object[] {e.Error});
-                    };
-                    await _api.DownloadUpdate(version);
-                }
-                finally
+                };
+                _api.DownloadUpdateFinished += (sender, e) =>
                 {
-                    _semaphore.Release();
-                }
+                    _updateHub.Clients.All.SendAsync("UpdateFinished");
+                };
+                _api.DownloadUpdateFailed += (sender, e) =>
+                {
+                    _updateHub.Clients.All.SendAsync("UpdateFailed", new object[] { e.Error });
+                };
+                await _api.DownloadUpdate(version);
             });
             return Task.CompletedTask;
         }
@@ -79,22 +71,16 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-                if (!await _semaphore.WaitAsync(10))
+                using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                if (!releaser.EnteredSemaphore)
                 {
                     return;
                 }
 
-                try
-                {
-                    var pluginDownloader =
-                        new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader);
+                var pluginDownloader =
+                    new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader);
 
-                    await pluginDownloader.Download();
-                }
-                finally
-                {
-                    _semaphore.Release();
-                }
+                await pluginDownloader.Download();
             });
             return Task.CompletedTask;
         }
@@ -124,29 +110,23 @@ namespace Automatica.Push.Hubs
 
         private async Task InstallOrUpdatePlugins(IList<Plugin> plugins)
         {
-            if (_semaphore.Wait(100))
+            using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 100).ConfigureAwait(false);
+            if (!releaser.EnteredSemaphore)
             {
-                try
-                {
-                    var tasks = new List<Task>();
-                    foreach (var plug in plugins)
-                    {
-                        var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
-                            _loader, false);
-
-                        tasks.Add(pluginDownloader.Download());
-                    }
-
-                    await Task.WhenAll(tasks.ToArray());
-                    _coreServer.Restart();
-                }
-                finally
-                {
-                    _semaphore.Release();
-                }
+                return;
             }
 
-        }
+            var tasks = new List<Task>();
+            foreach (var plug in plugins)
+            {
+                var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
+                    _loader, false);
 
+                tasks.Add(pluginDownloader.Download());
+            }
+
+            await Task.WhenAll(tasks.ToArray());
+            _coreServer.Restart();
+        }
     }
 }
