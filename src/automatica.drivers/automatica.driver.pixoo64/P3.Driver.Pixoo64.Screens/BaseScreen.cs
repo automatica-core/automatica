@@ -86,9 +86,13 @@ namespace P3.Driver.Pixoo64.Screens
                 await pixoo.SendResetGif();
                 await pixoo.SendBufferAsync(0);
             }
+            catch (TimeoutException)
+            {
+                _logger.LogTrace("Timeout occured...");
+            }
             catch (Exception e)
             {
-                _logger.LogError(e, $"{e}");
+                _logger.LogError(e, $"Unknown error occurred...{e}");
             }
         }
 
