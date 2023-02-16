@@ -56,6 +56,17 @@ namespace P3.Driver.MBus.Frames.VariableData
 
         }
 
+        public static ValueInformationField Default()
+        {
+            var vif = new ValueInformationField();
+
+            vif.HasExtension = false;
+            vif.Unit = Unit.Unknown;
+            vif.Multiplier = 1;
+
+            return vif;
+        }
+
         public static ValueInformationField Parse(in byte data)
         {
             var vif = new ValueInformationField();

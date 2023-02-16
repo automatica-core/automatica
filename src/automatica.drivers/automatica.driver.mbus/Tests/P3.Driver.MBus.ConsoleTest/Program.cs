@@ -18,11 +18,11 @@ namespace P3.Driver.MBus.ConsoleTest
             {
                 IpAddress = IPAddress.Parse("192.168.8.32"),
                 Port = 10030
-            }, new EmptyTelegramMonitorInstance(), NullLogger.Instance);
+            }, new EmptyTelegramMonitorInstance(), new ConsoleLogger());
 
             while (true)
             {
-                var frame = await mbusUdp.ReadDevice(20, false, 5000);
+                var frame = await mbusUdp.ReadDevice(20, false, 15000);
 
                 if (frame is VariableDataFrame vdf)
                     foreach (var data in vdf.DataBlocks)
