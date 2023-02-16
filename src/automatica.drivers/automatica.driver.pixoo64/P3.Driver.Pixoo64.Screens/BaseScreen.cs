@@ -88,7 +88,11 @@ namespace P3.Driver.Pixoo64.Screens
             }
             catch (TimeoutException)
             {
-                _logger.LogTrace("Timeout occured...");
+                _logger.LogTrace("Timeout occurred...");
+            }
+            catch (TaskCanceledException)
+            {
+                _logger.LogTrace("Task cancelled occurred...");
             }
             catch (Exception e)
             {
