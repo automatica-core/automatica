@@ -38,6 +38,7 @@ namespace Automatica.Core.Slave.Runtime
 
         private readonly ILogger _logger;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _startupSemaphore = new SemaphoreSlim(1);
 
         private readonly Timer _timer = new Timer(5000);
         private bool _connected;
@@ -116,6 +117,8 @@ namespace Automatica.Core.Slave.Runtime
 
         private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            await _startupSemaphore.WaitAsync();
+
             if (!_connected)
             {
                 await StopInternal();
@@ -145,6 +148,8 @@ namespace Automatica.Core.Slave.Runtime
                     }
                 }
             }
+
+            _startupSemaphore.Release(1);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -388,6 +393,7 @@ namespace Automatica.Core.Slave.Runtime
                     {
                         Force = true
                     });
+
                 }
                 catch(Exception e)
                 {
@@ -407,7 +413,11 @@ namespace Automatica.Core.Slave.Runtime
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error stopping connection...");
+                _logger.LogError(e, $"Error stopping connection...{e}");
+            }
+            finally
+            {
+                _connected = false;
             }
         }
 
