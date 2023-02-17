@@ -34,6 +34,12 @@ namespace Automatica.Core.Plugin.Standalone
         {
             var json = "";
 
+            if (e == null || e.ApplicationMessage == null || e.ApplicationMessage.Payload == null)
+            {
+                Logger.LogInformation($"Application message is empty...{JsonConvert.DeserializeObject(e)}");
+                return;
+            }
+
             if (e.ApplicationMessage.Payload.Length > 0)
             {
                 json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
