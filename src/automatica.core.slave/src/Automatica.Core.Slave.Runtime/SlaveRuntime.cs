@@ -121,7 +121,7 @@ namespace Automatica.Core.Slave.Runtime
 
             if (!_connected)
             {
-                await StopInternal();
+                await StopInternal("not connected");
                 await StartInternal();
             }
             else if(_containerStarted)
@@ -143,7 +143,7 @@ namespace Automatica.Core.Slave.Runtime
                 {
                     if (containers.All(a => a.ID != running.Value))
                     {
-                        await StopInternal();
+                        await StopInternal("restart");
                         await StartInternal();
                     }
                 }
@@ -208,7 +208,7 @@ namespace Automatica.Core.Slave.Runtime
                 case SlaveAction.Start:
                     if (!await StartImage(action))
                     {
-                        await StopInternal();
+                        await StopInternal("start");
                         await StartInternal();
                     }
                     break;
@@ -372,19 +372,19 @@ namespace Automatica.Core.Slave.Runtime
 
         internal async Task ReInit()
         {
-            await StopAllContainers();
+            await StopAllContainers("re-init");
         }
         internal async Task Restart()
         {
-            await StopInternal();
+            await StopInternal("restart");
             await StartAsync();
         }
 
-        private async Task StopAllContainers()
+        private async Task StopAllContainers(string reason)
         {
             foreach (var id in _runningImages)
             {
-                _logger.LogInformation($"Stopping container instance {id.Value}");
+                _logger.LogInformation($"Stopping container instance {id.Value}: Reason {reason}");
                 try
                 {
                     await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
@@ -403,11 +403,11 @@ namespace Automatica.Core.Slave.Runtime
             _runningImages.Clear();
         }
 
-        private async Task StopInternal()
+        private async Task StopInternal(string reason)
         {
             try
             {
-                await StopAllContainers();
+                await StopAllContainers(reason);
 
                 await _mqttClient.DisconnectAsync();
             }
@@ -424,7 +424,7 @@ namespace Automatica.Core.Slave.Runtime
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await StopInternal();
+            await StopInternal("stop service");
 
 
             _timer.Elapsed -= _timer_Elapsed;
