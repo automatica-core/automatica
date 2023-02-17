@@ -36,7 +36,7 @@ namespace Automatica.Core.Plugin.Standalone
 
             if (e == null || e.ApplicationMessage == null || e.ApplicationMessage.Payload == null)
             {
-                Logger.LogInformation($"Application message is empty...{JsonConvert.DeserializeObject(e)}");
+                Logger.LogInformation($"Application message is empty...{JsonConvert.SerializeObject(e)}");
                 return;
             }
 
