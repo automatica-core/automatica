@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
-namespace P3.Knx.Core.DPT.Dpt8
+namespace P3.Knx.Core.Driver.DPT.Dpt8
 {
     internal static class Dpt8TypeTranslators
     {

@@ -1,7 +1,4 @@
 ﻿using P3.Knx.Core.Driver.Frames;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace P3.Knx.Core.Driver
 {

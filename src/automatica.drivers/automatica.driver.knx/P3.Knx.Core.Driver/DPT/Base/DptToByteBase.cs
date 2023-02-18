@@ -1,11 +1,13 @@
-﻿namespace P3.Knx.Core.DPT.Base
+﻿using Automatica.Core.Base.Cryptography;
+
+namespace P3.Knx.Core.Driver.DPT.Base
 {
     public abstract class DptToByteBase : Dpt
     {
         public override object FromDataPoint(byte[] data)
         {
             if (data == null || data.Length != 1)
-                throw new FromDataPointException("data is invalid");
+                throw new FromDataPointException($"data is invalid ({data?.ToHex(true)})");
             
             return ConvertFromBusValue(ValidateMinMax(data[0]));
         }

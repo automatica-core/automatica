@@ -1,6 +1,4 @@
 ﻿using System;
-using P3.Knx.Core.Driver;
-using P3.Knx.Core.Driver.Frames;
 
 namespace P3.Knx.Core.Driver.Frames
 {

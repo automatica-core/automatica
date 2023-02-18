@@ -1,20 +1,18 @@
-﻿using Automatica.Core.Driver.Utility.Network;
-using P3.Knx.Core.Driver;
-using P3.Knx.Core.Driver.Tunneling;
-using System;
+﻿using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Driver.Utility.Network;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using P3.Knx.Core.DPT;
+using P3.Knx.Core.Driver;
+using P3.Knx.Core.Driver.Tunneling;
 
-namespace P3.Knx.Core
+namespace P3.Knx.Core.Console
 {
     class ConsoleLogger : ILogger {
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            Console.WriteLine(formatter.Invoke(state, exception));
+            System.Console.WriteLine(formatter.Invoke(state, exception));
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -50,7 +48,7 @@ namespace P3.Knx.Core
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            System.Console.WriteLine("Hello World!");
 
             KnxHelper.Logger = new ConsoleLogger();//NullLogger.Instance;
 
@@ -73,7 +71,7 @@ namespace P3.Knx.Core
 
            
 
-            Console.ReadLine();
+            System.Console.ReadLine();
         }
     }
 }

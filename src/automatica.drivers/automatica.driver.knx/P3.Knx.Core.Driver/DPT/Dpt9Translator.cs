@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using P3.Knx.Core.DPT.Base;
+using Automatica.Core.Base.Cryptography;
+using P3.Knx.Core.Driver.DPT.Base;
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
     internal class Dpt9Translator : Dpt
     {
@@ -17,7 +17,7 @@ namespace P3.Knx.Core.DPT
         {
             if (data == null || data.Length != 2)
             {
-                throw new FromDataPointException("data is invalid");
+                throw new FromDataPointException($"data is invalid ({data?.ToHex(true)})");
             }
             // DPT bits high byte: MEEEEMMM, low byte: MMMMMMMM
             // first M is signed state from two's complement notation

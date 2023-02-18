@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace P3.Knx.Core.DPT.Dpt5
+namespace P3.Knx.Core.Driver.DPT.Dpt5
 {
     internal class Dpt5001TypeTranslator : Dpt5Translator
     {

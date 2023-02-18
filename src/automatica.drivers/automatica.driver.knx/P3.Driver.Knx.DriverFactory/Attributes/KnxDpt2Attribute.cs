@@ -8,8 +8,8 @@ using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.DPT;
 using P3.Knx.Core.Driver;
+using P3.Knx.Core.Driver.DPT;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {

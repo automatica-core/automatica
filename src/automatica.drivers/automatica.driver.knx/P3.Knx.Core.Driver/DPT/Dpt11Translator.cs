@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-using P3.Knx.Core.DPT.Base;
+using Automatica.Core.Base.Cryptography;
+using P3.Knx.Core.Driver.DPT.Base;
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
    
     internal class Dpt11Translator : Dpt
@@ -12,7 +13,7 @@ namespace P3.Knx.Core.DPT
         {
             if (data == null || data.Length != 3)
             {
-                throw new FromDataPointException("data is invalid");
+                throw new FromDataPointException($"data is invalid ({data?.ToHex(true)})");
             }
 
             data = data.Reverse().ToArray();

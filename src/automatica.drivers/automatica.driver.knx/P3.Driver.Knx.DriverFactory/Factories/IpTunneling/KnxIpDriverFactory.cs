@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 
 

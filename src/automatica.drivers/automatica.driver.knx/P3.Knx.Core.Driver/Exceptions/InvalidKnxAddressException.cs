@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace P3.Driver.Knx.Exceptions
+namespace P3.Knx.Core.Driver.Exceptions
 {
     /// <summary>
     /// Exception thrown when an invalid KNX address is used to perform an action or status query

@@ -1,7 +1,7 @@
 ﻿using System;
-using P3.Knx.Core.DPT.Dpt6;
+using P3.Knx.Core.Driver.DPT.Dpt6;
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
     public abstract class Dpt
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace P3.Knx.Core.DPT.Dpt5
+namespace P3.Knx.Core.Driver.DPT.Dpt5
 {
     internal static class Dpt5TypeTranslators
     {

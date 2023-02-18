@@ -4,7 +4,6 @@ using P3.Knx.Core.Ets;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Exceptions;
 using P3.Knx.Core.Abstractions;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel

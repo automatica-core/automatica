@@ -1,6 +1,6 @@
-﻿using P3.Knx.Core.DPT.Base;
+﻿using P3.Knx.Core.Driver.DPT.Base;
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
 
     internal class Dpt13Translator : DptToIntBase

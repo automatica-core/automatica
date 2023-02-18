@@ -212,7 +212,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             }
             else
             {
-                KnxHelper.Logger.LogWarning($"Datagram on GA - not callback registered");
+                KnxHelper.Logger.LogInformation($"Datagram on GA {datagram.DestinationAddress} - not callback registered");
             }
 
             return Task.CompletedTask;

@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Automatica.Core.Base.Cryptography;
+using System;
 
-namespace P3.Knx.Core.DPT.Base
+namespace P3.Knx.Core.Driver.DPT.Base
 {
     public abstract class DptToUShortBase : Dpt
     {
         public override object FromDataPoint(byte[] data)
         {
             if (data == null || data.Length != 2)
-                throw new FromDataPointException("data input must have 2 bytes");
+                throw new FromDataPointException($"data input must have 2 bytes ({data?.ToHex(true)})");
 
             return ConvertFromBusValue(ValidateMinMax(BitConverter.ToUInt16(data, 0)));
         }

@@ -1,11 +1,11 @@
-﻿using P3.Knx.Core.Ets;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using P3.Knx.Core.Ets;
 using Xunit;
 
-namespace P3.Driver.Knx.Tests.Ets
+namespace P3.Driver.Knx.Tests.ETS
 {
     //Test
     public class ETSProjectParserTest
