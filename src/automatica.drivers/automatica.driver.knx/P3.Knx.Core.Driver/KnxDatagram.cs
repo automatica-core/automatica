@@ -2,11 +2,13 @@
 {
     public class KnxDatagram
     {
-        private readonly byte[] datagram;
+        private readonly byte[] _datagram;
+
+        public byte[] Datagram => _datagram;
 
         public KnxDatagram(byte[] datagram)
         {
-            this.datagram = datagram;
+            this._datagram = datagram;
         }
         // HEADER
         public int HeaderLength { get; set; }
@@ -32,7 +34,7 @@
 
         public override string ToString()
         {
-            return Automatica.Core.Driver.Utility.Utils.ByteArrayToString(datagram);
+            return Automatica.Core.Driver.Utility.Utils.ByteArrayToString(_datagram);
         }
     }
 }

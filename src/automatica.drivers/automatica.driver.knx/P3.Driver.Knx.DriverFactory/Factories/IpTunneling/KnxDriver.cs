@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Cryptography;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -206,7 +207,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     }
                     catch (Exception e)
                     {
-                        KnxHelper.Logger.LogError($"{e}");
+                        KnxHelper.Logger.LogError($"{datagram.DestinationAddress} ({datagram.Datagram.ToHex(true)}): {e}");
                     }
                 }
             }
