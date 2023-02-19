@@ -25,6 +25,10 @@ namespace P3.Driver.SonosDriverFactory
         {
             _sonosControllerFactory = new SonosControllerFactory();
         }
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
 
         public override bool Init()
         {

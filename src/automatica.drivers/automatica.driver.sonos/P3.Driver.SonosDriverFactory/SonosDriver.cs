@@ -15,6 +15,7 @@ namespace P3.Driver.SonosDriverFactory
         {
         }
 
+
         public override async Task<IList<NodeInstance>> Scan()
         {
             var ret = new List<NodeInstance>();
