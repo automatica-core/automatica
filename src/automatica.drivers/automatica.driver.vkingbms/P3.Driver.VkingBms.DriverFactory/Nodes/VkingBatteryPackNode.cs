@@ -48,7 +48,7 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
                 _current?.DispatchValue(Convert.ToDouble(analogData.Current) / 100);
                 _soh?.DispatchValue(analogData.Soh);
                 _soc?.DispatchValue(analogData.Soc);
-                _version?.DispatchValue(version.VersionId.Substring(1, version.VersionId.IndexOf('\0') - 2));
+                _version?.DispatchValue(version.VersionId);
                 _remainCapacity?.DispatchValue(analogData.RemainingCapacity);
                 _fullCharge?.DispatchValue(analogData.FullCapacity);
                 _cycleTimes?.DispatchValue(analogData.CycleNumber);
