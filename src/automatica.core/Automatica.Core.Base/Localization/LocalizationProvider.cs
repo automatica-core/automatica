@@ -21,7 +21,7 @@ namespace Automatica.Core.Base.Localization
             _logger = logger;
         }
 
-        public void AddLocalization(TextReader stream, CultureInfo culture, string assemblyName)
+        public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
         {
             if (!_localizationStreams.ContainsKey(culture.TwoLetterISOLanguageName))
             {
@@ -44,7 +44,7 @@ namespace Automatica.Core.Base.Localization
             }
 
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
-            _logger.LogInformation($"Add localization for {culture.TwoLetterISOLanguageName} and {}");
+            _logger.LogInformation($"Add localization for {culture.TwoLetterISOLanguageName} and {fileName}");
         }
 
         public void LoadFromAssembly(Assembly assembly)
