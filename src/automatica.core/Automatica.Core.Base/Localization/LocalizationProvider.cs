@@ -21,7 +21,7 @@ namespace Automatica.Core.Base.Localization
             _logger = logger;
         }
 
-        public void AddLocalization(TextReader stream, CultureInfo culture)
+        public void AddLocalization(TextReader stream, CultureInfo culture, string assemblyName)
         {
             if (!_localizationStreams.ContainsKey(culture.TwoLetterISOLanguageName))
             {
@@ -44,6 +44,7 @@ namespace Automatica.Core.Base.Localization
             }
 
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
+            _logger.LogInformation($"Add localization for {culture.TwoLetterISOLanguageName} and {}");
         }
 
         public void LoadFromAssembly(Assembly assembly)
@@ -63,7 +64,7 @@ namespace Automatica.Core.Base.Localization
                         var split = fileName.Split("-");
 
                         var culture = CultureInfo.GetCultureInfo(split[split.Length - 1]);
-                        AddLocalization(new StreamReader(assembly.GetManifestResourceStream(file)), culture);
+                        AddLocalization(new StreamReader(assembly.GetManifestResourceStream(file)), culture, file);
                     }
                     catch (Exception e)
                     {
