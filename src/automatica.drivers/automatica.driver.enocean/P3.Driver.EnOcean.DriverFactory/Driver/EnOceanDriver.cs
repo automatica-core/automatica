@@ -145,10 +145,13 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public override Task<bool> Stop()
         {
-            _driver.Close();
-            _driver.TelegramReceived -= DriverOnTelegramReceived;
-            _driver.AnswerReceived -= _driver_AnswerReceived;
-            _driver.PacketSent -= _driver_PacketSent;
+            if(_driver != null) 
+            {
+                _driver.Close();
+                _driver.TelegramReceived -= DriverOnTelegramReceived;
+                _driver.AnswerReceived -= _driver_AnswerReceived;
+                _driver.PacketSent -= _driver_PacketSent;
+            }
             return base.Stop();
         }
 

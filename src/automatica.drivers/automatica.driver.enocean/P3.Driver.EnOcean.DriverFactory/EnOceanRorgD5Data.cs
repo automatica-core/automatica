@@ -14,7 +14,7 @@
                 public class EnOceanRorgD5Data : EnOceanRorgData
                 {
                     
-// AUTO GENERATED 16.11.2018 10:34:17
+// AUTO GENERATED 23.02.2023 13:58:59
 // -----------------------------------------
 // -----------------------------------------
 // 0xD5 --------------------------------
@@ -30,7 +30,7 @@ public static readonly Guid DataFieldD5_00_01_1_LRN_Guid = new Guid("eb2c5295-4a
             var nodeGuid = RorgD5Guid;
 
             Guid interfaceGuid = GenerateNewGuid(nodeGuid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_D5.NAME", "ENOCEAN.RORG_D5.DESCRIPTION",Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_D5.NAME", "ENOCEAN.RORG_D5.DESCRIPTION",Int32.MaxValue, int.MaxValue, false);
 
            
             factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_D5.NAME", "ENOCEAN.RORG_D5.DESCRIPTION",
@@ -44,7 +44,7 @@ public static readonly Guid DataFieldD5_00_01_1_LRN_Guid = new Guid("eb2c5295-4a
         private static void AddFunctionD5_00Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionD5_00Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_D5.FUNCTION_00.NAME", "ENOCEAN.RORG_D5.FUNCTION_00.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_D5.FUNCTION_00.NAME", "ENOCEAN.RORG_D5.FUNCTION_00.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionD5_00Guid, "ENOCEAN.RORG_D5.FUNCTION_00.NAME", "ENOCEAN.RORG_D5.FUNCTION_00.DESCRIPTION",
                 "enocean-function-00", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -57,7 +57,7 @@ public static readonly Guid DataFieldD5_00_01_1_LRN_Guid = new Guid("eb2c5295-4a
         private static void AddTypesD5_00_01_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeD5_00_01_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_D5.FUNCTION_00.TYPE_01_1.NAME", "ENOCEAN.RORG_D5.FUNCTION_00.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_D5.FUNCTION_00.TYPE_01_1.NAME", "ENOCEAN.RORG_D5.FUNCTION_00.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeD5_00_01_1Guid;
             

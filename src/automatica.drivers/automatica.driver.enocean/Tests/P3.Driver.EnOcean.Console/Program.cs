@@ -45,7 +45,7 @@ namespace P3.Driver.EnOcean.Console
             var logger =  new ConsoleLogger();
             Logger.Logger.Instance = logger;
 
-            var driver = new Driver("COM3");
+            var driver = new Driver("COM11");
             await driver.Open();
              
              driver.StartTeachInMode();

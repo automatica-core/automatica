@@ -20,7 +20,7 @@ namespace P3.Driver.EnOcean.DriverFactory
 
         public override string DriverName => "EnOcean";
         public override Guid DriverGuid => DriverGuidId;
-        public override Version DriverVersion => new Version(0, 1, 0, 10);
+        public override Version DriverVersion => new Version(1, 0, 0, 1);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.enocean";
         public override string Tag => "latest-develop";
@@ -33,9 +33,9 @@ namespace P3.Driver.EnOcean.DriverFactory
             factory.CreateInterfaceType(gwguid, "ENOCEAN.DEVICE.NAME", "ENOCEAN.DEVICE.DESCRIPTION", int.MaxValue, 1,
                 true);
             factory.CreateInterfaceType(InterfaceGuid, "ENOCEAN.LEARNED.NAME", "ENOCEAN.LEARNED.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
             factory.CreateInterfaceType(SimulatedGuid, "ENOCEAN.SIMULATED.NAME", "ENOCEAN.SIMULATED.DESCRIPTION", int.MaxValue, 1,
-                true);
+                false);
 
             factory.CreateNodeTemplate(DriverGuid, "ENOCEAN.DEVICE.NAME", "ENOCEAN.DEVICE.DESCRIPTION",
                 "enocean-device", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Usb), gwguid, false, false, true, false, true,

@@ -14,7 +14,7 @@
                 public class EnOceanRorgF6Data : EnOceanRorgData
                 {
                     
-// AUTO GENERATED 16.11.2018 10:34:17
+// AUTO GENERATED 23.02.2023 13:58:59
 // -----------------------------------------
 // -----------------------------------------
 // 0xF6 --------------------------------
@@ -94,7 +94,7 @@ public static readonly Guid DataFieldF6_10_01_2_HVL_Guid = new Guid("eb2c5295-4a
             var nodeGuid = RorgF6Guid;
 
             Guid interfaceGuid = GenerateNewGuid(nodeGuid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.NAME", "ENOCEAN.RORG_F6.DESCRIPTION",Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.NAME", "ENOCEAN.RORG_F6.DESCRIPTION",Int32.MaxValue, int.MaxValue, false);
 
            
             factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_F6.NAME", "ENOCEAN.RORG_F6.DESCRIPTION",
@@ -113,7 +113,7 @@ AddFunctionF6_10Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddFunctionF6_01Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionF6_01Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_01.NAME", "ENOCEAN.RORG_F6.FUNCTION_01.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_01.NAME", "ENOCEAN.RORG_F6.FUNCTION_01.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionF6_01Guid, "ENOCEAN.RORG_F6.FUNCTION_01.NAME", "ENOCEAN.RORG_F6.FUNCTION_01.DESCRIPTION",
                 "enocean-function-01", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -126,7 +126,7 @@ AddFunctionF6_10Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_01_01_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_01_01_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_01.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_01.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_01.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_01.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_01_01_1Guid;
             
@@ -160,7 +160,7 @@ AddFunctionF6_10Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddFunctionF6_02Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionF6_02Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionF6_02Guid, "ENOCEAN.RORG_F6.FUNCTION_02.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.DESCRIPTION",
                 "enocean-function-02", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -178,7 +178,7 @@ AddTypesF6_02_04_6Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_02_01_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_02_01_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_02_01_1Guid;
             
@@ -260,7 +260,7 @@ AddDataFieldF6_02_01_1_SATemplates(factory, interfaceGuid);
         private static void AddTypesF6_02_01_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_02_01_2Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_02_01_2Guid;
             
@@ -310,7 +310,7 @@ AddDataFieldF6_02_01_2_EBTemplates(factory, interfaceGuid);
         private static void AddTypesF6_02_02_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_02_02_3Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_02_02_3Guid;
             
@@ -392,7 +392,7 @@ AddDataFieldF6_02_02_3_SATemplates(factory, interfaceGuid);
         private static void AddTypesF6_02_02_4Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_02_02_4Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_4.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_4.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_4.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_02_4.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_02_02_4Guid;
             
@@ -442,7 +442,7 @@ AddDataFieldF6_02_02_4_EBTemplates(factory, interfaceGuid);
         private static void AddTypesF6_02_03_5Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_02_03_5Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_03_5.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_03_5.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_03_5.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_03_5.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_02_03_5Guid;
             
@@ -476,7 +476,7 @@ AddDataFieldF6_02_02_4_EBTemplates(factory, interfaceGuid);
         private static void AddTypesF6_02_04_6Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_02_04_6Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_04_6.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_04_6.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_04_6.NAME", "ENOCEAN.RORG_F6.FUNCTION_02.TYPE_04_6.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_02_04_6Guid;
             
@@ -590,7 +590,7 @@ AddDataFieldF6_02_04_6_RA0Templates(factory, interfaceGuid);
         private static void AddFunctionF6_03Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionF6_03Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionF6_03Guid, "ENOCEAN.RORG_F6.FUNCTION_03.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.DESCRIPTION",
                 "enocean-function-03", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -606,7 +606,7 @@ AddTypesF6_03_02_4Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_03_01_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_03_01_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_03_01_1Guid;
             
@@ -688,7 +688,7 @@ AddDataFieldF6_03_01_1_SATemplates(factory, interfaceGuid);
         private static void AddTypesF6_03_01_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_03_01_2Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_03_01_2Guid;
             
@@ -738,7 +738,7 @@ AddDataFieldF6_03_01_2_EBTemplates(factory, interfaceGuid);
         private static void AddTypesF6_03_02_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_03_02_3Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_03_02_3Guid;
             
@@ -820,7 +820,7 @@ AddDataFieldF6_03_02_3_SATemplates(factory, interfaceGuid);
         private static void AddTypesF6_03_02_4Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_03_02_4Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_4.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_4.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_4.NAME", "ENOCEAN.RORG_F6.FUNCTION_03.TYPE_02_4.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_03_02_4Guid;
             
@@ -870,7 +870,7 @@ AddDataFieldF6_03_02_4_EBTemplates(factory, interfaceGuid);
         private static void AddFunctionF6_04Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionF6_04Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionF6_04Guid, "ENOCEAN.RORG_F6.FUNCTION_04.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.DESCRIPTION",
                 "enocean-function-04", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -885,7 +885,7 @@ AddTypesF6_04_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_04_01_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_04_01_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_04_01_1Guid;
             
@@ -919,7 +919,7 @@ AddTypesF6_04_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_04_01_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_04_01_2Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_04_01_2Guid;
             
@@ -953,7 +953,7 @@ AddTypesF6_04_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_04_02_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_04_02_3Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_04.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_04_02_3Guid;
             
@@ -1019,7 +1019,7 @@ AddDataFieldF6_04_02_3_SOCTemplates(factory, interfaceGuid);
         private static void AddFunctionF6_05Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionF6_05Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionF6_05Guid, "ENOCEAN.RORG_F6.FUNCTION_05.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.DESCRIPTION",
                 "enocean-function-05", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -1034,7 +1034,7 @@ AddTypesF6_05_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_05_00_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_05_00_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_00_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_00_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_00_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_00_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_05_00_1Guid;
             
@@ -1068,7 +1068,7 @@ AddTypesF6_05_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_05_01_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_05_01_2Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_05_01_2Guid;
             
@@ -1102,7 +1102,7 @@ AddTypesF6_05_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_05_02_3Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_05_02_3Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_02_3.NAME", "ENOCEAN.RORG_F6.FUNCTION_05.TYPE_02_3.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_05_02_3Guid;
             
@@ -1136,7 +1136,7 @@ AddTypesF6_05_02_3Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddFunctionF6_10Templates(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(FunctionF6_10Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_10.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_10.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(FunctionF6_10Guid, "ENOCEAN.RORG_F6.FUNCTION_10.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.DESCRIPTION",
                 "enocean-function-10", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -1150,7 +1150,7 @@ AddTypesF6_10_01_2Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_10_00_1Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_10_00_1Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_10_00_1Guid;
             
@@ -1184,7 +1184,7 @@ AddTypesF6_10_01_2Templates(factory, interfaceGuid, enoceanFactory);
         private static void AddTypesF6_10_01_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {
             Guid interfaceGuid = GenerateNewGuid(TypeF6_10_01_2Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_01_2.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_01_2.DESCRIPTION", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = TypeF6_10_01_2Guid;
             

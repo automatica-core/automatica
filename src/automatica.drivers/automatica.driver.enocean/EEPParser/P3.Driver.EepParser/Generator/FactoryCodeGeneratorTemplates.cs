@@ -36,7 +36,7 @@ namespace P3.Driver.EepParser.Generator
             var nodeGuid = Rorg{0}Guid;
 
             Guid interfaceGuid = GenerateNewGuid(nodeGuid, 1);
-            factory.CreateInterfaceType(interfaceGuid, """ + RorgName + @".NAME"", """ + RorgName + @".DESCRIPTION"",Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, """ + RorgName + @".NAME"", """ + RorgName + @".DESCRIPTION"",Int32.MaxValue, int.MaxValue, false);
 
            
             factory.CreateNodeTemplate(nodeGuid, """ + RorgName + @".NAME"", """ + RorgName + @".DESCRIPTION"",
@@ -55,7 +55,7 @@ namespace P3.Driver.EepParser.Generator
         private static void "+ AddFunctionMethodName + @"(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {{
             Guid interfaceGuid = GenerateNewGuid(Function{0}_{1}Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, """ + FunctionName + @".NAME"", """ + FunctionName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, """ + FunctionName + @".NAME"", """ + FunctionName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(Function{0}_{1}Guid, """ + FunctionName + @".NAME"", """ + FunctionName + @".DESCRIPTION"",
                 ""enocean-function-{1:L}"", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -73,7 +73,7 @@ namespace P3.Driver.EepParser.Generator
         private static void " + AddTypesMethodName + @"(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {{
             Guid interfaceGuid = GenerateNewGuid(Type{0}_{1}_{2}Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, """ + TypeName + @".NAME"", """ + TypeName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, """ + TypeName + @".NAME"", """ + TypeName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = Type{0}_{1}_{2}Guid;
             
