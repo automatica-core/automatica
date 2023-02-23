@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -49,7 +50,8 @@ namespace Automatica.Core.Base.Localization
 
         public void LoadFromAssembly(Assembly assembly)
         {
-            if(_loadedAssemblies.Contains(assembly))
+            _logger.LogInformation($"Load localization for {assembly.FullName}");
+            if (_loadedAssemblies.Contains(assembly))
             {
                 return;
             }
