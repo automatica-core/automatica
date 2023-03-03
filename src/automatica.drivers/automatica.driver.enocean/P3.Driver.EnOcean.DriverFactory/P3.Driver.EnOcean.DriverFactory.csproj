@@ -6,6 +6,7 @@
     <Version>0.14.0.1</Version>
     <ProjectGuid>1AFF3021-85D6-480C-B5E9-C0A2CCFBD23D</ProjectGuid>
     <LangVersion>7.3</LangVersion>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Drivers\EnOcean</BaseOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
   </PropertyGroup>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using P3.Driver.EepParser.Generator;
 using P3.Driver.EepParser.Model;
@@ -120,7 +121,7 @@ namespace P3.Driver.EepParser
                                 {
                                     if (range != null)
                                     {
-                                        dataFieldModel.Range = new P3.Driver.EepParser.Model.Range();;
+                                        dataFieldModel.Range = new Model.Range();
 
                                         var minEl = range.Element("min");
                                         var maxEl = range.Element("max");
@@ -249,6 +250,25 @@ namespace P3.Driver.EepParser
 
                                         dataFieldModel.Enumeration = enumerationItem;
 
+                                        if (enumerationItem.First.Min.HasValue)
+                                        {
+                                            var parent = dataFieldModel.Parent;
+                                            dataFieldModel.Parent = null;
+                                            var copy = JsonConvert.DeserializeObject<DataField>(
+                                                JsonConvert.SerializeObject(dataFieldModel));
+                                            copy.Enumeration = null;
+                                            copy.ShortCut = copy.ShortCut + "_RAW";
+                                            copy.Data += " raw";
+
+                                            dataFieldModel.Parent = parent;
+                                            copy.Parent = parent;
+
+                                            if (!typeModel.DataFields.ContainsKey(copy.ShortCut))
+                                            {
+                                                typeModel.DataFields.Add(copy.ShortCut, copy);
+                                            }
+                                        }
+
 
                                     }
                                 }
@@ -280,6 +300,7 @@ namespace P3.Driver.EepParser
             var builder = FactoryCodeGenerator.GenerateCode(rorgTypes, rangeRefDictionary, ref json);
             var tests = FactoryCodeTestGenerator.GenerateTests(rorgTypes, rangeRefDictionary);
 
+            var translations = json.ToString();
             Console.WriteLine(builder);
             Console.WriteLine(tests);
 

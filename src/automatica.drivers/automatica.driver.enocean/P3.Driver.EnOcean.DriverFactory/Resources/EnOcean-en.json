@@ -834,6 +834,10 @@
             "NAME": "Supply voltage (OPTIONAL)",
             "DESCRIPTION": "Supply voltage (OPTIONAL)"
           },
+          "SHORTCUT_PIRS_RAW": {
+            "NAME": "PIR Status raw",
+            "DESCRIPTION": "PIR Status raw"
+          },
           "SHORTCUT_PIRS": {
             "NAME": "PIR Status",
             "DESCRIPTION": "PIR Status"
@@ -1206,6 +1210,10 @@
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
           },
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
+          },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
             "DESCRIPTION": "Turn-switch for fan speed"
@@ -1229,6 +1237,10 @@
           "SHORTCUT_LRNB": {
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
+          },
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
           },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
@@ -1269,6 +1281,10 @@
           "SHORTCUT_LRNB": {
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
+          },
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
           },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
@@ -1330,6 +1346,10 @@
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
           },
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
+          },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
             "DESCRIPTION": "Turn-switch for fan speed"
@@ -1345,6 +1365,10 @@
           "SHORTCUT_LRNB": {
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
+          },
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
           },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
@@ -1365,6 +1389,10 @@
           "SHORTCUT_LRNB": {
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
+          },
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
           },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
@@ -1802,6 +1830,10 @@
           "DESCRIPTION": "Humidity, Humidity Set Point, Temperature Sensor, Fan Speed and Occupancy Control"
         },
         "TYPE_1F_28": {
+          "SHORTCUT_FAN_RAW": {
+            "NAME": "Turn-switch for fan speed raw",
+            "DESCRIPTION": "Turn-switch for fan speed raw"
+          },
           "SHORTCUT_FAN": {
             "NAME": "Turn-switch for fan speed",
             "DESCRIPTION": "Turn-switch for fan speed"
@@ -2578,6 +2610,10 @@
             "NAME": "Rainfall Adjust Sign",
             "DESCRIPTION": "Rainfall Adjust Sign"
           },
+          "SHORTCUT_RFA_RAW": {
+            "NAME": "Rainfall Adjust raw",
+            "DESCRIPTION": "Rainfall Adjust raw"
+          },
           "SHORTCUT_RFA": {
             "NAME": "Rainfall Adjust",
             "DESCRIPTION": "Rainfall Adjust"
@@ -3006,6 +3042,10 @@
             "NAME": "Feed Temperature OR Temperature Set Point",
             "DESCRIPTION": "Feed Temperature OR Temperature Set Point"
           },
+          "SHORTCUT_TMPFC_RAW": {
+            "NAME": "Room Temperature OR Failure Code raw",
+            "DESCRIPTION": "Room Temperature OR Failure Code raw"
+          },
           "SHORTCUT_TMPFC": {
             "NAME": "Room Temperature OR Failure Code",
             "DESCRIPTION": "Room Temperature OR Failure Code"
@@ -3318,9 +3358,17 @@
             "NAME": "LRN Bit",
             "DESCRIPTION": "LRN Bit"
           },
+          "SHORTCUT_SVC_RAW": {
+            "NAME": "Supply voltage raw",
+            "DESCRIPTION": "Supply voltage raw"
+          },
           "SHORTCUT_SVC": {
             "NAME": "Supply voltage",
             "DESCRIPTION": "Supply voltage"
+          },
+          "SHORTCUT_IPS_RAW": {
+            "NAME": "Input State raw",
+            "DESCRIPTION": "Input State raw"
           },
           "SHORTCUT_IPS": {
             "NAME": "Input State",
@@ -3409,6 +3457,10 @@
           "SHORTCUT_ST": {
             "NAME": "Signal type",
             "DESCRIPTION": "Signal type"
+          },
+          "SHORTCUT_IOS_RAW": {
+            "NAME": "Index of Signals raw",
+            "DESCRIPTION": "Index of Signals raw"
           },
           "SHORTCUT_IOS": {
             "NAME": "Index of Signals",
@@ -3822,6 +3874,10 @@
             "NAME": "Presence",
             "DESCRIPTION": "Presence"
           },
+          "SHORTCUT_ZA_RAW": {
+            "NAME": "Figure A Value raw",
+            "DESCRIPTION": "Figure A Value raw"
+          },
           "SHORTCUT_ZA": {
             "NAME": "Figure A Value",
             "DESCRIPTION": "Figure A Value"
@@ -3950,6 +4006,10 @@
             "NAME": "Dim value",
             "DESCRIPTION": "Dim value"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
             "DESCRIPTION": "I/O channel"
@@ -3981,6 +4041,10 @@
           "SHORTCUT_LC": {
             "NAME": "Local control",
             "DESCRIPTION": "Local control"
+          },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
           },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
@@ -4018,6 +4082,10 @@
             "NAME": "Command ID",
             "DESCRIPTION": "Command ID"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
             "DESCRIPTION": "I/O channel"
@@ -4045,6 +4113,10 @@
           "SHORTCUT_EL": {
             "NAME": "Error level",
             "DESCRIPTION": "Error level"
+          },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
           },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
@@ -4078,6 +4150,10 @@
             "NAME": "Measurement mode",
             "DESCRIPTION": "Measurement mode"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
             "DESCRIPTION": "I/O channel"
@@ -4094,9 +4170,17 @@
             "NAME": "Unit",
             "DESCRIPTION": "Unit"
           },
+          "SHORTCUT_MAT_RAW": {
+            "NAME": "Maximum time between two subsequent actuator messages raw",
+            "DESCRIPTION": "Maximum time between two subsequent actuator messages raw"
+          },
           "SHORTCUT_MAT": {
             "NAME": "Maximum time between two subsequent actuator messages",
             "DESCRIPTION": "Maximum time between two subsequent actuator messages"
+          },
+          "SHORTCUT_MIT_RAW": {
+            "NAME": "Minimum time between two subsequent actuator messages raw",
+            "DESCRIPTION": "Minimum time between two subsequent actuator messages raw"
           },
           "SHORTCUT_MIT": {
             "NAME": "Minimum time between two subsequent actuator messages",
@@ -4114,6 +4198,10 @@
             "NAME": "Query",
             "DESCRIPTION": "Query"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
             "DESCRIPTION": "I/O channel"
@@ -4129,6 +4217,10 @@
           "SHORTCUT_UN": {
             "NAME": "Unit",
             "DESCRIPTION": "Unit"
+          },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
           },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
@@ -4178,6 +4270,10 @@
             "NAME": "Command ID",
             "DESCRIPTION": "Command ID"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
             "DESCRIPTION": "I/O channel"
@@ -4206,6 +4302,10 @@
             "NAME": "Command ID",
             "DESCRIPTION": "Command ID"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
             "DESCRIPTION": "I/O channel"
@@ -4217,6 +4317,10 @@
           "SHORTCUT_CMD": {
             "NAME": "Command ID",
             "DESCRIPTION": "Command ID"
+          },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O channel raw",
+            "DESCRIPTION": "I/O channel raw"
           },
           "SHORTCUT_IO": {
             "NAME": "I/O channel",
@@ -4250,6 +4354,10 @@
             "NAME": "Extended Command ID",
             "DESCRIPTION": "Extended Command ID"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O Channel raw",
+            "DESCRIPTION": "I/O Channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O Channel",
             "DESCRIPTION": "I/O Channel"
@@ -4257,6 +4365,10 @@
           "SHORTCUT_MAXV": {
             "NAME": "Maximum Value",
             "DESCRIPTION": "Maximum Value"
+          },
+          "SHORTCUT_MINV_RAW": {
+            "NAME": "Minimum Value raw",
+            "DESCRIPTION": "Minimum Value raw"
           },
           "SHORTCUT_MINV": {
             "NAME": "Minimum Value",
@@ -4274,6 +4386,10 @@
             "NAME": "Extended Command ID",
             "DESCRIPTION": "Extended Command ID"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O Channel raw",
+            "DESCRIPTION": "I/O Channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O Channel",
             "DESCRIPTION": "I/O Channel"
@@ -4290,6 +4406,10 @@
             "NAME": "Extended Command ID",
             "DESCRIPTION": "Extended Command ID"
           },
+          "SHORTCUT_IO_RAW": {
+            "NAME": "I/O Channel raw",
+            "DESCRIPTION": "I/O Channel raw"
+          },
           "SHORTCUT_IO": {
             "NAME": "I/O Channel",
             "DESCRIPTION": "I/O Channel"
@@ -4297,6 +4417,10 @@
           "SHORTCUT_MAXV": {
             "NAME": "Maximum Value",
             "DESCRIPTION": "Maximum Value"
+          },
+          "SHORTCUT_MINV_RAW": {
+            "NAME": "Minimum Value raw",
+            "DESCRIPTION": "Minimum Value raw"
           },
           "SHORTCUT_MINV": {
             "NAME": "Minimum Value",
@@ -4390,6 +4514,10 @@
       },
       "FUNCTION_03": {
         "TYPE_00_1": {
+          "SHORTCUT_RI2_RAW": {
+            "NAME": "Rocker Information raw",
+            "DESCRIPTION": "Rocker Information raw"
+          },
           "SHORTCUT_RI2": {
             "NAME": "Rocker Information",
             "DESCRIPTION": "Rocker Information"
@@ -4446,9 +4574,17 @@
       },
       "FUNCTION_05": {
         "TYPE_00_1": {
+          "SHORTCUT_POS_RAW": {
+            "NAME": "Position raw",
+            "DESCRIPTION": "Position raw"
+          },
           "SHORTCUT_POS": {
             "NAME": "Position",
             "DESCRIPTION": "Position"
+          },
+          "SHORTCUT_ANG_RAW": {
+            "NAME": "Angle raw",
+            "DESCRIPTION": "Angle raw"
           },
           "SHORTCUT_ANG": {
             "NAME": "Angle",
@@ -4498,9 +4634,17 @@
           "DESCRIPTION": "Type 0x00"
         },
         "TYPE_00_4": {
+          "SHORTCUT_POS_RAW": {
+            "NAME": "Position raw",
+            "DESCRIPTION": "Position raw"
+          },
           "SHORTCUT_POS": {
             "NAME": "Position",
             "DESCRIPTION": "Position"
+          },
+          "SHORTCUT_ANG_RAW": {
+            "NAME": "Angle raw",
+            "DESCRIPTION": "Angle raw"
           },
           "SHORTCUT_ANG": {
             "NAME": "Angle",
@@ -4522,9 +4666,17 @@
           "DESCRIPTION": "Type 0x00"
         },
         "TYPE_00_5": {
+          "SHORTCUT_VERT_RAW": {
+            "NAME": "Set vertical raw",
+            "DESCRIPTION": "Set vertical raw"
+          },
           "SHORTCUT_VERT": {
             "NAME": "Set vertical",
             "DESCRIPTION": "Set vertical"
+          },
+          "SHORTCUT_ROT_RAW": {
+            "NAME": "Set rotation raw",
+            "DESCRIPTION": "Set rotation raw"
           },
           "SHORTCUT_ROT": {
             "NAME": "Set rotation",
@@ -4546,9 +4698,17 @@
           "DESCRIPTION": "Type 0x00"
         },
         "TYPE_02_6": {
+          "SHORTCUT_POS_RAW": {
+            "NAME": "Position raw",
+            "DESCRIPTION": "Position raw"
+          },
           "SHORTCUT_POS": {
             "NAME": "Position",
             "DESCRIPTION": "Position"
+          },
+          "SHORTCUT_ANG_RAW": {
+            "NAME": "Angle raw",
+            "DESCRIPTION": "Angle raw"
           },
           "SHORTCUT_ANG": {
             "NAME": "Angle",
@@ -4598,9 +4758,17 @@
           "DESCRIPTION": "Type 0x02"
         },
         "TYPE_02_9": {
+          "SHORTCUT_POS_RAW": {
+            "NAME": "Position raw",
+            "DESCRIPTION": "Position raw"
+          },
           "SHORTCUT_POS": {
             "NAME": "Position",
             "DESCRIPTION": "Position"
+          },
+          "SHORTCUT_ANG_RAW": {
+            "NAME": "Angle raw",
+            "DESCRIPTION": "Angle raw"
           },
           "SHORTCUT_ANG": {
             "NAME": "Angle",
@@ -4662,17 +4830,33 @@
             "NAME": "Vacation Mode",
             "DESCRIPTION": "Vacation Mode"
           },
+          "SHORTCUT_T_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_T": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_H_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_H": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
           },
+          "SHORTCUT_I_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
+          },
           "SHORTCUT_I": {
             "NAME": "Illumination",
             "DESCRIPTION": "Illumination"
+          },
+          "SHORTCUT_BS_RAW": {
+            "NAME": "Battery State raw",
+            "DESCRIPTION": "Battery State raw"
           },
           "SHORTCUT_BS": {
             "NAME": "Battery State",
@@ -4698,9 +4882,17 @@
             "NAME": "Battery Low Click",
             "DESCRIPTION": "Battery Low Click"
           },
+          "SHORTCUT_SUIR_RAW": {
+            "NAME": "Sensor Update Interval raw",
+            "DESCRIPTION": "Sensor Update Interval raw"
+          },
           "SHORTCUT_SUIR": {
             "NAME": "Sensor Update Interval",
             "DESCRIPTION": "Sensor Update Interval"
+          },
+          "SHORTCUT_VBIR_RAW": {
+            "NAME": "Vacation Blink Interval raw",
+            "DESCRIPTION": "Vacation Blink Interval raw"
           },
           "SHORTCUT_VBIR": {
             "NAME": "Vacation Blink Interval",
@@ -4714,9 +4906,17 @@
             "NAME": "Message Type",
             "DESCRIPTION": "Message Type"
           },
+          "SHORTCUT_PON_RAW": {
+            "NAME": "Power Ons raw",
+            "DESCRIPTION": "Power Ons raw"
+          },
           "SHORTCUT_PON": {
             "NAME": "Power Ons",
             "DESCRIPTION": "Power Ons"
+          },
+          "SHORTCUT_ALL_RAW": {
+            "NAME": "Alarms raw",
+            "DESCRIPTION": "Alarms raw"
           },
           "SHORTCUT_ALL": {
             "NAME": "Alarms",
@@ -4730,13 +4930,25 @@
             "NAME": "Message Type",
             "DESCRIPTION": "Message Type"
           },
+          "SHORTCUT_HMC_RAW": {
+            "NAME": "Handle Movements Closed raw",
+            "DESCRIPTION": "Handle Movements Closed raw"
+          },
           "SHORTCUT_HMC": {
             "NAME": "Handle Movements Closed",
             "DESCRIPTION": "Handle Movements Closed"
           },
+          "SHORTCUT_HMO_RAW": {
+            "NAME": "Handle Movements Opened raw",
+            "DESCRIPTION": "Handle Movements Opened raw"
+          },
           "SHORTCUT_HMO": {
             "NAME": "Handle Movements Opened",
             "DESCRIPTION": "Handle Movements Opened"
+          },
+          "SHORTCUT_HMT_RAW": {
+            "NAME": "Handle Movements Tilted raw",
+            "DESCRIPTION": "Handle Movements Tilted raw"
           },
           "SHORTCUT_HMT": {
             "NAME": "Handle Movements Tilted",
@@ -4750,6 +4962,10 @@
             "NAME": "Message Type",
             "DESCRIPTION": "Message Type"
           },
+          "SHORTCUT_WT_RAW": {
+            "NAME": "Window Tilts raw",
+            "DESCRIPTION": "Window Tilts raw"
+          },
           "SHORTCUT_WT": {
             "NAME": "Window Tilts",
             "DESCRIPTION": "Window Tilts"
@@ -4762,9 +4978,17 @@
             "NAME": "Message Type",
             "DESCRIPTION": "Message Type"
           },
+          "SHORTCUT_BRP_RAW": {
+            "NAME": "Button Right Presses raw",
+            "DESCRIPTION": "Button Right Presses raw"
+          },
           "SHORTCUT_BRP": {
             "NAME": "Button Right Presses",
             "DESCRIPTION": "Button Right Presses"
+          },
+          "SHORTCUT_BLP_RAW": {
+            "NAME": "Button Left Presses raw",
+            "DESCRIPTION": "Button Left Presses raw"
           },
           "SHORTCUT_BLP": {
             "NAME": "Button Left Presses",
@@ -4822,6 +5046,10 @@
             "NAME": "Window Status Event",
             "DESCRIPTION": "Window Status Event"
           },
+          "SHORTCUT_CT_RAW": {
+            "NAME": "Counter raw",
+            "DESCRIPTION": "Counter raw"
+          },
           "SHORTCUT_CT": {
             "NAME": "Counter",
             "DESCRIPTION": "Counter"
@@ -4829,6 +5057,10 @@
           "SHORTCUT_CB": {
             "NAME": "Change Battery",
             "DESCRIPTION": "Change Battery"
+          },
+          "SHORTCUT_BS_RAW": {
+            "NAME": "Battery State raw",
+            "DESCRIPTION": "Battery State raw"
           },
           "SHORTCUT_BS": {
             "NAME": "Battery State",
@@ -4910,13 +5142,25 @@
             "NAME": "Battery Life",
             "DESCRIPTION": "Battery Life"
           },
+          "SHORTCUT_CH1_RAW": {
+            "NAME": "Channel 1 raw",
+            "DESCRIPTION": "Channel 1 raw"
+          },
           "SHORTCUT_CH1": {
             "NAME": "Channel 1",
             "DESCRIPTION": "Channel 1"
           },
+          "SHORTCUT_CH2_RAW": {
+            "NAME": "Channel 2 raw",
+            "DESCRIPTION": "Channel 2 raw"
+          },
           "SHORTCUT_CH2": {
             "NAME": "Channel 2",
             "DESCRIPTION": "Channel 2"
+          },
+          "SHORTCUT_CH3_RAW": {
+            "NAME": "Channel 3 raw",
+            "DESCRIPTION": "Channel 3 raw"
           },
           "SHORTCUT_CH3": {
             "NAME": "Channel 3",
@@ -6374,6 +6618,10 @@
             "NAME": "Temperature correction",
             "DESCRIPTION": "Temperature correction"
           },
+          "SHORTCUT_BSP_RAW": {
+            "NAME": "Basesetpoint raw",
+            "DESCRIPTION": "Basesetpoint raw"
+          },
           "SHORTCUT_BSP": {
             "NAME": "Basesetpoint",
             "DESCRIPTION": "Basesetpoint"
@@ -6417,6 +6665,10 @@
           "SHORTCUT_SP": {
             "NAME": "Setpoint offset",
             "DESCRIPTION": "Setpoint offset"
+          },
+          "SHORTCUT_IBS_RAW": {
+            "NAME": "Basesetpoint raw",
+            "DESCRIPTION": "Basesetpoint raw"
           },
           "SHORTCUT_IBS": {
             "NAME": "Basesetpoint",
@@ -6470,6 +6722,10 @@
             "NAME": "Failure Code",
             "DESCRIPTION": "Failure Code"
           },
+          "SHORTCUT_RTEMP_RAW": {
+            "NAME": "Room Temperature raw",
+            "DESCRIPTION": "Room Temperature raw"
+          },
           "SHORTCUT_RTEMP": {
             "NAME": "Room Temperature",
             "DESCRIPTION": "Room Temperature"
@@ -6482,6 +6738,10 @@
             "NAME": "Floor Heating Occupany / Power",
             "DESCRIPTION": "Floor Heating Occupany / Power"
           },
+          "SHORTCUT_FHTSP_RAW": {
+            "NAME": "Floor Heating Temperature Setpoint raw",
+            "DESCRIPTION": "Floor Heating Temperature Setpoint raw"
+          },
           "SHORTCUT_FHTSP": {
             "NAME": "Floor Heating Temperature Setpoint",
             "DESCRIPTION": "Floor Heating Temperature Setpoint"
@@ -6493,6 +6753,10 @@
           "SHORTCUT_ACFSP": {
             "NAME": "Air Condition Fan Setpoint",
             "DESCRIPTION": "Air Condition Fan Setpoint"
+          },
+          "SHORTCUT_ACTS_RAW": {
+            "NAME": "Air Condition Temperature Setting raw",
+            "DESCRIPTION": "Air Condition Temperature Setting raw"
           },
           "SHORTCUT_ACTS": {
             "NAME": "Air Condition Temperature Setting",
@@ -6530,6 +6794,10 @@
             "NAME": "Failure Code",
             "DESCRIPTION": "Failure Code"
           },
+          "SHORTCUT_RTEMP_RAW": {
+            "NAME": "Room Temperature raw",
+            "DESCRIPTION": "Room Temperature raw"
+          },
           "SHORTCUT_RTEMP": {
             "NAME": "Room Temperature",
             "DESCRIPTION": "Room Temperature"
@@ -6566,6 +6834,10 @@
             "NAME": "Floor Heating Occupany / Power",
             "DESCRIPTION": "Floor Heating Occupany / Power"
           },
+          "SHORTCUT_FHTSP_RAW": {
+            "NAME": "Floor Heating Temperature Setpoint raw",
+            "DESCRIPTION": "Floor Heating Temperature Setpoint raw"
+          },
           "SHORTCUT_FHTSP": {
             "NAME": "Floor Heating Temperature Setpoint",
             "DESCRIPTION": "Floor Heating Temperature Setpoint"
@@ -6577,6 +6849,10 @@
           "SHORTCUT_ACFSP": {
             "NAME": "Air Condition Fan Setpoint",
             "DESCRIPTION": "Air Condition Fan Setpoint"
+          },
+          "SHORTCUT_ACTS_RAW": {
+            "NAME": "Air Condition Temperature Setting raw",
+            "DESCRIPTION": "Air Condition Temperature Setting raw"
           },
           "SHORTCUT_ACTS": {
             "NAME": "Air Condition Temperature Setting",
@@ -6621,6 +6897,10 @@
           "SHORTCUT_FVS": {
             "NAME": "Fan Ventilation Speed Option",
             "DESCRIPTION": "Fan Ventilation Speed Option"
+          },
+          "SHORTCUT_TSCV_RAW": {
+            "NAME": "Room Temperature Correct Value raw",
+            "DESCRIPTION": "Room Temperature Correct Value raw"
           },
           "SHORTCUT_TSCV": {
             "NAME": "Room Temperature Correct Value",
@@ -6686,6 +6966,10 @@
             "NAME": "Floor Heating Occupany / Power",
             "DESCRIPTION": "Floor Heating Occupany / Power"
           },
+          "SHORTCUT_FHTSP_RAW": {
+            "NAME": "Floor Heating Temperature Setpoint raw",
+            "DESCRIPTION": "Floor Heating Temperature Setpoint raw"
+          },
           "SHORTCUT_FHTSP": {
             "NAME": "Floor Heating Temperature Setpoint",
             "DESCRIPTION": "Floor Heating Temperature Setpoint"
@@ -6702,6 +6986,10 @@
             "NAME": "Fan Ventilation Setpoint",
             "DESCRIPTION": "Fan Ventilation Setpoint"
           },
+          "SHORTCUT_ACTS_RAW": {
+            "NAME": "Air Condition Temperature Setting raw",
+            "DESCRIPTION": "Air Condition Temperature Setting raw"
+          },
           "SHORTCUT_ACTS": {
             "NAME": "Air Condition Temperature Setting",
             "DESCRIPTION": "Air Condition Temperature Setting"
@@ -6713,6 +7001,10 @@
           "SHORTCUT_WMS": {
             "NAME": "Work Mode Symbol",
             "DESCRIPTION": "Work Mode Symbol"
+          },
+          "SHORTCUT_RTOV_RAW": {
+            "NAME": "Remote Temperature Original Value raw",
+            "DESCRIPTION": "Remote Temperature Original Value raw"
           },
           "SHORTCUT_RTOV": {
             "NAME": "Remote Temperature Original Value",
@@ -6741,6 +7033,10 @@
           "SHORTCUT_ES": {
             "NAME": "Exception Status",
             "DESCRIPTION": "Exception Status"
+          },
+          "SHORTCUT_RTOV_RAW": {
+            "NAME": "Remote Temperature Original Value raw",
+            "DESCRIPTION": "Remote Temperature Original Value raw"
           },
           "SHORTCUT_RTOV": {
             "NAME": "Remote Temperature Original Value",
@@ -6782,6 +7078,10 @@
             "NAME": "Floor Heating Occupany / Power",
             "DESCRIPTION": "Floor Heating Occupany / Power"
           },
+          "SHORTCUT_FHTSP_RAW": {
+            "NAME": "Floor Heating Temperature Setpoint raw",
+            "DESCRIPTION": "Floor Heating Temperature Setpoint raw"
+          },
           "SHORTCUT_FHTSP": {
             "NAME": "Floor Heating Temperature Setpoint",
             "DESCRIPTION": "Floor Heating Temperature Setpoint"
@@ -6793,6 +7093,10 @@
           "SHORTCUT_ACFSP": {
             "NAME": "Air Condition Fan Setpoint",
             "DESCRIPTION": "Air Condition Fan Setpoint"
+          },
+          "SHORTCUT_ACTS_RAW": {
+            "NAME": "Air Condition Temperature Setting raw",
+            "DESCRIPTION": "Air Condition Temperature Setting raw"
           },
           "SHORTCUT_ACTS": {
             "NAME": "Air Condition Temperature Setting",
@@ -6854,6 +7158,10 @@
             "NAME": "Fan Ventilation Speed Option",
             "DESCRIPTION": "Fan Ventilation Speed Option"
           },
+          "SHORTCUT_TSCV_RAW": {
+            "NAME": "Room Temperature Correct Value raw",
+            "DESCRIPTION": "Room Temperature Correct Value raw"
+          },
           "SHORTCUT_TSCV": {
             "NAME": "Room Temperature Correct Value",
             "DESCRIPTION": "Room Temperature Correct Value"
@@ -6874,9 +7182,17 @@
       },
       "FUNCTION_14": {
         "TYPE_00_1": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -6886,9 +7202,17 @@
           "DESCRIPTION": "Sensor for Temperature and Humidity, line-powered"
         },
         "TYPE_01_2": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -6906,6 +7230,10 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Illumination and Button A and B, line-powered"
         },
         "TYPE_02_3": {
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
+          },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
             "DESCRIPTION": "VOC"
@@ -6914,13 +7242,25 @@
           "DESCRIPTION": "Sensor for VOC, line-powered"
         },
         "TYPE_03_4": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
           },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
@@ -6930,13 +7270,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity and VOC, line-powered"
         },
         "TYPE_04_5": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
           },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
@@ -6946,17 +7298,33 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity and Illumination, line-powered"
         },
         "TYPE_05_6": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
           },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
+          },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
             "DESCRIPTION": "Illumination"
+          },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
           },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
@@ -6966,6 +7334,10 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Illumination and VOC, line-powered"
         },
         "TYPE_06_7": {
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
+          },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
             "DESCRIPTION": "CO2"
@@ -6974,13 +7346,25 @@
           "DESCRIPTION": "Sensor for CO2, line-powered"
         },
         "TYPE_07_8": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
           },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
@@ -6990,17 +7374,33 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity and CO2, line-powered"
         },
         "TYPE_08_9": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
           },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
+          },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
             "DESCRIPTION": "Illumination"
+          },
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
           },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
@@ -7010,17 +7410,33 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Illumination and CO2, line-powered"
         },
         "TYPE_09_10": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
           },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
+          },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
             "DESCRIPTION": "VOC"
+          },
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
           },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
@@ -7030,21 +7446,41 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, VOC and CO2, line-powered"
         },
         "TYPE_0A_11": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
           },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
+          },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
             "DESCRIPTION": "Illumination"
           },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
+          },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
             "DESCRIPTION": "VOC"
+          },
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
           },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
@@ -7054,13 +7490,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Illumination, VOC and CO2, line-powered"
         },
         "TYPE_0B_12": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
           },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
@@ -7070,6 +7518,10 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, and VOC, line-powered"
         },
         "TYPE_0C_13": {
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
+          },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
             "DESCRIPTION": "CO2"
@@ -7078,13 +7530,25 @@
           "DESCRIPTION": "Sensor for CO2, line-powered"
         },
         "TYPE_0D_14": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
           },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
@@ -7098,17 +7562,33 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity and VOC and Button A, line-powered"
         },
         "TYPE_0E_15": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
           },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
+          },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
             "DESCRIPTION": "VOC"
+          },
+          "SHORTCUT_CO2_RAW": {
+            "NAME": "CO2 raw",
+            "DESCRIPTION": "CO2 raw"
           },
           "SHORTCUT_CO2": {
             "NAME": "CO2",
@@ -7122,13 +7602,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, VOC, CO2 and Button A, line-powered"
         },
         "TYPE_0F_16": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_BAR_RAW": {
+            "NAME": "Barometer raw",
+            "DESCRIPTION": "Barometer raw"
           },
           "SHORTCUT_BAR": {
             "NAME": "Barometer",
@@ -7138,13 +7630,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity and Barometric Pressure, line-powered"
         },
         "TYPE_10_17": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_VOC_RAW": {
+            "NAME": "VOC raw",
+            "DESCRIPTION": "VOC raw"
           },
           "SHORTCUT_VOC": {
             "NAME": "VOC",
@@ -7158,9 +7662,17 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, VOC and Presence, line-powered"
         },
         "TYPE_1A_18": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -7174,13 +7686,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity and Energy Storage"
         },
         "TYPE_1B_19": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
           },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
@@ -7194,9 +7718,17 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Illumination and Energy Storage"
         },
         "TYPE_1C_20": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -7205,6 +7737,10 @@
           "SHORTCUT_ES": {
             "NAME": "Energy Storage",
             "DESCRIPTION": "Energy Storage"
+          },
+          "SHORTCUT_BAR_RAW": {
+            "NAME": "Barometer raw",
+            "DESCRIPTION": "Barometer raw"
           },
           "SHORTCUT_BAR": {
             "NAME": "Barometer",
@@ -7214,13 +7750,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Energy Storage and Barometric Pressure"
         },
         "TYPE_1D_21": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
           },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
@@ -7230,6 +7778,10 @@
             "NAME": "Energy Storage",
             "DESCRIPTION": "Energy Storage"
           },
+          "SHORTCUT_BAR_RAW": {
+            "NAME": "Barometer raw",
+            "DESCRIPTION": "Barometer raw"
+          },
           "SHORTCUT_BAR": {
             "NAME": "Barometer",
             "DESCRIPTION": "Barometer"
@@ -7238,13 +7790,25 @@
           "DESCRIPTION": "Sensor for Temperature, Humidity, Illumination, Energy Storage and Barometric Pressure"
         },
         "TYPE_20_22": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
           },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
@@ -7258,6 +7822,10 @@
           "DESCRIPTION": "Outdoor Sensor for Temperature, Humidity, Illumination and Energy Storage"
         },
         "TYPE_21_23": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
@@ -7270,9 +7838,17 @@
           "DESCRIPTION": "Outdoor Sensor for Temperature and Energy Storage"
         },
         "TYPE_22_24": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -7286,9 +7862,17 @@
           "DESCRIPTION": "Outdoor Sensor for Temperature, Humidity and Energy Storage"
         },
         "TYPE_23_25": {
+          "SHORTCUT_TMP9_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP9": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
           },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
@@ -7302,6 +7886,10 @@
           "DESCRIPTION": "Outdoor Sensor for Temperature, Illumination and Energy Storage"
         },
         "TYPE_24_26": {
+          "SHORTCUT_ILL_RAW": {
+            "NAME": "Illumination raw",
+            "DESCRIPTION": "Illumination raw"
+          },
           "SHORTCUT_ILL": {
             "NAME": "Illumination",
             "DESCRIPTION": "Illumination"
@@ -7318,17 +7906,33 @@
             "NAME": "Smoke Alarm status",
             "DESCRIPTION": "Smoke Alarm status"
           },
+          "SHORTCUT_SMA_RAW": {
+            "NAME": "Time since last maintenance raw",
+            "DESCRIPTION": "Time since last maintenance raw"
+          },
           "SHORTCUT_ES": {
             "NAME": "Energy Storage",
             "DESCRIPTION": "Energy Storage"
+          },
+          "SHORTCUT_RPLT_RAW": {
+            "NAME": "Remaining Product Life Time raw",
+            "DESCRIPTION": "Remaining Product Life Time raw"
           },
           "SHORTCUT_RPLT": {
             "NAME": "Remaining Product Life Time",
             "DESCRIPTION": "Remaining Product Life Time"
           },
+          "SHORTCUT_TMP8_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP8": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -7350,21 +7954,41 @@
             "NAME": "CO Alarm status",
             "DESCRIPTION": "CO Alarm status"
           },
+          "SHORTCUT_COA_RAW": {
+            "NAME": "Time since last maintenance raw",
+            "DESCRIPTION": "Time since last maintenance raw"
+          },
           "SHORTCUT_ES": {
             "NAME": "Energy Storage",
             "DESCRIPTION": "Energy Storage"
+          },
+          "SHORTCUT_RPLT_RAW": {
+            "NAME": "Remaining Product Life Time raw",
+            "DESCRIPTION": "Remaining Product Life Time raw"
           },
           "SHORTCUT_RPLT": {
             "NAME": "Remaining Product Life Time",
             "DESCRIPTION": "Remaining Product Life Time"
           },
+          "SHORTCUT_CO_RAW": {
+            "NAME": "CO raw",
+            "DESCRIPTION": "CO raw"
+          },
           "SHORTCUT_CO": {
             "NAME": "CO",
             "DESCRIPTION": "CO"
           },
+          "SHORTCUT_TMP8_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP8": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
+          },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
           },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
@@ -7414,9 +8038,17 @@
             "NAME": "Room Size",
             "DESCRIPTION": "Room Size"
           },
+          "SHORTCUT_HT_RAW": {
+            "NAME": "Humidity Threshold raw",
+            "DESCRIPTION": "Humidity Threshold raw"
+          },
           "SHORTCUT_HT": {
             "NAME": "Humidity Threshold",
             "DESCRIPTION": "Humidity Threshold"
+          },
+          "SHORTCUT_FS_RAW": {
+            "NAME": "Fan Speed * raw",
+            "DESCRIPTION": "Fan Speed * raw"
           },
           "SHORTCUT_FS": {
             "NAME": "Fan Speed *",
@@ -7450,9 +8082,17 @@
             "NAME": "Room Size Status",
             "DESCRIPTION": "Room Size Status"
           },
+          "SHORTCUT_HUM_RAW": {
+            "NAME": "Humidity raw",
+            "DESCRIPTION": "Humidity raw"
+          },
           "SHORTCUT_HUM": {
             "NAME": "Humidity",
             "DESCRIPTION": "Humidity"
+          },
+          "SHORTCUT_FSS_RAW": {
+            "NAME": "Fan Speed Status raw",
+            "DESCRIPTION": "Fan Speed Status raw"
           },
           "SHORTCUT_FSS": {
             "NAME": "Fan Speed Status",
@@ -7473,6 +8113,10 @@
           "SHORTCUT_RS": {
             "NAME": "Room Size",
             "DESCRIPTION": "Room Size"
+          },
+          "SHORTCUT_FS_RAW": {
+            "NAME": "Fan Speed * raw",
+            "DESCRIPTION": "Fan Speed * raw"
           },
           "SHORTCUT_FS": {
             "NAME": "Fan Speed *",
@@ -7498,6 +8142,10 @@
             "NAME": "Room Size Status",
             "DESCRIPTION": "Room Size Status"
           },
+          "SHORTCUT_FSS_RAW": {
+            "NAME": "Fan Speed Status raw",
+            "DESCRIPTION": "Fan Speed Status raw"
+          },
           "SHORTCUT_FSS": {
             "NAME": "Fan Speed Status",
             "DESCRIPTION": "Fan Speed Status"
@@ -7517,6 +8165,10 @@
           "SHORTCUT_RS": {
             "NAME": "Room Size",
             "DESCRIPTION": "Room Size"
+          },
+          "SHORTCUT_FS_RAW": {
+            "NAME": "Fan Speed * raw",
+            "DESCRIPTION": "Fan Speed * raw"
           },
           "SHORTCUT_FS": {
             "NAME": "Fan Speed *",
@@ -7542,6 +8194,10 @@
             "NAME": "Room Size Status",
             "DESCRIPTION": "Room Size Status"
           },
+          "SHORTCUT_FSS_RAW": {
+            "NAME": "Fan Speed Status raw",
+            "DESCRIPTION": "Fan Speed Status raw"
+          },
           "SHORTCUT_FSS": {
             "NAME": "Fan Speed Status",
             "DESCRIPTION": "Fan Speed Status"
@@ -7566,6 +8222,10 @@
             "NAME": "Valve type",
             "DESCRIPTION": "Valve type"
           },
+          "SHORTCUT_HCH_RAW": {
+            "NAME": "Heating channel raw",
+            "DESCRIPTION": "Heating channel raw"
+          },
           "SHORTCUT_HCH": {
             "NAME": "Heating channel",
             "DESCRIPTION": "Heating channel"
@@ -7586,6 +8246,10 @@
             "NAME": "Command ID",
             "DESCRIPTION": "Command ID"
           },
+          "SHORTCUT_HCH_RAW": {
+            "NAME": "Heating channel raw",
+            "DESCRIPTION": "Heating channel raw"
+          },
           "SHORTCUT_HCH": {
             "NAME": "Heating channel",
             "DESCRIPTION": "Heating channel"
@@ -7601,6 +8265,10 @@
           "SHORTCUT_STATUS": {
             "NAME": "Status / Error",
             "DESCRIPTION": "Status / Error"
+          },
+          "SHORTCUT_HCH_RAW": {
+            "NAME": "Heating channel raw",
+            "DESCRIPTION": "Heating channel raw"
           },
           "SHORTCUT_HCH": {
             "NAME": "Heating channel",
@@ -7706,6 +8374,10 @@
             "NAME": "Number of pulses",
             "DESCRIPTION": "Number of pulses"
           },
+          "SHORTCUT_RST_RAW": {
+            "NAME": "Preset value raw",
+            "DESCRIPTION": "Preset value raw"
+          },
           "SHORTCUT_RST": {
             "NAME": "Preset value",
             "DESCRIPTION": "Preset value"
@@ -7753,6 +8425,10 @@
           "SHORTCUT_BUS": {
             "NAME": "Meter bus type",
             "DESCRIPTION": "Meter bus type"
+          },
+          "SHORTCUT_MCH_RAW": {
+            "NAME": "Meter channel index raw",
+            "DESCRIPTION": "Meter channel index raw"
           },
           "SHORTCUT_MCH": {
             "NAME": "Meter channel index",
@@ -7862,6 +8538,10 @@
             "NAME": "Number of pulses",
             "DESCRIPTION": "Number of pulses"
           },
+          "SHORTCUT_RST_RAW": {
+            "NAME": "Preset value raw",
+            "DESCRIPTION": "Preset value raw"
+          },
           "SHORTCUT_RST": {
             "NAME": "Preset value",
             "DESCRIPTION": "Preset value"
@@ -7909,6 +8589,10 @@
           "SHORTCUT_BUS": {
             "NAME": "Meter bus type",
             "DESCRIPTION": "Meter bus type"
+          },
+          "SHORTCUT_MCH_RAW": {
+            "NAME": "Meter channel index raw",
+            "DESCRIPTION": "Meter channel index raw"
           },
           "SHORTCUT_MCH": {
             "NAME": "Meter channel index",
@@ -8021,6 +8705,10 @@
           "SHORTCUT_MID": {
             "NAME": "Message Identifier",
             "DESCRIPTION": "Message Identifier"
+          },
+          "SHORTCUT_REQ_RAW": {
+            "NAME": "Request Frame raw",
+            "DESCRIPTION": "Request Frame raw"
           },
           "SHORTCUT_REQ": {
             "NAME": "Request Frame",
@@ -8334,6 +9022,10 @@
       },
       "FUNCTION_34": {
         "TYPE_00_1": {
+          "SHORTCUT_CHN_RAW": {
+            "NAME": "Channel raw",
+            "DESCRIPTION": "Channel raw"
+          },
           "SHORTCUT_CHN": {
             "NAME": "Channel",
             "DESCRIPTION": "Channel"
@@ -8346,6 +9038,10 @@
           "DESCRIPTION": "1 Output Channel"
         },
         "TYPE_00_2": {
+          "SHORTCUT_TMP_RAW": {
+            "NAME": "Temperature raw",
+            "DESCRIPTION": "Temperature raw"
+          },
           "SHORTCUT_TMP": {
             "NAME": "Temperature",
             "DESCRIPTION": "Temperature"
@@ -8357,6 +9053,10 @@
           "SHORTCUT_OPM": {
             "NAME": "Operation Mode",
             "DESCRIPTION": "Operation Mode"
+          },
+          "SHORTCUT_CHN_RAW": {
+            "NAME": "Channel raw",
+            "DESCRIPTION": "Channel raw"
           },
           "SHORTCUT_CHN": {
             "NAME": "Channel",
@@ -8386,6 +9086,10 @@
             "NAME": "Set point",
             "DESCRIPTION": "Set point"
           },
+          "SHORTCUT_CHN_RAW": {
+            "NAME": "Channel raw",
+            "DESCRIPTION": "Channel raw"
+          },
           "SHORTCUT_CHN": {
             "NAME": "Channel",
             "DESCRIPTION": "Channel"
@@ -8398,6 +9102,10 @@
           "DESCRIPTION": "1 Output Channel"
         },
         "TYPE_00_4": {
+          "SHORTCUT_CHN_RAW": {
+            "NAME": "Channel raw",
+            "DESCRIPTION": "Channel raw"
+          },
           "SHORTCUT_CHN": {
             "NAME": "Channel",
             "DESCRIPTION": "Channel"
@@ -8429,6 +9137,10 @@
           "SHORTCUT_OVR": {
             "NAME": "Set point",
             "DESCRIPTION": "Set point"
+          },
+          "SHORTCUT_CHN_RAW": {
+            "NAME": "Channel raw",
+            "DESCRIPTION": "Channel raw"
           },
           "SHORTCUT_CHN": {
             "NAME": "Channel",
@@ -8470,6 +9182,10 @@
             "NAME": "MsgId",
             "DESCRIPTION": "MsgId"
           },
+          "SHORTCUT_DLVL_RAW": {
+            "NAME": "Current Dim Level raw",
+            "DESCRIPTION": "Current Dim Level raw"
+          },
           "SHORTCUT_DLVL": {
             "NAME": "Current Dim Level",
             "DESCRIPTION": "Current Dim Level"
@@ -8502,13 +9218,25 @@
             "NAME": "MsgId",
             "DESCRIPTION": "MsgId"
           },
+          "SHORTCUT_DLVLR_RAW": {
+            "NAME": "Current Dim Level LED R raw",
+            "DESCRIPTION": "Current Dim Level LED R raw"
+          },
           "SHORTCUT_DLVLR": {
             "NAME": "Current Dim Level LED R",
             "DESCRIPTION": "Current Dim Level LED R"
           },
+          "SHORTCUT_DLVLG_RAW": {
+            "NAME": "Current Dim Level LED G raw",
+            "DESCRIPTION": "Current Dim Level LED G raw"
+          },
           "SHORTCUT_DLVLG": {
             "NAME": "Current Dim Level LED G",
             "DESCRIPTION": "Current Dim Level LED G"
+          },
+          "SHORTCUT_DLVLB_RAW": {
+            "NAME": "Current Dim Level LED B raw",
+            "DESCRIPTION": "Current Dim Level LED B raw"
           },
           "SHORTCUT_DLVLB": {
             "NAME": "Current Dim Level LED B",
@@ -8554,17 +9282,33 @@
             "NAME": "Timer Operation Mode Control",
             "DESCRIPTION": "Timer Operation Mode Control"
           },
+          "SHORTCUT_COT_RAW": {
+            "NAME": "CO2 Threshold raw",
+            "DESCRIPTION": "CO2 Threshold raw"
+          },
           "SHORTCUT_COT": {
             "NAME": "CO2 Threshold",
             "DESCRIPTION": "CO2 Threshold"
+          },
+          "SHORTCUT_HT_RAW": {
+            "NAME": "Humidity Threshold raw",
+            "DESCRIPTION": "Humidity Threshold raw"
           },
           "SHORTCUT_HT": {
             "NAME": "Humidity Threshold",
             "DESCRIPTION": "Humidity Threshold"
           },
+          "SHORTCUT_AQT_RAW": {
+            "NAME": "Air Quality Threshold raw",
+            "DESCRIPTION": "Air Quality Threshold raw"
+          },
           "SHORTCUT_AQT": {
             "NAME": "Air Quality Threshold",
             "DESCRIPTION": "Air Quality Threshold"
+          },
+          "SHORTCUT_RTT_RAW": {
+            "NAME": "Room temperature threshold raw",
+            "DESCRIPTION": "Room temperature threshold raw"
           },
           "SHORTCUT_RTT": {
             "NAME": "Room temperature threshold",
@@ -8634,6 +9378,10 @@
             "NAME": "Room Temperature Control Status",
             "DESCRIPTION": "Room Temperature Control Status"
           },
+          "SHORTCUT_AQS1_RAW": {
+            "NAME": "Air Quality Sensor 1 raw",
+            "DESCRIPTION": "Air Quality Sensor 1 raw"
+          },
           "SHORTCUT_AQS1": {
             "NAME": "Air Quality Sensor 1",
             "DESCRIPTION": "Air Quality Sensor 1"
@@ -8641,6 +9389,10 @@
           "SHORTCUT_MSS": {
             "NAME": "Master/Slave Configuration Status",
             "DESCRIPTION": "Master/Slave Configuration Status"
+          },
+          "SHORTCUT_AQS2_RAW": {
+            "NAME": "Air Quality Sensor 2 raw",
+            "DESCRIPTION": "Air Quality Sensor 2 raw"
           },
           "SHORTCUT_AQS2": {
             "NAME": "Air Quality Sensor 2",
@@ -8750,18 +9502,6 @@
       },
       "NAME": "VLD Telegram (D2)",
       "DESCRIPTION": "VLD Telegram"
-    },
-    "SIMULATED": {
-      "NAME": "Simuliert",
-      "DESCRIPTION": "",
-      "RELAY": {
-        "NAME": "Relay",
-        "DESCRIPTION": "",
-        "VALUE": {
-          "NAME": "Value",
-          "DESCRIPTION": ""
-        }
-      }
     }
   }
 }

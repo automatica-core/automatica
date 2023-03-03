@@ -14,7 +14,7 @@
                 public class EnOceanRorgA5Data : EnOceanRorgData
                 {
                     
-// AUTO GENERATED 03.03.2023 13:21:53
+// AUTO GENERATED 03.03.2023 20:11:50
 // -----------------------------------------
 // -----------------------------------------
 // 0xA5 --------------------------------
@@ -152,8 +152,9 @@ public static readonly Guid FunctionA5_07Guid = new Guid("eb2c5295-4a34-4389-8bb
 public static readonly Guid TypeA5_07_01_1Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010000");
 public static readonly Guid DataFieldA5_07_01_1_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010100");
 public static readonly Guid DataFieldA5_07_01_1_SVC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010200");
-public static readonly Guid DataFieldA5_07_01_1_PIRS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010300");
-public static readonly Guid DataFieldA5_07_01_1_SVA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010400");
+public static readonly Guid DataFieldA5_07_01_1_PIRS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010300");
+public static readonly Guid DataFieldA5_07_01_1_PIRS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010400"); 
+public static readonly Guid DataFieldA5_07_01_1_SVA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50701010500");
 public static readonly Guid TypeA5_07_02_2Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50702020000");
 public static readonly Guid DataFieldA5_07_02_2_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50702020100");
 public static readonly Guid DataFieldA5_07_02_2_SVC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a50702020200");
@@ -245,25 +246,28 @@ public static readonly Guid DataFieldA5_09_0C_10_SCM_Guid = new Guid("eb2c5295-4
 public static readonly Guid FunctionA5_10Guid = new Guid("eb2c5295-4a34-4389-8bb5-a510ff000000");
 public static readonly Guid TypeA5_10_01_1Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010000");
 public static readonly Guid DataFieldA5_10_01_1_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010100");
-public static readonly Guid DataFieldA5_10_01_1_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010200");
-public static readonly Guid DataFieldA5_10_01_1_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010300");
-public static readonly Guid DataFieldA5_10_01_1_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010400");
-public static readonly Guid DataFieldA5_10_01_1_OCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010500");
+public static readonly Guid DataFieldA5_10_01_1_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010200");
+public static readonly Guid DataFieldA5_10_01_1_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010300");
+public static readonly Guid DataFieldA5_10_01_1_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010400");
+public static readonly Guid DataFieldA5_10_01_1_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010500");
+public static readonly Guid DataFieldA5_10_01_1_OCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51001010600");
 public static readonly Guid TypeA5_10_02_2Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020000");
 public static readonly Guid DataFieldA5_10_02_2_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020100");
-public static readonly Guid DataFieldA5_10_02_2_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020200");
-public static readonly Guid DataFieldA5_10_02_2_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020300");
-public static readonly Guid DataFieldA5_10_02_2_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020400");
-public static readonly Guid DataFieldA5_10_02_2_SLSW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020500");
+public static readonly Guid DataFieldA5_10_02_2_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020200");
+public static readonly Guid DataFieldA5_10_02_2_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020300");
+public static readonly Guid DataFieldA5_10_02_2_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020400");
+public static readonly Guid DataFieldA5_10_02_2_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020500");
+public static readonly Guid DataFieldA5_10_02_2_SLSW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51002020600");
 public static readonly Guid TypeA5_10_03_3Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51003030000");
 public static readonly Guid DataFieldA5_10_03_3_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51003030100");
 public static readonly Guid DataFieldA5_10_03_3_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51003030200");
 public static readonly Guid DataFieldA5_10_03_3_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51003030300");
 public static readonly Guid TypeA5_10_04_4Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040000");
 public static readonly Guid DataFieldA5_10_04_4_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040100");
-public static readonly Guid DataFieldA5_10_04_4_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040200");
-public static readonly Guid DataFieldA5_10_04_4_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040300");
-public static readonly Guid DataFieldA5_10_04_4_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040400");
+public static readonly Guid DataFieldA5_10_04_4_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040200");
+public static readonly Guid DataFieldA5_10_04_4_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040300");
+public static readonly Guid DataFieldA5_10_04_4_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040400");
+public static readonly Guid DataFieldA5_10_04_4_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51004040500");
 public static readonly Guid TypeA5_10_05_5Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51005050000");
 public static readonly Guid DataFieldA5_10_05_5_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51005050100");
 public static readonly Guid DataFieldA5_10_05_5_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51005050200");
@@ -276,18 +280,21 @@ public static readonly Guid DataFieldA5_10_06_6_TMP_Guid = new Guid("eb2c5295-4a
 public static readonly Guid DataFieldA5_10_06_6_SLSW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51006060400");
 public static readonly Guid TypeA5_10_07_7Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070000");
 public static readonly Guid DataFieldA5_10_07_7_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070100");
-public static readonly Guid DataFieldA5_10_07_7_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070200");
-public static readonly Guid DataFieldA5_10_07_7_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070300");
+public static readonly Guid DataFieldA5_10_07_7_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070200");
+public static readonly Guid DataFieldA5_10_07_7_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070300");
+public static readonly Guid DataFieldA5_10_07_7_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51007070400");
 public static readonly Guid TypeA5_10_08_8Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080000");
 public static readonly Guid DataFieldA5_10_08_8_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080100");
-public static readonly Guid DataFieldA5_10_08_8_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080200");
-public static readonly Guid DataFieldA5_10_08_8_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080300");
-public static readonly Guid DataFieldA5_10_08_8_OCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080400");
+public static readonly Guid DataFieldA5_10_08_8_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080200");
+public static readonly Guid DataFieldA5_10_08_8_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080300");
+public static readonly Guid DataFieldA5_10_08_8_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080400");
+public static readonly Guid DataFieldA5_10_08_8_OCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51008080500");
 public static readonly Guid TypeA5_10_09_9Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090000");
 public static readonly Guid DataFieldA5_10_09_9_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090100");
-public static readonly Guid DataFieldA5_10_09_9_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090200");
-public static readonly Guid DataFieldA5_10_09_9_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090300");
-public static readonly Guid DataFieldA5_10_09_9_SLSW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090400");
+public static readonly Guid DataFieldA5_10_09_9_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090200");
+public static readonly Guid DataFieldA5_10_09_9_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090300");
+public static readonly Guid DataFieldA5_10_09_9_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090400");
+public static readonly Guid DataFieldA5_10_09_9_SLSW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51009090500");
 public static readonly Guid TypeA5_10_0A_10Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5100a0a0000");
 public static readonly Guid DataFieldA5_10_0A_10_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5100a0a0100");
 public static readonly Guid DataFieldA5_10_0A_10_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5100a0a0200");
@@ -394,15 +401,16 @@ public static readonly Guid DataFieldA5_10_1D_27_FAN_Guid = new Guid("eb2c5295-4
 public static readonly Guid DataFieldA5_10_1D_27_OED_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101d1b0600");
 public static readonly Guid DataFieldA5_10_1D_27_OB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101d1b0700");
 public static readonly Guid TypeA5_10_1F_28Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0000");
-public static readonly Guid DataFieldA5_10_1F_28_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0100");
-public static readonly Guid DataFieldA5_10_1F_28_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0200");
-public static readonly Guid DataFieldA5_10_1F_28_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0300");
-public static readonly Guid DataFieldA5_10_1F_28_TMP_F_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0400");
-public static readonly Guid DataFieldA5_10_1F_28_SP_F_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0500");
-public static readonly Guid DataFieldA5_10_1F_28_FAN_F_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0600");
-public static readonly Guid DataFieldA5_10_1F_28_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0700");
-public static readonly Guid DataFieldA5_10_1F_28_UNOCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0800");
-public static readonly Guid DataFieldA5_10_1F_28_OCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0900");
+public static readonly Guid DataFieldA5_10_1F_28_FAN_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0100");
+public static readonly Guid DataFieldA5_10_1F_28_FAN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0200");
+public static readonly Guid DataFieldA5_10_1F_28_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0300");
+public static readonly Guid DataFieldA5_10_1F_28_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0400");
+public static readonly Guid DataFieldA5_10_1F_28_TMP_F_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0500");
+public static readonly Guid DataFieldA5_10_1F_28_SP_F_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0600");
+public static readonly Guid DataFieldA5_10_1F_28_FAN_F_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0700");
+public static readonly Guid DataFieldA5_10_1F_28_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0800");
+public static readonly Guid DataFieldA5_10_1F_28_UNOCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0900");
+public static readonly Guid DataFieldA5_10_1F_28_OCC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a5101f1c0a00");
 public static readonly Guid TypeA5_10_20_29Guid = new Guid("eb2c5295-4a34-4389-8bb5-a510201d0000");
 public static readonly Guid DataFieldA5_10_20_29_SP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a510201d0100");
 public static readonly Guid DataFieldA5_10_20_29_TMP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a510201d0200");
@@ -588,9 +596,10 @@ public static readonly Guid DataFieldA5_13_07_7_BS_Guid = new Guid("eb2c5295-4a3
 public static readonly Guid TypeA5_13_08_8Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080000");
 public static readonly Guid DataFieldA5_13_08_8_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080100");
 public static readonly Guid DataFieldA5_13_08_8_RAS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080200");
-public static readonly Guid DataFieldA5_13_08_8_RFA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080300");
-public static readonly Guid DataFieldA5_13_08_8_RFC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080400");
-public static readonly Guid DataFieldA5_13_08_8_BS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080500");
+public static readonly Guid DataFieldA5_13_08_8_RFA_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080300");
+public static readonly Guid DataFieldA5_13_08_8_RFA_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080400");
+public static readonly Guid DataFieldA5_13_08_8_RFC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080500");
+public static readonly Guid DataFieldA5_13_08_8_BS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51308080600");
 public static readonly Guid TypeA5_13_10_9Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51310090000");
 public static readonly Guid DataFieldA5_13_10_9_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51310090100");
 public static readonly Guid DataFieldA5_13_10_9_DN_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a51310090200");
@@ -695,12 +704,13 @@ public static readonly Guid TypeA5_20_04_7Guid = new Guid("eb2c5295-4a34-4389-8b
 public static readonly Guid DataFieldA5_20_04_7_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070100");
 public static readonly Guid DataFieldA5_20_04_7_CP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070200");
 public static readonly Guid DataFieldA5_20_04_7_FTS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070300");
-public static readonly Guid DataFieldA5_20_04_7_TMPFC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070400");
-public static readonly Guid DataFieldA5_20_04_7_MST_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070500");
-public static readonly Guid DataFieldA5_20_04_7_STR_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070600");
-public static readonly Guid DataFieldA5_20_04_7_BLS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070700");
-public static readonly Guid DataFieldA5_20_04_7_TS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070800");
-public static readonly Guid DataFieldA5_20_04_7_FL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070900");
+public static readonly Guid DataFieldA5_20_04_7_TMPFC_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070400");
+public static readonly Guid DataFieldA5_20_04_7_TMPFC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070500");
+public static readonly Guid DataFieldA5_20_04_7_MST_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070600");
+public static readonly Guid DataFieldA5_20_04_7_STR_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070700");
+public static readonly Guid DataFieldA5_20_04_7_BLS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070800");
+public static readonly Guid DataFieldA5_20_04_7_TS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070900");
+public static readonly Guid DataFieldA5_20_04_7_FL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004070a00");
 public static readonly Guid TypeA5_20_04_8Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004080000");
 public static readonly Guid DataFieldA5_20_04_8_POS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004080100");
 public static readonly Guid DataFieldA5_20_04_8_TSP_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a52004080200");
@@ -773,8 +783,10 @@ public static readonly Guid DataFieldA5_20_12_15_RO_Guid = new Guid("eb2c5295-4a
 public static readonly Guid FunctionA5_30Guid = new Guid("eb2c5295-4a34-4389-8bb5-a530ff000000");
 public static readonly Guid TypeA5_30_01_1Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010000");
 public static readonly Guid DataFieldA5_30_01_1_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010100");
-public static readonly Guid DataFieldA5_30_01_1_SVC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010200");
-public static readonly Guid DataFieldA5_30_01_1_IPS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010300");
+public static readonly Guid DataFieldA5_30_01_1_SVC_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010200");
+public static readonly Guid DataFieldA5_30_01_1_SVC_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010300");
+public static readonly Guid DataFieldA5_30_01_1_IPS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010400");
+public static readonly Guid DataFieldA5_30_01_1_IPS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53001010500");
 public static readonly Guid TypeA5_30_02_2Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53002020000");
 public static readonly Guid DataFieldA5_30_02_2_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53002020100");
 public static readonly Guid DataFieldA5_30_02_2_IPS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53002020200");
@@ -796,7 +808,8 @@ public static readonly Guid TypeA5_30_05_5Guid = new Guid("eb2c5295-4a34-4389-8b
 public static readonly Guid DataFieldA5_30_05_5_LRNB_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53005050100");
 public static readonly Guid DataFieldA5_30_05_5_VDD_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53005050200");
 public static readonly Guid DataFieldA5_30_05_5_ST_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53005050300");
-public static readonly Guid DataFieldA5_30_05_5_IOS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53005050400");
+public static readonly Guid DataFieldA5_30_05_5_IOS_RAW_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53005050400");
+public static readonly Guid DataFieldA5_30_05_5_IOS_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53005050500");
 public static readonly Guid FunctionA5_37Guid = new Guid("eb2c5295-4a34-4389-8bb5-a537ff000000");
 public static readonly Guid TypeA5_37_01_1Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53701010000");
 public static readonly Guid DataFieldA5_37_01_1_DRL_Guid = new Guid("eb2c5295-4a34-4389-8bb5-a53701010100");
@@ -3528,6 +3541,7 @@ AddTypesA5_07_03_3Templates(factory, interfaceGuid, enoceanFactory);
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_07_01_1_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_07_01_1_SVCTemplates(factory, interfaceGuid);
+AddDataFieldA5_07_01_1_PIRS_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_07_01_1_PIRSTemplates(factory, interfaceGuid);
 AddDataFieldA5_07_01_1_SVATemplates(factory, interfaceGuid);
 
@@ -3572,6 +3586,21 @@ AddDataFieldA5_07_01_1_SVATemplates(factory, interfaceGuid);
                     "enocean-scale-max", PropertyTemplateType.Numeric, nodeGuid, "ENOCEAN", false, true, null, "5.0", 0, 0);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_SVCSVC.UNIT", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_SVCSVC.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "V", 0, 0);           
+        }
+        private static void AddDataFieldA5_07_01_1_PIRS_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_07_01_1_PIRS_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRS_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRS_RAW.DESCRIPTION",
+                "enocean-shortcut-PIRS_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRS_RAWPIRS_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRS_RAWPIRS_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "16", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRS_RAWPIRS_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRS_RAWPIRS_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
+
+                       
         }
         private static void AddDataFieldA5_07_01_1_PIRSTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -5424,6 +5453,7 @@ AddTypesA5_10_23_32Templates(factory, interfaceGuid, enoceanFactory);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_10_01_1_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_01_1_FAN_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_01_1_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_01_1_SPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_01_1_TMPTemplates(factory, interfaceGuid);
@@ -5443,6 +5473,21 @@ AddDataFieldA5_10_01_1_OCCTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_10_01_1_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_01_1_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -5550,6 +5595,7 @@ AddDataFieldA5_10_01_1_OCCTemplates(factory, interfaceGuid);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_10_02_2_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_02_2_FAN_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_02_2_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_02_2_SPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_02_2_TMPTemplates(factory, interfaceGuid);
@@ -5569,6 +5615,21 @@ AddDataFieldA5_10_02_2_SLSWTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_10_02_2_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_02_2_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -5762,6 +5823,7 @@ AddDataFieldA5_10_03_3_TMPTemplates(factory, interfaceGuid);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_10_04_4_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_04_4_FAN_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_04_4_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_04_4_SPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_04_4_TMPTemplates(factory, interfaceGuid);
@@ -5780,6 +5842,21 @@ AddDataFieldA5_10_04_4_TMPTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_10_04_4_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_04_4_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -6076,6 +6153,7 @@ AddDataFieldA5_10_06_6_SLSWTemplates(factory, interfaceGuid);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_10_07_7_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_07_7_FAN_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_07_7_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_07_7_TMPTemplates(factory, interfaceGuid);
 
@@ -6093,6 +6171,21 @@ AddDataFieldA5_10_07_7_TMPTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_10_07_7_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_07_7_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -6160,6 +6253,7 @@ AddDataFieldA5_10_07_7_TMPTemplates(factory, interfaceGuid);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_10_08_8_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_08_8_FAN_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_08_8_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_08_8_TMPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_08_8_OCCTemplates(factory, interfaceGuid);
@@ -6178,6 +6272,21 @@ AddDataFieldA5_10_08_8_OCCTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_10_08_8_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_08_8_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -6260,6 +6369,7 @@ AddDataFieldA5_10_08_8_OCCTemplates(factory, interfaceGuid);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_10_09_9_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_09_9_FAN_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_09_9_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_09_9_TMPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_09_9_SLSWTemplates(factory, interfaceGuid);
@@ -6278,6 +6388,21 @@ AddDataFieldA5_10_09_9_SLSWTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_10_09_9_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_09_9_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -8485,7 +8610,8 @@ AddDataFieldA5_10_1D_27_OBTemplates(factory, interfaceGuid);
                 "enocean-serialnumber", PropertyTemplateType.Text, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 0, 0);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
-            AddDataFieldA5_10_1F_28_FANTemplates(factory, interfaceGuid);
+            AddDataFieldA5_10_1F_28_FAN_RAWTemplates(factory, interfaceGuid);
+AddDataFieldA5_10_1F_28_FANTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_1F_28_SPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_1F_28_TMPTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_1F_28_TMP_FTemplates(factory, interfaceGuid);
@@ -8496,6 +8622,21 @@ AddDataFieldA5_10_1F_28_UNOCCTemplates(factory, interfaceGuid);
 AddDataFieldA5_10_1F_28_OCCTemplates(factory, interfaceGuid);
 
 
+        }
+        private static void AddDataFieldA5_10_1F_28_FAN_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_10_1F_28_FAN_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FAN_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FAN_RAW.DESCRIPTION",
+                "enocean-shortcut-FAN_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FAN_RAWFAN_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FAN_RAWFAN_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FAN_RAWFAN_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FAN_RAWFAN_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
+
+                       
         }
         private static void AddDataFieldA5_10_1F_28_FANTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -12155,6 +12296,7 @@ AddDataFieldA5_13_07_7_BSTemplates(factory, interfaceGuid);
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_13_08_8_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_13_08_8_RASTemplates(factory, interfaceGuid);
+AddDataFieldA5_13_08_8_RFA_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_13_08_8_RFATemplates(factory, interfaceGuid);
 AddDataFieldA5_13_08_8_RFCTemplates(factory, interfaceGuid);
 AddDataFieldA5_13_08_8_BSTemplates(factory, interfaceGuid);
@@ -12188,6 +12330,21 @@ AddDataFieldA5_13_08_8_BSTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RASRAS.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RASRAS.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_13_08_8_RFA_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_13_08_8_RFA_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFA_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFA_RAW.DESCRIPTION",
+                "enocean-shortcut-RFA_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFA_RAWRFA_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFA_RAWRFA_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "2", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFA_RAWRFA_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFA_RAWRFA_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "6", 0, 0);
 
                        
         }
@@ -14183,6 +14340,7 @@ AddDataFieldA5_20_03_6_TMPRCTemplates(factory, interfaceGuid);
             AddDataFieldA5_20_04_7_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_20_04_7_CPTemplates(factory, interfaceGuid);
 AddDataFieldA5_20_04_7_FTSTemplates(factory, interfaceGuid);
+AddDataFieldA5_20_04_7_TMPFC_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_20_04_7_TMPFCTemplates(factory, interfaceGuid);
 AddDataFieldA5_20_04_7_MSTTemplates(factory, interfaceGuid);
 AddDataFieldA5_20_04_7_STRTemplates(factory, interfaceGuid);
@@ -14256,6 +14414,21 @@ AddDataFieldA5_20_04_7_FLTemplates(factory, interfaceGuid);
                     "enocean-scale-max", PropertyTemplateType.Numeric, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 3), "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_FTSFTS.UNIT", "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_FTSFTS.UNIT",
                     "enocean-unit", PropertyTemplateType.Text, nodeGuid, "ENOCEAN", false, true, null, "°C", 0, 0);           
+        }
+        private static void AddDataFieldA5_20_04_7_TMPFC_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_20_04_7_TMPFC_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_TMPFC_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_TMPFC_RAW.DESCRIPTION",
+                "enocean-shortcut-TMPFC_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_TMPFC_RAWTMPFC_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_TMPFC_RAWTMPFC_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "16", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_TMPFC_RAWTMPFC_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_20.TYPE_04_7.SHORTCUT_TMPFC_RAWTMPFC_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
+
+                       
         }
         private static void AddDataFieldA5_20_04_7_TMPFCTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -15562,7 +15735,9 @@ AddTypesA5_30_05_5Templates(factory, interfaceGuid, enoceanFactory);
 
             enoceanFactory.AddTemplate(0xA5, nodeGuid);
             AddDataFieldA5_30_01_1_LRNBTemplates(factory, interfaceGuid);
+AddDataFieldA5_30_01_1_SVC_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_30_01_1_SVCTemplates(factory, interfaceGuid);
+AddDataFieldA5_30_01_1_IPS_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_30_01_1_IPSTemplates(factory, interfaceGuid);
 
 
@@ -15579,6 +15754,21 @@ AddDataFieldA5_30_01_1_IPSTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_LRNBLRNB.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_LRNBLRNB.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_30_01_1_SVC_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_30_01_1_SVC_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVC_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVC_RAW.DESCRIPTION",
+                "enocean-shortcut-SVC_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVC_RAWSVC_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVC_RAWSVC_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVC_RAWSVC_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVC_RAWSVC_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
                        
         }
@@ -15604,6 +15794,21 @@ AddDataFieldA5_30_01_1_IPSTemplates(factory, interfaceGuid);
                     "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "121", 0, 0);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.SECOND-MAX",
                     "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);           
+        }
+        private static void AddDataFieldA5_30_01_1_IPS_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_30_01_1_IPS_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPS_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPS_RAW.DESCRIPTION",
+                "enocean-shortcut-IPS_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPS_RAWIPS_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPS_RAWIPS_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "16", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPS_RAWIPS_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPS_RAWIPS_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
+
+                       
         }
         private static void AddDataFieldA5_30_01_1_IPSTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -15944,6 +16149,7 @@ AddDataFieldA5_30_04_4_DI0Templates(factory, interfaceGuid);
             AddDataFieldA5_30_05_5_LRNBTemplates(factory, interfaceGuid);
 AddDataFieldA5_30_05_5_VDDTemplates(factory, interfaceGuid);
 AddDataFieldA5_30_05_5_STTemplates(factory, interfaceGuid);
+AddDataFieldA5_30_05_5_IOS_RAWTemplates(factory, interfaceGuid);
 AddDataFieldA5_30_05_5_IOSTemplates(factory, interfaceGuid);
 
 
@@ -16000,6 +16206,21 @@ AddDataFieldA5_30_05_5_IOSTemplates(factory, interfaceGuid);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_STST.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_STST.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "1", 0, 0);
+
+                       
+        }
+        private static void AddDataFieldA5_30_05_5_IOS_RAWTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
+        {
+            var nodeGuid = DataFieldA5_30_05_5_IOS_RAW_Guid;
+            factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_IOS_RAW.NAME", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_IOS_RAW.DESCRIPTION",
+                "enocean-shortcut-IOS_RAW", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                NodeDataType.Integer, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_IOS_RAWIOS_RAW.OFFSET", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_IOS_RAWIOS_RAW.OFFSET",
+                "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "17", 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_IOS_RAWIOS_RAW.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_05_5.SHORTCUT_IOS_RAWIOS_RAW.LENGTH",
+                "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "7", 0, 0);
 
                        
         }

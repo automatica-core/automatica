@@ -65,7 +65,13 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 {
                     Multiplier = (ScaleMax - ScaleMin) / (RangeMax - RangeMin);
                 }
-
+            }
+            catch (PropertyNotFoundException)
+            {
+                //ignore
+            }
+            try 
+            {
                 var enumFirstMin = GetProperty("enocean-enum-first-min");
                 var enumFirstMax = GetProperty("enocean-enum-first-max");
                 var enumSecondMin= GetProperty("enocean-enum-second-min");
