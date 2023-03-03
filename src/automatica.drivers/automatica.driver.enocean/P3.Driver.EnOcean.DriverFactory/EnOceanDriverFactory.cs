@@ -20,7 +20,7 @@ namespace P3.Driver.EnOcean.DriverFactory
 
         public override string DriverName => "EnOcean";
         public override Guid DriverGuid => DriverGuidId;
-        public override Version DriverVersion => new Version(1, 0, 0, 1);
+        public override Version DriverVersion => new Version(1, 0, 1, 1);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.enocean";
         public override string Tag => "latest-develop";

@@ -125,6 +125,17 @@ namespace P3.Driver.EepParser.Generator
                     ""enocean-scale-min"", PropertyTemplateType.Numeric, nodeGuid, ""ENOCEAN"", false, true, null, ""{4}"", 0, 0);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 7), """ + DataFieldName + @"{3}.SCALE.MAX"", """+ DataFieldName + @"{3}.SCALE.MAX"",
                     ""enocean-scale-max"", PropertyTemplateType.Numeric, nodeGuid, ""ENOCEAN"", false, true, null, ""{5}"", 0, 0);";
+        
+        public static readonly string AddEnumMinMaxField = @"
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), """ + DataFieldName + @"{3}.ENUM.FIRST-MIN"", """ + DataFieldName + @"{3}.ENUM.FIRST-MIN"",
+                    ""enocean-enum-first-min"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{4}"", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), """ + DataFieldName + @"{3}.ENUM.FIRST-MAX"", """ + DataFieldName + @"{3}.ENUM.FIRST-MAX"",
+                    ""enocean-enum-first-max"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{5}"", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), """ + DataFieldName + @"{3}.ENUM.SECOND-MIN"", """ + DataFieldName + @"{3}.ENUM.SECOND-MIN"",
+                    ""enocean-enum-second-min"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{6}"", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), """ + DataFieldName + @"{3}.ENUM.SECOND-MAX"", """ + DataFieldName + @"{3}.ENUM.SECOND-MAX"",
+                    ""enocean-enum-second-max"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{7}"", 0, 0);";
+
 
 
         public static readonly string TestDataFieldDefaultProps = @"

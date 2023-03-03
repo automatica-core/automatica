@@ -14,7 +14,7 @@
                 public class EnOceanRorgA5Data : EnOceanRorgData
                 {
                     
-// AUTO GENERATED 23.02.2023 13:58:59
+// AUTO GENERATED 03.03.2023 13:21:53
 // -----------------------------------------
 // -----------------------------------------
 // 0xA5 --------------------------------
@@ -3586,7 +3586,15 @@ AddDataFieldA5_07_01_1_SVATemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "127", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "128", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_07.TYPE_01_1.SHORTCUT_PIRSPIRS.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);           
         }
         private static void AddDataFieldA5_07_01_1_SVATemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -5451,7 +5459,15 @@ AddDataFieldA5_10_01_1_OCCTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_01_1.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_01_1_SPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -5569,7 +5585,15 @@ AddDataFieldA5_10_02_2_SLSWTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_02_2.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_02_2_SPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -5772,7 +5796,15 @@ AddDataFieldA5_10_04_4_TMPTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_04_4.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_04_4_SPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -6077,7 +6109,15 @@ AddDataFieldA5_10_07_7_TMPTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_07_7.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_07_7_TMPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -6154,7 +6194,15 @@ AddDataFieldA5_10_08_8_OCCTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_08_8.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_08_8_TMPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -6246,7 +6294,15 @@ AddDataFieldA5_10_09_9_SLSWTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_09_9.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_09_9_TMPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -8454,7 +8510,15 @@ AddDataFieldA5_10_1F_28_OCCTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "210", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_10.TYPE_1F_28.SHORTCUT_FANFAN.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "144", 0, 0);           
         }
         private static void AddDataFieldA5_10_1F_28_SPTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -12140,7 +12204,15 @@ AddDataFieldA5_13_08_8_BSTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "6", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "39", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "40", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_13.TYPE_08_8.SHORTCUT_RFARFA.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "63", 0, 0);           
         }
         private static void AddDataFieldA5_13_08_8_RFCTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -15523,7 +15595,15 @@ AddDataFieldA5_30_01_1_IPSTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "120", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "121", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_SVCSVC.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);           
         }
         private static void AddDataFieldA5_30_01_1_IPSTemplates(INodeTemplateFactory factory, Guid typeInterfaceGuid)
         {
@@ -15538,7 +15618,15 @@ AddDataFieldA5_30_01_1_IPSTemplates(factory, interfaceGuid);
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 2), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.LENGTH", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.LENGTH",
                 "enocean-length", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "8", 0, 0);
 
-                       
+            
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.FIRST-MIN", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.FIRST-MIN",
+                    "enocean-enum-first-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.FIRST-MAX", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.FIRST-MAX",
+                    "enocean-enum-first-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "195", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.SECOND-MIN", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.SECOND-MIN",
+                    "enocean-enum-second-min", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "196", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.SECOND-MAX", "ENOCEAN.RORG_A5.FUNCTION_30.TYPE_01_1.SHORTCUT_IPSIPS.ENUM.SECOND-MAX",
+                    "enocean-enum-second-max", PropertyTemplateType.Long, nodeGuid, "ENOCEAN", false, true, null, "255", 0, 0);           
         }
         private static void AddTypesA5_30_02_2Templates(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {

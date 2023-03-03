@@ -6,17 +6,19 @@ using P3.Driver.VkingBms.Driver;
 
 Console.WriteLine("Hello, World!");
 
-var driver = new VkingDriver("COM10", new EmptyTelegramMonitorInstance(), NullLogger.Instance);
+var driver = new VkingDriver("COM6", new EmptyTelegramMonitorInstance(), NullLogger.Instance);
 driver.Open();
 
-var data = await driver.ReadAnalogValues(1);
-var data2 = await driver.ReadAnalogValues(2);
+var cts = new CancellationTokenSource();
 
-var bms = await driver.ReadBmsInfo(1);
-var bms2 = await driver.ReadBmsInfo(2);
+var data = await driver.ReadAnalogValues(1, cts.Token);
+var data2 = await driver.ReadAnalogValues(2, cts.Token);
 
-var ver = await driver.ReadVersionInfo(1);
-var ver2 = await driver.ReadVersionInfo(2);
+var bms = await driver.ReadBmsInfo(1, cts.Token);
+var bms2 = await driver.ReadBmsInfo(2, cts.Token);
+
+var ver = await driver.ReadVersionInfo(1, cts.Token);
+var ver2 = await driver.ReadVersionInfo(2, cts.Token);
 
 
 Console.ReadLine();

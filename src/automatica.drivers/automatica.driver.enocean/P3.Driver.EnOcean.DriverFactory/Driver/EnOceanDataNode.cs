@@ -21,6 +21,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public double Multiplier { get; set; }
 
+        public long? EnumFirstMin { get; set; }
+        public long? EnumFirstMax { get; set; }
+        public long? EnumSecondMin { get; set; }
+        public long? EnumSecondMax { get; set; }
+
 
         protected EnOceanDataNode(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
@@ -59,6 +64,19 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 if (UseRange && UseScale)
                 {
                     Multiplier = (ScaleMax - ScaleMin) / (RangeMax - RangeMin);
+                }
+
+                var enumFirstMin = GetProperty("enocean-enum-first-min");
+                var enumFirstMax = GetProperty("enocean-enum-first-max");
+                var enumSecondMin= GetProperty("enocean-enum-second-min");
+                var enumSecondMax = GetProperty("enocean-enum-second-max");
+
+                if (enumFirstMin != null && enumFirstMax != null && enumSecondMin != null && enumSecondMax != null)
+                {
+                    EnumFirstMin = enumFirstMin.ValueLong;
+                    EnumFirstMax = enumFirstMax.ValueLong;
+                    EnumSecondMin = enumSecondMin.ValueLong;
+                    EnumSecondMax = enumSecondMax.ValueLong;
                 }
             }
             catch (PropertyNotFoundException)

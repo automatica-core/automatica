@@ -16,7 +16,25 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
 
             if (data != null)
             {
-                DispatchValue(data);
+                if (data is int dataInt && EnumFirstMax.HasValue && EnumFirstMin.HasValue && EnumSecondMax.HasValue && EnumSecondMin.HasValue)
+                {
+                    if (dataInt >= EnumFirstMin && dataInt <= EnumFirstMax)
+                    {
+                        DispatchValue(0);
+                    }
+                    else if (dataInt >= EnumSecondMin && dataInt >= EnumSecondMax)
+                    {
+                        DispatchValue(1);
+                    }
+                    else
+                    {
+                        DispatchValue(data);
+                    }
+                }
+                else
+                {
+                    DispatchValue(data);
+                }
             }
         }
     }

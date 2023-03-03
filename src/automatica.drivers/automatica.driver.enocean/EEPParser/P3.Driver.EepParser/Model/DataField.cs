@@ -18,6 +18,7 @@ namespace P3.Driver.EepParser.Model
 
         public Scale Scale { get; set; }
 
+        public Enumeration Enumeration { get; set; }
 
         public DataField(Model.Type parent)
         {

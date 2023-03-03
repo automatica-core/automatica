@@ -104,6 +104,7 @@ namespace P3.Driver.EepParser
 
                                 var range = dataField.Element("range");
                                 var scale = dataField.Element("scale");
+                                var enumeration = dataField.Element("enum");
 
                                 var dataFieldModel = new DataField(typeModel)
                                 {
@@ -152,13 +153,104 @@ namespace P3.Driver.EepParser
                                         var minEl = scale.Element("min");
                                         var maxEl = scale.Element("max");
 
-                                        var min = Convert.ToDecimal(minEl.Value, CultureInfo.InvariantCulture);
-                                        var max = Convert.ToDecimal(maxEl.Value, CultureInfo.InvariantCulture);
+                                        if (minEl != null && maxEl != null)
+                                        {
+                                            var min = Convert.ToDecimal(minEl.Value, CultureInfo.InvariantCulture);
+                                            var max = Convert.ToDecimal(maxEl.Value, CultureInfo.InvariantCulture);
 
-                                        dataFieldModel.Scale.Min = min;
-                                        dataFieldModel.Scale.Max = max;
+                                            dataFieldModel.Scale.Min = min;
+                                            dataFieldModel.Scale.Max = max;
+                                        }
                                     }
-                                   
+
+                                    if (enumeration != null)
+                                    {
+                                        var enumerationItem = new Enumeration();
+
+                                        var items = enumeration.Elements("item");
+
+                                        foreach (var item in items)
+                                        {
+                                            var enumItem = new EnumerationItem();
+
+                                            if (enumerationItem.First == null)
+                                            {
+                                                enumerationItem.First = enumItem;
+                                            }
+                                            else
+                                            {
+                                                enumerationItem.Second = enumItem;
+                                            }
+                                            var value = item.Element("value");
+                                             var min = item.Element("min");
+                                            var max = item.Element("max");
+                                            var enumDescription = item.Element("description");
+
+                                            if (value != null)
+                                            {
+                                                try
+                                                {
+                                                    if (value.Value.StartsWith("0x"))
+                                                    {
+                                                        enumItem.Value = Convert.ToInt32(value.Value, 16);
+                                                    }
+                                                    else if (value.Value.Contains("..."))
+                                                    {
+                                                        continue;
+
+                                                    }
+                                                    else if (value.Value.StartsWith("0b"))
+                                                    {
+                                                        continue;
+
+                                                    }
+                                                    else if (String.IsNullOrEmpty(value.Value))
+                                                    {
+                                                        continue;
+                                                    }
+                                                    else
+                                                    {
+                                                        enumItem.Value = Convert.ToInt32(value.Value);
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                            if (min != null)
+                                            {
+                                                if (min.Value.StartsWith("0x"))
+                                                {
+                                                    enumItem.Min = Convert.ToInt64(min.Value, 16);
+                                                }
+                                                else
+                                                {
+                                                    enumItem.Min = Convert.ToInt64(min.Value);
+                                                }
+                                            }
+                                            if (max != null)
+                                            {
+                                                if (max.Value.StartsWith("0x"))
+                                                {
+                                                    enumItem.Max = Convert.ToInt64(max.Value, 16);
+                                                }
+                                                else
+                                                {
+                                                    enumItem.Max = Convert.ToInt64(max.Value);
+                                                }
+                                            }
+                                            if (enumDescription != null)
+                                            {
+                                                enumItem.Description = enumDescription.Value;
+                                            }
+
+                                        }
+
+                                        dataFieldModel.Enumeration = enumerationItem;
+
+
+                                    }
                                 }
                                 catch (Exception e)
                                 {
