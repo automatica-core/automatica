@@ -9,6 +9,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
         }
 
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
+
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             var m = new KnxMiddleGroup(ctx, Driver);
