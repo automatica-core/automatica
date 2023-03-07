@@ -24,7 +24,7 @@
         "NAME": "Is sunset"
       },
       "IS_SUNRISE": {
-        "NAME": "Is runrise"
+        "NAME": "Is sunrise"
       }
     },
     "DATETIME": {
