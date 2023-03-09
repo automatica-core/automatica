@@ -206,9 +206,24 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     if (!this.selectedNode || this.selectedNode.Id !== node.Id) {
       this.selectedRowKeys = [node.Id];
       this.selectedNode = node;
+      this.expandRowRecursive(node);
+      
+      //scroll to element...does not work right now!
+      // const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
+      // const rowElement = this.tree.instance.getRowElement(nodeIndex)
+      // this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
     }
 
     // this.tree.instance.repaint();
+  }
+
+  expandRowRecursive(node: ITreeNode) {
+    if(!node || !node.Parent) {
+      return;
+    }
+    
+    this.tree.instance.expandRow(node.ParentId);
+    this.expandRowRecursive(node.Parent);
   }
 
   selectNodeById(id: any) {

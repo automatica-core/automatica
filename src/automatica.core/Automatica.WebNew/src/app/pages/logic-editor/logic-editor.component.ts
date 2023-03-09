@@ -174,7 +174,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   onSelectedItemsChanged($event) {
     const page = $event.page;
     const items: any[] = $event.items;
-    if (this.pages[this.selectedPageIndex].ObjId === page.ObjId) {
+    if (this.selectedPage.ObjId === page.ObjId) {
       if (items.length === 1) {
         const item = items[0];
 
