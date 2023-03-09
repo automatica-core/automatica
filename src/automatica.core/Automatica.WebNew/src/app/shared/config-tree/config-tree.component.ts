@@ -212,9 +212,9 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       // const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
       // const rowElement = this.tree.instance.getRowElement(nodeIndex)
       // this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
+    this.tree.instance.repaint();
     }
 
-    // this.tree.instance.repaint();
   }
 
   expandRowRecursive(node: ITreeNode) {

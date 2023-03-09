@@ -37,7 +37,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   ruleTemplates: RuleTemplate[];
   linkableNodes: NodeInstance[] = [];
 
-  selectedPageIndex = 0;
   selectedPage: RulePage = void 0;
 
   selectedItem: NodeInstance | RulePage | NodeInstance2RulePage | RuleInstance;
@@ -72,7 +71,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
 
   initPages() {
-    this.selectedItem = this.pages[this.selectedPageIndex];
+    this.selectedItem = this.pages[0];
     this.selectedPage = this.selectedItem;
 
     for (const x of this.pages) {
@@ -221,18 +220,18 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   async delete() {
     try {
       if (this.selectedItem instanceof NodeInstance2RulePage) {
-        const selectedPage = this.pages[this.selectedPageIndex];
+        const selectedPage = this.selectedPage;
         selectedPage.NodeInstances = selectedPage.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
 
-        this.ruleEngineService.reInit.emit(this.selectedPageIndex);
+        this.ruleEngineService.reInit.emit(this.selectedPage);
 
         await this.ruleEngineService.removeItem(this.selectedItem);
 
       } else if (this.selectedItem instanceof RuleInstance) {
-        const selectedPage = this.pages[this.selectedPageIndex];
+        const selectedPage = this.selectedPage;
         selectedPage.RuleInstances = selectedPage.RuleInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
 
-        this.ruleEngineService.reInit.emit(this.selectedPageIndex);
+        this.ruleEngineService.reInit.emit(this.selectedPage);
 
         await this.ruleEngineService.removeItem(this.selectedItem);
 
@@ -275,7 +274,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.appService.isLoading = true;
 
     try {
-      const currentPage = this.pages[this.selectedPageIndex];
+      const currentPage = this.selectedPage;
 
       await this.ruleEngineService.removePage(currentPage);
 
@@ -312,7 +311,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async addRule($event) {
-    await this.add($event, this.pages[this.selectedPageIndex]);
+    await this.add($event, this.selectedPage);
   }
 
   async add(template: RuleTemplate | NodeInstance, rulePage: RulePage) {
@@ -323,20 +322,20 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         rule.Name = this.translate.translate(rule.Name);
         rule.Description = this.translate.translate(rule.Description);
 
-        this.pages[this.selectedPageIndex].RuleInstances.push(rule);
+        this.selectedPage.RuleInstances.push(rule);
 
         await this.ruleEngineService.addItem({
           data: rule,
-          pageId: this.pages[this.selectedPageIndex].ObjId
+          pageId: this.selectedPage.ObjId
         });
 
       } else if (template instanceof NodeInstance) {
         const node = NodeInstance2RulePage.createFromNodeInstance(template, rulePage);
 
-        this.pages[this.selectedPageIndex].NodeInstances.push(node);
+        this.selectedPage.NodeInstances.push(node);
         await this.ruleEngineService.addItem({
           data: node,
-          pageId: this.pages[this.selectedPageIndex].ObjId
+          pageId: this.selectedPage.ObjId
         });
       }
     }
