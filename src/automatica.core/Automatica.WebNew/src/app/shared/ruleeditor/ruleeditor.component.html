@@ -1,7 +1,7 @@
-<div id="my-rule-loadingPanel">
-        <div id="ruleEditorWrapper-{{page.ObjId}}">
-                <div id="ruleditor-{{ page.ObjId }}" dnd-droppable [allowDrop]="allowDrop()"
-                        (onDropSuccess)="dropSuccess($event)" style="height:650px; border:1px solid black; z-index: 10">
+<div id="my-rule-loadingPanel" #loadingPangel class="h-100">
+        <div id="ruleEditorWrapper-{{page.ObjId}}" class="h-100">
+                <div class="h-100" id="ruleditor-{{ page.ObjId }}" dnd-droppable [allowDrop]="allowDrop()"
+                        (onDropSuccess)="dropSuccess($event)" style=" border:1px solid black; z-index: 10">
                 </div>
         </div>
 </div>

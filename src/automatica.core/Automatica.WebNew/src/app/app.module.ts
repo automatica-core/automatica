@@ -26,7 +26,7 @@ import { LoginFormModule } from "./shared/components/login-form/login-form.modul
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ServicesModule } from "./services/services.module";
 import { SharedModule } from "./shared/shared.module";
-import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxScrollViewModule } from "devextreme-angular";
+import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxScrollViewModule, DxListModule } from "devextreme-angular";
 import { AutomaticaCommunicationModule } from "./base/communication/automatica-communication.module";
 import { AngularSplitModule } from "angular-split";
 import { DndModule, DragDropConfig, DataTransferEffect, DragImage } from "p3root-angular-dnd";
@@ -93,7 +93,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     VisualizationModule,
     DxScrollViewModule,
     MobileModule,
-    StartingOverlayModule
+    StartingOverlayModule,
+    DxListModule
   ],
   providers: [
     {
