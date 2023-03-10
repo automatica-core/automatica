@@ -48,7 +48,7 @@
                 <div class="logic-tab-panel" class="h-100">
                     <ng-container *ngFor="let page of pages;" class="h-100">
                         <dx-scroll-view *ngIf="selectedPage.ObjId == page.ObjId" #scrollView id="scrollview"
-                            [scrollByContent]="true" [scrollByThumb]="true" [showScrollbar]="false"
+                            [scrollByContent]="false" [scrollByThumb]="fasle" [showScrollbar]="false"
                             [bounceEnabled]="false" class="h-100">
 
                             <p3-ruleeditor class="h-100" (selectedItemsChanged)="onSelectedItemsChanged($event)"
