@@ -279,7 +279,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _loSystemLogger.Instancegger.LogError(e, "Could not publish config..."); 
+                SystemLogger.Instance.LogError(e, "Could not publish config..."); 
             }
         }
 
