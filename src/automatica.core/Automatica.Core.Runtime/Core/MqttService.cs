@@ -80,7 +80,7 @@ namespace Automatica.Core.Runtime.Core
 
         public Task ClientConnected(RemoteConnectedEvent connectedEvent)
         {
-            _logger.LogInformation($"Client {connectedEvent.ClientId} connected...");
+            SystemLogger.Instance.LogInformation($"Client {connectedEvent.ClientId} connected...");
             _connectedMqttClients.Add(connectedEvent.ClientId);
 
             return Task.CompletedTask;
@@ -88,7 +88,7 @@ namespace Automatica.Core.Runtime.Core
 
         public Task ClientDisconnected(RemoteDisconnectedEvent disconnectedEvent)
         {
-            _logger.LogInformation($"Client {disconnectedEvent.ClientId} disconnected...");
+            SystemLogger.Instance.LogInformation($"Client {disconnectedEvent.ClientId} disconnected...");
 
             if (_connectedMqttClients.Contains(disconnectedEvent.ClientId))
             {
@@ -100,7 +100,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ClientSubscribedTopic(RemoteSubscribedEvent subscribedEvent)
         {
-            _logger.LogInformation($"Client {subscribedEvent.ClientId} subscribed to {subscribedEvent.Topic}");
+            SystemLogger.Instance.LogInformation($"Client {subscribedEvent.ClientId} subscribed to {subscribedEvent.Topic}");
 
             if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.CONFIG_TOPIC}/#"))
             {
@@ -160,7 +160,7 @@ namespace Automatica.Core.Runtime.Core
                 msg.Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
             }
 
-            _logger.LogInformation($"Send action {action} to {client} {JsonConvert.SerializeObject(data)}");
+            SystemLogger.Instance.LogInformation($"Send action {action} to {client} {JsonConvert.SerializeObject(data)}");
             await _mqttServer.PublishAsync(msg);
         }
 
@@ -178,7 +178,7 @@ namespace Automatica.Core.Runtime.Core
             foreach(var client in _connectedMqttClients)
             {
 
-                _logger.LogInformation($"Send reinit to client {client}");
+                SystemLogger.Instance.LogInformation($"Send reinit to client {client}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{client}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}",
@@ -193,7 +193,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task AddNode(string id, NodeInstance node)
         {
-            _logger.LogInformation($"Add node for {id}, NodeInstance is {node.ObjId}");
+            SystemLogger.Instance.LogInformation($"Add node for {id}, NodeInstance is {node.ObjId}");
             _mqttNodes.Add(id, node);
 
             await PublishConfig(id, node);
@@ -201,7 +201,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task AddSlave(string id, IDriverFactory factory, NodeInstance nodeInstance)
         {
-            _logger.LogInformation($"Add slave with {id}, NodeInstance is {nodeInstance.ObjId}");
+            SystemLogger.Instance.LogInformation($"Add slave with {id}, NodeInstance is {nodeInstance.ObjId}");
             if (!_mqttSlaves.ContainsKey(id))
             {
                 _mqttSlaves.Add(id, new Dictionary<NodeInstance, IDriverFactory>());
@@ -249,7 +249,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogInformation($"Send action to client {clientId} {JsonConvert.SerializeObject(actionRequest)}");
+                SystemLogger.Instance.LogInformation($"Send action to client {clientId} {JsonConvert.SerializeObject(actionRequest)}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTION_TOPIC_START}",
@@ -260,7 +260,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError("Could not send action", e);
+                SystemLogger.Instance.LogError("Could not send action", e);
             }
         }
 
@@ -268,7 +268,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogInformation($"Publish to {RemoteTopicConstants.CONFIG_TOPIC}/{clientId}");
+                SystemLogger.Instance.LogInformation($"Publish to {RemoteTopicConstants.CONFIG_TOPIC}/{clientId}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
                     Topic = $"{RemoteTopicConstants.CONFIG_TOPIC}/{clientId}",
@@ -279,7 +279,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not publish config..."); 
+                _loSystemLogger.Instancegger.LogError(e, "Could not publish config..."); 
             }
         }
 
@@ -288,7 +288,7 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 var actionRequests = new List<ActionRequest>();
-                _logger.LogInformation(
+                SystemLogger.Instance.LogInformation(
                     $"Publish to slave/{clientId}/actions (Start {factory.ImageName}:{factory.Tag})");
 
                 var actionRequest = new ActionRequest
@@ -306,7 +306,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not send start instances message...");
+                SystemLogger.Instance.LogError(e, "Could not send start instances message...");
             }
         }
 
@@ -314,7 +314,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogInformation($"Publish StopInstance to slave/{clientId}/action");
+                SystemLogger.Instance.LogInformation($"Publish StopInstance to slave/{clientId}/action");
 
                 var actionRequest = new ActionRequest()
                 {
@@ -330,7 +330,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not send start instances message...");
+                SystemLogger.Instance.LogError(e, "Could not send start instances message...");
             }
         }
 
