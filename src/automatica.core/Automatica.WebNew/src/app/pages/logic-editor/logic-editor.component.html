@@ -15,8 +15,8 @@
             </as-split-area>
             <as-split-area [size]="20">
 
-                <dx-tab-panel class="h-100">
-                    <dxi-item title="Config" icon="floppy">
+                <dx-tab-panel class="h-100" itemTitleTemplate="title">
+                    <dxi-item title="COMMON.CONFIGURATION" icon="cogs">
                         <div *dxTemplate>
                             <p3-config-tree class="h-100" #configTree (onNodeSelect)="nodeSelect($event)"
                                 [isLoading]="isLoading">
@@ -24,7 +24,7 @@
                         </div>
                         <!-- ... -->
                     </dxi-item>
-                    <dxi-item title="Logics" icon="comment">
+                    <dxi-item title="COMMON.LOGIC_PAGES" icon="play">
                         <div *dxTemplate>
                             <dx-list [dataSource]="pagesDataSource" height="90%" selectionMode="single"
                                 (onSelectionChanged)="onTabSelectionChanged($event)">
@@ -34,6 +34,13 @@
                             </dx-list>
                         </div>
                     </dxi-item>
+                    <div *dxTemplate="let item of 'title'">
+                        <span title="{{item.title | translateAsync}}" class="nav-padding">
+                            <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true" [icon]="item.icon">
+                            </fa-icon>
+                            {{ item.title | translate }}</span>
+
+                    </div>
                 </dx-tab-panel>
 
             </as-split-area>

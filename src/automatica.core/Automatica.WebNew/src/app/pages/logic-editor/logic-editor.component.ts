@@ -69,7 +69,6 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     await this.loadData();
   }
 
-
   initPages() {
     this.selectedItem = this.pages[0];
     this.selectedPage = this.selectedItem;

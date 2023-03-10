@@ -124,7 +124,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   ngAfterViewInit() {
     this.height = this.loadingPangel.nativeElement.clientHeight;
-    console.log(this.height);
     
     this.onInit();
   }

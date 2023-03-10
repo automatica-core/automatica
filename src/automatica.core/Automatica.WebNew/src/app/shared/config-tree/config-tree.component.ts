@@ -207,21 +207,21 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       this.selectedRowKeys = [node.Id];
       this.selectedNode = node;
       this.expandRowRecursive(node);
-      
+
       //scroll to element...does not work right now!
       // const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
       // const rowElement = this.tree.instance.getRowElement(nodeIndex)
       // this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
-    this.tree.instance.repaint();
+      this.tree.instance.repaint();
     }
 
   }
 
   expandRowRecursive(node: ITreeNode) {
-    if(!node || !node.Parent) {
+    if (!node || !node.Parent) {
       return;
     }
-    
+
     this.tree.instance.expandRow(node.ParentId);
     this.expandRowRecursive(node.Parent);
   }
@@ -310,7 +310,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     try {
       this.configService.delete(<NodeInstance>item);
-      if(item.Parent && item.Parent.Children && item.Parent.Children.length > 0) {
+      if (item.Parent && item.Parent.Children && item.Parent.Children.length > 0) {
         item.Parent.Children = item.Parent.Children.filter(a => a.Id != item.Id);
       }
     } catch (error) {
