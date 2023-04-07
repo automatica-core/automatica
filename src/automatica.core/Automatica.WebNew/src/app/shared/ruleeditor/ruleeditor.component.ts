@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
 import { RuleEngineService, AddLogicData } from "../../services/ruleengine.service";
 import { L10nTranslationService } from "angular-l10n";
 import { RulePage } from "src/app/base/model/rule-page";
@@ -62,6 +62,12 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   private themeChangedSubDraw2d: Subscription;
 
+  public height: number;
+
+  
+  @ViewChild("loadingPangel")
+  loadingPangel: ElementRef;
+
 
   constructor(private ruleEngineService: RuleEngineService,
     private dataHub: DataHubService,
@@ -79,7 +85,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   async ngOnInit() {
 
-
+    
     this.linkService = new LinkService(this.page, this.translate, this.ruleEngineService);
 
     super.registerEvent(this.ruleEngineService.add, (data: AddLogicData) => {
@@ -117,6 +123,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   }
 
   ngAfterViewInit() {
+    this.height = this.loadingPangel.nativeElement.clientHeight;
+    
     this.onInit();
   }
 
@@ -170,17 +178,21 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     LogicLables.addLables(this.logic);
 
     this.workplace = new draw2d.Canvas("ruleditor-" + this.page.ObjId);
-
+    // this.workplace.setZoom(1.3);
+    // this.workplace.setScrollArea(window);
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToGeometryEditPolicy());
+    this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToInBetweenEditPolicy());
+    this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToCenterEditPolicy());
     this.workplace.installEditPolicy(new draw2d.policy.canvas.ZoomPolicy());
+    this.workplace.installEditPolicy(new draw2d.policy.canvas.WheelZoomPolicy());
     let gridPolicy = new draw2d.policy.canvas.ShowGridEditPolicy();
 
     this.workplace.installEditPolicy(gridPolicy);
     this.themeChangedSubDraw2d = this.themeService.themeChanged.subscribe(a => {
       gridPolicy.setBackgroundColor(this.themeService.getBackgroundColor());
       gridPolicy.setGridColor(this.themeService.getGridColor());
-    });
 
+    });
     gridPolicy.setBackgroundColor(this.themeService.getBackgroundColor());
     gridPolicy.setGridColor(this.themeService.getGridColor());
 
@@ -188,7 +200,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       if (event.figure !== null) {
         this.selectedItems = [event.figure.getUserData()];
       }
+      console.log(event);
     });
+    
   }
 
   onInit() {

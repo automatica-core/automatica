@@ -1,4 +1,5 @@
-<div class="config-tree">
+<div class="config-tree h-100">
+
 
     <dx-context-menu #contextMenu target="#config" activeStateEnabled="false" closeOnOutsideClick="true"
         onHiding="onContextMenuHiding($event)" (onItemClick)="onContextMenuClick($event)">
@@ -21,7 +22,7 @@
                     <fa-icon [icon]="['fas', 'exclamation']" *ngIf="!data.data.ValidationOk"></fa-icon>
 
                     <span id="{{ data.data.Id }}">
-                         {{data.value}}
+                        {{data.value}}
                     </span>
                 </div>
             </div>

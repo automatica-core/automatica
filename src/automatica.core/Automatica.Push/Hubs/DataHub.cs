@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Push.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -14,11 +15,13 @@ namespace Automatica.Push.Hubs
     {
         private readonly IDispatcher _dispatcher;
         private readonly INotifyDriver _notify;
+        private readonly INodeInstanceCache _nodeInstanceCache;
 
-        public DataHub(IDispatcher dispatcher, INotifyDriver notify)
+        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache)
         {
             _dispatcher = dispatcher;
             _notify = notify;
+            _nodeInstanceCache = nodeInstanceCache;
         }
 
         public async Task SubscribeAll()
@@ -35,15 +38,18 @@ namespace Automatica.Push.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, name);
         }
 
-        public async Task EnableLearnMode(NodeInstance node)
+        public async Task EnableLearnMode(Guid nodeInstanceId)
         {
-            await _notify.EnableLearnMode(node);
-            await Subscribe(node.ObjId.ToString());
+            var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId);
+            await _notify.EnableLearnMode(nodeInstance);
+            await Subscribe(nodeInstanceId.ToString());
         }
-        public async Task DisalbeLearnMode(NodeInstance node)
+        public async Task DisalbeLearnMode(Guid nodeInstanceId)
         {
-            await _notify.DisableLearnMode(node);
-            await Unsubscribe(node.ObjId.ToString());
+
+            var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId);
+            await _notify.DisableLearnMode(nodeInstance);
+            await Unsubscribe(nodeInstanceId.ToString());
         }
 
         public async Task Unsubscribe(string name)

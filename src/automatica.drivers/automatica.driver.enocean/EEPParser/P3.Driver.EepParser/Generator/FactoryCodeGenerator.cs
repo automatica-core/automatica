@@ -177,6 +177,25 @@ namespace P3.Driver.EepParser.Generator
                                 additionalDfProps.Append(unit);
                             }
 
+                            if (dataField.Enumeration != null && 
+                                dataField.Enumeration.First != null && 
+                                dataField.Enumeration.Second != null &&
+                                dataField.Enumeration.First.Min.HasValue && 
+                                dataField.Enumeration.First.Max.HasValue && 
+                                dataField.Enumeration.Second.Min.HasValue && 
+                                dataField.Enumeration.Second.Max.HasValue)
+                            {
+                                var enumeration = String.Format(FactoryCodeGeneratorTemplates.AddEnumMinMaxField,
+                                    rorg.Number.Replace("0x", ""), func.Number.Replace("0x", ""),
+                                    type.Number.Replace("0x", ""), dataField.ShortCut,
+
+                                    dataField.Enumeration.First.Min.Value.ToString(CultureInfo.InvariantCulture),
+                                    dataField.Enumeration.First.Max.Value.ToString(CultureInfo.InvariantCulture),
+                                    dataField.Enumeration.Second.Min.Value.ToString(CultureInfo.InvariantCulture),
+                                    dataField.Enumeration.Second.Max.Value.ToString(CultureInfo.InvariantCulture));
+                                additionalDfProps.Append(enumeration);
+                            }
+
                             var dataFieldCode = String.Format(FactoryCodeGeneratorTemplates.AddDataFieldTemplate,
                                 rorg.Number.Replace("0x", ""), func.Number.Replace("0x", ""),
                                 type.Number.Replace("0x", ""), dataField.ShortCut, dataField.Offset, dataField.Length,

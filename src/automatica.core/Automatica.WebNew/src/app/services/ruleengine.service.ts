@@ -22,7 +22,7 @@ export interface AddLogicData {
 @Injectable()
 export class RuleEngineService extends BaseService {
 
-  public reInit: EventEmitter<number> = new EventEmitter<number>();
+  public reInit: EventEmitter<RulePage> = new EventEmitter<RulePage>();
   public add = new EventEmitter<AddLogicData>();
 
   constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designService: DesignTimeDataService) {

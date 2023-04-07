@@ -20,6 +20,14 @@ namespace Automatica.Push.LearnMode
         }
         public async Task NotifyLearnNode(string name, string description, NodeInstance self, IList<NodeTemplate> templates, IList<PropertyInstance> propertyInstances)
         {
+            foreach (var template in templates)
+            {
+                foreach (var property in template.PropertyTemplate)
+                {
+                    property.This2NodeTemplateNavigation = null;
+                }
+            }
+
             _logger.LogDebug($"{nameof(NotifyLearnNode)} for {name}-{description} nodeInstance {self.Name} ({self.ObjId}) with templateCount of {templates.Count} and propertyInstanceCount of {propertyInstances.Count}");
             await _dataHub.Clients.Group(self.ObjId.ToString()).SendAsync("NotifyLearnMode", name, description, templates, propertyInstances);
         }

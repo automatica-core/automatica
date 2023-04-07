@@ -46,11 +46,11 @@ export class DataHubService extends BaseHub {
     }
 
     public enableLearnMode(nodeInstance: NodeInstance) {
-        return super.callHubProxyWithParam("enableLearnMode", nodeInstance.toJson());
+        return super.callHubProxyWithParam("enableLearnMode", nodeInstance.ObjId);
     }
 
     public disableLearnMode(nodeInstance: NodeInstance) {
-        return super.callHubProxyWithParam("disalbeLearnMode", nodeInstance.toJson());
+        return super.callHubProxyWithParam("disalbeLearnMode", nodeInstance.ObjId);
     }
 
 }

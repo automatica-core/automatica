@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
 import { L10nTranslationService } from "angular-l10n";
-import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent, DxDropDownBoxComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -29,6 +29,8 @@ import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
 import { RulePage } from "src/app/base/model/rule-page";
+import DataSource from "devextreme/data/data_source";
+import ArrayStore from "devextreme/data/array_store";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -61,14 +63,20 @@ export class LearnNodeInstance {
     this._nodeTemplates = v;
   }
 
+  nodeTemplateChanged = new EventEmitter<string>();
+
   private _nodeTemplate: string;
   public get nodeTemplate(): string {
     return this._nodeTemplate;
   }
   public set nodeTemplate(v: string) {
     this._nodeTemplate = v;
+    this.nodeTemplateChanged?.emit(v);
   }
 
+  public get nodeTemplateItem(): NodeTemplate {
+    return this.nodeTemplateInstance?.nodeTemplate;
+  }
 
 
   private _propertyInstances: PropertyInstance[];
@@ -77,6 +85,18 @@ export class LearnNodeInstance {
   }
   public set propertyInstances(v: PropertyInstance[]) {
     this._propertyInstances = v;
+  }
+
+  public dataSource: DataSource;
+
+  public init() {
+    this.dataSource = new DataSource({
+      store: new ArrayStore({
+        key: "ObjId",
+        data: this.nodeTemplates
+      })
+    }
+    );
   }
 
 
@@ -119,6 +139,8 @@ export class LearnNodeInstance {
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {
   PropertyTemplateType: typeof PropertyTemplateType = PropertyTemplateType;
+
+  @ViewChild(DxTreeViewComponent, { static: false }) treeView;
 
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
@@ -271,7 +293,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private slaveService: SlavesService,
     appService: AppService,
     private nodeInstanceService: NodeInstanceService,
-    private ruleEngineService: RuleEngineService) {
+    private ruleEngineService: RuleEngineService,
+    private changeDetection: ChangeDetectorRef) {
     super(notify, translate, appService);
   }
 
@@ -406,6 +429,23 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if ($event.node.children.length === 0) {
       learnInstance.nodeTemplateInstance = $event.itemData;
       learnInstance.nodeTemplate = learnInstance.nodeTemplateInstance.nodeTemplate.ObjId;
+
+      $event.component.selectItem(learnInstance.nodeTemplate);
+    }
+  }
+
+  nodeTemplateSelectItemSync($event) {
+    if (!this.treeView) return;
+
+
+    this.treeView.instance.selectItem($event.value);
+  }
+
+  nodeTemplateBoxOptionChanged(e) {
+    if (e.name === 'value') {
+      //(<DxDropDownBoxComponent>e).instance.close();
+      e.component.close();
+      this.changeDetection.detectChanges();
     }
   }
 
@@ -414,6 +454,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       this.saveLearnedNodes.emit({ learnedNodes: this.learnNodeInstance, nodeInstance: this.item });
       this.learnNodeInstance = [];
       this.learnModeVisible = false;
+      this.changeDetection.detectChanges();
     }
   }
 
@@ -425,9 +466,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if (data.Parent instanceof NodeInstance) {
       const currentNode: NodeInstance = data.Parent;
 
+      this.learnModeVisible = true;
+      this.isLoading = true;
       await this.dataHub.enableLearnMode(data.Parent);
       this.learnedNodeInstances = [];
-      this.learnModeVisible = true;
 
       this.learnModeSub = super.registerEvent(this.dataHub.notifyLearnMode, (hubData) => {
 
@@ -453,10 +495,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
             learnNode.propertyInstances = BaseService.getValidBaseModels<PropertyInstance>(hubData[3], this.translate);
           }
 
+          learnNode.init();
           this.learnNodeInstance = [...this.learnNodeInstance, learnNode];
+          console.log(this.learnNodeInstance);
+          this.changeDetection.detectChanges();
         }
       });
-
+      this.isLoading = false;
     }
   }
   async onLearnModeClosing($event) {

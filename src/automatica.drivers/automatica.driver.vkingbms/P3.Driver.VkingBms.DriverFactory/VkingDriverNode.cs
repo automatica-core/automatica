@@ -17,6 +17,7 @@ namespace P3.Driver.VkingBms.DriverFactory
         private readonly List<VkingBatteryPackNode> _packs = new();
         private Timer _timer;
         private string _port;
+        private int _opCancelledCounter = 0;
 
         private readonly SemaphoreSlim _semaphore = new(1);
 
@@ -82,6 +83,7 @@ namespace P3.Driver.VkingBms.DriverFactory
                         var analogData = await _driver.ReadAnalogValues(pack.PackId, cancellationTokenSource.Token);
 
                         pack.Read(analogData, version);
+                        _opCancelledCounter = 0;
                     }
                     catch (DataReadException ex)
                     {
@@ -92,6 +94,13 @@ namespace P3.Driver.VkingBms.DriverFactory
             catch (OperationCanceledException)
             {
                 DriverContext.Logger.LogError("Operation cancelled...");
+                _opCancelledCounter++;
+
+                if (_opCancelledCounter >= 10)
+                {
+                    _opCancelledCounter = 0;
+                    ReOpen();
+                }
             }
             catch (Exception ex)
             {

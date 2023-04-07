@@ -46,6 +46,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return true;
         }
 
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
+
         public override bool Init()
         {
             var ipAddress = GetProperty("knx-ip").ValueString;
@@ -83,11 +88,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             }
             catch (Exception e)
             {
-                KnxHelper.Logger.LogError($"Could not init knx driver {e}");
+                DriverContext.Logger.LogError($"Could not init knx driver {e}");
                 return false;
             }
 
-            KnxHelper.Logger.LogInformation($"Init done...");
+            DriverContext.Logger.LogInformation($"Init done...");
 
             return true;
         }
@@ -108,7 +113,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             lock (_lock)
             {
-                KnxHelper.Logger.LogInformation($"Stopping KNX driver...");
+                DriverContext.Logger.LogInformation($"Stopping KNX driver...");
                 if (_tunneling != null)
                 {
                     _tunneling.Stop();
@@ -121,7 +126,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         internal void AddGroupAddress(string groupAddress, Action<KnxDatagram> callback)
         {
-            KnxHelper.Logger.LogDebug($"Register for value changes on GA {groupAddress}");
+            DriverContext.Logger.LogDebug($"Register for value changes on GA {groupAddress}");
             if (!_callbackMap.ContainsKey(groupAddress))
             {
                 _callbackMap.Add(groupAddress, new List<Action<KnxDatagram>>());
@@ -158,6 +163,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public Task<bool> Write(string address, ReadOnlyMemory<byte> data)
         {
+            DriverContext.Logger.LogDebug($"Write datagram on GA {address}");
+
             _tunneling.Write(address, data.ToArray());
 
             return Task.FromResult(true);
@@ -165,7 +172,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public Task Connected()
         {
-            KnxHelper.Logger.LogDebug($"GW {Name} connected");
+            DriverContext.Logger.LogDebug($"GW {Name} connected");
             _gwState?.SetGatewayState(true);
 
             _knxTree?.ConnectionEstablished();
@@ -177,7 +184,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             lock (_lock)
             {
-                KnxHelper.Logger.LogDebug($"GW  {Name} disconnected");
+                DriverContext.Logger.LogDebug($"GW  {Name} disconnected");
                 _gwState?.SetGatewayState(false);
 
                 _tunneling.Stop();
@@ -192,7 +199,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public Task OnDatagram(KnxDatagram datagram)
         {
-            KnxHelper.Logger.LogDebug($"Datagram on GA {datagram.DestinationAddress}");
+            DriverContext.Logger.LogDebug($"Datagram on GA {datagram.DestinationAddress}");
 
             TelegramMonitor.NotifyTelegram(TelegramDirection.Input, datagram.SourceAddress, datagram.DestinationAddress, datagram.ToString(), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(datagram.Data.AsSpan()));
 
@@ -202,18 +209,18 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 {
                     try
                     {
-                        KnxHelper.Logger.LogDebug($"Datagram on GA {datagram.DestinationAddress} - dispatch to {ac}");
+                        DriverContext.Logger.LogDebug($"Datagram on GA {datagram.DestinationAddress} - dispatch to {ac}");
                         ac.Invoke(datagram);
                     }
                     catch (Exception e)
                     {
-                        KnxHelper.Logger.LogError($"{datagram.DestinationAddress} ({datagram.Datagram.ToHex(true)}): {e}");
+                        DriverContext.Logger.LogError($"{datagram.DestinationAddress} ({datagram.Datagram.ToHex(true)}): {e}");
                     }
                 }
             }
             else
             {
-                KnxHelper.Logger.LogInformation($"Datagram on GA {datagram.DestinationAddress} - not callback registered");
+                DriverContext.Logger.LogInformation($"Datagram on GA {datagram.DestinationAddress} - not callback registered");
             }
 
             return Task.CompletedTask;
