@@ -54,6 +54,8 @@ namespace Automatica.Core.Plugin.Standalone
             {
                 Logger.LogDebug($"Received config event...");
 
+                _connection.ConfigReceived();
+
                 if (!await _semaphore.WaitAsync(1000))
                 {
                     Logger.LogWarning($"Instance already running, ignoring second call...");

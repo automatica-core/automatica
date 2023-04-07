@@ -58,6 +58,7 @@ namespace Automatica.Core.Plugin.Standalone
         public IDriverStore DriverStore { get; }
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+        private Timer _configTimer;
 
         public MqttConnection(ILogger logger, string host, string nodeId, string username, string password,
             IList<IDriverFactory> factories,
@@ -109,8 +110,16 @@ namespace Automatica.Core.Plugin.Standalone
                     new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#")
                         .WithAtLeastOnceQoS().Build(),
                     new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.SLAVE_TOPIC}/{NodeId}/reinit")
-                        .WithAtLeastOnceQoS().Build()); 
+                        .WithAtLeastOnceQoS().Build());
 
+                _configTimer = new Timer(async state =>
+                {
+                    await _mqttClient.DisconnectAsync(new MqttClientDisconnectOptions()
+                    {
+                        ReasonCode = MqttClientDisconnectReason.SessionTakenOver,
+                        ReasonString = "Did not receive a config topic within the timeout range..."
+                    });
+                }, null, TimeSpan.FromMinutes(2), TimeSpan.FromSeconds(0));
             }
             catch (Exception e)
             {
@@ -160,6 +169,11 @@ namespace Automatica.Core.Plugin.Standalone
         {
             _semaphoreSlim.Release(1);
             return Task.FromResult(true);
+        }
+
+        public void ConfigReceived()
+        {
+            _configTimer.Dispose();
         }
     }
 }

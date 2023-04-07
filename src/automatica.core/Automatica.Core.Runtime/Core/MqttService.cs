@@ -287,7 +287,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                var actionRequests = new List<ActionRequest>();
+                var actionRequests  = new List<ActionRequest>();
                 SystemLogger.Instance.LogInformation(
                     $"Publish to slave/{clientId}/actions (Start {factory.ImageName}:{factory.Tag})");
 
