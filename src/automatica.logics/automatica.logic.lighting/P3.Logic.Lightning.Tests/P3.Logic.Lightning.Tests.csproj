@@ -43,6 +43,8 @@
     <PackageReference Include="Automatica.Core.Rule" Version="7.0.0.899" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.0.0.899" />
     <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.0.0.899" />
-    <ProjectReference Include="..\P3.Rule.Surveillance\P3.Rule.Surveillance.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\P3.Logic.Lightning\P3.Logic.Lightning.csproj" />
   </ItemGroup>
 </Project>

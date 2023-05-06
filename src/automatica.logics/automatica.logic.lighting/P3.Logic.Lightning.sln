@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28124.53
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Lightning", "P3.Rule.Lightning\P3.Rule.Lightning.csproj", "{FD6AFFB8-7382-4DE7-B491-8B30065EE768}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Lightning", "P3.Logic.Lightning\P3.Logic.Lightning.csproj", "{FD6AFFB8-7382-4DE7-B491-8B30065EE768}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Lightning.Tests", "P3.Rule.Lightning.Tests\P3.Rule.Lightning.Tests.csproj", "{BCCA7E26-EA48-4A4A-8799-3B5CB3338B52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Lightning.Tests", "P3.Logic.Lightning.Tests\P3.Logic.Lightning.Tests.csproj", "{BCCA7E26-EA48-4A4A-8799-3B5CB3338B52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
