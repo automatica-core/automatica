@@ -13,7 +13,11 @@ function split()
     SHA1=`./bin/splitsh-lite --prefix=$1`
     
 	echo $SHA1
-	git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH" -f
+	if [ -z "$SHA1" ]; then
+		echo "No commit hash found, no push will be executed!"
+	else
+		git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH" -f
+	fi
 
     # Use this to split a new branch
     #git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH"
@@ -73,6 +77,8 @@ remote automatica.driver.blockchain.ticker git@github.com:automatica-core/automa
 remote automatica.driver.ebus git@github.com:automatica-core/automatica.driver.ebus.git
 remote automatica.driver.ping git@github.com:automatica-core/automatica.driver.ping.git
 remote automatica.driver.sonos git@github.com:automatica-core/automatica.driver.sonos.git
+remote automatica.driver.vkingbms git@github.com:automatica-core/automatica.driver.vkingbms.git
+remote automatica.driver.pixoo64 git@github.com:automatica-core/automatica.driver.pixoo64.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -84,15 +90,14 @@ remote automatica.logic.surveillance git@github.com:automatica-core/automatica.l
 remote automatica.logic.time git@github.com:automatica-core/automatica.logic.time.git
 remote automatica.logic.string.baseoperations git@github.com:automatica-core/automatica.logic.string.baseoperations.git
 remote automatica.logic.operations git@github.com:automatica-core/automatica.logic.operations.git
+remote automatica.sonos.control git@github.com:automatica-core/automatica.sonos.control.git
 remote automatica.logic.lightning git@github.com:automatica-core/automatica.logic.lightning.git
-
 
 # core repos
 split src/automatica.core automatica.core
 split src/automatica.core.slave automatica.core.slave
 split src/automatica.supervisor automatica.supervisor
 split src/automatica.core.plugin.standalone automatica.core.plugin.standalone
-
 
 # drivers
 split src/automatica.drivers/automatica.driver.automatica.remote automatica.driver.automatica.remote
@@ -115,6 +120,8 @@ split src/automatica.drivers/automatica.driver.blockchain.ticker automatica.driv
 split src/automatica.drivers/automatica.driver.ebus automatica.driver.ebus
 split src/automatica.drivers/automatica.driver.ping automatica.driver.ping
 split src/automatica.drivers/automatica.driver.sonos automatica.driver.sonos
+split src/automatica.drivers/automatica.driver.vkingbms automatica.driver.vkingbms
+split src/automatica.drivers/automatica.driver.pixoo64 automatica.driver.pixoo64
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
@@ -127,5 +134,8 @@ split src/automatica.logics/automatica.logic.surveillance automatica.logic.surve
 split src/automatica.logics/automatica.logic.time automatica.logic.time
 split src/automatica.logics/automatica.logic.string.baseoperations automatica.logic.string.baseoperations
 split src/automatica.logics/automatica.logic.operations automatica.logic.operations
+split src/automatica.logics/automatica.sonos.control automatica.sonos.control
 split src/automatica.logics/automatica.logic.lightning automatica.logic.lightning
+
+
 
