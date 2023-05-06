@@ -1,8 +1,8 @@
 <div class="content-block">
     <div class="dx-card wide-card panel-height">
-        <p3-config-menu *ngIf="ruleTemplates" #configMenu (onSave)="save($event)" 
-            (onDelete)="delete($event)" [showRuleMenu]="true"
-            [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)" (onAddRulePage)="addRulePage($event)" (onRemoveRulePage)="removeRulePage($event)"
+        <p3-config-menu *ngIf="ruleTemplates" #configMenu (onSave)="save($event)" (onDelete)="delete($event)"
+            [showRuleMenu]="true" [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)"
+            (onAddRulePage)="addRulePage($event)" (onRemoveRulePage)="removeRulePage($event)"
             (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" [isLoading]="isLoading">
         </p3-config-menu>
 
@@ -14,14 +14,53 @@
                     (saveLearnedNodes)="saveLearnedNodes($event)" [isLoading]="isLoading"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="20">
-                <p3-config-tree #configTree (onNodeSelect)="nodeSelect($event)" [isLoading]="isLoading">
-                </p3-config-tree>
+
+                <dx-tab-panel class="h-100" itemTitleTemplate="title">
+                    <dxi-item title="COMMON.CONFIGURATION" icon="cogs">
+                        <div *dxTemplate>
+                            <p3-config-tree class="h-100" #configTree (onNodeSelect)="nodeSelect($event)"
+                                [isLoading]="isLoading">
+                            </p3-config-tree>
+                        </div>
+                        <!-- ... -->
+                    </dxi-item>
+                    <dxi-item title="COMMON.LOGIC_PAGES" icon="play">
+                        <div *dxTemplate>
+                            <dx-list [dataSource]="pagesDataSource" height="90%" selectionMode="single"
+                                (onSelectionChanged)="onTabSelectionChanged($event)">
+                                <div *dxTemplate="let page of 'item'">
+                                    <span>{{page.Name}}</span>
+                                </div>
+                            </dx-list>
+                        </div>
+                    </dxi-item>
+                    <div *dxTemplate="let item of 'title'">
+                        <span title="{{item.title | translateAsync}}" class="nav-padding">
+                            <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true" [icon]="item.icon">
+                            </fa-icon>
+                            {{ item.title | translate }}</span>
+
+                    </div>
+                </dx-tab-panel>
+
             </as-split-area>
             <as-split-area [size]="60">
-                <div class="logic-tab-panel">
-                    <dx-tab-panel #tabPanel height="100%" width="100%" [dataSource]="pages" [(selectedIndex)]="selectedPageIndex" [loop]="false"
-                        [animationEnabled]="false" [swipeEnabled]="false" [showNavButtons]="true"
-                        (onSelectionChanged)="onTabSelectionChanged($event)">
+                <div class="logic-tab-panel" class="h-100">
+                    <ng-container *ngFor="let page of pages;" class="h-100">
+                        <dx-scroll-view *ngIf="selectedPage.ObjId == page.ObjId" #scrollView id="scrollview"
+                            [scrollByContent]="false" [scrollByThumb]="fasle" [showScrollbar]="false"
+                            [bounceEnabled]="false" class="h-100">
+
+                            <p3-ruleeditor class="h-100" (selectedItemsChanged)="onSelectedItemsChanged($event)"
+                                [page]="page" id="{{page.ObjId}}" name="{{page.Name}}"
+                                [isLoading]="isLoading"></p3-ruleeditor>
+
+                        </dx-scroll-view>
+                    </ng-container>
+                    <!-- <dx-tab-panel #tabPanel height="100%" width="100%" [dataSource]="pages"
+                        [(selectedIndex)]="selectedPageIndex" [loop]="false" [animationEnabled]="false"
+                        [swipeEnabled]="false" [showNavButtons]="true"
+                        >
                         <div *dxTemplate="let page of 'title'">
                             <span>{{page.Name}}</span>
                         </div>
@@ -29,7 +68,7 @@
                             <p3-ruleeditor (selectedItemsChanged)="onSelectedItemsChanged($event)" [page]="page"
                                 id="{{page.ObjId}}" name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
                         </div>
-                    </dx-tab-panel>
+                    </dx-tab-panel> -->
                 </div>
             </as-split-area>
 

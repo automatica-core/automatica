@@ -27,7 +27,9 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("e3936850-7a0e-4651-9b01-0034e6dabeda")]
         Clock,
         [VisuMobileObjectTemplateType("8b17441f-de01-47c4-be49-5f56ba82440d")]
-        Dimmer
+        Dimmer,
+        [VisuMobileObjectTemplateType("82e5f7fc-10ec-4291-9b80-0f9cbee0e74d")]
+        MediaPlayer
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory

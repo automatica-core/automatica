@@ -15,15 +15,19 @@
       "DESCRIPTION": ""
     },
     "VOLUME_INCREMENT": {
-      "NAME": "Lautsträke+",
+      "NAME": "Lautstärke+",
       "DESCRIPTION": ""
     },
     "VOLUME_DECREMENT": {
-      "NAME": "Lautsträke-",
+      "NAME": "Lautstärke-",
       "DESCRIPTION": ""
     },
     "NEXT": {
       "NAME": "Next",
+      "DESCRIPTION": ""
+    },
+    "PREV": {
+      "NAME": "Previous",
       "DESCRIPTION": ""
     },
     "RADIO_STATION": {

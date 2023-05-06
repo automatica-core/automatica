@@ -5,7 +5,7 @@ import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxCircularGaugeModule, DxButtonModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
@@ -15,6 +15,9 @@ import { L10nTranslationModule } from "angular-l10n";
 import { ComponentsModule } from "../components/components.module";
 import { LogicDefaultComponent } from "./logic-default/logic-default.component";
 import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
+import { MediaPlayerComponent } from './media-player/media-player.component';
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { DxoLabelModule } from "devextreme-angular/ui/nested";
 
 @NgModule({
   imports: [
@@ -32,8 +35,12 @@ import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
     DxSliderModule,
     L10nTranslationModule,
     DxButtonModule,
+    DxTooltipModule,
+    DxoLabelModule,
     ComponentsModule,
-    DynamicModule
+    DynamicModule,
+    DxResponsiveBoxModule,
+    FontAwesomeModule
   ],
   declarations: [
     VisuItemComponent,
@@ -43,7 +50,8 @@ import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
     ToggleComponent,
     ToggleNodeComponent,
     DimmerComponent,
-    LogicDefaultComponent
+    LogicDefaultComponent,
+    MediaPlayerComponent
   ],
   exports: [
     VisuItemComponent

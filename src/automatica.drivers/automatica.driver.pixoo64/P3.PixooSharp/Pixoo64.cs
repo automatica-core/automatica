@@ -241,6 +241,7 @@ namespace P3.PixooSharp
             }
             using (var httpClient = new HttpClient())
             {
+                httpClient.Timeout = TimeSpan.FromSeconds(1);
                 var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
                 var response = await httpClient.PostAsync(_url, content);
                 if (response.IsSuccessStatusCode)

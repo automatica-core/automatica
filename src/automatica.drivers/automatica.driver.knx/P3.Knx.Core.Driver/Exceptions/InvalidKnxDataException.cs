@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace P3.Driver.Knx.Exceptions
+namespace P3.Knx.Core.Driver.Exceptions
 {
     /// <summary>
     /// Exception is thrown when invalid data has been provided to an action method

@@ -1,7 +1,6 @@
 ﻿using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using P3.Knx.Core.Abstractions;
 using P3.Knx.Core.Baos.Driver;
 using P3.Knx.Core.Baos.Driver.Data;

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
@@ -26,11 +25,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         public override Task<bool> Read()
         {
-            _parent.PollAttributes().ConfigureAwait(false);
+            _parent.Read().ConfigureAwait(false);
             return Task.FromResult(true);
         }
 
-        public abstract Task<object> ConvertValue(ModBusRegisterValueReturn modbusReturn);
+        public abstract Task<object> ConvertValue(ushort[] data);
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

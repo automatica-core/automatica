@@ -69,6 +69,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         public override Task<bool> Stop()
         {
+            _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
             return base.Stop();
         }

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using P3.Knx.Core.DPT.Base;
-using P3.Knx.Core.DPT.Dpt5;
-using P3.Knx.Core.DPT.Dpt6;
-using P3.Knx.Core.DPT.Dpt7;
-using P3.Knx.Core.DPT.Dpt8;
-using P3.Knx.Core.DPT.Dpt9;
-using P3.Knx.Core.Driver;
-using P3.Knx.Core.Driver.DPT;
+using P3.Knx.Core.Driver.DPT.Base;
+using P3.Knx.Core.Driver.DPT.Dpt5;
+using P3.Knx.Core.Driver.DPT.Dpt6;
+using P3.Knx.Core.Driver.DPT.Dpt7;
+using P3.Knx.Core.Driver.DPT.Dpt8;
+using P3.Knx.Core.Driver.DPT.Dpt9;
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
     public sealed class DptTranslator
     {

@@ -133,7 +133,7 @@ namespace P3.Driver.ModBusDriverFactory
             var propGuid = GenerateNewGuid(nodeGuid, 1);
             factory.CreatePropertyTemplate(propGuid, "MODBUS.PROPERTY.REGISTER", "",
                 "modbus-register", PropertyTemplateType.Range, nodeGuid, "COMMON.CATEGORY.ADDRESS", true, false,
-                PropertyHelper.CreateRangeMetaString(0, short.MaxValue - 1), 0, 0, 0);
+                PropertyHelper.CreateRangeMetaString(0, ushort.MaxValue - 1), 0, 0, 0);
 
             var propConstraint = GenerateNewGuid(nodeGuid, 10);
             factory.CreatePropertyConstraint(propConstraint,
@@ -194,7 +194,7 @@ namespace P3.Driver.ModBusDriverFactory
         {
             byte[] gu = guid.ToByteArray();
 
-            gu[gu.Length - 1] = (byte)(Convert.ToInt32(gu[gu.Length - 1]) + c);
+            gu[^1] = (byte)(Convert.ToInt32(gu[^1]) + c);
 
             return new Guid(gu);
         }

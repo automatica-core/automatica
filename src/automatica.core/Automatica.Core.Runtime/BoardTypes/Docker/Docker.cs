@@ -9,7 +9,7 @@ namespace Automatica.Core.Runtime.BoardTypes.Docker
     public sealed class Docker : IDatabaseBoardType
     {
         public BoardTypeEnum BoardType => BoardTypeEnum.Docker;
-        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual, InterfaceTypeEnum.RemoteUsb};
+        public InterfaceTypeEnum[] ProvidesInterfaceTypes => new[]{ InterfaceTypeEnum.Ethernet, InterfaceTypeEnum.Virtual, InterfaceTypeEnum.RemoteUsb, InterfaceTypeEnum.Usb };
 
         public static bool InDocker => ServerInfo.InDocker;
 

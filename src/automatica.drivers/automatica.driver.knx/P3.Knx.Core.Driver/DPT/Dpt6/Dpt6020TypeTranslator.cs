@@ -1,6 +1,6 @@
 ﻿using Automatica.Core.Driver.Utility;
 
-namespace P3.Knx.Core.DPT.Dpt6
+namespace P3.Knx.Core.Driver.DPT.Dpt6
 {
     public class Dpt6020Value
     {

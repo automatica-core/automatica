@@ -1,7 +1,8 @@
-﻿using Automatica.Core.Driver.Utility;
-using P3.Knx.Core.DPT.Base;
+﻿using Automatica.Core.Base.Cryptography;
+using Automatica.Core.Driver.Utility;
+using P3.Knx.Core.Driver.DPT.Base;
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
     public class Dpt3Data
     {
@@ -36,7 +37,7 @@ namespace P3.Knx.Core.DPT
         public override object FromDataPoint(byte[] data)
         {
             if (data == null || data.Length != 1)
-                throw new FromDataPointException("data is invalid");
+                throw new FromDataPointException($"data is invalid ({data?.ToHex(true)})");
 
             int input = data[0] & 0x0F;
 

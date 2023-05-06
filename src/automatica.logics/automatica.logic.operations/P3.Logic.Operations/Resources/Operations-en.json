@@ -3,13 +3,13 @@
     "NAME": "Operation",
     "SWITCH": {
       "NAME": "Switch",
-      "DESCRIPTION": "",
+      "DESCRIPTION": "Switch",
       "INPUT": {
 	    "NAME": "I",
-        "DESCRIPTION": "Value (Ein/Aus)",
+        "DESCRIPTION": "Value (On/Off)",
         "VALUE": {
           "NAME": "I",
-          "DESCRIPTION": "Value (Ein/Aus)"
+          "DESCRIPTION": "Value (On/Off)"
         },
         "STATE": {
           "NAME": "V",
@@ -22,27 +22,27 @@
       },
       "STATE": {
         "NAME": "S",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "S"
       },
       "OUTPUT": {
         "NAME": "O",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "O"
       }
     },
     "DIMMER": {
       "NAME": "Dimmer",
-      "DESCRIPTION": "",
+      "DESCRIPTION": "Dimmer",
       "INPUT": {
         "NAME": "I",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "I"
       },
       "STATE": {
         "NAME": "S",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "S"
       },
       "OUTPUT": {
         "NAME": "O",
-        "DESCRIPTION": ""
+        "DESCRIPTION": "O"
       }
     }
   }

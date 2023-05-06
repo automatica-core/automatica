@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,7 +22,7 @@ namespace Automatica.Core.Base.Localization
             _logger = logger;
         }
 
-        public void AddLocalization(TextReader stream, CultureInfo culture)
+        public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
         {
             if (!_localizationStreams.ContainsKey(culture.TwoLetterISOLanguageName))
             {
@@ -44,11 +45,13 @@ namespace Automatica.Core.Base.Localization
             }
 
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
+            _logger.LogInformation($"Add localization for {culture.TwoLetterISOLanguageName} and {fileName}");
         }
 
         public void LoadFromAssembly(Assembly assembly)
         {
-            if(_loadedAssemblies.Contains(assembly))
+            _logger.LogInformation($"Load localization for {assembly.FullName}");
+            if (_loadedAssemblies.Contains(assembly))
             {
                 return;
             }
@@ -63,7 +66,7 @@ namespace Automatica.Core.Base.Localization
                         var split = fileName.Split("-");
 
                         var culture = CultureInfo.GetCultureInfo(split[split.Length - 1]);
-                        AddLocalization(new StreamReader(assembly.GetManifestResourceStream(file)), culture);
+                        AddLocalization(new StreamReader(assembly.GetManifestResourceStream(file)), culture, file);
                     }
                     catch (Exception e)
                     {

@@ -9,11 +9,11 @@ using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 [assembly: InternalsVisibleTo("P3.Driver.Knx.Tests")]
 
 
-namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
+namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(0, 8, 0, 0);
+        public override Version DriverVersion => new Version(0, 9, 0, 0);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -102,13 +102,13 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 KnxInterface3Level, KnxInterface3LevelMain, false, false, true, false, true,
                 NodeDataType.NoAttribute, int.MaxValue, false);
             AddAddressProperty(KnxIp3LevelMainAddress, factory, 31);
-            factory.ChangeNodeTemplateMetaName(KnxIp3LevelMainAddress, "{PROPERTY:knx-address}{CONST:-}{NODE:Name}");
+            factory.ChangeNodeTemplateMetaName(KnxIp3LevelMainAddress, "{PROPERTY:knx-address:2}{CONST:-}{NODE:Name}");
 
             factory.CreateNodeTemplate(KnxIp3LevelMiddleAddress, "KNX.GATEWAY_3_LEVEL.MIDDLE.NAME", "KNX.GATEWAY_3_LEVEL.MIDDLE.DESCRIPTION", "knx-3-level-middle",
                 KnxInterface3LevelMain, KnxInterface3LevelMiddle, false, false, true, false, true,
                 NodeDataType.NoAttribute, int.MaxValue, false);
             AddAddressProperty(KnxIp3LevelMiddleAddress, factory, 7);
-            factory.ChangeNodeTemplateMetaName(KnxIp3LevelMiddleAddress, "{PROPERTY:knx-address}{CONST:-}{NODE:Name}");
+            factory.ChangeNodeTemplateMetaName(KnxIp3LevelMiddleAddress, "{PROPERTY:knx-address:2}{CONST:-}{NODE:Name}");
 
             AddDpt1Nodes(factory, KnxInterface3LevelMiddle);
             AddDpt2Nodes(factory, KnxInterface3LevelMiddle);
@@ -346,7 +346,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             AddAddressProperty(node, factory, 255);
 
-            factory.ChangeNodeTemplateMetaName(node, "{PROPERTY:knx-address}{CONST:-}{NODE:Name}");
+            factory.ChangeNodeTemplateMetaName(node, "{PROPERTY:knx-address:3}{CONST:-}{NODE:Name}");
         }
 
         private void InitDptType(int type, Guid node, INodeTemplateFactory factory)

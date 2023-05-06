@@ -36,7 +36,7 @@ namespace P3.Driver.EepParser.Generator
             var nodeGuid = Rorg{0}Guid;
 
             Guid interfaceGuid = GenerateNewGuid(nodeGuid, 1);
-            factory.CreateInterfaceType(interfaceGuid, """ + RorgName + @".NAME"", """ + RorgName + @".DESCRIPTION"",Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, """ + RorgName + @".NAME"", """ + RorgName + @".DESCRIPTION"",Int32.MaxValue, int.MaxValue, false);
 
            
             factory.CreateNodeTemplate(nodeGuid, """ + RorgName + @".NAME"", """ + RorgName + @".DESCRIPTION"",
@@ -55,7 +55,7 @@ namespace P3.Driver.EepParser.Generator
         private static void "+ AddFunctionMethodName + @"(INodeTemplateFactory factory, Guid rorgInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {{
             Guid interfaceGuid = GenerateNewGuid(Function{0}_{1}Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, """ + FunctionName + @".NAME"", """ + FunctionName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, """ + FunctionName + @".NAME"", """ + FunctionName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, false);
 
             factory.CreateNodeTemplate(Function{0}_{1}Guid, """ + FunctionName + @".NAME"", """ + FunctionName + @".DESCRIPTION"",
                 ""enocean-function-{1:L}"", rorgInterfaceGuid, interfaceGuid, false, false, true, false, true,
@@ -73,7 +73,7 @@ namespace P3.Driver.EepParser.Generator
         private static void " + AddTypesMethodName + @"(INodeTemplateFactory factory, Guid funcInterfaceGuid, EnOceanTemplateFactory enoceanFactory)
         {{
             Guid interfaceGuid = GenerateNewGuid(Type{0}_{1}_{2}Guid, 1);
-            factory.CreateInterfaceType(interfaceGuid, """ + TypeName + @".NAME"", """ + TypeName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(interfaceGuid, """ + TypeName + @".NAME"", """ + TypeName + @".DESCRIPTION"", Int32.MaxValue, int.MaxValue, false);
 
             var nodeGuid = Type{0}_{1}_{2}Guid;
             
@@ -125,6 +125,17 @@ namespace P3.Driver.EepParser.Generator
                     ""enocean-scale-min"", PropertyTemplateType.Numeric, nodeGuid, ""ENOCEAN"", false, true, null, ""{4}"", 0, 0);
                 factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 7), """ + DataFieldName + @"{3}.SCALE.MAX"", """+ DataFieldName + @"{3}.SCALE.MAX"",
                     ""enocean-scale-max"", PropertyTemplateType.Numeric, nodeGuid, ""ENOCEAN"", false, true, null, ""{5}"", 0, 0);";
+        
+        public static readonly string AddEnumMinMaxField = @"
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 8), """ + DataFieldName + @"{3}.ENUM.FIRST-MIN"", """ + DataFieldName + @"{3}.ENUM.FIRST-MIN"",
+                    ""enocean-enum-first-min"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{4}"", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 9), """ + DataFieldName + @"{3}.ENUM.FIRST-MAX"", """ + DataFieldName + @"{3}.ENUM.FIRST-MAX"",
+                    ""enocean-enum-first-max"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{5}"", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 10), """ + DataFieldName + @"{3}.ENUM.SECOND-MIN"", """ + DataFieldName + @"{3}.ENUM.SECOND-MIN"",
+                    ""enocean-enum-second-min"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{6}"", 0, 0);
+                factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 11), """ + DataFieldName + @"{3}.ENUM.SECOND-MAX"", """ + DataFieldName + @"{3}.ENUM.SECOND-MAX"",
+                    ""enocean-enum-second-max"", PropertyTemplateType.Long, nodeGuid, ""ENOCEAN"", false, true, null, ""{7}"", 0, 0);";
+
 
 
         public static readonly string TestDataFieldDefaultProps = @"

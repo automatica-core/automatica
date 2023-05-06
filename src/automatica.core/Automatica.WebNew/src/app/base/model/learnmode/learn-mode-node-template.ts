@@ -20,6 +20,10 @@ export class LearnModeNodeTemplate {
         return this.nodeTemplate.ProvidesInterface2InterfaceType;
     }
 
+    public get ObjId(): string {
+        return this.nodeTemplate.ObjId;
+    }
+
     public get DisplayName(): string {
         return this.nodeTemplate.DisplayName;
     }

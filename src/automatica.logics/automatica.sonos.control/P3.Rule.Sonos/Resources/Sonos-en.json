@@ -22,6 +22,10 @@
       "NAME": "Volume-",
       "DESCRIPTION": ""
     },
+    "PREV": {
+      "NAME": "Previous",
+      "DESCRIPTION": ""
+    },
     "NEXT": {
       "NAME": "Next",
       "DESCRIPTION": ""

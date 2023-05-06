@@ -1,9 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
-using P3.Knx.Core.DPT.Base;
+using Automatica.Core.Base.Cryptography;
+using P3.Knx.Core.Driver.DPT.Base;
 
 [assembly: InternalsVisibleTo("P3.Driver.Knx.Tests")]
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
     internal sealed class Dpt1Translator : Dpt
     {
@@ -16,7 +17,7 @@ namespace P3.Knx.Core.DPT
                 return data[0] >= 1;
             }
 
-            throw new FromDataPointException("data array length longer than 1");
+            throw new FromDataPointException($"data array length longer than 1 ({data?.ToHex(true)})");
         }
 
         public override byte[] ToDataPoint(object value)

@@ -34,6 +34,12 @@ namespace Automatica.Core.Plugin.Standalone
         {
             var json = "";
 
+            if (e == null || e.ApplicationMessage == null || e.ApplicationMessage.Payload == null)
+            {
+                Logger.LogInformation($"Application message is empty...{JsonConvert.SerializeObject(e)}");
+                return;
+            }
+
             if (e.ApplicationMessage.Payload.Length > 0)
             {
                 json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
@@ -47,6 +53,8 @@ namespace Automatica.Core.Plugin.Standalone
             if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.CONFIG_TOPIC}/{_connection.NodeId}")
             {
                 Logger.LogDebug($"Received config event...");
+
+                _connection.ConfigReceived();
 
                 if (!await _semaphore.WaitAsync(1000))
                 {

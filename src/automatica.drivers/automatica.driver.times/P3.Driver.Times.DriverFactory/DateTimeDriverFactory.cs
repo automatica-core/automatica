@@ -46,7 +46,7 @@ namespace P3.Driver.Times.DriverFactory
             factory.CreateNodeTemplate(DateTime, "TIMES.DATETIME.DATETIME.NAME", "TIMES.DATETIME.DATETIME.DESCRIPTION", "times-datetime", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
             factory.CreateNodeTemplate(Date, "TIMES.DATETIME.DATE.NAME", "TIMES.DATETIME.DATE.DESCRIPTION", "times-date", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Date, 1, false);
             factory.CreateNodeTemplate(Time, "TIMES.DATETIME.TIME.NAME", "TIMES.DATETIME.TIME.DESCRIPTION", "times-time", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Time, 1, false);
-
+            factory.ChangeDefaultVisuTemplate(Time, VisuMobileObjectTemplateTypes.Clock);
 
             factory.CreateNodeTemplate(DayOfWeek, "TIMES.DATETIME.DAY_OF_WEEK.NAME", "TIMES.DATETIME.DAY_OF_WEEK.DESCRIPTION", "times-day-of-week", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);
             factory.CreateNodeTemplate(DayOfMonth, "TIMES.DATETIME.DAY_OF_MONTH.NAME", "TIMES.DATETIME.DAY_OF_MONTH.DESCRIPTION", "times-day-of-month", DateTimeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);

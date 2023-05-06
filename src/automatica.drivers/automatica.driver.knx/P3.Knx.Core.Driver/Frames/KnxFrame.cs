@@ -1,7 +1,4 @@
-﻿using P3.Knx.Core.Driver.Tunneling;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using static P3.Knx.Core.Driver.KnxHelper;
 
 namespace P3.Knx.Core.Driver.Frames

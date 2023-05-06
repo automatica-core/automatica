@@ -3,12 +3,13 @@ import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instanc
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { ILogicErrorHandler } from "../ilogicErrorHandler";
 
 declare var draw2d: any;
 declare var $: any;
 
 export class LogicShapes {
-    public static addShape(logic, ruleEngineService: RuleEngineService) {
+    public static addShape(logic, ruleEngineService: RuleEngineService, errorHandler: ILogicErrorHandler) {
 
         logic.LogicShape = draw2d.shape.layout.VerticalLayout.extend({
             init: function (attr, element: RuleInstance, linkService: LinkService) {
@@ -31,6 +32,11 @@ export class LogicShapes {
                     resizeable: true,
                     minWidth: 150
                 });
+
+                element.onNameChanged.subscribe((v) => {
+                    this.classLabel.setText(v);
+                });
+
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
                 this.logicName = new logic.Label({
                     text: translatedName,
@@ -50,7 +56,12 @@ export class LogicShapes {
                 });
 
                 this.on("dragEnd", async (context, data) => {
-                    await ruleEngineService.updateItem(element);
+                    try {
+                        await ruleEngineService.updateItem(element);
+                    }
+                    catch(error) {
+                        errorHandler.notifyError(error);
+                    }
                 });
 
                 this.add(this.classLabel);
@@ -192,6 +203,12 @@ export class LogicShapes {
                     resizeable: true
                 });
 
+                element.NodeInstance.notifyChangeEvent.subscribe((v) =>{
+                    if(v.propertyName === "Name") {
+                        this.label.setText((<any>v.object).Name);
+                    }
+                });
+
                 this.label.setMinWidth(100);
 
                 if (element.Inputs.length > 0) {
@@ -233,7 +250,7 @@ export class LogicShapes {
                     try {
                         await ruleEngineService.updateItem(element);
                     } catch (error) {
-
+                        errorHandler.notifyError(error);
                     }
                 });
 

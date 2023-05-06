@@ -373,12 +373,16 @@
                 <div *dxTemplate="let data of 'nodeTemplateEditCell'">
 
                     <dx-drop-down-box [value]="data.data.nodeTemplate" valueExpr="ObjId" displayExpr="DisplayName"
-                        placeholder="Select a value..." [dataSource]="data.data.nodeTemplates">
+                        placeholder="Select a value..." [dataSource]="data.data.dataSource"
+                        (onValueChanged)="nodeTemplateSelectItemSync($event)"
+                        (onOptionChanged)="nodeTemplateBoxOptionChanged($event)">
                         <dxo-drop-down-options height="300px"></dxo-drop-down-options>
                         <div *dxTemplate="let contet of 'content'">
                             <dx-tree-view [dataSource]="data.data.nodeTemplates" dataStructure="plain" keyExpr="Id"
                                 parentIdExpr="ParentId" selectionMode="single" displayExpr="DisplayName"
-                                [selectByClick]="true" (onItemClick)="nodeTemplateSelectItem($event, data.data)">
+                                [selectByClick]="true"
+                                (onItemSelectionChanged)="nodeTemplateSelectItem($event, data.data)"
+                                (onContentReady)="$event.component.selectItem(data.data.nodeTemplate)">
 
                             </dx-tree-view>
                         </div>

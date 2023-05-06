@@ -1,7 +1,7 @@
 ﻿using System;
-using P3.Knx.Core.DPT.Base;
+using P3.Knx.Core.Driver.DPT.Base;
 
-namespace P3.Knx.Core.DPT.Dpt8
+namespace P3.Knx.Core.Driver.DPT.Dpt8
 {
     internal class Dpt8Type2Translator : Dpt8Translator
     {

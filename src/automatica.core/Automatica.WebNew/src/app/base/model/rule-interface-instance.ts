@@ -22,6 +22,9 @@ export class RuleInterfaceInstance extends BaseModel {
     This2RuleInstance: string;
 
     @JsonProperty()
+    IsLinked: boolean;
+
+    @JsonProperty()
     This2RuleInterfaceTemplate: string;
 
     @JsonPropertyName("This2RuleInterfaceTemplateNavigation")

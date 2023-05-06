@@ -11,5 +11,10 @@ namespace Automatica.Core.Tests.Model
         {
             return Get(objId);
         }
+
+        public bool IsRuleInterfaceMapped(Guid objId)
+        {
+            return false;
+        }
     }
 }

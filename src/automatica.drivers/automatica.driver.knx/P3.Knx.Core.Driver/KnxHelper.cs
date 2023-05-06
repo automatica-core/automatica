@@ -3,7 +3,8 @@ using System.Text;
 using Automatica.Core.Base.Templates;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using P3.Driver.Knx.Exceptions;
+using P3.Knx.Core.Driver.Exceptions;
+
 // ReSharper disable InconsistentNaming
 
 namespace P3.Knx.Core.Driver

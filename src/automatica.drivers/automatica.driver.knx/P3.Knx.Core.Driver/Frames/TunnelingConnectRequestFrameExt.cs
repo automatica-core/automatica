@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace P3.Knx.Core.Driver.Frames
 {

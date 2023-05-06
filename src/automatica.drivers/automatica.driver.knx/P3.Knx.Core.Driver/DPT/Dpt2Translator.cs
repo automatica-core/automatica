@@ -1,11 +1,11 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using Automatica.Core.Base.Cryptography;
 using Automatica.Core.Driver.Utility;
-using P3.Knx.Core.DPT.Base;
+using P3.Knx.Core.Driver.DPT.Base;
 
 [assembly: InternalsVisibleTo("P3.Driver.Knx.Tests")]
 
-namespace P3.Knx.Core.DPT
+namespace P3.Knx.Core.Driver.DPT
 {
     public class Dpt2Value
     {
@@ -49,7 +49,7 @@ namespace P3.Knx.Core.DPT
                 return new Dpt2Value(control, value);
             }
 
-            throw new FromDataPointException("data array length longer than 1");
+            throw new FromDataPointException($"data array length longer than 1 ({data?.ToHex(true)})");
         }
 
         public override byte[] ToDataPoint(object value)

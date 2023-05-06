@@ -3,14 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data;
 using P3.Driver.EnOcean.Data.Packets;
-using P3.Driver.EnOcean.Serial;
 
 namespace P3.Driver.EnOcean
 {
     public class Driver
     {
-        private readonly string _port;
-        private SerialStream _stream;
+        private readonly BaseStream _stream;
 
         private ReadOnlyMemory<byte> _idBase;
         private bool _learnModeActive;
@@ -20,9 +18,9 @@ namespace P3.Driver.EnOcean
         public event EventHandler<AnswerReceviedEventArgs> AnswerReceived;
         public event EventHandler<PacketSentEventArgs> PacketSent;
 
-        public Driver(string port)
+        public Driver(BaseStream stream)
         {
-            _port = port;
+            _stream = stream;
         }
 
         public ReadOnlyMemory<byte> IdBase => _idBase;
@@ -38,21 +36,20 @@ namespace P3.Driver.EnOcean
 
         public async Task<bool> Open()
         {
-            _stream = new SerialStream(_port);
-
-            if (_stream.Open())
+            if (await _stream.Open())
             {
                 _stream.TelegramReceived += TelegramReceivedEventHandler;
 
                 Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}");
+
                 var readIdBase = await SendTelegram(new CommonCommandPacket(CommonCommands.CO_RD_IDBASE));
 
-                if(readIdBase != null)
+
+                if (readIdBase != null)
                 {
                     _idBase = readIdBase.Data.Slice(1, 4);
-                    
-                }
 
+                }
 
                 return true;
             }
@@ -64,9 +61,7 @@ namespace P3.Driver.EnOcean
         {
             _stream.Pause();
 
-            _stream.WriteFrame(packet);
-
-            var p = await _stream.ReadFrame();
+            var p  = await _stream.WriteFrame(packet);
 
             if (p != null)
             {
@@ -87,10 +82,8 @@ namespace P3.Driver.EnOcean
 
             PacketSent?.Invoke(this, new PacketSentEventArgs(packet, telegram));
 
-            _stream.WriteFrame(packet);
+            var p = await _stream.WriteFrame(packet);
             
-            var p =  await _stream.ReadFrame();
-
             if(p != null)
             {
                 AnswerReceived?.Invoke(this, new AnswerReceviedEventArgs(p));
@@ -115,6 +108,9 @@ namespace P3.Driver.EnOcean
             if (packetReceivedEventArgs.Telegram is RadioErp1Packet radio1 && _learnModeActive && RadioErp1Packet.IsTechIn(radio1))
             {
                 TeachInReceived?.Invoke(sender, packetReceivedEventArgs);
+            }
+            else if (packetReceivedEventArgs.Telegram is ResponsePacket response)
+            {
             }
             TelegramReceived?.Invoke(sender, packetReceivedEventArgs);
         }

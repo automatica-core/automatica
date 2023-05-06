@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
 {
-    public class RuleInstance : TypedObject
+    public partial class RuleInstance : TypedObject
     {
         public RuleInstance()
         {

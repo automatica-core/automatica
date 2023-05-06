@@ -64,12 +64,26 @@ namespace Automatica.Core.Visu
             AddGaugeControl(factory);
 
             AddClockControl(factory);
+            AddMediaControl(factory);
 
             AddPushButton(factory);
 
             var dimmer = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Dimmer);
             factory.CreateVisuMobileTemplate(dimmer, "VISU.OBJECT.DIMMER.NAME", "VISU.OBJECT.DIMMER.DESCRIPTION",
                 "dimmer", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+        }
+
+        private void AddMediaControl(VisuMobileTemplateFactory factory)
+        {
+            var mediaControl = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.MediaPlayer);
+            factory.CreateVisuMobileTemplate(mediaControl, "VISU.OBJECT.MEDIA_PLAYER.NAME", "VISU.OBJECT.MEDIA_PLAYER.DESCRIPTION", "media_player",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            factory.UpdateMaxMinValues(mediaControl, 1, 1, 1, 1);
+            AddCommonProperty(mediaControl, factory);
+            
+            factory.CreatePropertyTemplate(mediaControl, "radio_list", "radio_list", "radio_list",
+                PropertyTemplateType.DropDown, mediaControl, "COMMON", false, false, "Ö3,s8007;FM4,s8235;OE1,s8514;Antenne Österreich,s310727;Rock Antenne Österreich,s306882; Energy Österreich,s921", "s8007", 0, 0);
         }
 
         private void AddClockControl(VisuMobileTemplateFactory factory)

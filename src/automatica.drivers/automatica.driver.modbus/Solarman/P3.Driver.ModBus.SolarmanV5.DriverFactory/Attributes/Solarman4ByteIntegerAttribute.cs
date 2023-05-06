@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Newtonsoft.Json.Linq;
-using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
 {
@@ -14,13 +11,13 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
         {
         }
 
-        public override async Task<object> ConvertValue(ModBusRegisterValueReturn modbusReturn)
+        public override async Task<object> ConvertValue(ushort[] data)
         {
             await Task.CompletedTask;
 
             var value = new List<byte>();
 
-            foreach (var va in modbusReturn.Data)
+            foreach (var va in data)
             {
                 value.AddRange(BitConverter.GetBytes(va));
             }

@@ -1,0 +1,93 @@
+<app-visualization-control [hasPopup]="false" [showIcon]="false" [useFullContainer]="true">
+
+    <ng-container control_full>
+        <!-- <dx-button text="prev"></dx-button>
+        <dx-button text="play/pause"></dx-button>
+        <dx-button text="next"></dx-button> -->
+        <dx-responsive-box>
+
+            <dxi-row [ratio]="0.1"></dxi-row>
+            <dxi-row [ratio]="1"></dxi-row>
+            <dxi-row [ratio]="1"></dxi-row>
+            <dxi-row [ratio]="0.1"></dxi-row>
+            <dxi-row [ratio]="0.1"></dxi-row>
+
+            <dxi-col [ratio]="1"></dxi-col>
+            <dxi-col [ratio]="1"></dxi-col>
+            <dxi-col [ratio]="1"></dxi-col>
+
+            <dxi-item>
+                <dxi-location [row]="0" [col]="0" [colspan]="3"> </dxi-location>
+                <div *dxTemplate class="prev image ">
+                    <div [hidden]="!location" class="cell_text_hint cell_text_overflow">{{ displayText }}</div>
+                </div>
+            </dxi-item>
+
+            <dxi-item>
+                <dxi-location [row]="1" [rowspan]="2" [col]="0" [colspan]="3"> </dxi-location>
+                <div *dxTemplate class="prev image center">
+                    <ng-container *ngIf="isPlaying">
+                        <fa-icon icon="music" size="6x" animation="beat"></fa-icon>
+                    </ng-container>
+                    <ng-container *ngIf="!isPlaying">
+                        <fa-icon icon="volume-xmark" size="6x"></fa-icon>
+                    </ng-container>
+                </div>
+            </dxi-item>
+
+            <dxi-item>
+                <dxi-location [row]="3" [col]="0"> </dxi-location>
+                <div *dxTemplate class="prev item">
+                    <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked">
+                        <div *dxTemplate="let buttonData of 'buttonTemplate'">
+                            <fa-icon icon="backward" />
+                        </div>
+                    </dx-button>
+                </div>
+            </dxi-item>
+            <dxi-item>
+                <dxi-location [row]="3" [col]="1">
+                </dxi-location>
+                <div *dxTemplate class="play item">
+                    <dx-button [template]="'buttonTemplate'" *ngIf="!isPlaying" (onClick)="playPauseClick()">
+                        <div *dxTemplate="let buttonData of 'buttonTemplate'">
+                            <fa-icon icon="play" />
+                        </div>
+                    </dx-button>
+                    <dx-button [template]="'buttonTemplate'" *ngIf="isPlaying" (onClick)="playPauseClick()">
+                        <div *dxTemplate="let buttonData of 'buttonTemplate'">
+                            <fa-icon icon="pause" />
+                        </div>
+                    </dx-button>
+                </div>
+            </dxi-item>
+            <dxi-item>
+                <dxi-location [row]="3" [col]="2"> </dxi-location>
+                <div *dxTemplate class="next item">
+                    <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked">
+                        <div *dxTemplate="let buttonData of 'buttonTemplate'">
+                            <fa-icon icon="forward" />
+                        </div>
+                    </dx-button>
+                </div>
+            </dxi-item>
+
+            <dxi-item>
+                <dxi-location [row]="4" [col]="0" [colspan]="3"></dxi-location>
+                <div *dxTemplate class="volume item">
+                    <dx-slider style="margin-left: 10px; margin-right:10px" [min]="0" [max]="100" [(value)]="volume"
+                        [disabled]="!volumeOutput.IsLinked" (onValueChanged)="onVolumeSliderChanged($event)"
+                        valueChangeMode="onHandleRelease">
+                        <dxo-label [visible]="true" position="bottom"></dxo-label>
+                        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+                    </dx-slider>
+                </div>
+            </dxi-item>
+        </dx-responsive-box>
+    </ng-container>
+    <div popup>
+        <div style="padding-top: 20px">
+
+        </div>
+
+    </div>

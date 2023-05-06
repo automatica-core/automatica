@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Automatica.Core.Base.Templates;
-using P3.Knx.Core.DPT;
+﻿using Automatica.Core.Base.Templates;
 using P3.Knx.Core.Driver;
-using P3.Knx.Core.DPT.Base;
+using P3.Knx.Core.Driver.DPT;
+using P3.Knx.Core.Driver.DPT.Base;
+using P3.Knx.Core.Driver.DPT.Dpt7;
 using Xunit;
-using P3.Knx.Core.DPT.Dpt7;
 
 namespace P3.Driver.Knx.Tests.DPT
 {

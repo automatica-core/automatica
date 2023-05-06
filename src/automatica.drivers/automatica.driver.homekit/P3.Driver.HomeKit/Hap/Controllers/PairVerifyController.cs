@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
 using P3.Driver.HomeKit.Hap.TlvData;
 using P3.Elliptic;
-using Ed25519 = Chaos.NaCl.Ed25519;
 
 namespace P3.Driver.HomeKit.Hap.Controllers
 {

@@ -26,7 +26,7 @@ namespace Automatica.Core.Slave
 
             var logBuild = new LoggerConfiguration()
              .WriteTo.Console()
-             .WriteTo.RollingFile(Path.Combine("logs", "logs.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 30)
+             .WriteTo.RollingFile(Path.Combine("logs", "logs.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 1000)
              .MinimumLevel.Verbose();
 
             Log.Logger = logBuild.CreateLogger();

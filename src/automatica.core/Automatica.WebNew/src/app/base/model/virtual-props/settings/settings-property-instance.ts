@@ -31,9 +31,6 @@ export class VirtualSettingsPropertyInstance extends VirtualPropertyInstance {
         if(setting.Type == PropertyTemplateType.MultiSelect) {
             this.PropertyTemplate.ExtendedType = new MultiSelectPropertyTemplate(this.PropertyTemplate);
         }
-
-        console.log(this);
-    
     }
 
     get Value(): any {

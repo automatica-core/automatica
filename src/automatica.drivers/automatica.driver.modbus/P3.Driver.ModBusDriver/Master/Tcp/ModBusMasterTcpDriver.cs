@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility;
 
@@ -159,6 +158,8 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                     byte[] data = new byte[lengthToRead];
                    
                     read = await _networkStream.ReadAsync(data, 0, lengthToRead, cts);
+
+                    var avalaibleBytes = _networkStream.DataAvailable;
                     
                     _receiveTimeoutTimer.Stop();
 

@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.1.0.955</Version>
+    <Version>7.2.0.1021</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>D659A788-2D0C-4E2D-8774-998BF4F3080B</ProjectGuid>
   </PropertyGroup>

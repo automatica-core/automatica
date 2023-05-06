@@ -19,6 +19,8 @@ namespace P3.Driver.HomeKit.Hap.Model
         public const string HueType = "13";
         public const string ContactSensorStateType = "6A";
         public const string CurrentTemperatureType = "11";
+        public const string FirmwareRevision = "52";
+        public const string Version = "37";
 
         internal CharacteristicBase(Type defaultType)
         {
@@ -122,6 +124,15 @@ namespace P3.Driver.HomeKit.Hap.Model
         public static Characteristic CreateSerial(Service service, string value, int id)
         {
             return Create<string>(service, CharacteristicBase.SerialCharacteristicType, value, id);
+        }
+
+        public static Characteristic CreateVersion(Service service, string value, int id)
+        {
+            return Create<string>(service, CharacteristicBase.Version, value, id);
+        }
+        public static Characteristic CreateFirmwareRevision(Service service, string value, int id)
+        {
+            return Create<string>(service, CharacteristicBase.FirmwareRevision, value, id);
         }
         public static Characteristic CreateIdentify(Service service, int id)
         {

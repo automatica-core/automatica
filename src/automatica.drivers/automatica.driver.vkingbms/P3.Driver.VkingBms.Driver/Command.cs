@@ -61,7 +61,6 @@ namespace P3.Driver.VkingBms.Driver
             }).Replace("-", "");
 
             string end = Encoding.ASCII.GetString(new byte[] { 13 });
-            var encoded2 = Encoding.ASCII.GetBytes("~52014642E00201FD30\r");
 
             if (body != null)
             {

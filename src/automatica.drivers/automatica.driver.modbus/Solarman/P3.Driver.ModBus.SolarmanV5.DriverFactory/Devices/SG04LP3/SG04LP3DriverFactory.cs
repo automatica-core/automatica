@@ -7,7 +7,7 @@ using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
 {
-    public class SG03LP3DriverFactory : SolarmanDriverFactory
+    public class SG04LP3DriverFactory : SolarmanDriverFactory
     {
         public Guid DeviceTypeGuid => new("515b4b7a-ec2a-4be4-88d9-b4e24ff7ab86");
         public Guid BatteryTypeGuid => new("4bc347d0-2fce-41ac-aa47-c9483d5cba15");
@@ -177,7 +177,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Devices.SG04LP3
 
         public override IDriver CreateDriver(IDriverContext config)
         {
-            return new SolarmanDriver(config, new SG04LP3DeviceMap());
+            return new SolarmanDriver(config, new SG04LP3DeviceMap(), new SG043LP3DeviceGroupMap());
         }
     }
 }

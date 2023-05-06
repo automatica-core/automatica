@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit.Hap.TlvData;
 
 namespace P3.Driver.HomeKit.Hap.Controllers

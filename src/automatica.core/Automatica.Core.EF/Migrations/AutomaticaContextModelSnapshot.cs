@@ -403,6 +403,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsRemanent")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsWriteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -1059,6 +1062,9 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<bool>("IsLinkableParameter")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Key")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("MaxLinks")
                         .HasColumnType("INTEGER");
 
@@ -1211,8 +1217,10 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
-                    b.Property<string>("MetaData")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("Meta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("");
 
                     b.Property<int>("Order")
                         .HasColumnType("INTEGER");

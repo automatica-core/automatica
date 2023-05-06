@@ -6,13 +6,13 @@ import { VirtualNamePropertyInstance } from "./virtual-props/virtual-name-proper
 import { VirtualDescriptionPropertyInstance } from "./virtual-props/virtual-description-property-instance"
 import { VirtualReadablePropertyInstance } from "./virtual-props/virtual-readable-property-instance"
 import { VirtualWriteablePropertyInstance } from "./virtual-props/virtual-writeable-property-instance"
+import { VirtualRemanentPropertyInstance } from "./virtual-props/virtual-remanent-property-instance"
 import { ITreeNode } from "./ITreeNode";
 import { INameModel } from "./INameModel";
 import { IDescriptionModel } from "./IDescriptionModel";
 import { VirtualPropertyInstance } from "./virtual-props/virtual-property-instance";
 import { MetaHelper } from "../base/meta-helper";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
-import { Guid } from "../utils/Guid";
 import { VirtualUseInVisuPropertyInstance } from "./virtual-props/virtual-use-in-visu-property-instance";
 import { VirtualAreaPropertyInstance } from "./virtual-props/virtual-area-property-instance";
 import { VirtualCategoryPropertyInstance } from "./virtual-props/virtual-category-property-instance";
@@ -52,7 +52,8 @@ class NodeInstanceMetaHelper {
                 let propValue = this.getValueForKey(key, value, nodeInstance);
                 if (typeof propValue === "number") {
                     propValue = propValue.toString();
-                    propValue = this.pad(propValue, 2);
+                    const padSize = split.length >= 3 ? split[2] : 2;
+                    propValue = this.pad(propValue, padSize);
 
                     addName += propValue;
                 } else {
@@ -232,6 +233,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     @JsonProperty()
     This2Slave: string;
 
+    @JsonProperty()
+    Remanent: boolean;
+
 
     @JsonProperty()
     StateTextValueTrue: string;
@@ -300,6 +304,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
             this.Properties.push(new VirtualWriteablePropertyInstance(this));
+            this.Properties.push(new VirtualRemanentPropertyInstance(this));
 
             this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
             this.Properties.push(new VirtualAreaPropertyInstance(this));

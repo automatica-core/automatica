@@ -64,18 +64,24 @@ namespace P3.Driver.MBus.Frames.VariableData
             }
 
 
-
-            ValueInformationField = ValueInformationField.Parse(in data[index++]);
-
-            hasExtension = ValueInformationField.HasExtension;
-
-            while (hasExtension)
+            if (data.Length > index)
             {
-                var vife = ValueInformationField.Parse(in data[index++]);
+                ValueInformationField = ValueInformationField.Parse(in data[index++]);
 
-                hasExtension = vife.HasExtension;
+                hasExtension = ValueInformationField.HasExtension;
 
-                _vifes.Add(vife);
+                while (hasExtension)
+                {
+                    var vife = ValueInformationField.Parse(in data[index++]);
+
+                    hasExtension = vife.HasExtension;
+
+                    _vifes.Add(vife);
+                }
+            }
+            else
+            {
+                ValueInformationField = ValueInformationField.Default();
             }
 
             if (ValueInformationField.RawData == 0xFD || ValueInformationField.RawData == 0xFB)
@@ -83,11 +89,12 @@ namespace P3.Driver.MBus.Frames.VariableData
                 ValueInformationField.ParseExtensionUnit(_vifes[0]);
 
             }
+
             if (DataInformationField.DataFieldType == DataFieldType.SpecialFunction)
             {
                 int valueLength = data.Length - index;
                 _data = dataSpan.Slice(index, valueLength).ToArray();
-                
+
                 index += valueLength;
 
             }
@@ -95,7 +102,7 @@ namespace P3.Driver.MBus.Frames.VariableData
             {
                 int valueLength = DataInformationField.DataFieldLength;
                 _data = dataSpan.Slice(index, valueLength).ToArray();
-                
+
                 index += valueLength;
                 var value = ConvertValue();
                 if (value != null)
@@ -125,13 +132,15 @@ namespace P3.Driver.MBus.Frames.VariableData
                 var storageIndex = usedStorageMap[ValueInformationField.Unit];
                 if (StorageNumber == storageIndex)
                 {
-                    StorageNumber+=1;
+                    StorageNumber += 1;
                     usedStorageMap[ValueInformationField.Unit] = storageIndex + 1;
                 }
-                
+
             }
 
             logger.LogTrace($"{ValueInformationField.Unit} {Value} storage {StorageNumber} tariff {Tariff}");
+
+
             return index - offset;
         }
 

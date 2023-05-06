@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -44,11 +44,11 @@ namespace P3.Driver.Pixoo64
 
     internal abstract class Pixoo64Screen<T> : Pixoo64Screen where T : BaseScreen
     {
-        public PixooSharp.Pixoo64 Pixoo { get; }
+        public IList<PixooSharp.Pixoo64> Pixoo { get; }
 
         public T Screen { get; private set; }
 
-        protected Pixoo64Screen(IDriverContext driverContext, PixooSharp.Pixoo64 pixoo) : base(driverContext)
+        protected Pixoo64Screen(IDriverContext driverContext, IList<PixooSharp.Pixoo64> pixoo) : base(driverContext)
         {
             Pixoo = pixoo;
         }

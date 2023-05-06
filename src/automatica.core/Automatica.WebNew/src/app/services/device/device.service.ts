@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from "@angular/core";
-import { DeviceDetectorService } from "ngx-device-detector";
+import { DeviceDetectorService, OrientationType } from "ngx-device-detector";
 
 export enum Orientation {
     Unknown,
@@ -33,24 +33,29 @@ export class DeviceService {
 
     private setOrientation() {
         const currentOrientation = this.orientation;
+        try {
+            console.log(this.deviceServiceDetector.orientation);
+            const orientation = this.deviceServiceDetector.orientation;
 
-        const orientation = <string><unknown>screen.orientation.type;
+            if (orientation === OrientationType.Landscape) {
+                this.orientation = Orientation.Landscape;
+            } else if (orientation ===  OrientationType.Portrait) {
+                this.orientation = Orientation.Portrait;
+            } else if (orientation === undefined) {
+                this.orientation = Orientation.Unknown;
+            }
 
-        if (orientation === "landscape-primary" || orientation === "landscape-secondary") {
-            this.orientation = Orientation.Landscape;
-        } else if (orientation === "portrait-secondary" || orientation === "portrait-primary") {
-            this.orientation = Orientation.Portrait;
-        } else if (orientation === undefined) {
-            this.orientation = Orientation.Unknown;
+            if (currentOrientation !== this.orientation) {
+                this.orientationChange.emit(this.orientation);
+            }
         }
-
-        if (currentOrientation !== this.orientation) {
-            this.orientationChange.emit(this.orientation);
+        catch (error) {
+            this.orientation = Orientation.Unknown;
         }
 
     }
 
     isMobile() {
-        return this.deviceServiceDetector.isMobile();
+        return this.deviceServiceDetector.isMobile() || this.deviceServiceDetector.isTablet();
     }
 }

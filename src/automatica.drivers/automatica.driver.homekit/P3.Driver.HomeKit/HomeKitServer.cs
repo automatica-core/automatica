@@ -34,7 +34,7 @@ namespace P3.Driver.HomeKit
         private readonly Dictionary<string, List<Characteristic>> _eventBasedNotifications =
             new Dictionary<string, List<Characteristic>>();
 
-        public HomeKitServer(ILogger logger, int port, string name, string ltsk, string ltpk, string deviceId, string pairCode, string manufacturer, string bridgeName, int configVersion)
+        public HomeKitServer(ILogger logger, int port, string name, string ltsk, string ltpk, string deviceId, string pairCode, string manufacturer, string bridgeName, int configVersion, string firmwareRevision)
         {
             if (!HomeKitSetup.IsSetupCodeValid(pairCode))
             {
@@ -60,7 +60,8 @@ namespace P3.Driver.HomeKit
             {
                 Id = 1
             };
-            bridgeAccessory.Services.Add(AccessoryFactory.CreateAccessoryInfo(bridgeAccessory, 1, bridgeName, manufacturer, ServerInfo.ServerUid.ToString()));
+            bridgeAccessory.Services.Add(AccessoryFactory.CreateAccessoryInfo(bridgeAccessory, 1, bridgeName, manufacturer, ServerInfo.ServerUid.ToString(), firmwareRevision));
+            bridgeAccessory.Services.Add(AccessoryFactory.CreateHapServiceInformation(bridgeAccessory, 8));
             _accessoryContainer.AddAccessory(bridgeAccessory);
 
         }

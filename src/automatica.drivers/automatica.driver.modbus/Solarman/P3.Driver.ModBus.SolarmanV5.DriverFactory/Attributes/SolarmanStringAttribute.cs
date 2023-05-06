@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
 {
@@ -11,7 +9,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory.Attributes
         {
         }
 
-        public override Task<object> ConvertValue(ModBusRegisterValueReturn modbusReturn)
+        public override Task<object> ConvertValue(ushort[] data)
         {
             return Task.FromResult((object)0);
         }

@@ -1,7 +1,6 @@
-﻿using P3.Knx.Core.Driver;
-using System;
+﻿using System;
 
-namespace P3.Driver.Knx.Exceptions
+namespace P3.Knx.Core.Driver.Exceptions
 {
     public class ConnectionErrorException : Exception
     {

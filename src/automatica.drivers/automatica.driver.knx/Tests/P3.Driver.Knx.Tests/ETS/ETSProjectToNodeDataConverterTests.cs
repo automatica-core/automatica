@@ -1,13 +1,13 @@
-﻿using P3.Driver.Knx.DriverFactory;
-using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
-using P3.Knx.Core.Ets;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Automatica.Core.UnitTests.Base.Drivers;
+using P3.Driver.Knx.DriverFactory;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
+using P3.Knx.Core.Ets;
 using Xunit;
 
-namespace P3.Driver.Knx.Tests.Ets
+namespace P3.Driver.Knx.Tests.ETS
 {
     public class ETSProjectToNodeConverterTests : DriverFactoryTestBase<KnxIpDriverFactory>
     {

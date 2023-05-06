@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.HueBridge;
 using P3.Driver.HueBridge.Data;
 using P3.Driver.HueBridge.EventArgs;
+using P3.Driver.HueBridgeSimulator.DriverFactory;
 using P3.Driver.HueBridgeSimulator.DriverFactory.OnOff;
 
 namespace P3.Driver.HueBridgeSimulatorDriverFactory

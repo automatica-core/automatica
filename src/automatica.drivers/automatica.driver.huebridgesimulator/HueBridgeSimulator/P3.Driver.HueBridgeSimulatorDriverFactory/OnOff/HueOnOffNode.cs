@@ -7,16 +7,15 @@ namespace P3.Driver.HueBridgeSimulator.DriverFactory.OnOff
 {
     public class HueOnOffNode : HueBridgeNode
     {
-        private readonly int _lightNumber;
         private HueOnOffSwitchNode _switchNode;
         private HueOnOffStateNode _stateNode;
 
         public HueOnOffNode(IDriverContext driverContext, HueBridgeDriver driver) : base(driverContext, driver)
         {
-            _lightNumber = driver.AddHueLight(new HueLight(driverContext.NodeInstance.Name, driverContext.NodeInstance.ObjId.ToString()), this);
+            LightNumber = driver.AddHueLight(new HueLight(driverContext.NodeInstance.Name, driverContext.NodeInstance.ObjId.ToString()), this);
         }
 
-        internal int LightNumber => _lightNumber;
+        internal int LightNumber { get; }
 
         public override void SwitchLight(HueSwitchLightEventArgs eventArgs)
         {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Automatica.Core.Driver;
+﻿using Automatica.Core.Driver;
 
 namespace P3.Driver.HomeKitFactory.NodeInstances
 {

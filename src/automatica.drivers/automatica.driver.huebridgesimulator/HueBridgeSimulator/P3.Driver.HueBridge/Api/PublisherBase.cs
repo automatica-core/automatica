@@ -392,7 +392,7 @@ USN: {1}
 
             if (IsDuplicateSearchRequest(searchTarget, endPoint))
             {
-                Log.LogWarning("Search Request is Duplicate, ignoring.");
+                Log.LogInfo("Search Request is Duplicate, ignoring.");
                 return;
             }
 
@@ -407,7 +407,7 @@ USN: {1}
                     mx = "1";
                 else
                 {
-                    _Log.LogWarning("Search Request ignored due to missing MX header. Set StandardsMode to relaxed to respond to these requests.");
+                    _Log.LogInfo("Search Request ignored due to missing MX header. Set StandardsMode to relaxed to respond to these requests.");
                     return;
                 }
             }
@@ -427,7 +427,7 @@ USN: {1}
                 if (devices != null)
                     SendSearchResponses(searchTarget, endPoint, devices);
                 else
-                    _Log.LogWarning("Sending search responses for 0 devices (no matching targets).");
+                    _Log.LogInfo("Sending search responses for 0 devices (no matching targets).");
             });
         }
 

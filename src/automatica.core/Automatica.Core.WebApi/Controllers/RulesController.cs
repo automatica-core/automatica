@@ -107,7 +107,7 @@ namespace Automatica.Core.WebApi.Controllers
             await using var dbContext = new AutomaticaContext(_config);
 
             var existingInstance = dbContext.RuleInstances.Single(a => a.ObjId == ruleInstance.ObjId);
-
+            
             existingInstance.Name = ruleInstance.Name;
             existingInstance.X = ruleInstance.X;
             existingInstance.Y= ruleInstance.Y;
@@ -360,6 +360,8 @@ namespace Automatica.Core.WebApi.Controllers
                 await _coreServer.RemoveLink(objId);
 
             }
+
+            _logicCacheFacade.LinkCache.Clear();
         }
 
         [HttpPost]

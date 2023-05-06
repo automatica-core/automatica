@@ -1,5 +1,6 @@
 ﻿using System;
-namespace P3.Knx.Core.DPT.Base
+
+namespace P3.Knx.Core.Driver.DPT.Base
 {
     public class ToDataPointException : ArgumentException
     {

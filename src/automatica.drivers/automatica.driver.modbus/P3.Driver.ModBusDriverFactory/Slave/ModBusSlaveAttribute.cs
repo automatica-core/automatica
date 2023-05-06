@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using P3.Driver.ModBusDriver;
 using P3.Driver.ModBusDriver.Slave;
 using P3.Driver.ModBusDriverFactory.Attributes;

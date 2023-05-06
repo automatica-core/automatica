@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace P3.Knx.Core.DPT.Dpt9
+namespace P3.Knx.Core.Driver.DPT.Dpt9
 {
     internal static class Dpt9TypeTranslators
     {

@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
-using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Pixoo64.Screens
 {
     internal class InfoScreenDriverNode : Pixoo64Screen<InfoScreen>
     {
-        public InfoScreenDriverNode(IDriverContext driverContext, PixooSharp.Pixoo64 pixoo) : base(driverContext, pixoo)
+        public InfoScreenDriverNode(IDriverContext driverContext, IList<PixooSharp.Pixoo64> pixoo) : base(driverContext, pixoo)
         {
         }
 
         protected override InfoScreen CreateScreen()
         {
-            return new InfoScreen(Pixoo);
+            return new InfoScreen(Pixoo, DriverContext.Logger);
         }
 
 

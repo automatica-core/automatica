@@ -36,7 +36,7 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
 
 
     private long _volumeOnPlayValue;
-    private long _radioStationValue;
+    private string _radioStationValue;
     private long _maxVolumeValue;
 
     private long _currentVolume;
@@ -93,7 +93,7 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
         }
         if (instance.This2RuleInterfaceTemplate == _radioStation.This2RuleInterfaceTemplate)
         {
-            _radioStationValue = Convert.ToInt64(value);
+            _radioStationValue = Convert.ToString(value);
         }
         if (instance.This2RuleInterfaceTemplate == _maxVolume.This2RuleInterfaceTemplate)
         {
@@ -109,7 +109,7 @@ public class SonosControlRule : Automatica.Core.Rule.Rule
             a.This2RuleInterfaceTemplate == _volumeOnPlay.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
 
         _radioStationValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-            a.This2RuleInterfaceTemplate == _radioStation.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
+            a.This2RuleInterfaceTemplate == _radioStation.This2RuleInterfaceTemplate)!.ValueString;
         
         _maxVolumeValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == _maxVolume.This2RuleInterfaceTemplate)!.ValueInteger!.Value;

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using P3.Knx.Core.Baos.Driver;
 using P3.Knx.Core.Baos.Driver.Data;
 using System.Collections.Generic;

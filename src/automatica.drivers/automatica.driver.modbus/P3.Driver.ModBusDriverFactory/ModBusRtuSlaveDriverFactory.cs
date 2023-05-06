@@ -12,7 +12,7 @@ namespace P3.Driver.ModBusDriverFactory
     {
         public override string DriverName => "ModBus.Rtu.Slave";
         public override Guid DriverGuid => new Guid("7a284855-4435-4c38-8144-bb7908d4ccf6");
-        public override Version DriverVersion => new Version(1, 3, 0, 2);
+        public override Version DriverVersion => new Version(1, 4, 0, 2);
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
 
         public override void InitTemplates(INodeTemplateFactory factory)

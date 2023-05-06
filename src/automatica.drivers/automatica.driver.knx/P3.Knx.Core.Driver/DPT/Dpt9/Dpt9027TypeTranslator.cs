@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace P3.Knx.Core.DPT.Dpt9
+﻿namespace P3.Knx.Core.Driver.DPT.Dpt9
 {
     internal class Dpt9027TypeTranslator : Dpt9Translator
     {

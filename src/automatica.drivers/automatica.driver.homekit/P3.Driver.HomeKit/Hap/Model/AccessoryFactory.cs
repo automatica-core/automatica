@@ -3,13 +3,14 @@
     public static class AccessoryFactory
     {
         public const string AccessoryInformationType = "3E";
+        public const string HapInformationProtocol = "A2";
         public const string LightBulbType = "43";
         public const string OutletType = "47";
         public const string ContactSensorType = "80";
         public const string SwitchType = "49";
         public const string TemperatureSensorType = "8A";
 
-        public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool value)
+        public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool? value)
         {
             var a2 = new Accessory
             {
@@ -17,7 +18,7 @@
             };
 
             a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateLightBulb(a2, 7, value));
+            a2.Services.Add(CreateLightBulb(a2, 7, name, value));
 
 
             return a2;
@@ -85,16 +86,37 @@
             };
 
 
-            service.Characteristics.Add(CharacteristicFactory.CreateIdentify(service, 2));
+            service.Characteristics.Add(CharacteristicFactory.CreateName(service, name, 2));
             service.Characteristics.Add(CharacteristicFactory.CreateManufacturer(service, manufacturer, 3));
-            service.Characteristics.Add(CharacteristicFactory.CreateModel(service, name, 4));
-            service.Characteristics.Add(CharacteristicFactory.CreateName(service, name, 5));
-            service.Characteristics.Add(CharacteristicFactory.CreateSerial(service, serial, 6));
+            service.Characteristics.Add(CharacteristicFactory.CreateSerial(service, serial, 4));
+            service.Characteristics.Add(CharacteristicFactory.CreateModel(service, name, 5));
+            service.Characteristics.Add(CharacteristicFactory.CreateIdentify(service, 6));
 
             return service;
         }
 
-        public static Service CreateLightBulb(Accessory accessory, int id, bool value)
+        public static Service CreateHapServiceInformation(Accessory accessory, int id)
+        {
+            var service = new Service(accessory)
+            {
+                Type = HapInformationProtocol,
+                Id = id
+            };
+
+            service.Characteristics.Add(CharacteristicFactory.CreateVersion(service, "1.1.0", 9));
+
+            return service;
+        }
+
+        public static Service CreateAccessoryInfo(Accessory accessory, int id, string name, string manufacturer, string serial, string firmwareRevision)
+        {
+            var service = CreateAccessoryInfo(accessory, id, name, manufacturer, serial);
+            service.Characteristics.Add(CharacteristicFactory.CreateFirmwareRevision(service, firmwareRevision, 7));
+
+            return service;
+        }
+
+        public static Service CreateLightBulb(Accessory accessory, int id, string name, bool? value)
         {
             var service = new Service(accessory)
             {
@@ -103,10 +125,14 @@
             };
 
             var bulbC = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.OnType, value, 8), "bool");
-            bulbC.Value = false;
-
+            bulbC.Value = value;
 
             service.Characteristics.Add(bulbC);
+            
+
+
+
+
 
             return service;
         }
@@ -210,7 +236,8 @@
                 c.Permissions.Add("pw");
             }
 
-            c.Permissions.Add("ev");
+            if (c.EventBasedNotification.HasValue && c.EventBasedNotification.Value)
+                c.Permissions.Add("ev");
             c.Format = format;
 
             return c;
