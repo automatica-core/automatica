@@ -87,6 +87,7 @@ remote automatica.logic.time git@github.com:automatica-core/automatica.logic.tim
 remote automatica.logic.string.baseoperations git@github.com:automatica-core/automatica.logic.string.baseoperations.git
 remote automatica.logic.operations git@github.com:automatica-core/automatica.logic.operations.git
 remote automatica.sonos.control git@github.com:automatica-core/automatica.sonos.control.git
+remote automatica.logic.lightning git@github.com:automatica-core/automatica.logic.lightning.git
 
 # core repos
 split src/automatica.core automatica.core
@@ -130,6 +131,7 @@ split src/automatica.logics/automatica.logic.time automatica.logic.time
 split src/automatica.logics/automatica.logic.string.baseoperations automatica.logic.string.baseoperations
 split src/automatica.logics/automatica.logic.operations automatica.logic.operations
 split src/automatica.logics/automatica.sonos.control automatica.sonos.control
+split src/automatica.logics/automatica.logic.lightning automatica.logic.lightning
 
 
 
