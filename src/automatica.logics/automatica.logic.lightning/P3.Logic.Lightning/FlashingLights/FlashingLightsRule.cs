@@ -29,12 +29,11 @@ namespace P3.Logic.Lightning.FlashingLights
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            _currentState = !_currentState;
-
+            var setState = !_currentState;
 
             Context.Logger.LogInformation($"Reset light state to {_currentState}");
 
-            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, !_currentState).Instance, !_currentState);
+            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, !_currentState).Instance, setState);
 
             _timer.Stop();
         }
@@ -43,13 +42,11 @@ namespace P3.Logic.Lightning.FlashingLights
         {
             if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.Trigger && (value is true))
             {
-                _currentState ??= false;
-
-                _currentState = !_currentState;
+                var setState = !(_currentState ??= false);
 
                 Context.Logger.LogInformation($"Set light state to {_currentState}");
 
-                Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _currentState).Instance, _currentState);
+                Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _currentState).Instance, setState);
                 
                 _timer.Start();
             }
