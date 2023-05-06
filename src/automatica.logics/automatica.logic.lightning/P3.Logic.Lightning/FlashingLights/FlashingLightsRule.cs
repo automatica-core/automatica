@@ -4,6 +4,7 @@ using System.Timers;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Lightning.FlashingLights
 {
@@ -29,6 +30,10 @@ namespace P3.Logic.Lightning.FlashingLights
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _currentState = !_currentState;
+
+
+            Context.Logger.LogInformation($"Reset light state to {_currentState}");
+
             Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, !_currentState).Instance, !_currentState);
 
             _timer.Stop();
@@ -36,11 +41,13 @@ namespace P3.Logic.Lightning.FlashingLights
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.Trigger && (value is bool bValue) && bValue)
+            if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.Trigger && (value is true))
             {
                 _currentState ??= false;
 
                 _currentState = !_currentState;
+
+                Context.Logger.LogInformation($"Set light state to {_currentState}");
 
                 Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _currentState).Instance, _currentState);
                 
