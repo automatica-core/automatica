@@ -36,7 +36,7 @@ namespace P3.Logic.Lightning.FlashingLights
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.Trigger)
+            if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.Trigger && (value is bool bValue) && bValue)
             {
                 _currentState ??= false;
 
