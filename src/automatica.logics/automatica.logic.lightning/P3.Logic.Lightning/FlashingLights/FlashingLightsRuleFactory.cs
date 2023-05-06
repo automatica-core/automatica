@@ -10,7 +10,7 @@ namespace P3.Logic.Lightning.FlashingLights
     {
         public override string RuleName => "FlashingLights";
         public override Guid RuleGuid => new Guid("2c55738a-221a-456b-8923-a6eead3de823");
-        public override Version RuleVersion => new Version(0, 1, 0, 0);
+        public override Version RuleVersion => new Version(0, 2, 0, 0);
 
         public static readonly Guid Trigger = new Guid("a5fd09a9-64f6-4eec-98a3-52740e30c9ac");
         public static readonly Guid State = new Guid("03fc863e-e657-4f83-afe1-fe29920f6615");
@@ -27,7 +27,7 @@ namespace P3.Logic.Lightning.FlashingLights
             factory.CreateRuleInterfaceTemplate(Trigger, "LIGHTNING.FLASHING_LIGHTS.TRIGGER.NAME", "LIGHTNING.FLASHING_LIGHTS.TRIGGER.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
             factory.CreateRuleInterfaceTemplate(State, "LIGHTNING.FLASHING_LIGHTS.STATE.NAME", "LIGHTNING.FLASHING_LIGHTS.STATE.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
 
-            factory.CreateRuleInterfaceTemplate(Output, "LIGHTNING.FLASHING_LIGHTS.OUTPUT.NAME", "LIGHTNING.FLASHING_LIGHTS.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, int.MaxValue, 3);
+            factory.CreateRuleInterfaceTemplate(Output, "LIGHTNING.FLASHING_LIGHTS.OUTPUT.NAME", "LIGHTNING.FLASHING_LIGHTS.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 1, 3);
 
             factory.CreateParameterRuleInterfaceTemplate(Delay, "LIGHTNING.FLASHING_LIGHTS.DELAY.NAME",
                 "LIGHTNING.FLASHING_LIGHTS.DELAY.DESCRIPTION", RuleGuid, 1, RuleInterfaceParameterDataType.Integer,
