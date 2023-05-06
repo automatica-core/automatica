@@ -1,5 +1,25 @@
 ﻿{
-  "SURVEILLANCE": {
-    "NAME": "Surveillance (Work in Progress)"
+  "LIGHTNING": {
+    "NAME": "Lichtsteuerung",
+    "FLASHING_LIGHTS": {
+      "NAME": "Blinkende Lichter",
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "NAME": "Trigger",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "Output",
+        "DESCRIPTION": ""
+      },
+      "DELAY": {
+        "NAME": "Delay [ms]",
+        "DESCRIPTION": ""
+      }
+    }
   }
 }
