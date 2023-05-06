@@ -6,7 +6,7 @@ using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirec
 
 namespace P3.Logic.Lightning.FlashingLights
 {
-    internal class FlashingLightsRuleFactory : RuleFactory
+    public class FlashingLightsRuleFactory : RuleFactory
     {
         public override string RuleName => "FlashingLights";
         public override Guid RuleGuid => new Guid("2c55738a-221a-456b-8923-a6eead3de823");
