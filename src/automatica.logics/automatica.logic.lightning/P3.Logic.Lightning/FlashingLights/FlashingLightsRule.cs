@@ -10,7 +10,7 @@ namespace P3.Logic.Lightning.FlashingLights
 {
     internal class FlashingLightsRule : Automatica.Core.Rule.Rule
     {
-        private bool? _currentState;
+        private bool _currentState;
 
         private readonly RuleInterfaceInstance _output;
         private readonly Timer _timer;
@@ -42,7 +42,7 @@ namespace P3.Logic.Lightning.FlashingLights
         {
             if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.Trigger && (value is true))
             {
-                var setState = !(_currentState ??= false);
+                var setState = !_currentState;
 
                 Context.Logger.LogInformation($"Set light state to {setState}");
 
