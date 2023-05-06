@@ -53,6 +53,7 @@ namespace P3.Logic.Lightning.FlashingLights
             else if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.State)
             {
                 _currentState = (bool)value;
+                Context.Logger.LogInformation($"Current state is {_currentState}");
             }
 
             return new List<IRuleOutputChanged>();
