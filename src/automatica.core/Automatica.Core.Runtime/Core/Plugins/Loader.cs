@@ -246,6 +246,18 @@ namespace Automatica.Core.Runtime.Core.Plugins
                         }
                     }
                 }
+
+                foreach (var ti in assembly.DefinedTypes)
+                {
+                    if (ti.IsSubclassOf(typeof(T)))
+                    {
+                        if (ti.IsNotPublic)
+                        {
+                            logger.LogWarning($"Found type {typeof(T)} in {ti} but it is not public! Ignore it!");
+                        }
+
+                    }
+                }
             }
             catch (ReflectionTypeLoadException e)
             {
