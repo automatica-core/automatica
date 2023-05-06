@@ -31,7 +31,7 @@ namespace P3.Logic.Lightning.FlashingLights
         {
             var setState = !_currentState;
 
-            Context.Logger.LogInformation($"Reset light state to {_currentState}");
+            Context.Logger.LogInformation($"Reset light state to {setState}");
 
             Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, !_currentState).Instance, setState);
 
@@ -44,7 +44,7 @@ namespace P3.Logic.Lightning.FlashingLights
             {
                 var setState = !(_currentState ??= false);
 
-                Context.Logger.LogInformation($"Set light state to {_currentState}");
+                Context.Logger.LogInformation($"Set light state to {setState}");
 
                 Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _currentState).Instance, setState);
                 
