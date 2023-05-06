@@ -14,6 +14,7 @@ namespace P3.Logic.Lightning.FlashingLights
 
         private readonly RuleInterfaceInstance _output;
         private readonly Timer _timer;
+        
 
         public FlashingLightsRule(IRuleContext context) : base(context)
         {
@@ -52,8 +53,11 @@ namespace P3.Logic.Lightning.FlashingLights
             }
             else if (instance.This2RuleInterfaceTemplate == FlashingLightsRuleFactory.State)
             {
-                _currentState = (bool)value;
-                Context.Logger.LogInformation($"Current state is {_currentState}");
+                if (_timer.Enabled)
+                {
+                    _currentState = (bool)value;
+                    Context.Logger.LogInformation($"Current state is {_currentState}");
+                }
             }
 
             return new List<IRuleOutputChanged>();
