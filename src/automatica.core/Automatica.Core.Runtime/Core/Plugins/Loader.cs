@@ -63,7 +63,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
     {
         public static async Task<IList<T>> Load<T>(string folder, string searchPattern, ILogger logger, IConfiguration config, bool isInDevMode)
         {
-            logger.LogDebug($"Loading files from {folder}");
+            logger.LogInformation($"Loading files from {folder}");
             var folders = Directory.GetDirectories(folder);
             var rootItems = await LoadFromFolder<T>(folder, searchPattern, logger, config, isInDevMode);
 
@@ -117,7 +117,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             {
                 var fileInfo = new FileInfo(file);
                 var folder = fileInfo.DirectoryName;
-                logger.LogDebug($"Loading file {file} and check for interfaces");
+                logger.LogInformation($"Loading file {file} and check for interfaces");
 
                 AssemblyLoader loader;
                 if (isInDevMode)
@@ -133,14 +133,14 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                 Func<AssemblyLoadContext, AssemblyName, Assembly> assemblyLoader = (context, name) =>
                 {
-                    logger.LogDebug($"Try to load assembly {name} for {file}");
+                    logger.LogInformation($"Try to load assembly {name} for {file}");
                     // avoid loading *.resources dll, because of: https://github.com/dotnet/coreclr/issues/8416
                     if (name.Name.EndsWith("resources"))
                     {
                         return null;
                     }
 
-                    logger.LogDebug($"try to load assembly from {folder}");
+                    logger.LogInformation($"Try to load assembly from {folder}");
                     var foundDll =
                         Directory.GetFileSystemEntries(folder, name.Name + ".dll", SearchOption.AllDirectories);
                     if (foundDll.Any())
@@ -149,7 +149,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     }
 
                     var secondPath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
-                    logger.LogDebug($"try to load assembly from second path: {secondPath}");
+                    logger.LogInformation($"Try to load assembly from second path: {secondPath}");
                     foundDll = Directory.GetFileSystemEntries(secondPath, name.Name + ".dll",
                         SearchOption.AllDirectories);
                     if (foundDll.Any())
@@ -241,7 +241,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                         if (assembly.CreateInstance(ti.FullName ?? throw new InvalidOperationException()) is T factory)
                         {
-                            logger.LogDebug($"Found {typeof(T)} in {ti}...");
+                            logger.LogInformation($"Found {typeof(T)} in {ti}...");
                             list.Add(factory);
                         }
                     }
@@ -270,7 +270,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         private static async Task<List<T>> LoadFromFolder<T>(string folder, string searchPattern, ILogger logger, IConfiguration config, bool isInDevMode)
         {
-            logger.LogDebug($"Loading files from {folder} and check for {typeof(T)}");
+            logger.LogInformation($"Loading files from {folder} and check for {typeof(T)}");
             var list = new List<T>();
             foreach (var file in Directory.GetFiles(folder, searchPattern))
             {
