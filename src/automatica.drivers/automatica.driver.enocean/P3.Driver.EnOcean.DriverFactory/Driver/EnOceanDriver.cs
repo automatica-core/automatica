@@ -10,6 +10,7 @@ using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 using P3.Driver.EnOcean.DriverFactory.Templates;
+using P3.Driver.EnOcean.Serial;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
@@ -56,7 +57,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 return false;
             }
 
-            _driver = new P3.Driver.EnOcean.Driver(port);
+            _driver = new P3.Driver.EnOcean.Driver(new SerialStream(port));
 
             return base.Init();
         }

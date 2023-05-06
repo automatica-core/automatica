@@ -44,7 +44,7 @@ namespace Automatica.Push.Hubs
             await _notify.EnableLearnMode(nodeInstance);
             await Subscribe(nodeInstanceId.ToString());
         }
-        public async Task DisalbeLearnMode(Guid nodeInstanceId)
+        public async Task DisableLearnMode(Guid nodeInstanceId)
         {
 
             var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId);

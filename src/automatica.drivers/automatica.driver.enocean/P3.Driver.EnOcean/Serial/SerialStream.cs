@@ -10,13 +10,13 @@ using RJCP.IO.Ports;
 
 namespace P3.Driver.EnOcean.Serial
 {
-    public class SerialStream
+    public class SerialStream : BaseStream
     {
         private readonly string _serialPort;
         private SerialPortStream _stream;
         private bool _connected;
 
-        public event EventHandler<PacketReceivedEventArgs> TelegramReceived;
+        public override event EventHandler<PacketReceivedEventArgs> TelegramReceived;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
         public SerialStream(string serialPort)
@@ -24,17 +24,17 @@ namespace P3.Driver.EnOcean.Serial
             _serialPort = serialPort;
         }
 
-        public void Pause()
+        public override void Pause()
         {
             _stream.DataReceived -= _stream_DataReceived;
         }
 
-        public void Continue()
+        public override void Continue()
         {
             _stream.DataReceived += _stream_DataReceived;
         }
 
-        public bool Open()
+        public override Task<bool> Open()
         {
             try
             {
@@ -57,9 +57,9 @@ namespace P3.Driver.EnOcean.Serial
             {
                 Logger.Logger.Instance.LogError("Could not open serial interface {0} {1}", _serialPort, e);
 
-                return false;
+                return Task.FromResult(false);
             }
-            return true;
+            return Task.FromResult(true);
         }
 
         private async void _stream_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -95,7 +95,7 @@ namespace P3.Driver.EnOcean.Serial
             }
         }
 
-        public bool Close()
+        public override Task<bool> Close()
         {
             _stream?.Close();
             if (_stream != null)
@@ -103,7 +103,7 @@ namespace P3.Driver.EnOcean.Serial
                 _stream.DataReceived -= _stream_DataReceived;
             }
             _connected = false;
-            return true;
+            return Task.FromResult(true);
         }
 
 
@@ -112,22 +112,19 @@ namespace P3.Driver.EnOcean.Serial
             return _connected;
         }
 
-        public void WriteFrame(EnOceanPacket frame)
+        public override async Task<EnOceanPacket> WriteFrame(EnOceanPacket frame)
         {
             try
             {
-                _stream.Write(frame.RawData.ToArray(), 0, frame.RawData.Length);
                 Logger.Logger.Instance.LogHexOut(frame.RawData);
+                _stream.Write(frame.RawData.ToArray(), 0, frame.RawData.Length);
+                return await ReadFrameInternal();
             }
             catch (Exception e)
             {
                 Logger.Logger.Instance.LogError($"Could not write frame {e}", e);
             }
-        }
-
-        public async Task<EnOceanPacket> ReadFrame()
-        {
-            return await ReadFrameInternal();
+            return null;
         }
 
         private async Task<EnOceanPacket> ReadFrameInternal()
@@ -194,9 +191,9 @@ namespace P3.Driver.EnOcean.Serial
             catch (IOException ioe)
             {
                 Logger.Logger.Instance.LogError($"Could not read frame {ioe}", ioe);
-                Close();
+                await Close();
                 Thread.Sleep(100);
-                Open();
+                await Open();
             }
             catch (Exception e)
             {

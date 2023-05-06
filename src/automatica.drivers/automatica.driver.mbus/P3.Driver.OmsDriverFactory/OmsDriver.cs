@@ -73,7 +73,7 @@ namespace P3.Driver.OmsDriverFactory
                     {
                         if (!(OmsHelper.AesDecrypt(_aesKey, data, _logger) is VariableDataFrame variableDataFrame))
                         {
-                                DriverContext.Logger.LogError("Could not encrypt data frame");
+                                DriverContext.Logger.LogError("Could not decrypt data frame");
                             return;
                         }
 

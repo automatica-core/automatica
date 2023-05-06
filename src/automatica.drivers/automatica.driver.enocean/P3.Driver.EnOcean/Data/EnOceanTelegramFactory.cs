@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using P3.Driver.EnOcean.Data.Packets;
 
 namespace P3.Driver.EnOcean.Data
@@ -15,6 +13,11 @@ namespace P3.Driver.EnOcean.Data
                 case EnOcean.PacketType.RadioErp1:
                 {
                     telegram = new RadioErp1Packet();
+                    break;
+                }
+                case EnOcean.PacketType.Response:
+                {
+                    telegram = new ResponsePacket();
                     break;
                 }
                 default:
