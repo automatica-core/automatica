@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Lightning.FlashingLights
 {
-    internal class FlashingLightsRule : Automatica.Core.Rule.Rule
+    internal class FlashingLightsRule : Rule
     {
         private bool _currentState;
 
@@ -51,6 +51,7 @@ namespace P3.Logic.Lightning.FlashingLights
 
                 Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, _currentState).Instance, setState);
 
+                _currentState = setState;
                 _timerRunning = true;
                 _timer.Start();
             }
