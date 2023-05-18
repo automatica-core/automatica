@@ -405,15 +405,17 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       const parentDrag = this.nodeInstanceService.getNodeInstance(drag.ParentId);
       parentDrag.Children = parentDrag.Children.filter(a => a.ObjId != drag.ObjId);
 
-      drag.setParent(drop);
-      drop.Children = [...drop.Children, drag];
-      drag.This2ParentNodeInstance = drop.ObjId;
+      //drag.setParent(drop);
+      // const contains = drop.Children.filter(a => a.ObjId == drag.ObjId);
+      // if(contains.length == 0)
+       drop.Children = [...drop.Children, drag];
+       drag.This2ParentNodeInstance = drop.ObjId;
 
       this.selectNode(drag);
 
       this.appService.isLoading = true;
       this.tree.instance.refresh();
-      await this.configService.update(drop);
+      await this.configService.update(drag);
       this.appService.isLoading = false;
     }
   }
