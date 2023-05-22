@@ -21,8 +21,6 @@ namespace Automatica.Core.Runtime.Recorder
         {
             Instance = instance;
             _recorderWriter = recorderWriter;
-
-
         }
 
         public Task Start()
@@ -90,25 +88,26 @@ namespace Automatica.Core.Runtime.Recorder
                             _lastValue = dblValue;
                             break;
                         case EF.Models.Trendings.TrendingTypes.Max:
-                            if (_lastValue == null)
-                            {
-                                _lastValue = dblValue;
-                            }
-                            else
-                            {
-                                _lastValue = Math.Max(dblValue, _lastValue.Value);
-                            }
+                            _lastValue = _lastValue == null ? dblValue : Math.Max(dblValue, _lastValue.Value);
                             break;
                         case EF.Models.Trendings.TrendingTypes.Min:
+                            _lastValue = _lastValue == null ? dblValue : Math.Min(dblValue, _lastValue.Value);
+                            break;
+                        case EF.Models.Trendings.TrendingTypes.OnChange:
                             if (_lastValue == null)
                             {
                                 _lastValue = dblValue;
+                                _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
                             }
                             else
                             {
-                                _lastValue = Math.Min(dblValue, _lastValue.Value);
+                                if (dblValue != _lastValue.Value)
+                                {
+                                    _lastValue = dblValue;
+                                    _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
+                                }
                             }
-                            break;
+                            break;  
                     }
                 }
             }

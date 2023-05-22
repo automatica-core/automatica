@@ -98,7 +98,8 @@ export enum TrendingTypes {
     Average = 0,
     Raw = 1,
     Max = 2,
-    Min = 3
+    Min = 3,
+    OnChange = 4
 }
 
 @Model()
