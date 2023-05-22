@@ -114,5 +114,32 @@ namespace Automatica.Core.Tests.Recorder
             Assert.Equal(2, recorder.LastTrending.Value);
 
         }
+
+
+
+        [Fact]
+        public async Task TestOnChangeRecording()
+        {
+            var node = new NodeInstance
+            {
+                ObjId = Guid.NewGuid(),
+                Trending = false,
+                TrendingType = TrendingTypes.OnChange
+            };
+
+            var recorder = await CreateRecorder(node);
+            var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
+            await trendingValueRecorder.Start();
+
+            trendingValueRecorder.ValueChanged(4, "testSource");
+            Assert.Equal(4, recorder.LastTrending.Value);
+
+            trendingValueRecorder.ValueChanged(2, "testSource");
+
+            Assert.Equal(2, recorder.LastTrending.Value);
+            trendingValueRecorder.ValueChanged(1, "testSource");
+            Assert.Equal(1, recorder.LastTrending.Value);
+
+        }
     }
 }
