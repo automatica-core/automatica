@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Runtime.Recorder
@@ -59,7 +61,7 @@ namespace Automatica.Core.Runtime.Recorder
             }
         }
 
-        public void ValueChanged(object value, string source)
+        public void ValueChanged(DispatchValue value, string source)
         {
             lock (_lock)
             {
@@ -69,7 +71,7 @@ namespace Automatica.Core.Runtime.Recorder
                 }
 
                 _lastSource = source;
-                if (double.TryParse(value.ToString(), out var dblValue))
+                if (double.TryParse(value.Value.ToString(), CultureInfo.InvariantCulture, out var dblValue))
                 {
                     switch (Instance.TrendingType)
                     {

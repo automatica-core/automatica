@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 
 namespace Automatica.Core.Runtime.Recorder
 {
     internal interface IDataRecorder
     {
-        void ValueChanged(object value, string name);
+        void ValueChanged(DispatchValue value, string name);
         Task Stop();
         Task Start();
     }
