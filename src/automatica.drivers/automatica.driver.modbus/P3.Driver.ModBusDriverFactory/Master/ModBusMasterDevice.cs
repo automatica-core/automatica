@@ -93,6 +93,10 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 {
                     // ignore
                 }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError(e, $"Unknown error occurred {e}");
+                }
             }
         }
 
