@@ -70,7 +70,6 @@ export class NodeInstanceService {
         if (this.hasNodeInstance(id)) {
             this._nodeInstanceMap.get(id).Value = value.value;
             this._nodeInstanceMap.get(id).ValueTimestamp = value.timestamp;
-            console.log("nodevalue: ", value);
         }
     }
 
