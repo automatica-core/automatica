@@ -84,6 +84,8 @@ namespace Automatica.Core.EF.Models
         Timer = 24,
         [PropertyTemplateType("TIME")]
         Time = 25,
+        [PropertyTemplateType("DATETIME")]
+        DateTime = 26,
 
         [PropertyTemplateType("AREA_ICON", "shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-hot,temperature-frigid,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath")]
         AreaIcon = 100,

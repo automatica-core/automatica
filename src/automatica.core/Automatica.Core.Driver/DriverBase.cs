@@ -204,6 +204,11 @@ namespace Automatica.Core.Driver
             return Task.CompletedTask;
         }
 
+        public virtual Task WriteValue(IDispatchable source, DispatchValue value)
+        {
+            return WriteValue(source, value.Value);
+        }
+
         public virtual Task<bool> Read()
         {
             DriverContext.Logger.LogError($"Read is not implemented in {DriverContext.NodeInstance.Name}");

@@ -24,7 +24,7 @@ namespace Automatica.Core.Tests
             _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, DispatchableMock.Instance.Id, (dispatchable, o) =>
             {
                 Assert.NotNull(o);
-                Assert.Equal(100, o);
+                Assert.Equal(100, o.Value);
                 autoResetEvent.Set();
             });
 

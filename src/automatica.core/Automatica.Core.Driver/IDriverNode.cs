@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
@@ -81,7 +82,17 @@ namespace Automatica.Core.Driver
         /// <param name="source">Source</param>
         /// <param name="value">The value</param>
         /// <returns><see cref="Task"/></returns>
+        [Obsolete("Use WriteValue with DispatchValue instead")]
         Task WriteValue(IDispatchable source, object value);
+
+
+        /// <summary>
+        /// Will be called from the <see cref="IDispatcher"/> when a value should be written to the driver
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="value">The value</param>
+        /// <returns><see cref="Task"/></returns>
+        Task WriteValue(IDispatchable source, DispatchValue value);
 
         /// <summary>
         /// Indicates the driver to read a value

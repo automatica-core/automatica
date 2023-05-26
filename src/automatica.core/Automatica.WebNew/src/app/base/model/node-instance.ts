@@ -192,6 +192,16 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this._Value = v;
     }
 
+    
+    private _valueTimestamp : Date;
+    public get ValueTimestamp() : Date {
+        return this._valueTimestamp;
+    }
+    public set ValueTimestamp(v : Date) {
+        this._valueTimestamp = v;
+    }
+    
+
 
     @JsonPropertyName("This2NodeTemplateNavigation")
     NodeTemplate: NodeTemplate;
@@ -325,6 +335,11 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualGenericPropertyInstance("TRENDING", 10, this, () => this.Trending, (value) => this.Trending = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.TRENDING"));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes)));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
+
+
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE", 1, this, () => this.Value, void 0, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VALUE"));
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE_TIMESTAMP", 2, this, () => this.ValueTimestamp, void 0, false, PropertyTemplateType.DateTime, "COMMON.CATEGORY.VALUE"));
+
         }
 
         this.updateDisplayName();

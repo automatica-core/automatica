@@ -48,8 +48,8 @@ namespace Automatica.Core.Tests.Dispatcher
 
             var value = DispatcherMock.Instance.GetValue(DispatchableType.NodeInstance, driverMock.Id);
 
-            Assert.IsType<bool>(value);
-            Assert.True((bool)value);
+            Assert.IsType<bool>(value.Value);
+            Assert.True((bool)value.Value);
         }
 
 

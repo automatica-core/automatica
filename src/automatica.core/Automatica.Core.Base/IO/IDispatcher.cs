@@ -5,19 +5,38 @@ using System.Threading.Tasks;
 
 namespace Automatica.Core.Base.IO
 {
+    public class DispatchValue
+    {
+
+
+        public DispatchValue(Guid id, DispatchableType dispatchableType, object value, DateTime timestamp)
+        {
+            Id = id;
+            Type = dispatchableType;
+            Value = value;
+            Timestamp = timestamp;
+        }
+
+        public DispatchableType Type { get; set; }
+        public Guid Id { get; set; }
+        public object Value { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+
     public interface IDispatcher
     {
         Task DispatchValue(IDispatchable self, object value);
+        Task DispatchValue(IDispatchable self, DispatchValue value);
 
         Task UnRegisterDispatch(DispatchableType type, Guid id);
-        Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback);
+        Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, DispatchValue> callback);
 
-        IDictionary<Guid, object> GetValues();
-        IDictionary<Guid, object> GetValues(DispatchableType type);
+        IDictionary<Guid, DispatchValue> GetValues();
 
+        IDictionary<Guid, DispatchValue> GetValues(DispatchableType type);
 
-        object GetValue(Guid id);
-        object GetValue(DispatchableType type, Guid id);
+        DispatchValue GetValue(Guid id);
+        DispatchValue GetValue(DispatchableType type, Guid id);
 
         Task ClearRegistrations();
         Task ClearValues();

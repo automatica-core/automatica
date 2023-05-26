@@ -46,8 +46,8 @@ namespace Automatica.Core.Tests.Dispatcher
             Assert.True(((DriverNodeMock) target.Children[0]).WriteReceived);
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
 
-            Assert.IsType<bool>(value);
-            Assert.True((bool) value);
+            Assert.IsType<bool>(value.Value);
+            Assert.True((bool) value.Value);
         }
 
         [Fact]
@@ -81,8 +81,8 @@ namespace Automatica.Core.Tests.Dispatcher
             Assert.True(target.WriteReceived);
             var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
 
-            Assert.IsType<bool>(value);
-            Assert.True((bool) value);
+            Assert.IsType<bool>(value.Value);
+            Assert.True((bool) value.Value);
         }
 
         [Fact]
@@ -120,8 +120,8 @@ namespace Automatica.Core.Tests.Dispatcher
             Assert.True(target.WriteReceived);
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
 
-            Assert.IsType<bool>(value);
-            Assert.True((bool) value);
+            Assert.IsType<bool>(value.Value);
+            Assert.True((bool) value.Value);
         }
 
 
@@ -159,8 +159,8 @@ namespace Automatica.Core.Tests.Dispatcher
             Assert.True(((DriverNodeMock) target.Children[0]).WriteReceived);
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
 
-            Assert.IsType<bool>(value);
-            Assert.True((bool) value);
+            Assert.IsType<bool>(value.Value);
+            Assert.True((bool) value.Value);
         }
 
     }

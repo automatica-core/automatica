@@ -118,7 +118,8 @@
       "SETTING": "Einstellungen",
       "DISCOVERY": "Suchen",
       "TRENDING": "Datenaufzeichnung",
-      "SLAVE": "Slave"
+      "SLAVE": "Slave",
+      "VALUE": "Wert"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -371,6 +372,12 @@
       },
       "REMANENT": {
         "NAME": "Remanenz"
+      },
+      "VALUE": {
+        "NAME": "Wert"
+      },
+      "VALUE_TIMESTAMP": {
+        "NAME": "Zeitstempel"
       }
     },
     "CATEGORY_INSTANCE": {

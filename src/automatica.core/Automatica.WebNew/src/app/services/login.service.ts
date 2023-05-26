@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BaseService } from "./base-service";
 import { L10nTranslationService } from "angular-l10n";
@@ -72,7 +72,7 @@ export class LoginService extends BaseService {
 }
 
 @Injectable()
-export class HasRoleGuard implements CanActivate {
+export class HasRoleGuard  {
 
   constructor(private router: Router, private userService: LoginService) {
 
@@ -95,7 +95,7 @@ export class HasRoleGuard implements CanActivate {
 }
 
 @Injectable()
-export class HomepageRouteGuard implements CanActivate {
+export class HomepageRouteGuard  {
 
   constructor(private router: Router, private loginService: LoginService) {
   }
