@@ -23,6 +23,12 @@ namespace P3.Driver.Constants
 
         public object Value => _value;
 
+        public override Task<bool> Read()
+        {
+            DispatchValue(_value);
+            return Task.FromResult(true);
+        }
+
         // timer elapsed method
         private void _dispatchTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
