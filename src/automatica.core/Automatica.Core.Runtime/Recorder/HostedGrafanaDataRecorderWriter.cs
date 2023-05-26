@@ -56,7 +56,7 @@ namespace Automatica.Core.Runtime.Recorder
 
             Logger?.LogDebug($"Saving value for {name}: {trend.Value}");
 
-            _client.Send(name, f => f.Field("value", Math.Round(trend.Value, 2)), t => t.Tag("nodeId", nodeInstance.ObjId.ToString().Replace("-", "_")).Tag("source", trend.Source).Tag("name", nodeInstance.Name));
+            _client?.Send(name, f => f.Field("value", Math.Round(trend.Value, 2)), t => t.Tag("nodeId", nodeInstance.ObjId.ToString().Replace("-", "_")).Tag("source", trend.Source).Tag("name", nodeInstance.Name));
         }
 
 
