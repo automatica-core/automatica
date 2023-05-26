@@ -175,6 +175,10 @@
                         [maxLength]="data.data.PropertyTemplate.ExtendedType.length" [readOnly]="data.data.IsReadonly"
                         (onValueChanged)="valueChanged($event, data)"></dx-text-box>
                 </ng-container>
+                <ng-container *ngSwitchCase="PropertyTemplateType.DateTime">
+                    <dx-date-box [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"
+                        (onValueChanged)="valueChanged($event, data)" displayFormat="shortDateShortTime"></dx-date-box>
+                </ng-container>
 
                 <ng-container *ngSwitchCase="PropertyTemplateType.Password">
                     <dx-text-box mode="password" [(value)]="data.data.Value"

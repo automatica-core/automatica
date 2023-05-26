@@ -118,7 +118,8 @@
       "SETTING": "Settings",
       "DISCOVERY": "Discovery",
       "TRENDING": "Trendings",
-      "SLAVE": "Slave"
+      "SLAVE": "Slave",
+      "VALUE": "Value"
     },
     "FACTOR": {
       "NAME": "Factor",
@@ -371,6 +372,12 @@
       },
       "REMANENT": {
         "NAME": "Remanent"
+      },
+      "VALUE": {
+        "NAME": "Value"
+      },
+      "VALUE_TIMESTAMP": {
+        "NAME": "Timestamp"
       }
     },
     "CATEGORY_INSTANCE": {

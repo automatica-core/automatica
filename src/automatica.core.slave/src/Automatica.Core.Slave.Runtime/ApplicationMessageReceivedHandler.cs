@@ -17,6 +17,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly string _actionTopic;
         private readonly string _actionTopics;
         private readonly string _reinitTopic;
+        private readonly string _watchdogTopic;
 
         public ApplicationMessageReceivedHandler(SlaveRuntime slave, ILogger logger)
         {
@@ -26,6 +27,7 @@ namespace Automatica.Core.Slave.Runtime
             _actionTopic = $"slave/{_slave.SlaveId}/action";
             _actionTopics = $"slave/{_slave.SlaveId}/actions";
             _reinitTopic = $"slave/{_slave.SlaveId}/reinit";
+            _watchdogTopic = $"watchdog/{_slave.SlaveId}";
 
         }
 
@@ -63,6 +65,10 @@ namespace Automatica.Core.Slave.Runtime
                 }
             }
             else if (MqttTopicFilterComparer.IsMatch(_reinitTopic, e.ApplicationMessage.Topic))
+            {
+                await _slave.ReInit();
+            }
+            else if (MqttTopicFilterComparer.IsMatch(_watchdogTopic, e.ApplicationMessage.Topic))
             {
                 await _slave.ReInit();
             }

@@ -19,16 +19,18 @@ namespace Automatica.Core.Base.IO
         private readonly IRemoteSender _remoteSender;
         private readonly ILogger _logger;
         private readonly object _lock = new object();
+        
 
-        protected readonly IDictionary<DispatchableType, IDictionary<Guid, object>> NodeValues =
-            new ConcurrentDictionary<DispatchableType, IDictionary<Guid, object>>();
+        protected readonly IDictionary<DispatchableType, IDictionary<Guid, DispatchValue>> NodeValues =
+            new ConcurrentDictionary<DispatchableType, IDictionary<Guid, DispatchValue>>();
 
-        protected readonly IDictionary<Guid, object> Values = new ConcurrentDictionary<Guid, object>();
+        protected readonly IDictionary<Guid, DispatchValue> Values = new ConcurrentDictionary<Guid, DispatchValue>();
 
-        private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>>();
+        private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>>();
+
         private readonly Timer _notifyTimer = new Timer();
 
-        private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, object>, int>>();
+        private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>>();
 
         public Dispatcher(ILogger logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender)
         {
@@ -38,19 +40,20 @@ namespace Automatica.Core.Base.IO
             _logger = logger;
 
             _notifyTimer.Elapsed += _notifyTimer_Elapsed;
-            _notifyTimer.Interval = 1000;
+            _notifyTimer.Interval = 30000;
             _notifyTimer.Start();
         }
 
-        public IDictionary<Guid, object> GetValues()
+      
+        public IDictionary<Guid, DispatchValue> GetValues()
         {
             lock (_lock)
             {
-                    return Values;
+                return Values;
             }
         }
 
-        public object GetValue(Guid id)
+        public DispatchValue GetValue(Guid id)
         {
 
             lock (_lock)
@@ -63,18 +66,19 @@ namespace Automatica.Core.Base.IO
 
             return null;
         }
+        
 
-        public virtual IDictionary<Guid, object> GetValues(DispatchableType type)
+        public virtual IDictionary<Guid, DispatchValue> GetValues(DispatchableType type)
         {
             lock (_lock)
             {
                 if(NodeValues.ContainsKey(type))
                     return NodeValues[type];
             }
-            return new Dictionary<Guid, object>();
+            return new Dictionary<Guid, DispatchValue>();
         }
 
-        public object GetValue(DispatchableType type, Guid id)
+        public DispatchValue GetValue(DispatchableType type, Guid id)
         {
 
             lock (_lock)
@@ -106,26 +110,30 @@ namespace Automatica.Core.Base.IO
             }
         }
 
-        private void StoreValue(IDispatchable self, object value)
+        private void StoreValue(IDispatchable self, DispatchValue value)
         {
             lock (_lock)
             {
                 if (!NodeValues.ContainsKey(self.Type))
                 {
-                    NodeValues.Add(self.Type, new ConcurrentDictionary<Guid, object>());
+                    NodeValues.Add(self.Type, new ConcurrentDictionary<Guid, DispatchValue>());
+                    
                 }
+
+                var dispatchable = value;
 
                 if (!NodeValues[self.Type].ContainsKey(self.Id))
                 {
-                    NodeValues[self.Type].Add(self.Id, value);
+                   
+                    NodeValues[self.Type].Add(self.Id, dispatchable);
 
                     if (!Values.ContainsKey(self.Id))
                     {
-                        Values.Add(self.Id, value);
+                        Values.Add(self.Id, dispatchable);
                     }
                     else
                     {
-                        Values[self.Id] = value;
+                        Values[self.Id] = dispatchable;
                     }
                     
                 }
@@ -135,20 +143,19 @@ namespace Automatica.Core.Base.IO
                     {
                         return;
                     }
-                    NodeValues[self.Type][self.Id] = value;
-                    Values[self.Id] = value;
+                    NodeValues[self.Type][self.Id] = dispatchable;
+                    Values[self.Id] = dispatchable;
                 }
-
             }
         }
 
-        private async Task Dispatch(IDispatchable self, object value, Action<IDispatchable, object, Action<IDispatchable, object>> dispatchAction)
+        private async Task Dispatch(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
         {
             StoreValue(self, value);
 
             if (!_hopCounts.ContainsKey(self.Id))
             {
-                _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, object>, int>());
+                _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, DispatchValue>, int>());
             }
 
             _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value}");
@@ -158,6 +165,7 @@ namespace Automatica.Core.Base.IO
                 await ExecuteDispatch(self, value, dispatch, dispatchAction);
 
             }
+           
             else if (self.Type == DispatchableType.Visualization)
             {
                 foreach (var all in _registrationMap)
@@ -180,7 +188,7 @@ namespace Automatica.Core.Base.IO
             await _dataBroadcast.DispatchValue(self.Type, self.Id, value);
         }
 
-        private Task ExecuteDispatch(IDispatchable self, object value, IList<Action<IDispatchable, object>> dispatch, Action<IDispatchable, object, Action<IDispatchable, object>> dispatchAction)
+        private Task ExecuteDispatch(IDispatchable self, DispatchValue value, IList<Action<IDispatchable, DispatchValue>> dispatch, Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
         {
             foreach (var dis in dispatch)
             {
@@ -218,7 +226,7 @@ namespace Automatica.Core.Base.IO
             return Task.CompletedTask;
         }
 
-        private void ResetHopCount(IDispatchable self, Action<IDispatchable, object> action)
+        private void ResetHopCount(IDispatchable self, Action<IDispatchable, DispatchValue> action)
         {
             if (!_hopCounts.ContainsKey(self.Id))
             {
@@ -234,7 +242,7 @@ namespace Automatica.Core.Base.IO
             _hopCounts[self.Id][action] = 0;
         }
 
-        private void IncrementHopCount(IDispatchable self, Action<IDispatchable, object> action)
+        private void IncrementHopCount(IDispatchable self, Action<IDispatchable, DispatchValue> action)
         {
             if (!_hopCounts.ContainsKey(self.Id))
             {
@@ -250,10 +258,22 @@ namespace Automatica.Core.Base.IO
             _hopCounts[self.Id][action]++;
         }
 
-        public virtual async Task DispatchValue(IDispatchable self, object value)
+        public Task DispatchValue(IDispatchable self, object value)
         {
-            await Dispatch(self, value, async (a, b, c) => { await DispatchValueInternal(self, value, c); });
+            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTime.Now);
+            return DispatchValue(self, dispatchable);
         }
+
+        public virtual async Task DispatchValue(IDispatchable self, DispatchValue value)
+        {
+            async void DispatchAction(IDispatchable a, DispatchValue b, Action<IDispatchable, DispatchValue> c)
+            {
+                await DispatchValueInternal(self, value, c);
+            }
+
+            await Dispatch(self, value, DispatchAction);
+        }
+
 
         public Task UnRegisterDispatch(DispatchableType type, Guid id)
         {
@@ -265,8 +285,7 @@ namespace Automatica.Core.Base.IO
             return Task.CompletedTask;
         }
 
-
-        protected virtual Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
+        protected virtual Task DispatchValueInternal(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue> dis)
         {
             return Task.Run(() =>
             {
@@ -274,20 +293,21 @@ namespace Automatica.Core.Base.IO
             });
         }
 
-        public virtual Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
+        public virtual Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, DispatchValue> callback)
         {
             if (!_registrationMap.ContainsKey(type))
             {
-                _registrationMap.Add(type, new ConcurrentDictionary<Guid, IList<Action<IDispatchable, object>>>());
+                _registrationMap.Add(type, new ConcurrentDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>());
             }
             if (!_registrationMap[type].ContainsKey(id))
             {
-                _registrationMap[type].Add(id, new List<Action<IDispatchable, object>>());
+                _registrationMap[type].Add(id, new List<Action<IDispatchable, DispatchValue>>());
             }
 
             _registrationMap[type][id].Add(callback);
             return Task.CompletedTask;
         }
+
 
         public virtual Task ClearRegistrations()
         {

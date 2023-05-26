@@ -24,14 +24,14 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("node/current")]
         [Authorize(Policy = Role.ViewerRole)]
-        public IDictionary<Guid, object> GetCurrentNodeValues()
+        public IDictionary<Guid, DispatchValue> GetCurrentNodeValues()
         {
             return _dispatcher.GetValues(DispatchableType.NodeInstance);
         }
         [HttpGet]
         [Route("node/:id")]
         [Authorize(Policy = Role.ViewerRole)]
-        public object GetNodeValue(Guid id)
+        public DispatchValue GetNodeValue(Guid id)
         {
             return _dispatcher.GetValue(DispatchableType.NodeInstance, id);
         }
@@ -39,7 +39,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("all/current")]
         [Authorize(Policy = Role.ViewerRole)]
-        public IDictionary<Guid, object> GetCurrentValues()
+        public IDictionary<Guid, DispatchValue> GetCurrentValues()
         {
             return _dispatcher.GetValues();
         }

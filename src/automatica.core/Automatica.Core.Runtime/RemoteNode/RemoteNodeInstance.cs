@@ -73,6 +73,11 @@ namespace Automatica.Core.Runtime.RemoteNode
             return Task.CompletedTask;
         }
 
+        public Task WriteValue(IDispatchable source, DispatchValue value)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task<bool> Read()
         {
             _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.Read, this);

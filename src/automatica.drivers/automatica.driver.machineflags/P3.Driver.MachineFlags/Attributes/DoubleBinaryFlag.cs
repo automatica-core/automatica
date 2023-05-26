@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -23,7 +24,7 @@ namespace P3.Driver.MachineFlags.Attributes
            
             try
             {
-                var dValue = Convert.ToDouble(value);
+                var dValue = Convert.ToDouble(value, CultureInfo.InvariantCulture);
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (_value == dValue)
                 {

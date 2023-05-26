@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet.Client.Options;
+using MqttTopicFilterBuilder = MQTTnet.MqttTopicFilterBuilder;
 using Timer = System.Timers.Timer;
 
 namespace Automatica.Core.Slave.Runtime
@@ -40,7 +41,7 @@ namespace Automatica.Core.Slave.Runtime
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
         private readonly SemaphoreSlim _startupSemaphore = new SemaphoreSlim(1);
 
-        private readonly Timer _timer = new Timer(5000);
+        private readonly Timer _timer = new Timer(60000);
         private bool _connected;
         private bool _containerStarted;
 
@@ -126,6 +127,7 @@ namespace Automatica.Core.Slave.Runtime
             }
             else if(_containerStarted)
             {
+                _logger.LogInformation($"Check running containers...");
                 var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
                 {
                     Filters = new Dictionary<string, IDictionary<string, bool>>
@@ -133,7 +135,7 @@ namespace Automatica.Core.Slave.Runtime
                         {
                             "status", new Dictionary<string, bool>
                             {
-                                {"running", true}
+                                {"running", false}
                             }
                         }
                     }
@@ -143,6 +145,7 @@ namespace Automatica.Core.Slave.Runtime
                 {
                     if (containers.All(a => a.ID != running.Value))
                     {
+                        _logger.LogInformation($"Restart containers...");
                         await StopInternal("restart");
                         await StartInternal();
                     }
@@ -171,7 +174,7 @@ namespace Automatica.Core.Slave.Runtime
                 _logger.LogInformation($"Try fetch docker images...");
                 await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
                 _logger.LogInformation($"Try fetch docker images...done");
-
+                
 
                 _logger.LogInformation($"Try connect to mqtt broker...");
                 await _mqttClient.ConnectAsync(_options); 
@@ -180,11 +183,13 @@ namespace Automatica.Core.Slave.Runtime
                 var topic = $"slave/{_slaveId}/action";
                 var topics = $"slave/{_slaveId}/actions";
                 var reinit = $"slave/{_slaveId}/reinit";
+                var watchdog = $"watchdog/{_slaveId}/#";
 
                 _logger.LogInformation($"Try subscribe to mqtt topics...");
-                await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
-                await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(topics).WithExactlyOnceQoS().Build());
-                await _mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(reinit).WithExactlyOnceQoS().Build());
+                await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(topic).WithExactlyOnceQoS().Build());
+                await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(topics).WithExactlyOnceQoS().Build());
+                await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(reinit).WithExactlyOnceQoS().Build());
+                await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(watchdog).WithExactlyOnceQoS().Build());
 
                 _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
 

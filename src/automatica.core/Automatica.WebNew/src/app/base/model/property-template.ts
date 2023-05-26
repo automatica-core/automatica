@@ -37,6 +37,7 @@ export enum PropertyTemplateType {
     LearnMode = 23,
     Timer = 24,
     Time = 25,
+    DateTime = 26,
 
     AreaIcon = 100,
     AreaInstance = 101,

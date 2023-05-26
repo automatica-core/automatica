@@ -103,7 +103,7 @@ namespace Automatica.Core.Runtime.IO
                     SystemLogger.Instance.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                     _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
-                        ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
+                        ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
                     });
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
@@ -121,7 +121,7 @@ namespace Automatica.Core.Runtime.IO
                     SystemLogger.Instance.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                     _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
-                        ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
+                        ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
                     });
                 }
                 else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
@@ -265,7 +265,7 @@ namespace Automatica.Core.Runtime.IO
             }
         }
 
-        private void ValueDispatched(IDispatchable dispatchable, object o, Guid to)
+        private void ValueDispatched(IDispatchable dispatchable, DispatchValue o, Guid to)
         {
             foreach (var node in _driverNodesStore.All())
             {
