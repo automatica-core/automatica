@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Core;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -333,12 +335,21 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task RemoveLink(Guid objId)
         {
             await using var dbContext = new AutomaticaContext(_config);
+            var transaction = await dbContext.Database.BeginTransactionAsync();
+            try
+            {
 
-            await RemoveLinkInternal(objId, dbContext);
+                await RemoveLinkInternal(objId, dbContext);
 
-            await dbContext.SaveChangesAsync();
-            await _logicCacheFacade.RemoveLink(objId);
-
+                await dbContext.SaveChangesAsync();
+                await _logicCacheFacade.RemoveLink(objId);
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                SystemLogger.Instance.LogError(e, $"Could not {nameof(RemoveLink)} {objId}", e);
+            }
         }
 
         private async Task RemoveLinkInternal(Guid objId, AutomaticaContext dbContext)
@@ -358,6 +369,8 @@ namespace Automatica.Core.WebApi.Controllers
                 }
 
                 await _coreServer.RemoveLink(objId);
+
+                dbContext.Links.Remove(link);
 
             }
 
