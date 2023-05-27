@@ -32,7 +32,7 @@ namespace P3.Driver.Constants
         public override string DriverName => "consts";
         public override Guid DriverGuid => BusId;
 
-        public override Version DriverVersion => new Version(0, 3, 0, 2);
+        public override Version DriverVersion => new Version(1, 0, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.constants";
         
