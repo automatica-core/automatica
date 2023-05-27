@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -88,6 +89,12 @@ namespace P3.Driver.ModBusDriverFactory.Master
                             attribute.DispatchValue(value);
                         }
                     }
+                }
+                catch (IOException)
+                {
+                    await _modBusDriver.Stop();
+                    _modBusDriver.Open();
+
                 }
                 catch (ModBusException)
                 {

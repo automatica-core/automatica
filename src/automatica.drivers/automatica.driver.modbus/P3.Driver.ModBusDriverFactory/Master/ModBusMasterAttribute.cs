@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -129,6 +130,10 @@ namespace P3.Driver.ModBusDriverFactory.Master
                     }
 
                 }
+            }
+            catch (IOException)
+            {
+                throw;
             }
             catch (Exception e)
             {
