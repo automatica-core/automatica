@@ -53,6 +53,14 @@ namespace P3.Driver.Constants
             {
                 _value = Math.PI * 2;
             }
+            else if (DriverContext.NodeInstance.This2NodeTemplateNavigation.Key == "const_true")
+            {
+                _value = true;
+            }
+            else if (DriverContext.NodeInstance.This2NodeTemplateNavigation.Key == "const_false")
+            {
+                _value = false;
+            }
             else if (DriverContext.NodeInstance.This2NodeTemplateNavigation.Key == "const_string")
             {
                 var prop = GetPropertyValueString("const_value"); // get the value property

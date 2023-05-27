@@ -20,6 +20,10 @@ namespace P3.Driver.Constants
         public static readonly Guid DoublePiId = new Guid("82e579a7-935e-463b-9d26-c75b31113553");
 
 
+        public static readonly Guid TrueId = new Guid("98e87e1d-d725-4314-bd6c-805e2d1c4ed9");
+        public static readonly Guid FalseId = new Guid("e74e5ae5-8c54-4f3a-aee8-63000de6738f");
+
+
         public static readonly Guid StringValueId = new Guid("9d3f1898-288a-48a4-b8a5-8ae3b3876784");
         public static readonly Guid StringPropertyValueId = new Guid("eef0348b-9b68-4998-a126-7a99af1d5aa0");
 
@@ -62,6 +66,16 @@ namespace P3.Driver.Constants
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true, NodeDataType.String, Int32.MaxValue, false);
             factory.CreatePropertyTemplate(StringPropertyValueId, "CONSTANTS.PROPERTY.VALUE.NAME", "CONSTANTS.PROPERTY.VALUE.DESCRIPTION", "const_value", PropertyTemplateType.Text,
                 StringValueId, "CONSTANTS.CATEGORY.VALUE", true, false, "", "", 1, 1);
+
+
+
+            factory.CreateNodeTemplate(TrueId, "CONSTANTS.NODE.TRUE.NAME", "CONSTANTS.NODE.TRUE.DESCRIPTION", "const_true", InterfaceId,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true, NodeDataType.Double, Int32.MaxValue, false);
+
+
+            factory.CreateNodeTemplate(FalseId, "CONSTANTS.NODE.FALSE.NAME", "CONSTANTS.NODE.FALSE.DESCRIPTION", "const_false", InterfaceId,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true, NodeDataType.Double, Int32.MaxValue, false);
+
         }
 
         public override IDriver CreateDriver(IDriverContext config)

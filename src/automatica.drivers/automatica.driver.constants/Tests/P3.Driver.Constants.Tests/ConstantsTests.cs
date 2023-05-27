@@ -109,5 +109,45 @@ namespace P3.Driver.Constants.Tests
             Assert.NotNull(con);
             Assert.Equal("test123", con.Value);
         }
+
+
+
+        [Fact]
+        public void Test_ConstantTrue()
+        {
+            var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
+            var valueId = CreateNodeInstance(ConstantsDriverFactory.TrueId);
+
+            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
+
+            var driver = CreateDriver(constantsRoot);
+
+            Assert.True(driver.Children.Count == 1);
+            Assert.IsType<Constant>(driver.Children[0]);
+
+            var con = driver.Children[0] as Constant;
+
+            Assert.NotNull(con);
+            Assert.True((bool)con.Value);
+        }
+
+        [Fact]
+        public void Test_ConstantFalse()
+        {
+            var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
+            var valueId = CreateNodeInstance(ConstantsDriverFactory.FalseId);
+
+            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
+
+            var driver = CreateDriver(constantsRoot);
+
+            Assert.True(driver.Children.Count == 1);
+            Assert.IsType<Constant>(driver.Children[0]);
+
+            var con = driver.Children[0] as Constant;
+
+            Assert.NotNull(con);
+            Assert.False((bool)con.Value);
+        }
     }
 }
