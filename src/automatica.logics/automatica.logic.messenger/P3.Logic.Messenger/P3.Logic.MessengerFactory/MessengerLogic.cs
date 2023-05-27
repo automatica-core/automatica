@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Messenger
 {
@@ -36,7 +38,16 @@ namespace P3.Logic.Messenger
         {
             if (_to.Count > 0)
             {
-                Context.CloudApi.SendEmail(_to, _subject, $"\"{Context.RuleInstance.Name}\" received value \"{value}\" from source \"{source.Name}\"");
+                try
+                {
+                    Context.Logger.LogInformation($"Send email to {String.Join(";", _to)}");
+                    Context.CloudApi.SendEmail(_to, _subject,
+                        $"\"{Context.RuleInstance.Name}\" received value \"{value}\" from source \"{source.Name}\"");
+                }
+                catch (Exception e)
+                {
+                    Context.Logger.LogError(e, $"Error sending email {e}");
+                }
             }
             
             return base.InputValueChanged(instance, source, value);
