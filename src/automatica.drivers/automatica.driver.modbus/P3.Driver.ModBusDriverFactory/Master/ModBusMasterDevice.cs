@@ -62,7 +62,9 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 if (!_modBusDriver.Connected)
                 {
                     DriverContext.Logger
-                        .LogWarning($"Could not read device {DeviceId}, connection state is false");
+                        .LogWarning($"Could not read device {DeviceId}, connection state is false, try to reconnect...");
+
+                    await _modBusDriver.Reconnect();
 
                     return;
                 }

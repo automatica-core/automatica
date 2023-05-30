@@ -112,6 +112,12 @@ namespace P3.Driver.ModBusDriver.Master
             }
         }
 
+        public async Task Reconnect()
+        {
+            await Stop();
+            Open();
+        }
+
         public async Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default)
         {
             await _semaphore.WaitAsync(cts);
