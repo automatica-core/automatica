@@ -23,6 +23,7 @@ import { DataHubService } from "src/app/base/communication/hubs/data-hub.service
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import DataSource from "devextreme/data/data_source";
+import { DxListComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-logic-editor",
@@ -43,6 +44,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
+
+  @ViewChild("logicPagesList")
+  logicPageList: DxListComponent;
 
   areaInstances: AreaInstance[] = [];
   categoryInstances: CategoryInstance[] = [];
@@ -278,6 +282,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       await this.ruleEngineService.removePage(currentPage);
 
       this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
+      this.logicPageList.selectedItems = [];
+      
+      await this.pagesDataSource.reload();
       this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
@@ -299,7 +306,15 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     try {
       await this.ruleEngineService.addPage(rulePage);
       this.pages.push(rulePage);
+
+      this.selectedPage = rulePage;
+      this.selectedItem = rulePage;
+
+      this.logicPageList.selectedItems = [rulePage];
+
+      await this.pagesDataSource.reload();
       this.changeRef.detectChanges();
+
     } catch (error) {
       this.handleError(error);
       await this.load();
