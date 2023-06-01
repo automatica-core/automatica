@@ -190,6 +190,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     }
     public set Value(v: any) {
         this._Value = v;
+        this.notifyChange("Value");
     }
 
     

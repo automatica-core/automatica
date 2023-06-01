@@ -4,7 +4,7 @@ import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-p
 import { LinkService } from "../link.service";
 import { RuleEngineService } from "src/app/services/ruleengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
-
+import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 declare var draw2d: any;
 declare var $: any;
 
@@ -59,7 +59,7 @@ export class LogicShapes {
                     try {
                         await ruleEngineService.updateItem(element);
                     }
-                    catch(error) {
+                    catch (error) {
                         errorHandler.notifyError(error);
                     }
                 });
@@ -203,8 +203,8 @@ export class LogicShapes {
                     resizeable: true
                 });
 
-                element.NodeInstance.notifyChangeEvent.subscribe((v) =>{
-                    if(v.propertyName === "Name") {
+                element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                    if (v.propertyName === "Name") {
                         this.label.setText((<any>v.object).Name);
                     }
                 });
@@ -230,6 +230,28 @@ export class LogicShapes {
                     const output = this.createPort("output");
                     output.setName(element.Outputs[0].PortId);
                     output.setId(element.Outputs[0].PortId);
+
+                    var dataLabel = new draw2d.shape.basic.Label({
+                        text: element.NodeInstance.Value,
+                        textLength: "100%",
+                        stroke: 0,
+                        radius: 0,
+                        bgColor: null,
+                        padding: 5,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        fontColor: "lightgray",
+                        resizeable: true
+                    });
+
+                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                        if (v.propertyName === "Value") {
+                            this.dataLabel.setText((<any>v.object).Name);
+                        }
+                    });
+
+                    output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 15, marginRight: 10 }));
+
 
                     output.on("connect", async function (emitterPort, connection) {
                         await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
