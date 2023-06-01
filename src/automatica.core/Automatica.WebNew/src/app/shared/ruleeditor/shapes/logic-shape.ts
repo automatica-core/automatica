@@ -153,6 +153,29 @@ export class LogicShapes {
                         port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(1);
+
+                        var dataLabel = new draw2d.shape.basic.Label({
+                            text: portInstance.PortValue,
+                            textLength: "100%",
+                            stroke: 0,
+                            radius: 0,
+                            bgColor: null,
+                            padding: 5,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            fontColor: "lightgray",
+                            fontSize: 9,
+                            resizeable: true
+                        });
+    
+                        portInstance.notifyChangeEvent.subscribe((v) => {
+                            if (v.propertyName === "PortValue") {
+                                dataLabel.setText((<any>v.object).PortValue);
+                            }
+                        });
+    
+                        port.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
+    
                     }
 
                     port.setMaxFanOut(portInstance.FromMaxLinks);
@@ -241,16 +264,17 @@ export class LogicShapes {
                         paddingLeft: 10,
                         paddingRight: 10,
                         fontColor: "lightgray",
+                        fontSize: 9,
                         resizeable: true
                     });
 
                     element.NodeInstance.notifyChangeEvent.subscribe((v) => {
                         if (v.propertyName === "Value") {
-                            this.dataLabel.setText((<any>v.object).Name);
+                            dataLabel.setText((<any>v.object).Value);
                         }
                     });
 
-                    output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 15, marginRight: 10 }));
+                    output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
 
 
                     output.on("connect", async function (emitterPort, connection) {

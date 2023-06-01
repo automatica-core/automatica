@@ -104,7 +104,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       if (this.completeMap.has(id)) {
         const d = this.completeMap.get(id);
         if (d instanceof RuleInterfaceInstance) {
-          d.PortValue = data[2];
+          d.PortValue = data[2].value;
         }
       } else if (this.nodeInstance2RulePageMap.has(id)) {
         for (const x of this.nodeInstance2RulePageMap.get(id)) {
