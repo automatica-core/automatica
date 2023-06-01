@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -25,7 +26,12 @@ namespace P3.Rule.Math.BasicOperations.Modulo
             _output2 = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == ModuloRuleFactory.RuleOutput2);
         }
-
+        public override Task<bool> Stop()
+        {
+            _i1 = 0;
+            _i2 = 0;
+            return Task.FromResult(true);
+        }
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (value != null)

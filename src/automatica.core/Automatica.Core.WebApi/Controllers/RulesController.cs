@@ -342,8 +342,9 @@ namespace Automatica.Core.WebApi.Controllers
                 await RemoveLinkInternal(objId, dbContext);
 
                 await dbContext.SaveChangesAsync();
-                await _logicCacheFacade.RemoveLink(objId);
                 await transaction.CommitAsync();
+
+                await _coreServer.ReloadLinks();
             }
             catch (Exception e)
             {
@@ -359,6 +360,10 @@ namespace Automatica.Core.WebApi.Controllers
             if (link != null)
             {
                 var instance = _logicCacheFacade.LinkCache.Get(objId);
+
+                await _logicCacheFacade.RemoveLink(objId);
+                await _coreServer.RemoveLink(objId);
+
                 if (link.This2RuleInterfaceInstanceOutput.HasValue)
                 {
                     await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
@@ -368,7 +373,6 @@ namespace Automatica.Core.WebApi.Controllers
                     await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
                 }
 
-                await _coreServer.RemoveLink(objId);
 
                 dbContext.Links.Remove(link);
 

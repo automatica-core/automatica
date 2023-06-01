@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -17,6 +18,11 @@ namespace P3.Rule.Math.BasicOperations.Ceiling
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == CeilingRuleFactory.RuleOutput);
+        }
+        public override Task<bool> Stop()
+        {
+            _i1 = 0;
+            return Task.FromResult(true);
         }
 
         /// <summary>

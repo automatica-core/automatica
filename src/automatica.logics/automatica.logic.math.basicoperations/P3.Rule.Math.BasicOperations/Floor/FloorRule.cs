@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -18,7 +19,11 @@ namespace P3.Rule.Math.BasicOperations.Floor
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == FloorRuleFactory.RuleOutput);
         }
-
+        public override Task<bool> Stop()
+        {
+            _i1 = 0;
+            return Task.FromResult(true);
+        }
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == FloorRuleFactory.RuleInput1 && value != null)

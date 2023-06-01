@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Rule;
@@ -20,6 +21,15 @@ namespace P3.Rule.Math.BasicOperations.Addition
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleOutput);
+        }
+
+        public override Task<bool> Stop()
+        {
+            _i1 = 0;
+            _i2 = 0;
+            _i3 = 0;
+            _i4 = 0;
+            return Task.FromResult(true);
         }
 
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
