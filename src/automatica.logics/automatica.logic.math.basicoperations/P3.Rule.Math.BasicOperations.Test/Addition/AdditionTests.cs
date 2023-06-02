@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.UnitTests.Base.Rules;
 using P3.Rule.Math.BasicOperations.Addition;
@@ -9,10 +10,13 @@ namespace P3.Rule.Math.BasicOperations.Tests.Addition
     public class AdditionTests : RuleTest<AdditionRuleFactory>
     {
         [Fact]
-        public void TestAdditionRule()
+        public async Task TestAdditionRule()
         {
+            await Context.Dispatcher.ClearValues();
+
             RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput1), 1);
-            Assert.Equal(1.0, Context.Dispatcher.GetValues(DispatchableType.RuleInstance).Values.First());
+            var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance).Values;
+            Assert.Equal(1.0, values.First());
 
             RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput2), 10);
             RuleInputChanged(GetRuleInterfaceByTemplate(AdditionRuleFactory.RuleInput3),  1);
