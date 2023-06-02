@@ -27,6 +27,13 @@ namespace P3.Rule.Math.BasicOperations.Division
             _i2 = 0;
             return Task.FromResult(true);
         }
+        public override Task<bool> Start()
+        {
+            var curValue = _i1 + _i2;
+            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, curValue).Instance, curValue);
+
+            return base.Start();
+        }
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (value != null)

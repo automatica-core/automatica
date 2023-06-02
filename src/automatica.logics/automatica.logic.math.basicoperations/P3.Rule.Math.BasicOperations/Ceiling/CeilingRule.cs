@@ -24,7 +24,13 @@ namespace P3.Rule.Math.BasicOperations.Ceiling
             _i1 = 0;
             return Task.FromResult(true);
         }
+        public override Task<bool> Start()
+        {
+            var curValue = _i1;
+            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, curValue).Instance, curValue);
 
+            return base.Start();
+        }
         /// <summary>
         /// Callback when a input value has changed
         /// </summary>

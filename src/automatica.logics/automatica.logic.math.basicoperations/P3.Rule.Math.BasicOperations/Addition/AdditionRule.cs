@@ -32,6 +32,14 @@ namespace P3.Rule.Math.BasicOperations.Addition
             return Task.FromResult(true);
         }
 
+        public override Task<bool> Start()
+        {
+            var curValue = _i1 +_i2 + _i3 + _i4;
+            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, curValue).Instance, curValue);
+
+            return base.Start();
+        }
+
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleInput1)

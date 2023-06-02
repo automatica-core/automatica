@@ -24,6 +24,13 @@ namespace P3.Rule.Math.BasicOperations.Floor
             _i1 = 0;
             return Task.FromResult(true);
         }
+        public override Task<bool> Start()
+        {
+            var curValue = _i1;
+            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, curValue).Instance, curValue);
+
+            return base.Start();
+        }
         protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == FloorRuleFactory.RuleInput1 && value != null)

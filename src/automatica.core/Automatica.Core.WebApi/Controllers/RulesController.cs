@@ -361,8 +361,8 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 var instance = _logicCacheFacade.LinkCache.Get(objId);
 
-                await _logicCacheFacade.RemoveLink(objId);
                 await _coreServer.RemoveLink(objId);
+                await _logicCacheFacade.RemoveLink(objId);
 
                 if (link.This2RuleInterfaceInstanceOutput.HasValue)
                 {
