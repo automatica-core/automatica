@@ -8,10 +8,10 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="7.1.0.954" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.1.0.954" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.2.0.1085" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.2.0.1085" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SerialPortStream" Version="2.4.0" />
+    <PackageReference Include="SerialPortStream" Version="2.4.1" />
   </ItemGroup>
 </Project>

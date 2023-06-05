@@ -1,7 +1,9 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { BaseHub, SignalRMethod } from "../base-hub";
 import { NodeInstance } from "../../model/node-instance";
-import { DataService } from "src/app/services/data.service";
+import { DataService, NodeInstanceValue } from "src/app/services/data.service";
+
+
 
 @Injectable()
 export class DataHubService extends BaseHub {
@@ -22,7 +24,7 @@ export class DataHubService extends BaseHub {
         super("dataHub");
     }
 
-    public getCurrentValue(id: string) {
+    public getCurrentValue(id: string): NodeInstanceValue {
         return this.dataService.getLocalValue(id);
     }
 

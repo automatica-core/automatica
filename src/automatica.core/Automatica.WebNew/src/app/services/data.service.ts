@@ -5,6 +5,13 @@ import { Router } from "@angular/router";
 import { L10nTranslationService } from "angular-l10n";
 import { Trending } from "../base/model/trending/trending";
 
+export interface NodeInstanceValue {
+    type: number;
+    id: string;
+    value: any;
+    timestamp: Date;
+}
+
 @Injectable()
 export class DataService extends BaseService {
 
@@ -28,7 +35,7 @@ export class DataService extends BaseService {
         return values;
     }
 
-    public getLocalValue(id: string) {
+    public getLocalValue(id: string): NodeInstanceValue {
         if (this._latestValues.has(id)) {
             return this._latestValues.get(id);
         }

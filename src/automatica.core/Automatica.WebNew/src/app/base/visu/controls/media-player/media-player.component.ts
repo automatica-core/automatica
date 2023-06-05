@@ -87,11 +87,11 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
       const nodeId = args[1];
 
-      this.onRuleInstanceValueChanged(nodeId, args[2]);
+      this.onRuleInstanceValueChanged(nodeId, args[2].value);
     });
 
-    this._isPlaying = this.dataHub.getCurrentValue(this.playPauseState.ObjId);
-    this._volume = this.dataHub.getCurrentValue(this.volumeState.ObjId);
+    this._isPlaying = this.dataHub.getCurrentValue(this.playPauseState.ObjId).value;
+    this._volume = this.dataHub.getCurrentValue(this.volumeState.ObjId).value;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {

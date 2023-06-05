@@ -45,13 +45,13 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
       const nodeId = args[1];
 
-      this.onRuleInstanceValueChanged(nodeId, args[2]);
+      this.onRuleInstanceValueChanged(nodeId, args[2].value);
     });
 
     this.readOnly = this.getReadOnly() ?? false;
 
     var cachedValue = this.dataHub.getCurrentValue(this.outputType.ObjId);
-    this.value = cachedValue;
+    this.value = cachedValue.value;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {

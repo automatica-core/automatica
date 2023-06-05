@@ -24,7 +24,7 @@ namespace Automatica.Core.Driver
         public Guid Id => DriverContext.NodeInstance.ObjId;
         public string Name => DriverContext?.NodeInstance.Name;
 
-        private readonly Queue<(IDispatchable, object)> _writeQueue = new Queue<(IDispatchable, object)>();
+        private readonly Queue<(IDispatchable, DispatchValue)> _writeQueue = new Queue<(IDispatchable, DispatchValue)>();
         private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(0, short.MaxValue);
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private Task _writeTask;
@@ -53,7 +53,7 @@ namespace Automatica.Core.Driver
         }
 
 
-        private void Enqueue(IDispatchable source, object value)
+        private void Enqueue(IDispatchable source, DispatchValue value)
         {
             _writeQueue.Enqueue((source, value));
             _writeSemaphore.Release(1);

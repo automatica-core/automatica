@@ -171,7 +171,8 @@ export abstract class BaseMobileComponent extends BaseComponent {
 
         if (this.item) {
             this.propertyChanged();
-            this.value = this.dataHub.getCurrentValue(this.item.ObjId);
+            const value = this.dataHub.getCurrentValue(this.item.ObjId);;
+            this.value = value.value;
         }
     }
 
@@ -204,7 +205,7 @@ export abstract class BaseMobileComponent extends BaseComponent {
             if (this.subscribedNodeInstances.has(nodeId) && args[0] === 0) { // check if node instance and dispatchable type is correct
 
                 if (this._primaryNodeInstance === nodeId) {
-                    this.value = args[2];
+                    this.value = args[2].value;
                     console.log("nodevalue dispatch: ", this.value);
                 }
                 await this.nodeValueReceived(nodeId, args[2]);

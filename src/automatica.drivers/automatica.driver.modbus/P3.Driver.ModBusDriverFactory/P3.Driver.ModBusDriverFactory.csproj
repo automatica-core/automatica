@@ -23,9 +23,9 @@
     <EmbeddedResource Include="Resources\ModBus-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="7.1.0.954" />
-    <PackageReference Include="Automatica.Core.Driver" Version="7.1.0.954" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.1.0.954" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.2.0.1085" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.2.0.1085" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.2.0.1085" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.ModBusDriver\P3.Driver.ModBusDriver.csproj" />

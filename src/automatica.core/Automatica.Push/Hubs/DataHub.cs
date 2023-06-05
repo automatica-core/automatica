@@ -7,6 +7,7 @@ using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Push.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace Automatica.Push.Hubs
 {
@@ -67,6 +68,15 @@ namespace Automatica.Push.Hubs
                 case JsonValueKind.Undefined:
                     break;
                 case JsonValueKind.Object:
+                    try
+                    {
+                        var dispatchValue = JsonConvert.DeserializeObject<DispatchValue>(value.GetRawText());
+                        convertedValue = dispatchValue.Value;
+                    }
+                    catch
+                    {
+                        //ignore
+                    }
                     throw new NotImplementedException();
                 case JsonValueKind.Array:
                     throw new NotImplementedException();
