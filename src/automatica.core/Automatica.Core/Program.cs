@@ -121,7 +121,9 @@ namespace Automatica.Core
 
         public static IWebHost BuildWebHost(string port, string sslPort)
         {
-            ServerInfo.WebPort = port; 
+            ServerInfo.WebPort = port;
+            ServerInfo.SslWebPort = sslPort; 
+
             var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
 
             var webHost = WebHost.CreateDefaultBuilder()

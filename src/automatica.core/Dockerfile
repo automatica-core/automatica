@@ -52,8 +52,17 @@ FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
-
 VOLUME /app/plugins
+
+RUN apt update
+RUN apt install curl -y
+
+RUN curl -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+RUN tar xvzf ngrok.tgz
+RUN mv ngrok /usr/local/bin
+RUN ngrok version
+RUN rm ngrok.tgz
+
 EXPOSE 1883/tcp
 EXPOSE 5001/tcp	
 ENV AUTOMATICA_PLUGIN_DIR=/app/plugins

@@ -19,6 +19,8 @@ namespace Automatica.Core.Internals.Cloud
         Task<bool> Ping();
         Task<bool> SayHelloToCloud(SayHelloData sayHi);
 
+        Task<bool> SendNgrokTunnelUrl(string url);
+
         Task<ServerVersion> CheckForUpdates();
         Task<IList<Plugin>> GetLatestPlugins();
 

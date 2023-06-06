@@ -29,6 +29,7 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
+using FluffySpoon.Ngrok;
 using Microsoft.AspNetCore.Mvc;
 using MQTTnet.AspNetCore.Extensions;
 using Newtonsoft.Json;
@@ -156,13 +157,13 @@ namespace Automatica.Core
             }).AddJsonProtocol(options =>
             {
             });
+            services.AddAutomaticaNGrokServices(Configuration);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            var port = ServerInfo.WebPort;
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -219,6 +220,7 @@ namespace Automatica.Core
                     await next();
                 }
             });
+
 
 
             if (Directory.Exists(wwwrootPath))

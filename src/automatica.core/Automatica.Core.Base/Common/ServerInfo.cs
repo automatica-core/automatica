@@ -118,6 +118,7 @@ namespace Automatica.Core.Base.Common
         /// Gets the web port
         /// </summary>
         public static string WebPort { get; set; }
+        public static string SslWebPort { get; set; }
 
         public static IBoardType BoardType { get; set; }
 

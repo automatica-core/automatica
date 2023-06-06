@@ -26,10 +26,12 @@ using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
+using Automatica.Core.Runtime.Ngrok;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
+using FluffySpoon.Ngrok;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -127,6 +129,17 @@ namespace Automatica.Core.Runtime
 
             services.AddAutomaticaVisualization(configuration);
             services.AddInternals(configuration);
+        }
+
+        public static void AddAutomaticaNGrokServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IAutomaticaNgrokService, AutomaticaNgrokService>();
+           //services.AddSingleton<IHostedService>(provider => provider.GetService<IAutomaticaNgrokService>());
+            services.AddNgrok(o =>
+            {
+                o.ShowNgrokWindow = true;
+                o.AuthToken = configuration["server:ngrok:token"];
+            });
         }
     }
 }

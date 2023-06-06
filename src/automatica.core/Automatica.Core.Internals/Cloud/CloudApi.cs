@@ -26,7 +26,10 @@ namespace Automatica.Core.Internals.Cloud
         public string Version { get; set; }
         public Guid ServerGuid { get; set; }
     }
-
+    public class NgrokObject
+    {
+        public string TunnelUrl { get; set; }
+    }
     public class CloudApi : ICloudApi
     {
         private readonly IConfiguration _config;
@@ -92,6 +95,24 @@ namespace Automatica.Core.Internals.Cloud
             return client;
         }
 
+
+        public async Task<bool> SendNgrokTunnelUrl(string url)
+        {
+            try
+            {
+                var ngrokObj = new NgrokObject
+                {
+                    TunnelUrl = url
+                };
+                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/ngrok", ngrokObj);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                return false;
+            }
+            return true;
+        }
 
         public Task<ServerVersion> CheckForUpdates()
         {
@@ -189,20 +210,20 @@ namespace Automatica.Core.Internals.Cloud
         public async Task<T> PostRequest<T>(string apiUrl, object postObject) where T : class
         {
             T result = null;
-            using (var client = SetupClient())
+            using var client = SetupClient();
+            var url = GetUrl();
+            var apiKey = GetApiKey();
+            var response = await client.PostAsync(new Uri(new Uri(url), apiUrl + "/" + apiKey), postObject, new JsonMediaTypeFormatter()).ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
+
+            await response.Content.ReadAsStringAsync().ContinueWith(x =>
             {
-                var response = await client.PostAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey()), postObject, new JsonMediaTypeFormatter()).ConfigureAwait(false);
+                if (x.IsFaulted)
+                    throw x.Exception;
 
-                response.EnsureSuccessStatusCode();
-
-                await response.Content.ReadAsStringAsync().ContinueWith(x =>
-                {
-                    if (x.IsFaulted)
-                        throw x.Exception;
-
-                    result = JsonConvert.DeserializeObject<T>(x.Result);
-                });
-            }
+                result = JsonConvert.DeserializeObject<T>(x.Result);
+            });
 
             return result;
         }

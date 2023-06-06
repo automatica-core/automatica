@@ -43,6 +43,7 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.Runtime.Ngrok;
 using Newtonsoft.Json;
 using String = System.String;
 
@@ -106,6 +107,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
+        private readonly IAutomaticaNgrokService _ngrokService;
 
 
         public RunState RunState
@@ -179,6 +181,8 @@ namespace Automatica.Core.Runtime.Core
             _loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
+
+            _ngrokService = services.GetRequiredService<IAutomaticaNgrokService>();
             InitInternals();
         }
 
@@ -211,6 +215,8 @@ namespace Automatica.Core.Runtime.Core
                     RunState = RunState.Loading;
                     await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
                     await ConfigureAndStart();
+
+                    await _ngrokService.StartAsync(cancellationToken);
                 }
                 catch (Exception e)
                 {
@@ -430,6 +436,8 @@ namespace Automatica.Core.Runtime.Core
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Stop();
+
+            await _ngrokService.StopAsync(cancellationToken);
             _logger.LogInformation("CoreServer stopped");
         }
 

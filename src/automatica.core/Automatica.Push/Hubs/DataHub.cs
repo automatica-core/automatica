@@ -72,6 +72,7 @@ namespace Automatica.Push.Hubs
                     {
                         var dispatchValue = JsonConvert.DeserializeObject<DispatchValue>(value.GetRawText());
                         convertedValue = dispatchValue.Value;
+                        break;
                     }
                     catch
                     {
