@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Internals.Cloud;
-using FluffySpoon.Ngrok;
+using Automatica.Ngrok;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -39,7 +39,7 @@ namespace Automatica.Core.Runtime.Ngrok
 
                 try
                 {
-                    var tunnel = await _ngrokService.StartAsync(new Uri($"http://localhost:{ServerInfo.WebPort}"),
+                    var tunnel = await _ngrokService.StartAsync(new Uri($"http://localhost:{ServerInfo.WebPort}"), 
                         cancellationToken);
                     await _ngrokService.WaitUntilReadyAsync(cancellationToken);
 

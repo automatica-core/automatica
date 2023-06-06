@@ -31,7 +31,7 @@ using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
-using FluffySpoon.Ngrok;
+using Automatica.Ngrok;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -137,7 +137,7 @@ namespace Automatica.Core.Runtime
            //services.AddSingleton<IHostedService>(provider => provider.GetService<IAutomaticaNgrokService>());
             services.AddNgrok(o =>
             {
-                o.ShowNgrokWindow = false;
+                o.ShowNgrokWindow = true;
                 o.AuthToken = configuration["server:ngrok:token"];
             });
         }

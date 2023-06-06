@@ -29,7 +29,6 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
-using FluffySpoon.Ngrok;
 using Microsoft.AspNetCore.Mvc;
 using MQTTnet.AspNetCore.Extensions;
 using Newtonsoft.Json;
