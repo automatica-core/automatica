@@ -216,7 +216,6 @@ namespace Automatica.Core.Runtime.Core
                     await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
                     await ConfigureAndStart();
 
-                    await _ngrokService.StartAsync(cancellationToken);
                 }
                 catch (Exception e)
                 {
@@ -274,6 +273,9 @@ namespace Automatica.Core.Runtime.Core
             }
             _logger.LogInformation("Starting recorders...done");
             RunState = RunState.Started;
+
+
+            await _ngrokService.StartAsync(default);
         }
 
         private async Task StartLogicEngine()
