@@ -226,7 +226,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "cloudUrl",
                     Type = (long)PropertyTemplateType.Text,
-                    Value = "https://automatica-core-cloud.azurewebsites.net",
+                    Value = "https://cloud-dev.automaticacore.com/",
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 1
