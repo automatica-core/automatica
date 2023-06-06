@@ -52,7 +52,6 @@ RUN apt install curl -y
 RUN curl -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm.tgz
 RUN tar xvzf ngrok.tgz
 RUN ./ngrok version
-RUN rm ngrok.tgz
 
 FROM automaticacore/automatica-plugin-runtime:arm32v7-7 AS runtime
 WORKDIR /app/

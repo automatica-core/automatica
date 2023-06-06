@@ -51,7 +51,6 @@ RUN rm -rf /src
 RUN curl -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
 RUN tar xvzf ngrok.tgz
 RUN ./ngrok version
-RUN rm ngrok.tgz
 
 FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
 WORKDIR /app/
@@ -59,8 +58,8 @@ WORKDIR /app/
 COPY --from=build /app/ ./
 VOLUME /app/plugins
 
-COPY --from=build /app/ ./
 COPY --from=build /app/ngrok /usr/local/bin
+COPY --from=build /app/ ./
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp
