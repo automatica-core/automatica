@@ -60,7 +60,7 @@ COPY --from=build /app/ ./
 VOLUME /app/plugins
 
 COPY --from=build /app/ ./
-COPY --from=build ngrok /usr/local/bin
+COPY --from=build /app/ngrok /usr/local/bin
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp
