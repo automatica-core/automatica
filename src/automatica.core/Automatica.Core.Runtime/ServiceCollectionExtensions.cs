@@ -137,7 +137,7 @@ namespace Automatica.Core.Runtime
            //services.AddSingleton<IHostedService>(provider => provider.GetService<IAutomaticaNgrokService>());
             services.AddNgrok(o =>
             {
-                o.ShowNgrokWindow = true;
+                o.ShowNgrokWindow = false;
                 o.AuthToken = configuration["server:ngrok:token"];
             });
         }
