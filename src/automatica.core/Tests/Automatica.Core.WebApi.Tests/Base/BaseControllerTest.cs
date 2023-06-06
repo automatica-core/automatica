@@ -90,6 +90,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton<ILogger<DriverLoader>>(NullLogger<DriverLoader>.Instance);
             services.AddSingleton<ILogger<PluginHandler>>(NullLogger<PluginHandler>.Instance);
             services.AddSingleton<ILogger<LearnMode>>(NullLogger<LearnMode>.Instance);
+            services.AddSingleton<ILogger<AutomaticaNgrokService>>(NullLogger<AutomaticaNgrokService>.Instance);
             services.AddSingleton<ILogger>(NullLogger.Instance);
             services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
 
