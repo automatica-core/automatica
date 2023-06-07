@@ -158,7 +158,7 @@ namespace Automatica.Core.Base.IO
                 _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, DispatchValue>, int>());
             }
 
-            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value}");
+            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value}");
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
             {
                 var dispatch = _registrationMap[self.Type][self.Id];

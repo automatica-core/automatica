@@ -182,7 +182,7 @@ namespace Automatica.Core.Runtime.Core
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
 
-            _ngrokService = services.GetRequiredService<IAutomaticaNgrokService>();
+            _ngrokService = services.GetService<IAutomaticaNgrokService>();
             InitInternals();
         }
 
@@ -275,7 +275,10 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Started;
 
 
-            await _ngrokService.StartAsync(default);
+            if (_ngrokService != null)
+            {
+                await _ngrokService.StartAsync(default);
+            }
         }
 
         private async Task StartLogicEngine()
@@ -439,7 +442,11 @@ namespace Automatica.Core.Runtime.Core
         {
             await Stop();
 
-            await _ngrokService.StopAsync(cancellationToken);
+            if (_ngrokService != null)
+            {
+                await _ngrokService.StopAsync(cancellationToken);
+            }
+
             _logger.LogInformation("CoreServer stopped");
         }
 

@@ -310,6 +310,7 @@ namespace Automatica.Core.Runtime.Database
             }
 
             AddHostedGrafanaRecorderSettings(context);
+            AddNgrodSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -508,6 +509,57 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
         }
 
+        private static void AddNgrodSettings(AutomaticaContext context)
+        {
+            var ngrokEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokEnabled");
+
+            if (ngrokEnabled == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "ngrokEnabled",
+                    Type = (long)PropertyTemplateType.Bool,
+                    Value = false,
+                    Group = "SERVER.REMOTE",
+                    IsVisible = true,
+                    Order = 1
+                });
+
+            }
+
+            var ngrokToken = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokToken");
+
+            if (ngrokToken == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "ngrokToken",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = null,
+                    Group = "SERVER.REMOTE",
+                    IsVisible = true,
+                    Order = 2
+                });
+
+            }
+
+
+            var ngrokDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokDomain");
+
+            if (ngrokDomain == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "ngrokDomain",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = null,
+                    Group = "SERVER.REMOTE",
+                    IsVisible = true,
+                    Order = 2
+                });
+
+            }
+        }
         private static void AddHostedGrafanaRecorderSettings(AutomaticaContext context)
         {
             var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaHost");

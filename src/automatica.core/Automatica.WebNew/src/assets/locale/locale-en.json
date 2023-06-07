@@ -6,7 +6,8 @@
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder"
     },
-    "SETTINGS": "Server Settings"
+    "SETTINGS": "Server Settings",
+    "REMOTE": "Remote Server Settings"
   },
   "COMMON": {
     "ADMIN": "Administration",
@@ -378,6 +379,15 @@
       },
       "VALUE_TIMESTAMP": {
         "NAME": "Timestamp"
+      },
+      "NGROKDOMAIN" : {
+        "NAME": "Domain"
+      },
+      "NGROKENABLED" : {
+        "NAME": "Active"
+      },
+      "NGROKTOKEN" : {
+        "NAME": "Token"
       }
     },
     "CATEGORY_INSTANCE": {

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -8,6 +9,7 @@ using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cloud;
@@ -134,12 +136,7 @@ namespace Automatica.Core.Runtime
         public static void AddAutomaticaNGrokServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IAutomaticaNgrokService, AutomaticaNgrokService>();
-           //services.AddSingleton<IHostedService>(provider => provider.GetService<IAutomaticaNgrokService>());
-            services.AddNgrok(o =>
-            {
-                o.ShowNgrokWindow = true;
-                o.AuthToken = configuration["server:ngrok:token"];
-            });
+            //services.AddSingleton<IHostedService>(provider => provider.GetService<IAutomaticaNgrokService>());
         }
     }
 }
