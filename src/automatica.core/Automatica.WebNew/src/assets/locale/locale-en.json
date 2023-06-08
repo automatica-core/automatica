@@ -263,6 +263,10 @@
         "NAME": "Connect in NAT mode",
         "DESCRIPTION": ""
       },
+      "ENABLE_TUNNEL": {
+        "NAME": "Enable the connection via a tunnel",
+        "DESCRIPTION": ""
+      },
       "IMPORT": {
         "NAME": "Import (*.knxproj)",
         "DESCRIPTION": ""

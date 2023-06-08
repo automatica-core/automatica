@@ -13,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(0, 9, 0, 0);
+        public override Version DriverVersion => new Version(1, 0, 0, 0);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -35,6 +35,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories
         internal static readonly Guid KnxInterface3LevelMain = new Guid("99813fd4-bdac-4858-93ee-5ac76df1170b");
         internal static readonly Guid KnxInterface3LevelMiddle = new Guid("c0378116-2f83-4c82-ac88-7d626b29bcf0");
         internal static readonly Guid KnxInterface3LevelValue = new Guid("dae3210f-f28b-44d4-9369-1fddefe3a244");
+
+
+        internal static readonly Guid UseTunnel = new Guid("dfa17c76-cc6f-42a9-94c7-19e46fa807ae");
+        internal static readonly Guid TunnelDomain = new Guid("5892b55e-7759-488d-9ce6-f182c34c3a72");
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
         {
@@ -58,6 +62,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreatePropertyTemplate(GenerateNewGuid(KnxGatway, 3), "COMMON.PROPERTY.USE_NAT.NAME", "COMMON.PROPERTY.USE_NAT.DESCRIPTION",
                 "knx-use-nat", PropertyTemplateType.Bool, KnxGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
                 3);
+
+
+            factory.CreatePropertyTemplate(UseTunnel, "COMMON.PROPERTY.ENABLE_TUNNEL.NAME", "COMMON.PROPERTY.ENABLE_TUNNEL.DESCRIPTION",
+                "knx-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                1);
 
             /*      factory.CreateNodeTemplate(KnxSecureGatway, "KNX.SECURE_GATEWAY.NAME", "KNX.SECURE_GATEWAY.DESCRIPTION", "knx-secure-gw",
                       GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), KnxInterface, false, false, true, false, true,

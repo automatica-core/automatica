@@ -263,6 +263,10 @@
         "NAME": "Verbinden im NAT Modus",
         "DESCRIPTION": ""
       },
+      "ENABLE_TUNNEL": {
+        "NAME": "Schalte die Verbindung über einen Tunnel frei",
+        "DESCRIPTION": ""
+      },
       "IMPORT": {
         "NAME": "Import (*.knxproj)",
         "DESCRIPTION": ""

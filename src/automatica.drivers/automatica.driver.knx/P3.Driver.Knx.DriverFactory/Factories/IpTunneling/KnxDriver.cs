@@ -9,6 +9,7 @@ using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using Automatica.Core.Driver.Utility.Network;
+using Automatica.Core.Runtime.Tunneling;
 using P3.Knx.Core.Driver;
 using P3.Knx.Core.Driver.Tunneling;
 using P3.Knx.Core.Abstractions;
@@ -33,6 +34,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
 
         private readonly Dictionary<string, List<Action<KnxDatagram>>> _callbackMap = new Dictionary<string, List<Action<KnxDatagram>>>();
+        private bool _tunnelingEnabled;
+        private IPAddress _remoteIp;
+        private int _remotePort;
 
         public KnxDriver(IDriverContext driverContext, bool secureDriver, KnxLevel level=KnxLevel.ThreeLevel) : base(driverContext)
         {
@@ -63,6 +67,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 return false;
             }
 
+
+            var useTunnel = GetProperty("knx-use-tunnel").ValueBool;
+
             try
             {
                 var remoteIp = IPAddress.Parse(ipAddress);
@@ -72,6 +79,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 }
                 else
                 {
+                    _remoteIp = remoteIp;
+                    _remotePort = port;
+
                     _tunneling = new KnxConnectionTunneling(this, remoteIp, port,
                         IPAddress.Parse(NetworkHelper.GetActiveIp()), NetworkHelper.GetFreeTcpPort());
 
@@ -84,7 +94,16 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                         _tunneling.UseNat = useNat.Value;
                     }
                 }
-                
+
+                if (useTunnel.HasValue && useTunnel.Value)
+                {
+                    DriverContext.Logger.LogInformation($"Using tunneling mode...");
+                    _tunnelingEnabled = true;
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Using routing mode...");
+                }
             }
             catch (Exception e)
             {
@@ -97,11 +116,32 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return true;
         }
 
-        public override Task<bool> Start()
+        public override async Task<bool> Start()
         {
             _gwState?.SetGatewayState(false);
             StartConnection();
-            return base.Start();
+
+            try
+            {
+                if (_tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
+                {
+                    var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Tcp, $"{_remoteIp}:{_remotePort}",
+                        null, default);
+
+                    DriverContext.Logger.LogInformation($"Tunnel created {tunnel}");
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Tunnel is disabled...");
+                }
+            }
+        
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError($"Could not start tunnel {e}");
+            }
+
+            return await base.Start();
         }
 
         private void StartConnection()
