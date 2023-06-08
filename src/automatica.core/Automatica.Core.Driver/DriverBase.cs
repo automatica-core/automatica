@@ -73,20 +73,7 @@ namespace Automatica.Core.Driver
                     DriverContext.Logger.LogInformation($"Using logger {loggerName} for node {node.Name}");
                 }
 
-                var driverNode = CreateDriverNode(
-                    new DriverContext(
-                        node, 
-                        DriverContext.Factory,
-                        DriverContext.Dispatcher, 
-                        DriverContext.NodeTemplateFactory, 
-                        DriverContext.TelegramMonitor, 
-                        DriverContext.LicenseState,
-                        logger,
-                        DriverContext.LearnMode,
-                        DriverContext.CloudApi,
-                        DriverContext.LicenseContract,
-                        DriverContext.LoggerFactory,
-                        DriverContext.IsTest));
+                var driverNode = CreateDriverNode(DriverContext.Copy(node, logger));
 
                 ChildrensCreated += 1;
                 if (driverNode == null)

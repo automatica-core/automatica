@@ -5,6 +5,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Runtime.Tunneling;
 using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Drivers;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             Dispatcher = dispatcher;
             LoggerFactory = loggerFactory;
             Factory = factory;
+            TunnelingProvider = new ITunnelingProviderMock();
         }
 
         public NodeInstance NodeInstance { get; }
@@ -40,5 +42,10 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public IServerCloudApi CloudApi => new CloudApiMock();
         public ILicenseContract LicenseContract => new LicenseContractMock();
         public ILoggerFactory LoggerFactory { get; }
+        public ITunnelingProvider TunnelingProvider { get; }
+        public IDriverContext Copy(NodeInstance node, ILogger logger)
+        {
+            return new DriverContextMock(node, Factory, NodeTemplateFactory, Dispatcher, LoggerFactory);
+        }
     }
 }

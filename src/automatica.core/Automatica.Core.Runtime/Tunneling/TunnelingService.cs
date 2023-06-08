@@ -6,20 +6,19 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Ngrok;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Runtime.Ngrok
+namespace Automatica.Core.Runtime.Tunneling
 {
-    internal class AutomaticaNgrokService : IAutomaticaNgrokService
+    internal class TunnelingService : ITunnelingService
     {
         private INgrokService _ngrokService;
         private readonly IConfiguration _config;
         private readonly ICloudApi _cloudApi;
-        private readonly ILogger<AutomaticaNgrokService> _logger;
+        private readonly ILogger<TunnelingService> _logger;
 
-        public AutomaticaNgrokService(IConfiguration config, ICloudApi cloudApi, ILogger<AutomaticaNgrokService> logger)
+        public TunnelingService(IConfiguration config, ICloudApi cloudApi, ILogger<TunnelingService> logger)
         {
             _config = config;
             _cloudApi = cloudApi;
@@ -80,6 +79,7 @@ namespace Automatica.Core.Runtime.Ngrok
                 var tunnel = await _ngrokService.StartAsync(new Uri($"http://localhost:{ServerInfo.WebPort}"), domain,
                     cancellationToken);
                 await _ngrokService.WaitUntilReadyAsync(cancellationToken);
+                
 
                 await _cloudApi.SendNgrokTunnelUrl(tunnel.PublicUrl);
             }
@@ -96,6 +96,22 @@ namespace Automatica.Core.Runtime.Ngrok
             {
                 await _ngrokService.StopAsync(cancellationToken);
             }
+        }
+
+        public Task<bool> IsRunning(CancellationToken token)
+        {
+            return Task.FromResult(_ngrokService != null);
+        }
+
+        public async Task<bool> CreateTunnelAsync(Uri uri, string domain, CancellationToken token)
+        {
+            if (_ngrokService == null)
+            {
+                return false;
+            }
+
+            //TODO
+            return true;
         }
     }
 }

@@ -4,6 +4,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Runtime.Tunneling;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Driver
@@ -72,6 +73,13 @@ namespace Automatica.Core.Driver
         /// Logger Factory to create custom logger instances
         /// </summary>
         ILoggerFactory LoggerFactory { get; }
+
+        /// <summary>
+        /// Tunneling provider to create http/tcp tunnels
+        /// </summary>
+        ITunnelingProvider TunnelingProvider { get; }
+
+        IDriverContext Copy(NodeInstance node, ILogger logger);
     }
 
 }

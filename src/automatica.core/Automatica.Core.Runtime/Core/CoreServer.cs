@@ -43,7 +43,7 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
-using Automatica.Core.Runtime.Ngrok;
+using Automatica.Core.Runtime.Tunneling;
 using Newtonsoft.Json;
 using String = System.String;
 
@@ -63,6 +63,7 @@ namespace Automatica.Core.Runtime.Core
     }
     public class CoreServer : IHostedService, ICoreServer
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _config;
         private readonly IHubContext<DataHub> _dataHub;
         private readonly ILogger _logger;
@@ -107,7 +108,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
-        private readonly IAutomaticaNgrokService _ngrokService;
+        private readonly ITunnelingService _ngrokService;
 
 
         public RunState RunState
@@ -125,6 +126,7 @@ namespace Automatica.Core.Runtime.Core
 
         public CoreServer(IServiceProvider services)
         {
+            _serviceProvider = services;
             _config = services.GetService<IConfiguration>();
 
             _dataHub = services.GetService<IHubContext<DataHub>>();
@@ -182,7 +184,7 @@ namespace Automatica.Core.Runtime.Core
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
 
-            _ngrokService = services.GetService<IAutomaticaNgrokService>();
+            _ngrokService = services.GetService<ITunnelingService>();
             InitInternals();
         }
 
@@ -753,8 +755,20 @@ namespace Automatica.Core.Runtime.Core
             var logger = CoreLoggerFactory.GetLogger(_config, loggerName);
             _logger.LogInformation($"Using logger {loggerName} for driver {nodeInstance.Name}");
 
-            var config = new DriverContext(nodeInstance, factory,
-                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), logger, _learnMode, _cloudApi, _licenseContext, _loggerFactory, false);
+            var config = new DriverContext(
+                nodeInstance, 
+                factory,
+                _dispatcher, 
+                new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), 
+                _telegramMonitor, 
+                _licenseContext.GetLicenseState(), 
+                logger, 
+                _learnMode, 
+                _cloudApi, 
+                _licenseContext, 
+                _loggerFactory, 
+                _serviceProvider,
+                false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
 

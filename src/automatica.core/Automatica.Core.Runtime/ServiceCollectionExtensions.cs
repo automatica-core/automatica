@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -9,7 +8,6 @@ using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
-using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cloud;
@@ -28,12 +26,11 @@ using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
-using Automatica.Core.Runtime.Ngrok;
 using Automatica.Core.Runtime.Recorder;
+using Automatica.Core.Runtime.Tunneling;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
-using Automatica.Ngrok;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -135,8 +132,8 @@ namespace Automatica.Core.Runtime
 
         public static void AddAutomaticaNGrokServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAutomaticaNgrokService, AutomaticaNgrokService>();
-            //services.AddSingleton<IHostedService>(provider => provider.GetService<IAutomaticaNgrokService>());
+            services.AddSingleton<ITunnelingService, TunnelingService>();
+            services.AddSingleton<ITunnelingProvider, TunnelingProvider>();
         }
     }
 }

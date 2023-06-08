@@ -8,7 +8,7 @@ using Automatica.Core.Runtime.Core.Plugins.Drivers;
 using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
-using Automatica.Core.Runtime.Ngrok;
+using Automatica.Core.Runtime.Tunneling;
 using Automatica.Push;
 using Automatica.Push.Hubs;
 using Automatica.Push.LearnMode;
@@ -72,7 +72,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             var hubClients = new Mock<IHubClients>();
             var clientProxy = new Mock<IClientProxy>();
 
-            var ngrogServiceMock = new Mock<IAutomaticaNgrokService>();
+            var ngrogServiceMock = new Mock<ITunnelingService>();
 
             hubClients.SetupGet(clients => clients.All).Returns(() => clientProxy.Object);
             hubClients.Setup(clients => clients.Group(It.IsAny<string>())).Returns(() => clientProxy.Object);
@@ -90,11 +90,11 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton<ILogger<DriverLoader>>(NullLogger<DriverLoader>.Instance);
             services.AddSingleton<ILogger<PluginHandler>>(NullLogger<PluginHandler>.Instance);
             services.AddSingleton<ILogger<LearnMode>>(NullLogger<LearnMode>.Instance);
-            services.AddSingleton<ILogger<AutomaticaNgrokService>>(NullLogger<AutomaticaNgrokService>.Instance);
+            services.AddSingleton<ILogger<TunnelingService>>(NullLogger<TunnelingService>.Instance);
             services.AddSingleton<ILogger>(NullLogger.Instance);
             services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
 
-            services.AddSingleton<IAutomaticaNgrokService>(ngrogServiceMock.Object);
+            services.AddSingleton<ITunnelingService>(ngrogServiceMock.Object);
 
             var mqttServerMock = new Mock<IMqttServer>();
             services.AddSingleton<IMqttServer>(mqttServerMock.Object);
