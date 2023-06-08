@@ -1,11 +1,11 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Runtime.Tunneling;
 using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Drivers;
 using Microsoft.Extensions.Logging;
@@ -24,7 +24,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             Dispatcher = dispatcher;
             LoggerFactory = loggerFactory;
             Factory = factory;
-            TunnelingProvider = new ITunnelingProviderMock();
+            TunnelingProvider = new TunnelingProviderMock();
         }
 
         public NodeInstance NodeInstance { get; }

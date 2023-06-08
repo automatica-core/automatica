@@ -310,7 +310,7 @@ namespace Automatica.Core.Runtime.Database
             }
 
             AddHostedGrafanaRecorderSettings(context);
-            AddNgrodSettings(context);
+            AddNgrokSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -509,7 +509,7 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
         }
 
-        private static void AddNgrodSettings(AutomaticaContext context)
+        private static void AddNgrokSettings(AutomaticaContext context)
         {
             var ngrokEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokEnabled");
 

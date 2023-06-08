@@ -9,6 +9,6 @@ namespace Automatica.Core.Runtime.Tunneling
     {
         Task<bool> IsRunning(CancellationToken token);
 
-        Task<bool> CreateTunnelAsync(Uri uri, string domain, CancellationToken token);
+        Task<string> CreateTunnelAsync(Uri uri, string domain, CancellationToken token);
     }
 }

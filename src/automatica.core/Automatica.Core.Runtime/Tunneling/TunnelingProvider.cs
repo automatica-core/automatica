@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Tunneling;
 
 namespace Automatica.Core.Runtime.Tunneling
 {
@@ -13,7 +14,7 @@ namespace Automatica.Core.Runtime.Tunneling
             _tunnelingService = tunnelingService;
         }
 
-        public async Task<bool> CreateTunnelAsync(TunnelingProtocol protocol, string address, string targetDomain, CancellationToken token)
+        public async Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string address, string targetDomain, CancellationToken token)
         {
             var uriPrefix = "http://";
             if (protocol == TunnelingProtocol.Tcp)

@@ -103,15 +103,15 @@ namespace Automatica.Core.Runtime.Tunneling
             return Task.FromResult(_ngrokService != null);
         }
 
-        public async Task<bool> CreateTunnelAsync(Uri uri, string domain, CancellationToken token)
+        public async Task<string> CreateTunnelAsync(Uri uri, string domain, CancellationToken token)
         {
             if (_ngrokService == null)
             {
-                return false;
+                return null;
             }
 
-            await _ngrokService.CreateTunnelAsync(uri, domain, token);
-            return true;
+            var tunnelResponse = await _ngrokService.CreateTunnelAsync(uri, domain, token);
+            return tunnelResponse.PublicUrl;
         }
     }
 }

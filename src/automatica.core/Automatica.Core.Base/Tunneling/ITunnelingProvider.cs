@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Automatica.Core.Runtime.Tunneling
+namespace Automatica.Core.Base.Tunneling
 {
     public enum TunnelingProtocol
     {
@@ -13,7 +13,7 @@ namespace Automatica.Core.Runtime.Tunneling
     {
         Task<bool> IsAvailableAsync(CancellationToken token);
 
-        Task<bool> CreateTunnelAsync(TunnelingProtocol protocol, string address, string targetDomain,
+        Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string address, string targetDomain,
             CancellationToken token);
     }
 }
