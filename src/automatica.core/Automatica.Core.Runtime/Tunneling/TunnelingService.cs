@@ -110,7 +110,7 @@ namespace Automatica.Core.Runtime.Tunneling
                 return false;
             }
 
-            //TODO
+            await _ngrokService.CreateTunnelAsync(uri, domain, token);
             return true;
         }
     }

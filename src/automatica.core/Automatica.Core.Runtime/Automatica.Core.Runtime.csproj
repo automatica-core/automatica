@@ -22,7 +22,7 @@
     <PackageReference Include="MQTTnet.AspNetCore" Version="3.1.2" />
     <PackageReference Include="Telegraf.Channel.Http" Version="1.0.3" />
     <PackageReference Include="Telegraf.Infux.Client" Version="1.0.4" />
-    <PackageReference Include="Automatica.Ngrok" Version="1.1.0" />
+    <PackageReference Include="Automatica.Ngrok" Version="1.2.0" />
     <PackageReference Include="Automatica.Ngrok.AspNet" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
