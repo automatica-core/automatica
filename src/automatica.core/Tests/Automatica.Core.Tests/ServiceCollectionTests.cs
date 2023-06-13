@@ -50,7 +50,7 @@ namespace Automatica.Core.Tests
             var moq = new ServiceCollection();
 
             Runtime.ServiceCollectionExtensions.AddAutomaticaCoreService(moq, mockConfSection.Object, false);
-            Runtime.ServiceCollectionExtensions.AddAutomaticaNGrokServices(moq, mockConfSection.Object);
+            Runtime.ServiceCollectionExtensions.AddAutomaticaRemoteConnectServices(moq, mockConfSection.Object);
 
 
             moq.AddSingleton(CreateHubContextMock<TelegramHub>());

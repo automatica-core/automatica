@@ -49,14 +49,15 @@ RUN rm -rf /src
 RUN apt update
 RUN apt install curl -y
 
-RUN curl -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm.tgz
-RUN tar xvzf ngrok.tgz
+RUN curl -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0/frp_0.49.0_linux_arm.tar.gz
+RUN tar xvzf frp.tgz
 
 FROM automaticacore/automatica-plugin-runtime:arm32v7-7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
-COPY --from=build /app/ngrok /usr/local/bin
+COPY --from=build /app/frp /usr/local/bin
+COPY ./.docker/*.ini /etc/frp/
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp

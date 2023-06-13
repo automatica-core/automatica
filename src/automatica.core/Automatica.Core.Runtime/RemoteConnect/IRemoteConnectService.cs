@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace Automatica.Core.Runtime.Tunneling
+namespace Automatica.Core.Runtime.RemoteConnect
 {
-    public interface ITunnelingService : IHostedService
+    public interface IRemoteConnectService : IHostedService
     {
         Task<bool> IsRunning(CancellationToken token);
 

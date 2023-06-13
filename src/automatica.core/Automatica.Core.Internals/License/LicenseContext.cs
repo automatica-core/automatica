@@ -7,11 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.Cloud;
 
 namespace Automatica.Core.Internals.License
 {
     public class LicenseContext : ILicenseContext
     {
+        private readonly ICloudApi _cloudApi;
         private int _dataPointsInUse = 0;
 
         public const string LicenseFileName = ".automatica.core.lic";
@@ -24,6 +26,10 @@ namespace Automatica.Core.Internals.License
         public int MaxDataPoints { get; private set; }
 
         public int MaxUsers { get; private set; }
+
+        public bool AllowRemoteControl { get; private set; } = false;
+
+
         public bool DriverLicenseCountExceeded()
         {
             return _dataPointsInUse > MaxDataPoints;
@@ -38,8 +44,9 @@ namespace Automatica.Core.Internals.License
 
         private Standard.Licensing.License _license;
 
-        public LicenseContext()
+        public LicenseContext(ICloudApi cloudApi)
         {
+            _cloudApi = cloudApi;
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var fileName = Path.Combine(path, LicenseFileName);
 
@@ -54,10 +61,18 @@ namespace Automatica.Core.Internals.License
                 pubKey = await reader.ReadToEndAsync();
             }
 
+            if (!File.Exists(LicensePath))
+            {
+                var license = await _cloudApi.GetLicense();
+
+                await using var file = new StreamWriter(LicensePath);
+                await file.WriteAsync(license);
+                await file.FlushAsync();
+                file.Close();
+            }
             if (File.Exists(LicensePath))
             {
-
-                using (var file = File.OpenRead(LicensePath))
+                await using (var file = File.OpenRead(LicensePath))
                 {
                     var license = Standard.Licensing.License.Load(file);
 
@@ -78,6 +93,8 @@ namespace Automatica.Core.Internals.License
             {
                 MaxDataPoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
                 MaxUsers = Convert.ToInt32(_license.ProductFeatures.Get("MaxUsers"));
+                if(_license.ProductFeatures.Contains("AllowRemoteControl"))
+                    AllowRemoteControl = Convert.ToBoolean(_license.ProductFeatures.Get("AllowRemoteControl"));
             }
             else
             {
@@ -118,20 +135,15 @@ namespace Automatica.Core.Internals.License
 
         public async Task<string> GetLicense()
         {
-            string license = "";
-            using (var reader = new StreamReader(LicensePath))
-            {
-                license = await reader.ReadToEndAsync();
-            }
+            using var reader = new StreamReader(LicensePath);
+            var license = await reader.ReadToEndAsync();
             return license;
         }
 
         public async Task SaveLicense(string license)
         {
-            using (var writer = new StreamWriter(LicensePath, false))
-            {
-                await writer.WriteAsync(license);
-            }
+            await using var writer = new StreamWriter(LicensePath, false);
+            await writer.WriteAsync(license);
         }
 
         public Task<bool> CheckIfValid(string license)

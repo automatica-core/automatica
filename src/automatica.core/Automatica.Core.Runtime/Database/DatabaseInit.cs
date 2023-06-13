@@ -310,7 +310,7 @@ namespace Automatica.Core.Runtime.Database
             }
 
             AddHostedGrafanaRecorderSettings(context);
-            AddNgrokSettings(context);
+            AddRemoteConnectSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -509,15 +509,18 @@ namespace Automatica.Core.Runtime.Database
             context.SaveChanges();
         }
 
-        private static void AddNgrokSettings(AutomaticaContext context)
+        private static void AddRemoteConnectSettings(AutomaticaContext context)
         {
-            var ngrokEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokEnabled");
 
-            if (ngrokEnabled == null)
+            var ngrokEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokEnabled");
+            context.Settings.Remove(ngrokEnabled);
+
+            var remoteEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteEnabled");
+            if (remoteEnabled == null)
             {
                 context.Settings.Add(new Setting
                 {
-                    ValueKey = "ngrokEnabled",
+                    ValueKey = "remoteEnabled",
                     Type = (long)PropertyTemplateType.Bool,
                     Value = false,
                     Group = "SERVER.REMOTE",
@@ -528,29 +531,18 @@ namespace Automatica.Core.Runtime.Database
             }
 
             var ngrokToken = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokToken");
-
-            if (ngrokToken == null)
-            {
-                context.Settings.Add(new Setting
-                {
-                    ValueKey = "ngrokToken",
-                    Type = (long)PropertyTemplateType.Text,
-                    Value = null,
-                    Group = "SERVER.REMOTE",
-                    IsVisible = true,
-                    Order = 2
-                });
-
-            }
+            context.Settings.Remove(ngrokToken);
 
 
             var ngrokDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokDomain");
+            context.Settings.Remove(ngrokDomain);
 
-            if (ngrokDomain == null)
+            var remoteDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteDomain");
+            if (remoteDomain == null)
             {
                 context.Settings.Add(new Setting
                 {
-                    ValueKey = "ngrokDomain",
+                    ValueKey = "remoteDomain",
                     Type = (long)PropertyTemplateType.Text,
                     Value = null,
                     Group = "SERVER.REMOTE",

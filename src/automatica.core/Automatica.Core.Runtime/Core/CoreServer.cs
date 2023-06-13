@@ -43,7 +43,7 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
-using Automatica.Core.Runtime.Tunneling;
+using Automatica.Core.Runtime.RemoteConnect;
 using Newtonsoft.Json;
 using String = System.String;
 
@@ -108,7 +108,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
-        private readonly ITunnelingService _ngrokService;
+        private readonly IRemoteConnectService _ngrokService;
 
 
         public RunState RunState
@@ -184,7 +184,7 @@ namespace Automatica.Core.Runtime.Core
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
 
-            _ngrokService = services.GetService<ITunnelingService>();
+            _ngrokService = services.GetService<IRemoteConnectService>();
             InitInternals();
         }
 

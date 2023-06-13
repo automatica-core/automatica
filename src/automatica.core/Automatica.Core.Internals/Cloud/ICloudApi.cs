@@ -17,9 +17,10 @@ namespace Automatica.Core.Internals.Cloud
         event EventHandler<AsyncCompletedEventArgs> DownloadUpdateFailed;
 
         Task<bool> Ping();
+        Task<string> GetLicense();
         Task<bool> SayHelloToCloud(SayHelloData sayHi);
 
-        Task<bool> SendNgrokTunnelUrl(string url);
+        Task<bool> SendRemoteConnectUrl(string url);
 
         Task<ServerVersion> CheckForUpdates();
         Task<IList<Plugin>> GetLatestPlugins();

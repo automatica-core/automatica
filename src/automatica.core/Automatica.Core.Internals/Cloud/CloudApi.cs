@@ -96,7 +96,7 @@ namespace Automatica.Core.Internals.Cloud
         }
 
 
-        public async Task<bool> SendNgrokTunnelUrl(string url)
+        public async Task<bool> SendRemoteConnectUrl(string url)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace Automatica.Core.Internals.Cloud
                 {
                     TunnelUrl = url
                 };
-                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/ngrok", ngrokObj);
+                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/remoteConnect", ngrokObj);
             }
             catch (Exception e)
             {
@@ -122,6 +122,12 @@ namespace Automatica.Core.Internals.Cloud
         public Task<IList<Plugin>> GetLatestPlugins()
         {
             return GetRequest<IList<Plugin>>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/plugins/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
+        }
+
+
+        public Task<string> GetLicense()
+        {
+            return GetRequest<string>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/license");
         }
 
         public async Task<bool> SayHelloToCloud(SayHelloData sayHi)

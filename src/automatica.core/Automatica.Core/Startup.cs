@@ -156,7 +156,7 @@ namespace Automatica.Core
             }).AddJsonProtocol(options =>
             {
             });
-            services.AddAutomaticaNGrokServices(Configuration);
+            services.AddAutomaticaRemoteConnectServices(Configuration);
 
         }
 

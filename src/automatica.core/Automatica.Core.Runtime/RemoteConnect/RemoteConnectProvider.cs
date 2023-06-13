@@ -3,13 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Tunneling;
 
-namespace Automatica.Core.Runtime.Tunneling
+namespace Automatica.Core.Runtime.RemoteConnect
 {
-    internal class TunnelingProvider : ITunnelingProvider
+    internal class RemoteConnectProvider : ITunnelingProvider
     {
-        private readonly ITunnelingService _tunnelingService;
+        private readonly IRemoteConnectService _tunnelingService;
 
-        public TunnelingProvider(ITunnelingService tunnelingService)
+        public RemoteConnectProvider(IRemoteConnectService tunnelingService)
         {
             _tunnelingService = tunnelingService;
         }

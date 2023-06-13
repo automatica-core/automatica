@@ -28,7 +28,7 @@ using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Runtime.Recorder;
-using Automatica.Core.Runtime.Tunneling;
+using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
@@ -53,7 +53,7 @@ namespace Automatica.Core.Runtime
             services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
             services.AddSingleton<IServerCloudApi, CloudApi>();
             services.AddSingleton<ICloudApi, CloudApi>();
-            services.AddSingleton<ILicenseContext, AllowAllLicenseContext>();
+            services.AddSingleton<ILicenseContext, LicenseContext>();
             services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();
             services.AddAutomaticaPushServices(configuration, isElectronActive);
@@ -131,10 +131,10 @@ namespace Automatica.Core.Runtime
             services.AddInternals(configuration);
         }
 
-        public static void AddAutomaticaNGrokServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAutomaticaRemoteConnectServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<ITunnelingService, TunnelingService>();
-            services.AddSingleton<ITunnelingProvider, TunnelingProvider>();
+            services.AddSingleton<IRemoteConnectService, RemoteConnectService>();
+            services.AddSingleton<ITunnelingProvider, RemoteConnectProvider>();
         }
     }
 }

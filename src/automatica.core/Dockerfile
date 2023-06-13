@@ -45,12 +45,12 @@ RUN mkdir -p /app/plugins
 RUN echo $VERSION
 RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
-
 RUN rm -rf /src
 
-RUN curl -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-RUN tar xvzf ngrok.tgz
-RUN ./ngrok version
+RUN curl -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0/frp_0.49.0_linux_amd64.tar.gz
+RUN tar xvzf frp.tgz
+RUN ./frpc --version
+
 
 FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
 WORKDIR /app/
@@ -58,8 +58,9 @@ WORKDIR /app/
 COPY --from=build /app/ ./
 VOLUME /app/plugins
 
-COPY --from=build /app/ngrok /usr/local/bin
+COPY --from=build /app/frpc /usr/local/bin
 COPY --from=build /app/ ./
+COPY ./.docker/*.ini /etc/frp/
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp
