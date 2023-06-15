@@ -4,7 +4,6 @@ using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
@@ -12,8 +11,9 @@ namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
     [Migration("20230126164130_add-rule-interface-template-key")]
-    partial class addruleinterfacetemplatekey
+    partial class AddRuleInterfaceTemplateKey
     {
+
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -26,9 +26,13 @@ namespace Automatica.Core.Internals.Cloud
         public string Version { get; set; }
         public Guid ServerGuid { get; set; }
     }
-    public class NgrokObject
+    public class RemoteConnectObject
     {
         public string TunnelUrl { get; set; }
+    }
+    public class CreateRemoteConnectObject
+    {
+        public string TargetSubDomain { get; set; }
     }
     public class CloudApi : ICloudApi
     {
@@ -96,15 +100,32 @@ namespace Automatica.Core.Internals.Cloud
         }
 
 
+        public async Task<RemoteConnectObject> CreateRemoteConnectUrl(string subDomain)
+        {
+            try
+            {
+                var remoteConnectObj = new CreateRemoteConnectObject
+                {
+                    TargetSubDomain = subDomain
+                };
+                return await PostRequest<RemoteConnectObject>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/createRemoteConnect", remoteConnectObj);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                return null;
+            }
+        }
+
         public async Task<bool> SendRemoteConnectUrl(string url)
         {
             try
             {
-                var ngrokObj = new NgrokObject
+                var remoteConnectObj = new RemoteConnectObject
                 {
                     TunnelUrl = url
                 };
-                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/remoteConnect", ngrokObj);
+                await PostRequest<object>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/remoteConnect", remoteConnectObj);
             }
             catch (Exception e)
             {

@@ -384,13 +384,13 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Timestamp"
       },
-      "NGROKDOMAIN" : {
+      "REMOTEDOMAIN" : {
         "NAME": "Domain"
       },
-      "NGROKENABLED" : {
+      "REMOTEENABLED" : {
         "NAME": "Active"
       },
-      "NGROKTOKEN" : {
+      "REMOTETOKEN" : {
         "NAME": "Token"
       }
     },

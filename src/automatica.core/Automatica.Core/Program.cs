@@ -158,6 +158,7 @@ namespace Automatica.Core
                     a.SetBasePath(configDir);
                     a.AddEnvironmentVariables();
                     a.AddJsonFile("appsettings.json", true);
+                    a.AddDatabaseConfiguration();
                 })
                 //.UseElectron(new string[])
                 .UseSerilog()
@@ -168,7 +169,8 @@ namespace Automatica.Core
                     config
                         .SetBasePath(ServerInfo.GetConfigDirectory())
                         .AddJsonFile("appsettings.json", false)
-                        .AddEnvironmentVariables();
+                        .AddEnvironmentVariables()
+                        .AddDatabaseConfiguration();
                 });
 
             //if (HybridSupport.IsElectronActive)

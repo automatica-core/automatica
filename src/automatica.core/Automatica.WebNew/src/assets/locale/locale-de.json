@@ -384,13 +384,13 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
       },
-      "NGROKDOMAIN" : {
+      "REMOTEDOMAIN" : {
         "NAME": "Domain"
       },
-      "NGROKENABLED" : {
+      "REMOTEENABLED" : {
         "NAME": "Aktiv"
       },
-      "NGROKTOKEN" : {
+      "REMOTETOKEN" : {
         "NAME": "Token"
       }
     },

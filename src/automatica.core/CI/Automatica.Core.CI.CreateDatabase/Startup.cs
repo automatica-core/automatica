@@ -29,7 +29,7 @@ namespace Automatica.Core.CI.CreateDatabase
         {
             services.AddDbContext<AutomaticaContext>();
 
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<IConfigurationRoot>(Configuration);
 
             services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();

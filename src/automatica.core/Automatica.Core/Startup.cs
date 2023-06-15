@@ -50,6 +50,8 @@ namespace Automatica.Core
         {
             services.AddMqttTcpServerAdapter();
 
+            services.AddSingleton(Configuration);
+
             services.AddDbContext<AutomaticaContext>();
             services.AddResponseCompression(options =>
             {
@@ -143,10 +145,13 @@ namespace Automatica.Core
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
                 .AddEnvironmentVariables()
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddDatabaseConfiguration();
 
-            Configuration = builder.Build();
+            var configRoot = builder.Build();
 
+            Configuration = configRoot;
+            services.AddSingleton<IConfigurationRoot>(configRoot);
 
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
@@ -156,7 +161,16 @@ namespace Automatica.Core
             }).AddJsonProtocol(options =>
             {
             });
-            services.AddAutomaticaRemoteConnectServices(Configuration);
+            services.AddAutomaticaRemoteConnectWithFrp(a =>
+            {
+                a.UseWeb = true;
+                a.UseSsh = true;
+
+                a.ServerAddress = Configuration["server:remote_connect_url"];
+                a.ServerPort = 7000;
+                a.LocalIp = "127.0.0.1";
+                a.LocalPort = Convert.ToInt32(Configuration["server:port"]);
+            });
 
         }
 

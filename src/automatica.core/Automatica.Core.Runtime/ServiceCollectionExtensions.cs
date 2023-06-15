@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -29,6 +30,7 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteConnect;
+using Automatica.Core.Runtime.RemoteConnect.Frp;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
@@ -131,7 +133,21 @@ namespace Automatica.Core.Runtime
             services.AddInternals(configuration);
         }
 
-        public static void AddAutomaticaRemoteConnectServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAutomaticaRemoteConnectWithFrp(this IServiceCollection services,
+            Action<FrpcOptions> settings)
+        {
+            services.AddAutomaticaRemoteConnectServices();
+            services.AddFrpServices(settings);
+        }
+
+        public static void AddAutomaticaRemoteConnectWithFrp(this IServiceCollection services,
+            IConfiguration settings)
+        {
+            services.AddAutomaticaRemoteConnectServices();
+            services.AddFrpServices(settings);
+        }
+
+        private static void AddAutomaticaRemoteConnectServices(this IServiceCollection services)
         {
             services.AddSingleton<IRemoteConnectService, RemoteConnectService>();
             services.AddSingleton<ITunnelingProvider, RemoteConnectProvider>();

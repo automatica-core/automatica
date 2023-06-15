@@ -14,6 +14,7 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using Automatica.Core.Runtime.Recorder;
@@ -27,7 +28,8 @@ namespace Automatica.Core.Runtime.Database
         {
             var context = services.GetRequiredService<AutomaticaContext>();
             var visuInitFactory = services.GetRequiredService<IVisualisationFactory>();
-            var config = services.GetRequiredService<IConfiguration>();
+            var config = services.GetRequiredService<IConfigurationRoot>();
+            
             context.Database.Migrate();
 
             bool dbCreated = !context.BoardTypes.Any();
@@ -507,13 +509,14 @@ namespace Automatica.Core.Runtime.Database
             }
 
             context.SaveChanges();
+            config.Reload();
         }
 
         private static void AddRemoteConnectSettings(AutomaticaContext context)
         {
 
             var ngrokEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokEnabled");
-            context.Settings.Remove(ngrokEnabled);
+            if(ngrokEnabled != null) context.Settings.Remove(ngrokEnabled);
 
             var remoteEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteEnabled");
             if (remoteEnabled == null)
@@ -531,11 +534,11 @@ namespace Automatica.Core.Runtime.Database
             }
 
             var ngrokToken = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokToken");
-            context.Settings.Remove(ngrokToken);
+            if (ngrokToken != null) context.Settings.Remove(ngrokToken);
 
 
             var ngrokDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokDomain");
-            context.Settings.Remove(ngrokDomain);
+            if (ngrokDomain != null) context.Settings.Remove(ngrokDomain);
 
             var remoteDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteDomain");
             if (remoteDomain == null)
@@ -731,7 +734,6 @@ namespace Automatica.Core.Runtime.Database
 
 
             context.SaveChanges();
-
         }
 
         private static void AddAreaData(AutomaticaContext context)

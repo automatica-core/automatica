@@ -5,7 +5,7 @@
 namespace Automatica.Core.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class addruleinterfacetemplatekey : Migration
+    public partial class AddRuleInterfaceTemplateKey : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

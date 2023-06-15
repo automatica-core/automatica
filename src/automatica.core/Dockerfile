@@ -47,8 +47,9 @@ RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_AP
 
 RUN rm -rf /src
 
-RUN curl -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0/frp_0.49.0_linux_amd64.tar.gz
+RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0/frp_0.49.0_linux_amd64.tar.gz
 RUN tar xvzf frp.tgz
+RUN mv frp_*/* .
 RUN ./frpc --version
 
 
@@ -60,7 +61,10 @@ VOLUME /app/plugins
 
 COPY --from=build /app/frpc /usr/local/bin
 COPY --from=build /app/ ./
-COPY ./.docker/*.ini /etc/frp/
+
+RUN mkdir /app/automatica/frp
+COPY ./Automatica.Core/frp/* /app/automatica/frp
+
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp

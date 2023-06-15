@@ -20,7 +20,9 @@ namespace Automatica.Core.Internals.Cloud
         Task<string> GetLicense();
         Task<bool> SayHelloToCloud(SayHelloData sayHi);
 
+        Task<RemoteConnectObject> CreateRemoteConnectUrl(string url);
         Task<bool> SendRemoteConnectUrl(string url);
+
 
         Task<ServerVersion> CheckForUpdates();
         Task<IList<Plugin>> GetLatestPlugins();
