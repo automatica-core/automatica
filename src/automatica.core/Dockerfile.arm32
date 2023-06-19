@@ -59,7 +59,7 @@ WORKDIR /app/
 COPY --from=build /app/ ./
 COPY --from=build /app/frp /usr/local/bin
 
-RUN mkdir /app/automatica/frp
+RUN mkdir -p /app/automatica/frp
 COPY ./Automatica.Core/frp/* /app/automatica/frp
 
 VOLUME /app/plugins

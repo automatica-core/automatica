@@ -62,7 +62,7 @@ VOLUME /app/plugins
 COPY --from=build /app/frpc /usr/local/bin
 COPY --from=build /app/ ./
 
-RUN mkdir /app/automatica/frp
+RUN mkdir -p /app/automatica/frp
 COPY ./Automatica.Core/frp/* /app/automatica/frp
 
 VOLUME /app/plugins
