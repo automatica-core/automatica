@@ -54,7 +54,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseType")]).Returns("sqlite");
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseSqlite")]).Returns($"Data Source={tmpFolder}/{DatabaseFilePath}.db");
 
-            var mockConfiguration = new Mock<IConfiguration>();
+            var mockConfiguration = new Mock<IConfigurationRoot>();
             mockConfiguration.Setup(a => a.GetSection(It.Is<string>(s => s == "ConnectionStrings"))).Returns(mockConfSection.Object);
 
             var config = mockConfiguration.Object;
@@ -63,6 +63,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             var services = new ServiceCollection();
 
             services.AddSingleton(config);
+            services.AddSingleton<IConfiguration>(config);
             services.AddAutomaticaCoreService(config, false);
             services.AddDbContext<AutomaticaContext>();
             services.AddSingleton<T>();
