@@ -68,5 +68,8 @@
 	  <None Update="frp\frpc_ssh.ini">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="frp\frpc_template.ini">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
   </ItemGroup>
 </Project>

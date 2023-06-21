@@ -6,14 +6,15 @@ namespace Automatica.Core.Base.Tunneling
     public enum TunnelingProtocol
     {
         Http,
-        Tcp
+        Https,
+        Tcp,
+        Udp
     }
 
     public interface ITunnelingProvider
     {
         Task<bool> IsAvailableAsync(CancellationToken token);
-
-        Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string address, string targetDomain,
-            CancellationToken token);
+        
+        Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort, int remotePort, CancellationToken token);
     }
 }

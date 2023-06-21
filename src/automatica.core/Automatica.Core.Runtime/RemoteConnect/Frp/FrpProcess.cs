@@ -38,11 +38,11 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 Process.Start(processInformation) ??
                 throw new InvalidOperationException("Could not start process");
 
-            var error = await process.StandardError.ReadToEndAsync(token);
-            var stdout= await process.StandardOutput.ReadToEndAsync(token);
+            //var error = await process.StandardError.ReadLineAsync(token);
+            //var stdout= await process.StandardOutput.ReadLineAsync(token);
 
-            _logger.LogInformation(stdout);
-            _logger.LogError(error);
+            //_logger.LogInformation(stdout);
+            //_logger.LogError(error);
 
 
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
@@ -106,6 +106,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                     
                     {"LOCAL_IP", $"{_settings.CurrentValue.LocalIp}"},
                     {"LOCAL_PORT", $"{ServerInfo.SslWebPort}"},
+                    {"FRPC_USERNAME", $"{ServerInfo.ServerUid}"},
                     {"SUB_DOMAIN", $"{_settings.CurrentValue.SubDomain ?? _config["db:remoteDomain"]}"}
                 }
             };

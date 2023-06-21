@@ -108,7 +108,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
-        private readonly IRemoteConnectService _ngrokService;
+        private readonly IRemoteConnectService _remoteConnectService;
 
 
         public RunState RunState
@@ -184,7 +184,7 @@ namespace Automatica.Core.Runtime.Core
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
 
-            _ngrokService = services.GetService<IRemoteConnectService>();
+            _remoteConnectService = services.GetService<IRemoteConnectService>();
             InitInternals();
         }
 
@@ -277,9 +277,9 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Started;
 
 
-            if (_ngrokService != null)
+            if (_remoteConnectService != null)
             {
-                await _ngrokService.StartAsync(default);
+                await _remoteConnectService.StartAsync(default);
             }
         }
 
@@ -444,9 +444,9 @@ namespace Automatica.Core.Runtime.Core
         {
             await Stop();
 
-            if (_ngrokService != null)
+            if (_remoteConnectService != null)
             {
-                await _ngrokService.StopAsync(cancellationToken);
+                await _remoteConnectService.StopAsync(cancellationToken);
             }
 
             _logger.LogInformation("CoreServer stopped");
@@ -649,6 +649,9 @@ namespace Automatica.Core.Runtime.Core
 
 
             _logger.LogInformation($"Loading recording data-points (found {recordingDataPointCount})...done");
+
+
+            await _remoteConnectService.InitAsync();
         }
         
       

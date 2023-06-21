@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
@@ -20,6 +21,10 @@ namespace Automatica.Core.Runtime.RemoteConnect
         private readonly IFrpService _frpService;
         private readonly ILogger<RemoteConnectService> _logger;
 
+        private string _currentDomainName;
+
+        private bool _isRunning;
+
         public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ILogger<RemoteConnectService> logger)
         {
             _config = config;
@@ -31,6 +36,65 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {                                                                                                                                                                                                                                           
+            if (!_licenseContext.AllowRemoteControl)
+            {
+                _logger.LogInformation($"Remote control is not licensed...:");
+                return;
+            }
+
+            await using var context = new AutomaticaContext(_config);
+            var remoteEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteEnabled");
+
+            if (remoteEnabled != null && (bool)remoteEnabled.Value)
+            {
+                _logger.LogInformation("RemoteControl is enabled....");
+            }
+            else
+            {
+                _logger.LogInformation("RemoteControl is disabled....");
+                return;
+            }
+
+            if (String.IsNullOrEmpty(_currentDomainName))
+            {
+                _logger.LogError("Cannot start RemoteControl, domain is not set....");
+            }
+
+            try
+            {
+                await _frpService.StartAsync(cancellationToken);
+                
+                _isRunning = true;
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not initialize RemoteControl service ....{e}");
+                return;
+            }
+            _logger.LogInformation($"Bind RemoteControl to address http://localhost:{ServerInfo.WebPort}");
+        }
+
+        public async Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, int remotePort,
+            CancellationToken token)
+        {
+            if (_isRunning)
+            {
+                throw new ArgumentException($"Cannot establish a new tunnel while already running...");
+            }
+
+            await FrpcHelper.CreateServiceFileFromTemplate(protocol, name, localIp, localPort, remotePort, token);
+
+            return _currentDomainName;
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await _frpService.StopAsync(cancellationToken);
+        }
+
+        public async Task InitAsync()
+        {
             if (!_licenseContext.AllowRemoteControl)
             {
                 _logger.LogInformation($"Remote control is not licensed...:");
@@ -61,50 +125,23 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 _logger.LogError($"Could not create target domain {domain}");
                 return;
             }
-            
+
             try
             {
-                await _frpService.InitConfigurationsAsync(cancellationToken);
-                await _frpService.StartAsync(cancellationToken);
+                await _frpService.InitConfigurationsAsync();
 
+                _currentDomainName = response.TunnelUrl;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Could not initialize RemoteControl service ....{e}");
                 return;
             }
-            _logger.LogInformation($"Bind RemoteControl to address http://localhost:{ServerInfo.WebPort}");
-
-            try
-            {
-                //var tunnel = await _ngrokService.StartAsync(new Uri($"http://localhost:{ServerInfo.WebPort}"), domain,
-                //    cancellationToken);
-                //await _ngrokService.WaitUntilReadyAsync(cancellationToken);
-                
-
-               // await _cloudApi.SendRemoteConnectUrl(tunnel.PublicUrl);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Could not bin logger...{e}");
-            }
-
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await _frpService.StopAsync(cancellationToken);
-            
         }
 
         public Task<bool> IsRunning(CancellationToken token)
         {
             return Task.FromResult(false);
-        }
-
-        public Task<string> CreateTunnelAsync(Uri uri, string domain, CancellationToken token)
-        {
-            return Task.FromResult("");
         }
     }
 }
