@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Tunneling;
 
 namespace Automatica.Core.Internals.Cloud
 {
@@ -21,6 +22,7 @@ namespace Automatica.Core.Internals.Cloud
         Task<bool> SayHelloToCloud(SayHelloData sayHi);
 
         Task<RemoteConnectObject> CreateRemoteConnectUrl(string url);
+        Task<RemoteConnectPortResponse> GetRemoteConnectPort(Guid driverGuid, string serviceName, TunnelingProtocol tunnelingProtocol);
         Task<bool> SendRemoteConnectUrl(string url);
 
 

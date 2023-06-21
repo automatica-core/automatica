@@ -15,6 +15,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Internals.Cloud.Exceptions;
 using Automatica.Core.Internals.Plugins;
 
@@ -29,6 +30,16 @@ namespace Automatica.Core.Internals.Cloud
     public class RemoteConnectObject
     {
         public string TunnelUrl { get; set; }
+    }
+    public class RemoteConnectPortResponse
+    {
+        public int Port { get; set; }
+    }
+    public class CreateRemoteConnectPortObject
+    {
+        public Guid DriverId { get; set; }
+        public string ServiceName { get; set; }
+        public string TunnelingProtocol { get; set; }
     }
     public class CreateRemoteConnectObject
     {
@@ -109,6 +120,25 @@ namespace Automatica.Core.Internals.Cloud
                     TargetSubDomain = subDomain
                 };
                 return await PostRequest<RemoteConnectObject>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/createRemoteConnect", remoteConnectObj);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                return null;
+            }
+        }
+
+        public async Task<RemoteConnectPortResponse> GetRemoteConnectPort(Guid driverGuid, string serviceName, TunnelingProtocol tunnelingProtocol)
+        {
+            try
+            {
+                var remoteConnectObj = new CreateRemoteConnectPortObject
+                {
+                    DriverId = driverGuid,
+                    ServiceName = serviceName,
+                    TunnelingProtocol =  tunnelingProtocol.ToString().ToLowerInvariant()
+                };
+                return await PostRequest<RemoteConnectPortResponse>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/createRemoteConnectPort", remoteConnectObj);
             }
             catch (Exception e)
             {

@@ -62,6 +62,8 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
             try
             {
+                await CreateTunnelAsync(TunnelingProtocol.Udp, "knx", "192.168.8.3", 3671, Guid.Parse("3b769fae-030a-4d37-a8bf-63182f0ac2d0"),
+                    cancellationToken);
                 await _frpService.StartAsync(cancellationToken);
                 
                 _isRunning = true;
@@ -75,13 +77,20 @@ namespace Automatica.Core.Runtime.RemoteConnect
             _logger.LogInformation($"Bind RemoteControl to address http://localhost:{ServerInfo.WebPort}");
         }
 
-        public async Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, int remotePort,
+        public async Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, Guid driverGuid,
             CancellationToken token)
         {
             if (_isRunning)
             {
                 throw new ArgumentException($"Cannot establish a new tunnel while already running...");
             }
+
+            var remotePortResponse = await _cloudApi.GetRemoteConnectPort(driverGuid, name, protocol);
+            if (remotePortResponse == null)
+            {
+                throw new ArgumentException($"Could not get remote port for tunnel {name}...");
+            }
+            var remotePort = remotePortResponse.Port;
 
             await FrpcHelper.CreateServiceFileFromTemplate(protocol, name, localIp, localPort, remotePort, token);
 

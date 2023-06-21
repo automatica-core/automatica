@@ -35,6 +35,7 @@ namespace Automatica.Core.Driver
         public ILicenseContract LicenseContract { get; }
         public ILoggerFactory LoggerFactory { get; }
         public ITunnelingProvider TunnelingProvider { get; }
+        
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
             return new DriverContext(
@@ -72,7 +73,8 @@ namespace Automatica.Core.Driver
             LicenseContract = licenseContract;
             LoggerFactory = loggerFactory;
 
-            TunnelingProvider = serviceProvider.GetRequiredService<ITunnelingProvider>();
+            var provider = serviceProvider.GetRequiredService<Func<IDriverContext, ITunnelingProvider>>();
+            TunnelingProvider = provider.Invoke(this);
         }
     }
 }

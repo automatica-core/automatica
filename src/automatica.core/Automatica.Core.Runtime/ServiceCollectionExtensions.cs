@@ -150,7 +150,12 @@ namespace Automatica.Core.Runtime
         private static void AddAutomaticaRemoteConnectServices(this IServiceCollection services)
         {
             services.AddSingleton<IRemoteConnectService, RemoteConnectService>();
-            services.AddSingleton<ITunnelingProvider, RemoteConnectProvider>();
+
+            services.AddTransient<Func<IDriverContext, ITunnelingProvider>>(provider =>
+            {
+                return driverContext => new RemoteConnectProvider(provider.GetRequiredService<IRemoteConnectService>(), driverContext);
+            });
+            
         }
     }
 }
