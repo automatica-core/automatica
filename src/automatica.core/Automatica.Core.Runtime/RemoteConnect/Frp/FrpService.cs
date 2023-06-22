@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Microsoft.Build.Framework;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
@@ -31,29 +32,27 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
         public Task InitConfigurationsAsync(CancellationToken cancellationToken = default)
         {
-            var currentDir = Directory.GetCurrentDirectory();
+            var currentDir = ServerInfo.GetBasePath();
             try
             {
                 if (!Directory.Exists("frp"))
                 {
-                    throw new ArgumentException("Could not find configuration directory!");
+                    throw new ArgumentException($"Could not find configuration directory in {currentDir}");
                 }
 
-                Directory.SetCurrentDirectory("frp");
-
-                if (!File.Exists(_frpcIniFile))
+                if (!File.Exists(Path.Combine("frp", _frpcIniFile)))
                 {
                     throw new ArgumentException(
                         $"Could not find config file '{_frpcIniFile}' in {Directory.GetCurrentDirectory()}");
                 }
 
-                if (!Directory.Exists("enabled"))
+                if (!Directory.Exists(Path.Combine("frp", "enabled")))
                 {
-                    Directory.CreateDirectory("enabled");
+                    Directory.CreateDirectory(Path.Combine("frp", "enabled"));
                 }
                 else
                 {
-                    var files = Directory.GetFiles("enabled");
+                    var files = Directory.GetFiles(Path.Combine("frp", "enabled"));
 
                     foreach (var file in files)
                     {
@@ -73,10 +72,9 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
                 _isInitialized = true;
             }
-            finally
+            catch
             {
-
-                Directory.SetCurrentDirectory(currentDir);
+                throw;
             }
             return Task.CompletedTask;
         }
