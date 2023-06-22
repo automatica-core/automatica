@@ -102,51 +102,58 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
         public async Task InitAsync()
         {
-            if (!_licenseContext.AllowRemoteControl)
-            {
-                _logger.LogInformation($"Remote control is not licensed...:");
-                return;
-            }
-
-            await using var context = new AutomaticaContext(_config);
-            var remoteEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteEnabled");
-
-            if (remoteEnabled != null && (bool)remoteEnabled.Value)
-            {
-                _logger.LogInformation($"RemoteControl is enabled....");
-            }
-            else
-            {
-                _logger.LogInformation($"RemoteControl is disabled....");
-                return;
-
-            }
-
-            var remoteDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteDomain");
-            var domain = remoteDomain.ValueText;
-
-            var response = await _cloudApi.CreateRemoteConnectUrl(domain);
-
-            if (response == null)
-            {
-                _logger.LogError($"Could not create target domain {domain}");
-                return;
-            }
-
             try
             {
-                await _frpService.InitConfigurationsAsync();
+                if (!_licenseContext.AllowRemoteControl)
+                {
+                    _logger.LogInformation($"Remote control is not licensed...:");
+                    return;
+                }
 
-                _currentDomainName = response.TunnelUrl;
+                await using var context = new AutomaticaContext(_config);
+                var remoteEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteEnabled");
+
+                if (remoteEnabled != null && (bool)remoteEnabled.Value)
+                {
+                    _logger.LogInformation($"RemoteControl is enabled....");
+                }
+                else
+                {
+                    _logger.LogInformation($"RemoteControl is disabled....");
+                    return;
+
+                }
+
+                var remoteDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteDomain");
+                var domain = remoteDomain.ValueText;
+
+                var response = await _cloudApi.CreateRemoteConnectUrl(domain);
+
+                if (response == null)
+                {
+                    _logger.LogError($"Could not create target domain {domain}");
+                    return;
+                }
+
+                try
+                {
+                    await _frpService.InitConfigurationsAsync();
+
+                    _currentDomainName = response.TunnelUrl;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Could not initialize RemoteControl service ....{e}");
+                    return;
+                }
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Could not initialize RemoteControl service ....{e}");
-                return;
+                _logger.LogError(e, "Something went wrong init frp services....");
             }
         }
 
-        public Task<bool> IsRunning(CancellationToken token)
+            public Task<bool> IsRunning(CancellationToken token)
         {
             return Task.FromResult(false);
         }
