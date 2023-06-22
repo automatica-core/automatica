@@ -16,6 +16,6 @@ namespace Automatica.Core.Base.Tunneling
 
         Task<bool> IsAvailableAsync(CancellationToken token);
         
-        Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort, int remotePort, CancellationToken token);
+        Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort, CancellationToken token);
     }
 }

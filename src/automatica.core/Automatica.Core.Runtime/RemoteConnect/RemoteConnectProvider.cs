@@ -22,7 +22,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
             return _tunnelingService.IsRunning(token);
         }
 
-        public Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort, int remotePort,
+        public Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort,
             CancellationToken token)
         {
             return _tunnelingService.CreateTunnelAsync(protocol, name, address, targetPort, _driverContext.Factory.DriverGuid, token);

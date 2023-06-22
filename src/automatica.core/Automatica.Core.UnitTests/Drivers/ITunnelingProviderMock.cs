@@ -11,7 +11,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             return Task.FromResult(false);
         }
 
-        public Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort, int remotePort,
+        public Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string address, int targetPort,
             CancellationToken token)
         {
             return Task.FromResult("");
