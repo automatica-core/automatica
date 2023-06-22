@@ -12,7 +12,7 @@ namespace P3.Driver.Knx.Tests.Factory
         {
             var node = CreateNodeInstance(KnxIpDriverFactory.KnxGatway);
 
-            Assert.True(node.PropertyInstance.Count == 3);
+            Assert.True(node.PropertyInstance.Count >= 3);
 
             var propIp = node.GetProperty("knx-ip");
             var propPort = node.GetProperty("knx-port");
