@@ -137,9 +137,14 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
                 try
                 {
-                    await _frpService.InitConfigurationsAsync();
-
-                    _currentDomainName = response.TunnelUrl;
+                    if (await _frpService.InitConfigurationsAsync())
+                    {
+                        _currentDomainName = response.TunnelUrl;
+                    }
+                    else
+                    {
+                        _logger.LogError($"Could not initialize RemoteControl service ....");
+                    }
                 }
                 catch (Exception e)
                 {

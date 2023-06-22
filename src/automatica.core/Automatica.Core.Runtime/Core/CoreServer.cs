@@ -279,7 +279,14 @@ namespace Automatica.Core.Runtime.Core
 
             if (_remoteConnectService != null)
             {
-                await _remoteConnectService.StartAsync(default);
+                try
+                {
+                    await _remoteConnectService.StartAsync(default);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error starting RemoteControl {e}");
+                }
             }
         }
 
@@ -650,8 +657,14 @@ namespace Automatica.Core.Runtime.Core
 
             _logger.LogInformation($"Loading recording data-points (found {recordingDataPointCount})...done");
 
-
-            await _remoteConnectService.InitAsync();
+            try
+            {
+                await _remoteConnectService.InitAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error initialize RemoteControl service {e}");
+            }
         }
         
       

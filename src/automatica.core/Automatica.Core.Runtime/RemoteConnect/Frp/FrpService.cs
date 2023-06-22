@@ -4,8 +4,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
-using Microsoft.Build.Framework;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -30,7 +28,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
             _logger = logger;
         }
 
-        public Task InitConfigurationsAsync(CancellationToken cancellationToken = default)
+        public Task<bool> InitConfigurationsAsync(CancellationToken cancellationToken = default)
         {
             var currentDir = ServerInfo.GetBasePath();
             try
@@ -75,7 +73,8 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
             {
                 throw;
             }
-            return Task.CompletedTask;
+
+            return Task.FromResult(true);
         }
 
         private void InitConfigurationFile(string file)
@@ -102,7 +101,11 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         {
             if (!_isInitialized)
             {
-                await InitConfigurationsAsync(cancellationToken);
+                if (!await InitConfigurationsAsync(cancellationToken))
+                {
+                    _logger.LogError($"Could not initialize RemoteControl service...");
+                    return;
+                }
             }
             await _process.StartAsync(cancellationToken);
         }
