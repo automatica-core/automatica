@@ -35,24 +35,24 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
             var currentDir = ServerInfo.GetBasePath();
             try
             {
-                if (!Directory.Exists("frp"))
+                if (!Directory.Exists(Path.Combine(currentDir, "frp")))
                 {
                     throw new ArgumentException($"Could not find configuration directory in {currentDir}");
                 }
 
-                if (!File.Exists(Path.Combine("frp", _frpcIniFile)))
+                if (!File.Exists(Path.Combine(currentDir, "frp", _frpcIniFile)))
                 {
                     throw new ArgumentException(
                         $"Could not find config file '{_frpcIniFile}' in {Directory.GetCurrentDirectory()}");
                 }
 
-                if (!Directory.Exists(Path.Combine("frp", "enabled")))
+                if (!Directory.Exists(Path.Combine(currentDir, "frp", "enabled")))
                 {
-                    Directory.CreateDirectory(Path.Combine("frp", "enabled"));
+                    Directory.CreateDirectory(Path.Combine(currentDir, "frp", "enabled"));
                 }
                 else
                 {
-                    var files = Directory.GetFiles(Path.Combine("frp", "enabled"));
+                    var files = Directory.GetFiles(Path.Combine(currentDir, "frp", "enabled"));
 
                     foreach (var file in files)
                     {
@@ -62,12 +62,11 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
                 if (_options.CurrentValue.UseSsh)
                 {
-                    InitConfigurationFile(_frpcSshIni);
+                    InitConfigurationFile(Path.Combine(currentDir, "frp", _frpcSshIni));
                 }
-
                 if (_options.CurrentValue.UseWeb)
                 {
-                    InitConfigurationFile(_frpcWebIni);
+                    InitConfigurationFile(Path.Combine(currentDir, "frp", _frpcWebIni));
                 }
 
                 _isInitialized = true;
@@ -83,17 +82,18 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         {
             if (!File.Exists(file))
             {
-                _logger.LogError($"Cannot enable ssh, '{file}' could not be found!");
+                _logger.LogError($"Cannot enable service, '{file}' could not be found!");
             }
             else
             {
+                var fileInfo = new FileInfo(file);
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    File.Copy(file, Path.Combine(Directory.GetCurrentDirectory(), "enabled", file));
+                    File.Copy(file, Path.Combine(fileInfo.DirectoryName!, "enabled", fileInfo.Name));
                 }
                 else
                 {
-                    File.CreateSymbolicLink(Path.Combine(Directory.GetCurrentDirectory(), "enabled", file), file);
+                    File.CreateSymbolicLink(Path.Combine(fileInfo.DirectoryName!, "enabled", file), file);
                 }
             }
         }
