@@ -156,9 +156,9 @@ namespace Automatica.Core
                     }
 
                     a.SetBasePath(configDir);
-                    a.AddEnvironmentVariables();
                     a.AddJsonFile("appsettings.json", true);
                     a.AddDatabaseConfiguration();
+                    a.AddEnvironmentVariables();
                 })
                 //.UseElectron(new string[])
                 .UseSerilog()
