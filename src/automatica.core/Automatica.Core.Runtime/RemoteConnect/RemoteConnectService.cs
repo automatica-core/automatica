@@ -62,8 +62,6 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
             try
             {
-                await CreateTunnelAsync(TunnelingProtocol.Udp, "knx", "192.168.8.3", 3671, Guid.Parse("3b769fae-030a-4d37-a8bf-63182f0ac2d0"),
-                    cancellationToken);
                 await _frpService.StartAsync(cancellationToken);
                 
                 _isRunning = true;
