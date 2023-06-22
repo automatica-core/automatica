@@ -93,7 +93,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 }
                 else
                 {
-                    File.CreateSymbolicLink(Path.Combine(fileInfo.DirectoryName!, "enabled", file), file);
+                    File.CreateSymbolicLink(file, Path.Combine(fileInfo.DirectoryName!, "enabled", fileInfo.Name));
                 }
             }
         }
