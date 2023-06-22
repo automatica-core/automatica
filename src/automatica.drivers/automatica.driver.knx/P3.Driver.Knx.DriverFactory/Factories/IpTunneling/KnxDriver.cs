@@ -5,11 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Cryptography;
 using Automatica.Core.Base.TelegramMonitor;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using Automatica.Core.Driver.Utility.Network;
-using Automatica.Core.Runtime.Tunneling;
 using P3.Knx.Core.Driver;
 using P3.Knx.Core.Driver.Tunneling;
 using P3.Knx.Core.Abstractions;
@@ -123,10 +123,12 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             try
             {
-                if (_tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
+                var remoteFeatureEnabled =
+                    DriverContext.LicenseContract.IsFeatureLicensed("knx-interface-remote-connection");
+                if (remoteFeatureEnabled && _tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
                 {
-                    var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Tcp, $"{_remoteIp}:{_remotePort}",
-                        null, default);
+                    var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Tcp, "knx", $"{_remoteIp}", _remotePort,
+                        0, default);
 
                     DriverContext.Logger.LogInformation($"Tunnel created {tunnel}");
                 }

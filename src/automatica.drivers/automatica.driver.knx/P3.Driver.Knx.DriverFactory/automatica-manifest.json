@@ -27,6 +27,6 @@
       "Revision": 0
     },
     "MandatoryLicenseFeatures": [],
-    "OptionalLicenseFeatures": [ "knx-ets-import" ]
+    "OptionalLicenseFeatures": [ "knx-ets-import", "knx-interface-remote-connection" ]
   }
 }

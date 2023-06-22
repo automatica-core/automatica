@@ -8,7 +8,6 @@ using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 [assembly: InternalsVisibleTo("P3.Driver.Knx.Tests")]
 
-
 namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
