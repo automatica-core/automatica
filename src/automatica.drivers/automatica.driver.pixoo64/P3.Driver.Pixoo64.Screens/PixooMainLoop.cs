@@ -77,7 +77,7 @@ namespace P3.Driver.Pixoo64.Screens
                         }
                     }
 
-            }, _cancellationTokenSource.Token).ConfigureAwait(false);
+            }).ConfigureAwait(false);
 
 
             _logger.LogInformation($"{GetHashCode()} Loop exited...");
