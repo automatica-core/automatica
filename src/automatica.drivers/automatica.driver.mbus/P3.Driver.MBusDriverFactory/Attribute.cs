@@ -32,7 +32,7 @@ namespace P3.Driver.MBusDriverFactory
         {
             Value = value;
 
-            DriverContext.Dispatcher.DispatchValue(this, value);
+            DispatchValue(value);
         }
 
         public Unit UnitType { get; private set; }
