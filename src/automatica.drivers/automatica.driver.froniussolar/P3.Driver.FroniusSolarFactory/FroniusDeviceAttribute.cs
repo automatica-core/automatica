@@ -37,30 +37,42 @@ namespace P3.Driver.FroniusSolarFactory
         {
             PollInterval = GetPropertyValueInt("fronius-poll-interval");
             DeviceId = (byte)GetPropertyValueInt("fronius-device-id");
+            IsDisabled = GetProperty("fronius-disabled")!.ValueBool!.Value;
 
-            _pollTimer.Interval = PollInterval;
 
-            var ip = GetPropertyValueString("fronius-ip");
-
-            if (!IPAddress.TryParse(ip, out var ipAddress))
+            if (!IsDisabled)
             {
-                return false;
+                _pollTimer.Interval = PollInterval;
+
+                var ip = GetPropertyValueString("fronius-ip");
+
+                if (!IPAddress.TryParse(ip, out var ipAddress))
+                {
+                    return false;
+                }
+
+                _client = new(ipAddress.ToString(), 1, DriverContext.Logger);
             }
-            _client = new(ipAddress.ToString(), 1, DriverContext.Logger);
 
             return base.Init();
         }
 
+        public bool IsDisabled { get; set; }
+
         public override Task<bool> Start()
         {
-            if (_client == null)
+            if (!IsDisabled)
             {
-                throw new ArgumentException("Init must be called before start..");
-            }
-            _pollTimer.Elapsed += PollTimerOnElapsed;
-            _pollTimer.Start();
+                if (_client == null)
+                {
+                    throw new ArgumentException("Init must be called before start..");
+                }
 
-            PollAll().ConfigureAwait(false);
+                _pollTimer.Elapsed += PollTimerOnElapsed;
+                _pollTimer.Start();
+
+                PollAll().ConfigureAwait(false);
+            }
 
             return base.Start();
         }

@@ -13,7 +13,7 @@ namespace P3.Driver.FroniusSolarFactory
 
         public override Guid DriverGuid => new Guid("d0f5650d-f786-4a08-8360-03fada6d4b29");
         
-        public override Version DriverVersion => new Version(0, 1, 0, 2);
+        public override Version DriverVersion => new Version(0, 2, 0, 2);
 
         public override bool InDevelopmentMode => false;
 
@@ -52,6 +52,12 @@ namespace P3.Driver.FroniusSolarFactory
                 "FRONIUS_SOLAR.PROPERTY.POLL_INTERVAL.NAME", "FRONIUS_SOLAR.PROPERTY.POLL_INTERVAL.DESCRIPTION", "fronius-poll-interval",
                 PropertyTemplateType.Integer, deviceGuid, "COMMON.CATEGORY.DEVICE", true, false,
                 PropertyHelper.CreateRangeMetaString(30000, 65535), 30000, 1, 1);
+
+
+            factory.CreatePropertyTemplate(new Guid("79ab381b-b9e3-48b6-8a06-d93be3d39ea0"),
+                "FRONIUS_SOLAR.PROPERTY.DISABLED.NAME", "FRONIUS_SOLAR.PROPERTY.DISABLED.DESCRIPTION", "fronius-disabled",
+                PropertyTemplateType.Bool, deviceGuid, "COMMON.CATEGORY.DEVICE", true, false,
+                "", false, 1, 1);
 
             factory.CreateNodeTemplate(new Guid("2d1f4463-e881-4214-a8f7-eeed4b7df24b"), "FRONIUS_SOLAR.LAST_POLL_TIMESTAMP.NAME", "FRONIUS_SOLAR.LAST_POLL_TIMESTAMP.DESCRIPTION",
                 "last-poll-timestamp", deviceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, false, true,
