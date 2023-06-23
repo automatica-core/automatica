@@ -260,7 +260,7 @@ namespace Automatica.Core.Driver
 
                     var writeData = _writeQueue.Dequeue();
 
-                    DriverContext.Logger.LogDebug($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
+                    DriverContext.Logger.LogInformation($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
                     var cts = new CancellationTokenSource();
                     cts.CancelAfter(TimeSpan.FromSeconds(30));

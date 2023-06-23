@@ -259,15 +259,15 @@ namespace Automatica.Core.Runtime.Core
 
             RunState = RunState.Starting;
 
+            await StartLogicEngine();
             foreach (var driver in _driverStore.All())
             {
                 _logger.LogInformation($"Starting driver {driver.Name}...");
                 await StartDriver(driver);
             }
 
-            await StartLogicEngine();
+            await StartLogics();
 
-           
             _logger.LogInformation("Starting recorders...");
             foreach (var rec in _trendingRecorder)
             {
@@ -275,7 +275,6 @@ namespace Automatica.Core.Runtime.Core
             }
             _logger.LogInformation("Starting recorders...done");
             RunState = RunState.Started;
-
 
             if (_remoteConnectService != null)
             {
@@ -290,17 +289,24 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StartLogicEngine()
+        private async Task StartLogics()
         {
-            _logger.LogInformation("Loading logic engine connections...");
-            _logicEngineDispatcher.Load();
-            _logger.LogInformation("Loading logic engine connections...done");
-
+            _logger.LogInformation("Loading logics...");
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
                 await StartLogic(rule.Value, rule.Key);
             }
+            _logger.LogInformation("Loading logics...done");
 
+        }
+
+        private async Task StartLogicEngine()
+        {
+            _logger.LogInformation("Loading logic engine connections...");
+            await _logicEngineDispatcher.Load();
+            _logger.LogInformation("Loading logic engine connections...done");
+
+           
         }
         private async Task StopLogicEngine()
         {
@@ -386,6 +392,7 @@ namespace Automatica.Core.Runtime.Core
         {
             await StopLogicEngine();
             await StartLogicEngine();
+            await StartLogics();
         }
 
         public async Task StopDriver(IDriver driver)

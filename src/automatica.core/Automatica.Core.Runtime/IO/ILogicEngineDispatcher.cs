@@ -5,7 +5,7 @@ namespace Automatica.Core.Runtime.IO
 {
     public interface ILogicEngineDispatcher : IDisposable
     {
-        bool Load();
+        Task<bool> Load();
         Task Unlink(Guid linkId);
     }
 }
