@@ -41,6 +41,8 @@ namespace P3.Driver.Pixoo64.Screens
                         {
                             if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
                             {
+                                _logger.LogInformation(
+                                    $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
                                 break;
                             }
 
@@ -51,6 +53,8 @@ namespace P3.Driver.Pixoo64.Screens
                             {
                                 if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
                                 {
+                                    _logger.LogInformation(
+                                        $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
                                     break;
                                 }
 
