@@ -21,6 +21,11 @@ namespace Automatica.Core.Base.IO
         public Guid Id { get; set; }
         public object Value { get; set; }
         public DateTime Timestamp { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Type}:{Timestamp}:{Value}";
+        }
     }
 
     public interface IDispatcher
