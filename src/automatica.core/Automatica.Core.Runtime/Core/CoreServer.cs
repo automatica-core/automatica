@@ -477,7 +477,7 @@ namespace Automatica.Core.Runtime.Core
                     {
                         nodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogDebug($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogInformation($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                     await ConfigureDriversRecursive(nodeInstance);
                     continue;
@@ -492,7 +492,7 @@ namespace Automatica.Core.Runtime.Core
                     {
                         nodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogDebug($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogInformation($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                     await ConfigureDriversRecursive(nodeInstance);
                     continue;

@@ -28,7 +28,7 @@ namespace Automatica.Core.Driver
         /// true if successfull
         /// if false will be returned, the childs will be ignored
         /// </returns>
-        bool Configure();
+        Task<bool> Configure();
 
         /// <summary>
         /// Init method of the node. Will be called after <see cref="IDriverNode.Configure"/>

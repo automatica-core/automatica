@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -31,30 +32,30 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             return node;
         }
 
-        protected IDriver CreateDriver(NodeInstance node)
+        protected async Task<IDriver> CreateDriver(NodeInstance node)
         {
             var driverContext = new DriverContextMock(node, DriverFactory, Factory, Dispatcher, new NullLoggerFactory());
             var driver = DriverFactory.CreateDriver(driverContext);
 
-            driver.Configure();
+            await driver.Configure();
             return driver;
 
         }
 
-        public T2 CreateDriver<T2>(NodeInstance node)
+        public async Task<T2> CreateDriver<T2>(NodeInstance node)
         {
-            var driver = CreateDriver(node);
+            var driver = await CreateDriver(node);
 
             if (driver.GetType() != typeof(T2))
             {
                 throw new ArgumentException("Invalid type");
             }
-            driver.Start();
+            await driver.Start();
 
             return (T2)driver;
         }
 
-        public T2 CreateDriver<T2>(NodeInstance node, params Guid[] childNodeGuid)
+        public async Task<T2> CreateDriver<T2>(NodeInstance node, params Guid[] childNodeGuid)
         {
             foreach (var gu in childNodeGuid)
             {
@@ -63,13 +64,13 @@ namespace Automatica.Core.UnitTests.Base.Drivers
                 node.InverseThis2ParentNodeInstanceNavigation.Add(childNode);
             }
 
-            return CreateDriver<T2>(node);
+            return await CreateDriver<T2>(node);
         }
 
-        public T2 CreateDriver<T2>(Guid driverGuid, params Guid[] childNodeGuid) where T2 : IDriver
+        public async Task<T2> CreateDriver<T2>(Guid driverGuid, params Guid[] childNodeGuid) where T2 : IDriver
         {
             var driverNode = CreateNodeInstance(driverGuid);
-            return CreateDriver<T2>(driverNode, childNodeGuid);
+            return await CreateDriver<T2>(driverNode, childNodeGuid);
 
         }
 

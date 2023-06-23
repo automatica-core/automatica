@@ -20,7 +20,7 @@ namespace Automatica.Core.Driver.Loader
             _driverStore = driverStore;
             _licenseContract = licenseContract;
         }
-        public Task<IDriver> LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context)
+        public async Task<IDriver> LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context)
         {
             var driver = factory.CreateDriver(context);
 
@@ -31,7 +31,7 @@ namespace Automatica.Core.Driver.Loader
                 {
                     _driverStore.Add(driver.Id, driver);
                     nodeInstance.State = NodeInstanceState.Initialized;
-                    driver.Configure();
+                    await driver.Configure();
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace Automatica.Core.Driver.Loader
 
 
             AddDriverRecursive(driver, driver);
-            return Task.FromResult(driver);
+            return driver;
         }
 
         private void AddDriverRecursive(IDriver root, IDriverNode driver)

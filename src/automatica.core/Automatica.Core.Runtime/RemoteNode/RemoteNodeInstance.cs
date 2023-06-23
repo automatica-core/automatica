@@ -27,9 +27,9 @@ namespace Automatica.Core.Runtime.RemoteNode
             _node = node;
             _remoteHandler = remoteHandler;
         }
-        public bool Configure()
+        public Task<bool> Configure()
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         public bool Init()

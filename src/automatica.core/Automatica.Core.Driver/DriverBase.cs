@@ -59,7 +59,7 @@ namespace Automatica.Core.Driver
             _writeSemaphore.Release(1);
         }
 
-        public bool Configure()
+        public async Task<bool> Configure()
         {
             foreach (var node in DriverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
             {
@@ -97,9 +97,9 @@ namespace Automatica.Core.Driver
                             return false;
                         }
 
-                        driverNode.Configure();
+                        await driverNode.Configure();
 
-                        DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
+                        await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
                         {
                             if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
                             {

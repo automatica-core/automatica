@@ -23,12 +23,12 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         }
         public async Task<bool> IsReady(CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.GetAsync($"http://127.0.0.1:{_options.CurrentValue.AdminPort}/api/status", cancellationToken);
-
-            var responseText = await response.Content.ReadAsStringAsync(cancellationToken);
-
+            
             try
             {
+                var response = await _httpClient.GetAsync($"http://127.0.0.1:{_options.CurrentValue.AdminPort}/api/status", cancellationToken);
+
+                var responseText = await response.Content.ReadAsStringAsync(cancellationToken);
                 _logger.LogTrace($"frpc response is {responseText}");
                 response.EnsureSuccessStatusCode();
             }
