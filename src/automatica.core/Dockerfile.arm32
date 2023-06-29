@@ -58,7 +58,6 @@ FROM automaticacore/automatica-plugin-runtime:arm32v7-7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
-COPY --from=build /app/frpc /usr/local/bin
 COPY --from=build /app/frp /app/frp
 
 COPY ./Automatica.Core/frp/* /app/automatica/frp/

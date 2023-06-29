@@ -60,7 +60,6 @@ WORKDIR /app/
 COPY --from=build /app/ ./
 VOLUME /app/plugins
 
-COPY --from=build /app/frpc /usr/local/bin
 COPY --from=build /app/frp /app/frp
 COPY --from=build /app/ ./
 
