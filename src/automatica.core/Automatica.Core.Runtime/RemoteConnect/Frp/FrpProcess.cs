@@ -45,35 +45,20 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 Process.Start(processInformation) ??
                 throw new InvalidOperationException("Could not start process");
 
-            var stdErrorCount = 0;
-            _stdTimer.Elapsed += (sender, args) =>
+
+            process.OutputDataReceived += (sender, args) =>
             {
-                try
-                {
-                    var stdout = process.StandardOutput.ReadLine();
-                    _logger.LogInformation(stdout);
-
-                    var error = process.StandardError.ReadLine();
-                    _logger.LogError(error);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e,$"Could not read stdout/stderr {e}");
-                    stdErrorCount++;
-
-                    if (stdErrorCount >= 10)
-                    {
-                        _stdTimer.Stop();
-                    }
-                }
+                _logger.LogInformation(args.Data);
             };
-            _stdTimer.Start();
-            //var error = await process.StandardError.ReadLineAsync(token);
-            //var stdout= await process.StandardOutput.ReadLineAsync(token);
 
-            //_logger.LogInformation(stdout);
-            //_logger.LogError(error);
-
+            process.ErrorDataReceived += (sender, args) =>
+            {
+                _logger.LogError(args.Data);
+            };
+            process.Exited += (sender, args) =>
+            {
+                _logger.LogError("Frp process exited");
+            };
 
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
             while (!await _apiClient.IsReady(cancellationToken))
