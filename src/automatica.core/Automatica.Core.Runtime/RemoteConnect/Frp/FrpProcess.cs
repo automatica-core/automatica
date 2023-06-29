@@ -45,7 +45,6 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 Process.Start(processInformation) ??
                 throw new InvalidOperationException("Could not start process");
 
-
             process.OutputDataReceived += (sender, args) =>
             {
                 _logger.LogInformation(args.Data);
@@ -55,6 +54,10 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
             {
                 _logger.LogError(args.Data);
             };
+
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
             process.Exited += (sender, args) =>
             {
                 _logger.LogError("Frp process exited");
