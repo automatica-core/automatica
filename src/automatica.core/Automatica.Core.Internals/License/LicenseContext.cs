@@ -98,8 +98,8 @@ namespace Automatica.Core.Internals.License
             }
             else
             {
-                MaxDataPoints = int.MaxValue;
-                MaxUsers = int.MaxValue;
+                MaxDataPoints = 100;
+                MaxUsers = 5;
             }
             return IsLicensed;
 
