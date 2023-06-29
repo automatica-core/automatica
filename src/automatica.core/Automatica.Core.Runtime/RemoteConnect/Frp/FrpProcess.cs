@@ -114,9 +114,19 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         }
         private string GetExecutableFileName()
         {
-            if (File.Exists(Path.Combine("frp", "frpc.exe")))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return Path.Combine("frp", "frpc.exe");
+                if (File.Exists(Path.Combine("frp", "frpc.exe")))
+                {
+                    return Path.Combine("frp", "frpc.exe");
+                }
+            }
+            else
+            {
+                if (File.Exists(Path.Combine("frp", "frpc")))
+                {
+                    return Path.Combine("frp", "frpc");
+                }
             }
 
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"{_processName}.exe" : $"{_processName}";

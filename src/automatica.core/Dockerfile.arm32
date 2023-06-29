@@ -51,13 +51,15 @@ RUN apt install curl -y
 
 RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0/frp_0.49.0_linux_arm.tar.gz
 RUN tar xvzf frp.tgz
-RUN mv frp_*/* .
+RUN mkdir -p frp
+RUN mv frp_*/* frp/
 
 FROM automaticacore/automatica-plugin-runtime:arm32v7-7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
 COPY --from=build /app/frpc /usr/local/bin
+COPY --from=build /app/frp /app/frp
 
 COPY ./Automatica.Core/frp/* /app/automatica/frp/
 

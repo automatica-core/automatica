@@ -49,7 +49,8 @@ RUN rm -rf /src
 
 RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0/frp_0.49.0_linux_amd64.tar.gz
 RUN tar xvzf frp.tgz
-RUN mv frp_*/* .
+RUN mkdir -p frp
+RUN mv frp_*/* frp/
 RUN ./frpc --version
 
 
@@ -60,6 +61,7 @@ COPY --from=build /app/ ./
 VOLUME /app/plugins
 
 COPY --from=build /app/frpc /usr/local/bin
+COPY --from=build /app/frp /app/frp
 COPY --from=build /app/ ./
 
 RUN mkdir -p /app/automatica/frp
