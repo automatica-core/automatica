@@ -9,6 +9,7 @@ using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Timer = System.Timers.Timer;
 
 namespace Automatica.Core.Runtime.RemoteConnect.Frp
 {
@@ -21,13 +22,19 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
         private readonly string _processName = "frpc";
 
+        private readonly Timer _stdTimer = new Timer();
+
         public FrpProcess(IFrpcApiClient apiClient, IOptionsMonitor<FrpcOptions> settings, IConfiguration config, ILogger<FrpProcess> logger)
         {
             _apiClient = apiClient;
             _settings = settings;
             _config = config;
             _logger = logger;
+
+            _stdTimer.Interval = 1000;
         }
+
+
 
         public async Task StartAsync(CancellationToken token = default)
         {
@@ -38,6 +45,29 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 Process.Start(processInformation) ??
                 throw new InvalidOperationException("Could not start process");
 
+            var stdErrorCount = 0;
+            _stdTimer.Elapsed += (sender, args) =>
+            {
+                try
+                {
+                    var stdout = process.StandardOutput.ReadLine();
+                    _logger.LogInformation(stdout);
+
+                    var error = process.StandardError.ReadLine();
+                    _logger.LogError(error);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e,$"Could not read stdout/stderr {e}");
+                    stdErrorCount++;
+
+                    if (stdErrorCount >= 10)
+                    {
+                        _stdTimer.Stop();
+                    }
+                }
+            };
+            _stdTimer.Start();
             //var error = await process.StandardError.ReadLineAsync(token);
             //var stdout= await process.StandardOutput.ReadLineAsync(token);
 
