@@ -51,7 +51,7 @@ RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.49.0
 RUN tar xvzf frp.tgz
 RUN mkdir -p frp
 RUN mv frp_*/* frp/
-RUN ./frpc --version
+RUN ./frp/frpc --version
 
 
 FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
