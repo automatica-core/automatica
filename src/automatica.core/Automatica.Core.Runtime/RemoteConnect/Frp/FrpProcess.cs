@@ -43,7 +43,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
             var processInformation = GetProcessStartInfo();
 
-            _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation.EnvironmentVariables)}");
+            _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation.EnvironmentVariables)}, {processInformation.Arguments}");
 
             using var process =
                 Process.Start(processInformation) ??
@@ -114,7 +114,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 UseShellExecute = false, //RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
-                WorkingDirectory = Path.Combine(Environment.CurrentDirectory, "frp"),
+                WorkingDirectory = Path.Combine(ServerInfo.GetBasePath(), "frp"),
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 RedirectStandardInput = false,
