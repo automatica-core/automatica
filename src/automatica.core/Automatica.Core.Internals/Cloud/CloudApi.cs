@@ -30,6 +30,7 @@ namespace Automatica.Core.Internals.Cloud
     public class RemoteConnectObject
     {
         public string TunnelUrl { get; set; }
+        public string SubDomain { get; set; }
     }
     public class RemoteConnectPortResponse
     {

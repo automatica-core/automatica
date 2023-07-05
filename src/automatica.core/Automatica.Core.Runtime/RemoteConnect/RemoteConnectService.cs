@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Tunneling;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Runtime.RemoteConnect.Frp;
@@ -19,18 +20,20 @@ namespace Automatica.Core.Runtime.RemoteConnect
         private readonly ICloudApi _cloudApi;
         private readonly ILicenseContext _licenseContext;
         private readonly IFrpService _frpService;
+        private readonly ISettingsCache _settingsCache;
         private readonly ILogger<RemoteConnectService> _logger;
 
         private string _currentDomainName;
 
         private bool _isRunning;
 
-        public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ILogger<RemoteConnectService> logger)
+        public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ISettingsCache settingsCache, ILogger<RemoteConnectService> logger)
         {
             _config = config;
             _cloudApi = cloudApi;
             _licenseContext = licenseContext;
             _frpService = frpService;
+            _settingsCache = settingsCache;
             _logger = logger;
         }
 
@@ -128,11 +131,19 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 var domain = remoteDomain.ValueText;
 
                 var response = await _cloudApi.CreateRemoteConnectUrl(domain);
+               
 
                 if (response == null)
                 {
                     _logger.LogError($"Could not create target domain {domain}");
                     return;
+                }
+                remoteDomain.Value = response.SubDomain;
+                if (response.SubDomain != domain)
+                {
+                    context.Update(remoteDomain);
+                    await context.SaveChangesAsync();
+                    _settingsCache.Clear();
                 }
 
                 try
