@@ -51,12 +51,12 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
             process.OutputDataReceived += (sender, args) =>
             {
-                _logger.LogInformation(args.Data);
+                _logger.LogInformation($"stdout: {args.Data}");
             };
 
             process.ErrorDataReceived += (sender, args) =>
             {
-                _logger.LogError(args.Data);
+                _logger.LogError($"stderr: {args.Data}");
             };
 
             process.BeginOutputReadLine();
