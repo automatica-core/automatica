@@ -43,7 +43,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
             var processInformation = GetProcessStartInfo();
 
-            _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation)}");
+            _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation.EnvironmentVariables)}");
 
             using var process =
                 Process.Start(processInformation) ??
