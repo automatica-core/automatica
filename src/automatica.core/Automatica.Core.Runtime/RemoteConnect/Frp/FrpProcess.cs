@@ -48,7 +48,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
             _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation.EnvironmentVariables)}, {processInformation.Arguments}");
 
-            using var process =
+            var process =
                 Process.Start(processInformation) ??
                 throw new InvalidOperationException("Could not start process");
 
