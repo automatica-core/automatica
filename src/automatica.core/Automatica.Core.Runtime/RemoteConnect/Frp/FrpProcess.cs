@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Internals.Cache.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -19,17 +20,19 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         private readonly IFrpcApiClient _apiClient;
         private readonly IOptionsMonitor<FrpcOptions> _settings;
         private readonly IConfiguration _config;
+        private readonly ISettingsCache _settingsCache;
         private readonly ILogger _logger;
 
         private readonly string _processName = "frpc";
 
         private readonly Timer _stdTimer = new Timer();
 
-        public FrpProcess(IFrpcApiClient apiClient, IOptionsMonitor<FrpcOptions> settings, IConfiguration config, ILogger<FrpProcess> logger)
+        public FrpProcess(IFrpcApiClient apiClient, IOptionsMonitor<FrpcOptions> settings, IConfiguration config, ISettingsCache settingsCache, ILogger<FrpProcess> logger)
         {
             _apiClient = apiClient;
             _settings = settings;
             _config = config;
+            _settingsCache = settingsCache;
             _logger = logger;
 
             _stdTimer.Interval = 1000;
@@ -129,7 +132,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                     {"LOCAL_IP", $"{_settings.CurrentValue.LocalIp}"},
                     {"LOCAL_PORT", $"{ServerInfo.SslWebPort}"},
                     {"FRPC_USERNAME", $"{ServerInfo.ServerUid}"},
-                    {"SUB_DOMAIN", $"{_settings.CurrentValue.SubDomain ?? _config["db:remoteDomain"]}"}
+                    {"SUB_DOMAIN", $"{_settingsCache.GetByKey("remoteDomain").ValueText ?? _config["db:remoteDomain"]}"}
                 }
             };
             return processStartInfo;
