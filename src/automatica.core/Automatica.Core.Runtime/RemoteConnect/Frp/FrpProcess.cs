@@ -9,6 +9,7 @@ using Automatica.Core.Base.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 
 namespace Automatica.Core.Runtime.RemoteConnect.Frp
@@ -41,6 +42,9 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
             await KillExistingProcessesAsync();
 
             var processInformation = GetProcessStartInfo();
+
+            _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation)}");
+
             using var process =
                 Process.Start(processInformation) ??
                 throw new InvalidOperationException("Could not start process");
