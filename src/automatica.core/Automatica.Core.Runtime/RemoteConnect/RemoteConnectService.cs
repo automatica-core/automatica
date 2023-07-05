@@ -143,7 +143,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 {
                     context.Update(remoteDomain);
                     await context.SaveChangesAsync();
-                    _settingsCache.Clear();
+                    _settingsCache.UpdateByKey(remoteDomain.ValueKey, remoteDomain);
                 }
 
                 try
