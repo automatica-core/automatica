@@ -1,38 +1,36 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Rule
+namespace Automatica.Core.Logic
 {
     /// <summary>
-    /// Base implementation of <see cref="IRule"/>
+    /// Base implementation of <see cref="ILogic"/>
     /// </summary>
-    public abstract class Rule : IRule
+    public abstract class Logic : ILogic
     {
-        private readonly Dictionary<RuleInterfaceInstance, object> _valueDictionary =
-            new Dictionary<RuleInterfaceInstance, object>();
+        private readonly Dictionary<RuleInterfaceInstance, object> _valueDictionary = new();
 
-        private readonly Dictionary<RuleInterfaceInstance, object> _inputValueDictionary =
-            new Dictionary<RuleInterfaceInstance, object>();
+        private readonly Dictionary<RuleInterfaceInstance, object> _inputValueDictionary = new();
         private readonly object _lock = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Rule"/> class.
+        /// Initializes a new instance of the <see cref="Logic"/> class.
         /// </summary>
-        /// <param name="context">The <see cref="IRuleContext"/> to configure the class</param>
-        protected Rule(IRuleContext context)
+        /// <param name="context">The <see cref="ILogicContext"/> to configure the class</param>
+        protected Logic(ILogicContext context)
         {
             Context = context;
         }
 
         /// <summary>
-        /// Returns the given instance of the <see cref="IRuleContext"/>
+        /// Returns the given instance of the <see cref="ILogicContext"/>
         /// </summary>
-        public IRuleContext Context { get; }
+        public ILogicContext Context { get; }
 
         public virtual bool IgnoreDuplicateValues => false;
 
@@ -46,23 +44,23 @@ namespace Automatica.Core.Rule
             return null;
         }
 
-        public virtual Task<bool> Start()
+        public virtual Task<bool> Start(CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
-        public virtual Task<bool> Stop()
+        public virtual Task<bool> Stop(CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
         /// <summary>
-        /// Will be called if a input parameter of the <see cref="IRule"/> has changed
+        /// Will be called if a input parameter of the <see cref="ILogic"/> has changed
         /// </summary>
         /// <param name="instance">The <see cref="RuleInterfaceInstance"/> instance</param>
         /// <param name="value">The changed value</param>
         /// <returns></returns>
-        public IList<IRuleOutputChanged> ValueChanged(RuleInterfaceInstance instance, object value)
+        public IList<ILogicOutputChanged> ValueChanged(RuleInterfaceInstance instance, object value)
         {
             return ValueChanged(instance, null, value);
         }
@@ -75,18 +73,18 @@ namespace Automatica.Core.Rule
         /// <param name="source">The source who dispatched the value (<see cref="IDispatchable"/>)</param>
         /// <param name="value">The changed value</param>
         /// <returns></returns>
-        public IList<IRuleOutputChanged> ValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        public IList<ILogicOutputChanged> ValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             lock (_lock)
             {
               
                 if (instance.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
-                    (long)Base.Templates.RuleInterfaceDirection.Param)
+                    (long)Base.Templates.LogicInterfaceDirection.Param)
                 {
-                    ParamterValueChanged(instance, source, value);
+                    ParameterValueChanged(instance, source, value);
 
                     Context.Logger.LogDebug($"RuleParameter changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}= value {value}");
-                    return new List<IRuleOutputChanged>();
+                    return new List<ILogicOutputChanged>();
                 }
                 Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}) value {value}");
 
@@ -104,7 +102,7 @@ namespace Automatica.Core.Rule
                 if (IgnoreDuplicateValues && _inputValueDictionary[instance] == prevValue)
                 {
                     Context.Logger.LogDebug($"Input value did not change, ignore value change...");
-                    return new List<IRuleOutputChanged>();
+                    return new List<ILogicOutputChanged>();
                 }
 
                 var values = InputValueChanged(instance, source, value);
@@ -143,9 +141,9 @@ namespace Automatica.Core.Rule
         /// <param name="source">The source who dispatched the value (<see cref="IDispatchable"/>)</param>
         /// <param name="value">The changed value</param>
         /// <returns></returns>
-        protected virtual IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected virtual IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            return new List<IRuleOutputChanged>();
+            return new List<ILogicOutputChanged>();
         }
 
         /// <summary>
@@ -155,7 +153,7 @@ namespace Automatica.Core.Rule
         /// <param name="source">The source who dispatched the value (<see cref="IDispatchable"/>)</param>
         /// <param name="value">The changed value</param>
         /// <returns></returns>
-        protected virtual void ParamterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected virtual void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
 
         }
@@ -164,11 +162,11 @@ namespace Automatica.Core.Rule
         /// <summary>
         /// Can be used to return only 1 output change
         /// </summary>
-        /// <param name="value">The <see cref="IRuleOutputChanged"/> value</param>
+        /// <param name="value">The <see cref="ILogicOutputChanged"/> value</param>
         /// <returns></returns>
-        protected IList<IRuleOutputChanged> SingleOutputChanged(IRuleOutputChanged value)
+        protected IList<ILogicOutputChanged> SingleOutputChanged(ILogicOutputChanged value)
         {
-            return new List<IRuleOutputChanged>
+            return new List<ILogicOutputChanged>
             {
                 value
             };

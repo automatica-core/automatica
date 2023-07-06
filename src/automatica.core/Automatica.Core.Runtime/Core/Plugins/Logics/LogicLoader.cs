@@ -5,7 +5,7 @@ using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             _logicFactoryStore = logicFactoryStore;
         }
 
-        public Task Load(IRuleFactory factory, IBoardType boardType)
+        public Task Load(ILogicFactory factory, IBoardType boardType)
         {
             try
             {
@@ -46,42 +46,42 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
 
                 _store.Add(manifest.Automatica.PluginGuid, manifest);
 
-                _logicFactoryStore.Add(factory.RuleGuid, factory);
-                _logger.LogDebug($"Init logic {factory.RuleName} {factory.RuleVersion}...");
+                _logicFactoryStore.Add(factory.LogicGuid, factory);
+                _logger.LogDebug($"Init logic {factory.LogicName} {factory.LogicVersion}...");
 
                 var driverDbVersion =
-                    _dbContext.VersionInformations.SingleOrDefault(a => a.RuleGuid == factory.RuleGuid);
+                    _dbContext.VersionInformations.SingleOrDefault(a => a.RuleGuid == factory.LogicGuid);
                 var initNodeTemplates = false;
 
                 if (driverDbVersion == null)
                 {
                     driverDbVersion = new VersionInformation
                     {
-                        Name = factory.RuleName,
-                        Version = factory.RuleVersion.ToString(),
-                        RuleGuid = factory.RuleGuid
+                        Name = factory.LogicName,
+                        Version = factory.LogicVersion.ToString(),
+                        RuleGuid = factory.LogicGuid
                     };
                     initNodeTemplates = true;
                     _dbContext.VersionInformations.Add(driverDbVersion);
                 }
-                else if (factory.RuleVersion > driverDbVersion.VersionData)
+                else if (factory.LogicVersion > driverDbVersion.VersionData)
                 {
                     initNodeTemplates = true;
-                    driverDbVersion.Name = factory.RuleName;
-                    driverDbVersion.Version = factory.RuleVersion.ToString();
+                    driverDbVersion.Name = factory.LogicName;
+                    driverDbVersion.Version = factory.LogicVersion.ToString();
                 }
 
                 _localizationProvider.LoadFromAssembly(factory.GetType().Assembly);
                 if (initNodeTemplates || factory.InDevelopmentMode)
                 {
-                    _logger.LogDebug($"InitRuleTemplates for {factory.RuleName}...");
+                    _logger.LogDebug($"InitRuleTemplates for {factory.LogicName}...");
 
                     using (var db = new AutomaticaContext(_config))
                     {
-                        factory.InitTemplates(new RuleTemplateFactory(db, _config, factory));
+                        factory.InitTemplates(new LogicTemplateFactory(db, _config, factory));
                         db.SaveChanges();
                     }
-                    _logger.LogDebug($"InitRuleTemplates for {factory.RuleName}...done");
+                    _logger.LogDebug($"InitRuleTemplates for {factory.LogicName}...done");
                 }
 
                 _dbContext.SaveChanges(true);
@@ -92,7 +92,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             }
             catch (Exception e)
             {
-                _logger.LogError($"Could not load Rule {factory.RuleName} {e}", e);
+                _logger.LogError($"Could not load Rule {factory.LogicName} {e}", e);
             }
             return Task.CompletedTask;
             ;

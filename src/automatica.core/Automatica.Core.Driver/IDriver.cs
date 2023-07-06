@@ -1,4 +1,7 @@
 ﻿
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Automatica.Core.Driver
 {
     /// <summary>
@@ -12,6 +15,6 @@ namespace Automatica.Core.Driver
         /// <returns>
         /// When return value is false the <see cref="IDriver"/> will not be started
         /// </returns>
-        bool BeforeInit();
+        Task<bool> BeforeInit(CancellationToken token = default);
     }
 }

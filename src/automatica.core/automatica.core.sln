@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Base", "Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Push", "Automatica.Push\Automatica.Push.csproj", "{54D90188-19AB-4FA3-8F25-878D11C92D4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Rule", "Automatica.Core.Rule\Automatica.Core.Rule.csproj", "{91142F5E-C914-4738-86FE-2BDA3D4B9509}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Logic", "Automatica.Core.Rule\Automatica.Core.Logic.csproj", "{91142F5E-C914-4738-86FE-2BDA3D4B9509}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.UnitTests.Base", "Automatica.Core.UnitTests\Automatica.Core.UnitTests.Base.csproj", "{C7BD55D0-CF95-4410-BC9B-7AD6794B814F}"
 EndProject

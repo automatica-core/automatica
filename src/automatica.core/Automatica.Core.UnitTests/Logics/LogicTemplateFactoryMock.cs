@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
-namespace Automatica.Core.UnitTests.Rules
+namespace Automatica.Core.UnitTests.Base.Logics
 {
-    public class RuleTemplateFactoryMock : IRuleTemplateFactory
+    public class LogicTemplateFactoryMock : ILogicTemplateFactory
     {
         private readonly Dictionary<Guid, RuleTemplate> _ruleTemplates = new Dictionary<Guid, RuleTemplate>();
         private readonly Dictionary<Guid, RuleInterfaceTemplate> _ruleInterfaceTemplates = new Dictionary<Guid, RuleInterfaceTemplate>();
@@ -43,7 +42,7 @@ namespace Automatica.Core.UnitTests.Rules
             return CreateRuleInstanceFromTemplate(_ruleTemplates[templateGuid]);
         }
 
-        public CreateTemplateCode CreateRuleTemplate(Guid ui, string name, string description, string key, string group,
+        public CreateTemplateCode CreateLogicTemplate(Guid ui, string name, string description, string key, string group,
             double height, double width)
         {
             var interfaceType = new RuleTemplate();
@@ -68,30 +67,30 @@ namespace Automatica.Core.UnitTests.Rules
             return retValue;
         }
 
-        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description,
+        public CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description,
             Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder)
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder)
         {
-            return CreateRuleInterfaceTemplate(id, name, description, ruleTemplate, direction, maxLinks, sortOrder,
+            return CreateLogicInterfaceTemplate(id, name, description, ruleTemplate, direction, maxLinks, sortOrder,
                 RuleInterfaceType.Unknown);
         }
 
-        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder)
+        public CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder)
         {
-            return CreateRuleInterfaceTemplate(id, name, description, key, ruleTemplate, direction, maxLinks, sortOrder,
+            return CreateLogicInterfaceTemplate(id, name, description, key, ruleTemplate, direction, maxLinks, sortOrder,
                 RuleInterfaceType.Unknown);
         }
 
-        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
+        public CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
         {
-            return CreateRuleInterfaceTemplate(id, name, description, name, ruleTemplate, direction, maxLinks, sortOrder,
+            return CreateLogicInterfaceTemplate(id, name, description, name, ruleTemplate, direction, maxLinks, sortOrder,
                 RuleInterfaceType.Unknown);
         }
 
-        public CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
+        public CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type)
         {
             var interfaceType = new RuleInterfaceTemplate();
 
@@ -117,14 +116,14 @@ namespace Automatica.Core.UnitTests.Rules
             return retValue;
         }
 
-        public CreateTemplateCode CreateParameterRuleInterfaceTemplate(Guid ui, string name, string description, Guid ruleTemplate,
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid ui, string name, string description, Guid ruleTemplate,
              int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
         {
-            return CreateParameterRuleInterfaceTemplate(ui, name, description, ruleTemplate, sortOrder, dataType,
+            return CreateParameterLogicInterfaceTemplate(ui, name, description, ruleTemplate, sortOrder, dataType,
                 defaultValue, false);
         }
 
-        public CreateTemplateCode CreateParameterRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
             int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
         {
             var interfaceType = new RuleInterfaceTemplate();
@@ -141,7 +140,7 @@ namespace Automatica.Core.UnitTests.Rules
             interfaceType.Name = name;
             interfaceType.Description = description;
             interfaceType.This2RuleTemplate = ruleTemplate;
-            interfaceType.This2RuleInterfaceDirection = (long)RuleInterfaceDirection.Param;
+            interfaceType.This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Param;
             interfaceType.MaxLinks = 0;
             interfaceType.SortOrder = sortOrder;
             interfaceType.ParameterDataType = dataType;
@@ -204,12 +203,12 @@ namespace Automatica.Core.UnitTests.Rules
             return _ruleTemplates[id];
         }
 
-        public RuleInstance CreateRuleInstance(Guid templateId)
+        public RuleInstance CreateLogicInstance(Guid templateId)
         {
-            return CreateRuleInstance(GetById(templateId));
+            return CreateLogicInstance(GetById(templateId));
         }
 
-        public RuleInstance CreateRuleInstance(RuleTemplate template)
+        public RuleInstance CreateLogicInstance(RuleTemplate template)
         {
             return RuleInstance.CreateFromTemplate(template);
         }

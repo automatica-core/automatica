@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Xunit;
 
@@ -135,7 +135,7 @@ namespace Automatica.Core.Tests.Dispatcher
 
             LogicEngineDispatcher.Load();
 
-            await Dispatcher.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
+            await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace Automatica.Core.Tests.Dispatcher
 
             LogicEngineDispatcher.Load();
 
-            await Dispatcher.DispatchValue(new RuleInterfaceInstanceDispatchable(outputInterface), true);
+            await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
         }
     }
 }

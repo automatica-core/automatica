@@ -2,16 +2,16 @@
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 
-namespace Automatica.Core.Rule
+namespace Automatica.Core.Logic
 {
     /// <summary>
     /// Implementation for <see cref="IRuleInterfaceInstanceDispatchable"/>
     /// </summary>
-    public class RuleInterfaceInstanceDispatchable : IRuleInterfaceInstanceDispatchable
+    public class LogicInterfaceInstanceDispatchable : IRuleInterfaceInstanceDispatchable
     {
         private readonly RuleInterfaceInstance _instance;
 
-        public RuleInterfaceInstanceDispatchable(RuleInterfaceInstance instance)
+        public LogicInterfaceInstanceDispatchable(RuleInterfaceInstance instance)
         {
             _instance = instance;
         }
@@ -25,9 +25,9 @@ namespace Automatica.Core.Rule
     }
 
     /// <summary>
-    /// Implementation of <see cref="IRuleOutputChanged"/>
+    /// Implementation of <see cref="ILogicOutputChanged"/>
     /// </summary>
-    public class RuleOutputChanged : IRuleOutputChanged
+    public class LogicOutputChanged : ILogicOutputChanged
     {
         public IRuleInterfaceInstanceDispatchable Instance { get; }
         public object Value { get; }
@@ -36,9 +36,9 @@ namespace Automatica.Core.Rule
         public bool ValueBoolean { get; }
         public int ValueInteger { get; }
 
-        public RuleOutputChanged(RuleInterfaceInstance instance, object value, string sourceInformation="")
+        public LogicOutputChanged(RuleInterfaceInstance instance, object value, string sourceInformation="")
         {
-            Instance = new RuleInterfaceInstanceDispatchable(instance);
+            Instance = new LogicInterfaceInstanceDispatchable(instance);
             Value = value;
             SourceInformation = sourceInformation;
 

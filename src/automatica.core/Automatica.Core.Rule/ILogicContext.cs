@@ -4,12 +4,12 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Rule
+namespace Automatica.Core.Logic
 {
     /// <summary>
     /// Rule context data
     /// </summary>
-    public interface IRuleContext
+    public interface ILogicContext
     {
         /// <summary>
         /// The <see cref="RuleInstance"/> itself
@@ -24,7 +24,7 @@ namespace Automatica.Core.Rule
         /// <summary>
         /// Rule Template Factory
         /// </summary>
-        IRuleTemplateFactory Factory { get; }
+        ILogicTemplateFactory Factory { get; }
 
         /// <summary>
         /// Communication to the UI

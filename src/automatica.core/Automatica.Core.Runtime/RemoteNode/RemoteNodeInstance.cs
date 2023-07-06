@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
@@ -27,74 +28,67 @@ namespace Automatica.Core.Runtime.RemoteNode
             _node = node;
             _remoteHandler = remoteHandler;
         }
-        public Task<bool> Configure()
+        public Task<bool> Configure(CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
-        public bool Init()
+        public Task<bool> Init(CancellationToken token = default)
         {
-
-            return true;
+            return Task.FromResult(true);
         }
 
         public IDriverNode Parent { get; set; }
-        public Task<bool> Start()
+        public Task<bool> Start(CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
-        public Task<bool> Stop()
+        public Task<bool> Stop(CancellationToken token = default)
         {
-
             return Task.FromResult(true);
         }
 
-        public async Task<IList<NodeInstance>> Scan()
+        public async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
-            await Task.Delay(0);
+            await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
-        public async Task<IList<NodeInstance>> Import(string fileName)
+        public async Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
         {
-            await Task.Delay(0);
+            await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
-        public async Task<IList<NodeInstance>> CustomAction(string actionName)
+        public async Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
         {
-            await Task.Delay(0);
+            await Task.CompletedTask;
             return new List<NodeInstance>();
         }
-
-        public Task WriteValue(IDispatchable source, object value)
+        
+        public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task WriteValue(IDispatchable source, DispatchValue value)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task<bool> Read()
+        public Task<bool> Read(CancellationToken token = default)
         {
             _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.Read, this);
             return Task.FromResult(true);
         }
 
-        public Task OnSave(NodeInstance instance)
+        public Task OnSave(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task OnDelete(NodeInstance instance)
+        public Task OnDelete(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task OnReinit()
+        public Task OnReInit(CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
@@ -102,14 +96,14 @@ namespace Automatica.Core.Runtime.RemoteNode
         public int ChildrensCreated => 0;
         public NodeInstanceState State => NodeInstanceState.InUse;
 
-        public async Task<bool> EnableLearnMode()
+        public async Task<bool> EnableLearnMode(CancellationToken token = default)
         {
             await _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.StartLearnMode, this);
 
             return true;
         }
 
-        public async Task<bool> DisableLearnMode()
+        public async Task<bool> DisableLearnMode(CancellationToken token = default)
         {
             await _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.StopLearnMode, this);
             return true;

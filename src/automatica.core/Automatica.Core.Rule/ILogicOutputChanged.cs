@@ -1,12 +1,12 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 
-namespace Automatica.Core.Rule
+namespace Automatica.Core.Logic
 {
     /// <summary>
     /// Interface for rule output changes
     /// </summary>
-    public interface IRuleOutputChanged
+    public interface ILogicOutputChanged
     {
         /// <summary>
         /// Dispatchable instance

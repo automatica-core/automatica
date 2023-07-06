@@ -4,9 +4,9 @@ using Automatica.Core.EF.Models;
 namespace Automatica.Core.Base.Templates
 {
     /// <summary>
-    /// RuleInterfaceDirection - either input,output or parameters
+    /// LogicInterfaceDirection - either input,output or parameters
     /// </summary>
-    public enum RuleInterfaceDirection
+    public enum LogicInterfaceDirection
     {
         Input  = 1,
         Output,
@@ -16,7 +16,7 @@ namespace Automatica.Core.Base.Templates
     /// <summary>
     /// Interface for creating <see cref="RuleTemplate"/>
     /// </summary>
-    public interface IRuleTemplateFactory : IPropertyTemplateFactory
+    public interface ILogicTemplateFactory : IPropertyTemplateFactory
     {
         /// <summary>
         /// Creates a <see cref="RuleTemplate"/>
@@ -29,7 +29,7 @@ namespace Automatica.Core.Base.Templates
         /// <param name="height">Height in rule editor</param>
         /// <param name="width">Width in rule editor</param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateRuleTemplate(Guid id, string name, string description, string key, string group,
+        CreateTemplateCode CreateLogicTemplate(Guid id, string name, string description, string key, string group,
             double height, double width);
 
         /// <summary>
@@ -39,12 +39,12 @@ namespace Automatica.Core.Base.Templates
         /// <param name="name">Name of the <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="description">Description of the  <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
-        /// <param name="direction">The direction, <see cref="RuleInterfaceDirection"/></param>
+        /// <param name="direction">The direction, <see cref="LogicInterfaceDirection"/></param>
         /// <param name="maxLinks">Defines how many links can be made</param>
         /// <param name="sortOrder">Sort order of all  <see cref="RuleInterfaceTemplate"/></param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder);
+        CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder);
 
         /// <summary>
         /// Creates a <see cref="RuleInterfaceTemplate"/> for the <see cref="RuleTemplate"/>
@@ -54,12 +54,12 @@ namespace Automatica.Core.Base.Templates
         /// <param name="description">Description of the  <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="key">Defines a unique key for the interface template<see cref="RuleInterfaceTemplate"/></param>
         /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
-        /// <param name="direction">The direction, <see cref="RuleInterfaceDirection"/></param>
+        /// <param name="direction">The direction, <see cref="LogicInterfaceDirection"/></param>
         /// <param name="maxLinks">Defines how many links can be made</param>
         /// <param name="sortOrder">Sort order of all  <see cref="RuleInterfaceTemplate"/></param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder);
+        CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate,
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder);
 
         /// <summary>
         /// Creates a <see cref="RuleInterfaceTemplate"/> for the <see cref="RuleTemplate"/>
@@ -68,13 +68,13 @@ namespace Automatica.Core.Base.Templates
         /// <param name="name">Name of the <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="description">Description of the  <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
-        /// <param name="direction">The direction, <see cref="RuleInterfaceDirection"/></param>
+        /// <param name="direction">The direction, <see cref="LogicInterfaceDirection"/></param>
         /// <param name="maxLinks">Defines how many links can be made</param>
         /// <param name="sortOrder">Sort order of all  <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="type">Type type of the interface <see cref="RuleInterfaceType"/></param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type);
+        CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type);
 
         /// <summary>
         /// Creates a <see cref="RuleInterfaceTemplate"/> for the <see cref="RuleTemplate"/>
@@ -84,14 +84,14 @@ namespace Automatica.Core.Base.Templates
         /// <param name="description">Description of the  <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="key">Defines a unique key for the interface template<see cref="RuleInterfaceTemplate"/></param>
         /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
-        /// <param name="direction">The direction, <see cref="RuleInterfaceDirection"/></param>
+        /// <param name="direction">The direction, <see cref="LogicInterfaceDirection"/></param>
         /// <param name="maxLinks">Defines how many links can be made</param>
         /// <param name="sortOrder">Sort order of all  <see cref="RuleInterfaceTemplate"/></param>
         /// <param name="type">Type type of the interface <see cref="RuleInterfaceType"/></param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateRuleInterfaceTemplate(Guid id, string name, string description, string key,
+        CreateTemplateCode CreateLogicInterfaceTemplate(Guid id, string name, string description, string key,
             Guid ruleTemplate,
-            RuleInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type);
+            LogicInterfaceDirection direction, int maxLinks, int sortOrder, RuleInterfaceType type);
 
         /// <summary>
         /// Creates a parameter for the  <see cref="RuleTemplate"/>
@@ -104,7 +104,7 @@ namespace Automatica.Core.Base.Templates
         /// <param name="dataType">Data type of the parameter, <see cref="RuleInterfaceParameterDataType"/></param>
         /// <param name="defaultValue">Default value of the parameter</param>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateParameterRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue);
+        CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue);
 
         /// <summary>
         /// Creates a parameter for the  <see cref="RuleTemplate"/>
@@ -118,7 +118,7 @@ namespace Automatica.Core.Base.Templates
         /// <param name="defaultValue">Default value of the parameter</param>
         /// <parma name="linkable">Defines if the parameter is linkable in the editor</parma>
         /// <returns><see cref="CreateTemplateCode"/></returns>
-        CreateTemplateCode CreateParameterRuleInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable);
+        CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable);
 
         /// <summary>
         /// Change the default visualization template for a <see cref="RuleTemplate"/>
@@ -140,13 +140,13 @@ namespace Automatica.Core.Base.Templates
         /// </summary>
         /// <param name="templateId"></param>
         /// <returns></returns>
-        RuleInstance CreateRuleInstance(Guid templateId);
+        RuleInstance CreateLogicInstance(Guid templateId);
 
         /// <summary>
         /// Creates a new <see cref="RuleInstance"/> from the given template.
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        RuleInstance CreateRuleInstance(RuleTemplate template);
+        RuleInstance CreateLogicInstance(RuleTemplate template);
     }
 }

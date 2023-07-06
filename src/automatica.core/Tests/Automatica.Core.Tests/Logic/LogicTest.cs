@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Linq;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.UnitTests.Rules;
+using Automatica.Core.UnitTests.Base.Logics;
 using Xunit;
-using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
 
 namespace Automatica.Core.Tests.Rule
 {
-    public class RuleTest
+    public class LogicTest
     {
         [Fact]
         public void TestRuleInterfaceInstanceValues()
         {
-            var ruleTemplateFactoryMock = new RuleTemplateFactoryMock();
+            var ruleTemplateFactoryMock = new LogicTemplateFactoryMock();
 
             var ruleTemplate = Guid.NewGuid();
-            ruleTemplateFactoryMock.CreateRuleTemplate(ruleTemplate, "test", "test", "test", "test", 10, 10);
+            ruleTemplateFactoryMock.CreateLogicTemplate(ruleTemplate, "test", "test", "test", "test", 10, 10);
             var int1 = Guid.NewGuid();
-            ruleTemplateFactoryMock.CreateRuleInterfaceTemplate(int1, "int1", "int1", ruleTemplate,
-                RuleInterfaceDirection.Input, 0, 1);
+            ruleTemplateFactoryMock.CreateLogicInterfaceTemplate(int1, "int1", "int1", ruleTemplate,
+                LogicInterfaceDirection.Input, 0, 1);
 
             var param1 = Guid.NewGuid();
-            ruleTemplateFactoryMock.CreateParameterRuleInterfaceTemplate(param1, "timer", "timer", ruleTemplate, 0,
+            ruleTemplateFactoryMock.CreateParameterLogicInterfaceTemplate(param1, "timer", "timer", ruleTemplate, 0,
                 RuleInterfaceParameterDataType.Timer, null);
 
             var rule = ruleTemplateFactoryMock.CreateRuleInstanceFromTemplate(ruleTemplate);

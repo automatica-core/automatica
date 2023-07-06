@@ -3,14 +3,14 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.UnitTests.Base.Common;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Automatica.Core.UnitTests.Base.Rules
+namespace Automatica.Core.UnitTests.Base.Logics
 {
-    public class RuleInstanceVisuNotifyMock : IRuleInstanceVisuNotify
+    public class LogicInstanceVisuNotifyMock : IRuleInstanceVisuNotify
     {
         public Task NotifyValueChanged(RuleInstance instance, object value)
         {
@@ -23,18 +23,18 @@ namespace Automatica.Core.UnitTests.Base.Rules
         }
     }
 
-    public class RuleContextMock : IRuleContext
+    public class LogicContextMock : ILogicContext
     {
-        public RuleContextMock(RuleInstance instance, IRuleTemplateFactory factory, IDispatcher dispatcher)
+        public LogicContextMock(RuleInstance instance, ILogicTemplateFactory factory, IDispatcher dispatcher)
         {
             RuleInstance = instance;
-            Notify = new RuleInstanceVisuNotifyMock();
+            Notify = new LogicInstanceVisuNotifyMock();
             Dispatcher = dispatcher;
             Factory = factory;
         }
         public RuleInstance RuleInstance { get; }
         public IDispatcher Dispatcher { get; }
-        public IRuleTemplateFactory Factory { get; }
+        public ILogicTemplateFactory Factory { get; }
 
         public IRuleInstanceVisuNotify Notify { get; }
 

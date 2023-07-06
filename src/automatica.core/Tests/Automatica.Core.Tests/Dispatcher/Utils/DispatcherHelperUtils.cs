@@ -8,12 +8,11 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.UnitTests.Base.Drivers;
-using Automatica.Core.UnitTests.Base.Rules;
+using Automatica.Core.UnitTests.Base.Logics;
 using Automatica.Core.UnitTests.Drivers;
-using Automatica.Core.UnitTests.Rules;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.Tests.Dispatcher.Utils
@@ -40,22 +39,22 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             return new DriverNodeMock(ctx);
         }
     }
-    public class LogicMock : Core.Rule.Rule
+    public class LogicMock : Logic.Logic
     {
         public bool WriteReceived { get; set; }
         public RuleInterfaceInstance Output { get; set; }
-        public LogicMock(IRuleContext ruleContext) : base(ruleContext)
+        public LogicMock(ILogicContext logicContext) : base(logicContext)
         {
-            Output = ruleContext.RuleInstance.RuleInterfaceInstance.Single(a =>
+            Output = logicContext.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplateNavigation.Name == "Output");
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
             WriteReceived = true;
 
-            return new List<IRuleOutputChanged>() {new RuleOutputChanged(Output, true)};
+            return new List<ILogicOutputChanged>() {new LogicOutputChanged(Output, true)};
         }
     }
 
@@ -170,7 +169,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             ruleInstance.RuleInterfaceInstance.Add(input);
             ruleInstance.RuleInterfaceInstance.Add(output);
 
-            var mock = new LogicMock(new RuleContextMock(ruleInstance, new RuleTemplateFactoryMock(), dispatcher));
+            var mock = new LogicMock(new LogicContextMock(ruleInstance, new LogicTemplateFactoryMock(), dispatcher));
 
             await mock.Start();
 

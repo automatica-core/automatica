@@ -59,7 +59,7 @@ namespace Automatica.Core.Driver
             _writeSemaphore.Release(1);
         }
 
-        public async Task<bool> Configure()
+        public async Task<bool> Configure(CancellationToken token = default)
         {
             foreach (var node in DriverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
             {
@@ -84,7 +84,7 @@ namespace Automatica.Core.Driver
                 try
                 {
                     driverNode.Parent = this;
-                    if (driverNode.Init())
+                    if (await driverNode.Init(token))
                     {
                         node.State = NodeInstanceState.Initialized;
                         driverNode.Parent = this;
@@ -97,7 +97,7 @@ namespace Automatica.Core.Driver
                             return false;
                         }
 
-                        await driverNode.Configure();
+                        await driverNode.Configure(token);
 
                         await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
                         {
@@ -138,19 +138,19 @@ namespace Automatica.Core.Driver
             
         }
 
-        public bool BeforeInit()
+        public Task<bool> BeforeInit(CancellationToken token = default)
         {
             if (CreateTelegramMonitor())
             {
                 TelegramMonitor = DriverContext.TelegramMonitor.CreateTelegramMonitor(DriverContext.NodeInstance, DriverContext.NodeInstance.This2NodeTemplateNavigation.Key);
             }
 
-            return Init();
+            return Init(token);
         }
 
-        public virtual bool Init()
+        public virtual Task<bool> Init(CancellationToken token = default)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
         
@@ -161,26 +161,26 @@ namespace Automatica.Core.Driver
             DriverContext.Dispatcher.DispatchValue(this, value);
         }
 
-        public  virtual Task<IList<NodeInstance>> Scan()
+        public  virtual Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
         }
 
-        public virtual Task<IList<NodeInstance>> Import(string fileName)
+        public virtual Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
         }
-        public virtual Task<IList<NodeInstance>> CustomAction(string actionName)
+        public virtual Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
         }
-        public virtual Task<bool> EnableLearnMode()
+        public virtual Task<bool> EnableLearnMode(CancellationToken token = default)
         {
             DriverContext.Logger.LogWarning("Learn mode not implemented");
             return Task.FromResult(false);
         }
 
-        public virtual Task<bool> DisableLearnMode()
+        public virtual Task<bool> DisableLearnMode(CancellationToken token = default)
         {
             DriverContext.Logger.LogWarning("Learn mode not implemented");
             return Task.FromResult(false);
@@ -191,33 +191,33 @@ namespace Automatica.Core.Driver
             return Task.CompletedTask;
         }
 
-        public virtual Task WriteValue(IDispatchable source, DispatchValue value)
+        public virtual Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
             return WriteValue(source, value.Value);
         }
 
-        public virtual Task<bool> Read()
+        public virtual Task<bool> Read(CancellationToken token = default)
         {
             DriverContext.Logger.LogError($"Read is not implemented in {DriverContext.NodeInstance.Name}");
             return Task.FromResult(false);
         }
 
-        public virtual Task OnSave(NodeInstance instance)
+        public virtual Task OnSave(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public virtual Task OnDelete(NodeInstance instance)
+        public virtual Task OnDelete(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public virtual Task OnReinit()
+        public virtual Task OnReInit(CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public virtual Task<bool> Start()
+        public virtual Task<bool> Start(CancellationToken token = default)
         {
             _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
 
@@ -267,7 +267,7 @@ namespace Automatica.Core.Driver
 
                     try
                     {
-                        await WriteValue(writeData.Item1, writeData.Item2).WithCancellation(cts.Token);
+                        await WriteValue(writeData.Item1, writeData.Item2, cts.Token);
                     }
                     catch (Exception e)
                     {
@@ -281,7 +281,7 @@ namespace Automatica.Core.Driver
             }
         }
 
-        public virtual async Task<bool> Stop()
+        public virtual async Task<bool> Stop(CancellationToken token = default)
         {
             _cancellationToken.Cancel();
 
@@ -289,7 +289,7 @@ namespace Automatica.Core.Driver
             {
                 try
                 {
-                    await node.Stop();
+                    await node.Stop(token);
                 }
                 catch (Exception e)
                 {

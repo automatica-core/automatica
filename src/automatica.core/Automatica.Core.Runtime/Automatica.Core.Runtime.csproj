@@ -29,7 +29,7 @@
     <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
-    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Logic.csproj" />
     <ProjectReference Include="..\Automatica.Core.Visu\Automatica.Core.Visu.csproj" />
     <ProjectReference Include="..\Automatica.Push\Automatica.Push.csproj" />
   </ItemGroup>

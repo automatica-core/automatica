@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Rule;
 using Automatica.Core.Runtime.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,6 +42,7 @@ using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.RemoteConnect;
 using Newtonsoft.Json;
 using String = System.String;
@@ -316,7 +316,7 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StartLogic(IRule rule, RuleInstance ruleInstance)
+        private async Task StartLogic(ILogic rule, RuleInstance ruleInstance)
         {
             _logger.LogInformation($"Starting logic {ruleInstance.Name}...");
             try
@@ -336,7 +336,7 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StopLogic(IRule rule, RuleInstance ruleInstance)
+        private async Task StopLogic(ILogic rule, RuleInstance ruleInstance)
         {
             try
             {
@@ -359,7 +359,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ReloadLogic(Guid ruleInstanceId)
         {
-            KeyValuePair<RuleInstance, IRule> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitRuleInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+            KeyValuePair<RuleInstance, ILogic> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitRuleInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
 
             await StopLogic(rule.Value, rule.Key);
             await StartLogic(rule.Value, rule.Key);
@@ -579,20 +579,20 @@ namespace Automatica.Core.Runtime.Core
 
         }
 
-        private KeyValuePair<RuleInstance, IRule> InitRuleInstance(Guid ruleInstanceId)
+        private KeyValuePair<RuleInstance, ILogic> InitRuleInstance(Guid ruleInstanceId)
         {
             var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
             var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
-            var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
-            var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
-            var rule = factory.CreateRuleInstance(ruleContext);
+            var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
+            var ruleContext = new LogicContext(ruleInstance, _dispatcher, new LogicTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
+            var rule = factory.CreateLogicInstance(ruleContext);
 
             if (rule != null)
             {
                 _logicInstanceStore.Add(ruleInstance, rule);
             }
 
-            return new KeyValuePair<RuleInstance, IRule>(ruleInstance, rule);
+            return new KeyValuePair<RuleInstance, ILogic>(ruleInstance, rule);
         }
 
 
