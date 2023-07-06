@@ -5,15 +5,15 @@ VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.compare.baseoperations", "automatica.logic.compare.baseoperations", "{527B2227-1C4E-4427-8E40-9C11E8487735}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Compare.BaseOperations", "automatica.logic.compare.baseoperations\P3.Rule.Compare.BaseOperations\P3.Rule.Compare.BaseOperations.csproj", "{6C397990-0876-4A37-940E-A3E7A6EE13D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Compare.BaseOperations", "automatica.logic.compare.baseoperations\P3.Rule.Compare.BaseOperations\P3.Logic.Compare.BaseOperations.csproj", "{6C397990-0876-4A37-940E-A3E7A6EE13D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Compare.BaseOperations.Tests", "automatica.logic.compare.baseoperations\P3.Rule.Compare.BaseOperations.Test\P3.Rule.Compare.BaseOperations.Tests.csproj", "{67268D2D-5563-4159-B6F4-DDC3746A3519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Compare.BaseOperations.Tests", "automatica.logic.compare.baseoperations\P3.Rule.Compare.BaseOperations.Test\P3.Logic.Compare.BaseOperations.Tests.csproj", "{67268D2D-5563-4159-B6F4-DDC3746A3519}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.digitaltoanalog", "automatica.logic.digitaltoanalog", "{4274CE6C-6833-44B9-80BD-C55FE49A5C7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.DigitalToAnalog", "automatica.logic.digitaltoanalog\P3.Rule.DigitalToAnalog\P3.Rule.DigitalToAnalog.csproj", "{2BFF9C23-06A4-4E6F-8BC5-0F92EF237346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.DigitalToAnalog", "automatica.logic.digitaltoanalog\P3.Rule.DigitalToAnalog\P3.Logic.DigitalToAnalog.csproj", "{2BFF9C23-06A4-4E6F-8BC5-0F92EF237346}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.DigitalToAnalog.Tests", "automatica.logic.digitaltoanalog\P3.Rule.DigitalToAnalog.Test\P3.Rule.DigitalToAnalog.Tests.csproj", "{0BF084B3-68A8-42F1-8355-94CE769377ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.DigitalToAnalog.Tests", "automatica.logic.digitaltoanalog\P3.Rule.DigitalToAnalog.Test\P3.Logic.DigitalToAnalog.Tests.csproj", "{0BF084B3-68A8-42F1-8355-94CE769377ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.enocean", "automatica.logic.enocean", "{3ADA0B67-3827-4578-87D4-E2FAD0CB03FC}"
 EndProject
@@ -21,15 +21,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.EnOceanFactory", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.logic.baseoperations", "automatica.logic.logic.baseoperations", "{03233254-490A-49E2-87AD-2D03D745A84D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Logic.BaseOperations", "automatica.logic.logic.baseoperations\P3.Rule.Logic.BaseOperations\P3.Rule.Logic.BaseOperations.csproj", "{BF9714A1-4CEF-43D2-8DAC-523EE537A9A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Logic.BaseOperations", "automatica.logic.logic.baseoperations\P3.Rule.Logic.BaseOperations\P3.Logic.Logic.BaseOperations.csproj", "{BF9714A1-4CEF-43D2-8DAC-523EE537A9A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Logic.BaseOperations.Tests", "automatica.logic.logic.baseoperations\P3.Rule.Logic.BaseOperations.Test\P3.Rule.Logic.BaseOperations.Tests.csproj", "{B6E3DC85-4A92-4451-A333-25F41FA89152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Logic.BaseOperations.Tests", "automatica.logic.logic.baseoperations\P3.Rule.Logic.BaseOperations.Test\P3.Logic.Logic.BaseOperations.Tests.csproj", "{B6E3DC85-4A92-4451-A333-25F41FA89152}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.math.basicoperations", "automatica.logic.math.basicoperations", "{FBA939CC-EE71-45C7-AE59-6C9F1E95496A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Math.BasicOperations", "automatica.logic.math.basicoperations\P3.Rule.Math.BasicOperations\P3.Rule.Math.BasicOperations.csproj", "{BC33F198-0D4F-4EDD-B53B-9E357ED72711}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Math.BasicOperations", "automatica.logic.math.basicoperations\P3.Rule.Math.BasicOperations\P3.Logic.Math.BasicOperations.csproj", "{BC33F198-0D4F-4EDD-B53B-9E357ED72711}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Math.BasicOperations.Tests", "automatica.logic.math.basicoperations\P3.Rule.Math.BasicOperations.Test\P3.Rule.Math.BasicOperations.Tests.csproj", "{3A112362-6B42-4832-81F1-F3507E19A166}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Math.BasicOperations.Tests", "automatica.logic.math.basicoperations\P3.Rule.Math.BasicOperations.Test\P3.Logic.Math.BasicOperations.Tests.csproj", "{3A112362-6B42-4832-81F1-F3507E19A166}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.messenger", "automatica.logic.messenger", "{E2A44D2F-2058-4795-9F48-98A77E4C121D}"
 EndProject
@@ -51,15 +51,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.StringOperations.T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.surveillance", "automatica.logic.surveillance", "{EFF18FC4-3F1A-4B71-99E0-E0DD24702857}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Surveillance", "automatica.logic.surveillance\P3.Rule.Surveillance\P3.Rule.Surveillance.csproj", "{FD6AFFB8-7382-4DE7-B491-8B30065EE768}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Surveillance", "automatica.logic.surveillance\P3.Rule.Surveillance\P3.Logic.Surveillance.csproj", "{FD6AFFB8-7382-4DE7-B491-8B30065EE768}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Surveillance.Tests", "automatica.logic.surveillance\P3.Rule.Surveillance.Tests\P3.Rule.Surveillance.Tests.csproj", "{BCCA7E26-EA48-4A4A-8799-3B5CB3338B52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Surveillance.Tests", "automatica.logic.surveillance\P3.Rule.Surveillance.Tests\P3.Logic.Surveillance.Tests.csproj", "{BCCA7E26-EA48-4A4A-8799-3B5CB3338B52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "automatica.logic.time", "automatica.logic.time", "{01C9B537-2221-43AC-B044-A8170B96F535}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Time", "automatica.logic.time\P3.Rule.Time\P3.Rule.Time.csproj", "{1C9D8F17-395E-4601-9190-13F030C57032}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Time", "automatica.logic.time\P3.Rule.Time\P3.Logic.Time.csproj", "{1C9D8F17-395E-4601-9190-13F030C57032}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Rule.Time.Tests", "automatica.logic.time\P3.Rule.Time.Tests\P3.Rule.Time.Tests.csproj", "{A2B7EB70-D36E-4569-8BF5-9A35A62C8EDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Logic.Time.Tests", "automatica.logic.time\P3.Rule.Time.Tests\P3.Logic.Time.Tests.csproj", "{A2B7EB70-D36E-4569-8BF5-9A35A62C8EDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,18 +1,18 @@
 using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
-using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
+using Automatica.Core.Logic;
+using LogicInterfaceDirection = Automatica.Core.Base.Templates.LogicInterfaceDirection;
 
 namespace P3.Logic.Messenger
 {
-    public class MessengerFactory : RuleFactory
+    public class MessengerFactory : LogicFactory
     {
-        public override string RuleName => "Messenger";
+        public override string LogicName => "Messenger";
 
-        public override Guid RuleGuid => new Guid("215efbd7-95e6-4451-9837-612010f493a6");
+        public override Guid LogicGuid => new Guid("215efbd7-95e6-4451-9837-612010f493a6");
 
-        public override Version RuleVersion => new Version(0, 1, 0, 1);
+        public override Version LogicVersion => new Version(0, 1, 0, 1);
 
         public override bool InDevelopmentMode => true;
 
@@ -21,23 +21,23 @@ namespace P3.Logic.Messenger
         public static Guid ToProperty = new Guid("836178a4-b8b5-472c-a515-5e3e7a730a89");
         public static Guid SubjectProperty = new Guid("ea67a0cd-1765-4c24-b645-3298147b584a");
 
-        public override IRule CreateRuleInstance(IRuleContext context)
+        public override ILogic CreateLogicInstance(ILogicContext context)
         {
             return new MessengerLogic(context);
         }
 
-        public override void InitTemplates(IRuleTemplateFactory factory)
+        public override void InitTemplates(ILogicTemplateFactory factory)
         {
-            factory.CreateRuleTemplate(RuleGuid, "MESSENGER.CLOUD_EMAIL.NAME", "MESSENGER.CLOUD_EMAIL.DESCRIPTION",
+            factory.CreateLogicTemplate(LogicGuid, "MESSENGER.CLOUD_EMAIL.NAME", "MESSENGER.CLOUD_EMAIL.DESCRIPTION",
                 "messenger-cloud-email", "MESSENGER.NAME", 100, 100);
 
-            factory.CreateRuleInterfaceTemplate(new Guid("7ac55e7b-3837-4efb-8995-70ef4c4dfef2"), "T", "MESSENGER.CLOUD_EMAIL.TRIGGER.DESCRIPTION",
-                RuleGuid, RuleInterfaceDirection.Input, 0, 1);
+            factory.CreateLogicInterfaceTemplate(new Guid("7ac55e7b-3837-4efb-8995-70ef4c4dfef2"), "T", "MESSENGER.CLOUD_EMAIL.TRIGGER.DESCRIPTION",
+                LogicGuid, LogicInterfaceDirection.Input, 0, 1);
 
-            factory.CreateParameterRuleInterfaceTemplate(ToProperty, "MESSENGER.CLOUD_EMAIL.TO.NAME",
-                "MESSENGER.CLOUD_EMAIL.TO.DESCRIPTION", RuleGuid, 0, RuleInterfaceParameterDataType.Text, "");
-            factory.CreateParameterRuleInterfaceTemplate(SubjectProperty, "MESSENGER.CLOUD_EMAIL.SUBJECT.NAME",
-                "MESSENGER.CLOUD_EMAIL.SUBJECT.DESCRIPTION", RuleGuid, 0, RuleInterfaceParameterDataType.Text, "");
+            factory.CreateParameterLogicInterfaceTemplate(ToProperty, "MESSENGER.CLOUD_EMAIL.TO.NAME",
+                "MESSENGER.CLOUD_EMAIL.TO.DESCRIPTION", LogicGuid, 0, RuleInterfaceParameterDataType.Text, "");
+            factory.CreateParameterLogicInterfaceTemplate(SubjectProperty, "MESSENGER.CLOUD_EMAIL.SUBJECT.NAME",
+                "MESSENGER.CLOUD_EMAIL.SUBJECT.DESCRIPTION", LogicGuid, 0, RuleInterfaceParameterDataType.Text, "");
         }
     }
 }

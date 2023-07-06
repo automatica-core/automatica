@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Version>0.14.0.1</Version>
+    <Configurations>Debug;Release;DebugLocal</Configurations>
+    <ProjectGuid>{BF9714A1-4CEF-43D2-8DAC-523EE537A9A6}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\netcoreapp2.2\Rules\Logic</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="automatica-manifest.json" />
+    <None Remove="Resources\Logic-de.json" />
+    <None Remove="Resources\Logic-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="automatica-manifest.json" />
+    <EmbeddedResource Include="Resources\Logic-de.json" />
+    <EmbeddedResource Include="Resources\Logic-en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Automatica.Core.Logic" Version="7.4.0.1159" />
+  </ItemGroup>
+</Project>

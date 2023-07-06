@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
-namespace P3.Rule.Math.BasicOperations.Floor
+namespace P3.Logic.Math.BasicOperations.Floor
 {
-    public class FloorRule : Automatica.Core.Rule.Rule
+    public class FloorRule : Automatica.Core.Logic.Logic
     {
         private double _i1 = 0.0;
 
         private readonly RuleInterfaceInstance _output;
 
-        public FloorRule(IRuleContext context) : base(context)
+        public FloorRule(ILogicContext context) : base(context)
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == FloorRuleFactory.RuleOutput);
+                a.This2RuleInterfaceTemplate == FloorLogicFactory.RuleOutput);
         }
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _i1 = 0;
             return Task.FromResult(true);
         }
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             var curValue = _i1;
-            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, curValue).Instance, curValue);
+            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, curValue).Instance, curValue);
 
-            return base.Start();
+            return Task.FromResult(true);
         }
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.This2RuleInterfaceTemplate == FloorRuleFactory.RuleInput1 && value != null)
+            if (instance.This2RuleInterfaceTemplate == FloorLogicFactory.RuleInput1 && value != null)
             {
                 _i1 = Convert.ToDouble(value);
             }
 
-            return SingleOutputChanged(new RuleOutputChanged(_output,  System.Math.Floor(_i1)));
+            return SingleOutputChanged(new LogicOutputChanged(_output,  System.Math.Floor(_i1)));
         }
 
     }

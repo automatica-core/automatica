@@ -1,31 +1,31 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
-using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
+using Automatica.Core.Logic;
+using LogicInterfaceDirection = Automatica.Core.Base.Templates.LogicInterfaceDirection;
 
-namespace P3.Rule.Math.BasicOperations.Floor
+namespace P3.Logic.Math.BasicOperations.Floor
 {
-    public class FloorRuleFactory : RuleFactory
+    public class FloorLogicFactory : LogicFactory
     {
         public static readonly Guid RuleInput1 = new Guid("746e1068-232f-4ec1-b019-7e6bae074a44");
         public static readonly Guid RuleOutput = new Guid("a44cb7b6-13ae-4394-b9dd-4b4abd595766");
 
-        public override string RuleName => "Math.Floor";
-        public override Version RuleVersion => new Version(2, 0, 0, 0);
-        public override Guid RuleGuid => new Guid("aa351d39-443e-425b-8a50-dde82ce4ba58");
+        public override string LogicName => "Math.Floor";
+        public override Version LogicVersion => new Version(2, 0, 0, 0);
+        public override Guid LogicGuid => new Guid("aa351d39-443e-425b-8a50-dde82ce4ba58");
 
-        public override void InitTemplates(IRuleTemplateFactory factory)
+        public override void InitTemplates(ILogicTemplateFactory factory)
         {
-            factory.CreateRuleTemplate(RuleGuid, "MATH.FLOOR.NAME", "MATH.FLOOR.DESCRIPTION",
+            factory.CreateLogicTemplate(LogicGuid, "MATH.FLOOR.NAME", "MATH.FLOOR.DESCRIPTION",
                 "math.floor", "MATH.NAME", 100, 100);
 
-            factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "MATH.FLOOR.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
+            factory.CreateLogicInterfaceTemplate(RuleInput1, "I1", "MATH.FLOOR.INPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.FLOOR.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
+            factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "MATH.FLOOR.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
-        public override IRule CreateRuleInstance(IRuleContext context)
+        public override ILogic CreateLogicInstance(ILogicContext context)
         {
             return new FloorRule(context);
         }

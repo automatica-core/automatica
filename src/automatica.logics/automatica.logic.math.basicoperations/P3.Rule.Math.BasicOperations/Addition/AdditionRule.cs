@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
-namespace P3.Rule.Math.BasicOperations.Addition
+namespace P3.Logic.Math.BasicOperations.Addition
 {
-    public class AdditionRule : Automatica.Core.Rule.Rule
+    public class AdditionRule : Automatica.Core.Logic.Logic
     {
         private double _i1 = 0.0;
         private double _i2 = 0.0;
@@ -17,13 +18,13 @@ namespace P3.Rule.Math.BasicOperations.Addition
 
         private readonly RuleInterfaceInstance _output;
 
-        public AdditionRule(IRuleContext context) : base(context)
+        public AdditionRule(ILogicContext context) : base(context)
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleOutput);
+                a.This2RuleInterfaceTemplate == AdditionLogicFactory.RuleOutput);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _i1 = 0;
             _i2 = 0;
@@ -32,36 +33,35 @@ namespace P3.Rule.Math.BasicOperations.Addition
             return Task.FromResult(true);
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             var curValue = _i1 +_i2 + _i3 + _i4;
-            Context.Dispatcher.DispatchValue(new RuleOutputChanged(_output, curValue).Instance, curValue);
-
-            return base.Start();
+            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, curValue).Instance, curValue);
+            return Task.FromResult(true);
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleInput1)
+            if (instance.This2RuleInterfaceTemplate == AdditionLogicFactory.RuleInput1)
             {
                 _i1 = Convert.ToDouble(value);
             }
 
-            if (instance.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleInput2)
+            if (instance.This2RuleInterfaceTemplate == AdditionLogicFactory.RuleInput2)
             {
                 _i2 = Convert.ToDouble(value);
             }
-            if (instance.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleInput3)
+            if (instance.This2RuleInterfaceTemplate == AdditionLogicFactory.RuleInput3)
             {
                 _i3 = Convert.ToDouble(value);
             }
-            if (instance.This2RuleInterfaceTemplate == AdditionRuleFactory.RuleInput4)
+            if (instance.This2RuleInterfaceTemplate == AdditionLogicFactory.RuleInput4)
             {
                 _i4 = Convert.ToDouble(value);
             }
 
 
-            return SingleOutputChanged(new RuleOutputChanged(_output, _i1 + _i2 + _i3 + _i4));
+            return SingleOutputChanged(new LogicOutputChanged(_output, _i1 + _i2 + _i3 + _i4));
         }
 
     }

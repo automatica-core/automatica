@@ -2,16 +2,16 @@
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
 namespace P3.Logic.Operations.Switch
 {
-    public class SwitchLogic : Automatica.Core.Rule.Rule
+    public class SwitchLogic : Automatica.Core.Logic.Logic
     {
         private readonly RuleInterfaceInstance _input;
         private readonly RuleInterfaceInstance _output;
 
-        public SwitchLogic(IRuleContext context) : base(context)
+        public SwitchLogic(ILogicContext context) : base(context)
         {
             _input = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == SwitchLogicFactory.RuleInput);
@@ -20,15 +20,15 @@ namespace P3.Logic.Operations.Switch
                 a.This2RuleInterfaceTemplate == SwitchLogicFactory.RuleOutput);
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
             if (instance.ObjId == _input.ObjId)
             {
-                return SingleOutputChanged(new RuleOutputChanged(_output, value));
+                return SingleOutputChanged(new LogicOutputChanged(_output, value));
             }
 
-            return new List<IRuleOutputChanged>();
+            return new List<ILogicOutputChanged>();
         }
 
         public override object GetDataForVisu()

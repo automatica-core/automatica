@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
 namespace P3.Logic.EnOceanFactory.WindowHandle
 {
-    public class EnOceanWindowHandleLogic : Rule
+    public class EnOceanWindowHandleLogic: Automatica.Core.Logic.Logic
     {
         private readonly RuleInterfaceInstance _output;
 
-        public EnOceanWindowHandleLogic(IRuleContext context) : base(context)
+        public EnOceanWindowHandleLogic(ILogicContext context) : base(context)
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == EnOceanWindowHandleLogicFactory.RuleOutput);
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == EnOceanWindowHandleLogicFactory.RuleInput)
             {
@@ -26,12 +26,12 @@ namespace P3.Logic.EnOceanFactory.WindowHandle
                 switch (numericValue)
                 {
                     case 13:
-                        return SingleOutputChanged(new RuleOutputChanged(_output, 0));
+                        return SingleOutputChanged(new LogicOutputChanged(_output, 0));
                     case 12:
                     case 14:
-                        return SingleOutputChanged(new RuleOutputChanged(_output, 1));
+                        return SingleOutputChanged(new LogicOutputChanged(_output, 1));
                     case 15:
-                        return SingleOutputChanged(new RuleOutputChanged(_output, 2));
+                        return SingleOutputChanged(new LogicOutputChanged(_output, 2));
 
                 }
             }

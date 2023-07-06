@@ -1,12 +1,12 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
-using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
+using Automatica.Core.Logic;
+using LogicInterfaceDirection = Automatica.Core.Base.Templates.LogicInterfaceDirection;
 
-namespace P3.Rule.Math.BasicOperations.Multiply
+namespace P3.Logic.Math.BasicOperations.Multiply
 {
-    public class MultiplyRuleFactory : RuleFactory
+    public class MultiplyLogicFactory : LogicFactory
     {
         public static readonly Guid RuleInput1 = new Guid("d1b17504-897d-4707-87e5-3d29d1bf75f5");
         public static readonly Guid RuleInput2 = new Guid("383facb9-fe8c-4ffc-a3d7-593feddb4de9");
@@ -14,22 +14,22 @@ namespace P3.Rule.Math.BasicOperations.Multiply
 
         public static readonly Guid RuleOutput = new Guid("1b8dac1d-e812-4938-9640-db0a6e29d225");
 
-        public override string RuleName => "Math.Multiply";
-        public override Version RuleVersion => new Version(2, 0, 0, 0);
-        public override Guid RuleGuid => new Guid("4856b924-459f-4190-8ff3-8db9b7cd992e");
+        public override string LogicName => "Math.Multiply";
+        public override Version LogicVersion => new Version(2, 0, 0, 0);
+        public override Guid LogicGuid => new Guid("4856b924-459f-4190-8ff3-8db9b7cd992e");
 
-        public override void InitTemplates(IRuleTemplateFactory factory)
+        public override void InitTemplates(ILogicTemplateFactory factory)
         {
-            factory.CreateRuleTemplate(RuleGuid, "MATH.MULTIPLY.NAME", "MATH.MULTIPLY.DESCRIPTION",
+            factory.CreateLogicTemplate(LogicGuid, "MATH.MULTIPLY.NAME", "MATH.MULTIPLY.DESCRIPTION",
                 "math.multiply", "MATH.NAME", 100, 100);
 
-            factory.CreateRuleInterfaceTemplate(RuleInput1, "I1", "MATH.MULTIPLY.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
-            factory.CreateRuleInterfaceTemplate(RuleInput2, "I2", "MATH.MULTIPLY.INPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
+            factory.CreateLogicInterfaceTemplate(RuleInput1, "I1", "MATH.MULTIPLY.INPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
+            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "MATH.MULTIPLY.INPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 2);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.MULTIPLY.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
+            factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "MATH.MULTIPLY.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
-        public override IRule CreateRuleInstance(IRuleContext context)
+        public override ILogic CreateLogicInstance(ILogicContext context)
         {
             return new MultiplyRule(context);
         }

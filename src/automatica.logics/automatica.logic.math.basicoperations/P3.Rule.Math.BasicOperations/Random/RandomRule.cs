@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
-namespace P3.Rule.Math.BasicOperations.Random
+namespace P3.Logic.Math.BasicOperations.Random
 {
-    public class RandomRule : Automatica.Core.Rule.Rule
+    public class RandomRule : Automatica.Core.Logic.Logic
     {
         private double? _i1;
 
@@ -20,16 +20,16 @@ namespace P3.Rule.Math.BasicOperations.Random
 
         private readonly System.Random _random = new System.Random();
 
-        public RandomRule(IRuleContext context) : base(context)
+        public RandomRule(ILogicContext context) : base(context)
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == RandomRuleFactory.RuleOutput);
+                a.This2RuleInterfaceTemplate == RandomLogicFactory.RuleOutput);
 
             _minInstance = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == RandomRuleFactory.RuleParamMin);
+                a.This2RuleInterfaceTemplate == RandomLogicFactory.RuleParamMin);
 
             _maxInstance = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == RandomRuleFactory.RuleParamMax);
+                a.This2RuleInterfaceTemplate == RandomLogicFactory.RuleParamMax);
         }
 
         public int Min
@@ -57,19 +57,19 @@ namespace P3.Rule.Math.BasicOperations.Random
             }
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
 
-            if (instance.This2RuleInterfaceTemplate == RandomRuleFactory.RuleInputDisabled)
+            if (instance.This2RuleInterfaceTemplate == RandomLogicFactory.RuleInputDisabled)
             {
                 _disabled = Convert.ToBoolean(value);
             }
 
-            if (!_disabled && instance.This2RuleInterfaceTemplate == RandomRuleFactory.RuleInputTrigger)
+            if (!_disabled && instance.This2RuleInterfaceTemplate == RandomLogicFactory.RuleInputTrigger)
             {
                 _i1 = _random.Next(Min, Max);
             }
-            return SingleOutputChanged(new RuleOutputChanged(_output,  _i1));
+            return SingleOutputChanged(new LogicOutputChanged(_output,  _i1));
         }
 
     }

@@ -1,12 +1,12 @@
 ﻿using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
-using RuleInterfaceDirection = Automatica.Core.Base.Templates.RuleInterfaceDirection;
+using Automatica.Core.Logic;
+using LogicInterfaceDirection = Automatica.Core.Base.Templates.LogicInterfaceDirection;
 
-namespace P3.Rule.Math.BasicOperations.Random
+namespace P3.Logic.Math.BasicOperations.Random
 {
-    public class RandomRuleFactory : RuleFactory
+    public class RandomLogicFactory : LogicFactory
     {
         public static readonly Guid RuleInputTrigger = new Guid("40e41d2c-b7d7-4d85-906d-8abf2e5ed4c7");
         public static readonly Guid RuleInputDisabled = new Guid("37bca3d8-e865-46f6-9803-7ca23431f890");
@@ -16,25 +16,25 @@ namespace P3.Rule.Math.BasicOperations.Random
 
         public static readonly Guid RuleOutput = new Guid("1c7d9aff-0b29-40b1-9502-17b534763c08");
 
-        public override string RuleName => "Math.Random";
-        public override Version RuleVersion => new Version(1, 0, 0, 2);
-        public override Guid RuleGuid => new Guid("3e08d671-610f-42f4-a676-a626ba42e83d");
+        public override string LogicName => "Math.Random";
+        public override Version LogicVersion => new Version(1, 0, 0, 2);
+        public override Guid LogicGuid => new Guid("3e08d671-610f-42f4-a676-a626ba42e83d");
 
-        public override void InitTemplates(IRuleTemplateFactory factory)
+        public override void InitTemplates(ILogicTemplateFactory factory)
         {
-            factory.CreateRuleTemplate(RuleGuid, "MATH.RANDOM.NAME", "MATH.RANDOM.DESCRIPTION",
+            factory.CreateLogicTemplate(LogicGuid, "MATH.RANDOM.NAME", "MATH.RANDOM.DESCRIPTION",
                 "math.random", "MATH.NAME", 100, 100);
 
-            factory.CreateRuleInterfaceTemplate(RuleInputTrigger, "Tr", "MATH.RANDOM.TRIGGER.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 1);
-            factory.CreateRuleInterfaceTemplate(RuleInputDisabled, "Dis", "MATH.RANDOM.DISABLED.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Input, 1, 2);
+            factory.CreateLogicInterfaceTemplate(RuleInputTrigger, "Tr", "MATH.RANDOM.TRIGGER.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
+            factory.CreateLogicInterfaceTemplate(RuleInputDisabled, "Dis", "MATH.RANDOM.DISABLED.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 2);
 
-            factory.CreateParameterRuleInterfaceTemplate(RuleParamMin, "Min", "MATH.RANDOM.MIN.DESCRIPTION", RuleGuid,  1, RuleInterfaceParameterDataType.Integer, 0);
-            factory.CreateParameterRuleInterfaceTemplate(RuleParamMax, "Max", "MATH.RANDOM.MAX.DESCRIPTION", RuleGuid, 2, RuleInterfaceParameterDataType.Integer, 100);
+            factory.CreateParameterLogicInterfaceTemplate(RuleParamMin, "Min", "MATH.RANDOM.MIN.DESCRIPTION", LogicGuid,  1, RuleInterfaceParameterDataType.Integer, 0);
+            factory.CreateParameterLogicInterfaceTemplate(RuleParamMax, "Max", "MATH.RANDOM.MAX.DESCRIPTION", LogicGuid, 2, RuleInterfaceParameterDataType.Integer, 100);
 
-            factory.CreateRuleInterfaceTemplate(RuleOutput, "O", "MATH.RANDOM.OUTPUT.DESCRIPTION", RuleGuid, RuleInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
+            factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "MATH.RANDOM.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Status);
         }
 
-        public override IRule CreateRuleInstance(IRuleContext context)
+        public override ILogic CreateLogicInstance(ILogicContext context)
         {
             return new RandomRule(context);
         }

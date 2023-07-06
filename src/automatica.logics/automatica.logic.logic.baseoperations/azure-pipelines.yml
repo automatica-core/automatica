@@ -40,7 +40,7 @@ steps:
 - task: AutomaticaCorePluginCli@7
   displayName: Plugin build
   inputs:
-    manifest_path: 'P3.Rule.Logic.BaseOperations/automatica-manifest.json'
+    manifest_path: 'P3.Logic.Logic.BaseOperations/automatica-manifest.json'
     version: '$(AUTOMATICA_VERSION).$(Build.BuildId)'
     api_key: '$(CLOUD_API_KEY)'
     cloud_url: '$(CLOUD_URL)'

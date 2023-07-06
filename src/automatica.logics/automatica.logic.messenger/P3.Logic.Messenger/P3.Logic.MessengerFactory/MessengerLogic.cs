@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Messenger
 {
-    public class MessengerLogic : Rule
+    public class MessengerLogic: Automatica.Core.Logic.Logic
     {
         private readonly IList<string> _to = new List<string>();
         private readonly string _subject = "Automatica.Core Message";
 
         private object _value;
 
-        public MessengerLogic(IRuleContext context) : base(context)
+        public MessengerLogic(ILogicContext context) : base(context)
         {
             var toProperty = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == MessengerFactory.ToProperty);
@@ -36,7 +36,7 @@ namespace P3.Logic.Messenger
             
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
 
             if (_to.Count > 0 && value != _value)
