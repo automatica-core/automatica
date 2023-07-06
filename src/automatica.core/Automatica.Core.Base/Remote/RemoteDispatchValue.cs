@@ -1,8 +1,10 @@
-﻿namespace Automatica.Core.Base.Remote
+﻿using Automatica.Core.Base.IO;
+
+namespace Automatica.Core.Base.Remote
 {
     public class RemoteDispatchValue
     {
-        public object Value { get; set; }
+        public DispatchValue Value { get; set; }
         public string Source { get; set; }
     }
 }
