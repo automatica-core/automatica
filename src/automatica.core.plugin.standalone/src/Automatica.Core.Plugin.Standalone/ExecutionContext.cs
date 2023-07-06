@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Driver;
 using Automatica.Core.Plugin.Standalone.Abstraction;
 using Automatica.Core.Plugin.Standalone.Factories;
+using Automatica.Core.Plugin.Standalone.Tunneling;
 using Docker.DotNet.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,6 +41,7 @@ namespace Automatica.Core.Plugin.Standalone
             serviceCollection.AddSingleton<ILogger>(a => logger);
             serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
             serviceCollection.AddSingleton<INodeTemplateFactory, RemoteNodeTemplatesFactory>();
+            serviceCollection.AddSingleton<ITunnelingProvider, RemoteTunnelingProvider>();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
