@@ -97,7 +97,7 @@ namespace Automatica.Core.Plugin.Standalone
                     .Build();
                 _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
 
-                _mqttClient.ApplicationMessageReceivedHandler = new MqttMessageHandlers(Logger, this);
+                _mqttClient.ApplicationMessageReceivedHandler = new MqttMessageHandlers(Logger, this, _serviceProvider);
                 await _mqttClient.ConnectAsync(options);
 
                 Logger.LogInformation($"Connected to mqtt broker {MasterAddress} with clientId {NodeId}");

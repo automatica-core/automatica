@@ -9,6 +9,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Serialization;
 using Docker.DotNet.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MQTTnet.Client;
 using Newtonsoft.Json;
 
@@ -22,10 +23,10 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
 
         private readonly Semaphore _semaphore = new Semaphore(1, 1);
 
-        protected readonly IDictionary<DispatchableType, IDictionary<Guid, object>> NodeValues =
-           new ConcurrentDictionary<DispatchableType, IDictionary<Guid, object>>();
+        protected readonly IDictionary<DispatchableType, IDictionary<Guid, DispatchValue>> NodeValues =
+           new ConcurrentDictionary<DispatchableType, IDictionary<Guid, DispatchValue>>();
 
-        private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, object>>>>();
+        private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>>();
 
         public MqttDispatcher(IMqttClient mqttClient)
         {
@@ -48,18 +49,18 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             return Task.CompletedTask;
         }
 
-        private Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
+        private Task DispatchValueInternal(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue> dis)
         {
             return Task.Run(() => dis(self, value));
         }
 
-        private void StoreValue(IDispatchable self, object value)
+        private void StoreValue(IDispatchable self, DispatchValue value)
         {
             lock (_lock)
             {
                 if (!NodeValues.ContainsKey(self.Type))
                 {
-                    NodeValues.Add(self.Type, new ConcurrentDictionary<Guid, object>());
+                    NodeValues.Add(self.Type, new ConcurrentDictionary<Guid, DispatchValue>());
                 }
 
                 if (!NodeValues[self.Type].ContainsKey(self.Id))
@@ -78,7 +79,12 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             }
         }
 
-        public async Task DispatchValue(IDispatchable self, object value)
+        public Task DispatchValue(IDispatchable self, object value)
+        {
+            return DispatchValue(self, new DispatchValue(self.Id, self.Type, value, DateTime.Now));
+        }
+
+        public async Task DispatchValue(IDispatchable self, DispatchValue value)
         {
 
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
@@ -137,12 +143,12 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
         }
 
 
-        public object GetValue(Guid id)
+        public DispatchValue GetValue(Guid id)
         {
             return null;
         }
 
-        public object GetValue(DispatchableType type, Guid id)
+        public DispatchValue GetValue(DispatchableType type, Guid id)
         {
 
             lock (_lock)
@@ -156,23 +162,23 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             return null;
         }
 
-        public IDictionary<Guid, object> GetValues()
+        public IDictionary<Guid, DispatchValue> GetValues()
         {
             return null;
 
         }
 
-        public IDictionary<Guid, object> GetValues(DispatchableType type)
+        public IDictionary<Guid, DispatchValue> GetValues(DispatchableType type)
         {
             lock (_lock)
             {
                 if (NodeValues.ContainsKey(type))
                     return NodeValues[type];
             }
-            return new Dictionary<Guid, object>();
+            return new Dictionary<Guid, DispatchValue>();
         }
 
-        public async Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, object> callback)
+        public async Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, DispatchValue> callback)
         {
 
             _semaphore.WaitOne();
@@ -186,12 +192,12 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
 
                 if (!_registrationMap.ContainsKey(type))
                 {
-                    _registrationMap.Add(type, new ConcurrentDictionary<Guid, IList<Action<IDispatchable, object>>>());
+                    _registrationMap.Add(type, new ConcurrentDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>());
                 }
 
                 if (!_registrationMap[type].ContainsKey(id))
                 {
-                    _registrationMap[type].Add(id, new List<Action<IDispatchable, object>>());
+                    _registrationMap[type].Add(id, new List<Action<IDispatchable, DispatchValue>>());
                 }
 
                 _registrationMap[type][id].Add(callback);

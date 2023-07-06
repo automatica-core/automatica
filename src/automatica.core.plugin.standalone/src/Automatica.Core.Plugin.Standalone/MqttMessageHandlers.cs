@@ -13,7 +13,6 @@ using MQTTnet.Client;
 using MQTTnet.Server.Internal;
 using System;
 using System.Linq;
-using Automatica.Core.Plugin.Standalone.Dispatcher;
 using RemoteDispatchValue = Automatica.Core.Base.Remote.RemoteDispatchValue;
 
 namespace Automatica.Core.Plugin.Standalone
@@ -21,12 +20,14 @@ namespace Automatica.Core.Plugin.Standalone
     internal class MqttMessageHandlers : IMqttApplicationMessageReceivedHandler
     {
         private readonly MqttConnection _connection;
+        private readonly IServiceProvider _serviceProvider;
         public ILogger Logger { get; }
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
-        public MqttMessageHandlers(ILogger logger, MqttConnection connection)
+        public MqttMessageHandlers(ILogger logger, MqttConnection connection, IServiceProvider serviceProvider)
         {
             _connection = connection;
+            _serviceProvider = serviceProvider;
             Logger = logger;
         }
 
@@ -67,7 +68,7 @@ namespace Automatica.Core.Plugin.Standalone
                 var factory = _connection.Factories.First(a => a.DriverGuid == dto.This2NodeTemplate);
                 var context = new DriverContext(dto, factory, _connection.Dispatcher, _connection.NodeTemplateFactory,
                     new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(_connection),
-                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), false);
+                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), _serviceProvider, false);
 
              
 
