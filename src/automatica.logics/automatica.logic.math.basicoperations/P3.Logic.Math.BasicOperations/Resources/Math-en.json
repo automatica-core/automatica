@@ -1,0 +1,97 @@
+﻿{
+  "MATH": {
+    "NAME": "Math",
+    "ADD": {
+      "NAME": "Sum",
+      "DESCRIPTION": "Sums the input values and provides the value as output (O = I1 + I2 + I3 + I4)",
+      "INPUT": {
+        "DESCRIPTION": "Inputvalue"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Outputvalue"
+      }
+    },
+    "SUBTRACT": {
+      "NAME": "Subtraction",
+      "DESCRIPTION": "Subtracts a value from the given inputs (O = - I1 - I2)",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ausgangswert"
+      }
+    },
+    "DIVISION": {
+      "NAME": "Division",
+      "DESCRIPTION": "Divides the inputs (O = I1 / I2)",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ausgangswert"
+      }
+    },
+    "MULTIPLY": {
+      "NAME": "Multiplication",
+      "DESCRIPTION": "Multipliziert die Eingangswerte und gibt den Wert beim Ausgang aus (O = I1 * I2)",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ausgangswert"
+      }
+    },
+    "CEILING": {
+      "NAME": "Ceil",
+      "DESCRIPTION": "Runden den Eingangswert auf",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ausgangswert"
+      }
+    },
+    "FLOOR": {
+      "NAME": "Floor",
+      "DESCRIPTION": "Runden den Eingangswert ab",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ausgangswert"
+      }
+    },
+    "MODULO": {
+      "NAME": "Modulo",
+      "DESCRIPTION": "Gibt den Divisionrest von I1 / I2 (O = I1 % I2)",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      },
+      "OUTPUT1": {
+        "DESCRIPTION": "Ausgangswert als Gleitkommazahl"
+      },
+      "OUTPUT2": {
+        "DESCRIPTION": "Ausgangswert als Ganzzahl"
+      }
+    },
+    "RANDOM": {
+      "NAME": "Random",
+      "DESCRIPTION": "Generiert eine Zufallszahl",
+      "TRIGGER": {
+        "DESCRIPTION": "Sobald ein Wert auf diesen Eingang geschrieben wird, wird eine neue Zufallszahl generiert"
+      },
+      "DISABLED": {
+        "DESCRIPTION": "Sperrt den Trigger Eingang"
+      },
+      "MIN": {
+        "DESCRIPTION": "Minimaler Wert für Zufallszahl"
+      },
+      "MAX": {
+        "DESCRIPTION": "Maximaler Wert für Zufallszahl"
+      },
+      "OUTPUT": {
+        "DESCRIPTION": "Ausgangswert"
+      }
+    }
+  }
+}
