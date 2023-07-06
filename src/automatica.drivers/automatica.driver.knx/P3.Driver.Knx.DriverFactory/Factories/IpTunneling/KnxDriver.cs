@@ -55,7 +55,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return true;
         }
 
-        public override bool Init()
+        public override async Task<bool> Init(CancellationToken token = default)
         {
             var ipAddress = GetProperty("knx-ip").ValueString;
             var useNat = GetProperty("knx-use-nat").ValueBool;
@@ -113,10 +113,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             DriverContext.Logger.LogInformation($"Init done...");
 
-            return true;
+            return await base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _gwState?.SetGatewayState(false);
             StartConnection();
@@ -143,7 +143,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 DriverContext.Logger.LogError($"Could not start tunnel {e}");
             }
 
-            return await base.Start();
+            return await base.Start(token);
         }
 
         private void StartConnection()
@@ -151,7 +151,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             _tunneling?.Start();
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             lock (_lock)
             {
@@ -163,7 +163,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     _tunneling = null;
                 }
             }
-            return base.Stop();
+            return base.Stop(token);
         }
 
         internal void AddGroupAddress(string groupAddress, Action<KnxDatagram> callback)

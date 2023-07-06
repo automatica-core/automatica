@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace P3.Driver.Pixoo64
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             var ip = GetPropertyValueString("pixoo64-ip");
             int screenSize = 64;
@@ -44,10 +45,10 @@ namespace P3.Driver.Pixoo64
                 }
             }
 
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             DriverContext.Logger.LogInformation($"Starting pixoo64 main loop");
             _mainLoop = new PixooMainLoop(_pixoo64, DriverContext.Logger);
@@ -57,14 +58,14 @@ namespace P3.Driver.Pixoo64
             }
 
             await _mainLoop.Start();
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             DriverContext.Logger.LogInformation($"Stopping pixoo64 main loop");
             await _mainLoop.Stop();
-            return await base.Stop();
+            return await base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

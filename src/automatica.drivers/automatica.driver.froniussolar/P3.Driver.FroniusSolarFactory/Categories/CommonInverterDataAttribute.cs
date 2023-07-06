@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using FroniusSolarClient;
-using FroniusSolarClient.Entities.SolarAPI.V1;
 
 namespace P3.Driver.FroniusSolarFactory.Categories
 {
@@ -13,7 +12,7 @@ namespace P3.Driver.FroniusSolarFactory.Categories
         public CommonInverterDataAttribute(IDriverContext driverContext, SolarClient solarClient, FroniusDeviceAttribute device) : base(driverContext, solarClient, device)
         {
         }
-        public override async Task PollAttributes()
+        public override async Task PollAttributes(CancellationToken token = default)
         {
             await Task.CompletedTask;
             var commonInverterData = SolarClient.GetCommonInverterData(Device.DeviceId);

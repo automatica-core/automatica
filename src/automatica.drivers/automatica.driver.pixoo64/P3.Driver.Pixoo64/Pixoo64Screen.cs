@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -55,7 +56,7 @@ namespace P3.Driver.Pixoo64
 
         protected abstract T CreateScreen();
 
-        public sealed override bool Init()
+        public sealed override Task<bool> Init(CancellationToken token = default)
         {
             Screen = CreateScreen();
             BaseScreen = Screen;
@@ -68,7 +69,7 @@ namespace P3.Driver.Pixoo64
             Screen.DateTimeHourOffset = TimeZoneOffset;
 
 
-            return base.Init();
+            return base.Init(token);
         }
 
         

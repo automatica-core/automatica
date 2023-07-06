@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -14,16 +15,16 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         {
         }
 
-        public override Task<bool> EnableLearnMode()
+        public override Task<bool> EnableLearnMode(CancellationToken token = default)
         {
             DriverContext.Logger.LogDebug("Enable learn mode...");
-            return Parent.EnableLearnMode();
+            return Parent.EnableLearnMode(token);
         }
 
-        public override Task<bool> DisableLearnMode()
+        public override Task<bool> DisableLearnMode(CancellationToken token = default)
         {
             DriverContext.Logger.LogDebug("Disable learn mode...");
-            return Parent.DisableLearnMode();
+            return Parent.DisableLearnMode(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.Blockchain.Ticker.Driver.Bitcoin;
 using P3.Driver.Blockchain.Ticker.Driver.Cardano;
 using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
+using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Blockchain.Ticker.Driver
 {
@@ -22,7 +24,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             _logger = driverContext.Logger;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             var pollTime = GetPropertyValueInt("poll");
        
@@ -32,16 +34,16 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             _logger.LogInformation($"Start polling every {pollTime}s");
 
 
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _timer.Start();
 
-            await ReadValues();
+            await ReadValues(token);
 
-            return await base.Start();
+            return await base.Start(token);
         }
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -50,14 +52,14 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            await ReadValues();
+            await ReadValues(token);
 
             return true;
         }
 
-        private async Task ReadValues()
+        private async Task ReadValues(CancellationToken token = default)
         {
             _logger.LogDebug($"Poll values...");
 
@@ -67,11 +69,11 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             }
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

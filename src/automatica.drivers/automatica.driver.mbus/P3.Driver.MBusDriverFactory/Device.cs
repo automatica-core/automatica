@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
@@ -8,6 +9,7 @@ using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Frames;
 using P3.Driver.MBus.Frames.VariableData;
+using Timer = System.Timers.Timer;
 
 namespace P3.Driver.MBusDriverFactory
 {
@@ -32,7 +34,7 @@ namespace P3.Driver.MBusDriverFactory
             return true;
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             _pollTimer?.Start();
 
@@ -50,11 +52,11 @@ namespace P3.Driver.MBusDriverFactory
                 _pollTimer_Elapsed(null, null);
             }
 
-            return base.Start();
+            return base.Start(token);
            
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _pollTimer?.Stop();
             if (_pollTimer != null)
@@ -62,11 +64,11 @@ namespace P3.Driver.MBusDriverFactory
                 _pollTimer.Elapsed -= _pollTimer_Elapsed;
             }
 
-            return base.Stop();
+            return base.Stop(token);
         }
 
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             DeviceId = GetProperty("mbus-deviceId").ValueInt.Value;
             PollInterval = GetProperty("mbus-pollInterval").ValueInt.Value;
@@ -77,7 +79,7 @@ namespace P3.Driver.MBusDriverFactory
 
             _pollTimer.Elapsed += _pollTimer_Elapsed;
 
-            return true;
+            return base.Init(token);
         }
 
         private async void _pollTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -102,15 +104,15 @@ namespace P3.Driver.MBusDriverFactory
            
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            await ReadInternal();
+            await ReadInternal(token);
             return true;
         }
 
-        private async Task ReadInternal()
+        private async Task ReadInternal(CancellationToken token = default)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(2), token);
 
             _logger.LogInformation($"Read MBus device with id {DeviceId}");
 
@@ -154,7 +156,7 @@ namespace P3.Driver.MBusDriverFactory
 
         public int PollInterval { get; private set; }
 
-        public override async Task<IList<NodeInstance>> Scan()
+        public override async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             var attributes = new List<NodeInstance>();
             var frame = await _parent.ScanDevice(DeviceId, DeviceTimeout);

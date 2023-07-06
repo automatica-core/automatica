@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -18,9 +19,9 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         }
 
-        public override bool Init()
+        public override async Task<bool> Init(CancellationToken token = default)
         {
-            base.Init();
+            await base.Init(token);
 
             if (Parent is KnxLevelBase parentLevel)
             {
@@ -71,7 +72,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
             if (DriverContext.NodeInstance.IsReadable)
             {

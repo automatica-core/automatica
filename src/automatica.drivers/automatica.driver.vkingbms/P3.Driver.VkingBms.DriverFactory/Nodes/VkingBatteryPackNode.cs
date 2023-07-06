@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -34,7 +35,7 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             PackId = (byte)GetProperty("vking-pack-id").ValueInt!.Value;
             return base.Init();

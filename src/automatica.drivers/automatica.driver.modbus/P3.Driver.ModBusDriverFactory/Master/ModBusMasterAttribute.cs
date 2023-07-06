@@ -69,12 +69,12 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            return await ReadValue() != null;
+            return await ReadValue(token) != null;
         }
 
-        public async Task<object> ReadValue()
+        public async Task<object> ReadValue(CancellationToken token = default)
         {
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             try

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 using P3.Driver.EnOcean.DriverFactory.Templates;
 using P3.Driver.EnOcean.Serial;
+using System.Threading;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
@@ -26,13 +27,13 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             _enoceanFactory = enoceanFactory;
         }
 
-        public override Task<bool> EnableLearnMode()
+        public override Task<bool> EnableLearnMode(CancellationToken token = default)
         {
             _driver.StartTeachInMode();
             return Task.FromResult(true);
         }
 
-        public override Task<bool> DisableLearnMode()
+        public override Task<bool> DisableLearnMode(CancellationToken token = default)
         {
             _driver.StopTeachInMode();
             return Task.FromResult(true);
@@ -43,7 +44,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             return true;
         }
 
-        public override bool Init()
+        public override async Task<bool> Init(CancellationToken token = default)
         {
             if (DriverContext.IsTest)
             {
@@ -59,10 +60,10 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
             _driver = new P3.Driver.EnOcean.Driver(new SerialStream(port));
 
-            return base.Init();
+            return await base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             if (DriverContext.IsTest)
             {
@@ -78,7 +79,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             _driver.PacketSent += _driver_PacketSent;
             _driver.TeachInReceived += _driver_TeachInReceived;
 
-            return await base.Start();
+            return await base.Start(token);
         }
 
         private void _driver_TeachInReceived(object sender, PacketReceivedEventArgs e)
@@ -144,7 +145,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             if(_driver != null) 
             {
@@ -153,7 +154,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 _driver.AnswerReceived -= _driver_AnswerReceived;
                 _driver.PacketSent -= _driver_PacketSent;
             }
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

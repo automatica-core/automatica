@@ -25,7 +25,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             return telegram;
         }
 
-        private EnOceanDriver CreateDriverForD5(string serial, Guid dataFieldGuid)
+        private async Task<EnOceanDriver> CreateDriverForD5(string serial, Guid dataFieldGuid)
         {
             var driverNode = CreateNodeInstance(EnOceanDriverFactory.DriverGuidId);
 
@@ -45,7 +45,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             var df = CreateNodeInstance(dataFieldGuid);
             singleInput.InverseThis2ParentNodeInstanceNavigation.Add(df);
 
-            var driver = CreateDriver<EnOceanDriver>(driverNode);
+            var driver = await CreateDriver<EnOceanDriver>(driverNode);
 
             return driver;
         }
@@ -54,7 +54,7 @@ namespace P3.Driver.EnOcean.Data.Tests
         public async Task TestCoBit()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_CO_Guid);
+            var driver = await CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_CO_Guid);
 
             var telegram = CreatePacket("55000707017AD509019DC2E80001FFFFFFFF5E0011");
             driver.TelegramReceived(telegram);
@@ -64,14 +64,14 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.True((bool)values.First().Value);
+            Assert.True((bool)values.First().Value.Value);
 
         }
         [Fact]
         public async Task TestLrnBit_False()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_LRN_Guid);
+            var driver = await CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_LRN_Guid);
 
             var telegram = CreatePacket("55000707017AD509019DC2E80001FFFFFFFF5E0011");
             driver.TelegramReceived(telegram);
@@ -81,14 +81,14 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.False((bool)values.First().Value);
+            Assert.False((bool)values.First().Value.Value);
 
         }
         [Fact]
         public async Task TestLrnBit_True()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_LRN_Guid);
+            var driver = await CreateDriverForD5("019DC2E8", EnOceanRorgD5Data.DataFieldD5_00_01_1_LRN_Guid);
 
             var telegram = CreatePacket("55000707017AD510019DC2E80001FFFFFFFF5E0011");
             driver.TelegramReceived(telegram);
@@ -98,7 +98,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.True((bool)values.First().Value);
+            Assert.True((bool)values.First().Value.Value);
 
         }
     }

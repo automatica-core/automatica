@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -76,7 +77,7 @@ namespace P3.Driver.HomeKitFactory
 
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _ltpkProperty = GetProperty("ltpk-private");
             _ltskProperty = GetProperty("ltsk-private");
@@ -115,10 +116,10 @@ namespace P3.Driver.HomeKitFactory
 
             await _server.Start();
 
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override Task<IList<NodeInstance>> CustomAction(string actionName)
+        public override Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
         {
             if (actionName == HomeKitFactory.ClearPairingsKey)
             {
@@ -127,7 +128,7 @@ namespace P3.Driver.HomeKitFactory
                 DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, null); //save to database
                 DriverContext.Logger.LogInformation($"Clear pairings...done");
             }
-            return base.CustomAction(actionName);
+            return base.CustomAction(actionName, token);
         }
 
         private void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
@@ -157,7 +158,7 @@ namespace P3.Driver.HomeKitFactory
             DriverContext.Logger.LogInformation($"Saving LTSK {e.Ltsk} and LTPK {e.Ltpk} to database...done");
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             if (_server != null)
             {

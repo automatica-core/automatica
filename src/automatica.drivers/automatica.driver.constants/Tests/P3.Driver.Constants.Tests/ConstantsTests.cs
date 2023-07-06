@@ -8,7 +8,7 @@ namespace P3.Driver.Constants.Tests
     public class ConstantsTests : DriverFactoryTestBase<ConstantsDriverFactory>
     {
         [Fact]
-        public void Test_ConstantsValue()
+        public async void Test_ConstantsValue()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.ValueId);
@@ -19,7 +19,7 @@ namespace P3.Driver.Constants.Tests
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);
@@ -31,14 +31,14 @@ namespace P3.Driver.Constants.Tests
         }
 
         [Fact]
-        public void Test_ConstantPi()
+        public async void Test_ConstantPi()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.PiId);
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);
@@ -50,14 +50,14 @@ namespace P3.Driver.Constants.Tests
         }
 
         [Fact]
-        public void Test_ConstantHalfPi()
+        public async void Test_ConstantHalfPi()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.HalfPiId);
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);
@@ -69,14 +69,14 @@ namespace P3.Driver.Constants.Tests
         }
 
         [Fact]
-        public void Test_ConstantDoublePi()
+        public async void Test_ConstantDoublePi()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.DoublePiId);
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);
@@ -88,7 +88,7 @@ namespace P3.Driver.Constants.Tests
         }
 
         [Fact]
-        public void Test_ConstantString()
+        public async void Test_ConstantString()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.StringValueId);
@@ -99,7 +99,7 @@ namespace P3.Driver.Constants.Tests
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);
@@ -113,14 +113,14 @@ namespace P3.Driver.Constants.Tests
 
 
         [Fact]
-        public void Test_ConstantTrue()
+        public async void Test_ConstantTrue()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.TrueId);
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);
@@ -132,14 +132,14 @@ namespace P3.Driver.Constants.Tests
         }
 
         [Fact]
-        public void Test_ConstantFalse()
+        public async void Test_ConstantFalse()
         {
             var constantsRoot = CreateNodeInstance(ConstantsDriverFactory.BusId);
             var valueId = CreateNodeInstance(ConstantsDriverFactory.FalseId);
 
             constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
 
-            var driver = CreateDriver(constantsRoot);
+            var driver = await CreateDriver(constantsRoot);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Constant>(driver.Children[0]);

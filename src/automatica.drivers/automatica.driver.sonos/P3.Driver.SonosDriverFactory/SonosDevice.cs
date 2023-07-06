@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -30,16 +31,16 @@ namespace P3.Driver.SonosDriverFactory
             return true;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             _id = DriverContext.NodeInstance.GetPropertyValueString(SonosDriverFactory.IdAddressPropertyKey);
             
             _ip = DriverContext.NodeInstance.GetPropertyValueString(SonosDriverFactory.IpAddressPropertyKey);
             _useFixedIp = DriverContext.NodeInstance.GetProperty(SonosDriverFactory.UseFixedIpAddressPropertyKey).ValueBool;
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             var ip = String.Empty;
             if (_useFixedIp.HasValue && _useFixedIp.Value)
@@ -68,13 +69,13 @@ namespace P3.Driver.SonosDriverFactory
             }
 
             _controller = _sonosControllerFactory.Create(ip, DriverContext.Logger);
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             await _controller.StopAsync();
-            return await base.Stop();
+            return await base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

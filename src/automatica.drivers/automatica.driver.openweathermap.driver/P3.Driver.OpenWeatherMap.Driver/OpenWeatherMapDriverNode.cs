@@ -1,6 +1,7 @@
 ﻿using Automatica.Core.Driver;
 using OpenWeatherMap;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace P3.Driver.OpenWeatherMap.DriverFactory
@@ -19,9 +20,9 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             return _valueFunc.Invoke(weatherResponse);
         }
 
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
-            return Parent.Read();
+            return Parent.Read(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

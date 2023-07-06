@@ -49,7 +49,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             return true;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             PollInterval = GetPropertyValueInt("solarman-poll-interval"); 
             DeviceId = (byte)GetPropertyValueInt("solarman-device-id");
@@ -62,7 +62,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
             _pollTimer.Interval = PollInterval;
 
-            return base.Init();
+            return base.Init(token);
         }
 
         private void Open()
@@ -82,12 +82,12 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             return _driver?.Stop();
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             Open();
 
@@ -101,10 +101,10 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
             PollAll().ConfigureAwait(false);
 
-            return base.Start();
+            return base.Start(token);
         }
 
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
             PollAll().ConfigureAwait(false);
 

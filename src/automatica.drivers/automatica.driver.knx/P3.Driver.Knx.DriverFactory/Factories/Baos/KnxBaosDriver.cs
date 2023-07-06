@@ -6,6 +6,7 @@ using P3.Knx.Core.Baos.Driver;
 using P3.Knx.Core.Baos.Driver.Data;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.Baos
@@ -21,25 +22,21 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
         {
             _driver = new BaosDriver("/dev/ttyAMA0", DriverContext.Logger, this);
         }
+        
 
-        public override bool Init()
-        {
-            return base.Init();
-        }
-
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             if(await _driver.Start())
             {
-                return await base.Start();
+                return await base.Start(token);
             }
             return false;
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             var ret = await _driver.Stop();
-            await base.Stop();
+            await base.Stop(token);
 
             return ret;
         }

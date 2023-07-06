@@ -39,7 +39,7 @@ namespace P3.Driver.MBusDriverFactory
             return true;
         }
 
-        public override bool Init()
+        public override async Task<bool> Init(CancellationToken token = default)
         {
             if (_connectionType == MBusType.Serial)
             {
@@ -58,7 +58,8 @@ namespace P3.Driver.MBusDriverFactory
                 _connection = new MBusUdp(config, TelegramMonitor, _logger);
 
             }
-            return true;
+
+            return await base.Init(token);
         }
 
         public async Task<MBusFrame> ScanDevice(int deviceId, int deviceTimeout)

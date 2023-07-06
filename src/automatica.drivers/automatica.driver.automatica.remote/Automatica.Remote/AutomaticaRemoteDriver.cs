@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -32,16 +33,16 @@ namespace P3.Driver.Automatica.Remote
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             var ipProp = GetProperty("automatica.remote.ip");
             RemoteIpAddress = IPAddress.Parse(ipProp.ValueString);
 
             RemotePort = GetPropertyValueInt("automatica.remote.port");
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             var connectionBuilder = new Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
             _hubConnection = connectionBuilder.WithUrl($"http://{RemoteIpAddress}:{RemotePort}/signalr/dataHub").Build();
@@ -56,7 +57,7 @@ namespace P3.Driver.Automatica.Remote
                 }
             });
 
-            return base.Start();
+            return base.Start(token);
         }
 
         public override Task WriteValue(IDispatchable source, object value)
@@ -86,7 +87,7 @@ namespace P3.Driver.Automatica.Remote
             return node;
         }
 
-        public override async Task OnSave(NodeInstance instance)
+        public override async Task OnSave(NodeInstance instance, CancellationToken token = default)
         {
             var json = JsonConvert.SerializeObject(instance.InverseThis2ParentNodeInstanceNavigation);
             var post = await Client.PostAsync($"http://{RemoteIpAddress}:{RemotePort}/webapi/nodeInstances",
@@ -98,7 +99,7 @@ namespace P3.Driver.Automatica.Remote
             }
         }
 
-        public override async Task OnReinit()
+        public override async Task OnReInit(CancellationToken token = default)
         {
             var reload = await Client.GetAsync($"http://{RemoteIpAddress}:{RemotePort}/webapi/server");
 
@@ -108,7 +109,7 @@ namespace P3.Driver.Automatica.Remote
             }
         }
 
-        public override async Task<IList<NodeInstance>> Scan()
+        public override async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             var nodeString = await Client.GetStringAsync($"http://{RemoteIpAddress}:{RemotePort}/webapi/nodeInstances");
             

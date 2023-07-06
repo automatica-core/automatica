@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -23,9 +24,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
             _ethNode = bitcoinNode;
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            await _ethNode.Refresh();
+            await _ethNode.Refresh(token);
 
             return true;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,7 @@ namespace P3.Driver.PingFactory
             _buffer = Encoding.ASCII.GetBytes(data);
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             _ip = GetPropertyValueString("ip");
             _interval = GetPropertyValueInt("interval");
@@ -45,10 +46,10 @@ namespace P3.Driver.PingFactory
                 DoPing();
             }
 
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             if (_interval >= 0)
             {
@@ -65,7 +66,7 @@ namespace P3.Driver.PingFactory
                 }, null, interval, interval);
             }
 
-            return base.Start();
+            return base.Start(token);
         }
 
         private void DoPing()
@@ -128,10 +129,10 @@ namespace P3.Driver.PingFactory
             }
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _timer?.Dispose();
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

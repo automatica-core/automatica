@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using P3.Knx.Core.Abstractions;
+using System.Threading;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
@@ -37,7 +38,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
-        public override async Task<IList<NodeInstance>> Import(string fileName)
+        public override async Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
         {
             //if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeauterName))
             //{

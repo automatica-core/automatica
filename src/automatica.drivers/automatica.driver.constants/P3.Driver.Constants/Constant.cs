@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
+using Timer = System.Timers.Timer;
 
 [assembly: InternalsVisibleTo("P3.Driver.Constants.Tests")]
 
@@ -23,7 +25,7 @@ namespace P3.Driver.Constants
 
         public object Value => _value;
 
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
             DispatchValue(_value);
             return Task.FromResult(true);
@@ -39,7 +41,7 @@ namespace P3.Driver.Constants
             }
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             if (DriverContext.NodeInstance.This2NodeTemplateNavigation.Key == "const_pi")
             {
@@ -71,11 +73,11 @@ namespace P3.Driver.Constants
                 var prop = GetPropertyValueInt("const_value"); // get the value property
                 _value = Convert.ToDouble(prop);
             }
-            return base.Init();
+            return base.Init(token);
         }
 
         // only called once
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             _dispatchTimer.Start();
             _dispatchTimer.Elapsed += _dispatchTimer_Elapsed;
@@ -83,17 +85,17 @@ namespace P3.Driver.Constants
             // initially dispatch the value on start
             DispatchValue(_value);
 
-            return base.Start();
+            return base.Start(token);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _dispatchTimer.Elapsed -= _dispatchTimer_Elapsed;
             _dispatchTimer.Stop();
 
             _dispatchTimer.Dispose();
 
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

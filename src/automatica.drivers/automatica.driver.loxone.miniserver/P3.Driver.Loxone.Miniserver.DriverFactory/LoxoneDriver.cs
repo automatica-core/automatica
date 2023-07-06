@@ -7,6 +7,7 @@ using P3.Driver.Loxone.Miniserver.Driver.Data.Message;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace P3.Driver.Loxone.Miniserver.DriverFactory
@@ -26,13 +27,13 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             _miniserver = new LoxoneMiniserverConnection(GetPropertyValueString("ip-address"), GetPropertyValueInt("port"), GetPropertyValueString("user"), GetPropertyValueString("password"), DriverContext.Logger);
             _miniserver.OnConnectionEstablished += _miniserver_OnConnectionEstablished;
             _miniserver.OnConnectionClosed += _miniserver_OnConnectionClosed;
             _miniserver.OnMessage += _miniserver_OnMessage;
-            return base.Init();
+            return base.Init(token);
         }
 
         public async Task<bool> WriteValue(string uuid, object value)
@@ -70,13 +71,13 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
             }
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _miniserver.Close();
-            return base.Stop();
+            return base.Stop(token);
         }
 
-        public override async Task<IList<NodeInstance>> Scan()
+        public override async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             var ret = new List<NodeInstance>();
 
@@ -162,14 +163,14 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
             _connectionNode?.StateChanged(_connected);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _connected = await _miniserver.Connect();
             _connectionNode?.StateChanged(_connected);
 
             if(_connected)
             {
-                return await base.Start();
+                return await base.Start(token);
             }
             return false;
         }

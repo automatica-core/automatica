@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using FroniusSolarClient;
@@ -31,6 +32,6 @@ namespace P3.Driver.FroniusSolarFactory
             return valueAttribute;
         }
 
-        public abstract Task PollAttributes();
+        public abstract Task PollAttributes(CancellationToken token = default);
     }
 }

@@ -33,7 +33,7 @@ namespace P3.Driver.FroniusSolarFactory
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             PollInterval = GetPropertyValueInt("fronius-poll-interval");
             DeviceId = (byte)GetPropertyValueInt("fronius-device-id");
@@ -48,18 +48,18 @@ namespace P3.Driver.FroniusSolarFactory
 
                 if (!IPAddress.TryParse(ip, out var ipAddress))
                 {
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 _client = new(ipAddress.ToString(), 1, DriverContext.Logger);
             }
 
-            return base.Init();
+            return base.Init(token);
         }
 
         public bool IsDisabled { get; set; }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             if (!IsDisabled)
             {
@@ -74,7 +74,7 @@ namespace P3.Driver.FroniusSolarFactory
                 PollAll().ConfigureAwait(false);
             }
 
-            return base.Start();
+            return base.Start(token);
         }
 
         private async Task PollAll()

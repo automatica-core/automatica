@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -20,7 +21,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
             _value = device.LightControl[0].Dimmer;
             DispatchValue(_value);
         }
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
             DispatchValue(_value);
 

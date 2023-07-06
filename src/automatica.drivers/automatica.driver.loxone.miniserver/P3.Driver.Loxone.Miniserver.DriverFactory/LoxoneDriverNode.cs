@@ -1,6 +1,7 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace P3.Driver.Loxone.Miniserver.DriverFactory
@@ -29,14 +30,9 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
         {
             await driver.WriteValue(_uuid, value);
         }
+        
 
-        public override bool Init()
-        {
-         
-            return base.Init();
-        }
-
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             _uuid = GetPropertyValueString("uuid");
             var state = GetPropertyValueString("state");
@@ -55,7 +51,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
             {
                 return Task.FromResult(false);
             }
-            return base.Start();
+            return base.Start(token);
         }
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

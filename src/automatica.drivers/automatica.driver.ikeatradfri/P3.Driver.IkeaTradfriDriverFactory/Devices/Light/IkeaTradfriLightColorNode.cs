@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -20,7 +21,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
             DispatchValue(_value);
         }
 
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
             DispatchValue(_value);
 

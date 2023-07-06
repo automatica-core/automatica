@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -25,9 +26,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _map = map;
             _groupMap = groupMap;
         }
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
-            _parent.Read().ConfigureAwait(false);
+            _parent.Read(token).ConfigureAwait(false);
             return Task.FromResult(true);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using P3.Driver.IkeaTradfri;
 using P3.Driver.IkeaTradfriDriverFactory.Devices;
@@ -12,8 +13,8 @@ namespace P3.Driver.IkeaTradfriDriverFactory
     {
         IIkeaTradfriDriver Driver { get; set; }
 
-        Task<bool> Start();
-        Task<bool> Stop();
+        Task<bool> Start(CancellationToken token = default);
+        Task<bool> Stop(CancellationToken token = default);
 
         List<IkeaTradfriAttribute> Devices { get; }
     }

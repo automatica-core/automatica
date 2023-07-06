@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
+using Timer = System.Timers.Timer;
 
 
 namespace P3.Driver.SonosDriverFactory
@@ -69,20 +71,20 @@ namespace P3.Driver.SonosDriverFactory
             }
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
            await ReadValue();
 
             _readTimer.Start();
 
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _readTimer.Elapsed += ReadTimerOnElapsed;
             _readTimer.Stop();
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

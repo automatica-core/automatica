@@ -51,7 +51,7 @@ namespace P3.Driver.PingTests
 
             root.InverseThis2ParentNodeInstanceNavigation.Add(pingDevice);
 
-            var driver = CreateDriver(root);
+            var driver = await CreateDriver(root);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<PingDevice>(driver.Children[0]);

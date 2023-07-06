@@ -1,6 +1,8 @@
 ﻿using Automatica.Core.Driver;
 using System.Collections.Generic;
 using P3.Knx.Core.Abstractions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
@@ -31,10 +33,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             _children.Add(b);
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             Address = GetPropertyValueInt("knx-address");
-            return base.Init();
+            return base.Init(token);
         }
     }
 }

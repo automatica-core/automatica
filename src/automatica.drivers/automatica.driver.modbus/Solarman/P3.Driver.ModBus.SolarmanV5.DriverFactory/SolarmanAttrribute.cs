@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
@@ -15,15 +16,15 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _parent = parent;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             Offset = GetPropertyValueInt("offset");
             Scale = GetPropertyValueDouble("scale");
             IsSigned = GetProperty("signed").ValueBool.Value;
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
             _parent.Read().ConfigureAwait(false);
             return Task.FromResult(true);

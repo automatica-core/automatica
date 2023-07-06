@@ -33,7 +33,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             return true;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             if (_isTcp)
             {
@@ -68,19 +68,19 @@ namespace P3.Driver.ModBusDriverFactory.Master
                     Timeout = 5000
                 }, TelegramMonitor);
             }
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             _modBusDriver.Open();
-            return base.Start();
+            return base.Start(token);
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             await _modBusDriver.Stop();
-            return await base.Stop();
+            return await base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

@@ -12,11 +12,7 @@ namespace P3.Driver.HueBridgeSimulator.DriverFactory
         {
             Driver = driver;
         }
-
-        public override bool Init()
-        {
-            return base.Init();
-        }
+        
 
         public virtual void SwitchLight(HueSwitchLightEventArgs eventArgs)
         {

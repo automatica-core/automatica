@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -32,7 +33,7 @@ namespace P3.Driver.ModBusDriverFactory.Slave
             return true;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             if (_isTcp)
             {
@@ -57,11 +58,11 @@ namespace P3.Driver.ModBusDriverFactory.Slave
             {
                 throw new NotImplementedException();
             }
-            return base.Init();
+            return base.Init(token);
         }
 
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             if (_modBusDriver != null)
             {
@@ -73,13 +74,13 @@ namespace P3.Driver.ModBusDriverFactory.Slave
                 DriverContext.Logger.LogInformation($"Something went wrong starting the modbus tcp slave...");
             }
 
-            return base.Start();
+            return base.Start(token);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _modBusDriver?.Close();
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
