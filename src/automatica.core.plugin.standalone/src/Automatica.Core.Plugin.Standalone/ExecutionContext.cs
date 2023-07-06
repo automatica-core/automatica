@@ -42,6 +42,10 @@ namespace Automatica.Core.Plugin.Standalone
             serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
             serviceCollection.AddSingleton<INodeTemplateFactory, RemoteNodeTemplatesFactory>();
             serviceCollection.AddSingleton<ITunnelingProvider, RemoteTunnelingProvider>();
+            serviceCollection.AddTransient<Func<IDriverContext, ITunnelingProvider>>(provider =>
+            {
+                return driverContext => provider.GetRequiredService<ITunnelingProvider>();
+            });
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
