@@ -45,7 +45,7 @@ namespace P3.Driver.Times.DriverFactory.Sun
             return base.WriteValue(source, value);
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             DispatchSolarValue();
 
@@ -54,16 +54,16 @@ namespace P3.Driver.Times.DriverFactory.Sun
                 _tickTimer = new Timer(TimerTick, this, 1000, 1000);
              
             }
-            return base.Start();
+            return base.Start(token);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             if (!DriverContext.IsTest)
             {
                 _tickTimer.Dispose();
             }
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
