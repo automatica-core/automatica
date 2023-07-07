@@ -26,6 +26,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
         private string _currentDomainName;
 
         private bool _isRunning;
+        private bool _isEnabled;
 
         public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ISettingsCache settingsCache, ILogger<RemoteConnectService> logger)
         {
@@ -119,6 +120,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 if (remoteEnabled != null && (bool)remoteEnabled.Value)
                 {
                     _logger.LogInformation($"RemoteControl is enabled....");
+                    _isEnabled = true;
                 }
                 else
                 {
@@ -166,12 +168,13 @@ namespace Automatica.Core.Runtime.RemoteConnect
             catch (Exception e)
             {
                 _logger.LogError(e, "Something went wrong init frp services....");
+                _isEnabled = false;
             }
         }
 
-            public Task<bool> IsRunning(CancellationToken token)
+        public Task<bool> IsRunning(CancellationToken token)
         {
-            return Task.FromResult(false);
+            return Task.FromResult(_isEnabled);
         }
     }
 }
