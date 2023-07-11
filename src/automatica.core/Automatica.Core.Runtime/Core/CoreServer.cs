@@ -257,6 +257,18 @@ namespace Automatica.Core.Runtime.Core
 
             await Configure();
 
+            if (_remoteConnectService != null)
+            {
+                try
+                {
+                    await _remoteConnectService.StartAsync(default);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error starting RemoteControl {e}");
+                }
+            }
+
             RunState = RunState.Starting;
 
             await StartLogicEngine();
@@ -276,17 +288,7 @@ namespace Automatica.Core.Runtime.Core
             _logger.LogInformation("Starting recorders...done");
             RunState = RunState.Started;
 
-            if (_remoteConnectService != null)
-            {
-                try
-                {
-                    await _remoteConnectService.StartAsync(default);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Error starting RemoteControl {e}");
-                }
-            }
+           
         }
 
         private async Task StartLogics()
