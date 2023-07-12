@@ -609,7 +609,15 @@ namespace Automatica.Core.Runtime.Core
             }
             _configuredDrivers = 0;
 
-         
+            try
+            {
+                await _remoteConnectService.InitAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error initialize RemoteControl service {e}");
+            }
+
             var root = _nodeInstanceCache.Root;
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstancesStore.Add(root.ObjId, root);
@@ -665,15 +673,6 @@ namespace Automatica.Core.Runtime.Core
 
 
             _logger.LogInformation($"Loading recording data-points (found {recordingDataPointCount})...done");
-
-            try
-            {
-                await _remoteConnectService.InitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error initialize RemoteControl service {e}");
-            }
         }
         
       
