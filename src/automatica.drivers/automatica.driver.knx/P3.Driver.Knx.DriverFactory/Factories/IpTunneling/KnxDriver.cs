@@ -126,7 +126,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     DriverContext.LicenseContract.IsFeatureLicensed("knx-interface-remote-connection");
                 if (remoteFeatureEnabled && _tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
                 {
-                    var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Tcp, "knx", $"{_remoteIp}", _remotePort,
+                    var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Udp, "knx", $"{_remoteIp}", _remotePort,
                         token);
 
                     DriverContext.Logger.LogInformation($"Tunnel created {tunnel}");
