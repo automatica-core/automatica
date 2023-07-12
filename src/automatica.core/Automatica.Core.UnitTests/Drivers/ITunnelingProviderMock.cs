@@ -16,5 +16,11 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         {
             return Task.FromResult("");
         }
+
+        public Task<string> CreateWebTunnelAsync(TunnelingProtocol protocol, string name, string subDomain, string localIp, int localPort, string? basicUser, string? basicPassword,
+            CancellationToken token)
+        {
+            return Task.FromResult("");
+        }
     }
 }

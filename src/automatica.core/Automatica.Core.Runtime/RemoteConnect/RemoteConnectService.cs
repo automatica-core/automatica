@@ -28,6 +28,8 @@ namespace Automatica.Core.Runtime.RemoteConnect
         private bool _isRunning;
         private bool _isEnabled;
 
+        private int _activatedServices;
+
         public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ISettingsCache settingsCache, ILogger<RemoteConnectService> logger)
         {
             _config = config;
@@ -69,6 +71,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 await _frpService.StartAsync(cancellationToken);
                 
                 _isRunning = true;
+                _activatedServices++;
 
             }
             catch (Exception e)
@@ -79,12 +82,17 @@ namespace Automatica.Core.Runtime.RemoteConnect
             _logger.LogInformation($"Bind RemoteControl to address http://localhost:{ServerInfo.WebPort}");
         }
 
-        public async Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, Guid driverGuid,
+        public async Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, Guid driverGuid, 
             CancellationToken token)
         {
             if (_isRunning)
             {
                 throw new ArgumentException($"Cannot establish a new tunnel while already running...");
+            }
+
+            if (_activatedServices >= _licenseContext.MaxRemoteTunnels)
+            {
+                throw new ArgumentException($"Cannot establish another tunnel. Max remote tunnels limit reached...");
             }
 
             var remotePortResponse = await _cloudApi.GetRemoteConnectPort(driverGuid, name, protocol);
@@ -94,9 +102,51 @@ namespace Automatica.Core.Runtime.RemoteConnect
             }
             var remotePort = remotePortResponse.Port;
 
-            await FrpcHelper.CreateServiceFileFromTemplate(protocol, name, localIp, localPort, remotePort, token);
+            if (protocol is TunnelingProtocol.Tcp || protocol is TunnelingProtocol.Udp)
+            {
+                await FrpcHelper.CreateTransportServiceFileFromTemplate(protocol, name, localIp, localPort, remotePort,
+                    token);
+            }
+            else
+            {
+                throw new ArgumentException("Only Udp and Tcp are allowed!");
+            }
+
+            _activatedServices++;
 
             return _currentDomainName;
+        }
+
+        public async Task<string> CreateWebTunnelAsync(TunnelingProtocol protocol, string name, string subDomain, string localIp, int localPort,
+            Guid driverGuid, string basicUser, string basicPassword, CancellationToken token = default)
+        {
+            if (_isRunning)
+            {
+                throw new ArgumentException($"Cannot establish a new tunnel while already running...");
+            }
+
+            if (_activatedServices >= _licenseContext.MaxRemoteTunnels)
+            {
+                throw new ArgumentException($"Cannot establish another tunnel. Max remote tunnels limit reached...");
+            }
+
+            if (protocol is TunnelingProtocol.Tcp || protocol is TunnelingProtocol.Udp)
+            {
+                throw new ArgumentException("Only Http and Https are supported!");
+            }
+
+            var response = await _cloudApi.CreateRemoteConnectUrl(driverGuid, subDomain);
+
+            if (response == null)
+            {
+                _logger.LogError($"Could not create target domain {subDomain}");
+                throw new ArgumentException($"Could not create target domain { subDomain }");
+            }
+
+            await FrpcHelper.CreateApplicationServiceFileFromTemplate(protocol, name, localIp, localPort, subDomain,
+                basicUser, basicPassword,
+                token);
+            return response.TunnelUrl;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
@@ -162,7 +212,6 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Could not initialize RemoteControl service ....{e}");
-                    return;
                 }
             }
             catch (Exception e)

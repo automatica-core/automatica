@@ -54,15 +54,15 @@ namespace P3.Knx.Core.Console
 
             KnxHelper.Logger = new ConsoleLogger();//NullLogger.Instance;
 
-            var connection = new KnxConnectionTunnelingSecure(new KnxEvents(), IPAddress.Parse("192.168.8.151"), 3671,
-                IPAddress.Parse(NetworkHelper.GetActiveIp()), "F,;A@B%w", "MWvpeP6?");
-           // var connection = new KnxConnectionTunneling(new KnxEvents(), IPAddress.Parse("192.168.8.3"), 3671, IPAddress.Parse(NetworkHelper.GetActiveIp()));
-            connection.UseNat = false;
+           // var connection = new KnxConnectionTunnelingSecure(new KnxEvents(), IPAddress.Parse("192.168.8.151"), 3671,
+             //   IPAddress.Parse(NetworkHelper.GetActiveIp()), "F,;A@B%w", "MWvpeP6?");
+            var connection = new KnxConnectionTunneling(new KnxEvents(), IPAddress.Parse("137.116.195.45"), 1026, IPAddress.Parse(NetworkHelper.GetActiveIp()));
+            connection.UseNat = true;
 
-            connection.IpSecureErrorOccured += (sender, eventArgs) =>
-            {
-                System.Console.WriteLine($"{eventArgs.ErrorType}: {eventArgs.Text}");
-            };
+            //connection.IpSecureErrorOccured += (sender, eventArgs) =>
+            //{
+            //    System.Console.WriteLine($"{eventArgs.ErrorType}: {eventArgs.Text}");
+            //};
 
             connection.Start();
             while (true)

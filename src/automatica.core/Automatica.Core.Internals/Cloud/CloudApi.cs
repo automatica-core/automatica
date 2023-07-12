@@ -129,13 +129,30 @@ namespace Automatica.Core.Internals.Cloud
             }
         }
 
-        public async Task<RemoteConnectPortResponse> GetRemoteConnectPort(Guid driverGuid, string serviceName, TunnelingProtocol tunnelingProtocol)
+        public async Task<RemoteConnectObject> CreateRemoteConnectUrl(Guid pluginGuid, string subDomain)
+        {
+            try
+            {
+                var remoteConnectObj = new CreateRemoteConnectObject
+                {
+                    TargetSubDomain = subDomain
+                };
+                return await PostRequest<RemoteConnectObject>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/createRemoteConnect/{pluginGuid}", remoteConnectObj);
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                return null;
+            }
+        }
+
+        public async Task<RemoteConnectPortResponse> GetRemoteConnectPort(Guid pluginGuid, string serviceName, TunnelingProtocol tunnelingProtocol)
         {
             try
             {
                 var remoteConnectObj = new CreateRemoteConnectPortObject
                 {
-                    DriverId = driverGuid,
+                    DriverId = pluginGuid,
                     ServiceName = serviceName,
                     TunnelingProtocol =  tunnelingProtocol.ToString().ToLowerInvariant()
                 };

@@ -10,8 +10,9 @@ namespace Automatica.Core.Runtime.RemoteConnect
     {
         Task InitAsync();
         Task<bool> IsRunning(CancellationToken token);
-        
+
         Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, Guid driverGuid, CancellationToken token);
-     
+        Task<string> CreateWebTunnelAsync(TunnelingProtocol protocol, string name, string subDomain, string localIp, int localPort, Guid driverGuid, string? basicUser, string? basicPassword, CancellationToken token);
+
     }
 }

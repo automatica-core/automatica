@@ -28,6 +28,7 @@ namespace Automatica.Core.Internals.License
         public int MaxUsers { get; private set; }
 
         public bool AllowRemoteControl { get; private set; } = false;
+        public int MaxRemoteTunnels { get; private set; }
 
 
         public bool DriverLicenseCountExceeded()
@@ -93,13 +94,27 @@ namespace Automatica.Core.Internals.License
             {
                 MaxDataPoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
                 MaxUsers = Convert.ToInt32(_license.ProductFeatures.Get("MaxUsers"));
-                if(_license.ProductFeatures.Contains("AllowRemoteControl"))
+                if (_license.ProductFeatures.Contains("AllowRemoteControl"))
+                {
                     AllowRemoteControl = Convert.ToBoolean(_license.ProductFeatures.Get("AllowRemoteControl"));
+                }
+
+                if (_license.ProductFeatures.Contains("MaxRemoteTunnels"))
+                {
+                    MaxRemoteTunnels = Convert.ToInt32(_license.ProductFeatures.Get("MaxRemoteTunnels"));
+                }
+
+                if (!AllowRemoteControl)
+                {
+                    MaxRemoteTunnels = 0;
+                }
             }
             else
             {
                 MaxDataPoints = 100;
                 MaxUsers = 5;
+                MaxRemoteTunnels = 0;
+                AllowRemoteControl = false;
             }
             return IsLicensed;
 

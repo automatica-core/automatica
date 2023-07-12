@@ -22,7 +22,9 @@ namespace Automatica.Core.Internals.Cloud
         Task<bool> SayHelloToCloud(SayHelloData sayHi);
 
         Task<RemoteConnectObject> CreateRemoteConnectUrl(string url);
-        Task<RemoteConnectPortResponse> GetRemoteConnectPort(Guid driverGuid, string serviceName, TunnelingProtocol tunnelingProtocol);
+
+        Task<RemoteConnectObject> CreateRemoteConnectUrl(Guid pluginGuid, string url);
+        Task<RemoteConnectPortResponse> GetRemoteConnectPort(Guid pluginGuid, string serviceName, TunnelingProtocol tunnelingProtocol);
         Task<bool> SendRemoteConnectUrl(string url);
 
 

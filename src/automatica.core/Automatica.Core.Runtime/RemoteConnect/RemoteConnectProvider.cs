@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Tunneling;
-using Automatica.Core.Common.Update;
 using Automatica.Core.Driver;
 
 namespace Automatica.Core.Runtime.RemoteConnect
@@ -26,6 +25,12 @@ namespace Automatica.Core.Runtime.RemoteConnect
             CancellationToken token)
         {
             return _tunnelingService.CreateTunnelAsync(protocol, name, address, targetPort, _driverContext.Factory.DriverGuid, token);
+        }
+
+        public Task<string> CreateWebTunnelAsync(TunnelingProtocol protocol, string name, string subDomain, string localIp,
+            int localPort, string basicUser, string basicPassword, CancellationToken token)
+        {
+            return _tunnelingService.CreateWebTunnelAsync(protocol, name, subDomain, localIp, localPort, _driverContext.Factory.DriverGuid, basicUser, basicPassword, token);
         }
     }
 }
