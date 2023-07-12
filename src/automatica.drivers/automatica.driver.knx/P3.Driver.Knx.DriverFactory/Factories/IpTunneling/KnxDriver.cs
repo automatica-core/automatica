@@ -111,16 +111,15 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 return false;
             }
 
+            await InitRemoteConnect(token);
+
             DriverContext.Logger.LogInformation($"Init done...");
 
             return await base.Init(token);
         }
 
-        public override async Task<bool> Start(CancellationToken token = default)
+        private async Task InitRemoteConnect(CancellationToken token = default)
         {
-            _gwState?.SetGatewayState(false);
-            StartConnection();
-
             try
             {
                 var remoteFeatureEnabled =
@@ -128,7 +127,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 if (remoteFeatureEnabled && _tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
                 {
                     var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Tcp, "knx", $"{_remoteIp}", _remotePort,
-                        default);
+                        token);
 
                     DriverContext.Logger.LogInformation($"Tunnel created {tunnel}");
                 }
@@ -137,11 +136,18 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     DriverContext.Logger.LogInformation($"Tunnel is disabled...");
                 }
             }
-        
+
             catch (Exception e)
             {
                 DriverContext.Logger.LogError($"Could not start tunnel {e}");
             }
+
+        }
+
+        public override async Task<bool> Start(CancellationToken token = default)
+        {
+            _gwState?.SetGatewayState(false);
+            StartConnection();
 
             return await base.Start(token);
         }
