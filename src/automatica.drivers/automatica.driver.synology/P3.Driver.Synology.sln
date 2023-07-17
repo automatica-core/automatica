@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1383AFEC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Synology.Api.Client", "P3.Synology.Api.Client\P3.Synology.Api.Client.csproj", "{EA14A58D-3561-4577-8843-C2D1404867FC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Synology.Api.Client.Integration.Tests", "Tests\P3.Synology.Api.Client.Integration.Tests\P3.Synology.Api.Client.Integration.Tests.csproj", "{110ED661-616F-431F-A410-69DAA9F34EF7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Synology.Api.Client.Tests", "Tests\P3.Synology.Api.Client.Tests\P3.Synology.Api.Client.Tests.csproj", "{60117D99-97A2-4E13-A103-17386250980C}"
 EndProject
 Global
@@ -32,10 +30,6 @@ Global
 		{EA14A58D-3561-4577-8843-C2D1404867FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA14A58D-3561-4577-8843-C2D1404867FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA14A58D-3561-4577-8843-C2D1404867FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{110ED661-616F-431F-A410-69DAA9F34EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{110ED661-616F-431F-A410-69DAA9F34EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{110ED661-616F-431F-A410-69DAA9F34EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{110ED661-616F-431F-A410-69DAA9F34EF7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60117D99-97A2-4E13-A103-17386250980C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60117D99-97A2-4E13-A103-17386250980C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60117D99-97A2-4E13-A103-17386250980C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,7 +40,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
-		{110ED661-616F-431F-A410-69DAA9F34EF7} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
 		{60117D99-97A2-4E13-A103-17386250980C} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
