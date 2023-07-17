@@ -1,0 +1,55 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Synology.DriverFactory", "P3.Driver.Synology.DriverFactory\P3.Driver.Synology.DriverFactory.csproj", "{4D9A5074-1617-4E64-87A1-071FE59E0302}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Driver.Synology.Tests", "P3.Driver.Synology.Tests\P3.Driver.Synology.Tests.csproj", "{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1383AFEC-D64B-48FA-9FA3-70859B90AB49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Synology.Api.Client", "P3.Synology.Api.Client\P3.Synology.Api.Client.csproj", "{EA14A58D-3561-4577-8843-C2D1404867FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Synology.Api.Client.Integration.Tests", "Tests\P3.Synology.Api.Client.Integration.Tests\P3.Synology.Api.Client.Integration.Tests.csproj", "{110ED661-616F-431F-A410-69DAA9F34EF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P3.Synology.Api.Client.Tests", "Tests\P3.Synology.Api.Client.Tests\P3.Synology.Api.Client.Tests.csproj", "{60117D99-97A2-4E13-A103-17386250980C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9A5074-1617-4E64-87A1-071FE59E0302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA14A58D-3561-4577-8843-C2D1404867FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA14A58D-3561-4577-8843-C2D1404867FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA14A58D-3561-4577-8843-C2D1404867FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA14A58D-3561-4577-8843-C2D1404867FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{110ED661-616F-431F-A410-69DAA9F34EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{110ED661-616F-431F-A410-69DAA9F34EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{110ED661-616F-431F-A410-69DAA9F34EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{110ED661-616F-431F-A410-69DAA9F34EF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60117D99-97A2-4E13-A103-17386250980C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60117D99-97A2-4E13-A103-17386250980C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60117D99-97A2-4E13-A103-17386250980C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60117D99-97A2-4E13-A103-17386250980C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E7CE287-5309-4DA6-B1EE-34691F8F60EF} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
+		{110ED661-616F-431F-A410-69DAA9F34EF7} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
+		{60117D99-97A2-4E13-A103-17386250980C} = {1383AFEC-D64B-48FA-9FA3-70859B90AB49}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B60AC37E-67D6-4A77-9009-CF254B55B730}
+	EndGlobalSection
+EndGlobal

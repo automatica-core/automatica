@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.4.0.1159</Version>
+    <Version>7.4.0.1177</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>C7BD55D0-CF95-4410-BC9B-7AD6794B814F</ProjectGuid>
     <Description>Base classes for unit tests</Description>

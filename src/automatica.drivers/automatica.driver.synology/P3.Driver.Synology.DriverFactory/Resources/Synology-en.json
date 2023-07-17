@@ -1,0 +1,46 @@
+{
+  "SYNOLOGY": {
+    "NAME": "Synology",
+    "DESCRIPTION": "",
+    "DEVICE": {
+      "NAME": "DSM",
+      "DESCRIPTION": "",
+      "CONNECTED": {
+        "NAME": "Connected",
+        "DESCRIPTION": ""
+      }
+    },
+    "IP": {
+      "NAME": "Address",
+      "DESCRIPTION": ""
+    },
+    "PORT": {
+      "NAME": "Port",
+      "DESCRIPTION": ""
+    },
+    "USE_HTTPS": {
+      "NAME": "Use HTTPS",
+      "DESCRIPTION": ""
+    },
+    "USER": {
+      "NAME": "Username",
+      "DESCRIPTION": ""
+    },
+    "PASSWORD": {
+      "NAME": "Password",
+      "DESCRIPTION": ""
+    },
+    "IGNORE_SSL_ERRORS": {
+      "NAME": "Ignore SSL errors",
+      "DESCRIPTION": ""
+    },
+    "USE_REMOTE_CONNECT": {
+      "NAME": "Use remote connect",
+      "DESCRIPTION": ""
+    },
+    "REMOTE_CONNECT_DOMAIN": {
+      "NAME": "Remote connect domain",
+      "DESCRIPTION": ""
+    }
+  }
+}

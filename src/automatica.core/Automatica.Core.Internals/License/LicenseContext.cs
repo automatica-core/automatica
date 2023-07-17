@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Internals.Cloud;
 
 namespace Automatica.Core.Internals.License
@@ -69,14 +70,19 @@ namespace Automatica.Core.Internals.License
                 await using var file = new StreamWriter(LicensePath);
                 await file.WriteAsync(license);
                 await file.FlushAsync();
-                file.Close();
+                file.Close(); 
             }
             if (File.Exists(LicensePath))
             {
                 await using (var file = File.OpenRead(LicensePath))
                 {
                     var license = Standard.Licensing.License.Load(file);
-
+                    if (license.Id != ServerInfo.ServerUid)
+                    {
+                        await file.DisposeAsync();
+                        File.Delete(LicensePath);
+                        return false;
+                    }
                     var validationFailures = license.Validate().
                                                 ExpirationDate().
                                                 When(lic => lic.Type == LicenseType.Trial).
@@ -85,6 +91,8 @@ namespace Automatica.Core.Internals.License
                                                 AssertValidLicense();
                     ValidationErrors = validationFailures.ToList();
                     _license = license;
+
+                
                 }
 
                 IsLicensed = ValidationErrors.Count == 0;

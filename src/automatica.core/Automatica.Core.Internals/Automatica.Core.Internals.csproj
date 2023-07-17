@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.4.0.1159</Version>
+    <Version>7.4.0.1177</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="pub.txt" />

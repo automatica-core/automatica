@@ -231,7 +231,11 @@ namespace Automatica.Core.Runtime.Core
 
         private async Task ConfigureAndStart()
         {
-            await _licenseContext.Init();
+            if (!await _licenseContext.Init())
+            {
+                //try again 2nd time - seems buggy, but easy fix for now
+                await _licenseContext.Init();
+            }
 
             RunState = RunState.Configure;
             ServerInfo.IsConnectedToCloud = await _cloudApi.Ping();

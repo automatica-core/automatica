@@ -4,9 +4,10 @@
     <OutputType>Exe</OutputType>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.4.0.1159</Version>
+    <Version>7.4.0.1177</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
-    <ProjectGuid>D659A788-2D0C-4E2D-8774-998BF4F3080B</ProjectGuid>  </PropertyGroup>
+    <ProjectGuid>D659A788-2D0C-4E2D-8774-998BF4F3080B</ProjectGuid>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.8" />
