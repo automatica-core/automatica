@@ -14,7 +14,7 @@
     },
     "PluginGuid": "e55d1b26-aa15-40f2-ac74-2c1176393ed5",
     "Name": "P3.Driver.Synology.DriverFactory",
-    "ComponentName": "ping",
+    "ComponentName": "synology",
     "Type": "driver",
     "Output": "P3.Driver.Synology.DriverFactory.dll",
     "Resources": [],
