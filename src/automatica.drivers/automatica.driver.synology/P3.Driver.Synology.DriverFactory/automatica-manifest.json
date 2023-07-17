@@ -18,7 +18,7 @@
     "Type": "driver",
     "Output": "P3.Driver.Synology.DriverFactory.dll",
     "Resources": [],
-    "Dependencies": [ "Synology.Api.Client.dll" ],
+    "Dependencies": [ "P3.Synology.Api.Client.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.driver.synology",
     "MinCoreServerVersion": {
       "Minor": 4,
