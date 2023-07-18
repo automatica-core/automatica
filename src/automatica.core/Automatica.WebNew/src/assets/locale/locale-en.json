@@ -79,7 +79,7 @@
     "FAVORITES": "Favorites",
     "HOME": "Home",
     "RELOAD": "Reload",
-    "SLAVES": "Slaves (Preview)",
+    "SATELLITES": "Satellites",
     "SWITCH": {
       "ON": "Turn on",
       "OFF": "Turn off"
@@ -119,7 +119,7 @@
       "SETTING": "Settings",
       "DISCOVERY": "Discovery",
       "TRENDING": "Trendings",
-      "SLAVE": "Slave",
+      "SATELLITE": "Satellite",
       "VALUE": "Value"
     },
     "FACTOR": {
@@ -349,8 +349,8 @@
         "NAME": "ID",
         "DESCRIPTION": ""
       },
-      "SLAVE": {
-        "NAME": "Slave",
+      "SATELLITE": {
+        "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
             "NAME":  "Client id"
@@ -488,7 +488,7 @@
         "DESCRIPTION": ""
       }
     },
-    "SLAVE": {
+    "SATELLITE": {
       "CLIENTID": "Client id",
       "CLIENTKEY": "Client key",
       "CONNECTED": "Connected"

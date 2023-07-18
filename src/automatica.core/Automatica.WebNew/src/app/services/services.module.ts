@@ -22,7 +22,7 @@ import { LicenseService } from "./license.service";
 import { SystemService } from "./system.service";
 import { PluginsService } from "./plugins.service";
 import { AppService } from "./app.service";
-import { SlavesService } from "./slaves.services";
+import { SatelliteService } from "./satellite.services";
 import { NodeInstanceService } from "./node-instance.service";
 import { NodeTemplateService } from "./node-template.service";
 
@@ -54,7 +54,7 @@ import { NodeTemplateService } from "./node-template.service";
     SystemService,
     PluginsService,
     AppService,
-    SlavesService,
+    SatelliteService,
     NodeTemplateService
 
   ]

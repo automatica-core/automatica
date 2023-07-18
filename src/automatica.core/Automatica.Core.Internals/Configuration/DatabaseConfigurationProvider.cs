@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Internals.Configuration
@@ -22,6 +23,8 @@ namespace Automatica.Core.Internals.Configuration
         {
             Data.Clear();
             using var dbContext = new AutomaticaContext(_config);
+
+            dbContext.Database.Migrate();
 
             foreach (var setting in dbContext.Settings)
             {

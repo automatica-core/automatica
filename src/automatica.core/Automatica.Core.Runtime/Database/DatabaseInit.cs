@@ -19,6 +19,7 @@ using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using Automatica.Core.Runtime.Recorder;
 using Docker.DotNet.Models;
+using System.Runtime.InteropServices;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -409,6 +410,10 @@ namespace Automatica.Core.Runtime.Database
             if (BoardTypes.Docker.Docker.InDocker)
             {
                 boardType = new BoardTypes.Docker.Docker();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                boardType = new BoardTypes.Windows.GenericWindows();
             }
             else
             {

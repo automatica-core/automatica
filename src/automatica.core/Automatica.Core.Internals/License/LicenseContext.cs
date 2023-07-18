@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Internals.Cloud;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.License
 {
@@ -63,39 +64,45 @@ namespace Automatica.Core.Internals.License
                 pubKey = await reader.ReadToEndAsync();
             }
 
-            if (!File.Exists(LicensePath))
+            try
             {
-                var license = await _cloudApi.GetLicense();
-
-                await using var file = new StreamWriter(LicensePath);
-                await file.WriteAsync(license);
-                await file.FlushAsync();
-                file.Close(); 
-            }
-            if (File.Exists(LicensePath))
-            {
-                await using (var file = File.OpenRead(LicensePath))
+                if (!File.Exists(LicensePath))
                 {
-                    var license = Standard.Licensing.License.Load(file);
-                    if (license.Id != ServerInfo.ServerUid)
-                    {
-                        await file.DisposeAsync();
-                        File.Delete(LicensePath);
-                        return false;
-                    }
-                    var validationFailures = license.Validate().
-                                                ExpirationDate().
-                                                When(lic => lic.Type == LicenseType.Trial).
-                                                And().
-                                                Signature(pubKey).
-                                                AssertValidLicense();
-                    ValidationErrors = validationFailures.ToList();
-                    _license = license;
+                    var license = await _cloudApi.GetLicense();
 
-                
+                    await using var file = new StreamWriter(LicensePath);
+                    await file.WriteAsync(license);
+                    await file.FlushAsync();
+                    file.Close();
                 }
 
-                IsLicensed = ValidationErrors.Count == 0;
+                if (File.Exists(LicensePath))
+                {
+                    await using (var file = File.OpenRead(LicensePath))
+                    {
+                        var license = Standard.Licensing.License.Load(file);
+                        if (license.Id != ServerInfo.ServerUid)
+                        {
+                            await file.DisposeAsync();
+                            File.Delete(LicensePath);
+                            return false;
+                        }
+
+                        var validationFailures = license.Validate().ExpirationDate()
+                            .When(lic => lic.Type == LicenseType.Trial).And().Signature(pubKey).AssertValidLicense();
+                        ValidationErrors = validationFailures.ToList();
+                        _license = license;
+
+
+                    }
+
+                    IsLicensed = ValidationErrors.Count == 0;
+                }
+            }
+            catch (Exception e)
+            {
+                IsLicensed = false;
+                SystemLogger.Instance.LogError(e, "License validation failed");
             }
 
             if(IsLicensed)

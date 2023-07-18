@@ -21,8 +21,8 @@ import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { VirtualAreaPropertyInstance } from "src/app/base/model/virtual-props";
 import { ConfigTreeComponent } from "../config-tree/config-tree.component";
-import { Slave } from "src/app/base/model/slaves/slave";
-import { SlavesService } from "src/app/services/slaves.services";
+import { Satellite } from "src/app/base/model/satellites/satellite";
+import { SatelliteService } from "src/app/services/satellite.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
@@ -261,14 +261,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
 
 
-  private _slaves: Slave[];
+  private _satellites: Satellite[];
 
   @Input()
-  public get slaves(): Slave[] {
-    return this._slaves;
+  public get satellites(): Satellite[] {
+    return this._satellites;
   }
-  public set slaves(v: Slave[]) {
-    this._slaves = v;
+  public set satellites(v: Satellite[]) {
+    this._satellites = v;
   }
 
 
@@ -290,7 +290,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     translate: L10nTranslationService,
     private dataHub: DataHubService,
     private notify: NotifyService,
-    private slaveService: SlavesService,
+    private satellitesService: SatelliteService,
     appService: AppService,
     private nodeInstanceService: NodeInstanceService,
     private ruleEngineService: RuleEngineService,
@@ -299,7 +299,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.slaves = await this.slaveService.getSlaves();
+    this.satellites = await this.satellitesService.getAll();
   }
 
   flattenAraInit() {

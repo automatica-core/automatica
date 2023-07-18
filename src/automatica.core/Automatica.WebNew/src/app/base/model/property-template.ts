@@ -47,7 +47,7 @@ export enum PropertyTemplateType {
     User2Roles = 201,
     UserGroup2Roles = 202,
     UserGroup = 203,
-    Slave = 204,
+    Satellite = 204,
 
     MultiSelect = 300,
 

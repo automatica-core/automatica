@@ -5,17 +5,17 @@ import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
-import { Slave } from "src/app/base/model/slaves/slave";
-import { SlavesService } from "src/app/services/slaves.services";
+import { Satellite } from "src/app/base/model/satellites/satellite";
+import { SatelliteService } from "src/app/services/satellite.services";
 
 @Component({
-  selector: "app-slave-config",
-  templateUrl: "./slave-config.component.html",
-  styleUrls: ["./slave-config.component.scss"]
+  selector: "app-satellite-config",
+  templateUrl: "./satellite-config.component.html",
+  styleUrls: ["./satellite-config.component.scss"]
 })
-export class SlaveConfigComponent extends BaseComponent implements OnInit {
-  slaves: Slave[] = [];
-  selectedSlave: Slave = void 0;
+export class SatelliteConfigComponent extends BaseComponent implements OnInit {
+  satellites: Satellite[] = [];
+  selectedSatellite: Satellite = void 0;
 
 
   menuItems: CustomMenuItem[] = [];
@@ -37,7 +37,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
   }
 
   constructor(
-    private catService: SlavesService,
+    private catService: SatelliteService,
     translate: L10nTranslationService,
     private notify: NotifyService,
     appService: AppService) {
@@ -64,7 +64,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
     this.appService.isLoading = true;
 
     try {
-      this.slaves = await this.catService.getSlaves();
+      this.satellites = await this.catService.getAll();
 
     } catch (error) {
       this.handleError(error);
@@ -76,7 +76,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
     this.appService.isLoading = true;
 
     try {
-      this.catService.saveSlaves(this.slaves);
+      this.catService.save(this.satellites);
       this.notify.notifySuccess("COMMON.SAVED");
     } catch (error) {
       super.handleError(error);
@@ -101,7 +101,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
   }
 
   onRowUpdating($event) {
-    const oldData: Slave = $event.oldData;
+    const oldData: Satellite = $event.oldData;
 
     if ($event.newData.DisplayName || $event.newData.DisplayDescription) {
       $event.newData.DisplayName = this.translate.translate(oldData.Name);
@@ -110,7 +110,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
   }
 
   onInitNewRow($event) {
-    const newObject = new Slave();
+    const newObject = new Satellite();
     newObject.ObjId = Guid.MakeNew().ToString();
     newObject.addVirtualProperties();
 
@@ -119,7 +119,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
   }
 
   onRowInserting($event) {
-    const newObject = new Slave();
+    const newObject = new Satellite();
     newObject.addVirtualProperties();
 
     Object.assign(newObject, $event.data);
@@ -127,7 +127,7 @@ export class SlaveConfigComponent extends BaseComponent implements OnInit {
   }
 
   onRowClicked($event) {
-    this.selectedSlave = $event.data;
+    this.selectedSatellite = $event.data;
   }
 
   onInitialized($event) {

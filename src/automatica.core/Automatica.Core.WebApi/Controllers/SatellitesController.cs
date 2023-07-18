@@ -14,19 +14,19 @@ using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    [Route("webapi/slave")]
-    public class SlaveController : BaseController
+    [Route("webapi/satellite")]
+    public class SatellitesController : BaseController
     {
         private readonly IRemoteServerHandler _remoteServerHandler;
 
-        public SlaveController(AutomaticaContext dbContext, IRemoteServerHandler remoteServerHandler) : base(dbContext)
+        public SatellitesController(AutomaticaContext dbContext, IRemoteServerHandler remoteServerHandler) : base(dbContext)
         {
             _remoteServerHandler = remoteServerHandler;
         }
 
         [HttpGet]
         [Authorize(Policy = Role.AdminRole)]
-        public IEnumerable<Slave> GetSlaves()
+        public IEnumerable<Slave> GetAll()
         {
             var slaves = DbContext.Slaves.AsNoTracking().ToList();
 
@@ -85,7 +85,7 @@ namespace Automatica.Core.WebApi.Controllers
                 await transaction.RollbackAsync();
             }
 
-            return GetSlaves();
+            return GetAll();
         }
 
     }

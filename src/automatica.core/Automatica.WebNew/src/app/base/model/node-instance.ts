@@ -23,12 +23,12 @@ import { VirtualGenericPropertyInstance } from "./virtual-props/virtual-generic-
 import { NodeDataTypeEnum } from "./node-data-type";
 import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-template";
 import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
-import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
 import { INodeInstance } from "./INodeInstance";
 import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
 import { CategoryInstance } from "./categories";
 import { AreaInstance } from "./areas";
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance";
+import { VirtualSatellitePropertyInstance } from "./virtual-props/virtual-satellite-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -310,7 +310,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         if (this.isDriverNode()) {
-            this.Properties.push(new VirtualSlavePropertyInstance(this));
+            this.Properties.push(new VirtualSatellitePropertyInstance(this));
         }
 
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {

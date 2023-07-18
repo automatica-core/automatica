@@ -17,10 +17,10 @@
 
         <as-split direction="horizontal">
             <as-split-area [size]="30">
-                <p3-propertyeditor [item]="selectedSlave"></p3-propertyeditor>
+                <p3-propertyeditor [item]="selectedSatellite"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="70">
-                <dx-data-grid [dataSource]="slaves" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
+                <dx-data-grid [dataSource]="satellites" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
                     (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
                     (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
                     (onInitialized)="onInitialized($event)">
@@ -36,11 +36,11 @@
                     <dxi-column dataField="DisplayDescription" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
                     </dxi-column>
 
-                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SLAVE.CLIENTID' | translateAsync }}">
+                    <dxi-column dataField="ClientId" caption="{{ 'COMMON.SATELLITE.CLIENTID' | translateAsync }}">
                     </dxi-column>
-                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SLAVE.CLIENTKEY' | translateAsync }}">
+                    <dxi-column dataField="ClientKey" caption="{{ 'COMMON.SATELLITE.CLIENTKEY' | translateAsync }}">
                     </dxi-column>
-                    <dxi-column dataField="Connected" dataType="string" [allowEditing]="false" caption="{{ 'COMMON.SLAVE.CONNECTED' | translateAsync }}">
+                    <dxi-column dataField="Connected" dataType="string" [allowEditing]="false" caption="{{ 'COMMON.SATELLITE.CONNECTED' | translateAsync }}">
                     </dxi-column>
 
 

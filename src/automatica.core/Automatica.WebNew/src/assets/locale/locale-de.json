@@ -78,7 +78,7 @@
     "FAVORITES": "Favoriten",
     "HOME": "Home",
     "RELOAD": "Aktualisieren",
-    "SLAVES": "Slaves (Preview)",
+    "SATELLITES": "Satelliten",
     "SWITCH": {
       "ON": "Einschalten",
       "OFF": "Ausschalten"
@@ -119,7 +119,7 @@
       "SETTING": "Einstellungen",
       "DISCOVERY": "Suchen",
       "TRENDING": "Datenaufzeichnung",
-      "SLAVE": "Slave",
+      "SATELLITE": "Satellite",
       "VALUE": "Wert"
     },
     "FACTOR": {
@@ -349,8 +349,8 @@
         "NAME": "ID",
         "DESCRIPTION": ""
       },
-      "SLAVE": {
-        "NAME": "Slave",
+      "SATELLITE": {
+        "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
             "NAME":  "Client Id"
@@ -488,7 +488,7 @@
         "DESCRIPTION": ""
       }
     },
-    "SLAVE": {
+    "SATELLITE": {
       "CLIENTID": "Client Id",
       "CLIENTKEY": "Client Key",
       "CONNECTED": "Verbunden"

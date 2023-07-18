@@ -9,7 +9,7 @@ import { VirtualGenericPropertyInstance } from "../virtual-props/virtual-generic
 import { PropertyTemplateType } from "../property-template";
 
 @Model()
-export class Slave extends BaseModel implements IPropertyModel, INameModel, IDescriptionModel {
+export class Satellite extends BaseModel implements IPropertyModel, INameModel, IDescriptionModel {
 
     Properties: PropertyInstance[] = [];
 
@@ -61,8 +61,8 @@ export class Slave extends BaseModel implements IPropertyModel, INameModel, IDes
         this.Properties.push(new VirtualDisplayNamePropertyInstance(this, false));
         this.Properties.push(new VirtualDisplayDescriptionPropertyInstance(this, false));
 
-        this.Properties.push(new VirtualGenericPropertyInstance("SLAVE.CLIENTID", 3, this, () => this.ClientId, (v) => this.ClientId = v, false, PropertyTemplateType.Text));
-        this.Properties.push(new VirtualGenericPropertyInstance("SLAVE.CLIENTKEY", 3, this, () => this.ClientKey, (v) => this.ClientKey = v, false, PropertyTemplateType.Text));
+        this.Properties.push(new VirtualGenericPropertyInstance("SATELLITE.CLIENTID", 3, this, () => this.ClientId, (v) => this.ClientId = v, false, PropertyTemplateType.Text));
+        this.Properties.push(new VirtualGenericPropertyInstance("SATELLITE.CLIENTKEY", 3, this, () => this.ClientKey, (v) => this.ClientKey = v, false, PropertyTemplateType.Text));
 
     }
 
@@ -71,7 +71,7 @@ export class Slave extends BaseModel implements IPropertyModel, INameModel, IDes
     }
 
     public typeInfo(): string {
-        return "Slave";
+        return "Satellite";
     }
 
     protected getJsonProperty(): Map<string, JsonFieldInfo> {

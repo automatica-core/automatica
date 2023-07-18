@@ -4,26 +4,26 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { L10nTranslationService } from "angular-l10n";
 import { DesignTimeDataService } from "./design-time-data.service";
-import { Slave } from "../base/model/slaves/slave";
+import { Satellite } from "../base/model/satellites/satellite";
 
 @Injectable()
-export class SlavesService extends BaseService {
+export class SatelliteService extends BaseService {
 
     constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designData: DesignTimeDataService) {
         super(http, pRouter, translationService);
     }
 
 
-    getSlaves(): Promise<Slave[]> {
-        return super.getMultiple<Slave>("slave");
+    getAll(): Promise<Satellite[]> {
+        return super.getMultiple<Satellite>("satellite");
     }
 
-    saveSlaves(slaves: Slave[]) {
+    save(satellites: Satellite[]) {
         const data = new Array<any>();
-        for (const set of slaves) {
+        for (const set of satellites) {
             data.push(set.toJson());
         }
-        return super.postMultiple("slave", data);
+        return super.postMultiple("satellite", data);
     }
 
 

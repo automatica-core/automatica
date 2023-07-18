@@ -59,6 +59,8 @@ namespace Automatica.Core.Base.Templates
         [GuidTemplateType("2153e8f3-f0e0-428b-9713-a17855795179", int.MaxValue)]
         RaspberryPi3,
         [GuidTemplateType("9550a1fd-22fa-427f-8fba-6443fd99fd29", int.MaxValue)]
-        Docker
+        Docker,
+        [GuidTemplateType("d4c6fa89-a031-4e0a-adb1-8e5824075290", int.MaxValue)]
+        Windows
     }
 }

@@ -233,8 +233,8 @@
                 </ng-container>
 
 
-                <ng-container *ngSwitchCase="PropertyTemplateType.Slave">
-                    <dx-select-box [dataSource]="slaves" (onValueChanged)="valueChanged($event, data)"
+                <ng-container *ngSwitchCase="PropertyTemplateType.Satellite">
+                    <dx-select-box [dataSource]="satellites" (onValueChanged)="valueChanged($event, data)"
                         [placeholder]="'USER_GROUPS.ALL' | translateAsync" valueExpr="ObjId" [(value)]="data.data.Value"
                         displayExpr="DisplayName" [showClearButton]="false ">
                     </dx-select-box>
