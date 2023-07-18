@@ -130,6 +130,7 @@ namespace Automatica.Core.Internals.License
                 MaxUsers = 5;
                 MaxRemoteTunnels = 0;
                 AllowRemoteControl = false;
+                IsLicensed = true;
             }
             return IsLicensed;
 

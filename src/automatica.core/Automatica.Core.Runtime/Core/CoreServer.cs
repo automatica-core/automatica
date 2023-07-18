@@ -605,7 +605,7 @@ namespace Automatica.Core.Runtime.Core
         private async Task Configure()
         {
             _logger.LogDebug("Searching instantiated drivers");
-
+            await _licenseContext.Init();
             if (!_licenseContext.IsLicensed)
             {
                 _logger.LogError("Can not configure drivers - license is invalid");
