@@ -9,6 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Automatica.Core.EF" Version="7.4.0.1187" />
     <PackageReference Include="Automatica.Core.Base" Version="7.4.0.1187" />
-    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="SharpZipLib " Version="1.4.2" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 using Automatica.Core.Base.Common;
-using Ionic.Zip;
+using ICSharpCode.SharpZipLib.Zip;
 
 
 namespace P3.Knx.Core.Ets
@@ -67,13 +67,10 @@ namespace P3.Knx.Core.Ets
         {
             try
             {
-                using ZipFile s = ZipFile.Read(file);
-
+                var s = new FastZip();
                 var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
-
-
-                s.ExtractAll(tmpPath, ExtractExistingFileAction.OverwriteSilently);
-
+                s.ExtractZip(file, tmpPath, "*");
+                
                 if (IsPasswordProtected(tmpPath))
                 {
                     if (String.IsNullOrEmpty(password))
@@ -81,8 +78,7 @@ namespace P3.Knx.Core.Ets
 
                     var zipFile = Directory.GetFiles(tmpPath).FirstOrDefault(f => f.EndsWith(".zip"));
                     var fileInfo = new FileInfo(zipFile);
-                    using ZipFile projectZip = ZipFile.Read(fileInfo.FullName);
-
+                    
                     var projectTempDir = Path.Combine(tmpPath, fileInfo.Name.Replace(fileInfo.Extension, ""));
                     Directory.CreateDirectory(projectTempDir);
 
@@ -97,8 +93,11 @@ namespace P3.Knx.Core.Ets
                         password = Convert.ToBase64String(pbkdf2.GetBytes(32));
                     }
 
-                    projectZip.Password = password;
-                    projectZip.ExtractAll(projectTempDir, ExtractExistingFileAction.OverwriteSilently);
+                    var projectFastZip = new FastZip
+                    {
+                        Password = password
+                    };
+                    projectFastZip.ExtractZip(zipFile, projectTempDir, "*");
                 }
 
                 foreach (var dir in Directory.GetDirectories(tmpPath))
