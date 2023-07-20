@@ -14,11 +14,9 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
-using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using Automatica.Core.Runtime.Recorder;
-using Docker.DotNet.Models;
 using System.Runtime.InteropServices;
 
 namespace Automatica.Core.Runtime.Database

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
-using Microsoft.AspNetCore.Http;
-using Moq;
 using Xunit;
 
 namespace Automatica.Core.WebApi.Tests.Area

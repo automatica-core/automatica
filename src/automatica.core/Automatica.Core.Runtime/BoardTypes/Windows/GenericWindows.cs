@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 

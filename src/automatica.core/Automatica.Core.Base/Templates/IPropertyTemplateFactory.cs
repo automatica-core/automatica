@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Base.Templates

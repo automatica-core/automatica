@@ -38,7 +38,6 @@ using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
-using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
