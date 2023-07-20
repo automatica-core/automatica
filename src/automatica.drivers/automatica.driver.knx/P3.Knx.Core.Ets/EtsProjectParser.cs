@@ -3,9 +3,14 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml.Linq;
+using Automatica.Core.Base.Common;
+using Ionic.Zip;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.IO.Compression;
 
 namespace P3.Knx.Core.Ets
 {
@@ -34,7 +39,7 @@ namespace P3.Knx.Core.Ets
             Logger = NullLogger.Instance;
         }
 
-        public EtsProject ParseEtsFile(String file, GroupAddressStyle? expectedGroupAddressStyle = null)
+        public EtsProject ParseEtsFile(String file, string password = null, GroupAddressStyle? expectedGroupAddressStyle = null)
         {
             Logger.LogDebug("Parsing ETS project file {0}", file);
 
@@ -42,7 +47,7 @@ namespace P3.Knx.Core.Ets
 
             try
             {
-                return ParseEtsFileInternal(file, expectedGroupAddressStyle);
+                return ParseEtsFileInternal(file, password, expectedGroupAddressStyle);
             }
             catch (EtsProjectParserException)
             {
@@ -59,33 +64,66 @@ namespace P3.Knx.Core.Ets
             }
         }
 
-        private EtsProject ParseEtsFileInternal(String file, GroupAddressStyle? expectedGroupAddressStyle)
+        private EtsProject ParseEtsFileInternal(String file, string password, GroupAddressStyle? expectedGroupAddressStyle)
         {
             try
             {
-                using (ZipArchive s = ZipFile.OpenRead(file))
-                {
-                    var tmpPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-                    s.ExtractToDirectory(tmpPath);
+                using ZipFile s = ZipFile.Read(file);
 
-                    if (IsPasswordProtected(tmpPath))
+                var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
+
+
+                s.ExtractAll(tmpPath);
+
+                if (IsPasswordProtected(tmpPath))
+                {
+                    if (String.IsNullOrEmpty(password))
                         throw new EtsProjectParserPasswordRequiredException();
 
-                    foreach (var dir in Directory.GetDirectories(tmpPath))
-                    {
-                        foreach (var theEntry in Directory.GetFiles(dir))
-                        {
-                            var fileInfo = new FileInfo(theEntry);
+                    var zipFile = Directory.GetFiles(tmpPath).FirstOrDefault(f => f.EndsWith(".zip"));
+                    var fileInfo = new FileInfo(zipFile);
+                    using ZipFile projectZip = ZipFile.Read(fileInfo.FullName);
 
-                            if (IsXmlFileWithDirectoryPrefix(fileInfo, "P-"))
-                                ParseProjectDirectory(fileInfo);
-                            else if (IsXmlFileWithDirectoryPrefix(fileInfo, "M-"))
-                                ParseManufacturerDirectory(fileInfo);
-                        }
+                    var projectTempDir = Path.Combine(tmpPath, fileInfo.Name.Replace(fileInfo.Extension, ""));
+                    Directory.CreateDirectory(projectTempDir);
+
+                    bool ets6 = true;
+                    if (ets6)
+                    {
+                        var pbkdf2 = new Rfc2898DeriveBytes(
+                            password: Encoding.Unicode.GetBytes(password),
+                            salt: Encoding.ASCII.GetBytes("21.project.ets.knx.org"),
+                            iterations: 65536,
+                            hashAlgorithm: HashAlgorithmName.SHA256);
+                        password = Convert.ToBase64String(pbkdf2.GetBytes(32));
                     }
 
-                    Directory.Delete(tmpPath, true);
+                    projectZip.Password = password;
+                    projectZip.ExtractAll(projectTempDir);
                 }
+
+                foreach (var dir in Directory.GetDirectories(tmpPath))
+                {
+                    foreach (var theEntry in Directory.GetFiles(dir))
+                    {
+                        var fileInfo = new FileInfo(theEntry);
+
+                        if (IsXmlFileWithDirectoryPrefix(fileInfo, "P-"))
+                        {
+                            ParseProjectDirectory(fileInfo);
+                        }
+                        else if (IsXmlFileWithDirectoryPrefix(fileInfo, "M-"))
+                        {
+                            ParseManufacturerDirectory(fileInfo);
+                        }
+                        else if (IsProjectZipFile(fileInfo, "P-"))
+                        {
+
+                        }
+                    }
+                }
+
+                Directory.Delete(tmpPath, true);
             }
             catch (InvalidDataException e)
             {
@@ -107,6 +145,14 @@ namespace P3.Knx.Core.Ets
 
             return project;
         }
+
+        private bool IsProjectZipFile(FileInfo theEntry, String fileNamePrefix)
+        {
+            var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(theEntry.FullName));
+            return theEntry.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
+                   && theEntry.Name.StartsWith(fileNamePrefix, StringComparison.OrdinalIgnoreCase);
+        }
+
         private bool IsXmlFileWithDirectoryPrefix(FileInfo theEntry, String directoryPrefix)
         {
             var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(theEntry.FullName));
@@ -124,9 +170,9 @@ namespace P3.Knx.Core.Ets
             XElement doc = XElement.Load(file.FullName);
             XNamespace ns = doc.GetDefaultNamespace();
 
-            foreach(var p in from el in doc.Descendants(ns + "Project") 
-                             where el.Attribute("Id") != null
-                             select el)
+            foreach (var p in from el in doc.Descendants(ns + "Project")
+                              where el.Attribute("Id") != null
+                              select el)
             {
                 String id = GetAttributeValue(p, "Id");
                 if (!Context.Projects.ContainsKey(id))
@@ -231,7 +277,7 @@ namespace P3.Knx.Core.Ets
             XElement doc = XElement.Load(file.FullName);
             XNamespace ns = doc.GetDefaultNamespace();
 
-            foreach (var comObjectRef in from el in doc.Descendants(ns + "ComObjectRef") 
+            foreach (var comObjectRef in from el in doc.Descendants(ns + "ComObjectRef")
                                          where el.Attribute("Id") != null
                                          select el)
             {
@@ -293,7 +339,7 @@ namespace P3.Knx.Core.Ets
         }
         private void UpdateDeviceLinkFlags()
         {
-            foreach(EtsDatapoint dp in Context.Datapoints.Values)
+            foreach (EtsDatapoint dp in Context.Datapoints.Values)
                 dp.HasDeviceLinked = Context.GroupAddressRefId2ComObjectInstanceRefId.ContainsKey(dp.Id);
         }
     }

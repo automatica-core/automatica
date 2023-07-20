@@ -52,6 +52,7 @@
     "READ": "Read",
     "ETS_IMPORT": "ETS import",
     "SELECT_FILE": "Select file...",
+    "FILE": "File",
     "IMPORT_ETS_STRUCTURE": "Import ETS structure",
     "SAVE_BEFORE_CONTINUE": "You need to save your changes before starting this action",
     "SERVER_STARTING": "Automatica.Core Server starting...",
@@ -80,6 +81,7 @@
     "HOME": "Home",
     "RELOAD": "Reload",
     "SATELLITES": "Satellites",
+    "PASSWORD": "Password",
     "SWITCH": {
       "ON": "Turn on",
       "OFF": "Turn off"

@@ -1,27 +1,47 @@
-<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false" title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translateAsync }}"
-  (onHiding)="onHiding($event)">
+<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false"
+  title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translateAsync }}" (onHiding)="onHiding($event)">
   <div *dxTemplate="let data of 'content'">
-    <dx-file-uploader *ngIf="parentObjId" (onUploadStarted)="onUploadStarted($event)" (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
-      labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="instantly">
-    </dx-file-uploader>
+    <dx-scroll-view>
+      <div class="form">
+        <div class="dx-fieldset">
+          <div class="dx-field">
+            <div class="dx-field-label" translate>COMMON.FILE</div>
+            <div class="dx-field-value-static">
+              <dx-file-uploader *ngIf="parentObjId" (onUploadStarted)="onUploadStarted($event)"
+                (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
+                labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
+              </dx-file-uploader>
+            </div>
+          </div>
+          <div class="dx-field">
+            <div class="dx-field-label" translate>COMMON.PASSWORD</div>
+            <div class="dx-field-value-static">
+              <dx-text-box mode="password" [(value)]="password"></dx-text-box>
+            </div>
+          </div>
+          <div class="dx-field">
+            <dx-tree-list [height]="'70%'" #tree itemsExpr="InverseThis2ParentNavigation" id="config"
+              [dataSource]="instances" keyExpr="ObjId" parentIdExpr="This2Parent" [showRowLines]="true"
+              [columnAutoWidth]="true" [showColumnLines]="false" autoExpandAll="true"
+              [(selectedRowKeys)]="selectedRowKeys">
+              <dxo-selection mode="multiple" [recursive]="true"></dxo-selection>
 
+              <dxi-column dataField="Name" cellTemplate="cellTemplate"
+                caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+              <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
 
-    <dx-tree-list [height]="'80%'" #tree itemsExpr="InverseThis2ParentNavigation" id="config" [dataSource]="instances" keyExpr="ObjId"
-      parentIdExpr="This2Parent" [showRowLines]="true" [columnAutoWidth]="true" [showColumnLines]="false" autoExpandAll="true"
-      [(selectedRowKeys)]="selectedRowKeys">
-      <dxo-selection mode="multiple" [recursive]="true"></dxo-selection>
-
-      <dxi-column dataField="Name" cellTemplate="cellTemplate" caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-      <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
-
-      <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
-        <i class="{{ data.data.Icon }}"></i>
-        <span id="{{ data.data.Id }}"> {{data.value}}</span>
+              <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
+                <i class="{{ data.data.Icon }}"></i>
+                <span id="{{ data.data.Id }}"> {{data.value}}</span>
+              </div>
+            </dx-tree-list>
+          </div>
+          <div class="dx-field">
+            <dx-button style="margin-top:10px" text="{{ 'COMMON.SAVE' | translateAsync }}"
+              (onClick)="saveClick($event)"></dx-button>
+          </div>
+        </div>
       </div>
-    </dx-tree-list>
-
-
-    <dx-button style="margin-top:10px" text="{{ 'COMMON.SAVE' | translateAsync }}" (onClick)="saveClick($event)"></dx-button>
-
+    </dx-scroll-view>
   </div>
 </dx-popup>

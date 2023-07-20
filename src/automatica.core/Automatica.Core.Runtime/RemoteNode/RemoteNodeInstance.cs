@@ -49,24 +49,35 @@ namespace Automatica.Core.Runtime.RemoteNode
             return Task.FromResult(true);
         }
 
+        //TODO: Implement
         public async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
+        //TODO: Implement
         public async Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
         {
             await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
+        //TODO: Implement
+        public async Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = default)
+        {
+            await Task.CompletedTask;
+            return new List<NodeInstance>();
+        }
+
+        //TODO: Implement
         public async Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
         {
             await Task.CompletedTask;
             return new List<NodeInstance>();
         }
-        
+
+        //TODO: Implement
         public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
             return Task.CompletedTask;
@@ -78,21 +89,25 @@ namespace Automatica.Core.Runtime.RemoteNode
             return Task.FromResult(true);
         }
 
+        //TODO: Implement
         public Task OnSave(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
+        //TODO: Implement
         public Task OnDelete(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
+        //TODO: Implement
         public Task OnReInit(CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
+        //TODO: Implement
         public int ChildrensCreated => 0;
         public NodeInstanceState State => NodeInstanceState.InUse;
 

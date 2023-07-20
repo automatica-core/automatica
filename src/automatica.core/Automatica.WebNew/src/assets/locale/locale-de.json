@@ -50,6 +50,7 @@
     "TIMESTAMP": "Zeitpunkt",
     "ETS_IMPORT": "ETS Import",
     "SELECT_FILE": "Datei auswählen...",
+    "FILE": "Datei",
     "IMPORT_ETS_STRUCTURE": "Import ETS Struktur",
     "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
     "READ": "Lesen",
@@ -79,6 +80,7 @@
     "HOME": "Home",
     "RELOAD": "Aktualisieren",
     "SATELLITES": "Satelliten",
+    "PASSWORD": "Passwort",
     "SWITCH": {
       "ON": "Einschalten",
       "OFF": "Ausschalten"

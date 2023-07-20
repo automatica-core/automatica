@@ -58,10 +58,11 @@ namespace Automatica.Core.WebApi.Controllers
                 return new List<AreaInstance>(); 
             }
             var myFile = Request.Form.Files[0]; 
+            var password = Request.Headers["password"].ToString();
 
             try
             {
-                return await ProcessFile(parentInstance, myFile);
+                return await ProcessFile(parentInstance, password, myFile);
             }
             catch
             {
@@ -71,7 +72,7 @@ namespace Automatica.Core.WebApi.Controllers
             return new List<AreaInstance>();
         }
 
-        internal async Task<IEnumerable<AreaInstance>> ProcessFile(AreaInstance parentInstance, IFormFile formFile)
+        internal async Task<IEnumerable<AreaInstance>> ProcessFile(AreaInstance parentInstance, string password, IFormFile formFile)
         {
             var targetLocation = ServerInfo.GetTempPath();
             var path = Path.Combine(targetLocation, formFile.FileName);
@@ -83,7 +84,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
 
 
-            var etsProject = new EtsProjectParser().ParseEtsFile(path, GroupAddressStyle.ThreeLevel);
+            var etsProject = new EtsProjectParser().ParseEtsFile(path, password, GroupAddressStyle.ThreeLevel);
 
             foreach (var b in etsProject.Buildings)
             {

@@ -70,6 +70,14 @@ namespace Automatica.Core.Driver
         /// <returns>A list of new <see cref="NodeInstance"/></returns>
         Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default);
 
+
+        /// <summary>
+        /// Will be called to import data from a file
+        /// </summary>
+        /// <param name="config">The config to the uploaded file</param>
+        /// <returns>A list of new <see cref="NodeInstance"/></returns>
+        Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = default);
+
         /// <summary>
         /// Will be called if a custom action is called
         /// </summary>
