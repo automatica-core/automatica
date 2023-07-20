@@ -6,6 +6,8 @@ using System.IO;
 using System.Threading.Tasks;
 using P3.Knx.Core.Abstractions;
 using System.Threading;
+using Automatica.Core.Base.IO;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
@@ -14,7 +16,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         private readonly IKnxDriver _driver;
         private readonly IList<KnxMainGroup> _mainGroups;
 
-        internal const string EtsImportFeauterName = "knx-ets-import";
+        internal const string EtsImportFeatureName = "knx-ets-import";
 
         public Knx3Level(IDriverContext driverContext, IKnxDriver driver) : base(driverContext)
         {
@@ -37,24 +39,25 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 m.ConnectionEstablished();
             }
         }
-        
 
-        public override async Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
+        public override async Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = new())
         {
-            //if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeauterName))
-            //{
-            //    throw new LicenseInvalidException($"KNX.LICENSE.{EtsImportFeauterName.ToUpper()}");
-            //}
+            if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeatureName))
+            {
+                DriverContext.Logger.LogError($"Import feature is not licensed....");
+                return new List<NodeInstance>();
+            }
 
-            var file = Path.Combine(Path.GetTempPath(), fileName);
+            var file = Path.Combine(Path.GetTempPath(), config.FileName);
             if (!File.Exists(file))
             {
                 throw new FileNotFoundException();
             }
 
-            var project = new EtsProjectParser().ParseEtsFile(file, "", GroupAddressStyle.ThreeLevel);
-    
-            return await EtsProjectToNodeConverter.ConvertToNodeInstances(DriverContext.NodeTemplateFactory, project, DriverContext.NodeInstance);
+            var project = new EtsProjectParser().ParseEtsFile(file, config.Password, GroupAddressStyle.ThreeLevel);
+
+            return await EtsProjectToNodeConverter.ConvertToNodeInstances(DriverContext.NodeTemplateFactory, project, DriverContext.NodeInstance, token);
         }
+        
     }
 }

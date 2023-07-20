@@ -3,7 +3,9 @@ using Automatica.Core.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using P3.Driver.Knx.DriverFactory.Factories;
 using P3.Knx.Core.Ets;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
@@ -11,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory
 {
     public static class EtsProjectToNodeConverter
     {
-        public static Task<IList<NodeInstance>> ConvertToNodeInstances(INodeTemplateFactory factory, EtsProject project, NodeInstance knxInterface)
+        public static Task<IList<NodeInstance>> ConvertToNodeInstances(INodeTemplateFactory factory, EtsProject project, NodeInstance knxInterface, CancellationToken token = default)
         {
             IList<NodeInstance> nodes = new List<NodeInstance>();
 
@@ -28,7 +30,7 @@ namespace P3.Driver.Knx.DriverFactory
                 var mainGroup = FindByAddressProperty(mainAddress, mainGroupItems);
                 if(mainGroup == null)
                 {
-                    mainGroup = factory.CreateNodeInstance(KnxIpDriverFactory.KnxIp3LevelMainAddress);
+                    mainGroup = factory.CreateNodeInstance(KnxFactory.KnxIp3LevelMainAddress);
                     mainGroup.This2ParentNodeInstance = knxInterface.ObjId;
                 }
 
@@ -45,7 +47,7 @@ namespace P3.Driver.Knx.DriverFactory
 
                     if(middleGroup == null)
                     {
-                        middleGroup = factory.CreateNodeInstance(KnxIpDriverFactory.KnxIp3LevelMiddleAddress);
+                        middleGroup = factory.CreateNodeInstance(KnxFactory.KnxIp3LevelMiddleAddress);
                        
                         middleGroup.This2ParentNodeInstance = mainGroup.ObjId;
                     }
@@ -58,14 +60,14 @@ namespace P3.Driver.Knx.DriverFactory
                     mainGroup.InverseThis2ParentNodeInstanceNavigation.Add(middleGroup);
                     var dpItems = middleGroup.InverseThis2ParentNodeInstanceNavigation;
 
-                    foreach(var datapoint in ((EtsGroup)middle).Children)
+                    foreach(var dataPoint in ((EtsGroup)middle).Children)
                     {
-                        var dp = (EtsDatapoint)datapoint;
+                        var dp = (EtsDatapoint)dataPoint;
                         var dpNode = FindByAddressProperty(dp.Address, dpItems);
                         
                         if(dpNode == null) // already existing
                         {
-                            dpNode = CreateNodeTemplateFromEtsDatapoint(dp, factory);
+                            dpNode = CreateNodeTemplateFromEtsDataPoint(dp, factory);
                             if (dpNode == null) // not supported
                             {
                                 continue;
@@ -84,14 +86,14 @@ namespace P3.Driver.Knx.DriverFactory
             return Task.FromResult(nodes);
         }
 
-        private static NodeInstance CreateNodeTemplateFromEtsDatapoint(EtsDatapoint datapoint, INodeTemplateFactory factory)
+        private static NodeInstance CreateNodeTemplateFromEtsDataPoint(EtsDatapoint dataPoint, INodeTemplateFactory factory)
         {
-            if(!datapoint.DatapointTypesSplitted.Any())
+            if(!dataPoint.DatapointTypesSplitted.Any())
             {
                 return null;
             }
-            var mainDpt = datapoint.DatapointTypesSplitted.First().Item1;
-            var subDpt = datapoint.DatapointTypesSplitted.First().Item2;
+            var mainDpt = dataPoint.DatapointTypesSplitted.First().Item1;
+            var subDpt = dataPoint.DatapointTypesSplitted.First().Item2;
 
             NodeInstance nodeInstance = null;
             switch(mainDpt)
@@ -149,9 +151,9 @@ namespace P3.Driver.Knx.DriverFactory
 
             if (nodeInstance != null)
             {
-                nodeInstance.Name = datapoint.Name;
-                nodeInstance.Description = datapoint.Description;
-                nodeInstance.SetProperty("knx-address", datapoint.GetAddress());
+                nodeInstance.Name = dataPoint.Name;
+                nodeInstance.Description = dataPoint.Description;
+                nodeInstance.SetProperty("knx-address", dataPoint.GetAddress());
             }
             return nodeInstance;
         }
