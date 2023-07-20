@@ -69,8 +69,12 @@ namespace P3.Knx.Core.Ets
             {
                 var s = new FastZip();
                 var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
-                s.ExtractZip(file, tmpPath, "*");
-                
+                Directory.CreateDirectory(tmpPath);
+                s.ExtractZip(file, tmpPath, "");
+
+                if (Directory.GetFiles(tmpPath).Length == 0)
+                    throw new EtsProjectParserInvalidZipFileException();
+
                 if (IsPasswordProtected(tmpPath))
                 {
                     if (String.IsNullOrEmpty(password))
@@ -97,7 +101,7 @@ namespace P3.Knx.Core.Ets
                     {
                         Password = password
                     };
-                    projectFastZip.ExtractZip(zipFile, projectTempDir, "*");
+                    projectFastZip.ExtractZip(zipFile, projectTempDir, "");
                 }
 
                 foreach (var dir in Directory.GetDirectories(tmpPath))
