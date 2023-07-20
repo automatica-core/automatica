@@ -123,7 +123,7 @@ namespace P3.Knx.Core.Ets
 
                 Directory.Delete(tmpPath, true);
             }
-            catch (InvalidDataException e)
+            catch (ZipException e)
             {
                 throw new EtsProjectParserInvalidZipFileException(e);
             }
