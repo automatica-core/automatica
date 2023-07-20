@@ -124,7 +124,7 @@ namespace P3.Knx.Core.Driver.DPT
                 // ignore and return null
             }
 
-            return new byte[0];
+            return Array.Empty<byte>();
         }
     }
 }

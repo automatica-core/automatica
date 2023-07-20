@@ -72,7 +72,7 @@ namespace P3.Knx.Core.Ets
                 var tmpPath = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString());
 
 
-                s.ExtractAll(tmpPath);
+                s.ExtractAll(tmpPath, ExtractExistingFileAction.OverwriteSilently);
 
                 if (IsPasswordProtected(tmpPath))
                 {
@@ -98,7 +98,7 @@ namespace P3.Knx.Core.Ets
                     }
 
                     projectZip.Password = password;
-                    projectZip.ExtractAll(projectTempDir);
+                    projectZip.ExtractAll(projectTempDir, ExtractExistingFileAction.OverwriteSilently);
                 }
 
                 foreach (var dir in Directory.GetDirectories(tmpPath))
@@ -114,10 +114,6 @@ namespace P3.Knx.Core.Ets
                         else if (IsXmlFileWithDirectoryPrefix(fileInfo, "M-"))
                         {
                             ParseManufacturerDirectory(fileInfo);
-                        }
-                        else if (IsProjectZipFile(fileInfo, "P-"))
-                        {
-
                         }
                     }
                 }
@@ -143,13 +139,6 @@ namespace P3.Knx.Core.Ets
                 throw new EtsProjectParserWrongGroupAddressStyleException(expectedGroupAddressStyle.Value, project.GroupAddressStyle);
 
             return project;
-        }
-
-        private bool IsProjectZipFile(FileInfo theEntry, String fileNamePrefix)
-        {
-            var directoryInfo = new DirectoryInfo(Path.GetDirectoryName(theEntry.FullName));
-            return theEntry.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
-                   && theEntry.Name.StartsWith(fileNamePrefix, StringComparison.OrdinalIgnoreCase);
         }
 
         private bool IsXmlFileWithDirectoryPrefix(FileInfo theEntry, String directoryPrefix)
