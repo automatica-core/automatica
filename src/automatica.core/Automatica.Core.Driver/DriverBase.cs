@@ -168,7 +168,7 @@ namespace Automatica.Core.Driver
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
         }
 
-        public Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = default)
+        public virtual Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = default)
         {
             return Import(config.FileName, token);
         }

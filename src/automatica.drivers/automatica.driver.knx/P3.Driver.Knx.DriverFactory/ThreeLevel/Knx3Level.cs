@@ -37,6 +37,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 m.ConnectionEstablished();
             }
         }
+        
 
         public override async Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
         {
@@ -51,7 +52,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 throw new FileNotFoundException();
             }
 
-            var project = new EtsProjectParser().ParseEtsFile(file, GroupAddressStyle.ThreeLevel);
+            var project = new EtsProjectParser().ParseEtsFile(file, "", GroupAddressStyle.ThreeLevel);
     
             return await EtsProjectToNodeConverter.ConvertToNodeInstances(DriverContext.NodeTemplateFactory, project, DriverContext.NodeInstance);
         }

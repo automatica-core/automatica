@@ -9,8 +9,7 @@ using System.Text;
 using System.Xml.Linq;
 using Automatica.Core.Base.Common;
 using Ionic.Zip;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System.IO.Compression;
+
 
 namespace P3.Knx.Core.Ets
 {

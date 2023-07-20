@@ -7,7 +7,8 @@
     <ProjectGuid>AF274AE7-266C-4ED5-B1F2-E2A1C852DAA9</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="7.4.0.1159" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.4.0.1159" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.4.0.1185" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.4.0.1185" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
   </ItemGroup>
 </Project>
