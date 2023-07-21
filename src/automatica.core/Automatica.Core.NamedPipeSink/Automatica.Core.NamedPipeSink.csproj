@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>7.4.0.1187</Version>
+    <Version>7.4.0.1190</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="EventLogJsonConverter.cs" />
