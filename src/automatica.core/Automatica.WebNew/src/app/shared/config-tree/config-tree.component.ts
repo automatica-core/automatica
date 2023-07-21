@@ -154,10 +154,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.appService.isLoading = false;
   }
 
-  public async fileUploaded(nodeInstance: NodeInstance, fileName: string) {
+  public async fileUploaded(nodeInstance: NodeInstance, fileName: string, password: string) {
     try {
       this.appService.isLoading = true;
-      await this.configService.import(nodeInstance, fileName);
+      await this.configService.import(nodeInstance, fileName, password);
       await this.load();
 
     } catch (error) {

@@ -23,7 +23,7 @@
 </div>
 
 <ng-container *ngIf="hasPopup">
-    <dx-popup [width]="'95%'" [height]="'95%'" [visible]="popupVisible" [showTitle]="true" [closeOnOutsideClick]="false"
+    <dx-popup [width]="'95%'" [height]="'95%'" [visible]="popupVisible" [showTitle]="true" [hideOnOutsideClick]="false"
         [showCloseButton]="true" [title]="hint" [dragEnabled]="false" (onHiding)="onPopupHiding($event)">
         <div *dxTemplate="let data of 'content'">
             <dx-scroll-view width="100%" height="100%">

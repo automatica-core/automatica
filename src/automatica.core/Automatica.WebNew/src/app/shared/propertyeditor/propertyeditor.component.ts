@@ -31,6 +31,9 @@ import { RuleEngineService } from "src/app/services/ruleengine.service";
 import { RulePage } from "src/app/base/model/rule-page";
 import DataSource from "devextreme/data/data_source";
 import ArrayStore from "devextreme/data/array_store";
+import { NodeInstanceImportComponent } from "./node-instance-ets-import/node-instance-import.component";
+import { NodeInstanceImportSerivce } from "./node-instance-ets-import/node-instance-import.service";
+import { Router } from "@angular/router";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -169,6 +172,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public timerEditValue: TimerPropertyData = void 0;
   public selectedProperty: PropertyInstance = void 0;
 
+  @ViewChild("nodeInstanceImport")
+  NodeInstanceImportComponent: NodeInstanceImportComponent;
+
   @Output()
   public scan = new EventEmitter<NodeInstance>();
   @Output()
@@ -294,7 +300,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     appService: AppService,
     private nodeInstanceService: NodeInstanceService,
     private ruleEngineService: RuleEngineService,
-    private changeDetection: ChangeDetectorRef) {
+    private changeDetection: ChangeDetectorRef,
+    private router: Router,
+    private nodeInstanceImportService: NodeInstanceImportSerivce) {
     super(notify, translate, appService);
   }
 
@@ -423,6 +431,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if (this.item instanceof NodeInstance) {
       this.scan.emit(this.item);
     }
+  }
+
+  async onImportOpen($event, data: PropertyInstance) {
+    this.NodeInstanceImportComponent.isVisible = true;
+    this.NodeInstanceImportComponent.nodeInstance = this.item;
+    this.NodeInstanceImportComponent.propertyInstance = data;
+
+    this.NodeInstanceImportComponent.fileUploaded = this.fileUploaded;
   }
 
   nodeTemplateSelectItem($event, learnInstance: LearnNodeInstance) {

@@ -81,6 +81,8 @@
     "RELOAD": "Aktualisieren",
     "SATELLITES": "Satelliten",
     "PASSWORD": "Passwort",
+    "IMPORT_NODES": "Import",
+    "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
     "SWITCH": {
       "ON": "Einschalten",
       "OFF": "Ausschalten"

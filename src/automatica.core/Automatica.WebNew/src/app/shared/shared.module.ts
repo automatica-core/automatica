@@ -14,6 +14,8 @@ import { VisuPageSelectorComponent } from "./visu-page-selector/visu-page-select
 import { VisuPageListComponent } from "./visu-page-list/visu-page-list.component";
 import { HttpClientModule } from "@angular/common/http";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NodeInstanceImportComponent } from "./propertyeditor/node-instance-ets-import/node-instance-import.component";
+import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-import/node-instance-import.service";
 
 @NgModule({
     imports: [
@@ -55,12 +57,16 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
         RuleEditorComponent,
         NodeValueSelectorComponent,
         VisuPageSelectorComponent,
-        VisuPageListComponent    ],
+        VisuPageListComponent,
+        NodeInstanceImportComponent],
     exports: [
         PropertyEditorComponent,
         ConfigMenuComponent,
         ConfigTreeComponent,
         RuleEditorComponent
+    ],
+    providers: [
+        NodeInstanceImportSerivce
     ]
 })
 

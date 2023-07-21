@@ -97,6 +97,17 @@ namespace Automatica.Core.Internals.License
                     }
 
                     IsLicensed = ValidationErrors.Count == 0;
+
+                    if (ValidationErrors.Count > 0)
+                    {
+                        SystemLogger.Instance.LogError("License validation failed");
+
+                        foreach (var validationError in ValidationErrors)
+                        {
+                            SystemLogger.Instance.LogError(validationError.Message);
+                        }
+                        File.Delete(LicensePath);
+                    }
                 }
             }
             catch (Exception e)

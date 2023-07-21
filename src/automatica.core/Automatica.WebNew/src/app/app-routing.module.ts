@@ -18,6 +18,7 @@ import { AreasEtsImportComponent } from "./pages/area-config/areas-ets-import/ar
 import { VisualizationComponent } from "./visualization/visualization.component";
 import { Role } from "./base/model/user/role";
 import { SatelliteConfigComponent } from "./pages/satellite-config/satellite-config.component";
+import { NodeInstanceImportComponent } from "./shared/propertyeditor/node-instance-ets-import/node-instance-import.component";
 
 const routes: Routes = [
     {

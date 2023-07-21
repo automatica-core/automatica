@@ -82,6 +82,8 @@
     "RELOAD": "Reload",
     "SATELLITES": "Satellites",
     "PASSWORD": "Password",
+    "IMPORT_NODES": "Import",
+    "IMPORT_NOTE": "Enter your password (if needed) prior selecting the file. After selecting the file press upload and the import will start",
     "SWITCH": {
       "ON": "Turn on",
       "OFF": "Turn off"

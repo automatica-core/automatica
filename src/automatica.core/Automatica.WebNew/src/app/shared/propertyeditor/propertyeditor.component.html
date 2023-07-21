@@ -29,10 +29,15 @@
                 </dx-button>
 
                 <ng-container *ngSwitchCase="PropertyTemplateType.ImportData">
-                    <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
+
+
+                    <dx-button text="{{ 'COMMON.PROPERTY.IMPORT.NAME' | translateAsync:LANG }}"
+                        (click)="onImportOpen($event, data.data)"></dx-button>
+
+                    <!-- <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
                         selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}" labelText="" accept="*"
                         uploadUrl="/webapi/fileUpload" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
-                    </dx-file-uploader>
+                    </dx-file-uploader> -->
                 </ng-container>
 
                 <ng-container *ngSwitchCase="PropertyTemplateType.Enum">
@@ -396,3 +401,5 @@
         </dx-scroll-view>
     </div>
 </dx-popup>
+
+<node-instance-import #nodeInstanceImport (fileUploaded)="fileUploaded"></node-instance-import>

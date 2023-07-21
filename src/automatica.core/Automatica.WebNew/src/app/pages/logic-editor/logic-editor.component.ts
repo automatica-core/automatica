@@ -261,7 +261,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   async fileUploaded($event) {
     this.isLoading = true;
-    await this.configTree.fileUploaded($event.item, $event.file.name);
+    await this.configTree.fileUploaded($event.item, $event.file.name, $event.password);
     this.isLoading = false;
   }
 

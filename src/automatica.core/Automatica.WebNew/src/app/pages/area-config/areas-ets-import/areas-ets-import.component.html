@@ -1,9 +1,15 @@
-<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [closeOnOutsideClick]="false"
+<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [hideOnOutsideClick]="false"
   title="{{ 'COMMON.IMPORT_ETS_STRUCTURE' | translateAsync }}" (onHiding)="onHiding($event)">
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view>
       <div class="form">
         <div class="dx-fieldset">
+          <div class="dx-field">
+            <div class="dx-field-label" translate>COMMON.PASSWORD</div>
+            <div class="dx-field-value-static">
+              <dx-text-box mode="password" [(value)]="password"></dx-text-box>
+            </div>
+          </div>
           <div class="dx-field">
             <div class="dx-field-label" translate>COMMON.FILE</div>
             <div class="dx-field-value-static">
@@ -13,12 +19,7 @@
               </dx-file-uploader>
             </div>
           </div>
-          <div class="dx-field">
-            <div class="dx-field-label" translate>COMMON.PASSWORD</div>
-            <div class="dx-field-value-static">
-              <dx-text-box mode="password" [(value)]="password"></dx-text-box>
-            </div>
-          </div>
+
           <div class="dx-field">
             <dx-tree-list [height]="'70%'" #tree itemsExpr="InverseThis2ParentNavigation" id="config"
               [dataSource]="instances" keyExpr="ObjId" parentIdExpr="This2Parent" [showRowLines]="true"
