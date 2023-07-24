@@ -34,12 +34,18 @@
       "NAME": "Dimmer",
       "DESCRIPTION": "Dimmer",
       "INPUT": {
-        "NAME": "I",
-        "DESCRIPTION": "I"
-      },
-      "STATE": {
-        "NAME": "S",
-        "DESCRIPTION": "S"
+        "STATE": {
+          "NAME": "S",
+          "DESCRIPTION": "S"
+        },
+        "RESET": {
+          "NAME": "R",
+          "DESCRIPTION": "R"
+        },
+        "VALUE": {
+          "NAME": "V",
+          "Description":  "Dimm Value"
+        }
       },
       "OUTPUT": {
         "NAME": "O",
