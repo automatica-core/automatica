@@ -14,9 +14,11 @@ namespace P3.Logic.Operations.Dimmer
         private readonly RuleInterfaceInstance _reset;
 
         private readonly RuleInterfaceInstance _output;
+        private readonly RuleInterfaceInstance _outputState;
 
         private bool? _lastState;
         private int? _lastValue;
+        private bool? _lastOutputState;
 
         public DimmerLogic(ILogicContext context) : base(context)
         {
@@ -31,6 +33,10 @@ namespace P3.Logic.Operations.Dimmer
 
             _output = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleOutput);
+
+
+            _outputState = context.RuleInstance.RuleInterfaceInstance.Single(a =>
+                a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleState);
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
@@ -49,8 +55,11 @@ namespace P3.Logic.Operations.Dimmer
 
                 if (!_lastValue.HasValue && booleanValue || (_lastValue.HasValue && _lastValue.Value == 0))
                 {
-                    _lastValue = 100;
+                    _lastOutputState = true;
+                    ValueChanged(_outputState, _lastOutputState);
                 }
+
+                
 
                 return SingleOutputChanged(new LogicOutputChanged(_output, booleanValue ? _lastValue.Value : 0));
             }

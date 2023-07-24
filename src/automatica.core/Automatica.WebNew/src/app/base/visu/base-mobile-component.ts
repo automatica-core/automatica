@@ -172,7 +172,8 @@ export abstract class BaseMobileComponent extends BaseComponent {
         if (this.item) {
             this.propertyChanged();
             const value = this.dataHub.getCurrentValue(this.item.ObjId);;
-            this.value = value.value;
+            if(value)
+                this.value = value.value;
         }
     }
 

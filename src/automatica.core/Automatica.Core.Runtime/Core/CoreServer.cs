@@ -441,7 +441,7 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Stopped;
             _logger.LogInformation("CoreServer stopping...");
             IsRunning = false;
-
+            
             _driverStore.Clear();
             _logicStore.Clear();
             

@@ -150,7 +150,7 @@ namespace Automatica.Core.Runtime.IO
             foreach (var logicInterface in logicInterfaces)
             {
                 await _dispatcher.RegisterDispatch(DispatchableType.Visualization, logicInterface.ObjId,
-                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface); });
+                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o.Value, logicInterface.This2RuleInstance, logicInterface); });
             }
 
             return true;

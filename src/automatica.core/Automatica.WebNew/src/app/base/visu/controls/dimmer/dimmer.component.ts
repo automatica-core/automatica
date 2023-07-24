@@ -72,11 +72,13 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
   switch($event) {
-    this.dataHub.setValue(this.stateType.ObjId, $event);
+    if(this.stateType)
+      this.dataHub.setValue(this.stateType.ObjId, $event);
   }
 
   sliderUpdate($event) {
-    this.dataHub.setValue(this.valueType.ObjId, $event);
+    if(this.valueType)
+      this.dataHub.setValue(this.valueType.ObjId, $event);
   }
 
   ngOnDestroy(): void {

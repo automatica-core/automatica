@@ -29,7 +29,8 @@ namespace P3.Logic.Operations.Dimmer
             factory.CreateLogicInterfaceTemplate(RuleInputValue, "OPERATIONS.DIMMER.INPUT.VALUE.NAME", "OPERATIONS.DIMMER.INPUT.VALUE.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Status);
             factory.CreateLogicInterfaceTemplate(RuleInputReset, "OPERATIONS.DIMMER.INPUT.RESET.NAME", "OPERATIONS.DIMMER.INPUT.RESET.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Unknown);
 
-            factory.CreateLogicInterfaceTemplate(RuleOutput, "OPERATIONS.DIMMER.OUTPUT.NAME", "OPERATIONS.DIMMER.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
+            factory.CreateLogicInterfaceTemplate(RuleState, "OPERATIONS.DIMMER.OUTPUT.VALUE.NAME", "OPERATIONS.DIMMER.OUTPUT.VALUE.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
+            factory.CreateLogicInterfaceTemplate(RuleOutput, "OPERATIONS.DIMMER.OUTPUT.STATE.NAME", "OPERATIONS.DIMMER.OUTPUT.STATE.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output); 
             
             factory.ChangeDefaultVisuTemplate(LogicGuid, VisuMobileObjectTemplateTypes.Dimmer);
         }
