@@ -36,7 +36,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
             var pages = Controller.GetPages().ToList();
             var page = pages.First();
 
-            var sPage = Controller.GetRulePage(page.ObjId);
+            var sPage = Controller.GetPage(page.ObjId);
 
             Assert.Equal(page.ObjId, sPage.ObjId);
         }
@@ -44,7 +44,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         [Fact, TestOrder(2)]
         public void TestGetRuleTemplates()
         {
-            var templates = Controller.GetRuleTemplates();
+            var templates = Controller.GetLogicTemplates();
 
             Assert.NotEmpty(templates);
         }
