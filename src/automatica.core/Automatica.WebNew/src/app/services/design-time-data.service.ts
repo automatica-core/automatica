@@ -51,7 +51,7 @@ export class DesignTimeDataService extends BaseService {
 
     async getRuleTemplates(): Promise<RuleTemplate[]> {
         if (!this._ruleTemplates) {
-            this._ruleTemplates = await super.getMultiple<RuleTemplate>("rules/templates");
+            this._ruleTemplates = await super.getMultiple<RuleTemplate>("logics/templates");
         }
 
         return Promise.resolve(this._ruleTemplates);
