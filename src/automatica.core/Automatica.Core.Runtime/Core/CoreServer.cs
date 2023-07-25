@@ -364,7 +364,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ReloadLogic(Guid ruleInstanceId)
         {
-            KeyValuePair<RuleInstance, ILogic> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitRuleInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+            KeyValuePair<RuleInstance, ILogic> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitLogicInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
 
             await StopLogic(rule.Value, rule.Key);
             await StartLogic(rule.Value, rule.Key);
@@ -584,7 +584,7 @@ namespace Automatica.Core.Runtime.Core
 
         }
 
-        private KeyValuePair<RuleInstance, ILogic> InitRuleInstance(Guid ruleInstanceId)
+        private KeyValuePair<RuleInstance, ILogic> InitLogicInstance(Guid ruleInstanceId)
         {
             var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
             var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
@@ -637,7 +637,14 @@ namespace Automatica.Core.Runtime.Core
                     continue;
                 }
 
-                InitRuleInstance(ruleInstance.ObjId);
+                try
+                {
+                    InitLogicInstance(ruleInstance.ObjId);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not init logic instance...");
+                }
             }
 
             _logger.LogInformation($"Loading enabled recorders...");
