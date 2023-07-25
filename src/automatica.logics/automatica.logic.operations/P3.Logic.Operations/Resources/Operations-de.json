@@ -48,8 +48,14 @@
         }
       },
       "OUTPUT": {
-        "NAME": "O",
-        "DESCRIPTION": "O"
+        "VALUE": {
+          "NAME": "V",
+          "DESCRIPTION": "V"
+        },
+        "STATE": {
+          "NAME": "S",
+          "DESCRIPTION": "S"
+        }
       }
     }
   }
