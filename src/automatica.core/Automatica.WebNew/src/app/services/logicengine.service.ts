@@ -44,7 +44,7 @@ export class LogicEngineService extends BaseService {
   }
 
   getRuleTemplates(): Promise<RuleTemplate[]> {
-    return this.designService.getRuleTemplates();
+    return this.designService.getLogicTemplates();
   }
 
   addPage(page: RulePage): Promise<RulePage> {

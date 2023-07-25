@@ -22,5 +22,17 @@ namespace Automatica.Core.Internals.Cache.Logic
         {
             return obj.ObjId;
         }
+
+        public void AddOrUpdate(RuleTemplate template)
+        {
+            if (Contains(template.ObjId))
+            {
+                Update(template.ObjId, template);
+            }
+            else
+            {
+                Add(template.ObjId, template);
+            }
+        }
     }
 }

@@ -17,6 +17,8 @@ export class UpdateHubService extends BaseHub {
     public PluginFinished: EventEmitter<any> = new EventEmitter<any>();
     @SignalRMethod
     public PluginFailed: EventEmitter<any> = new EventEmitter<any>();
+    @SignalRMethod
+    public PluginLoaded: EventEmitter<any> = new EventEmitter<any>();
 
     public static formatBytes(bytes) {
         if (bytes < 1024) {

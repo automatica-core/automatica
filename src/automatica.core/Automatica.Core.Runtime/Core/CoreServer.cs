@@ -588,6 +588,12 @@ namespace Automatica.Core.Runtime.Core
         {
             var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
             var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
+
+            if (factory == null)
+            {
+                _logger.LogError($"Could not find logic factory for {ruleInstance.This2RuleTemplateNavigation.Name}");
+                throw new ArgumentException("Could not find factory for logic instance..");
+            }
             var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
             var ruleContext = new LogicContext(ruleInstance, _dispatcher, new LogicTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
             var rule = factory.CreateLogicInstance(ruleContext);

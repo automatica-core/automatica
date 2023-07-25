@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Automatica.Core.Base.Templates;
@@ -10,41 +12,54 @@ namespace Automatica.Core.Internals.Templates
 {
     public class LogicTemplateFactory : PropertyTemplateFactory, ILogicTemplateFactory
     {
+        public IDictionary<Guid, RuleTemplate> LogicTemplates { get; }
+
         public LogicTemplateFactory(AutomaticaContext database, IConfiguration config, ILogicFactory factory) : base(database, config, (template, guid) => throw new NotImplementedException(), factory)
         {
-            
+            LogicTemplates = new ConcurrentDictionary<Guid, RuleTemplate>();
         }
 
         public CreateTemplateCode CreateLogicTemplate(Guid ui, string name, string description, string key, string group,
             double height, double width)
         {
-            var interfaceType = Db.RuleTemplates.SingleOrDefault(a => a.ObjId == ui);
+            var logicTemplate = Db.RuleTemplates.SingleOrDefault(a => a.ObjId == ui);
             var retValue = CreateTemplateCode.Updated;
             bool isNewObject = false;
-            if (interfaceType == null)
+            if (logicTemplate == null)
             {
-                interfaceType = new RuleTemplate();
-                interfaceType.ObjId = ui;
+                logicTemplate = new RuleTemplate
+                {
+                    ObjId = ui
+                };
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
 
-            interfaceType.Name = name;
-            interfaceType.Description = description;
-            interfaceType.Key = key;
-            interfaceType.Group = group;
-            interfaceType.Height = (float)height;
-            interfaceType.Width = (float)width;
-            interfaceType.This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label);
+            logicTemplate.Name = name;
+            logicTemplate.Description = description;
+            logicTemplate.Key = key;
+            logicTemplate.Group = group;
+            logicTemplate.Height = (float)height;
+            logicTemplate.Width = (float)width;
+            logicTemplate.This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label);
 
             if (isNewObject)
             {
-                Db.RuleTemplates.Add(interfaceType);
+                Db.RuleTemplates.Add(logicTemplate);
                 Db.SaveChanges();
             }
             else
             {
-                Db.RuleTemplates.Update(interfaceType);
+                Db.RuleTemplates.Update(logicTemplate);
+            }
+
+            if (LogicTemplates.ContainsKey(logicTemplate.ObjId))
+            {
+                LogicTemplates[logicTemplate.ObjId] = logicTemplate;
+            }
+            else
+            {
+                LogicTemplates.Add(logicTemplate.ObjId, logicTemplate);
             }
 
             return retValue;
@@ -82,36 +97,38 @@ namespace Automatica.Core.Internals.Templates
                     $"Please use {nameof(CreateParameterLogicInterfaceTemplate)} for creating parameter interface templates");
             }
 
-            var interfaceType = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
+            var logicInterfaceTemplate = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
             var retValue = CreateTemplateCode.Updated;
             bool isNewObject = false;
-            if (interfaceType == null)
+            if (logicInterfaceTemplate == null)
             {
-                interfaceType = new RuleInterfaceTemplate();
-                interfaceType.ObjId = id;
+                logicInterfaceTemplate = new RuleInterfaceTemplate();
+                logicInterfaceTemplate.ObjId = id;
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
 
-            interfaceType.Name = name;
-            interfaceType.Key = key;
-            interfaceType.Description = description;
-            interfaceType.This2RuleTemplate = ruleTemplate;
-            interfaceType.This2RuleInterfaceDirection = (long)direction;
-            interfaceType.MaxLinks = maxLinks;
-            interfaceType.SortOrder = sortOrder;
-            interfaceType.ParameterDataType = RuleInterfaceParameterDataType.NoParameter;
-            interfaceType.InterfaceType = type;
+            logicInterfaceTemplate.Name = name;
+            logicInterfaceTemplate.Key = key;
+            logicInterfaceTemplate.Description = description;
+            logicInterfaceTemplate.This2RuleTemplate = ruleTemplate;
+            logicInterfaceTemplate.This2RuleInterfaceDirection = (long)direction;
+            logicInterfaceTemplate.MaxLinks = maxLinks;
+            logicInterfaceTemplate.SortOrder = sortOrder;
+            logicInterfaceTemplate.ParameterDataType = RuleInterfaceParameterDataType.NoParameter;
+            logicInterfaceTemplate.InterfaceType = type;
 
             if (isNewObject)
             {
-                Db.RuleInterfaceTemplates.Add(interfaceType);
+                Db.RuleInterfaceTemplates.Add(logicInterfaceTemplate);
                 Db.SaveChanges(true);
             }
             else
             {
-                Db.RuleInterfaceTemplates.Update(interfaceType);
+                Db.RuleInterfaceTemplates.Update(logicInterfaceTemplate);
             }
+
+            LogicTemplates[ruleTemplate].RuleInterfaceTemplate.Add(logicInterfaceTemplate);
 
             return retValue;
         }
@@ -127,38 +144,40 @@ namespace Automatica.Core.Internals.Templates
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
             int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
         {
-            var interfaceType = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
+            var parameterLogicInterfaceTemplate = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
             var retValue = CreateTemplateCode.Updated;
             bool isNewObject = false;
-            if (interfaceType == null)
+            if (parameterLogicInterfaceTemplate == null)
             {
-                interfaceType = new RuleInterfaceTemplate();
-                interfaceType.ObjId = id;
+                parameterLogicInterfaceTemplate = new RuleInterfaceTemplate();
+                parameterLogicInterfaceTemplate.ObjId = id;
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
 
-            interfaceType.Name = name;
+            parameterLogicInterfaceTemplate.Name = name;
 
-            interfaceType.Key = name;
-            interfaceType.Description = description;
-            interfaceType.This2RuleTemplate = ruleTemplate;
-            interfaceType.This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Param;
-            interfaceType.MaxLinks = 0;
-            interfaceType.SortOrder = sortOrder;
-            interfaceType.ParameterDataType = dataType;
-            interfaceType.IsLinkableParameter = linkable;
-            interfaceType.DefaultValue = Convert.ToString(defaultValue, CultureInfo.InvariantCulture);
+            parameterLogicInterfaceTemplate.Key = name;
+            parameterLogicInterfaceTemplate.Description = description;
+            parameterLogicInterfaceTemplate.This2RuleTemplate = ruleTemplate;
+            parameterLogicInterfaceTemplate.This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Param;
+            parameterLogicInterfaceTemplate.MaxLinks = 0;
+            parameterLogicInterfaceTemplate.SortOrder = sortOrder;
+            parameterLogicInterfaceTemplate.ParameterDataType = dataType;
+            parameterLogicInterfaceTemplate.IsLinkableParameter = linkable;
+            parameterLogicInterfaceTemplate.DefaultValue = Convert.ToString(defaultValue, CultureInfo.InvariantCulture);
 
             if (isNewObject)
             {
-                Db.RuleInterfaceTemplates.Add(interfaceType);
+                Db.RuleInterfaceTemplates.Add(parameterLogicInterfaceTemplate);
                 Db.SaveChanges(true);
             }
             else
             {
-                Db.RuleInterfaceTemplates.Update(interfaceType);
+                Db.RuleInterfaceTemplates.Update(parameterLogicInterfaceTemplate);
             }
+
+            LogicTemplates[ruleTemplate].RuleInterfaceTemplate.Add(parameterLogicInterfaceTemplate);
 
             return retValue;
         }

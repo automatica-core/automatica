@@ -5,5 +5,6 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     public interface ILogicTemplateCache : IStore<RuleTemplate>
     {
+        void AddOrUpdate(RuleTemplate template);
     }
 }

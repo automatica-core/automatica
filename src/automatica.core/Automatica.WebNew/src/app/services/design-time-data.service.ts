@@ -12,13 +12,17 @@ import { CategoryGroup } from "../base/model/categories";
 export class DesignTimeDataService extends BaseService {
 
     private _areaTemplates: AreaTemplate[];
-    private _ruleTemplates: RuleTemplate[];
+    private _logicTemplates: RuleTemplate[];
     private _categoryGroups: CategoryGroup[];
 
     private _nodeTemplateCache: Map<string, NodeTemplate> = new Map<string, NodeTemplate>();
 
     constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(http, pRouter, translationService);
+    }
+
+    public clearLogicTemplate() {
+        this._logicTemplates = null;
     }
 
     public async getNodeTemplate(id: string): Promise<NodeTemplate> {
@@ -49,12 +53,12 @@ export class DesignTimeDataService extends BaseService {
         return Promise.resolve(this._categoryGroups);
     }
 
-    async getRuleTemplates(): Promise<RuleTemplate[]> {
-        if (!this._ruleTemplates) {
-            this._ruleTemplates = await super.getMultiple<RuleTemplate>("logics/templates");
+    async getLogicTemplates(): Promise<RuleTemplate[]> {
+        if (!this._logicTemplates) {
+            this._logicTemplates = await super.getMultiple<RuleTemplate>("logics/templates");
         }
 
-        return Promise.resolve(this._ruleTemplates);
+        return Promise.resolve(this._logicTemplates);
     }
 
 }
