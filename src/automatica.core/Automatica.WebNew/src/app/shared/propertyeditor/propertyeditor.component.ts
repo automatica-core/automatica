@@ -27,7 +27,7 @@ import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-n
 import { AppService } from "src/app/services/app.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 import { RulePage } from "src/app/base/model/rule-page";
 import DataSource from "devextreme/data/data_source";
 import ArrayStore from "devextreme/data/array_store";
@@ -299,7 +299,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private satellitesService: SatelliteService,
     appService: AppService,
     private nodeInstanceService: NodeInstanceService,
-    private ruleEngineService: RuleEngineService,
+    private ruleEngineService: LogicEngineService,
     private changeDetection: ChangeDetectorRef,
     private router: Router,
     private nodeInstanceImportService: NodeInstanceImportSerivce) {

@@ -20,7 +20,7 @@ export interface AddLogicData {
 
 
 @Injectable()
-export class RuleEngineService extends BaseService {
+export class LogicEngineService extends BaseService {
 
   public reInit: EventEmitter<RulePage> = new EventEmitter<RulePage>();
   public add = new EventEmitter<AddLogicData>();
@@ -31,18 +31,18 @@ export class RuleEngineService extends BaseService {
 
 
   save(page: RulePage, model: any): Promise<RulePage> {
-    return super.post<RulePage>("rules/save", page.toJson());
+    return super.post<RulePage>("logics/save", page.toJson());
   }
 
   reload(): Promise<any> {
-    return super.postJson("rules/reload", {});
+    return super.postJson("logics/reload", {});
   }
 
   getPages(): Promise<RulePage[]> {
-    return super.getMultiple<RulePage>("rules/pages");
+    return super.getMultiple<RulePage>("logics/pages");
   }
   getPage(id: number): Promise<RulePage> {
-    return super.get<RulePage>("rules/page/" + id);
+    return super.get<RulePage>("logics/page/" + id);
   }
 
   getRuleTemplates(): Promise<RuleTemplate[]> {
@@ -50,7 +50,7 @@ export class RuleEngineService extends BaseService {
   }
 
   addPage(page: RulePage): Promise<RulePage> {
-    return super.post<RulePage>("rules/page/add", page.toJson());
+    return super.post<RulePage>("logics/page/add", page.toJson());
   }
 
   addItem(item: AddLogicData): Promise<any> {
@@ -64,11 +64,11 @@ export class RuleEngineService extends BaseService {
 
     this.add.emit(item);
 
-    return super.postJson(`rules/item/${linkExtension}/${item.pageId}`, item.data.toJson());
+    return super.postJson(`logics/item/${linkExtension}/${item.pageId}`, item.data.toJson());
   }
 
   removePage(page: RulePage): Promise<any> {
-    return super.deleteJson(`rules/page/${page.ObjId}`);
+    return super.deleteJson(`logics/page/${page.ObjId}`);
   }
 
   removeItem(data: RuleInstance | NodeInstance2RulePage): Promise<any> {
@@ -80,26 +80,26 @@ export class RuleEngineService extends BaseService {
       linkExtension = "nodeInstance";
     }
 
-    return super.deleteJson(`rules/item/${linkExtension}/${data.ObjId}`);
+    return super.deleteJson(`logics/item/${linkExtension}/${data.ObjId}`);
   }
 
   updateItem(item: RuleInstance | NodeInstance2RulePage) {
     if (item instanceof RuleInstance) {
-      return super.patchJson(`rules/item/ruleInstance`, item.toJson());
+      return super.patchJson(`logics/item/ruleInstance`, item.toJson());
     } else {
-      return super.patchJson(`rules/item/nodeInstance`, item.toJson());
+      return super.patchJson(`logics/item/nodeInstance`, item.toJson());
     }
   }
 
   addOrUpdateLink(item: Link) {
-    return super.postJson(`rules/link`, item.toJson());
+    return super.postJson(`logics/link`, item.toJson());
   }
 
   removeLink(item: Link) {
-    return super.deleteJson(`rules/link/${item.ObjId}`);
+    return super.deleteJson(`logics/link/${item.ObjId}`);
   }
 
   updatePage(item: RulePage) {
-    return super.patch("rules/page", item.toJson());
+    return super.patch("logics/page", item.toJson());
   }
 }

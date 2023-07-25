@@ -6,7 +6,7 @@ import { RuleInterfaceType } from 'src/app/base/model/rule-interface-template';
 import { AppService } from 'src/app/services/app.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { NotifyService } from 'src/app/services/notify.service';
-import { RuleInstanceVisuService } from 'src/app/services/rule-visu.service';
+import { LogicInstanceVisuService } from 'src/app/services/logic-visu.service';
 import { BaseMobileRuleComponent } from '../../base-mobile-rule-component';
 
 @Component({
@@ -64,7 +64,7 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     notify: NotifyService,
     translate: L10nTranslationService,
     configService: ConfigService,
-    ruleInstanceVisuService: RuleInstanceVisuService,
+    ruleInstanceVisuService: LogicInstanceVisuService,
     appService: AppService) {
     super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
   }

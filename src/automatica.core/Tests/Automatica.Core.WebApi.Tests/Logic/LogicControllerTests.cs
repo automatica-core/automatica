@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Automatica.Core.WebApi.Tests.Logic
 {
-    public class LogicControllerTests : BaseControllerTest<RulesController>
+    public class LogicControllerTests : BaseControllerTest<LogicsController>
     {
         public LogicControllerTests()
         {

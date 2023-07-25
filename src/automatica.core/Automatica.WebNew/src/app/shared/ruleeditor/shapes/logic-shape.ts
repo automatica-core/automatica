@@ -2,14 +2,14 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 declare var draw2d: any;
 declare var $: any;
 
 export class LogicShapes {
-    public static addShape(logic, ruleEngineService: RuleEngineService, errorHandler: ILogicErrorHandler) {
+    public static addShape(logic, ruleEngineService: LogicEngineService, errorHandler: ILogicErrorHandler) {
 
         logic.LogicShape = draw2d.shape.layout.VerticalLayout.extend({
             init: function (attr, element: RuleInstance, linkService: LinkService) {

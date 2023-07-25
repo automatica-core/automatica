@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, Chang
 import { RulePage } from "src/app/base/model/rule-page";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 import { ConfigService } from "src/app/services/config.service";
 import { L10nTranslationService } from "angular-l10n";
 import { AreaService } from "src/app/services/areas.service";
@@ -53,7 +53,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   userGroups: UserGroup[] = [];
 
 
-  constructor(private ruleEngineService: RuleEngineService,
+  constructor(private ruleEngineService: LogicEngineService,
     private configService: ConfigService,
     private notify: NotifyService,
     translate: L10nTranslationService,

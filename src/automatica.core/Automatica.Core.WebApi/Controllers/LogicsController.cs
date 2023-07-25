@@ -28,8 +28,8 @@ namespace Automatica.Core.WebApi.Controllers
         public List<NodeInstance> NodeInstances { get; set; }
     }
 
-    [Route("webapi/rules")]
-    public class RulesController : BaseController
+    [Route("webapi/logics")]
+    public class LogicsController : BaseController
     {
         private readonly IRuleDataHandler _ruleDataHandler;
         private readonly ILogicCacheFacade _logicCacheFacade;
@@ -38,7 +38,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ICoreServer _coreServer;
 
-        public RulesController(AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
+        public LogicsController(AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
             INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer coreServer)
             : base(db)
         {
