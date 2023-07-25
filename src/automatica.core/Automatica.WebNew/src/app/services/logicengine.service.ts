@@ -8,9 +8,7 @@ import { DesignTimeDataService } from "./design-time-data.service";
 import { RulePage } from "../base/model/rule-page";
 import { RuleTemplate } from "../base/model/rule-template";
 import { RuleInstance } from "../base/model/rule-instance";
-import { NodeInstance } from "../base/model/node-instance";
 import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
-import { Model, JsonProperty, JsonFieldInfo, BaseModel } from "../base/model/base-model";
 import { Link } from "../base/model/link";
 
 export interface AddLogicData {
@@ -55,9 +53,9 @@ export class LogicEngineService extends BaseService {
 
   addItem(item: AddLogicData): Promise<any> {
 
-    let linkExtension = "ruleInstance";
+    let linkExtension = "logicInstance";
     if (item.data instanceof RuleInstance) {
-      linkExtension = "ruleInstance";
+      linkExtension = "logicInstance";
     } else {
       linkExtension = "nodeInstance";
     }
@@ -73,9 +71,9 @@ export class LogicEngineService extends BaseService {
 
   removeItem(data: RuleInstance | NodeInstance2RulePage): Promise<any> {
 
-    let linkExtension = "ruleInstance";
+    let linkExtension = "logicInstance";
     if (data instanceof RuleInstance) {
-      linkExtension = "ruleInstance";
+      linkExtension = "logicInstance";
     } else {
       linkExtension = "nodeInstance";
     }
@@ -85,7 +83,7 @@ export class LogicEngineService extends BaseService {
 
   updateItem(item: RuleInstance | NodeInstance2RulePage) {
     if (item instanceof RuleInstance) {
-      return super.patchJson(`logics/item/ruleInstance`, item.toJson());
+      return super.patchJson(`logics/item/logicInstance`, item.toJson());
     } else {
       return super.patchJson(`logics/item/nodeInstance`, item.toJson());
     }

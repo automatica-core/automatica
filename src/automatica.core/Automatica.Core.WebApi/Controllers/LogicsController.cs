@@ -65,13 +65,13 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("item/ruleInstance/{pageId}")]
+        [Route("item/logicInstance/{pageId}")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<RuleInstance> AddRuleInstance([FromBody] RuleInstance ruleInstance, Guid pageId)
+        public async Task<RuleInstance> AddLogicInstance([FromBody] RuleInstance logicInstance, Guid pageId)
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-            foreach (var ruleInterface in ruleInstance.RuleInterfaceInstance)
+            foreach (var ruleInterface in logicInstance.RuleInterfaceInstance)
             {
                 ruleInterface.This2RuleInterfaceTemplateNavigation = null;
 
@@ -79,48 +79,48 @@ namespace Automatica.Core.WebApi.Controllers
                 dbContext.Entry(ruleInterface).State = EntityState.Added;
             }
 
-            ruleInstance.This2RulePage = pageId;
+            logicInstance.This2RulePage = pageId;
 
-            ruleInstance.This2RuleTemplate = ruleInstance.This2RuleTemplateNavigation.ObjId;
-            ruleInstance.This2RuleTemplateNavigation = null;
+            logicInstance.This2RuleTemplate = logicInstance.This2RuleTemplateNavigation.ObjId;
+            logicInstance.This2RuleTemplateNavigation = null;
 
-            dbContext.RuleInstances.Add(ruleInstance);
-            dbContext.Entry(ruleInstance).State = EntityState.Added;
+            dbContext.RuleInstances.Add(logicInstance);
+            dbContext.Entry(logicInstance).State = EntityState.Added;
 
-            ruleInstance.This2RulePage = pageId;
+            logicInstance.This2RulePage = pageId;
             await dbContext.SaveChangesAsync();
 
 
-            _logicCacheFacade.PageCache.AddRuleInstance(ruleInstance);
-            _logicCacheFacade.InstanceCache.Add(ruleInstance.ObjId, ruleInstance);
+            _logicCacheFacade.PageCache.AddRuleInstance(logicInstance);
+            _logicCacheFacade.InstanceCache.Add(logicInstance.ObjId, logicInstance);
             _logicCacheFacade.ClearInstances();
 
-            await _coreServer.ReloadLogic(ruleInstance.ObjId);
+            await _coreServer.ReloadLogic(logicInstance.ObjId);
 
-            return ruleInstance;
+            return logicInstance;
         }
 
         [HttpPatch]
-        [Route("item/ruleInstance")]
+        [Route("item/logicInstance")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<RuleInstance> UpdateRuleInstance([FromBody] RuleInstance ruleInstance)
+        public async Task<RuleInstance> UpdateLogicInstance([FromBody] RuleInstance logicInstance)
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-            var existingInstance = dbContext.RuleInstances.Single(a => a.ObjId == ruleInstance.ObjId);
+            var existingInstance = dbContext.RuleInstances.Single(a => a.ObjId == logicInstance.ObjId);
             
-            existingInstance.Name = ruleInstance.Name;
-            existingInstance.X = ruleInstance.X;
-            existingInstance.Y= ruleInstance.Y;
-            existingInstance.UseInVisu = ruleInstance.UseInVisu;
-            existingInstance.Description = ruleInstance.Description;
-            existingInstance.IsFavorite = ruleInstance.IsFavorite;
-            existingInstance.Rating = ruleInstance.Rating;
-            existingInstance.This2UserGroup = ruleInstance.This2UserGroup;
-            existingInstance.This2AreaInstance = ruleInstance.This2AreaInstance;
-            existingInstance.This2CategoryInstance = ruleInstance.This2CategoryInstance;
+            existingInstance.Name = logicInstance.Name;
+            existingInstance.X = logicInstance.X;
+            existingInstance.Y= logicInstance.Y;
+            existingInstance.UseInVisu = logicInstance.UseInVisu;
+            existingInstance.Description = logicInstance.Description;
+            existingInstance.IsFavorite = logicInstance.IsFavorite;
+            existingInstance.Rating = logicInstance.Rating;
+            existingInstance.This2UserGroup = logicInstance.This2UserGroup;
+            existingInstance.This2AreaInstance = logicInstance.This2AreaInstance;
+            existingInstance.This2CategoryInstance = logicInstance.This2CategoryInstance;
             
-            foreach(var ruleInterfaceInstance in ruleInstance.RuleInterfaceInstance)
+            foreach(var ruleInterfaceInstance in logicInstance.RuleInterfaceInstance)
             {
                 var existingRuleInterfaceInstance = dbContext.RuleInterfaceInstances.Single(a => a.ObjId == ruleInterfaceInstance.ObjId);
 
@@ -138,10 +138,10 @@ namespace Automatica.Core.WebApi.Controllers
             await dbContext.SaveChangesAsync();
 
             _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
-            _logicCacheFacade.InstanceCache.Update(ruleInstance.ObjId, ruleInstance);
-            await _coreServer.ReloadLogic(ruleInstance.ObjId);
+            _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId, logicInstance);
+            await _coreServer.ReloadLogic(logicInstance.ObjId);
             _logicCacheFacade.ClearInstances();
-            return ruleInstance;
+            return logicInstance;
         }
 
         [HttpPost]
@@ -218,7 +218,7 @@ namespace Automatica.Core.WebApi.Controllers
                 }
                 foreach (var ruleInstance in rulePage.RuleInstance)
                 {
-                    await RemoveRuleInstanceInternal(ruleInstance.ObjId, dbContext);
+                    await RemoveLogicInstanceInternal(ruleInstance.ObjId, dbContext);
                 }
 
 
@@ -230,19 +230,19 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("item/ruleInstance/{instanceId}")]
+        [Route("item/logicInstance/{instanceId}")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task RemoveRuleInstance(Guid instanceId)
+        public async Task RemoveLogicInstance(Guid instanceId)
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-            await RemoveRuleInstanceInternal(instanceId, dbContext);
+            await RemoveLogicInstanceInternal(instanceId, dbContext);
             await dbContext.SaveChangesAsync();
 
             _logicCacheFacade.ClearInstances();
         }
 
-        private async Task RemoveRuleInstanceInternal(Guid instanceId, AutomaticaContext dbContext)
+        private async Task RemoveLogicInstanceInternal(Guid instanceId, AutomaticaContext dbContext)
         {
             var ruleInstance = dbContext.RuleInstances.SingleOrDefault(a => a.ObjId == instanceId);
 
@@ -400,7 +400,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("page/{id}")]
         [Authorize(Policy = Role.AdminRole)]
-        public RulePage GetRulePage(Guid id)
+        public RulePage GetPage(Guid id)
         {
             return _logicCacheFacade.PageCache.Get(id);
         }
@@ -408,7 +408,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("templates")]
         [Authorize(Policy = Role.AdminRole)]
-        public ICollection<RuleTemplate> GetRuleTemplates()
+        public ICollection<RuleTemplate> GetLogicTemplates()
         {
             return _logicCacheFacade.TemplateCache.All();
         }
@@ -425,7 +425,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPatch]
         [Route("page")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<RulePage> UpdateRulePage([FromBody]RulePage page)
+        public async Task<RulePage> UpdatePage([FromBody]RulePage page)
         {
             await using var dbContext = new AutomaticaContext(_config);
 
