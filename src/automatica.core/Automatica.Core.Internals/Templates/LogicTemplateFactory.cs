@@ -128,7 +128,10 @@ namespace Automatica.Core.Internals.Templates
                 Db.RuleInterfaceTemplates.Update(logicInterfaceTemplate);
             }
 
-            LogicTemplates[ruleTemplate].RuleInterfaceTemplate.Add(logicInterfaceTemplate);
+            if (LogicTemplates[ruleTemplate].RuleInterfaceTemplate.All(a => a.ObjId != logicInterfaceTemplate.ObjId))
+            {
+                LogicTemplates[ruleTemplate].RuleInterfaceTemplate.Add(logicInterfaceTemplate);
+            }
 
             return retValue;
         }
@@ -176,8 +179,10 @@ namespace Automatica.Core.Internals.Templates
             {
                 Db.RuleInterfaceTemplates.Update(parameterLogicInterfaceTemplate);
             }
-
-            LogicTemplates[ruleTemplate].RuleInterfaceTemplate.Add(parameterLogicInterfaceTemplate);
+            if (LogicTemplates[ruleTemplate].RuleInterfaceTemplate.All(a => a.ObjId != parameterLogicInterfaceTemplate.ObjId))
+            {
+                LogicTemplates[ruleTemplate].RuleInterfaceTemplate.Add(parameterLogicInterfaceTemplate);
+            }
 
             return retValue;
         }

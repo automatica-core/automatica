@@ -14,6 +14,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         protected override IQueryable<RuleTemplate> GetAll(AutomaticaContext context)
         {
+            Clear();
             return context.RuleTemplates.AsNoTracking()
                 .Include(a => a.RuleInterfaceTemplate).ThenInclude(b => b.This2RuleInterfaceDirectionNavigation);
         }
