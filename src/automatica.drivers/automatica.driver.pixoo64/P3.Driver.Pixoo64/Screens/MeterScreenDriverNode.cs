@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -18,7 +19,7 @@ namespace P3.Driver.Pixoo64.Screens
             return new MeterScreen(Pixoo, DriverContext.Logger);
         }
 
-        protected override async Task SetScreenValue(object value, NodeInstance node)
+        protected override async Task SetScreenValue(object value, NodeInstance node, CancellationToken token = default)
         {
             await Task.CompletedTask;
             var dValue = Convert.ToDouble(value);

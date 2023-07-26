@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -15,11 +16,11 @@ namespace P3.Driver.Pixoo64
             _screen = screen;
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
+        public override async Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
         {
             try
             {
-                await _screen.SetValue(value, DriverContext.NodeInstance);
+                await _screen.SetValue(value.Value, DriverContext.NodeInstance, token);
                 DispatchValue(value);
             }
             catch (Exception e)
@@ -27,6 +28,7 @@ namespace P3.Driver.Pixoo64
                 DriverContext.Logger.LogError($"Could not set screen value {e}");
             }
         }
+
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
