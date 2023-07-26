@@ -38,7 +38,7 @@ stages:
           command: 'restore'
           projects: '**/*.csproj'
           feedsToUse: 'config'
-          nugetConfigPath: 'NuGet.config'
+          
 
       - task: DotNetCoreCLI@2
         displayName: Test
@@ -104,7 +104,7 @@ stages:
           command: 'restore'
           projects: '**/*.csproj'
           feedsToUse: 'config'
-          nugetConfigPath: 'NuGet.config'
+          
 
       - task: DotNetCoreCLI@2
         displayName: Test
