@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Automatica.Core.Tests.Dispatcher.Utils;
+using Moq;
 using Xunit;
 
 namespace Automatica.Core.Tests.Dispatcher
 {
     public class LoopDispatcherTests : BaseDispatcherTest
     {
-      
-        public LoopDispatcherTests() : base(new DispatcherLoopCheckMock())
+
+        public LoopDispatcherTests() : base(new DispatcherLoopCheckMock(), new Mock<IRemanentHandler>().Object)
         {
-             }
+
+        }
 
         [Fact]
         public async Task TestLoopNodes()

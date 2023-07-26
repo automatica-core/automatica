@@ -98,8 +98,9 @@ namespace Automatica.Push.Hubs
                     throw new ArgumentOutOfRangeException();
             }
 
+            var nodeInstanceValue = _nodeInstanceCache.Get(nodeInstance);
 
-            var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance, DispatchableSource.Visualization);
+            var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance, DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
             _dispatcher.DispatchValue(dispatchable, new DispatchValue(nodeInstance, DispatchableType.Visualization, convertedValue, DateTime.Now));
         }
     }

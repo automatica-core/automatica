@@ -19,6 +19,7 @@ namespace Automatica.Core.Runtime.RemoteNode
         public DispatchableType Type => DispatchableType.NodeInstance;
         public string Name => _node.Name;
         public Guid Id => _node.ObjId;
+        public bool IsRemanent => _node.IsRemanent;
         public IDriverContext DriverContext => null;
         public IList<IDriverNode> Children => new List<IDriverNode>();
 

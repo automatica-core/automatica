@@ -25,5 +25,6 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public string Name { get; }
 
         public Guid Id { get; }
+        public bool IsRemanent => false;
     }
 }

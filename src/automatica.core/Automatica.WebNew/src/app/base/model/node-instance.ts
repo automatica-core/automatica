@@ -246,7 +246,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     This2Slave: string;
 
     @JsonProperty()
-    Remanent: boolean;
+    IsRemanent: boolean;
 
 
     @JsonProperty()

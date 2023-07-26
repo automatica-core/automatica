@@ -19,6 +19,7 @@ namespace Automatica.Core.Logic
         public DispatchableType Type => DispatchableType.RuleInstance;
         public string Name => _instance.This2RuleInstanceNavigation.Name;
         public Guid Id => _instance.ObjId;
+        public bool IsRemanent => false;
         public RuleInterfaceInstance RuleInterfaceInstance => _instance;
 
         public DispatchableSource Source => DispatchableSource.RuleInstance;

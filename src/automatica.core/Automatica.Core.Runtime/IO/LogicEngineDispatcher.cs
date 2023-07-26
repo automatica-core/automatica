@@ -26,6 +26,7 @@ namespace Automatica.Core.Runtime.IO
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
         private readonly ILogger<LogicEngineDispatcher> _logger;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotifier;
+        private readonly IRemanentHandler _remanentHandler;
         private readonly object _lock = new object();
 
         public LogicEngineDispatcher(ILinkCache linkCache, 
@@ -35,7 +36,8 @@ namespace Automatica.Core.Runtime.IO
             INodeInstanceCache nodeInstanceCache,
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache,
             ILogger<LogicEngineDispatcher> logger,
-            IRuleInstanceVisuNotify ruleInstanceVisuNotifier)
+            IRuleInstanceVisuNotify ruleInstanceVisuNotifier,
+            IRemanentHandler remanentHandler)
         {
             _linkCache = linkCache;
             _dispatcher = dispatcher;
@@ -45,6 +47,7 @@ namespace Automatica.Core.Runtime.IO
             _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
             _logger = logger;
             _ruleInstanceVisuNotifier = ruleInstanceVisuNotifier;
+            _remanentHandler = remanentHandler;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -83,8 +86,9 @@ namespace Automatica.Core.Runtime.IO
                     }
                     
                     SystemLogger.Instance.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
-                    await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
+                    await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, async (dispatchable, o) =>
                     {
+                        await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
                         ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });
                 }
@@ -138,7 +142,7 @@ namespace Automatica.Core.Runtime.IO
 
                     var inputId = sourceNode.ObjId;
                     SystemLogger.Instance.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
-                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
+                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, async (dispatchable, o) =>
                     {
                         ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });

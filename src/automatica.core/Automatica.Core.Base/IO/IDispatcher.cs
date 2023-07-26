@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.Base.IO
@@ -30,6 +31,8 @@ namespace Automatica.Core.Base.IO
 
     public interface IDispatcher
     {
+        Task Init(CancellationToken token = default);
+
         Task DispatchValue(IDispatchable self, object value);
         Task DispatchValue(IDispatchable self, DispatchValue value);
 

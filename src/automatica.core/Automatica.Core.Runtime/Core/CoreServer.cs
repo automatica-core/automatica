@@ -217,6 +217,8 @@ namespace Automatica.Core.Runtime.Core
                     await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
                     await ConfigureAndStart();
 
+                    await _dispatcher.Init(cancellationToken);
+
                 }
                 catch (Exception e)
                 {

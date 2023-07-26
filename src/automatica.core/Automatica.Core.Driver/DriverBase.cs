@@ -19,6 +19,7 @@ namespace Automatica.Core.Driver
         public IDriverContext DriverContext { get; }
         public DispatchableType Type => DispatchableType.NodeInstance;
         public Guid Id => DriverContext.NodeInstance.ObjId;
+        public bool IsRemanent => DriverContext.NodeInstance.IsRemanent;
         public string Name => DriverContext?.NodeInstance.Name;
 
         private readonly Queue<(IDispatchable, DispatchValue)> _writeQueue = new Queue<(IDispatchable, DispatchValue)>();

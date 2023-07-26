@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.Base.IO.Remanent;
 using Automatica.Core.Base.Remote;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
@@ -17,6 +19,7 @@ namespace Automatica.Core.Base.IO
     {
         private readonly IDataBroadcast _dataBroadcast;
         private readonly IRemoteSender _remoteSender;
+        private readonly IRemanentHandler _remanentHandler;
         private readonly ILogger _logger;
         private readonly object _lock = new object();
         
@@ -32,10 +35,11 @@ namespace Automatica.Core.Base.IO
 
         private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>>();
 
-        public Dispatcher(ILogger logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender)
+        public Dispatcher(ILogger logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender, IRemanentHandler remanentHandler)
         {
             _dataBroadcast = dataBroadcast;
             _remoteSender = remoteSender;
+            _remanentHandler = remanentHandler;
 
             _logger = logger;
 
@@ -44,7 +48,17 @@ namespace Automatica.Core.Base.IO
             _notifyTimer.Start();
         }
 
-      
+
+        public async Task Init(CancellationToken token = default)
+        {
+            var values = await _remanentHandler.GetAllAsync(token);
+            foreach (var keyPair in values)
+            {
+                await DispatchValue(new RemanentDispatchable(keyPair.Key), keyPair.Value);
+            }
+        }
+
+
         public IDictionary<Guid, DispatchValue> GetValues()
         {
             lock (_lock)
@@ -159,6 +173,13 @@ namespace Automatica.Core.Base.IO
             }
 
             _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value}");
+
+            if (self.IsRemanent && self is not RemanentDispatchable)
+            {
+                await _remanentHandler.SaveValueAsync(self.Id, value);
+            }
+
+
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
             {
                 var dispatch = _registrationMap[self.Type][self.Id];

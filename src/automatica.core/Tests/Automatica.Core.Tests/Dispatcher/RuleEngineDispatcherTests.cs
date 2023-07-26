@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Remote;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Automatica.Core.Tests.Dispatcher.Utils;
 using Automatica.Core.UnitTests.Base.Common;
+using Moq;
 using Xunit;
 
 namespace Automatica.Core.Tests.Dispatcher
@@ -13,7 +15,7 @@ namespace Automatica.Core.Tests.Dispatcher
     public class RuleEngineDispatcherTests : BaseDispatcherTest
     {
 
-        public RuleEngineDispatcherTests() : base(DispatcherMock.Instance)
+        public RuleEngineDispatcherTests() : base(DispatcherMock.Instance, new Mock<IRemanentHandler>().Object)
         {
         }
 
