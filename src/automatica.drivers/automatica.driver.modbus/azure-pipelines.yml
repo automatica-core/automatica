@@ -37,7 +37,7 @@ stages:
         inputs:
           command: 'restore'
           projects: '**/*.csproj'
-          feedsToUse: 'config'
+          
           
 
       - task: DotNetCoreCLI@2
@@ -103,7 +103,7 @@ stages:
         inputs:
           command: 'restore'
           projects: '**/*.csproj'
-          feedsToUse: 'config'
+          
           
 
       - task: DotNetCoreCLI@2
