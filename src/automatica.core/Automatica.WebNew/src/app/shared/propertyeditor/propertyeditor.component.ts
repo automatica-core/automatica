@@ -19,7 +19,7 @@ import { VisuPage } from "src/app/base/model/visu-page";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
-import { VirtualAreaPropertyInstance } from "src/app/base/model/virtual-props";
+import { VirtualAreaPropertyInstance, VirtualDescriptionPropertyInstance } from "src/app/base/model/virtual-props";
 import { ConfigTreeComponent } from "../config-tree/config-tree.component";
 import { Satellite } from "src/app/base/model/satellites/satellite";
 import { SatelliteService } from "src/app/services/satellite.services";
@@ -191,6 +191,12 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     if (this.item && this.item.Properties) {
       this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortProperties);
+
+      this._properties.forEach(a => {
+        if(a instanceof VirtualDescriptionPropertyInstance) {
+          a.Value = this.translate.translate(a.Value);
+        }
+      });
     }
     if (!value) {
       this._properties = [];
