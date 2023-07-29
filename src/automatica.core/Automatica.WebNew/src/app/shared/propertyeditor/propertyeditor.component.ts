@@ -192,11 +192,20 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if (this.item && this.item.Properties) {
       this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortProperties);
 
-      this._properties.forEach(a => {
-        if(a instanceof VirtualDescriptionPropertyInstance) {
-          a.Value = this.translate.translate(a.Value);
+      for (var a of this._properties) {
+        if (a instanceof VirtualDescriptionPropertyInstance) {
+
+          if (a.Value === "" || !a.Value) {
+            continue;
+          }
+          var hasTranslation = this.translate.has(a.Value);
+          if (!hasTranslation) {
+            a.Value = "";
+          } else {
+            a.Value = this.translate.translate(a.Value);
+          }
         }
-      });
+      }
     }
     if (!value) {
       this._properties = [];

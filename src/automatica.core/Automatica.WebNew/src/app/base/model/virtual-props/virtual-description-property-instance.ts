@@ -10,6 +10,16 @@ export class VirtualDescriptionPropertyInstance extends VirtualPropertyInstance 
     /**
      *
      */
+
+    
+    private _valueOverride : string;
+    public get valueOverride() : string {
+        return this._valueOverride;
+    }
+    public set valueOverride(v : string) {
+        this._valueOverride = v;
+    }
+    
     constructor(private nodeInstance: IDescriptionModel, isReadonly: boolean = false) {
         super(nodeInstance);
 
@@ -22,9 +32,13 @@ export class VirtualDescriptionPropertyInstance extends VirtualPropertyInstance 
     }
 
     get Value(): any {
+        if(this.valueOverride === "") {
+            return this.valueOverride;
+        }
         return this.nodeInstance.DisplayDescription;
     }
     set Value(value: any) {
+        this.valueOverride = value;
         this.nodeInstance.DisplayDescription = value;
     }
 
