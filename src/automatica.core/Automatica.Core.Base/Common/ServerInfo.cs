@@ -77,6 +77,18 @@ namespace Automatica.Core.Base.Common
 
         public static bool IsConnectedToCloud { get; set; }
 
+        public static string GetConfigFileName()
+        {
+            var appSettingsName = Environment.GetEnvironmentVariable("AUTOMATICA_CONFIG_FILE");
+
+            if (String.IsNullOrEmpty(appSettingsName))
+            {
+                return "appsettings.json";
+            }
+
+            return appSettingsName;
+        }
+
         public static string Rid
         {
             get

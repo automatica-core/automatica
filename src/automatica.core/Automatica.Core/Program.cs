@@ -26,7 +26,7 @@ namespace Automatica.Core
            
             var config = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
-                .AddJsonFile("appsettings.json", false)
+                .AddJsonFile(ServerInfo.GetConfigFileName(), false)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -156,7 +156,7 @@ namespace Automatica.Core
                     }
 
                     a.SetBasePath(configDir);
-                    a.AddJsonFile("appsettings.json", true);
+                    a.AddJsonFile(ServerInfo.GetConfigFileName(), true);
                     a.AddDatabaseConfiguration();
                     a.AddEnvironmentVariables();
                 })
@@ -168,7 +168,7 @@ namespace Automatica.Core
                 }).ConfigureAppConfiguration((AutomaticaContext, config) => {
                     config
                         .SetBasePath(ServerInfo.GetConfigDirectory())
-                        .AddJsonFile("appsettings.json", false)
+                        .AddJsonFile(ServerInfo.GetConfigFileName(), false)
                         .AddEnvironmentVariables()
                         .AddDatabaseConfiguration();
                 });

@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Configuration
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(ServerInfo.GetConfigFileName())
                 .AddEnvironmentVariables();
                 _config = builder.Build();
         }
