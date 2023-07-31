@@ -39,6 +39,91 @@ namespace Automatica.Core.WebApi.Controllers
             return _userGroupsCache.All();
         }
 
+        [HttpDelete]
+        [Route("usergroup/{id}")]
+        public void DeleteUserGroup(Guid id)
+        {
+            using var dbContext = new AutomaticaContext(_config);
+            var transaction = dbContext.Database.BeginTransaction();
+
+            try
+            {
+                var userGroup = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == id);
+                if (userGroup != null)
+                {
+                    dbContext.UserGroups.Remove(userGroup);
+                    transaction.Commit();
+                    dbContext.SaveChanges();
+                    _userGroupsCache.Clear();
+                }
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not delete usergroup");
+                transaction.Rollback();
+            }
+        }
+
+        [HttpPost]
+        [Route("usergroup")]
+        public UserGroup SaveUserGroup([FromBody] UserGroup instance)
+        {
+            using var dbContext = new AutomaticaContext(_config);
+            var transaction = dbContext.Database.BeginTransaction();
+            try
+            {
+
+                var existing = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
+                var roles = instance.InverseThis2Roles;
+                instance.InverseThis2Roles = null;
+
+                if (existing == null)
+                {
+                    dbContext.UserGroups.Add(instance);
+                }
+                else
+                {
+                    dbContext.Entry(existing).State = EntityState.Detached;
+                    dbContext.UserGroups.Update(instance);
+                }
+
+                foreach (var role in roles)
+                {
+                    var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a =>
+                        a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
+
+                    if (rolesExisting != null)
+                    {
+                        continue;
+                    }
+
+                    dbContext.UserGroup2Roles.Add(role);
+                }
+
+                if (instance.InverseThis2Roles != null)
+                {
+                    var removedUserRoles = from c in dbContext.UserGroup2Roles
+                        where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
+                        select c;
+
+                    var removedUserRolesList = removedUserRoles.ToList();
+                    dbContext.RemoveRange(removedUserRolesList);
+                }
+
+                dbContext.SaveChanges();
+                transaction.Commit();
+                _userGroupsCache.Clear();
+            }
+            catch (Exception e)
+            {
+                SystemLogger.Instance.LogError(e, "Could not save data");
+                transaction.Rollback();
+            }
+
+            return GetUserGroup(instance.ObjId);
+        }
+
+
         [HttpPost]
         [Route("usergroups")]
         public ICollection<UserGroup> SaveUserGroups([FromBody]IList<UserGroup> instances)
@@ -121,7 +206,7 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("userGroup/{id}")]
+        [Route("usergroup/{id}")]
         public UserGroup GetUserGroup(Guid id)
         {
             return _userGroupsCache.Get(id);

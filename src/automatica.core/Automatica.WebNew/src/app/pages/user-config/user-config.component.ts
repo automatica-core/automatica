@@ -40,12 +40,12 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     command: (event) => { this.save(); }
   }
 
-  menuDelete: CustomMenuItem = {
-    id: "delete",
-    label: "Delete",
-    icon: "fa-delete",
+  menuRefresh: CustomMenuItem = {
+    id: "reload",
+    label: "Reload",
+    icon: "fa-reload",
     items: undefined,
-    command: (event) => { this.delete(); }
+    command: (event) => { this.load(); }
   }
 
   constructor(private catService: UsersService,
@@ -56,12 +56,12 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
 
     super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
-    // this.menuItems.push(this.menuDelete);
+    this.menuItems.push(this.menuRefresh);
 
     this.translate.onChange().subscribe({
       next: () => {
         this.menuSave.label = this.translate.translate("COMMON.SAVE");
-        this.menuDelete.label = this.translate.translate("COMMON.DELETE");
+        this.menuRefresh.label = this.translate.translate("COMMON.RELOAD");
       }
     });
 

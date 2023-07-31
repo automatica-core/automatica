@@ -32,6 +32,14 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     icon: "fa-save",
     items: undefined,
     command: (event) => { this.save(); }
+  }  
+  
+  menuRefresh: CustomMenuItem = {
+    id: "reload",
+    label: "Reload",
+    icon: "fa-reload",
+    items: undefined,
+    command: (event) => { this.load(); }
   }
 
   constructor(
@@ -39,12 +47,15 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     translate: L10nTranslationService,
     private notify: NotifyService,
     appService: AppService) {
+
     super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
+    this.menuItems.push(this.menuRefresh);
 
     this.translate.onChange().subscribe({
       next: () => {
         this.menuSave.label = this.translate.translate("COMMON.SAVE");
+        this.menuRefresh.label = this.translate.translate("COMMON.RELOAD");
       }
     });
 
@@ -53,12 +64,25 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
+    await this.load();
+  }
+
+  async load() {
     this.appService.isLoading = true;
 
     try {
+      var selectedNode = void 0;
+      if (this.selectedNode) {
+        selectedNode = this.selectedNode.ObjId;
+      }
+
       this.groups = await this.catService.getUserGroups();
       this.roles = await this.catService.getRoles();
 
+      if (selectedNode) {
+        this.selectedNode = this.groups.find(x => x.ObjId === selectedNode);
+        this.grid.instance.selectRows([selectedNode], false);
+      }
 
     } catch (error) {
       super.handleError(error);
@@ -66,13 +90,29 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
     this.appService.isLoading = false;
   }
+
+  async delete() {
+    this.appService.isLoading = true;
+    try {
+      await this.catService.deleteUserGroup(this.selectedNode);
+      this.notify.notifySuccess("COMMON.SAVED");
+
+      this.load();
+    }
+    catch (error) {
+      super.handleError(error);
+    }
+    this.appService.isLoading = false;
+  }
+
   async save() {
     this.appService.isLoading = true;
 
     try {
 
-      await this.catService.saveUserGroups(this.groups);
+      await this.catService.saveUserGroup(this.selectedNode);
 
+      this.load();
       this.notify.notifySuccess("COMMON.SAVED");
     } catch (error) {
       super.handleError(error);
@@ -84,8 +124,11 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
   colorBoxOnValueChanged($event, cell) {
     cell.setValue($event.value);
   }
-  onRowRemoving($event) {
+
+  async onRowRemoving($event) {
     const data: UserGroup = $event.data;
+    this.selectedNode = data;
+    this.delete();
   }
 
   itemClick($event) {
@@ -116,8 +159,9 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     Object.assign(newObject, $event.data);
     $event.data = newObject;
 
-    // await this.grid.instance.selectRows([newObject.ObjId], false);
+    this.grid.instance.selectRows([newObject.ObjId], false);
     this.selectedNode = newObject;
+    this.save();
   }
 
   onRowClicked($event) {
