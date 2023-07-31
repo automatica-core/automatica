@@ -100,8 +100,13 @@ namespace Automatica.Push.Hubs
 
             var nodeInstanceValue = _nodeInstanceCache.Get(nodeInstance);
 
-            var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance, DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
-            _dispatcher.DispatchValue(dispatchable, new DispatchValue(nodeInstance, DispatchableType.Visualization, convertedValue, DateTime.Now));
+            if (nodeInstanceValue != null)
+            {
+                var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance,
+                    DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
+                _dispatcher.DispatchValue(dispatchable,
+                    new DispatchValue(nodeInstance, DispatchableType.Visualization, convertedValue, DateTime.Now));
+            }
         }
     }
 }

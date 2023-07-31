@@ -21,11 +21,19 @@ export class UsersService extends BaseService {
         return super.getMultiple<Role>("usermgm/roles");
     }
 
-    saveUsers(ususersrGroups: User[]) {
+    saveUsers(users: User[]) {
         const data = new Array<any>();
-        for (const set of ususersrGroups) {
+        for (const set of users) {
             data.push(set.toJson());
         }
         return super.postMultiple("usermgm/users", data);
+    }   
+    
+    saveUser(user: User) {
+        return super.post<User>("usermgm/user", user.toJson());
+    } 
+    
+    deleteUser(user: User) {
+        return super.deleteJson("usermgm/user/" + user.ObjId);
     }
 }

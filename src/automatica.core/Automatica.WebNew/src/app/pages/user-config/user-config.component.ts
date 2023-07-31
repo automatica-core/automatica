@@ -40,6 +40,14 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     command: (event) => { this.save(); }
   }
 
+  menuDelete: CustomMenuItem = {
+    id: "delete",
+    label: "Delete",
+    icon: "fa-delete",
+    items: undefined,
+    command: (event) => { this.delete(); }
+  }
+
   constructor(private catService: UsersService,
     translate: L10nTranslationService,
     private notify: NotifyService,
@@ -48,10 +56,12 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
 
     super(notify, translate, appService);
     this.menuItems.push(this.menuSave);
+    // this.menuItems.push(this.menuDelete);
 
     this.translate.onChange().subscribe({
       next: () => {
         this.menuSave.label = this.translate.translate("COMMON.SAVE");
+        this.menuDelete.label = this.translate.translate("COMMON.DELETE");
       }
     });
 
@@ -60,22 +70,50 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.appService.isLoading = true;
+    await this.load();
+  }
 
+  async load() {
+    this.appService.isLoading = true;
     try {
+
+      var selectedNode = void 0;
+      if(this.selectedNode) {
+        selectedNode = this.selectedNode.ObjId;
+      }
+
       this.users = await this.catService.getUsers();
 
       this.userGroups = await this.userGroupService.getUserGroups();
 
       this.roles = await this.catService.getRoles();
 
+      if(selectedNode) {
+        this.selectedNode = this.users.find(x => x.ObjId === selectedNode);
+        this.grid.instance.selectRows([selectedNode], false);
+      }
+
 
     } catch (error) {
       super.handleError(error);
     }
-
     this.appService.isLoading = false;
   }
+
+  async delete() {
+    this.appService.isLoading = true;
+    try {
+      await this.catService.deleteUser(this.selectedNode);
+      this.notify.notifySuccess("COMMON.SAVED");
+
+      this.load();
+    }
+    catch (error) {
+      super.handleError(error);
+    }
+    this.appService.isLoading = false;
+  }
+
   async save() {
     this.appService.isLoading = true;
 
@@ -95,7 +133,9 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
         return;
       }
 
-      await this.catService.saveUsers(this.users);
+      this.selectedNode = await this.catService.saveUser(this.selectedNode);
+
+      this.load();
 
       this.notify.notifySuccess("COMMON.SAVED");
     } catch (error) {
@@ -110,6 +150,8 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   }
   onRowRemoving($event) {
     const data: User = $event.data;
+    this.selectedNode = data;
+    this.delete();
   }
 
   itemClick($event) {
@@ -143,6 +185,8 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
 
     this.grid.instance.selectRows([newObject.ObjId], false);
     this.selectedNode = newObject;
+
+    this.save();
   }
 
   onRowClicked($event) {
