@@ -87,6 +87,11 @@ namespace Automatica.Core
 
             logger.LogInformation($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
 
+            if (ServerInfo.InDocker)
+            {
+                logger.LogInformation($"Running in docker mode...");
+            }
+
             var db = webHost.Services.GetRequiredService<AutomaticaContext>();
             DatabaseInit.EnsureDatabaseCreated(webHost.Services);
 
