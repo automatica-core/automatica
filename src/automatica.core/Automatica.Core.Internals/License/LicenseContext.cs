@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Internals.Cloud;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.Internals.License
 {
@@ -143,6 +144,15 @@ namespace Automatica.Core.Internals.License
                 AllowRemoteControl = false;
                 IsLicensed = true;
             }
+
+            SystemLogger.Instance.LogInformation($"System is licensed to:");
+            SystemLogger.Instance.LogInformation($"{nameof(MaxDataPoints)}: {MaxDataPoints}");
+            SystemLogger.Instance.LogInformation($"{nameof(MaxUsers)}: {MaxUsers}");
+            SystemLogger.Instance.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
+            SystemLogger.Instance.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
+            SystemLogger.Instance.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
+            SystemLogger.Instance.LogInformation($"{nameof(_license.ProductFeatures)}: {JsonConvert.SerializeObject(_license.ProductFeatures)}");
+
             return IsLicensed;
 
         }
