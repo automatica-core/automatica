@@ -6,10 +6,22 @@ namespace Automatica.Core.Common.Update
 {
     public class AutomaticaVersion 
     {
+        private int _revision;
+        private int _build;
         public int Minor { get; set; }
         public int Major { get; set; }
-        public int Build { get; set; }
-        public int Revision { get; set; }
+
+        public int Build
+        {
+            get => _build < 0 ? 0 : _build;
+            set => _build  = value;
+        }
+
+        public int Revision
+        {
+            get => _revision < 0 ? 0 : _revision;
+            set => _revision = value;
+        }
 
         public Version ToVersion()
         {

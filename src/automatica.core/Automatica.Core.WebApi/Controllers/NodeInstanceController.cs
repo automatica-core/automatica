@@ -16,11 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.WebApi.Controllers
 {
-    public class ImportData
-    {
-        public NodeInstance Node { get; set; }
-        public string FileName { get; set; }
-    }
+  
 
     public class ResultState
     {

@@ -1,0 +1,14 @@
+﻿using System.Text.Json.Serialization;
+
+namespace P3.Synology.Api.Client.Apis.FileStation.Extract.Models
+{
+    public class FileStationExtractStatusResponse
+    {
+        [JsonPropertyName("dest_folder_path")]
+        public string DestFolderPath { get; set; }
+
+        public bool Finished { get; set; }
+
+        public decimal Progress { get; set; }
+    }
+}

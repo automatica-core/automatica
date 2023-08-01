@@ -26,7 +26,7 @@ import { LoginFormModule } from "./shared/components/login-form/login-form.modul
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ServicesModule } from "./services/services.module";
 import { SharedModule } from "./shared/shared.module";
-import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxScrollViewModule, DxListModule } from "devextreme-angular";
+import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxScrollViewModule, DxListModule, DxTextBoxModule } from "devextreme-angular";
 import { AutomaticaCommunicationModule } from "./base/communication/automatica-communication.module";
 import { AngularSplitModule } from "angular-split";
 import { DndModule, DragDropConfig, DataTransferEffect, DragImage } from "p3root-angular-dnd";
@@ -35,10 +35,11 @@ import { MobileModule } from "./visualization/mobile/mobile.module";
 import { HasRoleGuard } from "./services/login.service";
 import { CommonModule } from "@angular/common";
 import { StartingOverlayModule } from "./shared/starting-overlay/starting-overlay.module";
-import { SlaveConfigComponent } from "./pages/slave-config/slave-config.component";
+
 import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 import { ThemeService } from "./services/theme.service";
+import { SatelliteConfigComponent } from "./pages/satellite-config/satellite-config.component";
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -90,6 +91,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     DxColorBoxModule,
     DxTextAreaModule,
     DxProgressBarModule,
+    DxTextBoxModule,
     VisualizationModule,
     DxScrollViewModule,
     MobileModule,
@@ -133,7 +135,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     SystemComponent,
     PluginsComponent,
     AreasEtsImportComponent,
-    SlaveConfigComponent
+    SatelliteConfigComponent
   ]
 })
 export class AppModule {

@@ -33,36 +33,48 @@ namespace P3.Driver.FroniusSolarFactory
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             PollInterval = GetPropertyValueInt("fronius-poll-interval");
             DeviceId = (byte)GetPropertyValueInt("fronius-device-id");
+            IsDisabled = GetProperty("fronius-disabled")!.ValueBool!.Value;
 
-            _pollTimer.Interval = PollInterval;
 
-            var ip = GetPropertyValueString("fronius-ip");
-
-            if (!IPAddress.TryParse(ip, out var ipAddress))
+            if (!IsDisabled)
             {
-                return false;
-            }
-            _client = new(ipAddress.ToString(), 1, DriverContext.Logger);
+                _pollTimer.Interval = PollInterval;
 
-            return base.Init();
+                var ip = GetPropertyValueString("fronius-ip");
+
+                if (!IPAddress.TryParse(ip, out var ipAddress))
+                {
+                    return Task.FromResult(false);
+                }
+
+                _client = new(ipAddress.ToString(), 1, DriverContext.Logger);
+            }
+
+            return base.Init(token);
         }
 
-        public override Task<bool> Start()
+        public bool IsDisabled { get; set; }
+
+        public override Task<bool> Start(CancellationToken token = default)
         {
-            if (_client == null)
+            if (!IsDisabled)
             {
-                throw new ArgumentException("Init must be called before start..");
+                if (_client == null)
+                {
+                    throw new ArgumentException("Init must be called before start..");
+                }
+
+                _pollTimer.Elapsed += PollTimerOnElapsed;
+                _pollTimer.Start();
+
+                PollAll().ConfigureAwait(false);
             }
-            _pollTimer.Elapsed += PollTimerOnElapsed;
-            _pollTimer.Start();
 
-            PollAll().ConfigureAwait(false);
-
-            return base.Start();
+            return base.Start(token);
         }
 
         private async Task PollAll()

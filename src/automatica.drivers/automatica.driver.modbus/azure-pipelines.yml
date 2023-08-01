@@ -29,16 +29,16 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            dotnet tool install automatica-cli --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json --global  2>/dev/null
-            dotnet tool update automatica-cli -g --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json 2>/dev/null
+            dotnet tool install automatica-cli  --global  2>/dev/null
+            dotnet tool update automatica-cli -g  2>/dev/null
 
       - task: DotNetCoreCLI@2
         displayName: Restore
         inputs:
           command: 'restore'
           projects: '**/*.csproj'
-          feedsToUse: 'config'
-          nugetConfigPath: 'NuGet.config'
+          
+          
 
       - task: DotNetCoreCLI@2
         displayName: Test
@@ -95,16 +95,16 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            dotnet tool install automatica-cli --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json --global  2>/dev/null
-            dotnet tool update automatica-cli -g --add-source https://www.myget.org/F/automaticacore/auth/$(MYGET_API_KEY)/api/v3/index.json 2>/dev/null
+            dotnet tool install automatica-cli  --global  2>/dev/null
+            dotnet tool update automatica-cli -g  2>/dev/null
 
       - task: DotNetCoreCLI@2
         displayName: Restore
         inputs:
           command: 'restore'
           projects: '**/*.csproj'
-          feedsToUse: 'config'
-          nugetConfigPath: 'NuGet.config'
+          
+          
 
       - task: DotNetCoreCLI@2
         displayName: Test

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
@@ -18,6 +19,7 @@ namespace Automatica.Core.Runtime.RemoteNode
         public DispatchableType Type => DispatchableType.NodeInstance;
         public string Name => _node.Name;
         public Guid Id => _node.ObjId;
+        public bool IsRemanent => _node.IsRemanent;
         public IDriverContext DriverContext => null;
         public IList<IDriverNode> Children => new List<IDriverNode>();
 
@@ -27,84 +29,97 @@ namespace Automatica.Core.Runtime.RemoteNode
             _node = node;
             _remoteHandler = remoteHandler;
         }
-        public bool Configure()
+        public Task<bool> Configure(CancellationToken token = default)
         {
-            return true;
+            return Task.FromResult(true);
         }
 
-        public bool Init()
+        public Task<bool> Init(CancellationToken token = default)
         {
-
-            return true;
+            return Task.FromResult(true);
         }
 
         public IDriverNode Parent { get; set; }
-        public Task<bool> Start()
+        public Task<bool> Start(CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
 
-        public Task<bool> Stop()
+        public Task<bool> Stop(CancellationToken token = default)
         {
-
             return Task.FromResult(true);
         }
 
-        public async Task<IList<NodeInstance>> Scan()
+        //TODO: Implement
+        public async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
-            await Task.Delay(0);
+            await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
-        public async Task<IList<NodeInstance>> Import(string fileName)
+        //TODO: Implement
+        public async Task<IList<NodeInstance>> Import(string fileName, CancellationToken token = default)
         {
-            await Task.Delay(0);
+            await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
-        public async Task<IList<NodeInstance>> CustomAction(string actionName)
+        //TODO: Implement
+        public async Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = default)
         {
-            await Task.Delay(0);
+            await Task.CompletedTask;
             return new List<NodeInstance>();
         }
 
-        public Task WriteValue(IDispatchable source, object value)
+        //TODO: Implement
+        public async Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
+        {
+            await Task.CompletedTask;
+            return new List<NodeInstance>();
+        }
+
+        //TODO: Implement
+        public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task<bool> Read()
+        public Task<bool> Read(CancellationToken token = default)
         {
             _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.Read, this);
             return Task.FromResult(true);
         }
 
-        public Task OnSave(NodeInstance instance)
+        //TODO: Implement
+        public Task OnSave(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task OnDelete(NodeInstance instance)
+        //TODO: Implement
+        public Task OnDelete(NodeInstance instance, CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
-        public Task OnReinit()
+        //TODO: Implement
+        public Task OnReInit(CancellationToken token = default)
         {
             return Task.CompletedTask;
         }
 
+        //TODO: Implement
         public int ChildrensCreated => 0;
         public NodeInstanceState State => NodeInstanceState.InUse;
 
-        public async Task<bool> EnableLearnMode()
+        public async Task<bool> EnableLearnMode(CancellationToken token = default)
         {
             await _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.StartLearnMode, this);
 
             return true;
         }
 
-        public async Task<bool> DisableLearnMode()
+        public async Task<bool> DisableLearnMode(CancellationToken token = default)
         {
             await _remoteHandler.SendAction(_driverInstanceGuid, DriverNodeRemoteAction.StopLearnMode, this);
             return true;

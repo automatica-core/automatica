@@ -23,7 +23,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             return telegram;
         }
 
-        private EnOceanDriver CreateDriverForF6(string serial, params Guid[] dataFieldGuid)
+        private async Task<EnOceanDriver> CreateDriverForF6(string serial, params Guid[] dataFieldGuid)
         {
             var driverNode = CreateNodeInstance(EnOceanDriverFactory.DriverGuidId);
 
@@ -46,7 +46,7 @@ namespace P3.Driver.EnOcean.Data.Tests
                 type.InverseThis2ParentNodeInstanceNavigation.Add(df);
             }
 
-            var driver = CreateDriver<EnOceanDriver>(driverNode);
+            var driver = await CreateDriver<EnOceanDriver>(driverNode);
 
             return driver;
         }
@@ -56,7 +56,7 @@ namespace P3.Driver.EnOcean.Data.Tests
         public async Task TestRockerSwitch_R1_AO() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
             var telegram = CreatePacket("55000707017AF630FEF7D96E0001FFFFFFFF460039");
@@ -68,14 +68,14 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(1, values.First().Value);
+            Assert.Equal(1, values.First().Value.Value);
         }
 
         [Fact]
         public async Task TestRockerSwitch_R2_AO()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
             var telegram = CreatePacket("55000707017AF630FEF7D96E0001FFFFFFFF460039");
@@ -87,14 +87,14 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(1, values.First().Value);
+            Assert.Equal(1, values.First().Value.Value);
         }
 
         [Fact]
         public async Task TestRockerSwitch_R2_TeachIn()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
             var telegram = CreatePacket("55000707017AF630FEF7D96E0001FFFFFFFF460039");
@@ -107,7 +107,7 @@ namespace P3.Driver.EnOcean.Data.Tests
         public async Task TestRockerSwitch_R1_AI() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
             var telegram = CreatePacket("55000707017AF610FEF7D96E0001FFFFFFFF4400ED");
@@ -119,14 +119,14 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(0, values.First().Value);
+            Assert.Equal(0, values.First().Value.Value);
         }
 
         [Fact]
         public async Task TestRockerSwitch_R2_AI() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
             var telegram = CreatePacket("55000707017AF610FEF7D96E0001FFFFFFFF4400ED");
@@ -138,7 +138,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(0, values.First().Value);
+            Assert.Equal(0, values.First().Value.Value);
         }
 
 
@@ -147,7 +147,7 @@ namespace P3.Driver.EnOcean.Data.Tests
         public async Task TestRockerSwitch_R1_BO() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
             var telegram = CreatePacket("55000707017AF670FEF7D96E0001FFFFFFFF5B007C");
@@ -159,14 +159,14 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(3, values.First().Value);
+            Assert.Equal(3, values.First().Value.Value);
         }
 
         [Fact]
         public async Task TestRockerSwitch_R2_BO() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
             var telegram = CreatePacket("55000707017AF670FEF7D96E0001FFFFFFFF5B007C");
@@ -178,14 +178,14 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(3, values.First().Value);
+            Assert.Equal(3, values.First().Value.Value);
         }
 
         [Fact]
         public async Task TestRockerSwitch_R1_BI() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
 
             var telegram = CreatePacket("55000707017AF650FEF7D96E0001FFFFFFFF43007D");
@@ -197,14 +197,14 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(2, values.First().Value);
+            Assert.Equal(2, values.First().Value.Value);
         }
 
         [Fact]
         public async Task TestRockerSwitch_R2_BI() 
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriverForF6("FEF7D96E",
+            var driver = await CreateDriverForF6("FEF7D96E",
                 EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
 
             var telegram = CreatePacket("55000707017AF650FEF7D96E0001FFFFFFFF43007D");
@@ -216,7 +216,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(2, values.First().Value);
+            Assert.Equal(2, values.First().Value.Value);
         }
     }
 }

@@ -27,9 +27,9 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
             Gateway = gateway;
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
-            await base.Start();
+            await base.Start(token);
 
             try
             {
@@ -72,11 +72,11 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                 att.Update(device);
             }
         }
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             DeviceId = Convert.ToInt64(DriverContext.NodeInstance.GetPropertyValueDouble(IkeaTradfriFactory.DeviceIdPropertyKey));
 
-            return base.Init();
+            return base.Init(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

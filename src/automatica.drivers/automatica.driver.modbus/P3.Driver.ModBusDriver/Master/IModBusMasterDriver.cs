@@ -9,6 +9,9 @@ namespace P3.Driver.ModBusDriver.Master
 
         bool Open();
         Task<bool> Stop();
+
+        Task Reconnect();
+
         Task<ModBusReturn> ReadInputRegisters(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default);
         Task<ModBusReturn> ReadRegisters(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default);
         Task<ModBusReturn> ReadCoils(byte slaveId, ushort address, int numberOfRegisters, CancellationToken cts = default);

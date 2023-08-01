@@ -1,5 +1,5 @@
 
-import { Injectable, Optional } from "@angular/core";
+import { Inject, Injectable, Optional } from "@angular/core";
 import { L10nTranslationService, L10nConfig, L10nLoader, L10nTranslationLoader, L10nProvider } from "angular-l10n";
 import { loadMessages, locale } from "devextreme/localization"
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
@@ -39,7 +39,7 @@ import { Observable } from "rxjs";
 
 export const TranslationConfiguration: L10nConfig = {
   format: "language-region",
-  cache: true,
+  cache: false,
   keySeparator: ".",
   defaultLocale: { language: "de", currency: "EUR" },
   schema: [
@@ -66,12 +66,15 @@ export function miss(path: string): string {
 
 @Injectable()
 export class TranslationConfigService {
-  constructor(public translation: L10nTranslationService, private http: HttpClient, private l10Loader: L10nLoader) {
+  constructor(public translation: L10nTranslationService, 
+    private http: HttpClient, 
+    private l10Loader: L10nLoader) {
     // this.translation.translationError.subscribe((error: any) => console.log(error));
   }
 
   async init() {
     await this.l10Loader.init();
+
 
     loadMessages(deMessages);
     loadMessages(enMessages);

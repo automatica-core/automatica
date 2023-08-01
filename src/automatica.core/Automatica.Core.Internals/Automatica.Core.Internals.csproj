@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.2.0.1021</Version>
+    <Version>7.4.0.1190</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="pub.txt" />
@@ -15,10 +15,12 @@
     <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
-    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Rule.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Logic.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
     <PackageReference Include="Standard.Licensing" Version="1.1.5" />
   </ItemGroup>
 </Project>

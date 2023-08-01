@@ -165,8 +165,8 @@ namespace Automatica.Core.Supervisor.Runtime
 
         public async Task Stop()
         {
-            _checkForNewImageTimer?.Dispose();
-            _checkContainerStatusTimer?.Dispose();
+            await _checkForNewImageTimer.DisposeAsync();
+            await _checkContainerStatusTimer.DisposeAsync();
 
             await StopContainer(_runningContainer);
         }
@@ -298,7 +298,7 @@ namespace Automatica.Core.Supervisor.Runtime
                 if (imgName.Contains("."))
                 {
                     var splitPoint = imgName.Split(".", StringSplitOptions.RemoveEmptyEntries);
-                    imgName = splitPoint[splitPoint.Length - 1];
+                    imgName = splitPoint[^1];
                 }
 
                 try

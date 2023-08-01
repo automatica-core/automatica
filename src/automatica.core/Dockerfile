@@ -45,15 +45,29 @@ RUN mkdir -p /app/plugins
 RUN echo $VERSION
 RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
 
-
 RUN rm -rf /src
+
+RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.51.2/frp_0.51.2_linux_amd64.tar.gz
+RUN tar xvzf frp.tgz
+RUN mkdir -p frp
+RUN mv frp_*/* frp/
+RUN ./frp/frpc --version
+
 
 FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
 WORKDIR /app/
 
 COPY --from=build /app/ ./
+VOLUME /app/plugins
+
+COPY --from=build /app/frp /app/frp
+COPY --from=build /app/ ./
+
+RUN mkdir -p /app/automatica/frp
+COPY ./Automatica.Core/frp/* /app/automatica/frp/
 
 VOLUME /app/plugins
+
 EXPOSE 1883/tcp
 EXPOSE 5001/tcp	
 ENV AUTOMATICA_PLUGIN_DIR=/app/plugins

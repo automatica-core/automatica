@@ -1,10 +1,10 @@
-﻿using Automatica.Core.Rule;
+﻿using Automatica.Core.Logic;
 
 namespace Automatica.Core.WebApi.Tests.Logic
 {
-    public class TestLogic : Rule.Rule
+    public class TestLogic : Core.Logic.Logic
     {
-        public TestLogic(IRuleContext context) : base(context)
+        public TestLogic(ILogicContext context) : base(context)
         {
         }
 

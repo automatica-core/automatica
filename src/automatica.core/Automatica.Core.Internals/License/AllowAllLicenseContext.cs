@@ -21,6 +21,9 @@ namespace Automatica.Core.Internals.License
         public bool IsLicensed => true;
         public int MaxDataPoints => int.MaxValue;
         public int MaxUsers => int.MaxValue;
+        public bool AllowRemoteControl => false;
+        public int MaxRemoteTunnels => 0;
+
         public bool DriverLicenseCountExceeded()
         {
             return false;

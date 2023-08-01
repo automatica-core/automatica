@@ -51,6 +51,12 @@ namespace Automatica.Core.Base.IO
         /// <param name="fileName">Absolute filepath</param>
         /// <returns>A list of new <see cref="NodeInstance"/></returns>
         Task<IList<NodeInstance>> Import(NodeInstance node, string fileName);
+        /// <summary>
+        /// Notification when the <see cref="NodeInstance"/> should import a file.
+        /// </summary>
+        /// <param name="config"><see cref="ImportConfig"/> to import</param>
+        /// <returns>A list of new <see cref="NodeInstance"/></returns>
+        Task<IList<NodeInstance>> Import(ImportConfig config);
 
         /// <summary>
         /// Notification on a custom action

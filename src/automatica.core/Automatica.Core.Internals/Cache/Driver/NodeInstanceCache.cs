@@ -159,15 +159,28 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             if (_allCache.ContainsKey(item.ObjId))
             {
+                var cachedItem = _allCache[item.ObjId];
                 _allCache[item.ObjId] = item;
                 item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
                 if (item.This2ParentNodeInstance.HasValue)
                 {
                     item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance.Value];
                     var oldItem = _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
-                        .Single(a => a.ObjId == item.ObjId);
-                    _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
-                        .Remove(oldItem);
+                        .SingleOrDefault(a => a.ObjId == item.ObjId);
+
+                    if (oldItem != null)
+                    {
+                        _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                            .Remove(oldItem);
+                    }
+                    else //seems that we moved the node to a new parent, we need to remove it from the old parent
+                    {
+                        var oldParent = _allCache[cachedItem.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                            .Single(a => a.ObjId == cachedItem.ObjId);
+                ;
+                        _allCache[cachedItem.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation
+                            .Remove(oldParent);
+                    }
 
 
                     _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation.Add(item);

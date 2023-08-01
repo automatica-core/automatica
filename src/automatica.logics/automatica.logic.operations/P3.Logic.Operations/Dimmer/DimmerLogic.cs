@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
 namespace P3.Logic.Operations.Dimmer
 {
-    public class DimmerLogic : Rule
+    public class DimmerLogic: Automatica.Core.Logic.Logic
     {
         private readonly RuleInterfaceInstance _value;
         private readonly RuleInterfaceInstance _state;
         private readonly RuleInterfaceInstance _reset;
 
         private readonly RuleInterfaceInstance _output;
+        private readonly RuleInterfaceInstance _outputState;
 
         private bool? _lastState;
         private int? _lastValue;
+        private bool? _lastOutputState;
 
-        public DimmerLogic(IRuleContext context) : base(context)
+        public DimmerLogic(ILogicContext context) : base(context)
         {
             _state = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleInputState);
@@ -31,9 +33,13 @@ namespace P3.Logic.Operations.Dimmer
 
             _output = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleOutput);
+
+
+            _outputState = context.RuleInstance.RuleInterfaceInstance.Single(a =>
+                a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleState);
         }
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
             if (instance.ObjId == _state.ObjId)
@@ -42,17 +48,20 @@ namespace P3.Logic.Operations.Dimmer
 
                 if (_lastState.HasValue && _lastState.Value == booleanValue)
                 {
-                    return new List<IRuleOutputChanged>();
+                    return new List<ILogicOutputChanged>();
                 }
 
                 _lastState = booleanValue;
 
                 if (!_lastValue.HasValue && booleanValue || (_lastValue.HasValue && _lastValue.Value == 0))
                 {
-                    _lastValue = 100;
+                    _lastOutputState = true;
+                    ValueChanged(_outputState, _lastOutputState);
                 }
 
-                return SingleOutputChanged(new RuleOutputChanged(_output, booleanValue ? _lastValue.Value : 0));
+                
+
+                return SingleOutputChanged(new LogicOutputChanged(_output, booleanValue ? _lastValue.Value : 0));
             }
 
             if (instance.ObjId == _value.ObjId)
@@ -61,20 +70,20 @@ namespace P3.Logic.Operations.Dimmer
 
                 if (_lastValue.HasValue && _lastValue.Value == intValue)
                 {
-                    return new List<IRuleOutputChanged>();
+                    return new List<ILogicOutputChanged>();
                 }
 
                 _lastValue = intValue;
 
-                return SingleOutputChanged(new RuleOutputChanged(_output, value));
+                return SingleOutputChanged(new LogicOutputChanged(_output, value));
             }
 
             if (instance.ObjId == _reset.ObjId)
             {
-                return SingleOutputChanged(new RuleOutputChanged(_output, 0));
+                return SingleOutputChanged(new LogicOutputChanged(_output, 0));
             }
 
-            return new List<IRuleOutputChanged>();
+            return new List<ILogicOutputChanged>();
         }
 
         public override object GetDataForVisu()

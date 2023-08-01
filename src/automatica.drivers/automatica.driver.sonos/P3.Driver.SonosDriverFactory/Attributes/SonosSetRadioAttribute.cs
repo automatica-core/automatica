@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Sonos;
+using Timer = System.Timers.Timer;
 
 namespace P3.Driver.SonosDriverFactory.Attributes
 {
@@ -36,17 +38,17 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             }
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             _readTimer.Start();
-            return base.Start();
+            return base.Start(token);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _readTimer.Elapsed += ReadTimerOnElapsed;
             _readTimer.Stop();
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override async Task WriteValue(IDispatchable source, object value)

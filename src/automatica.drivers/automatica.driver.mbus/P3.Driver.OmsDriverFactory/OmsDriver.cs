@@ -6,6 +6,7 @@ using P3.Driver.OmsDriverFactory.Helper;
 using System.Threading.Tasks;
 using Automatica.Core.Driver.Utility;
 using P3.Driver.Oms;
+using System.Threading;
 
 namespace P3.Driver.OmsDriverFactory
 {
@@ -21,7 +22,7 @@ namespace P3.Driver.OmsDriverFactory
             _logger = driverContext.Logger;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             var key = GetProperty("mbus-oms-key").ValueString;
             var port = GetProperty("mbus-oms-port").ValueString;
@@ -31,7 +32,7 @@ namespace P3.Driver.OmsDriverFactory
             _aesKey = Utils.StringToByteArray(key);
             _omsDevice = new OmsDevice(port, _logger, TelegramMonitor, DecryptFrame);
 
-            return base.Init();
+            return base.Init(token);
         }
 
         private void DataReceived()
@@ -39,7 +40,7 @@ namespace P3.Driver.OmsDriverFactory
             _logger.LogDebug("Received data...");
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             var mbus = await _omsDevice.Start();
 
@@ -48,14 +49,14 @@ namespace P3.Driver.OmsDriverFactory
                 return false;
             }
             DriverContext.Logger.LogInformation($"Start checking for messages....");
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             await _omsDevice.Stop();
 
-            return await base.Stop();
+            return await base.Stop(token);
         }
 
         private void DecryptFrame(MBusFrame data)

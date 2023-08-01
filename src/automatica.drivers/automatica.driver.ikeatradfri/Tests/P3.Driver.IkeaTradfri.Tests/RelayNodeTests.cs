@@ -14,7 +14,7 @@ namespace P3.Driver.IkeaTradfri.Tests
         [Fact]
         public async Task TestWriteTimeout()
         {
-            var gateway = SetupGateway();
+            var gateway = await SetupGateway();
             Assert.NotNull(gateway);
 
             gateway.Driver = CreateMoq(async () => {
@@ -35,7 +35,7 @@ namespace P3.Driver.IkeaTradfri.Tests
         [Fact]
         public async Task TestWriteOk()
         {
-            var gateway = SetupGateway();
+            var gateway = await SetupGateway();
             Assert.NotNull(gateway);
 
             gateway.Driver = CreateMoq(async () =>
@@ -57,7 +57,7 @@ namespace P3.Driver.IkeaTradfri.Tests
         [Fact]
         public async Task TestWriteFail()
         {
-            var gateway = SetupGateway();
+            var gateway = await SetupGateway();
             Assert.NotNull(gateway);
 
             gateway.Driver = CreateMoq(async () =>
@@ -77,7 +77,7 @@ namespace P3.Driver.IkeaTradfri.Tests
 
         }
 
-        private IkeaTradfriGateway SetupGateway()
+        private async Task<IkeaTradfriGateway> SetupGateway()
         {
             var root = CreateNodeInstance(IkeaTradfriFactory.GatewayContainerGuid);
 
@@ -93,7 +93,7 @@ namespace P3.Driver.IkeaTradfri.Tests
             gw.InverseThis2ParentNodeInstanceNavigation.Add(relay);
             relay.InverseThis2ParentNodeInstanceNavigation.Add(relayState);
 
-            var driver = CreateDriver<IkeaTradfriDriverFactory.IkeaTradfri>(root);
+            var driver = await CreateDriver<IkeaTradfriDriverFactory.IkeaTradfri>(root);
 
             var gateway = driver.Children[0] as IkeaTradfriGateway;
             return gateway;

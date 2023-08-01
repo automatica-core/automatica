@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Times.DriverFactory.DateTime
 {
@@ -16,7 +18,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
             _getValue = getValue;
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             if (!DriverContext.IsTest)
             {
@@ -26,7 +28,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
 
             DispatchValue(_getValue());
 
-            return base.Start();
+            return base.Start(token);
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -34,14 +36,14 @@ namespace P3.Driver.Times.DriverFactory.DateTime
             DispatchValue(_getValue());
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             if (!DriverContext.IsTest)
             {
                 _timer.Elapsed -= _timer_Elapsed;
                 _timer.Stop();
             }
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

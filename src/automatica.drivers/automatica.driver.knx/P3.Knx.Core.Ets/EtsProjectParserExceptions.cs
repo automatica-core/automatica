@@ -40,6 +40,10 @@ namespace P3.Knx.Core.Ets
     }
     public class EtsProjectParserInvalidZipFileException : EtsProjectParserException
     {
+        public EtsProjectParserInvalidZipFileException() : base("KNX.ETS.ZIPFILE_ERROR")
+        {
+            
+        }
         public EtsProjectParserInvalidZipFileException(Exception innerException)
             : base("KNX.ETS.ZIPFILE_ERROR", innerException)
         {

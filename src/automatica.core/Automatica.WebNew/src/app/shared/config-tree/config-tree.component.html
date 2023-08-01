@@ -1,7 +1,7 @@
 <div class="config-tree h-100">
 
 
-    <dx-context-menu #contextMenu target="#config" activeStateEnabled="false" closeOnOutsideClick="true"
+    <dx-context-menu #contextMenu target="#config" activeStateEnabled="false" hideOnOutsideClick="true"
         onHiding="onContextMenuHiding($event)" (onItemClick)="onContextMenuClick($event)">
     </dx-context-menu>
 
@@ -38,5 +38,5 @@
     </dx-tree-list>
 </div>
 <!-- <dx-load-panel #loadPanel *ngIf="showLoadingPanel" shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#main' }"
-    [(visible)]="isLoading" [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+    [(visible)]="isLoading" [showIndicator]="true" [showPane]="true" [shading]="true" [hideOnOutsideClick]="false">
 </dx-load-panel> -->

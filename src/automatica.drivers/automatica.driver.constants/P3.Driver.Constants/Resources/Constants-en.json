@@ -22,6 +22,14 @@
       "STRING": {
         "NAME": "String",
         "DESCRIPION": "Returns a fixed string"
+      },
+      "TRUE": {
+        "NAME": "True",
+        "DESCRIPION": "Value provides always true"
+      },
+      "FALSE": {
+        "NAME": "False",
+        "DESCRIPION": "Value provides always false"
       }
     },
     "PROPERTY": {

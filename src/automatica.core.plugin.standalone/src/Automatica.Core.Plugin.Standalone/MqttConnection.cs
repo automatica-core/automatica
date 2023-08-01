@@ -93,10 +93,11 @@ namespace Automatica.Core.Plugin.Standalone
                     .WithTcpServer(MasterAddress)
                     .WithCredentials(Username, Password)
                     .WithCleanSession()
+                    .WithWillMessage(new MqttApplicationMessage { Topic = $"watchdog/{Username}/{NodeId}" })
                     .Build();
                 _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
 
-                _mqttClient.ApplicationMessageReceivedHandler = new MqttMessageHandlers(Logger, this);
+                _mqttClient.ApplicationMessageReceivedHandler = new MqttMessageHandlers(Logger, this, _serviceProvider);
                 await _mqttClient.ConnectAsync(options);
 
                 Logger.LogInformation($"Connected to mqtt broker {MasterAddress} with clientId {NodeId}");
@@ -105,12 +106,9 @@ namespace Automatica.Core.Plugin.Standalone
                 Logger.LogDebug($"Subscribe to {RemoteTopicConstants.DISPATCHER_TOPIC}/#");
 
                 await _mqttClient.SubscribeAsync(
-                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}")
-                        .WithExactlyOnceQoS().Build(),
-                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#")
-                        .WithAtLeastOnceQoS().Build(),
-                    new TopicFilterBuilder().WithTopic($"{RemoteTopicConstants.SLAVE_TOPIC}/{NodeId}/reinit")
-                        .WithAtLeastOnceQoS().Build());
+                    new MqttTopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}").WithExactlyOnceQoS().Build(),
+                    new MqttTopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#").WithAtLeastOnceQoS().Build(),
+                    new MqttTopicFilterBuilder().WithTopic($"{RemoteTopicConstants.SLAVE_TOPIC}/{NodeId}/reinit").WithAtLeastOnceQoS().Build());
 
                 _configTimer = new Timer(async state =>
                 {

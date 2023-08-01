@@ -9,7 +9,17 @@ import { L10nTranslationService } from "angular-l10n";
 @Model()
 export class RuleInterfaceInstance extends BaseModel {
 
-    PortValue: any;
+
+    
+    private _portValue : string;
+    public get PortValue() : string {
+        return this._portValue;
+    }
+    public set PortValue(v : string) {
+        this._portValue = v;
+        this.notifyChange("PortValue");
+    }
+    
 
     private _valueDouble: number;
     private _valueInteger: number;
@@ -126,6 +136,7 @@ export class RuleInterfaceInstance extends BaseModel {
                     break;
                 }
         }
+        this.notifyChange("Value");
     }
 
 

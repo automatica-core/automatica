@@ -386,16 +386,20 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         [Route("import")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<IList<NodeInstance>> Import([FromBody] ImportData instance)
+        public async Task<IList<NodeInstance>> Import([FromBody] ImportConfig config)
         {
-            var data = await _notifyDriver.Import(instance.Node, instance.FileName);
+            var data = await _notifyDriver.Import(config);
 
-            if (System.IO.File.Exists(instance.FileName))
+            if (System.IO.File.Exists(config.FileName))
             {
-                System.IO.File.Delete(instance.FileName);
+                System.IO.File.Delete(config.FileName);
             }
 
-            return await SaveAndReloadNodeInstances(data);
+            if (data != null)
+            {
+                return await SaveAndReloadNodeInstances(data);
+            }
+            return new List<NodeInstance>();
         }
 
         private async Task<IList<NodeInstance>> SaveAndReloadNodeInstances(IList<NodeInstance> nodeInstances)

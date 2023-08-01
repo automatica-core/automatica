@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
-import { RuleEngineService, AddLogicData } from "../../services/ruleengine.service";
+import { LogicEngineService, AddLogicData } from "../../services/logicengine.service";
 import { L10nTranslationService } from "angular-l10n";
 import { RulePage } from "src/app/base/model/rule-page";
 import { NotifyService } from "src/app/services/notify.service";
@@ -69,7 +69,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   loadingPangel: ElementRef;
 
 
-  constructor(private ruleEngineService: RuleEngineService,
+  constructor(private ruleEngineService: LogicEngineService,
     private dataHub: DataHubService,
     notify: NotifyService,
     translate: L10nTranslationService,
@@ -104,7 +104,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       if (this.completeMap.has(id)) {
         const d = this.completeMap.get(id);
         if (d instanceof RuleInterfaceInstance) {
-          d.PortValue = data[2];
+          d.PortValue = data[2].value;
         }
       } else if (this.nodeInstance2RulePageMap.has(id)) {
         for (const x of this.nodeInstance2RulePageMap.get(id)) {

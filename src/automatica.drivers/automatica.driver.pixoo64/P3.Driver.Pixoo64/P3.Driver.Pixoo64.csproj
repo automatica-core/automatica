@@ -20,9 +20,9 @@
     <EmbeddedResource Include="Resources\Pixoo64-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="7.1.0.954" />
-    <PackageReference Include="Automatica.Core.Driver" Version="7.1.0.954" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.1.0.954" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.4.0.1159" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.4.0.1159" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.4.0.1159" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.Pixoo64.Screens\P3.Driver.Pixoo64.Screens.csproj" />

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, Chang
 import { RulePage } from "src/app/base/model/rule-page";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 import { ConfigService } from "src/app/services/config.service";
 import { L10nTranslationService } from "angular-l10n";
 import { AreaService } from "src/app/services/areas.service";
@@ -23,6 +23,7 @@ import { DataHubService } from "src/app/base/communication/hubs/data-hub.service
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import DataSource from "devextreme/data/data_source";
+import { DxListComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-logic-editor",
@@ -44,12 +45,15 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   @ViewChild("configTree")
   configTree: ConfigTreeComponent;
 
+  @ViewChild("logicPagesList")
+  logicPageList: DxListComponent;
+
   areaInstances: AreaInstance[] = [];
   categoryInstances: CategoryInstance[] = [];
   userGroups: UserGroup[] = [];
 
 
-  constructor(private ruleEngineService: RuleEngineService,
+  constructor(private ruleEngineService: LogicEngineService,
     private configService: ConfigService,
     private notify: NotifyService,
     translate: L10nTranslationService,
@@ -257,7 +261,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   async fileUploaded($event) {
     this.isLoading = true;
-    await this.configTree.fileUploaded($event.item, $event.file.name);
+    await this.configTree.fileUploaded($event.item, $event.file.name, $event.password);
     this.isLoading = false;
   }
 
@@ -278,6 +282,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       await this.ruleEngineService.removePage(currentPage);
 
       this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
+      this.logicPageList.selectedItems = [];
+      
+      await this.pagesDataSource.reload();
       this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
@@ -299,7 +306,15 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     try {
       await this.ruleEngineService.addPage(rulePage);
       this.pages.push(rulePage);
+
+      this.selectedPage = rulePage;
+      this.selectedItem = rulePage;
+
+      this.logicPageList.selectedItems = [rulePage];
+
+      await this.pagesDataSource.reload();
       this.changeRef.detectChanges();
+
     } catch (error) {
       this.handleError(error);
       await this.load();

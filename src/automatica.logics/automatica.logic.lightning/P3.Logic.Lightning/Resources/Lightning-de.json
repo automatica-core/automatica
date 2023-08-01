@@ -1,0 +1,25 @@
+﻿{
+  "LIGHTNING": {
+    "NAME": "Lichtsteuerung",
+    "FLASHING_LIGHTS": {
+      "NAME": "Blinkende Lichter",
+      "DESCRIPTION": "",
+      "TRIGGER": {
+        "NAME": "Auslöser",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "Status",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "Ausgang",
+        "DESCRIPTION": ""
+      },
+      "DELAY": {
+        "NAME": "Verzögerung [ms]",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

@@ -20,10 +20,10 @@ export class VirtualRemanentPropertyInstance extends VirtualPropertyInstance {
     }
 
     get Value(): any {
-        return this.nodeInstance.Remanent;
+        return this.nodeInstance.IsRemanent;
     }
     set Value(value: any) {
-        this.nodeInstance.Remanent = value;
+        this.nodeInstance.IsRemanent = value;
     }
 
 }

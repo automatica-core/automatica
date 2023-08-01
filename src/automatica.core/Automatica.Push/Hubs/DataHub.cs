@@ -2,11 +2,11 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Push.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace Automatica.Push.Hubs
 {
@@ -67,6 +67,16 @@ namespace Automatica.Push.Hubs
                 case JsonValueKind.Undefined:
                     break;
                 case JsonValueKind.Object:
+                    try
+                    {
+                        var dispatchValue = JsonConvert.DeserializeObject<DispatchValue>(value.GetRawText());
+                        convertedValue = dispatchValue.Value;
+                        break;
+                    }
+                    catch
+                    {
+                        //ignore
+                    }
                     throw new NotImplementedException();
                 case JsonValueKind.Array:
                     throw new NotImplementedException();
@@ -88,9 +98,15 @@ namespace Automatica.Push.Hubs
                     throw new ArgumentOutOfRangeException();
             }
 
+            var nodeInstanceValue = _nodeInstanceCache.Get(nodeInstance);
 
-            var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance, DispatchableSource.Visualization);
-            _dispatcher.DispatchValue(dispatchable, convertedValue);
+            if (nodeInstanceValue != null)
+            {
+                var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance,
+                    DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
+                _dispatcher.DispatchValue(dispatchable,
+                    new DispatchValue(nodeInstance, DispatchableType.Visualization, convertedValue, DateTime.Now));
+            }
         }
     }
 }

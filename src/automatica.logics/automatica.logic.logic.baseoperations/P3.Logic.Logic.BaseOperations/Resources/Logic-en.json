@@ -1,0 +1,51 @@
+﻿{
+  "LOGIC": {
+    "NAME": "Logik",
+    "AND": {
+      "NAME": "Und",
+      "DESCRIPTION": "Logische UND Verknüpfung der Eingänge",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      }
+    },
+    "OR": {
+      "NAME": "Oder",
+      "DESCRIPTION": "Logische ODER Verknüpfung der Eingänge",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      }
+    },
+    "EXCLUSIVE_OR": {
+      "NAME": "Exklusives Oder",
+      "DESCRIPTION": "Logische Exklusives ODER Verknüpfung der Eingänge",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      }
+    },
+    "NOT": {
+      "NAME": "Nicht",
+      "DESCRIPTION": "Invertiert den Eingang",
+      "INPUT": {
+        "DESCRIPTION": "Eingangswert"
+      }
+    },
+    "BINARY_DECODER": {
+      "NAME": "Binarydecoder",
+      "DESCRIPTION": "Converts a value to single bits"
+    },
+    "IF": {
+      "NAME": "If",
+      "DESCRIPTION": "",
+      "PARAM": {
+        "TRUE": {
+          "NAME": "True value",
+          "DESCRIPTION": ""
+        },
+        "FALSE": {
+          "NAME": "False value",
+          "DESCRIPTION": ""
+        }
+      }
+    }
+  }
+}

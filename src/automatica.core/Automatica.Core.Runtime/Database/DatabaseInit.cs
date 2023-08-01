@@ -17,7 +17,7 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using Automatica.Core.Runtime.Recorder;
-using Docker.DotNet.Models;
+using System.Runtime.InteropServices;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -27,7 +27,8 @@ namespace Automatica.Core.Runtime.Database
         {
             var context = services.GetRequiredService<AutomaticaContext>();
             var visuInitFactory = services.GetRequiredService<IVisualisationFactory>();
-            var config = services.GetRequiredService<IConfiguration>();
+            var config = services.GetRequiredService<IConfigurationRoot>();
+            
             context.Database.Migrate();
 
             bool dbCreated = !context.BoardTypes.Any();
@@ -226,7 +227,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "cloudUrl",
                     Type = (long)PropertyTemplateType.Text,
-                    Value = "https://automatica-core-cloud.azurewebsites.net",
+                    Value = "https://cloud-dev.automaticacore.com/",
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 1
@@ -310,6 +311,7 @@ namespace Automatica.Core.Runtime.Database
             }
 
             AddHostedGrafanaRecorderSettings(context);
+            AddRemoteConnectSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -406,6 +408,10 @@ namespace Automatica.Core.Runtime.Database
             if (BoardTypes.Docker.Docker.InDocker)
             {
                 boardType = new BoardTypes.Docker.Docker();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                boardType = new BoardTypes.Windows.GenericWindows();
             }
             else
             {
@@ -506,8 +512,52 @@ namespace Automatica.Core.Runtime.Database
             }
 
             context.SaveChanges();
+            config.Reload();
         }
 
+        private static void AddRemoteConnectSettings(AutomaticaContext context)
+        {
+
+            var ngrokEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokEnabled");
+            if(ngrokEnabled != null) context.Settings.Remove(ngrokEnabled);
+
+            var remoteEnabled = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteEnabled");
+            if (remoteEnabled == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "remoteEnabled",
+                    Type = (long)PropertyTemplateType.Bool,
+                    Value = false,
+                    Group = "SERVER.REMOTE",
+                    IsVisible = true,
+                    Order = 1
+                });
+
+            }
+
+            var ngrokToken = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokToken");
+            if (ngrokToken != null) context.Settings.Remove(ngrokToken);
+
+
+            var ngrokDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokDomain");
+            if (ngrokDomain != null) context.Settings.Remove(ngrokDomain);
+
+            var remoteDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteDomain");
+            if (remoteDomain == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "remoteDomain",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = null,
+                    Group = "SERVER.REMOTE",
+                    IsVisible = true,
+                    Order = 2
+                });
+
+            }
+        }
         private static void AddHostedGrafanaRecorderSettings(AutomaticaContext context)
         {
             var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaHost");
@@ -687,7 +737,6 @@ namespace Automatica.Core.Runtime.Database
 
 
             context.SaveChanges();
-
         }
 
         private static void AddAreaData(AutomaticaContext context)

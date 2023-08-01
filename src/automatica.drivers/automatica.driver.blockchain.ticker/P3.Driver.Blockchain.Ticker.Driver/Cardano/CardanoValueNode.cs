@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -24,9 +25,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
             _cardanoNode = bitcoinNode;
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            await _cardanoNode.Refresh();
+            await _cardanoNode.Refresh(token);
 
             return true;
         }

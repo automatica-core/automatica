@@ -20,7 +20,8 @@ namespace Automatica.Core.Base.IO
         NodeInstance,
         RuleInstance,
         Visualization,
-        Remote
+        Remote,
+        RemanentValue
     }
 
     /// <summary>
@@ -32,6 +33,8 @@ namespace Automatica.Core.Base.IO
         DispatchableType Type { get;  }
         string Name { get; }
         Guid Id { get;  }
+
+        public bool IsRemanent { get; }
 
     }
 }

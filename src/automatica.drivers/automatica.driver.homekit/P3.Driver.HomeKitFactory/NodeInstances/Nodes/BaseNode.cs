@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using P3.Driver.HomeKit.Hap.Model;
@@ -16,15 +17,15 @@ namespace P3.Driver.HomeKitFactory.NodeInstances.Nodes
             Driver = driver;
         }
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
-            return base.Start();
+            return base.Start(token);
         }
 
-        public sealed override bool Init()
+        public sealed override Task<bool> Init(CancellationToken token = default)
         {
             Driver.RegisterCharacteristic(Characteristic.Service.Accessory, Characteristic, this);
-            return base.Init();
+            return base.Init(token);
         }
 
         internal virtual void SetValue(object value)

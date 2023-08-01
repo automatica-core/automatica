@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -25,15 +26,15 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             _id = DriverContext.NodeInstance.GetPropertyValueString(IkeaTradfriFactory.IdAddressPropertyKey);
             _secret = DriverContext.NodeInstance.GetPropertyValueString(IkeaTradfriFactory.SecretPropertyKey);
 
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override async Task<IList<NodeInstance>> Scan()
+        public override async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             var devices = await Driver.LoadDevices();
             IList<NodeInstance> ret = new List<NodeInstance>();
@@ -78,7 +79,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         }
 
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             if (DriverContext.IsTest)
             {
@@ -130,17 +131,18 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 await Driver.Connect();
             });
 
-           return await base.Start();
+           return await base.Start(token);
         }
         
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             if (Driver != null)
             {
                 await Driver.Disconnect();
             }
-            return true;
+
+            return await base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

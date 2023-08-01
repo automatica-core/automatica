@@ -11,7 +11,7 @@ namespace P3.Driver.Times.Tests
 {
     public class DateTimeDriverFactoryTests : DriverFactoryTestBase<DateTimeDriverFactory>
     {
-        public DateTimeDriver CreateDriver(Guid childNodeGuid)
+        public Task<DateTimeDriver> CreateDriver(Guid childNodeGuid)
         {
             return CreateDriver<DateTimeDriver>(DateTimeDriverFactory.DriverGuidId, childNodeGuid);
         }
@@ -21,7 +21,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.DateTime);
+            var driver = await CreateDriver(DateTimeDriverFactory.DateTime);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -29,7 +29,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var busDt =  values.First().Value as DateTime?;
+            var busDt =  values.First().Value.Value as DateTime?;
 
             Assert.NotNull(busDt);
             Assert.IsType<DateTime>(busDt);
@@ -49,7 +49,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Date);
+            var driver = await CreateDriver(DateTimeDriverFactory.Date);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -57,7 +57,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var busDt =  values.First().Value as DateTime?;
+            var busDt =  values.First().Value.Value as DateTime?;
 
             Assert.NotNull(busDt);
             Assert.IsType<DateTime>(busDt);
@@ -75,7 +75,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Time);
+            var driver = await CreateDriver(DateTimeDriverFactory.Time);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -83,7 +83,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var busDt = values.First().Value as TimeSpan?;
+            var busDt = values.First().Value.Value as TimeSpan?;
 
             Assert.NotNull(busDt);
             Assert.IsType<TimeSpan>(busDt);
@@ -103,7 +103,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.DayOfWeek);
+            var driver = await CreateDriver(DateTimeDriverFactory.DayOfWeek);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -111,7 +111,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.DayOfWeek);
             await driver.Stop();
@@ -123,7 +123,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.DayOfMonth);
+            var driver = await CreateDriver(DateTimeDriverFactory.DayOfMonth);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -131,7 +131,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.Day);
 
@@ -144,7 +144,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Year);
+            var driver = await CreateDriver(DateTimeDriverFactory.Year);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -152,7 +152,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.Year);
 
@@ -162,9 +162,9 @@ namespace P3.Driver.Times.Tests
         [Fact]
         public async Task TestMonth()
         {
-            Dispatcher.ClearValues();
+            await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Month);
+            var driver = await CreateDriver(DateTimeDriverFactory.Month);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -172,7 +172,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.Month);
 
@@ -184,7 +184,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Minutes);
+            var driver = await CreateDriver(DateTimeDriverFactory.Minutes);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -192,7 +192,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.Minute);
 
@@ -204,7 +204,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Seconds);
+            var driver = await CreateDriver(DateTimeDriverFactory.Seconds);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -212,7 +212,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.Second);
 
@@ -224,7 +224,7 @@ namespace P3.Driver.Times.Tests
         {
             await Dispatcher.ClearValues();
             var dtNow = DateTime.Now;
-            var driver = CreateDriver(DateTimeDriverFactory.Hours);
+            var driver = await CreateDriver(DateTimeDriverFactory.Hours);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -232,7 +232,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.Equal(value, dtNow.Hour);
 
@@ -243,7 +243,7 @@ namespace P3.Driver.Times.Tests
         public async Task TestMilliseconds()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver(DateTimeDriverFactory.Milliseconds);
+            var driver = await CreateDriver(DateTimeDriverFactory.Milliseconds);
 
             Assert.Equal(1, driver.Children.Count);
 
@@ -251,7 +251,7 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var value =  values.First().Value;
+            var value =  values.First().Value.Value;
 
             Assert.NotNull(value);
 

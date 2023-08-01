@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Cryptography;
 using Automatica.Core.Base.TelegramMonitor;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
@@ -33,6 +34,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
 
         private readonly Dictionary<string, List<Action<KnxDatagram>>> _callbackMap = new Dictionary<string, List<Action<KnxDatagram>>>();
+        private bool _tunnelingEnabled;
+        private IPAddress _remoteIp;
+        private int _remotePort;
 
         public KnxDriver(IDriverContext driverContext, bool secureDriver, KnxLevel level=KnxLevel.ThreeLevel) : base(driverContext)
         {
@@ -51,7 +55,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return true;
         }
 
-        public override bool Init()
+        public override async Task<bool> Init(CancellationToken token = default)
         {
             var ipAddress = GetProperty("knx-ip").ValueString;
             var useNat = GetProperty("knx-use-nat").ValueBool;
@@ -63,6 +67,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 return false;
             }
 
+
+            var useTunnel = GetProperty("knx-use-tunnel").ValueBool;
+
             try
             {
                 var remoteIp = IPAddress.Parse(ipAddress);
@@ -72,6 +79,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 }
                 else
                 {
+                    _remoteIp = remoteIp;
+                    _remotePort = port;
+
                     _tunneling = new KnxConnectionTunneling(this, remoteIp, port,
                         IPAddress.Parse(NetworkHelper.GetActiveIp()), NetworkHelper.GetFreeTcpPort());
 
@@ -84,7 +94,16 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                         _tunneling.UseNat = useNat.Value;
                     }
                 }
-                
+
+                if (useTunnel.HasValue && useTunnel.Value)
+                {
+                    DriverContext.Logger.LogInformation($"Using tunneling mode...");
+                    _tunnelingEnabled = true;
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Using routing mode...");
+                }
             }
             catch (Exception e)
             {
@@ -92,16 +111,45 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 return false;
             }
 
+            await InitRemoteConnect(token);
+
             DriverContext.Logger.LogInformation($"Init done...");
 
-            return true;
+            return await base.Init(token);
         }
 
-        public override Task<bool> Start()
+        private async Task InitRemoteConnect(CancellationToken token = default)
+        {
+            try
+            {
+                var remoteFeatureEnabled =
+                    DriverContext.LicenseContract.IsFeatureLicensed("knx-interface-remote-connection");
+                if (remoteFeatureEnabled && _tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
+                {
+                    var tunnel = await DriverContext.TunnelingProvider.CreateTunnelAsync(TunnelingProtocol.Udp, "knx", $"{_remoteIp}", _remotePort,
+                        token);
+
+                    DriverContext.Logger.LogInformation($"Tunnel created {tunnel}");
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Tunnel is disabled...");
+                }
+            }
+
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError($"Could not start tunnel {e}");
+            }
+
+        }
+
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _gwState?.SetGatewayState(false);
             StartConnection();
-            return base.Start();
+
+            return await base.Start(token);
         }
 
         private void StartConnection()
@@ -109,7 +157,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             _tunneling?.Start();
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             lock (_lock)
             {
@@ -121,7 +169,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     _tunneling = null;
                 }
             }
-            return base.Stop();
+            return base.Stop(token);
         }
 
         internal void AddGroupAddress(string groupAddress, Action<KnxDatagram> callback)

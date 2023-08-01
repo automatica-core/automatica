@@ -17,18 +17,19 @@ namespace Automatica.Core.CI.CreateDatabase
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfigurationRoot configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; private set; }
+        public IConfigurationRoot Configuration { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AutomaticaContext>();
 
+            services.AddSingleton<IConfigurationRoot>(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));

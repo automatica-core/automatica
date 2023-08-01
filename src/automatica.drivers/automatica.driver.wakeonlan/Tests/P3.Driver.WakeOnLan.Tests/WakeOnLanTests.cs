@@ -17,7 +17,7 @@ namespace P3.Driver.WakeOnLan.Tests
             0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF
         };
         [Fact]
-        public void Test_WakeOnLanValue()
+        public async void Test_WakeOnLanValue()
         {
             var root = CreateNodeInstance(WakeOnLanDriverFactory.BusId);
             var node = CreateNodeInstance(WakeOnLanDriverFactory.ValueId);
@@ -28,7 +28,7 @@ namespace P3.Driver.WakeOnLan.Tests
             Assert.NotNull(prop);
             prop.Value = "AABBCCDDEEFF";
 
-            var driver = CreateDriver(root);
+            var driver = await CreateDriver(root);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<WakeOnLan>(driver.Children[0]);
@@ -42,7 +42,7 @@ namespace P3.Driver.WakeOnLan.Tests
 
             var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
 
-            Assert.Equal("AABBCCDDEEFF", value);
+            Assert.Equal("AABBCCDDEEFF", value.Value);
 
         }
 

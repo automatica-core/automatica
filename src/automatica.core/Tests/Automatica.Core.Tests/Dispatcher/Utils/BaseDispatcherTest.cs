@@ -26,7 +26,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         protected ILogicEngineDispatcher LogicEngineDispatcher { get; set; }
         protected IRuleInstanceVisuNotify RuleNotify { get; set; }
 
-        protected BaseDispatcherTest(IDispatcher dispatcher)
+        protected BaseDispatcherTest(IDispatcher dispatcher, IRemanentHandler remanentHandler)
         {
             LinkCache = new LinkCacheMock();
 
@@ -41,7 +41,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             RuleNotify = notifyMock.Object;
 
             LogicEngineDispatcher = new LogicEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
-                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<LogicEngineDispatcher>.Instance, RuleNotify);
+                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<LogicEngineDispatcher>.Instance, RuleNotify, remanentHandler);
         }
 
 

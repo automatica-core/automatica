@@ -24,12 +24,13 @@ namespace Automatica.Core.Tests.Database
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseType")]).Returns("sqlite");
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseSqlite")]).Returns("Data Source=automatica.core-test.db");
 
-            var mockConfiguration = new Mock<IConfiguration>();
+            var mockConfiguration = new Mock<IConfigurationRoot>();
             mockConfiguration.Setup(a => a.GetSection(It.Is<string>(s => s == "ConnectionStrings"))).Returns(mockConfSection.Object);
 
 
             var serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IConfiguration)))).Returns(mockConfiguration.Object);
+            serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IConfigurationRoot)))).Returns(mockConfiguration.Object);
             serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(AutomaticaContext)))).Returns(new AutomaticaContext(mockConfiguration.Object, true));
             serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IVisualisationFactory)))).Returns(new VisuTempInit());
 

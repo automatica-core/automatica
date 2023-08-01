@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -20,20 +21,20 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
         {
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            await Refresh();
+            await Refresh(token);
             return true;
         }
 
-        public override async Task Refresh()
+        public override async Task Refresh(CancellationToken token = default)
         {
             try
             {
-                using var response = await _client.GetAsync("https://blockchain.info/ticker");
+                using var response = await _client.GetAsync("https://blockchain.info/ticker", token);
                 response.EnsureSuccessStatusCode();
 
-                var res = await response.Content.ReadAsStringAsync();
+                var res = await response.Content.ReadAsStringAsync(token);
 
                 var jsonToken = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(res);
 

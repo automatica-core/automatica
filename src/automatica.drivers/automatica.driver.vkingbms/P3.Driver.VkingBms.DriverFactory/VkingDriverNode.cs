@@ -26,26 +26,26 @@ namespace P3.Driver.VkingBms.DriverFactory
             
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             _port = GetProperty("vking-pack-port").ValueString;
             _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
 
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _driver.Open();
             _timer = new Timer(ReadPacks, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _timer?.Dispose();
             _driver?.Close();
-            return base.Stop(); 
+            return base.Stop(token); 
         }
 
         private void ReOpen()

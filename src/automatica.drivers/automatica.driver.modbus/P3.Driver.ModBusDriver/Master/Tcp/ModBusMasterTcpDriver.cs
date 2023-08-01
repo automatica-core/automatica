@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -156,11 +157,9 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                     var lengthToRead = GetLengthToRead(buffer);
                     _receiveTimeoutTimer.Start();
                     byte[] data = new byte[lengthToRead];
-                   
+
                     read = await _networkStream.ReadAsync(data, 0, lengthToRead, cts);
 
-                    var avalaibleBytes = _networkStream.DataAvailable;
-                    
                     _receiveTimeoutTimer.Stop();
 
                     ModBus.Logger.LogHexIn(data);
@@ -169,6 +168,10 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
                         return data;
                     }
                 }
+            }
+            catch (IOException)
+            {
+                throw;
             }
             catch (Exception e)
             {

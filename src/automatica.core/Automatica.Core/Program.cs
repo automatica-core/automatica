@@ -26,7 +26,7 @@ namespace Automatica.Core
            
             var config = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
-                .AddJsonFile("appsettings.json", false)
+                .AddJsonFile(ServerInfo.GetConfigFileName(), false)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -87,6 +87,11 @@ namespace Automatica.Core
 
             logger.LogInformation($"Starting...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}. Running .NET Core Version {GetNetCoreVersion()}");
 
+            if (ServerInfo.InDocker)
+            {
+                logger.LogInformation($"Running in docker mode...");
+            }
+
             var db = webHost.Services.GetRequiredService<AutomaticaContext>();
             DatabaseInit.EnsureDatabaseCreated(webHost.Services);
 
@@ -121,7 +126,9 @@ namespace Automatica.Core
 
         public static IWebHost BuildWebHost(string port, string sslPort)
         {
-            ServerInfo.WebPort = port; 
+            ServerInfo.WebPort = port;
+            ServerInfo.SslWebPort = sslPort; 
+
             var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
 
             var webHost = WebHost.CreateDefaultBuilder()
@@ -154,8 +161,9 @@ namespace Automatica.Core
                     }
 
                     a.SetBasePath(configDir);
+                    a.AddJsonFile(ServerInfo.GetConfigFileName(), true);
+                    a.AddDatabaseConfiguration();
                     a.AddEnvironmentVariables();
-                    a.AddJsonFile("appsettings.json", true);
                 })
                 //.UseElectron(new string[])
                 .UseSerilog()
@@ -165,8 +173,9 @@ namespace Automatica.Core
                 }).ConfigureAppConfiguration((AutomaticaContext, config) => {
                     config
                         .SetBasePath(ServerInfo.GetConfigDirectory())
-                        .AddJsonFile("appsettings.json", false)
-                        .AddEnvironmentVariables();
+                        .AddJsonFile(ServerInfo.GetConfigFileName(), false)
+                        .AddEnvironmentVariables()
+                        .AddDatabaseConfiguration();
                 });
 
             //if (HybridSupport.IsElectronActive)

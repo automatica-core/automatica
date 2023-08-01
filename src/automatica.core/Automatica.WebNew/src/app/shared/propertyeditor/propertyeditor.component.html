@@ -29,10 +29,15 @@
                 </dx-button>
 
                 <ng-container *ngSwitchCase="PropertyTemplateType.ImportData">
-                    <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
+
+
+                    <dx-button text="{{ 'COMMON.PROPERTY.IMPORT.NAME' | translateAsync:LANG }}"
+                        (click)="onImportOpen($event, data.data)"></dx-button>
+
+                    <!-- <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
                         selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}" labelText="" accept="*"
                         uploadUrl="/webapi/fileUpload" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
-                    </dx-file-uploader>
+                    </dx-file-uploader> -->
                 </ng-container>
 
                 <ng-container *ngSwitchCase="PropertyTemplateType.Enum">
@@ -175,6 +180,10 @@
                         [maxLength]="data.data.PropertyTemplate.ExtendedType.length" [readOnly]="data.data.IsReadonly"
                         (onValueChanged)="valueChanged($event, data)"></dx-text-box>
                 </ng-container>
+                <ng-container *ngSwitchCase="PropertyTemplateType.DateTime">
+                    <dx-date-box [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"
+                        (onValueChanged)="valueChanged($event, data)" displayFormat="shortDateShortTime"></dx-date-box>
+                </ng-container>
 
                 <ng-container *ngSwitchCase="PropertyTemplateType.Password">
                     <dx-text-box mode="password" [(value)]="data.data.Value"
@@ -229,8 +238,8 @@
                 </ng-container>
 
 
-                <ng-container *ngSwitchCase="PropertyTemplateType.Slave">
-                    <dx-select-box [dataSource]="slaves" (onValueChanged)="valueChanged($event, data)"
+                <ng-container *ngSwitchCase="PropertyTemplateType.Satellite">
+                    <dx-select-box [dataSource]="satellites" (onValueChanged)="valueChanged($event, data)"
                         [placeholder]="'USER_GROUPS.ALL' | translateAsync" valueExpr="ObjId" [(value)]="data.data.Value"
                         displayExpr="DisplayName" [showClearButton]="false ">
                     </dx-select-box>
@@ -392,3 +401,5 @@
         </dx-scroll-view>
     </div>
 </dx-popup>
+
+<node-instance-import #nodeInstanceImport (fileUploaded)="fileUploaded"></node-instance-import>

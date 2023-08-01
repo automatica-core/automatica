@@ -37,6 +37,7 @@ export enum PropertyTemplateType {
     LearnMode = 23,
     Timer = 24,
     Time = 25,
+    DateTime = 26,
 
     AreaIcon = 100,
     AreaInstance = 101,
@@ -46,7 +47,7 @@ export enum PropertyTemplateType {
     User2Roles = 201,
     UserGroup2Roles = 202,
     UserGroup = 203,
-    Slave = 204,
+    Satellite = 204,
 
     MultiSelect = 300,
 

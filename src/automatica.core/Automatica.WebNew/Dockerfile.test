@@ -1,0 +1,18 @@
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+WORKDIR /app/
+
+RUN apt update
+RUN apt install curl -y
+
+RUN curl -o ngrok-v3-stable-linux-amd64.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+RUN tar xvzf ngrok-v3-stable-linux-amd64.tgz
+RUN mv ngrok /usr/local/bin
+RUN ngrok version
+
+
+EXPOSE 1883/tcp
+EXPOSE 5001/tcp	
+
+# Build runtime image
+ENTRYPOINT ["dotnet", "/app/automatica/Automatica.Core.dll"]

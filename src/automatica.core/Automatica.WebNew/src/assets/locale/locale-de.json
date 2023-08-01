@@ -6,7 +6,8 @@
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder"
     },
-    "SETTINGS": "Server Einstellungen"
+    "SETTINGS": "Server Einstellungen",
+    "REMOTE": "Remote Server Einstellungen"
   },
   "COMMON": {
     "ADMIN": "Administration",
@@ -49,6 +50,7 @@
     "TIMESTAMP": "Zeitpunkt",
     "ETS_IMPORT": "ETS Import",
     "SELECT_FILE": "Datei auswählen...",
+    "FILE": "Datei",
     "IMPORT_ETS_STRUCTURE": "Import ETS Struktur",
     "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
     "READ": "Lesen",
@@ -77,7 +79,10 @@
     "FAVORITES": "Favoriten",
     "HOME": "Home",
     "RELOAD": "Aktualisieren",
-    "SLAVES": "Slaves (Preview)",
+    "SATELLITES": "Satelliten",
+    "PASSWORD": "Passwort",
+    "IMPORT_NODES": "Import",
+    "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
     "SWITCH": {
       "ON": "Einschalten",
       "OFF": "Ausschalten"
@@ -118,7 +123,8 @@
       "SETTING": "Einstellungen",
       "DISCOVERY": "Suchen",
       "TRENDING": "Datenaufzeichnung",
-      "SLAVE": "Slave"
+      "SATELLITE": "Satellite",
+      "VALUE": "Wert"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -261,6 +267,10 @@
         "NAME": "Verbinden im NAT Modus",
         "DESCRIPTION": ""
       },
+      "ENABLE_TUNNEL": {
+        "NAME": "Schalte die Verbindung über einen Tunnel frei",
+        "DESCRIPTION": ""
+      },
       "IMPORT": {
         "NAME": "Import (*.knxproj)",
         "DESCRIPTION": ""
@@ -343,8 +353,8 @@
         "NAME": "ID",
         "DESCRIPTION": ""
       },
-      "SLAVE": {
-        "NAME": "Slave",
+      "SATELLITE": {
+        "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
             "NAME":  "Client Id"
@@ -371,6 +381,21 @@
       },
       "REMANENT": {
         "NAME": "Remanenz"
+      },
+      "VALUE": {
+        "NAME": "Wert"
+      },
+      "VALUE_TIMESTAMP": {
+        "NAME": "Zeitstempel"
+      },
+      "REMOTEDOMAIN" : {
+        "NAME": "Domain"
+      },
+      "REMOTEENABLED" : {
+        "NAME": "Aktiv"
+      },
+      "REMOTETOKEN" : {
+        "NAME": "Token"
       }
     },
     "CATEGORY_INSTANCE": {
@@ -467,7 +492,7 @@
         "DESCRIPTION": ""
       }
     },
-    "SLAVE": {
+    "SATELLITE": {
       "CLIENTID": "Client Id",
       "CLIENTKEY": "Client Key",
       "CONNECTED": "Verbunden"

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using FroniusSolarClient;
@@ -11,7 +12,7 @@ namespace P3.Driver.FroniusSolarFactory.Categories
         {
         }
 
-        public override async Task PollAttributes()
+        public override async Task PollAttributes(CancellationToken token = default)
         {
             await Task.CompletedTask;
             var flow = SolarClient.GetPowerFlowRealtimeData();

@@ -3,17 +3,17 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Exceptions;
 
 namespace Automatica.Core.Runtime.Core.Plugins.Logics
 {
-    internal class LogicStore : StoreBase<RuleInstance, IRule>, ILogicStore
+    internal class LogicStore : StoreBase<RuleInstance, ILogic>, ILogicStore
     {
-        private readonly IDictionary<Guid, IRule> _ruleIdDictionary = new ConcurrentDictionary<Guid, IRule>();
+        private readonly IDictionary<Guid, ILogic> _ruleIdDictionary = new ConcurrentDictionary<Guid, ILogic>();
 
-        public override void Add(RuleInstance key, IRule value)
+        public override void Add(RuleInstance key, ILogic value)
         {
             if (!_ruleIdDictionary.ContainsKey(key.ObjId))
             {

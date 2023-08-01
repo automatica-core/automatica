@@ -2,7 +2,7 @@
 using System.Linq;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Exceptions;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Automatica.Core.WebApi.Tests.Logic
 {
-    public class LogicControllerTests : BaseControllerTest<RulesController>
+    public class LogicControllerTests : BaseControllerTest<LogicsController>
     {
         public LogicControllerTests()
         {
@@ -36,7 +36,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
             var pages = Controller.GetPages().ToList();
             var page = pages.First();
 
-            var sPage = Controller.GetRulePage(page.ObjId);
+            var sPage = Controller.GetPage(page.ObjId);
 
             Assert.Equal(page.ObjId, sPage.ObjId);
         }
@@ -44,7 +44,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         [Fact, TestOrder(2)]
         public void TestGetRuleTemplates()
         {
-            var templates = Controller.GetRuleTemplates();
+            var templates = Controller.GetLogicTemplates();
 
             Assert.NotEmpty(templates);
         }
@@ -61,7 +61,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             using var db = new AutomaticaContext(Configuration);
 
-            var logicTemplateFactory = new RuleTemplateFactory(db, Configuration, new Mock<IRuleFactory>().Object);
+            var logicTemplateFactory = new LogicTemplateFactory(db, Configuration, new Mock<ILogicFactory>().Object);
 
             var factory = new TestLogicFactory();
             factory.InitTemplates(logicTemplateFactory);

@@ -1,9 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Remote;
+using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
@@ -27,6 +29,8 @@ using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Runtime.Recorder;
+using Automatica.Core.Runtime.RemoteConnect;
+using Automatica.Core.Runtime.RemoteConnect.Frp;
 using Automatica.Core.Visu;
 using Automatica.Push;
 using Automatica.Push.LearnMode;
@@ -49,9 +53,9 @@ namespace Automatica.Core.Runtime
 
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
-            services.AddSingleton<IServerCloudApi, CloudApi>();
-            services.AddSingleton<ICloudApi, CloudApi>();
-            services.AddSingleton<ILicenseContext, AllowAllLicenseContext>();
+            services.AddTransient<IServerCloudApi, CloudApi>();
+            services.AddTransient<ICloudApi, CloudApi>();
+            services.AddSingleton<ILicenseContext, LicenseContext>();
             services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();
             services.AddAutomaticaPushServices(configuration, isElectronActive);
@@ -127,6 +131,31 @@ namespace Automatica.Core.Runtime
 
             services.AddAutomaticaVisualization(configuration);
             services.AddInternals(configuration);
+        }
+
+        public static void AddAutomaticaRemoteConnectWithFrp(this IServiceCollection services,
+            Action<FrpcOptions> settings)
+        {
+            services.AddAutomaticaRemoteConnectServices();
+            services.AddFrpServices(settings);
+        }
+
+        public static void AddAutomaticaRemoteConnectWithFrp(this IServiceCollection services,
+            IConfiguration settings)
+        {
+            services.AddAutomaticaRemoteConnectServices();
+            services.AddFrpServices(settings);
+        }
+
+        private static void AddAutomaticaRemoteConnectServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IRemoteConnectService, RemoteConnectService>();
+
+            services.AddTransient<Func<IDriverContext, ITunnelingProvider>>(provider =>
+            {
+                return driverContext => new RemoteConnectProvider(provider.GetRequiredService<IRemoteConnectService>(), driverContext);
+            });
+            
         }
     }
 }

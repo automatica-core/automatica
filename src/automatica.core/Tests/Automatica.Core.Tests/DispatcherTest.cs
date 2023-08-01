@@ -13,7 +13,7 @@ namespace Automatica.Core.Tests
         private readonly IDispatcher _dispatcher;
         public DispatcherTest()
         {
-            _dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object);
+            _dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object, new Mock<IRemanentHandler>().Object);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace Automatica.Core.Tests
             _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, DispatchableMock.Instance.Id, (dispatchable, o) =>
             {
                 Assert.NotNull(o);
-                Assert.Equal(100, o);
+                Assert.Equal(100, o.Value);
                 autoResetEvent.Set();
             });
 

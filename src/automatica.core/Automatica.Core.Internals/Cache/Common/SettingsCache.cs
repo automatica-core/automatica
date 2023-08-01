@@ -53,6 +53,18 @@ namespace Automatica.Core.Internals.Cache.Common
             _byKeyCache.Clear();
         }
 
+        public void UpdateByKey(string key, Setting value)
+        {
+            if (_byKeyCache.ContainsKey(key))
+            {
+                _byKeyCache[key] = value;
+            }
+            else
+            {
+                _byKeyCache.Add(key, value);
+            }
+        }
+
         public Setting GetByKey(string key)
         {
             return _byKeyCache[key];

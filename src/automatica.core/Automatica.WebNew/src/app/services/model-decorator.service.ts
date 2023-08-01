@@ -17,7 +17,7 @@ import { AreaInstance, AreaTemplate, AreaType } from "../base/model/areas";
 import { CategoryGroup, CategoryInstance } from "../base/model/categories";
 import { Link } from "../base/model/link";
 import { Trending } from "../base/model/trending/trending";
-import { Slave } from "../base/model/slaves/slave";
+import { Satellite } from "../base/model/satellites/satellite";
 import { VisualizationDataFacade } from "../base/model/visualization-data-facade";
 
 @Injectable()
@@ -53,7 +53,7 @@ export class ModelDecoratorService {
         new VisualizationDataFacade();
 
         new Trending();
-        new Slave();
+        new Satellite();
 
         // tslint:enable:no-unused-expression
     }

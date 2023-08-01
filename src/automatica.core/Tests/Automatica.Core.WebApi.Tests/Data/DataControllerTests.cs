@@ -20,7 +20,7 @@ namespace Automatica.Core.WebApi.Tests.Data
             var currentNodeValues = Controller.GetCurrentNodeValues();
 
             Assert.Contains(dispatchAble.Id, currentNodeValues);
-            Assert.Equal(false, currentNodeValues[dispatchAble.Id]);
+            Assert.Equal(false, currentNodeValues[dispatchAble.Id].Value);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Automatica.Core.WebApi.Tests.Data
             var nodeValue = Controller.GetNodeValue(dispatchAble.Id);
 
             Assert.NotNull(nodeValue);
-            Assert.Equal(true, nodeValue);
+            Assert.Equal(true, nodeValue.Value);
         }
         [Fact]
         public void TestGetNodeValueIsNull()

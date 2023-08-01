@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 
@@ -13,11 +14,11 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             _store = store;
         }
 
-        public async Task ReInitialize()
+        public async Task ReInitialize(CancellationToken token = default)
         {
             foreach (var item in _store.All())
             {
-                await item.OnReinit();
+                await item.OnReInit(token);
             }
         }
 

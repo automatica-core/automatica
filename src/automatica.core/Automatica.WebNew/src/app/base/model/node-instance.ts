@@ -23,12 +23,12 @@ import { VirtualGenericPropertyInstance } from "./virtual-props/virtual-generic-
 import { NodeDataTypeEnum } from "./node-data-type";
 import { PropertyTemplateType, EnumExtendedPropertyTemplate } from "./property-template";
 import { VirtualGenericTrendingPropertyInstance } from "./virtual-props/node-instance/virtual-generic-trending-property";
-import { VirtualSlavePropertyInstance } from "./virtual-props/virtual-slave-property-instance";
 import { INodeInstance } from "./INodeInstance";
 import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance";
 import { CategoryInstance } from "./categories";
 import { AreaInstance } from "./areas";
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance";
+import { VirtualSatellitePropertyInstance } from "./virtual-props/virtual-satellite-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -98,7 +98,8 @@ export enum TrendingTypes {
     Average = 0,
     Raw = 1,
     Max = 2,
-    Min = 3
+    Min = 3,
+    OnChange = 4
 }
 
 @Model()
@@ -189,7 +190,18 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     }
     public set Value(v: any) {
         this._Value = v;
+        this.notifyChange("Value");
     }
+
+    
+    private _valueTimestamp : Date;
+    public get ValueTimestamp() : Date {
+        return this._valueTimestamp;
+    }
+    public set ValueTimestamp(v : Date) {
+        this._valueTimestamp = v;
+    }
+    
 
 
     @JsonPropertyName("This2NodeTemplateNavigation")
@@ -234,7 +246,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     This2Slave: string;
 
     @JsonProperty()
-    Remanent: boolean;
+    IsRemanent: boolean;
 
 
     @JsonProperty()
@@ -298,7 +310,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         if (this.isDriverNode()) {
-            this.Properties.push(new VirtualSlavePropertyInstance(this));
+            this.Properties.push(new VirtualSatellitePropertyInstance(this));
         }
 
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
@@ -324,6 +336,11 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualGenericPropertyInstance("TRENDING", 10, this, () => this.Trending, (value) => this.Trending = value, false, PropertyTemplateType.Bool, "COMMON.CATEGORY.TRENDING"));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_TYPE", 11, this, () => this.TrendingType, (value) => this.TrendingType = value, false, PropertyTemplateType.Enum, EnumExtendedPropertyTemplate.createFromEnum(TrendingTypes)));
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
+
+
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE", 1, this, () => this.Value, void 0, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VALUE"));
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE_TIMESTAMP", 2, this, () => this.ValueTimestamp, void 0, false, PropertyTemplateType.DateTime, "COMMON.CATEGORY.VALUE"));
+
         }
 
         this.updateDisplayName();

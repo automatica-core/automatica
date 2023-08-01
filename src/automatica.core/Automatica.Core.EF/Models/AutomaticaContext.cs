@@ -146,7 +146,10 @@ namespace Automatica.Core.EF.Models
                 logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
             }
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
-            optionsBuilder.UseMySql(mariaDbConString, serverVersion);
+            optionsBuilder.UseMySql(mariaDbConString, serverVersion, a =>
+            {
+                a.CommandTimeout(300);
+            });
         }
 
         private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)

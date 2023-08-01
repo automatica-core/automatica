@@ -364,7 +364,7 @@ export class PropertyInstance extends BaseModel {
                 return this.ValueVisuPage;
             case PropertyTemplateType.AreaInstanceLink:
                 return this.ValueAreaInstance;
-            case PropertyTemplateType.Slave:
+            case PropertyTemplateType.Satellite:
                 return this.ValueSlave;
             case PropertyTemplateType.Bool:
                 return this.ValueBool;
@@ -428,7 +428,7 @@ export class PropertyInstance extends BaseModel {
             case PropertyTemplateType.AreaInstanceLink:
                 this.ValueAreaInstance = value;
                 break;
-            case PropertyTemplateType.Slave:
+            case PropertyTemplateType.Satellite:
                 this.ValueSlave = value;
                 break;
             case PropertyTemplateType.Bool:

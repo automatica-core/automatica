@@ -5,6 +5,8 @@ using OpenWeatherMap;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace P3.Driver.OpenWeatherMap.DriverFactory
 {
@@ -42,7 +44,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             }
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             var pollTime = GetPropertyValueInt("poll");
             var apiKey = GetPropertyValueString("api-key");
@@ -65,16 +67,16 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
           
 
 
-            return base.Init();
+            return base.Init(token);
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _timer.Start();
 
             await ReadValues();
 
-            return await base.Start();
+            return await base.Start(token);
         }
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -89,7 +91,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             }
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
             await ReadValues();
 
@@ -109,10 +111,10 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             }
         }
 
-        public override Task<bool> Stop()
+        public override Task<bool> Stop(CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
-            return base.Stop();
+            return base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

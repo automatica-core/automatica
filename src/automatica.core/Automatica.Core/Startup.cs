@@ -50,6 +50,8 @@ namespace Automatica.Core
         {
             services.AddMqttTcpServerAdapter();
 
+            services.AddSingleton(Configuration);
+
             services.AddDbContext<AutomaticaContext>();
             services.AddResponseCompression(options =>
             {
@@ -142,11 +144,14 @@ namespace Automatica.Core
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
-                .AddEnvironmentVariables()
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile(ServerInfo.GetConfigFileName())
+                .AddDatabaseConfiguration()
+                .AddEnvironmentVariables();
 
-            Configuration = builder.Build();
+            var configRoot = builder.Build();
 
+            Configuration = configRoot;
+            services.AddSingleton<IConfigurationRoot>(configRoot);
 
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
@@ -156,13 +161,22 @@ namespace Automatica.Core
             }).AddJsonProtocol(options =>
             {
             });
+            services.AddAutomaticaRemoteConnectWithFrp(a =>
+            {
+                a.UseWeb = true;
+                a.UseSsh = true;
+
+                a.ServerAddress = Configuration["server:remote_connect_url"];
+                a.ServerPort = 7000;
+                a.LocalIp = "127.0.0.1";
+                a.LocalPort = Convert.ToInt32(Configuration["server:port"]);
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
-            var port = ServerInfo.WebPort;
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -219,6 +233,7 @@ namespace Automatica.Core
                     await next();
                 }
             });
+
 
 
             if (Directory.Exists(wwwrootPath))

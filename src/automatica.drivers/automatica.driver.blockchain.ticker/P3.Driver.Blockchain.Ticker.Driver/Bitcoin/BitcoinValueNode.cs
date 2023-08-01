@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -31,9 +32,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
             _bitcoinNode = bitcoinNode;
         }
 
-        public override async Task<bool> Read()
+        public override async Task<bool> Read(CancellationToken token = default)
         {
-            await _bitcoinNode.Refresh();
+            await _bitcoinNode.Refresh(token);
 
             return true;
         }

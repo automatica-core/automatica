@@ -26,7 +26,7 @@
                     </dxi-item>
                     <dxi-item title="COMMON.LOGIC_PAGES" icon="play">
                         <div *dxTemplate>
-                            <dx-list [dataSource]="pagesDataSource" height="90%" selectionMode="single"
+                            <dx-list #logicPagesList [dataSource]="pagesDataSource" height="90%" selectionMode="single"
                                 (onSelectionChanged)="onTabSelectionChanged($event)">
                                 <div *dxTemplate="let page of 'item'">
                                     <span>{{page.Name}}</span>

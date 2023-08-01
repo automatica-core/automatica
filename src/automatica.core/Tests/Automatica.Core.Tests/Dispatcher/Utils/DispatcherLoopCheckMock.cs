@@ -7,7 +7,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 {
     internal class DispatcherLoopCheckMock : DispatcherMock
     {
-        protected override Task DispatchValueInternal(IDispatchable self, object value, Action<IDispatchable, object> dis)
+        protected override Task DispatchValueInternal(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue> dis)
         {
             dis.Invoke(self, value);
             return Task.CompletedTask;

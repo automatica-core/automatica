@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.License;
 using Automatica.Core.EF.Models;
@@ -20,18 +21,18 @@ namespace Automatica.Core.Driver.Loader
             _driverStore = driverStore;
             _licenseContract = licenseContract;
         }
-        public Task<IDriver> LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context)
+        public async Task<IDriver> LoadDriverFactory(NodeInstance nodeInstance, IDriverFactory factory, IDriverContext context, CancellationToken token = default)
         {
             var driver = factory.CreateDriver(context);
 
             nodeInstance.State = NodeInstanceState.Loaded;
             try
             {
-                if (driver.BeforeInit())
+                if (await driver.BeforeInit(token))
                 {
                     _driverStore.Add(driver.Id, driver);
                     nodeInstance.State = NodeInstanceState.Initialized;
-                    driver.Configure();
+                    await driver.Configure(token);
                 }
                 else
                 {
@@ -52,7 +53,7 @@ namespace Automatica.Core.Driver.Loader
 
 
             AddDriverRecursive(driver, driver);
-            return Task.FromResult(driver);
+            return driver;
         }
 
         private void AddDriverRecursive(IDriver root, IDriverNode driver)

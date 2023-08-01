@@ -21,6 +21,14 @@ export class GroupsService extends BaseService {
     getRoles(): Promise<Role[]> {
         return super.getMultiple<Role>("usermgm/roles");
     }
+    
+    deleteUserGroup(group: UserGroup) {
+        return super.deleteJson("usermgm/usergroup/" + group.ObjId);
+    }
+    
+    saveUserGroup(group: UserGroup) {
+        return super.post<UserGroup>("usermgm/usergroup", group.toJson());
+    } 
 
     saveUserGroups(userGroups: UserGroup[]) {
         const data = new Array<any>();

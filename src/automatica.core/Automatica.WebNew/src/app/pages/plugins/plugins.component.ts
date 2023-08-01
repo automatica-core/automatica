@@ -6,6 +6,8 @@ import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
+import { DesignTimeDataService } from "src/app/services/design-time-data.service";
+import { TranslationConfigService } from "src/app/services/translation-config.service";
 
 
 function versionCompare(v1: Version, v2: Version) {
@@ -174,7 +176,6 @@ class PluginStateInstance {
     }
 
     this._downloadCurrent = v;
-
     this.downloadCurrentFormatted = UpdateHubService.formatBytes(v);
   }
 
@@ -248,6 +249,8 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     private updateHubService: UpdateHubService,
     notify: NotifyService,
     private translationService: L10nTranslationService,
+    private designTimeDataService: DesignTimeDataService,
+    private translationConfigService: TranslationConfigService,
     appService: AppService) {
     super(notify, translationService, appService);
 
@@ -311,11 +314,15 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
         const instance = this.pluginsMap.get(a[0][0]);
         instance.error = a[0][1];
       });
-      super.registerEvent(this.updateHubService.PluginFinished, (a) => {
+      super.registerEvent(this.updateHubService.PluginFinished, async (a) => {
         const instance = this.pluginsMap.get(a[0][0]);
         instance.downloaded = true;
         instance.downloadMax = 100;
         instance.downloadCurrent = instance.downloadMax;
+
+      });
+      super.registerEvent(this.updateHubService.PluginLoaded, async (a) => {
+        await this.translationConfigService.init();     
       });
     } catch (error) {
       super.handleError(error);
@@ -326,9 +333,12 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
   async install($event, data: PluginStateInstance) {
     await this.updateHubService.installPlugin(data.instance.cloudPlugin);
+    this.designTimeDataService.clearLogicTemplate();
   }
+
   async update($event, data: PluginStateInstance) {
     await this.updateHubService.updatePlugin(data.instance.cloudPlugin);
+    this.designTimeDataService.clearLogicTemplate();
   }
 
   async updateAll() {
@@ -337,6 +347,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     await this.updateHubService.updateAllPlugins(data);
 
     this.appService.isStartingChanged.emit(true);
+    this.designTimeDataService.clearLogicTemplate();
   }
 
   async installAll() {
@@ -345,6 +356,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     await this.updateHubService.installAllPlugins(data);
 
     this.appService.isStartingChanged.emit(true);
+    this.designTimeDataService.clearLogicTemplate();
   }
 
   async installUpdateAll() {
@@ -355,6 +367,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     await this.updateHubService.installUpdateAllPlugins(data);
 
     this.appService.isStartingChanged.emit(true);
+    this.designTimeDataService.clearLogicTemplate();
   }
 
   preparePluginList(plugins: PluginStateInstance[]) {
@@ -375,5 +388,6 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
   ngOnDestroy() {
     super.baseOnDestroy();
+    this.translationConfigService.init();     
   }
 }

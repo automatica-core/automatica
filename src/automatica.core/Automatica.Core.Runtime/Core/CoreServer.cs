@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Rule;
 using Automatica.Core.Runtime.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,10 +38,11 @@ using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
-using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.Logic;
+using Automatica.Core.Runtime.RemoteConnect;
 using Newtonsoft.Json;
 using String = System.String;
 
@@ -62,6 +62,7 @@ namespace Automatica.Core.Runtime.Core
     }
     public class CoreServer : IHostedService, ICoreServer
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _config;
         private readonly IHubContext<DataHub> _dataHub;
         private readonly ILogger _logger;
@@ -106,6 +107,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
+        private readonly IRemoteConnectService _remoteConnectService;
 
 
         public RunState RunState
@@ -123,6 +125,7 @@ namespace Automatica.Core.Runtime.Core
 
         public CoreServer(IServiceProvider services)
         {
+            _serviceProvider = services;
             _config = services.GetService<IConfiguration>();
 
             _dataHub = services.GetService<IHubContext<DataHub>>();
@@ -179,6 +182,8 @@ namespace Automatica.Core.Runtime.Core
             _loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
+
+            _remoteConnectService = services.GetService<IRemoteConnectService>();
             InitInternals();
         }
 
@@ -211,6 +216,9 @@ namespace Automatica.Core.Runtime.Core
                     RunState = RunState.Loading;
                     await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
                     await ConfigureAndStart();
+
+                    await _dispatcher.Init(cancellationToken);
+
                 }
                 catch (Exception e)
                 {
@@ -224,7 +232,11 @@ namespace Automatica.Core.Runtime.Core
 
         private async Task ConfigureAndStart()
         {
-            await _licenseContext.Init();
+            if (!await _licenseContext.Init())
+            {
+                //try again 2nd time - seems buggy, but easy fix for now
+                await _licenseContext.Init();
+            }
 
             RunState = RunState.Configure;
             ServerInfo.IsConnectedToCloud = await _cloudApi.Ping();
@@ -250,17 +262,29 @@ namespace Automatica.Core.Runtime.Core
 
             await Configure();
 
+            if (_remoteConnectService != null)
+            {
+                try
+                {
+                    await _remoteConnectService.StartAsync(default);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error starting RemoteControl {e}");
+                }
+            }
+
             RunState = RunState.Starting;
 
+            await StartLogicEngine();
             foreach (var driver in _driverStore.All())
             {
                 _logger.LogInformation($"Starting driver {driver.Name}...");
                 await StartDriver(driver);
             }
 
-            await StartLogicEngine();
+            await StartLogics();
 
-           
             _logger.LogInformation("Starting recorders...");
             foreach (var rec in _trendingRecorder)
             {
@@ -268,19 +292,28 @@ namespace Automatica.Core.Runtime.Core
             }
             _logger.LogInformation("Starting recorders...done");
             RunState = RunState.Started;
+
+           
+        }
+
+        private async Task StartLogics()
+        {
+            _logger.LogInformation("Loading logics...");
+            foreach (var rule in _logicInstanceStore.Dictionary())
+            {
+                await StartLogic(rule.Value, rule.Key);
+            }
+            _logger.LogInformation("Loading logics...done");
+
         }
 
         private async Task StartLogicEngine()
         {
             _logger.LogInformation("Loading logic engine connections...");
-            _logicEngineDispatcher.Load();
+            await _logicEngineDispatcher.Load();
             _logger.LogInformation("Loading logic engine connections...done");
 
-            foreach (var rule in _logicInstanceStore.Dictionary())
-            {
-                await StartLogic(rule.Value, rule.Key);
-            }
-
+           
         }
         private async Task StopLogicEngine()
         {
@@ -290,7 +323,7 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StartLogic(IRule rule, RuleInstance ruleInstance)
+        private async Task StartLogic(ILogic rule, RuleInstance ruleInstance)
         {
             _logger.LogInformation($"Starting logic {ruleInstance.Name}...");
             try
@@ -310,7 +343,7 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StopLogic(IRule rule, RuleInstance ruleInstance)
+        private async Task StopLogic(ILogic rule, RuleInstance ruleInstance)
         {
             try
             {
@@ -333,7 +366,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ReloadLogic(Guid ruleInstanceId)
         {
-            KeyValuePair<RuleInstance, IRule> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitRuleInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+            KeyValuePair<RuleInstance, ILogic> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitLogicInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
 
             await StopLogic(rule.Value, rule.Key);
             await StartLogic(rule.Value, rule.Key);
@@ -366,6 +399,7 @@ namespace Automatica.Core.Runtime.Core
         {
             await StopLogicEngine();
             await StartLogicEngine();
+            await StartLogics();
         }
 
         public async Task StopDriver(IDriver driver)
@@ -409,7 +443,7 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Stopped;
             _logger.LogInformation("CoreServer stopping...");
             IsRunning = false;
-
+            
             _driverStore.Clear();
             _logicStore.Clear();
             
@@ -430,6 +464,12 @@ namespace Automatica.Core.Runtime.Core
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await Stop();
+
+            if (_remoteConnectService != null)
+            {
+                await _remoteConnectService.StopAsync(cancellationToken);
+            }
+
             _logger.LogInformation("CoreServer stopped");
         }
 
@@ -451,7 +491,7 @@ namespace Automatica.Core.Runtime.Core
                     {
                         nodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogDebug($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogInformation($"Ignoring Non DriverInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                     await ConfigureDriversRecursive(nodeInstance);
                     continue;
@@ -466,7 +506,7 @@ namespace Automatica.Core.Runtime.Core
                     {
                         nodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogDebug($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
+                    _logger.LogInformation($"Ignoring AdapterInterface {nodeInstance.Name} - {nodeInstance.This2NodeTemplateNavigation.Key}");
 
                     await ConfigureDriversRecursive(nodeInstance);
                     continue;
@@ -546,27 +586,33 @@ namespace Automatica.Core.Runtime.Core
 
         }
 
-        private KeyValuePair<RuleInstance, IRule> InitRuleInstance(Guid ruleInstanceId)
+        private KeyValuePair<RuleInstance, ILogic> InitLogicInstance(Guid ruleInstanceId)
         {
             var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
             var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
-            var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.RuleName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
-            var ruleContext = new RuleContext(ruleInstance, _dispatcher, new RuleTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
-            var rule = factory.CreateRuleInstance(ruleContext);
+
+            if (factory == null)
+            {
+                _logger.LogError($"Could not find logic factory for {ruleInstance.This2RuleTemplateNavigation.Name}");
+                throw new ArgumentException("Could not find factory for logic instance..");
+            }
+            var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
+            var ruleContext = new LogicContext(ruleInstance, _dispatcher, new LogicTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
+            var rule = factory.CreateLogicInstance(ruleContext);
 
             if (rule != null)
             {
                 _logicInstanceStore.Add(ruleInstance, rule);
             }
 
-            return new KeyValuePair<RuleInstance, IRule>(ruleInstance, rule);
+            return new KeyValuePair<RuleInstance, ILogic>(ruleInstance, rule);
         }
 
 
         private async Task Configure()
         {
             _logger.LogDebug("Searching instantiated drivers");
-
+            await _licenseContext.Init();
             if (!_licenseContext.IsLicensed)
             {
                 _logger.LogError("Can not configure drivers - license is invalid");
@@ -574,7 +620,15 @@ namespace Automatica.Core.Runtime.Core
             }
             _configuredDrivers = 0;
 
-         
+            try
+            {
+                await _remoteConnectService.InitAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error initialize RemoteControl service {e}");
+            }
+
             var root = _nodeInstanceCache.Root;
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstancesStore.Add(root.ObjId, root);
@@ -591,7 +645,14 @@ namespace Automatica.Core.Runtime.Core
                     continue;
                 }
 
-                InitRuleInstance(ruleInstance.ObjId);
+                try
+                {
+                    InitLogicInstance(ruleInstance.ObjId);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not init logic instance...");
+                }
             }
 
             _logger.LogInformation($"Loading enabled recorders...");
@@ -736,8 +797,20 @@ namespace Automatica.Core.Runtime.Core
             var logger = CoreLoggerFactory.GetLogger(_config, loggerName);
             _logger.LogInformation($"Using logger {loggerName} for driver {nodeInstance.Name}");
 
-            var config = new DriverContext(nodeInstance, factory,
-                _dispatcher, new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), _telegramMonitor, _licenseContext.GetLicenseState(), logger, _learnMode, _cloudApi, _licenseContext, _loggerFactory, false);
+            var config = new DriverContext(
+                nodeInstance, 
+                factory,
+                _dispatcher, 
+                new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), 
+                _telegramMonitor, 
+                _licenseContext.GetLicenseState(), 
+                logger, 
+                _learnMode, 
+                _cloudApi, 
+                _licenseContext, 
+                _loggerFactory, 
+                _serviceProvider,
+                false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);
 

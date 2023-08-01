@@ -1,11 +1,11 @@
 ﻿using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
 namespace Automatica.Core.Runtime.Abstraction.Plugins.Logic
 {
-    internal interface ILogicStore : IStore<RuleInstance, IRule>, IRuleDataHandler
+    internal interface ILogicStore : IStore<RuleInstance, ILogic>, IRuleDataHandler
     {
         
     }

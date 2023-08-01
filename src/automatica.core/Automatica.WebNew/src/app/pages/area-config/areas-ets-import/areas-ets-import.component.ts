@@ -23,6 +23,8 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
   @ViewChild("tree")
   dxTree: DxTreeListComponent;
 
+  password: string;
+
 
   private mapList: Map<any, AreaInstance> = new Map<any, AreaInstance>();
 
@@ -41,7 +43,7 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
   }
 
   get uploadHeader() {
-    return { "Authorization": "Bearer " + localStorage.getItem("jwt") };
+    return { "Authorization": "Bearer " + localStorage.getItem("jwt"), password: this.password };
   }
 
   constructor(

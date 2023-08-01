@@ -19,18 +19,21 @@ import { VisuPage } from "src/app/base/model/visu-page";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
-import { VirtualAreaPropertyInstance } from "src/app/base/model/virtual-props";
+import { VirtualAreaPropertyInstance, VirtualDescriptionPropertyInstance } from "src/app/base/model/virtual-props";
 import { ConfigTreeComponent } from "../config-tree/config-tree.component";
-import { Slave } from "src/app/base/model/slaves/slave";
-import { SlavesService } from "src/app/services/slaves.services";
+import { Satellite } from "src/app/base/model/satellites/satellite";
+import { SatelliteService } from "src/app/services/satellite.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 import { RulePage } from "src/app/base/model/rule-page";
 import DataSource from "devextreme/data/data_source";
 import ArrayStore from "devextreme/data/array_store";
+import { NodeInstanceImportComponent } from "./node-instance-ets-import/node-instance-import.component";
+import { NodeInstanceImportSerivce } from "./node-instance-ets-import/node-instance-import.service";
+import { Router } from "@angular/router";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -169,6 +172,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public timerEditValue: TimerPropertyData = void 0;
   public selectedProperty: PropertyInstance = void 0;
 
+  @ViewChild("nodeInstanceImport")
+  NodeInstanceImportComponent: NodeInstanceImportComponent;
+
   @Output()
   public scan = new EventEmitter<NodeInstance>();
   @Output()
@@ -185,6 +191,21 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     if (this.item && this.item.Properties) {
       this._properties = this.item.Properties.filter(a => a.IsVisible).sort(sortProperties);
+
+      for (var a of this._properties) {
+        if (a instanceof VirtualDescriptionPropertyInstance) {
+
+          if (a.Value === "" || !a.Value) {
+            continue;
+          }
+          var hasTranslation = this.translate.has(a.Value);
+          if (!hasTranslation) {
+            a.Value = "";
+          } else {
+            a.Value = this.translate.translate(a.Value);
+          }
+        }
+      }
     }
     if (!value) {
       this._properties = [];
@@ -261,14 +282,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
 
 
-  private _slaves: Slave[];
+  private _satellites: Satellite[];
 
   @Input()
-  public get slaves(): Slave[] {
-    return this._slaves;
+  public get satellites(): Satellite[] {
+    return this._satellites;
   }
-  public set slaves(v: Slave[]) {
-    this._slaves = v;
+  public set satellites(v: Satellite[]) {
+    this._satellites = v;
   }
 
 
@@ -290,16 +311,18 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     translate: L10nTranslationService,
     private dataHub: DataHubService,
     private notify: NotifyService,
-    private slaveService: SlavesService,
+    private satellitesService: SatelliteService,
     appService: AppService,
     private nodeInstanceService: NodeInstanceService,
-    private ruleEngineService: RuleEngineService,
-    private changeDetection: ChangeDetectorRef) {
+    private ruleEngineService: LogicEngineService,
+    private changeDetection: ChangeDetectorRef,
+    private router: Router,
+    private nodeInstanceImportService: NodeInstanceImportSerivce) {
     super(notify, translate, appService);
   }
 
   async ngOnInit() {
-    this.slaves = await this.slaveService.getSlaves();
+    this.satellites = await this.satellitesService.getAll();
   }
 
   flattenAraInit() {
@@ -423,6 +446,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if (this.item instanceof NodeInstance) {
       this.scan.emit(this.item);
     }
+  }
+
+  async onImportOpen($event, data: PropertyInstance) {
+    this.NodeInstanceImportComponent.isVisible = true;
+    this.NodeInstanceImportComponent.nodeInstance = this.item;
+    this.NodeInstanceImportComponent.propertyInstance = data;
+
+    this.NodeInstanceImportComponent.fileUploaded = this.fileUploaded;
   }
 
   nodeTemplateSelectItem($event, learnInstance: LearnNodeInstance) {

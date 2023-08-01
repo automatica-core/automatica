@@ -22,6 +22,7 @@ namespace Automatica.Core.Runtime.Recorder
             _writers.Add(DataRecorderType.FileRecorder, new FileDataRecorderWriter(config, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.GraphiteRecorder, new GraphiteDataRecorderWriter(config, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.HostedGrafanaRecorder, new HostedGrafanaDataRecorderWriter(config, settingsCache, nodeInstanceCache, dispatcher, loggerFactory));
+            _writers.Add(DataRecorderType.MemoryRecorder, new MemoryDataRecorder(config, nodeInstanceCache, dispatcher, loggerFactory));
         }
 
         public IDataRecorderWriter GetRecorder(DataRecorderType recorderType)
@@ -33,4 +34,6 @@ namespace Automatica.Core.Runtime.Recorder
             throw new NotImplementedException();
         }
     }
+
+
 }

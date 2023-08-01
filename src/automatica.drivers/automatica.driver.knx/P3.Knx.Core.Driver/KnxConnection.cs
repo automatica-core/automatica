@@ -31,6 +31,7 @@ namespace P3.Knx.Core.Driver
         private readonly HeartbeatMonitor _heartbeatMonitor;
         private readonly object _lock = new object();
 
+
         protected KnxConnection(IKnxEvents knxEvents, IPAddress host, int port, IPAddress localIp)
         {
             _knxEvents = knxEvents;

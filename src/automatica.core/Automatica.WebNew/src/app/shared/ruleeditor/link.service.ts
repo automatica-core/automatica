@@ -5,7 +5,7 @@ import { Link } from "src/app/base/model/link";
 import { Guid } from "src/app/base/utils/Guid";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { L10nTranslationService } from "angular-l10n";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 
 declare var draw2d: any;
 
@@ -19,7 +19,7 @@ export class LinkService {
     }
 
     static async handleOnConnection(linkService: LinkService, port: any, connection: any, isInput: boolean,
-        element: RuleInterfaceInstance | NodeInstance2RulePage, ruleEngineService: RuleEngineService) {
+        element: RuleInterfaceInstance | NodeInstance2RulePage, ruleEngineService: LogicEngineService) {
         let userData: Link = connection.connection.getUserData();
 
         if (!userData) {
@@ -92,7 +92,7 @@ export class LinkService {
         this._isInit = v;
     }
 
-    constructor(private page: RulePage, public translate: L10nTranslationService, private ruleEngineService: RuleEngineService) {
+    constructor(private page: RulePage, public translate: L10nTranslationService, private ruleEngineService: LogicEngineService) {
 
     }
 

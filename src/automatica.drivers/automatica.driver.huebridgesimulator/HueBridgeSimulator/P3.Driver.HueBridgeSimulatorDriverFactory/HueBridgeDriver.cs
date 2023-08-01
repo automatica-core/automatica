@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
     public class HueBridgeDriver : DriverBase
     {
         private IList<HueLight> _hueLights = new List<HueLight>();
-        private IDictionary<int, HueBridgeNode> _hueBridgeMapping = new Dictionary<int, HueBridgeNode>();
+        private readonly IDictionary<int, HueBridgeNode> _hueBridgeMapping = new Dictionary<int, HueBridgeNode>();
         private readonly HueDriver _driver;
 
         public HueBridgeDriver(IDriverContext driverContext) : base(driverContext)
@@ -33,12 +34,7 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
         {
             _driver.SetLightState(light, state, false);
         }
-
-        public override bool Init()
-        {
-            return base.Init();
-        }
-
+        
         internal int AddHueLight(HueLight light, HueBridgeNode node)
         {
             var lightNr = _driver.AddLight(light);
@@ -46,32 +42,32 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
             return lightNr;
         }
 
-        public override async Task<bool> Start()
+        public override async Task<bool> Start(CancellationToken token = default)
         {
             _driver.SwitchLight += HueDriverSwitchLight;
 
             await Task.Factory.StartNew(async () =>
             {
                 await _driver.Start();
-            });
+            }, token);
 
             DriverContext.Logger.LogInformation("Starting hue bridge web services");
             
-            return await base.Start();
+            return await base.Start(token);
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             _driver.SwitchLight -= HueDriverSwitchLight;
 
 
             await _driver.Stop();
-            return true;
+            return await base.Start(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            if(ctx.NodeInstance.This2NodeTemplate == HueBridgeSimulatorDriverFactory.OnOffLight)
+            if(ctx.NodeInstance.This2NodeTemplate == HueBridgeSimulator.DriverFactory.HueBridgeSimulatorDriverFactory.OnOffLight)
             {
                 return new HueOnOffNode(ctx, this);
             }

@@ -13,6 +13,7 @@ namespace Automatica.Core.Base.Remote
         public string Name { get; internal set; }
 
         public Guid Id { get; internal set; }
+        public bool IsRemanent => false;
     }
 
     public static class RemoteDispatchHelper

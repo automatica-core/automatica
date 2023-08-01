@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -15,7 +16,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         {
         }
 
-        public override async Task<IList<NodeInstance>> Scan()
+        public override async Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             var ret = new List<NodeInstance>();
             var gateways = await IkeaTradfriDriver.Discover();

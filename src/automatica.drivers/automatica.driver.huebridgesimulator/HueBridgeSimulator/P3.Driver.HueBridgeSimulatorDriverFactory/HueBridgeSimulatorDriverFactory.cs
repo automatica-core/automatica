@@ -1,14 +1,11 @@
-﻿using Automatica.Core.Base.Localization;
+﻿using System;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
-using System;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
+using P3.Driver.HueBridgeSimulatorDriverFactory;
 
-namespace P3.Driver.HueBridgeSimulatorDriverFactory
+namespace P3.Driver.HueBridgeSimulator.DriverFactory
 {
-    public class HueBridgeSimulatorDriverFactory : DriverFactory
+    public class HueBridgeSimulatorDriverFactory : Automatica.Core.Driver.DriverFactory
     {
         
         public static readonly Guid BusId = new Guid("1998f2fa-a6d9-4c52-873a-57e10d1afcd6");

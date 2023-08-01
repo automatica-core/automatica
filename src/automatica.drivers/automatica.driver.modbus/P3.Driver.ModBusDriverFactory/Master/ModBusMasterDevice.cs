@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -29,7 +30,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             _waitSemaphore = semaphore;
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             PollInterval = GetPropertyValueInt("modbus-poll-interval");
             DeviceId = (byte)GetPropertyValueInt("modbus-device-id");
@@ -38,11 +39,11 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
             DriverContext.Logger.LogInformation($"Polling {DriverContext.NodeInstance.Name} (Address: {DeviceId}) every {PollInterval/60}seconds...");
 
-            return base.Init();
+            return base.Init(token);
         }
 
 
-        public override Task<bool> Start()
+        public override Task<bool> Start(CancellationToken token = default)
         {
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
@@ -50,7 +51,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
 #pragma warning disable 4014
             PollAttributes();
 #pragma warning restore 4014
-            return base.Start();
+            return base.Start(token);
         }
 
         private async void PollTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -61,7 +62,9 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 if (!_modBusDriver.Connected)
                 {
                     DriverContext.Logger
-                        .LogWarning($"Could not read device {DeviceId}, connection state is false");
+                        .LogWarning($"Could not read device {DeviceId}, connection state is false, try to reconnect...");
+
+                    await _modBusDriver.Reconnect();
 
                     return;
                 }
@@ -89,18 +92,28 @@ namespace P3.Driver.ModBusDriverFactory.Master
                         }
                     }
                 }
+                catch (IOException)
+                {
+                    await _modBusDriver.Stop();
+                    _modBusDriver.Open();
+
+                }
                 catch (ModBusException)
                 {
                     // ignore
                 }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError(e, $"Unknown error occurred {e}");
+                }
             }
         }
 
-        public override async Task<bool> Stop()
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
             _pollTimer.Elapsed -= PollTimerOnElapsed;
             
-            return await base.Stop();
+            return await base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

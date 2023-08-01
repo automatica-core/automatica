@@ -1,0 +1,33 @@
+<dx-popup [visible]="true" [width]="800" [height]="800" [dragEnabled]="true" [hideOnOutsideClick]="false"
+  [hideOnParentScroll]="false" title="{{ 'COMMON.IMPORT_NODES' | translateAsync }}" (onHiding)="onHiding($event)"
+  [visible]="isVisible" [deferRendering]="false">
+  <div *dxTemplate="let data of 'content'">
+    <dx-scroll-view>
+      <div class="form">
+        <div class="dx-fieldset">
+          <div class="dx-field">
+            <div class="dx-field-value-static">
+              <span translate>COMMON.IMPORT_NOTE</span>
+            </div>
+          </div>
+          <div class="dx-field">
+            <div class="dx-field-label" translate>COMMON.PASSWORD</div>
+            <div class="dx-field-value-static">
+              <dx-text-box mode="password" [(value)]="password"></dx-text-box>
+            </div>
+          </div>
+          <div class="dx-field">
+            <div class="dx-field-label" translate>COMMON.FILE</div>
+            <div class="dx-field-value-static">
+              <dx-file-uploader (onUploaded)="onFileUploaded($event)"
+                selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}" labelText="" accept="*"
+                uploadUrl="/webapi/fileUpload" [uploadHeaders]="uploadHeader" uploadMode="useButtons"
+                [deferRendering]="false">
+              </dx-file-uploader>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dx-scroll-view>
+  </div>
+</dx-popup>

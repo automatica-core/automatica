@@ -8,6 +8,7 @@ namespace Automatica.Core.UnitTests.Base.Common
         public DispatchableType Type => DispatchableType.NodeInstance;
         public string Name => "Test";
         public Guid Id { get; }
+        public bool IsRemanent => false;
 
         public static DispatchableMock Instance { get; } = new DispatchableMock();
 

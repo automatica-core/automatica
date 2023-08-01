@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -10,13 +11,13 @@ namespace P3.Driver.Pixoo64
     {
         protected readonly int TimeZoneOffset = 0;
 
-        public async Task SetValue(object value, NodeInstance node)
+        public async Task SetValue(object value, NodeInstance node, CancellationToken token = default)
         {
-            await SetScreenValue(value, node);
+            await SetScreenValue(value, node, token);
         }
 
 
-        protected abstract Task SetScreenValue(object value, NodeInstance node);
+        protected abstract Task SetScreenValue(object value, NodeInstance node, CancellationToken token = default);
 
         public virtual BaseScreen BaseScreen { get; protected set; }
 
@@ -55,7 +56,7 @@ namespace P3.Driver.Pixoo64
 
         protected abstract T CreateScreen();
 
-        public sealed override bool Init()
+        public sealed override Task<bool> Init(CancellationToken token = default)
         {
             Screen = CreateScreen();
             BaseScreen = Screen;
@@ -68,7 +69,7 @@ namespace P3.Driver.Pixoo64
             Screen.DateTimeHourOffset = TimeZoneOffset;
 
 
-            return base.Init();
+            return base.Init(token);
         }
 
         

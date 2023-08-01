@@ -6,7 +6,8 @@
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder"
     },
-    "SETTINGS": "Server Settings"
+    "SETTINGS": "Server Settings",
+    "REMOTE": "Remote Server Settings"
   },
   "COMMON": {
     "ADMIN": "Administration",
@@ -51,6 +52,7 @@
     "READ": "Read",
     "ETS_IMPORT": "ETS import",
     "SELECT_FILE": "Select file...",
+    "FILE": "File",
     "IMPORT_ETS_STRUCTURE": "Import ETS structure",
     "SAVE_BEFORE_CONTINUE": "You need to save your changes before starting this action",
     "SERVER_STARTING": "Automatica.Core Server starting...",
@@ -78,7 +80,10 @@
     "FAVORITES": "Favorites",
     "HOME": "Home",
     "RELOAD": "Reload",
-    "SLAVES": "Slaves (Preview)",
+    "SATELLITES": "Satellites",
+    "PASSWORD": "Password",
+    "IMPORT_NODES": "Import",
+    "IMPORT_NOTE": "Enter your password (if needed) prior selecting the file. After selecting the file press upload and the import will start",
     "SWITCH": {
       "ON": "Turn on",
       "OFF": "Turn off"
@@ -118,7 +123,8 @@
       "SETTING": "Settings",
       "DISCOVERY": "Discovery",
       "TRENDING": "Trendings",
-      "SLAVE": "Slave"
+      "SATELLITE": "Satellite",
+      "VALUE": "Value"
     },
     "FACTOR": {
       "NAME": "Factor",
@@ -261,6 +267,10 @@
         "NAME": "Connect in NAT mode",
         "DESCRIPTION": ""
       },
+      "ENABLE_TUNNEL": {
+        "NAME": "Enable the connection via a tunnel",
+        "DESCRIPTION": ""
+      },
       "IMPORT": {
         "NAME": "Import (*.knxproj)",
         "DESCRIPTION": ""
@@ -343,8 +353,8 @@
         "NAME": "ID",
         "DESCRIPTION": ""
       },
-      "SLAVE": {
-        "NAME": "Slave",
+      "SATELLITE": {
+        "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
             "NAME":  "Client id"
@@ -371,6 +381,21 @@
       },
       "REMANENT": {
         "NAME": "Remanent"
+      },
+      "VALUE": {
+        "NAME": "Value"
+      },
+      "VALUE_TIMESTAMP": {
+        "NAME": "Timestamp"
+      },
+      "REMOTEDOMAIN" : {
+        "NAME": "Domain"
+      },
+      "REMOTEENABLED" : {
+        "NAME": "Active"
+      },
+      "REMOTETOKEN" : {
+        "NAME": "Token"
       }
     },
     "CATEGORY_INSTANCE": {
@@ -467,7 +492,7 @@
         "DESCRIPTION": ""
       }
     },
-    "SLAVE": {
+    "SATELLITE": {
       "CLIENTID": "Client id",
       "CLIENTKEY": "Client key",
       "CONNECTED": "Connected"

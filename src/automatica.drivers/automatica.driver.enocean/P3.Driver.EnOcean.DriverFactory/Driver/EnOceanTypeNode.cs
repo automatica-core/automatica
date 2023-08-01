@@ -2,6 +2,8 @@
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Data;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
@@ -13,11 +15,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             _serial = GetProperty("enocean-serialnumber").ValueString;
             TeachInManager.SetTeachedIn(_serial);
-            return base.Init();
+            return base.Init(token);
         }
 
         public override void TelegramReceived(RadioErp1Packet telegram)

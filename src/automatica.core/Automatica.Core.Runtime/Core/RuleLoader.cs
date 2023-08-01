@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Core.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ namespace Automatica.Core.Runtime.Core
 {
     public static class RuleLoader
     {
-        public static async Task<IList<RuleFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
+        public static async Task<IList<LogicFactory>> LoadSingle(ILogger logger, Plugin plugin, IConfiguration config)
         {
             var dir = Path.Combine(ServerInfo.PluginDirectory, ServerInfo.LogicsDirectory, plugin.ComponentName);
 
@@ -21,13 +21,13 @@ namespace Automatica.Core.Runtime.Core
             if (!Directory.Exists(dir))
             {
                 logger.LogError($"Could not find logic directory: {dir}");
-                return new List<RuleFactory>();
+                return new List<LogicFactory>();
             }
 
-            return await Loader.Load<RuleFactory>(dir, "*.dll", logger, config, false);
+            return await Loader.Load<LogicFactory>(dir, "*.dll", logger, config, false);
         }
 
-        public static Task<IList<RuleFactory>> GetRuleFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)
+        public static Task<IList<LogicFactory>> GetRuleFactories(ILogger logger, string path, string searchPattern, IConfiguration config, bool isInDevMode)
         {
             var fileInfo = new FileInfo(path);
             string dir = fileInfo.FullName;
@@ -43,7 +43,7 @@ namespace Automatica.Core.Runtime.Core
                 Directory.CreateDirectory(driverPath);
                 dir = driverPath;
             }
-            return Loader.Load<RuleFactory>(dir, searchPattern, logger, config, isInDevMode);
+            return Loader.Load<LogicFactory>(dir, searchPattern, logger, config, isInDevMode);
         }
     }
 }

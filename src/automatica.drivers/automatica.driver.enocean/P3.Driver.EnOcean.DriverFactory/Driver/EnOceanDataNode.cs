@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Exceptions;
 using P3.Driver.EnOcean.Data.Packets;
@@ -31,7 +33,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         {
         }
 
-        public override bool Init()
+        public override Task<bool> Init(CancellationToken token = default)
         {
             BitOffs = GetPropertyValueInt("enocean-bitoffset");
             Length = GetPropertyValueInt("enocean-length");
@@ -89,7 +91,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 //ignore
             }
-            return base.Init();
+            return base.Init(token);
         }
         
 

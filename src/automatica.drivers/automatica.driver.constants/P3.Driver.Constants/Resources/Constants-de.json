@@ -22,6 +22,14 @@
       "STRING": {
         "NAME": "Text",
         "DESCRIPION": "Gibt einen Fixen Wert zurück"
+      },
+      "TRUE": {
+        "NAME": "Wahr",
+        "DESCRIPION": "Wert liefert immer Wahr (true)"
+      },
+      "FALSE": {
+        "NAME": "Falsch",
+        "DESCRIPION": "Wert liefer immer Falsch (false)"
       }
     },
     "PROPERTY": {

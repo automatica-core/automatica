@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Recorder
 {
@@ -21,8 +24,6 @@ namespace Automatica.Core.Runtime.Recorder
         {
             Instance = instance;
             _recorderWriter = recorderWriter;
-
-
         }
 
         public Task Start()
@@ -61,55 +62,65 @@ namespace Automatica.Core.Runtime.Recorder
             }
         }
 
-        public void ValueChanged(object value, string source)
+        public void ValueChanged(DispatchValue value, string source)
         {
             lock (_lock)
             {
-                if (value == null)
+                try
                 {
-                    return;
-                }
-
-                _lastSource = source;
-                if (double.TryParse(value.ToString(), out var dblValue))
-                {
-                    switch (Instance.TrendingType)
+                    if (value == null || value.Value == null)
                     {
-                        case EF.Models.Trendings.TrendingTypes.Average:
-                            _values.Add(dblValue);
-
-                            double val = 0;
-                            foreach (var v in _values)
-                            {
-                                val += v;
-                            }
-                            _lastValue = val / _values.Count;
-
-                            break;
-                        case EF.Models.Trendings.TrendingTypes.Raw:
-                            _lastValue = dblValue;
-                            break;
-                        case EF.Models.Trendings.TrendingTypes.Max:
-                            if (_lastValue == null)
-                            {
-                                _lastValue = dblValue;
-                            }
-                            else
-                            {
-                                _lastValue = Math.Max(dblValue, _lastValue.Value);
-                            }
-                            break;
-                        case EF.Models.Trendings.TrendingTypes.Min:
-                            if (_lastValue == null)
-                            {
-                                _lastValue = dblValue;
-                            }
-                            else
-                            {
-                                _lastValue = Math.Min(dblValue, _lastValue.Value);
-                            }
-                            break;
+                        return;
                     }
+
+                    _lastSource = source;
+                    if (double.TryParse(value.Value.ToString(), CultureInfo.InvariantCulture, out var dblValue))
+                    {
+                        switch (Instance.TrendingType)
+                        {
+                            case EF.Models.Trendings.TrendingTypes.Average:
+                                _values.Add(dblValue);
+
+                                double val = 0;
+                                foreach (var v in _values)
+                                {
+                                    val += v;
+                                }
+
+                                _lastValue = val / _values.Count;
+
+                                break;
+                            case EF.Models.Trendings.TrendingTypes.Raw:
+                                _lastValue = dblValue;
+                                break;
+                            case EF.Models.Trendings.TrendingTypes.Max:
+                                _lastValue = _lastValue == null ? dblValue : Math.Max(dblValue, _lastValue.Value);
+                                break;
+                            case EF.Models.Trendings.TrendingTypes.Min:
+                                _lastValue = _lastValue == null ? dblValue : Math.Min(dblValue, _lastValue.Value);
+                                break;
+                            case EF.Models.Trendings.TrendingTypes.OnChange:
+                                if (_lastValue == null)
+                                {
+                                    _lastValue = dblValue;
+                                    _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
+                                }
+                                else
+                                {
+                                    if (dblValue != _lastValue.Value)
+                                    {
+                                        _lastValue = dblValue;
+                                        _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
+                                    }
+                                }
+
+                                break;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _recorderWriter.Logger.LogError(e, "Error while recording value");
                 }
             }
         }

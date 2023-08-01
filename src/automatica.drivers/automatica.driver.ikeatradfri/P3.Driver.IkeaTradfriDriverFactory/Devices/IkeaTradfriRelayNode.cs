@@ -24,7 +24,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
         {
         }
         
-        public override Task<bool> Read()
+        public override Task<bool> Read(CancellationToken token = default)
         {
             DispatchValue(_value);
 

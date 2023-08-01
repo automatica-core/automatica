@@ -26,6 +26,7 @@ namespace Automatica.Core.Runtime.IO
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
         private readonly ILogger<LogicEngineDispatcher> _logger;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotifier;
+        private readonly IRemanentHandler _remanentHandler;
         private readonly object _lock = new object();
 
         public LogicEngineDispatcher(ILinkCache linkCache, 
@@ -35,7 +36,8 @@ namespace Automatica.Core.Runtime.IO
             INodeInstanceCache nodeInstanceCache,
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache,
             ILogger<LogicEngineDispatcher> logger,
-            IRuleInstanceVisuNotify ruleInstanceVisuNotifier)
+            IRuleInstanceVisuNotify ruleInstanceVisuNotifier,
+            IRemanentHandler remanentHandler)
         {
             _linkCache = linkCache;
             _dispatcher = dispatcher;
@@ -45,6 +47,7 @@ namespace Automatica.Core.Runtime.IO
             _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
             _logger = logger;
             _ruleInstanceVisuNotifier = ruleInstanceVisuNotifier;
+            _remanentHandler = remanentHandler;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -65,7 +68,7 @@ namespace Automatica.Core.Runtime.IO
             return String.Join("-", list);
         }
 
-        public bool Load()
+        public async Task<bool> Load()
         {
             var data = _linkCache.All();
 
@@ -83,8 +86,9 @@ namespace Automatica.Core.Runtime.IO
                     }
                     
                     SystemLogger.Instance.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
-                    _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
+                    await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, async (dispatchable, o) =>
                     {
+                        await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
                         ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });
                 }
@@ -101,9 +105,9 @@ namespace Automatica.Core.Runtime.IO
 
                     var inputId = sourceNode.ObjId;
                     SystemLogger.Instance.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
-                    _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
+                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
-                        ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
+                        ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
                     });
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
@@ -119,9 +123,9 @@ namespace Automatica.Core.Runtime.IO
                     }
 
                     SystemLogger.Instance.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
-                    _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
+                    await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
-                        ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
+                        ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
                     });
                 }
                 else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
@@ -138,7 +142,7 @@ namespace Automatica.Core.Runtime.IO
 
                     var inputId = sourceNode.ObjId;
                     SystemLogger.Instance.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
-                    _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
+                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, async (dispatchable, o) =>
                     {
                         ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });
@@ -149,8 +153,8 @@ namespace Automatica.Core.Runtime.IO
 
             foreach (var logicInterface in logicInterfaces)
             {
-                _dispatcher.RegisterDispatch(DispatchableType.Visualization, logicInterface.ObjId,
-                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface); });
+                await _dispatcher.RegisterDispatch(DispatchableType.Visualization, logicInterface.ObjId,
+                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o.Value, logicInterface.This2RuleInstance, logicInterface); });
             }
 
             return true;
@@ -265,7 +269,7 @@ namespace Automatica.Core.Runtime.IO
             }
         }
 
-        private void ValueDispatched(IDispatchable dispatchable, object o, Guid to)
+        private void ValueDispatched(IDispatchable dispatchable, DispatchValue o, Guid to)
         {
             foreach (var node in _driverNodesStore.All())
             {
@@ -273,7 +277,7 @@ namespace Automatica.Core.Runtime.IO
                 {
                     try
                     {
-                        SystemLogger.Instance.LogDebug(
+                        SystemLogger.Instance.LogInformation(
                             $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
                         node.WriteValue(dispatchable, o);
                     }

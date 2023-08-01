@@ -17,6 +17,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "devexpress-diagram",
+              "devexpress-gantt",
+              "devextreme-quill",
+              "color-convert",
+              "moment",
+              "file-saver",
+              "jszip"
+            ],
             "aot": true,
             "outputPath": "../Automatica.Core/wwwroot",
             "index": "src/index.html",
@@ -34,9 +43,18 @@
             ],
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
-              { "input": "src/themes/generated/theme.additional.css", "bundleName": "additional" },
-              { "input": "src/themes/generated/dx.generic.automatica-light.css", "bundleName": "generic.light.compact" },
-              { "input": "src/themes/generated/dx.generic.automatica-dark.css", "bundleName": "generic.dark.compact" },
+              {
+                "input": "src/themes/generated/theme.additional.css",
+                "bundleName": "additional"
+              },
+              {
+                "input": "src/themes/generated/dx.generic.automatica-light.css",
+                "bundleName": "generic.light.compact"
+              },
+              {
+                "input": "src/themes/generated/dx.generic.automatica-dark.css",
+                "bundleName": "generic.dark.compact"
+              },
               "src/styles.scss"
             ],
             "scripts": [

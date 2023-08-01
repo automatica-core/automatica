@@ -4,7 +4,7 @@ import { DataHubService } from "src/app/base/communication/hubs/data-hub.service
 import { NotifyService } from "src/app/services/notify.service";
 import { L10nTranslationService } from "angular-l10n";
 import { ConfigService } from "src/app/services/config.service";
-import { RuleInstanceVisuService } from "src/app/services/rule-visu.service";
+import { LogicInstanceVisuService } from "src/app/services/logic-visu.service";
 import { AppService } from "src/app/services/app.service";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
@@ -28,7 +28,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     notify: NotifyService,
     translate: L10nTranslationService,
     configService: ConfigService,
-    ruleInstanceVisuService: RuleInstanceVisuService,
+    ruleInstanceVisuService: LogicInstanceVisuService,
     appService: AppService) {
     super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
   }
@@ -45,13 +45,13 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
       const nodeId = args[1];
 
-      this.onRuleInstanceValueChanged(nodeId, args[2]);
+      this.onRuleInstanceValueChanged(nodeId, args[2].value);
     });
 
     this.readOnly = this.getReadOnly() ?? false;
 
     var cachedValue = this.dataHub.getCurrentValue(this.outputType.ObjId);
-    this.value = cachedValue;
+    this.value = cachedValue.value;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {

@@ -2,14 +2,14 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
-import { RuleEngineService } from "src/app/services/ruleengine.service";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
-
+import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 declare var draw2d: any;
 declare var $: any;
 
 export class LogicShapes {
-    public static addShape(logic, ruleEngineService: RuleEngineService, errorHandler: ILogicErrorHandler) {
+    public static addShape(logic, ruleEngineService: LogicEngineService, errorHandler: ILogicErrorHandler) {
 
         logic.LogicShape = draw2d.shape.layout.VerticalLayout.extend({
             init: function (attr, element: RuleInstance, linkService: LinkService) {
@@ -59,7 +59,7 @@ export class LogicShapes {
                     try {
                         await ruleEngineService.updateItem(element);
                     }
-                    catch(error) {
+                    catch (error) {
                         errorHandler.notifyError(error);
                     }
                 });
@@ -153,6 +153,29 @@ export class LogicShapes {
                         port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(1);
+
+                        var dataLabel = new draw2d.shape.basic.Label({
+                            text: portInstance.PortValue,
+                            textLength: "100%",
+                            stroke: 0,
+                            radius: 0,
+                            bgColor: null,
+                            padding: 5,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            fontColor: "lightgray",
+                            fontSize: 9,
+                            resizeable: true
+                        });
+    
+                        portInstance.notifyChangeEvent.subscribe((v) => {
+                            if (v.propertyName === "PortValue") {
+                                dataLabel.setText((<any>v.object).PortValue);
+                            }
+                        });
+    
+                        port.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
+    
                     }
 
                     port.setMaxFanOut(portInstance.FromMaxLinks);
@@ -203,8 +226,8 @@ export class LogicShapes {
                     resizeable: true
                 });
 
-                element.NodeInstance.notifyChangeEvent.subscribe((v) =>{
-                    if(v.propertyName === "Name") {
+                element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                    if (v.propertyName === "Name") {
                         this.label.setText((<any>v.object).Name);
                     }
                 });
@@ -230,6 +253,29 @@ export class LogicShapes {
                     const output = this.createPort("output");
                     output.setName(element.Outputs[0].PortId);
                     output.setId(element.Outputs[0].PortId);
+
+                    var dataLabel = new draw2d.shape.basic.Label({
+                        text: element.NodeInstance.Value,
+                        textLength: "100%",
+                        stroke: 0,
+                        radius: 0,
+                        bgColor: null,
+                        padding: 5,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        fontColor: "lightgray",
+                        fontSize: 9,
+                        resizeable: true
+                    });
+
+                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                        if (v.propertyName === "Value") {
+                            dataLabel.setText((<any>v.object).Value);
+                        }
+                    });
+
+                    output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
+
 
                     output.on("connect", async function (emitterPort, connection) {
                         await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);

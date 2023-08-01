@@ -104,7 +104,7 @@ namespace Automatica.Core.Runtime.Recorder
             names.Add(parent.Name);
             GetFullNameRecursive(parent, ref names);
         }
-        private void DataCallback(IDispatchable dispatchable, object value)
+        private void DataCallback(IDispatchable dispatchable, DispatchValue value)
         {
             if(_recorders.ContainsKey(dispatchable.Id))
             {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Rule;
+using Automatica.Core.Logic;
 
 namespace P3.Logic.StringOperations.Concat
 {
-    public class StringConcat : Rule
+    public class StringConcat: Automatica.Core.Logic.Logic
     {
         private readonly RuleInterfaceInstance _output;
 
@@ -16,13 +16,13 @@ namespace P3.Logic.StringOperations.Concat
         private string _i3 = String.Empty;
         private string _i4 = String.Empty;
 
-        public StringConcat(IRuleContext context) : base(context)
+        public StringConcat(ILogicContext context) : base(context)
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == StringConcatFactory.RuleOutput);
         }           
 
-        protected override IList<IRuleOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             
             if (instance.This2RuleInterfaceTemplate == StringConcatFactory.RuleInput1)
@@ -43,7 +43,7 @@ namespace P3.Logic.StringOperations.Concat
                 _i4 = value?.ToString();
             }
 
-            return SingleOutputChanged(new RuleOutputChanged(_output, $"{_i1}{_i2}{_i3}{_i4}"));
+            return SingleOutputChanged(new LogicOutputChanged(_output, $"{_i1}{_i2}{_i3}{_i4}"));
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Driver;
 using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Innovative.Geometry;
@@ -35,14 +36,14 @@ namespace P3.Driver.Times.Tests
         public async Task TestSunSet()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunSetGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunSetGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value as DateTime?;
+            var busDt = values.First().Value.Value as DateTime?;
 
             Assert.NotNull(busDt);
             Assert.IsType<DateTime>(busDt);
@@ -59,14 +60,14 @@ namespace P3.Driver.Times.Tests
         public async Task TestSunRise()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunRiseGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunRiseGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value as DateTime?;
+            var busDt = values.First().Value.Value as DateTime?;
 
             Assert.NotNull(busDt);
             Assert.IsType<DateTime>(busDt);
@@ -84,17 +85,17 @@ namespace P3.Driver.Times.Tests
         public async Task TestIsSunSet()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var node = driver.Children.First();
-            await node.WriteValue(DispatchableMock.Instance, new DateTime(2018, 08, 28, 14, 00, 00));
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, new DateTime(2018, 08, 28, 14, 00, 00));
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value;
+            var busDt = values.First().Value.Value;
 
             Assert.NotNull(busDt);
             Assert.IsType<bool>(busDt);
@@ -110,19 +111,19 @@ namespace P3.Driver.Times.Tests
         public async Task TestIsSunRise()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsRiseGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsRiseGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var node = driver.Children.First();
             var setTime = new DateTime(2018, 08, 28, 15, 00, 00);
-            await node.WriteValue(DispatchableMock.Instance, setTime);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, setTime);
 
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value;
+            var busDt = values.First().Value.Value;
 
             Assert.NotNull(busDt);
             Assert.IsType<bool>(busDt);
@@ -136,18 +137,18 @@ namespace P3.Driver.Times.Tests
         public async Task TestIsSunSet2()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var node = driver.Children.First();
             var setTime = new DateTime(2018, 08, 28, 00, 00, 00);
-            await node.WriteValue(DispatchableMock.Instance, setTime);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, setTime);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value;
+            var busDt = values.First().Value.Value;
 
             Assert.NotNull(busDt);
             Assert.IsType<bool>(busDt);
@@ -162,18 +163,18 @@ namespace P3.Driver.Times.Tests
         public async Task TestIsSunSet3()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var node = driver.Children.First();
             var setTime = new DateTime(2018, 08, 28, 15, 00, 00);
-            await node.WriteValue(DispatchableMock.Instance, setTime);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, setTime);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value;
+            var busDt = values.First().Value.Value;
 
             Assert.NotNull(busDt);
             Assert.IsType<bool>(busDt);
@@ -187,18 +188,18 @@ namespace P3.Driver.Times.Tests
         public async Task TestIsSunRise2()
         {
             await Dispatcher.ClearValues();
-            var driver = CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsRiseGuid);
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsRiseGuid);
 
             Assert.Equal(1, driver.Children.Count);
 
             var node = driver.Children.First();
             var setTime = new DateTime(2018, 08, 28, 00, 00, 00);
-            await node.WriteValue(DispatchableMock.Instance, setTime);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, setTime);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
 
             Assert.True(values.Count > 0);
-            var busDt = values.First().Value;
+            var busDt = values.First().Value.Value;
 
             Assert.NotNull(busDt);
             Assert.IsType<bool>(busDt);

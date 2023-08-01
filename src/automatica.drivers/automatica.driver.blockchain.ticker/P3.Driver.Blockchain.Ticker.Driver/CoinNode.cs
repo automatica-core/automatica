@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 
 namespace P3.Driver.Blockchain.Ticker.Driver
@@ -9,7 +10,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         {
         }
 
-        public virtual Task Refresh()
+        public virtual Task Refresh(CancellationToken token = default)
         {
             return Task.CompletedTask;
         }

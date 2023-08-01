@@ -82,6 +82,8 @@ namespace Automatica.Push.Helper
                             _coreServer.Restart();
                         }
                     }
+
+                    await _updateHub.Clients.All.SendAsync("PluginLoaded", new object[] { _plugin.PluginGuid });
                 }
             }
             finally
