@@ -85,7 +85,7 @@ namespace Automatica.Core.Tests
             AssertLifecycle<IVisualisationFactory>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ITelegramMonitor>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IServerCloudApi>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<ICloudApi>(moq, ServiceLifetime.Singleton);
+            AssertLifecycle<ICloudApi>(moq, ServiceLifetime.Transient);
             AssertLifecycle<ILicenseContext>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ILicenseContract>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ILearnMode>(moq, ServiceLifetime.Singleton);
