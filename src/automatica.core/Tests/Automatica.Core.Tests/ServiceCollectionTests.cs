@@ -84,7 +84,7 @@ namespace Automatica.Core.Tests
             AssertLifecycle<ILocalizationProvider>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IVisualisationFactory>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ITelegramMonitor>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<IServerCloudApi>(moq, ServiceLifetime.Singleton);
+            AssertLifecycle<IServerCloudApi>(moq, ServiceLifetime.Transient);
             AssertLifecycle<ICloudApi>(moq, ServiceLifetime.Transient);
             AssertLifecycle<ILicenseContext>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ILicenseContract>(moq, ServiceLifetime.Singleton);
@@ -145,8 +145,8 @@ namespace Automatica.Core.Tests
             AssertImplementationType<ITelegramMonitor, TelegramMonitor>(moq);
             AssertImplementationType<IServerCloudApi, CloudApi>(moq);
             AssertImplementationType<ICloudApi, CloudApi>(moq);
-            //AssertImplementationType<ILicenseContext, AllowAllLicenseContext>(moq);
-            //AssertImplementationType<ILicenseContract, AllowAllLicenseContext>(moq);
+            AssertImplementationType<ILicenseContext, LicenseContext>(moq);
+            AssertImplementationType<ILicenseContract, LicenseContext>(moq);
             AssertImplementationType<ILearnMode, LearnMode>(moq);
 
             AssertImplementationType<INodeInstanceStore, NodeInstanceStore>(moq);
