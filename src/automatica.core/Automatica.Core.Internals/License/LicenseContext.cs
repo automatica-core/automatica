@@ -71,10 +71,13 @@ namespace Automatica.Core.Internals.License
                 {
                     var license = await _cloudApi.GetLicense();
 
-                    await using var file = new StreamWriter(LicensePath);
-                    await file.WriteAsync(license);
-                    await file.FlushAsync();
-                    file.Close();
+                    if (!String.IsNullOrEmpty(license))
+                    {
+                        await using var file = new StreamWriter(LicensePath);
+                        await file.WriteAsync(license);
+                        await file.FlushAsync();
+                        file.Close();
+                    }
                 }
 
                 if (File.Exists(LicensePath))
