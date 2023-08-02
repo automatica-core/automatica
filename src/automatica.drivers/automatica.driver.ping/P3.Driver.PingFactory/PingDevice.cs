@@ -49,6 +49,12 @@ namespace P3.Driver.PingFactory
             return base.Init(token);
         }
 
+        public override Task<bool> Read(CancellationToken token = new CancellationToken())
+        {
+            DispatchValue(Value);
+            return Task.FromResult(true);
+        }
+
         public override Task<bool> Start(CancellationToken token = default)
         {
             if (_interval >= 0)
@@ -81,7 +87,7 @@ namespace P3.Driver.PingFactory
             {
                 PingReply reply = pingSender.Send(_ip, _timeout, _buffer.ToArray(), options);
 
-                DriverContext.Logger.LogDebug($"Ping reply for {_ip} is {reply.Status}");
+                DriverContext.Logger.LogDebug($"Ping reply for {_ip} is {reply?.Status}");
 
                 if (reply?.Status == IPStatus.Success)
                 {
