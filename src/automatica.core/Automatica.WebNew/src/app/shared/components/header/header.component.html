@@ -26,7 +26,7 @@
 
 
         <dx-speed-dial-action icon="preferences" label="{{ 'COMMON.ADMIN' | translateAsync }}" [index]="1"
-            [visible]="!isAdminPage()" (onClick)="navigateToAdminPage()">
+            [visible]="isAdminAvailable && !isAdminPage()" (onClick)="navigateToAdminPage()">
         </dx-speed-dial-action>
 
         <dx-speed-dial-action icon="home" label="{{ 'VISU.NAME' | translateAsync }}" [index]="1"

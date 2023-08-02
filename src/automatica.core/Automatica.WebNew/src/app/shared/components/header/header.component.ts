@@ -42,6 +42,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     time: string = "00:00:00";
     ticker: NodeJS.Timeout;
 
+    isAdminAvailable = false;
+
     private projectName: string;
 
     public themes = [
@@ -73,6 +75,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const projectName = await this.settingsService.getByKey("projectName");
         this.projectName = projectName.Value;
         document.title = this.projectName;
+
+        var user = this.loginService.getCurrentUser();
+        var hasAdminRole = user.InverseThis2Roles.filter(a => a.This2RoleNavigation.Key == "administrator").length > 0;
+        this.isAdminAvailable = hasAdminRole;
 
         this.ticker = setInterval(() => {
             const date = new Date();
