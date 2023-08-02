@@ -71,10 +71,13 @@ namespace Automatica.Core.Internals.License
                 {
                     var license = await _cloudApi.GetLicense();
 
-                    await using var file = new StreamWriter(LicensePath);
-                    await file.WriteAsync(license);
-                    await file.FlushAsync();
-                    file.Close();
+                    if (!String.IsNullOrEmpty(license))
+                    {
+                        await using var file = new StreamWriter(LicensePath);
+                        await file.WriteAsync(license);
+                        await file.FlushAsync();
+                        file.Close();
+                    }
                 }
 
                 if (File.Exists(LicensePath))
@@ -115,6 +118,7 @@ namespace Automatica.Core.Internals.License
             catch (System.Xml.XmlException)
             {
                 File.Delete(LicensePath);
+                IsLicensed = false;
             }
             catch (Exception e)
             {
@@ -122,7 +126,7 @@ namespace Automatica.Core.Internals.License
                 SystemLogger.Instance.LogError(e, "License validation failed");
             }
 
-            if(IsLicensed)
+            if(IsLicensed && _license is { ProductFeatures: not null })
             {
                 MaxDataPoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
                 MaxUsers = Convert.ToInt32(_license.ProductFeatures.Get("MaxUsers"));
