@@ -111,6 +111,13 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
         private ProcessStartInfo GetProcessStartInfo()
         {
+            var localPort = ServerInfo.SslWebPort;
+
+            if (String.IsNullOrEmpty(localPort))
+            {
+                localPort = "443";
+            }
+
             var processStartInfo = new ProcessStartInfo(
                 GetExecutableFileName(), $"-c {"frpc.ini"}")
             {
@@ -130,7 +137,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                     {"LOG_LEVEL", $"{_settings.CurrentValue.LogLevel}"},
                     
                     {"LOCAL_IP", $"{_settings.CurrentValue.LocalIp}"},
-                    {"LOCAL_PORT", $"{ServerInfo.SslWebPort}"},
+                    {"LOCAL_PORT", $"{localPort}"},
                     {"FRPC_USERNAME", $"{ServerInfo.ServerUid}"},
                     {"SUB_DOMAIN", $"{_settingsCache.GetByKey("remoteDomain").ValueText ?? _config["db:remoteDomain"]}"}
                 }
