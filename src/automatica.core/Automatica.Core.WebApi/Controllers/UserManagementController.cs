@@ -291,7 +291,8 @@ namespace Automatica.Core.WebApi.Controllers
 
                 foreach (var user2Group in user2Groups)
                 {
-                    var user2GroupExisting = dbContext.User2Groups.SingleOrDefault(a => a.This2User == user2Group.This2User && a.This2UserGroup == user2Group.This2UserGroup);
+                    var user2GroupExisting = dbContext.User2Groups.SingleOrDefault(a =>
+                        a.This2User == user2Group.This2User && a.This2UserGroup == user2Group.This2UserGroup);
 
                     if (user2GroupExisting != null)
                     {
@@ -301,19 +302,19 @@ namespace Automatica.Core.WebApi.Controllers
                     dbContext.User2Groups.Add(user2Group);
                 }
 
-                if (user.InverseThis2UserGroups != null)
-                {
-                    var removedUserGroups = from c in dbContext.User2Groups
-                                            where !(from o in user.InverseThis2UserGroups select o.This2UserGroup).Contains(c.This2UserGroup)
-                                            select c;
+                var removedUserGroups = from c in dbContext.User2Groups
+                    where !(from o in user2Groups select o.This2UserGroup).Contains(c.This2UserGroup) &&
+                          c.This2User == user.ObjId
+                    select c;
 
-                    var removedUserGroupsList = removedUserGroups.ToList();
-                    dbContext.RemoveRange(removedUserGroupsList);
-                }
+                var removedUserGroupsList = removedUserGroups.ToList();
+                dbContext.RemoveRange(removedUserGroupsList);
+
 
                 foreach (var role in roles)
                 {
-                    var rolesExisting = dbContext.User2Roles.SingleOrDefault(a => a.This2User == role.This2User && a.This2Role == role.This2Role);
+                    var rolesExisting = dbContext.User2Roles.SingleOrDefault(a =>
+                        a.This2User == role.This2User && a.This2Role == role.This2Role);
 
                     if (rolesExisting != null)
                     {
@@ -323,20 +324,21 @@ namespace Automatica.Core.WebApi.Controllers
                     dbContext.User2Roles.Add(role);
                 }
 
-                if (user.InverseThis2Roles != null)
-                {
-                    var removedUserRoles = from c in dbContext.User2Roles
-                                           where !(from o in user.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
-                                           select c;
 
-                    var removedUserRolesList = removedUserRoles.ToList();
-                    dbContext.RemoveRange(removedUserRolesList);
-                }
+                var removedUserRoles = from c in dbContext.User2Roles
+                    where !(from o in roles select o.This2Role).Contains(c.This2Role) &&
+                          c.This2User == user.ObjId
+                    select c;
+
+                var removedUserRolesList = removedUserRoles.ToList();
+                dbContext.RemoveRange(removedUserRolesList);
+
+
                 _userCache.Clear();
                 dbContext.SaveChanges();
                 transaction.Commit();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 SystemLogger.Instance.LogError(e, "Could not save data");
                 transaction.Rollback();
