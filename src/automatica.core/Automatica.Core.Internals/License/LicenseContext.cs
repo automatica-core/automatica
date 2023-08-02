@@ -151,7 +151,7 @@ namespace Automatica.Core.Internals.License
             SystemLogger.Instance.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
             SystemLogger.Instance.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
             SystemLogger.Instance.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
-            SystemLogger.Instance.LogInformation($"{nameof(_license.ProductFeatures)}: {JsonConvert.SerializeObject(_license.ProductFeatures)}");
+            SystemLogger.Instance.LogInformation($"Features: {JsonConvert.SerializeObject(_license?.ProductFeatures)}");
 
             return IsLicensed;
 
