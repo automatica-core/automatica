@@ -107,9 +107,14 @@ namespace Automatica.Core.Internals.License
                         {
                             SystemLogger.Instance.LogError(validationError.Message);
                         }
+
                         File.Delete(LicensePath);
                     }
                 }
+            }
+            catch (System.Xml.XmlException)
+            {
+                File.Delete(LicensePath);
             }
             catch (Exception e)
             {
