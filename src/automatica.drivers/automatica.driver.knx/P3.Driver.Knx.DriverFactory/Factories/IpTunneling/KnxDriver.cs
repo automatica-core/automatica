@@ -37,6 +37,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private bool _tunnelingEnabled;
         private IPAddress _remoteIp;
         private int _remotePort;
+        private bool _onlyUseTunnel;
 
         public KnxDriver(IDriverContext driverContext, bool secureDriver, KnxLevel level=KnxLevel.ThreeLevel) : base(driverContext)
         {
@@ -69,6 +70,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
 
             var useTunnel = GetProperty("knx-use-tunnel").ValueBool;
+            _onlyUseTunnel = GetProperty("knx-only_use-tunnel").ValueBool!.Value;
 
             try
             {
@@ -146,6 +148,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
+            if (_onlyUseTunnel)
+            {
+                return true;
+            }
             _gwState?.SetGatewayState(false);
             StartConnection();
 

@@ -12,7 +12,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(1, 0, 0, 0);
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -37,6 +37,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 
 
         internal static readonly Guid UseTunnel = new Guid("dfa17c76-cc6f-42a9-94c7-19e46fa807ae");
+        internal static readonly Guid OnlyUseTunnel = new Guid("9ffc84d0-947b-41de-93d8-46d26a684f71");
         internal static readonly Guid TunnelDomain = new Guid("5892b55e-7759-488d-9ce6-f182c34c3a72");
 
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -64,6 +65,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 
 
             factory.CreatePropertyTemplate(UseTunnel, "COMMON.PROPERTY.ENABLE_TUNNEL.NAME", "COMMON.PROPERTY.ENABLE_TUNNEL.DESCRIPTION",
+                "knx-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                1); 
+            
+            factory.CreatePropertyTemplate(OnlyUseTunnel, "KNX.PROPERTIES.ONLY_USE_TUNNEL.NAME", "KNX.PROPERTIES.ONLY_USE_TUNNEL.DESCRIPTION",
                 "knx-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
                 1);
 
