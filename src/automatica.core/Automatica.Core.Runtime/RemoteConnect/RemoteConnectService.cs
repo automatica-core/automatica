@@ -151,6 +151,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            _isRunning = false;
             await _frpService.StopAsync(cancellationToken);
         }
 
