@@ -183,7 +183,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 DriverContext.Logger.LogInformation($"Stopping KNX driver...");
                 if (_tunneling != null)
                 {
-                    _tunneling.Stop();
+                    if(!_onlyUseTunnel)
+                        _tunneling.Stop();
                     _callbackMap.Clear();
                     _tunneling = null;
                 }

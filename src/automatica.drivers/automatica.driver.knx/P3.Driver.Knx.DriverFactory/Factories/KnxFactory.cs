@@ -12,7 +12,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(1, 1, 0, 0);
+        public override Version DriverVersion => new Version(1, 1, 1, 0);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
