@@ -1,0 +1,92 @@
+/*!******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[2]!./node_modules/devextreme/dist/css/dx.common.css?ngGlobalStyle ***!
+  \******************************************************************************************************************************************************************************************************************************************************/
+/**
+* DevExtreme (dx.common.css)
+* Version: 23.1.4
+* Build date: Fri Jul 14 2023
+*
+* Copyright (c) 2012 - 2023 Developer Express Inc. ALL RIGHTS RESERVED
+* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
+*/
+/*!
+This file is kept for backward compatibility.
+It is no longer required.
+*/
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./src/dx-styles.scss?ngGlobalStyle ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+html, body {
+  margin: 0px;
+  min-height: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.content {
+  line-height: 1.5;
+  flex-grow: 1;
+}
+.content h2 {
+  font-size: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.container {
+  height: 100%;
+  flex-direction: column;
+  display: flex;
+}
+
+.layout-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.side-nav-outer-toolbar .dx-drawer {
+  height: calc(100% - 56px);
+}
+
+.content-block {
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 20px;
+}
+.screen-x-small .content-block {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.responsive-paddings {
+  padding: 20px;
+}
+.screen-large .responsive-paddings {
+  padding: 40px;
+}
+
+.dx-card.wide-card {
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+.with-footer > .dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content {
+  height: 100%;
+}
+.with-footer > .dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-content > .dx-scrollview-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./src/styles.scss?ngGlobalStyle ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/* You can add global styles to this file, and also import other style files */
+
+/*# sourceMappingURL=styles.css.map*/

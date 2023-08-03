@@ -84,6 +84,7 @@ namespace Automatica.Core.Internals.License
                 {
                     await using (var file = File.OpenRead(LicensePath))
                     {
+                        
                         var license = Standard.Licensing.License.Load(file);
                         if (license.Id != ServerInfo.ServerUid)
                         {
