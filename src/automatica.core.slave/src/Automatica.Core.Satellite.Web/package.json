@@ -1,0 +1,49 @@
+{
+  "name": "automatica-satellite",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng b --watch --configuration=development",
+    "build": "ng build --configuration=",
+    "build-docker": "ng build --configuration=production --output-path ./dist",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "build-themes": "devextreme build",
+    "set-version": "json -I -f package.json -e \"this.version='$VERSION'\""
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^16.1.6",
+    "@angular/cdk": "^16.1.6",
+    "@angular/common": "^16.1.6",
+    "@angular/compiler": "^16.1.6",
+    "@angular/core": "^16.1.6",
+    "@angular/forms": "^16.1.6",
+    "@angular/platform-browser": "^16.1.6",
+    "@angular/platform-browser-dynamic": "^16.1.6",
+    "@angular/router": "^16.1.6",
+    "devextreme": "^23.1.3",
+    "devextreme-angular": "^23.1.3",
+    "devextreme-schematics": "^1.6.0",
+    "rxjs": "~7.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.13.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^16.1.6",
+    "@angular/cli": "^16.1.6",
+    "@angular/compiler-cli": "^16.1.6",
+    "@types/jasmine": "~3.10.0",
+    "@types/node": "^12.11.1",
+    "devextreme-cli": "latest",
+    "devextreme-themebuilder": "^23.1.3",
+    "jasmine-core": "~4.0.0",
+    "karma": "~6.3.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.1.0",
+    "karma-jasmine": "~4.0.0",
+    "karma-jasmine-html-reporter": "~1.7.0",
+    "typescript": "~4.9.5"
+  }
+}

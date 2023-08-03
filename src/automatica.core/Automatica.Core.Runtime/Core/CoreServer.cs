@@ -262,17 +262,7 @@ namespace Automatica.Core.Runtime.Core
 
             await Configure();
 
-            if (_remoteConnectService != null)
-            {
-                try
-                {
-                    await _remoteConnectService.StartAsync(default);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Error starting RemoteControl {e}");
-                }
-            }
+            await StartRemoteConnectService();
 
             RunState = RunState.Starting;
 
@@ -294,6 +284,22 @@ namespace Automatica.Core.Runtime.Core
             RunState = RunState.Started;
 
            
+        }
+
+        private async Task StartRemoteConnectService()
+        {
+            if (_remoteConnectService != null)
+            {
+                try
+                {
+                    await _remoteConnectService.StartAsync(default);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error starting RemoteControl {e}");
+                }
+            }
+
         }
 
         private async Task StartLogics()
@@ -459,6 +465,11 @@ namespace Automatica.Core.Runtime.Core
             }
 
             _logicEngineDispatcher.Dispose();
+
+            if (_remoteConnectService != null)
+            {
+                await _remoteConnectService.StopAsync(default);
+            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
