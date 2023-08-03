@@ -771,6 +771,7 @@ namespace Automatica.Core.Runtime.Core
         {
             await _remoteServerHandler.ReInit();
             await _driverNodesStore.ReInitialize();
+            _telegramMonitor?.Clear();
 
             await Stop();
 
