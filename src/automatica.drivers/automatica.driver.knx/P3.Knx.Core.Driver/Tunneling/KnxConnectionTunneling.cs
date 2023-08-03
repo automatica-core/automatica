@@ -57,7 +57,7 @@ namespace P3.Knx.Core.Driver.Tunneling
         protected override void Disconnect()
         {
             KnxHelper.Logger.LogDebug($"Close client socket...");
-            KnxHelper.Logger.LogDebug($"{_client.GetHashCode()}");
+            KnxHelper.Logger.LogDebug($"{_client?.GetHashCode()}");
             if (_client != null)
             {
                 _client.Client?.Shutdown(SocketShutdown.Both);
