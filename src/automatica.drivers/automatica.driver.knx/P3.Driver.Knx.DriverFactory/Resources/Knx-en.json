@@ -37,6 +37,10 @@
       "GROUP": {
         "NAME": "Groupaddress",
         "DESCRIPTION": ""
+      },
+      "ONLY_USE_TUNNEL": {
+        "NAME": "Only tunnel connection",
+        "DESCRIPTION": ""
       }
     },
     "PROPERTIES": {

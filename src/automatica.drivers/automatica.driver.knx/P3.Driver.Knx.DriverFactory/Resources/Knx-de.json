@@ -47,6 +47,10 @@
       "DPT": {
         "NAME": "DPT",
         "DESCRIPTION": ""
+      },
+      "ONLY_USE_TUNNEL": {
+        "NAME": "Nur Tunneln",
+        "DESCRIPTION": ""
       }
     },
     "DPT1": {
