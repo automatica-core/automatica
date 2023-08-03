@@ -37,10 +37,6 @@
       "GROUP": {
         "NAME": "Groupaddress",
         "DESCRIPTION": ""
-      },
-      "ONLY_USE_TUNNEL": {
-        "NAME": "Only tunnel connection",
-        "DESCRIPTION": ""
       }
     },
     "PROPERTIES": {
@@ -50,6 +46,10 @@
       },
       "DPT": {
         "NAME": "DPT",
+        "DESCRIPTION": ""
+      },
+      "ONLY_USE_TUNNEL": {
+        "NAME": "Only tunnel connection",
         "DESCRIPTION": ""
       }
     },

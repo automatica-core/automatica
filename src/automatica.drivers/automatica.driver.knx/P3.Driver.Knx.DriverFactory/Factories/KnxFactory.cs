@@ -69,7 +69,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 1); 
             
             factory.CreatePropertyTemplate(OnlyUseTunnel, "KNX.PROPERTIES.ONLY_USE_TUNNEL.NAME", "KNX.PROPERTIES.ONLY_USE_TUNNEL.DESCRIPTION",
-                "knx-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                "knx-only-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
                 1);
 
             /*      factory.CreateNodeTemplate(KnxSecureGatway, "KNX.SECURE_GATEWAY.NAME", "KNX.SECURE_GATEWAY.DESCRIPTION", "knx-secure-gw",
