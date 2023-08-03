@@ -13,6 +13,7 @@ using Automatica.Core.Driver.Utility.Network;
 using P3.Knx.Core.Driver;
 using P3.Knx.Core.Driver.Tunneling;
 using P3.Knx.Core.Abstractions;
+using Automatica.Core.EF.Exceptions;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
@@ -70,7 +71,19 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
 
             var useTunnel = GetProperty("knx-use-tunnel").ValueBool;
-            _onlyUseTunnel = GetProperty("knx-only_use-tunnel").ValueBool!.Value;
+
+            try
+            {
+                var onlyUseTunnelProp = GetProperty("knx-only-use-tunnel");
+
+                if (onlyUseTunnelProp != null && onlyUseTunnelProp.ValueBool.HasValue)
+                    _onlyUseTunnel = onlyUseTunnelProp.ValueBool!.Value;
+
+            }
+            catch (PropertyNotFoundException)
+            {
+                //ignore, default value is false anyway
+            }
 
             try
             {
