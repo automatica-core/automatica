@@ -1,7 +1,7 @@
 FROM node:18-alpine as node
 WORKDIR /www
 
-COPY ./src/Automatica.Core.Slave.Web /www
+COPY ./src/Automatica.Core.Satellite.Web /www
 RUN rm -rf /www/node_modules
 RUN npm install --global devextreme
 RUN npm install
@@ -20,14 +20,14 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 COPY . /src
 
 RUN automatica-cli setversion $VERSION -W /src/src
-RUN dotnet publish -c Release -o /app/slave /src/src/ -r linux-arm
+RUN dotnet publish -c Release -o /app/satellite /src/src/ -r linux-arm
 
 FROM automaticacore/automatica-plugin-runtime:arm32v7-7 AS runtime
-WORKDIR /app/slave
+WORKDIR /app/satellite
 
-COPY --from=node /www/dist /app/slave/wwwroot
+COPY --from=node /www/dist /app/satellite/wwwroot
 
 EXPOSE 8080
 
-COPY --from=build /app/slave ./
-ENTRYPOINT ["/app/slave/Automatica.Core.Slave"]
+COPY --from=build /app/satellite ./
+ENTRYPOINT ["/app/satellite/Automatica.Core.Satellite"]
