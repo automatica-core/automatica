@@ -23,9 +23,51 @@
 
                     <span id="{{ data.data.Id }}">
                         <ng-container *ngIf="data.data.IsAnyDisabled">
-                            <span [ngClass]="{'node-instance-disabled': data.data.IsAnyDisabled}">
-                                <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.NAME</span><span>)</span>
+                            <span class="node-instance-disabled">
+                                <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.NAME</span><span>) </span>
                             </span>
+                        </ng-container>
+                        <ng-container
+                            *ngIf="data.data.State == NodeInstanceState.UnknownError || data.data.State == NodeInstanceState.Unknown">
+                            <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
+                                <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNKNOWN.NAME</span><span> <fa-icon
+                                        icon="question" style="margin-left: 5px; margin-right: 2px;"></fa-icon>) </span>
+                            </span>
+
+                            <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
+                                hideEvent="mouseleave" position="top" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)"
+                                [width]="300">
+                                <div *dxTemplate="let data = model; of: 'content'">
+                                    <span translate>COMMON.NODEINSTANCE.STATE.UNKNOWN.DESCRIPTION</span>
+                                </div>
+                            </dx-popover>
+                        </ng-container>
+                        <ng-container *ngIf="data.data.State == NodeInstanceState.OutOfDataPoints">
+                            <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
+                                <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.OUTOFLICENSE.NAME</span><span> <fa-icon
+                                    icon="question" style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
+                                </span>
+                            </span>
+                            <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
+                                hideEvent="mouseleave" position="top" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)"
+                                [width]="300">
+                                <div *dxTemplate="let data = model; of: 'content'">
+                                    <span translate>COMMON.NODEINSTANCE.STATE.OUTOFLICENSE.DESCRIPTION</span>
+                                </div>
+                            </dx-popover>
+                        </ng-container>
+                        <ng-container *ngIf="data.data.State == NodeInstanceState.Unloaded">
+                            <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
+                                <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNLOADED.NAME</span><span> <fa-icon
+                                        icon="fa-solid fa-question"></fa-icon>) </span>
+                            </span>
+                            <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
+                                hideEvent="mouseleave" position="top" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)"
+                                [width]="300">
+                                <div *dxTemplate="let data = model; of: 'content'">
+                                    <span translate>COMMON.NODEINSTANCE.STATE.UNLOADED.DESCRIPTION</span>
+                                </div>
+                            </dx-popover>
                         </ng-container>
                         <ng-container>
                             {{data.value}}

@@ -10,15 +10,15 @@ namespace Automatica.Core.EF.Models
 {
     public enum NodeInstanceState
     {
-        New,
-        Saved,
-        Loaded,
-        Initialized,
-        InUse,
-        OutOfDatapoits,
-        UnknownError,
-        Unloaded,
-        Unknown
+        New = 0,
+        Saved = 1,
+        Loaded = 2,
+        Initialized = 3,
+        InUse = 4,
+        OutOfDataPoints = 5,
+        UnknownError = 6,
+        Unloaded = 7,
+        Unknown = 8
     }
     public partial class NodeInstance : TypedObject
     {
@@ -67,7 +67,7 @@ namespace Automatica.Core.EF.Models
         {
             foreach (var prop in instance.PropertyInstance)
             {
-                if (prop.This2PropertyTemplateNavigation.Key == propertyKey)
+                if (prop.This2PropertyTemplateNavigation != null && prop.This2PropertyTemplateNavigation.Key == propertyKey)
                 {
                     return prop;
                 }

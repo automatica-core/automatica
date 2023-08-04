@@ -83,6 +83,22 @@
     "PASSWORD": "Passwort",
     "IMPORT_NODES": "Import",
     "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
+    "NODEINSTANCE": {
+      "STATE": {
+        "UNKNOWN": {
+          "NAME": "Fehler",
+          "DESCRIPTION": "Beim Laden des Treibers ist ein unbekannter Fehler aufgetreten."
+        },
+        "UNLOADED": {
+          "NAME": "Nicht geladen",
+          "DESCRIPTION": "Der Knotenpunkt wurde nicht geladen."
+        },
+        "OUTOFLICENSE": {
+          "NAME": "Lizenz aufgebraucht",
+          "DESCRIPTION": "Du hast die Maximale Anzahl an Knoten in deiner Lizenz aufgebraucht."
+        }
+      }
+    },
     "SWITCH": {
       "ON": "Einschalten",
       "OFF": "Ausschalten"

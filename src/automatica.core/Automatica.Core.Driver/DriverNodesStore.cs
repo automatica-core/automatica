@@ -12,10 +12,7 @@ namespace Automatica.Core.Driver
         {
             Add(child.Id, child);
 
-            if (!_childRootMap.ContainsKey(child.Id))
-            {
-                _childRootMap.Add(child.Id, driver);
-            }
+            _childRootMap.TryAdd(child.Id, driver);
         }
 
         public IDriver GetDriver(Guid child)

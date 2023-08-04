@@ -84,6 +84,22 @@
     "PASSWORD": "Password",
     "IMPORT_NODES": "Import",
     "IMPORT_NOTE": "Enter your password (if needed) prior selecting the file. After selecting the file press upload and the import will start",
+    "NODEINSTANCE": {
+      "STATE": {
+        "UNKNOWN": {
+          "NAME": "Unknown",
+          "DESCRIPTION": "An unknown error occured during loading of the driver."
+        },
+        "UNLOADED": {
+          "NAME": "Unloaded",
+          "DESCRIPTION": "The node was not loaded."
+        },
+        "OUTOFLICENSE": {
+          "NAME": "License exceeded",
+          "DESCRIPTION": "You have reached the max amount of licensed datapoints."
+        }
+      }
+    },
     "SWITCH": {
       "ON": "Turn on",
       "OFF": "Turn off"

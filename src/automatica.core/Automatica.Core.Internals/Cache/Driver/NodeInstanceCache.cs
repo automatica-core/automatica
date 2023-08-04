@@ -162,7 +162,7 @@ namespace Automatica.Core.Internals.Cache.Driver
                 var cachedItem = _allCache[item.ObjId];
                 _allCache[item.ObjId] = item;
                 item.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(_allCache.Values.ToList(), item.ObjId);
-                if (item.This2ParentNodeInstance.HasValue)
+                if (item.This2ParentNodeInstance.HasValue && _allCache.ContainsKey(item.This2ParentNodeInstance.Value))
                 {
                     item.This2ParentNodeInstanceNavigation = _allCache[item.This2ParentNodeInstance.Value];
                     var oldItem = _allCache[item.This2ParentNodeInstance.Value].InverseThis2ParentNodeInstanceNavigation

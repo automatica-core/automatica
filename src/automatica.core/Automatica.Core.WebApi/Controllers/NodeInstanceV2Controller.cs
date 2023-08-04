@@ -249,10 +249,12 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task StopStartDriver(NodeInstance node)
         {
-
             var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
             await _notifyDriver.NotifyAdd(node);
-
+            if (rootNode == null)
+            {
+                return;
+            }
             var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
             if (driver == null)
             {

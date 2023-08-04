@@ -498,7 +498,7 @@ namespace Automatica.Core.Runtime.Core
                 {
                     if (LicenseExceeded())
                     {
-                        nodeInstance.State = NodeInstanceState.OutOfDatapoits;
+                        nodeInstance.State = NodeInstanceState.OutOfDataPoints;
                     }
                     else
                     {
@@ -513,7 +513,7 @@ namespace Automatica.Core.Runtime.Core
                 {
                     if (LicenseExceeded())
                     {
-                        nodeInstance.State = NodeInstanceState.OutOfDatapoits;
+                        nodeInstance.State = NodeInstanceState.OutOfDataPoints;
                     }
                     else
                     {
@@ -561,12 +561,13 @@ namespace Automatica.Core.Runtime.Core
             {
                 _driverNodesStore.Add(new RemoteNodeInstance(driverInstanceGuid, dr, _remoteHandler));
 
-                _configuredDrivers++;
-
-                if (_configuredDrivers >= _licenseContext.MaxDataPoints)
+                _licenseContext.IncrementDriverCount();
+                
+                if (_licenseContext.DriverLicenseCountExceeded())
                 {
+                    driver.State = NodeInstanceState.OutOfDataPoints;
                     _logger.LogError("Cannot instantiate more data-points, license exceeded");
-                //    return; //license will be ignored for now
+                    return; //license will be ignored for now
                 }
 
                 AddRemoteDriverRecursive(driverInstanceGuid, dr);
@@ -579,7 +580,7 @@ namespace Automatica.Core.Runtime.Core
         {
             if (_configuredDrivers >= _licenseContext.MaxDataPoints)
             {
-                nodeInstance.State = NodeInstanceState.OutOfDatapoits;
+                nodeInstance.State = NodeInstanceState.OutOfDataPoints;
             }
             if(nodeInstance.State == NodeInstanceState.New)
             {
