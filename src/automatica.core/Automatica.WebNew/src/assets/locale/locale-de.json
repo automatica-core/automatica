@@ -215,6 +215,10 @@
         "NAME": "Lesbar",
         "DESCRIPTION": ""
       },
+      "ISDISABLED": {
+        "NAME": "Deaktiviert",
+        "DESCRIPTION": ""
+      },
       "ISWRITEABLE": {
         "NAME": "Schreibbar",
         "DESCRIPTION": ""

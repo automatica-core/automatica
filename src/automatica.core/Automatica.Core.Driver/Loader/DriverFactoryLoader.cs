@@ -66,8 +66,6 @@ namespace Automatica.Core.Driver.Loader
             {
                 _driverNodeStore.AddChild(root, dr);
 
-                _licenseContract.IncrementDriverCount();
-
                 if (_licenseContract.DriverLicenseCountExceeded())
                 {
                     _logger.LogError("Cannot instantiate more data-points, license exceeded");

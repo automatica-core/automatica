@@ -412,6 +412,8 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
+
+                _licenseContext.DecrementDriverCount(driver.ChildrensCreated);
                 _logger.LogInformation($"Stopping driver {driver.Name}...");
 
                 if (await driver.Stop())
@@ -490,8 +492,8 @@ namespace Automatica.Core.Runtime.Core
             foreach (var nodeInstance in root.InverseThis2ParentNodeInstanceNavigation)
             {
                 _logger.LogDebug($"Working on {nodeInstance.Name}...");
-
                 _loadedNodeInstancesStore.Add(nodeInstance.ObjId, nodeInstance);
+               
                 if (!nodeInstance.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation.IsDriverInterface)
                 {
                     if (LicenseExceeded())
@@ -804,6 +806,7 @@ namespace Automatica.Core.Runtime.Core
                 return null;
             }
 
+
             var loggerName =
                 $"{factory.DriverName.ToLowerInvariant()}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_").ToLowerInvariant()}";
             var logger = CoreLoggerFactory.GetLogger(_config, loggerName);
@@ -849,7 +852,16 @@ namespace Automatica.Core.Runtime.Core
             {
                 var cts = new CancellationTokenSource();
                 cts.CancelAfter(TimeSpan.FromSeconds(120));
-                var driverStart = await driver.Start().WithCancellation(cts.Token);
+
+                bool driverStart;
+                if (driver is DriverBase driverBase)
+                {
+                    driverStart = await driverBase.StartInternal(cts.Token);
+                }
+                else
+                {
+                    driverStart = await driver.Start(cts.Token);
+                }
 
                 if (driverStart)
                 {

@@ -29,6 +29,7 @@ import { CategoryInstance } from "./categories";
 import { AreaInstance } from "./areas";
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance";
 import { VirtualSatellitePropertyInstance } from "./virtual-props/virtual-satellite-property-instance";
+import { VirtualDisabledPropertyInstance } from "./virtual-props/virtual-disabled-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -217,6 +218,20 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     IsReadable: boolean;
     @JsonProperty()
     IsWriteable: boolean;
+    @JsonProperty()
+    IsDisabled: boolean;
+
+    
+    public get IsAnyDisabled() : boolean {
+        if(this.IsDisabled) {
+            return true;
+        }
+        if(this.Parent instanceof NodeInstance) {
+            return this.Parent.IsAnyDisabled;
+        }
+        return false;
+    }
+    
 
     @JsonProperty()
     UseInVisu: boolean;
@@ -313,6 +328,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualSatellitePropertyInstance(this));
         }
 
+        this.Properties.push(new VirtualDisabledPropertyInstance(this));
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
             this.Properties.push(new VirtualWriteablePropertyInstance(this));

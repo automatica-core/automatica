@@ -36,6 +36,8 @@ namespace Automatica.Core.EF.Models
         public bool IsWriteable { get; set; }
         public bool IsDeleted { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         public bool UseInVisu { get; set; }
         public Guid? This2UserGroup { get; set; }
         public bool IsFavorite { get; set; }

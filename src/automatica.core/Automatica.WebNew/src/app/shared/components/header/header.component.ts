@@ -77,7 +77,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         document.title = this.projectName;
 
         var user = this.loginService.getCurrentUser();
-        var hasAdminRole = user.InverseThis2Roles.filter(a => a.This2RoleNavigation.Key == "administrator").length > 0;
+
+        var hasAdminRole = user?.InverseThis2Roles.filter(a => a.This2RoleNavigation.Key == "administrator").length > 0;
         this.isAdminAvailable = hasAdminRole;
 
         this.ticker = setInterval(() => {

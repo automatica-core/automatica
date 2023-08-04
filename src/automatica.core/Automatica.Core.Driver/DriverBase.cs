@@ -7,6 +7,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
+using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Driver
@@ -221,6 +222,17 @@ namespace Automatica.Core.Driver
             return Task.CompletedTask;
         }
 
+        public async Task<bool> StartInternal(CancellationToken token = default)
+        {
+            if (DriverContext.NodeInstance.IsDisabled)
+            {
+                DriverContext.Logger.LogWarning($"Node {Name} {Id} is disabled");
+                return false;
+            }
+
+            return await Start(token);
+        }
+
         public virtual Task<bool> Start(CancellationToken token = default)
         {
             _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
@@ -230,7 +242,15 @@ namespace Automatica.Core.Driver
                 cts.CancelAfter(TimeSpan.FromMinutes(2));
                 try
                 {
-                    var driverStart = await node.Start().WithCancellation(cts.Token);
+                    bool driverStart;
+                    if (node is DriverBase driverNode)
+                    {
+                        driverStart = await driverNode.StartInternal(cts.Token);
+                    }
+                    else
+                    {
+                        driverStart = await node.Start(cts.Token);
+                    }
 
                     if (!driverStart)
                     {

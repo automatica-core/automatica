@@ -22,7 +22,14 @@
                     <fa-icon [icon]="['fas', 'exclamation']" *ngIf="!data.data.ValidationOk"></fa-icon>
 
                     <span id="{{ data.data.Id }}">
-                        {{data.value}}
+                        <ng-container *ngIf="data.data.IsAnyDisabled">
+                            <span [ngClass]="{'node-instance-disabled': data.data.IsAnyDisabled}">
+                                <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.NAME</span><span>)</span>
+                            </span>
+                        </ng-container>
+                        <ng-container>
+                            {{data.value}}
+                        </ng-container>
                     </span>
                 </div>
             </div>
@@ -31,7 +38,9 @@
         <div *dxTemplate="let data of 'valueTemplate'" cellTemplate="valueTemplate">
             <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
                 <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
-                    <span id="{{ data.data.Id }}">{{data.value}}</span>
+                    <ng-container *ngIf="!data.data.IsAnyDisabled">
+                        <span id="{{ data.data.Id }}">{{data.value}}</span>
+                    </ng-container>
                 </div>
             </div>
         </div>

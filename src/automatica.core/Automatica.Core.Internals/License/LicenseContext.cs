@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Automatica.Core.Internals.License
 {
-    public class LicenseContext : ILicenseContext
+    public sealed class LicenseContext : ILicenseContext
     {
         private readonly ICloudApi _cloudApi;
         private int _dataPointsInUse = 0;
@@ -44,6 +44,11 @@ namespace Automatica.Core.Internals.License
             ++_dataPointsInUse;
         }
 
+        public void DecrementDriverCount(int count)
+        {
+            _dataPointsInUse -= count;
+        }
+
         public List<string> LicensedFeatures { get; set; }
 
         private Standard.Licensing.License _license;
@@ -59,6 +64,7 @@ namespace Automatica.Core.Internals.License
 
         public async Task<bool> Init()
         {
+            _dataPointsInUse = 0;
             string pubKey = "";
             using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Internals.pub.txt")))
             {
