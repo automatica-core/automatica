@@ -92,7 +92,8 @@ export enum NodeInstanceState {
     OutOfDataPoints = 5,
     UnknownError = 6,
     Unloaded = 7,
-    Unknown = 8
+    Unknown = 8,
+    Remote = 9
 }
 
 export enum TrendingTypes {

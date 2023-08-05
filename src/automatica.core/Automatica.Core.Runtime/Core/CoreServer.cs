@@ -553,6 +553,8 @@ namespace Automatica.Core.Runtime.Core
 
         private void AddRemoteDriverRecursive(Guid driverInstanceGuid, NodeInstance driver)
         {
+            driver.State = NodeInstanceState.Remote;
+
             if (driver.InverseThis2ParentNodeInstanceNavigation == null)
             {
                 return;
@@ -562,6 +564,7 @@ namespace Automatica.Core.Runtime.Core
                 _driverNodesStore.Add(new RemoteNodeInstance(driverInstanceGuid, dr, _remoteHandler));
 
                 _licenseContext.IncrementDriverCount();
+                dr.State = NodeInstanceState.Remote;
                 
                 if (_licenseContext.DriverLicenseCountExceeded())
                 {
