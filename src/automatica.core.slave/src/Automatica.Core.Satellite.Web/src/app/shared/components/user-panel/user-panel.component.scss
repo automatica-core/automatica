@@ -1,4 +1,4 @@
-@import "../../../../themes/generated/variables.base.scss";
+@import "../../../../themes/generated/variables.base.dark.scss";
 
 .user-info {
   display: flex;
@@ -28,7 +28,6 @@
 
   .user-name {
     font-size: 14px;
-    color: $base-text-color;
     margin: 0 9px;
   }
 }

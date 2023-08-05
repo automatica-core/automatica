@@ -1,7 +1,7 @@
-﻿using MQTTnet.Client.Disconnecting;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using MQTTnet.Client.Disconnecting;
 
-namespace Automatica.Core.Slave.Runtime
+namespace Automatica.Core.Satellite.Runtime
 {
     internal class MqttDisconnectedHandler : IMqttClientDisconnectedHandler
     {

@@ -1,8 +1,8 @@
-﻿using Docker.DotNet.Models;
-using System;
+﻿using System;
+using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Slave.Runtime
+namespace Automatica.Core.Satellite.Runtime
 {
     internal class ImageProgress : IProgress<JSONMessage>
     {

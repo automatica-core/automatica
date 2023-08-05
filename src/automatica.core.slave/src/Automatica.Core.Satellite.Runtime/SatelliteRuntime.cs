@@ -1,4 +1,11 @@
-﻿using Automatica.Core.Slave.Abstraction;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using Automatica.Core.Satellite.Abstraction;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using Microsoft.Extensions.Configuration;
@@ -7,18 +14,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using MQTTnet.Client.Options;
 using MqttTopicFilterBuilder = MQTTnet.MqttTopicFilterBuilder;
 using Timer = System.Timers.Timer;
 
-namespace Automatica.Core.Slave.Runtime
+namespace Automatica.Core.Satellite.Runtime
 {
     public class SatelliteRuntime : IHostedService
     {
@@ -120,39 +120,49 @@ namespace Automatica.Core.Slave.Runtime
         {
             await _startupSemaphore.WaitAsync();
 
-            if (!_connected)
+            try
             {
-                await StopInternal("not connected");
-                await StartInternal();
-            }
-            else if(_containerStarted)
-            {
-                _logger.LogInformation($"Check running containers...");
-                var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
+                if (!_connected)
                 {
-                    Filters = new Dictionary<string, IDictionary<string, bool>>
+                    await StopInternal("not connected");
+                    await StartInternal();
+                }
+                else if (_containerStarted)
+                {
+                    _logger.LogInformation($"Check running containers...");
+                    var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
                     {
+                        Filters = new Dictionary<string, IDictionary<string, bool>>
                         {
-                            "status", new Dictionary<string, bool>
                             {
-                                {"running", false}
+                                "status", new Dictionary<string, bool>
+                                {
+                                    { "running", false }
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                foreach (var running in _runningImages)
-                {
-                    if (containers.All(a => a.ID != running.Value))
+                    foreach (var running in _runningImages)
                     {
-                        _logger.LogInformation($"Restart containers...");
-                        await StopInternal("restart");
-                        await StartInternal();
+                        if (containers.All(a => a.ID != running.Value))
+                        {
+                            _logger.LogInformation($"Restart containers...");
+                            await StopInternal("restart");
+                            await StartInternal();
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error starting salve...");
+            }
+            finally
+            {
+                _startupSemaphore.Release(1);
+            }
 
-            _startupSemaphore.Release(1);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

@@ -1,5 +1,12 @@
-@import "../../../../themes/generated/variables.base.scss";
+@import "../../../../themes/generated/variables.base.dark.scss";
 
+
+.center_img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
 
 .login-form {
   .link {

@@ -5,7 +5,7 @@ export class AppInfoService {
   constructor() {}
 
   public get title() {
-    return 'Automatica Satellite';
+    return 'Automatica.Satellite';
   }
 
   public get currentYear() {

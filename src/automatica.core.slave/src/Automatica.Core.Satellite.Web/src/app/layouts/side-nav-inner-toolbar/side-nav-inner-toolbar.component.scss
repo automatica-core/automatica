@@ -1,10 +1,36 @@
+@import "../../../themes/generated/variables.additional.scss";
+@import "../../../themes/generated/variables.base.dark.scss";
+ 
+
 :host {
   width: 100%;
 }
 
+.drawer {
+  ::ng-deep h2 {
+      font-size: 30px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+  }
+
+  ::ng-deep h2, ::ng-deep .content-block, .footer {
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-top: 10px;
+  }
+
+  ::ng-deep .dx-card {
+      padding: 20px;
+  }
+}
+
+::ng-deep .dx-toolbar {
+  background-color: $base-accent2!important;
+}
+
 #navigation-header {
-  @import "../../../themes/generated/variables.additional.scss";
-  background-color: $base-accent;
+ 
+  background-color: $base-accent!important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
   ::ng-deep .menu-button .dx-icon {

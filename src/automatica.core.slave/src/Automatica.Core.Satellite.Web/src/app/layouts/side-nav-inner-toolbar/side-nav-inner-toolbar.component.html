@@ -27,18 +27,14 @@
             onClick: toggleMenu
           }">
         </dxi-item>
-        <dxi-item
-          location="before"
-          cssClass="header-title"
-          [text]="title">
-        </dxi-item>
       </dx-toolbar>
   </app-side-navigation-menu>
 
   <div class="container">
     <app-header
       [menuToggleEnabled]="minMenuSize === 0"
-      (menuToggle)="menuOpened = !menuOpened;">
+      (menuToggle)="menuOpened = !menuOpened;"
+      [title]="title">
     </app-header>
 
     <dx-scroll-view class="layout-body with-footer">

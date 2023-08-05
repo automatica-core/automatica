@@ -1,5 +1,8 @@
 <form class="login-form" (submit)="onSubmit($event)">
   <dx-form [formData]="formData" [disabled]="loading">
+    <dxi-item>
+      <img class="center_img" src="/assets/images/Logo1.png" />
+    </dxi-item>
 
     <dxi-item dataField="email" editorType="dxTextBox"
       [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
@@ -24,7 +27,7 @@
       </dxo-button-options>
     </dxi-item>
 
-    <dxi-item>
+    <!-- <dxi-item>
       <div class="link">
         <a routerLink="/reset-password">Forgot password?</a>
       </div>
@@ -32,7 +35,7 @@
 
     <dxi-item itemType="button">
       <dxo-button-options text="Create an account" width="100%" [onClick]="onCreateAccountClick"></dxo-button-options>
-    </dxi-item>
+    </dxi-item> -->
 
     <ng-container *dxTemplate="let item of 'signInTemplate'">
       <div>
@@ -40,7 +43,7 @@
           <ng-container *ngIf="loading; else notLoading">
             <dx-load-indicator width="24px" height="24px" [visible]="true"></dx-load-indicator>
           </ng-container>
-          <ng-template #notLoading>Sign In</ng-template>
+          <ng-template #notLoading><span style="color: white">Login</span></ng-template>
         </span>
       </div>
     </ng-container>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Automatica.Core.Slave.Abstraction
+namespace Automatica.Core.Satellite.Abstraction
 {
     public enum SlaveAction
     {

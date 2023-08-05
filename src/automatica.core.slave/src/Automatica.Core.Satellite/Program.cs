@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore;
+using Automatica.Core.Satellite.Abstraction.Config;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace Automatica.Core.Slave
+namespace Automatica.Core.Satellite
 {
     public class Program
     {
@@ -21,7 +22,15 @@ namespace Automatica.Core.Slave
 
             var config = new ConfigurationBuilder()
               .SetBasePath(configDir)
-              .AddJsonFile("appsettings.json", true)
+              .AddJsonFile("appsettings.json", true).Add(
+                  (Action<WritableJsonConfigurationSource>)(s =>
+                  {
+                      s.FileProvider = null;
+                      s.Path = "appsettings.json";
+                      s.Optional = false;
+                      s.ReloadOnChange = true;
+                      s.ResolveFileProvider();
+                  }))
               .Build();
 
             var logBuild = new LoggerConfiguration()
@@ -32,25 +41,43 @@ namespace Automatica.Core.Slave
             Log.Logger = logBuild.CreateLogger();
             Log.Logger.Information($"Starting Automatica.Slave...Version {NetStandardUtils.Version.GetAssemblyVersion()}, Datetime {DateTime.Now}");
 
-            CreateWebHostBuilder(config["server:port"]).Build().Run();
+            CreateWebHostBuilder(config["server:port"], args).Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string port) 
+        public static WebApplication CreateWebHostBuilder(string port, string[] args)
         {
-            return WebHost.CreateDefaultBuilder()
-                .ConfigureAppConfiguration(a =>
-                {
-                    var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
-                    if (Directory.Exists(Path.Combine(configDir, "config")))
-                    {
-                        configDir = Path.Combine(configDir, "config");
-                    }
+            var builder = WebApplication.CreateBuilder(args);
 
-                    a.SetBasePath(configDir);
-                    a.AddEnvironmentVariables();
-                    a.AddJsonFile("appsettings.json", true);
-                })
-                .UseStartup<Startup>().UseUrls($"http://*:{port}/").UseSerilog();
+            var configDir = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
+            if (Directory.Exists(Path.Combine(configDir, "config")))
+            {
+                configDir = Path.Combine(configDir, "config");
+            }
+
+            builder.Configuration.SetBasePath(configDir);
+            builder.Configuration.AddEnvironmentVariables();
+            builder.Configuration.AddJsonFile("appsettings.json");
+            builder.Configuration.Add(
+                (Action<WritableJsonConfigurationSource>)(s =>
+                {
+                    s.FileProvider = null;
+                    s.Path = "appsettings.json";
+                    s.Optional = false;
+                    s.ReloadOnChange = true;
+                    s.ResolveFileProvider();
+                }));
+
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.ListenAnyIP(5005);
+            });
+
+            Startup.ConfigureServices(builder.Services);
+            var app = builder.Build();
+            Startup.Configure(app);
+
+            
+            return app;
         }
     }
 }

@@ -7,6 +7,7 @@ import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangeP
 import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [
     AuthService,
     ScreenService,
-    AppInfoService
+    AppInfoService,
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })
