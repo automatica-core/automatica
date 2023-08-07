@@ -44,7 +44,7 @@ export class AuthService extends BaseService {
 
     this._isReady = result.ready;
 
-    this.router.navigate(['/login-form']);
+    this.router.navigate(['/create-account']);
 
 
     return this.isReady;
