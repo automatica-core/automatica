@@ -67,9 +67,14 @@ namespace Automatica.Core.Satellite
                     s.ResolveFileProvider();
                 }));
 
+
             builder.WebHost.ConfigureKestrel(serverOptions =>
             {
-                serverOptions.ListenAnyIP(5005);
+                var localPort = builder.Configuration["localPort"];
+                var webPort = String.IsNullOrEmpty(localPort)
+                    ? 5005
+                    : Convert.ToInt32(builder.Configuration["localPort"]);
+                serverOptions.ListenAnyIP(webPort);
             });
 
             Startup.ConfigureServices(builder.Services);
