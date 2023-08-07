@@ -6,6 +6,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
+import { SettingComponent } from './pages/setting/setting.component';
+import { CommonModule } from '@angular/common';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 const routes: Routes = [
   {
@@ -21,6 +24,11 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'settings',
+    component: SettingComponent,
     canActivate: [ AuthGuardService ]
   },
   {
@@ -50,7 +58,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule],
+  imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule, DxiItemModule, CommonModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [

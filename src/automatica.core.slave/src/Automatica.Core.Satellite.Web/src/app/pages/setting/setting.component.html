@@ -1,0 +1,18 @@
+<h2 class="content-block">Settings</h2>
+<div class="content-block">
+    <dx-form id="form" [formData]="config" *ngIf="config">
+        <dxi-item itemType="group">
+            <dxi-item itemType="group">
+                <dxi-item dataField="serverUrl"></dxi-item>
+                <dxi-item dataField="clientId" [editorOptions]="{mode: 'password'}"></dxi-item>
+                <dxi-item dataField="clientKey" [editorOptions]="{mode: 'password'}"></dxi-item>
+                <dxi-item dataField="dockerTag"></dxi-item>
+                <dxi-item dataField="port" editorType="dxNumberBox"
+                    [editorOptions]="{min: 1005, max: 65535, showSpinButtons: true}"></dxi-item>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item>
+            <dx-button stylingMode="outlined" width="100%" type="success" (onClick)="save()">Save</dx-button>
+        </dxi-item>
+    </dx-form>
+</div>

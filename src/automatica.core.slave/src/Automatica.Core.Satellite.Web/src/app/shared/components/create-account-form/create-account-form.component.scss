@@ -1,5 +1,13 @@
 @import "../../../../themes/generated/variables.base.scss";
 
+.center_img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+
 .create-account-form {
   .policy-info {
     margin: 10px 0;

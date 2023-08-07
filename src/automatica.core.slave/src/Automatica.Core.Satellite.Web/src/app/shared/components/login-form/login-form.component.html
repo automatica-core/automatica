@@ -4,10 +4,10 @@
       <img class="center_img" src="/assets/images/Logo1.png" />
     </dxi-item>
 
-    <dxi-item dataField="email" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
-      <dxi-validation-rule type="required" message="Email is required"></dxi-validation-rule>
-      <dxi-validation-rule type="email" message="Email is invalid"></dxi-validation-rule>
+    <dxi-item dataField="user" editorType="dxTextBox"
+      [editorOptions]="{ stylingMode: 'filled', placeholder: 'User' }">
+      <dxi-validation-rule type="required" message="User is required"></dxi-validation-rule>
+      <!-- <dxi-validation-rule type="user" message="User is invalid"></dxi-validation-rule> -->
       <dxo-label [visible]="false"></dxo-label>
     </dxi-item>
 

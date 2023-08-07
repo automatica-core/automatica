@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { BaseService } from './base.service';
 
 export interface IUser {
-  email: string;
+  user: string;
   avatarUrl?: string;
 }
 
@@ -13,8 +15,8 @@ const defaultUser = {
 };
 
 @Injectable()
-export class AuthService {
-  private _user: IUser | null = defaultUser;
+export class AuthService extends BaseService {
+  private _user: IUser | null = null;
   get loggedIn(): boolean {
     return !!this._user;
   }
@@ -24,14 +26,45 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
 
-  async logIn(email: string, password: string) {
+  private _isReady: boolean | undefined = undefined;
+  public get isReady(): boolean | undefined {
+    return this._isReady;
+  }
+
+
+  constructor(private router: Router, http: HttpClient) {
+    super(http);
+   }
+
+
+
+  async loadIsReady() {
+    const result = <any>await this.http.get("/webapi/ready", { headers: this.headers() }).toPromise();
+
+    this._isReady = result.ready;
+
+    this.router.navigate(['/login-form']);
+
+
+    return this.isReady;
+  }
+
+  async logIn(user: string, password: string) {
 
     try {
       // Send request
-      this._user = { ...defaultUser, email };
-      this.router.navigate([this._lastAuthenticatedPath]);
+      // this.router.navigate([this._lastAuthenticatedPath]);
+
+      const response = await this.http.post("/webapi/login", { username: user, password: password }, { headers: this.headers() }).toPromise();
+
+      this._user = { ...defaultUser, user };
+      console.log(response);
+
+
+      localStorage.setItem("token", response!.toString());
+
+      this.router.navigate(['/']);
 
       return {
         isOk: true,
@@ -49,6 +82,17 @@ export class AuthService {
   async getUser() {
     try {
       // Send request
+      if (this._user) {
+        return {
+          isOk: true,
+          data: this._user
+        };
+      }
+      const result = <any>await this.http.get("/webapi/user", { headers: this.headers() }).toPromise();
+
+      this._user = { user: result.user };
+
+      this.router.navigate(['/']);
 
       return {
         isOk: true,
@@ -63,11 +107,14 @@ export class AuthService {
     }
   }
 
-  async createAccount(email: string, password: string) {
+  async setupAccount(username: string, password: string) {
     try {
       // Send request
+      const response = await this.http.post("/webapi/setup", { username, password }, { headers: this.headers() }).toPromise();
 
-      this.router.navigate(['/create-account']);
+
+      this.router.navigate(['/login-form']);
+      this._isReady = true;
       return {
         isOk: true
       };
@@ -131,14 +178,32 @@ export class AuthGuardService implements CanActivate {
       'change-password/:recoveryCode'
     ].includes(route.routeConfig?.path || defaultPath);
 
+    const token = localStorage.getItem("token");
+
+    if (!!token) {
+      this.authService.getUser();
+    }
+
     if (isLoggedIn && isAuthForm) {
       this.authService.lastAuthenticatedPath = defaultPath;
       this.router.navigate([defaultPath]);
       return false;
     }
 
+    const isReady = this.authService.isReady;
+
+    if (isReady == false) {
+
+      if (route.routeConfig?.path == "create-account")
+        return true;
+
+      this.router.navigate(['/create-account']);
+      return false;
+    }
+
     if (!isLoggedIn && !isAuthForm) {
       this.router.navigate(['/login-form']);
+
     }
 
     if (isLoggedIn) {

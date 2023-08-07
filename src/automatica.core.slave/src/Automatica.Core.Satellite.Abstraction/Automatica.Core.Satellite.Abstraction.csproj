@@ -6,6 +6,8 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Docker.DotNet" Version="3.125.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="7.0.9" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0"></PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>

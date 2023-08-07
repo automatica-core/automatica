@@ -14,9 +14,11 @@ export class AppComponent implements OnInit {
 
   constructor(private authService: AuthService, private screen: ScreenService, public appInfo: AppInfoService, private themeService: ThemeService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     
     this.themeService.applyTheme("dark");
+
+    await this.authService.loadIsReady();
   }
 
   isAuthenticated() {
