@@ -35,8 +35,8 @@ msbuild.wrn
 *.js.map
 *.bundle.js
 *.bundle.map
-src/Automatica.Satellite/wwwroot/
+src/Automatica.Core.Satellite/wwwroot/
 
-src/Automatica.Satellite/dist
+src/Automatica.Core.Satellite/dist
 
 packages/
