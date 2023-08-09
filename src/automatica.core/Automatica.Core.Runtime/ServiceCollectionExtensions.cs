@@ -16,6 +16,7 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Plugins;
+using Automatica.Core.Logging;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
@@ -49,14 +50,14 @@ namespace Automatica.Core.Runtime
             services.AddAutomaticaDrivers();
             services.AddDispatcher();
 
-            services.AddSingleton<ILocalizationProvider>(new LocalizationProvider(SystemLogger.Instance));
+            services.AddSingleton<ILocalizationProvider, LocalizationProvider>();
 
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
             services.AddTransient<IServerCloudApi, CloudApi>();
             services.AddTransient<ICloudApi, CloudApi>();
             services.AddSingleton<ILicenseContext, LicenseContext>();
-            services.AddSingleton<ILicenseContract>(provider => provider.GetService<ILicenseContext>());
+            services.AddSingleton<ILicenseContract>(provider => provider.GetRequiredService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();
             services.AddAutomaticaPushServices(configuration, isElectronActive);
 
@@ -71,16 +72,16 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<INodeTemplateCache, NodeTemplateCache>();
 
                 services.AddSingleton<LogicStore, LogicStore>();
-                services.AddSingleton<ILogicStore>(a => a.GetService<LogicStore>());
-                services.AddSingleton<IRuleDataHandler>(a => a.GetService<LogicStore>());
+                services.AddSingleton<ILogicStore>(a => a.GetRequiredService<LogicStore>());
+                services.AddSingleton<IRuleDataHandler>(a => a.GetRequiredService<LogicStore>());
 
                 services.AddSingleton<LoadedNodeInstancesStore, LoadedNodeInstancesStore>();
-                services.AddSingleton<INodeInstanceStateHandler>(a => a.GetService<LoadedNodeInstancesStore>());
-                services.AddSingleton<ILoadedNodeInstancesStore>(a => a.GetService<LoadedNodeInstancesStore>());
+                services.AddSingleton<INodeInstanceStateHandler>(a => a.GetRequiredService<LoadedNodeInstancesStore>());
+                services.AddSingleton<ILoadedNodeInstancesStore>(a => a.GetRequiredService<LoadedNodeInstancesStore>());
 
                 services.AddSingleton<NativeUpdateHandler, NativeUpdateHandler>();
-                services.AddSingleton<IUpdateHandler>(a => a.GetService<NativeUpdateHandler>());
-                services.AddSingleton<IAutoUpdateHandler>(a => a.GetService<NativeUpdateHandler>());
+                services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
 
                 services.AddSingleton<ILoadedStore, LoadedStore>();
                 services.AddSingleton<ILogicFactoryStore, LogicFactoryStore>();
@@ -91,20 +92,20 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<ILogicLoader, LogicLoader>();
 
                 services.AddSingleton<MqttService, MqttService>();
-                services.AddSingleton<IRemoteHandler>(provider => provider.GetService<MqttService>());
-                services.AddSingleton<IRemoteServerHandler>(provider => provider.GetService<MqttService>());
+                services.AddSingleton<IRemoteHandler>(provider => provider.GetRequiredService<MqttService>());
+                services.AddSingleton<IRemoteServerHandler>(provider => provider.GetRequiredService<MqttService>());
                 services.AddSingleton<IRemoteSender, MqttPublishService>();
                 
 
                 services.AddSingleton<PluginHandler, PluginHandler>();
-                services.AddSingleton<IPluginHandler>(a => a.GetService<PluginHandler>());
-                services.AddSingleton<IPluginLoader>(a => a.GetService<PluginHandler>());
+                services.AddSingleton<IPluginHandler>(a => a.GetRequiredService<PluginHandler>());
+                services.AddSingleton<IPluginLoader>(a => a.GetRequiredService<PluginHandler>());
 
                 services.AddSingleton<IRuleInstanceVisuNotify, RuleInstanceVisuNotifier>();
 
                 services.AddSingleton<CoreServer, CoreServer>();
-                services.AddSingleton<IHostedService>(provider => provider.GetService<CoreServer>());
-                services.AddSingleton<ICoreServer>(provider => provider.GetService<CoreServer>());
+                services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<CoreServer>());
+                services.AddSingleton<ICoreServer>(provider => provider.GetRequiredService<CoreServer>());
 
                 services.AddSingleton<INotifyDriver, NotifyDriverHandler>();
                 services.AddSingleton<ILogicEngineDispatcher, LogicEngineDispatcher>();
@@ -118,7 +119,7 @@ namespace Automatica.Core.Runtime
 
             var mqttServerOptions = new MqttServerOptions()
             {
-                ConnectionValidator = new MqttServerConnectionValidatorDelegate(a => MqttService.ValidateConnection(a, configuration, SystemLogger.Instance))
+                ConnectionValidator = new MqttServerConnectionValidatorDelegate(a => MqttService.ValidateConnection(a, configuration, new CoreLogger(configuration, null)))
             };
 
             mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkAddress = IPAddress.Any;

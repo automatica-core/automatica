@@ -1,6 +1,5 @@
 ﻿using AsyncKeyedLock;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.Core;
@@ -22,14 +21,16 @@ namespace Automatica.Push.Hubs
         private readonly ICoreServer _coreServer;
         private readonly IPluginLoader _loader;
         private readonly AsyncKeyedLocker<string> _asyncKeyedLocker;
+        private readonly ILogger<UpdateHub> _logger;
 
-        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader, AsyncKeyedLocker<string> asyncKeyedLocker)
+        public UpdateHub(ICloudApi api, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader loader, AsyncKeyedLocker<string> asyncKeyedLocker, ILogger<UpdateHub> logger)
         {
             _api = api;
             _updateHub = updateHub;
             _coreServer = coreServer;
             _loader = loader;
             _asyncKeyedLocker = asyncKeyedLocker;
+            _logger = logger;
         }
         public Task StartUpdateDownload(ServerVersion version)
         {
@@ -49,7 +50,7 @@ namespace Automatica.Push.Hubs
                         previousState = e.ProgressPercentage;
                         _updateHub.Clients.All.SendAsync("UpdateDownloadProgressChanged",
                             new object[] { e.BytesReceived, e.TotalBytesToReceive });
-                        SystemLogger.Instance.LogInformation(
+                        _logger.LogInformation(
                             $"Downloading update {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
                     }
 
@@ -78,7 +79,7 @@ namespace Automatica.Push.Hubs
                 }
 
                 var pluginDownloader =
-                    new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader);
+                    new PluginDownloader(plugin, install, _api, _updateHub, _coreServer, _loader, _logger);
 
                 await pluginDownloader.Download();
             });
@@ -120,7 +121,7 @@ namespace Automatica.Push.Hubs
             foreach (var plug in plugins)
             {
                 var pluginDownloader = new PluginDownloader(plug, false, _api, _updateHub, _coreServer,
-                    _loader, false);
+                    _loader, _logger,false);
 
                 tasks.Add(pluginDownloader.Download());
             }

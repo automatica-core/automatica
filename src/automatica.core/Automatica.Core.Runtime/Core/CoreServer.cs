@@ -21,16 +21,14 @@ using System.IO;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Core;
-using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Loader;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
-using Automatica.Core.Internals.Logger;
+
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
@@ -126,17 +124,16 @@ namespace Automatica.Core.Runtime.Core
         public CoreServer(IServiceProvider services)
         {
             _serviceProvider = services;
-            _config = services.GetService<IConfiguration>();
+            _config = services.GetRequiredService<IConfiguration>();
 
-            _dataHub = services.GetService<IHubContext<DataHub>>();
-            _dispatcher = services.GetService<IDispatcher>();
-            _cloudApi = services.GetService<ICloudApi>();
-            _licenseContext = services.GetService<ILicenseContext>();
+            _dataHub = services.GetRequiredService<IHubContext<DataHub>>();
+            _dispatcher = services.GetRequiredService<IDispatcher>();
+            _cloudApi = services.GetRequiredService<ICloudApi>();
+            _licenseContext = services.GetRequiredService<ILicenseContext>();
 
-
-            _logger = SystemLogger.Instance;
+            _logger = services.GetRequiredService<ILogger<CoreServer>>();
             
-            _telegramMonitor = services.GetService<ITelegramMonitor>();
+            _telegramMonitor = services.GetRequiredService<ITelegramMonitor>();
             _ruleInstanceVisuNotify = services.GetRequiredService<IRuleInstanceVisuNotify>();
 
             _learnMode = services.GetRequiredService<ILearnMode>();
@@ -183,7 +180,7 @@ namespace Automatica.Core.Runtime.Core
 
             _recorderFactory = services.GetRequiredService<IRecorderFactory>();
 
-            _remoteConnectService = services.GetService<IRemoteConnectService>();
+            _remoteConnectService = services.GetRequiredService<IRemoteConnectService>();
             InitInternals();
         }
 
@@ -613,8 +610,8 @@ namespace Automatica.Core.Runtime.Core
                 _logger.LogError($"Could not find logic factory for {ruleInstance.This2RuleTemplateNavigation.Name}");
                 throw new ArgumentException("Could not find factory for logic instance..");
             }
-            var logger = CoreLoggerFactory.GetLogger(_config, $"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
-            var ruleContext = new LogicContext(ruleInstance, _dispatcher, new LogicTemplateFactory(new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
+            var logger = _loggerFactory.CreateLogger($"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
+            var ruleContext = new LogicContext(ruleInstance, _dispatcher, new LogicTemplateFactory(_logger, new AutomaticaContext(_config), _config, factory), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
             var rule = factory.CreateLogicInstance(ruleContext);
 
             if (rule != null)
@@ -813,14 +810,14 @@ namespace Automatica.Core.Runtime.Core
 
             var loggerName =
                 $"{factory.DriverName.ToLowerInvariant()}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_").ToLowerInvariant()}";
-            var logger = CoreLoggerFactory.GetLogger(_config, loggerName);
+            var logger = _loggerFactory.CreateLogger(loggerName);
             _logger.LogInformation($"Using logger {loggerName} for driver {nodeInstance.Name}");
 
             var config = new DriverContext(
                 nodeInstance, 
                 factory,
                 _dispatcher, 
-                new NodeTemplateFactory(new AutomaticaContext(_config), _config, _nodeInstanceService, factory), 
+                new NodeTemplateFactory(_logger, new AutomaticaContext(_config), _config, _nodeInstanceService, factory), 
                 _telegramMonitor, 
                 _licenseContext.GetLicenseState(), 
                 logger, 

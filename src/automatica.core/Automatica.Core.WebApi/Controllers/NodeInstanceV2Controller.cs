@@ -209,7 +209,7 @@ namespace Automatica.Core.WebApi.Controllers
             catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                SystemLogger.Instance.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
+                _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
                 throw;
             }
         }
@@ -243,7 +243,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Error hot-load driver..");
+                _logger.LogError(e, "Error hot-load driver..");
             }
         }
 
@@ -258,7 +258,7 @@ namespace Automatica.Core.WebApi.Controllers
             var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
             if (driver == null)
             {
-                SystemLogger.Instance.LogWarning(
+                _logger.LogWarning(
                     $"Could not hot-reload driver, seems that the driver wasn't loaded at the moment");
 
                 return;
@@ -314,14 +314,14 @@ namespace Automatica.Core.WebApi.Controllers
                 }
                 catch (Exception e)
                 {
-                    SystemLogger.Instance.LogError(e, $"Error stopping driver {node.Name}...");
+                    _logger.LogError(e, $"Error stopping driver {node.Name}...");
                 }
 
             }
             catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                SystemLogger.Instance.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
+                _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
                 throw;
             }
             finally
@@ -380,7 +380,7 @@ namespace Automatica.Core.WebApi.Controllers
             catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                SystemLogger.Instance.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
+                _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
                 throw;
             }
         }
@@ -431,7 +431,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             try
             {
-                SystemLogger.Instance.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
+                _logger.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
                 var scan = await _notifyDriver.ScanBus(instance);
 
                 if (scan != null)
@@ -449,7 +449,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not scan driver");
+                _logger.LogError(e, "Could not scan driver");
                 throw;
             }
         }

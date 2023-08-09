@@ -10,6 +10,8 @@
     "REMOTE": "Remote Server Einstellungen"
   },
   "COMMON": {
+    "LOG": "Log",
+    "LOGS": "Logs",
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualisierung",
     "ADD": "Hinzufügen",

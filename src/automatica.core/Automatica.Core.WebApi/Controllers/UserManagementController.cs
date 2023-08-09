@@ -20,12 +20,14 @@ namespace Automatica.Core.WebApi.Controllers
     [Authorize(Policy = Role.AdminRole)]
     public class UserManagementController : BaseController
     {
+        private readonly ILogger<UserManagementController> _logger;
         private readonly IUserCache _userCache;
         private readonly IUserGroupsCache _userGroupsCache;
         private readonly IConfiguration _config;
 
-        public UserManagementController(AutomaticaContext dbContext, IUserCache userCache, IUserGroupsCache userGroupsCache, IConfiguration config) : base(dbContext)
+        public UserManagementController(ILogger<UserManagementController> logger, AutomaticaContext dbContext, IUserCache userCache, IUserGroupsCache userGroupsCache, IConfiguration config) : base(dbContext)
         {
+            _logger = logger;
             _userCache = userCache;
             _userGroupsCache = userGroupsCache;
             _config = config;
@@ -59,7 +61,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not delete usergroup");
+                _logger.LogError(e, "Could not delete usergroup");
                 transaction.Rollback();
             }
         }
@@ -116,7 +118,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 transaction.Rollback();
             }
 
@@ -183,7 +185,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 transaction.Rollback();
             }
 
@@ -239,7 +241,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not delete user");
+                _logger.LogError(e, "Could not delete user");
                 transaction.Rollback();
             }
         }
@@ -340,7 +342,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 transaction.Rollback();
             }
 
@@ -374,7 +376,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 transaction.Rollback();
             }
 

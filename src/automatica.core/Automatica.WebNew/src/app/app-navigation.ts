@@ -44,6 +44,10 @@ export const navigation = [
         text: "COMMON.SATELLITES",
         path: "satellites",
         icon: "satellite-dish"
+    }, {
+        text: "COMMON.LOGS",
+        path: "logs",
+        icon: "file-lines"
     }];
 
     /*{

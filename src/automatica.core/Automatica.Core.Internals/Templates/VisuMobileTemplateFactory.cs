@@ -3,6 +3,7 @@ using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Templates
 {
@@ -13,7 +14,7 @@ namespace Automatica.Core.Internals.Templates
 
     public class VisuMobileTemplateFactory : PropertyTemplateFactory, IVisuTemplateFactory
     {
-        public VisuMobileTemplateFactory(AutomaticaContext database, IConfiguration config) : base(database, config,
+        public VisuMobileTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config) : base(logger, database, config,
             (template, guid) => template.This2VisuObjectTemplate = guid, new VisuMobileFactory())
         {
 

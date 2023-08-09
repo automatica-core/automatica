@@ -19,6 +19,7 @@ import { VisualizationComponent } from "./visualization/visualization.component"
 import { Role } from "./base/model/user/role";
 import { SatelliteConfigComponent } from "./pages/satellite-config/satellite-config.component";
 import { NodeInstanceImportComponent } from "./shared/propertyeditor/node-instance-ets-import/node-instance-import.component";
+import { LogsComponent } from "./pages/logs/logs.component";
 
 const routes: Routes = [
     {
@@ -80,6 +81,9 @@ const routes: Routes = [
             }, {
                 path: "satellites",
                 component: SatelliteConfigComponent
+            }, {
+                path: "logs",
+                component: LogsComponent
             }]
     },
     {

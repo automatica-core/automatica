@@ -31,6 +31,7 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/logics")]
     public class LogicsController : BaseController
     {
+        private readonly ILogger<LogicsController> _logger;
         private readonly IRuleDataHandler _ruleDataHandler;
         private readonly ILogicCacheFacade _logicCacheFacade;
         private readonly IConfiguration _config;
@@ -38,10 +39,11 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ICoreServer _coreServer;
 
-        public LogicsController(AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
+        public LogicsController(ILogger<LogicsController> logger, AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
             INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer coreServer)
             : base(db)
         {
+            _logger = logger;
             _ruleDataHandler = ruleDataHandler;
             _logicCacheFacade = logicCacheFacade;
             _config = config;
@@ -348,7 +350,7 @@ namespace Automatica.Core.WebApi.Controllers
             catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                SystemLogger.Instance.LogError(e, $"Could not {nameof(RemoveLink)} {objId}", e);
+                _logger.LogError(e, $"Could not {nameof(RemoveLink)} {objId}", e);
             }
         }
 

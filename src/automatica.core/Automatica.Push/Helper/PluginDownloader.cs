@@ -1,7 +1,6 @@
 ﻿using Automatica.Core.Base.Common;
 
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Push.Hubs;
@@ -23,10 +22,11 @@ namespace Automatica.Push.Helper
         private readonly IHubContext<UpdateHub> _updateHub;
         private readonly ICoreServer _coreServer;
         private readonly IPluginLoader _pluginLoader;
+        private readonly ILogger _logger;
         private readonly bool _restartOnUpdate;
         private int _previousState;
 
-        public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader pluginLoader, bool restartOnUpdate = true)
+        public PluginDownloader(Plugin plugin, bool install, ICloudApi cloudApi, IHubContext<UpdateHub> updateHub, ICoreServer coreServer, IPluginLoader pluginLoader, ILogger logger, bool restartOnUpdate = true)
         {
             _plugin = plugin;
             _install = install;
@@ -34,6 +34,7 @@ namespace Automatica.Push.Helper
             _updateHub = updateHub;
             _coreServer = coreServer;
             _pluginLoader = pluginLoader;
+            _logger = logger;
             _restartOnUpdate = restartOnUpdate;
         }
 
@@ -50,7 +51,7 @@ namespace Automatica.Push.Helper
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, $"Could not download file for {_plugin.ComponentName}");
+                _logger.LogError(e, $"Could not download file for {_plugin.ComponentName}");
                 File.Delete(automaticaPluginUpdateFile);
             }
             finally
@@ -91,7 +92,7 @@ namespace Automatica.Push.Helper
                 if (_install && File.Exists(automaticaPluginUpdateFile))
                 {
                     File.Delete(automaticaPluginUpdateFile);
-                    SystemLogger.Instance.LogDebug($"Remove update file for {_plugin.ComponentName}: {automaticaPluginUpdateFile}");
+                    _logger.LogDebug($"Remove update file for {_plugin.ComponentName}: {automaticaPluginUpdateFile}");
                 }
             }
         }
@@ -102,7 +103,7 @@ namespace Automatica.Push.Helper
             {
                 _previousState = e.ProgressPercentage;
                 await _updateHub.Clients.All.SendAsync("PluginDownloadProgressChanged", new object[] { _plugin.PluginGuid, e.BytesReceived, e.TotalBytesToReceive });
-                SystemLogger.Instance.LogInformation($"Downloading plugin {_plugin.ComponentName} {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
+                _logger.LogInformation($"Downloading plugin {_plugin.ComponentName} {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
             }
         }
     }

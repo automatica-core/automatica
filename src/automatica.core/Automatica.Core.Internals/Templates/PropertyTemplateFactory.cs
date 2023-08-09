@@ -3,16 +3,19 @@ using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Templates
 {
     public class PropertyTemplateFactory : SettingsFactory, IPropertyTemplateFactory
     {
+        public ILogger Logger { get; }
         public IFactory Factory { get; }
         private readonly Action<PropertyTemplate, Guid> _propertyExpression;
 
-        public PropertyTemplateFactory(AutomaticaContext database, IConfiguration config, Action<PropertyTemplate, Guid> propertyExpression, IFactory factory) : base(database, config)
+        public PropertyTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config, Action<PropertyTemplate, Guid> propertyExpression, IFactory factory) : base(database, config)
         {
+            Logger = logger;
             Factory = factory;
             _propertyExpression = propertyExpression;
         }

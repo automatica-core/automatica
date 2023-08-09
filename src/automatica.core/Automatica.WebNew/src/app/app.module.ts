@@ -40,6 +40,7 @@ import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 import { ThemeService } from "./services/theme.service";
 import { SatelliteConfigComponent } from "./pages/satellite-config/satellite-config.component";
+import { LogsComponent } from "./pages/logs/logs.component";
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -135,7 +136,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     SystemComponent,
     PluginsComponent,
     AreasEtsImportComponent,
-    SatelliteConfigComponent
+    SatelliteConfigComponent,
+    LogsComponent
   ]
 })
 export class AppModule {

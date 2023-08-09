@@ -73,7 +73,7 @@ namespace Automatica.Core.Tests.Dispatcher
 
             });
 
-            LogicEngineDispatcher.Load();
+            await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
         }
@@ -136,7 +136,7 @@ namespace Automatica.Core.Tests.Dispatcher
                 };
             });
 
-            LogicEngineDispatcher.Load();
+            await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
         }
@@ -172,7 +172,7 @@ namespace Automatica.Core.Tests.Dispatcher
                 };
             });
 
-            LogicEngineDispatcher.Load();
+            await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(source.Children[0], true);
 
@@ -213,7 +213,7 @@ namespace Automatica.Core.Tests.Dispatcher
                 };
             });
 
-            LogicEngineDispatcher.Load();
+            await LogicEngineDispatcher.Load();
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
         }

@@ -8,7 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Internals.Logger;
+using Automatica.Core.Logging;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using Microsoft.Extensions.Configuration;
 
@@ -34,7 +34,7 @@ namespace Automatica.Core.Watchdog
               .Filter.ByExcluding(Matching.FromSource("Microsoft"))
               .CreateLogger();
 
-            _logger = CoreLoggerFactory.GetLogger(config, "Watchdog");
+            _logger = CoreLoggerFactory.GetLogger(config,null, "Watchdog");
             _logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
 
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);

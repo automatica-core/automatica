@@ -32,7 +32,7 @@ namespace Automatica.Core.CI.CreateDatabase
             services.AddSingleton<IConfigurationRoot>(Configuration);
             services.AddSingleton<IConfiguration>(Configuration);
 
-            services.AddSingleton(new LocalizationProvider(SystemLogger.Instance));
+            services.AddSingleton<LocalizationProvider>();
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ILearnMode, EmptyLearnMode>();
             services.AddSingleton<IMqttServer, EmptyMqttServer>();

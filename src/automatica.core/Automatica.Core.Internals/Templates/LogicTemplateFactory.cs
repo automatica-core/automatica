@@ -7,6 +7,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Templates
 {
@@ -14,7 +15,7 @@ namespace Automatica.Core.Internals.Templates
     {
         public IDictionary<Guid, RuleTemplate> LogicTemplates { get; }
 
-        public LogicTemplateFactory(AutomaticaContext database, IConfiguration config, ILogicFactory factory) : base(database, config, (template, guid) => throw new NotImplementedException(), factory)
+        public LogicTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config, ILogicFactory factory) : base(logger, database, config, (template, guid) => throw new NotImplementedException(), factory)
         {
             LogicTemplates = new ConcurrentDictionary<Guid, RuleTemplate>();
         }

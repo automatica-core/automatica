@@ -17,10 +17,12 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/satellite")]
     public class SatellitesController : BaseController
     {
+        private readonly ILogger<SatellitesController> _logger;
         private readonly IRemoteServerHandler _remoteServerHandler;
 
-        public SatellitesController(AutomaticaContext dbContext, IRemoteServerHandler remoteServerHandler) : base(dbContext)
+        public SatellitesController(ILogger<SatellitesController> logger, AutomaticaContext dbContext, IRemoteServerHandler remoteServerHandler) : base(dbContext)
         {
+            _logger = logger;
             _remoteServerHandler = remoteServerHandler;
         }
 
@@ -81,7 +83,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 await transaction.RollbackAsync();
             }
 

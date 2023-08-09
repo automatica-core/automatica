@@ -1,34 +1,34 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.Push.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 
-namespace Automatica.Core.Internals.Logger
+namespace Automatica.Core.Logging
 {
     public class CoreLogger : Microsoft.Extensions.Logging.ILogger
     {
         private readonly IConfiguration _config;
+        private readonly IServiceProvider? _serviceProvider;
         private readonly string _facility;
         private readonly string _logNameFacility;
         private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
 
-        public CoreLogger(IConfiguration config) : this(config, "core")
+        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider) : this(config, serviceProvider, "core")
         {
         }
 
-        public CoreLogger(IConfiguration config, string facility) : this(config, facility, null)
+        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider, string facility) : this(config, serviceProvider, facility, null)
         {
             
         }
 
-        public CoreLogger(IConfiguration config, string facility, LogLevel? level, bool isFrameworkLog = false) {
+        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider, string facility, LogLevel? level, bool isFrameworkLog = false) {
+            _serviceProvider = serviceProvider;
             _facility = facility;
 
             if (isFrameworkLog)
@@ -62,15 +62,18 @@ namespace Automatica.Core.Internals.Logger
             var logBuild = new LoggerConfiguration();
 
             if (isFrameworkLog)
-            { 
-                logBuild.
-                    WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"), fileSizeLimitBytes: 31457280,
+            {
+                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"),
+                        fileSizeLimitBytes: 31457280,
                         retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
                     .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
-                        fileSizeLimitBytes: 134217728,//128mb
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning), shared: true,
+                        fileSizeLimitBytes: 134217728, //128mb
+                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
+                        shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
+                //logBuild.WriteTo.PushSignalR(_serviceProvider, "all.log", ConvertLogLevel(LogLevel.Warning));
+                //logBuild.WriteTo.PushSignalR(_serviceProvider, $"framework-{facility}.log", ConvertLogLevel(_level));
             }
             else
             {
@@ -97,6 +100,9 @@ namespace Automatica.Core.Internals.Logger
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
+
+                logBuild.WriteTo.PushSignalR(_serviceProvider, "all", ConvertLogLevel(LogLevel.Warning));
+                logBuild.WriteTo.PushSignalR(_serviceProvider, facility, ConvertLogLevel(_level));
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)

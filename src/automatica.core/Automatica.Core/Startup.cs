@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Automatica.Core.Push;
 using Automatica.Core.Internals;
-using Automatica.Core.Internals.Logger;
+using Automatica.Core.Logging;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
@@ -127,7 +127,7 @@ namespace Automatica.Core
                 });
 
             services.AddControllers(options =>
-                options.Filters.Add(new HttpResponseExceptionFilter()));
+                options.Filters.Add(new HttpResponseExceptionFilter(SystemLogger.Instance)));
 
 
             services.Configure<FormOptions>(x =>
@@ -216,7 +216,8 @@ namespace Automatica.Core
                     options.ApplicationMaxBufferSize = 1024 * 1024;
                 });
                 endpoints.MapHub<TelegramHub>("/signalr/telegramHub");
-                endpoints.MapHub<UpdateHub>("/signalr/updateHub"); 
+                endpoints.MapHub<UpdateHub>("/signalr/updateHub");
+                endpoints.MapHub<LoggingHub>("/signalr/loggingHub");
 
                 endpoints.MapControllerRoute("webapi", "");
 

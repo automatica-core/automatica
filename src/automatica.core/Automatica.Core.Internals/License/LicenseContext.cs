@@ -17,6 +17,7 @@ namespace Automatica.Core.Internals.License
     public sealed class LicenseContext : ILicenseContext
     {
         private readonly ICloudApi _cloudApi;
+        private readonly ILogger<LicenseContext> _logger;
         private int _dataPointsInUse = 0;
 
         public const string LicenseFileName = ".automatica.core.lic";
@@ -53,9 +54,10 @@ namespace Automatica.Core.Internals.License
 
         private Standard.Licensing.License _license;
 
-        public LicenseContext(ICloudApi cloudApi)
+        public LicenseContext(ICloudApi cloudApi, ILogger<LicenseContext> logger)
         {
             _cloudApi = cloudApi;
+            _logger = logger;
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var fileName = Path.Combine(path, LicenseFileName);
 
@@ -111,11 +113,11 @@ namespace Automatica.Core.Internals.License
 
                     if (ValidationErrors.Count > 0)
                     {
-                        SystemLogger.Instance.LogError("License validation failed");
+                        _logger.LogError("License validation failed");
 
                         foreach (var validationError in ValidationErrors)
                         {
-                            SystemLogger.Instance.LogError(validationError.Message);
+                            _logger.LogError(validationError.Message);
                         }
 
                         File.Delete(LicensePath);
@@ -130,7 +132,7 @@ namespace Automatica.Core.Internals.License
             catch (Exception e)
             {
                 IsLicensed = false;
-                SystemLogger.Instance.LogError(e, "License validation failed");
+                _logger.LogError(e, "License validation failed");
             }
 
             if(IsLicensed && _license is { ProductFeatures: not null })
@@ -161,13 +163,13 @@ namespace Automatica.Core.Internals.License
                 IsLicensed = true;
             }
 
-            SystemLogger.Instance.LogInformation($"System is licensed to:");
-            SystemLogger.Instance.LogInformation($"{nameof(MaxDataPoints)}: {MaxDataPoints}");
-            SystemLogger.Instance.LogInformation($"{nameof(MaxUsers)}: {MaxUsers}");
-            SystemLogger.Instance.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
-            SystemLogger.Instance.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
-            SystemLogger.Instance.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
-            SystemLogger.Instance.LogInformation($"Features: {JsonConvert.SerializeObject(_license?.ProductFeatures)}");
+            _logger.LogInformation($"System is licensed to:");
+            _logger.LogInformation($"{nameof(MaxDataPoints)}: {MaxDataPoints}");
+            _logger.LogInformation($"{nameof(MaxUsers)}: {MaxUsers}");
+            _logger.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
+            _logger.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
+            _logger.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
+            _logger.LogInformation($"Features: {JsonConvert.SerializeObject(_license?.ProductFeatures)}");
 
             return IsLicensed;
 

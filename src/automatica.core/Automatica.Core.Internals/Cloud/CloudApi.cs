@@ -50,6 +50,7 @@ namespace Automatica.Core.Internals.Cloud
     {
         private readonly IConfiguration _config;
         private readonly IPluginInstaller _pluginInstaller;
+        private readonly ILogger<CloudApi> _logger;
         private const string UpdateFileName = "Automatica.Core.Update.zip";
 
         public event EventHandler<DownloadProgressChangedEventArgs> DownloadUpdateProgressChanged;
@@ -59,10 +60,11 @@ namespace Automatica.Core.Internals.Cloud
         private const string WebApiVersion = "v2";
         private const string WebApiPrefix = "webapi";
         
-        public CloudApi(IConfiguration config, IPluginInstaller pluginInstaller)
+        public CloudApi(IConfiguration config, IPluginInstaller pluginInstaller, ILogger<CloudApi> logger)
         {
             _config = config;
             _pluginInstaller = pluginInstaller;
+            _logger = logger;
         }
 
         private string GetUrl()
@@ -124,7 +126,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                _logger.LogError(e, "Could not say hi to cloud api");
                 return null;
             }
         }
@@ -141,7 +143,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                _logger.LogError(e, "Could not say hi to cloud api");
                 return null;
             }
         }
@@ -160,7 +162,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                _logger.LogError(e, "Could not say hi to cloud api");
                 return null;
             }
         }
@@ -177,7 +179,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                _logger.LogError(e, "Could not say hi to cloud api");
                 return false;
             }
             return true;
@@ -207,7 +209,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch(Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                _logger.LogError(e, "Could not say hi to cloud api");
                 return false;
             }
             return true;
@@ -226,7 +228,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not say hi to cloud api");
+                _logger.LogError(e, "Could not say hi to cloud api");
                 return false;
             }
             return true;
@@ -240,7 +242,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch(Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not ping cloud uri");
+                _logger.LogError(e, "Could not ping cloud uri");
                 return false;
             }
             return true;
@@ -266,7 +268,7 @@ namespace Automatica.Core.Internals.Cloud
                     if (x.IsFaulted)
                         throw x.Exception;
 
-                    SystemLogger.Instance.LogTrace($"Received {x.Result} from {apiUrl}");
+                    _logger.LogTrace($"Received {x.Result} from {apiUrl}");
                     result = JsonConvert.DeserializeObject<T>(x.Result);
                 });
             }
@@ -276,7 +278,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not execute get request to cloud");
+                _logger.LogError(e, "Could not execute get request to cloud");
             }
 
             return result;

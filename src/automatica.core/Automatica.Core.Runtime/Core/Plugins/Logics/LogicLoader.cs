@@ -81,7 +81,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
 
                     using (var db = new AutomaticaContext(_config))
                     {
-                        var logicTemplateFactory = new LogicTemplateFactory(db, _config, factory);
+                        var logicTemplateFactory = new LogicTemplateFactory(_logger, db, _config, factory);
                         factory.InitTemplates(logicTemplateFactory);
 
                         foreach (var template in logicTemplateFactory.LogicTemplates.Values)

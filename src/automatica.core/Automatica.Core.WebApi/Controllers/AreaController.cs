@@ -30,11 +30,13 @@ namespace Automatica.Core.WebApi.Controllers
     {
         private readonly IAreaCache _areaCache;
         private readonly IAreaTemplateCache _areaTemplateCache;
+        private readonly ILogger<AreaController> _logger;
 
-        public AreaController(AutomaticaContext dbContext, IAreaCache areaCache, IAreaTemplateCache areaTemplateCache) : base(dbContext)
+        public AreaController(AutomaticaContext dbContext, IAreaCache areaCache, IAreaTemplateCache areaTemplateCache, ILogger<AreaController> logger) : base(dbContext)
         {
             _areaCache = areaCache;
             _areaTemplateCache = areaTemplateCache;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -245,7 +247,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 await transaction.RollbackAsync();
                 throw;
             }

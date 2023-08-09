@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Logging\Automatica.Core.Logging.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.12.0" />

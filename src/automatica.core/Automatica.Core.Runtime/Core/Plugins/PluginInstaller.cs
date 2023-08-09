@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Common.Update;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
-using Automatica.Core.Internals.Logger;
 using Automatica.Core.Internals.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -17,9 +15,9 @@ namespace Automatica.Core.Runtime.Core.Plugins
     {
         private readonly ILogger _logger;
 
-        public PluginInstaller(IConfiguration config)
+        public PluginInstaller(IConfiguration config, ILogger<PluginInstaller> logger)
         {
-            _logger = CoreLoggerFactory.GetLogger(config, "PluginInstaller");
+            _logger = logger;
         }
         public Task<bool> InstallPlugin(Plugin plugin, string acPkgFilePath)
         {
@@ -89,7 +87,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not install plugin...");
+                _logger.LogError(e, "Could not install plugin...");
             }
             finally
             {

@@ -85,7 +85,7 @@ namespace Automatica.Core.Runtime.IO
                         continue;
                     }
                     
-                    SystemLogger.Instance.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
+                    _logger.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, async (dispatchable, o) =>
                     {
                         await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
@@ -104,7 +104,7 @@ namespace Automatica.Core.Runtime.IO
                     }
 
                     var inputId = sourceNode.ObjId;
-                    SystemLogger.Instance.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                    _logger.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                     await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
                         ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
@@ -122,7 +122,7 @@ namespace Automatica.Core.Runtime.IO
                         continue;
                     }
 
-                    SystemLogger.Instance.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                    _logger.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
                         ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
@@ -141,8 +141,8 @@ namespace Automatica.Core.Runtime.IO
                     }
 
                     var inputId = sourceNode.ObjId;
-                    SystemLogger.Instance.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
-                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, async (dispatchable, o) =>
+                    _logger.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
+                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId,  (dispatchable, o) =>
                     {
                         ValueDispatched(dispatchable, o, targetNode.ObjId);
                     });
@@ -180,7 +180,7 @@ namespace Automatica.Core.Runtime.IO
                     return;
                 }
 
-                SystemLogger.Instance.LogInformation($"UnRegister Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
+                _logger.LogInformation($"UnRegister Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId);
             }
             else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
@@ -195,7 +195,7 @@ namespace Automatica.Core.Runtime.IO
                 }
 
                 var inputId = sourceNode.ObjId;
-                SystemLogger.Instance.LogInformation($"UnRegister Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                _logger.LogInformation($"UnRegister Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.RuleInstance, inputId);
             }
             else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
@@ -210,7 +210,7 @@ namespace Automatica.Core.Runtime.IO
                     return;
                 }
 
-                SystemLogger.Instance.LogInformation($"UnRegister Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                _logger.LogInformation($"UnRegister Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId);
             }
             else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
@@ -226,7 +226,7 @@ namespace Automatica.Core.Runtime.IO
                 }
 
                 var inputId = sourceNode.ObjId;
-                SystemLogger.Instance.LogInformation($"UnRegister Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
+                _logger.LogInformation($"UnRegister Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.RuleInstance, inputId);
             }
         }
@@ -247,7 +247,7 @@ namespace Automatica.Core.Runtime.IO
                     {
                         try
                         {
-                            SystemLogger.Instance.LogDebug(
+                            _logger.LogDebug(
                                 $"ValueDispatchToRule: {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
                             var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
 
@@ -262,7 +262,7 @@ namespace Automatica.Core.Runtime.IO
                         }
                         catch (Exception e)
                         {
-                            SystemLogger.Instance.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+                            _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
                         }
                     }
                 }
@@ -277,13 +277,13 @@ namespace Automatica.Core.Runtime.IO
                 {
                     try
                     {
-                        SystemLogger.Instance.LogInformation(
+                        _logger.LogInformation(
                             $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
                         node.WriteValue(dispatchable, o);
                     }
                     catch(Exception e)
                     {
-                        SystemLogger.Instance.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+                        _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
                     }
                 }
             }
