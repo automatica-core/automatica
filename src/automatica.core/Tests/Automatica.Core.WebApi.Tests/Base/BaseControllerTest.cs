@@ -85,16 +85,8 @@ namespace Automatica.Core.WebApi.Tests.Base
             var telegramHubMoq = new Mock<IHubContext<TelegramHub>>();
             services.AddSingleton(telegramHubMoq.Object);
 
-            services.AddSingleton<ILogger<NotifyDriverHandler>>(NullLogger<NotifyDriverHandler>.Instance);
-            services.AddSingleton<ILogger<LogicEngineDispatcher>>(NullLogger<LogicEngineDispatcher>.Instance);
-            services.AddSingleton<ILogger<LogicLoader>>(NullLogger<LogicLoader>.Instance);
-            services.AddSingleton<ILogger<DriverLoader>>(NullLogger<DriverLoader>.Instance);
-            services.AddSingleton<ILogger<PluginHandler>>(NullLogger<PluginHandler>.Instance);
-            services.AddSingleton<ILogger<LearnMode>>(NullLogger<LearnMode>.Instance);
-            services.AddSingleton<ILogger<RemoteConnectService>>(NullLogger<RemoteConnectService>.Instance);
-            services.AddSingleton<ILogger>(NullLogger.Instance);
-            services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
-
+            services.AddLogging(a => a.AddConsole());
+            
             services.AddSingleton<IRemoteConnectService>(ngrogServiceMock.Object);
 
             var mqttServerMock = new Mock<IMqttServer>();
