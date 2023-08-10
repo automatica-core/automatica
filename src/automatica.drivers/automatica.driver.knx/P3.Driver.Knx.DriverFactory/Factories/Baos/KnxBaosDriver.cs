@@ -60,6 +60,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
         public async Task<bool> Read(string address)
         {
+            DriverContext.Logger.LogDebug($"Read value on address {address}");
             var dpValue = await _driver.GetDatapointValue(Convert.ToInt16(address), 1);
 
             if(dpValue != null)

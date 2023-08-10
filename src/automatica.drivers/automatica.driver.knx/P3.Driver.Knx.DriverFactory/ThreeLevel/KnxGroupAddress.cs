@@ -76,7 +76,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             if (DriverContext.NodeInstance.IsReadable)
             {
-                return await Driver.Read(GroupAddress);
+                var readGood = await Driver.Read(GroupAddress);
+                DriverContext.Logger.LogDebug($"Read {GroupAddress}, response was {readGood}");
             }
             return false;
         }
