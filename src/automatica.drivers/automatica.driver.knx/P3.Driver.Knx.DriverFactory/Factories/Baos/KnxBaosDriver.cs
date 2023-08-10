@@ -65,7 +65,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
             if(dpValue != null)
             {
-                await DatapointInd(dpValue);
+                await DataPointInd(dpValue);
                 return true;
             }
             return false;
@@ -77,7 +77,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
             return await _driver.SetDatapointValue(Convert.ToUInt16(address), data) != null;
         }
 
-        public Task DatapointInd(IReadOnlyCollection<DatapointValue> values)
+        public Task DataPointInd(IReadOnlyCollection<DatapointValue> values)
         {
             foreach (var value in values)
             {
@@ -87,9 +87,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
                 TelegramMonitor.NotifyTelegram(TelegramDirection.Input, null, dpId, null, Automatica.Core.Driver.Utility.Utils.ByteArrayToString(value.Data));
 
-                if (_callbackMap.ContainsKey(dpId))
+                if (_callbackMap.TryGetValue(dpId, out var dataPoint))
                 {
-                    foreach (var ac in _callbackMap[dpId])
+                    foreach (var ac in dataPoint)
                     {
                         try
                         {

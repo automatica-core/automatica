@@ -12,7 +12,10 @@ export class LogsService extends BaseService {
     }
 
     getLogFiles(): Promise<any[]> {
-        return super.getMultiple<any>("logging/files");
+        return super.getJson("logging/files");
     }
 
+    getLogFile(logName: string): Promise<any> {
+        return super.getRaw("logging/file?file=" + logName);
+    }
 }

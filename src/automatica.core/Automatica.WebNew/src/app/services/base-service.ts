@@ -130,6 +130,22 @@ export class BaseService {
         }
     }
 
+    async getRaw(url: string): Promise<any> {
+        try {
+            const data = await this.httpService.get(this.getS1Server() + "/" + url,
+                { headers: this.headers(), withCredentials: true, responseType: "text" }).toPromise();
+
+            if (!data) {
+                return void 0;
+            }
+            
+            return data;
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
+
     private decode(url: string, data: ArrayBuffer) {
         const json = msgpack.decode(new Uint8Array(data));
         if (!environment.production) {
