@@ -17,9 +17,9 @@ namespace P3.Driver.Knx.Tests.DPT
             var value = DptTranslator.Instance.FromDataPoint(
                 PropertyHelper.GetNameAttributeFromEnumValue(DptType.Dpt11).EnumValue, input);
 
-            Assert.True(value is DateTime);
+            Assert.True(value is DateOnly);
 
-            var date = (DateTime) value;
+            var date = (DateOnly) value;
 
             Assert.True(date.Day == 11);
             Assert.True(date.Month== 04);
@@ -54,9 +54,9 @@ namespace P3.Driver.Knx.Tests.DPT
             var value = DptTranslator.Instance.FromDataPoint(
                 PropertyHelper.GetNameAttributeFromEnumValue(DptType.Dpt11).EnumValue, input);
 
-            Assert.True(value is DateTime);
+            Assert.True(value is DateOnly);
 
-            var date = (DateTime)value;
+            var date = (DateOnly)value;
 
             Assert.True(date.Day == 11);
             Assert.True(date.Month == 04);
