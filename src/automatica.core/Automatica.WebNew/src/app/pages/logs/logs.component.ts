@@ -160,7 +160,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
           continue;
         }
         const fullPath = segments.slice(0, i + 1).join("/");
-        
+
         if (!pathMap.has(fullPath)) {
           key++;
           const newNode: LogFile = {
@@ -193,11 +193,24 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
     let blob = new Blob([log], { type: "text/plain" });
     let url = window.URL.createObjectURL(blob);
-    let pwa = window.open(url);
+
+    var iframe = document.createElement('iframe');
+    var title = document.createElement('title');
+    title.appendChild(document.createTextNode(logFile.name));
+
+    iframe.src = url;
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.style.border = 'none';
+
+    let pwa = window.open('', '_blank');
+    pwa.document.head.appendChild(title);
+    pwa.document.body.appendChild(iframe);
+    pwa.document.body.style.margin = "0";
     if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
       alert('Please disable your Pop-up blocker and try again.');
     }
-    
+
     this.isLoading = false;
   }
 
