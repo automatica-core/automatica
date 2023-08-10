@@ -15,7 +15,7 @@ namespace Automatica.Core.Internals.Templates
     {
         public IDictionary<Guid, RuleTemplate> LogicTemplates { get; }
 
-        public LogicTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config, ILogicFactory factory) : base(logger, database, config, (template, guid) => throw new NotImplementedException(), factory)
+        public LogicTemplateFactory(ILogger<LogicTemplateFactory> logger, AutomaticaContext database, IConfiguration config) : base(logger, database, config, (template, guid) => throw new NotImplementedException())
         {
             LogicTemplates = new ConcurrentDictionary<Guid, RuleTemplate>();
         }

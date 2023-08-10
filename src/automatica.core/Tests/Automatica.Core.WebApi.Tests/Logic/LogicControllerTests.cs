@@ -62,7 +62,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
         {
             using var db = new AutomaticaContext(Configuration);
 
-            var logicTemplateFactory = new LogicTemplateFactory(NullLogger.Instance, db, Configuration, new Mock<ILogicFactory>().Object);
+            var logicTemplateFactory = new LogicTemplateFactory(NullLogger<LogicTemplateFactory>.Instance, db, Configuration);
 
             var factory = new TestLogicFactory();
             factory.InitTemplates(logicTemplateFactory);

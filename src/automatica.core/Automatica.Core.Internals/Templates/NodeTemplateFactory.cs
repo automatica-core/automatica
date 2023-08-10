@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Templates
     {
         private readonly INodeInstanceService _nodeInstanceService;
 
-        public NodeTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService, IDriverFactory factory) : base (logger, database, config, (template, guid) => template.This2NodeTemplate = guid, factory)
+        public NodeTemplateFactory(ILogger<NodeTemplateFactory> logger, AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService) : base (logger, database, config, (template, guid) => template.This2NodeTemplate = guid)
         {
             _nodeInstanceService = nodeInstanceService;
         }

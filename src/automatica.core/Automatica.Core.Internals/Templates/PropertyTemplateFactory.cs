@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
@@ -10,20 +11,30 @@ namespace Automatica.Core.Internals.Templates
     public class PropertyTemplateFactory : SettingsFactory, IPropertyTemplateFactory
     {
         public ILogger Logger { get; }
-        public IFactory Factory { get; }
+        public IFactory Factory { get; private set; }
         private readonly Action<PropertyTemplate, Guid> _propertyExpression;
 
-        public PropertyTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config, Action<PropertyTemplate, Guid> propertyExpression, IFactory factory) : base(database, config)
+        public PropertyTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config, Action<PropertyTemplate, Guid> propertyExpression) : base(database, config)
         {
             Logger = logger;
-            Factory = factory;
             _propertyExpression = propertyExpression;
+        }
+
+        public void SetFactory(IFactory factory)
+        {
+            Factory = factory;
         }
         
         public CreateTemplateCode CreatePropertyTemplate(Guid uid, string name, string description, string key,
             PropertyTemplateType propertyType, Guid objectRef, string group, bool isVisible, bool isReadonly, string meta,
             object defaultValue, int groupOrder, int order)
         {
+
+            if (Factory == null)
+            {
+                throw new ArgumentException($"You need to call {nameof(SetFactory)} prior using this service!");
+            }
+
             var retValue = CreateTemplateCode.Updated;
             var propertyTemplate = Db.PropertyTemplates.SingleOrDefault(p => p.ObjId == uid);
 

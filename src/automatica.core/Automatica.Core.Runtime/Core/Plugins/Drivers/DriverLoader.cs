@@ -26,12 +26,14 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
         private readonly ILoadedStore _store;
         private readonly IDriverFactoryStore _driverFactoryStore;
         private readonly INodeInstanceService _nodeInstanceService;
+        private readonly NodeTemplateFactory _nodeTemplateFactory;
 
         public DriverLoader(
             ILogger<DriverLoader> logger, AutomaticaContext dbContext, 
             ILocalizationProvider localizationProvider, IConfiguration config, 
             ILoadedStore store, IDriverFactoryStore driverFactoryStore,
-            INodeInstanceService nodeInstanceService)
+            INodeInstanceService nodeInstanceService,
+            NodeTemplateFactory nodeTemplateFactory)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -40,9 +42,10 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             _store = store;
             _driverFactoryStore = driverFactoryStore;
             _nodeInstanceService = nodeInstanceService;
+            _nodeTemplateFactory = nodeTemplateFactory;
         }
 
-        public Task Load(IDriverFactory factory, IBoardType boardType)
+        public async Task Load(IDriverFactory factory, IBoardType boardType)
         {
             try
             {
@@ -84,33 +87,31 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 {
                     _logger.LogInformation(
                         $"Ignore {factory.DriverName} because we do not support any of the given interfaces");
-                    return Task.CompletedTask;
+                    return;
                 }
 
                 _localizationProvider.LoadFromAssembly(factory.GetType().Assembly);
-                 if (initNodeTemplates || factory.InDevelopmentMode || factory.GetType().Assembly.GetName().Version < new Version(2, 3))
+                if (initNodeTemplates || factory.InDevelopmentMode ||
+                    factory.GetType().Assembly.GetName().Version < new Version(2, 3))
                 {
+                    _nodeTemplateFactory.SetFactory(factory);
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
-                    using (var db = new AutomaticaContext(_config))
-                    {
-                        factory.InitNodeTemplates(new NodeTemplateFactory(_logger, db, _config, _nodeInstanceService, factory));
-                        db.SaveChanges();
-                    }
+                    factory.InitNodeTemplates(_nodeTemplateFactory);
+                    await _nodeTemplateFactory.CommitChanges();
+
 
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...done");
                 }
                 else
                 {
-                    using (var db = new AutomaticaContext(_config))
-                    {
-                        factory.InitNodeTemplates(new DoNothingNodeTemplateFactory(db, _config));
-                    }
+                    await using var db = new AutomaticaContext(_config);
+                    factory.InitNodeTemplates(new DoNothingNodeTemplateFactory(db, _config));
                 }
 
 
                 _logger.LogDebug($"Init driver {factory.DriverName} {factory.DriverVersion}...done");
 
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
 
             }
             catch (NoManifestFoundException)
@@ -122,7 +123,6 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 _logger.LogError($"Could not load driver {factory.DriverName} {e}", e);
             }
 
-            return Task.CompletedTask;
         }
 
         private bool UsesInterface(IBoardType boardType, IDriverFactory factory)

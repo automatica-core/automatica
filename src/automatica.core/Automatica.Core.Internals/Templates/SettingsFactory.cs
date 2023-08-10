@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +16,10 @@ namespace Automatica.Core.Internals.Templates
             Db = database;
             _config = config;
         }
-
+        public async Task CommitChanges()
+        {
+            await Db.SaveChangesAsync();
+        }
         public void AddSettingsEntry(string key, object value, string group, PropertyTemplateType type, bool isVisible)
         {
             var settings = Db.Settings.SingleOrDefault(a => a.ValueKey == key);

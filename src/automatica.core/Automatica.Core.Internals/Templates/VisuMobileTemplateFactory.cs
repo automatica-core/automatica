@@ -15,7 +15,7 @@ namespace Automatica.Core.Internals.Templates
     public class VisuMobileTemplateFactory : PropertyTemplateFactory, IVisuTemplateFactory
     {
         public VisuMobileTemplateFactory(ILogger logger, AutomaticaContext database, IConfiguration config) : base(logger, database, config,
-            (template, guid) => template.This2VisuObjectTemplate = guid, new VisuMobileFactory())
+            (template, guid) => template.This2VisuObjectTemplate = guid)
         {
 
         }
