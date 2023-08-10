@@ -186,6 +186,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     if (!logFile.isFile) {
       return;
     }
+    this.isLoading = true;
 
     this.selectedLogFile = logFile;
     var log = (await this.logsService.getLogFile(logFile.path!)).toString();
@@ -196,6 +197,8 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
       alert('Please disable your Pop-up blocker and try again.');
     }
+    
+    this.isLoading = false;
   }
 
   ngOnDestroy(): void {
