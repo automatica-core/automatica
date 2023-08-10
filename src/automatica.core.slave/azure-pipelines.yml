@@ -43,7 +43,7 @@ steps:
     dockerRegistryEndpoint: 'DockerHub'
     dockerfile_amd64: 'Dockerfile'
     dockerfile_arm32: 'Dockerfile.arm32'
-    imageName: 'automaticacore/automatica.slave'
+    imageName: 'automaticacore/automatica.satellite'
     buildArgs: |
       VERSION=$(AUTOMATICA_VERSION).$(Build.BuildId)
       CONFIG=$(BuildConfiguration)

@@ -22,17 +22,21 @@ namespace Automatica.Core.Runtime.Recorder
 
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
         protected readonly Dictionary<Guid, string> MetricName = new();
+        private readonly ILogger _logger;
+
 
         internal BaseDataRecorderWriter(IConfiguration config, DataRecorderType recorderType, string recorderName, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory)
         {
-            Logger = factory.CreateLogger($"recording{LoggerConstants.FileSeparator}{recorderName}");
+            _logger = factory.CreateLogger($"recording{LoggerConstants.FileSeparator}{recorderName}");
             _config = config;
             _nodeCache = nodeCache;
             RecorderType = recorderType;
             Dispatcher = dispatcher;
+
         }
 
-        public ILogger Logger { get; }
+        public ILogger Logger => _logger;
+
         public DataRecorderType RecorderType { get; }
         public IDispatcher Dispatcher { get; }
 
@@ -132,7 +136,7 @@ namespace Automatica.Core.Runtime.Recorder
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Error save trending value...");
+                _logger.LogError(e, "Error save trending value...");
             }
         }
 

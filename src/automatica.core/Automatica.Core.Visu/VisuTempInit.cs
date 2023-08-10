@@ -4,6 +4,7 @@ using Automatica.Core.Base.Visu;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Automatica.Core.Visu
 {
@@ -11,7 +12,8 @@ namespace Automatica.Core.Visu
     {
         public void Initialize(AutomaticaContext database, IConfiguration config)
         {
-            var factory = new VisuMobileTemplateFactory(database, config);
+            var factory = new VisuMobileTemplateFactory(NullLogger.Instance, database, config);
+            factory.SetFactory(new VisuMobileFactory());
 
             var label = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label);
             factory.CreateVisuMobileTemplate(label, "VISU.OBJECT.LABEL.NAME", "VISU.OBJECT.LABEL.DESCRIPTION", "label", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);

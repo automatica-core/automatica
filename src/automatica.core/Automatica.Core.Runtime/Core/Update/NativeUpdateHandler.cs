@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Runtime.Abstraction;
 using Microsoft.Extensions.Configuration;
@@ -15,14 +14,16 @@ namespace Automatica.Core.Runtime.Core.Update
     public class NativeUpdateHandler : IUpdateHandler
     {
         private readonly IConfiguration _config;
+        private readonly ILogger<NativeUpdateHandler> _logger;
         private readonly ICloudApi _api;
 
         private readonly Timer _timer = new Timer();
 
 
-        public NativeUpdateHandler(IConfiguration config, ICloudApi api)
+        public NativeUpdateHandler(IConfiguration config, ILogger<NativeUpdateHandler> logger, ICloudApi api)
         {
             _config = config;
+            _logger = logger;
             _api = api;
 
             _timer.Elapsed += _timer_Elapsed;
@@ -30,23 +31,23 @@ namespace Automatica.Core.Runtime.Core.Update
 
         private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            SystemLogger.Instance.LogInformation("Check for update");
+            _logger.LogInformation("Check for update");
             _timer.Stop();
             var update = await _api.CheckForUpdates();
 
             if (update != null)
             {
-                SystemLogger.Instance.LogInformation("Download update");
+                _logger.LogInformation("Download update");
                 var fileInfo = await _api.DownloadUpdate(update);
                 
-                var check = Common.Update.Update.CheckUpdateFile(SystemLogger.Instance, fileInfo.FullName, ServerInfo.Rid);
+                var check = Common.Update.Update.CheckUpdateFile(_logger, fileInfo.FullName, ServerInfo.Rid);
 
                 if (!check)
                 {
                     _api.DeleteUpdate();
                 }
 
-                SystemLogger.Instance.LogInformation("Install update");
+                _logger.LogInformation("Install update");
                 await Update();
             }
 
@@ -80,12 +81,12 @@ namespace Automatica.Core.Runtime.Core.Update
                     var diff = (updateTimeToday - now).TotalSeconds;
 
                     _timer.Interval = diff * 1000;
-                    SystemLogger.Instance.LogInformation($"Next check for update is in {diff} seconds at {updateTimeToday}");
+                    _logger.LogInformation($"Next check for update is in {diff} seconds at {updateTimeToday}");
                     _timer.Start();
                 }
                 else
                 {
-                    SystemLogger.Instance.LogInformation("Auto update seems to be disabled");
+                    _logger.LogInformation("Auto update seems to be disabled");
                 }
             }
             return Task.CompletedTask;

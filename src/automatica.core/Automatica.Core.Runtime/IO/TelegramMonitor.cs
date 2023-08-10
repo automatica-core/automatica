@@ -5,35 +5,36 @@ using Automatica.Push.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.Runtime.IO
 {
     public class TelegramMonitor : ITelegramMonitor
     {
-        private readonly IHubContext<TelegramHub> telegramHub;
-        private readonly IList<TelegramMonitorInstance> _telegramMonitorInstances;
+        private readonly IHubContext<TelegramHub> _telegramHub;
+        private readonly Dictionary<Guid, TelegramMonitorInstance> _telegramMonitorInstances;
 
         public TelegramMonitor(IHubContext<TelegramHub> telegramHub)
         {
-            this.telegramHub = telegramHub;
-            _telegramMonitorInstances = new List<TelegramMonitorInstance>();
+            _telegramHub = telegramHub;
+            _telegramMonitorInstances = new Dictionary<Guid,TelegramMonitorInstance>();
         }
 
         public IList<TelegramMonitorInstance> GetMonitorInstances()
         {
-            return _telegramMonitorInstances;
+            return _telegramMonitorInstances.Values.ToList();
         }
 
         private ITelegramMonitorInstance CreateTelegramMonitor(TelegramMonitorInstance instance)
         {
-            _telegramMonitorInstances.Add(instance);
+            _telegramMonitorInstances[instance.Id] = instance;
             return new TelegramMonitorImpl(instance.Id, this);
         }
 
         public async Task NotifyTelegram(ITelegramMessage message)
         {
-            await telegramHub.Clients.All.SendAsync("OnTelegram", message);
+            await _telegramHub.Clients.All.SendAsync("OnTelegram", message);
         }
 
         public ITelegramMonitorInstance CreateTelegramMonitor(Guid id, string name, string busType, string description)

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using Automatica.Core.Slave.Abstraction;
+using Automatica.Core.Satellite.Abstraction;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client.Receiving;
 using MQTTnet.Server.Internal;
 using Newtonsoft.Json;
 
-namespace Automatica.Core.Slave.Runtime
+namespace Automatica.Core.Satellite.Runtime
 {
     internal class ApplicationMessageReceivedHandler : IMqttApplicationMessageReceivedHandler
     {

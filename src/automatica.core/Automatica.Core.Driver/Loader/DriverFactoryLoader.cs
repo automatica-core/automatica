@@ -14,7 +14,7 @@ namespace Automatica.Core.Driver.Loader
         private readonly IDriverStore _driverStore;
         private readonly ILicenseContract _licenseContract;
 
-        public DriverFactoryLoader(ILogger logger, IDriverNodesStore driverNodeStore, IDriverStore driverStore, ILicenseContract licenseContract)
+        public DriverFactoryLoader(ILogger<DriverFactoryLoader> logger, IDriverNodesStore driverNodeStore, IDriverStore driverStore, ILicenseContract licenseContract)
         {
             _logger = logger;
             _driverNodeStore = driverNodeStore;
@@ -66,12 +66,10 @@ namespace Automatica.Core.Driver.Loader
             {
                 _driverNodeStore.AddChild(root, dr);
 
-                _licenseContract.IncrementDriverCount();
-
                 if (_licenseContract.DriverLicenseCountExceeded())
                 {
                     _logger.LogError("Cannot instantiate more data-points, license exceeded");
-                    return;
+                    continue;
                 }
 
                 AddDriverRecursive(root, dr);

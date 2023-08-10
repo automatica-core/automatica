@@ -29,6 +29,7 @@ import { CategoryInstance } from "./categories";
 import { AreaInstance } from "./areas";
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance";
 import { VirtualSatellitePropertyInstance } from "./virtual-props/virtual-satellite-property-instance";
+import { VirtualDisabledPropertyInstance } from "./virtual-props/virtual-disabled-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -83,15 +84,16 @@ class NodeInstanceMetaHelper {
 }
 
 export enum NodeInstanceState {
-    New,
-    Saved,
-    Loaded,
-    Initialized,
-    InUse,
-    OutOfDatapoits,
-    UnknownError,
-    Unloaded,
-    Unknown
+    New = 0,
+    Saved = 1,
+    Loaded = 2,
+    Initialized = 3,
+    InUse = 4,
+    OutOfDataPoints = 5,
+    UnknownError = 6,
+    Unloaded = 7,
+    Unknown = 8,
+    Remote = 9
 }
 
 export enum TrendingTypes {
@@ -193,15 +195,15 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.notifyChange("Value");
     }
 
-    
-    private _valueTimestamp : Date;
-    public get ValueTimestamp() : Date {
+
+    private _valueTimestamp: Date;
+    public get ValueTimestamp(): Date {
         return this._valueTimestamp;
     }
-    public set ValueTimestamp(v : Date) {
+    public set ValueTimestamp(v: Date) {
         this._valueTimestamp = v;
     }
-    
+
 
 
     @JsonPropertyName("This2NodeTemplateNavigation")
@@ -217,6 +219,20 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     IsReadable: boolean;
     @JsonProperty()
     IsWriteable: boolean;
+    @JsonProperty()
+    IsDisabled: boolean;
+
+
+    public get IsAnyDisabled(): boolean {
+        if (this.IsDisabled) {
+            return true;
+        }
+        if (this.Parent instanceof NodeInstance) {
+            return this.Parent.IsAnyDisabled;
+        }
+        return false;
+    }
+
 
     @JsonProperty()
     UseInVisu: boolean;
@@ -313,10 +329,14 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualSatellitePropertyInstance(this));
         }
 
+        this.Properties.push(new VirtualDisabledPropertyInstance(this));
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
-            this.Properties.push(new VirtualWriteablePropertyInstance(this));
-            this.Properties.push(new VirtualRemanentPropertyInstance(this));
+
+            if (!this.NodeTemplate.IsWriteableFixed) {
+                this.Properties.push(new VirtualWriteablePropertyInstance(this));
+                this.Properties.push(new VirtualRemanentPropertyInstance(this));
+            }
 
             this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
             this.Properties.push(new VirtualAreaPropertyInstance(this));

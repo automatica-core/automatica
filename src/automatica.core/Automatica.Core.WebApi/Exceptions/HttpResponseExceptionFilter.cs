@@ -12,9 +12,9 @@ namespace Automatica.Core.WebApi.Exceptions
         private readonly ILogger _logger;
         public int Order { get; set; } = int.MaxValue - 10;
 
-        public HttpResponseExceptionFilter()
+        public HttpResponseExceptionFilter(ILogger logger)
         {
-            _logger = SystemLogger.Instance;
+            _logger = logger;
         }
         
         public void OnActionExecuting(ActionExecutingContext context) { }

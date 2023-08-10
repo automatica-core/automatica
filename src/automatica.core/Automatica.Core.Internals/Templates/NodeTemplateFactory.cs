@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Templates
     {
         private readonly INodeInstanceService _nodeInstanceService;
 
-        public NodeTemplateFactory(AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService, IDriverFactory factory) : base (database, config, (template, guid) => template.This2NodeTemplate = guid, factory)
+        public NodeTemplateFactory(ILogger<NodeTemplateFactory> logger, AutomaticaContext database, IConfiguration config, INodeInstanceService nodeInstanceService) : base (logger, database, config, (template, guid) => template.This2NodeTemplate = guid)
         {
             _nodeInstanceService = nodeInstanceService;
         }
@@ -217,7 +217,7 @@ namespace Automatica.Core.Internals.Templates
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError($"Could not create node template {uid}-{name}.{key} {e}");
+                Logger.LogError($"Could not create node template {uid}-{name}.{key} {e}");
 
                 throw;
             }

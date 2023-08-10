@@ -1,4 +1,12 @@
-﻿using Automatica.Core.Slave.Abstraction;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using Automatica.Core.Satellite.Abstraction;
+using Automatica.Core.Satellite.Abstraction.Model;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using Microsoft.Extensions.Configuration;
@@ -7,35 +15,28 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using MQTTnet.Client.Options;
 using MqttTopicFilterBuilder = MQTTnet.MqttTopicFilterBuilder;
 using Timer = System.Timers.Timer;
 
-namespace Automatica.Core.Slave.Runtime
+namespace Automatica.Core.Satellite.Runtime
 {
     public class SatelliteRuntime : IHostedService
     {
-        private readonly IMqttClientOptions _options;
-        private readonly IMqttClient _mqttClient;
+        private IMqttClientOptions _options;
+        private IMqttClient _mqttClient;
         private readonly DockerClient _dockerClient;
 
-        private readonly IDictionary<string, string> _runningImages = new Dictionary<string, string>();
+        private readonly IDictionary<string, RunningContainerInfo> _runningImages = new Dictionary<string, RunningContainerInfo>();
 
         public string SlaveId => _slaveId;
-        private readonly string _slaveId;
+        private string _slaveId;
 
-        private readonly string _masterAddress;
-        private readonly string _clientKey;
+        private string _masterAddress;
+        private string _clientKey;
 
-        private readonly string _useDockerTag;
-        private readonly string _logLevel;
+        private string _useDockerTag;
+        private string _logLevel;
 
         private readonly ILogger _logger;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
@@ -44,30 +45,20 @@ namespace Automatica.Core.Slave.Runtime
         private readonly Timer _timer = new Timer(60000);
         private bool _connected;
         private bool _containerStarted;
+        private readonly IConfiguration _config;
+
+        public bool Connected => _connected;
+        public bool ContainerStarted => _containerStarted;
+        public IDictionary<string, RunningContainerInfo> RunningImages => _runningImages;
 
         public SatelliteRuntime(IServiceProvider services, ILogger<SatelliteRuntime> logger)
         {
             var config = services.GetRequiredService<IConfiguration>();
+            _config = config;
 
             _logger = logger;
-
-            _masterAddress = config["server:master"];
-            _clientKey = config["server:clientKey"];
-
-            _slaveId = config["server:clientId"];
-
-            _useDockerTag = config["server:dockerTag"];
-            _logLevel = config["Logging:LogLevel:Default"];
             
-
-
-            _options = new MqttClientOptionsBuilder()
-                   .WithClientId(_slaveId)
-                   //   .WithWebSocketServer("localhost:5001/mqtt")
-                   .WithTcpServer(_masterAddress, 1883)
-                   .WithCredentials(_slaveId, _clientKey)
-                   .WithCleanSession()
-                   .Build();
+           
 
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {
@@ -83,10 +74,7 @@ namespace Automatica.Core.Slave.Runtime
                 //    _logger.LogTrace(trace);
                 //};
             }
-
-            _mqttClient = new MqttFactory().CreateMqttClient();
-            _mqttClient.ApplicationMessageReceivedHandler = new ApplicationMessageReceivedHandler(this, _logger);
-
+         
             try
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -120,39 +108,49 @@ namespace Automatica.Core.Slave.Runtime
         {
             await _startupSemaphore.WaitAsync();
 
-            if (!_connected)
+            try
             {
-                await StopInternal("not connected");
-                await StartInternal();
-            }
-            else if(_containerStarted)
-            {
-                _logger.LogInformation($"Check running containers...");
-                var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
+                if (!_connected)
                 {
-                    Filters = new Dictionary<string, IDictionary<string, bool>>
+                    await StopInternal("not connected");
+                    await StartInternal();
+                }
+                else if (_containerStarted)
+                {
+                    _logger.LogInformation($"Check running containers...");
+                    var containers = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
                     {
+                        Filters = new Dictionary<string, IDictionary<string, bool>>
                         {
-                            "status", new Dictionary<string, bool>
                             {
-                                {"running", false}
+                                "status", new Dictionary<string, bool>
+                                {
+                                    { "running", false }
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                foreach (var running in _runningImages)
-                {
-                    if (containers.All(a => a.ID != running.Value))
+                    foreach (var running in _runningImages)
                     {
-                        _logger.LogInformation($"Restart containers...");
-                        await StopInternal("restart");
-                        await StartInternal();
+                        if (containers.All(a => a.ID != running.Value.DockerId))
+                        {
+                            _logger.LogInformation($"Restart containers...");
+                            await StopInternal("restart");
+                            await StartInternal();
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error starting salve...");
+            }
+            finally
+            {
+                _startupSemaphore.Release(1);
+            }
 
-            _startupSemaphore.Release(1);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -166,11 +164,33 @@ namespace Automatica.Core.Slave.Runtime
             _timer.Start();
         }
 
+        private void Init()
+        {
+            _masterAddress = _config["server:master"];
+            _clientKey = _config["server:clientKey"];
+
+            _slaveId = _config["server:clientId"];
+
+            _useDockerTag = _config["server:dockerTag"];
+            _logLevel = _config["Logging:LogLevel:Default"];
+
+            _options = new MqttClientOptionsBuilder()
+                .WithClientId(_slaveId)
+                //   .WithWebSocketServer("localhost:5001/mqtt")
+                .WithTcpServer(_masterAddress, 1883)
+                .WithCredentials(_slaveId, _clientKey)
+                .WithCleanSession()
+                .Build();
+            _mqttClient = new MqttFactory().CreateMqttClient();
+            _mqttClient.ApplicationMessageReceivedHandler = new ApplicationMessageReceivedHandler(this, _logger);
+        }
 
         private async Task StartInternal()
         {
             try
             {
+                Init();
+
                 _logger.LogInformation($"Try fetch docker images...");
                 await _dockerClient.Images.ListImagesAsync(new ImagesListParameters());
                 _logger.LogInformation($"Try fetch docker images...done");
@@ -342,7 +362,13 @@ namespace Automatica.Core.Slave.Runtime
 
                 var response = await _dockerClient.Containers.CreateContainerAsync(createContainerParams);
 
-                _runningImages.Add(request.Id.ToString(), response.ID);
+                _runningImages.Add(request.Id.ToString(), new()
+                {
+                    CreateContainerParameters = createContainerParams,
+                    DockerId = response.ID,
+                    Image = createContainerParams.Image,
+                    RequestId = request.Id.ToString()
+                });
                 await _dockerClient.Containers.StartContainerAsync(response.ID, new ContainerStartParameters());
 
                 _containerStarted = true;
@@ -379,7 +405,8 @@ namespace Automatica.Core.Slave.Runtime
         {
             await StopAllContainers("re-init");
         }
-        internal async Task Restart()
+
+        public async Task Restart()
         {
             await StopInternal("restart");
             await StartAsync();
@@ -392,9 +419,9 @@ namespace Automatica.Core.Slave.Runtime
                 _logger.LogInformation($"Stopping container instance {id.Value}: Reason {reason}");
                 try
                 {
-                    await _dockerClient.Containers.StopContainerAsync(id.Value, new ContainerStopParameters());
+                    await _dockerClient.Containers.StopContainerAsync(id.Value.DockerId, new ContainerStopParameters());
 
-                    await _dockerClient.Containers.RemoveContainerAsync(id.Value, new ContainerRemoveParameters()
+                    await _dockerClient.Containers.RemoveContainerAsync(id.Value.DockerId, new ContainerRemoveParameters
                     {
                         Force = true
                     });

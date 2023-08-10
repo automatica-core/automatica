@@ -6,10 +6,10 @@ namespace P3.Knx.Core.Driver.DPT
 {
     public class Dpt10Value
     {
-        public TimeSpan TimeOfDay { get; }
+        public TimeOnly TimeOfDay { get; }
         public int Weekday { get; }
 
-        public Dpt10Value(TimeSpan timeOfDay, int weekday)
+        public Dpt10Value(TimeOnly timeOfDay, int weekday)
         {
             TimeOfDay = timeOfDay;
             Weekday = weekday;
@@ -17,7 +17,7 @@ namespace P3.Knx.Core.Driver.DPT
 
         public Dpt10Value(DateTime dt)
         {
-            TimeOfDay = dt.TimeOfDay;
+            TimeOfDay = new TimeOnly(dt.TimeOfDay.Hours, dt.TimeOfDay.Minutes, dt.TimeOfDay.Seconds);
 
             switch (dt.DayOfWeek)
             {
@@ -50,12 +50,12 @@ namespace P3.Knx.Core.Driver.DPT
             var data = new byte[4];
 
             var b0 = (byte)(Weekday << 5);
-            var hour = (byte)TimeOfDay.Hours;
+            var hour = (byte)TimeOfDay.Hour;
             b0 += hour;
 
             data[1] = b0;
-            data[2] = (byte) TimeOfDay.Minutes;
-            data[3] = (byte) TimeOfDay.Seconds;
+            data[2] = (byte) TimeOfDay.Minute;
+            data[3] = (byte) TimeOfDay.Second;
             
             return data;
         }
@@ -75,7 +75,7 @@ namespace P3.Knx.Core.Driver.DPT
             var hour = data[0] & 0x1F;
             var day = ((data[0] & 0xE0) >> 5);
 
-            var dt = new TimeSpan(hour, minutes, seconds);
+            var dt = new TimeOnly(hour, minutes, seconds);
 
             return new Dpt10Value(dt, day);
         }

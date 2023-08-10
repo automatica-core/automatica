@@ -8,6 +8,7 @@ namespace Automatica.Core.Internals.License
     public interface ILicenseContext : ILicenseContract
     {
         Task<bool> Init();
+        void DecrementDriverCount(int count);
 
         IList<IValidationFailure> ValidationErrors { get; }
 

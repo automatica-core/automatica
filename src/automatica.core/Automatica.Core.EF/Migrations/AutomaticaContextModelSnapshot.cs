@@ -395,6 +395,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsFavorite")
                         .HasColumnType("INTEGER");
 

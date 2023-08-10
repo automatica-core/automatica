@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: IUser | null = { email: '' };
+  user: IUser | null = { user: '' };
 
   userMenuItems = [{
     text: 'Profile',
@@ -42,8 +42,12 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit() {
-    this.authService.getUser().then((e) => this.user = e.data);
+  async ngOnInit() {
+    if (!this.user) {
+      var user = await this.authService.getUser();
+      this.user = user.data;
+      this.router.navigate(['/']);
+    }
   }
 
   toggleMenu = () => {
@@ -58,7 +62,7 @@ export class HeaderComponent implements OnInit {
     UserPanelModule,
     DxToolbarModule
   ],
-  declarations: [ HeaderComponent ],
-  exports: [ HeaderComponent ]
+  declarations: [HeaderComponent],
+  exports: [HeaderComponent]
 })
 export class HeaderModule { }

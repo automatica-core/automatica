@@ -16,7 +16,7 @@ namespace Automatica.Core.Base.Localization
         private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
         private readonly ILogger _logger;
 
-        public LocalizationProvider(ILogger logger)
+        public LocalizationProvider(ILogger<LocalizationProvider> logger)
         {
             _logger = logger;
         }

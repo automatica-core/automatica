@@ -43,13 +43,15 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/nodeInstances")]
     public class NodeInstanceController : BaseController
     {
+        private readonly ILogger<NodeInstanceController> _logger;
         private readonly INotifyDriver _notifyDriver;
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ICoreServer _server;
 
-        public NodeInstanceController(AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer server)
+        public NodeInstanceController(ILogger<NodeInstanceController> logger, AutomaticaContext db, INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer server)
             : base(db)
         {
+            _logger = logger;
             _notifyDriver = notifyDriver;
             _nodeInstanceCache = nodeInstanceCache;
             _server = server;
@@ -67,10 +69,10 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<NodeInstance> Get()
         {
-            SystemLogger.Instance.LogDebug($"Begin NodeInstance load...");
+            _logger.LogDebug($"Begin NodeInstance load...");
             var items = _nodeInstanceCache.All();
 
-            SystemLogger.Instance.LogDebug($"Begin NodeInstance load...done");
+            _logger.LogDebug($"Begin NodeInstance load...done");
 
             return items;
         }

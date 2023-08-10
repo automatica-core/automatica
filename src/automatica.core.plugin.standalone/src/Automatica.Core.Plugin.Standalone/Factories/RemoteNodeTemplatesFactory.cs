@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Base.Templates;
@@ -9,13 +10,13 @@ namespace Automatica.Core.Plugin.Standalone.Factories
 
     internal class RemoteNodeTemplatesFactory : INodeTemplateFactory
     {
-        private readonly Dictionary<string, Setting> _settings = new Dictionary<string, Setting>();
+        private readonly IDictionary<string, Setting> _settings = new ConcurrentDictionary<string, Setting>();
 
-        private readonly Dictionary<Guid, NodeTemplate> _nodeTemplates = new Dictionary<Guid, NodeTemplate>();
-        private readonly Dictionary<Guid, PropertyTemplate> _propertyTemplates = new Dictionary<Guid, PropertyTemplate>();
-        private readonly Dictionary<Guid, PropertyTemplateConstraint> _propertyConstraintTemplates = new Dictionary<Guid, PropertyTemplateConstraint>();
-        private readonly Dictionary<Guid, PropertyTemplateConstraintData> _propertyConstraintDataTemplates = new Dictionary<Guid, PropertyTemplateConstraintData>();
-        private readonly Dictionary<Guid, InterfaceType> _interfaceTypes = new Dictionary<Guid, InterfaceType>();
+        private readonly IDictionary<Guid, NodeTemplate> _nodeTemplates = new ConcurrentDictionary<Guid, NodeTemplate>();
+        private readonly IDictionary<Guid, PropertyTemplate> _propertyTemplates = new ConcurrentDictionary<Guid, PropertyTemplate>();
+        private readonly IDictionary<Guid, PropertyTemplateConstraint> _propertyConstraintTemplates = new ConcurrentDictionary<Guid, PropertyTemplateConstraint>();
+        private readonly IDictionary<Guid, PropertyTemplateConstraintData> _propertyConstraintDataTemplates = new ConcurrentDictionary<Guid, PropertyTemplateConstraintData>();
+        private readonly IDictionary<Guid, InterfaceType> _interfaceTypes = new Dictionary<Guid, InterfaceType>();
 
         public RemoteNodeTemplatesFactory()
         {
@@ -33,8 +34,10 @@ namespace Automatica.Core.Plugin.Standalone.Factories
                 Group = @group
             };
 
-
-            _settings.Add(key, settings);
+            if (!_settings.ContainsKey(key))
+            {
+                _settings.Add(key, settings);
+            }
         }
 
         public CreateTemplateCode ChangeDefaultVisuTemplate(Guid uid, VisuMobileObjectTemplateTypes template)

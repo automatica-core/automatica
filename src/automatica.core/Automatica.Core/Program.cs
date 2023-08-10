@@ -16,6 +16,7 @@ using Serilog;
 using Automatica.Core.Internals;
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
+using Automatica.Core.Logging;
 
 namespace Automatica.Core
 {

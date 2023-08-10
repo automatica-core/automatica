@@ -32,37 +32,38 @@ namespace P3.Knx.Core.Driver.DPT
                 iYear += 2000;
             }
             
-            var dt = new DateTime(iYear, month, day);
+            var dt = new DateOnly(iYear, month, day);
 
             return dt;
         }
 
         public override byte[] ToDataPoint(object value)
         {
-            if (value is DateTime datetime)
+            if (value is DateOnly dateOnly)
             {
                 var data = new byte[3];
 
                 byte year = 0;
 
 
-                if (datetime.Year < 2000 && datetime.Year >= 1990)
+                if (dateOnly.Year < 2000 && dateOnly.Year >= 1990)
                 {
-                    year = (byte)(datetime.Year - 1900);
+                    year = (byte)(dateOnly.Year - 1900);
                 }
-                else if (datetime.Year > 2000 && datetime.Year <= 2089)
+                else if (dateOnly.Year > 2000 && dateOnly.Year <= 2089)
                 {
-                    year = (byte) (datetime.Year - 2000);
+                    year = (byte)(dateOnly.Year - 2000);
                 }
                 else
                 {
                     throw new ToDataPointException($"{nameof(DateTime.Year)} must be in range of 1990-2089");
                 }
 
-                data[0] = year; 
-                data[1] = (byte) datetime.Month;
-                data[2] = (byte) datetime.Day;
+                data[0] = year;
+                data[1] = (byte)dateOnly.Month;
+                data[2] = (byte)dateOnly.Day;
                 return data.Reverse().ToArray();
+
             }
             throw new ToDataPointException($"{nameof(value)} must be of type {nameof(DateTime)}");
         }

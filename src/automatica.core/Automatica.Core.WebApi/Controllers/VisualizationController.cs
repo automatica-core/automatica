@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Visualization;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
@@ -15,10 +14,12 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/visualization")]
     public class VisualizationController : BaseController
     {
+        private readonly ILogger<VisualizationController> _logger;
         private readonly IVisualizationCache _cache;
 
-        public VisualizationController(AutomaticaContext dbContext, IVisualizationCache cache) : base(dbContext)
+        public VisualizationController(ILogger<VisualizationController> logger, AutomaticaContext dbContext, IVisualizationCache cache) : base(dbContext)
         {
+            _logger = logger;
             _cache = cache;
         }
 
@@ -162,7 +163,7 @@ namespace Automatica.Core.WebApi.Controllers
             catch (Exception e)
             {
                 transaction.Rollback();
-                SystemLogger.Instance.LogError(e, "Could not save visu", e);
+                _logger.LogError(e, "Could not save visu", e);
             }
 
             return GetPages();

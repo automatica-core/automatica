@@ -20,9 +20,9 @@ namespace P3.Driver.Knx.Tests.DPT
 
             var time = (Dpt10Value) value;
 
-            Assert.True(time.TimeOfDay.Hours == 8);
-            Assert.True(time.TimeOfDay.Minutes == 39);
-            Assert.True(time.TimeOfDay.Seconds == 20);
+            Assert.True(time.TimeOfDay.Hour == 8);
+            Assert.True(time.TimeOfDay.Minute == 39);
+            Assert.True(time.TimeOfDay.Second == 20);
             Assert.True(time.Weekday == 3);
 
 
@@ -43,9 +43,9 @@ namespace P3.Driver.Knx.Tests.DPT
 
             var time = (Dpt10Value)value;
 
-            Assert.True(time.TimeOfDay.Hours == 20);
-            Assert.True(time.TimeOfDay.Minutes == 33);
-            Assert.True(time.TimeOfDay.Seconds == 39);
+            Assert.True(time.TimeOfDay.Hour == 20);
+            Assert.True(time.TimeOfDay.Minute == 33);
+            Assert.True(time.TimeOfDay.Second == 39);
             Assert.True(time.Weekday == 0);
 
 

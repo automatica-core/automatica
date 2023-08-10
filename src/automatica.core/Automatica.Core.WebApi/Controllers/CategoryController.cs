@@ -19,11 +19,13 @@ namespace Automatica.Core.WebApi.Controllers
     {
         private readonly ICategoryCache _categoryCache;
         private readonly ICategoryGroupCache _categoryGroupCache;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(AutomaticaContext dbContext, ICategoryCache categoryCache, ICategoryGroupCache categoryGroupCache) : base(dbContext)
+        public CategoryController(AutomaticaContext dbContext, ICategoryCache categoryCache, ICategoryGroupCache categoryGroupCache, ILogger<CategoryController> logger) : base(dbContext)
         {
             _categoryCache = categoryCache;
             _categoryGroupCache = categoryGroupCache;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -75,7 +77,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             catch (Exception e)
             {
-                SystemLogger.Instance.LogError(e, "Could not save data");
+                _logger.LogError(e, "Could not save data");
                 transaction.Rollback();
                 throw;
             }

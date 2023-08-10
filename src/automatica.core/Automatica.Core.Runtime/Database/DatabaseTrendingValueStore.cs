@@ -29,7 +29,7 @@ namespace Automatica.Core.Runtime.Database
             }
             catch (Exception e)
             {
-
+                _logger.LogError(e, $"Could not save value...");
             }
         }
 

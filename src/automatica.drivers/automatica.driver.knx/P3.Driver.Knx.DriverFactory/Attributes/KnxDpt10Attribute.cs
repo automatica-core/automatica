@@ -11,7 +11,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt10Attribute : KnxGroupAddress
     {
-        private TimeSpan? _value;
+        private TimeOnly? _value;
         private readonly object _lock = new object();
 
         public KnxDpt10Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
@@ -22,7 +22,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             if (value is Dpt10Value dpt10Value)
             {
-                var timeOfDay = new TimeSpan(dpt10Value.TimeOfDay.Hours, dpt10Value.TimeOfDay.Minutes, dpt10Value.TimeOfDay.Seconds);
+                var timeOfDay = new TimeOnly(dpt10Value.TimeOfDay.Hour, dpt10Value.TimeOfDay.Minute, dpt10Value.TimeOfDay.Second);
                 var ret = !_value.HasValue || timeOfDay != _value.Value;
 
                 _value = timeOfDay;
@@ -47,7 +47,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 {
                     case DateTime dt:
                     {
-                        var timeOfDay = new TimeSpan(dt.TimeOfDay.Hours, dt.TimeOfDay.Minutes, dt.TimeOfDay.Seconds);
+                        var timeOfDay = new TimeOnly(dt.TimeOfDay.Hours, dt.TimeOfDay.Minutes, dt.TimeOfDay.Seconds);
 
                         if (timeOfDay != _value)
                         {
@@ -60,7 +60,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                     }
                     case TimeSpan ts:
                     {
-                        var timeOfDay = new TimeSpan(ts.Hours, ts.Minutes, ts.Seconds);
+                        var timeOfDay = new TimeOnly(ts.Hours, ts.Minutes, ts.Seconds);
 
                         if (timeOfDay != _value)
                         {

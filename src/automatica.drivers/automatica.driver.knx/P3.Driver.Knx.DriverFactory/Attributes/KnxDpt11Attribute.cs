@@ -10,7 +10,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt11Attribute : KnxGroupAddress
     {
-        private DateTime? _value;
+        private DateOnly? _value;
 
         public KnxDpt11Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
         {
@@ -18,11 +18,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override bool ValueRead(object value)
         {
-            if (value is DateTime dpt10Value)
+            if (value is DateOnly dpt11Value)
             {
-                var ret = !_value.HasValue || dpt10Value != _value.Value;
+                var ret = !_value.HasValue || dpt11Value != _value.Value;
 
-                _value = dpt10Value;
+                _value = dpt11Value;
 
                 if (ret)
                 {
@@ -37,16 +37,17 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         public override Task WriteValue(IDispatchable source, object value)
         {
-            DateTime? dateTime = null;
+            DateOnly? dateTime = null;
+            var lastValue = _value;
 
-            if (value is DateTime dt)
+            if (value is DateOnly dt)
             {
                 DispatchValue(dt);
                 _value = dt;
                 dateTime = dt;
             }
 
-            if (dateTime != null)
+            if (dateTime != null && lastValue.HasValue && lastValue != dateTime)
             {
                 Driver.Write(GroupAddress, ConvertToBus(dateTime));
             }

@@ -1,10 +1,14 @@
 <form class="create-account-form" (submit)="onSubmit($event)">
   <dx-form [formData]="formData" [disabled]="loading">
 
-    <dxi-item dataField="email" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Email', mode: 'email' }">
+    <dxi-item>
+      <img class="center_img" src="/assets/images/Logo1.png" />
+    </dxi-item>
+
+    <dxi-item dataField="username" editorType="dxTextBox"
+      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Username' }">
       <dxi-validation-rule type="required" message="Email is required"></dxi-validation-rule>
-      <dxi-validation-rule type="email" message="Email is invalid"></dxi-validation-rule>
+      <!-- <dxi-validation-rule type="email" message="Email is invalid"></dxi-validation-rule> -->
       <dxo-label [visible]="false"></dxo-label>
     </dxi-item>
 
@@ -22,22 +26,9 @@
       <dxo-label [visible]="false"></dxo-label>
     </dxi-item>
 
-    <dxi-item>
-      <div class='policy-info'>
-        By creating an account, you agree to the <a routerLink="#">Terms of Service</a> and <a routerLink="#">Privacy
-          Policy</a>
-      </div>
-    </dxi-item>
-
     <dxi-item itemType="button">
       <dxo-button-options width="100%" type="default" [useSubmitBehavior]="true" [template]="'createAccountTemplate'">
       </dxo-button-options>
-    </dxi-item>
-
-    <dxi-item>
-      <div class="login-link">
-        Have an account? <a routerLink="/login">Sign In</a>
-      </div>
     </dxi-item>
 
     <ng-container *dxTemplate="let item of 'createAccountTemplate'">
@@ -47,7 +38,7 @@
             <dx-load-indicator width="24px" height="24px" [visible]="true"></dx-load-indicator>
           </ng-container>
   
-          <ng-template #notLoading>Create a new account</ng-template>
+          <ng-template #notLoading>Setup</ng-template>
         </span>
       </div>
     </ng-container>

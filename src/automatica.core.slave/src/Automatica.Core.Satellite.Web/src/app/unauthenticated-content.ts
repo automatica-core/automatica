@@ -25,9 +25,9 @@ export class UnauthenticatedContentComponent {
   get title() {
     const path = this.router.url.split('/')[1];
     switch (path) {
-      case 'login-form': return 'Sign In';
+      case 'login-form': return 'Automatica.Satellite Login';
       case 'reset-password': return 'Reset Password';
-      case 'create-account': return 'Sign Up';
+      case 'create-account': return 'Setup Automatica.Satellite';
       case 'change-password': return 'Change Password';
       default: return '';
     }
