@@ -19,7 +19,7 @@
             <as-split-area [size]="70">
 
                 <dx-tab-panel [dataSource]="logFacilitiesArray" [(selectedItem)]="selectedFacility" [loop]="false"
-                    [animationEnabled]="false" [swipeEnabled]="false" style="height: 100%">
+                    [animationEnabled]="false" [swipeEnabled]="false" [showNavButtons]="true" style="height: 100%">
                     <div *dxTemplate="let facility of 'title'">
                         <span>{{facility.name}}</span>
                     </div>
