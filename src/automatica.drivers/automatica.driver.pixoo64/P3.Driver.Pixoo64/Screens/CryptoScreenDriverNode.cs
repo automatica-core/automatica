@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -22,7 +23,7 @@ namespace P3.Driver.Pixoo64.Screens
         protected override async Task SetScreenValue(object value, NodeInstance node, CancellationToken token = default)
         {
             await Task.CompletedTask;
-            var dValue = Convert.ToDouble(value);
+            var dValue = Convert.ToDouble(value, CultureInfo.InvariantCulture);
             switch (node.This2NodeTemplateNavigation.Key)
             {
                 case "crypto-bitcoin":

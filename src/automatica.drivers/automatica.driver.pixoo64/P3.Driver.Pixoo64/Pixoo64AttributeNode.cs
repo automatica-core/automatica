@@ -21,7 +21,7 @@ namespace P3.Driver.Pixoo64
             try
             {
                 await _screen.SetValue(value.Value, DriverContext.NodeInstance, token);
-                DispatchValue(value);
+                DispatchValue(value.Value);
             }
             catch (Exception e)
             {
