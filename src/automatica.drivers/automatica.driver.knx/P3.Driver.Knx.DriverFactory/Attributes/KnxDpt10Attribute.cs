@@ -69,6 +69,20 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                         break;
                     }
+                    case TimeOnly ts:
+                    {
+                        var timeOfDay = new TimeSpan(ts.Hour, ts.Minute, ts.Second);
+
+                        if (timeOfDay != _value)
+                        {
+
+                            dpt10Value = new KnxTime(timeOfDay, 0);
+                            DispatchValue(timeOfDay);
+                            _value = timeOfDay;
+                        }
+
+                        break;
+                    }
                 }
 
 
