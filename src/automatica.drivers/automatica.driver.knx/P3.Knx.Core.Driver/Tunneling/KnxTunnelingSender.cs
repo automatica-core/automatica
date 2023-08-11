@@ -18,7 +18,7 @@ namespace P3.Knx.Core.Driver.Tunneling
         {
             var byteFrame = frame.ToFrame();
 
-            KnxHelper.Logger.LogTrace($"Writing {frame}");
+            KnxHelper.Logger.LogTrace($"Writing {frame} {frame.GetType().Name}");
             KnxHelper.Logger.LogHexOut(byteFrame);
 
             try
