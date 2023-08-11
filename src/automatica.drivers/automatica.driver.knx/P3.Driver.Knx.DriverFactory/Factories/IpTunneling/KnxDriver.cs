@@ -225,6 +225,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public Task<bool> Read(string address)
         {
+            DriverContext.Logger.LogDebug($"Read datagram on GA {address}");
             _tunneling.Read(address);
             return Task.FromResult(true);
         }
