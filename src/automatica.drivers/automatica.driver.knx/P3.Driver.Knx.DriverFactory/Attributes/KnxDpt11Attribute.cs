@@ -50,25 +50,5 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             return null;
         }
-
-        public override Task WriteValue(IDispatchable source, object value)
-        {
-            DateTime? dateTime = null;
-            var lastValue = _value;
-
-            if (value is DateTime dt)
-            {
-                DispatchValue(dt);
-                _value = dt;
-                dateTime = dt;
-            }
-
-            if (dateTime != null && lastValue.HasValue && lastValue != dateTime)
-            {
-                Driver.Write(this, GroupAddress, ConvertToBus(dateTime));
-            }
-
-            return Task.CompletedTask;
-        }
     }
 }

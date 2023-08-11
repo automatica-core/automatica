@@ -176,7 +176,11 @@
             [EnumName("KNX.DPT13.NAME", "13")]
             Dpt13 = 13,
             [EnumName("KNX.DPT14.NAME", "14")]
-            Dpt14 = 14
+            Dpt14 = 14,
+            [EnumName("KNX.DPT15.NAME", "15")]
+            Dpt15 = 15,
+            [EnumName("KNX.DPT16.NAME", "16")]
+            Dpt16 = 16
 
         }
         public class KnxHelper

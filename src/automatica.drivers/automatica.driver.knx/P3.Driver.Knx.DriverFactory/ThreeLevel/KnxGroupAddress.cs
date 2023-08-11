@@ -21,7 +21,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         }
 
-        public override async Task<bool> Init(CancellationToken token = default)
+        public sealed override async Task<bool> Init(CancellationToken token = default)
         {
             await base.Init(token);
 
@@ -47,7 +47,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
         {
             var dptValue = ConvertToDptValue(value.Value);
 
@@ -91,7 +91,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        public sealed override async Task<bool> Read(CancellationToken token = default)
         {
             if (DriverContext.NodeInstance.IsReadable)
             {
@@ -110,21 +110,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         }
 
         protected abstract object ConvertToDptValue(object value);
-
-        protected GroupValue ConvertToBus(object value)
-        {
-            try
-            {
-                var dpt = DptFactory.Default.Get(DptType, -1);
-                var decodedValue = dpt.ToGroupValue(value);
-                return decodedValue;
-            }
-            catch (Exception e)
-            { 
-                DriverContext.Logger.LogError(e,$"Could not convert {value} to bus type");
-                throw;
-            }
-        }
 
         private void TelegramReceivedCallback(object data)
         {

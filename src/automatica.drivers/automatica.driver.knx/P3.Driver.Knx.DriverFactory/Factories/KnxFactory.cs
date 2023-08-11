@@ -12,7 +12,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(2, 0, 0, 0);
+        public override Version DriverVersion => new Version(2, 0, 0, 1);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -362,11 +362,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt16Guid, "KNX.DPT16.NAME", "KNX.DPT16.DESCRIPTION", "knx-dpt16",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.String, int.MaxValue, false);
-           
-            AddAddressProperty(dpt16Guid, factory);
+            
+            InitDptType((int)DptType.Dpt16, dpt16Guid, factory);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt16Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt16Guid,
+            factory.CreatePropertyTemplate(GenerateNewGuid(dpt16Guid, 2), "KNX.PROPERTIES.DPT-SUB.NAME",
+                "KNX.PROPERTIES.DPT-SUB.DESCRIPTION", "knx-dpt-sub", PropertyTemplateType.Enum, dpt16Guid,
                 "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt16Type)), (int)Dpt16Type.Dpt16_000, 0, 0);
         }
 
