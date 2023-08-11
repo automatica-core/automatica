@@ -29,9 +29,10 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             if (boolValue != Value)
             {
-                _parent.WriteToBus();
+                _parent.WriteValue(source, value);
             }
 
+            DispatchValue(boolValue);
             Value = boolValue;
 
             return Task.CompletedTask;
@@ -50,19 +51,16 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
-        public override int SizeInBits => 1;
-
-        internal void WriteToBus()
+        protected override object ConvertToDptValue(object value)
         {
             var controlAttribute = _children.SingleOrDefault(a => a.Index == 1);
             var valueAttribute = _children.SingleOrDefault(a => a.Index == 0);
 
             var controlValue = controlAttribute?.Value ?? false;
             var valueValue = valueAttribute?.Value ?? false;
-
+            
             var dpt2Value = new Knx1BitControlled(controlValue, valueValue);
-
-            Driver.Write(this, GroupAddress, ConvertToBus(dpt2Value));
+            return dpt2Value;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

@@ -25,17 +25,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             return ret;
         }
-
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override object ConvertToDptValue(object value)
         {
-            var newValue = Convert.ToDouble(value);
-
-            DispatchValue(newValue);
+            var newValue = Convert.ToDouble(value); 
             _value = newValue;
-
-            Driver.Write(this, GroupAddress, ConvertToBus(newValue));
-
-            return Task.CompletedTask;
+            return value;
         }
     }
 }

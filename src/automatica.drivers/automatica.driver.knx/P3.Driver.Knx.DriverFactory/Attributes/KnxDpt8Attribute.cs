@@ -9,6 +9,10 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         public KnxDpt8Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
+        protected override object ConvertToDptValue(object value)
+        {
+            return value;
+        }
 
     }
 }

@@ -35,6 +35,22 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             return false;
         }
 
+        protected override object ConvertToDptValue(object value)
+        {
+            if (value is DateTime vlDt)
+            {
+                DispatchValue(vlDt);
+                return new KnxDate(vlDt);
+            }
+            else if (value is DateOnly dtOnly)
+            {
+                DispatchValue(dtOnly);
+                return new KnxDate(new DateTime(dtOnly.Year, dtOnly.Month, dtOnly.Day));
+            }
+
+            return null;
+        }
+
         public override Task WriteValue(IDispatchable source, object value)
         {
             DateTime? dateTime = null;

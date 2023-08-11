@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Knx.Falcon;
 using Knx.Falcon.ApplicationData.DatapointTypes;
@@ -13,8 +14,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
     {
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
-
-        public virtual int SizeInBits { get; } = 8;
 
 
         protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
@@ -46,6 +45,23 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
             return true;
+        }
+
+        public override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        {
+            var dptValue = ConvertToDptValue(value.Value);
+
+            if (dptValue == null)
+            {
+                DriverContext.Logger.LogWarning($"Could not convert value correctly....ignore write!");
+                return Task.CompletedTask;
+            }
+            var dpt = DptFactory.Default.Get(DptType, -1);
+            var decodedValue = dpt.ToGroupValue(dptValue);
+
+            Driver.Write(this, GroupAddress, decodedValue);
+
+            return Task.CompletedTask;
         }
 
         protected void ConvertFromBus(GroupEventArgs datagram)
@@ -92,6 +108,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
              //   Driver.Read(this);
             }
         }
+
+        protected abstract object ConvertToDptValue(object value);
 
         protected GroupValue ConvertToBus(object value)
         {

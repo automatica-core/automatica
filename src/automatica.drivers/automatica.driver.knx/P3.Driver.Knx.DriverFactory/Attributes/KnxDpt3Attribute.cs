@@ -9,6 +9,10 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         public KnxDpt3Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
-        public override int SizeInBits => 3;
+
+        protected override object ConvertToDptValue(object value)
+        {
+            return value;
+        }
     }
 }

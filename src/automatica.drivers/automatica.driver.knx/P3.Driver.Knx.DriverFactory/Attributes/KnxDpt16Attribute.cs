@@ -14,6 +14,16 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
+        protected override object ConvertToDptValue(object value)
+        {
+            if (value is string dpt16Value)
+            {
+                return dpt16Value;
+            }
+
+            return null;
+        }
+
         protected override bool ValueRead(object value)
         {
             if (value is string dpt16Value)
@@ -24,25 +34,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             }
 
             return false;
-        }
-
-        public override Task WriteValue(IDispatchable source, object value)
-        {
-            string writeValue = null;
-
-            if (value is string str)
-            {
-                DispatchValue(str);
-                _value = str;
-                writeValue = str;
-            }
-
-            if (writeValue != null)
-            {
-                Driver.Write(this, GroupAddress, ConvertToBus(writeValue));
-            }
-
-            return Task.CompletedTask;
         }
     }
 }

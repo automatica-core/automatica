@@ -14,8 +14,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         public KnxDpt5Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
-
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToInt32(value);
 
@@ -23,11 +22,10 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             {
                 DispatchValue(newValue);
                 _value = newValue;
-
-                Driver.Write(this, GroupAddress, ConvertToBus(newValue));
+                return _value;
             }
 
-            return Task.CompletedTask;
+            return null;
         }
     }
 }

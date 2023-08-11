@@ -30,26 +30,19 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 return false;
 
             }
+
             return false;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override object ConvertToDptValue(object value)
         {
-            int? intValue = null;
-
-            if (value is int dt)
+            if (value is int vlInt)
             {
-                DispatchValue(dt);
-                _value = dt;
-                intValue = dt;
+                DispatchValue(vlInt);
+                return vlInt;
             }
 
-            if (intValue != null)
-            {
-                Driver.Write(this, GroupAddress, ConvertToBus(intValue));
-            }
-
-            return Task.CompletedTask;
+            return null;
         }
     }
 }
