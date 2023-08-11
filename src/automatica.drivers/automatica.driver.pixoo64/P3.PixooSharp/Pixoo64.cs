@@ -239,21 +239,20 @@ namespace P3.PixooSharp
             {
                 Console.WriteLine(jsonPayload);
             }
-            using (var httpClient = new HttpClient())
+
+            using var httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(1);
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(_url, content);
+            if (response.IsSuccessStatusCode)
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(1);
-                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync(_url, content);
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = response.Content.ReadAsStringAsync();
-                    _pushCount++;
-                }
-                else
-                {
-                    // Something went wrong
-                    Console.WriteLine("error!");
-                }
+                var result = response.Content.ReadAsStringAsync();
+                _pushCount++;
+            }
+            else
+            {
+                // Something went wrong
+                Console.WriteLine("error!");
             }
         }
     }
