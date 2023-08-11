@@ -51,6 +51,22 @@
       "ONLY_USE_TUNNEL": {
         "NAME": "Nur Tunneln",
         "DESCRIPTION": ""
+      },
+      "AUTHPW": {
+        "NAME": "Authentifizierungscode",
+        "DESCRIPTION": ""
+      },
+      "USERPW": {
+        "NAME": "Benutzerpasswort",
+        "DESCRIPTION": ""
+      },
+      "IA_ADDRESS": {
+        "NAME": "Individuele Adresse",
+        "DESCRIPTION": ""
+      },
+      "USER_ID": {
+        "NAME": "Benutzer ID",
+        "DESCRIPTION": ""
       }
     },
     "DPT1": {
