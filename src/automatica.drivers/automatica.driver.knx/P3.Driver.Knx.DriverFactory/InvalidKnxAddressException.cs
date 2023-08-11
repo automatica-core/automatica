@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace P3.Knx.Core.Driver.Exceptions
+namespace P3.Driver.Knx.DriverFactory
 {
     /// <summary>
     /// Exception thrown when an invalid KNX address is used to perform an action or status query
@@ -26,7 +30,7 @@ namespace P3.Knx.Core.Driver.Exceptions
         /// </returns>
         public override string ToString()
         {
-            return string.Format("InvalidKnxAddressException: Address {0} is invalid.", _address);
+            return $"InvalidKnxAddressException: Address {_address} is invalid.";
         }
     }
 }

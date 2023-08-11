@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
-using Knx.Falcon;
-using Microsoft.Extensions.Logging;
+using Knx.Falcon.ApplicationData;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver;
-using P3.Knx.Core.Driver.DPT;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
@@ -25,17 +21,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             _parent = parent;
             Index = index;
-        }
-
-        public void DispatchDpt2Value(Dpt2Value value)
-        {
-            if (Index == 0)
-            {
-                DispatchValue(value.Value);
-                Value = value.Value;
-            }
-            DispatchValue(value.Control);
-            Value = value.Control;
         }
 
         public override Task WriteValue(IDispatchable source, object value)
@@ -61,14 +46,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     public class KnxDpt2Attribute : KnxGroupAddress
     {
         private readonly List<KnxDpt2ValueAttribute> _children = new List<KnxDpt2ValueAttribute>();
-        public KnxDpt2Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxDpt2Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
-        protected override string GetDptString(int dpt)
-        {
-            return PropertyHelper.GetNameAttributeFromEnumValue((DptType)dpt).EnumValue;
-        }
+        public override int SizeInBits => 1;
 
         internal void WriteToBus()
         {
@@ -78,28 +60,9 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             var controlValue = controlAttribute?.Value ?? false;
             var valueValue = valueAttribute?.Value ?? false;
 
-            var dpt2Value = new Dpt2Value(controlValue, valueValue);
+            var dpt2Value = new Knx1BitControlled(controlValue, valueValue);
 
-            Driver.Write(GroupAddress, ConvertToBus(dpt2Value));
-        }
-
-        protected override void ConvertFromBus(GroupEventArgs datagram)
-        {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Value.Value);
-
-            if (value is Dpt2Value dpt2Value)
-            {
-                foreach (var child in _children)
-                {
-                    child.DispatchDpt2Value(dpt2Value);
-                }
-            }
-            else
-            {
-                KnxHelper.Logger.LogError("Received value has invalud type");
-            }
-
-            DispatchValue(value);
+            Driver.Write(this, GroupAddress, ConvertToBus(dpt2Value));
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

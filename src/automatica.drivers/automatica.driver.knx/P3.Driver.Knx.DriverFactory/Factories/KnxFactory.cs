@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using P3.Knx.Core.Driver;
+using P3.Driver.Knx.DriverFactory.P3.Knx.Core.Driver;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 

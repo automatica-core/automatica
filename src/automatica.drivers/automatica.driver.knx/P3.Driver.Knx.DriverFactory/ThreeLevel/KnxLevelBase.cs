@@ -1,20 +1,20 @@
 ﻿using Automatica.Core.Driver;
 using System.Collections.Generic;
-using P3.Knx.Core.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
     public abstract class KnxLevelBase : DriverBase
     {
-        public IKnxDriver Driver { get; }
+        public KnxDriver Driver { get; }
         public int Address { get; private set; }
 
         private readonly IList<KnxLevelBase> _children;
 
 
-        protected KnxLevelBase(IDriverContext driverContext, IKnxDriver driver) : base(driverContext)
+        protected KnxLevelBase(IDriverContext driverContext, KnxDriver driver) : base(driverContext)
         {
             Driver = driver;
             _children = new List<KnxLevelBase>();

@@ -8,17 +8,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 {
-    public class KnxBaosDriver : DriverBase, IKnxDriver, IDatapointInd
+    public class KnxBaosDriver : KnxDriver, IKnxDriver, IDatapointInd
     {
         private readonly BaosDriver _driver;
 
 
         private readonly Dictionary<string, List<Action<object>>> _callbackMap = new Dictionary<string, List<Action<object>>>();
 
-        public KnxBaosDriver(IDriverContext driverContext) : base(driverContext)
+        public KnxBaosDriver(IDriverContext driverContext) : base(driverContext, false, KnxLevel.TwoLevel) //move new layer in between, just a quick fix!
         {
             _driver = new BaosDriver("/dev/ttyAMA0", DriverContext.Logger, this);
         }

@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
@@ -12,7 +10,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     {
         private string _value;
 
-        public KnxDpt16Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxDpt16Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
@@ -41,17 +39,10 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             if (writeValue != null)
             {
-                Driver.Write(GroupAddress, ConvertToBus(writeValue));
+                Driver.Write(this, GroupAddress, ConvertToBus(writeValue));
             }
 
             return Task.CompletedTask;
         }
-
-        protected override string GetDptString(int dpt)
-        {
-            return PropertyHelper.GetNameAttributeFromEnumValue((Dpt16Type)dpt).EnumValue;
-        }
-
-        
     }
 }

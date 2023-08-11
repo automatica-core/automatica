@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Microsoft.Extensions.Logging;
-using P3.Knx.Core.Driver;
 
 namespace P3.Knx.Core.Console
 {
@@ -30,9 +29,7 @@ namespace P3.Knx.Core.Console
         {
             System.Console.WriteLine("Hello World!");
 
-            KnxHelper.Logger = new ConsoleLogger();//NullLogger.Instance;
-
-            while (true)
+           while (true)
             {
                 //connection.Stop();
 

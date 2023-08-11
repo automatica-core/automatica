@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
@@ -13,7 +11,9 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     {
         private bool? _value;
 
-        public KnxDpt1Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public override int SizeInBits => 1;
+
+        public KnxDpt1Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
@@ -26,7 +26,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 DispatchValue(newValue);
                 _value = newValue;
 
-                Driver.Write(GroupAddress, ConvertToBus(newValue));
+                Driver.Write(this, GroupAddress, ConvertToBus(newValue));
                 //Tunneling.Write(GroupAddress, ConvertToBus(newValue));
             }
 
@@ -37,11 +37,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         protected override bool ValueRead(object value)
         {
             return true; //always dispatch dpt1 values...
-        }
-
-        protected override string GetDptString(int dpt)
-        {
-            return PropertyHelper.GetNameAttributeFromEnumValue((DptType)dpt).EnumValue;
         }
     }
 }

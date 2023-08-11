@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Knx.Falcon;
+using Knx.Falcon.ApplicationData.DatapointTypes;
 using Microsoft.Extensions.Logging;
-using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver.DPT;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
@@ -13,8 +13,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
     {
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
-        public string DptTypeString { get; private set; }
-        protected KnxGroupAddress(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+
+        public virtual int SizeInBits { get; } = 8;
+
+
+        protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
 
         }
@@ -37,19 +40,18 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             DptType = GetPropertyValueInt("knx-dpt");
 
-            DptTypeString = GetDptString(DptType);
+            DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
-            DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType} - DptTypeString {DptTypeString}");
+
 
             Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
             return true;
         }
 
-        protected abstract string GetDptString(int dpt);
-
-        protected virtual void ConvertFromBus(GroupEventArgs datagram)
+        protected void ConvertFromBus(GroupEventArgs datagram)
         {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Value.Value);
+            var dpt = DptFactory.Default.Get(DptType, -1);
+            var value = dpt.ToValue(datagram.Value);
 
             if (ValueRead(value))
             {
@@ -57,9 +59,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
-        protected virtual void ConvertFromBus(ReadOnlyMemory<byte> data)
+        protected void ConvertFromBus(GroupValue groupValue)
         {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, data);
+            var dpt = DptFactory.Default.Get(DptType, -1);
+            var value= dpt.ToValue(groupValue);
 
             if (ValueRead(value))
             {
@@ -90,18 +93,19 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
-        protected virtual byte[] ConvertToBus(object value)
+        protected GroupValue ConvertToBus(object value)
         {
             try
             {
-                return DptTranslator.Instance.ToDataPoint(DptTypeString, value);
+                var dpt = DptFactory.Default.Get(DptType, -1);
+                var decodedValue = dpt.ToGroupValue(value);
+                return decodedValue;
             }
             catch (Exception e)
             { 
                 DriverContext.Logger.LogError(e,$"Could not convert {value} to bus type");
+                throw;
             }
-
-            return new byte[0];
         }
 
         private void TelegramReceivedCallback(object data)
@@ -109,10 +113,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             if (data is GroupEventArgs knxDatagram)
             {
                 ConvertFromBus(knxDatagram);
-            }
-            else if(data is ReadOnlyMemory<byte> memory)
-            {
-                ConvertFromBus(memory);
             }
         }
 

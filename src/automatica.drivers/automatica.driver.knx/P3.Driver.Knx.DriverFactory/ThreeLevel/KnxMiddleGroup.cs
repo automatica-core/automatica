@@ -1,16 +1,16 @@
 ﻿using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.Attributes;
-using P3.Knx.Core.Abstractions;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
     public class KnxMiddleGroup : KnxLevelBase
     {
-        public KnxMiddleGroup(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxMiddleGroup(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
-        internal static KnxLevelBase CreateDriverNode(string key, IDriverContext ctx, IKnxDriver driver)
+        internal static KnxLevelBase CreateDriverNode(string key, IDriverContext ctx, KnxDriver driver)
         {
             KnxLevelBase attribute = null;
             switch (key)

@@ -8,10 +8,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />
+    <PackageReference Include="Knx.Falcon.Sdk" Version="6.0.4942" />
     <PackageReference Include="P3.Elliptic.Curve25519" Version="3.0.0" />
     <PackageReference Include="Automatica.Core.Base" Version="7.4.0.1187" />
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.4.0.1187" />

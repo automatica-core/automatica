@@ -8,8 +8,6 @@ using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Driver;
-using P3.Knx.Core.Abstractions;
 using Automatica.Core.EF.Exceptions;
 using Knx.Falcon;
 using Knx.Falcon.Sdk;
@@ -23,7 +21,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         ThreeLevel,
         TwoLevel
     }
-    public class KnxDriver : DriverBase, IKnxDriver
+    public class KnxDriver : DriverBase
     {
         private readonly bool _secureDriver;
         private readonly KnxLevel _level;
@@ -45,7 +43,6 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             _secureDriver = secureDriver;
             _level = level;
-            KnxHelper.Logger = driverContext.Logger;
         }
 
         protected override bool CreateTelegramMonitor()
@@ -312,14 +309,20 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             DriverContext.Logger.LogDebug($"Read datagram on GA {address}");
 
-            return _tunneling.RequestGroupValueAsync(GroupAddress.Parse(address));
+            lock (_lock)
+            {
+                return _tunneling.RequestGroupValueAsync(GroupAddress.Parse(address));
+            }
         }
 
-        public Task<bool> Write(string address, ReadOnlyMemory<byte> data)
+        public Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue)
         {
             DriverContext.Logger.LogDebug($"Write datagram on GA {address}");
 
-            return _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), new GroupValue(data.ToArray()));
+            lock (_lock)
+            {
+                return _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue);
+            }
         }
 
         public Task Connected()
