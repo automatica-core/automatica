@@ -163,9 +163,17 @@
             Dpt3 = 3,
             [EnumName("KNX.DPT4.NAME", "4")]
             Dpt4 = 4,
+            [EnumName("KNX.DPT5.NAME", "5")]
+            Dpt5 = 5,
 
             [EnumName("KNX.DPT6.020.NAME", "6.020")]
             Dpt6_020 = 6,
+            [EnumName("KNX.DPT7.NAME", "7")]
+            Dpt7 = 7,
+            [EnumName("KNX.DPT8.NAME", "8")]
+            Dpt8 = 8,
+            [EnumName("KNX.DPT9.NAME", "9")]
+            Dpt9 = 9,
 
             [EnumName("KNX.DPT10.NAME", "10.001")]
             Dpt10 = 10,

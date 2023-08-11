@@ -15,6 +15,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
 
+        public abstract int ImplementationDptType { get; }
+
 
         protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
@@ -37,7 +39,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 GroupAddress = $"{Address}";
             }
 
-            DptType = GetPropertyValueInt("knx-dpt");
+            var dptValueProp = GetProperty("knx-dpt");
+            DptType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
@@ -56,7 +59,13 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 DriverContext.Logger.LogWarning($"Could not convert value correctly....ignore write!");
                 return Task.CompletedTask;
             }
-            var dpt = DptFactory.Default.Get(DptType, -1);
+
+            if (DptType != ImplementationDptType)
+            {
+                DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+            }
+
+            var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
             var decodedValue = dpt.ToGroupValue(dptValue);
 
             Driver.Write(this, GroupAddress, decodedValue);
@@ -66,7 +75,12 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         protected void ConvertFromBus(GroupEventArgs datagram)
         {
-            var dpt = DptFactory.Default.Get(DptType, -1);
+            if (DptType != ImplementationDptType)
+            {
+                DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+            }
+
+            var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
             var value = dpt.ToValue(datagram.Value);
 
             if (ValueRead(value))

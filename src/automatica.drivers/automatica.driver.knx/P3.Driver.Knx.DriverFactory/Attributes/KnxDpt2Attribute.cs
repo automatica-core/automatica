@@ -50,6 +50,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         public KnxDpt2Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt2;
 
         protected override object ConvertToDptValue(object value)
         {

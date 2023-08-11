@@ -6,6 +6,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt8Attribute : KnxGroupAddress
     {
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt8;
         public KnxDpt8Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }

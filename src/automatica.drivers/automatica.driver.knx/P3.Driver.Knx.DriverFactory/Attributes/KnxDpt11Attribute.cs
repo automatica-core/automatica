@@ -12,6 +12,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     {
         private DateTime? _value;
 
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt11;
         public KnxDpt11Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }

@@ -15,6 +15,8 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt10;
+
         protected override bool ValueRead(object value)
         {
             if (value is KnxTime dpt10Value)

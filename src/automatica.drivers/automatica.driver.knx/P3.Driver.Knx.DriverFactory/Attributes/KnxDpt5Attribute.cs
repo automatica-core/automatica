@@ -9,6 +9,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     {
         private int _value;
 
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt5;
         public KnxDpt5Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
