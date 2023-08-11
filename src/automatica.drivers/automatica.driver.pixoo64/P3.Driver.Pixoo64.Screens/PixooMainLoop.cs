@@ -23,12 +23,11 @@ namespace P3.Driver.Pixoo64.Screens
             _logger.LogInformation($"{GetHashCode()} Add Screen {screen.GetType().Name}...");
         }
 
-        public async Task Start()
+        public Task Start()
         {
             _isRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
-            await Task.CompletedTask;
-
+     
             _logger.LogInformation($"{GetHashCode()} Loop started...");
 
             _ = Task.Run(function: async () =>
@@ -48,7 +47,7 @@ namespace P3.Driver.Pixoo64.Screens
                             return;
                         }
 
-                        if (_screens.Count >= i)
+                        if (_screens.Count > i)
                         {
                             var screen = _screens[i];
                             screen.Start();
@@ -92,15 +91,16 @@ namespace P3.Driver.Pixoo64.Screens
 
 
             _logger.LogInformation($"{GetHashCode()} Loop exited...");
+            return Task.CompletedTask;
         }
 
-        public async Task Stop()
+        public Task Stop()
         {
             _screens.Clear();
             _logger.LogInformation($"{GetHashCode()} Stop loop...");
             _isRunning = false;
-            await Task.CompletedTask;
             _cancellationTokenSource.Cancel();
+            return Task.CompletedTask;
         }
     }
 }
