@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
-using Automatica.Core.Driver.Utility.Network;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Driver;
-using P3.Knx.Core.Driver.IpSecure;
-using P3.Knx.Core.Driver.Tunneling;
 
 namespace P3.Knx.Core.Console
 {
@@ -27,24 +22,7 @@ namespace P3.Knx.Core.Console
         }
     }
 
-    internal class KnxEvents : IKnxEvents
-    {
-        public Task Connected()
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task Disconnected()
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task OnDatagram(KnxDatagram datagram)
-        {
-            System.Console.WriteLine($"Datagram on {datagram.DestinationAddress}");
-            return Task.CompletedTask;
-        }
-    }
+   
 
     class Program
     {
@@ -54,17 +32,6 @@ namespace P3.Knx.Core.Console
 
             KnxHelper.Logger = new ConsoleLogger();//NullLogger.Instance;
 
-           // var connection = new KnxConnectionTunnelingSecure(new KnxEvents(), IPAddress.Parse("192.168.8.151"), 3671,
-             //   IPAddress.Parse(NetworkHelper.GetActiveIp()), "F,;A@B%w", "MWvpeP6?");
-            var connection = new KnxConnectionTunneling(new KnxEvents(), IPAddress.Parse("137.116.195.45"), 1026, IPAddress.Parse(NetworkHelper.GetActiveIp()));
-            connection.UseNat = true;
-
-            //connection.IpSecureErrorOccured += (sender, eventArgs) =>
-            //{
-            //    System.Console.WriteLine($"{eventArgs.ErrorType}: {eventArgs.Text}");
-            //};
-
-            connection.Start();
             while (true)
             {
                 //connection.Stop();

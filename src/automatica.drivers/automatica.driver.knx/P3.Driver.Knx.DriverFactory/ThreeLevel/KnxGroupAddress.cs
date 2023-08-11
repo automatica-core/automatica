@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Knx.Falcon;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver;
 using P3.Knx.Core.Driver.DPT;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
@@ -47,9 +47,9 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         protected abstract string GetDptString(int dpt);
 
-        protected virtual void ConvertFromBus(KnxDatagram datagram)
+        protected virtual void ConvertFromBus(GroupEventArgs datagram)
         {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Data);
+            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Value.Value);
 
             if (ValueRead(value))
             {
@@ -106,7 +106,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         private void TelegramReceivedCallback(object data)
         {
-            if (data is KnxDatagram knxDatagram)
+            if (data is GroupEventArgs knxDatagram)
             {
                 ConvertFromBus(knxDatagram);
             }

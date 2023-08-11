@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
+using Knx.Falcon;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
 using P3.Knx.Core.Abstractions;
@@ -82,9 +83,9 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             Driver.Write(GroupAddress, ConvertToBus(dpt2Value));
         }
 
-        protected override void ConvertFromBus(KnxDatagram datagram)
+        protected override void ConvertFromBus(GroupEventArgs datagram)
         {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Data);
+            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Value.Value);
 
             if (value is Dpt2Value dpt2Value)
             {

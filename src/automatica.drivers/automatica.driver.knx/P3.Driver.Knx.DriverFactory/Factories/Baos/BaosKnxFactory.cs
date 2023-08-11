@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Driver;
-using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using System;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.Baos

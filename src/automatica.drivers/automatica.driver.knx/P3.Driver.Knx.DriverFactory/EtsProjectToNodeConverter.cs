@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using P3.Driver.Knx.DriverFactory.Factories;
 using P3.Knx.Core.Ets;
-using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory
 {
