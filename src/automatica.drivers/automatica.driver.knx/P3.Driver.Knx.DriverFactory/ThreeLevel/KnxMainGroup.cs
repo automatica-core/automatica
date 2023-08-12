@@ -1,5 +1,8 @@
-﻿using Automatica.Core.Driver;
+﻿using Automatica.Core.Base.IO;
+using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
