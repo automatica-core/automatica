@@ -27,9 +27,9 @@ namespace P3.Driver.Pixoo64.Screens
             pixoo.DrawText(5, 5, Palette.Green, Title);
 
             if (Outside.HasValue)
-                pixoo.DrawText(5, 12, Palette.White, $"Out: {Outside}°C");
+                pixoo.DrawText(5, 12, Palette.White, $"Out: {Math.Round(Outside.Value)}°C");
             if (Inside.HasValue)
-                pixoo.DrawText(5, 22, Palette.White, $"In:  {Inside}°C");
+                pixoo.DrawText(5, 22, Palette.White, $"In:  {Math.Round(Inside.Value)}°C");
 
             pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
             pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
