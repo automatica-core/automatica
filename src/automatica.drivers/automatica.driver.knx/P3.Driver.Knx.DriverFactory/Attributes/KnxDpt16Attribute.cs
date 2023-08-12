@@ -16,6 +16,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             if (value is string dpt16Value)
             {
+                DispatchValue(dpt16Value);
                 return dpt16Value;
             }
 
