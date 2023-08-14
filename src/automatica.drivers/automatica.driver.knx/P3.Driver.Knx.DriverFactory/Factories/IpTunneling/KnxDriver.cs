@@ -13,6 +13,7 @@ using Knx.Falcon;
 using Knx.Falcon.Sdk;
 using Knx.Falcon.Configuration;
 using System.Security;
+using Automatica.Core.Base.Cryptography;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
@@ -155,7 +156,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             if (e.Value is { Value: not null })
             {
                 await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress,
-                    e.ToString(), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
+                    e.Value.Value.ToHex(true), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
             }
 
             if (e.EventType == GroupEventType.ValueRead)
