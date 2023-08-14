@@ -340,6 +340,10 @@ namespace Automatica.Core.Driver
         {
             return DriverContext.NodeInstance.GetProperty(propertyKey);
         }
+        protected object GetPropertyValue(string propertyKey, object defaultValue)
+        {
+            return DriverContext.NodeInstance.GetPropertyValue(propertyKey, defaultValue);
+        }
 
         protected double GetPropertyValueDouble(string property)
         {
@@ -357,6 +361,11 @@ namespace Automatica.Core.Driver
         protected int GetPropertyValueInt(string property)
         {
             return DriverContext.NodeInstance.GetPropertyValueInt(property);
+        }
+
+        protected bool? GetPropertyValueBool(string property)
+        {
+            return DriverContext.NodeInstance.GetPropertyValueBool(property);
         }
 
         public abstract IDriverNode CreateDriverNode(IDriverContext ctx);
