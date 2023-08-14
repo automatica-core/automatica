@@ -152,7 +152,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress} {e.EventType}");
 
-            await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress, e.ToString(), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
+            if (e.Value is { Value: not null })
+            {
+                await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress,
+                    e.ToString(), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
+            }
 
             if (e.EventType == GroupEventType.ValueRead)
             {
@@ -161,7 +165,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 if (_gaMap.TryGetValue(ga, out var groupAddress) && _lastGaValues.TryGetValue(ga, out var gaValue))
                 {
                     DriverContext.Logger.LogDebug($"Answer read request on GA {e.DestinationAddress}");
-                    await Write(groupAddress, ga, gaValue);
+
+                    await _tunneling.RespondGroupValueAsync(GroupAddress.Parse(ga), gaValue);
                 }
             }
             else

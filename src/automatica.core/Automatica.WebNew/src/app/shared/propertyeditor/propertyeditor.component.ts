@@ -34,6 +34,7 @@ import ArrayStore from "devextreme/data/array_store";
 import { NodeInstanceImportComponent } from "./node-instance-ets-import/node-instance-import.component";
 import { NodeInstanceImportSerivce } from "./node-instance-ets-import/node-instance-import.service";
 import { Router } from "@angular/router";
+import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props/virtual-generic-property-instance";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -548,6 +549,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     const prop = data.data as PropertyInstance;
 
     this.validate.emit(prop);
+
+    if(prop instanceof VirtualGenericPropertyInstance) {
+      if(!prop.updateOnChanges) {
+        return;
+      }
+    }
+
     this.appService.isLoading = true;
     try {
       if (this.item instanceof NodeInstance) {

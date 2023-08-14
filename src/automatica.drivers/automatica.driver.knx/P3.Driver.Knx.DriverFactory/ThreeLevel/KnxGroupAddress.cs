@@ -46,11 +46,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
-            var readableFromBusProperty = GetProperty("readable_from_bus");
+            var readableFromBusProperty = DriverContext.NodeInstance.GetPropertyValue("readable_from_bus", false);
 
-            if (readableFromBusProperty is { ValueBool: not null })
+            if (readableFromBusProperty is bool bValue)
             {
-                ReadableFromBus = readableFromBusProperty.ValueBool.Value;
+                ReadableFromBus = bValue;
             }
 
             Driver.AddAddressNotifier(GroupAddress, this, TelegramReceivedCallback);
