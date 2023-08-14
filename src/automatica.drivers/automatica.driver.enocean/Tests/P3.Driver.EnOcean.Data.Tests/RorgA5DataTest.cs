@@ -66,7 +66,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(72, values.First().Value.Value);
+            Assert.Equal(0, values.First().Value.Value);
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(142, values.First().Value.Value);
+            Assert.Equal(0, values.First().Value.Value);
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(0, values.First().Value.Value);
+            Assert.Equal(142, values.First().Value.Value);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.True((bool)values.First().Value.Value);
+            Assert.False((bool)values.First().Value.Value);
         }
 
         [Fact]
@@ -190,7 +190,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.False((bool)values.First().Value.Value);
+            Assert.True((bool)values.First().Value.Value);
         }
 
 
@@ -208,7 +208,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(40, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(26.7, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -225,7 +225,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(40, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(21.3, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -276,7 +276,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(36.9, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(28.4, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -329,7 +329,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(20, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(6.7, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -382,19 +382,33 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(26.5d, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(20.2d, Math.Round((double)values.First().Value.Value, 1));
+        }
+
+        [Fact]
+        public async Task TestA5_04_03_HUM()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("05194725", EnOceanRorgA5Data.DataFieldA5_04_03_3_HUM_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA5CF025209051947250101FFFFFFFF5C00C0");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.NotNull(values);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(81.2d, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
         public async Task TestVariableBitLengthData()
         {
-            //A5 B4 02 58 09 05 19 47 25 00
-
             var data = new byte[] { 0xB4, 0x02, 0x58, 0x09 };
             var driver = await CreateDriverForA5("05194725", EnOceanRorgA5Data.DataFieldA5_04_03_3_TMP_Guid);
 
             var node = driver.ChildrenT.First().ChildrenT.First().ChildrenT.First().ChildrenT.First().ChildrenT.First();
-            data = data.Reverse().ToArray();
             var value = node.GetValueGeneric(data);
 
         }

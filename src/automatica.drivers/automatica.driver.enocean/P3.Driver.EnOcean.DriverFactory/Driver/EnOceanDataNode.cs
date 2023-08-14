@@ -160,8 +160,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         public object GetValueGeneric(RadioErp1Packet telegram)
         {
-            var reversed = telegram.Data.ToArray().Reverse().ToArray();
-            return GetValueGeneric(new ReadOnlyMemory<byte>(reversed));
+            return GetValueGeneric(telegram.Data);
         }
 
         internal object GetVariableByteLengthValue(int index, byte b1, byte b2)
