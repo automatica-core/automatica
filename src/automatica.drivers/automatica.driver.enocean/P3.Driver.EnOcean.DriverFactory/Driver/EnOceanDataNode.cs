@@ -134,7 +134,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                     }
 
 
-                    var val = BitConverter.ToInt16(new [] {b1, (byte)(b2 & bitMask)}, 0);
+                    var val = b1 + ((b2 & bitMask) << 8);
                     return ScaleMinMax(val);
                 }
 
