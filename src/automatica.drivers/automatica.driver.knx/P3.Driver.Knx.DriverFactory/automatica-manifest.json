@@ -19,7 +19,6 @@
     "Output": "P3.Driver.Knx.DriverFactory.dll",
     "Resources": [],
     "Dependencies": [
-      "P3.Knx.Core.Driver.dll",
       "P3.Knx.Core.Ets.dll",
       "P3.Knx.Core.Baos.Driver.dll",
       "P3.Knx.Core.Abstractions.dll",

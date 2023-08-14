@@ -67,6 +67,10 @@
       "USER_ID": {
         "NAME": "Benutzer ID",
         "DESCRIPTION": ""
+      },
+      "IS_READABLE_FROM_BUS": {
+        "NAME": "Lesbar vom Bus",
+        "DESCRIPTION": ""
       }
     },
     "DPT1": {

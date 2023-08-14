@@ -15,6 +15,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
 
+        public bool ReadableFromBus { get; set; }
+
         public abstract int ImplementationDptType { get; }
 
 
@@ -44,9 +46,14 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
+            var readableFromBusProperty = GetProperty("readable_from_bus");
 
+            if (readableFromBusProperty is { ValueBool: not null })
+            {
+                ReadableFromBus = readableFromBusProperty.ValueBool.Value;
+            }
 
-            Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
+            Driver.AddAddressNotifier(GroupAddress, this, TelegramReceivedCallback);
             return true;
         }
 
@@ -72,6 +79,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             return Task.CompletedTask;
         }
+
 
         protected void ConvertFromBus(GroupEventArgs datagram)
         {
@@ -137,5 +145,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             return null;
         }
+
+       
     }
 }

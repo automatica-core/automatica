@@ -385,6 +385,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreatePropertyTemplate(GenerateNewGuid(node, 2), "KNX.PROPERTIES.DPT.NAME",
                 "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Integer, node,
                 "KNX.GROUP.DPT", false, true, "", type, 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(node, 5), "KNX.PROPERTIES.IS_READABLE_FROM_BUS.NAME", "KNX.PROPERTIES.IS_READABLE_FROM_BUS.DESCRIPTION","readable_from_bus", PropertyTemplateType.Bool,
+                node, "COMMON.CATEGORY.MISC", true, false, "", 0, 0, 0);
         }
         private void AddAddressProperty(Guid nodeTemplate, INodeTemplateFactory factory, int maxAddress)
         {
@@ -401,7 +404,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
         {
             byte[] gu = guid.ToByteArray();
 
-            gu[gu.Length - 1] = (byte)(Convert.ToInt32(gu[gu.Length - 1]) + c);
+            gu[^1] = (byte)(Convert.ToInt32(gu[^1]) + c);
 
             return new Guid(gu);
         }

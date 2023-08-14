@@ -33,7 +33,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private readonly object _lock = new object();
 
 
-        private readonly Dictionary<string, List<Action<GroupEventArgs>>> _callbackMap = new Dictionary<string, List<Action<GroupEventArgs>>>();
+        private readonly Dictionary<string, List<Action<GroupEventArgs>>> _callbackMap = new();
+        private readonly Dictionary<string, KnxGroupAddress> _gaMap = new();
+
+        private readonly Dictionary<string, GroupValue> _lastGaValues = new();
+
         private bool _tunnelingEnabled;
         private IPAddress _remoteIp;
         private int _remotePort;
@@ -144,36 +148,46 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return await base.Init(token);
         }
 
-        private void _tunneling_GroupMessageReceived(object sender, GroupEventArgs e)
+        private async void _tunneling_GroupMessageReceived(object sender, GroupEventArgs e)
         {
             DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress} {e.EventType}");
 
-            if (e.EventType == GroupEventType.ValueRead) //ignore other read requests for now!
-            {
-                return;
-            }
-            DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress}");
+            await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress, e.ToString(), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
 
-            TelegramMonitor.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress, e.ToString(), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
-
-            if (_callbackMap.TryGetValue(e.DestinationAddress, out var value))
+            if (e.EventType == GroupEventType.ValueRead)
             {
-                foreach (var ac in value)
+                var ga = e.DestinationAddress.ToString()!;
+                DriverContext.Logger.LogDebug($"Datagram on GA {e.EventType} {e.DestinationAddress}");
+                if (_gaMap.TryGetValue(ga, out var groupAddress) && _lastGaValues.TryGetValue(ga, out var gaValue))
                 {
-                    try
-                    {
-                        DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress} - dispatch to {ac}");
-                        ac.Invoke(e);
-                    }
-                    catch (Exception ex)
-                    {
-                        DriverContext.Logger.LogError($"{e.DestinationAddress}: {ex}");
-                    }
+                    DriverContext.Logger.LogDebug($"Answer read request on GA {e.DestinationAddress}");
+                    await Write(groupAddress, ga, gaValue);
                 }
             }
             else
             {
-                DriverContext.Logger.LogInformation($"Datagram on GA {e.DestinationAddress} - no callback registered");
+                if (_callbackMap.TryGetValue(e.DestinationAddress, out var value))
+                {
+                    foreach (var ac in value)
+                    {
+                        try
+                        {
+
+                            DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress} - dispatch to {ac}");
+                            ac.Invoke(e);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            DriverContext.Logger.LogError($"{e.DestinationAddress}: {ex}");
+                        }
+                    }
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation(
+                        $"Datagram on GA {e.DestinationAddress} - no callback registered");
+                }
             }
 
         }
@@ -300,9 +314,17 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return null;
         }
 
-        public void AddAddressNotifier(string address, Action<object> callback)
+        public void AddAddressNotifier(string address, KnxGroupAddress ga, Action<object> callback)
         {
             AddGroupAddress(address, callback);
+
+            if (_gaMap.ContainsKey(address))
+            {
+                DriverContext.Logger.LogWarning($"Double mapping detected {address} is used multiple times!");
+                return;
+            }
+
+            _gaMap.Add(address, ga);
         }
 
         public  Task<bool> Read(string address)
@@ -321,6 +343,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             lock (_lock)
             {
+                _lastGaValues[address] = groupValue;
                 return _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue);
             }
         }

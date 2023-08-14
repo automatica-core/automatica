@@ -30,7 +30,6 @@
   <ItemGroup>
     <ProjectReference Include="..\P3.Knx.Core.Abstractions\P3.Knx.Core.Abstractions.csproj" />
     <ProjectReference Include="..\P3.Knx.Core.Baos.Driver\P3.Knx.Core.Baos.Driver.csproj" />
-    <ProjectReference Include="..\P3.Knx.Core.Driver\P3.Knx.Core.Driver.csproj" />
     <ProjectReference Include="..\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj" />
   </ItemGroup>
 </Project>
