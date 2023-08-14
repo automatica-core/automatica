@@ -365,5 +365,24 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(1, values.Count);
             Assert.Equal(20.0, Math.Round((double)values.First().Value.Value, 1));
         }
+
+
+
+        [Fact]
+        public async Task TestA5_04_03_TMP()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("05194725", EnOceanRorgA5Data.DataFieldA5_04_03_3_TMP_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA5D401F609051947250001FFFFFFFF5C0052");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.NotNull(values);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(20.1d, Math.Round((double)values.First().Value.Value, 1));
+        }
     }
 }
