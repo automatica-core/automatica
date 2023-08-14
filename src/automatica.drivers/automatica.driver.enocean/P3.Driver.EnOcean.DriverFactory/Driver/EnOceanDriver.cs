@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using P3.Driver.EnOcean.Data;
@@ -12,6 +13,8 @@ using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 using P3.Driver.EnOcean.DriverFactory.Templates;
 using P3.Driver.EnOcean.Serial;
 using System.Threading;
+
+[assembly:InternalsVisibleTo("P3.Driver.EnOcean.Data.Tests")]
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {

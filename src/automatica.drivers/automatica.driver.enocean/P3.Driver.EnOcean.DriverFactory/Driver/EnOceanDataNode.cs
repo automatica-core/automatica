@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -93,13 +94,12 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
             return base.Init(token);
         }
-        
 
-        public object GetValueGeneric(RadioErp1Packet telegram)
+        public object GetValueGeneric(ReadOnlyMemory<byte> data)
         {
             var dif = BitOffs / 8;
             var mod = BitOffs % Length;
-        
+
             var size = Length / 8;
 
             int index;
@@ -113,38 +113,25 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 index = Math.Abs(BitOffs - 7);
             }
 
-            if (!telegram.Data.IsEmpty && telegram.Data.Length >= 1)
+            if (!data.IsEmpty && data.Length >= 1)
             {
                 if (mod == 0 && size == 1) // full byte
                 {
-                    var b = telegram.Data.Span[dif];
+                    var b = data.Span[dif];
                     return ScaleMinMax(b);
                 }
-                if(Length > 8 && Length < 14)
+                if (Length > 8 && Length < 14) //variable byte
                 {
-                    var b1 = telegram.Data.Span[dif];
-                    var b2 = telegram.Data.Span[dif + 1];
-                    var bitMask = (byte)0x0;
-                    var b2Len = Length - 8;
-
-                    for (var i = 0; i < b2Len; i++)
-                    {
-                        var bitIndex = index - i;
-                        bitMask = Automatica.Core.Driver.Utility.Utils.SetBitsTo1(bitMask, (byte)(bitIndex));
-                    }
-
-
-                    var val = b1 + ((b2 & bitMask) << 8);
-                    return ScaleMinMax(val);
+                    return GetVariableByteLengthValue(index, data.Span[dif], data.Span[dif + 1]);
                 }
 
                 if (Length < 8)
                 {
-                    var bitMask = (byte) 0x0;
+                    var bitMask = (byte)0x0;
                     for (var i = 0; i < Length; i++)
                     {
                         var bitIndex = index - i;
-                        bitMask = Automatica.Core.Driver.Utility.Utils.SetBitsTo1(bitMask, (byte) (bitIndex));
+                        bitMask = Automatica.Core.Driver.Utility.Utils.SetBitsTo1(bitMask, (byte)(bitIndex));
                     }
 
                     if (BitOffs < 8 && Length > 1)
@@ -152,7 +139,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                         bitMask <<= BitOffs;
                     }
 
-                    var ret = (telegram.Data.Span[dif] & bitMask) >> (index - Length + 1);
+                    var ret = (data.Span[dif] & bitMask) >> (index - Length + 1);
                     if (Length == 1)
                     {
                         return ret >= 1;
@@ -169,6 +156,28 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
 
             return null;
+        }
+
+        public object GetValueGeneric(RadioErp1Packet telegram)
+        {
+            var reversed = telegram.Data.ToArray().Reverse().ToArray();
+            return GetValueGeneric(new ReadOnlyMemory<byte>(reversed));
+        }
+
+        internal object GetVariableByteLengthValue(int index, byte b1, byte b2)
+        {
+            var bitMask = (byte)0x0;
+            var b2Len = Length - 8;
+
+            for (var i = 0; i < b2Len; i++)
+            {
+                var bitIndex = index - i;
+                bitMask = Automatica.Core.Driver.Utility.Utils.SetBitsTo1(bitMask, (byte)(bitIndex));
+            }
+
+
+            var val = b1 + ((b2 & bitMask) << 8);
+            return ScaleMinMax(val);
         }
 
         public object ScaleMinMax(int value)
