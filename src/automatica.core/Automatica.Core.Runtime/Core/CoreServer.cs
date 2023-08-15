@@ -328,21 +328,21 @@ namespace Automatica.Core.Runtime.Core
 
         private async Task StartLogic(ILogic rule, RuleInstance ruleInstance)
         {
-            _logger.LogInformation($"Starting logic {ruleInstance.Name}...");
+            _logger.LogInformation($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...");
             try
             {
                 if (await rule.Start())
                 {
-                    _logger.LogInformation($"Starting logic {ruleInstance.Name}...success");
+                    _logger.LogInformation($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Starting logic {ruleInstance.Name}...error");
+                    _logger.LogError($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...error");
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Starting logic {ruleInstance.Name}...error {e}");
+                _logger.LogError($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...error {e}");
             }
         }
 
@@ -350,20 +350,20 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogInformation($"Stopping logic {ruleInstance.Name}...");
+                _logger.LogInformation($"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...");
 
                 if (await rule.Stop())
                 {
-                    _logger.LogInformation($"Stopping logic {ruleInstance.Name}...success");
+                    _logger.LogInformation($"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Stopping logic {ruleInstance.Name}...error");
+                    _logger.LogError($"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...error");
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Stopping logic {ruleInstance.Name}...error");
+                _logger.LogError(e, $"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...error");
             }
         }
 
@@ -411,20 +411,20 @@ namespace Automatica.Core.Runtime.Core
             {
 
                 _licenseContext.DecrementDriverCount(driver.ChildrensCreated);
-                _logger.LogInformation($"Stopping driver {driver.Name}...");
+                _logger.LogInformation($"Stopping driver {driver.Id} {driver.Name}...");
 
                 if (await driver.Stop())
                 {
-                    _logger.LogInformation($"Stopping driver {driver.Name}...success");
+                    _logger.LogInformation($"Stopping driver {driver.Id} {driver.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Stopping driver {driver.Name}...error");
+                    _logger.LogError($"Stopping driver {driver.Id} {driver.Name}...error");
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Stopping driver {driver.Name}...error");
+                _logger.LogError(e, $"Stopping driver {driver.Id} {driver.Name}...error");
             }
 
             _driverStore.Remove(driver);
@@ -870,23 +870,23 @@ namespace Automatica.Core.Runtime.Core
                     {
                         driver.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
                     }
-                    _logger.LogInformation($"Starting driver {driver.Name}...done");
+                    _logger.LogInformation($"Starting driver {driver.Id} {driver.Name}...done");
                 }
                 else
                 {
                     driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                    _logger.LogError($"Could not start driver {driver.Name}");
+                    _logger.LogError($"Could not start driver {driver.Id} {driver.Name}");
                 }
             }
             catch (OperationCanceledException canceled)
             {
                 driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                _logger.LogError(canceled, $"Could not start driver {driver.Name}. Task was canceled after 30seconds");
+                _logger.LogError(canceled, $"Could not start driver {driver.Id} {driver.Name}. Task was canceled after 30seconds");
             }
             catch (Exception e)
             {
                 driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                _logger.LogError(e, $"Could not start driver {driver.Name}");
+                _logger.LogError(e, $"Could not start driver {driver.Id} {driver.Name}");
             }
         }
 
