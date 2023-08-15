@@ -17,6 +17,7 @@ namespace P3.Logic.Lightning.FlashingLights
         public static readonly Guid Output = new Guid("57157462-715d-4d3d-92c2-7e373bdadcc7");
 
         public static readonly Guid Delay = new Guid("a320d9bc-0c8c-4e5b-93a3-b96546c426c5");
+        public static readonly Guid RepeatCount = new Guid("5fde1d9b-6329-4ea3-9ec2-ff9f98f735c2");
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -31,6 +32,9 @@ namespace P3.Logic.Lightning.FlashingLights
             factory.CreateParameterLogicInterfaceTemplate(Delay, "LIGHTNING.FLASHING_LIGHTS.DELAY.NAME",
                 "LIGHTNING.FLASHING_LIGHTS.DELAY.DESCRIPTION", LogicGuid, 1, RuleInterfaceParameterDataType.Integer,
                 1000, false);
+            factory.CreateParameterLogicInterfaceTemplate(RepeatCount, "LIGHTNING.FLASHING_LIGHTS.REPEAT_COUNT.NAME",
+                "LIGHTNING.FLASHING_LIGHTS.REPEAT_COUNT.DESCRIPTION", LogicGuid, 1, RuleInterfaceParameterDataType.Integer,
+                2, false);
 
         }
 

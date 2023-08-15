@@ -16,6 +16,9 @@ namespace P3.Logic.Lightning.FlashingLights
         private readonly Timer _timer;
         
         private bool _timerRunning;
+        private readonly long _repetitions;
+
+        private int _repeatCounter = 0;
 
         public FlashingLightsLogic(ILogicContext context) : base(context)
         {
@@ -23,7 +26,11 @@ namespace P3.Logic.Lightning.FlashingLights
                 a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Output);
 
             var delay = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                               a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Delay);
+                a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Delay);
+
+
+            _repetitions = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.RepeatCount)!.ValueInteger!.Value;
 
             _timer = new Timer(delay.ValueInteger.Value);
             _timer.Elapsed += _timer_Elapsed;
@@ -39,6 +46,13 @@ namespace P3.Logic.Lightning.FlashingLights
 
             _timer.Stop();
             _timerRunning = false;
+
+            _repeatCounter++;
+
+            if (_repeatCounter <= _repetitions)
+                _timer.Start();
+            else 
+                _repeatCounter = 0;
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
