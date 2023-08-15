@@ -85,6 +85,8 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                         break;
                     }
+                    default:
+                        throw new NotImplementedException();
                 }
 
 

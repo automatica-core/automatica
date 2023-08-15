@@ -43,13 +43,14 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 DispatchValue(vlDt);
                 return new KnxDate(vlDt);
             }
-            else if (value is DateOnly dtOnly)
+
+            if (value is DateOnly dtOnly)
             {
                 DispatchValue(dtOnly);
                 return new KnxDate(new DateTime(dtOnly.Year, dtOnly.Month, dtOnly.Day));
             }
 
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

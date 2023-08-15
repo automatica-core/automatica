@@ -59,23 +59,32 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
         {
-            var dptValue = ConvertToDptValue(value.Value);
-
-            if (dptValue == null)
+            try
             {
-                DriverContext.Logger.LogWarning($"{DriverContext.NodeInstance.Name} from {source.Name} Could not convert value correctly....ignore write!");
-                return Task.CompletedTask;
-            }
+                var dptValue = ConvertToDptValue(value.Value);
 
-            if (DptType != ImplementationDptType)
+                if (dptValue == null) //value did not change
+                {
+
+                    return Task.CompletedTask;
+                }
+
+                if (DptType != ImplementationDptType)
+                {
+                    DriverContext.Logger.LogWarning(
+                        $"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+                }
+
+                var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+                var decodedValue = dpt.ToGroupValue(dptValue);
+
+                Driver.Write(this, GroupAddress, decodedValue);
+            }
+            catch (NotImplementedException)
             {
-                DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+                DriverContext.Logger.LogWarning(
+                    $"{DriverContext.NodeInstance.Name} from {source.Name} Could not convert value correctly....ignore write!");
             }
-
-            var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
-            var decodedValue = dpt.ToGroupValue(dptValue);
-
-            Driver.Write(this, GroupAddress, decodedValue);
 
             return Task.CompletedTask;
         }
