@@ -122,7 +122,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                 }
                 if (Length > 8 && Length < 14) //variable byte
                 {
-                    return GetVariableByteLengthValue(index, data.Span[dif], data.Span[dif + 1]);
+                    return GetVariableByteLengthValue(index, data.Span[dif + 1], data.Span[dif]);
                 }
 
                 if (Length < 8)

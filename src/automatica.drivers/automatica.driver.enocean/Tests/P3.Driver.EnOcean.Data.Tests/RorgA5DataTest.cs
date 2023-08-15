@@ -276,7 +276,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(28.4, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(36.9, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -382,7 +382,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(20.2d, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(26.5d, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -400,17 +400,6 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
             Assert.Equal(81.2d, Math.Round((double)values.First().Value.Value, 1));
-        }
-
-        [Fact]
-        public async Task TestVariableBitLengthData()
-        {
-            var data = new byte[] { 0xB4, 0x02, 0x58, 0x09 };
-            var driver = await CreateDriverForA5("05194725", EnOceanRorgA5Data.DataFieldA5_04_03_3_TMP_Guid);
-
-            var node = driver.ChildrenT.First().ChildrenT.First().ChildrenT.First().ChildrenT.First().ChildrenT.First();
-            var value = node.GetValueGeneric(data);
-
         }
     }
 }
