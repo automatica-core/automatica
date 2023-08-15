@@ -25,6 +25,7 @@ import { VisuObjectType } from "../visu/base-mobile-component"
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance"
 import { L10nTranslationService } from "angular-l10n"
 import { EventEmitter } from "@angular/core"
+import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-property-instance"
 
 function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
     if (!a.Template) {
@@ -174,6 +175,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     private addVirtualProperties() {
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
+        this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         this.Properties.push(new VirtualUseInVisuPropertyInstance(this));
         this.Properties.push(new VirtualAreaPropertyInstance(this));
