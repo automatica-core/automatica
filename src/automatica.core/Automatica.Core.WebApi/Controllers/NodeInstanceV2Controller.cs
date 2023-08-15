@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -27,6 +28,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INodeTemplateCache _templateCache;
         private readonly IDriverNodesStore _driverNodeStore;
         private readonly INodeInstanceService _nodeInstanceService;
+        private readonly IConfiguration _config;
         private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
@@ -37,6 +39,7 @@ namespace Automatica.Core.WebApi.Controllers
             INodeTemplateCache templateCache,
             IDriverNodesStore driverNodeStore,
             INodeInstanceService nodeInstanceService,
+            IConfiguration config,
             ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
@@ -45,6 +48,7 @@ namespace Automatica.Core.WebApi.Controllers
             _templateCache = templateCache;
             _driverNodeStore = driverNodeStore;
             _nodeInstanceService = nodeInstanceService;
+            _config = config;
             _logger = logger;
         }
 
@@ -118,17 +122,21 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("copy/{nodeInstance}/{targetNodeInstance}")]
         public async Task<NodeInstance> Copy(Guid nodeInstance, Guid targetNodeInstance)
         {
-            var instance = _nodeInstanceCache.Get(nodeInstance);
+            await using var context = new AutomaticaContext(_config);
+            var instance = _nodeInstanceCache.GetSingle(nodeInstance, context);
 
-            CopyRec(instance);
+            var copyInstance = JsonConvert.DeserializeObject<NodeInstance>(JsonConvert.SerializeObject(instance));
 
-            instance.This2ParentNodeInstance = targetNodeInstance;
-            var childs = instance.InverseThis2ParentNodeInstanceNavigation;
+            CopyRec(copyInstance);
 
-            await AddNode(instance);
+            copyInstance.This2ParentNodeInstance = targetNodeInstance;
+            var childs = copyInstance.InverseThis2ParentNodeInstanceNavigation;
 
-            instance.InverseThis2ParentNodeInstanceNavigation = childs;
-            return instance;
+            await AddNode(copyInstance);
+
+
+            copyInstance.InverseThis2ParentNodeInstanceNavigation = childs;
+            return copyInstance;
         }
 
         private void CopyRec(NodeInstance nodeInstance)
