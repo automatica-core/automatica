@@ -87,7 +87,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                         break;
                     }
-                    case String str:
+                    case string str:
                         if (TimeOnly.TryParse(str, CultureInfo.InvariantCulture, out var timeOnly))
                         {
                             var parsedTimeSpan = new TimeSpan(timeOnly.Hour, timeOnly.Minute, timeOnly.Second);
