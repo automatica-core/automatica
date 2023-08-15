@@ -9,7 +9,7 @@ namespace P3.Logic.Lightning.FlashingLights
     {
         public override string LogicName => "FlashingLights";
         public override Guid LogicGuid => new Guid("2c55738a-221a-456b-8923-a6eead3de823");
-        public override Version LogicVersion => new Version(0, 3, 0, 0);
+        public override Version LogicVersion => new Version(0, 4, 0, 0);
 
         public static readonly Guid Trigger = new Guid("a5fd09a9-64f6-4eec-98a3-52740e30c9ac");
         public static readonly Guid State = new Guid("03fc863e-e657-4f83-afe1-fe29920f6615");

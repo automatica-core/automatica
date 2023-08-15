@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using Automatica.Core.Base.IO;
@@ -29,8 +30,15 @@ namespace P3.Logic.Lightning.FlashingLights
                 a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Delay);
 
 
-            _repetitions = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.RepeatCount)!.ValueInteger!.Value;
+            try
+            {
+                _repetitions = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                    a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.RepeatCount)!.ValueInteger!.Value;
+            }
+            catch(Exception)
+            {
+                _repetitions = 1;
+            }
 
             _timer = new Timer(delay.ValueInteger.Value);
             _timer.Elapsed += _timer_Elapsed;
