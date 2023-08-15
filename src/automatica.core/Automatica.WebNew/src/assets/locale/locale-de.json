@@ -153,6 +153,10 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
+      "TYPE": {
+        "NAME": "Typ",
+        "DESCRIPTION": ""
+      },
       "SERVERUID": {
         "NAME": "Server UID",
         "DESCRIPTION": ""

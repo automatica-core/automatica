@@ -2,7 +2,7 @@
   "ERROR": {
     "UNAUTHORISED": "Nicht berechtigt"
   },
-  "SERVER":{
+  "SERVER": {
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder"
     },
@@ -153,6 +153,10 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
+      "TYPE": {
+        "NAME": "Typ",
+        "DESCRIPTION": ""
+      },
       "SERVERUID": {
         "NAME": "Server UID",
         "DESCRIPTION": ""
@@ -379,17 +383,17 @@
         "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
-            "NAME":  "Client id"
+          "NAME": "Client id"
         },
         "CLIENTKEY": {
-            "NAME": "Client key"
+          "NAME": "Client key"
         }
       },
       "TIMEZONEOFFSET": {
         "NAME": "Timezone offset [h]",
         "DESCRIPTION": ""
       },
-      "TRENDINGRECORDERS":{
+      "TRENDINGRECORDERS": {
         "NAME": "Trending Destinations"
       },
       "HOSTEDGRAFANAAPIKEY": {
@@ -410,13 +414,13 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Timestamp"
       },
-      "REMOTEDOMAIN" : {
+      "REMOTEDOMAIN": {
         "NAME": "Domain"
       },
-      "REMOTEENABLED" : {
+      "REMOTEENABLED": {
         "NAME": "Active"
       },
-      "REMOTETOKEN" : {
+      "REMOTETOKEN": {
         "NAME": "Token"
       }
     },

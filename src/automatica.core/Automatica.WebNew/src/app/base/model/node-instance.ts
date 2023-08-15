@@ -323,6 +323,8 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
+        this.Properties.push(new VirtualGenericPropertyInstance("TYPE", 2, this, () => this.translationService.translate(this.NodeTemplate.Name), void 0, true, PropertyTemplateType.Text, "COMMON.CATEGORY.MISC"));
+
         this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         if (this.isDriverNode()) {
