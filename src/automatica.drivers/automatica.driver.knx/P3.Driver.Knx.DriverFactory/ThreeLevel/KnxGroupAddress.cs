@@ -83,7 +83,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             catch (NotImplementedException)
             {
                 DriverContext.Logger.LogWarning(
-                    $"{DriverContext.NodeInstance.Name} from {source.Name} Could not convert value correctly....ignore write!");
+                    $"{DriverContext.NodeInstance.Name} {value.Value} from {source.Name} Could not convert value correctly....ignore write!");
             }
 
             return Task.CompletedTask;

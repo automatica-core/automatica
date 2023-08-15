@@ -25,7 +25,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 return newValue;
             }
 
-            throw new NotImplementedException();
+            return null;
         }
 
         protected override bool ValueRead(object value)
