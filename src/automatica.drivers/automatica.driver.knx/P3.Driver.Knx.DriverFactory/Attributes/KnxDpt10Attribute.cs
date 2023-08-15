@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using Automatica.Core.Driver;
 using Knx.Falcon.ApplicationData;
+using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
 
@@ -85,6 +87,23 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                         break;
                     }
+                    case String str:
+                        if (TimeOnly.TryParse(str, CultureInfo.InvariantCulture, out var timeOnly))
+                        {
+                            var parsedTimeSpan = new TimeSpan(timeOnly.Hour, timeOnly.Minute, timeOnly.Second);
+                            if (parsedTimeSpan != _value)
+                            {
+
+                                dpt10Value = new KnxTime(parsedTimeSpan, 0);
+                                DispatchValue(parsedTimeSpan);
+                                _value = parsedTimeSpan;
+                            }
+                        }
+                        else
+                        {
+                            DriverContext.Logger.LogError($"Could not parse time {str}");
+                        }
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
