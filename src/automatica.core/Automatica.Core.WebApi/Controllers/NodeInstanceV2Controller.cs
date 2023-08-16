@@ -345,6 +345,9 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task ReInit()
         {
             _nodeInstanceCache.Clear();
+            _templateCache.Clear();
+            _driverNodeStore.Clear();
+
             await _coreServer.ReInit();
         }
 
