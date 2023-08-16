@@ -330,6 +330,7 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 await transaction.RollbackAsync();
                 _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
+                _nodeInstanceCache.Clear();
                 throw;
             }
             finally

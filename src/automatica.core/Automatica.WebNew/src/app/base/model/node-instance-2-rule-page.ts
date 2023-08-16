@@ -100,6 +100,9 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
 
     get Name(): string {
+        if(!this.NodeInstance) {
+            return "unknown";
+        }
         return this.NodeInstance.Name;
     }
 

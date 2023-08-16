@@ -225,12 +225,14 @@ export class LogicShapes {
                     fontColor: "#4a4a4a",
                     resizeable: true
                 });
-
-                element.NodeInstance.notifyChangeEvent.subscribe((v) => {
-                    if (v.propertyName === "Name") {
-                        this.label.setText((<any>v.object).Name);
-                    }
-                });
+                
+                if(element.NodeInstance) {
+                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                        if (v.propertyName === "Name") {
+                            this.label.setText((<any>v.object).Name);
+                        }
+                    });
+                }
 
                 this.label.setMinWidth(100);
 
@@ -255,7 +257,7 @@ export class LogicShapes {
                     output.setId(element.Outputs[0].PortId);
 
                     var dataLabel = new draw2d.shape.basic.Label({
-                        text: element.NodeInstance.Value,
+                        text: element.Name,
                         textLength: "100%",
                         stroke: 0,
                         radius: 0,
@@ -267,13 +269,14 @@ export class LogicShapes {
                         fontSize: 9,
                         resizeable: true
                     });
-
-                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
-                        if (v.propertyName === "Value") {
-                            dataLabel.setText((<any>v.object).Value);
-                        }
-                    });
-
+                    
+                    if(element.NodeInstance) {
+                        element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                            if (v.propertyName === "Value") {
+                                dataLabel.setText((<any>v.object).Value);
+                            }
+                        });
+                    }
                     output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
 
 
