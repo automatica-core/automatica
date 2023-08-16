@@ -177,42 +177,42 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
                 case "openweathermap-forecast-humidity":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Humidity.Value));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Humidity.Value), 2));
                     break;
                 }
                 case "openweathermap-forecast-pressure":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Pressure.Value));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Pressure.Value), 2));
                     break;
                 }
                 case "openweathermap-forecast-wind-speed":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.WindSpeed.Mps));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.WindSpeed.Mps), 2));
                     break;
                 }
                 case "openweathermap-forecast-wind-direction":
                     {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.WindSpeed.Mps));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.WindSpeed.Mps), 2));
                     break;
                     }
                 case "openweathermap-forecast-temperature":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Temperature.Value));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Temperature.Value), 2));
                     break;
                 }
                 case "openweathermap-forecast-temperature-min":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Temperature.Min));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Temperature.Min), 2));
                     break;
                 }
                 case "openweathermap-forecast-temperature-max":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Temperature.Max));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Temperature.Max), 2));
                     break;
                 }
                 case "openweathermap-forecast-clouds":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Clouds.All));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Clouds.All), 2));
                     break;
                 }
                 case "openweathermap-forecast-clouds-description":
