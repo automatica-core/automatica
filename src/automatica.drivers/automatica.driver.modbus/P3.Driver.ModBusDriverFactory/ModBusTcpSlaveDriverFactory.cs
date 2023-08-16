@@ -13,7 +13,7 @@ namespace P3.Driver.ModBusDriverFactory
         public override string DriverName => "ModBus.Tcp.Slave";
         public override Guid DriverGuid => new Guid("d80ebf9d-c6a9-4554-8ff5-cbeb2cef7acd");
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
-        public override Version DriverVersion => new Version(1, 1, 0, 2);
+        public override Version DriverVersion => new Version(1, 2, 0, 2);
         public override void InitTemplates(INodeTemplateFactory factory)
         {
             factory.CreateNodeTemplate(DriverGuid, "MODBUS.SLAVE.TCP.NAME", "MODBUS.SLAVE.TCP.DESCRIPTION", "modbus-slave-tcp", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet),

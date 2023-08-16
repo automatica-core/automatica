@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using P3.Driver.ModBusDriver;
@@ -57,7 +58,9 @@ namespace P3.Driver.ModBusDriverFactory
             var devicePropGuid = new Guid("7765b031-ba80-485e-a136-7d6ed4dc7918");
             factory.CreatePropertyTemplate(devicePropGuid, "MODBUS.DEVICE.ID", "", "modbus-device-id",
                 PropertyTemplateType.Integer, DeviceTemplate, "MODBUS.CATEGORY.DEVICE", true, false, "", 0, 0, 1);
-            
+            factory.ChangeNodeTemplateMetaName(DeviceTemplate, "{PROPERTY:modbus-device-id}{CONST:-}{NODE:Name}");
+
+
             factory.CreatePropertyConstraint(new Guid("7765b031-ba80-485e-a136-7d6ed4dc79FF"), "MODBUS.CONSTRAINT.UNIQUE_ADDRESS.NAME",
                 "MODBUS.CONSTRAINT.UNIQUE_ADDRESS.NAME", PropertyConstraint.Unique, PropertyConstraintLevel.Error, devicePropGuid);
 
@@ -147,6 +150,9 @@ namespace P3.Driver.ModBusDriverFactory
                 PropertyConstraintConditionType.Unique);
             factory.CreatePropertyConstraintData(GenerateNewGuid(nodeGuid, 30), 1, -1, propConstraint, "modbus-register-length",
                 PropertyConstraintConditionType.UniqueRange);
+
+
+            factory.ChangeNodeTemplateMetaName(nodeGuid, "{PROPERTY:modbus-register}{CONST:-}{NODE:Name} (PROPERTY:modbus-table)");
 
             if (isByteRegister)
             {

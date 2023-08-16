@@ -14,7 +14,7 @@ namespace P3.Driver.ModBusDriverFactory
         public override Guid DriverGuid => new Guid("3e967c47-dad2-4ce5-9a42-7a346facd2fb");
 
         public override string ImageName => "automaticacore/plugin-p3.driver.modbus";
-        public override Version DriverVersion => new Version(1, 5, 0, 2);
+        public override Version DriverVersion => new Version(1, 6, 0, 2);
 
         public override void InitTemplates(INodeTemplateFactory factory)
         {
