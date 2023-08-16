@@ -53,9 +53,12 @@ class NodeInstanceMetaHelper {
                 let propValue = this.getValueForKey(key, value, nodeInstance);
                 if (typeof propValue === "number") {
                     propValue = propValue.toString();
-                    const padSize = split.length >= 3 ? split[2] : 2;
-                    propValue = this.pad(propValue, padSize);
 
+                    if(split.length >= 3) {
+                        const padSize = split.length >= 3 ? split[2] : 2;
+                        propValue = this.pad(propValue, padSize);
+                    }   
+                    
                     addName += propValue;
                 } else {
                     addName += propValue;
@@ -324,17 +327,21 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
 
-        if(this.NodeTemplate) {
+        if (this.NodeTemplate) {
             this.Properties.push(new VirtualGenericPropertyInstance("TYPE", 2, this, () => this.translationService.translate(this.NodeTemplate.Name), void 0, true, PropertyTemplateType.Text, "COMMON.CATEGORY.MISC"));
         }
-        
+
         this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         if (this.isDriverNode()) {
             this.Properties.push(new VirtualSatellitePropertyInstance(this));
         }
 
-        this.Properties.push(new VirtualDisabledPropertyInstance(this));
+        if (this.Parent) {
+            this.Properties.push(new VirtualDisabledPropertyInstance(this));
+        }
+
+
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
 
