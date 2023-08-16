@@ -152,7 +152,7 @@ namespace P3.Driver.ModBusDriverFactory
                 PropertyConstraintConditionType.UniqueRange);
 
 
-            factory.ChangeNodeTemplateMetaName(nodeGuid, "{PROPERTY:modbus-register}{CONST:-}{NODE:Name} (PROPERTY:modbus-table)");
+            factory.ChangeNodeTemplateMetaName(nodeGuid, "{PROPERTY:modbus-register}{CONST:-}{NODE:Name}{CONST: }{CONST:(}(PROPERTY:modbus-table){CONST:)}");
 
             if (isByteRegister)
             {
