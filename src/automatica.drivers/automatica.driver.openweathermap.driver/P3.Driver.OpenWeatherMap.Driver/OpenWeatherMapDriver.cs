@@ -200,6 +200,16 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                     node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Temperature.Value));
                     break;
                 }
+                case "openweathermap-forecast-temperature-min":
+                {
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Temperature.Min));
+                    break;
+                }
+                case "openweathermap-forecast-temperature-max":
+                {
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Temperature.Max));
+                    break;
+                }
                 case "openweathermap-forecast-clouds":
                 {
                     node = new OpenWeatherMapDriverNode(ctx, (_, y) => y.Forecast.Average(a => a.Clouds.All));
