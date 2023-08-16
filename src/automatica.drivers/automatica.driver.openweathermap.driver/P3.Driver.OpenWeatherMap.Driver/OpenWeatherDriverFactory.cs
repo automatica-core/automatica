@@ -78,9 +78,9 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                 DriverGuid, Forecast, true, false, true, false, true, NodeDataType.NoAttribute, 1, false);
 
             factory.CreateNodeTemplate(new Guid("5dddf5f7-d2e3-4959-8980-4a9bd5c15ee7"), "OPENWEATHERMAP.TEMPERATURE_MAX.NAME", "OPENWEATHERMAP.TEMPERATURE_MAX.DESCRIPTION", "openweathermap-forecast-temperature-max",
-                DriverGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, false, true, NodeDataType.NoAttribute, 1, false);
+                Forecast, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, false, true, NodeDataType.NoAttribute, 1, false);
             factory.CreateNodeTemplate(new Guid("5dddf5f7-d2e3-4959-8980-4a9bd5c15ee8"), "OPENWEATHERMAP.TEMPERATURE_MIN.NAME", "OPENWEATHERMAP.TEMPERATURE_MIN.DESCRIPTION", "openweathermap-forecast-temperature-max",
-                DriverGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, false, true, NodeDataType.NoAttribute, 1, false);
+                Forecast, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, false, true, NodeDataType.NoAttribute, 1, false);
 
             factory.CreateNodeTemplate(new Guid("66d08ddd-550f-4f88-ad22-9d3b8acf8459"), "OPENWEATHERMAP.HUMIDITY.NAME", "OPENWEATHERMAP.HUMIDITY.DESCRIPTION", "openweathermap-forecast-humidity",
                 Forecast, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Double, 1, false);
