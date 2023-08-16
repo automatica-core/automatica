@@ -8,16 +8,16 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 {
     internal class OpenWeatherMapDriverNode : DriverBase
     {
-        private readonly Func<CurrentWeatherResponse, object> _valueFunc;
+        private readonly Func<CurrentWeatherResponse, ForecastResponse, object> _valueFunc;
 
-        public OpenWeatherMapDriverNode(IDriverContext driverContext, Func<CurrentWeatherResponse, object> valueFunc) : base(driverContext)
+        public OpenWeatherMapDriverNode(IDriverContext driverContext, Func<CurrentWeatherResponse, ForecastResponse, object> valueFunc) : base(driverContext)
         {
             _valueFunc = valueFunc;
         }
 
-        public object GetValue(CurrentWeatherResponse weatherResponse)
+        public object GetValue(CurrentWeatherResponse weatherResponse, ForecastResponse forecastResponse)
         {
-            return _valueFunc.Invoke(weatherResponse);
+            return _valueFunc.Invoke(weatherResponse, forecastResponse);
         }
 
         public override Task<bool> Read(CancellationToken token = default)
