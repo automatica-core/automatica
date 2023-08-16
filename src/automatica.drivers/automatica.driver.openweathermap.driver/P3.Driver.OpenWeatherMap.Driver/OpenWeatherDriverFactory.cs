@@ -12,7 +12,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         public override Guid DriverGuid => new Guid("5330ccc5-42b6-4e7e-9c9a-3f53b54cdbe7");
 
-        public override Version DriverVersion => new Version(1, 2, 0, 1);
+        public override Version DriverVersion => new Version(1, 2, 0, 2);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.open-weather-map";
 
