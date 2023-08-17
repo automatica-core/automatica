@@ -88,6 +88,12 @@ namespace Automatica.Core.Base.Cache
             return _store.Values;
         }
 
+        public void ClearAndLoad()
+        {
+            Clear();
+            All();
+        }
+
         public IDictionary<T1, T2> Dictionary()
         {
             return _store;

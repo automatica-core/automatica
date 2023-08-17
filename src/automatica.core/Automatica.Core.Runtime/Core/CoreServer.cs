@@ -96,6 +96,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILoadedNodeInstancesStore _loadedNodeInstancesStore;
         private readonly IDriverNodesStoreInternal _driverNodesStore;
         private readonly ILogicInstancesStore _logicInstanceStore;
+        private readonly ILogicTemplateCache _logicTemplateCache;
 
         private readonly ISettingsCache _settingsCache;
         private readonly INodeInstanceCache _nodeInstanceCache;
@@ -106,7 +107,6 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IRemoteConnectService _remoteConnectService;
-
 
         public RunState RunState
         {
@@ -161,6 +161,7 @@ namespace Automatica.Core.Runtime.Core
             _settingsCache = services.GetRequiredService<ISettingsCache>();
             _nodeInstanceCache = services.GetRequiredService<INodeInstanceCache>();
             _logicInstanceCache = services.GetRequiredService<ILogicInstanceCache>();
+            _logicTemplateCache = services.GetRequiredService<ILogicTemplateCache>();
 
             _loadedNodeInstancesStore = services.GetRequiredService<ILoadedNodeInstancesStore>();
 
@@ -780,6 +781,9 @@ namespace Automatica.Core.Runtime.Core
             {
                 _logger.LogError($"Could not load rules {e}", e);
             }
+
+            _logicTemplateCache.ClearAndLoad();
+            _nodeTemplateCache.ClearAndLoad();
         }
 
         public async Task ReInit()
