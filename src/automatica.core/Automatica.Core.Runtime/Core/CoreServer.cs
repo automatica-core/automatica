@@ -182,6 +182,13 @@ namespace Automatica.Core.Runtime.Core
 
             _remoteConnectService = services.GetRequiredService<IRemoteConnectService>();
             InitInternals();
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += (sender, args) =>
+            {
+                Exception e = (Exception)args.ExceptionObject;
+                _logger.LogError(e, $"Unhandled exception occurred {e}");
+            };
         }
 
         private void InitInternals()
