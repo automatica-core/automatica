@@ -90,7 +90,7 @@
         },
         "STATE": {
           "NAME": "S",
-          "DESCRIPTION": "S"
+          "DESCRIPTION": "V > 0"
         }
       }
     }

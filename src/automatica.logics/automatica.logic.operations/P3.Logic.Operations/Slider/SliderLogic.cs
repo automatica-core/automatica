@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using NuGet.Packaging;
 
 namespace P3.Logic.Operations.Slider
 {
@@ -25,8 +26,8 @@ namespace P3.Logic.Operations.Slider
 
         private readonly RuleInterfaceInstance _reset;
         private readonly RuleInterfaceInstance _output;
+        private readonly RuleInterfaceInstance _stateOutput;
 
-        private bool? _lastState;
         private double? _lastValue;
         private bool? _lastOutputState;
 
@@ -38,13 +39,15 @@ namespace P3.Logic.Operations.Slider
          
             _value = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleInputValue);
-
+ 
             _reset = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleInputReset);
 
             _output = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleOutput);
-           
+            _stateOutput = context.RuleInstance.RuleInterfaceInstance.Single(a =>
+                a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleStateOutput);
+
             _valueMin = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleInputValueMin);
             _valueMax = context.RuleInstance.RuleInterfaceInstance.Single(a =>
@@ -85,7 +88,12 @@ namespace P3.Logic.Operations.Slider
                 }
 
                 _lastValue = dValue;
-                return SingleOutputChanged(new LogicOutputChanged(_output, value));
+                _lastOutputState = dValue > 0;
+
+                var outputs = SingleOutputChanged(new LogicOutputChanged(_output, _lastValue.Value));
+                outputs.AddRange(SingleOutputChanged(new LogicOutputChanged(_stateOutput, _lastOutputState.Value)));
+
+                return outputs;
             }
 
             if (instance.ObjId == _reset.ObjId)
