@@ -5,6 +5,7 @@ using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
+using Automatica.Core.Runtime.Exceptions;
 
 namespace Automatica.Core.Runtime.Core.Plugins.Logics
 {
@@ -39,7 +40,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                 return value.GetDataForVisu();
             }
 
-            return null;
+            throw new RuleNotFoundException();
         }
 
         public void UpdateInstance(RuleInstance key, ILogic value)
