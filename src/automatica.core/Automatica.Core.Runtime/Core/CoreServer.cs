@@ -333,23 +333,25 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StartLogic(ILogic rule, RuleInstance ruleInstance)
+        private async Task StartLogic(ILogic logic, RuleInstance logicInstance)
         {
-            _logger.LogInformation($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...");
+            _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...");
             try
             {
-                if (await rule.Start())
+                
+                if (await logic.Start())
                 {
-                    _logger.LogInformation($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...success");
+                    _logicStore.Add(logicInstance, logic);
+                    _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...error");
+                    _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...error");
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Starting logic {ruleInstance.ObjId} {ruleInstance.Name}...error {e}");
+                _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...error {e}");
             }
         }
 
@@ -376,11 +378,14 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ReloadLogic(Guid ruleInstanceId)
         {
-            KeyValuePair<RuleInstance, ILogic> rule = !_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId) ? InitLogicInstance(ruleInstanceId) : _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+            if (_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId))
+            {
+                var oldLogic = _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
+                await StopLogic(oldLogic.Value, oldLogic.Key);
+            }
 
-            await StopLogic(rule.Value, rule.Key);
-            await StartLogic(rule.Value, rule.Key);
-            
+            var newLogic = InitLogicInstance(ruleInstanceId);
+            await StartLogic(newLogic.Value, newLogic.Key);
         }
 
         public async Task StopLogic(Guid ruleInstanceId)

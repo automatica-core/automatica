@@ -56,6 +56,42 @@
           "DESCRIPTION": "S"
         }
       }
+    },
+    "SLIDER": {
+      "NAME": "Slider",
+      "DESCRIPTION": "Slider",
+      "INPUT": {
+        "STATE": {
+          "NAME": "S",
+          "DESCRIPTION": "S"
+        },
+        "RESET": {
+          "NAME": "R",
+          "DESCRIPTION": "R"
+        },
+        "VALUE": {
+          "NAME": "V",
+          "Description": "Value"
+        },
+        "VALUE_MIN": {
+          "NAME": "VMIN",
+          "Description": "Min Value"
+        },
+        "VALUE_MAX": {
+          "NAME": "VMAX",
+          "Description": "Max Value"
+        }
+      },
+      "OUTPUT": {
+        "VALUE": {
+          "NAME": "V",
+          "DESCRIPTION": "V"
+        },
+        "STATE": {
+          "NAME": "S",
+          "DESCRIPTION": "S"
+        }
+      }
     }
   }
 }

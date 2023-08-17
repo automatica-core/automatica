@@ -73,7 +73,7 @@ namespace Automatica.Core.Runtime
 
                 services.AddSingleton<LogicStore, LogicStore>();
                 services.AddSingleton<ILogicStore>(a => a.GetRequiredService<LogicStore>());
-                services.AddSingleton<IRuleDataHandler>(a => a.GetRequiredService<LogicStore>());
+                services.AddSingleton<ILogicDataHandler>(a => a.GetRequiredService<LogicStore>());
 
                 services.AddSingleton<LoadedNodeInstancesStore, LoadedNodeInstancesStore>();
                 services.AddSingleton<INodeInstanceStateHandler>(a => a.GetRequiredService<LoadedNodeInstancesStore>());

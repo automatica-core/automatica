@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Automatica.Core.Base.Cache;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 
@@ -10,8 +11,13 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
 {
     internal class LogicInstanceStore : StoreBase<RuleInstance, ILogic>, ILogicInstancesStore
     {
+        private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly IDictionary<Guid, ILogic> _ruleInstanceRuleMap = new ConcurrentDictionary<Guid, ILogic>();
-        private readonly IDictionary<Guid, RuleInstance> _ruleInstanceMap = new ConcurrentDictionary<Guid, RuleInstance>();
+
+        public LogicInstanceStore(ILogicInstanceCache logicInstanceCache)
+        {
+            _logicInstanceCache = logicInstanceCache;
+        }
 
         public bool ContainsRuleInstanceId(Guid ruleInstanceId)
         {
@@ -26,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             }
 
             var rule = _ruleInstanceRuleMap[ruleInstanceId];
-            var ruleInstance = _ruleInstanceMap[ruleInstanceId];
+            var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
 
             return new KeyValuePair<RuleInstance, ILogic>(ruleInstance, rule);
         }
@@ -34,15 +40,13 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
         public override void Add(RuleInstance key, ILogic value)
         {
             base.Add(key, value);
-            _ruleInstanceRuleMap.Add(key.ObjId, value);
-            _ruleInstanceMap.Add(key.ObjId, key);
+            _ruleInstanceRuleMap[key.ObjId] = value;
         }
 
         public override void Clear()
         {
             base.Clear();
             _ruleInstanceRuleMap.Clear();
-            _ruleInstanceMap.Clear();
         }
     }
 }

@@ -70,6 +70,8 @@ namespace Automatica.Core.Visu
 
             AddPushButton(factory);
 
+            AddSlider(factory);
+
             var dimmer = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Dimmer);
             factory.CreateVisuMobileTemplate(dimmer, "VISU.OBJECT.DIMMER.NAME", "VISU.OBJECT.DIMMER.DESCRIPTION",
                 "dimmer", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
@@ -175,6 +177,15 @@ namespace Automatica.Core.Visu
             var monitor = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.WindowMonitor);
             factory.CreateVisuMobileTemplate(monitor, "VISU.OBJECT.WINDOW_MONITOR.NAME", "VISU.OBJECT.WINDOW_MONITOR.DESCRIPTION", "window-monitor",
                 "VISU.CATEGORY.PRIVATE.NAME", 1, 1, false);
+
+        }
+
+        private void AddSlider(VisuMobileTemplateFactory factory)
+        {
+            var toggleButton = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Slider);
+            factory.CreateVisuMobileTemplate(toggleButton, "VISU.OBJECT.SLIDER.NAME",
+                "VISU.OBJECT.SLIDER.DESCRIPTION", "slider",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
         }
 

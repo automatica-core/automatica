@@ -10,6 +10,7 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,19 +33,19 @@ namespace Automatica.Core.WebApi.Controllers
     public class LogicsController : BaseController
     {
         private readonly ILogger<LogicsController> _logger;
-        private readonly IRuleDataHandler _ruleDataHandler;
+        private readonly ILogicDataHandler _logicDataHandler;
         private readonly ILogicCacheFacade _logicCacheFacade;
         private readonly IConfiguration _config;
         private readonly INotifyDriver _notifyDriver;
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ICoreServer _coreServer;
 
-        public LogicsController(ILogger<LogicsController> logger, AutomaticaContext db, IRuleDataHandler ruleDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
+        public LogicsController(ILogger<LogicsController> logger, AutomaticaContext db, ILogicDataHandler logicDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
             INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer coreServer)
             : base(db)
         {
             _logger = logger;
-            _ruleDataHandler = ruleDataHandler;
+            _logicDataHandler = logicDataHandler;
             _logicCacheFacade = logicCacheFacade;
             _config = config;
             _notifyDriver = notifyDriver;
@@ -141,6 +142,7 @@ namespace Automatica.Core.WebApi.Controllers
 
             _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
             _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId, logicInstance);
+           
             await _coreServer.ReloadLogic(logicInstance.ObjId);
             _logicCacheFacade.ClearInstances();
             return logicInstance;
@@ -421,7 +423,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.VisuRole)]
         public object GetInstanceData(Guid id)
         {
-            return _ruleDataHandler.GetDataForRuleInstance(id);
+            return _logicDataHandler.GetDataForRuleInstance(id);
         }
 
         [HttpPatch]
