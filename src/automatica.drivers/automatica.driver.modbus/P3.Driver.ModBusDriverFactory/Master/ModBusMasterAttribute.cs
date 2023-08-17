@@ -37,7 +37,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
                 var shortValue = _attribute.ConvertValueToBus(source, value, out var convertedValue);
                 DriverContext.Logger.LogInformation(
-                    $"WRITE value ({convertedValue}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" + Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
+                    $"WRITE value ({convertedValue}) from {source.Id} to {_parent.Name + $"({_parent.DeviceId})" + Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
                 switch (_attribute.Table)
                 {
                     case ModBusTable.Coil:
@@ -65,7 +65,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
             catch (Exception e)
             {
-                DriverContext.Logger.LogError(e, $"Could not write value...{e}");
+                DriverContext.Logger.LogError(e, $"Could not write value ({_parent.DeviceId}, {_attribute.Register} on {_attribute.Table})...{e}");
             }
         }
 
@@ -137,7 +137,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
             catch (Exception e)
             {
-                DriverContext.Logger.LogError(e, $"Could not read value...{e}");
+                DriverContext.Logger.LogError(e, $"Could not read value ({_parent.DeviceId}, {_attribute.Register} on {_attribute.Table})...{e}");
             }
 
             return null;
