@@ -19,6 +19,10 @@
       "DELAY": {
         "NAME": "Delay [ms]",
         "DESCRIPTION": ""
+      },
+      "REPEAT_COUNT": {
+        "NAME": "Repetitions",
+        "DESCRIPTION": ""
       }
     }
   }

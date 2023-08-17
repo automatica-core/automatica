@@ -18,6 +18,7 @@ import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
 import { MediaPlayerComponent } from './media-player/media-player.component';
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { DxoLabelModule } from "devextreme-angular/ui/nested";
+import { SliderComponent } from "./slider/slider.component";
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { DxoLabelModule } from "devextreme-angular/ui/nested";
     DefaultComponent,
     LinkComponent,
     ToggleComponent,
+    SliderComponent,
     ToggleNodeComponent,
     DimmerComponent,
     LogicDefaultComponent,

@@ -53,7 +53,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\P3.Knx.Core.Driver\P3.Knx.Core.Driver.csproj" />
     <ProjectReference Include="..\..\P3.Driver.Knx.DriverFactory\P3.Driver.Knx.DriverFactory.csproj" />
     <ProjectReference Include="..\..\P3.Knx.Core.Ets\P3.Knx.Core.Ets.csproj" />
   </ItemGroup>

@@ -53,8 +53,11 @@ class NodeInstanceMetaHelper {
                 let propValue = this.getValueForKey(key, value, nodeInstance);
                 if (typeof propValue === "number") {
                     propValue = propValue.toString();
-                    const padSize = split.length >= 3 ? split[2] : 2;
-                    propValue = this.pad(propValue, padSize);
+
+                    if (split.length >= 3) {
+                        const padSize = split.length >= 3 ? split[2] : 2;
+                        propValue = this.pad(propValue, padSize);
+                    }
 
                     addName += propValue;
                 } else {
@@ -160,6 +163,22 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this._name = v;
         this.notifyChange("Name");
         this.updateDisplayName();
+    }
+
+    public get FullName(): string {
+        var ret = void 0;
+
+        if (this.Parent instanceof NodeInstance) {
+            ret = this.Parent.FullName;
+            if(this.Name)
+                ret += ` → ${this.Name}`;
+        }
+
+        if(!ret) {
+            return "Root";
+        }
+
+        return ret;
     }
 
     private _Description: string;
@@ -323,13 +342,22 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
+
+        if (this.NodeTemplate) {
+            this.Properties.push(new VirtualGenericPropertyInstance("TYPE", 2, this, () => this.translationService.translate(this.NodeTemplate.Name), void 0, true, PropertyTemplateType.Text, "COMMON.CATEGORY.MISC"));
+        }
+
         this.Properties.push(new VirtualObjIdPropertyInstance(this));
 
         if (this.isDriverNode()) {
             this.Properties.push(new VirtualSatellitePropertyInstance(this));
         }
 
-        this.Properties.push(new VirtualDisabledPropertyInstance(this));
+        if (this.Parent) {
+            this.Properties.push(new VirtualDisabledPropertyInstance(this));
+        }
+
+
         if (this.NodeTemplate && this.NodeTemplate.This2NodeDataType > 0) {
             this.Properties.push(new VirtualReadablePropertyInstance(this));
 
@@ -358,8 +386,8 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             this.Properties.push(new VirtualGenericTrendingPropertyInstance(this, "TRENDING_INTERVAL", 12, this, () => this.TrendingInterval, (value) => this.TrendingInterval = value, false, PropertyTemplateType.Numeric));
 
 
-            this.Properties.push(new VirtualGenericPropertyInstance("VALUE", 1, this, () => this.Value, void 0, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VALUE"));
-            this.Properties.push(new VirtualGenericPropertyInstance("VALUE_TIMESTAMP", 2, this, () => this.ValueTimestamp, void 0, false, PropertyTemplateType.DateTime, "COMMON.CATEGORY.VALUE"));
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE", 1, this, () => this.Value, void 0, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VALUE", false));
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE_TIMESTAMP", 2, this, () => this.ValueTimestamp, void 0, false, PropertyTemplateType.DateTime, "COMMON.CATEGORY.VALUE", false));
 
         }
 

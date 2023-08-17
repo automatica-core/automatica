@@ -19,6 +19,10 @@
       "DELAY": {
         "NAME": "Verzögerung [ms]",
         "DESCRIPTION": ""
+      },
+      "REPEAT_COUNT": {
+        "NAME": "Widerholungen",
+        "DESCRIPTION": ""
       }
     }
   }

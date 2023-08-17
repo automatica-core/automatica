@@ -19,4 +19,11 @@ export class VirtualPropertyInstance extends PropertyInstance {
         this.PropertyTemplate.Order = -10;
         this.PropertyTemplate.IsVisible = true;
     }
+
+    
+    protected _updateOnChanges : boolean = true;
+    public get updateOnChanges() : boolean {
+        return this._updateOnChanges;
+    }
+    
 }

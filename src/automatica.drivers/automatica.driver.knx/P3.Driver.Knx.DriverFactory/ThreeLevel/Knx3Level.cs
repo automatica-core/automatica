@@ -4,21 +4,21 @@ using P3.Knx.Core.Ets;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using P3.Knx.Core.Abstractions;
 using System.Threading;
 using Automatica.Core.Base.IO;
 using Microsoft.Extensions.Logging;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
     public class Knx3Level: DriverBase
     {
-        private readonly IKnxDriver _driver;
+        private readonly KnxDriver _driver;
         private readonly IList<KnxMainGroup> _mainGroups;
 
         internal const string EtsImportFeatureName = "knx-ets-import";
 
-        public Knx3Level(IDriverContext driverContext, IKnxDriver driver) : base(driverContext)
+        public Knx3Level(IDriverContext driverContext, KnxDriver driver) : base(driverContext)
         {
             _driver = driver;
             _mainGroups = new List<KnxMainGroup>();
@@ -58,6 +58,20 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             return await EtsProjectToNodeConverter.ConvertToNodeInstances(DriverContext.NodeTemplateFactory, project, DriverContext.NodeInstance, token);
         }
-        
+        public sealed override Task WriteValue(IDispatchable source, object value)
+        {
+            return Task.CompletedTask;
+        }
+
+        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        public sealed override Task<bool> Read(CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
+        }
+
     }
 }

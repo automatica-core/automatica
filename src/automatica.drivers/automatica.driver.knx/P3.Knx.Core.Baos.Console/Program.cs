@@ -46,7 +46,7 @@ namespace P3.Knx.Core.Baos.Console
 
         public ILogger Logger { get; }
 
-        public Task DatapointInd(IReadOnlyCollection<DatapointValue> values)
+        public Task DataPointInd(IReadOnlyCollection<DatapointValue> values)
         {
             Logger.LogDebug($"Received datapoint values");
 

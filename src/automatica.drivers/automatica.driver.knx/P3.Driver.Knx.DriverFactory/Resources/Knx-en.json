@@ -51,6 +51,26 @@
       "ONLY_USE_TUNNEL": {
         "NAME": "Only tunnel connection",
         "DESCRIPTION": ""
+      },
+      "AUTHPW": {
+        "NAME": "Authentication code",
+        "DESCRIPTION": ""
+      },
+      "USERPW": {
+        "NAME": "User password",
+        "DESCRIPTION": ""
+      },
+      "IA_ADDRESS": {
+        "NAME": "Individual address",
+        "DESCRIPTION": ""
+      },
+      "USER_ID": {
+        "NAME": "User id",
+        "DESCRIPTION": ""
+      },
+      "IS_READABLE_FROM_BUS": {
+        "NAME": "Readable from bus",
+        "DESCRIPTION": ""
       }
     },
     "DPT1": {

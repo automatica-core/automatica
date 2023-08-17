@@ -2,9 +2,8 @@
   "profiles": {
     "P3.Driver.OpenWeatherMap.Driver": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
-      "commandLineArgs": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\Automatica.Core.dll develop C:\\dev\\p3\\automatica-drivers\\P3.Driver.OpenWeatherMap.Driver\\P3.Driver.OpenWeatherMap.Driver\\bin\\Debug\\netcoreapp2.2\\ P3.Driver.OpenWeatherMap.DriverFactory.dll",
-      "workingDirectory": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\"
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\"
     }
   }
 }

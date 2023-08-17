@@ -44,6 +44,38 @@
     "WIND_SPEED": {
       "NAME": "Windgeschwindigkeit",
       "DIRECTION": ""
+    },
+    "CLOUDS": {
+      "NAME": "Bewölkung",
+      "DESCRIPTION": ""
+    },
+    "CLOUDS_DESC": {
+      "NAME": "Bewölkung Beschreibung",
+      "DESCRIPTION": ""
+    },
+    "PRECIPITATION": {
+      "NAME": "Niederschlag",
+      "DESCRIPTION": ""
+    },
+    "PRECIPITATION_DESC": {
+      "NAME": "Niederschlag Beschreibung",
+      "DESCRIPTION": ""
+    },
+    "FORECAST_FROM": {
+      "NAME": "Vorhersage von",
+      "DESCRIPTION": ""
+    },
+    "FORECAST_TO": {
+      "NAME": "Vorhersage bis",
+      "DESCRIPTION": ""
+    },
+    "FORECAST_COUNT": {
+      "NAME": "Anzahl Vorhersagen",
+      "DESCRIPTION": ""
+    },
+    "FORECAST": {
+      "NAME": "Vorhersage",
+      "DESCRIPTION": ""
     }
   }
 }

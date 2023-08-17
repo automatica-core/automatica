@@ -8,17 +8,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 {
-    public class KnxBaosDriver : DriverBase, IKnxDriver, IDatapointInd
+    public class KnxBaosDriver : KnxDriver, IKnxDriver, IDatapointInd
     {
         private readonly BaosDriver _driver;
 
 
         private readonly Dictionary<string, List<Action<object>>> _callbackMap = new Dictionary<string, List<Action<object>>>();
 
-        public KnxBaosDriver(IDriverContext driverContext) : base(driverContext)
+        public KnxBaosDriver(IDriverContext driverContext) : base(driverContext, false, KnxLevel.TwoLevel) //move new layer in between, just a quick fix!
         {
             _driver = new BaosDriver("/dev/ttyAMA0", DriverContext.Logger, this);
         }
@@ -65,7 +66,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
             if(dpValue != null)
             {
-                await DatapointInd(dpValue);
+                await DataPointInd(dpValue);
                 return true;
             }
             return false;
@@ -77,7 +78,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
             return await _driver.SetDatapointValue(Convert.ToUInt16(address), data) != null;
         }
 
-        public Task DatapointInd(IReadOnlyCollection<DatapointValue> values)
+        public Task DataPointInd(IReadOnlyCollection<DatapointValue> values)
         {
             foreach (var value in values)
             {
@@ -87,9 +88,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
                 TelegramMonitor.NotifyTelegram(TelegramDirection.Input, null, dpId, null, Automatica.Core.Driver.Utility.Utils.ByteArrayToString(value.Data));
 
-                if (_callbackMap.ContainsKey(dpId))
+                if (_callbackMap.TryGetValue(dpId, out var dataPoint))
                 {
-                    foreach (var ac in _callbackMap[dpId])
+                    foreach (var ac in dataPoint)
                     {
                         try
                         {

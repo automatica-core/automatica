@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
+using Knx.Falcon.ApplicationData;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Abstractions;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt11Attribute : KnxGroupAddress
     {
-        private DateOnly? _value;
+        private DateTime? _value;
 
-        public KnxDpt11Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt11;
+        public KnxDpt11Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
         protected override bool ValueRead(object value)
         {
-            if (value is DateOnly dpt11Value)
+            if (value is KnxDate dpt11Value)
             {
                 var ret = !_value.HasValue || dpt11Value != _value.Value;
 
@@ -35,32 +36,21 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             return false;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override object ConvertToDptValue(object value)
         {
-            DateOnly? dateTime = null;
-            var lastValue = _value;
-
-            if (value is DateOnly dt)
+            if (value is DateTime vlDt)
             {
-                DispatchValue(dt);
-                _value = dt;
-                dateTime = dt;
+                DispatchValue(vlDt);
+                return new KnxDate(vlDt);
             }
 
-            if (dateTime != null && lastValue.HasValue && lastValue != dateTime)
+            if (value is DateOnly dtOnly)
             {
-                Driver.Write(GroupAddress, ConvertToBus(dateTime));
+                DispatchValue(dtOnly);
+                return new KnxDate(new DateTime(dtOnly.Year, dtOnly.Month, dtOnly.Day));
             }
 
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
-
-        protected override string GetDptString(int dpt)
-        {
-            var dpt11 = P3.Knx.Core.Driver.DptType.Dpt11;
-            return PropertyHelper.GetNameAttributeFromEnumValue(dpt11).EnumValue;
-        }
-
-        
     }
 }

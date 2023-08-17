@@ -62,7 +62,7 @@ namespace P3.Driver.EnOcean.Data.Packets
             SenderId = packet.Data.Slice(dataLength + 1, 4);
             Status = packet.Data.Span[packet.Data.Length - 1];
 
-            Logger.Logger.Instance.LogDebug($"RadioERP1 Packet {Rorg} from {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(SenderId)}  Data: {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(Data)}");
+            Logger.Logger.Instance.LogDebug($"RadioERP1 Packet {Rorg} from {Utils.ByteArrayToString(SenderId)}  Data: {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(Data)}");
         }
 
         private int GetRorgDataSize(Rorg rorg)

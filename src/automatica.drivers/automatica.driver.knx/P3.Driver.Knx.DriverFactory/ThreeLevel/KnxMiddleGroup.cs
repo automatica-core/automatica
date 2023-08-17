@@ -1,16 +1,34 @@
-﻿using Automatica.Core.Driver;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
+using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.Attributes;
-using P3.Knx.Core.Abstractions;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
     public class KnxMiddleGroup : KnxLevelBase
     {
-        public KnxMiddleGroup(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public KnxMiddleGroup(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
-        internal static KnxLevelBase CreateDriverNode(string key, IDriverContext ctx, IKnxDriver driver)
+        public sealed override Task WriteValue(IDispatchable source, object value)
+        {
+            return Task.CompletedTask;
+        }
+
+        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        public sealed override Task<bool> Read(CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
+        }
+
+        internal static KnxLevelBase CreateDriverNode(string key, IDriverContext ctx, KnxDriver driver)
         {
             KnxLevelBase attribute = null;
             switch (key)

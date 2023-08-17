@@ -128,7 +128,7 @@ namespace P3.Knx.Core.Baos.Driver
                         Logger.LogDebug($"DatapointValue.Ind");
 
                         var data = BaosDriver.ParseDatapointValues(longFrame);
-                        await Driver.DatapointInd(data);
+                        await Driver.DataPointInd(data);
                     }
                 }
                 else if (frame is ShortFrame)

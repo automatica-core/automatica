@@ -137,5 +137,17 @@ namespace Automatica.Core.EF.Models
 
             return prop.ValueString;
         }
+
+        public bool? GetPropertyValueBool(string property)
+        {
+            var prop = GetProperty(property);
+
+            if (prop == null)
+            {
+                throw new ArgumentException(nameof(property));
+            }
+
+            return prop.ValueBool;
+        }
     }
 }

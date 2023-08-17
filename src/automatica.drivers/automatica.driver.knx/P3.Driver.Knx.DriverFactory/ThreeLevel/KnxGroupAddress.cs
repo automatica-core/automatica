@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
+using Knx.Falcon;
+using Knx.Falcon.ApplicationData.DatapointTypes;
 using Microsoft.Extensions.Logging;
-using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver;
-using P3.Knx.Core.Driver.DPT;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
@@ -13,13 +14,18 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
     {
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
-        public string DptTypeString { get; private set; }
-        protected KnxGroupAddress(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+
+        public bool ReadableFromBus { get; set; }
+
+        public abstract int ImplementationDptType { get; }
+
+
+        protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
 
         }
 
-        public override async Task<bool> Init(CancellationToken token = default)
+        public sealed override async Task<bool> Init(CancellationToken token = default)
         {
             await base.Init(token);
 
@@ -35,21 +41,64 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 GroupAddress = $"{Address}";
             }
 
-            DptType = GetPropertyValueInt("knx-dpt");
+            var dptValueProp = GetProperty("knx-dpt");
+            DptType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
 
-            DptTypeString = GetDptString(DptType);
+            DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
-            DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType} - DptTypeString {DptTypeString}");
+            var readableFromBusProperty = DriverContext.NodeInstance.GetPropertyValue("readable_from_bus", false);
 
-            Driver.AddAddressNotifier(GroupAddress, TelegramReceivedCallback);
+            if (readableFromBusProperty is bool bValue)
+            {
+                ReadableFromBus = bValue;
+            }
+
+            Driver.AddAddressNotifier(GroupAddress, this, TelegramReceivedCallback);
             return true;
         }
 
-        protected abstract string GetDptString(int dpt);
-
-        protected virtual void ConvertFromBus(KnxDatagram datagram)
+        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
         {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, datagram.Data);
+            try
+            {
+                var dptValue = ConvertToDptValue(value.Value);
+
+                if (dptValue == null) //value did not change
+                {
+
+                    return Task.CompletedTask;
+                }
+
+                if (DptType != ImplementationDptType)
+                {
+                    DriverContext.Logger.LogWarning(
+                        $"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+                }
+
+                var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+                var decodedValue = dpt.ToGroupValue(dptValue);
+
+                Driver.Write(this, GroupAddress, decodedValue);
+            }
+            catch (NotImplementedException)
+            {
+                DriverContext.Logger.LogWarning(
+                    $"{DriverContext.NodeInstance.Name} {value.Value} from {source.Name} Could not convert value correctly....ignore write!");
+            }
+
+            return Task.CompletedTask;
+        }
+
+
+        protected void ConvertFromBus(GroupEventArgs datagram)
+        {
+            if (DptType != ImplementationDptType)
+            {
+                DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+            }
+
+            var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+            var value = dpt.ToValue(datagram.Value);
 
             if (ValueRead(value))
             {
@@ -57,9 +106,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
-        protected virtual void ConvertFromBus(ReadOnlyMemory<byte> data)
+        protected void ConvertFromBus(GroupValue groupValue)
         {
-            var value = DptTranslator.Instance.FromDataPoint(DptTypeString, data);
+            var dpt = DptFactory.Default.Get(DptType, -1);
+            var value= dpt.ToValue(groupValue);
 
             if (ValueRead(value))
             {
@@ -72,7 +122,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        public sealed override async Task<bool> Read(CancellationToken token = default)
         {
             if (DriverContext.NodeInstance.IsReadable)
             {
@@ -90,29 +140,13 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
-        protected virtual byte[] ConvertToBus(object value)
-        {
-            try
-            {
-                return DptTranslator.Instance.ToDataPoint(DptTypeString, value);
-            }
-            catch (Exception e)
-            { 
-                DriverContext.Logger.LogError(e,$"Could not convert {value} to bus type");
-            }
-
-            return new byte[0];
-        }
+        protected abstract object ConvertToDptValue(object value);
 
         private void TelegramReceivedCallback(object data)
         {
-            if (data is KnxDatagram knxDatagram)
+            if (data is GroupEventArgs knxDatagram)
             {
                 ConvertFromBus(knxDatagram);
-            }
-            else if(data is ReadOnlyMemory<byte> memory)
-            {
-                ConvertFromBus(memory);
             }
         }
 
@@ -120,5 +154,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             return null;
         }
+
+       
     }
 }

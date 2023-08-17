@@ -17,6 +17,7 @@ namespace Automatica.Core.Driver
     /// </summary>
     public abstract class DriverBase : IDriver
     {
+        private bool _isRunning;
         public IDriverContext DriverContext { get; }
         public DispatchableType Type => DispatchableType.NodeInstance;
         public Guid Id => DriverContext.NodeInstance.ObjId;
@@ -153,9 +154,14 @@ namespace Automatica.Core.Driver
             return Task.FromResult(true);
         }
 
-        
+
 
         public void DispatchValue(object value)
+        {
+            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
+            DriverContext.Dispatcher.DispatchValue(this, value);
+        }
+        public void DispatchValue(DispatchValue value)
         {
             DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
             DriverContext.Dispatcher.DispatchValue(this, value);
@@ -236,6 +242,7 @@ namespace Automatica.Core.Driver
 
         public virtual Task<bool> Start(CancellationToken token = default)
         {
+            _isRunning = true;
             _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
 
             Parallel.ForEach(Children, async node => {
@@ -280,8 +287,15 @@ namespace Automatica.Core.Driver
         {
             try
             {
-                while (true) {
-                    await _writeSemaphore.WaitAsync();
+                while (_isRunning)
+                {
+                    await _writeSemaphore.WaitAsync(_cancellationToken.Token);
+
+                    if (DriverContext.NodeInstance.IsDisabled)
+                    {
+                        DriverContext.Logger.LogWarning($"{FullName}: Node is disabled, stop write task");
+                        return;
+                    }
 
                     var writeData = _writeQueue.Dequeue();
 
@@ -308,6 +322,7 @@ namespace Automatica.Core.Driver
 
         public virtual async Task<bool> Stop(CancellationToken token = default)
         {
+            _isRunning = false;
             _cancellationToken.Cancel();
 
             foreach (var node in Children)
@@ -335,6 +350,10 @@ namespace Automatica.Core.Driver
         {
             return DriverContext.NodeInstance.GetProperty(propertyKey);
         }
+        protected object GetPropertyValue(string propertyKey, object defaultValue)
+        {
+            return DriverContext.NodeInstance.GetPropertyValue(propertyKey, defaultValue);
+        }
 
         protected double GetPropertyValueDouble(string property)
         {
@@ -352,6 +371,11 @@ namespace Automatica.Core.Driver
         protected int GetPropertyValueInt(string property)
         {
             return DriverContext.NodeInstance.GetPropertyValueInt(property);
+        }
+
+        protected bool? GetPropertyValueBool(string property)
+        {
+            return DriverContext.NodeInstance.GetPropertyValueBool(property);
         }
 
         public abstract IDriverNode CreateDriverNode(IDriverContext ctx);

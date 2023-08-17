@@ -1,19 +1,27 @@
-﻿using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Templates;
+﻿using System;
 using Automatica.Core.Driver;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Abstractions;
-using P3.Knx.Core.Driver;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt16Attribute : KnxGroupAddress
     {
-        private string _value;
 
-        public KnxDpt16Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt16;
+        public KnxDpt16Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
+        }
+
+        protected override object ConvertToDptValue(object value)
+        {
+            if (value is string dpt16Value)
+            {
+                DispatchValue(dpt16Value);
+                return dpt16Value;
+            }
+
+            throw new NotImplementedException();
         }
 
         protected override bool ValueRead(object value)
@@ -27,31 +35,5 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             return false;
         }
-
-        public override Task WriteValue(IDispatchable source, object value)
-        {
-            string writeValue = null;
-
-            if (value is string str)
-            {
-                DispatchValue(str);
-                _value = str;
-                writeValue = str;
-            }
-
-            if (writeValue != null)
-            {
-                Driver.Write(GroupAddress, ConvertToBus(writeValue));
-            }
-
-            return Task.CompletedTask;
-        }
-
-        protected override string GetDptString(int dpt)
-        {
-            return PropertyHelper.GetNameAttributeFromEnumValue((Dpt16Type)dpt).EnumValue;
-        }
-
-        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
@@ -24,6 +25,13 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         {
         }
 
+        public override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
+        {
+            WriteReceived = true;
+
+            DispatchValue(value);
+            return Task.CompletedTask;
+        }
 
         public override Task WriteValue(IDispatchable source, object value)
         {

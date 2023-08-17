@@ -1,9 +1,7 @@
-﻿using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
-using Automatica.Core.Base.Templates;
+﻿using System;
 using Automatica.Core.Driver;
+using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 using P3.Driver.Knx.DriverFactory.ThreeLevel;
-using P3.Knx.Core.Abstractions;
 
 namespace P3.Driver.Knx.DriverFactory.Attributes
 {
@@ -11,7 +9,8 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
     {
         private int? _value;
 
-        public KnxDpt13Attribute(IDriverContext driverContext, IKnxDriver knxDriver) : base(driverContext, knxDriver)
+        public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt13;
+        public KnxDpt13Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
 
@@ -31,34 +30,19 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 return false;
 
             }
+
             return false;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override object ConvertToDptValue(object value)
         {
-            int? intValue = null;
-
-            if (value is int dt)
+            if (value is int vlInt)
             {
-                DispatchValue(dt);
-                _value = dt;
-                intValue = dt;
+                DispatchValue(vlInt);
+                return vlInt;
             }
 
-            if (intValue != null)
-            {
-                Driver.Write(GroupAddress, ConvertToBus(intValue));
-            }
-
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
-
-        protected override string GetDptString(int dpt)
-        {
-            var dpt13 = P3.Knx.Core.Driver.DptType.Dpt13;
-            return PropertyHelper.GetNameAttributeFromEnumValue(dpt13).EnumValue;
-        }
-
-        
     }
 }

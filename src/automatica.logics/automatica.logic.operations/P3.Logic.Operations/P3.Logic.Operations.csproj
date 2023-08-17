@@ -5,6 +5,7 @@
     <Version>2.1.0.7</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>6888202B-8BB1-403B-8A92-AC2D204071CA</ProjectGuid>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Rules\Operations</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />

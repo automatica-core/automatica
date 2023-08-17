@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Push.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -16,12 +17,16 @@ namespace Automatica.Push.Hubs
         private readonly IDispatcher _dispatcher;
         private readonly INotifyDriver _notify;
         private readonly INodeInstanceCache _nodeInstanceCache;
+        private readonly ILogicInstanceCache _logicInstanceCache;
+        private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
 
-        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache)
+        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache)
         {
             _dispatcher = dispatcher;
             _notify = notify;
             _nodeInstanceCache = nodeInstanceCache;
+            _logicInstanceCache = logicInstanceCache;
+            _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
         }
 
         public async Task SubscribeAll()
@@ -58,7 +63,7 @@ namespace Automatica.Push.Hubs
         }
 
 
-        public void SetValue(Guid nodeInstance, JsonElement value)
+        public void SetValue(Guid instanceId, JsonElement value)
         {
             object convertedValue = null;
 
@@ -98,14 +103,21 @@ namespace Automatica.Push.Hubs
                     throw new ArgumentOutOfRangeException();
             }
 
-            var nodeInstanceValue = _nodeInstanceCache.Get(nodeInstance);
+            var nodeInstanceValue = _nodeInstanceCache.Get(instanceId);
 
             if (nodeInstanceValue != null)
             {
-                var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", nodeInstance,
+                var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
                 _dispatcher.DispatchValue(dispatchable,
-                    new DispatchValue(nodeInstance, DispatchableType.Visualization, convertedValue, DateTime.Now));
+                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now));
+            }
+            else
+            {
+                var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
+                    DispatchableSource.Visualization, false);
+                _dispatcher.DispatchValue(dispatchable,
+                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now));
             }
         }
     }

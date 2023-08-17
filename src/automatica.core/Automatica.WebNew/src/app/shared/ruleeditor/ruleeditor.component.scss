@@ -2,3 +2,14 @@
     height: 100%;
     display:block;   
 }
+
+::ng-deep .tooltip {
+	position: absolute;
+	background: #EEEEEE;
+	padding:10px;
+
+    font-size: 12px;
+    font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+
+    color: #4a4a4a;
+}

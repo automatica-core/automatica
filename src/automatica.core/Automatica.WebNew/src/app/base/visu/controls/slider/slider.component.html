@@ -1,0 +1,14 @@
+<app-visualization-control [hint]="displayText" [value]="state" [icon]="icon" [location]="location" [hasPopup]="true">
+  <!-- <dx-switch control [value]="state" (onValueChanged)="onValueChanged($event)"></dx-switch> -->
+
+  <div popup>
+    <div>
+      <dx-slider class="slider" [min]="valueMin" [max]="valueMax" [(value)]="state" (onValueChanged)="switch($event)"
+        valueChangeMode="onHandleRelease">
+        <dxo-label [visible]="true" [format]="format" position="top"></dxo-label>
+        <dxo-tooltip [enabled]="true" [format]="format" showMode="always" position="bottom"></dxo-tooltip>
+      </dx-slider>
+    </div>
+
+  </div>
+</app-visualization-control>

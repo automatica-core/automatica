@@ -13,6 +13,10 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
     {
         private readonly IDictionary<Guid, ILogic> _ruleIdDictionary = new ConcurrentDictionary<Guid, ILogic>();
 
+        public LogicStore()
+        {
+            
+        }
         public override void Add(RuleInstance key, ILogic value)
         {
             if (!_ruleIdDictionary.ContainsKey(key.ObjId))
@@ -29,13 +33,19 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             _ruleIdDictionary.Clear();
         }
 
-        public object GetDataForRuleInstance(Guid id)
+        public object? GetDataForRuleInstance(Guid id)
         {
-            if (_ruleIdDictionary.ContainsKey(id))
+            if (_ruleIdDictionary.TryGetValue(id, out var value))
             {
-                return _ruleIdDictionary[id].GetDataForVisu();
+                return value.GetDataForVisu();
             }
+
             throw new RuleNotFoundException();
+        }
+
+        public void UpdateInstance(RuleInstance key, ILogic value)
+        {
+            Update(key, value);
         }
     }
 }

@@ -167,15 +167,15 @@ export class LogicShapes {
                             fontSize: 9,
                             resizeable: true
                         });
-    
+
                         portInstance.notifyChangeEvent.subscribe((v) => {
                             if (v.propertyName === "PortValue") {
                                 dataLabel.setText((<any>v.object).PortValue);
                             }
                         });
-    
+
                         port.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
-    
+
                     }
 
                     port.setMaxFanOut(portInstance.FromMaxLinks);
@@ -203,6 +203,9 @@ export class LogicShapes {
 
 
             init: function (attr, element: NodeInstance2RulePage, linkService: LinkService) {
+                this.tooltip = null;
+                this.element = element;
+
                 if (element.Y < 0) {
                     element.Y *= -1;
                 } if (element.X < 0) {
@@ -226,11 +229,13 @@ export class LogicShapes {
                     resizeable: true
                 });
 
-                element.NodeInstance.notifyChangeEvent.subscribe((v) => {
-                    if (v.propertyName === "Name") {
-                        this.label.setText((<any>v.object).Name);
-                    }
-                });
+                if (element.NodeInstance) {
+                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                        if (v.propertyName === "Name") {
+                            this.label.setText((<any>v.object).Name);
+                        }
+                    });
+                }
 
                 this.label.setMinWidth(100);
 
@@ -255,7 +260,7 @@ export class LogicShapes {
                     output.setId(element.Outputs[0].PortId);
 
                     var dataLabel = new draw2d.shape.basic.Label({
-                        text: element.NodeInstance.Value,
+                        text: "",
                         textLength: "100%",
                         stroke: 0,
                         radius: 0,
@@ -268,12 +273,13 @@ export class LogicShapes {
                         resizeable: true
                     });
 
-                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
-                        if (v.propertyName === "Value") {
-                            dataLabel.setText((<any>v.object).Value);
-                        }
-                    });
-
+                    if (element.NodeInstance) {
+                        element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                            if (v.propertyName === "Value") {
+                                dataLabel.setText((<any>v.object).Value);
+                            }
+                        });
+                    }
                     output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
 
 
@@ -286,9 +292,31 @@ export class LogicShapes {
                     });
                 }
 
+                this.on("mouseenter", () => {
+                    this.showTooltip();
+                });
+                this.on("mouseleave", () => {
+                    this.hideTooltip()
+                });
+                this.on("dragstart", () => {
+                    this.hideTooltip()
+                });
+
+                this.label.on("mouseenter", () => {
+                    this.showTooltip();
+                });
+                this.label.on("mouseleave", () => {
+                    this.hideTooltip()
+                });
+                this.label.on("dragstart", () => {
+                    this.hideTooltip()
+                });
+
                 this.on("move", (context) => {
                     element.X = context.x;
                     element.Y = context.y;
+
+                    this.hideTooltip();
                 });
 
 
@@ -315,6 +343,34 @@ export class LogicShapes {
 
                 this.fireEvent("dragEnd", { x: x, y: y });
 
+            },
+            showTooltip: function () {
+                this.tooltip = $('<div class="tooltip">' + this.element.FullName + '</div>')
+                    .appendTo('body');
+                this.positionTooltip();
+            },
+
+            positionTooltip: function () {
+                if (this.tooltip === null) {
+                    return
+                }
+
+                var width = this.tooltip.outerWidth(true)
+                var pos = this.canvas.fromCanvasToDocumentCoordinate(
+                    this.getAbsoluteX() + this.getWidth() / 2 - width / 2 + 8,
+                    this.getAbsoluteY() + this.getHeight() + 10)
+
+                // remove the scrolling part from the tooltip because the tooltip is placed
+                // inside the scrolling container
+                pos.x += this.canvas.getScrollLeft()
+                pos.y += this.canvas.getScrollTop()
+
+                this.tooltip.css({ 'top': pos.y, 'left': pos.x })
+            }, hideTooltip: function () {
+                if (this.tooltip !== null) {
+                    this.tooltip.remove();
+                    this.tooltip = null;
+                }
             }
         });
 

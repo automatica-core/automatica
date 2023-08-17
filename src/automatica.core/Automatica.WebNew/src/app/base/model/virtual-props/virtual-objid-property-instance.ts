@@ -1,13 +1,15 @@
 import { VirtualPropertyInstance } from "./virtual-property-instance"
 import { ITreeNode } from "../ITreeNode"
+import { RuleInstance } from "../rule-instance";
+import { NodeInstance } from "../node-instance";
 
 export class VirtualObjIdPropertyInstance extends VirtualPropertyInstance {
 
     /**
      *
      */
-    constructor(private nodeInstance: ITreeNode) {
-        super(nodeInstance);
+    constructor(private instance: NodeInstance | RuleInstance) {
+        super(instance);
 
         this.PropertyTemplate.Name = "COMMON.PROPERTY.OBJID.NAME";
         this.PropertyTemplate.Description = "COMMON.PROPERTY.OBJID.DESCRIPTION";
@@ -18,7 +20,7 @@ export class VirtualObjIdPropertyInstance extends VirtualPropertyInstance {
     }
 
     get Value(): any {
-        return this.nodeInstance.Id;
+        return this.instance.ObjId;
     }
     set Value(value: any) {
         // do nothing

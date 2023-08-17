@@ -96,7 +96,7 @@ namespace Automatica.Core.Tests
             AssertLifecycle<ILogicInstancesStore>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<LogicStore>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ILogicStore>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<IRuleDataHandler>(moq, ServiceLifetime.Singleton);
+            AssertLifecycle<ILogicDataHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<LoadedNodeInstancesStore>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<INodeInstanceStateHandler>(moq, ServiceLifetime.Singleton);
 
@@ -157,7 +157,7 @@ namespace Automatica.Core.Tests
 
             AssertImplementationType<LogicStore, LogicStore>(moq);
             AssertImplementationType<ILogicStore, LogicStore>(moq);
-            AssertImplementationType<IRuleDataHandler, LogicStore>(moq);
+            AssertImplementationType<ILogicDataHandler, LogicStore>(moq);
 
             AssertImplementationType<LoadedNodeInstancesStore, LoadedNodeInstancesStore>(moq);
             AssertImplementationType<INodeInstanceStateHandler, LoadedNodeInstancesStore>(moq);

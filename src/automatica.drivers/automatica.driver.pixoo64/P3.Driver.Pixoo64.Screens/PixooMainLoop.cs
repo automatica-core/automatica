@@ -23,29 +23,32 @@ namespace P3.Driver.Pixoo64.Screens
             _logger.LogInformation($"{GetHashCode()} Add Screen {screen.GetType().Name}...");
         }
 
-        public async Task Start()
+        public Task Start()
         {
             _isRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
-            await Task.CompletedTask;
-
+     
             _logger.LogInformation($"{GetHashCode()} Loop started...");
 
-            var task = Task.Run(function: async () =>
+            _ = Task.Run(function: async () =>
             {
                 
-                    int i = 0;
-                    while (true)
+                int i = 0;
+                while (true)
+                {
+                    try
                     {
-                        try
+                        if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
                         {
-                            if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
-                            {
-                                _logger.LogInformation(
-                                    $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
-                                break;
-                            }
+                            _logger.LogInformation(
+                                $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
+                            _screens.Clear();
+                            i = 0;
+                            return;
+                        }
 
+                        if (_screens.Count > i)
+                        {
                             var screen = _screens[i];
                             screen.Start();
 
@@ -55,41 +58,49 @@ namespace P3.Driver.Pixoo64.Screens
                                 {
                                     _logger.LogInformation(
                                         $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
-                                    break;
+                                    _screens.Clear();
+                                    i = 0;
+                                    return;
                                 }
 
                                 await screen.Paint();
                                 Thread.Sleep(1000);
                             } while (screen.TimeForNextScreen > 0);
-
-
-                            i++;
-
-                            if (i >= _screens.Count)
-                            {
-                                i = 0;
-                            }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            _logger.LogError(ex, $"Exception occurred {ex}");
-                            Thread.Sleep(2000);
+                            i = 0;
+                        }
+
+
+                        i++;
+
+                        if (i >= _screens.Count)
+                        {
+                            i = 0;
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, $"Exception occurred {ex}");
+                        Thread.Sleep(2000);
+                    }
+                }
 
             }).ConfigureAwait(false);
 
 
             _logger.LogInformation($"{GetHashCode()} Loop exited...");
+            return Task.CompletedTask;
         }
 
-        public async Task Stop()
+        public Task Stop()
         {
             _screens.Clear();
             _logger.LogInformation($"{GetHashCode()} Stop loop...");
             _isRunning = false;
-            await Task.CompletedTask;
             _cancellationTokenSource.Cancel();
+            return Task.CompletedTask;
         }
     }
 }

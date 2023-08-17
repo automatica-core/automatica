@@ -276,7 +276,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.NotNull(values);
 
             Assert.Equal(1, values.Count);
-            Assert.Equal(28.4, Math.Round((double)values.First().Value.Value, 1));
+            Assert.Equal(36.9, Math.Round((double)values.First().Value.Value, 1));
         }
 
         [Fact]
@@ -364,6 +364,42 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
             Assert.Equal(20.0, Math.Round((double)values.First().Value.Value, 1));
+        }
+
+
+
+        [Fact]
+        public async Task TestA5_04_03_TMP()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("05194725", EnOceanRorgA5Data.DataFieldA5_04_03_3_TMP_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA5CF025209051947250101FFFFFFFF5C00C0");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.NotNull(values);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(26.5d, Math.Round((double)values.First().Value.Value, 1));
+        }
+
+        [Fact]
+        public async Task TestA5_04_03_HUM()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("05194725", EnOceanRorgA5Data.DataFieldA5_04_03_3_HUM_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA5CF025209051947250101FFFFFFFF5C00C0");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.NotNull(values);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(81.2d, Math.Round((double)values.First().Value.Value, 1));
         }
     }
 }

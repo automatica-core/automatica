@@ -5,7 +5,7 @@ using Automatica.Core.Logic;
 
 namespace Automatica.Core.Runtime.Abstraction.Plugins.Logic
 {
-    internal interface ILogicStore : IStore<RuleInstance, ILogic>, IRuleDataHandler
+    internal interface ILogicStore : IStore<RuleInstance, ILogic>, ILogicDataHandler
     {
         
     }

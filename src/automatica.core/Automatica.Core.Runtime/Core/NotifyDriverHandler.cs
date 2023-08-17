@@ -93,7 +93,7 @@ namespace Automatica.Core.Runtime.Core
                 {
                     return action(driverNode);
                 }
-
+                _logger.LogError($"Could not find mapped driver instance for node {node.ObjId} {node.Name}");
                 return Task.FromResult(default(T));
             }
             catch (NodeNotFoundException)

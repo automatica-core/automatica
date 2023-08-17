@@ -16,6 +16,7 @@ namespace Automatica.Core.Base.Cache
         ICollection<T2> All();
 
         void Clear();
+        void ClearAndLoad();
         IDictionary<T1, T2> Dictionary();
     }
 
