@@ -42,26 +42,30 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 {
                     case ModBusTable.Coil:
                         await Driver.WriteCoil(_parent.DeviceId, _attribute.Register, shortValue[0] == 1, cts.Token);
+                        break;
+                    case ModBusTable.HoldingRegister:
+                    {
+                        for (int i = 0; i < _attribute.RegisterLength; i++)
+                        {
+                            var registerAddress = (ushort)(_attribute.Register + i);
+                            switch (_attribute.Table)
+                            {
+                                case ModBusTable.HoldingRegister:
+                                    await Driver.WriteHoldingRegister(_parent.DeviceId, registerAddress, shortValue[i],
+                                        cts.Token);
+                                    break;
+                            }
+                        }
 
-                        return;
+                        break;
+                    }
                     case ModBusTable.DiscreteInput:
                     case ModBusTable.InputRegister:
-                        //not writeable
+                        //not write able
                         return;
-
                 }
 
-                for (int i = 0; i < _attribute.RegisterLength; i++)
-                {
-                    var registerAddress = (ushort)(_attribute.Register + i);
-                    switch (_attribute.Table)
-                    {
-                        case ModBusTable.HoldingRegister:
-                            await Driver.WriteHoldingRegister(_parent.DeviceId, registerAddress, shortValue[i],
-                                cts.Token);
-                            break;
-                    }
-                }
+                DispatchValue(value);
             }
             catch (Exception e)
             {
