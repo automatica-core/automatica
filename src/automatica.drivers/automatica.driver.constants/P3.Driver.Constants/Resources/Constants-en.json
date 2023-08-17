@@ -34,12 +34,12 @@
     },
     "PROPERTY": {
       "VALUE": {
-        "NAME": "Value",
+        "NAME": "Const Value",
         "Description": "Defines the constant value"
       }
     },
     "CATEGORY": {
-      "VALUE": "Value"
+      "VALUE": "Const Value"
     }
   }
 }
