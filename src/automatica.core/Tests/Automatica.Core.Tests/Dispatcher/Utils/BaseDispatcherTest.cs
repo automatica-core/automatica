@@ -32,7 +32,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 
             Dispatcher = dispatcher;
 
-            LogicInstancesStore = new LogicInstanceStore();
+            LogicInstancesStore = new LogicInstanceStore(new Mock<ILogicInstanceCache>().Object);
             DriverNodesStore = new DriverNodesStore();
             NodeInstanceCache = new NodeInstanceCacheMock();
             LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
