@@ -16,8 +16,8 @@ export class NodeInterfaceInstance {
 }
 
 @Model()
-export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
+export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     public get Properties(): PropertyInstance[] {
         if (!this.NodeInstance) {
             return [];
@@ -48,6 +48,9 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
         this._y = value;
     }
 
+    public get FullName() {
+        return this.NodeInstance.FullName;
+    }
 
     @JsonPropertyName("This2NodeInstanceNavigation")
     NodeInstance: NodeInstance;

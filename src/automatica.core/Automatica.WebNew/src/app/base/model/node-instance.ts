@@ -54,11 +54,11 @@ class NodeInstanceMetaHelper {
                 if (typeof propValue === "number") {
                     propValue = propValue.toString();
 
-                    if(split.length >= 3) {
+                    if (split.length >= 3) {
                         const padSize = split.length >= 3 ? split[2] : 2;
                         propValue = this.pad(propValue, padSize);
-                    }   
-                    
+                    }
+
                     addName += propValue;
                 } else {
                     addName += propValue;
@@ -163,6 +163,22 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this._name = v;
         this.notifyChange("Name");
         this.updateDisplayName();
+    }
+
+    public get FullName(): string {
+        var ret = void 0;
+
+        if (this.Parent instanceof NodeInstance) {
+            ret = this.Parent.FullName;
+            if(this.Name)
+                ret += ` → ${this.Name}`;
+        }
+
+        if(!ret) {
+            return "Root";
+        }
+
+        return ret;
     }
 
     private _Description: string;
