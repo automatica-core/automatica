@@ -79,8 +79,14 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
         {
             _timer.Start();
 
-            await ReadValues();
-
+            try
+            {
+                await ReadValues();
+            }
+            catch(Exception e)
+            {
+                DriverContext.Logger.LogError(e, "Could not read values...");
+            }
             return await base.Start(token);
         }
 
