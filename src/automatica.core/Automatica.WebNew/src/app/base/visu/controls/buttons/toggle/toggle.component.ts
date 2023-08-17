@@ -89,9 +89,6 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
   switch(value) {
 
-    if(this.value === undefined || this.value === void 0) {
-      return;
-    }
     if (this.inputType) {
       if (this.value != value) {
         this.dataHub.setValue(this.inputType.ObjId, value);

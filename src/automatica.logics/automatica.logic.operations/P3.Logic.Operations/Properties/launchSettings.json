@@ -4,6 +4,11 @@
       "commandName": "Executable",
       "executablePath": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\win7-x64\\Automatica.Core.exe",
       "workingDirectory": "C:\\dev\\p3\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp2.2\\win7-x64\\"
+    },
+    "Automatica": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\"
     }
   }
 }
