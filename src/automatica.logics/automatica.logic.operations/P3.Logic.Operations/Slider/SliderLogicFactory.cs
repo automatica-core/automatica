@@ -19,12 +19,11 @@ namespace P3.Logic.Operations.Slider
         public static Guid RuleInputValueMinParam = new Guid("c2492133-a7d9-4e56-a36d-8af42053ce9a");
 
         public static Guid RuleOutput = new Guid("1f17f3a6-948b-4ca1-9ceb-ce239c5c4e94");
-        public static Guid RuleStateOutput = new Guid("d02337a8-7cb1-42bf-84df-1b4b9370095b");
 
         public override string LogicName => "P3.Logic.Operations.Slider";
         public override Guid LogicGuid => new Guid("3d77ef6f-fa1e-4f20-a3ab-81b3ef969221");
-        public override Version LogicVersion => new Version(1, 0, 0, 4);
-        public override bool InDevelopmentMode => false;
+        public override Version LogicVersion => new Version(1, 0, 0, 3);
+        public override bool InDevelopmentMode => true;
 
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -36,8 +35,7 @@ namespace P3.Logic.Operations.Slider
             factory.CreateLogicInterfaceTemplate(RuleInputValueMax, "OPERATIONS.SLIDER.INPUT.VALUE_MAX.NAME", "OPERATIONS.SLIDER.INPUT.VALUE_MAX.DESCRIPTION", "value_max",LogicGuid, LogicInterfaceDirection.Input, 0, 3);
             factory.CreateLogicInterfaceTemplate(RuleInputValueMin, "OPERATIONS.SLIDER.INPUT.VALUE_MIN.NAME", "OPERATIONS.SLIDER.INPUT.VALUE_MIN.DESCRIPTION", "value_min", LogicGuid, LogicInterfaceDirection.Input, 0, 4);
 
-            factory.CreateLogicInterfaceTemplate(RuleOutput, "OPERATIONS.SLIDER.OUTPUT.VALUE.NAME", "OPERATIONS.SLIDER.OUTPUT.VALUE.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
-            factory.CreateLogicInterfaceTemplate(RuleStateOutput, "OPERATIONS.SLIDER.OUTPUT.STATE.NAME", "OPERATIONS.SLIDER.OUTPUT.STATE.DESCRIPTION",  "output-state",LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
+            factory.CreateLogicInterfaceTemplate(RuleOutput, "OPERATIONS.SLIDER.OUTPUT.VALUE.NAME", "OPERATIONS.SLIDER.OUTPUT.VALUE.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
 
             factory.CreateParameterLogicInterfaceTemplate(RuleInputValueMinParam,
                 "OPERATIONS.SLIDER.INPUT.VALUE_MIN.NAME", "OPERATIONS.SLIDER.INPUT.VALUE_MIN.DESCRIPTION", LogicGuid, 1,
