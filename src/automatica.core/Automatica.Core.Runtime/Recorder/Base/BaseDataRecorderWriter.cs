@@ -8,12 +8,13 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Runtime.Recorder.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Automatica.Core.Tests")]
 
-namespace Automatica.Core.Runtime.Recorder
+namespace Automatica.Core.Runtime.Recorder.Base
 {
     internal abstract class BaseDataRecorderWriter : IDataRecorderWriter
     {
@@ -59,7 +60,7 @@ namespace Automatica.Core.Runtime.Recorder
             {
                 MetricName.Add(nodeInstance, GetFullNodeName(node));
             }
-            
+
             _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
             await Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
         }
@@ -70,7 +71,7 @@ namespace Automatica.Core.Runtime.Recorder
             nameList.Add(nodeInstance.Name);
             GetFullNameRecursive(nodeInstance, ref nameList);
             nameList.Reverse();
-            var name = String.Join("-", nameList);
+            var name = string.Join("-", nameList);
 
             name = name
                 .Replace("*", "")
@@ -110,9 +111,9 @@ namespace Automatica.Core.Runtime.Recorder
         }
         private void DataCallback(IDispatchable dispatchable, DispatchValue value)
         {
-            if(_recorders.ContainsKey(dispatchable.Id))
+            if (_recorders.TryGetValue(dispatchable.Id, out var recorder))
             {
-                foreach(var rec in _recorders[dispatchable.Id])
+                foreach (var rec in recorder)
                 {
                     rec.ValueChanged(value, dispatchable.Name);
                 }
@@ -120,7 +121,7 @@ namespace Automatica.Core.Runtime.Recorder
         }
 
 
-        internal void SaveValue(NodeInstance instance, double value, string source)
+        internal async Task SaveValue(NodeInstance instance, double value, string source)
         {
             var trending = new Trending
             {
@@ -132,7 +133,7 @@ namespace Automatica.Core.Runtime.Recorder
             trending.Source = source;
             try
             {
-                Save(trending, instance);
+                await Save(trending, instance);
             }
             catch (Exception e)
             {
@@ -140,7 +141,7 @@ namespace Automatica.Core.Runtime.Recorder
             }
         }
 
-        internal abstract void Save(Trending trend, NodeInstance nodeInstance);
+        internal abstract Task Save(Trending trend, NodeInstance nodeInstance);
 
         public Task RemoveAll()
         {
@@ -162,7 +163,7 @@ namespace Automatica.Core.Runtime.Recorder
 
         public virtual async Task Start()
         {
-            foreach(var ls in _recorders.Values)
+            foreach (var ls in _recorders.Values)
             {
                 foreach (var rec in ls)
                 {

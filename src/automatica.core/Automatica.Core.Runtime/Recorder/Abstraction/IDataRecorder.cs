@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 
-namespace Automatica.Core.Runtime.Recorder
+namespace Automatica.Core.Runtime.Recorder.Abstraction
 {
     internal interface IDataRecorder
     {

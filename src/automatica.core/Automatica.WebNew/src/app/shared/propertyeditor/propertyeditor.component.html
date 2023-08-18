@@ -259,7 +259,7 @@
                 <ng-container *ngSwitchCase="PropertyTemplateType.MultiSelect">
                     <dx-drop-down-box [(value)]="data.data.Value" valueExpr="Key" displayExpr="Value"
                         placeholder="{{ 'COMMON.EDIT' | translateAsync }}" [showClearButton]="true"
-                        (onValueChanged)="valueChanged($event, data)"
+                        (onOptionChanged)="optionChanged($event, data)"
                         [dataSource]="data.data.PropertyTemplate.ExtendedType.items">
                         <div *dxTemplate="let dataGrid of 'content'">
                             <dx-data-grid [dataSource]="data.data.PropertyTemplate.ExtendedType.items"

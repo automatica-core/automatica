@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Runtime.Recorder.Base;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Runtime.Recorder
+namespace Automatica.Core.Runtime.Recorder.Abstraction
 {
     internal class TrendingValueRecorder : IDataRecorder
     {
@@ -33,7 +34,7 @@ namespace Automatica.Core.Runtime.Recorder
                 return Task.CompletedTask;
             }
 
-            if(Instance.TrendingInterval == 0)
+            if (Instance.TrendingInterval == 0)
             {
                 Instance.TrendingInterval = 1;
             }
@@ -45,7 +46,7 @@ namespace Automatica.Core.Runtime.Recorder
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-           RecordValue();
+            RecordValue();
         }
 
         internal void RecordValue()
@@ -56,7 +57,7 @@ namespace Automatica.Core.Runtime.Recorder
                 {
                     return;
                 }
-                _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
+                _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource).ConfigureAwait(false);
                 _lastValue = null;
                 _values.Clear();
             }
@@ -103,14 +104,14 @@ namespace Automatica.Core.Runtime.Recorder
                                 if (_lastValue == null)
                                 {
                                     _lastValue = dblValue;
-                                    _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
+                                    _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource).ConfigureAwait(false); ;
                                 }
                                 else
                                 {
                                     if (dblValue != _lastValue.Value)
                                     {
                                         _lastValue = dblValue;
-                                        _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource);
+                                        _recorderWriter.SaveValue(Instance, _lastValue.Value, _lastSource).ConfigureAwait(false); ;
                                     }
                                 }
 

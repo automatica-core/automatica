@@ -4,7 +4,8 @@
   },
   "SERVER": {
     "RECORDERS": {
-      "HOSTED_GRAFANA": "Hosted Grafana Recorder"
+      "HOSTED_GRAFANA": "Hosted Grafana Recorder",
+      "HYPERSERIES": "Hyperseries"
     },
     "SETTINGS": "Server Settings",
     "REMOTE": "Remote Server Settings"
@@ -422,6 +423,18 @@
       },
       "REMOTETOKEN": {
         "NAME": "Token"
+      },
+      "HYPERSERIESUSER":{
+        "NAME": "User"
+      },
+      "HYPERSERIESHOST":{
+        "NAME": "Host"
+      },
+      "HYPERSERIESPASSWORD":{
+        "NAME": "Password"
+      },
+      "HYPERSERIESDATABASE":{
+        "NAME": "Database"
       }
     },
     "CATEGORY_INSTANCE": {

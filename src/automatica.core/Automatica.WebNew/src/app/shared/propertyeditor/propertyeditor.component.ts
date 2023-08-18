@@ -544,14 +544,29 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       this.learnModeSub = void 0;
     }
   }
+  async optionChanged(e, data) {
+    console.log(e);
+    console.log(data);
 
+    if (e.name == "value") {
+
+      var oldValue = JSON.stringify(e.previousValue);
+      var newValue = JSON.stringify(e.value);
+
+      if (newValue == oldValue) {
+        return;
+      }
+
+      this.valueChanged(e, data);
+    }
+  }
   async valueChanged(e, data) {
     const prop = data.data as PropertyInstance;
 
     this.validate.emit(prop);
 
-    if(prop instanceof VirtualGenericPropertyInstance) {
-      if(!prop.updateOnChanges) {
+    if (prop instanceof VirtualGenericPropertyInstance) {
+      if (!prop.updateOnChanges) {
         return;
       }
     }

@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\Automatica.Core.Driver\Automatica.Core.Driver.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
+    <ProjectReference Include="..\Automatica.Core.HyperSeries\Automatica.Core.HyperSeries.csproj" />
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
     <ProjectReference Include="..\Automatica.Core.Logging\Automatica.Core.Logging.csproj" />
     <ProjectReference Include="..\Automatica.Core.Rule\Automatica.Core.Logic.csproj" />

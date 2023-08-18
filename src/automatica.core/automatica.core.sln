@@ -61,11 +61,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.WebApi.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 Base", "00 Base", "{9B0689B8-D06D-4C9C-9E16-AFBC402EEA59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.Logging", "Automatica.Core.Logging\Automatica.Core.Logging.csproj", "{35E3E4F5-E7A9-4CBA-96CA-F4CDD65CF574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Logging", "Automatica.Core.Logging\Automatica.Core.Logging.csproj", "{35E3E4F5-E7A9-4CBA-96CA-F4CDD65CF574}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.Push.Logging", "Automatica.Core.Push.Logging\Automatica.Core.Push.Logging.csproj", "{2724C2F3-34C6-4152-91BC-DAECE24B8FB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Push.Logging", "Automatica.Core.Push.Logging\Automatica.Core.Push.Logging.csproj", "{2724C2F3-34C6-4152-91BC-DAECE24B8FB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.Logging.SignalR", "Automatica.Core.Logging.SignalR\Automatica.Core.Logging.SignalR.csproj", "{4F9C91A7-6B42-45F0-BF1B-62A28DCBBBCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.Logging.SignalR", "Automatica.Core.Logging.SignalR\Automatica.Core.Logging.SignalR.csproj", "{4F9C91A7-6B42-45F0-BF1B-62A28DCBBBCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.HyperSeries", "Automatica.Core.HyperSeries\Automatica.Core.HyperSeries.csproj", "{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -659,6 +661,30 @@ Global
 		{4F9C91A7-6B42-45F0-BF1B-62A28DCBBBCD}.Release|x64.Build.0 = Release|Any CPU
 		{4F9C91A7-6B42-45F0-BF1B-62A28DCBBBCD}.Release|x86.ActiveCfg = Release|Any CPU
 		{4F9C91A7-6B42-45F0-BF1B-62A28DCBBBCD}.Release|x86.Build.0 = Release|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Debug|x64.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Debug|x86.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugLocal|x64.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugLocal|x64.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugLocal|x86.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugLocal|x86.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugTests|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugTests|Any CPU.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugTests|x64.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugTests|x64.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugTests|x86.ActiveCfg = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.DebugTests|x86.Build.0 = Debug|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Release|x64.ActiveCfg = Release|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Release|x64.Build.0 = Release|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -690,6 +716,7 @@ Global
 		{35E3E4F5-E7A9-4CBA-96CA-F4CDD65CF574} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 		{2724C2F3-34C6-4152-91BC-DAECE24B8FB6} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 		{4F9C91A7-6B42-45F0-BF1B-62A28DCBBBCD} = {AB29E770-A012-4773-823B-51F696E3B4F6}
+		{B1927E47-FAD3-40D6-B460-3A3A63CBCDCB} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FBBCDCF-EF03-4621-9894-35C829FA855F}

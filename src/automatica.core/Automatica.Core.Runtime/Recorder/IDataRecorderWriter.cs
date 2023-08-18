@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Automatica.Core.Runtime.Recorder
 {
-    public interface IDataRecorderWriter
+    internal interface IDataRecorderWriter
     {
         Task Start();
         Task Stop();

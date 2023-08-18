@@ -43,6 +43,8 @@ using Automatica.Core.Logic;
 using Automatica.Core.Runtime.RemoteConnect;
 using Newtonsoft.Json;
 using String = System.String;
+using Automatica.Core.Runtime.Recorder.Abstraction;
+using Automatica.Core.Runtime.Recorder.Base;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -77,8 +79,6 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILearnMode _learnMode;
 
         private readonly IUpdateHandler _updateHandler;
-        private readonly IList<IDataRecorderWriter> _trendingRecorder = new List<IDataRecorderWriter>();
-        private readonly IRecorderFactory _recorderFactory;
 
         private readonly IRemoteServerHandler _remoteServerHandler;
         private readonly IRemoteHandler _remoteHandler;
@@ -107,6 +107,8 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IRemoteConnectService _remoteConnectService;
+        private readonly ITrendingContext _trendingContext
+            ;
 
         public RunState RunState
         {
@@ -178,8 +180,7 @@ namespace Automatica.Core.Runtime.Core
             _localizationProvider.LoadFromAssembly(GetType().Assembly);
 
             _loggerFactory = services.GetRequiredService<ILoggerFactory>();
-
-            _recorderFactory = services.GetRequiredService<IRecorderFactory>();
+            _trendingContext = services.GetRequiredService<ITrendingContext>();
 
             _remoteConnectService = services.GetRequiredService<IRemoteConnectService>();
             InitInternals();
@@ -279,13 +280,7 @@ namespace Automatica.Core.Runtime.Core
             }
 
             await StartLogics();
-
-            _logger.LogInformation("Starting recorders...");
-            foreach (var rec in _trendingRecorder)
-            {
-                await rec.Start();
-            }
-            _logger.LogInformation("Starting recorders...done");
+            await _trendingContext.Start();
             RunState = RunState.Started;
 
            
@@ -471,10 +466,7 @@ namespace Automatica.Core.Runtime.Core
 
             _store.Clear();
 
-            foreach(var rec in _trendingRecorder)
-            {
-                await rec.Stop();
-            }
+            await _trendingContext.Stop();
 
             _logicEngineDispatcher.Dispose();
 
@@ -682,42 +674,7 @@ namespace Automatica.Core.Runtime.Core
                 }
             }
 
-            _logger.LogInformation($"Loading enabled recorders...");
-            var trendingRecorder = _settingsCache.GetByKey("trendingRecorders");
-            _trendingRecorder.Clear();
-            if (!String.IsNullOrEmpty(trendingRecorder.ValueText))
-            {
-                var trendingKvp = JsonConvert.DeserializeObject<IList<KeyValuePair<DataRecorderType, String>>>(trendingRecorder.ValueText);
-
-                foreach (var kvp in trendingKvp)
-                {
-                    _trendingRecorder.Add(_recorderFactory.GetRecorder(kvp.Key));
-                    _logger.LogInformation($"Added recorder for {kvp.Value}...");
-                }
-            }
-
-            _logger.LogInformation($"Loading enabled recorders...done");
-
-            _logger.LogInformation("Loading recording data-points...");
-            int recordingDataPointCount = 0;
-
-            await using (var db = new AutomaticaContext(_config))
-            {
-                var nodeInstances = db.NodeInstances.Where(a => a.Trending).ToList();
-                
-                foreach(var node in nodeInstances)
-                {
-                    foreach(var recorder in _trendingRecorder)
-                    {
-                        _logger.LogDebug($"Node {node.Name} is selected for trending...");
-                        await recorder.AddTrend(node.ObjId);
-                        recordingDataPointCount++;
-                    }
-                }
-            }
-
-
-            _logger.LogInformation($"Loading recording data-points (found {recordingDataPointCount})...done");
+            await _trendingContext.Configure();
         }
         
       

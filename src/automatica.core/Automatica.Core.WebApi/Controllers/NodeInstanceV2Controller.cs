@@ -8,6 +8,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Internals.Recorder;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly IDriverNodesStore _driverNodeStore;
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly IConfiguration _config;
+        private readonly IRecorderContext _recorderContext;
         private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
@@ -40,6 +42,7 @@ namespace Automatica.Core.WebApi.Controllers
             IDriverNodesStore driverNodeStore,
             INodeInstanceService nodeInstanceService,
             IConfiguration config,
+            IRecorderContext recorderContext,
             ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
@@ -49,6 +52,7 @@ namespace Automatica.Core.WebApi.Controllers
             _driverNodeStore = driverNodeStore;
             _nodeInstanceService = nodeInstanceService;
             _config = config;
+            _recorderContext = recorderContext;
             _logger = logger;
         }
 
@@ -75,6 +79,18 @@ namespace Automatica.Core.WebApi.Controllers
 
                 DbContext.Update(node);
                 entityState = EntityState.Modified;
+
+                if (entity.Trending != node.Trending)
+                {
+                    if (node.Trending)
+                    {
+                        await _recorderContext.AddRecording(node.ObjId);
+                    }
+                    else
+                    {
+                        await _recorderContext.RemoveRecording(node.ObjId);
+                    }
+                }
 
             }
             else
@@ -369,6 +385,7 @@ namespace Automatica.Core.WebApi.Controllers
                         reloadServer = true;
                     }
                 }
+                
 
                 var entityState = await AddOrUpdateNodeInstance(node);
 

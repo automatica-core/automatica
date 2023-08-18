@@ -1,4 +1,4 @@
-﻿namespace Automatica.Core.Runtime.Recorder
+﻿namespace Automatica.Core.Runtime.Recorder.Base
 {
     public enum DataRecorderType
     {
@@ -7,6 +7,7 @@
         FileRecorder = 2,
         GraphiteRecorder = 3,
         HostedGrafanaRecorder = 4,
-        MemoryRecorder = 5
+        MemoryRecorder = 5,
+        HyperSeriesRecorder = 6
     }
 }

@@ -62,7 +62,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("AreaInstances");
+                    b.ToTable("AreaInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaTemplate", b =>
@@ -109,7 +109,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2AreaType");
 
-                    b.ToTable("AreaTemplates");
+                    b.ToTable("AreaTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaType", b =>
@@ -132,7 +132,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("AreaTypes");
+                    b.ToTable("AreaTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardInterface", b =>
@@ -169,7 +169,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2InterfaceType");
 
-                    b.ToTable("BoardInterfaces");
+                    b.ToTable("BoardInterfaces", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardType", b =>
@@ -191,7 +191,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("BoardTypes");
+                    b.ToTable("BoardTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Categories.CategoryGroup", b =>
@@ -214,7 +214,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("CategoryGroups");
+                    b.ToTable("CategoryGroups", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Categories.CategoryInstance", b =>
@@ -272,7 +272,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("CategoryInstances");
+                    b.ToTable("CategoryInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.InterfaceType", b =>
@@ -313,7 +313,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("InterfaceTypes");
+                    b.ToTable("InterfaceTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Link", b =>
@@ -353,7 +353,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RulePage");
 
-                    b.ToTable("Links");
+                    b.ToTable("Links", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeDataType", b =>
@@ -375,7 +375,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("NodeDataTypes");
+                    b.ToTable("NodeDataTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance", b =>
@@ -494,7 +494,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("NodeInstances");
+                    b.ToTable("NodeInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance2RulePage", b =>
@@ -525,7 +525,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RulePage");
 
-                    b.ToTable("NodeInstance2RulePages");
+                    b.ToTable("NodeInstance2RulePages", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeTemplate", b =>
@@ -618,7 +618,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2NodeDataType");
 
-                    b.ToTable("NodeTemplates");
+                    b.ToTable("NodeTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Plugin", b =>
@@ -665,7 +665,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Plugins");
+                    b.ToTable("Plugins", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyInstance", b =>
@@ -742,7 +742,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("ValueVisuPage");
 
-                    b.ToTable("PropertyInstances");
+                    b.ToTable("PropertyInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplate", b =>
@@ -820,7 +820,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2VisuObjectTemplate");
 
-                    b.ToTable("PropertyTemplates");
+                    b.ToTable("PropertyTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraint", b =>
@@ -854,7 +854,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2PropertyTemplate");
 
-                    b.ToTable("PropertyTemplateConstraints");
+                    b.ToTable("PropertyTemplateConstraints", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraintData", b =>
@@ -886,7 +886,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2PropertyTemplateConstraint");
 
-                    b.ToTable("PropertyTemplateConstraintData");
+                    b.ToTable("PropertyTemplateConstraintData", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyType", b =>
@@ -912,7 +912,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("PropertyTypes");
+                    b.ToTable("PropertyTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInstance", b =>
@@ -980,7 +980,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("RuleInstances");
+                    b.ToTable("RuleInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceDirection", b =>
@@ -1007,7 +1007,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("RuleInterfaceDirections");
+                    b.ToTable("RuleInterfaceDirections", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceInstance", b =>
@@ -1041,7 +1041,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RuleInterfaceTemplate");
 
-                    b.ToTable("RuleInterfaceInstances");
+                    b.ToTable("RuleInterfaceInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceTemplate", b =>
@@ -1094,7 +1094,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RuleTemplate");
 
-                    b.ToTable("RuleInterfaceTemplates");
+                    b.ToTable("RuleInterfaceTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RulePage", b =>
@@ -1126,7 +1126,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RulePageType");
 
-                    b.ToTable("RulePages");
+                    b.ToTable("RulePages", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RulePageType", b =>
@@ -1153,7 +1153,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("RulePageTypes");
+                    b.ToTable("RulePageTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleTemplate", b =>
@@ -1198,7 +1198,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2DefaultMobileVisuTemplate");
 
-                    b.ToTable("RuleTemplates");
+                    b.ToTable("RuleTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Setting", b =>
@@ -1246,7 +1246,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Slave", b =>
@@ -1269,7 +1269,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Slaves");
+                    b.ToTable("Slaves", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>
@@ -1295,7 +1295,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2NodeInstance");
 
-                    b.ToTable("Trendings");
+                    b.ToTable("Trendings", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VersionInformation", b =>
@@ -1323,7 +1323,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("VersionInformations");
+                    b.ToTable("VersionInformations", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectInstance", b =>
@@ -1377,7 +1377,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2VisuPage");
 
-                    b.ToTable("VisuObjectInstances");
+                    b.ToTable("VisuObjectInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectTemplate", b =>
@@ -1437,7 +1437,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2VisuPageType");
 
-                    b.ToTable("VisuObjectTemplates");
+                    b.ToTable("VisuObjectTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuPage", b =>
@@ -1491,7 +1491,7 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("This2VisuPageType")
                         .HasDatabaseName("This2VisuPageType");
 
-                    b.ToTable("VisuPages");
+                    b.ToTable("VisuPages", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuPageType", b =>
@@ -1518,7 +1518,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("VisuPageTypes");
+                    b.ToTable("VisuPageTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Priviledge", b =>
@@ -1546,7 +1546,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Priviledges");
+                    b.ToTable("Priviledges", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Priviledge2Role", b =>
@@ -1561,7 +1561,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2Priviledge");
 
-                    b.ToTable("Priviledge2Roles");
+                    b.ToTable("Priviledge2Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Role", b =>
@@ -1594,7 +1594,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User", b =>
@@ -1637,7 +1637,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User2Group", b =>
@@ -1652,7 +1652,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("User2Groups");
+                    b.ToTable("User2Groups", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User2Role", b =>
@@ -1667,7 +1667,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2Role");
 
-                    b.ToTable("User2Roles");
+                    b.ToTable("User2Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.UserGroup", b =>
@@ -1690,7 +1690,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("UserGroups", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.UserGroup2Role", b =>
@@ -1705,7 +1705,7 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2Role");
 
-                    b.ToTable("UserGroup2Roles");
+                    b.ToTable("UserGroup2Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>

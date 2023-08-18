@@ -37,7 +37,9 @@ export class VirtualSettingsPropertyInstance extends VirtualPropertyInstance {
         return this.setting.Value;
     }
     set Value(value: any) {
+       
         this.setting.Value = value;
+
         this.propertyChanged.emit(this);
     }
 }

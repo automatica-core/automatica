@@ -1,13 +1,16 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
+using Automatica.Core.Runtime.Recorder.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Automatica.Core.Runtime.Recorder
+
+namespace Automatica.Core.Runtime.Recorder.FileSystem
 {
     internal class FileDataRecorderWriter : BaseDataRecorderWriter
     {
@@ -20,7 +23,7 @@ namespace Automatica.Core.Runtime.Recorder
             }
         }
 
-        internal override void Save(Trending trend, NodeInstance nodeInstance)
+        internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
             var fileName = Path.Combine(ServerInfo.GetTrendingDirectory(), nodeInstance.ObjId + ".csv");
             lock (_lock)
@@ -38,6 +41,8 @@ namespace Automatica.Core.Runtime.Recorder
 
                 streamWriter.WriteLine($"{nodeInstance.ObjId},{nodeInstance.Name},{trend.TimestampIso},{trend.Value},{trend.Source}");
             }
+
+            return Task.CompletedTask;
         }
     }
 }
