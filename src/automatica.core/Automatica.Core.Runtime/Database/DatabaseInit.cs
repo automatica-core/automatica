@@ -593,6 +593,29 @@ namespace Automatica.Core.Runtime.Database
                 host.NeedsReloadOnChange = true;
             }
 
+
+            var port = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesPort");
+
+            if (port == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hyperSeriesPort",
+                    Type = (long)PropertyTemplateType.Numeric,
+                    Value = "5432",
+                    Group = "SERVER.RECORDERS.HYPERSERIES",
+                    IsVisible = true,
+                    Order = 0,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
+                });
+            }
+            else
+            {
+                port.ReloadContext = SettingReloadContext.Recorders;
+                port.NeedsReloadOnChange = true;
+            }
+
             var user = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesUser");
 
             if (user == null)

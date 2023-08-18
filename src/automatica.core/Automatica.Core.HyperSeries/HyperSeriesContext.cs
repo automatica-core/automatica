@@ -43,7 +43,7 @@ namespace Automatica.Core.HyperSeries
                 if (_config != null)
                 {
                     var hyperSeriesConString =
-                        $"Server={_config["db:hyperSeriesHost"]};User Id={_config["db:hyperSeriesUser"]};Password={_config["db:hyperSeriesPassword"]};Database={_config["db:hyperSeriesDatabase"]}";
+                        $"Server={_config["db:hyperSeriesHost"]};User Id={_config["db:hyperSeriesUser"]};Password={_config["db:hyperSeriesPassword"]};Database={_config["db:hyperSeriesDatabase"]};Port={_config["db:hyperSeriesPort"]}";
 
                     if (string.IsNullOrEmpty(_config["db:hyperSeriesHost"]))
                     {
