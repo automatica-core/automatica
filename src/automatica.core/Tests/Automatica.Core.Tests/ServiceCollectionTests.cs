@@ -7,6 +7,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
+using Automatica.Core.HyperSeries;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.License;
@@ -56,6 +57,7 @@ namespace Automatica.Core.Tests
             moq.AddSingleton(CreateHubContextMock<TelegramHub>());
             moq.AddSingleton(CreateHubContextMock<DataHub>());
             moq.AddSingleton(new AutomaticaContext(mockConfiguration.Object));
+            moq.AddSingleton(new HyperSeriesContext(mockConfiguration.Object));
             moq.AddSingleton<ILogger>(a => NullLogger.Instance);
 
             moq.AddLogging(a => { a.AddConsole(); });

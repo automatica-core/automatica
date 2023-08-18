@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.HyperSeries;
 using Automatica.Core.Runtime;
 using Automatica.Core.Runtime.Core;
 using Automatica.Core.Runtime.Core.Plugins;
@@ -66,6 +67,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton<IConfiguration>(config);
             services.AddAutomaticaCoreService(config, false);
             services.AddDbContext<AutomaticaContext>();
+            services.AddHyperSeries();
             services.AddSingleton<T>();
 
             services.AddAutomaticaPushServices(config, false);
