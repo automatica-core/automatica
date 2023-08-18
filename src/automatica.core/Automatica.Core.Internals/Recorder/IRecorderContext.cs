@@ -7,5 +7,6 @@ namespace Automatica.Core.Internals.Recorder
     {
         Task AddRecording(Guid nodeInstanceId);
         Task RemoveRecording(Guid nodeInstanceId);
+        Task Reload();
     }
 }

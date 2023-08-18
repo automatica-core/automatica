@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Core;
+using Automatica.Core.Internals.Recorder;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -13,12 +14,14 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly IAutoUpdateHandler _updateHandler;
         private readonly ISettingsCache _settingsCache;
         private readonly ICoreServer _coreServer;
+        private readonly IRecorderContext _recorderContext;
 
-        public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler, ISettingsCache settingsCache, ICoreServer coreServer) : base(dbContext)
+        public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler, ISettingsCache settingsCache, ICoreServer coreServer, IRecorderContext recorderContext) : base(dbContext)
         {
             _updateHandler = updateHandler;
             _settingsCache = settingsCache;
             _coreServer = coreServer;
+            _recorderContext = recorderContext;
         }
 
         [HttpGet]
@@ -38,6 +41,7 @@ namespace Automatica.Core.WebApi.Controllers
         public ICollection<Setting> SaveSettings([FromBody]IList<Setting> settings)
         {
             var reloadServer = false;
+            var reloadContext = new List<SettingReloadContext>();
             foreach(var s in settings)
             {
                 var originalSetting = DbContext.Settings.SingleOrDefault(a => a.ValueKey == s.ValueKey);
@@ -48,18 +52,24 @@ namespace Automatica.Core.WebApi.Controllers
                     continue;
                 }
 
-                if (s.ValueDouble != originalSetting.ValueDouble)
+                if (s.ValueDouble != originalSetting.ValueDouble && originalSetting.NeedsReloadOnChange)
                 {
                     reloadServer = true;
+                    if(!reloadContext.Contains(originalSetting.ReloadContext))
+                        reloadContext.Add(originalSetting.ReloadContext);
                 }
 
-                if (s.ValueInt != originalSetting.ValueInt)
+                if (s.ValueInt != originalSetting.ValueInt && originalSetting.NeedsReloadOnChange)
                 {
                     reloadServer = true;
+                    if (!reloadContext.Contains(originalSetting.ReloadContext))
+                        reloadContext.Add(originalSetting.ReloadContext);
                 }
-                if (s.ValueText != originalSetting.ValueText)
+                if (s.ValueText != originalSetting.ValueText && originalSetting.NeedsReloadOnChange)
                 {
                     reloadServer = true;
+                    if (!reloadContext.Contains(originalSetting.ReloadContext))
+                        reloadContext.Add(originalSetting.ReloadContext);
                 }
                 originalSetting.Value = s.Value;
 
@@ -68,11 +78,14 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (reloadServer)
             {
-                _coreServer.ReInit().ConfigureAwait(false);
+                if(reloadContext.Contains(SettingReloadContext.Server))
+                    _coreServer.ReInit().ConfigureAwait(false);
+                else if(reloadContext.Contains(SettingReloadContext.Recorders))
+                    _recorderContext.Reload().ConfigureAwait(false);
             }
 
             DbContext.SaveChanges();
-            _updateHandler.ReInitialize();
+            _updateHandler.ReInitialize().ConfigureAwait(false);
             _settingsCache.Clear();
 
             return LoadSettings();

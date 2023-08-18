@@ -116,15 +116,16 @@ namespace Automatica.Core.Runtime.Database
                     Value = 0,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 10
+                    Order = 10,
+                    ReloadContext = SettingReloadContext.Server,
+                    NeedsReloadOnChange = true
                 });
             }
             else
             {
-                if (lat.ValueDouble == null)
-                {
-                    lat.ValueDouble = 0;
-                }
+                lat.ValueDouble ??= 0;
+                lat.NeedsReloadOnChange = true;
+                lat.ReloadContext = SettingReloadContext.Server;
                 context.Settings.Update(lat);
             }
             if(longi == null)
@@ -136,12 +137,16 @@ namespace Automatica.Core.Runtime.Database
                     Value = 0,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 11
+                    Order = 11,
+                    ReloadContext = SettingReloadContext.Server,
+                    NeedsReloadOnChange = true
                 });
             }
             else
             {
                 longi.ValueDouble ??= 0;
+                longi.NeedsReloadOnChange = true;
+                longi.ReloadContext = SettingReloadContext.Server;
                 context.Settings.Update(longi);
             }
 
@@ -573,8 +578,15 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
-                    Order = 0
+                    Order = 0,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
+            }
+            else
+            {
+                host.ReloadContext = SettingReloadContext.Recorders;
+                host.NeedsReloadOnChange = true;
             }
 
             var user = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesUser");
@@ -588,8 +600,15 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
+            }
+            else
+            {
+                user.ReloadContext = SettingReloadContext.Recorders;
+                user.NeedsReloadOnChange = true;
             }
 
             var password = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesPassword");
@@ -603,8 +622,15 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
-                    Order = 2
+                    Order = 2,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
+            }
+            else
+            {
+                password.ReloadContext = SettingReloadContext.Recorders;
+                password.NeedsReloadOnChange = true;
             }
             var database = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesDatabase");
 
@@ -617,12 +643,16 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
-                    Order = 3
+                    Order = 3,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
             else
             {
                 database.Type = (long) PropertyTemplateType.Text;
+                database.ReloadContext = SettingReloadContext.Recorders;
+                database.NeedsReloadOnChange = true;
             }
         }
 

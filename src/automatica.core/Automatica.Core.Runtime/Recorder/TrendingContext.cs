@@ -123,5 +123,11 @@ namespace Automatica.Core.Runtime.Recorder
                 await recorder.RemoveTrend(nodeInstanceId);
             }
         }
+
+        public async Task Reload()
+        {
+            await Stop();
+            await Start();
+        }
     }
 }
