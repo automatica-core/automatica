@@ -46,7 +46,7 @@ namespace Automatica.Core.Tests
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseType")]).Returns("sqlite");
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseSqlite")]).Returns("Data Source=automatica.core-test.db");
 
-            var mockConfiguration = new Mock<IConfiguration>();
+            var mockConfiguration = new Mock<IConfigurationRoot>();
             mockConfiguration.Setup(a => a.GetSection(It.Is<string>(s => s == "ConnectionStrings"))).Returns(mockConfSection.Object);
             var moq = new ServiceCollection();
 
@@ -62,7 +62,8 @@ namespace Automatica.Core.Tests
 
             moq.AddLogging(a => { a.AddConsole(); });
 
-            moq.AddSingleton(mockConfiguration.Object);
+            moq.AddSingleton<IConfigurationRoot>(mockConfiguration.Object);
+            moq.AddSingleton<IConfiguration>(mockConfiguration.Object);
             return moq;
         }
 
