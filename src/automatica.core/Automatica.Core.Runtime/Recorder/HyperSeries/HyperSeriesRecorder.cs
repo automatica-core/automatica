@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Automatica.Core.Runtime.Recorder.Base;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -19,10 +21,17 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
     internal class HyperSeriesRecorder : BaseDataRecorderWriter
     {
         private readonly IConfigurationRoot _config;
+        private readonly HyperSeriesContext _context;
 
-        public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, HyperSeriesContext hyperContext, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0);
+
+        private readonly Queue<RecordValue> _queue = new Queue<RecordValue>();
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
+        public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, HyperSeriesContext context, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
         {
-            _config = config;;
+            _config = config;
+            _context = context;
         }
 
         public override async Task Start()
@@ -33,6 +42,8 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                 await using var hyperContext = new HyperSeriesContext(_config);
                 await hyperContext.Database.MigrateAsync();
 
+                _ = Task.Run(WorkerThread, _cancellationTokenSource.Token);
+
                 await base.Start();
             }
             catch (Exception e)
@@ -41,17 +52,42 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
             }
         }
 
-        internal override async Task Save(Trending trend, NodeInstance nodeInstance)
+        public override Task Stop()
         {
-            await using var hyperContext = new HyperSeriesContext(_config);
-            await hyperContext.AddRecordValue(new RecordValue
+            _cancellationTokenSource.Cancel(true);
+            return base.Stop();
+        }
+
+        private async Task WorkerThread()
+        {
+
+            while (true)
+            {
+                try
+                {
+                    await _semaphore.WaitAsync(_cancellationTokenSource.Token);
+
+                    var record = _queue.Dequeue();
+                    await _context.AddRecordValue(record);
+                }
+                catch (TaskCanceledException)
+                {
+                    
+                }
+            }
+        }
+
+        internal override Task Save(Trending trend, NodeInstance nodeInstance)
+        {
+            _queue.Enqueue(new RecordValue
             {
                 NodeInstanceId = nodeInstance.ObjId,
                 Timestamp = trend.Timestamp,
                 Value = trend.Value,
                 TrendId = trend.ObjId
             });
-
+            _semaphore.Release();
+            return Task.CompletedTask;
         }
     }
 }
