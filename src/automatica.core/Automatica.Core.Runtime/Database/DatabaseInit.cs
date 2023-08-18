@@ -673,7 +673,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
                     IsVisible = true,
-                    Order = 0
+                    Order = 0,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
             var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaApiKey");
@@ -687,7 +689,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
             var userId = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaUserId");
@@ -701,7 +705,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
         }
