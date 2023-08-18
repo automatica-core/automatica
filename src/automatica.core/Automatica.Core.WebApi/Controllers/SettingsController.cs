@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Internals.Cache.Common;
+using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.Recorder;
+using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -15,13 +17,20 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ISettingsCache _settingsCache;
         private readonly ICoreServer _coreServer;
         private readonly IRecorderContext _recorderContext;
+        private readonly IConfigurationProvider _dbProvider;
 
-        public SettingsController(AutomaticaContext dbContext, IAutoUpdateHandler updateHandler, ISettingsCache settingsCache, ICoreServer coreServer, IRecorderContext recorderContext) : base(dbContext)
+        public SettingsController(AutomaticaContext dbContext, 
+            IAutoUpdateHandler updateHandler, 
+            ISettingsCache settingsCache, 
+            ICoreServer coreServer, 
+            IRecorderContext recorderContext,
+            IConfigurationRoot dbProvider) : base(dbContext)
         {
             _updateHandler = updateHandler;
             _settingsCache = settingsCache;
             _coreServer = coreServer;
             _recorderContext = recorderContext;
+            _dbProvider = dbProvider.Providers.FirstOrDefault(p => p is DatabaseConfigurationProvider);
         }
 
         [HttpGet]
@@ -75,6 +84,11 @@ namespace Automatica.Core.WebApi.Controllers
 
                 DbContext.Update(originalSetting);
             }
+            _dbProvider.Load();
+
+            DbContext.SaveChanges();
+            _updateHandler.ReInitialize().ConfigureAwait(false);
+            _settingsCache.Clear();
 
             if (reloadServer)
             {
@@ -84,10 +98,7 @@ namespace Automatica.Core.WebApi.Controllers
                     _recorderContext.Reload().ConfigureAwait(false);
             }
 
-            DbContext.SaveChanges();
-            _updateHandler.ReInitialize().ConfigureAwait(false);
-            _settingsCache.Clear();
-
+           
             return LoadSettings();
         }
     }

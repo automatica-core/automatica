@@ -24,7 +24,7 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
         private readonly IDictionary<DataRecorderType, IDataRecorderWriter> _writers =
             new ConcurrentDictionary<DataRecorderType, IDataRecorderWriter>();
 
-        public RecorderFactory(INodeInstanceCache nodeInstanceCache, IDispatcher dispatcher, ILoggerFactory loggerFactory, IConfiguration config, ISettingsCache settingsCache, IServiceProvider serviceProvider)
+        public RecorderFactory(INodeInstanceCache nodeInstanceCache, IDispatcher dispatcher, ILoggerFactory loggerFactory, IConfigurationRoot config, ISettingsCache settingsCache, IServiceProvider serviceProvider)
         {
             _writers.Add(DataRecorderType.CloudRecorder, new CloudDataRecorderWriter(config, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.DatabaseRecorder, new DatabaseDataRecorderWriter(config, nodeInstanceCache, dispatcher, loggerFactory));

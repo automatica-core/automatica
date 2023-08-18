@@ -577,6 +577,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
         await this.config.update(this.item);
 
         if (!this.item.ParentId) {
+          prop.Value = e.value;
           this.nodeInstanceService.saveSettings();
         }
       } else if (this.item instanceof RuleInstance) {

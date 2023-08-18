@@ -67,6 +67,10 @@ namespace Automatica.Core.Internals.Cache.Common
 
         public Setting GetByKey(string key)
         {
+            if (_byKeyCache.Count == 0)
+            {
+                Initialize();
+            }
             return _byKeyCache[key];
         }
     }

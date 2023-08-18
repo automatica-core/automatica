@@ -127,6 +127,7 @@ namespace Automatica.Core.Runtime.Recorder
         public async Task Reload()
         {
             await Stop();
+            await Configure();
             await Start();
         }
     }
