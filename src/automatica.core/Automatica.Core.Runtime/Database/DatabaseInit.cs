@@ -306,12 +306,16 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 0,
-                    Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType))
+                    Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType)),
+                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.Recorders
                 });
             }
             else
             {
                 trendingRecorder.Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType));
+                trendingRecorder.NeedsReloadOnChange = true;
+                trendingRecorder.ReloadContext = SettingReloadContext.Recorders;
                 context.Update(trendingRecorder);
             }
 
