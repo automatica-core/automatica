@@ -45,6 +45,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                 _ = Task.Run(WorkerThread, _cancellationTokenSource.Token);
 
                 await base.Start();
+                Logger.LogInformation($"Started hyperseries recorder....");
             }
             catch (Exception e)
             {
@@ -60,7 +61,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         private async Task WorkerThread()
         {
-
+            Logger.LogInformation($"Started worker thread...");
             while (true)
             {
                 try
@@ -72,9 +73,10 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                 }
                 catch (TaskCanceledException)
                 {
-                    
+                    break;
                 }
             }
+            Logger.LogInformation($"Exited worker thread...");
         }
 
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
