@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { LabelComponent } from "./label/label.component";
 import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
@@ -61,6 +61,9 @@ import { SliderComponent } from "./slider/slider.component";
   ],
   exports: [
     VisuItemComponent
+  ],
+  providers: [
+    DatePipe
   ]
 })
 export class ControlsModule { }

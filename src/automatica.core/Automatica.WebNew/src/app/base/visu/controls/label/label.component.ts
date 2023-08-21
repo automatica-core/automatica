@@ -11,6 +11,8 @@ import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { DefaultComponent } from "../default/default.component";
 import { HyperSeriesService } from "src/app/services/hyperseries.service";
 import { AggregatedValueRecord, AggregationType } from "src/app/base/model/aggregated-record-value";
+import { DatePipe } from "@angular/common";
+import { formatDate } from "devextreme/localization";
 
 @Component({
   selector: "visu-label",
@@ -83,7 +85,7 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
     switch (this.aggregationTypeValue) {
       case AggregationType.Raw:
       case AggregationType.Hourly:
-        this.argumentAxisFormatString = "shortTime"; 
+        this.argumentAxisFormatString = "shortTime";
         break;
 
       case AggregationType.Weekly:
@@ -105,6 +107,15 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
   async onValueChanged($event) {
     await this.fetchValues();
   }
+
+  customizeTooltip = (info: any) => ({
+    html: `<div><div class='tooltip-header'>${Math.round((info.point.data.averageValue + Number.EPSILON) * 100) / 100}</div>`
+      + '<div class=\'tooltip-body\'><div class=\'series-name\'>'
+      + `<span class='top-series-name'>${this.translate.translate("COMMON.TIMESTAMP")}</span>`
+      + '</div><div class=\'value-text\'>'
+      + `<span class='top-series-value'>${formatDate(info.point.data.timestamp, this.argumentAxisFormatString)}</span>`
+      + '</div></div></div>',
+  });
 
   async ngOnDestroy() {
     super.baseOnDestroy();

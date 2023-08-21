@@ -9,12 +9,11 @@ namespace Automatica.Core.HyperSeries
     internal class HyperSeriesRepository : IHyperSeriesRepository
     {
         public HyperSeriesContext Context { get; }
-        public bool IsActivated { get; }
+        public bool IsActivated => Context.Database.CanConnect();
 
         public HyperSeriesRepository(HyperSeriesContext context)
         {
             Context = context;
-            IsActivated = context.Database.CanConnect();
         }
         public Task Add(RecordValue recordValue)
         {

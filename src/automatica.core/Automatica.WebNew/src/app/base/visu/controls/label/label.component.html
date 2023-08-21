@@ -32,7 +32,8 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'COMMON.CHART.RANGE' | translate }}</div>
                     <div class="dx-field-value-static">
-                        <dx-date-range-box [(value)]="dateRangeValue" (onValueChanged)="onValueChanged($event)" applyValueMode="useButtons">
+                        <dx-date-range-box [(value)]="dateRangeValue" (onValueChanged)="onValueChanged($event)"
+                            applyValueMode="useButtons">
                         </dx-date-range-box>
                     </div>
                 </div>
@@ -40,7 +41,7 @@
                     <div class="dx-field-label">{{ 'COMMON.CHART.COUNT' | translate }}</div>
                     <div class="dx-field-value-static">
                         <dx-number-box [(value)]="countValues" [min]="0" [max]="100000" [showSpinButtons]="true"
-                            (onValueChanged)="onValueChanged($event)"></dx-number-box>
+                            (onValueChanged)="onValueChanged($event)" valueChangeEvent="focusout"></dx-number-box>
                     </div>
                 </div>
             </div>
@@ -65,7 +66,7 @@
                             </dxo-label>
                         </dxi-series>
 
-                        <dxo-tooltip [enabled]="true">
+                        <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
                             <dxo-format type="fixedPoint" [precision]="2"></dxo-format>
                         </dxo-tooltip>
                         <dxo-legend [visible]="false"></dxo-legend>
@@ -73,9 +74,21 @@
                 </div>
             </div>
 
-
+            <div>
+                <div class='tooltip-header'>100</div>
+                <div class='tooltip-body'>
+                    <div class='series-name'>
+                        <span class='top-series-name'>Name</span>
+                    </div>
+                    <div class='value-text'>
+                        <span class='top-series-value'>Timestamp</span>
+                    </div>
+                </div>
+            </div>
 
         </ng-container>
 
     </div>
+
+    
 </app-visualization-control>
