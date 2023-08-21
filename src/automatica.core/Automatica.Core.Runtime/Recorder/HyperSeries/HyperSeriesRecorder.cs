@@ -89,19 +89,18 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
-            if (!_repository.IsActivated)
+            if (_repository.IsActivated)
             {
-                return Task.CompletedTask;
+                _queue.Enqueue(new RecordValue
+                {
+                    NodeInstanceId = nodeInstance.ObjId,
+                    Timestamp = trend.Timestamp,
+                    Value = trend.Value,
+                    TrendId = trend.ObjId
+                });
+                _semaphore.Release();
             }
 
-            _queue.Enqueue(new RecordValue
-            {
-                NodeInstanceId = nodeInstance.ObjId,
-                Timestamp = trend.Timestamp,
-                Value = trend.Value,
-                TrendId = trend.ObjId
-            });
-            _semaphore.Release();
             return Task.CompletedTask;
         }
     }
