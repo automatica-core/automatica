@@ -26,6 +26,7 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
   aggregationTypeValue: AggregationType;
 
   enablePopup = false;
+  argumentAxisFormatString: any;
 
   public get displayValue() {
     if (this.value === void 0) {
@@ -65,6 +66,8 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
     ];
 
     this.aggregationTypeValue = AggregationType.Hourly;
+
+    this.argumentAxisFormatString = "shortTime";
   }
 
   async ngOnInit() {
@@ -73,8 +76,24 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
     this.enablePopup = this.nodeInstanceModel && this.nodeInstanceModel.Trending;
 
   }
-  
+
   private async fetchValues() {
+
+    switch (this.aggregationTypeValue) {
+      case AggregationType.Raw:
+      case AggregationType.Hourly:
+        this.argumentAxisFormatString = "shortTime"; 
+        break;
+
+      case AggregationType.Weekly:
+      case AggregationType.Monthly:
+      case AggregationType.Yearly:
+        this.argumentAxisFormatString = "shortDate";
+      default:
+        this.argumentAxisFormatString = "shortDateShortTime";
+        break;
+    }
+
     this.hyperSeriesChartValues = await this.hyperSeriesService.getAggregatedValues(this.aggregationTypeValue, this.nodeInstanceModel.Id, this.dateRangeValue[0], this.dateRangeValue[1], 100);
   }
 
