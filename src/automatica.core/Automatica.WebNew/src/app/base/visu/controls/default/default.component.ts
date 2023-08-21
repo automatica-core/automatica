@@ -41,7 +41,6 @@ export class DefaultComponent extends BaseMobileComponent implements OnInit, OnD
 
     if(this.nodeInstanceModel && this.nodeInstanceModel.Trending) {
       this.hyperSeriesValues = await this.hyperSeries.getAggregatedValues(AggregationType.Raw, this.nodeInstanceModel.Id);
-      console.log(this.hyperSeriesValues);
     }
 
   }
