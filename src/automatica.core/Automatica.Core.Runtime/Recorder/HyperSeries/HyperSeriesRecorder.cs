@@ -89,7 +89,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
-            if (_repository.IsActivated)
+            if (!_repository.IsActivated)
             {
                 return Task.CompletedTask;
             }
