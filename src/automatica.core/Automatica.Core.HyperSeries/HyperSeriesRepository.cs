@@ -30,13 +30,13 @@ namespace Automatica.Core.HyperSeries
                 case AggregationType.Raw:
                     List<RecordValue> values;
                     if (startDate.HasValue && endDate.HasValue)
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
                     else if (startDate.HasValue && !endDate.HasValue)
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).OrderBy(a => a.Timestamp).ToList();
                     else if (!startDate.HasValue && endDate.HasValue)
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
                     else
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id).Take(count).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id).Take(count).OrderBy(a => a.Timestamp).ToList();
 
                     foreach (var recordValue in values)
                     {
@@ -80,13 +80,13 @@ namespace Automatica.Core.HyperSeries
             await Task.CompletedTask;
 
             if(startDate.HasValue && endDate.HasValue)
-                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).ToList();
+                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
             if(startDate.HasValue && !endDate.HasValue)
-                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).ToList();
+                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).OrderBy(a => a.Timestamp).ToList();
             if (!startDate.HasValue && endDate.HasValue)
-                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).ToList();
+                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
 
-            return dbSet.Where(a => a.NodeInstanceId == id).Take(count).ToList();
+            return dbSet.Where(a => a.NodeInstanceId == id).Take(count).OrderBy(a => a.Timestamp).ToList();
         }
     }
 }
