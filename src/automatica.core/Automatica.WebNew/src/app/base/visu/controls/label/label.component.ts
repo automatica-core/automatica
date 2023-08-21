@@ -76,7 +76,7 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
   async ngOnInit() {
     await super.ngOnInit();
 
-    this.enablePopup = this.nodeInstanceModel && this.nodeInstanceModel.Trending;
+    this.enablePopup = this.nodeInstanceModel && this.nodeInstanceModel.Trending && this.hyperSeriesValues.length > 0;
 
   }
 
