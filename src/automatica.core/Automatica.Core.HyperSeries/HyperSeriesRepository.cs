@@ -1,5 +1,8 @@
-﻿using Automatica.Core.HyperSeries.Model;
+﻿using System.Runtime.CompilerServices;
+using Automatica.Core.HyperSeries.Model;
 using Microsoft.EntityFrameworkCore;
+
+[assembly:InternalsVisibleTo("Automatica.Core.Tests")]
 
 namespace Automatica.Core.HyperSeries
 {

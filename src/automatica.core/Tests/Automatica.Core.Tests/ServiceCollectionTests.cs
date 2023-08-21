@@ -59,6 +59,7 @@ namespace Automatica.Core.Tests
             moq.AddSingleton(new AutomaticaContext(mockConfiguration.Object));
             moq.AddSingleton(new HyperSeriesContext(mockConfiguration.Object));
             moq.AddSingleton<ILogger>(a => NullLogger.Instance);
+            moq.AddSingleton<IHyperSeriesRepository, HyperSeriesRepository>();
 
             moq.AddLogging(a => { a.AddConsole(); });
 
