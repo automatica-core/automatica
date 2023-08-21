@@ -24,6 +24,7 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
   aggregations: AggregationType[] = [AggregationType.Raw, AggregationType.Hourly, AggregationType.Daily, AggregationType.Weekly, AggregationType.Monthly, AggregationType.Yearly];
   dateRangeValue: [Date, Date] = void 0;
   aggregationTypeValue: AggregationType;
+  countValues = 100;
 
   enablePopup = false;
   argumentAxisFormatString: any;
@@ -61,7 +62,7 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
     const msInDay = 1000 * 60 * 60 * 24;
     const now = new Date();
     this.dateRangeValue = [
-      new Date(now.getTime() - msInDay * 3),
+      new Date(now.getTime() - msInDay * 5),
       new Date(now.getTime()),
     ];
 
@@ -94,7 +95,7 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
         break;
     }
 
-    this.hyperSeriesChartValues = await this.hyperSeriesService.getAggregatedValues(this.aggregationTypeValue, this.nodeInstanceModel.Id, this.dateRangeValue[0], this.dateRangeValue[1], 100);
+    this.hyperSeriesChartValues = await this.hyperSeriesService.getAggregatedValues(this.aggregationTypeValue, this.nodeInstanceModel.Id, this.dateRangeValue[0], this.dateRangeValue[1], this.countValues);
   }
 
   async onPopupShowing($event) {

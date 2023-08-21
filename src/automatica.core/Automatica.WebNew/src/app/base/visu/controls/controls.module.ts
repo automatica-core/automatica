@@ -44,7 +44,8 @@ import { SliderComponent } from "./slider/slider.component";
     FontAwesomeModule,
     DxSelectBoxModule,
     DxDateRangeBoxModule,
-    DxTextBoxModule
+    DxTextBoxModule,
+    DxNumberBoxModule
   ],
   declarations: [
     VisuItemComponent,

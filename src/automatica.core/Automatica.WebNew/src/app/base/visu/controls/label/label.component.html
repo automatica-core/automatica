@@ -32,8 +32,15 @@
                 <div class="dx-field">
                     <div class="dx-field-label">{{ 'COMMON.CHART.RANGE' | translate }}</div>
                     <div class="dx-field-value-static">
-                        <dx-date-range-box [(value)]="dateRangeValue" (onValueChanged)="onValueChanged($event)">
+                        <dx-date-range-box [(value)]="dateRangeValue" (onValueChanged)="onValueChanged($event)" applyValueMode="useButtons">
                         </dx-date-range-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'COMMON.CHART.COUNT' | translate }}</div>
+                    <div class="dx-field-value-static">
+                        <dx-number-box [(value)]="countValues" [min]="0" [max]="100000" [showSpinButtons]="true"
+                            (onValueChanged)="onValueChanged($event)"></dx-number-box>
                     </div>
                 </div>
             </div>

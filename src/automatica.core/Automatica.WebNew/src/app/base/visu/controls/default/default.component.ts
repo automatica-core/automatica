@@ -40,7 +40,7 @@ export class DefaultComponent extends BaseMobileComponent implements OnInit, OnD
     await super.propertyChanged();
 
     if(this.nodeInstanceModel && this.nodeInstanceModel.Trending) {
-      this.hyperSeriesValues = await this.hyperSeries.getAggregatedValues(AggregationType.Raw, this.nodeInstanceModel.Id);
+      this.hyperSeriesValues = await this.hyperSeries.getAggregatedValues(AggregationType.Raw, this.nodeInstanceModel.Id, null, null, 10);
     }
 
   }

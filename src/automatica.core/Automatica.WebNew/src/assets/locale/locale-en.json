@@ -107,7 +107,8 @@
       "NAME": "Chart",
       "RANGE_AGGREGATION": "Range/Aggregation",
       "RANGE": "Range",
-      "AGGREGATION": "Aggregation"   ,
+      "AGGREGATION": "Aggregation",
+      "COUNT": "Count values",
       "AGGREGATION_ENUM": {
         "RAW": "Raw",
         "HOURLY": "Hourly",

@@ -24,19 +24,29 @@ namespace Automatica.Core.HyperSeries
         public async Task<List<AggregatedRecordValue>> GetAggregatedValues(AggregationType aggregationType, Guid id, DateTime? startDate, DateTime? endDate, int count)
         {
             var ret = new List<AggregatedRecordValue>();
+
+            if (startDate.HasValue)
+            {
+                startDate = new DateTime(startDate.Value.Year, startDate.Value.Month, startDate.Value.Day, 0, 0, 0, DateTimeKind.Utc);
+            }
+
+            if (endDate.HasValue)
+            {
+                endDate = new DateTime(endDate.Value.Year, endDate.Value.Month, endDate.Value.Day, 23, 59, 59, DateTimeKind.Utc);
+            }
             
             switch (aggregationType)
             {
                 case AggregationType.Raw:
                     List<RecordValue> values;
                     if (startDate.HasValue && endDate.HasValue)
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).OrderByDescending(a => a.Timestamp).ToList();
                     else if (startDate.HasValue && !endDate.HasValue)
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).OrderBy(a => a.Timestamp).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).OrderByDescending(a => a.Timestamp).ToList();
                     else if (!startDate.HasValue && endDate.HasValue)
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).OrderByDescending(a => a.Timestamp).ToList();
                     else
-                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id).Take(count).OrderBy(a => a.Timestamp).ToList();
+                        values = Context.RecordValues.Where(a => a.NodeInstanceId == id).Take(count).OrderByDescending(a => a.Timestamp).ToList();
 
                     foreach (var recordValue in values)
                     {
@@ -80,13 +90,13 @@ namespace Automatica.Core.HyperSeries
             await Task.CompletedTask;
 
             if(startDate.HasValue && endDate.HasValue)
-                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
+                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate && a.Timestamp <= endDate).Take(count).OrderByDescending(a => a.Timestamp).ToList();
             if(startDate.HasValue && !endDate.HasValue)
-                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).OrderBy(a => a.Timestamp).ToList();
+                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp >= startDate).Take(count).OrderByDescending(a => a.Timestamp).ToList();
             if (!startDate.HasValue && endDate.HasValue)
-                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).OrderBy(a => a.Timestamp).ToList();
+                return dbSet.Where(a => a.NodeInstanceId == id && a.Timestamp <= endDate).Take(count).OrderByDescending(a => a.Timestamp).ToList();
 
-            return dbSet.Where(a => a.NodeInstanceId == id).Take(count).OrderBy(a => a.Timestamp).ToList();
+            return dbSet.Where(a => a.NodeInstanceId == id).Take(count).OrderByDescending(a => a.Timestamp).ToList();
         }
     }
 }

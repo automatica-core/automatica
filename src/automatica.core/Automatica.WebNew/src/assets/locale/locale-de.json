@@ -107,6 +107,7 @@
       "RANGE_AGGREGATION": "Zeitbereich/Aggregierung",
       "RANGE": "Bereich",
       "AGGREGATION": "Aggregierung",
+      "COUNT": "Anzahl Werte",
       "AGGREGATION_ENUM": {
         "RAW": "Rohwerte",
         "HOURLY": "Stündlich",
