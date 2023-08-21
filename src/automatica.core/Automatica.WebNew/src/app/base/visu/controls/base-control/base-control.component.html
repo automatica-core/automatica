@@ -2,12 +2,13 @@
 
     <ng-container *ngIf="aggregatedValues && aggregatedValues.length >= 3">
         <div class="chart">
-            <dx-chart [dataSource]="aggregatedValues">
+            <dx-chart [dataSource]="aggregatedValues" autoHidePointMarkers="true">
                 <dxo-size [height]="30" [width]="180">
                 </dxo-size>
-                <dxi-series valueField="averageValue" name="averageValue" argumentField="timestamp">
+                <dxi-series type="line" valueField="averageValue" name="averageValue" argumentField="timestamp">
                     <dxo-label [visible]="false"></dxo-label>
                     <dxo-grid visible="false" opacity="0"></dxo-grid>
+                    <dxo-point hoverMode="none" visible="false" size="0"></dxo-point>
                 </dxi-series>
 
                 <dxi-value-axis opacity="0">
@@ -31,7 +32,7 @@
 
                 <dxo-common-series-settings argumentField="timestamp" type="line" opacity="0">
                     <dxo-label visible="false"></dxo-label>
-                    <dxo-point hoverMode="none"></dxo-point>
+                    <dxo-point hoverMode="none" visible="false" size="0"></dxo-point>
                     <dxo-grid visible="false" opacity="0"></dxo-grid>
                 </dxo-common-series-settings>
 

@@ -1,6 +1,6 @@
 <app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location"
-    [aggregatedValues]="hyperSeriesValues" [hasPopup]="enablePopup" [showIconInPopup]="false" [showLocationInPopup]="false"
-    (onPopupShowing)="onPopupShowing($event)">
+    [aggregatedValues]="hyperSeriesValues" [hasPopup]="enablePopup" [showIconInPopup]="false"
+    [showLocationInPopup]="false" (onPopupShowing)="onPopupShowing($event)">
 
 
     <div popup>
@@ -45,8 +45,10 @@
                         </dxi-value-axis>
                         <dxi-series valueField="averageValue" name="{{ 'COMMON.VALUE' | translate }}" axis="value"
                             argumentField="timestamp">
-                            <dxo-label [visible]="true"></dxo-label>
                         </dxi-series>
+
+                        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+                        <dxo-legend [visible]="false"></dxo-legend>
                     </dx-chart>
                 </div>
             </div>
