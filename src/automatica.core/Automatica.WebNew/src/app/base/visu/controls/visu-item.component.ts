@@ -102,7 +102,7 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         if (this.item.type === VisuObjectSourceType.RuleInstance) {
           this.component = LogicDefaultComponent;
         } else {
-          this.component = DefaultComponent;
+          this.component = LabelComponent;
         }
         break;
       }
