@@ -5,7 +5,7 @@ import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
@@ -41,7 +41,10 @@ import { SliderComponent } from "./slider/slider.component";
     ComponentsModule,
     DynamicModule,
     DxResponsiveBoxModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    DxSelectBoxModule,
+    DxDateRangeBoxModule,
+    DxTextBoxModule
   ],
   declarations: [
     VisuItemComponent,

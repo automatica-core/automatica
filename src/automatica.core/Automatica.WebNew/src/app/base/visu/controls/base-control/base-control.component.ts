@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { AggregatedValueRecord } from "src/app/base/model/aggregated-record-value";
 
 @Component({
   selector: "app-visualization-control",
@@ -37,6 +38,21 @@ export class BaseControlComponent implements OnInit {
   @Input()
   useFullContainer: boolean = false;
 
+  @Input()
+  aggregatedValues: AggregatedValueRecord[] = undefined;
+
+  @Input()
+  showIconInPopup: boolean = true;
+
+  @Input()
+  showLocationInPopup: boolean = true;
+
+  @Output()
+  onPopupShowing: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output()
+  onPopupHiding: EventEmitter<any> = new EventEmitter<any>();
+
   popupVisible = false;
 
   public get valueHidden(): boolean {
@@ -57,8 +73,12 @@ export class BaseControlComponent implements OnInit {
     this.popupVisible = true;
   }
 
-  onPopupHiding($event) {
+  async onPopupHidingCall($event) {
+    await this.onPopupHiding.emit($event);
     this.popupVisible = false;
+  }
+  async onPopupShowingCall($event) {
+    await this.onPopupShowing.emit($event);
   }
 
 }

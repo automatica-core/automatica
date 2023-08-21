@@ -102,6 +102,20 @@
         }
       }
     },
+    "CHART": {
+      "NAME": "Chart",
+      "RANGE_AGGREGATION": "Zeitbereich/Aggregierung",
+      "RANGE": "Bereich",
+      "AGGREGATION": "Aggregierung",
+      "AGGREGATION_ENUM": {
+        "RAW": "Rohwerte",
+        "HOURLY": "Stündlich",
+        "DAILY": "Täglich",
+        "WEEKLY": "Wöchentlich",
+        "MONTHLY": "Monatlich",
+        "YEARLY": "Jährlich"
+      }
+    },
     "SWITCH": {
       "ON": "Einschalten",
       "OFF": "Ausschalten"

@@ -1,6 +1,11 @@
-﻿using Automatica.Core.HyperSeries.Model;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using Automatica.Core.EF.Models;
+using Automatica.Core.HyperSeries.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 
 namespace Automatica.Core.HyperSeries
 {
@@ -8,11 +13,17 @@ namespace Automatica.Core.HyperSeries
     {
         private readonly IConfiguration? _config;
         public DbSet<RecordValue> RecordValues { get; set; } = default!;
+        public DbSet<HourByHourAggregatedRecordValue> HourByHourAggregatedValues { get; set; } = default!;
+        public DbSet<DayByDayAggregatedRecordValue> DayByDayAggregatedValues { get; set; } = default!;
+        public DbSet<WeekByWeekAggregatedRecordValue> WeekByWeekAggregatedValues { get; set; } = default!;
+        public DbSet<MonthByMonthAggregatedRecordValue> MonthByMonthAggregatedValues { get; set; } = default!;
+        public DbSet<YearByYearAggregatedRecordValue> YearByYearAggregatedValues { get; set; } = default!;
 
         public HyperSeriesContext()
         {
-            
+
         }
+
         public HyperSeriesContext(IConfiguration config)
         {
             _config = config;
@@ -21,20 +32,10 @@ namespace Automatica.Core.HyperSeries
         public async Task AddRecordValue(RecordValue recordValue)
         {
             await Database.ExecuteSqlRawAsync(
-                "INSERT INTO \"RecordValues\" (\"Timestamp\", \"TrendId\", \"NodeInstanceId\", \"Value\") VALUES ({0}, {1}, {2}, {3})", recordValue.Timestamp, recordValue.TrendId, recordValue.NodeInstanceId, recordValue.Value);
+                "INSERT INTO \"RecordValues\" (\"Timestamp\", \"TrendId\", \"NodeInstanceId\", \"Value\") VALUES ({0}, {1}, {2}, {3})",
+                recordValue.Timestamp, recordValue.TrendId, recordValue.NodeInstanceId, recordValue.Value);
 
         }
-
-        //public IQueryable<IntervalResult> GetWeeklyResults(DateTime value)
-        //{
-        //    if (value.Kind != DateTimeKind.Utc)
-        //    {
-        //        // Read this and cry https://www.npgsql.org/doc/types/datetime.html
-        //        throw new ArgumentException("DateTime.Kind must be of UTC to convert to timestamp with time zone");
-        //    }
-
-        //    return FromExpression(() => GetWeeklyResults(value));
-        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,20 +56,71 @@ namespace Automatica.Core.HyperSeries
                 else
                 {
                     //only for ef tool to migrate db!!!
-                    optionsBuilder.UseNpgsql(connectionString: "Server=localhost;User Id=postgres;Password=password;Database=postgres;");
+                    optionsBuilder.UseNpgsql(
+                        connectionString: "Server=localhost;User Id=postgres;Password=password;Database=postgres;");
                 }
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // shouldn't be used since we have a method
-           // modelBuilder
-                //.HasDbFunction(typeof(StocksDbContext).GetMethod(nameof(GetWeeklyResults), new[] { typeof(DateTime) })!)
-                // map to entity and don't worry about tables
-                // mapping to a table in the snapshot 
-               // .HasName("get_weekly_results")
-                //.IsBuiltIn(false);
+            modelBuilder.Entity<HourByHourAggregatedRecordValue>(entity =>
+            {
+                AddAggregatedProperty(entity);
+                entity.ToTable("values_hour_by_hour");
+            });
+            modelBuilder.Entity<DayByDayAggregatedRecordValue>(entity =>
+            {
+                AddAggregatedProperty(entity);
+                entity.ToTable("values_day_by_day");
+            });
+            modelBuilder.Entity<WeekByWeekAggregatedRecordValue>(entity =>
+            {
+                AddAggregatedProperty(entity);
+                entity.ToTable("values_week_by_week");
+            });
+            modelBuilder.Entity<MonthByMonthAggregatedRecordValue>(entity =>
+            {
+                AddAggregatedProperty(entity);
+                entity.ToTable("values_month_by_month");
+            });
+            modelBuilder.Entity<YearByYearAggregatedRecordValue>(entity =>
+            {
+                AddAggregatedProperty(entity);
+                entity.ToTable("values_year_by_year");
+            });
+        }
+
+        private void AddAggregatedProperty<T>(EntityTypeBuilder<T> entity) where T : AggregatedRecordValue
+        {
+            entity.Property<double>("AverageValue")
+                .HasColumnType("double precision")
+                .HasColumnName("avgvalue");
+
+            entity.Property<int>("Count")
+                .HasColumnType("integer")
+                .HasColumnName("countvalue");
+
+            entity.Property<double>("DifferenceValue")
+                .HasColumnType("double precision")
+                .HasColumnName("diffvalue");
+
+            entity.Property<double>("MaxValue")
+                .HasColumnType("double precision")
+                .HasColumnName("maxvalue");
+
+            entity.Property<double>("MinValue")
+                .HasColumnType("double precision")
+                .HasColumnName("minvalue");
+
+            entity.Property<Guid>("NodeInstanceId")
+                .HasColumnType("uuid")
+                .HasColumnName("nodeinstanceid");
+
+            entity.Property<DateTimeOffset>("Timestamp")
+                .HasColumnType("timestamp with time zone")
+                .HasColumnName("time");
+
         }
     }
 }

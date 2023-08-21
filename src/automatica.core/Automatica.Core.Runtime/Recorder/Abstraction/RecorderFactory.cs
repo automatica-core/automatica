@@ -32,7 +32,7 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
             _writers.Add(DataRecorderType.GraphiteRecorder, new GraphiteDataRecorderWriter(config, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.HostedGrafanaRecorder, new HostedGrafanaDataRecorderWriter(config, settingsCache, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.MemoryRecorder, new MemoryDataRecorder(config, nodeInstanceCache, dispatcher, loggerFactory));
-            _writers.Add(DataRecorderType.HyperSeriesRecorder, new HyperSeriesRecorder(config, nodeInstanceCache, dispatcher, serviceProvider.GetRequiredService<HyperSeriesContext>(), loggerFactory));
+            _writers.Add(DataRecorderType.HyperSeriesRecorder, new HyperSeriesRecorder(config, nodeInstanceCache, dispatcher, serviceProvider.GetRequiredService<IHyperSeriesRepository>(), loggerFactory));
         }
 
         public IDataRecorderWriter GetRecorder(DataRecorderType recorderType)

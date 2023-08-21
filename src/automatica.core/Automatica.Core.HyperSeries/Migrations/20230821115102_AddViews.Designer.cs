@@ -3,6 +3,7 @@ using System;
 using Automatica.Core.HyperSeries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Automatica.Core.HyperSeries.Migrations
 {
     [DbContext(typeof(HyperSeriesContext))]
-    partial class HyperSeriesContextModelSnapshot : ModelSnapshot
+    [Migration("20230821115102_AddViews")]
+    partial class AddViews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,37 +25,37 @@ namespace Automatica.Core.HyperSeries.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Automatica.Core.HyperSeries.Model.HourByHourAggregatedRecordValue", b =>
+            modelBuilder.Entity("Automatica.Core.HyperSeries.Model.AggregatedRecordValue", b =>
                 {
                     b.Property<double>("AverageValue")
                         .HasColumnType("double precision")
-                        .HasColumnName("avgvalue");
+                        .HasColumnName("avgValue");
 
                     b.Property<int>("Count")
                         .HasColumnType("integer")
-                        .HasColumnName("countvalue");
+                        .HasColumnName("count");
 
                     b.Property<double>("DifferenceValue")
                         .HasColumnType("double precision")
-                        .HasColumnName("diffvalue");
+                        .HasColumnName("diffValue");
 
                     b.Property<double>("MaxValue")
                         .HasColumnType("double precision")
-                        .HasColumnName("maxvalue");
+                        .HasColumnName("maxValue");
 
                     b.Property<double>("MinValue")
                         .HasColumnType("double precision")
-                        .HasColumnName("minvalue");
+                        .HasColumnName("minValue");
 
                     b.Property<Guid>("NodeInstanceId")
                         .HasColumnType("uuid")
-                        .HasColumnName("nodeinstanceid");
+                        .HasColumnName("nodeInstanceId");
 
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("time");
 
-                    b.ToTable("values_hour_by_hour");
+                    b.ToTable("AggregatedRecordValues");
                 });
 
             modelBuilder.Entity("Automatica.Core.HyperSeries.Model.RecordValue", b =>

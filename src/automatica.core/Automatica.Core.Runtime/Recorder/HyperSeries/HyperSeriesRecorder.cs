@@ -14,30 +14,35 @@ using Automatica.Core.Internals.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.DotNet.Scaffolding.Shared;
 
 namespace Automatica.Core.Runtime.Recorder.HyperSeries
 {
     internal class HyperSeriesRecorder : BaseDataRecorderWriter
     {
         private readonly IConfigurationRoot _config;
-        private readonly HyperSeriesContext _context;
+        private readonly IHyperSeriesRepository _repository;
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0);
 
         private readonly Queue<RecordValue> _queue = new Queue<RecordValue>();
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, HyperSeriesContext context, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
+        public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, IHyperSeriesRepository repository, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
         {
             _config = config;
-            _context = context;
+            _repository = repository;
         }
 
         public override async Task Start()
         {
             try
             {
+                if (!_repository.IsActivated)
+                {
+                    Logger.LogWarning($"HyperSeriesRecorder is not activated!");
+                    return;
+                }
+
                 _config.Providers.FirstOrDefault(p => p is DatabaseConfigurationProvider)!.Load();
                 await using var hyperContext = new HyperSeriesContext(_config);
                 await hyperContext.Database.MigrateAsync();
@@ -69,7 +74,10 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                     await _semaphore.WaitAsync(_cancellationTokenSource.Token);
 
                     var record = _queue.Dequeue();
-                    await _context.AddRecordValue(record);
+                    if (record != null)
+                    {
+                        await _repository.Add(record);
+                    }
                 }
                 catch (TaskCanceledException)
                 {
@@ -81,6 +89,11 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
+            if (_repository.IsActivated)
+            {
+                return Task.CompletedTask;
+            }
+
             _queue.Enqueue(new RecordValue
             {
                 NodeInstanceId = nodeInstance.ObjId,

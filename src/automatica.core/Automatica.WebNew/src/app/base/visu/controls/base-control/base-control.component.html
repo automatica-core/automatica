@@ -1,4 +1,50 @@
 <div class="section_cell">
+
+    <ng-container *ngIf="aggregatedValues && aggregatedValues.length >= 3">
+        <div class="chart">
+            <dx-chart [dataSource]="aggregatedValues">
+                <dxo-size [height]="30" [width]="180">
+                </dxo-size>
+                <dxi-series valueField="averageValue" name="averageValue" argumentField="timestamp">
+                    <dxo-label [visible]="false"></dxo-label>
+                    <dxo-grid visible="false" opacity="0"></dxo-grid>
+                </dxi-series>
+
+                <dxi-value-axis opacity="0">
+                    <dxo-label [visible]="false"></dxo-label>
+                    <dxo-grid visible="false" opacity="0"></dxo-grid>
+                    <dxo-minor-tick visible="false" opacity="0"></dxo-minor-tick>
+                    <dxo-minor-grid visible="false" opacity="0"></dxo-minor-grid>
+                    <dxo-tick opacity="0"></dxo-tick>
+                </dxi-value-axis>
+                <dxo-legend [visible]="false"></dxo-legend>
+
+                <dxo-common-pane-settings [visible]="false" opacity="0"></dxo-common-pane-settings>
+
+                <dxo-argument-axis opacity="0">
+                    <dxo-label [visible]="false"></dxo-label>
+                    <dxo-grid visible="false" opacity="0"></dxo-grid>
+                    <dxo-minor-tick visible="false" opacity="0"></dxo-minor-tick>
+                    <dxo-minor-grid visible="false" opacity="0"></dxo-minor-grid>
+                    <dxo-tick opacity="0"></dxo-tick>
+                </dxo-argument-axis>
+
+                <dxo-common-series-settings argumentField="timestamp" type="line" opacity="0">
+                    <dxo-label visible="false"></dxo-label>
+                    <dxo-point hoverMode="none"></dxo-point>
+                    <dxo-grid visible="false" opacity="0"></dxo-grid>
+                </dxo-common-series-settings>
+
+                <dxo-common-axis-settings opacity="0">
+                    <dxo-label visible="false" opacity="0"></dxo-label>
+                    <dxo-grid visible="false" opacity="0"></dxo-grid>
+
+                    <dxo-minor-grid visible="false" opacity="0"></dxo-minor-grid>
+                </dxo-common-axis-settings>
+            </dx-chart>
+        </div>
+    </ng-container>
+
     <div class="cell_content" (click)="onCellClick($event)">
         <ng-container *ngIf="!useFullContainer">
             <div class="cell_icon_placeholder" *ngIf="showIcon">
@@ -24,22 +70,30 @@
 
 <ng-container *ngIf="hasPopup">
     <dx-popup [width]="'95%'" [height]="'95%'" [visible]="popupVisible" [showTitle]="true" [hideOnOutsideClick]="false"
-        [showCloseButton]="true" [title]="hint" [dragEnabled]="false" (onHiding)="onPopupHiding($event)">
+        [showCloseButton]="true" title="" [dragEnabled]="false" (onHiding)="onPopupHidingCall($event)"
+        (onShowing)="onPopupShowingCall($event)">
         <div *dxTemplate="let data of 'content'">
             <dx-scroll-view width="100%" height="100%">
                 <div class="overlay">
+                    <div class="form">
+                        <div class="dx-fieldset">
+                            <div class="dx-fieldset-header">{{hint}}</div>
+                            <div class="dx-field">
+                                <div [hidden]="valueHidden" class="overlay_value cell_text_overflow">{{ value }}</div>
+                            </div>
+                        </div>
 
-                    <div [hidden]="valueHidden" class="overlay_value cell_text_overflow">{{ value }}</div>
+                        <div class="overlay_icon" *ngIf="showIconInPopup">
+                            <span [style.color]="iconColor" style="vertical-align: middle;">
+                                <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
+                            </span>
+                        </div>
 
-                    <div class="overlay_icon">
-                        <span [style.color]="iconColor" style="vertical-align: middle;">
-                            <fa-icon [icon]="icon" size="4x" styles="display: inline-block;"></fa-icon>
-                        </span>
+                        <div *ngIf="showLocationInPopup" [hidden]="!location"
+                            class="overlay_location cell_text_overflow">{{ location }}</div>
+
+                        <ng-content select="[popup]"></ng-content>
                     </div>
-
-                    <div [hidden]="!location" class="overlay_location cell_text_overflow">{{ location }}</div>
-
-                    <ng-content select="[popup]"></ng-content>
                 </div>
             </dx-scroll-view>
         </div>

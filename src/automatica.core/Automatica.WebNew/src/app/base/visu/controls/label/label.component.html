@@ -1,3 +1,59 @@
-<app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location">
+<app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location"
+    [aggregatedValues]="hyperSeriesValues" [hasPopup]="enablePopup" [showIconInPopup]="false" [showLocationInPopup]="false"
+    (onPopupShowing)="onPopupShowing($event)">
 
+
+    <div popup>
+        <ng-container *ngIf="hyperSeriesChartValues">
+
+
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">{{ 'COMMON.CHART.RANGE_AGGREGATION' | translate }}</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'COMMON.CHART.AGGREGATION' | translate }}</div>
+                    <div class="dx-field-value-static">
+                        <dx-select-box [(value)]="aggregationTypeValue" [items]="aggregations"
+                            (onValueChanged)="onValueChanged($event)" fieldTemplate="field">
+                            <div *dxTemplate="let data of 'field'">
+                                <div class="custom-item">
+                                    <dx-text-box
+                                        value="{{ 'COMMON.CHART.AGGREGATION_ENUM.' + data.toUpperCase() | translate }}"
+                                        [readOnly]="true"></dx-text-box>
+                                </div>
+                            </div>
+                            <div *dxTemplate="let data of 'item'">
+                                <div class="custom-item">
+                                    {{ 'COMMON.CHART.AGGREGATION_ENUM.' + data.toUpperCase() | translate }}
+                                </div>
+                            </div>
+                        </dx-select-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">{{ 'COMMON.CHART.RANGE' | translate }}</div>
+                    <div class="dx-field-value-static">
+                        <dx-date-range-box [(value)]="dateRangeValue" (onValueChanged)="onValueChanged($event)">
+                        </dx-date-range-box>
+                    </div>
+                </div>
+            </div>
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">{{ 'COMMON.CHART.NAME' | translate }}</div>
+                <div class="dx-field">
+                    <dx-chart [dataSource]="hyperSeriesChartValues">
+                        <dxi-value-axis name="value" position="left" [valueMarginsEnabled]="false">
+                        </dxi-value-axis>
+                        <dxi-series valueField="averageValue" name="{{ 'COMMON.VALUE' | translate }}" axis="value"
+                            argumentField="timestamp">
+                            <dxo-label [visible]="true"></dxo-label>
+                        </dxi-series>
+                    </dx-chart>
+                </div>
+            </div>
+
+
+
+        </ng-container>
+
+    </div>
 </app-visualization-control>

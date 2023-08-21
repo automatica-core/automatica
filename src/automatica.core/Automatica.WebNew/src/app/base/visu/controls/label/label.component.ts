@@ -8,14 +8,24 @@ import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import * as moment from "moment";
 import { AppService } from "src/app/services/app.service";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
+import { DefaultComponent } from "../default/default.component";
+import { HyperSeriesService } from "src/app/services/hyperseries.service";
+import { AggregatedValueRecord, AggregationType } from "src/app/base/model/aggregated-record-value";
 
 @Component({
   selector: "visu-label",
   templateUrl: "./label.component.html",
   styleUrls: ["./label.component.scss"]
 })
-export class LabelComponent extends BaseMobileComponent implements OnInit, OnDestroy {
+export class LabelComponent extends DefaultComponent implements OnInit, OnDestroy {
 
+  hyperSeriesChartValues: AggregatedValueRecord[] = [];
+
+  aggregations: AggregationType[] = [AggregationType.Raw, AggregationType.Hourly, AggregationType.Daily, AggregationType.Weekly, AggregationType.Monthly, AggregationType.Yearly];
+  dateRangeValue: [Date, Date] = void 0;
+  aggregationTypeValue: AggregationType;
+
+  enablePopup = false;
 
   public get displayValue() {
     if (this.value === void 0) {
@@ -43,20 +53,38 @@ export class LabelComponent extends BaseMobileComponent implements OnInit, OnDes
     notify: NotifyService,
     translate: L10nTranslationService,
     configService: ConfigService,
-    appService: AppService) {
-    super(dataHub, notify, translate, configService, appService);
+    appService: AppService,
+    private hyperSeriesService: HyperSeriesService) {
+    super(dataHub, notify, translate, configService, appService, hyperSeriesService);
+
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    this.dateRangeValue = [
+      new Date(now.getTime() - msInDay * 3),
+      new Date(now.getTime()),
+    ];
+
+    this.aggregationTypeValue = AggregationType.Hourly;
   }
 
   async ngOnInit() {
-    super.baseOnInit();
+    await super.ngOnInit();
 
-    super.propertyChanged();
-
-  }
-  public onItemResized() {
+    this.enablePopup = this.nodeInstanceModel && this.nodeInstanceModel.Trending;
 
   }
+  
+  private async fetchValues() {
+    this.hyperSeriesChartValues = await this.hyperSeriesService.getAggregatedValues(this.aggregationTypeValue, this.nodeInstanceModel.Id, this.dateRangeValue[0], this.dateRangeValue[1], 100);
+  }
 
+  async onPopupShowing($event) {
+    await this.fetchValues();
+  }
+
+  async onValueChanged($event) {
+    await this.fetchValues();
+  }
 
   async ngOnDestroy() {
     super.baseOnDestroy();

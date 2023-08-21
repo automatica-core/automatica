@@ -177,14 +177,14 @@ export abstract class BaseMobileComponent extends BaseComponent {
         }
     }
 
-    protected propertyChanged() {
+    protected async propertyChanged() {
         const nodeProperty = this.getProperty("nodeInstance");
 
         if (!nodeProperty) {
             return;
         }
 
-        this.registerForItemValues(nodeProperty);
+        await this.registerForItemValues(nodeProperty);
     }
 
     public getPropertyValue(key: string) {

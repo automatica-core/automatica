@@ -103,6 +103,20 @@
         }
       }
     },
+    "CHART": {
+      "NAME": "Chart",
+      "RANGE_AGGREGATION": "Range/Aggregation",
+      "RANGE": "Range",
+      "AGGREGATION": "Aggregation"   ,
+      "AGGREGATION_ENUM": {
+        "RAW": "Raw",
+        "HOURLY": "Hourly",
+        "DAILY": "Daily",
+        "WEEKLY": "Weekly",
+        "MONTHLY": "Monthly",
+        "YEARLY": "Yearly"
+      }
+    },
     "SWITCH": {
       "ON": "Turn on",
       "OFF": "Turn off"

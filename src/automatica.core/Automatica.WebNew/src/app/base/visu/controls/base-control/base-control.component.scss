@@ -13,10 +13,18 @@
     height: 180px;
     border-radius: 2px;
     margin: 0 5px 5px 0;
+    position: relative;
     background-color: $base-border-color;
 }
 
+.chart {
+    z-index: 0; 
+    position: absolute;
+    margin-top: 150px;
+}
+
 .cell_content {
+    z-index: 10;
     flex: 1;
     -webkit-box-pack: initial;
     justify-content: initial;
@@ -153,7 +161,7 @@
     height: 100%;
     text-align: center;
     position: relative;
-    max-width: 480px;
+    max-width: 80%;
 }
 
 .overlay_value {

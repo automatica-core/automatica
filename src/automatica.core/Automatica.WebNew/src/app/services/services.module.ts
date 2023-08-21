@@ -26,6 +26,7 @@ import { SatelliteService } from "./satellite.services";
 import { NodeInstanceService } from "./node-instance.service";
 import { NodeTemplateService } from "./node-template.service";
 import { LogsService } from "./logs.service";
+import { HyperSeriesService } from "./hyperseries.service";
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { LogsService } from "./logs.service";
     AppService,
     SatelliteService,
     NodeTemplateService,
-    LogsService
+    LogsService,
+    HyperSeriesService
 
   ]
 })
