@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.HyperSeries;
 using Automatica.Core.HyperSeries.Model;
+using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

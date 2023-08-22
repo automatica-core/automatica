@@ -27,18 +27,26 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0);
 
         private readonly Queue<RecordValue> _queue = new Queue<RecordValue>();
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource;
 
         public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, IServiceProvider provider, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
         {
             _config = config;
             _provider = provider;
+
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         public override async Task Start()
         {
             try
             {
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    _cancellationTokenSource.Cancel(true);
+                }
+
+                _cancellationTokenSource = new CancellationTokenSource();
                 _repository = _provider.GetRequiredService<IHyperSeriesRepository>();
                 if (!_repository.IsActivated)
                 {
@@ -50,7 +58,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                 await using var hyperContext = new HyperSeriesContext(_config);
                 await hyperContext.Database.MigrateAsync();
 
-                _ = Task.Run(WorkerThread, _cancellationTokenSource.Token);
+                _ = Task.Run(() => WorkerThread(_cancellationTokenSource.Token));
 
                 await base.Start();
                 Logger.LogInformation($"Started hyperseries recorder....");
@@ -67,14 +75,15 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
             return base.Stop();
         }
 
-        private async Task WorkerThread()
+        private async Task WorkerThread(CancellationToken token)
         {
             Logger.LogInformation($"Started worker thread...");
-            while (true)
+
+            while (!token.IsCancellationRequested)
             {
                 try
                 {
-                    await _semaphore.WaitAsync(_cancellationTokenSource.Token);
+                    await _semaphore.WaitAsync(token);
 
                     var record = _queue.Dequeue();
                     if (record != null && _repository != null)
@@ -82,7 +91,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                         await _repository.Add(record);
                     }
                 }
-                catch (TaskCanceledException)
+                catch (OperationCanceledException)
                 {
                     break;
                 }
