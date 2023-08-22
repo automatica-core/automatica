@@ -109,9 +109,10 @@ namespace Automatica.Core
                         }
                     };
                 });
-
+            
             services.Configure<MvcOptions>(options =>
             {
+                options.EnableEndpointRouting = false;
             });
             services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
                 .AddAuthorization(options =>
