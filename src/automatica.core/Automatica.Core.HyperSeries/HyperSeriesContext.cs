@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using Automatica.Core.EF.Models;
-using Automatica.Core.HyperSeries.Model;
+﻿using Automatica.Core.HyperSeries.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
-using Npgsql;
 
 namespace Automatica.Core.HyperSeries
 {
@@ -28,7 +24,6 @@ namespace Automatica.Core.HyperSeries
         {
             _config = config;
         }
-
         public async Task AddRecordValue(RecordValue recordValue)
         {
             await Database.ExecuteSqlRawAsync(

@@ -91,7 +91,7 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
   onRuleInstanceValueChanged(interfaceId, value) {
     console.log("ruleinterfacevalue changed", interfaceId, value);
 
-    if (this.outputType.ObjId === interfaceId) {
+    if (this.outputType && this.outputType.ObjId === interfaceId) {
       this.state = value;
     }
   }

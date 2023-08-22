@@ -157,7 +157,8 @@ namespace Automatica.Core
             var configRoot = builder.Build();
 
             Configuration = configRoot;
-            services.AddSingleton<IConfigurationRoot>(configRoot);
+            services.AddSingleton(configRoot);
+            services.AddSingleton<IConfiguration>(configRoot);
 
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 

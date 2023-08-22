@@ -7,7 +7,7 @@ namespace Automatica.Core.HyperSeries
         public static void AddHyperSeries(this IServiceCollection services)
         {
             services.AddDbContext<HyperSeriesContext>();
-            services.AddTransient<IHyperSeriesRepository, HyperSeriesRepository>();
+            services.AddScoped<IHyperSeriesRepository, HyperSeriesRepository>();
         }
     }
 }
