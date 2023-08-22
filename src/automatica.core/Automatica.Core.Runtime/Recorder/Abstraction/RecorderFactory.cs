@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Automatica.Core.Base.IO;
-using Automatica.Core.HyperSeries;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Runtime.Recorder.Base;
@@ -14,7 +13,6 @@ using Automatica.Core.Runtime.Recorder.HostedGrafana;
 using Automatica.Core.Runtime.Recorder.HyperSeries;
 using Automatica.Core.Runtime.Recorder.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Recorder.Abstraction
@@ -32,14 +30,14 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
             _writers.Add(DataRecorderType.GraphiteRecorder, new GraphiteDataRecorderWriter(config, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.HostedGrafanaRecorder, new HostedGrafanaDataRecorderWriter(config, settingsCache, nodeInstanceCache, dispatcher, loggerFactory));
             _writers.Add(DataRecorderType.MemoryRecorder, new MemoryDataRecorder(config, nodeInstanceCache, dispatcher, loggerFactory));
-            _writers.Add(DataRecorderType.HyperSeriesRecorder, new HyperSeriesRecorder(config, nodeInstanceCache, dispatcher, serviceProvider.GetRequiredService<IHyperSeriesRepository>(), loggerFactory));
+            _writers.Add(DataRecorderType.HyperSeriesRecorder, new HyperSeriesRecorder(config, nodeInstanceCache, dispatcher, serviceProvider, loggerFactory));
         }
 
         public IDataRecorderWriter GetRecorder(DataRecorderType recorderType)
         {
-            if (_writers.ContainsKey(recorderType))
+            if (_writers.TryGetValue(recorderType, out var recorder))
             {
-                return _writers[recorderType];
+                return recorder;
             }
             throw new NotImplementedException();
         }

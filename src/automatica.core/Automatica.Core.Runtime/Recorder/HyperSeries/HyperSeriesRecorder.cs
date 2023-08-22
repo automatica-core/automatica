@@ -13,6 +13,7 @@ using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Recorder.HyperSeries
@@ -20,23 +21,25 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
     internal class HyperSeriesRecorder : BaseDataRecorderWriter
     {
         private readonly IConfigurationRoot _config;
-        private readonly IHyperSeriesRepository _repository;
+        private readonly IServiceProvider _provider;
+        private IHyperSeriesRepository? _repository;
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0);
 
         private readonly Queue<RecordValue> _queue = new Queue<RecordValue>();
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, IHyperSeriesRepository repository, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
+        public HyperSeriesRecorder(IConfigurationRoot config, INodeInstanceCache nodeCache, IDispatcher dispatcher, IServiceProvider provider, ILoggerFactory factory) : base(config, DataRecorderType.HyperSeriesRecorder, nameof(HyperSeriesRecorder), nodeCache, dispatcher, factory)
         {
             _config = config;
-            _repository = repository;
+            _provider = provider;
         }
 
         public override async Task Start()
         {
             try
             {
+                _repository = _provider.GetRequiredService<IHyperSeriesRepository>();
                 if (!_repository.IsActivated)
                 {
                     Logger.LogWarning($"HyperSeriesRecorder is not activated!");
@@ -74,7 +77,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                     await _semaphore.WaitAsync(_cancellationTokenSource.Token);
 
                     var record = _queue.Dequeue();
-                    if (record != null)
+                    if (record != null && _repository != null)
                     {
                         await _repository.Add(record);
                     }
@@ -89,7 +92,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
-            if (_repository.IsActivated)
+            if (_repository is { IsActivated: true })
             {
                 _queue.Enqueue(new RecordValue
                 {

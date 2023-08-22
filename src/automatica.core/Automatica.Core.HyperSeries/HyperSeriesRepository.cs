@@ -10,13 +10,14 @@ namespace Automatica.Core.HyperSeries
 {
     internal class HyperSeriesRepository : IHyperSeriesRepository
     {
-        public HyperSeriesContext Context { get; }
+        public HyperSeriesContext? Context { get; }
         public bool IsActivated { get; }
 
-        public HyperSeriesRepository(HyperSeriesContext context, IConfiguration config,
+        public HyperSeriesRepository(IConfigurationRoot config,
             ILogger<HyperSeriesRepository> logger)
         {
-            Context = context;
+            config.Reload();
+
             if (string.IsNullOrEmpty(config["db:hyperSeriesHost"]) ||
                 string.IsNullOrEmpty(config["db:hyperSeriesUser"]) ||
                 string.IsNullOrEmpty(config["db:hyperSeriesPassword"]) ||
@@ -34,8 +35,11 @@ namespace Automatica.Core.HyperSeries
 
             try
             {
+                var context = new HyperSeriesContext(config);
                 context.Database.Migrate();
                 IsActivated = true;
+
+                Context = context;
             }
             catch (Exception e)
             {
@@ -47,12 +51,20 @@ namespace Automatica.Core.HyperSeries
 
         public Task Add(RecordValue recordValue)
         {
+            if (Context == null)
+            {
+                return Task.CompletedTask;
+            }
             return Context.AddRecordValue(recordValue);
         }
 
         public async Task<List<AggregatedRecordValue>> GetAggregatedValues(AggregationType aggregationType, Guid id, DateTime? startDate, DateTime? endDate, int count)
         {
             var ret = new List<AggregatedRecordValue>();
+            if (Context == null)
+            {
+                return ret;
+            }
 
             if (startDate.HasValue)
             {

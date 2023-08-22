@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.HyperSeries.Model;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Automatica.Core.HyperSeries
 {
