@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using Automatica.Core.HyperSeries.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 [assembly:InternalsVisibleTo("Automatica.Core.Tests")]
 
@@ -9,11 +11,33 @@ namespace Automatica.Core.HyperSeries
     internal class HyperSeriesRepository : IHyperSeriesRepository
     {
         public HyperSeriesContext Context { get; }
-        public bool IsActivated => Context.Database.CanConnect();
+        public bool IsActivated { get; }
 
-        public HyperSeriesRepository(HyperSeriesContext context)
+        public HyperSeriesRepository(HyperSeriesContext context, IConfiguration config, ILogger<HyperSeriesRepository> logger)
         {
             Context = context;
+            if ((String.IsNullOrEmpty(config["db:hyperSeriesHost"]) ||
+                String.IsNullOrEmpty(config["db:hyperSeriesUser"]) ||
+                String.IsNullOrEmpty(config["db:hyperSeriesPassword"]) ||
+                String.IsNullOrEmpty(config["db:hyperSeriesDatabase"]) ||
+                String.IsNullOrEmpty(config["db:hyperSeriesPort"])) &&
+                String.IsNullOrEmpty(config.GetConnectionString($"HyperSeriesConnection")))
+            {
+                IsActivated = false;
+            }
+            else
+            {
+                try
+                {
+                    context.Database.Migrate();
+                    IsActivated = true;
+                }
+                catch(Exception e)
+                {
+                    logger.LogError(e, "Could not migrate db");
+                    IsActivated = false;
+                }
+            }
         }
         public Task Add(RecordValue recordValue)
         {
