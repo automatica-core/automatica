@@ -105,8 +105,6 @@ namespace Automatica.Core.Internals.License
                             .When(lic => lic.Type == LicenseType.Trial).And().Signature(pubKey).AssertValidLicense();
                         ValidationErrors = validationFailures.ToList();
                         _license = license;
-
-
                     }
 
                     IsLicensed = ValidationErrors.Count == 0;

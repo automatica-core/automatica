@@ -35,6 +35,7 @@ namespace Automatica.Core.HyperSeries
 
             try
             {
+                logger.LogInformation($"Connecting to database {config["db:hyperSeriesDatabase"]} on {config["db:hyperSeriesHost"]}....");
                 var context = new HyperSeriesContext(config);
                 context.Database.Migrate();
                 IsActivated = true;
@@ -46,7 +47,6 @@ namespace Automatica.Core.HyperSeries
                 logger.LogError(e, "Could not migrate db");
                 IsActivated = false;
             }
-
         }
 
         public Task Add(RecordValue recordValue)

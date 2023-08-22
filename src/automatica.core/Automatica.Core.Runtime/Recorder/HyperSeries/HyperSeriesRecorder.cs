@@ -88,6 +88,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                     var record = _queue.Dequeue();
                     if (record != null && _repository != null)
                     {
+                        Logger.LogTrace($"Adding record to hyperseries db: {record.NodeInstanceId} {record.Value}");
                         await _repository.Add(record);
                     }
                 }
