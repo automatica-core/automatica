@@ -15,7 +15,7 @@ namespace Automatica.Core.Runtime.Recorder.Memory
     {
         private readonly Dictionary<Guid, object> _trends = new();
 
-        public MemoryDataRecorder(IConfiguration config, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.FileRecorder, "FileDataRecorder", nodeCache, dispatcher, factory)
+        public MemoryDataRecorder(IConfiguration config, INodeInstanceCache nodeCache, IDispatcher dispatcher, ILoggerFactory factory) : base(config, DataRecorderType.MemoryRecorder, nameof(MemoryDataRecorder), nodeCache, dispatcher, factory)
 
         {
         }

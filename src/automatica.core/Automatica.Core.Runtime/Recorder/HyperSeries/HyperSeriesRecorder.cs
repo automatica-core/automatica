@@ -88,7 +88,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                     var record = _queue.Dequeue();
                     if (record != null && _repository != null)
                     {
-                        Logger.LogTrace($"Adding record to hyperseries db: {record.NodeInstanceId} {record.Value}");
+                        Logger.LogDebug($"Adding record to hyperseries db: {record.NodeInstanceId} {record.Value}");
                         await _repository.Add(record);
                     }
                 }
@@ -102,6 +102,7 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         internal override Task Save(Trending trend, NodeInstance nodeInstance)
         {
+            Logger.LogDebug($"Enqueue record: {nodeInstance.ObjId} {trend.Value}");
             if (_repository is { IsActivated: true })
             {
                 _queue.Enqueue(new RecordValue
