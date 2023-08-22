@@ -6,6 +6,7 @@ using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.Recorder;
+using Automatica.Core.Runtime.RemoteConnect;
 using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -18,19 +19,22 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ICoreServer _coreServer;
         private readonly IRecorderContext _recorderContext;
         private readonly IConfigurationRoot _config;
+        private readonly IRemoteConnectService _remoteConnectService;
 
         public SettingsController(AutomaticaContext dbContext, 
             IAutoUpdateHandler updateHandler, 
             ISettingsCache settingsCache, 
             ICoreServer coreServer, 
             IRecorderContext recorderContext,
-            IConfigurationRoot config) : base(dbContext)
+            IConfigurationRoot config, 
+            IRemoteConnectService remoteConnectService) : base(dbContext)
         {
             _updateHandler = updateHandler;
             _settingsCache = settingsCache;
             _coreServer = coreServer;
             _recorderContext = recorderContext;
             _config = config;
+            _remoteConnectService = remoteConnectService;
         }
 
         [HttpGet]
@@ -97,6 +101,8 @@ namespace Automatica.Core.WebApi.Controllers
                     _coreServer.ReInit().ConfigureAwait(false);
                 else if(reloadContext.Contains(SettingReloadContext.Recorders))
                     _recorderContext.Reload().ConfigureAwait(false);
+                else if(reloadContext.Contains(SettingReloadContext.RemoteConnect))
+                    _remoteConnectService.ReloadAsync().ConfigureAwait(false);
             }
 
            

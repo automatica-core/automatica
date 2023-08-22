@@ -18,6 +18,7 @@ using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using System.Runtime.InteropServices;
 using Automatica.Core.Runtime.Recorder.Base;
+using SQLitePCL;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -541,9 +542,15 @@ namespace Automatica.Core.Runtime.Database
                     Value = false,
                     Group = "SERVER.REMOTE",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.RemoteConnect
                 });
-
+            }
+            else
+            {
+                remoteEnabled.NeedsReloadOnChange = true;
+                remoteEnabled.ReloadContext = SettingReloadContext.RemoteConnect;
             }
 
             var ngrokToken = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokToken");
@@ -563,9 +570,15 @@ namespace Automatica.Core.Runtime.Database
                     Value = null,
                     Group = "SERVER.REMOTE",
                     IsVisible = true,
-                    Order = 2
+                    Order = 2,
+                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.RemoteConnect
                 });
-
+            }
+            else
+            {
+                remoteDomain.NeedsReloadOnChange = true;
+                remoteDomain.ReloadContext = SettingReloadContext.RemoteConnect;
             }
         }
 

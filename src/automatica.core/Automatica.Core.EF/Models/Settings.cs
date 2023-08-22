@@ -5,7 +5,8 @@ namespace Automatica.Core.EF.Models
     {
         None = -1,
         Server = 0,
-        Recorders = 1
+        Recorders = 1,
+        RemoteConnect = 2
     }
 
     public partial class Setting

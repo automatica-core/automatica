@@ -23,7 +23,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
         private readonly ISettingsCache _settingsCache;
         private readonly ILogger<RemoteConnectService> _logger;
 
-        private string _currentDomainName;
+        private string? _currentDomainName;
 
         private bool _isRunning;
         private bool _isEnabled;
@@ -44,7 +44,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
         {                                                                                                                                                                                                                                           
             if (!_licenseContext.AllowRemoteControl)
             {
-                _logger.LogInformation($"Remote control is not licensed...:");
+                _logger.LogInformation($"Remote control is not licensed...");
                 return;
             }
 
@@ -95,6 +95,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 throw new ArgumentException($"Cannot establish another tunnel. Max remote tunnels limit reached...");
             }
 
+            _logger.LogInformation($"Try to register remote-port for {name}:{protocol}...");
             var remotePortResponse = await _cloudApi.GetRemoteConnectPort(driverGuid, name, protocol);
             if (remotePortResponse == null)
             {
@@ -102,7 +103,10 @@ namespace Automatica.Core.Runtime.RemoteConnect
             }
             var remotePort = remotePortResponse.Port;
 
-            if (protocol is TunnelingProtocol.Tcp || protocol is TunnelingProtocol.Udp)
+
+            _logger.LogInformation($"Received remote port {remotePort} for {name}:{protocol}...");
+
+            if (protocol is TunnelingProtocol.Tcp or TunnelingProtocol.Udp)
             {
                 await FrpcHelper.CreateTransportServiceFileFromTemplate(protocol, name, localIp, localPort, remotePort,
                     token);
@@ -114,11 +118,11 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
             _activatedServices++;
 
-            return _currentDomainName;
+            return _currentDomainName!;
         }
 
         public async Task<string> CreateWebTunnelAsync(TunnelingProtocol protocol, string name, string subDomain, string localIp, int localPort,
-            Guid driverGuid, string basicUser, string basicPassword, CancellationToken token = default)
+            Guid driverGuid, string? basicUser, string? basicPassword, CancellationToken token = default)
         {
             if (_isRunning)
             {
@@ -130,22 +134,39 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 throw new ArgumentException($"Cannot establish another tunnel. Max remote tunnels limit reached...");
             }
 
-            if (protocol is TunnelingProtocol.Tcp || protocol is TunnelingProtocol.Udp)
+            if (protocol is TunnelingProtocol.Tcp or TunnelingProtocol.Udp)
             {
                 throw new ArgumentException("Only Http and Https are supported!");
             }
 
-            var response = await _cloudApi.CreateRemoteConnectUrl(driverGuid, subDomain);
+            if (_currentDomainName == null)
+            {
+                throw new ArgumentException("Current domain name is not set!");
+            }
+
+            var remoteDomain = _config["db:remoteDomain"];
+
+            if (_currentDomainName == null)
+            {
+                throw new ArgumentException("Domain name is not set!");
+            }
+
+            var useSubDomain = $"{subDomain}-{remoteDomain}";
+
+            _logger.LogInformation($"Try to register sub-domain {useSubDomain} for {name}");
+            var response = await _cloudApi.CreateRemoteConnectUrl(driverGuid, useSubDomain);
 
             if (response == null)
             {
-                _logger.LogError($"Could not create target domain {subDomain}");
-                throw new ArgumentException($"Could not create target domain { subDomain }");
+                _logger.LogError($"Could not create target domain {useSubDomain}");
+                throw new ArgumentException($"Could not create target domain {useSubDomain}");
             }
 
-            await FrpcHelper.CreateApplicationServiceFileFromTemplate(protocol, name, localIp, localPort, subDomain,
+            await FrpcHelper.CreateApplicationServiceFileFromTemplate(protocol, name, localIp, localPort, useSubDomain,
                 basicUser, basicPassword,
                 token);
+
+            _logger.LogInformation($"Received tunnel url {response.TunnelUrl} for {name}");
             return response.TunnelUrl;
         }
 
@@ -155,7 +176,14 @@ namespace Automatica.Core.Runtime.RemoteConnect
             await _frpService.StopAsync(cancellationToken);
         }
 
-        public async Task InitAsync()
+        public async Task ReloadAsync(CancellationToken cancellationToken = default)
+        {
+            await StopAsync(cancellationToken);
+            await InitAsync(cancellationToken);
+            await StartAsync(cancellationToken);
+        }
+
+        public async Task InitAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -177,15 +205,13 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 {
                     _logger.LogInformation($"RemoteControl is disabled....");
                     return;
-
                 }
 
                 var remoteDomain = context.Settings.SingleOrDefault(a => a.ValueKey == "remoteDomain");
-                var domain = remoteDomain.ValueText;
+                var domain = remoteDomain!.ValueText;
 
                 var response = await _cloudApi.CreateRemoteConnectUrl(domain);
-               
-
+                
                 if (response == null)
                 {
                     _logger.LogError($"Could not create target domain {domain}");
@@ -195,13 +221,13 @@ namespace Automatica.Core.Runtime.RemoteConnect
                 if (response.SubDomain != domain)
                 {
                     context.Update(remoteDomain);
-                    await context.SaveChangesAsync();
+                    await context.SaveChangesAsync(cancellationToken);
                     _settingsCache.UpdateByKey(remoteDomain.ValueKey, remoteDomain);
                 }
 
                 try
                 {
-                    if (await _frpService.InitConfigurationsAsync())
+                    if (await _frpService.InitConfigurationsAsync(cancellationToken))
                     {
                         _currentDomainName = response.TunnelUrl;
                     }
