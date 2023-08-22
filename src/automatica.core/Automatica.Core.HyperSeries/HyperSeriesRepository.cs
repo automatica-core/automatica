@@ -13,32 +13,38 @@ namespace Automatica.Core.HyperSeries
         public HyperSeriesContext Context { get; }
         public bool IsActivated { get; }
 
-        public HyperSeriesRepository(HyperSeriesContext context, IConfiguration config, ILogger<HyperSeriesRepository> logger)
+        public HyperSeriesRepository(HyperSeriesContext context, IConfiguration config,
+            ILogger<HyperSeriesRepository> logger)
         {
             Context = context;
-            if ((String.IsNullOrEmpty(config["db:hyperSeriesHost"]) ||
-                String.IsNullOrEmpty(config["db:hyperSeriesUser"]) ||
-                String.IsNullOrEmpty(config["db:hyperSeriesPassword"]) ||
-                String.IsNullOrEmpty(config["db:hyperSeriesDatabase"]) ||
-                String.IsNullOrEmpty(config["db:hyperSeriesPort"])) &&
-                String.IsNullOrEmpty(config.GetConnectionString($"HyperSeriesConnection")))
+            if (string.IsNullOrEmpty(config["db:hyperSeriesHost"]) ||
+                string.IsNullOrEmpty(config["db:hyperSeriesUser"]) ||
+                string.IsNullOrEmpty(config["db:hyperSeriesPassword"]) ||
+                string.IsNullOrEmpty(config["db:hyperSeriesDatabase"]) ||
+                string.IsNullOrEmpty(config["db:hyperSeriesPort"]))
             {
+                logger.LogWarning("No hyperseries db params are set....");
+                if(string.IsNullOrEmpty(config.GetConnectionString($"HyperSeriesConnection")))
+                {
+                    logger.LogWarning("No hyperseries connection string is set....");
+                    IsActivated = false;
+                    return;
+                }
+            }
+
+            try
+            {
+                context.Database.Migrate();
+                IsActivated = true;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Could not migrate db");
                 IsActivated = false;
             }
-            else
-            {
-                try
-                {
-                    context.Database.Migrate();
-                    IsActivated = true;
-                }
-                catch(Exception e)
-                {
-                    logger.LogError(e, "Could not migrate db");
-                    IsActivated = false;
-                }
-            }
+
         }
+
         public Task Add(RecordValue recordValue)
         {
             return Context.AddRecordValue(recordValue);
