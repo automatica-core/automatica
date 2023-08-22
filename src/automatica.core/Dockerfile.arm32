@@ -65,7 +65,7 @@ COPY ./Automatica.Core/frp/* /app/automatica/frp/
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp
-EXPOSE 5001/tcp
+EXPOSE 5000-6000
 ENV AUTOMATICA_PLUGIN_DIR=/app/plugins
 
 # Build runtime image
