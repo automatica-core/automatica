@@ -16,8 +16,6 @@ namespace Automatica.Core.HyperSeries
         public HyperSeriesRepository(IConfigurationRoot config,
             ILogger<HyperSeriesRepository> logger)
         {
-            config.Reload();
-
             if (string.IsNullOrEmpty(config["db:hyperSeriesHost"]) ||
                 string.IsNullOrEmpty(config["db:hyperSeriesUser"]) ||
                 string.IsNullOrEmpty(config["db:hyperSeriesPassword"]) ||

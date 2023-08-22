@@ -17,14 +17,14 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ISettingsCache _settingsCache;
         private readonly ICoreServer _coreServer;
         private readonly IRecorderContext _recorderContext;
-        private readonly IConfiguration _config;
+        private readonly IConfigurationRoot _config;
 
         public SettingsController(AutomaticaContext dbContext, 
             IAutoUpdateHandler updateHandler, 
             ISettingsCache settingsCache, 
             ICoreServer coreServer, 
             IRecorderContext recorderContext,
-            IConfiguration config) : base(dbContext)
+            IConfigurationRoot config) : base(dbContext)
         {
             _updateHandler = updateHandler;
             _settingsCache = settingsCache;
@@ -89,6 +89,7 @@ namespace Automatica.Core.WebApi.Controllers
             context.SaveChanges();
             _updateHandler.ReInitialize().ConfigureAwait(false);
             _settingsCache.Clear();
+            _config.Reload();
 
             if (reloadServer)
             {
