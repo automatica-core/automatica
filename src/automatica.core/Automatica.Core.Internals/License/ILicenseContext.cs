@@ -16,8 +16,8 @@ namespace Automatica.Core.Internals.License
         int MaxDataPoints { get; }
         int MaxUsers { get; }
         bool AllowRemoteControl { get; }
-
         int MaxRemoteTunnels { get; }
+        long MaxRecordingDataPoints { get; }
 
         Task<string> GetLicense();
         Task SaveLicense(string license);

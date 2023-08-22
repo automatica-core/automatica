@@ -18,7 +18,7 @@ namespace Automatica.Core.Internals.License
     {
         private readonly ICloudApi _cloudApi;
         private readonly ILogger<LicenseContext> _logger;
-        private int _dataPointsInUse = 0;
+        private int _dataPointsInUse;
 
         public const string LicenseFileName = ".automatica.core.lic";
         public string LicensePath { get; }
@@ -31,9 +31,9 @@ namespace Automatica.Core.Internals.License
 
         public int MaxUsers { get; private set; }
 
-        public bool AllowRemoteControl { get; private set; } = false;
+        public bool AllowRemoteControl { get; private set; }
         public int MaxRemoteTunnels { get; private set; }
-
+        public long MaxRecordingDataPoints { get; private set; }
 
         public bool DriverLicenseCountExceeded()
         {
@@ -68,7 +68,7 @@ namespace Automatica.Core.Internals.License
         {
             _dataPointsInUse = 0;
             string pubKey = "";
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Internals.pub.txt")))
+            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Internals.pub.txt") ?? throw new InvalidOperationException()))
             {
                 pubKey = await reader.ReadToEndAsync();
             }
@@ -149,6 +149,11 @@ namespace Automatica.Core.Internals.License
                     MaxRemoteTunnels = Convert.ToInt32(_license.ProductFeatures.Get("MaxRemoteTunnels"));
                 }
 
+                if (_license.ProductFeatures.Contains("MaxRecordingDataPoints"))
+                {
+                    MaxRecordingDataPoints = Convert.ToInt64(_license.ProductFeatures.Get("MaxRecordingDataPoints"));
+                }
+
                 if (!AllowRemoteControl)
                 {
                     MaxRemoteTunnels = 0;
@@ -161,6 +166,7 @@ namespace Automatica.Core.Internals.License
                 MaxRemoteTunnels = 0;
                 AllowRemoteControl = false;
                 IsLicensed = true;
+                MaxRecordingDataPoints = 50;
             }
 
             _logger.LogInformation($"System is licensed to:");
@@ -168,6 +174,7 @@ namespace Automatica.Core.Internals.License
             _logger.LogInformation($"{nameof(MaxUsers)}: {MaxUsers}");
             _logger.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
             _logger.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
+            _logger.LogInformation($"{nameof(MaxRecordingDataPoints)}: {MaxRecordingDataPoints}");
             _logger.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
             _logger.LogInformation($"Features: {JsonConvert.SerializeObject(_license?.ProductFeatures)}");
 
@@ -177,8 +184,8 @@ namespace Automatica.Core.Internals.License
 
         private async Task<bool> Validate(string license)
         {
-            string pubKey = "";
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Internals.pub.txt")))
+            string pubKey;
+            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Internals.pub.txt") ?? throw new InvalidOperationException()))
             {
                 pubKey = await reader.ReadToEndAsync();
             }

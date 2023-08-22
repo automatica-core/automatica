@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Runtime.Recorder.Abstraction;
@@ -76,9 +74,10 @@ namespace Automatica.Core.Runtime.Recorder
 
                 foreach (var node in nodeInstances)
                 {
+                    _logger.LogDebug($"Node {node.Name} is selected for trending...");
                     foreach (var recorder in _trendingRecorder)
                     {
-                        _logger.LogDebug($"Node {node.Name} is selected for trending...");
+                        _logger.LogDebug($"{recorder.GetType().Name} added {node.Name} {node.ObjId} for recording...");
                         await recorder.AddTrend(node.ObjId);
                         recordingDataPointCount++;
                     }
