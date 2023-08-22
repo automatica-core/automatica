@@ -108,12 +108,21 @@ export class LabelComponent extends DefaultComponent implements OnInit, OnDestro
     await this.fetchValues();
   }
 
+  isDateFromToday(input: Date) {
+    var todaysDate = new Date();
+    var compare = new Date(input);
+    if (compare.setHours(0, 0, 0, 0) == todaysDate.setHours(0, 0, 0, 0)) {
+      return true;
+    }
+    return false;
+  }
+
   customizeTooltip = (info: any) => ({
     html: `<div><div class='tooltip-header'>${Math.round((info.point.data.averageValue + Number.EPSILON) * 100) / 100}</div>`
       + '<div class=\'tooltip-body\'><div class=\'series-name\'>'
       + `<span class='top-series-name'>${this.translate.translate("COMMON.TIMESTAMP")}</span>`
       + '</div><div class=\'value-text\'>'
-      + `<span class='top-series-value'>${formatDate(info.point.data.timestamp, this.argumentAxisFormatString)}</span>`
+      + `<span class='top-series-value'>${formatDate(info.point.data.timestamp, this.isDateFromToday(info.point.data.timestamp) ? "shortTime" : "shortDateShortTime")}</span>`
       + '</div></div></div>',
   });
 
