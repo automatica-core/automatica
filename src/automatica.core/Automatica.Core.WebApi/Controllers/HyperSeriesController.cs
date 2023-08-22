@@ -11,7 +11,6 @@ namespace Automatica.Core.WebApi.Controllers
    
 
     [Route("webapi/hyperseries")]
-    [AllowAnonymous]
     public class HyperSeriesController
     {
         private readonly IHyperSeriesRepository _repository;
@@ -22,7 +21,7 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpGet("{aggregationType}")]
-        [AllowAnonymous]
+        [Authorize(Policy = Role.ViewerRole)]
         public async Task<List<AggregatedRecordValue>> GetHourlyValues([FromRoute]AggregationType aggregationType, [FromQuery] Guid id, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] int? count)
         {
             if (!_repository.IsActivated)
