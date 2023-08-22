@@ -158,6 +158,7 @@ namespace Automatica.Core.Runtime.Recorder.Base
                 await rec.Stop();
             }
 
+            await Dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, nodeInstance);
             _recorders.Remove(nodeInstance);
         }
 
