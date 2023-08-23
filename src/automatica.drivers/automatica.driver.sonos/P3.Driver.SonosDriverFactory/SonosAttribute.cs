@@ -1,40 +1,28 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using Timer = System.Timers.Timer;
 
 
 namespace P3.Driver.SonosDriverFactory
 {
     public class SonosAttribute : DriverBase
     {
-        private readonly SonosDevice _device;
         private readonly Func<Task<object>> _readAction;
         private readonly Func<object, Task<object>> _writeAction;
-        private readonly Timer _readTimer = new Timer();
 
+        private object? _lastValue = null;
 
-
-        public SonosAttribute(IDriverContext ctx, SonosDevice device, Func<Task<object>> readAction, Func<object, Task<object>> writeAction) : base(ctx)
+        public SonosAttribute(IDriverContext ctx, Func<Task<object>> readAction, Func<object, Task<object>> writeAction) : base(ctx)
         {
-            _device = device;
             _readAction = readAction;
             _writeAction = writeAction;
 
-            _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
         }
 
-        private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            await ReadValue();
-        }
-
-        protected virtual async Task ReadValue()
+        public override async Task<bool> Read(CancellationToken token = new CancellationToken())
         {
             if (_readAction != null)
             {
@@ -42,8 +30,9 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     var value = await _readAction.Invoke();
 
-                    if (value != null)
+                    if (value != null && value != _lastValue)
                     {
+                        _lastValue = value;
                         DispatchValue(value);
                     }
                 }
@@ -52,6 +41,8 @@ namespace P3.Driver.SonosDriverFactory
                     DriverContext.Logger.LogError(e, $"Could not read value...");
                 }
             }
+
+            return true;
         }
 
         public override async Task WriteValue(IDispatchable source, object value)
@@ -59,9 +50,11 @@ namespace P3.Driver.SonosDriverFactory
             try
             {
                 var write = await _writeAction.Invoke(value);
+                DriverContext.Logger.LogDebug($"Sonos write value {write}...");
 
-                if (write != null)
+                if (write != null && write != _lastValue)
                 {
+                    _lastValue = write;
                     DispatchValue(write);
                 }
             }
@@ -71,21 +64,12 @@ namespace P3.Driver.SonosDriverFactory
             }
         }
 
-        public override async Task<bool> Start(CancellationToken token = default)
+        public override Task<bool> Start(CancellationToken token = default)
         {
-           await ReadValue();
-
-            _readTimer.Start();
-
-            return await base.Start(token);
+            Read(token).ConfigureAwait(false);
+            return base.Start(token);
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
-        {
-            _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Stop();
-            return base.Stop(token);
-        }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

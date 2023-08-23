@@ -6,6 +6,10 @@
       "NAME": "Play/Pause",
       "DESCRIPTION": ""
     },
+    "PLAY_DEFAULT": {
+      "NAME": "Play Default",
+      "DESCRIPTION": ""
+    },
     "PAUSE_INPUT_STATUS": {
       "NAME": "Pause",
       "DESCRIPTION": ""

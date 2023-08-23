@@ -2,7 +2,7 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
-import { LogicEngineService } from "src/app/services/logicengine.service";
+import { LogicEngineService, LogicUpdateScope } from "src/app/services/logicengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 declare var draw2d: any;
@@ -57,7 +57,7 @@ export class LogicShapes {
 
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element);
+                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
                     }
                     catch (error) {
                         errorHandler.notifyError(error);
@@ -322,7 +322,7 @@ export class LogicShapes {
 
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element);
+                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
                     } catch (error) {
                         errorHandler.notifyError(error);
                     }

@@ -61,6 +61,31 @@ namespace P3.Driver.Synology.DriverFactory
                 SynologyDevice, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true,
                 true, false, true, NodeDataType.Boolean, 1, false, true);
 
+            AddWebStationNodes(factory);
+
+        }
+
+        private void AddWebStationNodes(INodeTemplateFactory factory)
+        {
+            var dsmWebStationGuid = new Guid("25a06729-049f-409f-9e0e-f731f444db07");
+            factory.CreateInterfaceType(dsmWebStationGuid, "SYNOLOGY.DSM.WEBSTATION.NAME", "SYNOLOGY..WEBSTATION.DESCRIPTION", int.MaxValue, 1, false);
+
+            factory.CreateNodeTemplate(dsmWebStationGuid, "SYNOLOGY.DSM.WEBSTATION.NAME", "SYNOLOGY.DSM.WEBSTATION.DESCRIPTION", "synology-dsm-webstation",
+                SynologyDevice, dsmWebStationGuid, false, true,
+                true, false, true, NodeDataType.NoAttribute, 1, false, true);
+
+
+            var dsmWebStationConnectedGuid = new Guid("59761e22-17c1-434d-8146-1ea548cde077");
+            factory.CreateNodeTemplate(dsmWebStationConnectedGuid, "SYNOLOGY.DSM.WEBSTATION.CONNECTED.NAME", "SYNOLOGY.DSM.WEBSTATION.CONNECTED.DESCRIPTION", "synology-dsm-webstation-connected",
+                dsmWebStationGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true,
+                true, false, true, NodeDataType.Boolean, 1, false, true);
+
+            factory.CreatePropertyTemplate(new Guid("e31ab036-88dc-4f29-a20b-d906c30bdabe"), "SYNOLOGY.USE_REMOTE_CONNECT.NAME", "SYNOLOGY.USE_REMOTE_CONNECT.DESCRIPTION", "use_remote_connect",
+                PropertyTemplateType.Bool, dsmWebStationConnectedGuid, "COMMON.CATEGORY.REMOTE", true, false, null, null, 0, 5);
+            factory.CreatePropertyTemplate(new Guid("71b77f1d-0ea9-4448-b432-8884d010aaff"), "SYNOLOGY.REMOTE_CONNECT_DOMAIN.NAME", "SYNOLOGY.REMOTE_CONNECT_DOMAIN.DESCRIPTION", "remote_connect_domain",
+                PropertyTemplateType.Text, dsmWebStationConnectedGuid, "COMMON.CATEGORY.REMOTE", true, false, null, null, 0, 6);
+
+
         }
     }
 }

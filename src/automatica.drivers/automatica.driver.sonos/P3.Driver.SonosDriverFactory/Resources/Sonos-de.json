@@ -6,6 +6,63 @@
     "DEVICE": {
       "NAME": "Sonos Gerät",
       "DESCRIPTION": "",
+
+      "PLAY": {
+        "NAME": "Play",
+        "DESCRIPTION": ""
+      },
+      "PAUSE": {
+        "NAME": "Pause",
+        "DESCRIPTION": ""
+      },
+      "SET_VOLUME": {
+        "NAME": "Lautstärke",
+        "DESCRIPTION": ""
+      },
+      "NEXT": {
+        "NAME": "Nächstes",
+        "DESCRIPTION": ""
+      },
+      "SET_TUNE_IN": {
+        "NAME": "Radio",
+        "DESCRIPTION": ""
+      },
+      "SET_TUNE_IN_PLAY": {
+        "NAME": "Radio & Play",
+        "DESCRIPTION": ""
+      },
+      "STATUS": {
+        "NAME": "Status",
+        "DESCRIPTION": "",
+        "TITLE": {
+          "NAME": "Titel",
+          "DESCRIPTION": ""
+        },
+        "CREATOR": {
+          "NAME": "Artist",
+          "DESCRIPTION": ""
+        },
+        "ALBUM": {
+          "NAME": "Album",
+          "DESCRIPTION": ""
+        },
+        "ALBUM_ART_URI": {
+          "NAME": "Album Art Uri",
+          "DESCRIPTION": ""
+        },
+        "CLASS": {
+          "NAME": "Class",
+          "DESCRIPTION": ""
+        },
+        "DURATION": {
+          "NAME": "Dauer",
+          "DESCRIPTION": ""
+        },
+        "RELATIVE_TIME": {
+          "NAME": "Relative Dauer",
+          "DESCRIPTION": ""
+        }
+      },
       "ID": {
         "NAME": "ID",
         "DESCRIPTION": ""
@@ -18,31 +75,6 @@
         "NAME": "FIxe IP verwenden",
         "DESCRIPTION": ""
       }
-    },
-
-    "PLAY": {
-      "NAME": "Play",
-      "DESCRIPTION": ""
-    },
-    "PAUSE": {
-      "NAME": "Pause",
-      "DESCRIPTION": ""
-    },
-    "SET_VOLUME": {
-      "NAME": "Lautstärke",
-      "DESCRIPTION": ""
-    },
-    "NEXT": {
-      "NAME": "Nächstes",
-      "DESCRIPTION": ""
-    },
-    "SET_TUNE_IN": {
-      "NAME": "Radio",
-      "DESCRIPTION": ""
-    },
-    "SET_TUNE_IN_PLAY": {
-      "NAME": "Radio & Play",
-      "DESCRIPTION": ""
     }
   }
 }

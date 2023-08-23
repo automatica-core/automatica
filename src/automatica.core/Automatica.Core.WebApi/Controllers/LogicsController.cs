@@ -18,6 +18,11 @@ using Newtonsoft.Json;
 
 namespace Automatica.Core.WebApi.Controllers
 {
+    public enum LogicUpdateScope
+    {
+        Unknown = 0,
+        Drag = 1
+    }
     public class SaveAllLogicEditor : TypedObject
     {
         [JsonProperty("logicPages")]
@@ -104,7 +109,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPatch]
         [Route("item/logicInstance")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<RuleInstance> UpdateLogicInstance([FromBody] RuleInstance logicInstance)
+        public async Task<RuleInstance> UpdateLogicInstance([FromBody] RuleInstance logicInstance, [FromQuery]LogicUpdateScope updateScope = LogicUpdateScope.Unknown)
         {
             await using var dbContext = new AutomaticaContext(_config);
 
@@ -140,9 +145,13 @@ namespace Automatica.Core.WebApi.Controllers
 
             _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
             _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId, logicInstance);
-           
-            await _coreServer.ReloadLogic(logicInstance.ObjId);
-            _logicCacheFacade.ClearInstances();
+
+            if (updateScope != LogicUpdateScope.Drag) //do not reload if we only drag it around
+            {
+                await _coreServer.ReloadLogic(logicInstance.ObjId);
+                _logicCacheFacade.ClearInstances();
+            }
+
             return logicInstance;
         }
 

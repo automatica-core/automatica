@@ -54,10 +54,25 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   playPauseState: RuleInterfaceInstance;
   volumeState: RuleInterfaceInstance;
   radioStationState: RuleInterfaceInstance;
+
+  titleState: RuleInterfaceInstance;
+  creatorState: RuleInterfaceInstance;
+  albumState: RuleInterfaceInstance;
+  albumArtState: RuleInterfaceInstance;
+  classState: RuleInterfaceInstance;
+  durationState: RuleInterfaceInstance;
+  relativeTimeState: RuleInterfaceInstance;
+
+  title: string;
+  creator: string;
+  album: string;
+  albumArt: string;
+  class: string;
+  duration: string;
+  relativeTime: string;
+
   nextOutput: RuleInterfaceInstance;
-
   volumeOutput: RuleInterfaceInstance;
-
 
   constructor(
     dataHubService: DataHubService,
@@ -81,6 +96,15 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     this.volumeState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "volume");
     this.radioStationState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "radio_station");
 
+
+    this.titleState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "title");
+    this.creatorState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "creator");
+    this.albumState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "album");
+    this.albumArtState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "album_art_uri");
+    this.classState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "class");
+    this.durationState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "duration");
+    this.relativeTimeState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "relative_time");
+
     this.nextOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "next");
     this.volumeOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "volume");
 
@@ -103,6 +127,24 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
       this.volume = toNumber(value);
     } else if (interfaceId == this.radioStationState.ObjId) {
       this.radioStation = value;
+    } else if (this.titleState && interfaceId == this.titleState.ObjId) {
+      if (!value?.includes("tunein.com")) {
+        this.title = value;
+      }
+    } else if (this.creatorState && interfaceId == this.creatorState.ObjId) {
+      this.creator = value;
+    } else if (this.albumState && interfaceId == this.albumState.ObjId) {
+      this.album = value;
+    } else if (this.albumArtState && interfaceId == this.albumArtState.ObjId) {
+      if (value?.startsWith("http") || value?.startsWith("https")) {
+        this.albumArt = value;
+      }
+    } else if (this.classState && interfaceId == this.classState.ObjId) {
+      this.class = value;
+    } else if (this.durationState && interfaceId == this.durationState.ObjId) {
+      this.duration = value;
+    } else if (this.relativeTimeState && interfaceId == this.relativeTimeState.ObjId) {
+      this.relativeTime = value;
     }
   }
 

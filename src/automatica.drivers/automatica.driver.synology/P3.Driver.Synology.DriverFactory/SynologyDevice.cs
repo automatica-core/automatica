@@ -95,8 +95,19 @@ namespace P3.Driver.Synology.DriverFactory
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            _connectedAttribute = new SynologyConnectedAttribute(ctx);
-            return _connectedAttribute;
+            var key = ctx.NodeInstance.This2NodeTemplateNavigation.Key;
+            if (key == "synology-device-connected")
+            {
+                _connectedAttribute = new SynologyConnectedAttribute(ctx);
+                return _connectedAttribute;
+            }
+            
+            if (key == "synology-dsm-webstation")
+            {
+
+            }
+
+            return null;
         }
     }
 }

@@ -16,6 +16,10 @@ export interface AddLogicData {
   pageId: string;
 }
 
+export enum LogicUpdateScope {
+  Unknown = 0,
+  Drag = 1
+}
 
 @Injectable()
 export class LogicEngineService extends BaseService {
@@ -81,11 +85,11 @@ export class LogicEngineService extends BaseService {
     return super.deleteJson(`logics/item/${linkExtension}/${data.ObjId}`);
   }
 
-  updateItem(item: RuleInstance | NodeInstance2RulePage) {
+  updateItem(item: RuleInstance | NodeInstance2RulePage, updateScope: LogicUpdateScope = LogicUpdateScope.Unknown): Promise<any> {
     if (item instanceof RuleInstance) {
-      return super.patchJson(`logics/item/logicInstance`, item.toJson());
+      return super.patchJson(`logics/item/logicInstance?updateScope=${updateScope}`, item.toJson());
     } else {
-      return super.patchJson(`logics/item/nodeInstance`, item.toJson());
+      return super.patchJson(`logics/item/nodeInstance?updateScope=${updateScope}`, item.toJson());
     }
   }
 

@@ -188,5 +188,10 @@ namespace P3.Driver.Sonos
             return _avTransportService.GetMediaInfoAsync();
         }
         #endregion
+
+        public Task<GetPositionInfoResponse> GetPositionInfoAsync()
+        {
+            return _avTransportService.GetPositionInfoAsync();
+        }
     }
 }

@@ -9,12 +9,18 @@
 }
 
 .section_cell {
-    width: 180px;
     height: 180px;
     border-radius: 2px;
     margin: 0 5px 5px 0;
     position: relative;
     background-color: $base-border-color;
+}
+
+.section_cell_180 {
+    width: 180px;
+}
+.section_cell_360 {
+    width: 365px;
 }
 
 .chart {

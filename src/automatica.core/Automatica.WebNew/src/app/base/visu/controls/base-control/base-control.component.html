@@ -1,4 +1,4 @@
-<div class="section_cell">
+<div [class]="section_cell_class"  [ngClass]="{'section_cell_180': width === 1, 'section_cell_360': width === 2}">
 
     <ng-container *ngIf="aggregatedValues && aggregatedValues.length >= 3">
         <div class="chart">

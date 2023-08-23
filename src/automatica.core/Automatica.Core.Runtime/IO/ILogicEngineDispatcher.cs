@@ -7,5 +7,6 @@ namespace Automatica.Core.Runtime.IO
     {
         Task<bool> Load();
         Task Unlink(Guid linkId);
+        Task Unload();
     }
 }

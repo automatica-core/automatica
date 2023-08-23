@@ -9,6 +9,12 @@ import { AggregatedValueRecord } from "src/app/base/model/aggregated-record-valu
 export class BaseControlComponent implements OnInit {
 
   @Input()
+  width: number = 1;
+
+  @Input()
+  section_cell_class: string = "section_cell";
+
+  @Input()
   icon: string = "question";
 
   @Input()

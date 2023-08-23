@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Sonos;
 using P3.Driver.Sonos.Discovery;
 using P3.Driver.Sonos.Models;
 using P3.Driver.SonosDriverFactory.Attributes;
+using Timer = System.Timers.Timer;
 
 namespace P3.Driver.SonosDriverFactory
 {
@@ -21,11 +23,54 @@ namespace P3.Driver.SonosDriverFactory
         private SonosController _controller;
 
         public SonosController Controller => _controller;
+        private readonly Timer _readTimer = new Timer();
+
+        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+
 
         public SonosDevice(IDriverContext driverContext) : base(driverContext)
         {
             _sonosControllerFactory = new SonosControllerFactory();
+
+            _readTimer.Elapsed += ReadTimerOnElapsed;
+            _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
         }
+
+        private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            await Read();
+        }
+
+        public override async Task<bool> Read(CancellationToken token = new CancellationToken())
+        {
+            try
+            {
+                await _semaphoreSlim.WaitAsync(token);
+                var isPlaying = await _controller.GetIsPlayingAsync();
+
+                _readTimer.Interval = isPlaying
+                    ? TimeSpan.FromSeconds(1).TotalMilliseconds
+                    : TimeSpan.FromSeconds(15).TotalMilliseconds;
+
+                foreach (var child in Children)
+                {
+                    await child.Read(token);
+                }
+            }
+            catch (Exception ex)
+            {
+                _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
+                DriverContext.Logger.LogError(ex, "Error reading...");
+                return false;
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
+
+            return true;
+        }
+
         protected override bool CreateCustomLogger()
         {
             return true;
@@ -42,7 +87,7 @@ namespace P3.Driver.SonosDriverFactory
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
-            var ip = String.Empty;
+            string ip;
             if (_useFixedIp.HasValue && _useFixedIp.Value)
             {
                 ip = _ip;
@@ -69,11 +114,13 @@ namespace P3.Driver.SonosDriverFactory
             }
 
             _controller = _sonosControllerFactory.Create(ip, DriverContext.Logger);
+            _readTimer.Start();
             return await base.Start(token);
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)
         {
+            _readTimer.Stop();
             await _controller.StopAsync();
             return await base.Stop(token);
         }
@@ -81,10 +128,11 @@ namespace P3.Driver.SonosDriverFactory
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             var nodeId = ctx.NodeInstance.This2NodeTemplateNavigation.ObjId;
+            DriverBase sonosAttribute = null;
 
             if (nodeId == SonosDriverFactory.PlayGuid)
             {
-                return new SonosAttribute(ctx, this, async () =>
+                sonosAttribute = new SonosAttribute(ctx, async () =>
                 {
                     var value = await _controller.GetIsPlayingAsync();
                     return value;
@@ -102,7 +150,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.PauseGuid)
             {
-                return new SonosAttribute(ctx, this, async () =>
+                sonosAttribute = new SonosAttribute(ctx, async () =>
                 {
                     var value = await _controller.GetIsPlayingAsync();
                     return !value;
@@ -119,7 +167,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.NextTrack)
             {
-                return new SonosAttribute(ctx, this, null, async o =>
+                sonosAttribute = new SonosAttribute(ctx,  null, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos next track...");
                     if (o is true)
@@ -133,7 +181,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.VolumeGuid)
             {
-                return new SonosAttribute(ctx, this, async () =>
+                return new SonosAttribute(ctx,  async () =>
                 {
                     var value = await _controller.GetVolumeAsync();
                     return value.Value;
@@ -148,6 +196,7 @@ namespace P3.Driver.SonosDriverFactory
                     }
                     catch (Exception e)
                     {
+                        _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
                         DriverContext.Logger.LogError(e, "Could not set volume...");
                     }
 
@@ -156,14 +205,19 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadio)
             {
-                return new SonosSetRadioAttribute(ctx, this);
+                sonosAttribute = new SonosSetRadioAttribute(ctx, this);
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadioAndPlay)
             {
-                return new SonosSetRadioAndPlayAttribute(ctx, this);
+                sonosAttribute = new SonosSetRadioAndPlayAttribute(ctx, this);
             }
 
-            return null;
+            if (nodeId == SonosDriverFactory.StatusGuid)
+            {
+                sonosAttribute = new SonosStatusAttribute(ctx, this);
+            }
+
+            return sonosAttribute;
         }
     }
 }

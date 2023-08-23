@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using P3.Driver.Sonos.Device;
 using P3.Driver.Sonos.Discovery;
 
 namespace P3.Driver.SonosDriverFactory
@@ -30,14 +31,16 @@ namespace P3.Driver.SonosDriverFactory
                 }
 
                 var node = DriverContext.NodeTemplateFactory.CreateNodeInstance(SonosDriverFactory.SonosDeviceGuid);
-                node.Name = device.Uuid;
-
+               
                 var id = node.GetProperty(SonosDriverFactory.IdAddressPropertyKey);
                 id.Value = device.Uuid;
 
                 var ip = node.GetProperty(SonosDriverFactory.IpAddressPropertyKey);
                 ip.Value = device.Location.Host;
 
+                var sonosDevice = await new SonosDeviceService().GetDeviceAsync(ip.ValueString);
+                node.Name = sonosDevice.FriendlyName;
+                
                 ret.Add(node);
             }
 

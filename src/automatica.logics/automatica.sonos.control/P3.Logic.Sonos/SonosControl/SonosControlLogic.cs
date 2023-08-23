@@ -15,6 +15,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
     //Inputs
     private readonly RuleInterfaceInstance _playPauseTrigger;
+    private readonly RuleInterfaceInstance _playDefaultTrigger;
     private readonly RuleInterfaceInstance _playPauseInputState;
     private readonly RuleInterfaceInstance _volume;
     private readonly RuleInterfaceInstance _volumeIncrement;
@@ -41,6 +42,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
     private long _currentVolume;
     private bool _currentlyPlaying = false;
+    private bool? _lastPlayValue;
 
     public SonosControlLogic(ILogicContext context) : base(context)
     {
@@ -49,6 +51,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         //Inputs
         _playPauseTrigger = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayPauseTrigger);
+        _playDefaultTrigger = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayDefaultTrigger);
         _playPauseInputState = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PauseTrigger);
         _volume = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
@@ -132,6 +136,23 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         {
             var play = Convert.ToBoolean(value);
 
+            if (_lastPlayValue == play)
+                return ret;
+
+            _lastPlayValue = play;
+            ret.Add(new LogicOutputChanged(_playOutputStatus, play));
+            ret.Add(new LogicOutputChanged(_pauseOutputStatus, !play));
+            _currentlyPlaying = play;
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playDefaultTrigger?.This2RuleInterfaceTemplate)
+        {
+            var play = Convert.ToBoolean(value);
+
+            if(_lastPlayValue == play)
+                return ret;
+
+            _lastPlayValue = play;
             if (play)
             {
                 _currentVolume = _volumeOnPlayValue;
@@ -185,6 +206,10 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             if (_currentlyPlaying)
             {
                 var volume = Convert.ToInt64(value);
+                if (_currentVolume == volume)
+                {
+                    return ret;
+                }
                 if (volume >= _maxVolumeValue)
                 {
                     return ret;

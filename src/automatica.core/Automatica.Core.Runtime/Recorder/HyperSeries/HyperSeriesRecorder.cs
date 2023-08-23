@@ -85,11 +85,14 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                 {
                     await _semaphore.WaitAsync(token);
 
-                    var record = _queue.Dequeue();
-                    if (record != null && _repository != null)
+                    if (_queue.Count > 0)
                     {
-                        Logger.LogDebug($"Adding record to hyperseries db: {record.NodeInstanceId} {record.Value}");
-                        await _repository.Add(record);
+                        var record = _queue.Dequeue();
+                        if (record != null && _repository != null)
+                        {
+                            Logger.LogDebug($"Adding record to hyperseries db: {record.NodeInstanceId} {record.Value}");
+                            await _repository.Add(record);
+                        }
                     }
                 }
                 catch (OperationCanceledException)

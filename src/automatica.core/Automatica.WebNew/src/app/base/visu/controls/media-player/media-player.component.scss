@@ -1,11 +1,15 @@
+@import "../../../../../themes/generated/variables.additional.scss"; 
+
 .center {
     position: absolute;
     text-align: center;
     left: 30%;
     top: 30px;
-    // -moz-transform: translateX(-50%) translateY(-50%);
-    // -webkit-transform: translateX(-50%) translateY(-50%);
-    // transform: translateX(-50%) translateY(-50%);
+}
+
+::ng-deep .section_cell_bg {
+    background-color: transparent!important;
+    background: linear-gradient(90deg, $base-border-color 0%, $base-border-color 50%, rgba(0,0,0,0) 100%)!important;
 }
 
 .cell_text_hint {
@@ -17,4 +21,17 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .media_player_button {
+    background: transparent; 
+    border-color:transparent
+  }
+
+  .media_player_button_margin {
+    margin-top: 5px;
+  }
+
+  .volume {
+    margin-bottom: 5px;
   }

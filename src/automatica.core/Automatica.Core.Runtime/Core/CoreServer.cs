@@ -324,6 +324,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 await StopLogic(rule.Value, rule.Key);
             }
+            await _logicEngineDispatcher.Unload();
         }
 
         private async Task StartLogic(ILogic logic, RuleInstance logicInstance)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -28,6 +29,9 @@ namespace Automatica.Core.Runtime.IO
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotifier;
         private readonly IRemanentHandler _remanentHandler;
         private readonly object _lock = new object();
+
+        private readonly List<(DispatchableType type, Guid id)> _dispatchRegistrations =
+            new List<(DispatchableType type, Guid id)>();
 
         public LogicEngineDispatcher(ILinkCache linkCache, 
             IDispatcher dispatcher, 
@@ -85,7 +89,8 @@ namespace Automatica.Core.Runtime.IO
                         continue;
                     }
                     
-                    _logger.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
+                    _logger.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" {sourceNode.ObjId} is mapped to \"{GetFullName(targetNode)}\" {targetNode.ObjId}");
+                    _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId));
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, async (dispatchable, o) =>
                     {
                         await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
@@ -104,7 +109,8 @@ namespace Automatica.Core.Runtime.IO
                     }
 
                     var inputId = sourceNode.ObjId;
-                    _logger.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                    _logger.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} {sourceNode.ObjId} is mapped to {targetNode.This2RuleInstanceNavigation.Name} {targetNode.ObjId}");
+                    _dispatchRegistrations.Add((DispatchableType.RuleInstance, inputId));
                     await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
                         ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
@@ -122,7 +128,8 @@ namespace Automatica.Core.Runtime.IO
                         continue;
                     }
 
-                    _logger.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
+                    _logger.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" {sourceNode.ObjId} is mapped to {targetNode.This2RuleInstanceNavigation.Name} {targetNode.ObjId}");
+                    _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId));
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
                         ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
@@ -141,7 +148,8 @@ namespace Automatica.Core.Runtime.IO
                     }
 
                     var inputId = sourceNode.ObjId;
-                    _logger.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
+                    _logger.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} {sourceNode.This2RuleInstanceNavigation.ObjId} is mapped to \"{GetFullName(targetNode)} {targetNode.ObjId}\"");
+                    _dispatchRegistrations.Add((DispatchableType.RuleInstance, inputId));
                     await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId,  (dispatchable, o) =>
                     {
                         ValueDispatched(dispatchable, o, targetNode.ObjId);
@@ -182,6 +190,8 @@ namespace Automatica.Core.Runtime.IO
 
                 _logger.LogInformation($"UnRegister Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId);
+                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
+                    a.type == DispatchableType.NodeInstance && a.id == sourceNode.ObjId));
             }
             else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
             {
@@ -197,6 +207,8 @@ namespace Automatica.Core.Runtime.IO
                 var inputId = sourceNode.ObjId;
                 _logger.LogInformation($"UnRegister Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.RuleInstance, inputId);
+                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
+                    a.type == DispatchableType.RuleInstance && a.id == inputId));
             }
             else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
             {
@@ -212,6 +224,8 @@ namespace Automatica.Core.Runtime.IO
 
                 _logger.LogInformation($"UnRegister Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId);
+                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
+                    a.type == DispatchableType.NodeInstance && a.id == sourceNode.ObjId));
             }
             else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
             {
@@ -228,7 +242,19 @@ namespace Automatica.Core.Runtime.IO
                 var inputId = sourceNode.ObjId;
                 _logger.LogInformation($"UnRegister Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
                 await _dispatcher.UnRegisterDispatch(DispatchableType.RuleInstance, inputId);
+                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
+                    a.type == DispatchableType.RuleInstance && a.id == inputId));
             }
+        }
+
+        public async Task Unload()
+        {
+            foreach (var reg in _dispatchRegistrations)
+            {
+                await _dispatcher.UnRegisterDispatch(reg.type, reg.id);
+            }
+
+            _dispatchRegistrations.Clear();
         }
 
 

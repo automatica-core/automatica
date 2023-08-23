@@ -8,17 +8,18 @@ namespace P3.Driver.SonosDriverFactory
 {
     public class SonosDriverFactory : DriverFactory
     {
-        public static readonly Guid BusId = new Guid("df404af7-a487-4742-805a-0b871d1b5447");
+        public static readonly Guid BusId = new("df404af7-a487-4742-805a-0b871d1b5447");
 
-        public static Guid SonosDeviceGuid = new Guid("d6daedf4-9dd6-48c9-8f5d-8dd56e4e0748");
-        public static Guid SonosDeviceInterfaceGuid = new Guid("ba2a0906-6789-42b3-a460-e8d624dde38e");
+        public static Guid SonosDeviceGuid = new("d6daedf4-9dd6-48c9-8f5d-8dd56e4e0748");
+        public static Guid SonosDeviceInterfaceGuid = new("ba2a0906-6789-42b3-a460-e8d624dde38e");
 
-        public static Guid PlayGuid = new Guid("6a482ed1-33ed-47de-b58e-d850652d4e40");
-        public static Guid PauseGuid = new Guid("48b1eeba-13e5-4300-bea3-e26836c64cb8");
-        public static Guid VolumeGuid = new Guid("5285e217-7793-4aef-91d2-230bbe61b5c7");
-        public static Guid NextTrack = new Guid("3e22c6b8-c557-4be7-b671-cd627855b05d");
-        public static Guid SetTuneInRadio = new Guid("77947332-cd89-4765-b79b-b64ce4fa23cf");
-        public static Guid SetTuneInRadioAndPlay = new Guid("fc5c92c1-8011-4e8d-96fb-25e2accf10b9");
+        public static Guid PlayGuid = new("6a482ed1-33ed-47de-b58e-d850652d4e40");
+        public static Guid PauseGuid = new("48b1eeba-13e5-4300-bea3-e26836c64cb8");
+        public static Guid VolumeGuid = new("5285e217-7793-4aef-91d2-230bbe61b5c7");
+        public static Guid NextTrack = new("3e22c6b8-c557-4be7-b671-cd627855b05d");
+        public static Guid SetTuneInRadio = new("77947332-cd89-4765-b79b-b64ce4fa23cf");
+        public static Guid SetTuneInRadioAndPlay = new("fc5c92c1-8011-4e8d-96fb-25e2accf10b9");
+        public static Guid StatusGuid = new ("d317d318-3c65-46cc-b0ab-f894c2dc51d0");
 
 
         public const string IdAddressPropertyKey = "device-id";
@@ -29,7 +30,7 @@ namespace P3.Driver.SonosDriverFactory
         public override Guid DriverGuid => BusId;
         public override string ImageName => "automaticacore/plugin-p3.driver.sonos"; 
 
-        public override Version DriverVersion => new Version(0, 3, 0, 4);
+        public override Version DriverVersion => new(1, 0, 0, 1);
 
         
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -43,7 +44,7 @@ namespace P3.Driver.SonosDriverFactory
                 0);
 
             var gwInterface = SonosDeviceInterfaceGuid;
-            factory.CreateInterfaceType(gwInterface, "SONOS.DEVICE.NAME", "SONOS.DEVICE.DESCRIPTION", int.MaxValue, int.MaxValue, true);
+            factory.CreateInterfaceType(gwInterface, "SONOS.DEVICE.NAME", "SONOS.DEVICE.DESCRIPTION", int.MaxValue, int.MaxValue, false);
             factory.CreateNodeTemplate(SonosDeviceGuid, "SONOS.DEVICE.NAME", "SONOS.DEVICE.NAME", "sonos-device", DriverGuid, gwInterface, false, false, true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
 
             factory.CreatePropertyTemplate(new Guid("594be0ff-63c4-4e46-9cc8-37ff7ccf80a2"), "SONOS.DEVICE.ID.NAME",
@@ -67,12 +68,38 @@ namespace P3.Driver.SonosDriverFactory
             CreateAction(factory, SetTuneInRadio, "set_tune_in", true, true, NodeDataType.Integer);
             CreateAction(factory, SetTuneInRadioAndPlay, "set_tune_in_play", true, true, NodeDataType.Integer);
 
+            CreateCurrentStatusItems(factory);
+        }
+
+        private void CreateCurrentStatusItems(INodeTemplateFactory factory)
+        {
+            var statusGuid = StatusGuid;
+            factory.CreateInterfaceType(statusGuid, "SONOS.DEVICE.STATUS.NAME", "SONOS.DEVICE.STATUS.DESCRIPTION", int.MaxValue, 1, false);
+            factory.CreateNodeTemplate(statusGuid, "SONOS.DEVICE.STATUS.NAME", "SONOS.DEVICE.STATUS.DESCRIPTION", "sonos-status", SonosDeviceInterfaceGuid,
+                statusGuid, true, false, true, false, true, NodeDataType.NoAttribute, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("aea0dd95-0dd5-49ce-8a2d-606eb1355c7a"), "SONOS.DEVICE.STATUS.TITLE.NAME", "SONOS.DEVICE.STATUS.TITLE.DESCRIPTION", "sonos-status-title", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+            factory.CreateNodeTemplate(new Guid("840af2d3-d326-4d72-bb1e-da7c69a4f5a2"), "SONOS.DEVICE.STATUS.CREATOR.NAME", "SONOS.DEVICE.STATUS.CREATOR.DESCRIPTION", "sonos-status-creator", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+            factory.CreateNodeTemplate(new Guid("cbc6244e-9e12-4178-bd0f-b7102482c2b1"), "SONOS.DEVICE.STATUS.ALBUM.NAME", "SONOS.DEVICE.STATUS.ALBUM.DESCRIPTION", "sonos-status-album", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+            factory.CreateNodeTemplate(new Guid("8ae25092-6de4-4fcb-9038-adc1271cc038"), "SONOS.DEVICE.STATUS.ALBUM_ART_URI.NAME", "SONOS.DEVICE.STATUS.ALBUM_ART_URI.DESCRIPTION", "sonos-status-album-art-uri", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+            factory.CreateNodeTemplate(new Guid("9c34f7ff-2356-45b4-b680-df40c914b42c"), "SONOS.DEVICE.STATUS.CLASS.NAME", "SONOS.DEVICE.STATUS.CLASS.DESCRIPTION", "sonos-status-class", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("9f49e650-32f2-4694-b763-94c33b1ddf8c"), "SONOS.DEVICE.STATUS.DURATION.NAME", "SONOS.DEVICE.STATUS.DURATION.DESCRIPTION", "sonos-status-duration", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+            factory.CreateNodeTemplate(new Guid("a4f4af10-cff6-4b90-99f1-ac5c2963e158"), "SONOS.DEVICE.STATUS.RELATIVE_TIME.NAME", "SONOS.DEVICE.STATUS.RELATIVE_TIME.DESCRIPTION", "sonos-status-relative-time", statusGuid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
+
         }
 
         private void CreateAction(INodeTemplateFactory factory, Guid guid, string name, bool writeAble, bool readAble, NodeDataType dataType)
         {
-            factory.CreateNodeTemplate(guid, $"SONOS.{name.ToUpperInvariant()}.NAME",
-                $"SONOS.{name.ToUpperInvariant()}.DESCRIPTION", name.ToLowerInvariant(), SonosDeviceInterfaceGuid,
+            factory.CreateNodeTemplate(guid, $"SONOS.DEVICE.{name.ToUpperInvariant()}.NAME",
+                $"SONOS.DEVICE.{name.ToUpperInvariant()}.DESCRIPTION", name.ToLowerInvariant(), SonosDeviceInterfaceGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, readAble, true, writeAble, true,
                 dataType, 1, false);
         }
