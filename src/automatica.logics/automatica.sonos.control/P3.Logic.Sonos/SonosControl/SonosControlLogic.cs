@@ -128,7 +128,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
     {
         var ret = new List<ILogicOutputChanged>();
-        
+
+        Context.Logger.LogInformation($"Input value changed.... {instance.ObjId} from {source.Name} ({source.Id}) with value {value}");
 
         if (instance.This2RuleInterfaceTemplate == _volume.This2RuleInterfaceTemplate)
         {
