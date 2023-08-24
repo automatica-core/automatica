@@ -61,6 +61,36 @@
     "MAX_VOLUME": {
       "NAME": "Max Volume",
       "DESCRIPTION": ""
+    },
+    "STATE": {
+      "TITLE": {
+        "NAME": "Title",
+        "DESCRIPTION": ""
+      },
+      "CREATOR": {
+        "NAME": "Artist",
+        "DESCRIPTION": ""
+      },
+      "ALBUM": {
+        "NAME": "Album",
+        "DESCRIPTION": ""
+      },
+      "ALBUM_ART_URI": {
+        "NAME": "Album art uri",
+        "DESCRIPTION": ""
+      },
+      "CLASS": {
+        "NAME": "Class",
+        "DESCRIPTION": ""
+      },
+      "DURATION": {
+        "NAME": "Duration",
+        "DESCRIPTION": ""
+      },
+      "RELATIVE_TIME": {
+        "NAME": "Relative time",
+        "DESCRIPTION": ""
+      }
     }
   },
   "SONOS": {
