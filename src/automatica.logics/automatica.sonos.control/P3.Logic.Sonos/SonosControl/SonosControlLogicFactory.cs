@@ -7,7 +7,7 @@ namespace P3.Logic.Sonos.SonosControl;
 
 public class SonosControlLogicFactory : LogicFactory
 {
-    public override Version LogicVersion => new Version(0, 4, 0, 2);
+    public override Version LogicVersion => new Version(1, 0, 0, 0);
 
     public override bool InDevelopmentMode => true;
 
