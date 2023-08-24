@@ -154,12 +154,21 @@ namespace Automatica.Core.Driver
             return Task.FromResult(true);
         }
 
-
-
-        public void DispatchValue(object value)
+        public void DispatchValueFromWrite(object value)
+        {
+            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
+            DriverContext.Dispatcher.DispatchValue(this, value, DispatchValueSource.Write);
+        }
+        public void DispatchValueFromWrite(DispatchValue value)
         {
             DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
             DriverContext.Dispatcher.DispatchValue(this, value);
+        }
+
+        public void DispatchValue(object value, DispatchValueSource valueSource = DispatchValueSource.Read)
+        {
+            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
+            DriverContext.Dispatcher.DispatchValue(this, value, valueSource);
         }
         public void DispatchValue(DispatchValue value)
         {

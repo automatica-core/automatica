@@ -47,5 +47,17 @@ namespace Automatica.Core.Internals.Cache.Logic
             LinkCache.GetSingle(objId, dbContext);
             return Task.CompletedTask;
         }
+
+        public Task RemoveNodeInstance(Guid instanceId)
+        {
+            LogicNodeInstanceCache.Remove(instanceId);
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveLogic(Guid instanceId)
+        {
+            InstanceCache.Remove(instanceId);
+            return Task.CompletedTask;
+        }
     }
 }

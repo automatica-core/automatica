@@ -18,5 +18,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         Task RemoveLink(Guid linkId);
         Task AddOrUpdateLink(Guid objId, AutomaticaContext dbContext);
+        Task RemoveNodeInstance(Guid instanceId);
+        Task RemoveLogic(Guid instanceId);
     }
 }

@@ -93,8 +93,11 @@ namespace Automatica.Core.Runtime.IO
                     _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId));
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, async (dispatchable, o) =>
                     {
-                        await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
-                        ValueDispatched(dispatchable, o, targetNode.ObjId);
+                        if (o.ValueSource == DispatchValueSource.Read)
+                        {
+                            await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
+                            ValueDispatched(dispatchable, o, targetNode.ObjId);
+                        }
                     });
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
@@ -113,7 +116,10 @@ namespace Automatica.Core.Runtime.IO
                     _dispatchRegistrations.Add((DispatchableType.RuleInstance, inputId));
                     await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
                     {
-                        ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
+                        if (o.ValueSource == DispatchValueSource.Read)
+                        {
+                            ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
+                        }
                     });
                 }
                 else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
@@ -132,7 +138,10 @@ namespace Automatica.Core.Runtime.IO
                     _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId));
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
-                        ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
+                        if (o.ValueSource == DispatchValueSource.Read)
+                        {
+                            ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
+                        }
                     });
                 }
                 else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
@@ -152,7 +161,10 @@ namespace Automatica.Core.Runtime.IO
                     _dispatchRegistrations.Add((DispatchableType.RuleInstance, inputId));
                     await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId,  (dispatchable, o) =>
                     {
-                        ValueDispatched(dispatchable, o, targetNode.ObjId);
+                        if (o.ValueSource == DispatchValueSource.Read)
+                        {
+                            ValueDispatched(dispatchable, o, targetNode.ObjId);
+                        }
                     });
                 }
             }

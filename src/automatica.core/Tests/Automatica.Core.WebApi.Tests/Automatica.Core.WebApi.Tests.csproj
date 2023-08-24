@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Version>7.4.0.1190</Version>
+    <Version>7.5.1.0</Version>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>

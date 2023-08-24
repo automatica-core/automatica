@@ -110,14 +110,14 @@ namespace Automatica.Push.Hubs
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
                 _dispatcher.DispatchValue(dispatchable,
-                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now));
+                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now, DispatchValueSource.User));
             }
             else
             {
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, false);
                 _dispatcher.DispatchValue(dispatchable,
-                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now));
+                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now, DispatchValueSource.User));
             }
         }
     }

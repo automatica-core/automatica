@@ -279,9 +279,9 @@ namespace Automatica.Core.Base.IO
             _hopCounts[self.Id][action]++;
         }
 
-        public Task DispatchValue(IDispatchable self, object value)
+        public Task DispatchValue(IDispatchable self, object value, DispatchValueSource valueSource)
         {
-            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTime.Now);
+            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTime.Now, valueSource);
             return DispatchValue(self, dispatchable);
         }
 

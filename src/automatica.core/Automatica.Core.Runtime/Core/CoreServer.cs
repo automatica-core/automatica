@@ -652,7 +652,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 if (!_logicFactoryStore.Contains(ruleInstance.This2RuleTemplate))
                 {
-                    _logger.LogWarning($"Could not find RuleFactory for guid {ruleInstance.This2RuleTemplate}");
+                    _logger.LogWarning($"Could not find LogicFactory for guid {ruleInstance.This2RuleTemplate}");
                     continue;
                 }
 
