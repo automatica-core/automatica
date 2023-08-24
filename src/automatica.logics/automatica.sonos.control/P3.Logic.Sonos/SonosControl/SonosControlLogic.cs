@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Sonos.SonosControl;
 
@@ -47,6 +48,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     public SonosControlLogic(ILogicContext context) : base(context)
     {
         _context = context;
+
+        context.Logger.LogInformation($"Starting {context.RuleInstance.ObjId} {context.RuleInstance.Name}");
 
         //Inputs
         _playPauseTrigger = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
