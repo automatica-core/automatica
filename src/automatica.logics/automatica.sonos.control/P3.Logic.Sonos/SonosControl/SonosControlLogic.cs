@@ -129,7 +129,12 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == _volume.This2RuleInterfaceTemplate)
         {
-            _currentVolume = Convert.ToInt64(value);
+            var vol = Convert.ToInt64(value);
+            if (_currentVolume != vol)
+            {
+                _currentVolume = vol;
+                ret.Add(new LogicOutputChanged(_volumeOutputStatus, _currentVolume));
+            }
         }
 
         if (instance.This2RuleInterfaceTemplate == _playPauseTrigger.This2RuleInterfaceTemplate)

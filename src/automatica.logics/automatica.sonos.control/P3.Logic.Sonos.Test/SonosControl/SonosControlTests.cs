@@ -20,7 +20,46 @@ public class SonosControlTests : LogicTest<SonosControlLogicFactory>
 
         await Task.Delay(500);
 
-        var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+        var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+
+        Assert.Equal(2, values.Count);
+
+        AssertInternal(values, SonosControlLogicFactory.PlayOutputStatus, true);
+        AssertInternal(values, SonosControlLogicFactory.PauseOutputStatus, false);
+
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.VolumeIncrement), true);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+
+        AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus,  Convert.ToInt64(1));
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.Volume), 20);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+
+        AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus, Convert.ToInt64(20));
+
+
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayPauseTrigger), false);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+
+
+        AssertInternal(values, SonosControlLogicFactory.PlayOutputStatus, false); 
+        AssertInternal(values, SonosControlLogicFactory.PauseOutputStatus, true);
+
+    }
+
+    [Fact]
+    public async void Test2Logic()
+    {
+        await Context.Dispatcher.ClearValues();
+        await Context.Dispatcher.ClearRegistrations();
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayDefaultTrigger), true);
+
+        await Task.Delay(500);
+
+        var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
 
         Assert.Equal(4, values.Count);
 
@@ -31,17 +70,17 @@ public class SonosControlTests : LogicTest<SonosControlLogicFactory>
 
 
         LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.VolumeIncrement), true);
-        values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
 
         AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus, SonosControlLogicFactory.DefaultVolume + 1);
 
 
 
         LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayPauseTrigger), false);
-        values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
 
 
-        AssertInternal(values, SonosControlLogicFactory.PlayOutputStatus, false); 
+        AssertInternal(values, SonosControlLogicFactory.PlayOutputStatus, false);
         AssertInternal(values, SonosControlLogicFactory.PauseOutputStatus, true);
 
     }
