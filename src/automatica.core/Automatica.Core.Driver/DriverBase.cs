@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
-using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Driver
@@ -154,28 +152,6 @@ namespace Automatica.Core.Driver
             return Task.FromResult(true);
         }
 
-        public void DispatchValueFromWrite(object value)
-        {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value, DispatchValueSource.Write);
-        }
-        public void DispatchValueFromWrite(DispatchValue value)
-        {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value);
-        }
-
-        public void DispatchValue(object value, DispatchValueSource valueSource = DispatchValueSource.Read)
-        {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value, valueSource);
-        }
-        public void DispatchValue(DispatchValue value)
-        {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value);
-        }
-
         public  virtual Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
@@ -208,19 +184,20 @@ namespace Automatica.Core.Driver
         }
         public virtual Task WriteValue(IDispatchable source, object value)
         {
-            DriverContext.Logger.LogError($"Write is not implemented in {DriverContext.NodeInstance.Name}");
-            return Task.CompletedTask;
+            return Write(value, new WriteContext(DriverContext.Dispatcher, this));
         }
 
-        public virtual Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
+        public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
             return WriteValue(source, value.Value);
         }
 
-        public virtual Task<bool> Read(CancellationToken token = default)
+        protected abstract Task Write(object value, IWriteContext writeContext, CancellationToken token = default);
+        protected abstract Task<bool> Read(IReadContext writeContext, CancellationToken token = default);
+
+        public Task<bool> Read(CancellationToken token = default)
         {
-            DriverContext.Logger.LogError($"Read is not implemented in {DriverContext.NodeInstance.Name}");
-            return Task.FromResult(false);
+            return Read(new ReadContext(DriverContext.Dispatcher, this), token);
         }
 
         public virtual Task OnSave(NodeInstance instance, CancellationToken token = default)
