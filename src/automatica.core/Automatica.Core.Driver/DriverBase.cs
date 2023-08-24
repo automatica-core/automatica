@@ -167,6 +167,12 @@ namespace Automatica.Core.Driver
             return Import(config.FileName, token);
         }
 
+        public void DispatchValue(object value, DispatchValueSource valueSource = DispatchValueSource.Read)
+        {
+            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
+            DriverContext.Dispatcher.DispatchValue(this, value, valueSource);
+        }
+
         public virtual Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
@@ -193,7 +199,7 @@ namespace Automatica.Core.Driver
         }
 
         protected abstract Task Write(object value, IWriteContext writeContext, CancellationToken token = default);
-        protected abstract Task<bool> Read(IReadContext writeContext, CancellationToken token = default);
+        protected abstract Task<bool> Read(IReadContext readContext, CancellationToken token = default);
 
         public Task<bool> Read(CancellationToken token = default)
         {
