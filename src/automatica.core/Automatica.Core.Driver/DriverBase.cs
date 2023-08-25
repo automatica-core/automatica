@@ -167,10 +167,10 @@ namespace Automatica.Core.Driver
             return Import(config.FileName, token);
         }
 
-        public void DispatchValue(object value, DispatchValueSource valueSource = DispatchValueSource.Read)
+        public void DispatchRead(object value)
         {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value, valueSource);
+            DriverContext.Logger.LogDebug($"Node {Name} dispatching read value {value}");
+            DriverContext.Dispatcher.DispatchValue(this, value);
         }
 
         public virtual Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
