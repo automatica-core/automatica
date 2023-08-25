@@ -25,12 +25,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="7.4.0.1159" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.4.0.1159" />
-    <PackageReference Include="Automatica.Core.Logic" Version="7.4.0.1159" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.4.0.1159" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1355" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.4.0.1159" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.0.1355" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <ProjectReference Include="..\P3.Logic.Logic.BaseOperations\P3.Logic.Logic.BaseOperations.csproj" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
