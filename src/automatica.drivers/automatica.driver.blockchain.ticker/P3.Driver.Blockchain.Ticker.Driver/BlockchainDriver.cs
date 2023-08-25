@@ -11,7 +11,7 @@ using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Blockchain.Ticker.Driver
 {
-    internal class BlockchainDriver : DriverBase
+    internal class BlockchainDriver : DriverNoneAttributeBase
     {
         private Timer _timer = new Timer();
       

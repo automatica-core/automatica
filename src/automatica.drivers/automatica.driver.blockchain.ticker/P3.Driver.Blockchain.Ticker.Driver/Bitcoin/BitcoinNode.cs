@@ -21,7 +21,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
         {
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await Refresh(token);
             return true;
