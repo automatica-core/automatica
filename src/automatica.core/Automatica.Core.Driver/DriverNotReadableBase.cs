@@ -10,10 +10,10 @@ namespace Automatica.Core.Driver
         {
         }
 
-        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = default)
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = default)
         {
-            DriverContext.Logger.LogWarning($"Write not implemented for {FullName}");
-            return Task.CompletedTask;
+            DriverContext.Logger.LogWarning($"Read not implemented for {FullName}");
+            return Task.FromResult(false);
         }
     }
 }

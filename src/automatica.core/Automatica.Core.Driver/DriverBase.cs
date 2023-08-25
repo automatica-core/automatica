@@ -170,7 +170,7 @@ namespace Automatica.Core.Driver
         public void DispatchRead(object value)
         {
             DriverContext.Logger.LogDebug($"Node {Name} dispatching read value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value);
+            DriverContext.Dispatcher.DispatchValue(this, value).ConfigureAwait(false);
         }
 
         public virtual Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
@@ -188,7 +188,7 @@ namespace Automatica.Core.Driver
             DriverContext.Logger.LogWarning("Learn mode not implemented");
             return Task.FromResult(false);
         }
-        public virtual Task WriteValue(IDispatchable source, object value)
+        public Task WriteValue(IDispatchable source, object value)
         {
             return Write(value, new WriteContext(DriverContext.Dispatcher, this));
         }
