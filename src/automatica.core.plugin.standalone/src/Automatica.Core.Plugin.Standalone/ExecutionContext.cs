@@ -38,7 +38,16 @@ namespace Automatica.Core.Plugin.Standalone
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddAutomaticaDrivers();
+
+
+            serviceCollection.AddLogging(config =>
+            {
+                config.AddDebug();
+                config.AddConsole();
+                //etc
+            });
             serviceCollection.AddSingleton<ILogger>(a => logger);
+            serviceCollection.AddSingleton<ILoggerFactory>(new LoggerFactory());
             serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
             serviceCollection.AddSingleton<INodeTemplateFactory, RemoteNodeTemplatesFactory>();
             serviceCollection.AddSingleton<ITunnelingProvider, RemoteTunnelingProvider>();
