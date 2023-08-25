@@ -18,24 +18,23 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
         internal override void Update(TradfriDevice device)
         {
             _value = device.LightControl[0].ColorHex;
-            DispatchValue(_value);
+            DispatchRead(_value);
         }
 
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            DispatchValue(_value);
-
-            return Task.FromResult(true);
+            await readContext.DispatchValue(_value, token);
+            return true;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var strValue = Convert.ToString(value);
 
             _value = strValue;
 
-            Container.Gateway.Driver.SetColor(Container.DeviceId, strValue);
-            return base.WriteValue(source, value);
+            await Container.Gateway.Driver.SetColor(Container.DeviceId, strValue);
+            await writeContext.DispatchValue(strValue, token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

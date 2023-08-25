@@ -25,20 +25,27 @@ namespace P3.Driver.Constants
 
         public object Value => _value;
 
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-            DispatchValue(_value);
+            if (_value != null)
+            {
+                // dispatch the value
+                writeContext.DispatchValue(_value, token);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            readContext.DispatchValue(_value, token);
             return Task.FromResult(true);
         }
 
         // timer elapsed method
         private void _dispatchTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_value != null)
-            {
-                // dispatch the value
-                DispatchValue(_value);
-            }
+            Read();
         }
 
         public override Task<bool> Init(CancellationToken token = default)
@@ -83,7 +90,7 @@ namespace P3.Driver.Constants
             _dispatchTimer.Elapsed += _dispatchTimer_Elapsed;
 
             // initially dispatch the value on start
-            DispatchValue(_value);
+            Read(token).ConfigureAwait(false);
 
             return base.Start(token);
         }

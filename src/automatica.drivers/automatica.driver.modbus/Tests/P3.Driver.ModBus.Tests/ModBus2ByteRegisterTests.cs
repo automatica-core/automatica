@@ -10,9 +10,9 @@ namespace P3.Driver.ModBus.Tests
         {
             var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register2ByteGuid);
             var modBusAttribute = attribute.Attribute;
-            var data = modBusAttribute.ConvertValueToBus(DispatchableMock.Instance, 123, out var convertedValue);
+            var data = modBusAttribute.ConvertValueToBus(123, out var convertedValue);
 
-            var value = modBusAttribute.ConvertValueFromBus(DispatchableMock.Instance, data);
+            var value = modBusAttribute.ConvertValueFromBus(data);
 
             Assert.True((ushort)value == 123);
 

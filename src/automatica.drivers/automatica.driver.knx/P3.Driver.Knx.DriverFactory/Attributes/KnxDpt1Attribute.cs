@@ -21,7 +21,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             if (newValue != _value)
             {
                 _value = newValue;
-                DispatchValue(newValue);
                 return newValue;
             }
 
@@ -30,6 +29,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override bool ValueRead(object value)
         {
+            DispatchRead(value);
             return true; //always dispatch dpt1 values...
         }
     }

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.MachineFlags.Attributes
 {
-    public class MachineFlags : DriverBase
+    public class MachineFlags : DriverNoneAttributeBase
     {
 
         private object _value;
@@ -27,7 +27,7 @@ namespace P3.Driver.MachineFlags.Attributes
             _value = value;
             DriverContext.Logger.LogDebug($"WriteValue {value}");
 
-            DispatchValue(value);
+            DispatchRead(value);
             return Task.CompletedTask;
         }
 

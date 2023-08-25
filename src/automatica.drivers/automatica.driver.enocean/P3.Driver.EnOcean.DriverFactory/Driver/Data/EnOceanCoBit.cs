@@ -1,4 +1,6 @@
-﻿using Automatica.Core.Driver;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Automatica.Core.Driver;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 
@@ -16,12 +18,14 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
             var value = GetValueGeneric(telegram);
             if (value != null && value is int bValue)
             {
-                DispatchValue(bValue > 0);
+                DispatchRead(bValue > 0);
             }
             else if (value is bool)
             {
-                DispatchValue(value);
+                DispatchRead(value);
             }
         }
+
+       
     }
 }

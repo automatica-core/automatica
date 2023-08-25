@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +21,26 @@ namespace P3.Driver.SonosDriverFactory
 
         }
 
-        public override async Task<bool> Read(CancellationToken token = new CancellationToken())
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        {
+            try
+            {
+                var write = await _writeAction.Invoke(value);
+                DriverContext.Logger.LogDebug($"Sonos write value {write}...");
+
+                if (write != null && write != _lastValue)
+                {
+                    _lastValue = write;
+                    await writeContext.DispatchValue(write, token);
+                }
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, "Error write value to sonos...");
+            }
+        }
+
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             if (_readAction != null)
             {
@@ -33,7 +51,7 @@ namespace P3.Driver.SonosDriverFactory
                     if (value != null && value != _lastValue)
                     {
                         _lastValue = value;
-                        DispatchValue(value);
+                        await readContext.DispatchValue(value, token);
                     }
                 }
                 catch (Exception e)
@@ -43,25 +61,6 @@ namespace P3.Driver.SonosDriverFactory
             }
 
             return true;
-        }
-
-        public override async Task WriteValue(IDispatchable source, object value)
-        {
-            try
-            {
-                var write = await _writeAction.Invoke(value);
-                DriverContext.Logger.LogDebug($"Sonos write value {write}...");
-
-                if (write != null && write != _lastValue)
-                {
-                    _lastValue = write;
-                    DispatchValue(write);
-                }
-            }
-            catch (Exception e)
-            {
-                DriverContext.Logger.LogError(e, "Error write value to sonos...");
-            }
         }
 
         public override Task<bool> Start(CancellationToken token = default)

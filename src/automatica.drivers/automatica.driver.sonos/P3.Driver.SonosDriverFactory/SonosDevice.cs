@@ -13,7 +13,7 @@ using Timer = System.Timers.Timer;
 
 namespace P3.Driver.SonosDriverFactory
 {
-    public class SonosDevice : DriverBase
+    public class SonosDevice : DriverNotWriteableBase
     {
         private string _id;
         private bool? _useFixedIp;
@@ -41,7 +41,7 @@ namespace P3.Driver.SonosDriverFactory
             await Read();
         }
 
-        public override async Task<bool> Read(CancellationToken token = new CancellationToken())
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             try
             {

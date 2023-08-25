@@ -2,7 +2,7 @@
 
 namespace P3.Driver.Times.DriverFactory.Sun
 {
-    public class SunDriver : DriverBase
+    public class SunDriver : DriverNoneAttributeBase
 
     {
         private int _timeZoneOffset  = 0;

@@ -1,5 +1,4 @@
 ﻿using System;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Exceptions;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         }
 
         public override int RegisterLength => 1;
-        public override ushort[] ConvertValueToBus(IDispatchable source, object value, out object convertedValue)
+        public override ushort[] ConvertValueToBus(object value, out object convertedValue)
         {
             try
             {
@@ -30,7 +29,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
           
         }
 
-        public override object ConvertValueFromBus(IDispatchable source, ushort[] value)
+        public override object ConvertValueFromBus(ushort[] value)
         {
             return value[0];
         }

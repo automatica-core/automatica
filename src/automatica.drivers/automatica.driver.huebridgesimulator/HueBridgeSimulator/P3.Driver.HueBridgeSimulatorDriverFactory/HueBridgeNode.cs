@@ -4,7 +4,7 @@ using P3.Driver.HueBridgeSimulatorDriverFactory;
 
 namespace P3.Driver.HueBridgeSimulator.DriverFactory
 {
-    public abstract class HueBridgeNode : DriverBase
+    public abstract class HueBridgeNode : DriverNoneAttributeBase
     {
         public HueBridgeDriver Driver { get; }
 

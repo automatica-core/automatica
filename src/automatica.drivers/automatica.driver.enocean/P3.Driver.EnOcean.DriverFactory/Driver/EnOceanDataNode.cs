@@ -33,6 +33,15 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         protected EnOceanDataNode(IDriverContext driverContext, ITeachInManager teachInManager) : base(driverContext, teachInManager)
         {
         }
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        protected override Task<bool> Read(IReadContext writeContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
+        }
 
         public override Task<bool> Init(CancellationToken token = default)
         {

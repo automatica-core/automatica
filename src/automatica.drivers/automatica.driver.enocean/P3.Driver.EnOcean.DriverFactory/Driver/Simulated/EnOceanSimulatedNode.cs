@@ -1,12 +1,9 @@
 ﻿using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver.Simulated
 {
-    public class EnOceanSimulatedNode : DriverBase
+    public class EnOceanSimulatedNode : DriverNoneAttributeBase
     {
         private readonly P3.Driver.EnOcean.Driver _driver;
 

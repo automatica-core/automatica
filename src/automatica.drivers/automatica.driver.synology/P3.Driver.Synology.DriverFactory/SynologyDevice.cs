@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
-using System.Net.Security;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Tunneling;
@@ -13,7 +10,7 @@ using P3.Synology.Api.Client;
 
 namespace P3.Driver.Synology.DriverFactory
 {
-    internal class SynologyDevice : DriverBase
+    internal class SynologyDevice : DriverNoneAttributeBase
     {
         private SynologyConnectedAttribute _connectedAttribute;
 
@@ -79,12 +76,12 @@ namespace P3.Driver.Synology.DriverFactory
                     if (!String.IsNullOrEmpty(_username) && _password.Length > 0)
                         await _client.LoginAsync(_username, _password);
                     _connected = true;
-                    _connectedAttribute.DispatchValue(true);
+                    _connectedAttribute.DispatchRead(true);
 
                 }
                 catch (Exception e)
                 {
-                    _connectedAttribute.DispatchValue(false);
+                    _connectedAttribute.DispatchRead(false);
                     DriverContext.Logger.LogError(e, $"Could not connected to DSM....{e}");
                 }
 

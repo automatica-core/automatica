@@ -22,7 +22,7 @@
     <EmbeddedResource Include="Resources\Synology-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="7.4.0.1177" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.5.0.1355" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Synology.Api.Client\P3.Synology.Api.Client.csproj" />

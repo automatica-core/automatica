@@ -22,7 +22,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         ThreeLevel,
         TwoLevel
     }
-    public class KnxDriver : DriverBase
+    public class KnxDriver : DriverNoneAttributeBase
     {
         private readonly bool _secureDriver;
         private readonly KnxLevel _level;

@@ -2,7 +2,7 @@
 
 namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
-    public class KnxGatewayState : DriverBase
+    public class KnxGatewayState : DriverNoneAttributeBase
     {
         public KnxGatewayState(IDriverContext driverContext) : base(driverContext)
         {
@@ -10,7 +10,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public void SetGatewayState(bool state)
         {
-            DriverContext.Dispatcher.DispatchValue(this, state);
+            DispatchRead(state);
         }
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

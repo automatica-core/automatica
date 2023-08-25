@@ -14,8 +14,19 @@ namespace P3.Driver.FroniusSolarFactory.Categories
 
         public override async Task PollAttributes(CancellationToken token = default)
         {
-            await Task.CompletedTask;
+            await Read(token);
+
+        }
+
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
             var flow = SolarClient.GetPowerFlowRealtimeData();
+            await Task.CompletedTask;
 
             if (flow != null && flow.Body.Data.Inverters.ContainsKey(Device.DeviceId.ToString()))
             {
@@ -25,25 +36,24 @@ namespace P3.Driver.FroniusSolarFactory.Categories
                     switch (attr.Key)
                     {
                         case "device-type":
-                            attr.DispatchValue(data.DT);
+                            attr.DispatchRead(data.DT);
                             break;
                         case "current-power":
-                            attr.DispatchValue(data.P);
+                            attr.DispatchRead(data.P);
                             break;
                         case "ac-energy-today":
-                            attr.DispatchValue(data.EDay);
+                            attr.DispatchRead(data.EDay);
                             break;
                         case "ac-energy-year":
-                            attr.DispatchValue(data.EYear);
+                            attr.DispatchRead(data.EYear);
                             break;
                         case "ac-energy-total":
-                            attr.DispatchValue(data.ETotal);
+                            attr.DispatchRead(data.ETotal);
                             break;
                     }
                 }
             }
-
+            return true;
         }
-
     }
 }

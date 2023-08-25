@@ -15,11 +15,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
             var value = GetValueGeneric(telegram);
             if (value != null && value is int bValue)
             {
-                DispatchValue(bValue == 0);
+                DispatchRead(bValue == 0);
             }
             else if (value is bool booleanValue)
             {
-                DispatchValue(!booleanValue);
+                DispatchRead(!booleanValue);
             }
             
         }

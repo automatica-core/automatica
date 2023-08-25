@@ -1,5 +1,4 @@
-﻿using Automatica.Core.Base.IO;
-using Automatica.Core.Driver;
+﻿using Automatica.Core.Driver;
 using P3.Driver.ModBusDriver;
 
 namespace P3.Driver.ModBusDriverFactory.Attributes
@@ -28,8 +27,8 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         public abstract int RegisterLength { get; }
         public IDriverContext DriverContext { get; }
 
-        public abstract ushort[] ConvertValueToBus(IDispatchable source, object value, out object convertedValue);
+        public abstract ushort[] ConvertValueToBus(object value, out object convertedValue);
 
-        public abstract object ConvertValueFromBus(IDispatchable source, ushort[] value);
+        public abstract object ConvertValueFromBus(ushort[] value);
     }
 }

@@ -19,12 +19,13 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             Device = device;
         }
 
-        public override async Task<bool> Read(CancellationToken token = new CancellationToken())
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             try
             {
                 var currentMediaInfo = await Device.Controller.GetMediaInfoAsync();
                 _currentMediaUrl = currentMediaInfo.CurrentUri;
+                await readContext.DispatchValue(_currentMediaUrl, token);
 
             }
             catch (Exception ex)
@@ -35,7 +36,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             return true;
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
@@ -47,7 +48,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
                     await Device.Controller.SetMediaUrl(mediaUrl);
                     _currentMediaUrl = mediaUrl;
 
-                    DispatchValue(value);
+                    await writeContext.DispatchValue(value, token);
 
                     DriverContext.Logger.LogDebug($"Sonos set radio to {mediaUrl}...");
                 }

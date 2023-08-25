@@ -6,7 +6,7 @@ using P3.Driver.ModBusDriverFactory.Attributes;
 
 namespace P3.Driver.ModBusDriverFactory.Slave
 {
-    public class ModBusSlaveDevice : DriverBase
+    public class ModBusSlaveDevice : DriverNoneAttributeBase
     {
         private readonly IModBusSlaveDriver _driver;
         public byte DeviceId { get; set; }

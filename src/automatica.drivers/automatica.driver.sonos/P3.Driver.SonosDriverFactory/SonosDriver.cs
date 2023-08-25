@@ -9,7 +9,7 @@ using P3.Driver.Sonos.Discovery;
 
 namespace P3.Driver.SonosDriverFactory
 {
-    public class SonosDriver : DriverBase
+    public class SonosDriver : DriverNoneAttributeBase
     {
         private readonly Dictionary<string, NodeInstance> _existingDevices = new Dictionary<string, NodeInstance>();
 

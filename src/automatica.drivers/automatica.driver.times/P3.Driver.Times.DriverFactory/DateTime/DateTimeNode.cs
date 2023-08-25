@@ -8,7 +8,7 @@ using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Times.DriverFactory.DateTime
 {
-    public class DateTimeNode : DriverBase
+    public class DateTimeNode : DriverNotWriteableBase
     {
         private readonly Func<object> _getValue;
         private readonly Timer _timer = new Timer(1000);
@@ -16,6 +16,12 @@ namespace P3.Driver.Times.DriverFactory.DateTime
         public DateTimeNode(IDriverContext driverContext, Func<object> getValue) : base(driverContext)
         {
             _getValue = getValue;
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            DispatchRead(_getValue());
+            return Task.FromResult(true);
         }
 
         public override Task<bool> Start(CancellationToken token = default)
@@ -26,14 +32,14 @@ namespace P3.Driver.Times.DriverFactory.DateTime
                 _timer.Start();
             }
 
-            DispatchValue(_getValue());
+            DispatchRead(_getValue());
 
             return base.Start(token);
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            DispatchValue(_getValue());
+            DispatchRead(_getValue());
         }
 
         public override Task<bool> Stop(CancellationToken token = default)

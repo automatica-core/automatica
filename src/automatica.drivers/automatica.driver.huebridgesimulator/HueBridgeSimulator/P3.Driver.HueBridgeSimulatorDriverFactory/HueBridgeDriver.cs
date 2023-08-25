@@ -11,7 +11,7 @@ using P3.Driver.HueBridgeSimulator.DriverFactory.OnOff;
 
 namespace P3.Driver.HueBridgeSimulatorDriverFactory
 {
-    public class HueBridgeDriver : DriverBase
+    public class HueBridgeDriver : DriverNoneAttributeBase
     {
         private IList<HueLight> _hueLights = new List<HueLight>();
         private readonly IDictionary<int, HueBridgeNode> _hueBridgeMapping = new Dictionary<int, HueBridgeNode>();
@@ -24,9 +24,9 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
 
         private void HueDriverSwitchLight(object sender, HueSwitchLightEventArgs e)
         {
-            if(_hueBridgeMapping.ContainsKey(e.Light.Id))
+            if(_hueBridgeMapping.TryGetValue(e.Light.Id, out var value))
             {
-                Task.Factory.StartNew(() => _hueBridgeMapping[e.Light.Id].SwitchLight(e));
+                Task.Factory.StartNew(() => value.SwitchLight(e));
             }
         }
 

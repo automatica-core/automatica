@@ -20,20 +20,20 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
                 {
                     if (dataInt >= EnumFirstMin && dataInt <= EnumFirstMax)
                     {
-                        DispatchValue(false);
+                        DispatchRead(false);
                     }
                     else if (dataInt >= EnumSecondMin && dataInt >= EnumSecondMax)
                     {
-                        DispatchValue(true);
+                        DispatchRead(true);
                     }
                     else
                     {
-                        DispatchValue(data);
+                        DispatchRead(data);
                     }
                 }
                 else
                 {
-                    DispatchValue(data);
+                    DispatchRead(data);
                 }
             }
         }

@@ -13,7 +13,7 @@ using Timer = System.Timers.Timer;
 
 namespace P3.Driver.MBusDriverFactory
 {
-    public class Device : DriverBase
+    public class Device : DriverNoneAttributeBase
     {
         private readonly Driver _parent;
         private readonly Timer _pollTimer = new Timer();
@@ -104,7 +104,7 @@ namespace P3.Driver.MBusDriverFactory
            
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await ReadInternal(token);
             return true;

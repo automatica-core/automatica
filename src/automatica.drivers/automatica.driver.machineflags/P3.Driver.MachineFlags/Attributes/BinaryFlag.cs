@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.MachineFlags.Attributes
 {
-    public class BinaryFlag : DriverBase
+    public class BinaryFlag : DriverNoneAttributeBase
     {
 
         private bool? _value;
@@ -32,7 +32,7 @@ namespace P3.Driver.MachineFlags.Attributes
                 _value = bValue;
                 DriverContext.Logger.LogDebug($"WriteValue {bValue}");
 
-                DispatchValue(bValue);
+                DispatchRead(bValue);
             }
             catch (Exception ex)
             {

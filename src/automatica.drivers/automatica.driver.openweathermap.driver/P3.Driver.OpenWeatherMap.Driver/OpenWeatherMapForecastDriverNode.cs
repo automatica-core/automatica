@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace P3.Driver.OpenWeatherMap.DriverFactory
 {
-    internal class OpenWeatherMapForecastDriverNode : DriverBase
+    internal class OpenWeatherMapForecastDriverNode : DriverNotWriteableBase
     {
         private readonly OpenWeatherMapDriver _parent;
 
@@ -13,17 +13,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             _parent = parent;
         }
 
-        public override Task<bool> Init(CancellationToken token = default)
-        {
-            return Task.FromResult(true);
-        }
-
-        public override Task<bool> Start(CancellationToken token = default)
-        {
-            return base.Start(token);
-        }
-
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             return _parent.Read(token);
         }

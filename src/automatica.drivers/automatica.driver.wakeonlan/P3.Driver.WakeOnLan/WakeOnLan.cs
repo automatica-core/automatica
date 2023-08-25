@@ -13,7 +13,7 @@ using Automatica.Core.Driver.Utility;
 
 namespace P3.Driver.WakeOnLan
 {
-    public class WakeOnLan : DriverBase
+    public class WakeOnLan : DriverNoneAttributeBase
     {
         public WakeOnLan(IDriverContext ctx) : base(ctx)
         {
@@ -30,7 +30,7 @@ namespace P3.Driver.WakeOnLan
                     DriverContext.Logger.LogError($"Could not wake up {mac}");
                 }
 
-                DispatchValue(mac);
+                DispatchRead(mac);
             }
             return Task.CompletedTask;
         }

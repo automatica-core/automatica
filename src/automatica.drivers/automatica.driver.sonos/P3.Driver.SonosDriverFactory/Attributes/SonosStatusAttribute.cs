@@ -9,7 +9,7 @@ using Timer = System.Timers.Timer;
 
 namespace P3.Driver.SonosDriverFactory.Attributes
 {
-    internal class SonosStatusAttribute : DriverBase
+    internal class SonosStatusAttribute : DriverNotWriteableBase
     {
         private readonly SonosDevice _device;
 
@@ -26,7 +26,8 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             return base.Start(token);
         }
 
-        public override async Task<bool> Read(CancellationToken token = new CancellationToken())
+
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             try
             {

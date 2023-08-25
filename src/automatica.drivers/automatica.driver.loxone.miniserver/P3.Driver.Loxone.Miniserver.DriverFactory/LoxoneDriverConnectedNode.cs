@@ -2,7 +2,7 @@
 
 namespace P3.Driver.Loxone.Miniserver.DriverFactory
 {
-    public class LoxoneDriverConnectedNode : DriverBase
+    public class LoxoneDriverConnectedNode : DriverNoneAttributeBase
     {
         public LoxoneDriverConnectedNode(IDriverContext driverContext) : base(driverContext)
         {
@@ -11,7 +11,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         public void StateChanged(bool value)
         {
-            DispatchValue(value);
+            DispatchRead(value);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

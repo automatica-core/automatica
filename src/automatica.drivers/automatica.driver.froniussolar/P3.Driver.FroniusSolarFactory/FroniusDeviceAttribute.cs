@@ -13,7 +13,7 @@ using P3.Driver.FroniusSolarFactory.Categories;
 
 namespace P3.Driver.FroniusSolarFactory
 {
-    internal class FroniusDeviceAttribute : DriverBase
+    internal class FroniusDeviceAttribute : DriverNoneAttributeBase
     {
         private List<FroniusCategoryAttribute> _attributes = new();
         private readonly System.Timers.Timer _pollTimer = new System.Timers.Timer();

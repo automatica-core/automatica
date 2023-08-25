@@ -31,13 +31,18 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         public override async Task WriteValue(IDispatchable source, object value)
         {
+           
+        }
+
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        {
             try
             {
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-                var shortValue = _attribute.ConvertValueToBus(source, value, out var convertedValue);
+                var shortValue = _attribute.ConvertValueToBus( value, out var convertedValue);
                 DriverContext.Logger.LogInformation(
-                    $"WRITE value ({convertedValue}) from {source.Id} to {_parent.Name + $"({_parent.DeviceId})" + Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
+                    $"WRITE value ({convertedValue}) to {_parent.Name + $"({_parent.DeviceId})" + Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
                 switch (_attribute.Table)
                 {
                     case ModBusTable.Coil:
@@ -65,7 +70,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                         return;
                 }
 
-                DispatchValue(value);
+                await writeContext.DispatchValue(value, cts.Token);
             }
             catch (Exception e)
             {
@@ -73,7 +78,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             return await ReadValue(token) != null;
         }
@@ -119,7 +124,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                         case ModBusTable.DiscreteInput:
                             if (modbusReturn is ModBusIoStateValueReturn ioStateReturn)
                             {
-                                return _attribute.ConvertValueFromBus(this, ioStateReturn.DataShort.ToArray());
+                                return _attribute.ConvertValueFromBus(ioStateReturn.DataShort.ToArray());
                             }
 
                             break;
@@ -127,7 +132,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                         case ModBusTable.InputRegister:
                             if (modbusReturn is ModBusRegisterValueReturn registerStateReturn)
                             {
-                                return _attribute.ConvertValueFromBus(this, registerStateReturn.DataShort.ToArray());
+                                return _attribute.ConvertValueFromBus(registerStateReturn.DataShort.ToArray());
                             }
 
                             break;

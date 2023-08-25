@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace P3.Driver.Loxone.Miniserver.DriverFactory
 {
-    public class LoxoneDriver : DriverBase
+    public class LoxoneDriver : DriverNoneAttributeBase
     {
         private LoxoneMiniserverConnection _miniserver;
         private bool _connected = false;

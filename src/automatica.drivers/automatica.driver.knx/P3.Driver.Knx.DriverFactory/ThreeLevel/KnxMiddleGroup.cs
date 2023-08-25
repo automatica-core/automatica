@@ -18,16 +18,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return Task.CompletedTask;
         }
 
-        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
-        {
-            return Task.CompletedTask;
-        }
-
-        public sealed override Task<bool> Read(CancellationToken token = new CancellationToken())
-        {
-            return Task.FromResult(false);
-        }
-
         internal static KnxLevelBase CreateDriverNode(string key, IDriverContext ctx, KnxDriver driver)
         {
             KnxLevelBase attribute = null;

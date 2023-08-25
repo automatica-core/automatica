@@ -12,7 +12,7 @@ using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
-    internal class SolarmanGroupAttribute : DriverBase
+    internal class SolarmanGroupAttribute : DriverNoneAttributeBase
     {
         private readonly SolarmanDriver _parent;
         private readonly DeviceMap _map;
@@ -26,7 +26,8 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             _map = map;
             _groupMap = groupMap;
         }
-        public override Task<bool> Read(CancellationToken token = default)
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             _parent.Read(token).ConfigureAwait(false);
             return Task.FromResult(true);
@@ -47,7 +48,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                         Array.Copy(modbusRegisterValue.Data.ToArray(), offset, data, 0, length);
 
                         var val = await _nameMap[register.Key].ConvertValue(data);
-                        _nameMap[register.Key].DispatchValue(val);
+                        _nameMap[register.Key].DispatchRead(val);
                     }
                 }
                 else

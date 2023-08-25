@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3.Driver.Loxone.Miniserver.DriverFactory
 {
-    public class LoxoneDriverNode : DriverBase
+    public class LoxoneDriverNode : DriverNoneAttributeBase
     {
         private readonly LoxoneDriver driver;
         private double? _value;
@@ -22,15 +22,16 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
             if (_value != value)
             {
                 _value = value;
-                DispatchValue(value);
+                DispatchRead(value);
             }
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
+
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             await driver.WriteValue(_uuid, value);
+            await writeContext.DispatchValue(value, token);
         }
-        
 
         public override Task<bool> Start(CancellationToken token = default)
         {

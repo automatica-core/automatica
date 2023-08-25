@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using P3.Driver.EnOcean.Data.Packets;
 
@@ -14,19 +12,20 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Simulated
         {
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             if (bool.TryParse(value.ToString(), out bool bolValue))
             {
                 if (bolValue)
                 {
                     var dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x10 }));
-                    
+
                     await Driver.SendTelegram(dg);
                     await Task.Delay(150);
 
                     dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x00 }));
                     await Driver.SendTelegram(dg);
+                    await writeContext.DispatchValue(value, token);
                 }
                 else
                 {
@@ -37,8 +36,11 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Simulated
 
                     dg = new RadioErp1Packet(Rorg.Rps, new ReadOnlyMemory<byte>(new byte[] { 0x20 }));
                     await Driver.SendTelegram(dg);
+                    await writeContext.DispatchValue(value, token);
                 }
             }
         }
+
+
     }
 }

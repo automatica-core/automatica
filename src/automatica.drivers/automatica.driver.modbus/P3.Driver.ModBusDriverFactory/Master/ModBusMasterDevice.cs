@@ -12,7 +12,7 @@ using P3.Driver.ModBusDriverFactory.Common;
 
 namespace P3.Driver.ModBusDriverFactory.Master
 {
-    public class ModBusMasterDevice : DriverBase
+    public class ModBusMasterDevice : DriverNoneAttributeBase
     {
         private readonly IModBusMasterDriver _modBusDriver;
         public int PollInterval { get; private set; }
@@ -88,7 +88,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                         var value = await attribute.ReadValue();
                         if (value != null)
                         {
-                            attribute.DispatchValue(value);
+                            attribute.DispatchRead(value);
                         }
                     }
                 }

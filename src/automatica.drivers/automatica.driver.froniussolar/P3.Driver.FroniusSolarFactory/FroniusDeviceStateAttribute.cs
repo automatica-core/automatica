@@ -2,7 +2,7 @@
 
 namespace P3.Driver.FroniusSolarFactory
 {
-    internal class FroniusDeviceStateAttribute : DriverBase
+    internal class FroniusDeviceStateAttribute : DriverNoneAttributeBase
     {
         public FroniusDeviceStateAttribute(IDriverContext driverContext) : base(driverContext)
         {

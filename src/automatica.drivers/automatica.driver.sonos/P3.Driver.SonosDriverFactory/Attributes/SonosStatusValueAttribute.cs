@@ -6,7 +6,7 @@ using P3.Driver.Sonos.Upnp.Services.Models;
 
 namespace P3.Driver.SonosDriverFactory.Attributes
 {
-    internal class SonosStatusValueAttribute : DriverBase
+    internal class SonosStatusValueAttribute : DriverNotWriteableBase
     {
         private readonly Func<GetPositionInfoResponse, object> _getFunc;
 
@@ -15,15 +15,16 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             _getFunc = getFunc;
         }
 
-        public override Task<bool> Read(CancellationToken token = new CancellationToken())
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             return Parent.Read(token);
         }
 
+     
         internal void GetValueAndDispatch(GetPositionInfoResponse info)
         {
             var value = _getFunc(info);
-            DispatchValue(value);
+            DispatchRead(value);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

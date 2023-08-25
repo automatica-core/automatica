@@ -19,7 +19,7 @@ namespace P3.Driver.HueBridgeSimulator.DriverFactory.OnOff
 
         public override void SwitchLight(HueSwitchLightEventArgs eventArgs)
         {
-            _switchNode?.DispatchValue(eventArgs.State);
+            _switchNode?.DispatchRead(eventArgs.State);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

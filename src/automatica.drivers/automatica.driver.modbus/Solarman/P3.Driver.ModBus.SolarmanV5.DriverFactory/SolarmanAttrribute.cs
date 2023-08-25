@@ -4,7 +4,7 @@ using Automatica.Core.Driver;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
-    internal abstract class SolarmanAttrribute : DriverBase
+    internal abstract class SolarmanAttrribute : DriverNotWriteableBase
     {
         private readonly SolarmanGroupAttribute _parent;
         public int Offset { get; set; }
@@ -24,9 +24,9 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             return base.Init(token);
         }
 
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            _parent.Read().ConfigureAwait(false);
+            _parent.Read(token).ConfigureAwait(false);
             return Task.FromResult(true);
         }
 

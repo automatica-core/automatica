@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using FroniusSolarClient;
+using FroniusSolarClient.Entities.SolarAPI.V1.InverterRealtimeData;
 
 namespace P3.Driver.FroniusSolarFactory.Categories
 {
@@ -19,59 +20,76 @@ namespace P3.Driver.FroniusSolarFactory.Categories
 
             if (commonInverterData == null || commonInverterData.Body == null)
             {
-                DeviceStateAttribute?.DispatchValue(false);
+                DeviceStateAttribute?.DriverContext.Dispatcher.DispatchValue(DeviceStateAttribute, false);
             }
 
             if (commonInverterData != null && commonInverterData.Body != null)
             {
-                DeviceStateAttribute?.DispatchValue(true);
+                DeviceStateAttribute?.DriverContext.Dispatcher.DispatchValue(DeviceStateAttribute, true);
             }
+
+            await Read(token);
             
+           
+
+        }
+
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            var commonInverterData = SolarClient.GetCommonInverterData(Device.DeviceId);
+
+            await Task.CompletedTask;
+
             foreach (var attr in _attributes.Values)
             {
                 switch (attr.Key)
                 {
                     case "ac-power":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.AcPower?.Value ?? 0);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.AcPower?.Value ?? 0);
                         break;
                     case "ac-current":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.AcCurrent?.Value ?? 0);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.AcCurrent?.Value ?? 0);
                         break;
                     case "ac-voltage":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.AcVoltage?.Value ?? 0);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.AcVoltage?.Value ?? 0);
                         break;
                     case "ac-frequency":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.AcFrequency?.Value ?? 0);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.AcFrequency?.Value ?? 0);
                         break;
                     case "dc-current":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.DcCurrent?.Value ?? 0);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.DcCurrent?.Value ?? 0);
                         break;
                     case "dc-voltage":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.DcVoltage?.Value ?? 0);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.DcVoltage?.Value ?? 0);
                         break;
                     case "current-day-energy":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.CurrentDayEnergy.Value);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.CurrentDayEnergy.Value);
                         break;
                     case "current-year-energy":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.CurrentYearEnergy.Value);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.CurrentYearEnergy.Value);
                         break;
                     case "total-energy":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.TotalEnergy.Value);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.TotalEnergy.Value);
                         break;
                     case "device-status":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.DeviceStatus.StatusCode);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.DeviceStatus.StatusCode);
                         break;
                     case "error-code":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.DeviceStatus.ErrorCode);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.DeviceStatus.ErrorCode);
                         break;
                     case "mgm-timer-remaining-time":
-                        attr.DispatchValue(commonInverterData?.Body?.Data.DeviceStatus.MgmtTimerRemainingTime);
+                        attr.DispatchRead(commonInverterData?.Body?.Data.DeviceStatus
+                            .MgmtTimerRemainingTime);
                         break;
-
                 }
+
             }
-
+            return true;
         }
-
     }
 }

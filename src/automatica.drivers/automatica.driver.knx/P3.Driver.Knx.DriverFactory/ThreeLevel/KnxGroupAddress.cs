@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
+using Elfie.Serialization;
 using Knx.Falcon;
 using Knx.Falcon.ApplicationData.DatapointTypes;
 using Microsoft.Extensions.Logging;
@@ -57,11 +58,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
-                var dptValue = ConvertToDptValue(value.Value);
+                var dptValue = ConvertToDptValue(value);
 
                 if (dptValue == null) //value did not change
                 {
@@ -79,16 +80,16 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 var decodedValue = dpt.ToGroupValue(dptValue);
 
                 Driver.Write(this, GroupAddress, decodedValue);
+                writeContext.DispatchValue(value, token);
             }
             catch (NotImplementedException)
             {
                 DriverContext.Logger.LogWarning(
-                    $"{DriverContext.NodeInstance.Name} {value.Value} from {source.Name} Could not convert value correctly....ignore write!");
+                    $"{DriverContext.NodeInstance.Name} {value} Could not convert value correctly....ignore write!");
             }
 
             return Task.CompletedTask;
         }
-
 
         protected void ConvertFromBus(GroupEventArgs datagram)
         {
@@ -102,7 +103,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             if (ValueRead(value))
             {
-                DispatchValue(value);
+                DispatchRead(value);
             }
         }
 
@@ -113,7 +114,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             if (ValueRead(value))
             {
-                DispatchValue(value);
+                DispatchRead(value);
             }
         }
 
@@ -122,7 +123,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public sealed override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             if (DriverContext.NodeInstance.IsReadable)
             {

@@ -1,6 +1,8 @@
 ﻿using Automatica.Core.Driver;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
@@ -24,6 +26,16 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 child.TelegramReceived(telegram);
             }
+        }
+
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.CompletedTask;
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
         }
     }
 }

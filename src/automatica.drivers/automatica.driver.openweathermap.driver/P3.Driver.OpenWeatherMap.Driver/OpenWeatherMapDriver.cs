@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace P3.Driver.OpenWeatherMap.DriverFactory
 {
-    internal class OpenWeatherMapDriver : DriverBase
+    internal class OpenWeatherMapDriver : DriverNoneAttributeBase
     {
         private readonly Timer _timer = new();
         private Coordinates _cords;
@@ -102,12 +102,12 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             }
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await ReadValues();
-
             return true;
         }
+
 
         private async Task ReadValues()
         {
@@ -120,7 +120,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             foreach (var node in _nodes)
             {
                 var value = node.GetValue(data, forecast);
-                node.DispatchValue(value);
+                node.DispatchRead(value);
             }
         }
 

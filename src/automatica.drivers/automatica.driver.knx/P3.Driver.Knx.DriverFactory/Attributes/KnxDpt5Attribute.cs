@@ -19,7 +19,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             if (newValue != _value)
             {
-                DispatchValue(newValue);
                 _value = newValue;
                 return _value;
             }

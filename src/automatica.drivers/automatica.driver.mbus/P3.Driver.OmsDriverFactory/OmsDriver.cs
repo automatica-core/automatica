@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace P3.Driver.OmsDriverFactory
 {
-    public class OmsDriver : DriverBase
+    public class OmsDriver : DriverNoneAttributeBase
     {
 
         private byte[] _aesKey;

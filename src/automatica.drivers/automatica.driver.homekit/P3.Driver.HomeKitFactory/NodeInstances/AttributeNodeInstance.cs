@@ -3,7 +3,7 @@ using P3.Driver.HomeKit.Hap.Model;
 
 namespace P3.Driver.HomeKitFactory.NodeInstances
 {
-    public class AttributeNodeInstance : DriverBase
+    public class AttributeNodeInstance : DriverNoneAttributeBase
     {
         private readonly Characteristic _characteristic;
 

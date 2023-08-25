@@ -2,7 +2,7 @@
 
 namespace P3.Driver.HomeKitFactory.NodeInstances
 {
-    internal class PairingKeyNode : DriverBase
+    internal class PairingKeyNode : DriverNoneAttributeBase
     {
         public PairingKeyNode(IDriverContext driverContext) : base(driverContext)
         {

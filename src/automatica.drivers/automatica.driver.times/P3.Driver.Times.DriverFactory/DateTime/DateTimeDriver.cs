@@ -4,7 +4,7 @@ using Automatica.Core.Driver;
 
 namespace P3.Driver.Times.DriverFactory.DateTime
 {
-    public class DateTimeDriver : DriverBase
+    public class DateTimeDriver : DriverNoneAttributeBase
     {
         private readonly int _timeZoneOffset = 0;
 

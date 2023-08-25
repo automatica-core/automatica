@@ -25,12 +25,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                 _value = dpt11Value;
 
-                if (ret)
-                {
-                    DispatchValue(_value);
-                }
-
-                return false;
+                return ret;
 
             }
             return false;
@@ -40,13 +35,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             if (value is DateTime vlDt)
             {
-                DispatchValue(vlDt);
                 return new KnxDate(vlDt);
             }
 
             if (value is DateOnly dtOnly)
             {
-                DispatchValue(dtOnly);
                 return new KnxDate(new DateTime(dtOnly.Year, dtOnly.Month, dtOnly.Day));
             }
 

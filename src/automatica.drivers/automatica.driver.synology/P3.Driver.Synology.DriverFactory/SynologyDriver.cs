@@ -2,7 +2,7 @@
 
 namespace P3.Driver.Synology.DriverFactory
 {
-    internal class SynologyDriver : DriverBase
+    internal class SynologyDriver : DriverNoneAttributeBase
     {
         public SynologyDriver(IDriverContext driverContext) : base(driverContext)
         {
