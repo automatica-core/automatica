@@ -107,7 +107,7 @@ namespace Automatica.Core.Plugin.Standalone
         {
             try
             {
-                var localization = new LocalizationProvider(_logger);
+                var localization = new LocalizationProvider(new NullLogger<LocalizationProvider>());
                 var factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
                 var templateFactory = _serviceProvider.GetRequiredService<INodeTemplateFactory>();
 
