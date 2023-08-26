@@ -167,12 +167,26 @@ namespace P3.Driver.SonosDriverFactory
             }
             if (nodeId == SonosDriverFactory.NextTrack)
             {
-                sonosAttribute = new SonosAttribute(ctx,  null, async o =>
+                sonosAttribute = new SonosAttribute(ctx, null, async o =>
                 {
                     DriverContext.Logger.LogDebug($"Sonos next track...");
                     if (o is true)
                     {
                         await _controller.NextTrackAsync();
+                        return true;
+                    }
+
+                    return null;
+                });
+            }
+            if (nodeId == SonosDriverFactory.PreviousTrack)
+            {
+                sonosAttribute = new SonosAttribute(ctx, null, async o =>
+                {
+                    DriverContext.Logger.LogDebug($"Sonos previous track...");
+                    if (o is true)
+                    {
+                        await _controller.PreviousTrackAsync();
                         return true;
                     }
 

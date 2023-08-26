@@ -17,6 +17,7 @@ namespace P3.Driver.SonosDriverFactory
         public static Guid PauseGuid = new("48b1eeba-13e5-4300-bea3-e26836c64cb8");
         public static Guid VolumeGuid = new("5285e217-7793-4aef-91d2-230bbe61b5c7");
         public static Guid NextTrack = new("3e22c6b8-c557-4be7-b671-cd627855b05d");
+        public static Guid PreviousTrack = new("1f60a282-e649-43a5-af7f-9b82c6b41a80");
         public static Guid SetTuneInRadio = new("77947332-cd89-4765-b79b-b64ce4fa23cf");
         public static Guid SetTuneInRadioAndPlay = new("fc5c92c1-8011-4e8d-96fb-25e2accf10b9");
         public static Guid StatusGuid = new ("d317d318-3c65-46cc-b0ab-f894c2dc51d0");
@@ -30,7 +31,7 @@ namespace P3.Driver.SonosDriverFactory
         public override Guid DriverGuid => BusId;
         public override string ImageName => "automaticacore/plugin-p3.driver.sonos"; 
 
-        public override Version DriverVersion => new(1, 0, 0, 1);
+        public override Version DriverVersion => new(1, 0, 0, 2);
 
         
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -62,11 +63,12 @@ namespace P3.Driver.SonosDriverFactory
 
             CreateAction(factory, PlayGuid, "play", true, true, NodeDataType.Boolean);
             CreateAction(factory, PauseGuid, "pause", true, true, NodeDataType.Boolean);
-            CreateAction(factory, VolumeGuid, "set_volume", true, true, NodeDataType.Integer);
-            CreateAction(factory, NextTrack, "next", true, true, NodeDataType.Boolean);
+            CreateAction(factory, VolumeGuid, "set_volume", true, false, NodeDataType.Integer);
+            CreateAction(factory, NextTrack, "next", true, false, NodeDataType.Boolean);
+            CreateAction(factory, PreviousTrack, "previous", true, false, NodeDataType.Boolean);
 
-            CreateAction(factory, SetTuneInRadio, "set_tune_in", true, true, NodeDataType.Integer);
-            CreateAction(factory, SetTuneInRadioAndPlay, "set_tune_in_play", true, true, NodeDataType.Integer);
+            CreateAction(factory, SetTuneInRadio, "set_tune_in", true, false, NodeDataType.Integer);
+            CreateAction(factory, SetTuneInRadioAndPlay, "set_tune_in_play", true, false, NodeDataType.Integer);
 
             CreateCurrentStatusItems(factory);
         }

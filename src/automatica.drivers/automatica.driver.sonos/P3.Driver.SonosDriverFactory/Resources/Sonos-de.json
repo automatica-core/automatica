@@ -23,6 +23,10 @@
         "NAME": "Nächstes",
         "DESCRIPTION": ""
       },
+      "PREVIOUS": {
+        "NAME": "Vorherige",
+        "DESCRIPTION": ""
+      },
       "SET_TUNE_IN": {
         "NAME": "Radio",
         "DESCRIPTION": ""
