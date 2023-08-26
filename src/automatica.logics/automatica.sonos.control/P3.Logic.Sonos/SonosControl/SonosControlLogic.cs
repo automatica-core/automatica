@@ -42,7 +42,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private long _maxVolumeValue;
 
     private long _currentVolume;
-    private bool _currentlyPlaying = false;
+    private bool? _currentlyPlaying;
     private bool? _lastPlayValue;
 
     public SonosControlLogic(ILogicContext context) : base(context)
@@ -149,9 +149,13 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
                 return ret;
 
             _lastPlayValue = play;
-            ret.Add(new LogicOutputChanged(_playOutputStatus, play));
-            ret.Add(new LogicOutputChanged(_pauseOutputStatus, !play));
-            _currentlyPlaying = play;
+
+            if (_currentlyPlaying.HasValue)
+            {
+                ret.Add(new LogicOutputChanged(_playOutputStatus, play));
+                ret.Add(new LogicOutputChanged(_pauseOutputStatus, !play));
+                _currentlyPlaying = play;
+            }
         }
 
         if (instance.This2RuleInterfaceTemplate == _playDefaultTrigger?.This2RuleInterfaceTemplate)
@@ -162,7 +166,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
                 return ret;
 
             _lastPlayValue = play;
-            if (play)
+            if (play && _currentlyPlaying.HasValue)
             {
                 _currentVolume = _volumeOnPlayValue;
                 _currentlyPlaying = true;
@@ -172,8 +176,9 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
                 ret.Add(new LogicOutputChanged(_volumeOutputStatus, _currentVolume));
                 ret.Add(new LogicOutputChanged(_playOutputStatus, true));
             }
-            else
+            else if (_currentlyPlaying.HasValue)
             {
+                _currentlyPlaying = false;
                 ret.Add(new LogicOutputChanged(_pauseOutputStatus, true));
                 ret.Add(new LogicOutputChanged(_playOutputStatus, false));
             }
@@ -185,7 +190,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == _volumeIncrement.This2RuleInterfaceTemplate)
         {
-            if (_currentlyPlaying)
+            if (_currentlyPlaying.HasValue && _currentlyPlaying.Value)
             {
                 if (_currentVolume + 1 >= _maxVolumeValue)
                 {
@@ -199,7 +204,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == _volumeDecrement.This2RuleInterfaceTemplate)
         {
-            if (_currentlyPlaying)
+            if (_currentlyPlaying.HasValue && _currentlyPlaying.Value)
             {
                 if (_currentVolume - 1 < 0)
                 {
@@ -212,7 +217,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         }
         if (instance.This2RuleInterfaceTemplate == _volume.This2RuleInterfaceTemplate)
         {
-            if (_currentlyPlaying)
+            if (_currentlyPlaying.HasValue && _currentlyPlaying.Value)
             {
                 var volume = Convert.ToInt64(value);
                 if (_currentVolume == volume)
@@ -231,7 +236,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == _next.This2RuleInterfaceTemplate)
         {
-            if (_currentlyPlaying)
+            if (_currentlyPlaying.HasValue && _currentlyPlaying.Value)
             {
                 Context.Dispatcher.DispatchValue(new LogicOutputChanged(_nextOutput, true).Instance, true);
                 Thread.Sleep(100);
