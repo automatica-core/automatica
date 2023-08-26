@@ -144,7 +144,7 @@ namespace Automatica.Core.WebApi.Controllers
             await dbContext.SaveChangesAsync();
 
             _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
-            _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId, logicInstance);
+            _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId, _logicCacheFacade.InstanceCache.GetSingle(dbContext, logicInstance.ObjId));
 
             if (updateScope != LogicUpdateScope.Drag) //do not reload if we only drag it around
             {

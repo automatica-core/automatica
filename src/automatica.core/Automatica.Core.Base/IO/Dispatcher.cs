@@ -172,7 +172,7 @@ namespace Automatica.Core.Base.IO
                 _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, DispatchValue>, int>());
             }
 
-            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value}");
+            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value} from a {value.ValueSource} operation");
 
             if (self.IsRemanent && self is not RemanentDispatchable)
             {
