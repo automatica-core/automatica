@@ -22,6 +22,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _volumeIncrement;
     private readonly RuleInterfaceInstance _volumeDecrement;
     private readonly RuleInterfaceInstance _next;
+    private readonly RuleInterfaceInstance _prev;
     private readonly RuleInterfaceInstance _radioStationInput;
 
     //Params
@@ -35,6 +36,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _volumeOutputStatus;
     private readonly RuleInterfaceInstance _radioStationOutputValue;
     private readonly RuleInterfaceInstance _nextOutput;
+    private readonly RuleInterfaceInstance _prevOutput;
 
 
     private long _volumeOnPlayValue;
@@ -66,6 +68,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.VolumeDecrement);
         _next = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.Next);
+        _prev = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.Previous);
         _radioStationInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStationInput);
 
@@ -89,6 +93,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStationOutputValue);
         _nextOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.NextOutput);
+        _prevOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PreviousOutput);
 
     }
 
@@ -242,12 +248,16 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         if (instance.This2RuleInterfaceTemplate == _next.This2RuleInterfaceTemplate)
         {
-            if (_currentlyPlaying.HasValue && _currentlyPlaying.Value)
-            {
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_nextOutput, true).Instance, true);
-                Thread.Sleep(100);
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_nextOutput, false).Instance, false);
-            }
+            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_nextOutput, true).Instance, true);
+            Thread.Sleep(100);
+            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_nextOutput, false).Instance, false);
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _prev.This2RuleInterfaceTemplate)
+        {
+            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_prevOutput, true).Instance, true);
+            Thread.Sleep(100);
+            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_prevOutput, false).Instance, false);
         }
 
         if (instance.This2RuleInterfaceTemplate == _radioStationInput.This2RuleInterfaceTemplate)
