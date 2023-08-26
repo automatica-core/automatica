@@ -1,4 +1,4 @@
-<dx-button class="switch-button" *ngIf="!state" type="normal" text="{{ 'COMMON.SWITCH.ON' | translateAsync }}" (onClick)="switch(true)" [disabled]="disabled"></dx-button>
+<dx-button class="switch-button" *ngIf="!state" type="normal" text="{{ 'COMMON.SWITCH.ON' | translateAsync }}" (onClick)="switch($event, true)" [disabled]="disabled"></dx-button>
 
-<dx-button class="switch-button" *ngIf="state" type="normal" text="{{ 'COMMON.SWITCH.OFF' | translateAsync }}" (onClick)="switch(false)" [disabled]="disabled">
+<dx-button class="switch-button" *ngIf="state" type="normal" text="{{ 'COMMON.SWITCH.OFF' | translateAsync }}" (onClick)="switch($event, false)" [disabled]="disabled">
 </dx-button>
