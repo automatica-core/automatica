@@ -71,7 +71,12 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   duration: string;
   relativeTime: string;
 
+  next: RuleInterfaceInstance;
+  prev: RuleInterfaceInstance;
+
+  
   nextOutput: RuleInterfaceInstance;
+  prevOutput: RuleInterfaceInstance;
   volumeOutput: RuleInterfaceInstance;
 
   constructor(
@@ -105,7 +110,12 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     this.durationState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "duration");
     this.relativeTimeState = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "relative_time");
 
+    this.next = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "next");
+    this.prev = this.getInterfaceByTypeAndName(RuleInterfaceType.Input, "prev");
+
+    
     this.nextOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "next");
+    this.prevOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "prev");
     this.volumeOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "volume");
 
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
@@ -148,6 +158,12 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     }
   }
 
+  prevCick() {
+    this.dataHub.setValue(this.prev.ObjId, true);
+  }
+  nextClick() {
+    this.dataHub.setValue(this.next.ObjId, true);
+  }
 
   playPauseClick($event) {
     this.isPlaying = !this.isPlaying;

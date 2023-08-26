@@ -2,7 +2,7 @@
     <ng-container control_full>
         <div style="background-repeat: no-repeat; 
         
-            background-size: 70%; 
+            background-size: 75%; 
             background-position: right; 
             background-image: linear-gradient(to left, rgba(0, 0, 0, 0), #515159),url('{{albumArt}}'); 
             width: 100%; 
@@ -74,7 +74,7 @@
                         <dxi-item>
                             <dxi-location [row]="0" [col]="0"> </dxi-location>
                             <div *dxTemplate class="prev item">
-                                <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked"
+                                <dx-button [template]="'buttonTemplate'" [disabled]="!prevOutput.IsLinked"  (onClick)="prevCick()"
                                     class="media_player_button media_player_button_margin">
                                     <div *dxTemplate="let buttonData of 'buttonTemplate'">
                                         <fa-icon size="2x" icon="backward" />
@@ -105,7 +105,7 @@
                         <dxi-item>
                             <dxi-location [row]="0" [col]="2"> </dxi-location>
                             <div *dxTemplate class="next item">
-                                <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked"
+                                <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked" (onClick)="nextClick()"
                                     class="media_player_button media_player_button_margin">
                                     <div *dxTemplate="let buttonData of 'buttonTemplate'">
                                         <fa-icon size="2x" icon="forward" />
