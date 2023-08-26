@@ -150,11 +150,17 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
             _lastPlayValue = play;
 
-            if (_currentlyPlaying.HasValue)
+            if (play)
             {
-                ret.Add(new LogicOutputChanged(_playOutputStatus, play));
-                ret.Add(new LogicOutputChanged(_pauseOutputStatus, !play));
-                _currentlyPlaying = play;
+                ret.Add(new LogicOutputChanged(_playOutputStatus, true));
+                ret.Add(new LogicOutputChanged(_pauseOutputStatus, false));
+                _currentlyPlaying = true;
+            }
+            else if (_currentlyPlaying.HasValue)
+            {
+                ret.Add(new LogicOutputChanged(_playOutputStatus, false));
+                ret.Add(new LogicOutputChanged(_pauseOutputStatus, true));
+                _currentlyPlaying = false;
             }
         }
 
@@ -166,7 +172,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
                 return ret;
 
             _lastPlayValue = play;
-            if (play && _currentlyPlaying.HasValue)
+            if (play)
             {
                 _currentVolume = _volumeOnPlayValue;
                 _currentlyPlaying = true;
