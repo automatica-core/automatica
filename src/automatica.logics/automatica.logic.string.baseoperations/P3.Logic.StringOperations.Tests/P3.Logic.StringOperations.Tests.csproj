@@ -31,12 +31,12 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
-    <PackageReference Include="Automatica.Core.EF" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.5.0.1363" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1363" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1363" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1363" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.0.1363" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Logic.StringOperations\P3.Logic.StringOperations.csproj" />

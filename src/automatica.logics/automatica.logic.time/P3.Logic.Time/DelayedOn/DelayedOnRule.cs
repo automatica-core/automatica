@@ -34,11 +34,11 @@ namespace P3.Logic.Time.DelayedOn
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, true);
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
+        protected override Task<bool> Start(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _delay = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == DelayedOnLogicFactory.RuleParamDelay).ValueInteger.Value;
-            return base.Start();
+            return base.Start(ruleInstance, token);
         }
 
         protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -54,12 +54,12 @@ namespace P3.Logic.Time.DelayedOn
             base.ParameterValueChanged(instance, source, value);
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
             _timerRunning = false;
-            return base.Stop(token);
+            return base.Stop(ruleInstance, token);
         }
 
         private void StartStopTimer()

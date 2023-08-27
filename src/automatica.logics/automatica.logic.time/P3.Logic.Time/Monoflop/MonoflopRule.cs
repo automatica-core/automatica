@@ -27,11 +27,11 @@ namespace P3.Logic.Time.Monoflop
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
-            return base.Stop();
+            return base.Stop(ruleInstance, token);
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)

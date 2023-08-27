@@ -116,7 +116,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         base.ParameterValueChanged(instance, source, value);
     }
 
-    public override Task<bool> Start(CancellationToken token = default)
+    protected override Task<bool> Start(RuleInstance instance, CancellationToken token = default)
     {
         _volumeOnPlayValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == _volumeOnPlay.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
@@ -127,7 +127,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         _maxVolumeValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == _maxVolume.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
 
-        return base.Start(token);
+        return base.Start(instance, token);
     }
 
 
