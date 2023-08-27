@@ -349,24 +349,29 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StopLogic(ILogic rule, RuleInstance ruleInstance)
+        private async Task StopLogic(ILogic logic, RuleInstance logicInstance)
         {
             try
             {
-                _logger.LogInformation($"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...");
+                _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...");
 
-                if (await rule.Stop())
+                if (await logic.Stop())
                 {
-                    _logger.LogInformation($"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...success");
+                    _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...error");
+                    _logger.LogError($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...error");
+                }
+
+                foreach (var logicInterface in logicInstance.RuleInterfaceInstance)
+                {
+                    await _logicEngineDispatcher.Unlink(logicInterface.ObjId);
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Stopping logic {ruleInstance.ObjId} {ruleInstance.Name}...error");
+                _logger.LogError(e, $"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...error");
             }
         }
 
