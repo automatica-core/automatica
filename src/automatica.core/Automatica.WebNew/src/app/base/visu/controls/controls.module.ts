@@ -19,6 +19,7 @@ import { MediaPlayerComponent } from './media-player/media-player.component';
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { DxoLabelModule } from "devextreme-angular/ui/nested";
 import { SliderComponent } from "./slider/slider.component";
+import { PushComponent } from "./buttons/push/push.component";
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { SliderComponent } from "./slider/slider.component";
     ToggleNodeComponent,
     DimmerComponent,
     LogicDefaultComponent,
-    MediaPlayerComponent
+    MediaPlayerComponent,
+    PushComponent
   ],
   exports: [
     VisuItemComponent
