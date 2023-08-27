@@ -1,12 +1,11 @@
-<app-visualization-control [hasPopup]="false" [showIcon]="false" [useFullContainer]="true" [width]="2" section_cell_class="section_cell section_cell_bg">
+<app-visualization-control [hasPopup]="false" [showIcon]="false" [useFullContainer]="true" [width]="2"
+    section_cell_class="section_cell">
     <ng-container control_full>
-        <div style="background-repeat: no-repeat; 
+        <div 
+        [ngStyle]="{'background-image': albumArt ? 'linear-gradient(to left, rgba(0, 0, 0, 0), #515159),url(' + albumArt + ')' : ''}"
         
-            background-size: 75%; 
-            background-position: right; 
-            background-image: linear-gradient(to left, rgba(0, 0, 0, 0), #515159),url('{{albumArt}}'); 
-            width: 100%; 
-            height: 100%;">
+            [style.background-repeat]=" albumArt ? 'no-repeat' : ''" [style.backgrohnd-size]=" albumArt ? '75%' : ''"
+            [style.background-position]=" albumArt ? 'right' : ''" style=" width: 100%; height: 100%;">
 
             <!-- <dx-button text="prev"></dx-button>
         <dx-button text="play/pause"></dx-button>
@@ -74,8 +73,8 @@
                         <dxi-item>
                             <dxi-location [row]="0" [col]="0"> </dxi-location>
                             <div *dxTemplate class="prev item">
-                                <dx-button [template]="'buttonTemplate'" [disabled]="!prevOutput.IsLinked"  (onClick)="prevCick()"
-                                    class="media_player_button media_player_button_margin">
+                                <dx-button [template]="'buttonTemplate'" [disabled]="!prevOutput.IsLinked"
+                                    (onClick)="prevCick()" class="media_player_button media_player_button_margin">
                                     <div *dxTemplate="let buttonData of 'buttonTemplate'">
                                         <fa-icon size="2x" icon="backward" />
                                     </div>
@@ -105,8 +104,8 @@
                         <dxi-item>
                             <dxi-location [row]="0" [col]="2"> </dxi-location>
                             <div *dxTemplate class="next item">
-                                <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked" (onClick)="nextClick()"
-                                    class="media_player_button media_player_button_margin">
+                                <dx-button [template]="'buttonTemplate'" [disabled]="!nextOutput.IsLinked"
+                                    (onClick)="nextClick()" class="media_player_button media_player_button_margin">
                                     <div *dxTemplate="let buttonData of 'buttonTemplate'">
                                         <fa-icon size="2x" icon="forward" />
                                     </div>

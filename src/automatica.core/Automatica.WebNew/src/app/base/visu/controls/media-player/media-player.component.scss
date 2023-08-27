@@ -7,11 +7,6 @@
     top: 30px;
 }
 
-::ng-deep .section_cell_bg {
-    background-color: transparent!important;
-    background: linear-gradient(90deg, $base-border-color 0%, $base-border-color 50%, rgba(0,0,0,0) 100%)!important;
-}
-
 .cell_text_hint {
     margin: 10px;
     font-size: 14px;

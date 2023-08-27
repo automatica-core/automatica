@@ -149,6 +149,9 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
       if (value?.startsWith("http") || value?.startsWith("https")) {
         this.albumArt = value;
       }
+      else if(value?.startsWith("/Assets")) {
+        this.albumArt = void 0;
+      }
     } else if (this.classState && interfaceId == this.classState.ObjId) {
       this.class = value;
     } else if (this.durationState && interfaceId == this.durationState.ObjId) {
