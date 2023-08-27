@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +18,7 @@ namespace P3.Driver.MachineFlags.Attributes
 
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             if (_value == value)
             {
@@ -27,9 +27,10 @@ namespace P3.Driver.MachineFlags.Attributes
             _value = value;
             DriverContext.Logger.LogDebug($"WriteValue {value}");
 
-            DispatchRead(value);
+            writeContext.DispatchValue(value, token);
             return Task.CompletedTask;
         }
+
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 
@@ -18,9 +18,8 @@ namespace P3.Driver.MachineFlags.Attributes
 
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-           
             try
             {
                 var bValue = Convert.ToBoolean(value);
@@ -32,14 +31,14 @@ namespace P3.Driver.MachineFlags.Attributes
                 _value = bValue;
                 DriverContext.Logger.LogDebug($"WriteValue {bValue}");
 
-                DispatchRead(bValue);
+                writeContext.DispatchValue(bValue, token);
             }
             catch (Exception ex)
             {
                 DriverContext.Logger.LogError(ex, $"Could not convert value to bool {ex}");
             }
 
-           
+
             return Task.CompletedTask;
         }
 
