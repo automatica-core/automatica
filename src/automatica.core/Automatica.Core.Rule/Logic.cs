@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -44,16 +45,35 @@ namespace Automatica.Core.Logic
             return null;
         }
 
-        public virtual Task<bool> Start(CancellationToken token = default)
+        public async Task<bool> Start(CancellationToken token = default)
         {
+            await Start(Context.RuleInstance, token);
+
+            foreach(var param in Context.RuleInstance.RuleInterfaceInstance.Where(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
+                (long)Base.Templates.LogicInterfaceDirection.Param))
+            {
+                ParameterValueChanged(param, new LogicInterfaceInstanceDispatchable(param), param.Value);
+            }
+
+            return true;
+        }
+
+        protected virtual Task<bool> Start(RuleInstance instance, CancellationToken token = default)
+        {
+
             return Task.FromResult(true);
         }
 
-        public virtual Task<bool> Stop(CancellationToken token = default)
+        public async Task<bool> Stop(CancellationToken token = default)
+        {
+            await Stop(Context.RuleInstance, token);
+            return true;
+        }
+
+        protected virtual Task<bool> Stop(RuleInstance instance, CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
-
         /// <summary>
         /// Will be called if a input parameter of the <see cref="ILogic"/> has changed
         /// </summary>
