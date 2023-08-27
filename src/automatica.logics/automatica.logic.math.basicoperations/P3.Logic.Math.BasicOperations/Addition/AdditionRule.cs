@@ -24,7 +24,7 @@ namespace P3.Logic.Math.BasicOperations.Addition
                 a.This2RuleInterfaceTemplate == AdditionLogicFactory.RuleOutput);
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance logicInstance, CancellationToken token = default)
         {
             _i1 = 0;
             _i2 = 0;
@@ -33,7 +33,7 @@ namespace P3.Logic.Math.BasicOperations.Addition
             return Task.FromResult(true);
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
+        protected override Task<bool> Start(RuleInstance logicInstance, CancellationToken token = default)
         {
             var curValue = _i1 +_i2 + _i3 + _i4;
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, curValue).Instance, curValue);
