@@ -1,0 +1,12 @@
+<app-visualization-control [hint]="displayText" [value]="displayValue" [icon]="icon" [location]="location"
+  [hasPopup]="false">
+
+  <dx-button control icon="isblank" [template]="'buttonTemplate'" style="margin-left: 10px" height="35px" width="35px" (onClick)="onValueChanged($event)">
+    <div *dxTemplate="let buttonData of 'buttonTemplate'">
+      <fa-icon size="2x" icon="circle-notch" />
+  </div>
+  </dx-button>
+
+  <div popup>
+
+  </div>
