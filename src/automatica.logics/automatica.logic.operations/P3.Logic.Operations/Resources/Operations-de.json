@@ -30,6 +30,22 @@
         "DESCRIPTION": "O"
       }
     },
+    "PUSH": {
+      "NAME": "Taster",
+      "DESCRIPTION": "",
+      "INPUT": {
+        "NAME": "Tr",
+        "DESCRIPTION": "Eingangswert"
+      },
+      "DURATION": {
+        "NAME": "Dauer",
+        "DESCRIPTION": ""
+      },
+      "OUTPUT": {
+        "NAME": "O",
+        "DESCRIPTION": "O"
+      }
+    },
     "DIMMER": {
       "NAME": "Dimmer",
       "DESCRIPTION": "Dimmer",

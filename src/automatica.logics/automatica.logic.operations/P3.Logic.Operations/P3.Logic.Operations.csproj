@@ -22,4 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1355" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Blind\" />
+  </ItemGroup>
 </Project>
