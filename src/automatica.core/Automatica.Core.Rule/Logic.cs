@@ -133,14 +133,7 @@ namespace Automatica.Core.Logic
                     {
                         Context.Logger.LogDebug($"RuleOutput changed {ruleOutValue.Instance.Name} value {ruleOutValue.Value}");
 
-                        if (!_valueDictionary.ContainsKey(ruleOutValue.Instance.RuleInterfaceInstance))
-                        {
-                            _valueDictionary.Add(ruleOutValue.Instance.RuleInterfaceInstance, ruleOutValue.Value);
-                        }
-                        else
-                        {
-                            _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
-                        }
+                        _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
                     }
                 }
                 catch (Exception)

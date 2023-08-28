@@ -224,7 +224,7 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 foreach (var link in rulePage.Link)
                 {
-                    await RemoveLinkInternal(link.ObjId, dbContext);
+                    await RemoveLinkInternal(link.ObjId, dbContext, false);
                     await _logicCacheFacade.RemoveLink(link.ObjId);
                 }
                 foreach (var nodeInstance in rulePage.NodeInstance2RulePage)
@@ -367,7 +367,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
         }
 
-        private async Task RemoveLinkInternal(Guid objId, AutomaticaContext dbContext)
+        private async Task RemoveLinkInternal(Guid objId, AutomaticaContext dbContext, bool reload = true)
         {
             var link = dbContext.Links.SingleOrDefault(a => a.ObjId == objId);
 
@@ -378,11 +378,11 @@ namespace Automatica.Core.WebApi.Controllers
                 await _coreServer.RemoveLink(objId);
                 await _logicCacheFacade.RemoveLink(objId);
 
-                if (link.This2RuleInterfaceInstanceOutput.HasValue)
+                if (link.This2RuleInterfaceInstanceOutput.HasValue && reload)
                 {
                     await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceOutputNavigation.This2RuleInstance);
                 }
-                if (link.This2RuleInterfaceInstanceInput.HasValue)
+                if (link.This2RuleInterfaceInstanceInput.HasValue && reload)
                 {
                     await _coreServer.ReloadLogic(instance.This2RuleInterfaceInstanceInputNavigation.This2RuleInstance);
                 }
