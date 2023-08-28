@@ -1,6 +1,6 @@
 <div class="property-editor" style="height: 100%">
     <dx-data-grid #dataTable [twoWayBindingEnabled]="false" id="gridContainer" [dataSource]="Properties"
-        [allowColumnReordering]="false" height="100%">
+        [allowColumnReordering]="false" [height]="'100%'">
 
         <dxi-column dataField="PropertyTemplate.GroupOrder" [calculateGroupValue]="groupName"
             caption="{{ 'COMMON.GROUP' | translateAsync }}" [groupIndex]="0" [allowSorting]="false"></dxi-column>
@@ -14,268 +14,279 @@
         <dxo-search-panel [visible]="false"></dxo-search-panel>
         <dxo-group-panel [visible]="false"></dxo-group-panel>
         <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+        <dxo-paging [pageSize]="32"> </dxo-paging>
+        <dxo-scrolling [useNative]="false"></dxo-scrolling>
 
-        <dxo-editing mode="cell" [allowUpdating]="true">
-        </dxo-editing>
+            <dxo-editing mode="cell" [allowUpdating]="true">
+            </dxo-editing>
 
-        <div *dxTemplate="let data of 'editTemplate'">
-            <ng-container [ngSwitch]="data.data.PropertyType">
-                <dx-check-box *ngSwitchCase="PropertyTemplateType.Bool" (onValueChanged)="valueChanged($event, data)"
-                    [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"></dx-check-box>
+            <div *dxTemplate="let data of 'editTemplate'">
+                <ng-container [ngSwitch]="data.data.PropertyType">
+                    <dx-check-box *ngSwitchCase="PropertyTemplateType.Bool"
+                        (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value"
+                        [readOnly]="data.data.IsReadonly"></dx-check-box>
 
-                <dx-button *ngSwitchCase="PropertyTemplateType.Scan" width="100%"
-                    text="{{ 'COMMON.PROPERTY.SCAN.NAME' | translateAsync:LANG }}"
-                    (click)="onScanClick($event, data.data)">
-                </dx-button>
+                    <dx-button *ngSwitchCase="PropertyTemplateType.Scan" width="100%"
+                        text="{{ 'COMMON.PROPERTY.SCAN.NAME' | translateAsync:LANG }}"
+                        (click)="onScanClick($event, data.data)">
+                    </dx-button>
 
-                <ng-container *ngSwitchCase="PropertyTemplateType.ImportData">
+                    <ng-container *ngSwitchCase="PropertyTemplateType.ImportData">
 
 
-                    <dx-button text="{{ 'COMMON.PROPERTY.IMPORT.NAME' | translateAsync:LANG }}"
-                        (click)="onImportOpen($event, data.data)"></dx-button>
+                        <dx-button text="{{ 'COMMON.PROPERTY.IMPORT.NAME' | translateAsync:LANG }}"
+                            (click)="onImportOpen($event, data.data)"></dx-button>
 
-                    <!-- <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
+                        <!-- <dx-file-uploader (onUploaded)="onFileUploaded($event, data.data)"
                         selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}" labelText="" accept="*"
                         uploadUrl="/webapi/fileUpload" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
                     </dx-file-uploader> -->
-                </ng-container>
+                    </ng-container>
 
-                <ng-container *ngSwitchCase="PropertyTemplateType.Enum">
-                    <dx-select-box [items]="data.data.PropertyTemplate.ExtendedType.items"
-                        (onValueChanged)="valueChanged($event, data)" [readOnly]="data.data.IsReadonly"
-                        displayExpr="name" valueExpr="id" [(value)]="data.data.Value" fieldTemplate="field">
-                        <div *dxTemplate="let data of 'item'">
-                            {{ data.name | translateAsync }}
-                        </div>
-                        <div *dxTemplate="let data of 'field'">
-                            <div class="custom-item">
-                                <dx-text-box *ngIf="data != null" class="product-name"
-                                    [value]="data.name | translateAsync" [readOnly]="true"></dx-text-box>
-                                <dx-text-box *ngIf="data == null" class="product-name" [readOnly]="true"></dx-text-box>
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Enum">
+                        <dx-select-box [items]="data.data.PropertyTemplate.ExtendedType.items"
+                            (onValueChanged)="valueChanged($event, data)" [readOnly]="data.data.IsReadonly"
+                            displayExpr="name" valueExpr="id" [(value)]="data.data.Value" fieldTemplate="field">
+                            <div *dxTemplate="let data of 'item'">
+                                {{ data.name | translateAsync }}
                             </div>
-                        </div>
-                    </dx-select-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.AreaIcon">
-                    <dx-select-box [dataSource]="data.data.PropertyTemplate.ExtendedType.list"
-                        (onValueChanged)="valueChanged($event, data)" [readOnly]="data.data.IsReadonly" valueExpr="key"
-                        [(value)]="data.data.Value" fieldTemplate="field">
-                        <div *dxTemplate="let data of 'item'">
-                            <fa-icon [icon]="data.value"></fa-icon> {{ data.value }}
-                        </div>
-                        <div *dxTemplate="let data of 'field'">
-                            <div class="custom-item">
-                                <div *ngIf="data != null">
-                                    <fa-icon [icon]="data.value"></fa-icon> {{ data.value }}
-                                    <dx-text-box class="product-name" [readOnly]="true"></dx-text-box>
+                            <div *dxTemplate="let data of 'field'">
+                                <div class="custom-item">
+                                    <dx-text-box *ngIf="data != null" class="product-name"
+                                        [value]="data.name | translateAsync" [readOnly]="true"></dx-text-box>
+                                    <dx-text-box *ngIf="data == null" class="product-name"
+                                        [readOnly]="true"></dx-text-box>
                                 </div>
-
-                                <dx-text-box *ngIf="data == null" class="product-name" [readOnly]="true"></dx-text-box>
                             </div>
-                        </div>
-                    </dx-select-box>
+                        </dx-select-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.AreaIcon">
+                        <dx-select-box [dataSource]="data.data.PropertyTemplate.ExtendedType.list"
+                            (onValueChanged)="valueChanged($event, data)" [readOnly]="data.data.IsReadonly"
+                            valueExpr="key" [(value)]="data.data.Value" fieldTemplate="field">
+                            <div *dxTemplate="let data of 'item'">
+                                <fa-icon [icon]="data.value"></fa-icon> {{ data.value }}
+                            </div>
+                            <div *dxTemplate="let data of 'field'">
+                                <div class="custom-item">
+                                    <div *ngIf="data != null">
+                                        <fa-icon [icon]="data.value"></fa-icon> {{ data.value }}
+                                        <dx-text-box class="product-name" [readOnly]="true"></dx-text-box>
+                                    </div>
+
+                                    <dx-text-box *ngIf="data == null" class="product-name"
+                                        [readOnly]="true"></dx-text-box>
+                                </div>
+                            </div>
+                        </dx-select-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Range">
+                        <dx-number-box [showSpinButtons]="true" [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value"
+                            [min]="data.data.PropertyTemplate.ExtendedType.min"
+                            [max]="data.data.PropertyTemplate.ExtendedType.max">
+                        </dx-number-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Integer">
+                        <dx-number-box [showSpinButtons]="true" [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value"></dx-number-box>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Numeric">
+                        <dx-number-box [showSpinButtons]="true" [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value" step="0.1">
+                        </dx-number-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.IP">
+                        <dx-text-box [readOnly]="data.data.IsReadonly" [(value)]="data.data.Value"
+                            (onValueChanged)="valueChanged($event, data)"></dx-text-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Color">
+                        <dx-color-box [readOnly]="data.data.IsReadonly" [editAlphaChannel]="true"
+                            [(value)]="data.data.Value" (onValueChanged)="valueChanged($event, data)"></dx-color-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.NodeInstance">
+                        <node-value-selector [(value)]="data.data.Value"
+                            (openDialog)="openNodeSelectDialog($event, data.data)"
+                            [readOnly]="data.data.IsReadonly"></node-value-selector>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.LearnMode">
+                        <dx-button width="100%" text="{{ 'COMMON.PROPERTY.LEARN.NAME' | translateAsync:LANG }}"
+                            (click)="onLearnClick($event, data.data)"></dx-button>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.CustomAction">
+                        <dx-button width="100%" text="{{ data.data.PropertyTemplate.Name | translateAsync:LANG }}"
+                            (click)="onCustomActionClick($event, data.data)"></dx-button>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.VisuPage">
+                        <node-value-selector [(value)]="data.data.Value"
+                            (openDialog)="openVisuPageSelectDialog($event, data.data)"
+                            [readOnly]="data.data.IsReadonly">
+                        </node-value-selector>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.AreaInstanceLink">
+                        <dx-drop-down-box [(value)]="data.data.Value" [dataSource]="areaInstancesFlat" valueExpr="ObjId"
+                            displayExpr="DisplayName" [showClearButton]="true" [dataSource]="areaInstances"
+                            (onValueChanged)="valueChanged($event, data)">
+
+                            <div *dxTemplate="let datax of 'content'">
+                                <dx-tree-view [dataSource]="areaInstances" expandAllEnabled="true" keyExpr="ObjId"
+                                    itemsExpr="InverseThis2ParentNavigation" parentIdExpr="This2Parent"
+                                    selectionMode="single" displayExpr="Name" [selectByClick]="true"
+                                    (onContentReady)="$event.component.selectItem(treeBoxValue)"
+                                    (onItemSelectionChanged)="onAreaItemSelectionChanged($event, data)">
+                                </dx-tree-view>
+                            </div>
+                        </dx-drop-down-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.AreaInstance">
+                        <!--TODO: Placeholder-->
+                        <dx-drop-down-box [(value)]="data.data.Value" [dataSource]="areaInstancesFlat" valueExpr="ObjId"
+                            displayExpr="DisplayName" [showClearButton]="true" [dataSource]="areaInstances"
+                            (onValueChanged)="valueChanged($event, data)">
+
+                            <div *dxTemplate="let datax of 'content'">
+                                <dx-tree-view [dataSource]="areaInstances" height="200px" expandAllEnabled="true"
+                                    keyExpr="ObjId" itemsExpr="InverseThis2ParentNavigation" parentIdExpr="This2Parent"
+                                    selectionMode="single" displayExpr="Name" [selectByClick]="true"
+                                    (onContentReady)="$event.component.selectItem(treeBoxValue)"
+                                    (onItemSelectionChanged)="onAreaItemSelectionChanged($event, data)">
+                                </dx-tree-view>
+                            </div>
+                        </dx-drop-down-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.CategoryInstance">
+                        <!--TODO: Placeholder-->
+                        <dx-drop-down-box [(value)]="data.data.Value" valueExpr="ObjId" displayExpr="DisplayName"
+                            [showClearButton]="true" [dataSource]="categoryInstances"
+                            (onValueChanged)="valueChanged($event, data)">
+
+                            <div *dxTemplate="let datax of 'content'">
+                                <dx-data-grid [dataSource]="categoryInstances" keyExpr="ObjId"
+                                    [columns]="['DisplayName']" [selection]="{ mode: 'single' }"
+                                    [hoverStateEnabled]="true" [paging]="{ enabled: false}"
+                                    [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }" [height]="265"
+                                    [(selectedRowKeys)]="data.data.categorySelectedKeys">
+                                </dx-data-grid>
+                            </div>
+                        </dx-drop-down-box>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Text">
+                        <dx-text-box [(value)]="data.data.Value"
+                            [maxLength]="data.data.PropertyTemplate.ExtendedType.length"
+                            [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)"></dx-text-box>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="PropertyTemplateType.DateTime">
+                        <dx-date-box [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)"
+                            displayFormat="shortDateShortTime"></dx-date-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Password">
+                        <dx-text-box mode="password" [(value)]="data.data.Value"
+                            [maxLength]="data.data.PropertyTemplate.ExtendedType.length"
+                            [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)"></dx-text-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.User2Groups">
+                        <dx-drop-down-box [value]="data.data.ValueIds" valueExpr="ObjId" displayExpr="Name"
+                            [(opened)]="data.data.dropDownOpened" [showClearButton]="false" [dataSource]="userGroups">
+
+                            <div *dxTemplate="let datax of 'content'">
+                                <dx-data-grid [dataSource]="userGroups" keyExpr="ObjId"
+                                    [selection]="{ mode: 'multiple' }" [hoverStateEnabled]="true"
+                                    [paging]="{ enabled: false}" [filterRow]="{ visible: false }"
+                                    [scrolling]="{ mode: 'infinite' }" [height]="265"
+                                    [(selectedRowKeys)]="data.data.ValueIds">
+                                    <dxi-column dataField="DisplayName"
+                                        caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                                    <dxi-column dataField="DisplayDescription"
+                                        caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </dx-drop-down-box>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="PropertyTemplateType.User2Roles">
+                        <dx-drop-down-box [value]="data.data.ValueIds" valueExpr="ObjId" displayExpr="DisplayName"
+                            [(opened)]="data.data.dropDownOpened" [showClearButton]="false" [dataSource]="roles">
+
+                            <div *dxTemplate="let datax of 'content'">
+                                <dx-data-grid [dataSource]="roles" keyExpr="ObjId" [selection]="{ mode: 'multiple' }"
+                                    [hoverStateEnabled]="true" [paging]="{ enabled: false}"
+                                    [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }" [height]="265"
+                                    [(selectedRowKeys)]="data.data.ValueIds">
+                                    <dxi-column dataField="DisplayName"
+                                        caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+                                    <dxi-column dataField="DisplayDescription"
+                                        caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
+                                    </dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </dx-drop-down-box>
+                    </ng-container>
+
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.UserGroup">
+                        <dx-select-box [dataSource]="userGroups" (onValueChanged)="valueChanged($event, data)"
+                            [placeholder]="'USER_GROUPS.ALL' | translateAsync" [readOnly]="data.data.IsReadonly"
+                            valueExpr="ObjId" [(value)]="data.data.Value" displayExpr="DisplayName"
+                            [showClearButton]="true">
+                        </dx-select-box>
+                    </ng-container>
+
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Satellite">
+                        <dx-select-box [dataSource]="satellites" (onValueChanged)="valueChanged($event, data)"
+                            [placeholder]="'USER_GROUPS.ALL' | translateAsync" valueExpr="ObjId"
+                            [(value)]="data.data.Value" displayExpr="DisplayName" [showClearButton]="false ">
+                        </dx-select-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Timer">
+                        <dx-button width="100%" text="{{ 'COMMON.EDIT' | translateAsync }}"
+                            (click)="onTimerEditClick($event, data.data)"></dx-button>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.Time">
+                        <dx-date-box [(value)]="data.data.Value" type="time" [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)">
+                        </dx-date-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="PropertyTemplateType.MultiSelect">
+                        <dx-drop-down-box [(value)]="data.data.Value" valueExpr="Key" displayExpr="Value"
+                            placeholder="{{ 'COMMON.EDIT' | translateAsync }}" [showClearButton]="true"
+                            (onOptionChanged)="optionChanged($event, data)"
+                            [dataSource]="data.data.PropertyTemplate.ExtendedType.items">
+                            <div *dxTemplate="let dataGrid of 'content'">
+                                <dx-data-grid [dataSource]="data.data.PropertyTemplate.ExtendedType.items"
+                                    [columns]="['Value']" [selection]="{ mode: 'multiple' }" [hoverStateEnabled]="true"
+                                    [height]="345" [(selectedRowKeys)]="data.data.Value">
+                                </dx-data-grid>
+                            </div>
+                        </dx-drop-down-box>
+                    </ng-container>
+
+                    <ng-container *ngSwitchDefault>
+                        <dx-text-box [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"
+                            (onValueChanged)="valueChanged($event, data)"></dx-text-box>
+                    </ng-container>
                 </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Range">
-                    <dx-number-box [showSpinButtons]="true" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value"
-                        [min]="data.data.PropertyTemplate.ExtendedType.min"
-                        [max]="data.data.PropertyTemplate.ExtendedType.max">
-                    </dx-number-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Integer">
-                    <dx-number-box [showSpinButtons]="true" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value"></dx-number-box>
-                </ng-container>
-                <ng-container *ngSwitchCase="PropertyTemplateType.Numeric">
-                    <dx-number-box [showSpinButtons]="true" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)" [(value)]="data.data.Value" step="0.1">
-                    </dx-number-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.IP">
-                    <dx-text-box [readOnly]="data.data.IsReadonly" [(value)]="data.data.Value"
-                        (onValueChanged)="valueChanged($event, data)"></dx-text-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Color">
-                    <dx-color-box [readOnly]="data.data.IsReadonly" [editAlphaChannel]="true"
-                        [(value)]="data.data.Value" (onValueChanged)="valueChanged($event, data)"></dx-color-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.NodeInstance">
-                    <node-value-selector [(value)]="data.data.Value"
-                        (openDialog)="openNodeSelectDialog($event, data.data)"
-                        [readOnly]="data.data.IsReadonly"></node-value-selector>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.LearnMode">
-                    <dx-button width="100%" text="{{ 'COMMON.PROPERTY.LEARN.NAME' | translateAsync:LANG }}"
-                        (click)="onLearnClick($event, data.data)"></dx-button>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.CustomAction">
-                    <dx-button width="100%" text="{{ data.data.PropertyTemplate.Name | translateAsync:LANG }}"
-                        (click)="onCustomActionClick($event, data.data)"></dx-button>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.VisuPage">
-                    <node-value-selector [(value)]="data.data.Value"
-                        (openDialog)="openVisuPageSelectDialog($event, data.data)" [readOnly]="data.data.IsReadonly">
-                    </node-value-selector>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.AreaInstanceLink">
-                    <dx-drop-down-box [(value)]="data.data.Value" [dataSource]="areaInstancesFlat" valueExpr="ObjId"
-                        displayExpr="DisplayName" [showClearButton]="true" [dataSource]="areaInstances"
-                        (onValueChanged)="valueChanged($event, data)">
-
-                        <div *dxTemplate="let datax of 'content'">
-                            <dx-tree-view [dataSource]="areaInstances" expandAllEnabled="true" keyExpr="ObjId"
-                                itemsExpr="InverseThis2ParentNavigation" parentIdExpr="This2Parent"
-                                selectionMode="single" displayExpr="Name" [selectByClick]="true"
-                                (onContentReady)="$event.component.selectItem(treeBoxValue)"
-                                (onItemSelectionChanged)="onAreaItemSelectionChanged($event, data)">
-                            </dx-tree-view>
-                        </div>
-                    </dx-drop-down-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.AreaInstance">
-                    <!--TODO: Placeholder-->
-                    <dx-drop-down-box [(value)]="data.data.Value" [dataSource]="areaInstancesFlat" valueExpr="ObjId"
-                        displayExpr="DisplayName" [showClearButton]="true" [dataSource]="areaInstances"
-                        (onValueChanged)="valueChanged($event, data)">
-
-                        <div *dxTemplate="let datax of 'content'">
-                            <dx-tree-view [dataSource]="areaInstances" height="200px" expandAllEnabled="true"
-                                keyExpr="ObjId" itemsExpr="InverseThis2ParentNavigation" parentIdExpr="This2Parent"
-                                selectionMode="single" displayExpr="Name" [selectByClick]="true"
-                                (onContentReady)="$event.component.selectItem(treeBoxValue)"
-                                (onItemSelectionChanged)="onAreaItemSelectionChanged($event, data)">
-                            </dx-tree-view>
-                        </div>
-                    </dx-drop-down-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.CategoryInstance">
-                    <!--TODO: Placeholder-->
-                    <dx-drop-down-box [(value)]="data.data.Value" valueExpr="ObjId" displayExpr="DisplayName"
-                        [showClearButton]="true" [dataSource]="categoryInstances"
-                        (onValueChanged)="valueChanged($event, data)">
-
-                        <div *dxTemplate="let datax of 'content'">
-                            <dx-data-grid [dataSource]="categoryInstances" keyExpr="ObjId" [columns]="['DisplayName']"
-                                [selection]="{ mode: 'single' }" [hoverStateEnabled]="true" [paging]="{ enabled: false}"
-                                [filterRow]="{ visible: false }" [scrolling]="{ mode: 'infinite' }" [height]="265"
-                                [(selectedRowKeys)]="data.data.categorySelectedKeys">
-                            </dx-data-grid>
-                        </div>
-                    </dx-drop-down-box>
-                </ng-container>
-                <ng-container *ngSwitchCase="PropertyTemplateType.Text">
-                    <dx-text-box [(value)]="data.data.Value"
-                        [maxLength]="data.data.PropertyTemplate.ExtendedType.length" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)"></dx-text-box>
-                </ng-container>
-                <ng-container *ngSwitchCase="PropertyTemplateType.DateTime">
-                    <dx-date-box [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)" displayFormat="shortDateShortTime"></dx-date-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Password">
-                    <dx-text-box mode="password" [(value)]="data.data.Value"
-                        [maxLength]="data.data.PropertyTemplate.ExtendedType.length" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)"></dx-text-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.User2Groups">
-                    <dx-drop-down-box [value]="data.data.ValueIds" valueExpr="ObjId" displayExpr="Name"
-                        [(opened)]="data.data.dropDownOpened" [showClearButton]="false" [dataSource]="userGroups">
-
-                        <div *dxTemplate="let datax of 'content'">
-                            <dx-data-grid [dataSource]="userGroups" keyExpr="ObjId" [selection]="{ mode: 'multiple' }"
-                                [hoverStateEnabled]="true" [paging]="{ enabled: false}" [filterRow]="{ visible: false }"
-                                [scrolling]="{ mode: 'infinite' }" [height]="265"
-                                [(selectedRowKeys)]="data.data.ValueIds">
-                                <dxi-column dataField="DisplayName"
-                                    caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-                                <dxi-column dataField="DisplayDescription"
-                                    caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
-                                </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                    </dx-drop-down-box>
-                </ng-container>
-                <ng-container *ngSwitchCase="PropertyTemplateType.User2Roles">
-                    <dx-drop-down-box [value]="data.data.ValueIds" valueExpr="ObjId" displayExpr="DisplayName"
-                        [(opened)]="data.data.dropDownOpened" [showClearButton]="false" [dataSource]="roles">
-
-                        <div *dxTemplate="let datax of 'content'">
-                            <dx-data-grid [dataSource]="roles" keyExpr="ObjId" [selection]="{ mode: 'multiple' }"
-                                [hoverStateEnabled]="true" [paging]="{ enabled: false}" [filterRow]="{ visible: false }"
-                                [scrolling]="{ mode: 'infinite' }" [height]="265"
-                                [(selectedRowKeys)]="data.data.ValueIds">
-                                <dxi-column dataField="DisplayName"
-                                    caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
-                                <dxi-column dataField="DisplayDescription"
-                                    caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}">
-                                </dxi-column>
-                            </dx-data-grid>
-                        </div>
-                    </dx-drop-down-box>
-                </ng-container>
-
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.UserGroup">
-                    <dx-select-box [dataSource]="userGroups" (onValueChanged)="valueChanged($event, data)"
-                        [placeholder]="'USER_GROUPS.ALL' | translateAsync" [readOnly]="data.data.IsReadonly"
-                        valueExpr="ObjId" [(value)]="data.data.Value" displayExpr="DisplayName"
-                        [showClearButton]="true">
-                    </dx-select-box>
-                </ng-container>
-
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Satellite">
-                    <dx-select-box [dataSource]="satellites" (onValueChanged)="valueChanged($event, data)"
-                        [placeholder]="'USER_GROUPS.ALL' | translateAsync" valueExpr="ObjId" [(value)]="data.data.Value"
-                        displayExpr="DisplayName" [showClearButton]="false ">
-                    </dx-select-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Timer">
-                    <dx-button width="100%" text="{{ 'COMMON.EDIT' | translateAsync }}"
-                        (click)="onTimerEditClick($event, data.data)"></dx-button>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.Time">
-                    <dx-date-box [(value)]="data.data.Value" type="time" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)">
-                    </dx-date-box>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="PropertyTemplateType.MultiSelect">
-                    <dx-drop-down-box [(value)]="data.data.Value" valueExpr="Key" displayExpr="Value"
-                        placeholder="{{ 'COMMON.EDIT' | translateAsync }}" [showClearButton]="true"
-                        (onOptionChanged)="optionChanged($event, data)"
-                        [dataSource]="data.data.PropertyTemplate.ExtendedType.items">
-                        <div *dxTemplate="let dataGrid of 'content'">
-                            <dx-data-grid [dataSource]="data.data.PropertyTemplate.ExtendedType.items"
-                                [columns]="['Value']" [selection]="{ mode: 'multiple' }" [hoverStateEnabled]="true"
-                                [height]="345" [(selectedRowKeys)]="data.data.Value">
-                            </dx-data-grid>
-                        </div>
-                    </dx-drop-down-box>
-                </ng-container>
-
-                <ng-container *ngSwitchDefault>
-                    <dx-text-box [(value)]="data.data.Value" [readOnly]="data.data.IsReadonly"
-                        (onValueChanged)="valueChanged($event, data)"></dx-text-box>
-                </ng-container>
-            </ng-container>
-        </div>
+            </div>
     </dx-data-grid>
 </div>
 

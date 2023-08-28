@@ -324,6 +324,12 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   async ngOnInit() {
     this.satellites = await this.satellitesService.getAll();
+
+    var gridHeight = this.dataTable.instance.element().clientHeight;
+    var pageSize = gridHeight/30;
+
+    this.dataTable.instance.pageSize(pageSize);
+    
   }
 
   flattenAraInit() {

@@ -3,15 +3,21 @@ p3-propertyeditor {
 }
 
 .property-editor {
-    padding-bottom:100px;
+    padding-bottom:70px;
 }
 
 ::ng-deep .dx-datagrid-table {
     
-    padding-bottom:100px;
+    // padding-bottom:20px;
+    height: 100%;
 }
 
 ::ng-deep .dx-datagrid-table-fixed {
     
-    padding-bottom:100px;
+    // padding-bottom:20px;
+    height: 100%;
+}
+
+::ng-deep .dx-row.dx-freespace-row {
+     display: none !important; 
 }
