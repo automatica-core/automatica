@@ -208,12 +208,12 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                 }
                 case "openweathermap-forecast-temperature-min":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Temperature.Min), 2));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Min(a => a.Temperature.Min), 2));
                     break;
                 }
                 case "openweathermap-forecast-temperature-max":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Average(a => a.Temperature.Max), 2));
+                    node = new OpenWeatherMapDriverNode(ctx, (_, y) => Math.Round(y.Forecast.Max(a => a.Temperature.Max), 2));
                     break;
                 }
                 case "openweathermap-forecast-clouds":
