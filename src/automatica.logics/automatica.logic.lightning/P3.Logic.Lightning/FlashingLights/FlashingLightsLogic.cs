@@ -54,14 +54,16 @@ namespace P3.Logic.Lightning.FlashingLights
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, !_currentState).Instance, setState);
 
             _timer.Stop();
-            _timerRunning = false;
 
             _repeatCounter++;
 
             if (_repeatCounter <= _repetitions)
                 StartAction();
-            else 
+            else
+            {
+                _timerRunning = false;
                 _repeatCounter = 0;
+            }
         }
 
         private void StartAction()
@@ -79,7 +81,7 @@ namespace P3.Logic.Lightning.FlashingLights
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Trigger && (value is true))
+            if (instance.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Trigger && value is true)
             {
                StartAction();
             }
