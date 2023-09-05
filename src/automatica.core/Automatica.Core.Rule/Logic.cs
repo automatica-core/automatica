@@ -70,6 +70,11 @@ namespace Automatica.Core.Logic
             return true;
         }
 
+        public virtual Task Reload(CancellationToken token = default)
+        {
+            return Task.CompletedTask;
+        }
+
         protected virtual Task<bool> Stop(RuleInstance instance, CancellationToken token = default)
         {
             return Task.FromResult(true);

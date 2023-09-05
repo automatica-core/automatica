@@ -179,83 +179,26 @@ namespace Automatica.Core.Runtime.IO
             return true;
         }
 
-        public async Task Unlink(Guid linkId)
+        public async Task Unlink(Guid id)
         {
-            var entry = _linkCache.Get(linkId);
-
-            if (entry == null)
+            (DispatchableType type, Guid id, Guid target) reg;
+            if (_dispatchRegistrations.Any(a => a.id == id))
             {
+                reg = _dispatchRegistrations.First(a => a.id == id);
+            }
+            else if (_dispatchRegistrations.Any(a => a.target == id))
+            {
+                reg = _dispatchRegistrations.First(a => a.target == id);
+            }
+            else
+            {
+                _logger.LogWarning($"Could not find dispatcher registration for {id}");
                 return;
             }
 
-            if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 node
-            {
-                var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutputNavigation.This2NodeInstance);
-                var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.This2NodeInstance);
-
-                if (sourceNode == null || targetNode == null)
-                {
-                    _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2NodeInstance2RulePageInput}) is empty - invalid configuration ");
-                    return;
-                }
-
-                _logger.LogInformation($"UnRegister Node2Node - \"{GetFullName(sourceNode)}\" is mapped to \"{GetFullName(targetNode)}\"");
-                await _dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId);
-                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
-                    a.type == DispatchableType.NodeInstance && a.id == sourceNode.ObjId && a.target == targetNode.ObjId));
-            }
-            else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 rule
-            {
-                var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
-                var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
-
-                if (sourceNode == null || targetNode == null)
-                {
-                    _logger.LogError($"{nameof(sourceNode)} - ({entry.This2RuleInterfaceInstanceOutput}) || {nameof(targetNode)} - ({entry.This2RuleInterfaceInstanceInput}) is empty - invalid configuration ");
-                    return;
-                }
-
-                var inputId = sourceNode.ObjId;
-                _logger.LogInformation($"UnRegister Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
-                await _dispatcher.UnRegisterDispatch(DispatchableType.RuleInstance, inputId);
-                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
-                    a.type == DispatchableType.RuleInstance && a.id == inputId && a.target == targetNode.ObjId));
-            }
-            else if (entry.This2RuleInterfaceInstanceInput.HasValue && entry.This2NodeInstance2RulePageOutput.HasValue) // node 2 rule
-            {
-                var sourceNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageOutputNavigation.This2NodeInstance);
-                var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
-
-
-                if (sourceNode == null || targetNode == null)
-                {
-                    _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2RuleInterfaceInstanceInput}) is empty - invalid configuration ");
-                    return;
-                }
-
-                _logger.LogInformation($"UnRegister Node2Rule - \"{GetFullName(sourceNode)}\" is mapped to {targetNode.This2RuleInstanceNavigation.Name}");
-                await _dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId);
-                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
-                    a.type == DispatchableType.NodeInstance && a.id == sourceNode.ObjId && a.target == targetNode.ObjId));
-            }
-            else if (entry.This2NodeInstance2RulePageInput.HasValue && entry.This2RuleInterfaceInstanceOutput.HasValue) // rule 2 node
-            {
-                var targetNode = _nodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.This2NodeInstance);
-                var sourceNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceOutput.Value);
-
-
-                if (sourceNode == null || targetNode == null)
-                {
-                    _logger.LogError($"{nameof(sourceNode)} - ({entry.This2RuleInterfaceInstanceOutput}) || {nameof(targetNode)} - ({entry.This2NodeInstance2RulePageInput}) is empty - invalid configuration ");
-                    return;
-                }
-
-                var inputId = sourceNode.ObjId;
-                _logger.LogInformation($"UnRegister Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} is mapped to \"{GetFullName(targetNode)}\"");
-                await _dispatcher.UnRegisterDispatch(DispatchableType.RuleInstance, inputId);
-                _dispatchRegistrations.Remove(_dispatchRegistrations.Single(a =>
-                    a.type == DispatchableType.RuleInstance && a.id == inputId && a.target == targetNode.ObjId));
-            }
+            _logger.LogInformation($"Unregister Dispatch for {reg.type} from {reg.id} to {reg.target}");
+            await _dispatcher.UnRegisterDispatch(reg.type, reg.id);
+            _dispatchRegistrations.Remove(reg);
         }
 
         public async Task Unload()

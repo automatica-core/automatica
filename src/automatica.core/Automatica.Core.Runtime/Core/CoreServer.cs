@@ -322,7 +322,7 @@ namespace Automatica.Core.Runtime.Core
         {
             foreach (var rule in _logicInstanceStore.Dictionary())
             {
-                await StopLogic(rule.Value, rule.Key);
+                await StopLogic(rule.Value, rule.Key, true);
             }
             await _logicEngineDispatcher.Unload();
         }
@@ -349,11 +349,19 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private async Task StopLogic(ILogic logic, RuleInstance logicInstance)
+        private async Task StopLogic(ILogic logic, RuleInstance logicInstance, bool unlink)
         {
             try
             {
                 _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...");
+
+                if (unlink)
+                {
+                    foreach (var logicInterface in logicInstance.RuleInterfaceInstance)
+                    {
+                        await _logicEngineDispatcher.Unlink(logicInterface.ObjId);
+                    }
+                }
 
                 if (await logic.Stop())
                 {
@@ -364,10 +372,7 @@ namespace Automatica.Core.Runtime.Core
                     _logger.LogError($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...error");
                 }
 
-                foreach (var logicInterface in logicInstance.RuleInterfaceInstance)
-                {
-                    await _logicEngineDispatcher.Unlink(logicInterface.ObjId);
-                }
+                
             }
             catch (Exception e)
             {
@@ -380,11 +385,15 @@ namespace Automatica.Core.Runtime.Core
             if (_logicInstanceStore.ContainsRuleInstanceId(ruleInstanceId))
             {
                 var oldLogic = _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
-                await StopLogic(oldLogic.Value, oldLogic.Key);
+                await StopLogic(oldLogic.Value, oldLogic.Key, false);
+                await oldLogic.Value.Reload();
+                await StartLogic(oldLogic.Value, oldLogic.Key);
             }
-
-            var newLogic = InitLogicInstance(ruleInstanceId);
-            await StartLogic(newLogic.Value, newLogic.Key);
+            else
+            {
+                var newLogic = InitLogicInstance(ruleInstanceId);
+                await StartLogic(newLogic.Value, newLogic.Key);
+            }
         }
 
         public async Task StopLogic(Guid ruleInstanceId)
@@ -394,7 +403,7 @@ namespace Automatica.Core.Runtime.Core
                 return;
             }
             var rule = _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
-            await StopLogic(rule.Value, rule.Key);
+            await StopLogic(rule.Value, rule.Key, true);
             
         }
 

@@ -37,5 +37,12 @@ namespace Automatica.Core.Logic
         /// </summary>
         /// <returns>True if success full</returns>
         Task<bool> Stop(CancellationToken token = default);
+
+
+        /// <summary>
+        /// Will be called on reload
+        /// </summary>
+        /// <returns>True if success full</returns>
+        Task Reload(CancellationToken token = default);
     }
 }
