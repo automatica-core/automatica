@@ -18,9 +18,9 @@ namespace P3.Logic.Lightning.FlashingLights
         private readonly RuleInterfaceInstance _output;
         
         private bool _taskRunning;
-        private readonly long _repetitions;
+        private long _repetitions;
 
-        private readonly int _delay;
+        private int _delay;
 
         private CancellationTokenSource _cancellationTokenSource;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
@@ -29,11 +29,13 @@ namespace P3.Logic.Lightning.FlashingLights
         {
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Output);
+        }
 
-           
+        protected override Task<bool> Start(RuleInstance instance, CancellationToken token = new CancellationToken())
+        {
             try
             {
-                var delay = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                var delay = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                     a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.Delay);
                 _delay = Convert.ToInt32(delay!.ValueInteger!.Value);
             }
@@ -44,18 +46,14 @@ namespace P3.Logic.Lightning.FlashingLights
 
             try
             {
-                _repetitions = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                _repetitions = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                     a.This2RuleInterfaceTemplate == FlashingLightsLogicFactory.RepeatCount)!.ValueInteger!.Value;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 _repetitions = 1;
             }
 
-        }
-
-        protected override Task<bool> Start(RuleInstance instance, CancellationToken token = new CancellationToken())
-        {
             _cancellationTokenSource = new CancellationTokenSource();
             return base.Start(instance, token);
         }
@@ -78,11 +76,16 @@ namespace P3.Logic.Lightning.FlashingLights
 
                 for (var i = 0; i < _repetitions; i++)
                 {
-                    Context.Logger.LogInformation($"Set light state to {setState}");
+                    Context.Logger.LogInformation($"Repetition {i+1}/{_repetitions}");
 
                     await Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, setState).Instance,
                         setState);
+                    setState = !setState;
 
+                    await Task.Delay(_delay, token);
+
+                    await Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, setState).Instance,
+                        setState);
                     setState = !setState;
 
                     await Task.Delay(_delay, token);
