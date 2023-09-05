@@ -5,6 +5,7 @@
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>{FD6AFFB8-7382-4DE7-B491-8B30065EE768}</ProjectGuid>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Rules\Lightning</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
@@ -18,5 +19,6 @@
   </ItemGroup>
   <ItemGroup>
 	  <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1363" />
+	  <PackageReference Include="Microsoft.Build.Framework" Version="17.3.2" />
   </ItemGroup>
 </Project>
