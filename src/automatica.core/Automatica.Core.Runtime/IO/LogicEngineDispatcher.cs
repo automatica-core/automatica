@@ -71,9 +71,14 @@ namespace Automatica.Core.Runtime.IO
             return String.Join("-", list);
         }
 
-        public async Task<bool> Load()
+        public async Task<bool> Reload()
         {
             _linkCache.ClearAndLoad();
+            return await Load();
+        }
+
+        public async Task<bool> Load()
+        {
             var data = _linkCache.All();
 
             foreach (var entry in data)

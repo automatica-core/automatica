@@ -412,10 +412,9 @@ namespace Automatica.Core.Runtime.Core
             return _logicEngineDispatcher.Unlink(linkId);
         }
 
-        public Task ReloadLinks()
+        public async Task ReloadLinks()
         {
-            _logicEngineDispatcher.Load();
-            return Task.CompletedTask;
+            await _logicEngineDispatcher.Reload();
         }
 
         public async Task ReloadLogicServices()
