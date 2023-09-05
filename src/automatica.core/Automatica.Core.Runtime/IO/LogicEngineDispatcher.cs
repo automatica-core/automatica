@@ -73,6 +73,7 @@ namespace Automatica.Core.Runtime.IO
 
         public async Task<bool> Load()
         {
+            _linkCache.ClearAndLoad();
             var data = _linkCache.All();
 
             foreach (var entry in data)
