@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using Timer = System.Timers.Timer;
 
 namespace P3.Driver.SonosDriverFactory.Attributes
 {
