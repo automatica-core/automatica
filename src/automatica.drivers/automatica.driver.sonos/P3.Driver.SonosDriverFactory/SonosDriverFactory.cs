@@ -31,7 +31,7 @@ namespace P3.Driver.SonosDriverFactory
         public override Guid DriverGuid => BusId;
         public override string ImageName => "automaticacore/plugin-p3.driver.sonos"; 
 
-        public override Version DriverVersion => new(1, 0, 0, 2);
+        public override Version DriverVersion => new(1, 0, 0, 3);
 
         
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -63,7 +63,7 @@ namespace P3.Driver.SonosDriverFactory
 
             CreateAction(factory, PlayGuid, "play", true, true, NodeDataType.Boolean);
             CreateAction(factory, PauseGuid, "pause", true, true, NodeDataType.Boolean);
-            CreateAction(factory, VolumeGuid, "set_volume", true, false, NodeDataType.Integer);
+            CreateAction(factory, VolumeGuid, "set_volume", true, true, NodeDataType.Integer);
             CreateAction(factory, NextTrack, "next", true, false, NodeDataType.Boolean);
             CreateAction(factory, PreviousTrack, "previous", true, false, NodeDataType.Boolean);
 
