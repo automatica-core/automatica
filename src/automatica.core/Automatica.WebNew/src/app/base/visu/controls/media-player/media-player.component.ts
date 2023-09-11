@@ -129,7 +129,6 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    console.log("rule value changed", interfaceId, value);
 
     if (interfaceId == this.playPauseState.ObjId) {
       this.isPlaying = value!!;
