@@ -42,7 +42,15 @@ namespace Automatica.Core.Logic
         /// <returns></returns>
         public virtual object GetDataForVisu()
         {
-            return null;
+            var dictionary = new Dictionary<string, object>();
+            foreach (var param in Context.RuleInstance.RuleInterfaceInstance.Where(a =>
+                         a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
+                         (long)Base.Templates.LogicInterfaceDirection.Param))
+            {
+                dictionary.Add(param.This2RuleInterfaceTemplateNavigation.Key, param.Value);
+            }
+
+            return dictionary;
         }
 
         public async Task<bool> Start(CancellationToken token = default)

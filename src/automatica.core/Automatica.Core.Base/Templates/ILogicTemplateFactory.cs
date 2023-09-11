@@ -112,6 +112,35 @@ namespace Automatica.Core.Base.Templates
         /// <param name="id">Unique id for the parameter</param>
         /// <param name="name">Name of the parameter</param>
         /// <param name="description">Description of the parameter</param>
+        /// <param name="key">Key of the parameter</param>
+        /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
+        /// <param name="sortOrder">Sort order of all parameters</param>
+        /// <param name="dataType">Data type of the parameter, <see cref="RuleInterfaceParameterDataType"/></param>
+        /// <param name="defaultValue">Default value of the parameter</param>
+        /// <parma name="linkable">Defines if the parameter is linkable in the editor</parma>
+        /// <returns><see cref="CreateTemplateCode"/></returns>
+        CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable);
+
+        /// <summary>
+        /// Creates a parameter for the  <see cref="RuleTemplate"/>
+        /// </summary>
+        /// <param name="id">Unique id for the parameter</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="description">Description of the parameter</param>
+        /// <param name="key">Key of the parameter</param>
+        /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
+        /// <param name="sortOrder">Sort order of all parameters</param>
+        /// <param name="dataType">Data type of the parameter, <see cref="RuleInterfaceParameterDataType"/></param>
+        /// <param name="defaultValue">Default value of the parameter</param>
+        /// <returns><see cref="CreateTemplateCode"/></returns>
+        CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue);
+
+        /// <summary>
+        /// Creates a parameter for the  <see cref="RuleTemplate"/>
+        /// </summary>
+        /// <param name="id">Unique id for the parameter</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="description">Description of the parameter</param>
         /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
         /// <param name="sortOrder">Sort order of all parameters</param>
         /// <param name="dataType">Data type of the parameter, <see cref="RuleInterfaceParameterDataType"/></param>
@@ -119,6 +148,7 @@ namespace Automatica.Core.Base.Templates
         /// <parma name="linkable">Defines if the parameter is linkable in the editor</parma>
         /// <returns><see cref="CreateTemplateCode"/></returns>
         CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable);
+
 
         /// <summary>
         /// Change the default visualization template for a <see cref="RuleTemplate"/>
