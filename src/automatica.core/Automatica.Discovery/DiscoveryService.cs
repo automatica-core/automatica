@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility.Network;
 using Rssdp;
-using Automatica.Core.Internals;
 
 namespace Automatica.Discovery
 {

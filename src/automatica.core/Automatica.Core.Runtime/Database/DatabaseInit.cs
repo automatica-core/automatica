@@ -18,7 +18,6 @@ using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using System.Runtime.InteropServices;
 using Automatica.Core.Runtime.Recorder.Base;
-using SQLitePCL;
 
 namespace Automatica.Core.Runtime.Database
 {

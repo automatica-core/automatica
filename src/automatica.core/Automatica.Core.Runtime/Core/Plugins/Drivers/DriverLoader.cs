@@ -26,14 +26,14 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
         private readonly ILoadedStore _store;
         private readonly IDriverFactoryStore _driverFactoryStore;
         private readonly INodeInstanceService _nodeInstanceService;
-        private readonly NodeTemplateFactory _nodeTemplateFactory;
+        private readonly TemplateFactoryProvider<NodeTemplateFactory> _nodeTemplateFactory;
 
         public DriverLoader(
             ILogger<DriverLoader> logger, AutomaticaContext dbContext, 
             ILocalizationProvider localizationProvider, IConfiguration config, 
             ILoadedStore store, IDriverFactoryStore driverFactoryStore,
             INodeInstanceService nodeInstanceService,
-            NodeTemplateFactory nodeTemplateFactory)
+            TemplateFactoryProvider<NodeTemplateFactory> nodeTemplateFactory)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -94,10 +94,11 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 if (initNodeTemplates || factory.InDevelopmentMode ||
                     factory.GetType().Assembly.GetName().Version < new Version(2, 3))
                 {
-                    _nodeTemplateFactory.SetFactory(factory);
+                    var nodeTemplateFactory = _nodeTemplateFactory.CreateInstance(factory.DriverGuid);
+                    nodeTemplateFactory.SetFactory(factory);
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
-                    factory.InitNodeTemplates(_nodeTemplateFactory);
-                    await _nodeTemplateFactory.CommitChanges();
+                    factory.InitNodeTemplates(nodeTemplateFactory);
+                    await nodeTemplateFactory.CommitChanges();
 
 
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...done");

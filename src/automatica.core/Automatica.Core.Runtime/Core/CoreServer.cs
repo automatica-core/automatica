@@ -36,15 +36,11 @@ using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
-using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.RemoteConnect;
-using Newtonsoft.Json;
-using String = System.String;
 using Automatica.Core.Runtime.Recorder.Abstraction;
-using Automatica.Core.Runtime.Recorder.Base;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -621,7 +617,7 @@ namespace Automatica.Core.Runtime.Core
                 throw new ArgumentException("Could not find factory for logic instance..");
             }
             var logger = _loggerFactory.CreateLogger($"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
-            var ruleContext = new LogicContext(ruleInstance, _dispatcher, _serviceProvider.GetRequiredService<LogicTemplateFactory>(), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
+            var ruleContext = new LogicContext(ruleInstance, _dispatcher, _serviceProvider.GetRequiredService<TemplateFactoryProvider<LogicTemplateFactory>>().CreateInstance(factory.LogicGuid), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
             var rule = factory.CreateLogicInstance(ruleContext);
 
             if (rule != null)
@@ -795,7 +791,7 @@ namespace Automatica.Core.Runtime.Core
                 nodeInstance, 
                 factory,
                 _dispatcher, 
-               _serviceProvider.GetRequiredService<NodeTemplateFactory>(),
+               _serviceProvider.GetRequiredService<TemplateFactoryProvider<NodeTemplateFactory>>().CreateInstance(factory.DriverGuid),
                 _telegramMonitor, 
                 _licenseContext.GetLicenseState(), 
                 logger, 

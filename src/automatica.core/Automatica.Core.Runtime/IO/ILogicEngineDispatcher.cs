@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Automatica.Core.EF.Models;
 
 namespace Automatica.Core.Runtime.IO
 {

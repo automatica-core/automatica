@@ -6,6 +6,7 @@ namespace Automatica.Core.EF.Models
     public class InterfaceType : TypedObject
     {
         public Guid Type { get; set; }
+        public Guid? Owner { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int MaxChilds { get; set; }

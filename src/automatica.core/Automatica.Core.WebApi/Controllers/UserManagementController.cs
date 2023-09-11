@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Common;
-using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;

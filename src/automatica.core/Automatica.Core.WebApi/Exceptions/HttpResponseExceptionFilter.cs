@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.Base.Exceptions;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cloud.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

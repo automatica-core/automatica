@@ -4,7 +4,6 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
-using Automatica.Core.Runtime.Recorder;
 using Automatica.Core.Runtime.Recorder.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

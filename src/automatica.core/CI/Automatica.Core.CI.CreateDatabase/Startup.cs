@@ -2,7 +2,6 @@
 using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Runtime;
 using Automatica.Core.Visu;
 using Microsoft.AspNetCore.Builder;

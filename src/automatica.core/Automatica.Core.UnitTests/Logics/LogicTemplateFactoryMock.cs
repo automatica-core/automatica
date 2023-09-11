@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Automatica.Core.UnitTests.Base.Logics
 {

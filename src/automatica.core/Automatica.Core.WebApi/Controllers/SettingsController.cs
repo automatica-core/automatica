@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.Internals.Cache.Common;
-using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.Recorder;
 using Automatica.Core.Runtime.RemoteConnect;

@@ -35,6 +35,12 @@ namespace Automatica.Core.Internals.Templates
                 retValue = CreateTemplateCode.Created;
             }
 
+            if (logicTemplate.Owner.HasValue && logicTemplate.Owner != Owner)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            logicTemplate.Owner = Owner;
             logicTemplate.Name = name;
             logicTemplate.Description = description;
             logicTemplate.Key = key;
@@ -102,7 +108,12 @@ namespace Automatica.Core.Internals.Templates
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
+            if (logicInterfaceTemplate.Owner.HasValue && logicInterfaceTemplate.Owner != Owner)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
 
+            logicInterfaceTemplate.Owner = Owner;
             logicInterfaceTemplate.Name = name;
             logicInterfaceTemplate.Key = key;
             logicInterfaceTemplate.Description = description;
@@ -154,6 +165,12 @@ namespace Automatica.Core.Internals.Templates
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
+            if (parameterLogicInterfaceTemplate.Owner.HasValue && parameterLogicInterfaceTemplate.Owner != Owner)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            parameterLogicInterfaceTemplate.Owner = Owner;
 
             parameterLogicInterfaceTemplate.Name = name;
 
