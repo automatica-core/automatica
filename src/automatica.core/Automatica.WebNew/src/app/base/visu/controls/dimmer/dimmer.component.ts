@@ -59,7 +59,6 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    console.log("ruleinterfacevalue changed", interfaceId, value);
 
     if (this.outputType && this.outputType.ObjId === interfaceId) {
       this.state = value;
