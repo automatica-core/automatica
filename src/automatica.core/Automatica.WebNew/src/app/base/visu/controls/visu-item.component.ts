@@ -18,6 +18,7 @@ import { ToggleNodeComponent } from "./buttons/toggle/toggle.node.component";
 import { MediaPlayerComponent } from "./media-player/media-player.component";
 import { SliderComponent } from "./slider/slider.component";
 import { PushComponent } from "./buttons/push/push.component";
+import { GaugeComponent } from "./gauge/gauge.component";
 
 @Component({
   selector: "visu-component",
@@ -100,6 +101,10 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
       }
       case "push-button": {
         this.component = PushComponent;
+        break;
+      }
+      case "gauge":{
+        this.component = GaugeComponent;
         break;
       }
       default: {

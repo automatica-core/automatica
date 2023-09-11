@@ -5,7 +5,7 @@ import { DynamicModule } from "ng-dynamic-component";
 import { VisuItemComponent } from "./visu-item.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
-import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule } from "devextreme-angular";
+import { DxSliderModule, DxSwitchModule, DxBoxModule, DxNumberBoxModule, DxLoadIndicatorModule, DxColorBoxModule, DxChartModule, DxButtonModule, DxResponsiveBoxModule, DxTooltipModule, DxSelectBoxModule, DxDateRangeBoxModule, DxTextBoxModule, DxLinearGaugeModule, DxCircularGaugeModule } from "devextreme-angular";
 import { ToggleComponent } from "./buttons/toggle/toggle.component";
 import { FormsModule } from "@angular/forms";
 import { NgColorModule } from "../../color";
@@ -20,6 +20,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { DxoLabelModule } from "devextreme-angular/ui/nested";
 import { SliderComponent } from "./slider/slider.component";
 import { PushComponent } from "./buttons/push/push.component";
+import { GaugeComponent } from "./gauge/gauge.component";
 
 @NgModule({
   imports: [
@@ -46,7 +47,9 @@ import { PushComponent } from "./buttons/push/push.component";
     DxSelectBoxModule,
     DxDateRangeBoxModule,
     DxTextBoxModule,
-    DxNumberBoxModule
+    DxNumberBoxModule,
+    DxLinearGaugeModule,
+    DxCircularGaugeModule
   ],
   declarations: [
     VisuItemComponent,
@@ -59,7 +62,8 @@ import { PushComponent } from "./buttons/push/push.component";
     DimmerComponent,
     LogicDefaultComponent,
     MediaPlayerComponent,
-    PushComponent
+    PushComponent,
+    GaugeComponent
   ],
   exports: [
     VisuItemComponent

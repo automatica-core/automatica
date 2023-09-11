@@ -2,7 +2,6 @@
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
-using P3.Logic.Operations.Switch;
 using LogicInterfaceDirection = Automatica.Core.Base.Templates.LogicInterfaceDirection;
 
 namespace P3.Logic.Operations.Push
