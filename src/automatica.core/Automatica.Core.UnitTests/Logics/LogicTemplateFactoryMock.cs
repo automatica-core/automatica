@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Automatica.Core.UnitTests.Base.Logics
 {
@@ -123,8 +124,8 @@ namespace Automatica.Core.UnitTests.Base.Logics
                 defaultValue, false);
         }
 
-        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
-            int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
         {
             var interfaceType = new RuleInterfaceTemplate();
 
@@ -148,6 +149,20 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
             _ruleInterfaceTemplates[id] = interfaceType;
             return retValue;
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, false);
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, name, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable);
         }
 
         public CreateTemplateCode CreatePropertyTemplate(Guid uid, string name, string description, string key,
