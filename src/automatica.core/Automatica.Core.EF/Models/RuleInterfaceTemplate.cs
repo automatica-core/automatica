@@ -13,7 +13,8 @@ namespace Automatica.Core.EF.Models
         Double,
         Text,
         Timer,
-        ConstantString
+        ConstantString,
+        Color
     }
 
     public class TimerPropertyData : TypedObject

@@ -137,7 +137,7 @@ namespace Automatica.Core.Internals.Templates
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
-            if (interfaceType.Owner.HasValue && interfaceType.Owner != Owner)
+            if (interfaceType.Owner.HasValue && interfaceType.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
@@ -191,7 +191,7 @@ namespace Automatica.Core.Internals.Templates
                     nodeTemplate.ObjId = uid;
                     retValue = CreateTemplateCode.Created;
                 }
-                if (nodeTemplate.Owner.HasValue && nodeTemplate.Owner != Owner)
+                if (nodeTemplate.Owner.HasValue && nodeTemplate.Owner != Owner && !AllowOwnerOverride)
                 {
                     throw new ArgumentException("You are not allowed to modify this template...");
                 }

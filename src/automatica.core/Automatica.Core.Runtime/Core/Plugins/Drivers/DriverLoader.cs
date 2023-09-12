@@ -57,8 +57,8 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 }
 
                 _store.Add(manifest.Automatica.PluginGuid, manifest);
-
-                _driverFactoryStore.Add(factory.DriverGuid, factory);
+                _driverFactoryStore.AddDriver(factory, manifest);
+                
                 _logger.LogDebug($"Init driver {factory.DriverName} {factory.DriverVersion}...");
 
                 var driverDbVersion =
@@ -94,7 +94,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 if (initNodeTemplates || factory.InDevelopmentMode ||
                     factory.GetType().Assembly.GetName().Version < new Version(2, 3))
                 {
-                    var nodeTemplateFactory = _nodeTemplateFactory.CreateInstance(factory.DriverGuid);
+                    var nodeTemplateFactory = _nodeTemplateFactory.CreateInstance(manifest.Automatica.PluginGuid);
                     nodeTemplateFactory.SetFactory(factory);
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
                     factory.InitNodeTemplates(nodeTemplateFactory);

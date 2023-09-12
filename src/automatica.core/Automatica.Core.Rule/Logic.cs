@@ -19,6 +19,9 @@ namespace Automatica.Core.Logic
         private readonly Dictionary<RuleInterfaceInstance, object> _inputValueDictionary = new();
         private readonly object _lock = new object();
 
+
+        protected readonly Dictionary<string, object> ParameterValues = new Dictionary<string, object>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Logic"/> class.
         /// </summary>
@@ -42,15 +45,17 @@ namespace Automatica.Core.Logic
         /// <returns></returns>
         public virtual object GetDataForVisu()
         {
-            var dictionary = new Dictionary<string, object>();
-            foreach (var param in Context.RuleInstance.RuleInterfaceInstance.Where(a =>
-                         a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
-                         (long)Base.Templates.LogicInterfaceDirection.Param))
+            if (ParameterValues.Count == 0)
             {
-                dictionary.Add(param.This2RuleInterfaceTemplateNavigation.Key, param.Value);
+                foreach (var param in Context.RuleInstance.RuleInterfaceInstance.Where(a =>
+                             a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
+                             (long)Base.Templates.LogicInterfaceDirection.Param))
+                {
+                    ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
+                }
             }
 
-            return dictionary;
+            return ParameterValues;
         }
 
         public async Task<bool> Start(CancellationToken token = default)
@@ -61,6 +66,7 @@ namespace Automatica.Core.Logic
                 (long)Base.Templates.LogicInterfaceDirection.Param))
             {
                 ParameterValueChanged(param, new LogicInterfaceInstanceDispatchable(param), param.Value);
+                ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
             }
 
             return true;
@@ -68,13 +74,26 @@ namespace Automatica.Core.Logic
 
         protected virtual Task<bool> Start(RuleInstance instance, CancellationToken token = default)
         {
-
             return Task.FromResult(true);
         }
 
         public async Task<bool> Stop(CancellationToken token = default)
         {
             await Stop(Context.RuleInstance, token);
+            return true;
+        }
+
+        public async Task<bool> Restart(RuleInstance instance, CancellationToken token = default)
+        {
+            await Start(instance, token);
+
+            foreach (var param in instance.RuleInterfaceInstance.Where(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
+                                                                             (long)Base.Templates.LogicInterfaceDirection.Param))
+            {
+                ParameterValueChanged(param, new LogicInterfaceInstanceDispatchable(param), param.Value);
+                ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
+            }
+
             return true;
         }
 
@@ -115,6 +134,7 @@ namespace Automatica.Core.Logic
                     (long)Base.Templates.LogicInterfaceDirection.Param)
                 {
                     ParameterValueChanged(instance, source, value);
+                    ParameterValues[instance.This2RuleInterfaceTemplateNavigation.Key] = value;
 
                     Context.Logger.LogDebug($"RuleParameter changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}= value {value}");
                     return new List<ILogicOutputChanged>();

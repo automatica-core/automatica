@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Cache.Logic
         private readonly ILinkCache _linkCache;
         private readonly IDictionary<Guid, IList<RuleInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IDictionary<Guid, IList<RuleInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
-        private readonly IList<RuleInstance> _favorites = new List<RuleInstance>();
+        private readonly IDictionary<Guid, RuleInstance> _favorites = new ConcurrentDictionary<Guid, RuleInstance>();
 
         public LogicInstanceCache(IConfiguration configuration, ILinkCache linkCache) : base(configuration)
         {
@@ -56,7 +56,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
                 if (item.IsFavorite)
                 {
-                    _favorites.Add(item);
+                    _favorites.TryAdd(item.ObjId, item);
                 }
 
                 foreach (var interfaceInstance in item.RuleInterfaceInstance)
@@ -119,7 +119,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             if (item.IsFavorite)
             {
-                _favorites.Add(item);
+                _favorites.TryAdd(item.ObjId, item);
             }
 
             foreach (var interfaceInstance in item.RuleInterfaceInstance)
@@ -137,7 +137,7 @@ namespace Automatica.Core.Internals.Cache.Logic
         {
             Initialize();
 
-            return _favorites;
+            return _favorites.Values.ToList();
         }
 
         public IList<RuleInstance> ByCategory(Guid category)

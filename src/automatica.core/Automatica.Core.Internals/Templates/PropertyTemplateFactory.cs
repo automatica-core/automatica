@@ -13,6 +13,7 @@ namespace Automatica.Core.Internals.Templates
     public class PropertyTemplateFactory : SettingsFactory, IPropertyTemplateFactory
     {
         public Guid Owner { get; internal set; }
+        public bool AllowOwnerOverride { get; internal set; }
         public ILogger Logger { get; }
         public IFactory Factory { get; private set; }
         private readonly Action<PropertyTemplate, Guid> _propertyExpression;
@@ -48,7 +49,7 @@ namespace Automatica.Core.Internals.Templates
                 propertyTemplate = new PropertyTemplate {ObjId = uid};
                 retValue = CreateTemplateCode.Created;
             }
-            if (propertyTemplate.Owner.HasValue && propertyTemplate.Owner != Owner)
+            if (propertyTemplate.Owner.HasValue && propertyTemplate.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
@@ -122,7 +123,7 @@ namespace Automatica.Core.Internals.Templates
                 constraint = new PropertyTemplateConstraint {ObjId = constraintId};
                 retValue = CreateTemplateCode.Created;
             }
-            if (constraint.Owner.HasValue && constraint.Owner != Owner)
+            if (constraint.Owner.HasValue && constraint.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
@@ -160,7 +161,7 @@ namespace Automatica.Core.Internals.Templates
                 constraint.ObjId = constraintData;
                 retValue = CreateTemplateCode.Created;
             }
-            if (constraint.Owner.HasValue && constraint.Owner != Owner)
+            if (constraint.Owner.HasValue && constraint.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }

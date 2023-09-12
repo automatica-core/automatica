@@ -16,6 +16,7 @@ namespace Automatica.Core.Internals.Templates
             var factory = _serviceProvider.GetRequiredService<T>();
 
             factory.Owner = owner;
+            factory.AllowOwnerOverride = true; //TODO: disable in 2 versions again
             return factory;
         }
     }

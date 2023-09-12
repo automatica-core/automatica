@@ -40,6 +40,13 @@ namespace Automatica.Core.Logic
 
 
         /// <summary>
+        /// Will be called on restart
+        /// </summary>
+        /// <returns>True if success full</returns>
+        Task<bool> Restart(RuleInstance instance, CancellationToken token = default);
+
+
+        /// <summary>
         /// Will be called on reload
         /// </summary>
         /// <returns>True if success full</returns>

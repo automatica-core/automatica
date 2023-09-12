@@ -328,7 +328,6 @@ namespace Automatica.Core.Runtime.Core
             _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...");
             try
             {
-                
                 if (await logic.Start())
                 {
                     _logicStore.Add(logicInstance, logic);
@@ -342,6 +341,27 @@ namespace Automatica.Core.Runtime.Core
             catch (Exception e)
             {
                 _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...error {e}");
+            }
+        }
+
+        private async Task RestartLogic(ILogic logic, RuleInstance logicInstance)
+        {
+            _logger.LogInformation($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...");
+            try
+            {
+                if (await logic.Restart(logicInstance))
+                {
+                    _logicStore.Add(logicInstance, logic);
+                    _logger.LogInformation($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...success");
+                }
+                else
+                {
+                    _logger.LogError($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...error");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...error {e}");
             }
         }
 
@@ -383,7 +403,8 @@ namespace Automatica.Core.Runtime.Core
                 var oldLogic = _logicInstanceStore.GetByRuleInstanceId(ruleInstanceId);
                 await StopLogic(oldLogic.Value, oldLogic.Key, false);
                 await oldLogic.Value.Reload();
-                await StartLogic(oldLogic.Value, oldLogic.Key);
+                var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
+                await RestartLogic(oldLogic.Value, ruleInstance);
             }
             else
             {
@@ -774,13 +795,19 @@ namespace Automatica.Core.Runtime.Core
             }
 
             var factory = _driverFactoryStore.Get(nodeTemplate.ObjId);
-
+        
             if(factory == null)
             {
                 _logger.LogError($"No factory found for {nodeTemplate.Name} ({nodeTemplate.ObjId})");
                 return null;
             }
+            var manifest = _driverFactoryStore.GetManifestForDriver(factory.DriverGuid);
 
+            if (manifest == null)
+            {
+                _logger.LogError($"No manifest found for {factory.DriverName} ({factory.DriverGuid})");
+                return null;
+            }
 
             var loggerName =
                 $"{factory.DriverName.ToLowerInvariant()}{LoggerConstants.FileSeparator}{nodeInstance.Name.Replace(" ", "_").ToLowerInvariant()}";
@@ -791,7 +818,7 @@ namespace Automatica.Core.Runtime.Core
                 nodeInstance, 
                 factory,
                 _dispatcher, 
-               _serviceProvider.GetRequiredService<TemplateFactoryProvider<NodeTemplateFactory>>().CreateInstance(factory.DriverGuid),
+               _serviceProvider.GetRequiredService<TemplateFactoryProvider<NodeTemplateFactory>>().CreateInstance(manifest.Automatica.PluginGuid),
                 _telegramMonitor, 
                 _licenseContext.GetLicenseState(), 
                 logger, 

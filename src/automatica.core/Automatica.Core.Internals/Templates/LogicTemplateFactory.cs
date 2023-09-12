@@ -35,7 +35,7 @@ namespace Automatica.Core.Internals.Templates
                 retValue = CreateTemplateCode.Created;
             }
 
-            if (logicTemplate.Owner.HasValue && logicTemplate.Owner != Owner)
+            if (logicTemplate.Owner.HasValue && logicTemplate.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
@@ -108,7 +108,7 @@ namespace Automatica.Core.Internals.Templates
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
-            if (logicInterfaceTemplate.Owner.HasValue && logicInterfaceTemplate.Owner != Owner)
+            if (logicInterfaceTemplate.Owner.HasValue && logicInterfaceTemplate.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
@@ -165,7 +165,7 @@ namespace Automatica.Core.Internals.Templates
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
-            if (parameterLogicInterfaceTemplate.Owner.HasValue && parameterLogicInterfaceTemplate.Owner != Owner)
+            if (parameterLogicInterfaceTemplate.Owner.HasValue && parameterLogicInterfaceTemplate.Owner != Owner && !AllowOwnerOverride)
             {
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
