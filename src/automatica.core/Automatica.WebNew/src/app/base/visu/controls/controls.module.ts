@@ -21,6 +21,7 @@ import { DxoLabelModule } from "devextreme-angular/ui/nested";
 import { SliderComponent } from "./slider/slider.component";
 import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
+import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import { GaugeComponent } from "./gauge/gauge.component";
     LogicDefaultComponent,
     MediaPlayerComponent,
     PushComponent,
-    GaugeComponent
+    GaugeComponent,
+    ThreeRangeGaugeComponent
   ],
   exports: [
     VisuItemComponent

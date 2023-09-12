@@ -215,7 +215,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     get Inputs(): RuleInterfaceInstance[] {
         const interfaces = new Array<RuleInterfaceInstance>();
         this.Interfaces.forEach(element => {
-            if (element.Template.InterfaceDirection.Key === "I") {
+            if (element.Template.InterfaceDirection.Key && element.Template.InterfaceDirection.Key === "I") {
                 interfaces.push(element);
             }
         });
@@ -226,7 +226,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     get Outputs(): RuleInterfaceInstance[] {
         const interfaces = new Array<RuleInterfaceInstance>();
         this.Interfaces.forEach(element => {
-            if (element.Template.InterfaceDirection.Key === "O") {
+            if (element.Template.InterfaceDirection.Key && element.Template.InterfaceDirection.Key === "O") {
                 interfaces.push(element);
             }
         });

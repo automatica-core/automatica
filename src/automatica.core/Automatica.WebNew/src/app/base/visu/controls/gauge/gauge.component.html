@@ -1,21 +1,64 @@
 <app-visualization-control [hasPopup]="false" [showIcon]="false" [useFullContainer]="true" [width]="1">
 
     <ng-container control_full>
-        <dx-circular-gauge class="gauge" id="gauge" [value]="105">
-            <dxo-size [height]="160" [width]="160">
-            </dxo-size>
+        <ng-container *ngIf="type == GaugeType.Circular">
+            <dx-circular-gauge class="gauge" id="gauge" [value]="value" [subvalues]="[value]">
+                <dxo-size [height]="160" [width]="160">
+                </dxo-size>
 
-            <dxo-scale [startValue]="50" [endValue]="150" [tickInterval]="10">
-                <dxo-label [useRangeColors]="true"></dxo-label>
-            </dxo-scale>
-            <dxo-range-container palette="pastel">
-                <dxi-range [startValue]="50" [endValue]="90"></dxi-range>
-                <dxi-range [startValue]="90" [endValue]="130"></dxi-range>
-                <dxi-range [startValue]="130" [endValue]="150"></dxi-range>
-            </dxo-range-container>
-            <dxo-title [text]="displayText">
-                <dxo-font [size]="16"></dxo-font></dxo-title>
-        </dx-circular-gauge>
+                <dxo-animation [enabled]="true">
+                </dxo-animation>
+
+                <dxo-subvalue-indicator [offset]="-5" type="triangleMarker" color="#325862" arrowLength="2"
+                    length="10" />
+
+                <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
+
+                <dxo-scale [startValue]="scaleStart" [endValue]="scaleEnd" [minorTickInterval]="ticks">
+                    <dxo-tick></dxo-tick>
+                    <dxo-minor-tick [visible]="true"></dxo-minor-tick>
+                    <dxo-label>
+                        <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif'></dxo-font>
+                    </dxo-label>
+                </dxo-scale>
+                <dxo-range-container backgroundColor="none">
+
+                </dxo-range-container>
+                <dxo-title [text]="displayText">
+                    <!-- <dxo-subtitle [text]="value"></dxo-subtitle> -->
+                    <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif' [weight]="400" [size]="17"
+                        color="white"></dxo-font>
+                </dxo-title>
+
+            </dx-circular-gauge>
+
+        </ng-container>
+        <ng-container *ngIf="type == GaugeType.Linear">
+            <dx-linear-gauge class="gauge" id="gauge" [value]="value">
+                <dxo-size [height]="160" [width]="160">
+                </dxo-size>
+
+                <dxo-value-indicator type="rectangle" color="#325862">
+                </dxo-value-indicator>
+
+                <dxo-scale [startValue]="scaleStart" [endValue]="scaleEnd" [minorTickInterval]="ticks">
+                    <dxo-tick></dxo-tick>
+                    <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+                    <dxo-label>
+                        <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif'></dxo-font>
+                    </dxo-label>
+                </dxo-scale>
+                <dxo-range-container backgroundColor="none">
+
+                </dxo-range-container>
+                <dxo-title [text]="displayText">
+                    <!-- <dxo-subtitle [text]="value"></dxo-subtitle> -->
+                    <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif' [weight]="400" [size]="17"
+                        color="white"></dxo-font>
+                </dxo-title>
+            </dx-linear-gauge>
+        </ng-container>
+
     </ng-container>
 
 

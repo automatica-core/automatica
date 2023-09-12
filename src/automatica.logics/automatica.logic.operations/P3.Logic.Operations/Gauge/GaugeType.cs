@@ -3,6 +3,7 @@
     internal enum GaugeType
     {
         Linear = 0,
-        Circular = 1
+        Circular = 1,
+        CircularThreeRange = 2
     }
 }

@@ -108,6 +108,76 @@
           "DESCRIPTION": "S"
         }
       }
+    },
+    "GAUGE": {
+      "EASY_LINEAR": {
+        "NAME": "Linear (1 Scale)",
+        "DESCRIPTION": ""
+      },
+      "EASY_CIRCULAR": {
+        "NAME": "Circular (1 Scale)",
+        "DESCRIPTION": ""
+      },
+      "RANGE_CIRCULAR": {
+        "NAME": "Circular (3 Scale)",
+        "DESCRIPTION": ""
+      },
+      "SCALE_START": {
+        "NAME": "Scale start",
+        "DESCRIPTION": ""
+      },
+      "SCALE_END": {
+        "NAME": "Scale end",
+        "DESCRIPTION": ""
+      },
+      "FIRST_SCALE_START": {
+        "NAME": "First Scale start",
+        "DESCRIPTION": ""
+      },
+      "FIRST_SCALE_END": {
+        "NAME": "First Scale end",
+        "DESCRIPTION": ""
+      },
+      "FIRST_COLOR": {
+        "NAME": "First color",
+        "DESCRIPTION": ""
+      },
+      "SECOND_SCALE_START": {
+        "NAME": "Second Scale start",
+        "DESCRIPTION": ""
+      },
+      "SECOND_SCALE_END": {
+        "NAME": "Second Scale end",
+        "DESCRIPTION": ""
+      },
+      "SECOND_COLOR": {
+        "NAME": "Second color",
+        "DESCRIPTION": ""
+      },
+      "THIRD_SCALE_START": {
+        "NAME": "Third Scale start",
+        "DESCRIPTION": ""
+      },
+      "THIRD_SCALE_END": {
+        "NAME": "ThirdScale end",
+        "DESCRIPTION": ""
+      },
+      "THIRD_COLOR": {
+        "NAME": "Third color",
+        "DESCRIPTION": ""
+      },
+      "TICKS": {
+        "NAME": "Ticks",
+        "DESCRIPTION": ""
+      },
+      "TYPE": {
+        "NAME": "Type",
+        "DESCRIPTION": ""
+      },
+      "VALUE": {
+        "NAME": "Value",
+        "Description": "Value"
+      }
     }
   }
 }

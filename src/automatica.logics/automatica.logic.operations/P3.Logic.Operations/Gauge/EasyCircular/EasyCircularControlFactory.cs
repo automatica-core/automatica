@@ -39,7 +39,7 @@ namespace P3.Logic.Operations.Gauge.EasyCircular
                 "OPERATIONS.GAUGE.SCALE_END.DESCRIPTION",
                 "scale_end",
                 LogicGuid,
-                1,
+                2,
                 RuleInterfaceParameterDataType.Integer,
                 "100",
                 true);
@@ -50,24 +50,14 @@ namespace P3.Logic.Operations.Gauge.EasyCircular
                 "OPERATIONS.GAUGE.TICKS.DESCRIPTION",
                 "ticks",
                 LogicGuid,
-                1,
+                3,
                 RuleInterfaceParameterDataType.Integer,
                 "1",
                 true);
 
-            factory.CreateParameterLogicInterfaceTemplate(
-                new Guid("f6951bc2-cbba-4314-9fb0-ffb558d988bf"),
-                "OPERATIONS.GAUGE.TICKS.NAME",
-                "OPERATIONS.GAUGE.TICKS.DESCRIPTION",
-                "type",
-                LogicGuid,
-                1,
-                RuleInterfaceParameterDataType.Integer,
-                "1",
-                true);
 
-            factory.CreateParameterLogicInterfaceTemplate(new Guid("a074af85-00f7-49b7-9815-d963eaae1fd0"), "OPERATIONS.GAUGE.TYPE", "OPERATIONS.GAUGE.TYPE", LogicGuid, 0,
-                RuleInterfaceParameterDataType.NoParameter, (int)GaugeType.Circular);
+            factory.CreateParameterLogicInterfaceTemplate(new Guid("b074af85-00f7-49b7-9815-d963eaae1fd0"), "OPERATIONS.GAUGE.TYPE", "OPERATIONS.GAUGE.TYPE", "gauge_type", LogicGuid, 0,
+                RuleInterfaceParameterDataType.ConstantString, $"{(int)GaugeType.Circular}");
 
 
             factory.ChangeDefaultVisuTemplate(LogicGuid, VisuMobileObjectTemplateTypes.Gauge);

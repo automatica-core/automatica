@@ -1,0 +1,38 @@
+<app-visualization-control [hasPopup]="false" [showIcon]="false" [useFullContainer]="true" [width]="1">
+
+    <ng-container control_full>
+        <dx-circular-gauge class="gauge" id="gauge" [value]="value" [subvalues]="[value]">
+            <dxo-size [height]="160" [width]="160">
+            </dxo-size>
+
+            <!-- <dxo-animation [enabled]="true">
+            </dxo-animation> -->
+
+            <dxo-subvalue-indicator [offset]="-5" type="triangleMarker" color="#325862" arrowLength="2" length="10" />
+
+            <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
+
+            <dxo-scale [minorTickInterval]="ticks" [startValue]="firstScaleStart" [endValue]="thirdScaleEnd"> 
+                <dxo-tick></dxo-tick>
+                <dxo-minor-tick [visible]="true"></dxo-minor-tick>
+                <dxo-label [useRangeColors]="true">
+                    <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif'></dxo-font>
+                </dxo-label>
+            </dxo-scale>
+            <dxo-range-container backgroundColor="pastel">
+                <dxi-range [startValue]="firstScaleStart" [endValue]="firstScaleEnd"></dxi-range>
+                <dxi-range [startValue]="secondScaleStart" [endValue]="secondScaleEnd"></dxi-range>
+                <dxi-range [startValue]="thirdScaleStart" [endValue]="thirdScaleEnd"></dxi-range>
+            </dxo-range-container>
+            <dxo-title [text]="displayText">
+                <!-- <dxo-subtitle [text]="value"></dxo-subtitle> -->
+                <dxo-font family='Helvetica Neue,Segoe UI,helvetica,verdana,sans-serif' [weight]="400" [size]="17"
+                    color="white"></dxo-font>
+            </dxo-title>
+
+        </dx-circular-gauge>
+
+    </ng-container>
+
+
+</app-visualization-control>

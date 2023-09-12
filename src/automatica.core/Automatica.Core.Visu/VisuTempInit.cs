@@ -112,6 +112,10 @@ namespace Automatica.Core.Visu
             factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.GAUGE.NAME", "VISU.OBJECT.GAUGE.DESCRIPTION", "gauge",
                 "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
+            var threeRangeGauge = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.ThreeRangeGauge);
+            factory.CreateVisuMobileTemplate(threeRangeGauge, "VISU.OBJECT.GAUGE.NAME", "VISU.OBJECT.GAUGE.DESCRIPTION", "three-range-gauge",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
             factory.CreatePropertyTemplate(new Guid("85e6e721-d45b-479c-ab44-6672d2f772dc"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",
                 PropertyTemplateType.NodeInstance, chart, "VISU.CATEGORY.APPEARANCE.NAME", true, false, null, null, 1, 1);
 

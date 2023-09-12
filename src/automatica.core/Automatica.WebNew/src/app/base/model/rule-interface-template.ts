@@ -6,7 +6,9 @@ export enum RuleInterfaceParameterDataType {
     Integer,
     Double,
     Text,
-    Timer
+    Timer,
+    ConstantString,
+    Color
 }
 
 export enum RuleInterfaceDirectionEnum {
