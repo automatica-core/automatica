@@ -24,6 +24,8 @@ namespace Automatica.Core.Base.Templates
         Chart,
         [VisuMobileObjectTemplateType("0e742e37-5d83-4476-910c-726677b4477f")]
         Gauge,
+        [VisuMobileObjectTemplateType("0fc4a94f-1fdb-4ba1-8f61-fd37e0b5757a")]
+        ThreeRangeGauge,
         [VisuMobileObjectTemplateType("e3936850-7a0e-4651-9b01-0034e6dabeda")]
         Clock,
         [VisuMobileObjectTemplateType("8b17441f-de01-47c4-be49-5f56ba82440d")]
