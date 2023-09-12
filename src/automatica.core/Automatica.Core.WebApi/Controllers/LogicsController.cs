@@ -431,7 +431,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpGet]
         [Route("data/{id}")]
-        [Authorize(Policy = Role.VisuRole)]
+        [Authorize(Policy = Role.ViewerRole)]
         public object GetInstanceData(Guid id)
         {
             return _logicDataHandler.GetDataForRuleInstance(id);
