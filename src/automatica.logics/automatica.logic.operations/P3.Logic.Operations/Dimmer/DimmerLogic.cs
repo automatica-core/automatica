@@ -53,7 +53,7 @@ namespace P3.Logic.Operations.Dimmer
 
                 _lastState = booleanValue;
 
-                return SingleOutputChanged(new LogicOutputChanged(_outputState, booleanValue));
+                return SingleOutputChanged(new LogicOutputChanged(_output, booleanValue));
             }
 
             if (instance.ObjId == _value.ObjId)
@@ -67,7 +67,7 @@ namespace P3.Logic.Operations.Dimmer
 
                 _lastValue = intValue;
 
-                return SingleOutputChanged(new LogicOutputChanged(_output, value));
+                return SingleOutputChanged(new LogicOutputChanged(_outputState, value));
             }
 
             if (instance.ObjId == _reset.ObjId)
