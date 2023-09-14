@@ -52,13 +52,7 @@ namespace P3.Logic.Operations.Dimmer
                 }
 
                 _lastState = booleanValue;
-
-                if (!_lastValue.HasValue && booleanValue || (_lastValue.HasValue && _lastValue.Value == 0))
-                {
-                    _lastOutputState = true;
-                    ValueChanged(_outputState, _lastOutputState);
-                }
-
+                ValueChanged(_outputState, booleanValue);
                 
 
                 return SingleOutputChanged(new LogicOutputChanged(_output, booleanValue ? _lastValue.Value : 0));
