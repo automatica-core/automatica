@@ -67,7 +67,7 @@ namespace P3.Logic.Operations.Dimmer
 
                 _lastValue = intValue;
 
-                return SingleOutputChanged(new LogicOutputChanged(_outputState, value));
+                return new List<ILogicOutputChanged>() { new LogicOutputChanged(_outputState, intValue) , new LogicOutputChanged(_output, intValue > 0) };
             }
 
             if (instance.ObjId == _reset.ObjId)
