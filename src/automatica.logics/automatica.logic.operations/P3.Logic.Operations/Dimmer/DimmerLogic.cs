@@ -46,16 +46,14 @@ namespace P3.Logic.Operations.Dimmer
             {
                 var booleanValue = Convert.ToBoolean(value);
 
-                if (_lastState.HasValue && _lastState.Value == booleanValue)
+                if (_lastState == booleanValue)
                 {
                     return new List<ILogicOutputChanged>();
                 }
 
                 _lastState = booleanValue;
-                ValueChanged(_outputState, booleanValue);
-                
 
-                return SingleOutputChanged(new LogicOutputChanged(_output, booleanValue ? _lastValue.Value : 0));
+                return SingleOutputChanged(new LogicOutputChanged(_outputState, booleanValue));
             }
 
             if (instance.ObjId == _value.ObjId)
