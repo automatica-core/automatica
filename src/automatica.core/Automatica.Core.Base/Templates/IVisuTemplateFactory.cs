@@ -21,7 +21,7 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("a39fe74f-e7ae-444a-aef0-f997d56beb1e")]
         Rgba = 7,
         [VisuMobileObjectTemplateType("220da983-0f65-4852-b813-fcbeb331fb16")]
-        Char = 8,
+        Chart = 8,
         [VisuMobileObjectTemplateType("0e742e37-5d83-4476-910c-726677b4477f")]
         Gauge = 9,
         [VisuMobileObjectTemplateType("0fc4a94f-1fdb-4ba1-8f61-fd37e0b5757a")]
