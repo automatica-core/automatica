@@ -224,6 +224,11 @@ namespace Automatica.Core.Internals.Templates
                 return CreateTemplateCode.Error;
             }
 
+            if (ruleTemplate.Owner.HasValue && ruleTemplate.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
             ruleTemplate.This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(template);
 
             Db.SaveChanges(true);
