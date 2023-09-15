@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
-using Automatica.Core.Driver;
+﻿using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.Attributes;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
