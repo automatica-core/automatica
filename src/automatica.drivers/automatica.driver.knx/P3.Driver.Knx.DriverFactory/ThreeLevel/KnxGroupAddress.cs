@@ -76,7 +76,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                         $"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
                 }
 
-                var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+                var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
                 var decodedValue = dpt.ToGroupValue(dptValue);
 
                 Driver.Write(this, GroupAddress, decodedValue);
@@ -100,17 +100,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
             var value = dpt.ToValue(datagram.Value);
-
-            if (ValueRead(value))
-            {
-                DispatchRead(value);
-            }
-        }
-
-        protected void ConvertFromBus(GroupValue groupValue)
-        {
-            var dpt = DptFactory.Default.Get(DptType, -1);
-            var value= dpt.ToValue(groupValue);
 
             if (ValueRead(value))
             {
