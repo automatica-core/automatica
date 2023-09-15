@@ -22,9 +22,14 @@ interface IDimmerComponent {
 export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy, IDimmerComponent {
 
   private _state: boolean;
-  valueType: RuleInterfaceInstance;
-  stateType: RuleInterfaceInstance;
+  valueInput: RuleInterfaceInstance;
+  stateInput: RuleInterfaceInstance;
   outputType: RuleInterfaceInstance;
+
+
+  outputValue: RuleInterfaceInstance;
+  outputState: RuleInterfaceInstance;
+
   displayValue: any = "0%";
 
   public get state(): boolean {
@@ -33,6 +38,16 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   public set state(v: boolean) {
     this._state = v;
   }
+
+
+  private _stateValue: number;
+  public get stateValue(): number {
+    return this._stateValue;
+  }
+  public set stateValue(v: number) {
+    this._stateValue = v;
+  }
+
 
 
   constructor(
@@ -51,18 +66,30 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
 
     super.mobileRuleInit();
 
-    this.valueType = this.getInterfaceByType(RuleInterfaceType.Status);
-    this.stateType = this.getInterfaceByType(RuleInterfaceType.Input);
-    this.outputType = this.getInterfaceByType(RuleInterfaceType.Output);
+    this.valueInput = this.getInterfaceByType(RuleInterfaceType.Status);
+    this.stateInput = this.getInterfaceByType(RuleInterfaceType.Input);
+
+    this.outputValue = this.getInterfaceByKey("outputValue");
+    this.outputState = this.getInterfaceByKey("outputState");
 
 
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
 
-    if (this.outputType && this.outputType.ObjId === interfaceId) {
+    if (this.stateInput && this.stateInput.ObjId === interfaceId) {
       this.state = value;
+    }
+    else if (this.valueInput && this.valueInput.ObjId == interfaceId) {
       this.displayValue = `${value}%`;
+      this.stateValue = value;
+    }
+    else if (this.outputState && this.outputState.ObjId === interfaceId) {
+      this.state = value;
+    }
+    else if (this.outputValue && this.outputValue.ObjId == interfaceId) {
+      this.displayValue = `${value}%`;
+      this.stateValue = value;
     }
   }
 
@@ -70,14 +97,16 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
     this.switch($event.value);
   }
 
-  switch($event) {
-    if(this.stateType)
-      this.dataHub.setValue(this.stateType.ObjId, $event);
+  switch(value) {
+    if (this.stateInput)
+      if (this.state != value)
+        this.dataHub.setValue(this.stateInput.ObjId, value);
   }
 
-  sliderUpdate($event) {
-    if(this.valueType)
-      this.dataHub.setValue(this.valueType.ObjId, $event);
+  sliderUpdate(value) {
+    if (this.valueInput)
+      if (this.stateValue != value)
+        this.dataHub.setValue(this.valueInput.ObjId, value);
   }
 
   ngOnDestroy(): void {

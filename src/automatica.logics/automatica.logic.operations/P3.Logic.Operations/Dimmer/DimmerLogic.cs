@@ -4,6 +4,7 @@ using System.Linq;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Operations.Dimmer
 {
@@ -13,8 +14,8 @@ namespace P3.Logic.Operations.Dimmer
         private readonly RuleInterfaceInstance _state;
         private readonly RuleInterfaceInstance _reset;
 
-        private readonly RuleInterfaceInstance _output;
-        private readonly RuleInterfaceInstance _outputState;
+        private readonly RuleInterfaceInstance _dimmerValue;
+        private readonly RuleInterfaceInstance _dimmerState;
 
         private bool? _lastState;
         private int? _lastValue;
@@ -31,12 +32,12 @@ namespace P3.Logic.Operations.Dimmer
             _reset = context.RuleInstance.RuleInterfaceInstance.Single(a =>
                 a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleInputReset);
 
-            _output = context.RuleInstance.RuleInterfaceInstance.Single(a =>
-                a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleOutput);
+            _dimmerValue = context.RuleInstance.RuleInterfaceInstance.Single(a =>
+                a.This2RuleInterfaceTemplate == DimmerLogicFactory.DimmerValue);
 
 
-            _outputState = context.RuleInstance.RuleInterfaceInstance.Single(a =>
-                a.This2RuleInterfaceTemplate == DimmerLogicFactory.RuleState);
+            _dimmerState = context.RuleInstance.RuleInterfaceInstance.Single(a =>
+                a.This2RuleInterfaceTemplate == DimmerLogicFactory.DimmerState);
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
@@ -53,7 +54,19 @@ namespace P3.Logic.Operations.Dimmer
 
                 _lastState = booleanValue;
 
-                return SingleOutputChanged(new LogicOutputChanged(_output, booleanValue));
+                var ret = new List<ILogicOutputChanged>();
+                ret.Add(new LogicOutputChanged(_dimmerState, booleanValue));
+
+                if (booleanValue && _lastValue.HasValue)
+                {
+                    ret.Add( new LogicOutputChanged(_dimmerValue, _lastValue));
+                }
+                else if (!booleanValue)
+                {
+                    ret.Add(new LogicOutputChanged(_dimmerValue, 0));
+                }
+
+                return ret;
             }
 
             if (instance.ObjId == _value.ObjId)
@@ -64,15 +77,14 @@ namespace P3.Logic.Operations.Dimmer
                 {
                     return new List<ILogicOutputChanged>();
                 }
-
                 _lastValue = intValue;
 
-                return new List<ILogicOutputChanged>() { new LogicOutputChanged(_outputState, intValue) , new LogicOutputChanged(_output, intValue > 0) };
+                return new List<ILogicOutputChanged> { new LogicOutputChanged(_dimmerState, intValue > 0) , new LogicOutputChanged(_dimmerValue, intValue) };
             }
 
             if (instance.ObjId == _reset.ObjId)
             {
-                return SingleOutputChanged(new LogicOutputChanged(_output, 0));
+                return SingleOutputChanged(new LogicOutputChanged(_dimmerValue, 0));
             }
 
             return new List<ILogicOutputChanged>();
