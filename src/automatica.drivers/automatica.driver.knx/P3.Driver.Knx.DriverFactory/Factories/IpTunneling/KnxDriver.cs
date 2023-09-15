@@ -179,7 +179,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                         try
                         {
 
-                            DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress} - dispatch to {ac}");
+                            DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress}  {e.Value.Value.ToHex(false)} - dispatch to {ac}");
                             ac.Invoke(e);
 
                         }
@@ -345,7 +345,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue)
         {
-            DriverContext.Logger.LogDebug($"Write datagram on GA {address}");
+            DriverContext.Logger.LogDebug($"Write datagram on GA {address} {groupValue.Value.ToHex(false)}");
 
             lock (_lock)
             {

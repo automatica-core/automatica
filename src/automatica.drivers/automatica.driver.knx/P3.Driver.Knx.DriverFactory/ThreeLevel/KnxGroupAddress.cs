@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
-using Elfie.Serialization;
 using Knx.Falcon;
 using Knx.Falcon.ApplicationData.DatapointTypes;
 using Microsoft.Extensions.Logging;
@@ -15,6 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
     {
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
+        public int DptSubType { get; private set; }
 
         public bool ReadableFromBus { get; set; }
 
@@ -43,7 +42,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
 
             var dptValueProp = GetProperty("knx-dpt");
-            DptType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
+            DptType = ImplementationDptType;
+            DptSubType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
@@ -98,7 +98,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
             }
 
-            var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
             var value = dpt.ToValue(datagram.Value);
 
             if (ValueRead(value))
