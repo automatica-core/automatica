@@ -484,6 +484,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
       items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
+     
 
 
       if (this.copyItem && nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === this.copyItem.NodeTemplate.NeedsInterface2InterfacesType) {
@@ -497,6 +498,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       if (nodeInstance.NodeTemplate.This2NodeDataType > 0 && !nodeInstance.isNewObject) {
         items.push({ beginGroup: true, text: this.translate.translate("COMMON.READ"), data: nodeInstance, onItemClick: function () { that.readNode(nodeInstance); } });
       }
+      items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () {  navigator.clipboard.writeText(nodeInstance.Value);  } });
     }
 
     this.contextMenu.instance.option({ items: items, target: $event.event });

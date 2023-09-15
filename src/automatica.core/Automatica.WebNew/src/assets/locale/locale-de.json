@@ -29,6 +29,7 @@
     "SAVE": "Speichern",
     "NEW": "Neu",
     "COPY": "Kopieren",
+    "COPY_VALUE": "Wert kopieren",
     "PASTE": "Einfügen",
     "DELETE": "Löschen",
     "CONFIRM_DELETE": "Bist du sicher diesen Eintrag zu löschen?",
