@@ -75,6 +75,10 @@ namespace Automatica.Core.Visu
             var dimmer = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Dimmer);
             factory.CreateVisuMobileTemplate(dimmer, "VISU.OBJECT.DIMMER.NAME", "VISU.OBJECT.DIMMER.DESCRIPTION",
                 "dimmer", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            var shutter = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Shutter);
+            factory.CreateVisuMobileTemplate(shutter, "VISU.OBJECT.SHUTTER.NAME", "VISU.OBJECT.SHUTTER.DESCRIPTION",
+                "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)
