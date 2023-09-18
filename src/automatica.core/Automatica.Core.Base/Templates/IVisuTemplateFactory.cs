@@ -31,7 +31,9 @@ namespace Automatica.Core.Base.Templates
         [VisuMobileObjectTemplateType("8b17441f-de01-47c4-be49-5f56ba82440d")]
         Dimmer = 12,
         [VisuMobileObjectTemplateType("82e5f7fc-10ec-4291-9b80-0f9cbee0e74d")]
-        MediaPlayer = 13
+        MediaPlayer = 13,
+        [VisuMobileObjectTemplateType("1ccc646b-b384-4753-aba3-a1f8b840fed8")]
+        Shutter = 14
     }
 
     public interface  IVisuTemplateFactory : IPropertyTemplateFactory
