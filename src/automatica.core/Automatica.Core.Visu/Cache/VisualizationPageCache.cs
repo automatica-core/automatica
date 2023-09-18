@@ -73,28 +73,28 @@ namespace Automatica.Core.Visu.Cache
 
         public VisualizationDataFacade AllByCategory(Guid categoryId)
         {
-            return new VisualizationDataFacade()
+            return new VisualizationDataFacade
             {
-                NodeInstances = _nodeInstanceCache.ByCategory(categoryId),
-                RuleInstances = _logicInstanceCache.ByCategory(categoryId)
+                NodeInstances = _nodeInstanceCache.ByCategory(categoryId).Where(a => a.UseInVisu).ToList(),
+                RuleInstances = _logicInstanceCache.ByCategory(categoryId).Where(a => a.UseInVisu).ToList()
             };
         }
 
         public VisualizationDataFacade AllByArea(Guid areaInstance)
         {
-            return new VisualizationDataFacade()
+            return new VisualizationDataFacade
             {
-                NodeInstances = _nodeInstanceCache.ByArea(areaInstance),
-                RuleInstances = _logicInstanceCache.ByArea(areaInstance)
+                NodeInstances = _nodeInstanceCache.ByArea(areaInstance).Where(a => a.UseInVisu).ToList(),
+                RuleInstances = _logicInstanceCache.ByArea(areaInstance).Where(a => a.UseInVisu).ToList(),
             };
         }
 
         public VisualizationDataFacade ByFavorites()
         {
-            return new VisualizationDataFacade()
+            return new VisualizationDataFacade
             {
-                NodeInstances = _nodeInstanceCache.ByFavorites(),
-                RuleInstances = _logicInstanceCache.ByFavorites()
+                NodeInstances = _nodeInstanceCache.ByFavorites().Where(a => a.UseInVisu).ToList(),
+                RuleInstances = _logicInstanceCache.ByFavorites().Where(a => a.UseInVisu).ToList()
             };
         }
 

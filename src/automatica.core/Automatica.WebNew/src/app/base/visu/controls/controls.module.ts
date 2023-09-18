@@ -22,6 +22,7 @@ import { SliderComponent } from "./slider/slider.component";
 import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
+import { ShutterComponent } from "./shutter/shutter.component";
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.co
     MediaPlayerComponent,
     PushComponent,
     GaugeComponent,
-    ThreeRangeGaugeComponent
+    ThreeRangeGaugeComponent,
+    ShutterComponent
   ],
   exports: [
     VisuItemComponent

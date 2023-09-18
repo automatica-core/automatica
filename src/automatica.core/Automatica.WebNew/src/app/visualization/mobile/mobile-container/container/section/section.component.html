@@ -1,11 +1,16 @@
 <div class="section_view">
     <div class="section_header">
-        <div class="section_header_text">{{ title | translateAsync }}</div>
+        <div class="section_header_text">{{ title | translateAsync }}
+            <dx-button control icon="refresh" style="margin-left: 10px" height="35px" width="35px" style="border: none; -webkit-box-shadow: none"
+                (onClick)="onRefresh($event)">
+
+            </dx-button>
+        </div>
     </div>
 
     <div class="sections_rows">
-       <ng-container *ngFor="let item of items">
-           <app-visualization-element [pageGroupType]="pageGroupType" [item]="item"></app-visualization-element>
-       </ng-container>
+        <ng-container *ngFor="let item of items">
+            <app-visualization-element [pageGroupType]="pageGroupType" [item]="item"></app-visualization-element>
+        </ng-container>
     </div>
 </div>

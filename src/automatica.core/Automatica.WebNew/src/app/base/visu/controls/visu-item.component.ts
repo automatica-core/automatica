@@ -20,6 +20,7 @@ import { SliderComponent } from "./slider/slider.component";
 import { PushComponent } from "./buttons/push/push.component";
 import { GaugeComponent } from "./gauge/gauge.component";
 import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.component";
+import { ShutterComponent } from "./shutter/shutter.component";
 
 @Component({
   selector: "visu-component",
@@ -108,9 +109,15 @@ export class VisuItemComponent extends BaseComponent implements OnInit, OnDestro
         this.component = GaugeComponent;
         break;
       }
-      case "three-range-gauge":
+      case "three-range-gauge": {
         this.component = ThreeRangeGaugeComponent;
         break;
+      }
+      case "shutter": {
+        this.component = ShutterComponent;
+        break;
+      }
+      
       default: {
 
         if (this.item.type === VisuObjectSourceType.RuleInstance) {
