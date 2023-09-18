@@ -8,6 +8,11 @@
     <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Rules\Operations</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Blind\**" />
+    <EmbeddedResource Remove="Blind\**" />
+    <None Remove="Blind\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\Operations-de.json" />
     <None Remove="Resources\Operations-en.json" />
@@ -20,9 +25,6 @@
     <EmbeddedResource Include="Resources\Operations-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1381" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Blind\" />
+    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1393" />
   </ItemGroup>
 </Project>

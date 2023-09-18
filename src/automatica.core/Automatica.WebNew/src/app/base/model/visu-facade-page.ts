@@ -7,4 +7,9 @@ import { VisuPage, VisuPageGroupType } from "./visu-page";
 export class VisuFacadePage extends VisuPage {
 
     public visuPageType: VisuPageGroupType;
+
+    public typeInfo() {
+        return "VisuFacadePage";
+    }
+
 }

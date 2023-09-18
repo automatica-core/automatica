@@ -179,6 +179,54 @@
         "NAME": "Value",
         "Description": "Value"
       }
+    },
+    "SHUTTER": {
+      "NAME": "Shutter",
+      "DESCRIPTION": "Shutter",
+      "INPUT": {
+        "MOVE": {
+          "NAME": "Move",
+          "DESCRIPTION": ""
+        },
+        "DIRECTION": {
+          "NAME": "Direction",
+          "DESCRIPTION": ""
+        },
+        "UP": {
+          "NAME": "Up",
+          "DESCRIPTION": ""
+        },
+        "DOWN": {
+          "NAME": "Down",
+          "DESCRIPTION": ""
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": ""
+        },
+        "ABSOLUTE": {
+          "NAME": "Position",
+          "DESCRIPTION": ""
+        }
+      },
+      "OUTPUT": {
+        "MOVE": {
+          "NAME": "Move",
+          "DESCRIPTION": ""
+        },
+        "ABSOLUTE": {
+          "NAME": "Position",
+          "DESCRIPTION": ""
+        },
+        "DIRECTION": {
+          "NAME": "Direction",
+          "DESCRIPTION": ""
+        },
+        "STOP": {
+          "NAME": "Stop",
+          "DESCRIPTION": ""
+        }
+      }
     }
   }
 }
