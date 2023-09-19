@@ -1,6 +1,4 @@
-﻿using Automatica.Core.Base.Common;
-using Automatica.Core.Common.Update;
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.Core;

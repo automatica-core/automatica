@@ -167,10 +167,6 @@ namespace Automatica.Core.Tests
             AssertImplementationType<INodeInstanceStateHandler, LoadedNodeInstancesStore>(moq);
             AssertImplementationType<ILoadedNodeInstancesStore, LoadedNodeInstancesStore>(moq);
 
-            AssertImplementationType<NativeUpdateHandler, NativeUpdateHandler>(moq);
-            AssertImplementationType<IUpdateHandler, NativeUpdateHandler>(moq);
-            AssertImplementationType<IAutoUpdateHandler, NativeUpdateHandler>(moq);
-
             AssertImplementationType<ILoadedStore, LoadedStore>(moq);
             AssertImplementationType<ILogicFactoryStore, LogicFactoryStore>(moq);
             AssertImplementationType<IDriverFactoryStore, DriverFactoryStore>(moq);
