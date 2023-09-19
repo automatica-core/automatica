@@ -99,7 +99,7 @@ namespace Automatica.Core.Watchdog
                     var exitCode = process.ExitCode;
                     _logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
-                    if (PrepareUpdateIfExists())
+                    if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker)
                     {
                         Environment.Exit(2); //restart
                         return;

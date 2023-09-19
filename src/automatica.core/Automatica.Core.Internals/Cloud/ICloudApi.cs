@@ -29,11 +29,12 @@ namespace Automatica.Core.Internals.Cloud
 
 
         Task<ServerVersion> CheckForUpdates();
+        Task<ServerDockerVersion> CheckForDockerUpdates();
         Task<IList<Plugin>> GetLatestPlugins();
 
         Task<bool> UpdateAlreadyDownloaded();
 
-        Task<FileInfo> DownloadUpdate(ServerVersion update);
+        Task<FileInfo> DownloadUpdate(IServerVersion update);
         Task<byte[]> DownloadFile(string url);
         
         Task<bool> InstallPlugin(Plugin plugin, string fileName);

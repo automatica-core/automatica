@@ -190,6 +190,11 @@ namespace Automatica.Core.Internals.Cloud
             return GetRequest<ServerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForUpdates/{ServerInfo.Rid}/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
         }
 
+        public Task<ServerDockerVersion> CheckForDockerUpdates()
+        {
+            return GetRequest<ServerDockerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForDockerUpdates/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
+        }
+
         public Task<IList<Plugin>> GetLatestPlugins()
         {
             return GetRequest<IList<Plugin>>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/plugins/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
@@ -321,9 +326,16 @@ namespace Automatica.Core.Internals.Cloud
             }
         }
 
-        public async Task<FileInfo> DownloadUpdate(ServerVersion update)
+        public async Task<FileInfo> DownloadUpdate(IServerVersion update)
         {
-            var file = await DownloadFile(update.AzureUrl);
+            if (update.Type != nameof(ServerVersion))
+            {
+                throw new ArgumentException("Invalid type...");
+            }
+
+            var updateServerVersion = (ServerVersion)update;
+
+            var file = await DownloadFile(updateServerVersion.AzureUrl);
 
             var tmpFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
             await using(var stream = new FileStream(tmpFile, FileMode.OpenOrCreate))

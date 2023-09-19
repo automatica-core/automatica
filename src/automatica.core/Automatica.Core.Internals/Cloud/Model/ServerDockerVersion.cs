@@ -11,7 +11,8 @@ namespace Automatica.Core.Internals.Cloud.Model
     /// 
     /// </summary>
     [DataContract]
-  public class ServerVersion : IServerVersion {
+  public class ServerDockerVersion : IServerVersion
+    {
     /// <summary>
     /// Gets or Sets ObjId
     /// </summary>
@@ -43,16 +44,16 @@ namespace Automatica.Core.Internals.Cloud.Model
         /// <summary>
         /// Gets or Sets AzureUrl
         /// </summary>
-        [DataMember(Name="azureUrl", EmitDefaultValue=false)]
-    [JsonProperty(PropertyName = "azureUrl")]
-    public string AzureUrl { get; set; }
+        [DataMember(Name="imageName", EmitDefaultValue=false)]
+    [JsonProperty(PropertyName = "imageName")]
+    public string ImageName { get; set; }
 
     /// <summary>
     /// Gets or Sets AzureFileName
     /// </summary>
-    [DataMember(Name="azureFileName", EmitDefaultValue=false)]
-    [JsonProperty(PropertyName = "azureFileName")]
-    public string AzureFileName { get; set; }
+    [DataMember(Name="imageTag", EmitDefaultValue=false)]
+    [JsonProperty(PropertyName = "imageTag")]
+    public string ImageTag { get; set; }
 
     /// <summary>
     /// Gets or Sets ChangeLog
@@ -61,10 +62,12 @@ namespace Automatica.Core.Internals.Cloud.Model
     [JsonProperty(PropertyName = "changeLog")]
     public string ChangeLog { get; set; }
 
-        /// <summary>
-        /// Gets or Sets IsPreRelease 
-        /// </summary>
-        [DataMember(Name= "isPreRelease", EmitDefaultValue=false)]
+    public string Type => nameof(ServerDockerVersion);
+
+    /// <summary>
+    /// Gets or Sets IsPrerelease
+    /// </summary>
+    [DataMember(Name="isPreRelease", EmitDefaultValue=false)]
     [JsonProperty(PropertyName = "isPreRelease")]
     public bool? IsPreRelease { get; set; }
 
@@ -90,21 +93,18 @@ namespace Automatica.Core.Internals.Cloud.Model
     public bool? IsNewObject { get; set; }
 
 
-    public string Type => nameof(ServerVersion);
-
-
-/// <summary>
-        /// Get the string presentation of the object
-        /// </summary>
-        /// <returns>String presentation of the object</returns>
-        public override string ToString()  {
+    /// <summary>
+    /// Get the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()  {
       var sb = new StringBuilder();
       sb.Append("class ServerVersion {\n");
       sb.Append("  ObjId: ").Append(ObjId).Append("\n");
       sb.Append("  Version: ").Append(Version).Append("\n");
       sb.Append("  VersionObj: ").Append(VersionObj).Append("\n");
-      sb.Append("  AzureUrl: ").Append(AzureUrl).Append("\n");
-      sb.Append("  AzureFileName: ").Append(AzureFileName).Append("\n");
+      sb.Append("  ImageName: ").Append(ImageName).Append("\n");
+      sb.Append("  ImageTag: ").Append(ImageTag).Append("\n");
       sb.Append("  ChangeLog: ").Append(ChangeLog).Append("\n");
       sb.Append("  IsPreRelease: ").Append(IsPreRelease).Append("\n");
       sb.Append("  IsPublic: ").Append(IsPublic).Append("\n");

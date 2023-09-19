@@ -19,7 +19,7 @@ namespace Automatica.Core.WebApi.Controllers
     public class UpdateController : BaseController
     {
         private readonly ILogger<UpdateController> _logger;
-        private readonly ICloudApi api;
+        private readonly ICloudApi _api;
         private readonly IAutoUpdateHandler _updateHandler;
 
         public ICoreServer CoreServer { get; }
@@ -27,22 +27,22 @@ namespace Automatica.Core.WebApi.Controllers
         public UpdateController(ILogger<UpdateController> logger, AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler) : base(dbContext)
         {
             _logger = logger;
-            this.api = api;
+            _api = api;
             _updateHandler = updateHandler;
             CoreServer = coreServer;
         }
 
         [HttpGet, Route("checkForUpdate")]
-        public async Task<ServerVersion> CheckForUpdate()
+        public async Task<IServerVersion> CheckForUpdate()
         {
-            var update = await api.CheckForUpdates();
+            var update = await _updateHandler.CheckForUpdates();
             return update;
         }
 
         [HttpGet, Route("alreadyDownloaded")]
         public async Task<ResultDto> AlreadyDownloaded()
         {
-            var downloaded = await api.UpdateAlreadyDownloaded();
+            var downloaded = await _updateHandler.UpdateAlreadyDownloaded();
             
             return new ResultDto
             {
@@ -65,14 +65,8 @@ namespace Automatica.Core.WebApi.Controllers
         {
             try
             {
-                var fileInfo = await api.DownloadUpdate(version);
-                var check = Update.CheckUpdateFile(_logger, fileInfo.FullName, ServerInfo.Rid);
-
-                if(!check)
-                {
-                    api.DeleteUpdate();
-                }
-
+                var check = await _updateHandler.DownloadUpdate(version);
+                
                 return new ResultDto
                 {
                     Result = check

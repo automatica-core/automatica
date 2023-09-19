@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using Automatica.Core.Base;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
@@ -83,9 +84,18 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<INodeInstanceStateHandler>(a => a.GetRequiredService<LoadedNodeInstancesStore>());
                 services.AddSingleton<ILoadedNodeInstancesStore>(a => a.GetRequiredService<LoadedNodeInstancesStore>());
 
-                services.AddSingleton<NativeUpdateHandler, NativeUpdateHandler>();
-                services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
-                services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                if (ServerInfo.InDocker)
+                {
+                    services.AddSingleton<DockerUpdateHandler, DockerUpdateHandler>();
+                    services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<DockerUpdateHandler>());
+                    services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<DockerUpdateHandler>());
+                }
+                else
+                {
+                    services.AddSingleton<NativeUpdateHandler, NativeUpdateHandler>();
+                    services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                    services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                }
 
                 services.AddSingleton<ILoadedStore, LoadedStore>();
                 services.AddSingleton<ILogicFactoryStore, LogicFactoryStore>();

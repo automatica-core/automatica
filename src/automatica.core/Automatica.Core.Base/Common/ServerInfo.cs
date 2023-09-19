@@ -24,6 +24,7 @@ namespace Automatica.Core.Base.Common
 
         public const int ExitCodeUpdateInstall = 2;
         public const int ExitCodePluginUpdateInstall = 3;
+        public const int ExitCodeUpdateInstallDocker = 4;
 
 
         public const string SelfSlaveId = "172bb906-b584-4d5d-85e8-b6d881498534";
