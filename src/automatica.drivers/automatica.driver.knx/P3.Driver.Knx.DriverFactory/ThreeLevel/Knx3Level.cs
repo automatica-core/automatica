@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.License;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
@@ -45,7 +46,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeatureName))
             {
                 DriverContext.Logger.LogError($"Import feature is not licensed....");
-                return new List<NodeInstance>();
+                throw new FeatureNotLicensedException(EtsImportFeatureName);
             }
 
             var file = Path.Combine(Path.GetTempPath(), config.FileName);
