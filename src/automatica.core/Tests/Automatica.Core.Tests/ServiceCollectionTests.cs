@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
@@ -108,6 +109,15 @@ namespace Automatica.Core.Tests
             AssertLifecycle<IUpdateHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IAutoUpdateHandler>(moq, ServiceLifetime.Singleton);
 
+            if (ServerInfo.InDocker)
+            {
+                AssertLifecycle<DockerUpdateHandler>(moq, ServiceLifetime.Singleton);
+            }
+            else
+            {
+                AssertLifecycle<NativeUpdateHandler>(moq, ServiceLifetime.Singleton);
+            }
+
             AssertLifecycle<ILoadedStore>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ILogicFactoryStore>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IDriverFactoryStore>(moq, ServiceLifetime.Singleton);
@@ -190,6 +200,15 @@ namespace Automatica.Core.Tests
             AssertImplementationType<INotifyDriver, NotifyDriverHandler>(moq);
             AssertImplementationType<IDispatcher, Base.IO.Dispatcher>(moq);
             AssertImplementationType<ILogicEngineDispatcher, LogicEngineDispatcher>(moq);
+
+            if (ServerInfo.InDocker)
+            {
+                AssertImplementationType<IAutoUpdateHandler, DockerUpdateHandler>(moq);
+            }
+            else
+            {
+                AssertImplementationType<IAutoUpdateHandler, NativeUpdateHandler>(moq);
+            }
         }
 
 
