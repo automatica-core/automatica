@@ -13,11 +13,19 @@ COPY . /src
 RUN automatica-cli setversion $VERSION -W /src/Automatica.Core.Supervisor/
 RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor/ -r linux-arm
 
-RUN cp /src/Automatica.Core.Supervisor/Automatica.Core.Supervisor/appsettings.json /app/supervisor/appsettings.json
 RUN rm -rf /src
+RUN rm -rf /app/supervisor/appsettings.json
 
 FROM automaticacore/automatica-plugin-standalone:arm-latest AS runtime
 WORKDIR /app/supervisor
+
+ARG DEFAULT_IMAGE
+ARG DEFAULT_TAG
+ARG DOCKER_REGISTRY
+
+ENV image=$DEFAULT_IMAGE
+ENV imageTag=$DEFAULT_TAG
+ENV dockerRegistry=$DOCKER_REGISTRY
 
 COPY --from=build /app/supervisor ./
 ENTRYPOINT ["/app/supervisor/Automatica.Core.Supervisor"]
