@@ -236,21 +236,34 @@ namespace Automatica.Core.Supervisor.Runtime
             try
             {
 
-                var portBindings = new Dictionary<string, IList<PortBinding>>();
-                portBindings.Add("5001/tcp", new List<PortBinding>()
+                var portBindings = new Dictionary<string, IList<PortBinding>>
                 {
-                    new PortBinding()
                     {
-                        HostPort = "5001"
-                    }
-                });
-                portBindings.Add("1883/tcp", new List<PortBinding>()
-                {
-                    new PortBinding()
+                        "5001/tcp", new List<PortBinding>()
+                        {
+                            new()
+                            {
+                                HostPort = "5001"
+                            }
+                        }
+                    },
                     {
-                        HostPort = "1883"
-                    }
-                });
+                        "5002/tcp", new List<PortBinding>()
+                        {
+                            new()
+                            {
+                                HostPort = "5002"
+                            }
+                        }
+                    },
+                    { "1883/tcp", new List<PortBinding>()
+                    {
+                        new()
+                        {
+                            HostPort = "1883"
+                        }
+                    } }
+                };
 
                 var envVariables = new List<string>();
 
