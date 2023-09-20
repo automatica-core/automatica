@@ -105,7 +105,6 @@ namespace Automatica.Core.Tests
             AssertLifecycle<INodeInstanceStateHandler>(moq, ServiceLifetime.Singleton);
 
             AssertLifecycle<ILoadedNodeInstancesStore>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<NativeUpdateHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IUpdateHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IAutoUpdateHandler>(moq, ServiceLifetime.Singleton);
 
