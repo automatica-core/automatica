@@ -57,7 +57,7 @@ RUN ./frp/frpc --version
 FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
 WORKDIR /app/
 
-ENV AUTOMATICA_VERSION $VERSION
+ENV AUTOMATICA_VERSION=$VERSION
 
 COPY --from=build /app/ ./
 VOLUME /app/plugins

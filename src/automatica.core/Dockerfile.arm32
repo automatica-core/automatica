@@ -57,7 +57,7 @@ RUN mv frp_*/* frp/
 FROM automaticacore/automatica-plugin-runtime:arm32v7-7 AS runtime
 WORKDIR /app/
 
-ENV AUTOMATICA_VERSION $VERSION
+ENV AUTOMATICA_VERSION=$VERSION
 
 COPY --from=build /app/ ./
 COPY --from=build /app/frp /app/frp
