@@ -275,6 +275,8 @@ namespace Automatica.Core.Supervisor.Runtime
                     _logger.LogDebug($"Using env variable: {envVar}");
                 }
 
+                envVariables.Add($"AUTOMATICA_SUPERVISOR_HOSTED=1");
+
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
 
                 if (imgName.Contains("."))
