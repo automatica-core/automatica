@@ -31,10 +31,10 @@ namespace Automatica.Core.Internals.Cloud.Model
     /// Gets or Sets VersionObj
     /// </summary>
     [DataMember(Name="versionObj", EmitDefaultValue=false)]
-    [JsonIgnore]
-     public Version VersionObj { get; set; }
-
     [JsonProperty(PropertyName = "versionObj")]
+    public Version VersionObj { get; set; }
+
+    [JsonIgnore]
     public AutomaticaVersion InternVersionObj
     {
         get => AutomaticaVersion.FromVersion(VersionObj);

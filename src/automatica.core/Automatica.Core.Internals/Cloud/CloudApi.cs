@@ -192,7 +192,7 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<ServerDockerVersion> CheckForDockerUpdates()
         {
-            return GetRequest<ServerDockerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForDockerUpdates/{ServerInfo.GetServerVersion()}/{GetCloudEnvironmentType()}");
+            return GetRequest<ServerDockerVersion>($"/{WebApiPrefix}/{WebApiVersion}/coreServerData/checkForDockerUpdates/{GetCloudEnvironmentType()}/{ServerInfo.GetServerVersion()}");
         }
 
         public Task<IList<Plugin>> GetLatestPlugins()

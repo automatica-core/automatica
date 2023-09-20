@@ -33,7 +33,7 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
     appService.setAppTitle("SYSTEM.NAME");
   }
 
-  async ngOnInit() {
+  protected async load(): Promise<any> {
     this.appService.isLoading = true;
     try {
       const downloaded = await this.systemService.alreadyDownloaded();
@@ -44,6 +44,10 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
       super.handleError(error);
     }
     this.appService.isLoading = false;
+  }
+
+  async ngOnInit() {
+    await this.load();
 
     super.registerEvent(this.updateHubService.UpdateDownloadProgressChanged, (a) => {
       this.downloadMaxValue = UpdateHubService.formatBytes(a[0][1]);
