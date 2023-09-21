@@ -17,6 +17,9 @@ export class SystemService extends BaseService {
     alreadyDownloaded(): Promise<any> {
         return super.getJson("update/alreadyDownloaded");
     }
+    getLicense(): Promise<string> {
+        return super.getJson("update/license");
+    }
 
     downloadUpdate(update: any): Promise<any> {
         return super.postJson("update/download", update);

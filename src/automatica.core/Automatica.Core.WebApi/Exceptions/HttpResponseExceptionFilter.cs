@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Base.Exceptions;
+using Automatica.Core.Base.License;
 using Automatica.Core.Internals.Cloud.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -31,7 +32,16 @@ namespace Automatica.Core.WebApi.Exceptions
             }
             else if (context.Exception is NoApiKeyException)
             {
-                var noApiKeyException = new WebApiException("CLOUD_CONNECTION_INVALID", ExceptionSeverity.Warning); 
+                var noApiKeyException = new WebApiException("CLOUD_CONNECTION_INVALID", ExceptionSeverity.Warning);
+                context.Result = new ObjectResult(noApiKeyException.ToJson())
+                {
+                    StatusCode = 500,
+                };
+                context.ExceptionHandled = true;
+            }
+            else if (context.Exception is FeatureNotLicensedException)
+            {
+                var noApiKeyException = new WebApiException("FEATURE_NOT_LICENSED", ExceptionSeverity.Warning);
                 context.Result = new ObjectResult(noApiKeyException.ToJson())
                 {
                     StatusCode = 500,

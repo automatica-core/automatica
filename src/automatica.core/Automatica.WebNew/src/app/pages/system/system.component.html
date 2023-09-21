@@ -1,5 +1,5 @@
-<div class="content-block">
-    <div class="dx-card wide-card panel-height" style="padding: 20px">
+<div class="content-block panel-height">
+    <div class="dx-card wide-card" style="padding: 20px">
         <ng-container *ngIf="update">
             <p translate>SYSTEM.UPDATE_AVAILABLE</p>
             <span>
@@ -12,20 +12,39 @@
                         <div class="progress-info" *ngIf="fileMax">
                             {{ 'COMMON.DOWNLOADING' | translateAsync }} {{downloadValue}}/{{downloadMaxValue}}
                         </div>
-                        <dx-progress-bar *ngIf="fileMax" [min]="0" [max]="fileMax" [statusFormat]="format" [value]="fileCurrent"></dx-progress-bar>
+                        <dx-progress-bar *ngIf="fileMax" [min]="0" [max]="fileMax" [statusFormat]="format"
+                            [value]="fileCurrent"></dx-progress-bar>
                     </div>
                     <dx-button *ngIf="!alreadyDownloaded && !fileMax" text="{{ 'COMMON.DOWNLOAD' | translateAsync }}"
                         (onClick)="downloadClick($event)">
                     </dx-button>
                 </div>
 
-                <dx-button *ngIf="alreadyDownloaded" text="{{ 'COMMON.INSTALL' | translateAsync }}" (onClick)="installClick($event)">
+                <dx-button *ngIf="alreadyDownloaded" text="{{ 'COMMON.INSTALL' | translateAsync }}"
+                    (onClick)="installClick($event)">
                 </dx-button>
             </span>
         </ng-container>
 
         <ng-container *ngIf="!update">
             <p translate>SYSTEM.NO_UPDATE_AVAILABLE</p>
+
+            <ng-container *ngIf="updateError">
+                <span style="color: red">
+                    {{updateError}}
+                </span>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <div class="dx-card wide-card" style="padding: 20px">
+
+        <p translate>SYSTEM.LICENSE</p>
+        <ng-container *ngIf="license">
+            <dx-text-area [height]="500" [readOnly]="true" [value]="license"></dx-text-area>
+        </ng-container>
+        <ng-container *ngIf="!license">
+           <p translate>SYSTEM.NO_LICENSE_FOUND</p>
         </ng-container>
     </div>
 </div>

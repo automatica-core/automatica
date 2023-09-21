@@ -2,6 +2,7 @@
 using Automatica.Core.Runtime.Abstraction;
 using System;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Exceptions;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Cloud.Model;
 using Microsoft.Extensions.Configuration;
@@ -35,8 +36,8 @@ namespace Automatica.Core.Runtime.Core.Update
         {
             if (!_isSupervisorHosted)
             {
-                throw new ArgumentException(
-                    "Docker image cannot be automatically updated, if not hosted by our supervisor!");
+                throw new WebApiException(
+                    "DOCKER_NOT_RUN_BY_SUPERVISOR", ExceptionSeverity.Error);
             }
             return await _cloudApi.CheckForDockerUpdates();
         }

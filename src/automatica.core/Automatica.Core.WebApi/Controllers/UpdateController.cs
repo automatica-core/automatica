@@ -5,6 +5,7 @@ using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.License;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -19,14 +20,16 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly ILogger<UpdateController> _logger;
         private readonly ICloudApi _api;
         private readonly IAutoUpdateHandler _updateHandler;
+        private readonly ILicenseContext _licenseContext;
 
         public ICoreServer CoreServer { get; }
 
-        public UpdateController(ILogger<UpdateController> logger, AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler) : base(dbContext)
+        public UpdateController(ILogger<UpdateController> logger, AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler, ILicenseContext licenseContext) : base(dbContext)
         {
             _logger = logger;
             _api = api;
             _updateHandler = updateHandler;
+            _licenseContext = licenseContext;
             CoreServer = coreServer;
         }
 
@@ -35,6 +38,13 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var update = await _updateHandler.CheckForUpdates();
             return update;
+        }
+
+        [HttpGet, Route("license")]
+        public async Task<string> GetLicense()
+        {
+            var license = await _licenseContext.GetLicense();
+            return license;
         }
 
         [HttpGet, Route("alreadyDownloaded")]

@@ -49,6 +49,18 @@ export class BaseComponent {
         return Promise.resolve();
     }
 
+    protected parseErrorString(error) {
+        if (error instanceof WebApiException) {
+            const errorText = this.translate.translate("ERROR." + error.ErrorText);
+            return errorText;
+        } else if (error instanceof HttpErrorResponse) {
+            return error.message;
+        }
+        else {
+            return error;
+        }
+    }
+
     protected handleError(error) {
         if (error instanceof WebApiException) {
             const errorText = this.translate.translate("ERROR." + error.ErrorText);
@@ -65,7 +77,7 @@ export class BaseComponent {
                     break;
             }
 
-        } else if(error instanceof HttpErrorResponse) {
+        } else if (error instanceof HttpErrorResponse) {
             this.notifyService.notifyError(error.message);
         }
         else {

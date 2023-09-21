@@ -601,8 +601,10 @@
   },
   "SYSTEM": {
     "NAME": "System",
+    "LICENSE": "License",
     "UPDATE_AVAILABLE": "Update available",
-    "NO_UPDATE_AVAILABLE": "No update available"
+    "NO_UPDATE_AVAILABLE": "No update available",
+    "NO_LICENSE_FOUND": "No license found"
   },
   "LICENSE": {
     "NAME": "License"
