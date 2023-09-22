@@ -56,6 +56,22 @@
                                 </div>
                             </dx-popover>
                         </ng-container>
+                        
+                        <ng-container *ngIf="data.data.State == NodeInstanceState.OutOfSatelliteLicenses">
+                            <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
+                                <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.OUT_OF_SATELLITE_LICENSES.NAME</span><span> <fa-icon
+                                    icon="question" style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
+                                </span>
+                            </span>
+                            <dx-popover target="#unknown_error_id-{{data.data.Id}}" showEvent="click"
+                                hideEvent="mouseleave" position="top" [shading]="true" shadingColor="rgba(0, 0, 0, 0.5)"
+                                [width]="300">
+                                <div *dxTemplate="let data = model; of: 'content'">
+                                    <span translate>COMMON.NODEINSTANCE.STATE.OUT_OF_SATELLITE_LICENSES.DESCRIPTION</span>
+                                </div>
+                            </dx-popover>
+                        </ng-container>
+
                         <ng-container *ngIf="data.data.State == NodeInstanceState.Unloaded">
                             <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
                                 <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNLOADED.NAME</span><span> <fa-icon

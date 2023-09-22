@@ -4,9 +4,11 @@ using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Internals.License;
 using Microsoft.Extensions.Logging;
+using Standard.Licensing.Validation;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -45,6 +47,11 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var license = await _licenseContext.GetLicense();
             return license;
+        }
+        [HttpGet, Route("licenseErrors")]
+        public IList<IValidationFailure> GetLicenseErrors()
+        {
+            return  _licenseContext.ValidationErrors;
         }
 
         [HttpGet, Route("alreadyDownloaded")]

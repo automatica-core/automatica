@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Internals.Cloud;
@@ -34,6 +35,9 @@ namespace Automatica.Core.Internals.License
         public bool AllowRemoteControl { get; private set; }
         public int MaxRemoteTunnels { get; private set; }
         public long MaxRecordingDataPoints { get; private set; }
+        public int MaxSatellites { get; private set; }
+
+        private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public bool DriverLicenseCountExceeded()
         {
@@ -66,6 +70,8 @@ namespace Automatica.Core.Internals.License
 
         public async Task<bool> Init()
         {
+            await _semaphore.WaitAsync();
+
             _dataPointsInUse = 0;
             string pubKey = "";
             using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Automatica.Core.Internals.pub.txt") ?? throw new InvalidOperationException()))
@@ -75,18 +81,17 @@ namespace Automatica.Core.Internals.License
 
             try
             {
-                if (!File.Exists(LicensePath))
-                {
-                    var license = await _cloudApi.GetLicense();
+                
+                var licenseString = await _cloudApi.GetLicense();
 
-                    if (!String.IsNullOrEmpty(license))
-                    {
-                        await using var file = new StreamWriter(LicensePath);
-                        await file.WriteAsync(license);
-                        await file.FlushAsync();
-                        file.Close();
-                    }
+                if (!String.IsNullOrEmpty(licenseString))
+                {
+                    await using var file = new StreamWriter(LicensePath);
+                    await file.WriteAsync(licenseString);
+                    await file.FlushAsync();
+                    file.Close();
                 }
+                
 
                 if (File.Exists(LicensePath))
                 {
@@ -101,8 +106,8 @@ namespace Automatica.Core.Internals.License
                             return false;
                         }
 
-                        var validationFailures = license.Validate().ExpirationDate()
-                            .When(lic => lic.Type == LicenseType.Trial).And().Signature(pubKey).AssertValidLicense();
+                        var validationFailures = license.Validate().ExpirationDate().And()
+                            .Signature(pubKey).AssertValidLicense();
                         ValidationErrors = validationFailures.ToList();
                         _license = license;
                     }
@@ -117,8 +122,6 @@ namespace Automatica.Core.Internals.License
                         {
                             _logger.LogError(validationError.Message);
                         }
-
-                        File.Delete(LicensePath);
                     }
                 }
             }
@@ -133,7 +136,7 @@ namespace Automatica.Core.Internals.License
                 _logger.LogError(e, "License validation failed");
             }
 
-            if(IsLicensed && _license is { ProductFeatures: not null })
+            if (IsLicensed && _license is { ProductFeatures: not null })
             {
                 MaxDataPoints = Convert.ToInt32(_license.ProductFeatures.Get("MaxDatapoints"));
                 MaxUsers = Convert.ToInt32(_license.ProductFeatures.Get("MaxUsers"));
@@ -151,6 +154,10 @@ namespace Automatica.Core.Internals.License
                 {
                     MaxRecordingDataPoints = Convert.ToInt64(_license.ProductFeatures.Get("MaxRecordingDataPoints"));
                 }
+                if (_license.ProductFeatures.Contains("MaxSatellites"))
+                {
+                    MaxSatellites = Convert.ToInt32(_license.ProductFeatures.Get("MaxSatellites"));
+                }
 
                 if (!AllowRemoteControl)
                 {
@@ -159,6 +166,7 @@ namespace Automatica.Core.Internals.License
             }
             else
             {
+                MaxSatellites = 1;
                 MaxDataPoints = 100;
                 MaxUsers = 5;
                 MaxRemoteTunnels = 0;
@@ -173,8 +181,11 @@ namespace Automatica.Core.Internals.License
             _logger.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
             _logger.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
             _logger.LogInformation($"{nameof(MaxRecordingDataPoints)}: {MaxRecordingDataPoints}");
+            _logger.LogInformation($"{nameof(MaxSatellites)}: {MaxSatellites}");
             _logger.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
             _logger.LogInformation($"Features: {JsonConvert.SerializeObject(_license?.ProductFeatures)}");
+            
+            _semaphore.Release();
 
             return IsLicensed;
 
@@ -210,9 +221,14 @@ namespace Automatica.Core.Internals.License
 
         public async Task<string> GetLicense()
         {
-            using var reader = new StreamReader(LicensePath);
-            var license = await reader.ReadToEndAsync();
-            return license;
+            if (File.Exists(LicensePath))
+            {
+                using var reader = new StreamReader(LicensePath);
+                var license = await reader.ReadToEndAsync();
+                return license;
+            }
+
+            return null;
         }
 
         public async Task SaveLicense(string license)

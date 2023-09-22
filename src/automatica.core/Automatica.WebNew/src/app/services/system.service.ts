@@ -20,6 +20,9 @@ export class SystemService extends BaseService {
     getLicense(): Promise<string> {
         return super.getJson("update/license");
     }
+    getLicenseErrors(): Promise<any> {
+        return super.getJson("update/licenseErrors");
+    }
 
     downloadUpdate(update: any): Promise<any> {
         return super.postJson("update/download", update);

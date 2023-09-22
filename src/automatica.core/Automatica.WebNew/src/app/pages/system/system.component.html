@@ -44,7 +44,11 @@
             <dx-text-area [height]="500" [readOnly]="true" [value]="license"></dx-text-area>
         </ng-container>
         <ng-container *ngIf="!license">
-           <p translate>SYSTEM.NO_LICENSE_FOUND</p>
+            <p translate>SYSTEM.NO_LICENSE_FOUND</p>
+        </ng-container>
+
+        <ng-container>
+            <dx-text-area [height]="500" [readOnly]="true" [value]="licenseErrors"></dx-text-area>
         </ng-container>
     </div>
 </div>

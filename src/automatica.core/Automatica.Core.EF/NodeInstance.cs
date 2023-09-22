@@ -19,7 +19,8 @@ namespace Automatica.Core.EF.Models
         UnknownError = 6,
         Unloaded = 7,
         Unknown = 8,
-        Remote = 9
+        Remote = 9,
+        OutOfSatelliteLicenses = 10
     }
     public partial class NodeInstance : TypedObject
     {

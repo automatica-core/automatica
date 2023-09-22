@@ -101,6 +101,10 @@
         "OUTOFLICENSE": {
           "NAME": "License exceeded",
           "DESCRIPTION": "You have reached the max amount of licensed datapoints."
+        },
+        "OUT_OF_SATELLITE_LICENSES": {
+          "NAME": "Satellite license exceeded",
+          "DESCRIPTION": "You have reached the max amount of statellites."
         }
       }
     },

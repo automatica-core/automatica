@@ -25,6 +25,7 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
   errorText: any;
   updateError: any;
   license: String;
+  licenseErrors: any;
 
   constructor(private systemService: SystemService,
     private updateHubService: UpdateHubService,
@@ -52,6 +53,13 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
     try {
       this.license = await this.systemService.getLicense();
       //this.license = license.replaceAll("\n", "<br/>");
+    }
+    catch (error) {
+      this.handleError(error);
+    }
+
+    try {
+      this.licenseErrors = JSON.stringify(await this.systemService.getLicenseErrors());
     }
     catch (error) {
       this.handleError(error);

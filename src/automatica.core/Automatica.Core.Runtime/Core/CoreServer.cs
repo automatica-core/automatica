@@ -106,6 +106,8 @@ namespace Automatica.Core.Runtime.Core
         private readonly ITrendingContext _trendingContext
             ;
 
+        private int _satelliteInstanceCount;
+
         public RunState RunState
         {
             get => _runState;
@@ -239,6 +241,8 @@ namespace Automatica.Core.Runtime.Core
                 //try again 2nd time - seems buggy, but easy fix for now
                 await _licenseContext.Init();
             }
+
+            _satelliteInstanceCount = 0;
 
             RunState = RunState.Configure;
             ServerInfo.IsConnectedToCloud = await _cloudApi.Ping();
@@ -790,6 +794,14 @@ namespace Automatica.Core.Runtime.Core
 
                 _driverNodesStore.Add(new RemoteNodeInstance(nodeInstance.ObjId, nodeInstance, _remoteHandler));
 
+                if (_satelliteInstanceCount >= _licenseContext.MaxSatellites)
+                {
+                    nodeInstance.State = NodeInstanceState.OutOfSatelliteLicenses;
+                    _logger.LogError($"Can not add more satellites - max count of {_licenseContext.MaxSatellites} reached");
+                    return null;
+                }
+
+                _satelliteInstanceCount++;
                 AddRemoteDriverRecursive(nodeInstance.ObjId, nodeInstance);
                 return null;
             }

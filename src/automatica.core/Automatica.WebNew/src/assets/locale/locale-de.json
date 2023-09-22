@@ -100,6 +100,10 @@
         "OUTOFLICENSE": {
           "NAME": "Lizenz aufgebraucht",
           "DESCRIPTION": "Du hast die Maximale Anzahl an Knoten in deiner Lizenz aufgebraucht."
+        },
+        "OUT_OF_SATELLITE_LICENSES": {
+          "NAME": "Satelliten Lizenz aufgebraucht",
+          "DESCRIPTION": "Du hast die Maximale Anzahl an Satelliten in deiner Lizenz aufgebraucht."
         }
       }
     },
