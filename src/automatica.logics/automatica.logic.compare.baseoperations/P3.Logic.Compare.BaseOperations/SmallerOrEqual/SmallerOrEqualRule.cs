@@ -27,12 +27,26 @@ namespace P3.Logic.Compare.BaseOperations.SmallerOrEqual
             {
                 if (instance.This2RuleInterfaceTemplate == SmallerOrEqualLogicFactory.RuleInput1)
                 {
-                    _i1 = Convert.ToDouble(value);
+                    if (value is DateTime vdt)
+                    {
+                        _i1 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else
+                    {
+                        _i1 = Convert.ToDouble(value);
+                    }
                 }
 
                 if (instance.This2RuleInterfaceTemplate == SmallerOrEqualLogicFactory.RuleInput2)
                 {
-                    _i2 = Convert.ToDouble(value);
+                    if (value is DateTime vdt)
+                    {
+                        _i2 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else
+                    {
+                        _i2 = Convert.ToDouble(value);
+                    }
                 }
             }
             if (_i1 == null || _i2 == null)

@@ -12,7 +12,6 @@ namespace P3.Logic.Compare.BaseOperations.Smaller
         private double? _i1 = null;
         private double? _i2 = null;
 
-
         private readonly RuleInterfaceInstance _output;
 
         public SmallerRule(ILogicContext context) : base(context)
@@ -27,12 +26,26 @@ namespace P3.Logic.Compare.BaseOperations.Smaller
             {
                 if (instance.This2RuleInterfaceTemplate == SmallerLogicFactory.RuleInput1)
                 {
-                    _i1 = Convert.ToDouble(value);
+                    if (value is DateTime vdt)
+                    {
+                        _i1 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else
+                    {
+                        _i1 = Convert.ToDouble(value);
+                    }
                 }
 
                 if (instance.This2RuleInterfaceTemplate == SmallerLogicFactory.RuleInput2)
                 {
-                    _i2 = Convert.ToDouble(value);
+                    if (value is DateTime vdt)
+                    {
+                        _i2 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else
+                    {
+                        _i2 = Convert.ToDouble(value);
+                    }
                 }
             }
             if (_i1 == null || _i2 == null)
