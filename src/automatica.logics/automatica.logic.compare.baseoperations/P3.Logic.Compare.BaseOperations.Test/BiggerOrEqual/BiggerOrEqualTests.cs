@@ -38,5 +38,31 @@ namespace P3.Logic.Compare.BaseOperations.Tests.BiggerOrEqual
 
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new DateTime(2023, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerOrEqualLogicFactory.RuleOutput);
         }
+
+
+        [Fact]
+        public void TestBiggerOrEqualRuleDateOnly()
+        {
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31)).Count == 0);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31)).Count == 0);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput2), Dispatchable, new DateOnly(2022, 03, 31))[0].ValueBoolean);
+
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput2), Dispatchable, new DateOnly(2024, 03, 31))[0].ValueBoolean);
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31))[0].ValueBoolean);
+
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerOrEqualLogicFactory.RuleOutput);
+        }
+        [Fact]
+        public void TestBiggerOrEqualRuleTimeOnly()
+        {
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 3, 31)).Count == 0);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31)).Count == 0);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput2), Dispatchable, new TimeOnly(22, 03, 31))[0].ValueBoolean);
+
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput2), Dispatchable, new TimeOnly(23, 10, 31))[0].ValueBoolean);
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31))[0].ValueBoolean);
+
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerOrEqualLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerOrEqualLogicFactory.RuleOutput);
+        }
     }
 }

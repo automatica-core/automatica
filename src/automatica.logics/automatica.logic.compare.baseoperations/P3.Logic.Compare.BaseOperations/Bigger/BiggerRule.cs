@@ -31,6 +31,14 @@ namespace P3.Logic.Compare.BaseOperations.Bigger
                     {
                         _i1 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
                     }
+                    else if (value is DateOnly vd)
+                    {
+                        _i1 = new DateTimeOffset(vd.Year, vd.Month, vd.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
+                    }
+                    else if (value is TimeOnly vt)
+                    {
+                        _i1 = vt.Ticks;
+                    }
                     else
                     {
                         _i1 = Convert.ToDouble(value);
@@ -42,6 +50,14 @@ namespace P3.Logic.Compare.BaseOperations.Bigger
                     if (value is DateTime vdt)
                     {
                         _i2 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else if (value is DateOnly vd)
+                    {
+                        _i2 = new DateTimeOffset(vd.Year, vd.Month, vd.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
+                    }
+                    else if (value is TimeOnly vt)
+                    {
+                        _i2 = vt.Ticks;
                     }
                     else
                     {

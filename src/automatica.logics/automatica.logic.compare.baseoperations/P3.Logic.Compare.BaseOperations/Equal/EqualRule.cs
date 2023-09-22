@@ -27,12 +27,42 @@ namespace P3.Logic.Compare.BaseOperations.Equal
             {
                 if (instance.This2RuleInterfaceTemplate == EqualLogicFactory.RuleInput1)
                 {
-                    _i1 = Convert.ToDouble(value);
+                    if (value is DateTime vdt)
+                    {
+                        _i1 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else if (value is DateOnly vd)
+                    {
+                        _i1 = new DateTimeOffset(vd.Year, vd.Month, vd.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
+                    }
+                    else if (value is TimeOnly vt)
+                    {
+                        _i1 = vt.Ticks;
+                    }
+                    else
+                    {
+                        _i1 = Convert.ToDouble(value);
+                    }
                 }
 
                 if (instance.This2RuleInterfaceTemplate == EqualLogicFactory.RuleInput2)
                 {
-                    _i2 = Convert.ToDouble(value);
+                    if (value is DateTime vdt)
+                    {
+                        _i2 = new DateTimeOffset(vdt).ToUnixTimeSeconds();
+                    }
+                    else if (value is DateOnly vd)
+                    {
+                        _i2 = new DateTimeOffset(vd.Year, vd.Month, vd.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
+                    }
+                    else if (value is TimeOnly vt)
+                    {
+                        _i2 = vt.Ticks;
+                    }
+                    else
+                    {
+                        _i2 = Convert.ToDouble(value);
+                    }
                 }
             }
             if (_i1 == null || _i2 == null)
