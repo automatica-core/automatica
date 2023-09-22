@@ -11,7 +11,7 @@ namespace P3.Logic.Compare.BaseOperations.SmallerOrEqual
         public static readonly Guid RuleOutput = new Guid("cf71ef57-7df0-47e6-b9d7-f7b670fadd6a");
 
         public override string LogicName => "Compare.SmallerOrEqual";
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        public override Version LogicVersion => new Version(1, 0, 0, 1);
         public override Guid LogicGuid => new Guid("f44f80cd-4261-476b-99c2-fe7878f44724");
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -19,7 +19,7 @@ namespace P3.Logic.Compare.BaseOperations.SmallerOrEqual
                 "compare.smaller_or_equal", "COMPARE.NAME", 100, 100);
 
             factory.CreateLogicInterfaceTemplate(RuleInput1, "I1", "COMPARE.SMALLER_OR_EQUAL.INPUT1.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
-            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "COMPARE.SMALLER_OR_EQUAL.INPUT2.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
+            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "COMPARE.SMALLER_OR_EQUAL.INPUT2.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 2);
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "COMPARE.SMALLER_OR_EQUAL.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
         }

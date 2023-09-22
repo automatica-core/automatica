@@ -11,7 +11,7 @@ namespace P3.Logic.Compare.BaseOperations.Equal
         public static readonly Guid RuleOutput = new Guid("ece069c5-7363-48a3-ab31-1f3202bfa2ad");
 
         public override string LogicName => "Compare.Equal";
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        public override Version LogicVersion => new Version(1, 0, 0, 1);
         public override Guid LogicGuid => new Guid("c79e65da-41ed-4bfe-8a7e-ac5fec54539a");
         public override void InitTemplates(ILogicTemplateFactory factory)
         {
@@ -19,7 +19,7 @@ namespace P3.Logic.Compare.BaseOperations.Equal
                 "compare.equal", "COMPARE.NAME", 100, 100);
 
             factory.CreateLogicInterfaceTemplate(RuleInput1, "I1", "COMPARE.EQUAL.INPUT1.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
-            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "COMPARE.EQUAL.INPUT2.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
+            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "COMPARE.EQUAL.INPUT2.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 2);
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "COMPARE.EQUAL.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
         }
