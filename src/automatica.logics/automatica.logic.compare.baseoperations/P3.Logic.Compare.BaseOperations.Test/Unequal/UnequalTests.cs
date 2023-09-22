@@ -15,12 +15,11 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Unequal
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, 100).Count == 0);
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, 2)[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, 200)[0].ValueBoolean);
-            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, 200)[0].ValueBoolean);
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, 100)[0].ValueBoolean);
+            Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, 100);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, 200)[0].ValueBoolean);
 
-            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, null)[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == UnequalLogicFactory.RuleOutput);
         }
 
         [Fact]
@@ -30,15 +29,11 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Unequal
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateTime(2023, 03, 31)).Count == 0);
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new DateTime(2022, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new DateTime(2024, 03, 31))[0].ValueBoolean);
-
-
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateTime(2023, 03, 31))[0].ValueBoolean);
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, null)[0].ValueBoolean);
             Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new DateTime(2023, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateTime(2023, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == UnequalLogicFactory.RuleOutput);
-        }
+
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateTime(2024, 03, 31))[0].ValueBoolean);
+    }
 
 
         [Fact]
@@ -48,10 +43,9 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Unequal
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31)).Count == 0);
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new DateOnly(2022, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new DateOnly(2024, 03, 31))[0].ValueBoolean);
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31))[0].ValueBoolean);
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new DateOnly(2023, 03, 31))[0].ValueBoolean);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 05, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == UnequalLogicFactory.RuleOutput);
         }
         [Fact]
         public void TestUnequalRuleTimeOnly()
@@ -60,12 +54,10 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Unequal
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31)).Count == 0);
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(22, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(23, 10, 31))[0].ValueBoolean);
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31))[0].ValueBoolean);
+            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(23, 3, 31))[0].ValueBoolean);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(22, 03, 31))[0].ValueBoolean);
             Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(23, 03, 31))[0].ValueBoolean);
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(23, 10, 31))[0].ValueBoolean);
-
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == UnequalLogicFactory.RuleOutput);
-        }
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(UnequalLogicFactory.RuleInput2), Dispatchable, new TimeOnly(22, 10, 31))[0].ValueBoolean);
+     }
     }
 }

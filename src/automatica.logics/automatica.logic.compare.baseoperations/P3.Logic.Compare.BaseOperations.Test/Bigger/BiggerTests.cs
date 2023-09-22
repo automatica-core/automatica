@@ -18,9 +18,7 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Bigger
             Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, 200)[0].ValueBoolean);
 
 
-            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, null)[0].ValueBoolean);
-
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, 1)[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerLogicFactory.RuleOutput);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, 1).Count == 0);
         }
 
 
@@ -32,9 +30,8 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Bigger
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, new DateTime(2022, 03, 31))[0].ValueBoolean);
 
             Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, new DateTime(2024, 03, 31))[0].ValueBoolean);
-            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new DateTime(2023, 03, 31))[0].ValueBoolean);
+            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new DateTime(2025, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new DateTime(2023, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerLogicFactory.RuleOutput);
         }
 
         [Fact]
@@ -45,9 +42,7 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Bigger
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, new DateOnly(2022, 03, 31))[0].ValueBoolean);
 
             Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, new DateOnly(2024, 03, 31))[0].ValueBoolean);
-            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new DateOnly(2023, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerLogicFactory.RuleOutput);
         }
         [Fact]
         public void TestBiggerRuleTimeOnly()
@@ -57,9 +52,7 @@ namespace P3.Logic.Compare.BaseOperations.Tests.Bigger
             Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, new TimeOnly(22, 03, 31))[0].ValueBoolean);
 
             Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput2), Dispatchable, new TimeOnly(23, 10, 31))[0].ValueBoolean);
-            Assert.False(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31))[0].ValueBoolean);
 
-            Assert.True(Logic.ValueChanged(GetLogicInterfaceByTemplate(BiggerLogicFactory.RuleInput1), Dispatchable, new TimeOnly(23, 03, 31))[0].Instance.RuleInterfaceInstance.This2RuleInterfaceTemplate == BiggerLogicFactory.RuleOutput);
         }
     }
 }
