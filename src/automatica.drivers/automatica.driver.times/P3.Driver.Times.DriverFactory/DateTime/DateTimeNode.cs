@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Newtonsoft.Json.Linq;
 using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Times.DriverFactory.DateTime
 {
-    public class DateTimeNode : DriverNotWriteableBase
+    public class DateTimeNode<T> : DriverNotWriteableBase
     {
-        private readonly Func<object> _getValue;
+        private readonly Func<T> _getValue;
         private readonly Timer _timer = new Timer(1000);
+        private T _prevValue = default(T);
 
-        public DateTimeNode(IDriverContext driverContext, Func<object> getValue) : base(driverContext)
+        public DateTimeNode(IDriverContext driverContext, Func<T> getValue) : base(driverContext)
         {
             _getValue = getValue;
         }
@@ -39,7 +42,13 @@ namespace P3.Driver.Times.DriverFactory.DateTime
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            DispatchRead(_getValue());
+            var value = _getValue();
+
+            if (!EqualityComparer<T>.Default.Equals(value, _prevValue))
+            {
+                DispatchRead(_getValue());
+                _prevValue = value;
+            }
         }
 
         public override Task<bool> Stop(CancellationToken token = default)
