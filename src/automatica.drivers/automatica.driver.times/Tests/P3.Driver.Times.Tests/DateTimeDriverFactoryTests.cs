@@ -48,7 +48,7 @@ namespace P3.Driver.Times.Tests
         public async Task TestDateNow()
         {
             await Dispatcher.ClearValues();
-            var dtNow = DateTime.Now;
+            var dtNow = DateOnly.FromDateTime(DateTime.Now);
             var driver = await CreateDriver(DateTimeDriverFactory.Date);
 
             Assert.Equal(1, driver.Children.Count);
@@ -57,16 +57,13 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var busDt =  values.First().Value.Value as DateTime?;
+            var busDt =  values.First().Value.Value as DateOnly?;
 
             Assert.NotNull(busDt);
-            Assert.IsType<DateTime>(busDt);
+            Assert.IsType<DateOnly>(busDt);
 
-            Assert.Equal(dtNow.Date, busDt.Value.Date);
-            Assert.Equal(0, busDt.Value.Hour);
-            Assert.Equal(0, busDt.Value.Minute);
-            Assert.Equal(0, busDt.Value.Second);
-
+            Assert.Equal(dtNow, busDt.Value);
+            
             await driver.Stop();
             await Dispatcher.ClearValues();
         }
@@ -74,7 +71,7 @@ namespace P3.Driver.Times.Tests
         public async Task TestTimeNow()
         {
             await Dispatcher.ClearValues();
-            var dtNow = DateTime.Now;
+            var dtNow = TimeOnly.FromDateTime(DateTime.Now);
             var driver = await CreateDriver(DateTimeDriverFactory.Time);
 
             Assert.Equal(1, driver.Children.Count);
@@ -83,14 +80,14 @@ namespace P3.Driver.Times.Tests
 
             Assert.Equal(1, values.Count);
 
-            var busDt = values.First().Value.Value as TimeSpan?;
+            var busDt = values.First().Value.Value as TimeOnly?;
 
             Assert.NotNull(busDt);
-            Assert.IsType<TimeSpan>(busDt);
+            Assert.IsType<TimeOnly>(busDt);
            
-            Assert.Equal(dtNow.TimeOfDay.Hours, busDt.Value.Hours);
-            Assert.Equal(dtNow.TimeOfDay.Minutes, busDt.Value.Minutes);
-            Assert.InRange(busDt.Value.Seconds, dtNow.TimeOfDay.Seconds - 5, dtNow.TimeOfDay.Seconds + 5);
+            Assert.Equal(dtNow.Hour, busDt.Value.Hour);
+            Assert.Equal(dtNow.Minute, busDt.Value.Minute);
+            Assert.InRange(busDt.Value.Second, dtNow.Second - 5, dtNow.Second + 5);
 
 
             await driver.Stop();
