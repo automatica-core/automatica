@@ -4,8 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Driver;
-using Automatica.Core.EF.Models;
-using Newtonsoft.Json.Linq;
 using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Times.DriverFactory.DateTime
@@ -27,7 +25,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
             return Task.FromResult(true);
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
+        protected override Task<bool> StartedInternal(CancellationToken token = new CancellationToken())
         {
             if (!DriverContext.IsTest)
             {
@@ -36,8 +34,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
             }
 
             DispatchRead(_getValue());
-
-            return base.Start(token);
+            return Task.FromResult(true);
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
