@@ -51,6 +51,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
                 throw new ArgumentException("Invalid type");
             }
             await driver.Start();
+            await driver.Started();
 
             return (T2)driver;
         }
