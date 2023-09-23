@@ -35,14 +35,14 @@ namespace P3.Driver.Times.DriverFactory.Sun
             DispatchRead(_getValueFunc(solarTimes, System.DateTime.Now));
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-            if(value is System.DateTime)
+            if (value is System.DateTime)
             {
                 var solarTimes = new SolarTimes((System.DateTime)value, Latitude, Longitude);
                 DispatchRead(_getValueFunc(solarTimes, (System.DateTime)value));
             }
-            return base.WriteValue(source, value);
+            return base.Write(value, writeContext, token);
         }
 
         protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
