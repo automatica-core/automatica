@@ -50,11 +50,25 @@ namespace Automatica.Core.Driver
         /// <returns>True if successful</returns>
         Task<bool> Start(CancellationToken token = default);
 
+
+        /// <summary>
+        /// Notification when all drivers/logics are started. This is the point when the dispatcher is fully initialized
+        /// </summary>
+        /// <returns>True if successful</returns>
+        Task<bool> Started(CancellationToken token = default);
+
         /// <summary>
         /// Will be called on shutdown
         /// </summary>
         /// <returns>True if successful</returns>
         Task<bool> Stop(CancellationToken token = default);
+
+
+        /// <summary>
+        /// Notification when all drivers/logics are stopped
+        /// </summary>
+        /// <returns>True if successful</returns>
+        Task<bool> Stopped(CancellationToken token = default);
 
         /// <summary>
         /// Will be called to scan the driver for <see cref="NodeInstance"/>

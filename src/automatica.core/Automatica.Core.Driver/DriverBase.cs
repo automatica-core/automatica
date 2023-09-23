@@ -152,6 +152,7 @@ namespace Automatica.Core.Driver
             return Task.FromResult(true);
         }
 
+
         public  virtual Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
@@ -275,6 +276,20 @@ namespace Automatica.Core.Driver
             return Task.FromResult(true);
         }
 
+        protected virtual Task<bool> StartedInternal(CancellationToken token = default)
+        {
+            return Task.FromResult(true);
+        }
+        public async Task<bool> Started(CancellationToken token = default)
+        {
+            await StartedInternal(token).ConfigureAwait(false);
+            foreach(var node in Children)
+            {
+                await node.Started(token);
+            }
+            return true;
+        }
+
         private async Task WriteTask()
         {
             try
@@ -331,6 +346,22 @@ namespace Automatica.Core.Driver
                 DriverContext.NodeInstance.State = NodeInstanceState.Unloaded;
             }
             return true;
+        }
+
+        public async Task<bool> Stopped(CancellationToken token = default)
+        {
+            await StoppedInternal(token).ConfigureAwait(false);
+            foreach (var node in Children)
+            {
+                await node.Stopped(token);
+            }
+
+            return true;
+        }
+
+        protected virtual Task<bool> StoppedInternal(CancellationToken token = default)
+        {
+            return Task.FromResult(true);
         }
 
         protected PropertyInstance GetProperty(NodeInstance instance, string propertyKey)

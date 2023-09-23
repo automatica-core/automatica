@@ -283,6 +283,11 @@ namespace Automatica.Core.Runtime.Core
             await _trendingContext.Start();
             RunState = RunState.Started;
 
+            foreach (var driver in _driverStore.All())
+            {
+                await driver.Started();
+            }
+
            
         }
 
@@ -483,7 +488,12 @@ namespace Automatica.Core.Runtime.Core
             }
 
             await StopLogicEngine();
-         
+
+            foreach (var driver in _driverStore.All())
+            {
+                await driver.Stopped();
+            }
+
 
             RunState = RunState.Stopped;
             _logger.LogInformation("CoreServer stopping...");
@@ -776,7 +786,7 @@ namespace Automatica.Core.Runtime.Core
             _telegramMonitor?.Clear();
 
             await Stop();
-
+            
             InitInternals();
 
             await ConfigureAndStart();
@@ -858,6 +868,7 @@ namespace Automatica.Core.Runtime.Core
                 return;
             }
             await StartDriver(driver);
+            await driver.Started();
         }
 
         private async Task StartDriver(IDriver driver)

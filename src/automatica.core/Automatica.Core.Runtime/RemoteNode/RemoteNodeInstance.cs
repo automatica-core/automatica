@@ -45,7 +45,17 @@ namespace Automatica.Core.Runtime.RemoteNode
             return Task.FromResult(true);
         }
 
+        public Task<bool> Started(CancellationToken token = default)
+        {
+            return Task.FromResult(true);
+        }
+
         public Task<bool> Stop(CancellationToken token = default)
+        {
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> Stopped(CancellationToken token = default)
         {
             return Task.FromResult(true);
         }
