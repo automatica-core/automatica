@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Driver;
+﻿using Automatica.Core.Base.Tunneling;
+using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Loxone.Miniserver.Driver;
@@ -19,6 +20,9 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
         private LoxoneDriverConnectedNode _connectionNode;
 
         public LoxApp3Data LoxData => _miniserver.LoxData;
+        private bool _tunnelingEnabled;
+        private string _ip;
+        private int _port;
 
         public IDictionary<string, List<LoxoneDriverNode>> Nodes { get; } = new ConcurrentDictionary<string, List<LoxoneDriverNode>>();
 
@@ -27,13 +31,53 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         }
 
-        public override Task<bool> Init(CancellationToken token = default)
+        public override async Task<bool> Init(CancellationToken token = default)
         {
-            _miniserver = new LoxoneMiniserverConnection(GetPropertyValueString("ip-address"), GetPropertyValueInt("port"), GetPropertyValueString("user"), GetPropertyValueString("password"), DriverContext.Logger);
+            _ip = GetPropertyValueString("ip-address");
+            _port = GetPropertyValueInt("port");
+            _miniserver = new LoxoneMiniserverConnection(_ip, _port, GetPropertyValueString("user"), GetPropertyValueString("password"), DriverContext.Logger);
             _miniserver.OnConnectionEstablished += _miniserver_OnConnectionEstablished;
             _miniserver.OnConnectionClosed += _miniserver_OnConnectionClosed;
             _miniserver.OnMessage += _miniserver_OnMessage;
-            return base.Init(token);
+
+
+
+            var useTunnel = GetProperty("loxone-use-tunnel").ValueBool;
+
+            if (useTunnel.HasValue && useTunnel.Value)
+            {
+                _tunnelingEnabled = true;
+                DriverContext.Logger.LogInformation($"Using remote connect...");
+                await InitRemoteConnect(token).ConfigureAwait(false);
+            }
+
+            return await base.Init(token);
+        }
+
+        private async Task InitRemoteConnect(CancellationToken token = default)
+        {
+            try
+            {
+                var remoteFeatureEnabled =
+                    DriverContext.LicenseContract.IsFeatureLicensed("loxone-remote-connection");
+                if (remoteFeatureEnabled && _tunnelingEnabled && await DriverContext.TunnelingProvider.IsAvailableAsync(default))
+                {
+                    string tunnel = await DriverContext.TunnelingProvider.CreateWebTunnelAsync(TunnelingProtocol.Http,
+                        DriverContext.NodeInstance.Name, "loxone", _ip, _port, null, null, token);
+
+                    DriverContext.Logger.LogInformation($"Tunnel created {tunnel}");
+                }
+                else
+                {
+                    DriverContext.Logger.LogInformation($"Tunnel is disabled or not licensed...");
+                }
+            }
+
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError($"Could not start tunnel {e}");
+            }
+
         }
 
         public async Task<bool> WriteValue(string uuid, object value)
