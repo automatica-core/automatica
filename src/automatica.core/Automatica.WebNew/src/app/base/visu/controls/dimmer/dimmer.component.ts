@@ -72,6 +72,10 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
     this.outputValue = this.getInterfaceByKey("outputValue");
     this.outputState = this.getInterfaceByKey("outputState");
 
+    
+    this.state = this.dataHub.getCurrentValue(this.stateInput.ObjId)?.value;
+    this.stateValue = this.dataHub.getCurrentValue(this.valueInput.ObjId)?.value;
+
 
   }
 
@@ -81,14 +85,14 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
       this.state = value;
     }
     else if (this.valueInput && this.valueInput.ObjId == interfaceId) {
-      this.displayValue = `${value}%`;
+      this.displayValue = `${Math.round(value)}%`;
       this.stateValue = value;
     }
     else if (this.outputState && this.outputState.ObjId === interfaceId) {
       this.state = value;
     }
     else if (this.outputValue && this.outputValue.ObjId == interfaceId) {
-      this.displayValue = `${value}%`;
+      this.displayValue = `${Math.round(value)}%`;
       this.stateValue = value;
     }
   }
