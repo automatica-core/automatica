@@ -132,7 +132,7 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
 
     if (interfaceId == this.playPauseState.ObjId) {
       this.isPlaying = value!!;
-    } else if (interfaceId == this.volumeState.ObjId || interfaceId == this.volumeOutput.ObjId) {
+    } else if (interfaceId == this.volumeState.ObjId) {
       this.volume = toNumber(value);
     } else if (interfaceId == this.radioStationState.ObjId) {
       this.radioStation = value;
