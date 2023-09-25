@@ -212,10 +212,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             var dpt3StepCode = new Guid("c3ba5a94-83ba-44d6-b853-ef0c945318c0");
 
             factory.CreateNodeTemplate(dpt3Control, "KNX.DPT3.CONTROL.NAME", "KNX.DPT3.CONTROL.DESCRIPTION",
-                "knx-dpt2-control", dpt3InterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                "knx-dpt3-control", dpt3InterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
                 NodeDataType.Boolean, 1, false);
             factory.CreateNodeTemplate(dpt3StepCode, "KNX.DPT3.STEPCODE.NAME", "KNX.DPT3.STEPCODE.DESCRIPTION",
-                "knx-dpt2-step-code", dpt3InterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                "knx-dpt3-step-code", dpt3InterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
                 NodeDataType.Integer, 1, false);
         }
 
