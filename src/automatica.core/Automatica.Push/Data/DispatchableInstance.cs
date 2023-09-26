@@ -18,6 +18,7 @@ namespace Automatica.Push.Data
         public string Name { get; }
         public Guid Id { get; }
         public bool IsRemanent { get; }
+        public bool WriteOnlyIfChanged => false;
 
         public DispatchableSource Source { get; }
 

@@ -429,6 +429,9 @@
       "REMANENT": {
         "NAME": "Remanent"
       },
+      "ONLY_WRITE_IF_CHANGED": {
+        "NAME": "Nur Schreiben wenn geändert"
+      },
       "VALUE": {
         "NAME": "Value"
       },

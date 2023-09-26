@@ -30,6 +30,7 @@ import { AreaInstance } from "./areas";
 import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-is-fav-visu-property-instance";
 import { VirtualSatellitePropertyInstance } from "./virtual-props/virtual-satellite-property-instance";
 import { VirtualDisabledPropertyInstance } from "./virtual-props/virtual-disabled-property-instance";
+import { VirtualOnlyWriteIfChangedPropertyInstance } from "./virtual-props/virtual-only-write-if-changed-property-instance";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -309,6 +310,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     @JsonProperty()
     TrendingToCloud: boolean;
 
+    @JsonProperty()
+    WriteOnlyIfChanged: boolean;
+
     private _ValidationOk: boolean = true;
     public get ValidationOk(): boolean {
         return this._ValidationOk;
@@ -365,6 +369,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
             if (!this.NodeTemplate.IsWriteableFixed) {
                 this.Properties.push(new VirtualWriteablePropertyInstance(this));
                 this.Properties.push(new VirtualRemanentPropertyInstance(this));
+                this.Properties.push(new VirtualOnlyWriteIfChangedPropertyInstance(this));
             }
 
             this.Properties.push(new VirtualUseInVisuPropertyInstance(this));

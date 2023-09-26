@@ -3,6 +3,7 @@ using System;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
-    partial class AutomaticaContextModelSnapshot : ModelSnapshot
+    [Migration("20230926185512_AddOnlyIfChangedPropertyToNodeInstance")]
+    partial class AddOnlyIfChangedPropertyToNodeInstance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");

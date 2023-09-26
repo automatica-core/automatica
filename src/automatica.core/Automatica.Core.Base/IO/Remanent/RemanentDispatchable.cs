@@ -9,6 +9,7 @@ namespace Automatica.Core.Base.IO.Remanent
         public string Name => $"remanent source {Id}";
         public Guid Id { get; }
         public bool IsRemanent => false;
+        public bool WriteOnlyIfChanged => false;
 
         public RemanentDispatchable(Guid id)
         {

@@ -1,8 +1,5 @@
-import { PropertyInstance } from "../property-instance"
-import { PropertyTemplate, PropertyTemplateType } from "../property-template"
-import { PropertyType } from "../property-type"
+import { PropertyTemplateType } from "../property-template"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
-import { INameModel } from "../INameModel";
 import { ICategoryInstanceModel } from "../ICategoryInstanceModel";
 
 export class VirtualCategoryPropertyInstance extends VirtualPropertyInstance {

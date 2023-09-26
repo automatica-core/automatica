@@ -238,7 +238,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   }
   public set areaInstances(v: AreaInstance[]) {
     this._areaInstances = v;
-    this.flattenAraInit();
+    this.flattenAreaInit();
+    console.log(this.areaInstancesFlat);
   }
 
 
@@ -332,7 +333,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     
   }
 
-  flattenAraInit() {
+  flattenAreaInit() {
     for (const x of this.areaInstances) {
       this.areaInstancesFlat.push(x);
       this.areaInstanceMap.set(x.ObjId, x);
