@@ -34,7 +34,7 @@ namespace Automatica.Core.Logging
 
             if (isFrameworkLog)
             {
-                _level = LogLevel.Error;
+                _level = LogLevel.Information;
             }
             else if (level.HasValue)
             {

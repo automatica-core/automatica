@@ -182,12 +182,23 @@ export class LogicShapes {
                     port.setUserData(portInstance);
 
                     port.on("connect", async function (emitterPort, connection) {
-                        await LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance, ruleEngineService);
+                        try {
+                            await LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance, ruleEngineService);
+                        }
+                        catch (error) {
+                            errorHandler.notifyError(error);
+                        }
 
                     });
 
                     port.on("disconnect", async function (emitterPort, connection) {
-                        await LinkService.handleOnDisconnection(linkService, connection, isInput);
+                        try {
+                            await LinkService.handleOnDisconnection(linkService, connection, isInput);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
 
                     data.push(label);
@@ -245,12 +256,23 @@ export class LogicShapes {
                     input.setId(element.Inputs[0].PortId);
 
                     input.on("connect", async function (emitterPort, connection) {
-                        await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
+                        try {
+                            await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
+                        }
+                        catch (error) {
+                            errorHandler.notifyError(error);
+                        }
 
                     });
 
                     input.on("disconnect", async function (emitterPort, connection) {
-                        await LinkService.handleOnDisconnection(linkService, connection, true);
+                        try {
+                            await LinkService.handleOnDisconnection(linkService, connection, true);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
                 }
                 if (element.Outputs.length > 0) {
@@ -284,11 +306,23 @@ export class LogicShapes {
 
 
                     output.on("connect", async function (emitterPort, connection) {
-                        await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
+                        try {
+                            await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
 
                     output.on("disconnect", async function (emitterPort, connection) {
-                        await LinkService.handleOnDisconnection(linkService, connection, false);
+                        try {
+                            await LinkService.handleOnDisconnection(linkService, connection, false);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
                 }
 

@@ -1,1 +1,32 @@
-{"Automatica":{"manifest-version":{"Minor":1,"Major":0,"Build":0,"Revision":0},"plugin-version":{"Minor":0,"Major":2,"Build":0,"Revision":0},"PluginGuid":"2291be3e-9a42-4975-8362-66f1b34df461","Name":"P3.Driver.IkeaTradfriDriverFactory","ComponentName":"IkeaTradfri","Type":"driver","Output":"P3.Driver.IkeaTradfriDriverFactory.dll","Resources":[],"Dependencies":["P3.Driver.IkeaTradfri.dll","BouncyCastle.Crypto.dll","CBOR.dll","CoAP.dll","COSE.dll","MessagePack.dll","Numbers.dll","Zeroconf.dll","System.Reactive.dll","ApiLibs.dll","Tomidix.NetStandard.Tradfri.dll","RestSharp.dll"],"ProjectPage":"https://github.com/automatica-core/automatica.driver.ikeatradfri","MinCoreServerVersion":{"Minor":5,"Major":7,"Build":0,"Revision":1355},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+  "Automatica": {
+    "manifest-version": {
+      "Minor": 1,
+      "Major": 0,
+      "Build": 0,
+      "Revision": 0
+    },
+    "plugin-version": {
+      "Minor": 0,
+      "Major": 2,
+      "Build": 0,
+      "Revision": 0
+    },
+    "PluginGuid": "2291be3e-9a42-4975-8362-66f1b34df461",
+    "Name": "P3.Driver.IkeaTradfriDriverFactory",
+    "ComponentName": "IkeaTradfri",
+    "Type": "driver",
+    "Output": "P3.Driver.IkeaTradfriDriverFactory.dll",
+    "Resources": [],
+    "Dependencies": [ "P3.Driver.IkeaTradfri.dll", "BouncyCastle.Crypto.dll", "CBOR.dll", "CoAP.dll", "COSE.dll", "MessagePack.dll", "Numbers.dll", "Zeroconf.dll", "System.Reactive.dll", "ApiLibs.dll", "Tomidix.NetStandard.Tradfri.dll", "RestSharp.dll" ],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.ikeatradfri",
+    "MinCoreServerVersion": {
+      "Minor": 5,
+      "Major": 7,
+      "Build": 0,
+      "Revision": 1355
+    },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}

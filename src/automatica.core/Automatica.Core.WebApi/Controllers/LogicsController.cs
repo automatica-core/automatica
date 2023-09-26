@@ -304,7 +304,6 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
-          
             link.This2RuleInterfaceInstanceOutputNavigation = null;
             link.This2RuleInterfaceInstanceInputNavigation = null;
             link.This2NodeInstance2RulePageInputNavigation = null;

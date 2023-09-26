@@ -161,9 +161,6 @@ namespace Automatica.Core
             });
             
 
-            builder.Logging.AddFilter("Microsoft.AspNetCore.SignalR", LogLevel.Trace);
-            builder.Logging.AddFilter("Microsoft.AspNetCore.Http.Connections", LogLevel.Trace);
-
             var startup = new Startup(builder.Configuration);
             startup.ConfigureServices(builder.Services);
 
