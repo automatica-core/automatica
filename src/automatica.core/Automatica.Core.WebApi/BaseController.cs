@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi
 {
-    public abstract class BaseController : Controller
+    public abstract class BaseController : ControllerBase
     {
         public AutomaticaContext DbContext { get; }
         protected BaseController(AutomaticaContext dbContext)

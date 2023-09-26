@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Automatica.Core.Logging
 {
@@ -107,7 +108,7 @@ namespace Automatica.Core.Logging
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
             {
-                logBuild.WriteTo.Console();
+                logBuild.WriteTo.Console(theme: ConsoleTheme.None);
             }
 
             switch (_level)

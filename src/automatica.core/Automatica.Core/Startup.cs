@@ -30,7 +30,9 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using MQTTnet.AspNetCore.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -109,11 +111,7 @@ namespace Automatica.Core
                         }
                     };
                 });
-            
-            services.Configure<MvcOptions>(options =>
-            {
-                options.EnableEndpointRouting = false;
-            });
+
             services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
                 .AddAuthorization(options =>
                 {
