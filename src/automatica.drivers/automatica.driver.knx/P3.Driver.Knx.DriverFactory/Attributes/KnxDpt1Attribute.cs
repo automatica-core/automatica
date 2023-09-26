@@ -18,13 +18,8 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             var newValue = Convert.ToBoolean(value);
 
-            if (newValue != _value)
-            {
-                _value = newValue;
-                return newValue;
-            }
-
-            return null;
+            _value = newValue;
+            return newValue;
         }
 
         protected override bool ValueRead(object value)
