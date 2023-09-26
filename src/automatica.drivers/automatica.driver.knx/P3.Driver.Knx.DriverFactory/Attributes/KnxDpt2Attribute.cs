@@ -57,7 +57,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         }
         public override int ImplementationDptType => (int)P3.Knx.Core.Driver.DptType.Dpt2;
 
-        protected override object ConvertToDptValue(object value)
+        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
         {
             var controlAttribute = _children.SingleOrDefault(a => a.Index == 1);
             var valueAttribute = _children.SingleOrDefault(a => a.Index == 0);

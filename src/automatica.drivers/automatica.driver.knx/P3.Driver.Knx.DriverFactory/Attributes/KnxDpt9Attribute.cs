@@ -24,7 +24,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             return ret;
         }
-        protected override object ConvertToDptValue(object value)
+        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
         {
             var newValue = Convert.ToDouble(value); 
             _value = newValue;
