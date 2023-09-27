@@ -28,6 +28,16 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             var newValue = Convert.ToDouble(value); 
             _value = newValue;
+            if (writeContext.WriteOnlyIfChanged)
+            {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (newValue != _value)
+                {
+                    return _value;
+                }
+
+                return null;
+            }
             return value;
         }
     }

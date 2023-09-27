@@ -23,8 +23,8 @@
     "MinCoreServerVersion": {
       "Minor": 5,
       "Major": 7,
-      "Build": 0,
-      "Revision": 1397
+      "Build": 1,
+      "Revision": 1434
     },
     "MandatoryLicenseFeatures": [],
     "OptionalLicenseFeatures": [ "knx-ets-import", "knx-interface-remote-connection" ]

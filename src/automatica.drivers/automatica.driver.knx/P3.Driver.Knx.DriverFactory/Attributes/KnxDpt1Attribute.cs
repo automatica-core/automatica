@@ -19,6 +19,16 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             var newValue = Convert.ToBoolean(value);
 
             _value = newValue;
+            if (writeContext.WriteOnlyIfChanged)
+            {
+                if (_value != newValue)
+                {
+                    return newValue;
+                }
+
+                return null;
+            }
+
             return newValue;
         }
 

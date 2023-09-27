@@ -16,14 +16,18 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         protected override object ConvertToDptValue(object value, IWriteContext writeContext)
         {
             var newValue = Convert.ToInt32(value);
-
-            if (newValue != _value)
+            _value = newValue;
+            if (writeContext.WriteOnlyIfChanged)
             {
-                _value = newValue;
-                return _value;
+                if (newValue != _value)
+                {
+                    return _value;
+                }
+
+                return null;
             }
 
-            return null;
+            return _value;
         }
     }
 }
