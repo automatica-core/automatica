@@ -9,7 +9,6 @@ namespace Automatica.Core.UnitTests.Base.Common
         public string Name => "Test";
         public Guid Id { get; }
         public bool IsRemanent => false;
-        public bool WriteOnlyIfChanged => false;
         public static DispatchableMock Instance { get; } = new DispatchableMock();
 
         public DispatchableSource Source => DispatchableSource.NodeInstance;

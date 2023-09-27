@@ -62,7 +62,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             try
             {
-                var dptValue = ConvertToDptValue(value, writeContext);
+                var dptValue = ConvertToDptValue(value);
 
                 if (dptValue == null) //value did not change
                 {
@@ -130,7 +130,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
         }
 
-        protected abstract object ConvertToDptValue(object value, IWriteContext writeContext);
+        protected abstract object ConvertToDptValue(object value);
 
         private void TelegramReceivedCallback(object data)
         {

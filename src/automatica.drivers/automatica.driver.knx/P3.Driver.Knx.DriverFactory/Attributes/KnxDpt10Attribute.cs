@@ -34,7 +34,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             return false;
         }
 
-        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
+        protected override object ConvertToDptValue(object value)
         {
             lock (_lock)
             {

@@ -14,12 +14,12 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
-        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
+        protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToBoolean(value);
 
             _value = newValue;
-            if (writeContext.WriteOnlyIfChanged)
+            if (WriteOnlyIfChanged)
             {
                 if (_value != newValue)
                 {

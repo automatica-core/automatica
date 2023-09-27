@@ -24,11 +24,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             return ret;
         }
-        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
+        protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToDouble(value); 
             _value = newValue;
-            if (writeContext.WriteOnlyIfChanged)
+            if (WriteOnlyIfChanged)
             {
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (newValue != _value)

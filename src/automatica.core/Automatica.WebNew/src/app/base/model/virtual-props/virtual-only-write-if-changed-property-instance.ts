@@ -23,7 +23,7 @@ export class VirtualOnlyWriteIfChangedPropertyInstance extends VirtualPropertyIn
         return this.nodeInstance.WriteOnlyIfChanged;
     }
     set Value(value: any) {
-        this.nodeInstance.IsRemanent = value;
+        this.nodeInstance.WriteOnlyIfChanged = value;
     }
 
 }

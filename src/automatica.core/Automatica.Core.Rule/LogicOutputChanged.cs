@@ -20,7 +20,6 @@ namespace Automatica.Core.Logic
         public string Name => _instance.This2RuleInstanceNavigation.Name;
         public Guid Id => _instance.ObjId;
         public bool IsRemanent => false;
-        public bool WriteOnlyIfChanged => false; //TODO: Add to logic instance
         public RuleInterfaceInstance RuleInterfaceInstance => _instance;
 
         public DispatchableSource Source => DispatchableSource.RuleInstance;

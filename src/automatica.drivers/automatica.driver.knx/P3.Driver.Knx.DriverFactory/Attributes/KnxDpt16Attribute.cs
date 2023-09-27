@@ -13,7 +13,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
-        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
+        protected override object ConvertToDptValue(object value)
         {
             if (value is string dpt16Value)
             {

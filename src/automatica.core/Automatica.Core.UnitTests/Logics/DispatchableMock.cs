@@ -26,6 +26,5 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
         public Guid Id { get; }
         public bool IsRemanent => false;
-        public bool WriteOnlyIfChanged => false;
     }
 }

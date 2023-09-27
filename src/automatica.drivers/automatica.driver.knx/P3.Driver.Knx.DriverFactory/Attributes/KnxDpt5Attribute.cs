@@ -13,11 +13,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         public KnxDpt5Attribute(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
         }
-        protected override object ConvertToDptValue(object value, IWriteContext writeContext)
+        protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToInt32(value);
             _value = newValue;
-            if (writeContext.WriteOnlyIfChanged)
+            if (WriteOnlyIfChanged)
             {
                 if (newValue != _value)
                 {
