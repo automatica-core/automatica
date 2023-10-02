@@ -1,4 +1,5 @@
 ﻿using System;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
@@ -21,14 +22,14 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
             switch (action)
             {
                 case 0x07:
-                    DispatchRead(1); // closed
+                    DispatchRead(WindowState.Closed); // closed
                     break;
                 case 0x04:
                 case 0x06:
-                    DispatchRead(0); //open
+                    DispatchRead(WindowState.Open); //open
                     break;
                 case 0x05:
-                    DispatchRead(2); //tilt
+                    DispatchRead(WindowState.Tilted); //tilt
                     break;
             }
         }
