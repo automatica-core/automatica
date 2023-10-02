@@ -201,7 +201,7 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
-        public async Task TestRockerSwitch_R2_BI() 
+        public async Task TestRockerSwitch_R2_BI()
         {
             await Dispatcher.ClearValues();
             var driver = await CreateDriverForF6("FEF7D96E",
@@ -217,6 +217,47 @@ namespace P3.Driver.EnOcean.Data.Tests
             Assert.Equal(1, values.Count);
 
             Assert.Equal(2, values.First().Value.Value);
+        }
+
+
+
+        [Fact]
+        public async Task TestWindowHandle_00_0()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForF6("00211D5A",
+                EnOceanRorgF6Data.DataFieldF6_10_00_1_WIN_Guid);
+
+            var telegram = CreatePacket("55 00 07 07 01 7A F6 D0 00 21 1D 5A 22 03 FF FF FF FF 41 00 DF".Replace(" ", ""));
+            driver.TelegramReceived(telegram);
+
+            Assert.Equal("00211D5A", telegram.SenderIdString);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+
+            Assert.Equal(2, values.First().Value.Value);
+        }
+
+
+        [Fact]
+        public async Task TestWindowHandle_00_1()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForF6("00211D5A",
+                EnOceanRorgF6Data.DataFieldF6_10_00_1_WIN_Guid);
+
+            var telegram = CreatePacket("55 00 07 07 01 7A F6 E0 00 21 1D 5A 22 02 FF FF FF FF 43 00 AB".Replace(" ", ""));
+            driver.TelegramReceived(telegram);
+
+            Assert.Equal("00211D5A", telegram.SenderIdString);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+
+            Assert.Equal(0, values.First().Value.Value);
         }
     }
 }

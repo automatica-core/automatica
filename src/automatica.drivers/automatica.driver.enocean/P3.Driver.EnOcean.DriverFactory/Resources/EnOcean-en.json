@@ -19,6 +19,9 @@
       "NAME": "Serialnumber",
       "DESCRIPTION": ""
     },
+    "SIMULATED": {
+      "NAME": "Simuldated devices"
+    },
     "RORG_F6": {
       "FUNCTION_01": {
         "TYPE_01_1": {
