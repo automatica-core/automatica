@@ -362,7 +362,7 @@
 </dx-popup>
 
 <dx-popup #popupLearnMode [width]="'90%'" [height]="'90%'" showCloseButton="false" [showTitle]="true"
-    [title]="'COMMON.LEARN_MODE.NAME' | translateAsync" [visible]="learnModeVisible"
+    [title]="'LEARN_MODE.NAME' | translateAsync" [visible]="learnModeVisible"
     (onHiding)="onLearnModeClosing($event)">
     <div *dxTemplate="let data of 'content'">
         <dx-button text="{{ 'COMMON.ADD' | translateAsync }}" (click)="saveLearnNodes($event)"></dx-button>
