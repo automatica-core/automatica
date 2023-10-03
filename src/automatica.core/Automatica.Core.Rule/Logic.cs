@@ -157,25 +157,27 @@ namespace Automatica.Core.Logic
                     Context.Logger.LogDebug($"Input value did not change, ignore value change...");
                     return new List<ILogicOutputChanged>();
                 }
-
-                var values = InputValueChanged(instance, source, value);
-
                 try
                 {
+
+                    var values = InputValueChanged(instance, source, value);
+
                     foreach (var ruleOutValue in values)
                     {
                         Context.Logger.LogDebug($"RuleOutput changed {ruleOutValue.Instance.Name} value {ruleOutValue.Value}");
 
                         _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
                     }
+
+                    return values;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     //Ignore for the current test
+                    Context.Logger.LogError(ex, $"Error dispatching value...{ex}");
                 }
 
-
-                return values;
+                return new List<ILogicOutputChanged>();
             }
         }
 
