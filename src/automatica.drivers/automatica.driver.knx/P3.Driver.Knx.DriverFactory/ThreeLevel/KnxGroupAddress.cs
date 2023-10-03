@@ -73,7 +73,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 if (DptType != ImplementationDptType)
                 {
                     DriverContext.Logger.LogWarning(
-                        $"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+                        $"{GroupAddress} DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
                 }
 
                 var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
