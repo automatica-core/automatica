@@ -106,6 +106,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
             interfaceType.Name = name;
             interfaceType.Description = description;
+            interfaceType.Key = Key;
             interfaceType.This2RuleTemplate = ruleTemplate;
             interfaceType.This2RuleInterfaceDirection = (long)direction;
             interfaceType.MaxLinks = maxLinks;

@@ -51,7 +51,8 @@ namespace Automatica.Core.Logic
                              a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
                              (long)Base.Templates.LogicInterfaceDirection.Param))
                 {
-                    ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
+                    if(!String.IsNullOrEmpty(param.This2RuleInterfaceTemplateNavigation.Key))
+                        ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
                 }
             }
 
@@ -66,7 +67,8 @@ namespace Automatica.Core.Logic
                 (long)Base.Templates.LogicInterfaceDirection.Param))
             {
                 ParameterValueChanged(param, new LogicInterfaceInstanceDispatchable(param), param.Value);
-                ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
+                if (!String.IsNullOrEmpty(param.This2RuleInterfaceTemplateNavigation.Key))
+                    ParameterValues[param.This2RuleInterfaceTemplateNavigation.Key] = param.Value;
             }
 
             return true;
