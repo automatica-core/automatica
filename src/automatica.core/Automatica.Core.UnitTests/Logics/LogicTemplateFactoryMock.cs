@@ -140,6 +140,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
             interfaceType.Name = name;
             interfaceType.Description = description;
+            interfaceType.Key = key;
             interfaceType.This2RuleTemplate = ruleTemplate;
             interfaceType.This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Param;
             interfaceType.MaxLinks = 0;
