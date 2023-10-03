@@ -66,25 +66,32 @@ namespace Automatica.Core.Base.IO.Remanent
 
         public async Task<bool> SaveValueAsync(Guid nodeInstanceId, DispatchValue value, CancellationToken token = default)
         {
-            var dirName = Path.Combine(ServerInfo.GetBasePath(), "remanent");
-            if (!Directory.Exists(dirName))
+            try
             {
-                Directory.CreateDirectory(dirName);
-            }
+                var dirName = Path.Combine(ServerInfo.GetBasePath(), "remanent");
+                if (!Directory.Exists(dirName))
+                {
+                    Directory.CreateDirectory(dirName);
+                }
 
-            var valuePath = Path.Combine(dirName, $"{nodeInstanceId}");
-            if (File.Exists(valuePath))
+                var valuePath = Path.Combine(dirName, $"{nodeInstanceId}");
+                if (File.Exists(valuePath))
+                {
+                    File.Delete(valuePath);
+                }
+
+                var jsonValue = JsonConvert.SerializeObject(value);
+
+                await using var fileWriter = new StreamWriter(valuePath);
+                await fileWriter.WriteLineAsync(jsonValue);
+
+                fileWriter.Close();
+                return true;
+            }
+            catch (Exception)
             {
-                File.Delete(valuePath);
+                return false;
             }
-
-            var jsonValue = JsonConvert.SerializeObject(value);
-
-            await using var fileWriter = new StreamWriter(valuePath);
-            await fileWriter.WriteLineAsync(jsonValue);
-
-            fileWriter.Close();
-            return true;
         }
     }
 }
