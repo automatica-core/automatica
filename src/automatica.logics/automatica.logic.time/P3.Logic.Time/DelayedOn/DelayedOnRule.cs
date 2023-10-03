@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Time.DelayedOn
 {
@@ -38,6 +39,13 @@ namespace P3.Logic.Time.DelayedOn
         {
             _delay = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == DelayedOnLogicFactory.RuleParamDelay).ValueInteger.Value;
+
+            if (_delay <= 0)
+            {
+                Context.Logger.LogError($"Interval cannot be lower or equal to 0");
+                return Task.FromResult(false);
+            }
+
             return base.Start(ruleInstance, token);
         }
 
