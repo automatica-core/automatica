@@ -9,11 +9,13 @@ namespace P3.Logic.Time.Tests.Monoflop
     public class MonoflopTests: LogicTest<MonoflopLogicFactory>
     {
         [Fact]
-        public async void TestDelayedOnRule()
+        public async void TestMonoflopRule()
         {
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
 
+
+            await Logic.Start();
             Logic.ValueChanged(GetLogicInterfaceByTemplate(MonoflopLogicFactory.RuleTrigger), Dispatchable, true);
 
             await Task.Delay(2000);
@@ -32,14 +34,16 @@ namespace P3.Logic.Time.Tests.Monoflop
         }
 
         [Fact]
-        public async void TestDelayedOnRule2()
+        public async void TestMonoflopRule2()
         {
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
-
+            
             var paramDelay = GetLogicInterfaceByTemplate(MonoflopLogicFactory.RuleParamDelay);
             paramDelay.Value = 1;
 
+            await Logic.Start();
+          
             Logic.ValueChanged(GetLogicInterfaceByTemplate(MonoflopLogicFactory.RuleTrigger), Dispatchable, true);
 
             
@@ -48,7 +52,7 @@ namespace P3.Logic.Time.Tests.Monoflop
             Assert.Equal(1, values.Count);
             Assert.Equal(true, values.First().Value.Value);
 
-            await Task.Delay(1500);
+            await Task.Delay(1600);
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 

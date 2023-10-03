@@ -28,7 +28,7 @@ namespace P3.Logic.Time.Timer
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "TIME.TIMER.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
 
-            factory.CreateParameterLogicInterfaceTemplate(RuleTimerParameter, "TIME.TIMER.NAME", "TIME.TIMER.DESCRIPTION", LogicGuid, 1, RuleInterfaceParameterDataType.Timer, JsonConvert.SerializeObject(new TimerPropertyData()));
+            factory.CreateParameterLogicInterfaceTemplate(RuleTimerParameter, "TIME.TIMER.NAME", "TIME.TIMER.DESCRIPTION", "delay", LogicGuid, 1, RuleInterfaceParameterDataType.Timer, JsonConvert.SerializeObject(new TimerPropertyData()));
             
         }
 

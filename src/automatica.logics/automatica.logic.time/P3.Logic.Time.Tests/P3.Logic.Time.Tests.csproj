@@ -19,15 +19,15 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.2.0">
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="xunit" Version="2.5.1" />
     <PackageReference Include="OpenCover" Version="4.7.1221">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -37,12 +37,12 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="7.5.0.1363" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1363" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1363" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1363" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.0.1363" />
+    <PackageReference Include="Automatica.Core.EF" Version="7.5.1.1443" />
+    <PackageReference Include="Automatica.Core.Base" Version="7.5.1.1443" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="Automatica.Core.Logic" Version="7.5.1.1443" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.1.1443" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.1.1443" />
     <ProjectReference Include="..\P3.Logic.Time\P3.Logic.Time.csproj" />
   </ItemGroup>
 </Project>

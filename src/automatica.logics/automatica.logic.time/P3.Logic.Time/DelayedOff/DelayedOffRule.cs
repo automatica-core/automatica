@@ -47,19 +47,6 @@ namespace P3.Logic.Time.DelayedOff
             return base.Stop(ruleInstance, token);
         }
 
-        protected override Task<bool> Start(RuleInstance ruleInstance, CancellationToken token = default)
-        {
-            _delay = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleParamDelay).ValueInteger.Value;
-
-            if (_delay <= 0)
-            {
-                Context.Logger.LogError($"Interval cannot be lower or equal to 0");
-                return Task.FromResult(false);
-            }
-            return base.Start(ruleInstance, token);
-        }
-
         protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleParamDelay)
