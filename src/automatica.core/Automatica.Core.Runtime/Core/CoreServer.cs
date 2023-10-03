@@ -334,43 +334,43 @@ namespace Automatica.Core.Runtime.Core
 
         private async Task StartLogic(ILogic logic, RuleInstance logicInstance)
         {
-            _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...");
+            _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...");
             try
             {
                 if (await logic.Start())
                 {
                     _logicStore.Add(logicInstance, logic);
-                    _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...success");
+                    _logger.LogInformation($"Starting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...error");
+                    _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...error");
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name}...error {e}");
+                _logger.LogError($"Starting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...error {e}");
             }
         }
 
         private async Task RestartLogic(ILogic logic, RuleInstance logicInstance)
         {
-            _logger.LogInformation($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...");
+            _logger.LogInformation($"Restarting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...");
             try
             {
                 if (await logic.Restart(logicInstance))
                 {
-                    _logicStore.Add(logicInstance, logic);
-                    _logger.LogInformation($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...success");
+                    _logicStore.Update(logicInstance, logic);
+                    _logger.LogInformation($"Restarting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...error");
+                    _logger.LogError($"Restarting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...error");
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError($"Restarting logic {logicInstance.ObjId} {logicInstance.Name}...error {e}");
+                _logger.LogError($"Restarting logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...error {e}");
             }
         }
 
@@ -378,7 +378,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...");
+                _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...");
 
                 if (unlink)
                 {
@@ -390,18 +390,18 @@ namespace Automatica.Core.Runtime.Core
 
                 if (await logic.Stop())
                 {
-                    _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...success");
+                    _logger.LogInformation($"Stopping logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...success");
                 }
                 else
                 {
-                    _logger.LogError($"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...error");
+                    _logger.LogError($"Stopping logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...error");
                 }
 
                 
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Stopping logic {logicInstance.ObjId} {logicInstance.Name}...error");
+                _logger.LogError(e, $"Stopping logic {logicInstance.ObjId} {logicInstance.Name} {logicInstance.GetHashCode()}...error");
             }
         }
 
