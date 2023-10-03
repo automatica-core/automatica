@@ -74,6 +74,13 @@ namespace Automatica.Core.Runtime.IO
         public async Task<bool> Reload()
         {
             _linkCache.ClearAndLoad();
+
+            foreach (var registration in _dispatchRegistrations)
+            {
+                await _dispatcher.UnRegisterDispatch(registration.type, registration.id);
+            }
+
+            _dispatchRegistrations.Clear();
             return await Load();
         }
 
@@ -234,7 +241,7 @@ namespace Automatica.Core.Runtime.IO
                         try
                         {
                             _logger.LogDebug(
-                                $"ValueDispatchToRule: {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
+                                $"ValueDispatchToRule: {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
                             var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
 
                             foreach (var result in ruleResults)
