@@ -237,7 +237,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(2, values.First().Value.Value);
+            Assert.Equal(WindowState.Tilted, values.First().Value.Value);
         }
 
 
@@ -257,7 +257,7 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(0, values.First().Value.Value);
+            Assert.Equal(WindowState.Open, values.First().Value.Value);
         }
     }
 }
