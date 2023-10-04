@@ -78,9 +78,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     const pageId = this.route.snapshot.params["id"];
     this.selectLogicPageById(pageId);
+    const that = this;
 
     this.route.params.subscribe(async (params) => {
-      this.selectLogicPageById(params.id);
+      that.selectLogicPageById(params.id);
     });
 
     this.baseOnInit();
@@ -126,7 +127,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         ]);
 
       this.pages = this.sortPages(pages);;
-      
+
 
       this.pagesDataSource = new DataSource({
         paginate: false,
@@ -237,9 +238,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   onTabSelectionChanged($event) {
     if ($event.addedItems && $event.addedItems.length > 0) {
-      this.selectLogicPage(<RulePage>$event.addedItems[0]);
-
-      this.router.navigate(["../", this.selectedPage.ObjId], { relativeTo: this.route });
+      const selectedPage = <RulePage>$event.addedItems[0];
+      this.router.navigate(["../", selectedPage.ObjId], { relativeTo: this.route });
     }
   }
 
