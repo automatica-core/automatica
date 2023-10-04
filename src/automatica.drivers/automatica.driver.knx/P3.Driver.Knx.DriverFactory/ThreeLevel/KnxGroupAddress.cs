@@ -58,7 +58,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
@@ -66,8 +66,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
                 if (dptValue == null) //value did not change
                 {
-
-                    return Task.CompletedTask;
+                    DriverContext.Logger.LogDebug($"{GroupAddress} Value did not change, we will not write it WriteOnlyIfChanged is: {WriteOnlyIfChanged}");
+                    return;
                 }
 
                 if (DptType != ImplementationDptType)
@@ -79,8 +79,13 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
                 var decodedValue = dpt.ToGroupValue(dptValue);
 
-                Driver.Write(this, GroupAddress, decodedValue);
-                writeContext.DispatchValue(value, token);
+                var result = await Driver.Write(this, GroupAddress, decodedValue).ConfigureAwait(false);
+                await writeContext.DispatchValue(value, token);
+
+                if (!result)
+                {
+                    DriverContext.Logger.LogWarning("Failed to write to Write datagram");
+                }
             }
             catch (NotImplementedException)
             {
@@ -88,7 +93,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                     $"{DriverContext.NodeInstance.Name} {value} Could not convert value correctly....ignore write!");
             }
 
-            return Task.CompletedTask;
         }
 
         protected void ConvertFromBus(GroupEventArgs datagram)
