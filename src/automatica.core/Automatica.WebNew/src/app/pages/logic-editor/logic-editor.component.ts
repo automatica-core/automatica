@@ -24,6 +24,7 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import DataSource from "devextreme/data/data_source";
 import { DxListComponent } from "devextreme-angular";
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
 
 @Component({
   selector: "app-logic-editor",
@@ -63,12 +64,27 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     appService: AppService,
     private dataHub: DataHubService,
     private nodeInstanceService: NodeInstanceService,
-    private changeRef: ChangeDetectorRef) {
+    private changeRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router) {
     super(notify, translate, appService);
 
     appService.setAppTitle("RULEENGINE.NAME");
   }
 
+  async ngOnInit() {
+
+    await this.loadData();
+
+    const pageId = this.route.snapshot.params["id"];
+    this.selectLogicPageById(pageId);
+
+    this.route.params.subscribe(async (params) => {
+      this.selectLogicPageById(params.id);
+    });
+
+    this.baseOnInit();
+  }
   async load() {
     await this.loadData();
   }
@@ -109,19 +125,11 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
           this.nodeInstanceService.load()
         ]);
 
-      this.pages = pages;
-      this.pages = this.pages.sort((n1, n2) => {
-        if (n1.Name > n2.Name) {
-          return 1;
-        }
-        if (n1.Name < n2.Name) {
-          return -1;
-        }
-        return 0;
-      });
+      this.pages = this.sortPages(pages);;
+      
 
       this.pagesDataSource = new DataSource({
-        paginate: false, 
+        paginate: false,
         pageSize: 1000,
         load: (loadOptions) => {
           return new Promise((resolve, reject) => {
@@ -157,14 +165,43 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.changeRef.detectChanges();
   }
 
+  private sortPages(pages) {
+    return pages.sort((n1, n2) => {
+      if (n1.Name > n2.Name) {
+        return 1;
+      }
+      if (n1.Name < n2.Name) {
+        return -1;
+      }
+      return 0;
+    });
+
+  }
+
   validate($event) {
     this.configTree.validate($event);
+
+    // this.sortPages();
   }
-  async ngOnInit() {
 
-    await this.loadData();
-    this.baseOnInit();
 
+  private selectLogicPageById(id: string) {
+    if (!id) {
+      return;
+    }
+
+    const page = this.pages.filter(a => a.ObjId == id);
+
+    if (page.length == 0) {
+      return;
+    }
+    this.selectLogicPage(page[0]);
+  }
+
+  private selectLogicPage(page: RulePage) {
+    this.configTree.selectNodeById(void 0);
+    this.selectedPage = page;
+    this.selectedItem = page;
   }
 
   onImportData($event) {
@@ -200,9 +237,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   onTabSelectionChanged($event) {
     if ($event.addedItems && $event.addedItems.length > 0) {
-      this.configTree.selectNodeById(void 0);
-      this.selectedItem = <RulePage>$event.addedItems[0];
-      this.selectedPage = this.selectedItem;
+      this.selectLogicPage(<RulePage>$event.addedItems[0]);
+
+      this.router.navigate(["../", this.selectedPage.ObjId], { relativeTo: this.route });
     }
   }
 
@@ -283,7 +320,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
       this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
       this.logicPageList.selectedItems = [];
-      
+
       await this.pagesDataSource.reload();
       this.changeRef.detectChanges();
     } catch (error) {

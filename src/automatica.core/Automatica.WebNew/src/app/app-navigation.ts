@@ -10,7 +10,7 @@ export const navigation = [
         icon: "cogs"
     }, {
         text: "COMMON.RULEENGINE",
-        path: "logic-editor",
+        path: "logic-editor/default",
         icon: "play"
     }, {
         text: "COMMON.AREAS",

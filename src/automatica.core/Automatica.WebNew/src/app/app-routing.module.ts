@@ -40,7 +40,7 @@ const routes: Routes = [
                 path: "config",
                 component: ConfigComponent
             }, {
-                path: "logic-editor",
+                path: "logic-editor/:id",
                 component: LogicEditorComponent
             }, {
                 path: "visualisation",

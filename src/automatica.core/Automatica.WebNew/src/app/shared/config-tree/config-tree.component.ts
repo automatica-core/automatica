@@ -408,8 +408,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       //drag.setParent(drop);
       // const contains = drop.Children.filter(a => a.ObjId == drag.ObjId);
       // if(contains.length == 0)
-       drop.Children = [...drop.Children, drag];
-       drag.This2ParentNodeInstance = drop.ObjId;
+      drop.Children = [...drop.Children, drag];
+      drag.This2ParentNodeInstance = drop.ObjId;
 
       this.selectNode(drag);
 
@@ -484,7 +484,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
       items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
-     
+
 
 
       if (this.copyItem && nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === this.copyItem.NodeTemplate.NeedsInterface2InterfacesType) {
@@ -498,7 +498,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       if (nodeInstance.NodeTemplate.This2NodeDataType > 0 && !nodeInstance.isNewObject) {
         items.push({ beginGroup: true, text: this.translate.translate("COMMON.READ"), data: nodeInstance, onItemClick: function () { that.readNode(nodeInstance); } });
       }
-      items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () {  navigator.clipboard.writeText(nodeInstance.Value);  } });
+      items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () { navigator.clipboard.writeText(nodeInstance.Value); } });
     }
 
     this.contextMenu.instance.option({ items: items, target: $event.event });
@@ -532,8 +532,43 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  async saveLearnNodeInstances(nodeInstance: NodeInstance, learnedNodes: LearnNodeInstance[]) {
-    // for (const learnNode of learnedNodes) {
+  async saveLearnNodeInstances(parentNodeInstance: NodeInstance, learnedNodes: LearnNodeInstance[]) {
+
+    try {
+      this.isLoading = true;
+
+      for (const learnNode of learnedNodes) {
+        var nodeInstance = await this.configService.createFromTemplate(parentNodeInstance, learnNode.nodeTemplateItem);
+
+        for (const prop of learnNode.propertyInstances) {
+          var property = nodeInstance.Properties.find(a => a.PropertyTemplate.Key == prop.PropertyTemplate.Key);
+          if (property) {
+            property.Value = prop.Value;
+          }
+        }
+
+        for (const child of nodeInstance.Children) {
+          for (const prop of learnNode.propertyInstances) {
+            var property = child.Properties.find(a => a.PropertyTemplate.Key == prop.PropertyTemplate.Key);
+            if (property) {
+              property.Value = prop.Value;
+            }
+          }
+        }
+
+        await this.configService.update(nodeInstance);
+
+      }
+
+      await this.load();
+    }
+    catch (error) {
+      this.handleError(error);
+    }
+    finally {
+
+      this.isLoading = false;
+    }
     //   let existingNode = this.nodeInstanceService.getNodeInstanceByNeedsInterface(nodeInstance, learnNode.nodeTemplateInstance.nodeTemplate.NeedsInterface2InterfacesType);
 
     //   let created = void 0;
