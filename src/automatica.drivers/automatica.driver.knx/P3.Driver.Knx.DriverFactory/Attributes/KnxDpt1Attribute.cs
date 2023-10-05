@@ -14,6 +14,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
+        protected override object GetCurrentValue()
+        {
+            return _value;
+        }
+
         protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToBoolean(value);

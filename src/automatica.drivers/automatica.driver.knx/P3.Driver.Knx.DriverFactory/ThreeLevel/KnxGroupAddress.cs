@@ -20,6 +20,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         public abstract int ImplementationDptType { get; }
 
 
+
         protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
 
@@ -66,7 +67,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
                 if (dptValue == null) //value did not change
                 {
-                    DriverContext.Logger.LogDebug($"{GroupAddress} Value did not change, we will not write it WriteOnlyIfChanged is: {WriteOnlyIfChanged}");
+                    DriverContext.Logger.LogDebug($"{GroupAddress} Value did not change, we will not write it WriteOnlyIfChanged is: {WriteOnlyIfChanged} (NewValue: {value} OldValue: {GetCurrentValue()})");
                     return;
                 }
 
@@ -135,6 +136,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         }
 
         protected abstract object ConvertToDptValue(object value);
+
+        protected virtual object GetCurrentValue()
+        {
+            return null;
+        }
 
         private void TelegramReceivedCallback(object data)
         {
