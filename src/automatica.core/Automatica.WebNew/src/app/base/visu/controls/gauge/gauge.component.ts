@@ -60,6 +60,7 @@ export class GaugeComponent extends BaseMobileRuleComponent implements OnInit, O
     this.ticksInterface = this.getInterfaceByKey("ticks");
     this.typeInterface = this.getInterfaceByKey("type");
 
+    console.log(dictionary);
   
     if (dictionary.hasOwnProperty("scale_start")) {
       this.scaleStart = dictionary["scale_start"];
@@ -73,6 +74,8 @@ export class GaugeComponent extends BaseMobileRuleComponent implements OnInit, O
     if (dictionary.hasOwnProperty("gauge_type")) {
       this.type = <GaugeType>parseInt(dictionary["gauge_type"]);
     }
+
+    this.value = this.dataHub.getCurrentValue(this.valueInterface.ObjId)?.value;
   }
 
   protected onRuleInstanceValueChanged(ruleInterfaceId: any, value: any) {

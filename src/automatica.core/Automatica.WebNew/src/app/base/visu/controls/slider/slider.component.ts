@@ -82,7 +82,9 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
     this.valueMax = data.maxValue;
     this.valueMin = data.minValue;
 
-
+    
+    this.value = this.dataHub.getCurrentValue(this.valueType.ObjId)?.value;
+    this.state = this.value;
   }
   format(value) {
     return `${value}`;

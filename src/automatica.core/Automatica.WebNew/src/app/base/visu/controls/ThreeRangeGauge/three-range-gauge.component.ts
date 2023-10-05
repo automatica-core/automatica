@@ -120,6 +120,8 @@ export class ThreeRangeGaugeComponent extends BaseMobileRuleComponent implements
     if (dictionary.hasOwnProperty("ticks")) {
       this.ticks = dictionary["ticks"];
     }
+    
+    this.value = this.dataHub.getCurrentValue(this.valueInterface.ObjId)?.value;
   }
 
   protected onRuleInstanceValueChanged(ruleInterfaceId: any, value: any) {
