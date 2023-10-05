@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList } from "@angular/core";
 import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
 import { L10nTranslationService } from "angular-l10n";
-import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent, DxDropDownBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent, DxDropDownBoxComponent, DxComponent, DxTextBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -308,6 +308,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
+  @ViewChildren('control') controls: QueryList<any>;
+
   constructor(
     private config: ConfigService,
     translate: L10nTranslationService,
@@ -327,10 +329,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this.satellites = await this.satellitesService.getAll();
 
     var gridHeight = this.dataTable.instance.element().clientHeight;
-    var pageSize = gridHeight/30;
+    var pageSize = gridHeight / 30;
 
     this.dataTable.instance.pageSize(pageSize);
-    
+
   }
 
   flattenAreaInit() {
@@ -351,7 +353,33 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
 
+  onFocusedCellChanging(e) {
+    e.preventDefault = true;
+    var cellElement = e.cellElement[0];
 
+    if (cellElement.id?.startsWith("control-"))
+      return;
+
+    var control = this.searchControlRecursive(cellElement);
+
+    for (const dxControl of this.controls) {
+      if (dxControl.element.nativeElement == control) {
+        setTimeout(async () => {
+          await dxControl.instance.focus();
+        });
+      }
+    }
+  }
+
+  searchControlRecursive(parent) {
+    for (const child of parent.children) {
+      if (child.id?.startsWith("control-")) {
+        return child;
+      }
+      return this.searchControlRecursive(child);
+    }
+    return null;
+  }
 
 
   nodeSelect($event) {
