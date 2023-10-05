@@ -26,19 +26,21 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         }
         protected override object ConvertToDptValue(object value)
         {
-            var newValue = Convert.ToDouble(value); 
+            var newValue = Convert.ToDouble(value);
+            var oldValue = _value;
             _value = newValue;
+
             if (WriteOnlyIfChanged)
             {
                 // ReSharper disable once CompareOfFloatsByEqualityOperator
-                if (newValue != _value)
+                if (newValue != oldValue)
                 {
                     return _value;
                 }
 
                 return null;
             }
-            return value;
+            return _value;
         }
     }
 }
