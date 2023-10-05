@@ -86,8 +86,8 @@ namespace Automatica.Core.Base.IO
         {
             lock (_lock)
             {
-                if(NodeValues.ContainsKey(type))
-                    return NodeValues[type];
+                if(NodeValues.TryGetValue(type, out var values))
+                    return values;
             }
             return new Dictionary<Guid, DispatchValue>();
         }
