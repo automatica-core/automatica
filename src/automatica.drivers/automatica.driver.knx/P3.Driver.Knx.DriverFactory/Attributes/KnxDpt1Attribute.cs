@@ -22,11 +22,12 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToBoolean(value);
+            var oldValue = _value;
 
             _value = newValue;
             if (WriteOnlyIfChanged)
             {
-                if (_value != newValue)
+                if (oldValue != newValue)
                 {
                     return newValue;
                 }
