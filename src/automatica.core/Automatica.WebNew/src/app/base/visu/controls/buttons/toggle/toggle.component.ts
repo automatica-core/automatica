@@ -49,10 +49,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     });
 
     this.readOnly = this.getReadOnly() ?? false;
-
-    var cachedValue = this.dataHub.getCurrentValue(this.outputType.ObjId);
-    if(cachedValue)
-      this.value = cachedValue.value;
+    this.value = this.dataHub.getCurrentValue(this.outputType.ObjId)?.value;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
