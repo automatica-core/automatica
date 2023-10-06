@@ -1,4 +1,11 @@
 <app-visualization-control [hint]="displayText" [value]="displayText" [icon]="icon" [location]="location"
   [hasPopup]="false">
 
+  <ng-container control>
+    <div style="display: inline-block;">
+      <dx-button icon="chevronup" (onClick)="moveUp($event)"></dx-button>
+      <dx-button icon="chevrondown" (onClick)="moveDown($event)"></dx-button>
+    </div>
+  </ng-container>
+
 </app-visualization-control>

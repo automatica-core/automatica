@@ -206,6 +206,10 @@
         "ABSOLUTE": {
           "NAME": "Position",
           "DESCRIPTION": ""
+        },
+        "LOCKED": {
+          "NAME": "Locked",
+          "DESCRIPTION": ""
         }
       },
       "OUTPUT": {
@@ -224,6 +228,9 @@
         "STOP": {
           "NAME": "Stop",
           "DESCRIPTION": ""
+        },
+        "IS_MOVING": {
+          "NAME": "Is Moving"
         }
       }
     }
