@@ -9,8 +9,8 @@ COPY ./Automatica.WebNew /src
 
 RUN ls -lah /src
 
-npm install --save @fortawesome/fontawesome-pro
-npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN
+RUN npm install --save @fortawesome/fontawesome-pro
+RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN
 
 
 RUN npm install
