@@ -8,6 +8,7 @@ import { LogicInstanceVisuService } from "src/app/services/logic-visu.service";
 import { AppService } from "src/app/services/app.service";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
+import { ThemeService } from "src/app/services/theme.service";
 
 
 @Component({
@@ -32,6 +33,9 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
 
   private absolutePosition: number;
   private isMoving: boolean;
+  displayValue: string;
+
+  shutterIcon: any;
 
   constructor(
     dataHubService: DataHubService,
@@ -63,18 +67,28 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
     this.isMovingOutput = this.getInterfaceByKey("ruleIsMoving");
 
     this.isMoving = this.dataHub.getCurrentValue(this.isMovingOutput?.ObjId)?.value;
+    this.value = this.dataHub.getCurrentValue(this.absolutePositionInput.ObjId)?.value;
+    this.updateIcon();
+  }
 
+  private updateIcon() {
+    if (this.value >= 50 && this.value <= 100) {
+      this.shutterIcon = ["fad", "blinds"];
+    }
+    else {
+      this.shutterIcon = ["fad", "blinds-raised"];
+    }
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    if (this.absolutePositionOutput.ObjId == interfaceId) {
+    if (this.absolutePositionOutput.ObjId == interfaceId || this.absolutePositionInput.ObjId == interfaceId) {
       this.absolutePosition = value;
       this.value = value;
+      this.displayValue = Math.round(value) + "%";
+
+      this.updateIcon();
     }
-    else if (this.absolutePositionInput.ObjId == interfaceId) {
-      this.absolutePosition = value;
-      this.value = value;
-    }
+
     else if (this.isMovingOutput.ObjId == interfaceId) {
       this.isMoving = value;
     }

@@ -130,6 +130,11 @@ namespace P3.Logic.Operations.Shutter
                     _moving = false;
                     ret.Add(new LogicOutputChanged(_isMovingOutput, false));
                 }
+                else if (Math.Floor(dValue) <= 0)
+                {
+                    _moving = false;
+                    ret.Add(new LogicOutputChanged(_isMovingOutput, false));
+                }
                 _position = dValue;
                 ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
             }

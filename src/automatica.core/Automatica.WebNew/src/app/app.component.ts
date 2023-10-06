@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
 import { faClock, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
+import { faBlinds, faBlindsOpen, faBlindsRaised, fad } from "@fortawesome/pro-duotone-svg-icons";
 import { fas, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
@@ -46,6 +47,11 @@ export class AppComponent extends BaseComponent implements OnInit {
 
     library.addIconPacks(fas);
     library.addIconPacks(far);
+    library.addIconPacks(fad);
+
+    library.addIcons(faBlinds);
+    library.addIcons(faBlindsOpen);
+    library.addIcons(faBlindsRaised);
 
     library.addIcons(<IconDefinition>{
       prefix: "fas",
