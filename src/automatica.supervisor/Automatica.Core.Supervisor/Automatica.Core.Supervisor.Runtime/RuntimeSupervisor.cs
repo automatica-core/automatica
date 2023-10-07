@@ -304,8 +304,7 @@ namespace Automatica.Core.Supervisor.Runtime
                     AttachStdout = false,
                     HostConfig = new HostConfig
                     {
-                        PortBindings = portBindings,
-                        Binds = new List<string> { "/etc/timezone:/etc/timezone:ro" }
+                        PortBindings = portBindings
                     },
                     Env = envVariables
                 };
@@ -349,6 +348,13 @@ namespace Automatica.Core.Supervisor.Runtime
                         Source = "/tmp",
                         Target = "/tmp",
                         Type = "bind"
+                    });
+                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    {
+                        Source = "/etc/timezone",
+                        Target = "/etc/timezone",
+                        Type = "bind",
+                        ReadOnly = true
                     });
                 }
 
