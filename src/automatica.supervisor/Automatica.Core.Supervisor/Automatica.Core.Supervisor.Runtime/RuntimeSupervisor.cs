@@ -304,7 +304,8 @@ namespace Automatica.Core.Supervisor.Runtime
                     AttachStdout = false,
                     HostConfig = new HostConfig
                     {
-                        PortBindings = portBindings
+                        PortBindings = portBindings,
+                        Binds = new List<string> { "/etc/timezone:/etc/timezone:ro" }
                     },
                     Env = envVariables
                 };
