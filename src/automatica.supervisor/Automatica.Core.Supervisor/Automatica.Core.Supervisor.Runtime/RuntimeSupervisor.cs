@@ -283,7 +283,7 @@ namespace Automatica.Core.Supervisor.Runtime
                     if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
                         var timezone = await File.ReadAllTextAsync("/etc/timezone");
-                        envVariables.Add($"TZ={timezone}");
+                        envVariables.Add($"TZ={timezone.Replace("\n", "").Replace("\r", "")}");
                     }
                 }
                 catch (Exception e)
