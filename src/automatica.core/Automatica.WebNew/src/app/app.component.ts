@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
 import { faClock, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
-import { faBlinds, faBlindsOpen, faBlindsRaised, fad } from "@fortawesome/pro-duotone-svg-icons";
+import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBlinds, faBlindsOpen, faBlindsRaised, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank, fad } from "@fortawesome/pro-duotone-svg-icons";
 import { fas, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
@@ -26,7 +26,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     notify: NotifyService,
     translate: L10nTranslationService,
     private changeDet: ChangeDetectorRef,
-    library: FaIconLibrary,
+    private library: FaIconLibrary,
     private ngZone: NgZone,
     private iconConfig: FaConfig,
     private themeService: ThemeService) {
@@ -42,16 +42,27 @@ export class AppComponent extends BaseComponent implements OnInit {
     const boothCurtain = {
       prefix: "fas",
       iconName: "booth-curtain",
-      icon: faQuestion.icon
+      icon: faBoothCurtain.icon
     };
 
     library.addIconPacks(fas);
     library.addIconPacks(far);
     library.addIconPacks(fad);
-
-    library.addIcons(faBlinds);
-    library.addIcons(faBlindsOpen);
-    library.addIcons(faBlindsRaised);
+    
+    this.addIcon(faTemperatureHot);
+    this.addIcon(faTemperatureSun);
+    this.addIcon(faTemperatureSnow);
+    this.addIcon(faForkKnife);
+    this.addIcon(faAppleCore);
+    this.addIcon(faHeat);
+    this.addIcon(faToiletPaperBlank);
+    this.addIcon(faBedFront);
+    this.addIcon(faBedBunk);
+    this.addIcon(faDryerHeat);
+    this.addIcon(faFireplace);
+    this.addIcon(faAirConditioner);
+    this.addIcon(faOutlet);
+    
 
     library.addIcons(<IconDefinition>{
       prefix: "fas",
@@ -75,6 +86,15 @@ export class AppComponent extends BaseComponent implements OnInit {
     document.title = this.title;
 
     this.dogeLog();
+  }
+
+  private addIcon(icon: IconDefinition) {
+    const iconDef = <IconDefinition>{
+      prefix: "fas",
+      iconName: icon.iconName,
+      icon: icon.icon
+    };
+    this.library.addIcons(iconDef);
   }
 
   private dogeLog() {
