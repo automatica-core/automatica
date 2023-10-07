@@ -3,15 +3,12 @@ using P3.Driver.MachineFlags.Attributes;
 
 namespace P3.Driver.MachineFlags
 {
-    public class MachineFlagsDriver : DriverBase
+    public class MachineFlagsDriver : DriverNoneAttributeBase
     {
-        
         public MachineFlagsDriver(IDriverContext ctx)
             : base(ctx)
         {
         }
-        
-
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             var key = ctx.NodeInstance.This2NodeTemplateNavigation.Key;

@@ -9,7 +9,7 @@ using P3.Driver.Pixoo64.Screens;
 
 namespace P3.Driver.Pixoo64
 {
-    public class Pixoo64Driver : DriverBase
+    public class Pixoo64Driver : DriverNoneAttributeBase
     {
         private readonly List<PixooSharp.Pixoo64> _pixoo64 = new List<PixooSharp.Pixoo64>();
         private PixooMainLoop _mainLoop;

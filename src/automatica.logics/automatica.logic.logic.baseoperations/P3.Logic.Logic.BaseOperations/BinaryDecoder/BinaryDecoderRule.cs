@@ -41,14 +41,8 @@ namespace P3.Logic.Logic.BaseOperations.BinaryDecoder
                 a.This2RuleInterfaceTemplate == BinaryDecoderLogicFactory.RuleOutput7);
             _output8 = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == BinaryDecoderLogicFactory.RuleOutput8);
-
-
-        }
-
-        public override Task<bool> Start(CancellationToken token = default)
-        {
             _b1 = null;
-            return Task.FromResult(true);
+
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)

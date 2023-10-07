@@ -25,21 +25,16 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         {
         }
 
-        public override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = default)
         {
             WriteReceived = true;
-
-            DispatchValue(value);
+            writeContext.DispatchValue(value, token);
             return Task.CompletedTask;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task<bool> Read(IReadContext writeContext, CancellationToken token = default)
         {
-            WriteReceived = true;
-
-            DispatchValue(value);
-
-            return Task.CompletedTask;
+            return Task.FromResult(false);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

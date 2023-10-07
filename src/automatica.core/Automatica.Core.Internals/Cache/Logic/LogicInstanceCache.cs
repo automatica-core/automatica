@@ -14,7 +14,7 @@ namespace Automatica.Core.Internals.Cache.Logic
         private readonly ILinkCache _linkCache;
         private readonly IDictionary<Guid, IList<RuleInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IDictionary<Guid, IList<RuleInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
-        private readonly IList<RuleInstance> _favorites = new List<RuleInstance>();
+        private readonly IDictionary<Guid, RuleInstance> _favorites = new ConcurrentDictionary<Guid, RuleInstance>();
 
         public LogicInstanceCache(IConfiguration configuration, ILinkCache linkCache) : base(configuration)
         {
@@ -56,7 +56,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
                 if (item.IsFavorite)
                 {
-                    _favorites.Add(item);
+                    _favorites.TryAdd(item.ObjId, item);
                 }
 
                 foreach (var interfaceInstance in item.RuleInterfaceInstance)
@@ -85,11 +85,59 @@ namespace Automatica.Core.Internals.Cache.Logic
             return obj.ObjId;
         }
 
+        public RuleInstance GetSingle(AutomaticaContext context, Guid id)
+        {
+            var item = context.RuleInstances
+                .Include(a => a.RuleInterfaceInstance)
+                .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
+                .ThenInclude(a => a.This2RuleTemplateNavigation)
+                .Include(a => a.This2RuleTemplateNavigation)
+                .Include(a => a.This2AreaInstanceNavigation)
+                .Include(a => a.This2CategoryInstanceNavigation)
+                .AsNoTracking()
+                .Single(a => a.ObjId == id);
+
+            if (item.This2AreaInstance.HasValue)
+            {
+                if (!_areaCache.ContainsKey(item.This2AreaInstance.Value))
+                {
+                    _areaCache.Add(item.This2AreaInstance.Value, new List<RuleInstance>());
+                }
+
+                _areaCache[item.This2AreaInstance.Value].Add(item);
+            }
+
+            if (item.This2CategoryInstance.HasValue)
+            {
+                if (!_categoryCache.ContainsKey(item.This2CategoryInstance.Value))
+                {
+                    _categoryCache.Add(item.This2CategoryInstance.Value, new List<RuleInstance>());
+                }
+
+                _categoryCache[item.This2CategoryInstance.Value].Add(item);
+            }
+
+            if (item.IsFavorite)
+            {
+                _favorites.TryAdd(item.ObjId, item);
+            }
+
+            foreach (var interfaceInstance in item.RuleInterfaceInstance)
+            {
+                if (_linkCache.IsRuleInterfaceMapped(interfaceInstance.ObjId))
+                {
+                    interfaceInstance.IsLinked = true;
+                }
+            }
+
+            return item;
+        }
+
         public IList<RuleInstance> ByFavorites()
         {
             Initialize();
 
-            return _favorites;
+            return _favorites.Values.ToList();
         }
 
         public IList<RuleInstance> ByCategory(Guid category)

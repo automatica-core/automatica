@@ -26,6 +26,13 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
             case RuleInterfaceParameterDataType.Timer:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Timer;
                 break;
+            case RuleInterfaceParameterDataType.ConstantString:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Text;
+                this.PropertyTemplate.IsReadonly = true;
+                break;
+            case RuleInterfaceParameterDataType.Color:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Color;
+                break;
         }
 
     }

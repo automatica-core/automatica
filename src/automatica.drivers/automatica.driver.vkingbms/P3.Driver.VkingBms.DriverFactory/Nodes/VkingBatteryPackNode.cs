@@ -9,7 +9,7 @@ using P3.Driver.VkingBms.Driver.Interfaces;
 
 namespace P3.Driver.VkingBms.DriverFactory.Nodes
 {
-    internal class VkingBatteryPackNode : DriverBase
+    internal class VkingBatteryPackNode : DriverNoneAttributeBase
     {
 
         private VkingBatteryCellsNode _cellsNode;
@@ -45,49 +45,49 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
         {
             try
             {
-                _voltage?.DispatchValue(Convert.ToDouble(analogData.Voltage) / 100);
-                _current?.DispatchValue(Convert.ToDouble(analogData.Current) / 100);
-                _soh?.DispatchValue(analogData.Soh);
-                _soc?.DispatchValue(analogData.Soc);
-                _version?.DispatchValue(version.VersionId);
-                _remainCapacity?.DispatchValue(analogData.RemainingCapacity);
-                _fullCharge?.DispatchValue(analogData.FullCapacity);
-                _cycleTimes?.DispatchValue(analogData.CycleNumber);
+                _voltage?.DispatchRead(Convert.ToDouble(analogData.Voltage) / 100);
+                _current?.DispatchRead(Convert.ToDouble(analogData.Current) / 100);
+                _soh?.DispatchRead(analogData.Soh);
+                _soc?.DispatchRead(analogData.Soc);
+                _version?.DispatchRead(version.VersionId);
+                _remainCapacity?.DispatchRead(analogData.RemainingCapacity);
+                _fullCharge?.DispatchRead(analogData.FullCapacity);
+                _cycleTimes?.DispatchRead(analogData.CycleNumber);
                 //_bmsTime?.DispatchValue(analogData.Voltage);
 
                 var minCell = analogData.CellVoltages.Min();
                 var maxCell = analogData.CellVoltages.Max();
 
-                _minCell?.DispatchValue(minCell);
-                _maxCell?.DispatchValue(maxCell);
-                _cellDiff?.DispatchValue(maxCell - minCell);
+                _minCell?.DispatchRead(minCell);
+                _maxCell?.DispatchRead(maxCell);
+                _cellDiff?.DispatchRead(maxCell - minCell);
 
-                _cellsNode?.Cell1?.DispatchValue(analogData.CellVoltages[0]);
-                _cellsNode?.Cell2?.DispatchValue(analogData.CellVoltages[1]);
-                _cellsNode?.Cell3?.DispatchValue(analogData.CellVoltages[2]);
-                _cellsNode?.Cell4?.DispatchValue(analogData.CellVoltages[3]);
-                _cellsNode?.Cell5?.DispatchValue(analogData.CellVoltages[4]);
-                _cellsNode?.Cell6?.DispatchValue(analogData.CellVoltages[5]);
-                _cellsNode?.Cell7?.DispatchValue(analogData.CellVoltages[6]);
-                _cellsNode?.Cell8?.DispatchValue(analogData.CellVoltages[7]);
-                _cellsNode?.Cell9?.DispatchValue(analogData.CellVoltages[8]);
-                _cellsNode?.Cell10?.DispatchValue(analogData.CellVoltages[9]);
-                _cellsNode?.Cell11?.DispatchValue(analogData.CellVoltages[10]);
-                _cellsNode?.Cell12?.DispatchValue(analogData.CellVoltages[11]);
-                _cellsNode?.Cell13?.DispatchValue(analogData.CellVoltages[12]);
-                _cellsNode?.Cell14?.DispatchValue(analogData.CellVoltages[13]);
-                _cellsNode?.Cell15?.DispatchValue(analogData.CellVoltages[14]);
-                _cellsNode?.Cell16?.DispatchValue(analogData.CellVoltages[15]);
+                _cellsNode?.Cell1?.DispatchRead(analogData.CellVoltages[0]);
+                _cellsNode?.Cell2?.DispatchRead(analogData.CellVoltages[1]);
+                _cellsNode?.Cell3?.DispatchRead(analogData.CellVoltages[2]);
+                _cellsNode?.Cell4?.DispatchRead(analogData.CellVoltages[3]);
+                _cellsNode?.Cell5?.DispatchRead(analogData.CellVoltages[4]);
+                _cellsNode?.Cell6?.DispatchRead(analogData.CellVoltages[5]);
+                _cellsNode?.Cell7?.DispatchRead(analogData.CellVoltages[6]);
+                _cellsNode?.Cell8?.DispatchRead(analogData.CellVoltages[7]);
+                _cellsNode?.Cell9?.DispatchRead(analogData.CellVoltages[8]);
+                _cellsNode?.Cell10?.DispatchRead(analogData.CellVoltages[9]);
+                _cellsNode?.Cell11?.DispatchRead(analogData.CellVoltages[10]);
+                _cellsNode?.Cell12?.DispatchRead(analogData.CellVoltages[11]);
+                _cellsNode?.Cell13?.DispatchRead(analogData.CellVoltages[12]);
+                _cellsNode?.Cell14?.DispatchRead(analogData.CellVoltages[13]);
+                _cellsNode?.Cell15?.DispatchRead(analogData.CellVoltages[14]);
+                _cellsNode?.Cell16?.DispatchRead(analogData.CellVoltages[15]);
 
-                _tempsNode.Environment?.DispatchValue(analogData.Temperatures[0]);
-                _tempsNode.Mos?.DispatchValue(analogData.Temperatures[1]);
-                _tempsNode.CellT1?.DispatchValue(analogData.Temperatures[2]);
-                _tempsNode.CellT2?.DispatchValue(analogData.Temperatures[3]);
-                _tempsNode.CellT3?.DispatchValue(analogData.Temperatures[4]);
-                _tempsNode.CellT4?.DispatchValue(analogData.Temperatures[5]);
+                _tempsNode.Environment?.DispatchRead(analogData.Temperatures[0]);
+                _tempsNode.Mos?.DispatchRead(analogData.Temperatures[1]);
+                _tempsNode.CellT1?.DispatchRead(analogData.Temperatures[2]);
+                _tempsNode.CellT2?.DispatchRead(analogData.Temperatures[3]);
+                _tempsNode.CellT3?.DispatchRead(analogData.Temperatures[4]);
+                _tempsNode.CellT4?.DispatchRead(analogData.Temperatures[5]);
 
 
-                _lastUpdate?.DispatchValue(DateTime.Now);
+                _lastUpdate?.DispatchRead(DateTime.Now);
             }
             catch (Exception e)
             {

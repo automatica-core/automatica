@@ -2,7 +2,7 @@ using Automatica.Core.Driver;
 
 namespace P3.Driver.PingFactory
 {
-    public class PingDriver : DriverBase
+    public class PingDriver : DriverNoneAttributeBase
     {
         public PingDriver(IDriverContext driverContext) : base(driverContext)
         {

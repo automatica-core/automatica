@@ -2,7 +2,7 @@ import { RuleInstance } from "src/app/base/model/rule-instance";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { LinkService } from "../link.service";
-import { LogicEngineService } from "src/app/services/logicengine.service";
+import { LogicEngineService, LogicUpdateScope } from "src/app/services/logicengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 declare var draw2d: any;
@@ -57,7 +57,7 @@ export class LogicShapes {
 
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element);
+                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
                     }
                     catch (error) {
                         errorHandler.notifyError(error);
@@ -182,12 +182,23 @@ export class LogicShapes {
                     port.setUserData(portInstance);
 
                     port.on("connect", async function (emitterPort, connection) {
-                        await LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance, ruleEngineService);
+                        try {
+                            await LinkService.handleOnConnection(linkService, port, connection, isInput, portInstance, ruleEngineService);
+                        }
+                        catch (error) {
+                            errorHandler.notifyError(error);
+                        }
 
                     });
 
                     port.on("disconnect", async function (emitterPort, connection) {
-                        await LinkService.handleOnDisconnection(linkService, connection, isInput);
+                        try {
+                            await LinkService.handleOnDisconnection(linkService, connection, isInput);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
 
                     data.push(label);
@@ -245,12 +256,23 @@ export class LogicShapes {
                     input.setId(element.Inputs[0].PortId);
 
                     input.on("connect", async function (emitterPort, connection) {
-                        await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
+                        try {
+                            await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
+                        }
+                        catch (error) {
+                            errorHandler.notifyError(error);
+                        }
 
                     });
 
                     input.on("disconnect", async function (emitterPort, connection) {
-                        await LinkService.handleOnDisconnection(linkService, connection, true);
+                        try {
+                            await LinkService.handleOnDisconnection(linkService, connection, true);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
                 }
                 if (element.Outputs.length > 0) {
@@ -284,11 +306,23 @@ export class LogicShapes {
 
 
                     output.on("connect", async function (emitterPort, connection) {
-                        await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
+                        try {
+                            await LinkService.handleOnConnection(linkService, output, connection, false, element, ruleEngineService);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
 
                     output.on("disconnect", async function (emitterPort, connection) {
-                        await LinkService.handleOnDisconnection(linkService, connection, false);
+                        try {
+                            await LinkService.handleOnDisconnection(linkService, connection, false);
+                        }
+                        catch (error) {
+
+                            errorHandler.notifyError(error);
+                        }
                     });
                 }
 
@@ -322,7 +356,7 @@ export class LogicShapes {
 
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element);
+                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
                     } catch (error) {
                         errorHandler.notifyError(error);
                     }

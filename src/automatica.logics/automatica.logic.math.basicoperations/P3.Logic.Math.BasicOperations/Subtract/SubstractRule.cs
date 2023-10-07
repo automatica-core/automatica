@@ -22,18 +22,18 @@ namespace P3.Logic.Math.BasicOperations.Subtract
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == SubtractLogicFactory.RuleOutput);
         }
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance logicInstance, CancellationToken token = default)
         {
             _i1 = 0;
             _i2 = 0;
             return Task.FromResult(true);
         }
-        public override Task<bool> Start(CancellationToken token = default)
+        protected override Task<bool> Start(RuleInstance logicInstance, CancellationToken token = default)
         {
             var curValue = _i1 + _i2 ;
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, curValue).Instance, curValue);
 
-            return base.Start(token);
+            return Task.FromResult(true);
         }
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {

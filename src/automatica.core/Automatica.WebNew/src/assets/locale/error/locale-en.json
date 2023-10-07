@@ -1,6 +1,7 @@
 {
     "ERROR":{
         "NODE_NOT_FOUND": "The node could not be found on the server, a reboot can fix that issue!",
-        "CLOUD_CONNECTION_INVALID": "Cloud connection invalid! You need to enter a API key."
+        "CLOUD_CONNECTION_INVALID": "Cloud connection invalid! You need to enter a API key.",
+        "DOCKER_NOT_RUN_BY_SUPERVISOR": "Docker image cannot be automatically updated! This can only be done when hosted by our supervisor!"
     }
 }

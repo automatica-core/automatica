@@ -16,7 +16,7 @@ export class VirtualIconProperty extends VirtualPropertyInstance {
 
         this.PropertyTemplate.Order = 10;
 
-        this.PropertyTemplate.Meta = "booth-curtain,shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-high,temperature-low,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath";
+        this.PropertyTemplate.Meta = "shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-sun,temperature-snow,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath,fork-knife,apple-core,heat,toilet-paper-blank,toilet-portable,bed-front,bed-bunk,dryer-heat,fireplace,air-conditioner,wind,industry,outlet,charging-station,poop,fan";
         this.PropertyTemplate.ExtendedType = new ListExtendedPropertyTemplate(this.PropertyTemplate);
     }
 

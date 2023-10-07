@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Categories;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;

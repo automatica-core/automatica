@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.BoardType;
 using Automatica.Core.Base.Localization;
-using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Templates;
@@ -24,7 +23,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
         private readonly ILoadedStore _store;
         private readonly ILogicFactoryStore _logicFactoryStore;
         private readonly ILogicTemplateCache _logicTemplateCache;
-        private readonly LogicTemplateFactory _logicTemplateFactory;
+        private readonly TemplateFactoryProvider<LogicTemplateFactory> _logicTemplateFactory;
 
         public LogicLoader(ILogger<LogicLoader> logger, 
             AutomaticaContext dbContext, 
@@ -33,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             ILoadedStore store, 
             ILogicFactoryStore logicFactoryStore, 
             ILogicTemplateCache logicTemplateCache,
-            LogicTemplateFactory logicTemplateFactory)
+            TemplateFactoryProvider<LogicTemplateFactory> logicTemplateFactory)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -89,16 +88,18 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                 {
                     _logger.LogDebug($"Init logic templates for {factory.LogicName}...");
 
-                    _logicTemplateFactory.SetFactory(factory);
+                    var logicTemplateFactory = _logicTemplateFactory.CreateInstance(factory.LogicGuid);
 
-                    factory.InitTemplates(_logicTemplateFactory);
+                    logicTemplateFactory.SetFactory(factory);
 
-                    foreach (var template in _logicTemplateFactory.LogicTemplates.Values)
+                    factory.InitTemplates(logicTemplateFactory);
+
+                    foreach (var template in logicTemplateFactory.LogicTemplates.Values)
                     {
                         _logicTemplateCache.AddOrUpdate(template);
                     }
 
-                    await _logicTemplateFactory.CommitChanges();
+                    await logicTemplateFactory.CommitChanges();
 
                     _logger.LogDebug($"InitRuleTemplates for {factory.LogicName}...done");
                 }

@@ -6,7 +6,7 @@ using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
-    public abstract class KnxLevelBase : DriverBase
+    public abstract class KnxLevelBase : DriverNoneAttributeBase
     {
         public KnxDriver Driver { get; }
         public int Address { get; private set; }

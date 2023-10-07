@@ -1,13 +1,14 @@
-﻿using Automatica.Core.Base.Common;
-using Automatica.Core.Common.Update;
-using Automatica.Core.EF.Models;
+﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Internals.Core;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Automatica.Core.Internals.License;
 using Microsoft.Extensions.Logging;
+using Standard.Licensing.Validation;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -19,30 +20,44 @@ namespace Automatica.Core.WebApi.Controllers
     public class UpdateController : BaseController
     {
         private readonly ILogger<UpdateController> _logger;
-        private readonly ICloudApi api;
+        private readonly ICloudApi _api;
         private readonly IAutoUpdateHandler _updateHandler;
+        private readonly ILicenseContext _licenseContext;
 
         public ICoreServer CoreServer { get; }
 
-        public UpdateController(ILogger<UpdateController> logger, AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler) : base(dbContext)
+        public UpdateController(ILogger<UpdateController> logger, AutomaticaContext dbContext, ICloudApi api, ICoreServer coreServer, IAutoUpdateHandler updateHandler, ILicenseContext licenseContext) : base(dbContext)
         {
             _logger = logger;
-            this.api = api;
+            _api = api;
             _updateHandler = updateHandler;
+            _licenseContext = licenseContext;
             CoreServer = coreServer;
         }
 
         [HttpGet, Route("checkForUpdate")]
-        public async Task<ServerVersion> CheckForUpdate()
+        public async Task<IServerVersion> CheckForUpdate()
         {
-            var update = await api.CheckForUpdates();
+            var update = await _updateHandler.CheckForUpdates();
             return update;
+        }
+
+        [HttpGet, Route("license")]
+        public async Task<string> GetLicense()
+        {
+            var license = await _licenseContext.GetLicense();
+            return license;
+        }
+        [HttpGet, Route("licenseErrors")]
+        public IList<IValidationFailure> GetLicenseErrors()
+        {
+            return  _licenseContext.ValidationErrors;
         }
 
         [HttpGet, Route("alreadyDownloaded")]
         public async Task<ResultDto> AlreadyDownloaded()
         {
-            var downloaded = await api.UpdateAlreadyDownloaded();
+            var downloaded = await _updateHandler.UpdateAlreadyDownloaded();
             
             return new ResultDto
             {
@@ -65,14 +80,8 @@ namespace Automatica.Core.WebApi.Controllers
         {
             try
             {
-                var fileInfo = await api.DownloadUpdate(version);
-                var check = Update.CheckUpdateFile(_logger, fileInfo.FullName, ServerInfo.Rid);
-
-                if(!check)
-                {
-                    api.DeleteUpdate();
-                }
-
+                var check = await _updateHandler.DownloadUpdate(version);
+                
                 return new ResultDto
                 {
                     Result = check

@@ -14,22 +14,33 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
         }
 
+        protected override object GetCurrentValue()
+        {
+            return _value;
+        }
+
         protected override object ConvertToDptValue(object value)
         {
             var newValue = Convert.ToBoolean(value);
+            var oldValue = _value;
 
-            if (newValue != _value)
+            _value = newValue;
+            if (WriteOnlyIfChanged)
             {
-                _value = newValue;
-                DispatchValue(newValue);
-                return newValue;
+                if (oldValue != newValue)
+                {
+                    return newValue;
+                }
+
+                return null;
             }
 
-            return null;
+            return newValue;
         }
 
         protected override bool ValueRead(object value)
         {
+            DispatchRead(value);
             return true; //always dispatch dpt1 values...
         }
     }

@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { SectionComponent } from "./section.component";
 import { ElementModule } from "./element/element.module";
 import { L10nTranslationModule } from "angular-l10n";
+import { DxButtonModule } from "devextreme-angular";
 
 
 
@@ -11,7 +12,8 @@ import { L10nTranslationModule } from "angular-l10n";
   imports: [
     CommonModule,
     ElementModule,
-    L10nTranslationModule
+    L10nTranslationModule,
+    DxButtonModule
   ],
   exports: [
     SectionComponent

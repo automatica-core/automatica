@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+[assembly:InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
+
 namespace Automatica.Core.Internals.Templates
 {
     public class PropertyTemplateFactory : SettingsFactory, IPropertyTemplateFactory
     {
+        public Guid Owner { get; internal set; }
+        public bool AllowOwnerOverride { get; internal set; }
         public ILogger Logger { get; }
         public IFactory Factory { get; private set; }
         private readonly Action<PropertyTemplate, Guid> _propertyExpression;
@@ -45,6 +49,12 @@ namespace Automatica.Core.Internals.Templates
                 propertyTemplate = new PropertyTemplate {ObjId = uid};
                 retValue = CreateTemplateCode.Created;
             }
+            if (propertyTemplate.Owner.HasValue && propertyTemplate.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            propertyTemplate.Owner = Owner;
 
             propertyTemplate.FactoryReference = Factory.FactoryGuid;
             propertyTemplate.Name = name;
@@ -113,6 +123,12 @@ namespace Automatica.Core.Internals.Templates
                 constraint = new PropertyTemplateConstraint {ObjId = constraintId};
                 retValue = CreateTemplateCode.Created;
             }
+            if (constraint.Owner.HasValue && constraint.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            constraint.Owner = Owner;
 
             constraint.Name = name;
             constraint.Description = description;
@@ -145,6 +161,12 @@ namespace Automatica.Core.Internals.Templates
                 constraint.ObjId = constraintData;
                 retValue = CreateTemplateCode.Created;
             }
+            if (constraint.Owner.HasValue && constraint.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            constraint.Owner = Owner;
             constraint.Factor = factor;
             constraint.Offset = offset;
             constraint.This2PropertyTemplateConstraint = propertyTemplateConstraint;

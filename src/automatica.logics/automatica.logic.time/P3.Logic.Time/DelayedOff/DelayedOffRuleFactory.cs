@@ -14,7 +14,7 @@ namespace P3.Logic.Time.DelayedOff
         public static readonly Guid RuleOutput = new Guid("b3261338-09ee-40d2-b051-efc4d6b577ce");
 
         public override string LogicName => "Time.DelayedOff";
-        public override Version LogicVersion => new Version(0, 1, 0, 1);
+        public override Version LogicVersion => new Version(1, 1, 0, 1);
         public override Guid LogicGuid => new Guid("61182a90-6dd7-4677-ac06-a8bc38ba46a9");
 
         public override void InitTemplates(ILogicTemplateFactory factory)
@@ -27,7 +27,7 @@ namespace P3.Logic.Time.DelayedOff
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "TIME.DELAYOFF.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
 
-            factory.CreateParameterLogicInterfaceTemplate(RuleParamDelay, "TIME.DELAY.NAME", "TIME.DELAY.DESCRIPTION", LogicGuid, 1, Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Integer, 5, true);
+            factory.CreateParameterLogicInterfaceTemplate(RuleParamDelay, "TIME.DELAY.NAME", "TIME.DELAY.DESCRIPTION", "delay", LogicGuid, 1, Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Integer, 5);
         }
 
         public override ILogic CreateLogicInstance(ILogicContext context)

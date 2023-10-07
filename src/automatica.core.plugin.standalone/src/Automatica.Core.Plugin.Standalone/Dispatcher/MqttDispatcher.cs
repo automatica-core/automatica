@@ -79,9 +79,14 @@ namespace Automatica.Core.Plugin.Standalone.Dispatcher
             }
         }
 
-        public Task DispatchValue(IDispatchable self, object value)
+        public Task Init(CancellationToken token = new CancellationToken())
         {
-            return DispatchValue(self, new DispatchValue(self.Id, self.Type, value, DateTime.Now));
+            return Task.CompletedTask;
+        }
+
+        public Task DispatchValue(IDispatchable self, object value, DispatchValueSource valueSource)
+        {
+            return DispatchValue(self, new DispatchValue(self.Id, self.Type, value, DateTime.Now, valueSource));
         }
 
         public async Task DispatchValue(IDispatchable self, DispatchValue value)

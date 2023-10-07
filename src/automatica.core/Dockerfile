@@ -8,8 +8,10 @@ ARG FONTAWESOME_TOKEN
 COPY ./Automatica.WebNew /src
 
 RUN ls -lah /src
+RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN
 
-RUN npm install
+RUN npm install 
 RUN npm run build-docker
 
 
@@ -57,6 +59,9 @@ RUN ./frp/frpc --version
 FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
 WORKDIR /app/
 
+ARG VERSION
+ENV AUTOMATICA_VERSION=$VERSION
+
 COPY --from=build /app/ ./
 VOLUME /app/plugins
 
@@ -69,7 +74,7 @@ COPY ./Automatica.Core/frp/* /app/automatica/frp/
 VOLUME /app/plugins
 
 EXPOSE 1883/tcp
-EXPOSE 5001/tcp	
+EXPOSE 5000-6000
 ENV AUTOMATICA_PLUGIN_DIR=/app/plugins
 
 # Build runtime image

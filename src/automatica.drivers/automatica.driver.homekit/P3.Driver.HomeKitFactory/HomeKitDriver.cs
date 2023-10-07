@@ -14,7 +14,7 @@ using P3.Driver.HomeKitFactory.NodeInstances.Nodes;
 
 namespace P3.Driver.HomeKitFactory
 {
-    public class HomeKitDriver : DriverBase
+    public class HomeKitDriver : DriverNoneAttributeBase
     {
         private HomeKitServer _server;
         private PropertyInstance _ltskProperty;
@@ -104,7 +104,7 @@ namespace P3.Driver.HomeKitFactory
             _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"), DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
                 code, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
 
-            _pairingNode.DispatchValue(code);
+            _pairingNode.DispatchRead(code);
 
             foreach (var accessory in _accessories)
             {
@@ -133,9 +133,9 @@ namespace P3.Driver.HomeKitFactory
 
         private void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
         {
-            if (_characteristicNodeMap.ContainsKey(e.Characteristic))
+            if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
             {
-                _characteristicNodeMap[e.Characteristic].ForEach(a => a.SetValue(e.Value));
+                value.ForEach(a => a.SetValue(e.Value));
             }
         }
 

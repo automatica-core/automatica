@@ -12,7 +12,7 @@ using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory
 {
-    public class IkeaTradfriGateway : DriverBase, IIkeaTradfriGateway
+    public class IkeaTradfriGateway : DriverNoneAttributeBase, IIkeaTradfriGateway
     {
         private string _id;
         private string _secret;

@@ -10,16 +10,16 @@ import { L10nTranslationService } from "angular-l10n";
 export class RuleInterfaceInstance extends BaseModel {
 
 
-    
-    private _portValue : string;
-    public get PortValue() : string {
+
+    private _portValue: string;
+    public get PortValue(): string {
         return this._portValue;
     }
-    public set PortValue(v : string) {
+    public set PortValue(v: string) {
         this._portValue = v;
         this.notifyChange("PortValue");
     }
-    
+
 
     private _valueDouble: number;
     private _valueInteger: number;
@@ -102,6 +102,8 @@ export class RuleInterfaceInstance extends BaseModel {
             case RuleInterfaceParameterDataType.Integer:
                 return this.ValueInteger;
             case RuleInterfaceParameterDataType.Text:
+            case RuleInterfaceParameterDataType.ConstantString:
+            case RuleInterfaceParameterDataType.Color:
                 return this.ValueString;
             case RuleInterfaceParameterDataType.Timer: {
                 const timerProperty = new TimerPropertyData();
@@ -124,6 +126,8 @@ export class RuleInterfaceInstance extends BaseModel {
                 this.ValueInteger = parseInt(value, 10);
                 break;
             case RuleInterfaceParameterDataType.Text:
+            case RuleInterfaceParameterDataType.ConstantString:
+            case RuleInterfaceParameterDataType.Color:
                 this.ValueString = value;
                 break;
             case RuleInterfaceParameterDataType.Timer:

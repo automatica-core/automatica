@@ -7,7 +7,7 @@ using P3.Driver.Pixoo64.Screens;
 
 namespace P3.Driver.Pixoo64
 {
-    internal abstract class Pixoo64Screen : DriverBase
+    internal abstract class Pixoo64Screen : DriverNoneAttributeBase
     {
         protected readonly int TimeZoneOffset = 0;
 

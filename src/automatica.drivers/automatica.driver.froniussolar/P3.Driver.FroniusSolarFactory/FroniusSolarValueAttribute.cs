@@ -2,7 +2,7 @@
 
 namespace P3.Driver.FroniusSolarFactory
 {
-    internal class FroniusSolarValueAttribute : DriverBase
+    internal class FroniusSolarValueAttribute : DriverNoneAttributeBase
     {
         public string Key => DriverContext.NodeInstance.This2NodeTemplateNavigation.Key;
 

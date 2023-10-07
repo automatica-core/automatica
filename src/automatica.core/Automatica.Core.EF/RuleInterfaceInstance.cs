@@ -27,6 +27,8 @@ namespace Automatica.Core.EF.Models
                     case RuleInterfaceParameterDataType.Integer:
                         return ValueInteger;
                     case RuleInterfaceParameterDataType.Text:
+                    case RuleInterfaceParameterDataType.ConstantString:
+                    case RuleInterfaceParameterDataType.Color:
                         return ValueString;
                     case RuleInterfaceParameterDataType.Timer:
                         if (!String.IsNullOrEmpty(ValueString))
@@ -61,6 +63,8 @@ namespace Automatica.Core.EF.Models
                         ValueInteger = Convert.ToInt64(value);
                         break;
                     case RuleInterfaceParameterDataType.Text:
+                    case RuleInterfaceParameterDataType.ConstantString:
+                    case RuleInterfaceParameterDataType.Color:
                         ValueString = value.ToString();
                         break;
                     case RuleInterfaceParameterDataType.Timer:

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
-using Automatica.Core.Logic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +14,7 @@ namespace Automatica.Core.Internals.Templates
     {
         public IDictionary<Guid, RuleTemplate> LogicTemplates { get; }
 
-        public LogicTemplateFactory(ILogger<LogicTemplateFactory> logger, AutomaticaContext database, IConfiguration config) : base(logger, database, config, (template, guid) => throw new NotImplementedException())
+        public LogicTemplateFactory(ILogger<LogicTemplateFactory> logger, AutomaticaContext database, IConfiguration config) : base(logger, database, config, (_, _) => throw new NotImplementedException())
         {
             LogicTemplates = new ConcurrentDictionary<Guid, RuleTemplate>();
         }
@@ -36,6 +35,12 @@ namespace Automatica.Core.Internals.Templates
                 retValue = CreateTemplateCode.Created;
             }
 
+            if (logicTemplate.Owner.HasValue && logicTemplate.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            logicTemplate.Owner = Owner;
             logicTemplate.Name = name;
             logicTemplate.Description = description;
             logicTemplate.Key = key;
@@ -54,14 +59,7 @@ namespace Automatica.Core.Internals.Templates
                 Db.RuleTemplates.Update(logicTemplate);
             }
 
-            if (LogicTemplates.ContainsKey(logicTemplate.ObjId))
-            {
-                LogicTemplates[logicTemplate.ObjId] = logicTemplate;
-            }
-            else
-            {
-                LogicTemplates.Add(logicTemplate.ObjId, logicTemplate);
-            }
+            LogicTemplates[logicTemplate.ObjId] = logicTemplate;
 
             return retValue;
         }
@@ -103,12 +101,19 @@ namespace Automatica.Core.Internals.Templates
             bool isNewObject = false;
             if (logicInterfaceTemplate == null)
             {
-                logicInterfaceTemplate = new RuleInterfaceTemplate();
-                logicInterfaceTemplate.ObjId = id;
+                logicInterfaceTemplate = new RuleInterfaceTemplate
+                {
+                    ObjId = id
+                };
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
+            if (logicInterfaceTemplate.Owner.HasValue && logicInterfaceTemplate.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
 
+            logicInterfaceTemplate.Owner = Owner;
             logicInterfaceTemplate.Name = name;
             logicInterfaceTemplate.Key = key;
             logicInterfaceTemplate.Description = description;
@@ -141,27 +146,35 @@ namespace Automatica.Core.Internals.Templates
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
             int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
         {
-            return CreateParameterLogicInterfaceTemplate(id, name, description, ruleTemplate, sortOrder, dataType,
+            return CreateParameterLogicInterfaceTemplate(id, name, description, name, ruleTemplate, sortOrder, dataType,
                 defaultValue, false);
         }
 
-        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
-            int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
         {
             var parameterLogicInterfaceTemplate = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
             var retValue = CreateTemplateCode.Updated;
             bool isNewObject = false;
             if (parameterLogicInterfaceTemplate == null)
             {
-                parameterLogicInterfaceTemplate = new RuleInterfaceTemplate();
-                parameterLogicInterfaceTemplate.ObjId = id;
+                parameterLogicInterfaceTemplate = new RuleInterfaceTemplate
+                {
+                    ObjId = id
+                };
                 isNewObject = true;
                 retValue = CreateTemplateCode.Created;
             }
+            if (parameterLogicInterfaceTemplate.Owner.HasValue && parameterLogicInterfaceTemplate.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
+            }
+
+            parameterLogicInterfaceTemplate.Owner = Owner;
 
             parameterLogicInterfaceTemplate.Name = name;
 
-            parameterLogicInterfaceTemplate.Key = name;
+            parameterLogicInterfaceTemplate.Key = key;
             parameterLogicInterfaceTemplate.Description = description;
             parameterLogicInterfaceTemplate.This2RuleTemplate = ruleTemplate;
             parameterLogicInterfaceTemplate.This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Param;
@@ -188,12 +201,32 @@ namespace Automatica.Core.Internals.Templates
             return retValue;
         }
 
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
+            string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, name, ruleTemplate, sortOrder, dataType,
+                defaultValue, false);
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, name, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable);
+        }
+
         public CreateTemplateCode ChangeDefaultVisuTemplate(Guid uid, VisuMobileObjectTemplateTypes template)
         {
             var ruleTemplate = Db.RuleTemplates.SingleOrDefault(p => p.ObjId == uid);
             if (ruleTemplate == null)
             {
                 return CreateTemplateCode.Error;
+            }
+
+            if (ruleTemplate.Owner.HasValue && ruleTemplate.Owner != Owner && !AllowOwnerOverride)
+            {
+                throw new ArgumentException("You are not allowed to modify this template...");
             }
 
             ruleTemplate.This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(template);

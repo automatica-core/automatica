@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
+using Automatica.Core.Internals.Cloud.Model;
 using Automatica.Core.Runtime.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -59,6 +61,30 @@ namespace Automatica.Core.Runtime.Core.Update
             Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
             return Task.CompletedTask;
         }
+
+        public async Task<IServerVersion> CheckForUpdates()
+        {
+            return await _api.CheckForUpdates();
+        }
+
+        public Task<bool> UpdateAlreadyDownloaded()
+        {
+            return _api.UpdateAlreadyDownloaded();
+        }
+
+        public async Task<bool> DownloadUpdate(IServerVersion version)
+        {
+            var fileInfo =  await _api.DownloadUpdate(version);
+            var check = Common.Update.Update.CheckUpdateFile(_logger, fileInfo.FullName, ServerInfo.Rid);
+
+            if (!check)
+            {
+                _api.DeleteUpdate();
+            }
+
+            return check;
+        }
+
 
         public Task Init()
         {

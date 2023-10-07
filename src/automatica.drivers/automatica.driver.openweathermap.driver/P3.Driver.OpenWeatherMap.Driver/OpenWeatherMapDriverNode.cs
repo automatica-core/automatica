@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3.Driver.OpenWeatherMap.DriverFactory
 {
-    internal class OpenWeatherMapDriverNode : DriverBase
+    internal class OpenWeatherMapDriverNode : DriverNotWriteableBase
     {
         private readonly Func<CurrentWeatherResponse, ForecastResponse, object> _valueFunc;
 
@@ -20,10 +20,11 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
             return _valueFunc.Invoke(weatherResponse, forecastResponse);
         }
 
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             return Parent.Read(token);
         }
+
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

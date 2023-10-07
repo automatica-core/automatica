@@ -1458,7 +1458,7 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("This2UserGroup");
 
                     b.HasIndex("This2VisuPageType")
-                        .HasName("This2VisuPageType");
+                        .HasDatabaseName("This2VisuPageType");
 
                     b.ToTable("VisuPages");
                 });

@@ -6,12 +6,13 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.License;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 {
-    public class Knx3Level: DriverBase
+    public class Knx3Level: DriverNoneAttributeBase
     {
         private readonly KnxDriver _driver;
         private readonly IList<KnxMainGroup> _mainGroups;
@@ -45,7 +46,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             if (!DriverContext.LicenseContract.IsFeatureLicensed(EtsImportFeatureName))
             {
                 DriverContext.Logger.LogError($"Import feature is not licensed....");
-                return new List<NodeInstance>();
+                throw new FeatureNotLicensedException(EtsImportFeatureName);
             }
 
             var file = Path.Combine(Path.GetTempPath(), config.FileName);
@@ -58,20 +59,5 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             return await EtsProjectToNodeConverter.ConvertToNodeInstances(DriverContext.NodeTemplateFactory, project, DriverContext.NodeInstance, token);
         }
-        public sealed override Task WriteValue(IDispatchable source, object value)
-        {
-            return Task.CompletedTask;
-        }
-
-        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
-        {
-            return Task.CompletedTask;
-        }
-
-        public sealed override Task<bool> Read(CancellationToken token = new CancellationToken())
-        {
-            return Task.FromResult(false);
-        }
-
     }
 }

@@ -11,7 +11,7 @@ using Timer = System.Threading.Timer;
 
 namespace P3.Driver.VkingBms.DriverFactory
 {
-    internal class VkingDriverNode : DriverBase
+    internal class VkingDriverNode : DriverNoneAttributeBase
     {
         private VkingDriver _driver;
         private readonly List<VkingBatteryPackNode> _packs = new();

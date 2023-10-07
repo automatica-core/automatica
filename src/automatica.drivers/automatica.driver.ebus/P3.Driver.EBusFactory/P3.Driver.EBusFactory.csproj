@@ -17,6 +17,6 @@
     <EmbeddedResource Include="Resources\FroniusSymo-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="7.4.0.1159" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.5.0.1352" />
   </ItemGroup>
 </Project>

@@ -23,15 +23,8 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
         public IkeaTradfriRelayNode(IDriverContext driverContext, IkeaTradfriContainerNode container, DeviceType deviceType) : base(driverContext, container, deviceType)
         {
         }
-        
-        public override Task<bool> Read(CancellationToken token = default)
-        {
-            DispatchValue(_value);
 
-            return Task.FromResult(true);
-        }
-
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var cancellation = new CancellationTokenSource(WriteTimeout);
             try
@@ -60,6 +53,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 
                     DriverContext.Logger.LogDebug($"Done write {DriverContext.NodeInstance.Name}");
                     LastWriteState = true;
+                    await writeContext.DispatchValue(bValue, cancellation.Token);
 
                 }, cancellation.Token).WithCancellation(cancellation.Token);
             }
@@ -69,6 +63,13 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                 LastWriteState = false;
             }
         }
+
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            await readContext.DispatchValue(_value, token);
+            return true;
+        }
+
 
         internal override void Update(TradfriDevice device)
         {
@@ -81,7 +82,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                 }
 
                 _value = device.Control[0].State == Bool.True;
-                DispatchValue(_value);
+                DispatchRead(_value);
             }
             else if(DeviceType == DeviceType.Light)
             {
@@ -92,7 +93,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                 }
 
                 _value = device.LightControl[0].State == Bool.True;
-                DispatchValue(_value);
+                DispatchRead(_value);
             }
         }
 

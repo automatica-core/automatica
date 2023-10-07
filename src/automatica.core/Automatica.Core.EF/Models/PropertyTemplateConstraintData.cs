@@ -8,6 +8,7 @@ namespace Automatica.Core.EF.Models
     public class PropertyTemplateConstraintData : TypedObject
     {
         public Guid ObjId { get; set; }
+        public Guid? Owner { get; set; }
         public double Factor { get; set; }
         public double Offset { get; set; }
         public string PropertyKey { get; set; }

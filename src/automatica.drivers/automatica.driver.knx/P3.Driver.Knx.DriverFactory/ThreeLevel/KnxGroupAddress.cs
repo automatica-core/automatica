@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Knx.Falcon;
 using Knx.Falcon.ApplicationData.DatapointTypes;
@@ -14,10 +13,12 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
     {
         public string GroupAddress { get; private set; }
         public int DptType { get; private set; }
+        public int DptSubType { get; private set; }
 
         public bool ReadableFromBus { get; set; }
 
         public abstract int ImplementationDptType { get; }
+
 
 
         protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
@@ -42,7 +43,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
 
             var dptValueProp = GetProperty("knx-dpt");
-            DptType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
+            DptType = ImplementationDptType;
+            DptSubType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
@@ -57,38 +59,42 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public sealed override Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
-                var dptValue = ConvertToDptValue(value.Value);
+                var dptValue = ConvertToDptValue(value);
 
                 if (dptValue == null) //value did not change
                 {
-
-                    return Task.CompletedTask;
+                    DriverContext.Logger.LogDebug($"{GroupAddress} Value did not change, we will not write it WriteOnlyIfChanged is: {WriteOnlyIfChanged} (NewValue: {value} OldValue: {GetCurrentValue()})");
+                    return;
                 }
 
                 if (DptType != ImplementationDptType)
                 {
                     DriverContext.Logger.LogWarning(
-                        $"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
+                        $"{GroupAddress} DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
                 }
 
-                var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+                var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
                 var decodedValue = dpt.ToGroupValue(dptValue);
 
-                Driver.Write(this, GroupAddress, decodedValue);
+                var result = await Driver.Write(this, GroupAddress, decodedValue).ConfigureAwait(false);
+                await writeContext.DispatchValue(value, token);
+
+                if (!result)
+                {
+                    DriverContext.Logger.LogWarning("Failed to write to Write datagram");
+                }
             }
             catch (NotImplementedException)
             {
                 DriverContext.Logger.LogWarning(
-                    $"{DriverContext.NodeInstance.Name} {value.Value} from {source.Name} Could not convert value correctly....ignore write!");
+                    $"{DriverContext.NodeInstance.Name} {value} Could not convert value correctly....ignore write!");
             }
 
-            return Task.CompletedTask;
         }
-
 
         protected void ConvertFromBus(GroupEventArgs datagram)
         {
@@ -97,23 +103,12 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
             }
 
-            var dpt = DptFactory.Default.Get(ImplementationDptType, -1);
+            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
             var value = dpt.ToValue(datagram.Value);
 
             if (ValueRead(value))
             {
-                DispatchValue(value);
-            }
-        }
-
-        protected void ConvertFromBus(GroupValue groupValue)
-        {
-            var dpt = DptFactory.Default.Get(DptType, -1);
-            var value= dpt.ToValue(groupValue);
-
-            if (ValueRead(value))
-            {
-                DispatchValue(value);
+                DispatchRead(value);
             }
         }
 
@@ -122,7 +117,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             return true;
         }
 
-        public sealed override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             if (DriverContext.NodeInstance.IsReadable)
             {
@@ -141,6 +136,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         }
 
         protected abstract object ConvertToDptValue(object value);
+
+        protected virtual object GetCurrentValue()
+        {
+            return null;
+        }
 
         private void TelegramReceivedCallback(object data)
         {

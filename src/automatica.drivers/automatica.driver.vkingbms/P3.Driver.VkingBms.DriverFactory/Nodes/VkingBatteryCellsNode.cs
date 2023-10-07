@@ -3,7 +3,7 @@ using Automatica.Core.Driver;
 
 namespace P3.Driver.VkingBms.DriverFactory.Nodes
 {
-    internal class VkingBatteryCellsNode : DriverBase
+    internal class VkingBatteryCellsNode : DriverNoneAttributeBase
     {
         internal VkingBatteryValueNode Cell1 { get; private set; }
         internal VkingBatteryValueNode Cell2 { get; private set; }

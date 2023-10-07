@@ -3,7 +3,7 @@ using P3.Driver.EnOcean.DriverFactory.Driver.Simulated;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
-    public class EnOceanSimulatedDevices : DriverBase
+    public class EnOceanSimulatedDevices : DriverNoneAttributeBase
     {
         private readonly P3.Driver.EnOcean.Driver _driver;
 

@@ -16,6 +16,9 @@ export class AreaInstance extends BaseModel implements IPropertyModel, INameMode
 
     Properties: PropertyInstance[] = [];
 
+    
+    IsExpanded: boolean = true; 
+
 
     public get DisplayName(): string {
         return this.Name;

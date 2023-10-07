@@ -11,7 +11,7 @@ namespace P3.Logic.Compare.BaseOperations.Unequal
         public static readonly Guid RuleOutput = new Guid("8c8ee302-4da8-4f43-956b-52d5ca96eb4f");
 
         public override string LogicName => "Compare.Unequal";
-        public override Version LogicVersion => new Version(1, 0, 0, 0);
+        public override Version LogicVersion => new Version(1, 0, 0, 1);
         public override Guid LogicGuid => new Guid("22d83387-a7db-425a-82fc-28cde7effd25");
 
         public override void InitTemplates(ILogicTemplateFactory factory)
@@ -20,7 +20,7 @@ namespace P3.Logic.Compare.BaseOperations.Unequal
                 "compare.unequal", "COMPARE.NAME", 100, 100);
 
             factory.CreateLogicInterfaceTemplate(RuleInput1, "I1", "COMPARE.UNEQUAL.INPUT1.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
-            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "COMPARE.UNEQUAL.INPUT2.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 1);
+            factory.CreateLogicInterfaceTemplate(RuleInput2, "I2", "COMPARE.UNEQUAL.INPUT2.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Input, 1, 2);
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "COMPARE.UNEQUAL.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
         }

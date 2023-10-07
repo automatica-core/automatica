@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Exceptions;
 
@@ -25,12 +24,12 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
 
         public sealed override int RegisterLength => 4;
 
-        protected abstract byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue);
-        protected abstract object ConvertFromBus(IDispatchable source, byte[] value);
+        protected abstract byte[] ConvertToBus(object value, out object convertedValue);
+        protected abstract object ConvertFromBus(byte[] value);
 
-        public sealed override ushort[] ConvertValueToBus(IDispatchable source, object value, out object convertedValue)
+        public sealed override ushort[] ConvertValueToBus(object value, out object convertedValue)
         {
-            var bytes = ConvertToBus(source, value, out convertedValue);
+            var bytes = ConvertToBus(value, out convertedValue);
 
             switch (ByteOrder)
             {
@@ -83,7 +82,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             }
             throw new InvalidInputValueException();
         }
-        public sealed override object ConvertValueFromBus(IDispatchable source, ushort[] value)
+        public sealed override object ConvertValueFromBus(ushort[] value)
         {
             var bytes = new List<byte>();
 
@@ -107,7 +106,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
                     break;
             }
 
-            return ConvertFromBus(source, bytes.ToArray());
+            return ConvertFromBus(bytes.ToArray());
         }
         private void ByteSwap(ref List<byte> bytes)
         {

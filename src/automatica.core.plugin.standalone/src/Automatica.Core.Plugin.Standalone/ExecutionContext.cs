@@ -38,7 +38,16 @@ namespace Automatica.Core.Plugin.Standalone
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddAutomaticaDrivers();
+
+
+            serviceCollection.AddLogging(config =>
+            {
+                config.AddDebug();
+                config.AddConsole();
+                //etc
+            });
             serviceCollection.AddSingleton<ILogger>(a => logger);
+            serviceCollection.AddSingleton<ILoggerFactory>(new LoggerFactory());
             serviceCollection.AddSingleton<ILicenseContract, RemoteLicenseContract>();
             serviceCollection.AddSingleton<INodeTemplateFactory, RemoteNodeTemplatesFactory>();
             serviceCollection.AddSingleton<ITunnelingProvider, RemoteTunnelingProvider>();
@@ -107,7 +116,7 @@ namespace Automatica.Core.Plugin.Standalone
         {
             try
             {
-                var localization = new LocalizationProvider(_logger);
+                var localization = new LocalizationProvider(new NullLogger<LocalizationProvider>());
                 var factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
                 var templateFactory = _serviceProvider.GetRequiredService<INodeTemplateFactory>();
 

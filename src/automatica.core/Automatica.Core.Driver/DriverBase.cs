@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.Extensions;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
-using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Driver
@@ -22,6 +20,7 @@ namespace Automatica.Core.Driver
         public DispatchableType Type => DispatchableType.NodeInstance;
         public Guid Id => DriverContext.NodeInstance.ObjId;
         public bool IsRemanent => DriverContext.NodeInstance.IsRemanent;
+        public bool WriteOnlyIfChanged => DriverContext.NodeInstance.WriteOnlyIfChanged;
         public string Name => DriverContext?.NodeInstance.Name;
 
         private readonly Queue<(IDispatchable, DispatchValue)> _writeQueue = new Queue<(IDispatchable, DispatchValue)>();
@@ -155,18 +154,6 @@ namespace Automatica.Core.Driver
         }
 
 
-
-        public void DispatchValue(object value)
-        {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value);
-        }
-        public void DispatchValue(DispatchValue value)
-        {
-            DriverContext.Logger.LogDebug($"Node {Name} dispatching value {value}");
-            DriverContext.Dispatcher.DispatchValue(this, value);
-        }
-
         public  virtual Task<IList<NodeInstance>> Scan(CancellationToken token = default)
         {
             return new Task<IList<NodeInstance>>(() => new List<NodeInstance>());
@@ -180,6 +167,12 @@ namespace Automatica.Core.Driver
         public virtual Task<IList<NodeInstance>> Import(ImportConfig config, CancellationToken token = default)
         {
             return Import(config.FileName, token);
+        }
+
+        public void DispatchRead(object value)
+        {
+            DriverContext.Logger.LogDebug($"Node {Name} dispatching read value {value}");
+            DriverContext.Dispatcher.DispatchValue(this, value).ConfigureAwait(false);
         }
 
         public virtual Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
@@ -197,21 +190,22 @@ namespace Automatica.Core.Driver
             DriverContext.Logger.LogWarning("Learn mode not implemented");
             return Task.FromResult(false);
         }
-        public virtual Task WriteValue(IDispatchable source, object value)
+        public Task WriteValue(IDispatchable source, object value)
         {
-            DriverContext.Logger.LogError($"Write is not implemented in {DriverContext.NodeInstance.Name}");
-            return Task.CompletedTask;
+            return Write(value, new WriteContext(DriverContext.Dispatcher, this));
         }
 
-        public virtual Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
+        public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
             return WriteValue(source, value.Value);
         }
 
-        public virtual Task<bool> Read(CancellationToken token = default)
+        protected abstract Task Write(object value, IWriteContext writeContext, CancellationToken token = default);
+        protected abstract Task<bool> Read(IReadContext readContext, CancellationToken token = default);
+
+        public Task<bool> Read(CancellationToken token = default)
         {
-            DriverContext.Logger.LogError($"Read is not implemented in {DriverContext.NodeInstance.Name}");
-            return Task.FromResult(false);
+            return Read(new ReadContext(DriverContext.Dispatcher, this), token);
         }
 
         public virtual Task OnSave(NodeInstance instance, CancellationToken token = default)
@@ -283,6 +277,20 @@ namespace Automatica.Core.Driver
             return Task.FromResult(true);
         }
 
+        protected virtual Task<bool> StartedInternal(CancellationToken token = default)
+        {
+            return Task.FromResult(true);
+        }
+        public async Task<bool> Started(CancellationToken token = default)
+        {
+            await StartedInternal(token).ConfigureAwait(false);
+            foreach(var node in Children)
+            {
+                await node.Started(token);
+            }
+            return true;
+        }
+
         private async Task WriteTask()
         {
             try
@@ -339,6 +347,22 @@ namespace Automatica.Core.Driver
                 DriverContext.NodeInstance.State = NodeInstanceState.Unloaded;
             }
             return true;
+        }
+
+        public async Task<bool> Stopped(CancellationToken token = default)
+        {
+            await StoppedInternal(token).ConfigureAwait(false);
+            foreach (var node in Children)
+            {
+                await node.Stopped(token);
+            }
+
+            return true;
+        }
+
+        protected virtual Task<bool> StoppedInternal(CancellationToken token = default)
+        {
+            return Task.FromResult(true);
         }
 
         protected PropertyInstance GetProperty(NodeInstance instance, string propertyKey)

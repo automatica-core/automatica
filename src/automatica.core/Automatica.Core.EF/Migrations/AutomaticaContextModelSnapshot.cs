@@ -15,7 +15,7 @@ namespace Automatica.Core.EF.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
@@ -311,6 +311,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("Owner")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Type");
 
                     b.ToTable("InterfaceTypes");
@@ -480,6 +483,9 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("VisuName")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("WriteOnlyIfChanged")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ObjId");
 
                     b.HasIndex("This2AreaInstance");
@@ -595,6 +601,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("NeedsInterface2InterfacesType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("Owner")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ProvidesInterface2InterfaceType")
@@ -803,6 +812,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValueSql("1");
 
+                    b.Property<Guid?>("Owner")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("This2NodeTemplate")
                         .HasColumnType("TEXT");
 
@@ -847,6 +859,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("Owner")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("This2PropertyTemplate")
                         .HasColumnType("TEXT");
 
@@ -875,6 +890,9 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("REAL")
                         .HasDefaultValue(0.0);
+
+                    b.Property<Guid?>("Owner")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PropertyKey")
                         .HasColumnType("TEXT");
@@ -1076,6 +1094,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("Owner")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ParameterDataType")
                         .HasColumnType("INTEGER");
 
@@ -1186,6 +1207,9 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("Owner")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("This2DefaultMobileVisuTemplate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
@@ -1225,7 +1249,13 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
+                    b.Property<bool>("NeedsReloadOnChange")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ReloadContext")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("Type")

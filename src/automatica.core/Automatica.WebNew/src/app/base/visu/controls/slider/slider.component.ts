@@ -24,11 +24,11 @@ interface SliderData {
 export class SliderComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 
   private _state: number;
-  
+
   valueType: RuleInterfaceInstance;
   valueMinType: RuleInterfaceInstance;
   valueMaxType: RuleInterfaceInstance;
-  
+
   outputType: RuleInterfaceInstance;
 
   public get state(): number {
@@ -38,23 +38,23 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
     this._state = v;
   }
 
-  
-  private _valueMax? : number;
-  public get valueMax() : number {
+
+  private _valueMax?: number;
+  public get valueMax(): number {
     return this._valueMax;
   }
-  public set valueMax(v : number) {
+  public set valueMax(v: number) {
     this._valueMax = v;
   }
-  
-  private _valueMin? : number;
-  public get valueMin() : number {
+
+  private _valueMin?: number;
+  public get valueMin(): number {
     return this._valueMin;
   }
-  public set valueMin(v : number) {
+  public set valueMin(v: number) {
     this._valueMin = v;
   }
-  
+
 
   constructor(
     dataHubService: DataHubService,
@@ -77,31 +77,38 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
 
     this.valueMaxType = this.getInterfaceByTypeAndName(RuleInterfaceType.Unknown, "value_max");
     this.valueMinType = this.getInterfaceByTypeAndName(RuleInterfaceType.Unknown, "value_min");
-    
+
     var data = await <SliderData>this.logicInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId);
     this.valueMax = data.maxValue;
     this.valueMin = data.minValue;
 
 
+    this.value = this.dataHub.getCurrentValue(this.valueType.ObjId)?.value;
+    this.state = this.value;
   }
   format(value) {
     return `${value}`;
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    console.log("ruleinterfacevalue changed", interfaceId, value);
-
-    if (this.outputType.ObjId === interfaceId) {
+    if (this.outputType && this.outputType.ObjId === interfaceId) {
       this.state = value;
     }
   }
 
   onValueChanged($event) {
-    this.switch($event.value);
+    if ($event.value === true) {
+      this.state = this.valueMax;
+      this.switch(this.valueMax);
+    }
+    else if ($event.value === false) {
+      this.state = this.valueMin;
+      this.switch(this.valueMin);
+    }
   }
 
   switch($event) {
-    if(this.valueType)
+    if (this.valueType)
       this.dataHub.setValue(this.valueType.ObjId, this.state);
   }
 

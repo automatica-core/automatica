@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.UnitTests.Base.Logics;
 using P3.Logic.Time.DelayedOff;

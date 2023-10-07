@@ -18,7 +18,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
     }
 
 
-    internal class BitcoinValueNode : DriverBase
+    internal class BitcoinValueNode : DriverNotWriteableBase
     {
         private readonly string _currency;
         private readonly bool _addSymbol;
@@ -31,13 +31,12 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
             _addSymbol = addSymbol;
             _bitcoinNode = bitcoinNode;
         }
-
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await _bitcoinNode.Refresh(token);
-
             return true;
         }
+
 
         public void UpdateValue(JObject jObject)
         {
@@ -54,7 +53,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
                     value += blockChainValue.Symbol;
                 }
 
-                DispatchValue(value);
+                DispatchRead(value);
 
                 DriverContext.Logger.LogDebug($"Read value {blockChainValue.Last}{blockChainValue.Symbol}");
             }

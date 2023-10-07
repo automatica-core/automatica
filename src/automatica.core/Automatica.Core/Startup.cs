@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
+using Automatica.Core.HyperSeries;
 using Automatica.Core.WebApi;
 using Automatica.Discovery;
 using Automatica.Push.Hubs;
@@ -29,7 +30,9 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using MQTTnet.AspNetCore.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -38,21 +41,22 @@ namespace Automatica.Core
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
+       
         public IConfiguration Configuration { get; private set; }
+
+        public Startup(IConfiguration config)
+        {
+            Configuration = config;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMqttTcpServerAdapter();
 
-            services.AddSingleton(Configuration);
 
             services.AddDbContext<AutomaticaContext>();
+            services.AddHyperSeries();
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
@@ -71,12 +75,16 @@ namespace Automatica.Core
                 })
                 .AddJwtBearer(config =>
                 {
+                    var serverUid = ServerInfo.ServerUid.ToByteArray();
+                    var key = new byte[32];
+                    Array.Copy(serverUid, 0, key, 0, 16);
+                    Array.Copy(serverUid, 0, key, 16, 16);
                     config.RequireHttpsMetadata = false;
                     config.SaveToken = true;
                     config.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(ServerInfo.ServerUid.ToByteArray()),
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
@@ -104,9 +112,6 @@ namespace Automatica.Core
                     };
                 });
 
-            services.Configure<MvcOptions>(options =>
-            {
-            });
             services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
                 .AddAuthorization(options =>
                 {
@@ -151,7 +156,8 @@ namespace Automatica.Core
             var configRoot = builder.Build();
 
             Configuration = configRoot;
-            services.AddSingleton<IConfigurationRoot>(configRoot);
+            services.AddSingleton(configRoot);
+            services.AddSingleton<IConfiguration>(configRoot);
 
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
@@ -171,6 +177,7 @@ namespace Automatica.Core
                 a.LocalIp = "127.0.0.1";
                 a.LocalPort = Convert.ToInt32(Configuration["server:port"]);
             });
+
 
         }
 

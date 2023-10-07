@@ -12,7 +12,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         public override Guid DriverGuid => new Guid("7284093b-d1a0-4b9e-84ba-1f031f518af8");
 
-        public override Version DriverVersion => new Version(0, 4, 1, 0);
+        public override Version DriverVersion => new Version(1, 0, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.blockchain.ticker";
 
@@ -44,7 +44,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         private void CreateBitcoin(INodeTemplateFactory factory)
         {
             var btcGuid = new Guid("14e2dfca-40a3-4e0b-b44b-e52ef1ca2e00");
-            factory.CreateInterfaceType(btcGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.BTC.DESCRIPTION", int.MaxValue, 1, true);
+            factory.CreateInterfaceType(btcGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.BTC.DESCRIPTION", int.MaxValue, 1, false);
 
             factory.CreateNodeTemplate(new Guid("f728a20d-b805-4abd-9965-0e3c299a242c"), "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-btc", DriverGuid,
                 btcGuid, true, true, true, false, true, NodeDataType.Date, 1, false);
@@ -65,7 +65,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         private void CreateEthereum(INodeTemplateFactory factory)
         {
             var ethGuid = new Guid("8d522b59-5d27-410f-8382-74ffcdbed8d3");
-            factory.CreateInterfaceType(ethGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.ETH.DESCRIPTION", int.MaxValue, 1, true);
+            factory.CreateInterfaceType(ethGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.ETH.DESCRIPTION", int.MaxValue, 1, false);
 
             factory.CreateNodeTemplate(new Guid("f9541784-5107-4832-998e-049bec427ca1"), "BLOCKCHAIN_TICKER.ETH.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-eth", DriverGuid,
                 ethGuid, true, true, true, false, true, NodeDataType.Date, 1, false);
@@ -85,7 +85,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         private void CreateCardano(INodeTemplateFactory factory)
         {
             var adaGuid = new Guid("05121a1a-bc8a-49e2-b8c5-b7c0bc00d1d8");
-            factory.CreateInterfaceType(adaGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.ADA.DESCRIPTION", int.MaxValue, 1, true);
+            factory.CreateInterfaceType(adaGuid, "BLOCKCHAIN_TICKER.BTC.NAME", "BLOCKCHAIN_TICKER.ADA.DESCRIPTION", int.MaxValue, 1, false);
 
             factory.CreateNodeTemplate(new Guid("99f6142d-81bc-471a-9339-5d3fd3012f47"), "BLOCKCHAIN_TICKER.ADA.NAME", "BLOCKCHAIN_TICKER.DESCRIPTION", "blockchain-ada", DriverGuid,
                 adaGuid, true, true, true, false, true, NodeDataType.Date, 1, false);

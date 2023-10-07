@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using Automatica.Core.Base;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
@@ -16,6 +17,7 @@ using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Plugins;
+using Automatica.Core.Internals.Recorder;
 using Automatica.Core.Logging;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
@@ -30,6 +32,7 @@ using Automatica.Core.Runtime.Core.Update;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Runtime.IO;
 using Automatica.Core.Runtime.Recorder;
+using Automatica.Core.Runtime.Recorder.Abstraction;
 using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Core.Runtime.RemoteConnect.Frp;
 using Automatica.Core.Visu;
@@ -63,6 +66,8 @@ namespace Automatica.Core.Runtime
 
             services.AddSingleton<IPluginInstaller, PluginInstaller>();
             services.AddSingleton<IRecorderFactory, RecorderFactory>();
+            services.AddSingleton<ITrendingContext, TrendingContext>();
+            services.AddSingleton<IRecorderContext>(a => a.GetRequiredService<ITrendingContext>());
 
             if (!isElectronActive)
             {
@@ -79,9 +84,18 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<INodeInstanceStateHandler>(a => a.GetRequiredService<LoadedNodeInstancesStore>());
                 services.AddSingleton<ILoadedNodeInstancesStore>(a => a.GetRequiredService<LoadedNodeInstancesStore>());
 
-                services.AddSingleton<NativeUpdateHandler, NativeUpdateHandler>();
-                services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
-                services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                if (ServerInfo.InDocker)
+                {
+                    services.AddSingleton<DockerUpdateHandler, DockerUpdateHandler>();
+                    services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<DockerUpdateHandler>());
+                    services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<DockerUpdateHandler>());
+                }
+                else
+                {
+                    services.AddSingleton<NativeUpdateHandler, NativeUpdateHandler>();
+                    services.AddSingleton<IUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                    services.AddSingleton<IAutoUpdateHandler>(a => a.GetRequiredService<NativeUpdateHandler>());
+                }
 
                 services.AddSingleton<ILoadedStore, LoadedStore>();
                 services.AddSingleton<ILogicFactoryStore, LogicFactoryStore>();

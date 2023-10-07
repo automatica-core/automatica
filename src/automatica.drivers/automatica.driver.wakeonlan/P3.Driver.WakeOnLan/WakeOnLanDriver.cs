@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Automatica.Core.Driver;
+﻿using Automatica.Core.Driver;
 
 namespace P3.Driver.WakeOnLan
 {
-    public class WakeOnLanDriver : DriverBase
+    public class WakeOnLanDriver : DriverNoneAttributeBase
     {
         
         public WakeOnLanDriver(IDriverContext ctx)

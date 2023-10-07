@@ -9,7 +9,6 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.Base.LinqExtensions;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Areas;
-using Automatica.Core.Internals;
 using Automatica.Core.Internals.Areas;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Model.Models.User;

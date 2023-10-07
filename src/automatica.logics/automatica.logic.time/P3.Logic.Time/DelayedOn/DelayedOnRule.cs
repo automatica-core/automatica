@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Time.DelayedOn
 {
@@ -34,13 +35,6 @@ namespace P3.Logic.Time.DelayedOn
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, true);
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
-        {
-            _delay = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == DelayedOnLogicFactory.RuleParamDelay).ValueInteger.Value;
-            return base.Start();
-        }
-
         protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == DelayedOnLogicFactory.RuleParamDelay)
@@ -54,12 +48,12 @@ namespace P3.Logic.Time.DelayedOn
             base.ParameterValueChanged(instance, source, value);
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
             _timerRunning = false;
-            return base.Stop(token);
+            return base.Stop(ruleInstance, token);
         }
 
         private void StartStopTimer()

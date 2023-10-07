@@ -39,10 +39,10 @@ namespace P3.Logic.Operations.Slider
 
             factory.CreateParameterLogicInterfaceTemplate(RuleInputValueMinParam,
                 "OPERATIONS.SLIDER.INPUT.VALUE_MIN.NAME", "OPERATIONS.SLIDER.INPUT.VALUE_MIN.DESCRIPTION", LogicGuid, 1,
-                RuleInterfaceParameterDataType.Double, null);
+                RuleInterfaceParameterDataType.Double, "0");
             factory.CreateParameterLogicInterfaceTemplate(RuleInputValueMaxParam,
                 "OPERATIONS.SLIDER.INPUT.VALUE_MAX.NAME", "OPERATIONS.SLIDER.INPUT.VALUE_MAX.DESCRIPTION", LogicGuid, 2,
-                RuleInterfaceParameterDataType.Double, null);
+                RuleInterfaceParameterDataType.Double, "100");
 
             factory.ChangeDefaultVisuTemplate(LogicGuid, VisuMobileObjectTemplateTypes.Slider);
         }

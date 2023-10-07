@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Base.Common;
+﻿using System.Linq.Expressions;
+using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ namespace Automatica.Core.Internals.Configuration
     public class DatabaseConfigurationProvider : ConfigurationProvider
     {
         private readonly IConfiguration _config;
+        private readonly object _lock = new object();
 
         public DatabaseConfigurationProvider()
         {
@@ -21,15 +23,26 @@ namespace Automatica.Core.Internals.Configuration
 
         public override void Load()
         {
-            Data.Clear();
-            using var dbContext = new AutomaticaContext(_config);
-
-            dbContext.Database.Migrate();
-
-            foreach (var setting in dbContext.Settings)
+            lock (_lock)
             {
-                Data.Add("db:" + setting.ValueKey, $"{setting.Value}");
+                Data.Clear();
+                using var dbContext = new AutomaticaContext(_config);
+                try
+                {
+                    dbContext.Database.Migrate();
+
+                    foreach (var setting in dbContext.Settings)
+                    {
+                        Data.Add("db:" + setting.ValueKey, $"{setting.Value}");
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
             }
+
+
         }
     }
 }

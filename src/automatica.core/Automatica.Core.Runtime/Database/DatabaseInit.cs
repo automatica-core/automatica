@@ -16,8 +16,8 @@ using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
-using Automatica.Core.Runtime.Recorder;
 using System.Runtime.InteropServices;
+using Automatica.Core.Runtime.Recorder.Base;
 
 namespace Automatica.Core.Runtime.Database
 {
@@ -35,21 +35,21 @@ namespace Automatica.Core.Runtime.Database
 
             if (dbCreated)
             {
-                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                context.RuleInterfaceDirections.Add(new RuleInterfaceDirection
                 {
                     ObjId = 1,
                     Name = "Input",
                     Description = "Input",
                     Key = "I"
                 });
-                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                context.RuleInterfaceDirections.Add(new RuleInterfaceDirection
                 {
                     ObjId = 2,
                     Name = "Output",
                     Description = "Output",
                     Key = "O"
                 });
-                context.RuleInterfaceDirections.Add(new EF.Models.RuleInterfaceDirection()
+                context.RuleInterfaceDirections.Add(new RuleInterfaceDirection
                 {
                     ObjId = 3,
                     Name = "Parameter",
@@ -57,21 +57,21 @@ namespace Automatica.Core.Runtime.Database
                     Key = "P"
                 });
 
-                context.RulePageTypes.Add(new RulePageType()
+                context.RulePageTypes.Add(new RulePageType
                 {
                     ObjId = 1,
                     Name = "Rules",
                     Description = "Rules",
                     Key = "rules"
                 });
-                context.VisuPageTypes.Add(new VisuPageType()
+                context.VisuPageTypes.Add(new VisuPageType
                 {
                     ObjId = 1,
                     Name = "PC",
                     Description = "PC",
                     Key = "pc"
                 });
-                context.VisuPageTypes.Add(new VisuPageType()
+                context.VisuPageTypes.Add(new VisuPageType
                 {
                     ObjId = 2,
                     Name = "Mobile",
@@ -80,7 +80,7 @@ namespace Automatica.Core.Runtime.Database
                 });
                 context.SaveChanges();
 
-                context.Slaves.Add(new Slave()
+                context.Slaves.Add(new Slave
                 {
                     ObjId = new Guid(ServerInfo.SelfSlaveId),
                     Name = "local",
@@ -104,6 +104,8 @@ namespace Automatica.Core.Runtime.Database
             }
 
             var lat = context.Settings.SingleOrDefault(a => a.ValueKey == "Latitude");
+            var longi = context.Settings.SingleOrDefault(a => a.ValueKey == "Longitude");
+
 
             if (lat == null)
             {
@@ -114,9 +116,20 @@ namespace Automatica.Core.Runtime.Database
                     Value = 0,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 10
+                    Order = 10,
+                    ReloadContext = SettingReloadContext.Server,
+                    NeedsReloadOnChange = true
                 });
-
+            }
+            else
+            {
+                lat.ValueDouble ??= 0;
+                lat.NeedsReloadOnChange = true;
+                lat.ReloadContext = SettingReloadContext.Server;
+                context.Settings.Update(lat);
+            }
+            if(longi == null)
+            {
                 context.Settings.Add(new Setting
                 {
                     ValueKey = "Longitude",
@@ -124,25 +137,17 @@ namespace Automatica.Core.Runtime.Database
                     Value = 0,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 11
+                    Order = 11,
+                    ReloadContext = SettingReloadContext.Server,
+                    NeedsReloadOnChange = true
                 });
             }
             else
             {
-                var longi = context.Settings.SingleOrDefault(a => a.ValueKey == "Longitude");
-
-                if (lat.ValueDouble == null)
-                {
-                    lat.ValueDouble = 0;
-                }
-
-                if (longi.ValueDouble == null)
-                {
-                    longi.ValueDouble = 0;
-                }
-
+                longi.ValueDouble ??= 0;
+                longi.NeedsReloadOnChange = true;
+                longi.ReloadContext = SettingReloadContext.Server;
                 context.Settings.Update(longi);
-                context.Settings.Update(lat);
             }
 
             var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "apiKey");
@@ -301,17 +306,22 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 0,
-                    Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType))
+                    Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType)),
+                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.Recorders
                 });
             }
             else
             {
                 trendingRecorder.Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType));
+                trendingRecorder.NeedsReloadOnChange = true;
+                trendingRecorder.ReloadContext = SettingReloadContext.Recorders;
                 context.Update(trendingRecorder);
             }
 
             AddHostedGrafanaRecorderSettings(context);
             AddRemoteConnectSettings(context);
+            AddHyperSeriesRecorderSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -327,7 +337,7 @@ namespace Automatica.Core.Runtime.Database
                 }
 
                 var type = propertyType.GetType();
-                var memInfo = type.GetMember(propertyType.ToString());
+                var memInfo = type!.GetMember(propertyType.ToString());
                 var attributes = memInfo[0].GetCustomAttributes(typeof(PropertyTemplateTypeAttribute), false);
 
                 if (attributes.Length > 0 && attributes[0] is PropertyTemplateTypeAttribute attribute)
@@ -368,7 +378,7 @@ namespace Automatica.Core.Runtime.Database
                 }
 
                 var type = nodeDataType.GetType();
-                var memInfo = type.GetMember(nodeDataType.ToString());
+                var memInfo = type!.GetMember(nodeDataType.ToString());
                 var attributes = memInfo[0].GetCustomAttributes(typeof(NodeDataTypeEnumAttribute), false);
 
                 if (attributes.Length > 0 && attributes[0] is NodeDataTypeEnumAttribute attribute)
@@ -403,7 +413,7 @@ namespace Automatica.Core.Runtime.Database
             AddSystemTemplates(context);
             AddSystemRemoteTemplates(context);
 
-            IDatabaseBoardType boardType = null;
+            IDatabaseBoardType boardType;
 
             if (BoardTypes.Docker.Docker.InDocker)
             {
@@ -531,9 +541,15 @@ namespace Automatica.Core.Runtime.Database
                     Value = false,
                     Group = "SERVER.REMOTE",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.RemoteConnect
                 });
-
+            }
+            else
+            {
+                remoteEnabled.NeedsReloadOnChange = true;
+                remoteEnabled.ReloadContext = SettingReloadContext.RemoteConnect;
             }
 
             var ngrokToken = context.Settings.SingleOrDefault(a => a.ValueKey == "ngrokToken");
@@ -553,11 +569,132 @@ namespace Automatica.Core.Runtime.Database
                     Value = null,
                     Group = "SERVER.REMOTE",
                     IsVisible = true,
-                    Order = 2
+                    Order = 2,
+                    NeedsReloadOnChange = true,
+                    ReloadContext = SettingReloadContext.RemoteConnect
                 });
-
+            }
+            else
+            {
+                remoteDomain.NeedsReloadOnChange = true;
+                remoteDomain.ReloadContext = SettingReloadContext.RemoteConnect;
             }
         }
+
+        private static void AddHyperSeriesRecorderSettings(AutomaticaContext context)
+        {
+            var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesHost");
+
+            if (host == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hyperSeriesHost",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HYPERSERIES",
+                    IsVisible = true,
+                    Order = 0,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
+                });
+            }
+            else
+            {
+                host.ReloadContext = SettingReloadContext.Recorders;
+                host.NeedsReloadOnChange = true;
+            }
+
+
+            var port = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesPort");
+
+            if (port == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hyperSeriesPort",
+                    Type = (long)PropertyTemplateType.Numeric,
+                    Value = "5432",
+                    Group = "SERVER.RECORDERS.HYPERSERIES",
+                    IsVisible = true,
+                    Order = 0,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
+                });
+            }
+            else
+            {
+                port.ReloadContext = SettingReloadContext.Recorders;
+                port.NeedsReloadOnChange = true;
+            }
+
+            var user = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesUser");
+
+            if (user == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hyperSeriesUser",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HYPERSERIES",
+                    IsVisible = true,
+                    Order = 1,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
+                });
+            }
+            else
+            {
+                user.ReloadContext = SettingReloadContext.Recorders;
+                user.NeedsReloadOnChange = true;
+            }
+
+            var password = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesPassword");
+
+            if (password == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hyperSeriesPassword",
+                    Type = (long)PropertyTemplateType.Password,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HYPERSERIES",
+                    IsVisible = true,
+                    Order = 2,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
+                });
+            }
+            else
+            {
+                password.ReloadContext = SettingReloadContext.Recorders;
+                password.NeedsReloadOnChange = true;
+            }
+            var database = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesDatabase");
+
+            if (database == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "hyperSeriesDatabase",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = "",
+                    Group = "SERVER.RECORDERS.HYPERSERIES",
+                    IsVisible = true,
+                    Order = 3,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
+                });
+            }
+            else
+            {
+                database.Type = (long) PropertyTemplateType.Text;
+                database.ReloadContext = SettingReloadContext.Recorders;
+                database.NeedsReloadOnChange = true;
+            }
+        }
+
         private static void AddHostedGrafanaRecorderSettings(AutomaticaContext context)
         {
             var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaHost");
@@ -571,7 +708,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
                     IsVisible = true,
-                    Order = 0
+                    Order = 0,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
             var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaApiKey");
@@ -585,7 +724,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
             var userId = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaUserId");
@@ -599,7 +740,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.RECORDERS.HOSTED_GRAFANA",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    ReloadContext = SettingReloadContext.Recorders,
+                    NeedsReloadOnChange = true
                 });
             }
         }
@@ -729,7 +872,7 @@ namespace Automatica.Core.Runtime.Database
             });
 
 
-            context.Add(new UserGroup2Role()
+            context.Add(new UserGroup2Role
             {
                 This2UserGroup = visuGroup.ObjId,
                 This2Role = visuRole.ObjId

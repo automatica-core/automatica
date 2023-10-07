@@ -114,6 +114,7 @@ namespace Automatica.Core.EF.Models
                     case "mariadb":
                         ConfigureMariaDatabase(optionsBuilder, loggerInstance);
                         break;
+                        break;
                     case "memory":
                         optionsBuilder.UseInMemoryDatabase("automatica");
                         loggerInstance.LogInformation($"Using MemoryDatabase provider...");
@@ -984,7 +985,7 @@ namespace Automatica.Core.EF.Models
                 entity.Property(e => e.DefaultPage);
 
                 entity.HasIndex(e => e.This2VisuPageType)
-                    .HasName("This2VisuPageType");
+                    .HasDatabaseName("This2VisuPageType");
 
                 entity.Property(a => a.Height).HasDefaultValue(4).IsRequired();
                 entity.Property(a => a.Width).HasDefaultValue(6).IsRequired();

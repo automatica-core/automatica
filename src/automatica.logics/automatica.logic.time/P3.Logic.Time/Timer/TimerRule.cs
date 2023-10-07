@@ -33,7 +33,7 @@ namespace P3.Logic.Time.Timer
 
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
+        protected override Task<bool> Start(RuleInstance ruleInstance, CancellationToken token = new CancellationToken())
         {
             if (_timerProperty?.Value != null)
             {
@@ -56,7 +56,7 @@ namespace P3.Logic.Time.Timer
             
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
-            return base.Start(token);
+            return base.Start(ruleInstance, token);
         }
 
         private void CalculateTickTime(bool isStartup=false)
@@ -122,11 +122,11 @@ namespace P3.Logic.Time.Timer
             _timer.Start();
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
-            return base.Stop(token);
+            return base.Stop(ruleInstance, token);
         }
 
         private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

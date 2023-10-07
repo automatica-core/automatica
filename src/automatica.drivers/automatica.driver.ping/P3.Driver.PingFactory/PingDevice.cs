@@ -9,7 +9,7 @@ using Timer = System.Threading.Timer;
 
 namespace P3.Driver.PingFactory
 {
-    public class PingDevice : DriverBase
+    public class PingDevice : DriverNotWriteableBase
     {
         private string _ip;
         private int _interval;
@@ -49,9 +49,9 @@ namespace P3.Driver.PingFactory
             return base.Init(token);
         }
 
-        public override Task<bool> Read(CancellationToken token = new CancellationToken())
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            DispatchValue(Value);
+            DispatchRead(Value);
             return Task.FromResult(true);
         }
 
@@ -111,7 +111,7 @@ namespace P3.Driver.PingFactory
             {
                 CurrentSuccess = 0;
                 Value = false;
-                DispatchValue(false);
+                DispatchRead(false);
             }
             else
             {
@@ -126,7 +126,7 @@ namespace P3.Driver.PingFactory
             if (CurrentSuccess >= _minSuccess)
             {
                 Value = true;
-                DispatchValue(true);
+                DispatchRead(true);
             }
             else
             {

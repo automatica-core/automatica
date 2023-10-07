@@ -8,7 +8,8 @@ namespace Automatica.Core.Runtime.RemoteConnect
 {
     public interface IRemoteConnectService : IHostedService
     {
-        Task InitAsync();
+        Task ReloadAsync(CancellationToken cancellationToken = default);
+        Task InitAsync(CancellationToken cancellationToken = default);
         Task<bool> IsRunning(CancellationToken token);
 
         Task<string> CreateTunnelAsync(TunnelingProtocol protocol, string name, string localIp, int localPort, Guid driverGuid, CancellationToken token);

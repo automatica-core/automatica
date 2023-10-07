@@ -16,17 +16,22 @@ namespace P3.Driver.Pixoo64
             _screen = screen;
         }
 
-        public override async Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = new CancellationToken())
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
-                await _screen.SetValue(value.Value, DriverContext.NodeInstance, token);
-                DispatchValue(value.Value);
+                await _screen.SetValue(value, DriverContext.NodeInstance, token);
+                await writeContext.DispatchValue(value, token);
             }
             catch (Exception e)
             {
                 DriverContext.Logger.LogError($"Could not set screen value {e}");
             }
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
         }
 
 

@@ -11,13 +11,13 @@ namespace Automatica.Core.Internals.Cloud.Model
     /// 
     /// </summary>
     [DataContract]
-  public class ServerVersion {
+  public class ServerVersion : IServerVersion {
     /// <summary>
     /// Gets or Sets ObjId
     /// </summary>
     [DataMember(Name="objId", EmitDefaultValue=false)]
     [JsonProperty(PropertyName = "objId")]
-    public Guid? ObjId { get; set; }
+    public Guid ObjId { get; set; }
 
     /// <summary>
     /// Gets or Sets Version
@@ -61,12 +61,12 @@ namespace Automatica.Core.Internals.Cloud.Model
     [JsonProperty(PropertyName = "changeLog")]
     public string ChangeLog { get; set; }
 
-    /// <summary>
-    /// Gets or Sets IsPrerelease
-    /// </summary>
-    [DataMember(Name="isPrerelease", EmitDefaultValue=false)]
-    [JsonProperty(PropertyName = "isPrerelease")]
-    public bool? IsPrerelease { get; set; }
+        /// <summary>
+        /// Gets or Sets IsPreRelease 
+        /// </summary>
+        [DataMember(Name= "isPreRelease", EmitDefaultValue=false)]
+    [JsonProperty(PropertyName = "isPreRelease")]
+    public bool? IsPreRelease { get; set; }
 
     /// <summary>
     /// Gets or Sets IsPublic
@@ -90,11 +90,14 @@ namespace Automatica.Core.Internals.Cloud.Model
     public bool? IsNewObject { get; set; }
 
 
-    /// <summary>
-    /// Get the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()  {
+    public string Type => nameof(ServerVersion);
+
+
+/// <summary>
+        /// Get the string presentation of the object
+        /// </summary>
+        /// <returns>String presentation of the object</returns>
+        public override string ToString()  {
       var sb = new StringBuilder();
       sb.Append("class ServerVersion {\n");
       sb.Append("  ObjId: ").Append(ObjId).Append("\n");
@@ -103,7 +106,7 @@ namespace Automatica.Core.Internals.Cloud.Model
       sb.Append("  AzureUrl: ").Append(AzureUrl).Append("\n");
       sb.Append("  AzureFileName: ").Append(AzureFileName).Append("\n");
       sb.Append("  ChangeLog: ").Append(ChangeLog).Append("\n");
-      sb.Append("  IsPrerelease: ").Append(IsPrerelease).Append("\n");
+      sb.Append("  IsPreRelease: ").Append(IsPreRelease).Append("\n");
       sb.Append("  IsPublic: ").Append(IsPublic).Append("\n");
       sb.Append("  Rid: ").Append(Rid).Append("\n");
       sb.Append("  IsNewObject: ").Append(IsNewObject).Append("\n");

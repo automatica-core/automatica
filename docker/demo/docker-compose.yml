@@ -14,5 +14,15 @@ services:
     links:
       - automatica
       
+  timescale_automatica:
+    image: timescale/timescaledb:latest-pg15
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    links:
+      - automatica
+      
       
       

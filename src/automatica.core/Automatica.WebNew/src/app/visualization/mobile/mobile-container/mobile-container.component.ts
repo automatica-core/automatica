@@ -17,6 +17,7 @@ import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { DataService } from "src/app/services/data.service";
 import { VirtualPropertyInstance } from "src/app/base/model/virtual-props";
 import { PropertyTemplateType } from "src/app/base/model/property-template";
+import { VisuFacadePage } from "src/app/base/model/visu-facade-page";
 
 @Component({
   selector: "app-mobile-container",
@@ -53,6 +54,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
     this.visuTemplates = await this.visuService.getVisuTemplates();
 
+    this.registerEvent(this.visuService.reloadedPage, (page) => {
+      this.initPage(page, page.ObjId);
+    });
+
+
 
     for (const v of this.visuTemplates) {
       this.visuTemplatesMap.set(v.ObjId, v);
@@ -65,7 +71,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
         if (this.route.snapshot.data.loadHomepage) {
           this.pageGroupType = VisuPageGroupType.Favorites;
           const data = await this.visuService.getFavorites();
-          this.initPage(data);
+          this.initPage(data, void 0);
 
         } else {
           super.registerObservable(this.route.params, async (params) => {
@@ -89,7 +95,7 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
             }
 
             const data = await this.visuService.getVisuPage(id);
-            this.initPage(data);
+            this.initPage(data, id);
 
 
             this.appService.isLoading = false;
@@ -105,11 +111,16 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     this.appService.isLoading = false;
   }
 
-  private initPage(data) {
+  private initPage(data: VisuPage | VisualizationDataFacade, id: any) {
     if (data instanceof VisualizationDataFacade) {
-      this.page = new VisuPage();
-      this.page.Height = 3;
-      this.page.Width = 5;
+      var page = new VisuFacadePage();
+      
+      page.Height = 3;
+      page.Width = 5;
+      page.visuPageType = this.pageGroupType;
+
+      page.ObjId = id;
+      this.page = page;
 
       const visuObjectInstances = [];
 

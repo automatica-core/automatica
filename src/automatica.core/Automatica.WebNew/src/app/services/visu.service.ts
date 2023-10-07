@@ -1,14 +1,18 @@
 import { BaseService } from "../services/base-service";
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { L10nTranslationService } from "angular-l10n";
 import { VisuObjectTemplate } from "../base/model/visu-object-template";
 import { VisuPage } from "../base/model/visu-page";
 import { BaseModel } from "../base/model/base-model";
+import { VisualizationDataFacade } from "../base/model/visualization-data-facade";
 
 @Injectable()
 export class VisuService extends BaseService {
+
+    public reloadedPage = new EventEmitter<VisuPage | VisualizationDataFacade>();
+
     constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
         super(http, pRouter, translationService);
     }
@@ -20,7 +24,7 @@ export class VisuService extends BaseService {
     getVisuPages(): Promise<VisuPage[]> {
         return super.getMultiple<VisuPage>("visualization/pages");
     }
-    getVisuPage(id: string): Promise<BaseModel> {
+    getVisuPage(id: string): Promise<VisuPage | VisualizationDataFacade> {
         return super.get("visualization/page/" + id);
     }
 
@@ -28,7 +32,7 @@ export class VisuService extends BaseService {
         return super.get<VisuPage>("visualization/page/default/" + pageType);
     }
 
-    getFavorites(): Promise<BaseModel> {
+    getFavorites(): Promise<VisualizationDataFacade> {
         return super.get("visualization/page/default/0");
     }
 
@@ -39,5 +43,14 @@ export class VisuService extends BaseService {
         }
 
         return super.postMultiple<VisuPage>("visualization/pages", ar);
+    }
+
+    async reloadPage(page: VisuPage): Promise<VisuPage | VisualizationDataFacade> {
+
+        var loaded = await super.get<VisuPage>("visualization/page/" + page.ObjId);
+        loaded.ObjId = page.ObjId;
+        this.reloadedPage.emit(loaded);
+        return loaded;
+
     }
 }

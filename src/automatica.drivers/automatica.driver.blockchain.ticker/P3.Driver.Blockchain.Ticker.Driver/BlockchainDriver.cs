@@ -11,7 +11,7 @@ using Timer = System.Timers.Timer;
 
 namespace P3.Driver.Blockchain.Ticker.Driver
 {
-    internal class BlockchainDriver : DriverBase
+    internal class BlockchainDriver : DriverNoneAttributeBase
     {
         private Timer _timer = new Timer();
       
@@ -52,10 +52,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await ReadValues(token);
-
             return true;
         }
 
@@ -65,7 +64,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
             foreach (var node in _nodes)
             {
-                await node.Refresh();
+                await node.Refresh(token);
             }
         }
 

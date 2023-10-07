@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 [assembly: InternalsVisibleTo("P3.Driver.Blockchain.Ticker.Console")]
 
@@ -31,12 +30,11 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
         {
         }
 
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await Refresh(token);
             return true;
         }
-
         public override async Task Refresh(CancellationToken token = default)
         {
             try

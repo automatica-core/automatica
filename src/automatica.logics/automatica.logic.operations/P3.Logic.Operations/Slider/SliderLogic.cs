@@ -51,15 +51,15 @@ namespace P3.Logic.Operations.Slider
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleInputValueMax);
         }
 
-        public override Task<bool> Start(CancellationToken token = new CancellationToken())
+        protected override Task<bool> Start(RuleInstance ruleInstance, CancellationToken token = new CancellationToken())
         {
-            _min = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            _min = ruleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleInputValueMinParam)!.ValueDouble;
 
-            _max = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            _max = ruleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == SliderLogicFactory.RuleInputValueMaxParam)!.ValueDouble;
 
-            return base.Start(token);
+            return Task.FromResult(true);
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,

@@ -16,7 +16,7 @@ namespace P3.Driver.MBusDriverFactory
         Serial,
         Udp
     }
-    public class Driver : DriverBase
+    public class Driver : DriverNoneAttributeBase
     {
         private readonly MBusType _connectionType;
         private MBusConnection _connection;

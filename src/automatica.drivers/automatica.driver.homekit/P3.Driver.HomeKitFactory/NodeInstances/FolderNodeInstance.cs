@@ -6,7 +6,7 @@ using P3.Driver.HomeKitFactory.NodeInstances.Nodes;
 
 namespace P3.Driver.HomeKitFactory.NodeInstances
 {
-    public class FolderNodeInstance : DriverBase
+    public class FolderNodeInstance : DriverNoneAttributeBase
     {
         public HomeKitDriver Driver { get; }
         public Accessory Accessory { get; }

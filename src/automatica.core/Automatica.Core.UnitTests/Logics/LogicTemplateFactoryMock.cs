@@ -106,6 +106,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
             interfaceType.Name = name;
             interfaceType.Description = description;
+            interfaceType.Key = key;
             interfaceType.This2RuleTemplate = ruleTemplate;
             interfaceType.This2RuleInterfaceDirection = (long)direction;
             interfaceType.MaxLinks = maxLinks;
@@ -123,8 +124,8 @@ namespace Automatica.Core.UnitTests.Base.Logics
                 defaultValue, false);
         }
 
-        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
-            int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
         {
             var interfaceType = new RuleInterfaceTemplate();
 
@@ -139,6 +140,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
             interfaceType.Name = name;
             interfaceType.Description = description;
+            interfaceType.Key = key;
             interfaceType.This2RuleTemplate = ruleTemplate;
             interfaceType.This2RuleInterfaceDirection = (long)LogicInterfaceDirection.Param;
             interfaceType.MaxLinks = 0;
@@ -148,6 +150,20 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
             _ruleInterfaceTemplates[id] = interfaceType;
             return retValue;
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, false);
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
+            int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, name, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable);
         }
 
         public CreateTemplateCode CreatePropertyTemplate(Guid uid, string name, string description, string key,

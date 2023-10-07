@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 
@@ -13,12 +13,12 @@ namespace P3.Driver.SonosDriverFactory.Attributes
         {
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
                 DriverContext.Logger.LogDebug($"Sonos play...");
-                await base.WriteValue(source, value);
+                await base.Write(value, writeContext, token);
                 await Device.Controller.PlayAsync();
             }
             catch (Exception e)

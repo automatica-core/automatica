@@ -15,8 +15,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
-		<PackageReference Include="System.IO.Abstractions" Version="19.1.18" />
+		<PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
+		<PackageReference Include="System.IO.Abstractions" Version="19.2.67" />
 	</ItemGroup>
 
 </Project>

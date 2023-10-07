@@ -18,21 +18,13 @@
     "Type": "driver",
     "Output": "P3.Driver.Knx.DriverFactory.dll",
     "Resources": [],
-    "Dependencies": [
-      "P3.Knx.Core.Ets.dll",
-      "P3.Knx.Core.Baos.Driver.dll",
-      "P3.Knx.Core.Abstractions.dll",
-      "ICSharpCode.SharpZipLib.dll",
-      "Knx.Falcon.dll",
-      "Knx.Falcon.Sdk.dll",
-      "Knx.Falcon.ApplicationData.dll"
-    ],
+    "Dependencies": [ "P3.Knx.Core.Ets.dll", "P3.Knx.Core.Baos.Driver.dll", "P3.Knx.Core.Abstractions.dll", "ICSharpCode.SharpZipLib.dll", "Knx.Falcon.dll", "Knx.Falcon.Sdk.dll", "Knx.Falcon.ApplicationData.dll" ],
     "ProjectPage": null,
     "MinCoreServerVersion": {
-      "Minor": 4,
+      "Minor": 5,
       "Major": 7,
-      "Build": 0,
-      "Revision": 1190
+      "Build": 1,
+      "Revision": 1434
     },
     "MandatoryLicenseFeatures": [],
     "OptionalLicenseFeatures": [ "knx-ets-import", "knx-interface-remote-connection" ]

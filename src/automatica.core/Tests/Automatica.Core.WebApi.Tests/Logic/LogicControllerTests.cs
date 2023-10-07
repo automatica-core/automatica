@@ -2,12 +2,10 @@
 using System.Linq;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
-using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Exceptions;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
 using Microsoft.Extensions.Logging.Abstractions;
-using Moq;
 using Xunit;
 
 namespace Automatica.Core.WebApi.Tests.Logic
@@ -63,6 +61,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
             using var db = new AutomaticaContext(Configuration);
 
             var logicTemplateFactory = new LogicTemplateFactory(NullLogger<LogicTemplateFactory>.Instance, db, Configuration);
+            logicTemplateFactory.Owner = Guid.NewGuid();
 
             var factory = new TestLogicFactory();
             factory.InitTemplates(logicTemplateFactory);

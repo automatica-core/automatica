@@ -2,7 +2,7 @@
 
 namespace P3.Driver.VkingBms.DriverFactory.Nodes
 {
-    internal class VkingBatteryTempsNode : DriverBase
+    internal class VkingBatteryTempsNode : DriverNoneAttributeBase
     {
         internal VkingBatteryValueNode Environment { get; private set; }
         internal VkingBatteryValueNode Mos { get; private set; }

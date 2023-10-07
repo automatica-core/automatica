@@ -4,7 +4,8 @@
   },
   "SERVER": {
     "RECORDERS": {
-      "HOSTED_GRAFANA": "Hosted Grafana Recorder"
+      "HOSTED_GRAFANA": "Hosted Grafana Recorder",
+      "HYPERSERIES": "Hyperseries"
     },
     "SETTINGS": "Server Settings",
     "REMOTE": "Remote Server Settings"
@@ -28,6 +29,7 @@
     "SAVE": "Save",
     "NEW": "New",
     "COPY": "Copy",
+    "COPY_VALUE": "Copy value",
     "PASTE": "Paste",
     "DELETE": "Delete",
     "CONFIRM_DELETE": "Are you sure you want to delete this record?",
@@ -99,7 +101,26 @@
         "OUTOFLICENSE": {
           "NAME": "License exceeded",
           "DESCRIPTION": "You have reached the max amount of licensed datapoints."
+        },
+        "OUT_OF_SATELLITE_LICENSES": {
+          "NAME": "Satellite license exceeded",
+          "DESCRIPTION": "You have reached the max amount of statellites."
         }
+      }
+    },
+    "CHART": {
+      "NAME": "Chart",
+      "RANGE_AGGREGATION": "Range/Aggregation",
+      "RANGE": "Range",
+      "AGGREGATION": "Aggregation",
+      "COUNT": "Count values",
+      "AGGREGATION_ENUM": {
+        "RAW": "Raw",
+        "HOURLY": "Hourly",
+        "DAILY": "Daily",
+        "WEEKLY": "Weekly",
+        "MONTHLY": "Monthly",
+        "YEARLY": "Yearly"
       }
     },
     "SWITCH": {
@@ -408,6 +429,9 @@
       "REMANENT": {
         "NAME": "Remanent"
       },
+      "ONLY_WRITE_IF_CHANGED": {
+        "NAME": "Nur Schreiben wenn geändert"
+      },
       "VALUE": {
         "NAME": "Value"
       },
@@ -422,6 +446,21 @@
       },
       "REMOTETOKEN": {
         "NAME": "Token"
+      },
+      "HYPERSERIESUSER":{
+        "NAME": "User"
+      },
+      "HYPERSERIESHOST":{
+        "NAME": "Host"
+      },
+      "HYPERSERIESPASSWORD":{
+        "NAME": "Password"
+      },
+      "HYPERSERIESDATABASE":{
+        "NAME": "Database"
+      },
+      "HYPERSERIESPORT":{
+        "NAME": "Port"
       }
     },
     "CATEGORY_INSTANCE": {
@@ -569,8 +608,10 @@
   },
   "SYSTEM": {
     "NAME": "System",
+    "LICENSE": "License",
     "UPDATE_AVAILABLE": "Update available",
-    "NO_UPDATE_AVAILABLE": "No update available"
+    "NO_UPDATE_AVAILABLE": "No update available",
+    "NO_LICENSE_FOUND": "No license found"
   },
   "LICENSE": {
     "NAME": "License"

@@ -13,7 +13,7 @@ namespace P3.Logic.Time.Monoflop
         public static readonly Guid RuleOutput = new Guid("3DBE05BF-BD15-4460-BB1D-9622797FD4AA");
 
         public override string LogicName => "Time.Monoflop";
-        public override Version LogicVersion => new Version(0, 0, 0, 2);
+        public override Version LogicVersion => new Version(1, 0, 0, 2);
         public override Guid LogicGuid => new Guid("32C3A4C9-9A84-4581-AA25-72B5D25091EA");
 
         public override void InitTemplates(ILogicTemplateFactory factory)
@@ -25,7 +25,7 @@ namespace P3.Logic.Time.Monoflop
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "TIME.MONOFLOP.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
 
-            factory.CreateParameterLogicInterfaceTemplate(RuleParamDelay, "TIME.DELAY.NAME", "TIME.DELAY.DESCRIPTION", LogicGuid, 1, Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Integer, 5);
+            factory.CreateParameterLogicInterfaceTemplate(RuleParamDelay, "TIME.DELAY.NAME", "TIME.DELAY.DESCRIPTION", "delay", LogicGuid, 1, Automatica.Core.EF.Models.RuleInterfaceParameterDataType.Integer, 5);
         }
 
         public override ILogic CreateLogicInstance(ILogicContext context)

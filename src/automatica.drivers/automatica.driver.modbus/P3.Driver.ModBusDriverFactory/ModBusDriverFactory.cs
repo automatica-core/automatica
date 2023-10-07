@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Xml.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using P3.Driver.ModBusDriver;

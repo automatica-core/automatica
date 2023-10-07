@@ -1,10 +1,6 @@
-import { PropertyInstance } from "../property-instance"
-import { PropertyTemplate, PropertyTemplateType } from "../property-template"
-import { PropertyType } from "../property-type"
+import { PropertyTemplateType } from "../property-template"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
-import { INameModel } from "../INameModel";
 import { IAreaInstanceModel } from "../IAreaInstanceModel";
-import { AreaInstance } from "../areas/area-instance";
 
 export class VirtualAreaPropertyInstance extends VirtualPropertyInstance {
 
@@ -31,4 +27,5 @@ export class VirtualAreaPropertyInstance extends VirtualPropertyInstance {
         this.areaInstance.This2AreaInstance = value;
         this.propertyChanged.emit(this);
     }
+
 }

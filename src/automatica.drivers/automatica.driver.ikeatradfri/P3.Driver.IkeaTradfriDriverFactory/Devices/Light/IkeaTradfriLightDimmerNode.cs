@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
-using Newtonsoft.Json.Linq;
 using Tomidix.NetStandard.Tradfri.Models;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
@@ -19,23 +16,22 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices.Light
         internal override void Update(TradfriDevice device)
         {
             _value = device.LightControl[0].Dimmer;
-            DispatchValue(_value);
+            DispatchRead(_value);
         }
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            DispatchValue(_value);
-
-            return Task.FromResult(true);
+            await readContext.DispatchValue(_value, token);
+            return true;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var intValue = Convert.ToInt32(value);
 
             _value = intValue;
 
-            Container.Gateway.Driver.SetDimmer(Container.DeviceId, intValue);
-            return base.WriteValue(source, intValue);
+            await Container.Gateway.Driver.SetDimmer(Container.DeviceId, intValue);
+            await writeContext.DispatchValue(intValue, token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

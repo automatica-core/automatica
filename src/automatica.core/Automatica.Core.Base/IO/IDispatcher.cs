@@ -6,26 +6,34 @@ using System.Threading.Tasks;
 
 namespace Automatica.Core.Base.IO
 {
+    public enum DispatchValueSource
+    {
+        Read,
+        Write,
+        User
+    }
     public class DispatchValue
     {
 
 
-        public DispatchValue(Guid id, DispatchableType dispatchableType, object value, DateTime timestamp)
+        public DispatchValue(Guid id, DispatchableType dispatchableType, object value, DateTime timestamp, DispatchValueSource valueSource)
         {
             Id = id;
             Type = dispatchableType;
             Value = value;
             Timestamp = timestamp;
+            ValueSource = valueSource;
         }
 
         public DispatchableType Type { get; set; }
         public Guid Id { get; set; }
         public object Value { get; set; }
         public DateTime Timestamp { get; set; }
+        public DispatchValueSource ValueSource { get; }
 
         public override string ToString()
         {
-            return $"{Type}:{Timestamp}:{Value}";
+            return $"{Type}:{Timestamp}:{Value} - {ValueSource}";
         }
     }
 
@@ -33,7 +41,7 @@ namespace Automatica.Core.Base.IO
     {
         Task Init(CancellationToken token = default);
 
-        Task DispatchValue(IDispatchable self, object value);
+        Task DispatchValue(IDispatchable self, object value, DispatchValueSource valueSource = DispatchValueSource.Read);
         Task DispatchValue(IDispatchable self, DispatchValue value);
 
         Task UnRegisterDispatch(DispatchableType type, Guid id);

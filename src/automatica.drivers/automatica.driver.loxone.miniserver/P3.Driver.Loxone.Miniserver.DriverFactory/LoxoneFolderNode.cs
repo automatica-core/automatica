@@ -2,7 +2,7 @@
 
 namespace P3.Driver.Loxone.Miniserver.DriverFactory
 {
-    public class LoxoneFolderNode : DriverBase
+    public class LoxoneFolderNode : DriverNoneAttributeBase
     {
         private readonly LoxoneDriver _driver;
 

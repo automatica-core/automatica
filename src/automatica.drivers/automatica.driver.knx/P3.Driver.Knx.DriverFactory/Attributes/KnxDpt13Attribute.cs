@@ -22,12 +22,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                 _value = dpt13Value;
 
-                if (ret)
-                {
-                    DispatchValue(_value);
-                }
-
-                return false;
+                return ret;
 
             }
 
@@ -38,7 +33,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
         {
             if (value is int vlInt)
             {
-                DispatchValue(vlInt);
                 return vlInt;
             }
 

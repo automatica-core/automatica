@@ -3,7 +3,7 @@ using P3.Driver.Knx.DriverFactory.ThreeLevel;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 {
-    public class KnxBaosDatapoints : DriverBase
+    public class KnxBaosDatapoints : DriverNoneAttributeBase
     {
         private readonly KnxBaosDriver _baosDriver;
 

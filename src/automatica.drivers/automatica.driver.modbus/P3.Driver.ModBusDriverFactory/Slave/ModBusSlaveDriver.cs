@@ -10,7 +10,7 @@ using P3.Driver.ModBusDriver.Slave.Tcp;
 
 namespace P3.Driver.ModBusDriverFactory.Slave
 {
-    public class ModBusSlaveDriver: DriverBase
+    public class ModBusSlaveDriver : DriverNoneAttributeBase
     {
         private readonly ILogger _logger;
         private readonly bool _isTcp;

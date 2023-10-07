@@ -28,10 +28,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                 _value = timeOfDay;
 
-                if (ret)
-                {
-                    DispatchValue(_value);
-                }
                 return false;
 
             }
@@ -53,7 +49,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                         if (timeOfDay != _value)
                         {
                             dpt10Value = new KnxTime(timeOfDay);
-                            DispatchValue(timeOfDay);
                             _value = timeOfDay;
                         }
 
@@ -67,7 +62,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                         {
 
                             dpt10Value = new KnxTime(timeOfDay, 0);
-                            DispatchValue(timeOfDay);
                             _value = timeOfDay;
                         }
 
@@ -81,7 +75,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                         {
 
                             dpt10Value = new KnxTime(timeOfDay, 0);
-                            DispatchValue(timeOfDay);
                             _value = timeOfDay;
                         }
 
@@ -95,7 +88,6 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                             {
 
                                 dpt10Value = new KnxTime(parsedTimeSpan, 0);
-                                DispatchValue(parsedTimeSpan);
                                 _value = parsedTimeSpan;
                             }
                         }

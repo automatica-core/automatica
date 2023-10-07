@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Exceptions;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         {
         }
 
-        protected override byte[] ConvertToBus(IDispatchable source, object value, out object convertedValue)
+        protected override byte[] ConvertToBus(object value, out object convertedValue)
         {
             try
             {
@@ -41,7 +40,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             }
         }
 
-        protected override object ConvertFromBus(IDispatchable source, byte[] value)
+        protected override object ConvertFromBus(byte[] value)
         {
             var intValue = BitConverter.ToUInt64(value, 0);
             intValue = ((UInt64)(intValue / Factor) + (UInt64)Offset);

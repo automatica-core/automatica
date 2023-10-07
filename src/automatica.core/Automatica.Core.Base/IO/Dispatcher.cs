@@ -86,8 +86,8 @@ namespace Automatica.Core.Base.IO
         {
             lock (_lock)
             {
-                if(NodeValues.ContainsKey(type))
-                    return NodeValues[type];
+                if(NodeValues.TryGetValue(type, out var values))
+                    return values;
             }
             return new Dictionary<Guid, DispatchValue>();
         }
@@ -172,7 +172,7 @@ namespace Automatica.Core.Base.IO
                 _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, DispatchValue>, int>());
             }
 
-            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value}");
+            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value} from a {value.ValueSource} operation");
 
             if (self.IsRemanent && self is not RemanentDispatchable)
             {
@@ -279,9 +279,9 @@ namespace Automatica.Core.Base.IO
             _hopCounts[self.Id][action]++;
         }
 
-        public Task DispatchValue(IDispatchable self, object value)
+        public Task DispatchValue(IDispatchable self, object value, DispatchValueSource valueSource)
         {
-            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTime.Now);
+            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTime.Now, valueSource);
             return DispatchValue(self, dispatchable);
         }
 

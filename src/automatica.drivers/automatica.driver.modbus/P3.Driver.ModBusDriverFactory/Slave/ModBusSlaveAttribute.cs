@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.ModBusDriver;
@@ -25,13 +25,13 @@ namespace P3.Driver.ModBusDriverFactory.Slave
             _attribute = attribute;
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             await Task.CompletedTask;
-            var shortValue = _attribute.ConvertValueToBus(source, value, out var convertedValue);
+            var shortValue = _attribute.ConvertValueToBus( value, out var convertedValue);
 
             DriverContext.Logger.LogInformation(
-                $"Get value ({value} - {String.Join("-", shortValue)}) from {source.Id} to {_parent.Name + $"(-{_parent.DeviceId}-)" + Name} (Register: {_attribute.Register}, Lenght: {_attribute.RegisterLength}, Table: {_attribute.Table})");
+                $"Get value ({value} - {String.Join("-", shortValue)}) {_parent.Name + $"(-{_parent.DeviceId}-)" + Name} (Register: {_attribute.Register}, Length: {_attribute.RegisterLength}, Table: {_attribute.Table})");
             switch (_attribute.Table)
             {
                 case ModBusTable.Coil:
@@ -56,8 +56,14 @@ namespace P3.Driver.ModBusDriverFactory.Slave
                 }
             }
 
-            DispatchValue(convertedValue);
+            await writeContext.DispatchValue(convertedValue, token);
         }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
+        }
+
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

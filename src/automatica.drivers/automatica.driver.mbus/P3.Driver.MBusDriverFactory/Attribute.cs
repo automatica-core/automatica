@@ -5,7 +5,7 @@ using P3.Driver.MBus.Frames.VariableData;
 
 namespace P3.Driver.MBusDriverFactory
 {
-    public class Attribute : DriverBase
+    public class Attribute : DriverNotWriteableBase
     {
         public string Address => $"{(int)UnitType}-{StorageNumber}-{Tariff}";
 
@@ -24,16 +24,17 @@ namespace P3.Driver.MBusDriverFactory
             return base.Init(token);
         }
 
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             return Parent.Read(token);
         }
+
 
         public void SetValue(object value)
         {
             Value = value;
 
-            DispatchValue(value);
+            DispatchRead(value);
         }
 
         public Unit UnitType { get; private set; }

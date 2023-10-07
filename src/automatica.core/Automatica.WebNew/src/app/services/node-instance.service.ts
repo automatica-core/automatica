@@ -176,8 +176,6 @@ export class NodeInstanceService {
                 settings.push(x.setting);
             }
         }
-
-        this._settings = await this.settingsService.saveSettings(settings);
+        await this.settingsService.saveSettings(settings);
     }
-
 }

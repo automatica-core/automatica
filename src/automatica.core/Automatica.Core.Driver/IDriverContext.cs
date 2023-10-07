@@ -29,6 +29,7 @@ namespace Automatica.Core.Driver
         /// </summary>
         IDispatcher Dispatcher { get; }
 
+
         /// <summary>
         /// <see cref="INodeTemplateFactory"/> instance
         /// </summary>

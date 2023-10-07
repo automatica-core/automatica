@@ -43,7 +43,9 @@ namespace Automatica.Core.Internals
 
             services.AddSingleton<ILinkCache, LinkCache>();
 
+            services.AddTransient<TemplateFactoryProvider<LogicTemplateFactory>>();
             services.AddTransient<LogicTemplateFactory>();
+            services.AddTransient<TemplateFactoryProvider<NodeTemplateFactory>>();
             services.AddTransient<NodeTemplateFactory>();
             services.AddTransient<SettingsFactory>();
         }

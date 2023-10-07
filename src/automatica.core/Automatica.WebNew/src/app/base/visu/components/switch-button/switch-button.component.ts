@@ -15,7 +15,8 @@ export class SwitchButtonComponent {
   public set state(v: boolean) {
 
     if (v === undefined) {
-      v = false;
+      this._state = false;
+      return;
     }
 
     this._state = v;
@@ -29,7 +30,7 @@ export class SwitchButtonComponent {
   @Output()
   stateChanged = new EventEmitter<boolean>();
 
-  switch(value) {
+  switch($event, value) {
     this.state = value;
   }
 }

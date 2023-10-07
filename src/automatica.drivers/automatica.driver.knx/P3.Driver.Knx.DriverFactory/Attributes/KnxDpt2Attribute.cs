@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Knx.Falcon.ApplicationData;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
@@ -23,19 +23,24 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             Index = index;
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var boolValue = Convert.ToBoolean(value);
 
             if (boolValue != Value)
             {
-                _parent.WriteValue(source, value);
+                _parent.WriteInternal(value, writeContext, token);
             }
 
-            DispatchValue(boolValue);
+            writeContext.DispatchValue(boolValue, token);
             Value = boolValue;
 
             return Task.CompletedTask;
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            return Parent.Read(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -62,6 +67,17 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             
             var dpt2Value = new Knx1BitControlled(controlValue, valueValue);
             return dpt2Value;
+        }
+
+        internal Task WriteInternal(object value, IWriteContext writeContext,
+            CancellationToken token = new CancellationToken())
+        {
+            return Write(value, writeContext, token);
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            return Task.FromResult(false);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

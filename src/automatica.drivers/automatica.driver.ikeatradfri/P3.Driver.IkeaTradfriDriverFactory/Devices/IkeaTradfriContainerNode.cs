@@ -13,7 +13,7 @@ using Exception = System.Exception;
 
 namespace P3.Driver.IkeaTradfriDriverFactory.Devices
 {
-    public class IkeaTradfriContainerNode : DriverBase
+    public class IkeaTradfriContainerNode : DriverNoneAttributeBase
     {
         internal IIkeaTradfriGateway Gateway { get; }
         public long DeviceId { get; private set; }

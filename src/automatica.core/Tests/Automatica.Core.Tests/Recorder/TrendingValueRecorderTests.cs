@@ -4,7 +4,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Internals.Cache.Driver;
-using Automatica.Core.Runtime.Recorder;
+using Automatica.Core.Runtime.Recorder.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -42,8 +42,8 @@ namespace Automatica.Core.Tests.Recorder
             var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
             await trendingValueRecorder.Start();
 
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now), "testSource");
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now, DispatchValueSource.Read), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now, DispatchValueSource.Read), "testSource");
             trendingValueRecorder.RecordValue();
 
             Assert.Equal(3, recorder.LastTrending.Value);
@@ -63,8 +63,8 @@ namespace Automatica.Core.Tests.Recorder
             var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
             await trendingValueRecorder.Start();
 
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now), "testSource");
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now, DispatchValueSource.Read), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now, DispatchValueSource.Read), "testSource");
             trendingValueRecorder.RecordValue();
 
             Assert.Equal(4, recorder.LastTrending.Value);
@@ -84,8 +84,8 @@ namespace Automatica.Core.Tests.Recorder
             var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
             await trendingValueRecorder.Start();
 
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now), "testSource");
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now, DispatchValueSource.Read), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now, DispatchValueSource.Read), "testSource");
             trendingValueRecorder.RecordValue();
 
             Assert.Equal(2, recorder.LastTrending.Value);
@@ -105,11 +105,11 @@ namespace Automatica.Core.Tests.Recorder
             var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
             await trendingValueRecorder.Start();
 
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now, DispatchValueSource.Read), "testSource");
             trendingValueRecorder.RecordValue();
             Assert.Equal(4, recorder.LastTrending.Value);
             
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now, DispatchValueSource.Read), "testSource");
             trendingValueRecorder.RecordValue();
             Assert.Equal(2, recorder.LastTrending.Value);
 
@@ -131,13 +131,13 @@ namespace Automatica.Core.Tests.Recorder
             var trendingValueRecorder = new TrendingValueRecorder(node, recorder);
             await trendingValueRecorder.Start();
 
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 4, DateTime.Now, DispatchValueSource.Read), "testSource");
             Assert.Equal(4, recorder.LastTrending.Value);
 
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 2, DateTime.Now, DispatchValueSource.Read), "testSource");
 
             Assert.Equal(2, recorder.LastTrending.Value);
-            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 1, DateTime.Now), "testSource");
+            trendingValueRecorder.ValueChanged(new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, 1, DateTime.Now, DispatchValueSource.Read), "testSource");
             Assert.Equal(1, recorder.LastTrending.Value);
 
         }

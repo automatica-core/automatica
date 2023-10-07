@@ -21,13 +21,8 @@ namespace P3.Logic.Logic.BaseOperations.Or
         {
             _output1 = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == OrLogicFactory.RuleOutput);
-        }
-
-        public override Task<bool> Start(CancellationToken token = default)
-        {
             _i1 = null;
             _i2 = null;
-            return Task.FromResult(true);
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)

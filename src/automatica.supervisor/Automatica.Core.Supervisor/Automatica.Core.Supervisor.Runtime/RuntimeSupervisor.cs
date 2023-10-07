@@ -38,9 +38,6 @@ namespace Automatica.Core.Supervisor.Runtime
         private readonly string _supervisorImageTag;
         private readonly string _dockerRepositoryUrl;
 
-        private readonly int _pollIntervalMinutes;
-        private Timer _checkForNewImageTimer;
-
         private Timer _checkContainerStatusTimer;
 
         private readonly IConfiguration _config;
@@ -79,17 +76,6 @@ namespace Automatica.Core.Supervisor.Runtime
             _supervisorImage = config["image"];
             _supervisorImageTag = config["imageTag"];
             _dockerRepositoryUrl = config["dockerRegistry"];
-
-            var pollInterval = config["pollIntervalMinutes"];
-
-            if (String.IsNullOrEmpty(pollInterval))
-            {
-                _pollIntervalMinutes = 5;
-            }
-            else
-            {
-                _pollIntervalMinutes = Convert.ToInt32(pollInterval);
-            }
         }
 
         public async Task Start()
@@ -107,22 +93,6 @@ namespace Automatica.Core.Supervisor.Runtime
                 {
                     await CheckContainerStatus();
                 }, null, 0, (int)TimeSpan.FromSeconds(10).TotalMilliseconds);
-
-                _checkForNewImageTimer = new Timer(async (a) =>
-                {
-                    try
-                    {
-                        if (await CheckForNewerImage())
-                        {
-                            await CreateAndStartContainer();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, "Could not check for container updates");
-                    }
-
-                }, null, 0, (int)TimeSpan.FromMinutes(_pollIntervalMinutes).TotalMilliseconds);
 
             }
             catch (Exception e)
@@ -165,7 +135,6 @@ namespace Automatica.Core.Supervisor.Runtime
 
         public async Task Stop()
         {
-            await _checkForNewImageTimer.DisposeAsync();
             await _checkContainerStatusTimer.DisposeAsync();
 
             await StopContainer(_runningContainer);
@@ -267,21 +236,34 @@ namespace Automatica.Core.Supervisor.Runtime
             try
             {
 
-                var portBindings = new Dictionary<string, IList<PortBinding>>();
-                portBindings.Add("5001/tcp", new List<PortBinding>()
+                var portBindings = new Dictionary<string, IList<PortBinding>>
                 {
-                    new PortBinding()
                     {
-                        HostPort = "5001"
-                    }
-                });
-                portBindings.Add("1883/tcp", new List<PortBinding>()
-                {
-                    new PortBinding()
+                        "5001/tcp", new List<PortBinding>()
+                        {
+                            new()
+                            {
+                                HostPort = "5001"
+                            }
+                        }
+                    },
                     {
-                        HostPort = "1883"
-                    }
-                });
+                        "5002/tcp", new List<PortBinding>()
+                        {
+                            new()
+                            {
+                                HostPort = "5002"
+                            }
+                        }
+                    },
+                    { "1883/tcp", new List<PortBinding>()
+                    {
+                        new()
+                        {
+                            HostPort = "1883"
+                        }
+                    } }
+                };
 
                 var envVariables = new List<string>();
 
@@ -292,6 +274,8 @@ namespace Automatica.Core.Supervisor.Runtime
 
                     _logger.LogDebug($"Using env variable: {envVar}");
                 }
+
+                envVariables.Add($"AUTOMATICA_SUPERVISOR_HOSTED=1");
 
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
 

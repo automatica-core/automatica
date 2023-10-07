@@ -73,6 +73,7 @@ namespace Automatica.Core.Plugin.Standalone
             Password = password;
             Factories = factories;
 
+
             NodeTemplateFactory = serviceProvider.GetRequiredService<INodeTemplateFactory>();
             Loader = _serviceProvider.GetRequiredService<IDriverFactoryLoader>();
             NodeStore = serviceProvider.GetRequiredService<IDriverNodesStore>();

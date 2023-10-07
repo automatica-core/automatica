@@ -37,6 +37,17 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
         return void 0;
     }
 
+    protected getInterfaceByKey(key: string) {
+        if (this.ruleInstance && this.ruleInstance.Interfaces) {
+            for (const interf of this.ruleInstance.Interfaces) {
+                if (interf.Template.Key === key) {
+                    return interf;
+                }
+            }
+        }
+        return void 0;
+    }
+
     protected getInterfaceByTypeAndName(type: RuleInterfaceType, key: string) {
         if (this.ruleInstance && this.ruleInstance.Interfaces) {
             for (const interf of this.ruleInstance.Interfaces) {

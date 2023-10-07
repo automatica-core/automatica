@@ -8,7 +8,7 @@ using P3.Driver.IkeaTradfri;
 
 namespace P3.Driver.IkeaTradfriDriverFactory
 {
-    public class IkeaTradfri : DriverBase
+    public class IkeaTradfri : DriverNoneAttributeBase
     {
         private readonly Dictionary<string, NodeInstance> _existingDevices = new Dictionary<string, NodeInstance>();
 

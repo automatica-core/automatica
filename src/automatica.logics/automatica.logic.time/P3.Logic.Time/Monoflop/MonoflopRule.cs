@@ -1,53 +1,71 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System;
+using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 
 namespace P3.Logic.Time.Monoflop
 {
     public class MonoflopRule : Automatica.Core.Logic.Logic
     {
-        private readonly RuleInterfaceInstance _delay;
+        private long _delay;
         private readonly RuleInterfaceInstance _output;
-        private readonly System.Timers.Timer _timer;
+        private System.Threading.Timer _timer;
+        private bool _timerRunning = false;
 
         public MonoflopRule(ILogicContext context) : base(context)
         {
-            _delay = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == MonoflopLogicFactory.RuleParamDelay);
-
+           
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == MonoflopLogicFactory.RuleOutput);
 
-            _timer = new System.Timers.Timer();
-            _timer.Elapsed += _timer_Elapsed;
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            _timer.Elapsed -= _timer_Elapsed;
-            _timer.Stop();
-            return base.Stop();
+            if (instance.This2RuleInterfaceTemplate == MonoflopLogicFactory.RuleParamDelay)
+            {
+                _delay = Convert.ToInt64(value);
+                if (_delay <= 0)
+                {
+                    Context.Logger.LogError($"Interval cannot be lower or equal to 0");
+                    _delay = 5;
+                }
+                if (_timerRunning)
+                {
+                    StartStopTimer();
+                }
+            }
+            base.ParameterValueChanged(instance, source, value);
         }
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
-            _timer.Stop();
-            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
+            _timer?.Dispose();
+            return base.Stop(ruleInstance, token);
+        }
+
+       
+        private void StartStopTimer()
+        {
+            _timer?.Dispose();
+            _timer = new System.Threading.Timer(state =>
+            {
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
+            }, null, _delay * 1000,  -1);
+           
+            _timerRunning = false;
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {   
-            _timer.Stop();
-            _timer.Interval = _delay.ValueInteger.Value * 1000;
-            _timer.Start();
-
-
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, true);
+
+            StartStopTimer();
 
             return new List<ILogicOutputChanged>();
         }

@@ -9,7 +9,7 @@ using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
 {
-    internal class CardanoValueNode : DriverBase
+    internal class CardanoValueNode : DriverNotWriteableBase
     {
         private readonly string _currency;
         private readonly bool _addSymbol;
@@ -24,13 +24,12 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
             _symbol = symbol;
             _cardanoNode = bitcoinNode;
         }
-
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await _cardanoNode.Refresh(token);
-
             return true;
         }
+
 
         public void UpdateValue(List<TickerPriceValue> values)
         {
@@ -48,7 +47,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
                     value += _symbol;
                 }
 
-                DispatchValue(value);
+                DispatchRead(value);
 
                 DriverContext.Logger.LogDebug($"Read value {tickerPrice.LastTradePrice}{_symbol}");
             }

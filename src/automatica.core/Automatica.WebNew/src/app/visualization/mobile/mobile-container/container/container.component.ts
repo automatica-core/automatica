@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
-import { VisuPageGroupType } from "src/app/base/model/visu-page";
+import { VisuPage, VisuPageGroupType } from "src/app/base/model/visu-page";
 import { L10nTranslationService } from "angular-l10n";
+import { VisualizationDataFacade } from "src/app/base/model/visualization-data-facade";
 
 interface Section {
   title: string;
@@ -20,6 +21,9 @@ export class ContainerComponent implements OnInit {
 
   @Input()
   public pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
+
+  @Input()
+  public page: VisuPage;
 
   @Input()
   public get items(): VisuObjectMobileInstance[] {

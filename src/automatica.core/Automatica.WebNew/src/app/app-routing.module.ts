@@ -39,8 +39,12 @@ const routes: Routes = [
             }, {
                 path: "config",
                 component: ConfigComponent
-            }, {
-                path: "logic-editor",
+            }, 
+            {
+                path: "logic-editor", redirectTo: "logic-editor/default", pathMatch: "full"
+            },
+            {
+                path: "logic-editor/:id",
                 component: LogicEditorComponent
             }, {
                 path: "visualisation",

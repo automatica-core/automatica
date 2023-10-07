@@ -2,7 +2,7 @@
 
 namespace P3.Driver.Constants
 {
-    public class ConstantsDriver : DriverBase
+    public class ConstantsDriver : DriverNoneAttributeBase
     { 
         public ConstantsDriver(IDriverContext ctx) : base(ctx)
         {

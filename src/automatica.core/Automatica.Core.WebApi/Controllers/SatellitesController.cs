@@ -1,5 +1,4 @@
 ﻿using Automatica.Core.EF.Models;
-using Automatica.Core.Internals;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -79,7 +79,8 @@ namespace Automatica.Core.Runtime.Core
 
             if (value.DefaultCreated)
             {
-                _defaultTemplateItemsKeyDictionary[value.NeedsInterface2InterfacesType].Add(value);
+                if (_defaultTemplateItemsKeyDictionary[value.NeedsInterface2InterfacesType].All(a => a.ObjId != value.ObjId))
+                    _defaultTemplateItemsKeyDictionary[value.NeedsInterface2InterfacesType].Add(value);
             }
 
             var factory = _driverFactoryStore.Get(value.FactoryReference);

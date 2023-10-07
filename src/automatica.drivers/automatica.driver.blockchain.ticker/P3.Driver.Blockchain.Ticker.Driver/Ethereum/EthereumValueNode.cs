@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
 {
-    internal class EthereumValueNode : DriverBase
+    internal class EthereumValueNode : DriverNotWriteableBase
     {
         private readonly string _currency;
         private readonly bool _addSymbol;
@@ -23,14 +23,12 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
             _symbol = symbol;
             _ethNode = bitcoinNode;
         }
-
-        public override async Task<bool> Read(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             await _ethNode.Refresh(token);
-
             return true;
         }
-
+      
         public void UpdateValue(List<TickerPriceValue> values)
         {
             if(values.Any(a => a.Symbol == _currency))
@@ -45,7 +43,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
                     value += _symbol;
                 }
 
-                DispatchValue(value);
+                DispatchRead(value);
 
                 DriverContext.Logger.LogDebug($"Read value {tickerPrice.LastTradePrice}{_symbol}");
             }

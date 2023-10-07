@@ -65,7 +65,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
         public static async Task CreateApplicationServiceFileFromTemplate(TunnelingProtocol tunnelingProtocol, string name,
             string address, int targetPort,
-            string subDomain, string basicUser, string basicPassword, CancellationToken token)
+            string subDomain, string? basicUser, string? basicPassword, CancellationToken token)
         {
 
             if (tunnelingProtocol != TunnelingProtocol.Http && tunnelingProtocol != TunnelingProtocol.Https)

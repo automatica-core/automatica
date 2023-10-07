@@ -7,6 +7,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     public interface ILogicInstanceCache : IStore<RuleInstance>
     {
+        RuleInstance GetSingle(AutomaticaContext context, Guid id);
         IList<RuleInstance> ByFavorites();
         IList<RuleInstance> ByCategory(Guid category);
         IList<RuleInstance> ByArea(Guid category);

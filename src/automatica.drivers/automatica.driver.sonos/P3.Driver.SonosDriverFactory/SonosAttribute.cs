@@ -1,68 +1,37 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
-using Timer = System.Timers.Timer;
 
 
 namespace P3.Driver.SonosDriverFactory
 {
     public class SonosAttribute : DriverBase
     {
-        private readonly SonosDevice _device;
         private readonly Func<Task<object>> _readAction;
         private readonly Func<object, Task<object>> _writeAction;
-        private readonly Timer _readTimer = new Timer();
 
+        private object? _lastValue = null;
 
-
-        public SonosAttribute(IDriverContext ctx, SonosDevice device, Func<Task<object>> readAction, Func<object, Task<object>> writeAction) : base(ctx)
+        public SonosAttribute(IDriverContext ctx, Func<Task<object>> readAction, Func<object, Task<object>> writeAction) : base(ctx)
         {
-            _device = device;
             _readAction = readAction;
             _writeAction = writeAction;
 
-            _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
         }
 
-        private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            await ReadValue();
-        }
-
-        protected virtual async Task ReadValue()
-        {
-            if (_readAction != null)
-            {
-                try
-                {
-                    var value = await _readAction.Invoke();
-
-                    if (value != null)
-                    {
-                        DispatchValue(value);
-                    }
-                }
-                catch (Exception e)
-                {
-                    DriverContext.Logger.LogError(e, $"Could not read value...");
-                }
-            }
-        }
-
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
                 var write = await _writeAction.Invoke(value);
+                DriverContext.Logger.LogDebug($"Sonos write value {write}...");
 
-                if (write != null)
+                if (write != null && write != _lastValue)
                 {
-                    DispatchValue(write);
+                    _lastValue = write;
+                    await writeContext.DispatchValue(write, token);
                 }
             }
             catch (Exception e)
@@ -71,21 +40,35 @@ namespace P3.Driver.SonosDriverFactory
             }
         }
 
-        public override async Task<bool> Start(CancellationToken token = default)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-           await ReadValue();
+            if (_readAction != null)
+            {
+                try
+                {
+                    var value = await _readAction.Invoke();
 
-            _readTimer.Start();
+                    if (value != null && value != _lastValue)
+                    {
+                        _lastValue = value;
+                        await readContext.DispatchValue(value, token);
+                    }
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError(e, $"Could not read value...");
+                }
+            }
 
-            return await base.Start(token);
+            return true;
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        public override Task<bool> Start(CancellationToken token = default)
         {
-            _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Stop();
-            return base.Stop(token);
+            Read(token).ConfigureAwait(false);
+            return base.Start(token);
         }
+
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

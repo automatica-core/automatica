@@ -8,7 +8,7 @@ using Innovative.SolarCalculator;
 
 namespace P3.Driver.Times.DriverFactory.Sun
 {
-    public class SunDriverNode : DriverBase
+    public class SunDriverNode : DriverNotWriteableBase
     {
         private readonly Func<SolarTimes, System.DateTime, object> _getValueFunc;
         private Timer _tickTimer;
@@ -32,17 +32,23 @@ namespace P3.Driver.Times.DriverFactory.Sun
         private void DispatchSolarValue()
         {
             var solarTimes = new SolarTimes(System.DateTime.Now, Latitude, Longitude);
-            DispatchValue(_getValueFunc(solarTimes, System.DateTime.Now));
+            DispatchRead(_getValueFunc(solarTimes, System.DateTime.Now));
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-            if(value is System.DateTime)
+            if (value is System.DateTime)
             {
                 var solarTimes = new SolarTimes((System.DateTime)value, Latitude, Longitude);
-                DispatchValue(_getValueFunc(solarTimes, (System.DateTime)value));
+                DispatchRead(_getValueFunc(solarTimes, (System.DateTime)value));
             }
-            return base.WriteValue(source, value);
+            return base.Write(value, writeContext, token);
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            DispatchSolarValue();
+            return Task.FromResult(true);
         }
 
         public override Task<bool> Start(CancellationToken token = default)

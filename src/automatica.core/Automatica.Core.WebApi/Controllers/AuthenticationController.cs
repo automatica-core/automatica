@@ -113,7 +113,10 @@ namespace Automatica.Core.WebApi.Controllers
             var claimsIdentity = new ClaimsIdentity(claims);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = ServerInfo.ServerUid.ToByteArray();
+            var serverUid = ServerInfo.ServerUid.ToByteArray();
+            var key = new byte[32];
+            Array.Copy(serverUid, 0, key, 0, 16);
+            Array.Copy(serverUid, 0, key, 16, 16);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,

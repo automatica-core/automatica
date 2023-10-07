@@ -21,13 +21,9 @@ namespace P3.Logic.Logic.BaseOperations.Not
         {
             _output1 = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == NotLogicFactory.RuleOutput);
+            _i1 = null;
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
-        {
-            _i1 = null;
-            return Task.FromResult(true);
-        }
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (value != null && instance.This2RuleInterfaceTemplate == NotLogicFactory.RuleInput1)

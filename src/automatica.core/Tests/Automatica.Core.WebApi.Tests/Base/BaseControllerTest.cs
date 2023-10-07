@@ -1,22 +1,16 @@
 ﻿using System;
 using System.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.HyperSeries;
 using Automatica.Core.Runtime;
-using Automatica.Core.Runtime.Core;
-using Automatica.Core.Runtime.Core.Plugins;
-using Automatica.Core.Runtime.Core.Plugins.Drivers;
-using Automatica.Core.Runtime.Core.Plugins.Logics;
 using Automatica.Core.Runtime.Database;
-using Automatica.Core.Runtime.IO;
 using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Push;
 using Automatica.Push.Hubs;
-using Automatica.Push.LearnMode;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using MQTTnet.Server;
 using Xunit;
@@ -66,6 +60,7 @@ namespace Automatica.Core.WebApi.Tests.Base
             services.AddSingleton<IConfiguration>(config);
             services.AddAutomaticaCoreService(config, false);
             services.AddDbContext<AutomaticaContext>();
+            services.AddHyperSeries();
             services.AddSingleton<T>();
 
             services.AddAutomaticaPushServices(config, false);

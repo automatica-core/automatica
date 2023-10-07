@@ -11,7 +11,7 @@ using P3.Driver.ModBusDriver.Master.Tcp;
 
 namespace P3.Driver.ModBusDriverFactory.Master
 {
-    public class ModBusMasterDriver : DriverBase
+    public class ModBusMasterDriver : DriverNoneAttributeBase
     {
         private readonly bool _isTcp;
         private readonly List<ModBusMasterDevice> _childs = new List<ModBusMasterDevice>();

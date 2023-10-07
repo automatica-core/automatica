@@ -75,6 +75,10 @@ namespace Automatica.Core.Visu
             var dimmer = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Dimmer);
             factory.CreateVisuMobileTemplate(dimmer, "VISU.OBJECT.DIMMER.NAME", "VISU.OBJECT.DIMMER.DESCRIPTION",
                 "dimmer", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            var shutter = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Shutter);
+            factory.CreateVisuMobileTemplate(shutter, "VISU.OBJECT.SHUTTER.NAME", "VISU.OBJECT.SHUTTER.DESCRIPTION",
+                "shutter", "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
         }
 
         private void AddMediaControl(VisuMobileTemplateFactory factory)
@@ -110,6 +114,10 @@ namespace Automatica.Core.Visu
         {
             var chart = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Gauge);
             factory.CreateVisuMobileTemplate(chart, "VISU.OBJECT.GAUGE.NAME", "VISU.OBJECT.GAUGE.DESCRIPTION", "gauge",
+                "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
+
+            var threeRangeGauge = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.ThreeRangeGauge);
+            factory.CreateVisuMobileTemplate(threeRangeGauge, "VISU.OBJECT.GAUGE.NAME", "VISU.OBJECT.GAUGE.DESCRIPTION", "three-range-gauge",
                 "VISU.CATEGORY.COMMON.NAME", 1, 1, true);
 
             factory.CreatePropertyTemplate(new Guid("85e6e721-d45b-479c-ab44-6672d2f772dc"), "VISU.APPEARANCE.NODE_VALUE.NAME", "VISU.APPEARANCE.NODE_VALUE.DESCRIPTION", "nodeInstance",

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Frames;
@@ -6,7 +8,7 @@ using P3.Driver.MBus.Frames.VariableData;
 
 namespace P3.Driver.OmsDriverFactory
 {
-    public class OmsDriverAttribute : DriverBase
+    public class OmsDriverAttribute : DriverNotWriteableBase
     {
         private readonly int _dataIndex;
         private VariableDataBlock _lastFrame;
@@ -26,11 +28,16 @@ namespace P3.Driver.OmsDriverFactory
 
                 if (_lastFrame != null && _lastFrame.Value != frame.Value)
                 {
-                    DispatchValue(frame.Value);
+                    DispatchRead(frame.Value);
                 }
 
                 _lastFrame = frame;
             }
+        }
+
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            return Parent.Read(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

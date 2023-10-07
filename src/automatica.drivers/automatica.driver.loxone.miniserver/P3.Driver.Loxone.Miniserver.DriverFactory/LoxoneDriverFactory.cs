@@ -19,7 +19,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         public override string DriverName => "loxone-miniserver";
         public override Guid DriverGuid => BusId;
-        public override Version DriverVersion => new Version(0, 3, 0, 3);
+        public override Version DriverVersion => new Version(0, 4, 0, 3);
 
         public static Guid BusId => new Guid("ad2f16c2-3a4a-4de4-8768-caa766b02810");
 
@@ -38,7 +38,9 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
             factory.CreatePropertyTemplate(new Guid("91c6148a-ce94-4240-abf3-2eec52c46e3e"), "LOXONE.MINISERVER.PROPERTY.PASSWORD.NAME", "LOXONE.MINISERVER.PROPERTY.PASSWORD.DESCRIPTION", "password", PropertyTemplateType.Password, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 1, 3);
 
             factory.CreatePropertyTemplate(new Guid("f51d380a-2a89-4a70-b63e-35e91ef810b5"), "LOXONE.MINISERVER.PROPERTY.SCAN.NAME", "LOXONE.MINISERVER.PROPERTY.SCAN.DESCRIPTION", "scan", PropertyTemplateType.Scan, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 1, 4);
-
+            factory.CreatePropertyTemplate(new Guid("31f637b5-35cb-4208-86a6-9d3c472f16a0"), "COMMON.PROPERTY.ENABLE_TUNNEL.NAME", "COMMON.PROPERTY.ENABLE_TUNNEL.DESCRIPTION",
+                "loxone-use-tunnel", PropertyTemplateType.Bool, DriverGuid, "SERVER.REMOTE", true, false, "", false, 1,
+                1);
             CreateFolder(factory);
 
             CreateConnectionState(factory);

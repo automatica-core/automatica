@@ -1,57 +1,41 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.Sonos;
-using Timer = System.Timers.Timer;
 
 namespace P3.Driver.SonosDriverFactory.Attributes
 {
-    public class SonosSetRadioAttribute : DriverBase
+    public class SonosSetRadioAttribute : SonosAttribute
     {
         protected SonosDevice Device { get; }
-        private readonly Timer _readTimer = new Timer();
 
         private string _currentMediaUrl = String.Empty;
 
-        public SonosSetRadioAttribute(IDriverContext driverContext, SonosDevice device) : base(driverContext)
+        public SonosSetRadioAttribute(IDriverContext driverContext, SonosDevice device) : base(driverContext, () => null, o => null)
         {
             Device = device;
-            _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Interval = TimeSpan.FromSeconds(20).TotalMilliseconds;
         }
 
-        private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             try
             {
                 var currentMediaInfo = await Device.Controller.GetMediaInfoAsync();
                 _currentMediaUrl = currentMediaInfo.CurrentUri;
-                
+                await readContext.DispatchValue(_currentMediaUrl, token);
+
             }
             catch (Exception ex)
             {
                 DriverContext.Logger.LogError(ex, "Error read current media url...");
             }
+
+            return true;
         }
 
-        public override Task<bool> Start(CancellationToken token = default)
-        {
-            _readTimer.Start();
-            return base.Start(token);
-        }
-
-        public override Task<bool> Stop(CancellationToken token = default)
-        {
-            _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Stop();
-            return base.Stop(token);
-        }
-
-        public override async Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
@@ -63,7 +47,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
                     await Device.Controller.SetMediaUrl(mediaUrl);
                     _currentMediaUrl = mediaUrl;
 
-                    DispatchValue(value);
+                    await writeContext.DispatchValue(value, token);
 
                     DriverContext.Logger.LogDebug($"Sonos set radio to {mediaUrl}...");
                 }

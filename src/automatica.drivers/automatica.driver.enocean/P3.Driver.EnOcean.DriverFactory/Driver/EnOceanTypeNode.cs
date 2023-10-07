@@ -40,7 +40,10 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 return new EnOceanCoBit(ctx, TeachInManager);
             }
-
+            if (ctx.NodeInstance.This2NodeTemplateNavigation.Key == "enocean-shortcut-WIN")
+            {
+                return new EnOceanWinData(ctx, TeachInManager);
+            }
             return new EnOceanGenericData(ctx, TeachInManager);
         }
     }

@@ -71,6 +71,20 @@
       "IS_READABLE_FROM_BUS": {
         "NAME": "Readable from bus",
         "DESCRIPTION": ""
+      },
+      "SECURE": {
+        "AUTHPW": {
+          "NAME": "Auth password"
+        },
+        "USERPW": {
+          "NAME": "User password"
+        },
+        "IA_ADDRESS": {
+          "NAME": "IA Address"
+        },
+        "USER_ID": {
+          "NAME": "User ID"
+        }
       }
     },
     "DPT1": {

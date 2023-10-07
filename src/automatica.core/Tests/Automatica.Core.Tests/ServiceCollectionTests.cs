@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
@@ -7,6 +8,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
+using Automatica.Core.HyperSeries;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.License;
@@ -45,7 +47,7 @@ namespace Automatica.Core.Tests
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseType")]).Returns("sqlite");
             mockConfSection.SetupGet(m => m[It.Is<string>(s => s == "AutomaticaDatabaseSqlite")]).Returns("Data Source=automatica.core-test.db");
 
-            var mockConfiguration = new Mock<IConfiguration>();
+            var mockConfiguration = new Mock<IConfigurationRoot>();
             mockConfiguration.Setup(a => a.GetSection(It.Is<string>(s => s == "ConnectionStrings"))).Returns(mockConfSection.Object);
             var moq = new ServiceCollection();
 
@@ -56,11 +58,14 @@ namespace Automatica.Core.Tests
             moq.AddSingleton(CreateHubContextMock<TelegramHub>());
             moq.AddSingleton(CreateHubContextMock<DataHub>());
             moq.AddSingleton(new AutomaticaContext(mockConfiguration.Object));
+            moq.AddSingleton(new HyperSeriesContext(mockConfiguration.Object));
             moq.AddSingleton<ILogger>(a => NullLogger.Instance);
+            moq.AddSingleton<IHyperSeriesRepository, HyperSeriesRepository>();
 
             moq.AddLogging(a => { a.AddConsole(); });
 
-            moq.AddSingleton(mockConfiguration.Object);
+            moq.AddSingleton<IConfigurationRoot>(mockConfiguration.Object);
+            moq.AddSingleton<IConfiguration>(mockConfiguration.Object);
             return moq;
         }
 
@@ -101,9 +106,17 @@ namespace Automatica.Core.Tests
             AssertLifecycle<INodeInstanceStateHandler>(moq, ServiceLifetime.Singleton);
 
             AssertLifecycle<ILoadedNodeInstancesStore>(moq, ServiceLifetime.Singleton);
-            AssertLifecycle<NativeUpdateHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IUpdateHandler>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IAutoUpdateHandler>(moq, ServiceLifetime.Singleton);
+
+            if (ServerInfo.InDocker)
+            {
+                AssertLifecycle<DockerUpdateHandler>(moq, ServiceLifetime.Singleton);
+            }
+            else
+            {
+                AssertLifecycle<NativeUpdateHandler>(moq, ServiceLifetime.Singleton);
+            }
 
             AssertLifecycle<ILoadedStore>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ILogicFactoryStore>(moq, ServiceLifetime.Singleton);
@@ -163,10 +176,6 @@ namespace Automatica.Core.Tests
             AssertImplementationType<INodeInstanceStateHandler, LoadedNodeInstancesStore>(moq);
             AssertImplementationType<ILoadedNodeInstancesStore, LoadedNodeInstancesStore>(moq);
 
-            AssertImplementationType<NativeUpdateHandler, NativeUpdateHandler>(moq);
-            AssertImplementationType<IUpdateHandler, NativeUpdateHandler>(moq);
-            AssertImplementationType<IAutoUpdateHandler, NativeUpdateHandler>(moq);
-
             AssertImplementationType<ILoadedStore, LoadedStore>(moq);
             AssertImplementationType<ILogicFactoryStore, LogicFactoryStore>(moq);
             AssertImplementationType<IDriverFactoryStore, DriverFactoryStore>(moq);
@@ -191,6 +200,15 @@ namespace Automatica.Core.Tests
             AssertImplementationType<INotifyDriver, NotifyDriverHandler>(moq);
             AssertImplementationType<IDispatcher, Base.IO.Dispatcher>(moq);
             AssertImplementationType<ILogicEngineDispatcher, LogicEngineDispatcher>(moq);
+
+            if (ServerInfo.InDocker)
+            {
+                AssertImplementationType<IAutoUpdateHandler, DockerUpdateHandler>(moq);
+            }
+            else
+            {
+                AssertImplementationType<IAutoUpdateHandler, NativeUpdateHandler>(moq);
+            }
         }
 
 

@@ -14,7 +14,7 @@ using P3.Driver.ModBusDriver.Master;
 
 namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 {
-    internal class SolarmanDriver : DriverBase
+    internal class SolarmanDriver : DriverNoneAttributeBase
     {
         private readonly DeviceMap _map;
         private readonly DeviceGroupMap _groupMap;
@@ -104,7 +104,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             return base.Start(token);
         }
 
-        public override Task<bool> Read(CancellationToken token = default)
+        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
             PollAll().ConfigureAwait(false);
 

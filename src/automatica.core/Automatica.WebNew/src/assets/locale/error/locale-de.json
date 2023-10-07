@@ -1,6 +1,7 @@
 {
     "ERROR":{
         "NODE_NOT_FOUND": "Das Element konnte im Server nicht gefunden werden. Ein Neustart des Servers kann dieses Problem beheben!",
-        "CLOUD_CONNECTION_INVALID": "Die Cloud Verbindung ist ungültig. Du musst einen API Schlüssel eintragen!"
+        "CLOUD_CONNECTION_INVALID": "Die Cloud Verbindung ist ungültig. Du musst einen API Schlüssel eintragen!",
+        "DOCKER_NOT_RUN_BY_SUPERVISOR": "Docker Image kann nicht automatisch upgedated werden. Hierzu müsste der Container über den Supervisor gestartet werden."
     }
 }

@@ -39,19 +39,12 @@ namespace P3.Logic.Time.DelayedOff
             Context.Logger.LogDebug($">>> Dispatching value <<<");
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
             _timerRunning = false;
-            return base.Stop();
-        }
-
-        public override Task<bool> Start(CancellationToken token = default)
-        {
-            _delay = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleParamDelay).ValueInteger.Value;
-            return base.Start();
+            return base.Stop(ruleInstance, token);
         }
 
         protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
