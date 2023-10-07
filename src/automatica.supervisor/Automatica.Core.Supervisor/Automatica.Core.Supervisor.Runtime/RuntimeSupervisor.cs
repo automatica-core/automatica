@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -276,6 +277,19 @@ namespace Automatica.Core.Supervisor.Runtime
                 }
 
                 envVariables.Add($"AUTOMATICA_SUPERVISOR_HOSTED=1");
+
+                try
+                {
+                    if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        var timezone = await File.ReadAllTextAsync("/etc/timezone");
+                        envVariables.Add($"TZ={timezone}");
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Could not set timezone....{e}");
+                }
 
                 var imgName = _supervisorImage.Split("/", StringSplitOptions.RemoveEmptyEntries)[1];
 
