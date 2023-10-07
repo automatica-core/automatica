@@ -30,6 +30,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/pro-duotone-svg-icons": "^6.4.2",
+    "@fortawesome/pro-solid-svg-icons": "^6.4.2",
     "@microsoft/signalr": "^7.0.11",
     "@types/body-parser": "^1.19.2",
     "@types/jszip": "^3.4.1",

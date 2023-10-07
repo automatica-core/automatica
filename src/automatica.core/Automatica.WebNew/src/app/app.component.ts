@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
 import { faClock, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
-import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBlinds, faBlindsOpen, faBlindsRaised, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank, fad } from "@fortawesome/pro-duotone-svg-icons";
+import { fad } from "@fortawesome/pro-duotone-svg-icons";
+import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank } from "@fortawesome/pro-solid-svg-icons";
 import { fas, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
@@ -48,7 +49,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     library.addIconPacks(fas);
     library.addIconPacks(far);
     library.addIconPacks(fad);
-    
+
     this.addIcon(faTemperatureHot);
     this.addIcon(faTemperatureSun);
     this.addIcon(faTemperatureSnow);
@@ -62,7 +63,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.addIcon(faFireplace);
     this.addIcon(faAirConditioner);
     this.addIcon(faOutlet);
-    
+
 
     library.addIcons(<IconDefinition>{
       prefix: "fas",
