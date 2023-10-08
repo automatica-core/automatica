@@ -100,8 +100,8 @@
             <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
                 <div dnd-droppable [allowDrop]="allowDrop(data.data)" (onDropSuccess)="dropSuccess($event, data.data)">
                     <ng-container *ngIf="!data.data.IsAnyDisabled">
-                        <ng-container *ngIf="data.data.This2NodeDataType == NodeDataTypeEnum.WindowState; else default">
-                            <span id="{{ data.data.Id }}">{{NodeDataTypeEnum[data.data.Value]}}</span>
+                        <ng-container *ngIf="data.data.NodeTemplate && data.data.NodeTemplate.This2NodeDataType == NodeDataTypeEnum.WindowState; else default">
+                            <span id="{{ data.data.Id }}">{{WindowState[data.value]}}</span>
                         </ng-container>
                         <ng-template #default>
                             <span id="{{ data.data.Id }}">{{data.value}}</span>
