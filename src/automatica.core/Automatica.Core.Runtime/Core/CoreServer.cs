@@ -90,7 +90,8 @@ namespace Automatica.Core.Runtime.Core
         private readonly IDriverStore _driverStore;
         private readonly ILogicStore _logicStore;
         private readonly ILoadedNodeInstancesStore _loadedNodeInstancesStore;
-        private readonly IDriverNodesStoreInternal _driverNodesStore;
+        private readonly IDriverNodesStoreInternal _driverNodesStoreInternal;
+        private readonly IDriverNodesStore _driverNodesStore;
         private readonly ILogicInstancesStore _logicInstanceStore;
         private readonly ILogicTemplateCache _logicTemplateCache;
 
@@ -103,8 +104,8 @@ namespace Automatica.Core.Runtime.Core
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IRemoteConnectService _remoteConnectService;
-        private readonly ITrendingContext _trendingContext
-            ;
+        private readonly ITrendingContext _trendingContext;
+        private readonly INotifyDriver _notifyDriver;
 
         private int _satelliteInstanceCount;
 
@@ -155,7 +156,8 @@ namespace Automatica.Core.Runtime.Core
             _driverStore = services.GetRequiredService<IDriverStore>();
             _logicStore = services.GetRequiredService<ILogicStore>();
 
-            _driverNodesStore = services.GetRequiredService<IDriverNodesStoreInternal>();
+            _driverNodesStoreInternal = services.GetRequiredService<IDriverNodesStoreInternal>();
+            _driverNodesStore = services.GetRequiredService<IDriverNodesStore>();
             _logicInstanceStore = services.GetRequiredService<ILogicInstancesStore>();
 
             _settingsCache = services.GetRequiredService<ISettingsCache>();
@@ -179,6 +181,8 @@ namespace Automatica.Core.Runtime.Core
 
             _loggerFactory = services.GetRequiredService<ILoggerFactory>();
             _trendingContext = services.GetRequiredService<ITrendingContext>();
+
+            _notifyDriver = services.GetRequiredService<INotifyDriver>();
 
             _remoteConnectService = services.GetRequiredService<IRemoteConnectService>();
             InitInternals();
@@ -473,7 +477,7 @@ namespace Automatica.Core.Runtime.Core
             }
 
             _driverStore.Remove(driver);
-            _driverNodesStore.RemoveDriver(driver);
+            _driverNodesStoreInternal.RemoveDriver(driver);
         }
 
         
@@ -502,7 +506,7 @@ namespace Automatica.Core.Runtime.Core
             _driverStore.Clear();
             _logicStore.Clear();
             
-            _driverNodesStore.Clear();
+            _driverNodesStoreInternal.Clear();
             _loadedNodeInstancesStore.Clear();
             _logicInstanceStore.Clear();
 
@@ -599,7 +603,7 @@ namespace Automatica.Core.Runtime.Core
             }
             foreach (var dr in driver.InverseThis2ParentNodeInstanceNavigation)
             {
-                _driverNodesStore.Add(new RemoteNodeInstance(driverInstanceGuid, dr, _remoteHandler));
+                _driverNodesStoreInternal.Add(new RemoteNodeInstance(driverInstanceGuid, dr, _remoteHandler));
 
                 _licenseContext.IncrementDriverCount();
                 dr.State = NodeInstanceState.Remote;
@@ -782,7 +786,7 @@ namespace Automatica.Core.Runtime.Core
         public async Task ReInit()
         {
             await _remoteServerHandler.ReInit();
-            await _driverNodesStore.ReInitialize();
+            await _driverNodesStoreInternal.ReInitialize();
             _telegramMonitor?.Clear();
 
             await Stop();
@@ -802,7 +806,7 @@ namespace Automatica.Core.Runtime.Core
                 await _remoteServerHandler.AddSlave(nodeInstance.This2SlaveNavigation.ClientId, _driverFactoryStore.Get(nodeInstance.This2NodeTemplateNavigation.ObjId), nodeInstance);
 
 
-                _driverNodesStore.Add(new RemoteNodeInstance(nodeInstance.ObjId, nodeInstance, _remoteHandler));
+                _driverNodesStoreInternal.Add(new RemoteNodeInstance(nodeInstance.ObjId, nodeInstance, _remoteHandler));
 
                 if (_satelliteInstanceCount >= _licenseContext.MaxSatellites)
                 {
@@ -857,6 +861,28 @@ namespace Automatica.Core.Runtime.Core
 
             return driver;
 
+        }
+
+        public async Task StartStopDriver(NodeInstance nodeInstance)
+        {
+            var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(nodeInstance);
+            await _notifyDriver.NotifyAdd(nodeInstance);
+            if (rootNode == null)
+            {
+                return;
+            }
+            var driver = _driverNodesStore.GetDriver(rootNode.ObjId);
+            if (driver == null)
+            {
+                _logger.LogWarning(
+                    $"Could not hot-reload driver, seems that the driver wasn't loaded at the moment");
+
+                return;
+            }
+            _licenseContext.DecrementDriverCount(driver.ChildrensCreated);
+
+            await StopDriver(driver);
+            await InitializeAndStartDriver(rootNode, _nodeTemplateCache.Get(rootNode.This2NodeTemplate.Value));
         }
 
         public async Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)

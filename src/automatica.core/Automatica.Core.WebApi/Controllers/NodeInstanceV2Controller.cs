@@ -273,23 +273,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task StopStartDriver(NodeInstance node)
         {
-            var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
-            await _notifyDriver.NotifyAdd(node);
-            if (rootNode == null)
-            {
-                return;
-            }
-            var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
-            if (driver == null)
-            {
-                _logger.LogWarning(
-                    $"Could not hot-reload driver, seems that the driver wasn't loaded at the moment");
-
-                return;
-            }
-            await _coreServer.StopDriver(driver);
-            await _coreServer.InitializeAndStartDriver(rootNode,
-                _templateCache.Get(rootNode.This2NodeTemplate.Value));
+            await _coreServer.StartStopDriver(node);
         }
 
         [Route("delete")]
