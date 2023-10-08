@@ -1171,7 +1171,7 @@ AddTypesF6_10_01_2Templates(factory, interfaceGuid, enoceanFactory);
             var nodeGuid = DataFieldF6_10_00_1_WIN_Guid;
             factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.SHORTCUT_WIN.NAME", "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.SHORTCUT_WIN.DESCRIPTION",
                 "enocean-shortcut-WIN", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
-                NodeDataType.Integer, 1, false);
+                NodeDataType.WindowState, 1, false);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.SHORTCUT_WINWIN.OFFSET", "ENOCEAN.RORG_F6.FUNCTION_10.TYPE_00_1.SHORTCUT_WINWIN.OFFSET",
                 "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);

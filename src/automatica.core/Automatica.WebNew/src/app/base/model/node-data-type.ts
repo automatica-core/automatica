@@ -2,13 +2,14 @@ import { BaseModel, JsonFieldInfo, JsonProperty, Model } from "./base-model"
 
 export enum NodeDataTypeEnum {
     NoAttribute = 0,
-    Integer,
-    Double,
-    String,
-    Boolean,
-    DateTime,
-    Time,
-    Date
+    Integer = 1,
+    Double = 2,
+    String = 3,
+    Boolean = 4,
+    DateTime = 5,
+    Time = 6,
+    Date = 7,
+    WindowState = 8
 }
 
 @Model()

@@ -18,6 +18,7 @@ import { DesignTimeDataService } from "src/app/services/design-time-data.service
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { NodeTemplateService } from "src/app/services/node-template.service";
 import { DataService } from "src/app/services/data.service";
+import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 
 @Component({
   selector: "p3-config-tree",
@@ -27,6 +28,8 @@ import { DataService } from "src/app/services/data.service";
 
 })
 export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDestroy {
+
+  NodeDataTypeEnum: typeof NodeDataTypeEnum = NodeDataTypeEnum
 
   NodeInstanceState: typeof NodeInstanceState = NodeInstanceState;
   expandedRowKeys: any[] = ["b0"];
