@@ -18,6 +18,7 @@ export interface VisuObjectType {
     This2AreaInstanceNavigation: AreaInstance;
     This2CategoryInstanceNavigation: CategoryInstance;
 
+    VisuDisplayName: string;
     DisplayName: string;
     IsFavorite: boolean;
 }
@@ -94,7 +95,7 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     public get displayText() {
-        return this.visuObjectType.DisplayName;
+        return this.visuObjectType.VisuDisplayName;
     }
 
     public get icon() {

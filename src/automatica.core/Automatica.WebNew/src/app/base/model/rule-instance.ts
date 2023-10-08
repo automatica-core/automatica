@@ -125,6 +125,10 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         return this.Name;
     }
 
+    public get VisuDisplayName(): string {
+        return this.Name;
+    }
+
     private _DisplayDescription: string;
     public get DisplayDescription(): string {
         if (!this._DisplayDescription) {
