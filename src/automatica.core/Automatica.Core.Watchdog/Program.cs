@@ -88,12 +88,19 @@ namespace Automatica.Core.Watchdog
                 while (true)
                 {
                     _logger.LogInformation($"Starting {appName}");
-                    
+
+                    var startTime = DateTime.Now;
                     process = Process.Start(processInfo);
                     process!.ErrorDataReceived += ProcessOnErrorDataReceived;
 
                     process.WaitForExit();
                     restartCount++;
+
+                    var diffNow = DateTime.Now - startTime;
+                    if (diffNow.TotalMinutes >= 30)
+                    {
+                        restartCount = 0;
+                    }
 
 
                     process.ErrorDataReceived -= ProcessOnErrorDataReceived;
