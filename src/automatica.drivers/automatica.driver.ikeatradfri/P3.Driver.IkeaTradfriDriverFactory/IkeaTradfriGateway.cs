@@ -100,7 +100,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 return false;
             }
 
-            var gw = scan.SingleOrDefault(a => a.Id == _id.ToLowerInvariant());
+            var gw = scan.SingleOrDefault(a => a.DisplayName == _id.ToLowerInvariant());
 
             if (gw == null)
             {

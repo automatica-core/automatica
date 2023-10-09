@@ -33,13 +33,13 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 var node = DriverContext.NodeTemplateFactory.CreateNodeInstance(IkeaTradfriFactory.GatewayGuid);
                 node.Name = gw.DisplayName;
 
-                if (_existingDevices.ContainsKey(gw.Id))
+                if (_existingDevices.ContainsKey(gw.DisplayName))
                 {
                     continue;
                 }
 
                 var id = node.GetProperty(IkeaTradfriFactory.IdAddressPropertyKey);
-                id.Value = gw.Id;
+                id.Value = gw.DisplayName;
 
                 ret.Add(node);
             }
