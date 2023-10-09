@@ -268,31 +268,35 @@ namespace Automatica.Core.Runtime.Core
 
             });
 #pragma warning restore 4014
-           
 
-            await Configure();
-
-            await StartRemoteConnectService();
-
-            RunState = RunState.Starting;
-
-            await StartLogicEngine();
-            foreach (var driver in _driverStore.All())
+            try
             {
-                _logger.LogInformation($"Starting driver {driver.Name}...");
-                await StartDriver(driver);
+                await Configure();
+
+                await StartRemoteConnectService();
+
+                RunState = RunState.Starting;
+
+                await StartLogicEngine();
+                foreach (var driver in _driverStore.All())
+                {
+                    _logger.LogInformation($"Starting driver {driver.Name}...");
+                    await StartDriver(driver);
+                }
+
+                await StartLogics();
+                await _trendingContext.Start();
+                RunState = RunState.Started;
+
+                foreach (var driver in _driverStore.All())
+                {
+                    await driver.Started();
+                }
             }
-
-            await StartLogics();
-            await _trendingContext.Start();
-            RunState = RunState.Started;
-
-            foreach (var driver in _driverStore.All())
+            catch (Exception e)
             {
-                await driver.Started();
+                _logger.LogError(e, $"Some unhandled exception occurred during startup...{e}");
             }
-
-           
         }
 
         private async Task StartRemoteConnectService()
