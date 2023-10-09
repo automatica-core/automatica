@@ -60,8 +60,20 @@ namespace Automatica.Core.Driver
 
         public async Task<bool> Configure(CancellationToken token = default)
         {
+            if (DriverContext.NodeInstance.IsDisabled)
+            {
+                DriverContext.Logger.LogWarning($"Node {Name} {Id} is disabled");
+                return false;
+            }
             foreach (var node in DriverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
             {
+                if (node.IsDisabled)
+                {
+                    node.State = NodeInstanceState.Disabled;
+                    DriverContext.Logger.LogWarning($"Node {node.Name} {node.ObjId} is disabled");
+                    continue;
+                }
+
                 node.State = NodeInstanceState.Loaded;
 
                 var logger = DriverContext.Logger;
