@@ -9,6 +9,16 @@
         "NAME": "Status"
       }
     },
+    "25": {
+      "NAME": "Shelly 2.5",
+      "DESCRIPTION": "",
+      "STATE_1": {
+        "NAME": "Status 1"
+      },
+      "STATE_2": {
+        "NAME": "Status 2"
+      }
+    },
     "PROPERTIES": {
       "ID": {
         "NAME": "Id"

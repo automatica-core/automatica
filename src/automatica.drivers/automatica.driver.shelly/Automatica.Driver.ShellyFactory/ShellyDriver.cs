@@ -83,6 +83,9 @@ namespace Automatica.Driver.ShellyFactory
                 case "shelly-1":
                     shellyDevice = new Shelly1Device(ctx);
                     break;
+                case "shelly-25":
+                    shellyDevice = new Shelly25Device(ctx);
+                    break;
                 default:
                     DriverContext.Logger.LogWarning($"Could not found implementation type for {key} on {ctx.NodeInstance.Name}");
                     return null;

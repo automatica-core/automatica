@@ -2,7 +2,8 @@
 {
     public enum ShellyDeviceType
     {
-        Shelly1Pm
+        Shelly1Pm,
+        Shelly25
     }
 
     public class ShellyDevice

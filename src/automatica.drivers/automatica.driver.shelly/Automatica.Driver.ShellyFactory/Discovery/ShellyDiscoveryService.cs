@@ -42,6 +42,9 @@ namespace Automatica.Driver.ShellyFactory.Discovery
                     case "1":
                         type = ShellyDeviceType.Shelly1Pm;
                         break;
+                    case "switch25":
+                        type = ShellyDeviceType.Shelly25;
+                        break;
                     default:
                         continue;
                 }
