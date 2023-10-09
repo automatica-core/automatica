@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Driver.Loader;
+﻿using Automatica.Core.Driver.Discovery;
+using Automatica.Core.Driver.Loader;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Automatica.Core.Driver
@@ -11,6 +12,7 @@ namespace Automatica.Core.Driver
             services.AddSingleton<IDriverStore, DriverStore>();
 
             services.AddSingleton<IDriverFactoryLoader, DriverFactoryLoader>();
+            services.AddSingleton<IZeroconfDiscovery, ZeroconfDiscoveryService>();
         }
     }
 }
