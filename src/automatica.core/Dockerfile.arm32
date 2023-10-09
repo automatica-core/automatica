@@ -53,7 +53,7 @@ RUN rm -rf /src
 RUN apt update
 RUN apt install curl -y
 
-RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.51.2/frp_0.51.2_linux_arm.tar.gz
+RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.51.3/frp_0.51.3_linux_arm.tar.gz
 RUN tar xvzf frp.tgz
 RUN mkdir -p frp
 RUN mv frp_*/* frp/
