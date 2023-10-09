@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tomidix.NetStandard.Tradfri;
 using Tomidix.NetStandard.Tradfri.Models;
-using Zeroconf;
 
 namespace P3.Driver.IkeaTradfri
 {
@@ -42,18 +41,7 @@ namespace P3.Driver.IkeaTradfri
             _tradfri.DeviceController.ObserveDevice(device, changeAction); 
         }
 
-        public static async Task<IEnumerable<Tuple<string, string>>> Discover()
-        {
-            var ret = new List<Tuple<string, string>>();
-            var responses = await ZeroconfResolver.ResolveAsync("_coap._udp.local.");
-            foreach (var resp in responses)
-            {
-                ret.Add(new Tuple<string, string>(resp.DisplayName, resp.IPAddress));
-            }
-
-            return ret;
-        }
-
+       
         public static TradfriAuth GeneratePsk(string gatewayIp, string appName, string secret)
         {
             try

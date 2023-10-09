@@ -18,13 +18,13 @@
     "Type": "driver",
     "Output": "P3.Driver.IkeaTradfriDriverFactory.dll",
     "Resources": [],
-    "Dependencies": [ "P3.Driver.IkeaTradfri.dll", "BouncyCastle.Crypto.dll", "CBOR.dll", "CoAP.dll", "COSE.dll", "MessagePack.dll", "Numbers.dll", "Zeroconf.dll", "System.Reactive.dll", "ApiLibs.dll", "Tomidix.NetStandard.Tradfri.dll", "RestSharp.dll" ],
+    "Dependencies": [ "P3.Driver.IkeaTradfri.dll", "BouncyCastle.Crypto.dll", "CBOR.dll", "CoAP.dll", "COSE.dll", "MessagePack.dll", "Numbers.dll", "System.Reactive.dll", "ApiLibs.dll", "Tomidix.NetStandard.Tradfri.dll", "RestSharp.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.driver.ikeatradfri",
     "MinCoreServerVersion": {
       "Minor": 5,
       "Major": 7,
-      "Build": 0,
-      "Revision": 1355
+      "Build": 1,
+      "Revision": 1469
     },
     "MandatoryLicenseFeatures": [],
     "OptionalLicenseFeatures": []

@@ -92,7 +92,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 return false;
             }
 
-            var scan = (await IkeaTradfriDriver.Discover()).ToList();
+            var scan = (await IkeaTradfri.Discover(DriverContext)).ToList();
 
             if(scan.Count == 0)
             {
@@ -100,21 +100,21 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                 return false;
             }
 
-            var gw = scan.Single(a => a.Item1 == _id.ToLowerInvariant());
+            var gw = scan.SingleOrDefault(a => a.Id == _id.ToLowerInvariant());
 
             if (gw == null)
             {
                 DriverContext.Logger.LogInformation($"Could not find gateway with id {_id}");
                 return false;
             }
-            DriverContext.Logger.LogInformation($"Connecting to tradfri with ip {gw.Item2}");
+            DriverContext.Logger.LogInformation($"Connecting to tradfri with ip {gw.IpAddress}");
 
             await Task.Run(async () =>
             {
                 var conName = $"Automatica.Core-{DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds}";
                 if (String.IsNullOrEmpty(_appKey))
                 {
-                    var auth = IkeaTradfriDriver.GeneratePsk(gw.Item2, conName, _secret);
+                    var auth = IkeaTradfriDriver.GeneratePsk(gw.IpAddress, conName, _secret);
                     if (auth == null)
                     {
                         DriverContext.Logger.LogError($"Could not generate psk key for tradfri {Name}");
@@ -127,7 +127,7 @@ namespace P3.Driver.IkeaTradfriDriverFactory
                     DriverContext.NodeTemplateFactory.SetPropertyValue(prop.ObjId, _appKey);
                 }
 
-                Driver = new IkeaTradfriDriver(gw.Item2, conName, _appKey);
+                Driver = new IkeaTradfriDriver(gw.IpAddress, conName, _appKey);
                 await Driver.Connect();
             });
 
