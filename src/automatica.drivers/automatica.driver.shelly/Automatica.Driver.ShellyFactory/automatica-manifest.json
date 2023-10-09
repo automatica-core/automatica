@@ -16,7 +16,7 @@
     "Name": "P3.Driver.Shelly",
     "ComponentName": "shelly",
     "Type": "driver",
-    "Output": "Automatica.Driver.ShellyFactory",
+    "Output": "Automatica.Driver.ShellyFactory.dll",
     "Resources": [],
     "Dependencies": [ "Automatica.Driver.Shelly.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.driver.shelly",
