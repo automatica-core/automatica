@@ -57,6 +57,9 @@ namespace Automatica.Driver.ShellyFactory
                     case ShellyDeviceType.Shelly1Pm:
                         node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly1Device);
                         break;
+                    case ShellyDeviceType.Shelly25:
+                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly25Device);
+                        break;
                     default:
                         DriverContext.Logger.LogInformation($"Device with id {device.Id} not supported...");
                         continue;
