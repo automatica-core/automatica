@@ -84,7 +84,7 @@ namespace Automatica.Core.Watchdog
             Process process = null;
             try
             {
-
+                int restartCount = 0;
                 while (true)
                 {
                     _logger.LogInformation($"Starting {appName}");
@@ -93,13 +93,14 @@ namespace Automatica.Core.Watchdog
                     process!.ErrorDataReceived += ProcessOnErrorDataReceived;
 
                     process.WaitForExit();
+                    restartCount++;
 
 
                     process.ErrorDataReceived -= ProcessOnErrorDataReceived;
                     var exitCode = process.ExitCode;
                     _logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
-                    if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker)
+                    if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker && restartCount >= 10)
                     {
                         Environment.Exit(2); //restart
                         return;
