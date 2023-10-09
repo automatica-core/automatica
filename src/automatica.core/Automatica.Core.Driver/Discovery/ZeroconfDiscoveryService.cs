@@ -10,7 +10,7 @@ namespace Automatica.Core.Driver.Discovery
         public async Task<IEnumerable<ZeroconfHost>> DiscoverAsync(string serviceType, TimeSpan timeout=default)
         {
             var ret = new List<ZeroconfHost>();
-            var responses = await ZeroconfResolver.ResolveAsync("_coap._udp.local.", timeout);
+            var responses = await ZeroconfResolver.ResolveAsync(serviceType, timeout);
             foreach (var resp in responses)
             {
                var services = new Dictionary<string, ZeroconfService>();
