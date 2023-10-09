@@ -1,0 +1,34 @@
+{
+  "wifi_sta": {
+    "connected": true,
+    "ssid": "WuTangLan",
+    "ip": "172.16.1.115",
+    "rssi": -87
+  },
+  "cloud": {
+    "enabled": true,
+    "connected": true
+  },
+  "mqtt": {
+    "connected": true
+  },
+  "time": "17:09",
+  "unixtime": 1588525744,
+  "serial": 123,
+  "has_update": true,
+  "mac": "0123456789AB",
+  "ext_sensors": {},
+  "ext_temperature": {},
+  "ext_humidity": {},
+  "update": {
+    "status": "idle",
+    "has_update": false,
+    "new_version": "20200320-123430/v1.6.2@514044b4",
+    "old_version": "20200320-123430/v1.6.2@514044b4"
+  },
+  "ram_total": 50568,
+  "ram_free": 39748,
+  "fs_size": 233681,
+  "fs_free": 152106,
+  "uptime": 32372
+}

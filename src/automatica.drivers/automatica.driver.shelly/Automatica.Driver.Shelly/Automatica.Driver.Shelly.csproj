@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Automatica.Driver.Shelly</RootNamespace>
+    <Company>Automatica.Core</Company>
+    <Authors>Patrik Pfaffenbauer</Authors>
+    <PackageProjectUrl>https://github.com/automatica-core/automatica.driver.shelly</PackageProjectUrl>
+    <Description>.NET API for Shelly Devices</Description>
+    <PackageReleaseNotes />    
+  </PropertyGroup>
+
+  <ItemGroup>
+	     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

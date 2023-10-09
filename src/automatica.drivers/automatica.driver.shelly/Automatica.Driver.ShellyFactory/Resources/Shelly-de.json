@@ -1,0 +1,19 @@
+{
+  "SHELLY": {
+    "NAME": "Shelly",
+    "DESCRIPTION": "",
+    "1": {
+      "NAME": "Shelly 1",
+      "DESCRIPTION": "",
+      "STATE": {
+        "NAME": "Status"
+      }
+    },
+    "PROPERTIES": {
+      "ID": {
+        "NAME":  "Id"
+      }
+    }
+  
+  }
+}

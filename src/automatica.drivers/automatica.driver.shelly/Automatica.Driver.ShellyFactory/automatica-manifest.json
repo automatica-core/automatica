@@ -1,0 +1,32 @@
+{
+  "Automatica": {
+    "manifest-version": {
+      "Minor": 1,
+      "Major": 0,
+      "Build": 0,
+      "Revision": 0
+    },
+    "plugin-version": {
+      "Minor": 1,
+      "Major": 0,
+      "Build": 0,
+      "Revision": 0
+    },
+    "PluginGuid": "70f2c724-25ec-4eff-97bc-976b49b442bc",
+    "Name": "P3.Driver.Shelly",
+    "ComponentName": "shelly",
+    "Type": "driver",
+    "Output": "Automatica.Driver.ShellyFactory",
+    "Resources": [],
+    "Dependencies": [ "Automatica.Driver.Shelly.dll" ],
+    "ProjectPage": "https://github.com/automatica-core/automatica.driver.shelly",
+    "MinCoreServerVersion": {
+      "Minor": 5,
+      "Major": 7,
+      "Build": 1,
+      "Revision": 1471
+    },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}
