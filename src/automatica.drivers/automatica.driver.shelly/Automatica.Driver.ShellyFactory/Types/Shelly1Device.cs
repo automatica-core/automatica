@@ -49,6 +49,11 @@ namespace Automatica.Driver.ShellyFactory.Types
                     Password = GetPropertyValueString("shelly-password")
                 });
 
+            if (!await Poll(token))
+            {
+                return false;
+            }
+
             return await base.Start(token);
         }
 

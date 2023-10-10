@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -20,14 +21,26 @@ namespace Automatica.Driver.ShellyFactory
             PollingInterval = GetPropertyValueInt("polling-interval");
         }
 
-        public override Task<bool> Start(CancellationToken token = new CancellationToken())
+        public override async Task<bool> Start(CancellationToken token = new CancellationToken())
         {
             _timer = new Timer(PollingInterval);
 
+
+            var ret = await base.Start(token);
+
+            if (!ret)
+            {
+                return ret;
+            }
+
+            if (!await Poll(token))
+            {
+                return false;
+            }
+
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
-
-            return base.Start(token);
+            return true;
         }
 
         private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
