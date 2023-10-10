@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using Zeroconf;
 
@@ -31,6 +30,11 @@ namespace Automatica.Core.Driver.Discovery
                     var autoService = new ZeroconfService(service.Value.Name, service.Value.ServiceName,
                         service.Value.Port, service.Value.Ttl, service.Value.Properties);
                     services.Add(service.Key, autoService);
+
+                    foreach (var prop in autoService.Properties)
+                        foreach(var pro in prop)
+                        _logger.LogDebug(
+                            $"Found {resp.Id} provides service {service.Value.Name} with property {pro.Key}={pro.Value}");
                 }
 
                 ret.Add(new ZeroconfHost(resp.Id, resp.DisplayName, resp.IPAddress, resp.IPAddresses, services));
