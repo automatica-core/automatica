@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Driver.Shelly.Dtos;
 using Automatica.Driver.Shelly.Options;
 
@@ -9,7 +10,7 @@ namespace Automatica.Driver.Shelly.Clients
 {
     public class Shelly1Client : ShellyClientBase, IShelly1
     {
-        public Shelly1Client(HttpClient httpClient, Shelly1Options shelly1Options) : base(httpClient, shelly1Options)
+        public Shelly1Client(ITelegramMonitorInstance telegramMonitor, HttpClient httpClient, Shelly1Options shelly1Options) : base(telegramMonitor, httpClient, shelly1Options)
         {
         }
 

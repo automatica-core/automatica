@@ -36,7 +36,10 @@ namespace Automatica.Driver.ShellyFactory
 
             return await base.Init(token);
         }
-
+        protected override bool CreateTelegramMonitor()
+        {
+            return true;
+        }
 
         public override async Task<IList<NodeInstance>> Scan(CancellationToken token = new CancellationToken())
         {
@@ -84,10 +87,10 @@ namespace Automatica.Driver.ShellyFactory
             switch (key)
             {
                 case "shelly-1":
-                    shellyDevice = new Shelly1Device(ctx);
+                    shellyDevice = new Shelly1Device(ctx, TelegramMonitor);
                     break;
                 case "shelly-25":
-                    shellyDevice = new Shelly25Device(ctx);
+                    shellyDevice = new Shelly25Device(ctx, TelegramMonitor);
                     break;
                 default:
                     DriverContext.Logger.LogWarning($"Could not found implementation type for {key} on {ctx.NodeInstance.Name}");

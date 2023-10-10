@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver;
 using Automatica.Driver.Shelly.Clients;
 using Automatica.Driver.Shelly.Options;
@@ -14,6 +15,8 @@ namespace Automatica.Driver.ShellyFactory.Types
 {
     internal class Shelly1Device : ShellyDriverDevice
     {
+        private readonly ITelegramMonitorInstance _telegramMonitorInstance;
+        private readonly ShellyDriver _driver;
         private string _ipAddress;
         public ShellyDevice Device { get; private set; }
 
@@ -21,8 +24,9 @@ namespace Automatica.Driver.ShellyFactory.Types
 
         private List<ShellyRelay> _relays = new List<ShellyRelay>();
 
-        public Shelly1Device(IDriverContext driverContext) : base(driverContext)
+        public Shelly1Device(IDriverContext driverContext, ITelegramMonitorInstance telegramMonitorInstance) : base(driverContext)
         {
+            _telegramMonitorInstance = telegramMonitorInstance;
         }
 
         public override async Task<bool> Start(CancellationToken token = new CancellationToken())
@@ -38,7 +42,7 @@ namespace Automatica.Driver.ShellyFactory.Types
             _ipAddress = shellyDiscovery.IpAddress;
             Device = shellyDiscovery;
 
-            Shelly = new Shelly1PmClient(new HttpClient { BaseAddress = new Uri($"http://{_ipAddress}") },
+            Shelly = new Shelly1PmClient(_telegramMonitorInstance, new HttpClient { BaseAddress = new Uri($"http://{_ipAddress}") },
                 new Shelly1PmOptions
                 {
                     UserName = GetPropertyValueString("shelly-username"),

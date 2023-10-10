@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.TelegramMonitor;
+using Automatica.Core.Driver.Monitor;
 using Automatica.Driver.Shelly.Dtos.Shelly1PM;
 using Automatica.Driver.Shelly.Options;
 using Newtonsoft.Json;
@@ -12,20 +14,19 @@ namespace Automatica.Driver.Shelly.Clients
 {
     public abstract class ShellyClientBase
     {
+        private readonly ITelegramMonitorInstance _telegramMonitor;
         protected readonly HttpClient ShellyHttpClient;
         private readonly IShellyCommonOptions _shellyCommonOptions;
         protected readonly Uri ServerUri;
         
         protected TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
 
-        protected ShellyClientBase(HttpClient httpClient, IShellyCommonOptions shellyCommonOptions)
+        protected ShellyClientBase(ITelegramMonitorInstance telegramMonitor, HttpClient httpClient, IShellyCommonOptions shellyCommonOptions)
         {
-            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
-            if (shellyCommonOptions == null) throw new ArgumentNullException(nameof(shellyCommonOptions));
-            
+            _telegramMonitor = telegramMonitor;
+            ShellyHttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _shellyCommonOptions = shellyCommonOptions ?? throw new ArgumentNullException(nameof(shellyCommonOptions));
 
-            ShellyHttpClient = httpClient;
-            _shellyCommonOptions = shellyCommonOptions;
             ServerUri = shellyCommonOptions.ServerUri;
             
             if (shellyCommonOptions.DefaultTimeout.HasValue)
@@ -39,6 +40,10 @@ namespace Automatica.Driver.Shelly.Clients
             var turnValue = value ? "on" : "off";
             var endpoint = ServerUri + $"/relay/{channelId}?turn={turnValue}";
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
+
+
+            await _telegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, turnValue, endpoint);
+
             return await ExecuteRequestSetAsync<RelayDto>(requestMessage, token, default);
         }
         protected async Task<ShellyResult<T>> ExecuteRequestAsync<T>(HttpRequestMessage httpRequestMessage,
@@ -54,7 +59,9 @@ namespace Automatica.Driver.Shelly.Clients
                 
             var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutTokenSource.Token , cancellationToken);
             var response = await ShellyHttpClient.SendAsync(httpRequestMessage, linkedTokenSource.Token);
-                
+            
+            await _telegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, "read", httpRequestMessage.RequestUri?.AbsoluteUri);
+
             if (response.StatusCode == 0)
             {
                 // Status code of 0 means timeout reached
@@ -93,14 +100,19 @@ namespace Automatica.Driver.Shelly.Clients
             var response = await ShellyHttpClient.SendAsync(httpRequestMessage, linkedTokenSource.Token);
 
 
-            var readAsStringAsync = await response.Content.ReadAsStringAsync();
+            var readAsStringAsync = await response.Content.ReadAsStringAsync(linkedTokenSource.Token);
             var result = JsonConvert.DeserializeObject<T>(readAsStringAsync);
+
+            await _telegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
+
             return result;
         }
 
         protected virtual async Task<ShellyResult<T>> HandleOkResponse<T>(HttpResponseMessage response)
         {
             var readAsStringAsync = await response.Content.ReadAsStringAsync();
+
+            await _telegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
             var shelly1Status = JsonConvert.DeserializeObject<T>(readAsStringAsync);
             return ShellyResult<T>.Success(shelly1Status);
         }
