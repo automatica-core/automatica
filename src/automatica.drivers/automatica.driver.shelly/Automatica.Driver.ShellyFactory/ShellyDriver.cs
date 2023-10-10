@@ -36,6 +36,13 @@ namespace Automatica.Driver.ShellyFactory
 
             return await base.Init(token);
         }
+
+        public override async Task<bool> Start(CancellationToken token = new CancellationToken())
+        {
+            DiscoveredShellys = await DiscoveryService.SearchShellys();
+            return await base.Start(token);
+        }
+
         protected override bool CreateTelegramMonitor()
         {
             return true;
