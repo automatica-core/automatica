@@ -56,20 +56,32 @@ namespace Automatica.Driver.ShellyFactory.Types
 
         public override async Task<bool> Poll(CancellationToken token = default)
         {
-            var status = await Shelly.GetStatus(token);
-
-            if (status.IsSuccess)
+            if (Shelly != null)
             {
-                foreach (var relay in _relays)
+                try
                 {
-                    if(status.Value.Relays.Length >= relay.RelayId+1)
+                    var status = await Shelly.GetStatus(token);
+
+                    if (status.IsSuccess)
                     {
-                        await relay.GetValueFromShelly(status.Value.Relays[relay.RelayId]);
+                        foreach (var relay in _relays)
+                        {
+                            if (status.Value.Relays.Length >= relay.RelayId + 1)
+                            {
+                                await relay.GetValueFromShelly(status.Value.Relays[relay.RelayId]);
+                            }
+                        }
                     }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    DriverContext.Logger.LogError(ex, $"Could not poll shelly...{ex}");
                 }
             }
 
-            return true;
+            return false;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

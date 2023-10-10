@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 
 namespace Automatica.Driver.ShellyFactory
@@ -34,6 +35,10 @@ namespace Automatica.Driver.ShellyFactory
             try
             {
                 await Poll();
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, "Error polling shelly device");
             }
             finally
             {

@@ -12,6 +12,7 @@ namespace Automatica.Driver.ShellyFactory
 {
     internal class ShellyDriver : DriverBase
     {
+        public List<ShellyDevice> DiscoveredShellys { get; private set; } = new List<ShellyDevice>();
         public ShellyDiscoveryService DiscoveryService { get; }
         private readonly List<ShellyDriverDevice> _devices = new List<ShellyDriverDevice>();
         public ShellyDriver(IDriverContext driverContext) : base(driverContext)
@@ -36,7 +37,6 @@ namespace Automatica.Driver.ShellyFactory
             return await base.Init(token);
         }
 
-        public List<ShellyDevice> DiscoveredShellys { get; set; }
 
         public override async Task<IList<NodeInstance>> Scan(CancellationToken token = new CancellationToken())
         {
