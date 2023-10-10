@@ -12,6 +12,7 @@ namespace Automatica.Driver.ShellyFactory
         private Timer _timer;
         public string ShellyId { get; }
         public int PollingInterval { get; }
+        public int PollFailCount { get; private set; }
 
         protected ShellyDriverDevice(IDriverContext driverContext) : base(driverContext)
         {
@@ -34,7 +35,21 @@ namespace Automatica.Driver.ShellyFactory
             _timer.Elapsed -= _timer_Elapsed;
             try
             {
-                await Poll();
+                var ret = await Poll();
+                if (!ret)
+                {
+                    PollFailCount++;
+                }
+                else
+                {
+                    PollFailCount = 0;
+                }
+
+                if (PollFailCount >= 10)
+                {
+                    DriverContext.Logger.LogError($"Stop polling, after 10 tries, we have some errors to check...");
+                    _timer.Stop();
+                }
             }
             catch (Exception ex)
             {
