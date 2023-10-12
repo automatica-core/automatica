@@ -1,0 +1,97 @@
+{
+  "wifi_sta": {
+    "connected": true,
+    "ssid": "WuTangLan",
+    "ip": "172.16.1.115",
+    "rssi": -57
+  },
+  "cloud": {
+    "enabled": true,
+    "connected": true
+  },
+  "mqtt": {
+    "connected": false
+  },
+  "time": "20:39",
+  "unixtime": 1696963187,
+  "serial": 59749,
+  "has_update": true,
+  "mac": "40F52001AA79",
+  "cfg_changed_cnt": 0,
+  "actions_stats": {
+    "skipped": 0
+  },
+  "rollers": [
+    {
+      "state": "stop",
+      "source": "input",
+      "power": 0,
+      "is_valid": true,
+      "safety_switch": false,
+      "overtemperature": false,
+      "stop_reason": "normal",
+      "last_direction": "open",
+      "current_pos": 100,
+      "calibrating": false,
+      "positioning": true
+    }
+  ],
+  "meters": [
+    {
+      "power": 0,
+      "overpower": 0,
+      "is_valid": true,
+      "timestamp": 1696970387,
+      "counters": [
+        0,
+        0,
+        0
+      ],
+      "total": 9470
+    },
+    {
+      "power": 0,
+      "overpower": 0,
+      "is_valid": true,
+      "timestamp": 1696970387,
+      "counters": [
+        0,
+        0,
+        0
+      ],
+      "total": 9141
+    }
+  ],
+  "inputs": [
+    {
+      "input": 0,
+      "event": "",
+      "event_cnt": 0
+    },
+    {
+      "input": 0,
+      "event": "",
+      "event_cnt": 0
+    }
+  ],
+  "temperature": 61.5,
+  "overtemperature": false,
+  "tmp": {
+    "tC": 61.5,
+    "tF": 142.7,
+    "is_valid": true
+  },
+  "temperature_status": "Normal",
+  "update": {
+    "status": "pending",
+    "has_update": true,
+    "new_version": "20230913-112234/v1.14.0-gcb84623",
+    "old_version": "20230503-095750/v1.13.0-g9aed950"
+  },
+  "ram_total": 50720,
+  "ram_free": 37192,
+  "fs_size": 233681,
+  "fs_free": 145831,
+  "voltage": 238.31,
+  "uptime": 2697240
+}

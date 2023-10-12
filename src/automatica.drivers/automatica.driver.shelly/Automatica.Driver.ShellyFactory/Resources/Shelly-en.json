@@ -4,26 +4,88 @@
     "DESCRIPTION": "",
     "1": {
       "NAME": "Shelly 1",
-      "DESCRIPTION": "",
-      "STATE": {
-        "NAME": "Status"
-      }
+      "DESCRIPTION": ""
     },
     "25": {
       "NAME": "Shelly 2.5",
-      "DESCRIPTION": "",
-      "STATE_1": {
-        "NAME": "Status 1"
-      },
-      "STATE_2": {
-        "NAME": "Status 2"
-      }
+      "DESCRIPTION": ""
+    },
+    "1PM": {
+      "NAME": "Shelly 1PM",
+      "DESCRIPTION": ""
     },
     "PROPERTIES": {
       "ID": {
         "NAME": "Id"
+      },
+      "POLLING_INTERVAL": {
+        "NAME": "Pollinginterval [ms]"
+      },
+      "USERNAME": {
+        "NAME": "Username"
+      },
+      "PASSWORD": {
+        "NAME": "Password"
+      },
+      "SCAN": {
+        "NAME": "Scan Shellys"
       }
-    }
+    },
+    "METERS": {
+      "NAME": "Meters"
 
+    },
+    "METER": {
+      "NAME": "Meter",
+      "IS_VALID": {
+        "NAME": "Is valid"
+      },
+      "OVERPOWER": {
+        "NAME": "Overpower"
+      },
+      "POWER": {
+        "NAME": "Power [W]"
+      },
+      "TIMESTAMP": {
+        "NAME": "Timestamp"
+      },
+      "TOTAL": {
+        "NAME": "Total [Wh]"
+      }
+    },
+    "RELAYS": {
+      "NAME": "Relais"
+
+    },
+    "RELAY": {
+      "NAME": "Relais",
+      "HAS_TIMER": {
+        "NAME": "Has timer"
+      },
+      "STATUS": {
+        "NAME": "State"
+      }
+    },
+    "ROLLER": {
+      "NAME": "Roller",
+      "POSITION": {
+        "NAME": "Position"
+      },
+      "STATE": {
+        "NAME": "State"
+      },
+      "STOP_REASON": {
+        "NAME": "Stop reason"
+      },
+      "LAST_DIRECTION": {
+        "NAME": "Direction"
+      }
+    },
+    "TEMPERATURE": {
+      "NAME": "Temperature"
+    },
+    "HAS_UPDATE": {
+      "NAME": "Has update"
+    }
   }
 }

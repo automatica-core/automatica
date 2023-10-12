@@ -90,20 +90,8 @@ namespace Automatica.Driver.ShellyFactory
         {
             var key = ctx.NodeInstance.This2NodeTemplateNavigation.Key;
 
-            ShellyDriverDevice shellyDevice;
-            switch (key)
-            {
-                case "shelly-1":
-                    shellyDevice = new Shelly1Device(ctx, TelegramMonitor);
-                    break;
-                case "shelly-25":
-                    shellyDevice = new Shelly25Device(ctx, TelegramMonitor);
-                    break;
-                default:
-                    DriverContext.Logger.LogWarning($"Could not found implementation type for {key} on {ctx.NodeInstance.Name}");
-                    return null;
-            }
-
+            var shellyDevice = new ShellyDriverDevice(ctx, TelegramMonitor);
+            
             _devices.Add(shellyDevice);
             return shellyDevice;
         }

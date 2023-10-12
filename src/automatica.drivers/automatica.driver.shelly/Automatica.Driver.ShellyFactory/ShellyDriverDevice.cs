@@ -1,28 +1,73 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Automatica.Driver.Shelly.Clients;
+using Automatica.Driver.Shelly.Options;
+using Automatica.Driver.ShellyFactory.Types.Meter;
+using Automatica.Driver.ShellyFactory.Types.Relay;
+using Automatica.Driver.ShellyFactory.Types.Roller;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
+using Automatica.Driver.ShellyFactory.Discovery;
+using Automatica.Core.Base.TelegramMonitor;
+using Automatica.Driver.ShellyFactory.Types;
 
 namespace Automatica.Driver.ShellyFactory
 {
-    internal abstract class ShellyDriverDevice : DriverBase
+    internal class ShellyDriverDevice : DriverBase
     {
+        private readonly ITelegramMonitorInstance _telegramMonitorInstance;
         private Timer _timer;
         public string ShellyId { get; }
         public int PollingInterval { get; }
         public int PollFailCount { get; private set; }
 
-        protected ShellyDriverDevice(IDriverContext driverContext) : base(driverContext)
+        private string _ipAddress;
+        public ShellyDevice Device { get; private set; }
+
+        public ShellyClient Client { get; set; }
+
+        protected readonly List<ShellyContainerNode> ContainerNodes = new();
+
+        internal ShellyDriverDevice(IDriverContext driverContext, ITelegramMonitorInstance telegramMonitorInstance) : base(driverContext)
         {
+            _telegramMonitorInstance = telegramMonitorInstance;
             ShellyId = GetPropertyValueString(ShellyFactory.DeviceIdPropertyKey);
             PollingInterval = GetPropertyValueInt("polling-interval");
         }
 
         public override async Task<bool> Start(CancellationToken token = new CancellationToken())
         {
+            var shellyDiscovery = (Parent as ShellyDriver).DiscoveredShellys.FirstOrDefault(a => a.Id == ShellyId);
+
+            if (shellyDiscovery == null)
+            {
+                DriverContext.Logger.LogError($"Could not find any shelly device with id {ShellyId} in the local network");
+                return false;
+            }
+
+            _ipAddress = shellyDiscovery.IpAddress;
+            Device = shellyDiscovery;
+
+            Client = new ShellyClient(_telegramMonitorInstance, new HttpClient { BaseAddress = new Uri($"http://{_ipAddress}") },
+                new ShellyOptions
+                {
+                    UserName = GetPropertyValueString("shelly-username"),
+                    Password = GetPropertyValueString("shelly-password")
+                });
+
+            if (!await Poll(token))
+            {
+                return false;
+            }
+
+
             _timer = new Timer(PollingInterval);
 
 
@@ -86,8 +131,29 @@ namespace Automatica.Driver.ShellyFactory
             return base.Stop(token);
         }
 
-        public abstract Task<bool> Write(int channelId, bool value, CancellationToken token = default);
-        public abstract Task<bool> Poll(CancellationToken token = default);
+        private async Task<bool> Poll(CancellationToken token = default)
+        {
+            try
+            {
+                var data = await Client.GetStatus(token);
+
+                if (data.IsSuccess)
+                {
+                    foreach (var containerNode in ContainerNodes)
+                    {
+                        containerNode.ReadData(data.Value);
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, "Something strange happened....");
+            }
+
+            return false;
+        }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
@@ -101,7 +167,26 @@ namespace Automatica.Driver.ShellyFactory
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            throw new NotImplementedException();
+            var type = ctx.NodeInstance.This2NodeTemplateNavigation.Key;
+
+            ShellyContainerNode node;
+            switch (type)
+            {
+                case "shelly-relays":
+                    node = new RelayContainerNode(ctx, this);
+                    break;
+                case "shelly-meters":
+                    node = new MeterContainerNode(ctx, this);
+                    break;
+                case "shelly-rollers":
+                    node = new RollerContainerNode(ctx, this);
+                    break;
+                default:
+                    return null;
+            }
+
+            ContainerNodes.Add(node);
+            return node;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver.Monitor;
-using Automatica.Driver.Shelly.Dtos.Shelly1PM;
+using Automatica.Driver.Shelly.Dtos;
 using Automatica.Driver.Shelly.Options;
 using Newtonsoft.Json;
 

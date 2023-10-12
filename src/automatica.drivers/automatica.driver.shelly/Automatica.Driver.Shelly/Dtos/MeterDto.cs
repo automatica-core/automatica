@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Automatica.Driver.Shelly.Dtos.Shelly1PM
+namespace Automatica.Driver.Shelly.Dtos
 {
     public class MeterDto
     {
@@ -9,7 +9,7 @@ namespace Automatica.Driver.Shelly.Dtos.Shelly1PM
 
         [JsonProperty("overpower")]
         public double OverPower { get; set; }
-        
+
         [JsonProperty("total")]
         public long Total { get; set; }
 
@@ -18,7 +18,7 @@ namespace Automatica.Driver.Shelly.Dtos.Shelly1PM
 
         [JsonProperty("timestamp")]
         public long TimeStamp { get; set; }
-        
+
         [JsonProperty("counters")]
         public long[] Counters { get; set; }
     }

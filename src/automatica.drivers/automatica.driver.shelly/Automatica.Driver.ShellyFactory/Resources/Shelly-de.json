@@ -4,26 +4,88 @@
     "DESCRIPTION": "",
     "1": {
       "NAME": "Shelly 1",
-      "DESCRIPTION": "",
-      "STATE": {
-        "NAME": "Status"
-      }
+      "DESCRIPTION": ""
     },
     "25": {
       "NAME": "Shelly 2.5",
-      "DESCRIPTION": "",
-      "STATE_1": {
-        "NAME": "Status 1"
-      },
-      "STATE_2": {
-        "NAME": "Status 2"
-      }
+      "DESCRIPTION": ""
+    },
+    "1PM": {
+      "NAME": "Shelly 1PM",
+      "DESCRIPTION": ""
     },
     "PROPERTIES": {
       "ID": {
         "NAME": "Id"
+      },
+      "POLLING_INTERVAL": {
+        "NAME": "Abfrageintervall [ms]"
+      },
+      "USERNAME": {
+        "NAME": "Benutzername"
+      },
+      "PASSWORD": {
+        "NAME": "Passwort"
+      },
+      "SCAN": {
+        "NAME": "Suche"
       }
-    }
+    },
+    "METERS": {
+      "NAME": "Stromzähler"
 
+    },
+    "METER": {
+      "NAME": "Stromzähler",
+      "IS_VALID": {
+        "NAME": "Ist gültig"
+      },
+      "OVERPOWER": {
+        "NAME": "Überlastung"
+      },
+      "POWER": {
+        "NAME": "Leistung [W]"
+      },
+      "TIMESTAMP": {
+        "NAME": "Zeitstempel"
+      },
+      "TOTAL": {
+        "NAME": "Gesamt [Wh]"
+      }
+    },
+    "RELAYS": {
+      "NAME": "Relais"
+
+    },
+    "RELAY": {
+      "NAME": "Relais",
+      "HAS_TIMER": {
+        "NAME": "Hat Timer"
+      },
+      "STATUS": {
+        "NAME": "Status"
+      }
+    },
+    "ROLLER": {
+      "NAME": "Rollladen",
+      "POSITION": {
+        "NAME": "Position"
+      },
+      "STATE": {
+        "NAME": "Status"
+      },
+      "STOP_REASON": {
+        "NAME": "Stop Grund"
+      },
+      "LAST_DIRECTION": {
+        "NAME": "Richtung"
+      }
+    },
+    "TEMPERATURE": {
+      "NAME": "Temperatur"
+    },
+    "HAS_UPDATE": {
+      "NAME": "Update verfügbar"
+    }
   }
 }

@@ -1,12 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Automatica.Driver.Shelly.Dtos
 {
     /// <summary>
     /// https://shelly-api-docs.shelly.cloud/gen1/#status
     /// </summary>
-    public class Shelly1StatusDto
+    public class ShellyStatusDto
     {
+        public ShellyStatusDto()
+        {
+            Relays = new List<RelayDto>();
+            Rollers = new List<RollerDto>();
+            Meters = new List<MeterDto>();
+        }
+
         [JsonProperty("wifi_sta")]
         public WiFiStatusDto WiFiStatus { get; set; }
         
@@ -50,5 +58,14 @@ namespace Automatica.Driver.Shelly.Dtos
                 
         [JsonProperty("uptime")]
         public long Uptime { get; set; }
+
+        [JsonProperty("meters")]
+        public List<MeterDto> Meters { get; set; }
+
+        [JsonProperty("relays")]
+        public List<RelayDto> Relays { get; set; }
+
+        [JsonProperty("rollers")] 
+        public List<RollerDto> Rollers { get; set; }
     }
 }

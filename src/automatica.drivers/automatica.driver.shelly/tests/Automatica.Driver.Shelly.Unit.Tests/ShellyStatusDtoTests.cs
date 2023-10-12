@@ -6,12 +6,12 @@ using Xunit;
 
 namespace Automatica.Driver.Shelly.Unit.Tests
 {
-    public class Shelly1PmStatusDtoTests
+    public class ShellyStatusDtoTests
     {
         [Fact]
         public void Shelly1PmStatusDto_CanDeserializeJsonResponseFromShelly1()
         {
-            Shelly1StatusDto status = GetShelly1StatusFromFile("./status_response.json");
+            var status = GetShellyStatusFromFile("./status_response.json");
 
             // assert
             status.Should().NotBeNull();
@@ -32,22 +32,22 @@ namespace Automatica.Driver.Shelly.Unit.Tests
             status.Time.Should().Be("17:09");
             status.UnixTime.Should().Be(1588525744);
             status.Serial.Should().Be(123);
-       
+
         }
 
         [Fact]
         public void Shelly1PMStatusDto_CanDeserializeJsonResponseFromShelly1PM()
         {
-            Shelly1PmStatusDto status = GetShelly1PmStatusFromFile("./status_response_1PM.json");
-            
+            var status = GetShellyStatusFromFile("./status_response_1PM.json");
+
             // assert
             status.Should().NotBeNull();
-            status.Meters.Length.Should().Be(1);
+            status.Meters.Count.Should().Be(1);
             status.Meters[0].Power.Should().Be(95.35);
             status.Meters[0].IsValid.Should().BeTrue();
             status.Meters[0].TimeStamp.Should().Be(1588532068);
             status.Meters[0].Total.Should().Be(8849733);
-            status.Relays.Length.Should().Be(2);
+            status.Relays.Count.Should().Be(2);
             status.Relays[0].IsOn.Should().BeTrue();
             status.Relays[0].HasTimer.Should().BeFalse();
             status.Relays[0].TimerRemaining.Should().Be(0);
@@ -56,17 +56,27 @@ namespace Automatica.Driver.Shelly.Unit.Tests
             status.Relays[1].TimerRemaining.Should().Be(60);
         }
 
-        private Shelly1StatusDto GetShelly1StatusFromFile(string statusResponsePmJson)
+        [Fact]
+        public void Shelly25PMStatusDto_CanDeserializeJsonResponseFromShelly1PM()
         {
-            string json = File.ReadAllText(statusResponsePmJson);
-            var status = JsonConvert.DeserializeObject<Shelly1PmStatusDto>(json);
-            return status;
+            var status = GetShellyStatusFromFile("./status_response_25PM.json");
+
+            // assert
+            status.Should().NotBeNull();
+            status.Meters.Count.Should().Be(2);
+            status.Meters[0].Power.Should().Be(0);
+            status.Meters[0].IsValid.Should().BeTrue();
+            status.Meters[0].TimeStamp.Should().Be(1696970387);
+            status.Meters[0].Total.Should().Be(9470);
+            status.Relays.Count.Should().Be(0);
+
+            status.Rollers.Count.Should().Be(1);
         }
-        
-        private Shelly1PmStatusDto GetShelly1PmStatusFromFile(string statusResponsePmJson)
+
+        private ShellyStatusDto GetShellyStatusFromFile(string statusResponsePmJson)
         {
             string json = File.ReadAllText(statusResponsePmJson);
-            var status = JsonConvert.DeserializeObject<Shelly1PmStatusDto>(json);
+            var status = JsonConvert.DeserializeObject<ShellyStatusDto>(json);
             return status;
         }
     }
