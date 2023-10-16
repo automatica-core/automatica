@@ -4,35 +4,12 @@ namespace Automatica.Driver.Shelly
 {
     public class ShellyResult<T>
     {
-        public T Value
-        {
-            get
-            {
-                if (!_successChecked)
-                {
-                    throw new InvalidOperationException("Cannot access value of result without checking success first");
-                }
-
-                return _value;
-            }
-        }
+        public T Value => _value;
 
         /// <summary>
         /// Indicates the client request has completed successfully
         /// </summary>
-        public bool IsSuccess
-        {
-            get
-            {
-                _successChecked = true;
-                return _success;
-            }
-        }
-        
-        /// <summary>
-        /// Indicates the client request has failed
-        /// </summary>
-        public bool IsFailure => !IsSuccess;
+        public bool IsSuccess => _success;
         
         /// <summary>
         /// Indicates if the reason for failure is transient 
@@ -44,9 +21,8 @@ namespace Automatica.Driver.Shelly
         /// </summary>
         public string Message { get; }
 
-        private T _value;
-        private bool _successChecked = false;
-        private bool _success = false;
+        private readonly T _value;
+        private readonly bool _success = false;
         
         private ShellyResult(T value, bool success, bool isTransient, string message = null)
         {

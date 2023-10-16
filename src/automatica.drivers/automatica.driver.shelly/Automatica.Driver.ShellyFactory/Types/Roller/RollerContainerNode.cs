@@ -1,17 +1,17 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Dtos;
 
 namespace Automatica.Driver.ShellyFactory.Types.Roller
 {
-    internal class RollerContainerNode : ShellyContainerNode<RollerDto>
+    internal class RollerContainerNode : ShellyContainerNode<object>
     {
         public RollerContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext, client)
         {
         }
 
-        internal override RollerDto GetCorrespondingDataObject(ShellyStatusDto data)
+
+        internal override Task<object> GetCorrespondingDataObject()
         {
             throw new System.NotImplementedException();
         }

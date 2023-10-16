@@ -5,20 +5,20 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
-using Automatica.Core.Driver.Monitor;
-using Automatica.Driver.Shelly.Dtos;
-using Automatica.Driver.Shelly.Options;
+using Automatica.Driver.Shelly.Common;
+using Automatica.Driver.Shelly.Gen1.Dtos;
+using Automatica.Driver.Shelly.Gen1.Options;
 using Newtonsoft.Json;
 
-namespace Automatica.Driver.Shelly.Clients
+namespace Automatica.Driver.Shelly.Gen1.Clients
 {
-    public abstract class ShellyClientBase
+    public abstract class ShellyClientBase : IShellyCommonClient
     {
         private readonly ITelegramMonitorInstance _telegramMonitor;
         protected readonly HttpClient ShellyHttpClient;
         private readonly IShellyCommonOptions _shellyCommonOptions;
         protected readonly Uri ServerUri;
-        
+
         protected TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
 
         protected ShellyClientBase(ITelegramMonitorInstance telegramMonitor, HttpClient httpClient, IShellyCommonOptions shellyCommonOptions)
@@ -28,7 +28,7 @@ namespace Automatica.Driver.Shelly.Clients
             _shellyCommonOptions = shellyCommonOptions ?? throw new ArgumentNullException(nameof(shellyCommonOptions));
 
             ServerUri = shellyCommonOptions.ServerUri;
-            
+
             if (shellyCommonOptions.DefaultTimeout.HasValue)
             {
                 DefaultTimeout = shellyCommonOptions.DefaultTimeout.Value;
@@ -53,13 +53,13 @@ namespace Automatica.Driver.Shelly.Clients
 
             using var timeoutTokenSource = new CancellationTokenSource(timeout.Value);
             var authenticationString = $"{_shellyCommonOptions.UserName}:{_shellyCommonOptions.Password}";
-            var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
-                
+            var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
+
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
-                
-            var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutTokenSource.Token , cancellationToken);
+
+            var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutTokenSource.Token, cancellationToken);
             var response = await ShellyHttpClient.SendAsync(httpRequestMessage, linkedTokenSource.Token);
-            
+
             await _telegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, "read", httpRequestMessage.RequestUri?.AbsoluteUri);
 
             if (response.StatusCode == 0)
@@ -92,7 +92,7 @@ namespace Automatica.Driver.Shelly.Clients
 
             using var timeoutTokenSource = new CancellationTokenSource(timeout.Value);
             var authenticationString = $"{_shellyCommonOptions.UserName}:{_shellyCommonOptions.Password}";
-            var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(authenticationString));
+            var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
 
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
 
@@ -115,6 +115,20 @@ namespace Automatica.Driver.Shelly.Clients
             await _telegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
             var shelly1Status = JsonConvert.DeserializeObject<T>(readAsStringAsync);
             return ShellyResult<T>.Success(shelly1Status);
+        }
+
+        public async Task<ShellyInfoDto> GetInfo(CancellationToken token = default)
+        {
+            var endpoint = ServerUri + "/shelly";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
+            var response =  await ExecuteRequestAsync<ShellyInfoDto>(requestMessage, token, default);
+
+            if (response.IsSuccess)
+            {
+                return response.Value;
+            }
+
+            return null;
         }
     }
 }

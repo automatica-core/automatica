@@ -2,13 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Clients;
-using Automatica.Driver.Shelly.Dtos;
+using Automatica.Driver.Shelly.Gen1.Dtos;
 
 namespace Automatica.Driver.ShellyFactory.Types.Relay
 {
 
-    internal class RelayContainerNode : ShellyContainerNode<RelayDto>
+    internal class RelayContainerNode : ShellyContainerNode<bool>
     {
         public int RelayId { get; private set; }
 
@@ -27,14 +26,9 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
             return base.Init(token);
         }
 
-        internal override RelayDto GetCorrespondingDataObject(ShellyStatusDto data)
+        internal override async Task<bool> GetCorrespondingDataObject()
         {
-            if (data.Relays.Count >= RelayId + 1)
-            {
-                return data.Relays[RelayId];
-            }
-
-            return null;
+            return await Client.Client.GetRelayState(RelayId, CancellationToken.None);
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
@@ -56,20 +50,20 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                 case "relay":
                     return new RelayContainerNode(ctx, Client);
                 case "relay-state":
-                    return new GenericValueNode<bool, RelayDto>(ctx, Client, 
+                    return new GenericValueNode<bool, bool>(ctx, Client, 
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
-                            await Client.Client.SetStatus(RelayId, o, CancellationToken.None);
+                            await Client.Client.SetRelayState(RelayId, o, CancellationToken.None);
                         },
-                        dto => dto.IsOn);
+                        async client => await client.GetRelayState(RelayId, CancellationToken.None));
                 case "relay-timer":
-                    return new GenericValueNode<bool, RelayDto>(ctx, Client,
+                    return new GenericValueNode<bool, bool>(ctx, Client,
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
                         },
-                        dto => dto.HasTimer);
+                        async client => await client.GetHasUpdate(default));
             }
 
             return null;

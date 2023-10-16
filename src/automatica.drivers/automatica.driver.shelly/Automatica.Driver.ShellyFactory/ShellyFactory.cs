@@ -19,7 +19,7 @@ namespace Automatica.Driver.ShellyFactory
 
         public override string ImageName => "automaticacore/plugin-automatica.driver.shelly";
 
-        public override Version DriverVersion => new Version(0, 0, 0, 4);
+        public override Version DriverVersion => new Version(0, 0, 0, 5);
 
         public override bool InDevelopmentMode => true;
 
@@ -240,7 +240,7 @@ namespace Automatica.Driver.ShellyFactory
         }
 
 
-        private void InitShellyParams(INodeTemplateFactory factory, Guid parentGuid)
+        private void InitShellyParams(INodeTemplateFactory factory, Guid parentGuid, bool hasUsername=true)
         {
             factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 5), "SHELLY.TEMPERATURE.NAME", "SHELLY.TEMPERATURE.DESCRIPTIONS", "temperature", parentGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true,
@@ -255,10 +255,23 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 1), "SHELLY.PROPERTIES.ID.NAME",
                 "SHELLY.PROPERTIES.ID.DESCRIPTION", DeviceIdPropertyKey, PropertyTemplateType.Text, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, 0, 0, 1);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 2), "SHELLY.PROPERTIES.USERNAME.NAME",
+            if(hasUsername) 
+            {
+                factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 2), "SHELLY.PROPERTIES.USERNAME.NAME",
                 "SHELLY.PROPERTIES.USERNAME.DESCRIPTION", "shelly-username", PropertyTemplateType.Text, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 2, 3);
+            }
+
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 3), "SHELLY.PROPERTIES.PASSWORD.NAME",
                 "SHELLY.PROPERTIES.PASSWORD.DESCRIPTION", "shelly-password", PropertyTemplateType.Password, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 4);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 6), "SHELLY.PROPERTIES.USE_IP.NAME",
+                "SHELLY.PROPERTIES.USE_IP.DESCRIPTION", "shelly-use-ip", PropertyTemplateType.Bool, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, false, 0, 5);
+            factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 7), "SHELLY.PROPERTIES.IP.NAME",
+                "SHELLY.PROPERTIES.IP.DESCRIPTION", "shelly-ip", PropertyTemplateType.Ip, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 6);
+            
+
+
+
         }
 
         private Guid GenerateNewGuid(Guid guid, int c)

@@ -1,6 +1,6 @@
 using System;
 
-namespace Automatica.Driver.Shelly.Options
+namespace Automatica.Driver.Shelly.Gen1.Options
 {
     public class ShellyOptions : IShellyCommonOptions
     {
@@ -13,5 +13,8 @@ namespace Automatica.Driver.Shelly.Options
         {
             DefaultTimeout = null;
         }
+
+        public string IpAddress { get; set; }
+        public string ShellyId { get; set; }
     }
 }

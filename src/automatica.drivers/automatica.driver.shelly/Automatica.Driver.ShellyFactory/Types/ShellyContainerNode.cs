@@ -2,8 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Clients;
-using Automatica.Driver.Shelly.Dtos;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
@@ -15,10 +13,10 @@ namespace Automatica.Driver.ShellyFactory.Types
             Client = client;
         }
 
-        internal abstract object ReadData(ShellyStatusDto dto);
+        internal abstract Task<object> ReadData();
     }
 
-    internal abstract class ShellyContainerNode<T> : ShellyContainerNode where T : class
+    internal abstract class ShellyContainerNode<T> : ShellyContainerNode 
     {
         public List<GenericValueNode<T>> ValueNodes { get; }
 
@@ -30,20 +28,20 @@ namespace Automatica.Driver.ShellyFactory.Types
             ContainerNodes = new List<ShellyContainerNode>();
         }
 
-        internal abstract T GetCorrespondingDataObject(ShellyStatusDto data);
+        internal abstract Task<T> GetCorrespondingDataObject();
 
-        internal override object ReadData(ShellyStatusDto dto)
+        internal override async Task<object> ReadData()
         {
-            var dataObj = GetCorrespondingDataObject(dto);
+            var dataObj = await GetCorrespondingDataObject();
 
             foreach (var containerNode in ContainerNodes)
             {
-                containerNode.ReadData(dto);
+                await containerNode.ReadData();
             }
 
             foreach (var valueNode in ValueNodes)
             {
-                var value = valueNode.GetValueFromShelly(dataObj);
+                var value = await valueNode.GetValueFromShelly(Client.Client);
                 valueNode.DispatchRead(value);
             }
 

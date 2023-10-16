@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Clients;
+using Automatica.Driver.Shelly.Common;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
@@ -12,25 +12,25 @@ namespace Automatica.Driver.ShellyFactory.Types
         {
         }
         
-        internal abstract object GetValueFromShelly(TValueObject value);
+        internal abstract Task<object> GetValueFromShelly(IShellyClient shellyClient);
     }
 
     internal class GenericValueNode<T, T2> : GenericValueNode<T2>
     {
         private readonly ShellyDriverDevice _client;
-        private readonly Func<T, ShellyClient, Task> _writeValueTask;
-        private readonly Func<T2, T> _getValueFromDto;
+        private readonly Func<T, IShellyClient, Task> _writeValueTask;
+        private readonly Func<IShellyClient, Task<T>> _getValueTask;
 
-        public GenericValueNode(IDriverContext driverContext, ShellyDriverDevice client, Func<T, ShellyClient, Task> writeValueTask, Func<T2, T> getValueFromDto) : base(driverContext)
+        public GenericValueNode(IDriverContext driverContext, ShellyDriverDevice client, Func<T, IShellyClient, Task> writeValueTask, Func<IShellyClient, Task<T>> getValueTas) : base(driverContext)
         {
             _client = client;
             _writeValueTask = writeValueTask;
-            _getValueFromDto = getValueFromDto;
+            _getValueTask = getValueTas;
         }
 
-        internal override object GetValueFromShelly(T2 value)
+        internal override async Task<object> GetValueFromShelly(IShellyClient shellyClient)
         {
-            return _getValueFromDto(value);
+            return await _getValueTask(shellyClient);
         }
 
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())

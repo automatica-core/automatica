@@ -1,19 +1,20 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Dtos;
+using Automatica.Driver.Shelly.Gen1.Dtos;
 
 namespace Automatica.Driver.ShellyFactory.Types.Meter
 {
-    internal class MeterContainerNode : ShellyContainerNode<MeterDto>
+    internal class MeterContainerNode : ShellyContainerNode<object>
     {
         public MeterContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext, client)
         {
         }
 
-        internal override MeterDto GetCorrespondingDataObject(ShellyStatusDto data)
+
+        internal override Task<object> GetCorrespondingDataObject()
         {
-            return data.Meters[0]; //TODO
+            throw new System.NotImplementedException();
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())

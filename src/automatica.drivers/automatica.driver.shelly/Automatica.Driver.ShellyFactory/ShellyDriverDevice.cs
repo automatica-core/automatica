@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Clients;
-using Automatica.Driver.Shelly.Options;
 using Automatica.Driver.ShellyFactory.Types.Meter;
 using Automatica.Driver.ShellyFactory.Types.Relay;
 using Automatica.Driver.ShellyFactory.Types.Roller;
@@ -17,6 +13,9 @@ using Timer = System.Timers.Timer;
 using Automatica.Driver.ShellyFactory.Discovery;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Driver.ShellyFactory.Types;
+using Automatica.Driver.Shelly.Gen1.Clients;
+using Automatica.Driver.Shelly.Gen1.Options;
+using Automatica.Driver.Shelly.Common;
 
 namespace Automatica.Driver.ShellyFactory
 {
@@ -29,9 +28,8 @@ namespace Automatica.Driver.ShellyFactory
         public int PollFailCount { get; private set; }
 
         private string _ipAddress;
-        public ShellyDevice Device { get; private set; }
 
-        public ShellyClient Client { get; set; }
+        public IShellyClient Client { get; set; }
 
         protected readonly List<ShellyContainerNode> ContainerNodes = new();
 
@@ -44,16 +42,27 @@ namespace Automatica.Driver.ShellyFactory
 
         public override async Task<bool> Start(CancellationToken token = new CancellationToken())
         {
-            var shellyDiscovery = (Parent as ShellyDriver).DiscoveredShellys.FirstOrDefault(a => a.Id == ShellyId);
 
-            if (shellyDiscovery == null)
+            var useIp = GetPropertyValueBool("shelly-use-ip");
+
+            if (useIp.HasValue && useIp.Value)
             {
-                DriverContext.Logger.LogError($"Could not find any shelly device with id {ShellyId} in the local network");
-                return false;
+                _ipAddress = GetPropertyValueString("shelly-ip");
+            }
+            else
+            {
+                var shellyDiscovery = (Parent as ShellyDriver).DiscoveredShellys.FirstOrDefault(a => a.Id == ShellyId);
+
+                if (shellyDiscovery == null)
+                {
+                    DriverContext.Logger.LogError(
+                        $"Could not find any shelly device with id {ShellyId} in the local network");
+                    return false;
+                }
+
+                _ipAddress = shellyDiscovery.IpAddress;
             }
 
-            _ipAddress = shellyDiscovery.IpAddress;
-            Device = shellyDiscovery;
 
             Client = new ShellyClient(_telegramMonitorInstance, new HttpClient { BaseAddress = new Uri($"http://{_ipAddress}") },
                 new ShellyOptions
@@ -76,6 +85,14 @@ namespace Automatica.Driver.ShellyFactory
             if (!ret)
             {
                 return ret;
+            }
+
+            var shellyInfo = await Client.GetInfo(token);
+
+            if (ShellyId.ToLowerInvariant() != shellyInfo.Mac.ToLowerInvariant())
+            {
+                DriverContext.Logger.LogError($"Invalid shelly id....");
+                return false;
             }
 
             if (!await Poll(token))
@@ -135,17 +152,12 @@ namespace Automatica.Driver.ShellyFactory
         {
             try
             {
-                var data = await Client.GetStatus(token);
-
-                if (data.IsSuccess)
+                foreach (var containerNode in ContainerNodes)
                 {
-                    foreach (var containerNode in ContainerNodes)
-                    {
-                        containerNode.ReadData(data.Value);
-                    }
-
-                    return true;
+                    await containerNode.ReadData();
                 }
+
+                return true;
             }
             catch (Exception ex)
             {

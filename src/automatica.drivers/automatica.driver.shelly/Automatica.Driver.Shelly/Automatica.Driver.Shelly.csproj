@@ -18,6 +18,7 @@
   <ItemGroup>
 	     <PackageReference Include="Automatica.Core.Driver" Version="7.5.1.1471" />
 	     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	     <PackageReference Include="PureWebSockets" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

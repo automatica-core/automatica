@@ -26,7 +26,7 @@ namespace Automatica.Driver.ShellyFactory.Discovery
 
             foreach (var shelly in shellyList)
             {
-                var id = shelly.Services.First().Value.Properties.First()["id"];
+                var id = shelly.DisplayName;
 
                 _logger.LogDebug($"Found device with id {id} and ip {shelly.IpAddress}");
 
@@ -37,7 +37,7 @@ namespace Automatica.Driver.ShellyFactory.Discovery
 
                 ShellyDeviceType type;
 
-                switch (deviceType)
+                switch (deviceType.ToLowerInvariant())
                 {
                     case "1":
                         type = ShellyDeviceType.Shelly1Pm;
@@ -45,11 +45,42 @@ namespace Automatica.Driver.ShellyFactory.Discovery
                     case "switch25":
                         type = ShellyDeviceType.Shelly25;
                         break;
+                    case "plus2pm":
+                        type = ShellyDeviceType.ShellyPlus2Pm;
+                        break;
+                    case "plus1pm":
+                        type = ShellyDeviceType.ShellyPlus1Pm;
+                        break;
                     default:
                         continue;
                 }
 
-                ret.Add(new ShellyDevice(id, name,type, shelly.IpAddress));
+                ShellyGeneration generation;
+
+                var httpService = shelly.Services.First(a => a.Key.EndsWith("_http._tcp.local."));
+
+                if (httpService.Value.Properties.First().Any(a => a.Value == "gen"))
+                {
+                    var genType = httpService.Value.Properties.First().First(a => a.Key == "gen");
+                    switch (genType.Value)
+                    {
+                        case "gen1":
+                            generation = ShellyGeneration.Gen1;
+                            break;
+                        case "gen2":
+                            generation = ShellyGeneration.Gen2;
+                            break;
+                        default:
+                            generation = ShellyGeneration.Gen1;
+                            break;
+                    }
+                }
+                else
+                {
+                    generation = ShellyGeneration.Gen1;
+                }
+
+                ret.Add(new ShellyDevice(id, name,type, shelly.IpAddress, generation));
             }
 
             return ret;

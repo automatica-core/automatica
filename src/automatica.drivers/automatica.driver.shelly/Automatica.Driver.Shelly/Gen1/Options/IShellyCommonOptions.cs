@@ -1,11 +1,12 @@
 using System;
+using Automatica.Driver.Shelly.Common;
 
-namespace Automatica.Driver.Shelly.Options
+namespace Automatica.Driver.Shelly.Gen1.Options
 {
     /// <summary>
     /// Common options across all shelly devices
     /// </summary>
-    public interface IShellyCommonOptions : IShellyAuthOptions
+    public interface IShellyCommonOptions : IShellyAuthOptions, IShellyAddress
     {
         /// <summary>
         /// URI for the Shelly device

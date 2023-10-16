@@ -58,7 +58,7 @@ namespace Automatica.Driver.ShellyFactory
                 if (_devices.Any(a => a.ShellyId == device.Id))
                 {
                     DriverContext.Logger.LogInformation($"Device with id {device.Id} already added...");
-                    continue;
+                    continue;   
                 }
 
                 NodeInstance node;
