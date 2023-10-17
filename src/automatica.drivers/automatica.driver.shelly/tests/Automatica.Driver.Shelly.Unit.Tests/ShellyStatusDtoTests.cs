@@ -1,5 +1,5 @@
 using System.IO;
-using Automatica.Driver.Shelly.Gen1.Dtos;
+using Automatica.Driver.Shelly.Gen1.Models;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Xunit;

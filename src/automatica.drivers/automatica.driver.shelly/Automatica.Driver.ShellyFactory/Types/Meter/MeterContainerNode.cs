@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Gen1.Dtos;
 
 namespace Automatica.Driver.ShellyFactory.Types.Meter
 {

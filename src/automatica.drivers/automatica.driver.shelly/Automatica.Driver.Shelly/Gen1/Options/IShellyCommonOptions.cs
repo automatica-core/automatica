@@ -16,5 +16,8 @@ namespace Automatica.Driver.Shelly.Gen1.Options
         /// Default timeout for HTTP requests if a specific timeout is not supplied
         /// </summary>
         TimeSpan? DefaultTimeout { get; }
+
+
+        public Guid SourceId { get; set; }
     }
 }

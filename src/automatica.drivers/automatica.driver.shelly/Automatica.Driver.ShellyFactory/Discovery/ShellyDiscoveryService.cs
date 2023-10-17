@@ -59,15 +59,15 @@ namespace Automatica.Driver.ShellyFactory.Discovery
 
                 var httpService = shelly.Services.First(a => a.Key.EndsWith("_http._tcp.local."));
 
-                if (httpService.Value.Properties.First().Any(a => a.Value == "gen"))
+                if (httpService.Value.Properties.First().Any(a => a.Key == "gen"))
                 {
                     var genType = httpService.Value.Properties.First().First(a => a.Key == "gen");
                     switch (genType.Value)
                     {
-                        case "gen1":
+                        case "1":
                             generation = ShellyGeneration.Gen1;
                             break;
-                        case "gen2":
+                        case "2":
                             generation = ShellyGeneration.Gen2;
                             break;
                         default:

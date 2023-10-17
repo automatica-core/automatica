@@ -3,6 +3,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Migrations;
 using Automatica.Core.EF.Models;
+using Automatica.Driver.ShellyFactory.Discovery;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace Automatica.Driver.ShellyFactory
@@ -13,6 +14,9 @@ namespace Automatica.Driver.ShellyFactory
         public static Guid Shelly1Device = new Guid("d5f3a2d0-275e-4cd3-86f8-cd358162fdff");
         public static Guid Shelly1PmDevice = new Guid("99bc456d-3bcc-437a-b6dd-a8ce38d1b901");
         public static Guid Shelly25Device = new Guid("46e1dbd5-45a2-4ed1-a6d0-d967f65579b6");
+
+
+        public static Guid ShellyPlus1PmDevice = new Guid("10f3e8f5-0d46-4aa7-aa93-c66abc67775b");
         public override string DriverName => "Shelly";
 
         public override Guid DriverGuid => DriverId;
@@ -44,6 +48,8 @@ namespace Automatica.Driver.ShellyFactory
             InitShelly1Templates(factory);
             InitShelly1PmTemplates(factory);
             InitShelly25Templates(factory);
+
+            InitShellyPlus1PmTemplates(factory);
         }
 
         private void InitShelly1Templates(INodeTemplateFactory factory)
@@ -68,7 +74,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreatePropertyTemplate(GenerateNewGuid(shelly1State, 1), "SHELLY.1.RELAY_CHANNEL",
                 "SHELLY.1.RELAY_CHANNEL", "shelly-relay-channel", PropertyTemplateType.Numeric, shelly1State, "COMMON.CATEGORY.ADDRESS", false, false, null, 0, 0, 0);
 
-            InitShellyParams(factory, guid);
+            InitShellyParams(factory, guid, ShellyGeneration.Gen1);
         }
 
         private void InitShelly1PmTemplates(INodeTemplateFactory factory)
@@ -78,7 +84,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreateNodeTemplate(guid, "SHELLY.1PM.NAME", "SHELLY.1PM.DESCRIPTION", "shelly-1", DriverGuid,
                 guid, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
 
-            InitShellyParams(factory, guid);
+            InitShellyParams(factory, guid, ShellyGeneration.Gen1);
 
             var shelly1RelayInterface = new Guid("f66e7c26-1341-4016-8d64-4c1b7db28357");
             factory.CreateInterfaceType(shelly1RelayInterface, "SHELLY.RELAYS.NAME",
@@ -100,6 +106,35 @@ namespace Automatica.Driver.ShellyFactory
 
         }
 
+        private void InitShellyPlus1PmTemplates(INodeTemplateFactory factory)
+        {
+            var guid = ShellyPlus1PmDevice;
+            factory.CreateInterfaceType(guid, "SHELLY.PLUS_1PM.NAME", "SHELLY.PLUS_1PM.DESCRIPTION", int.MaxValue, int.MaxValue, false);
+            factory.CreateNodeTemplate(guid, "SHELLY.PLUS_1PM.NAME", "SHELLY.PLUS_1PM.DESCRIPTION", "shelly-plus-1pm", DriverGuid,
+                guid, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
+
+            InitShellyParams(factory, guid, ShellyGeneration.Gen2);
+
+            var shelly1RelayInterface = new Guid("1483043e-b0de-4598-8af4-1cf218f95978");
+            factory.CreateInterfaceType(shelly1RelayInterface, "SHELLY.RELAYS.NAME",
+                "SHELLY.RELAYS.DESCRIPTION", 1, 1, false);
+            factory.CreateNodeTemplate(shelly1RelayInterface, "SHELLY.RELAYS.NAME",
+                "SHELLY.RELAYS.DESCRIPTION", "shelly-relays", guid, shelly1RelayInterface,
+                true, false, true, false, true, NodeDataType.NoAttribute, 1, false, true);
+
+            CreateRelayInterface(factory, new Guid("2984e4bb-62ff-499e-b4ba-5dbc3d09d210"), shelly1RelayInterface, 0, 1);
+
+            var shelly1PmMeterInterface = new Guid("eefadb8d-d3ed-49e4-bbb0-9deb2e494324");
+            factory.CreateInterfaceType(shelly1PmMeterInterface, "SHELLY.METERS.NAME",
+                "SHELLY.METERS.DESCRIPTION", 2, 1, false);
+            factory.CreateNodeTemplate(shelly1PmMeterInterface, "SHELLY.METERS.NAME",
+                "SHELLY.METERS.DESCRIPTION", "shelly-meters", guid, shelly1PmMeterInterface,
+                false, false, true, false, true, NodeDataType.NoAttribute, 1, false, true);
+
+            CreateMeterInterface(factory, new Guid("75608f3f-156f-4213-b00a-7b9fdb4f19cc"), shelly1PmMeterInterface, 0, 1);
+
+        }
+
         private void InitShelly25Templates(INodeTemplateFactory factory)
         {
             var guid = Shelly25Device;
@@ -107,7 +142,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreateNodeTemplate(guid, "SHELLY.25.NAME", "SHELLY.25.DESCRIPTION", "shelly-25", DriverGuid,
                 guid, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
 
-            InitShellyParams(factory, guid);
+            InitShellyParams(factory, guid, ShellyGeneration.Gen1);
 
             var shelly25RelayInterface = new Guid("17078292-3f92-40f2-945c-0025ab93b40a");
             factory.CreateInterfaceType(shelly25RelayInterface, "SHELLY.RELAYS.NAME",
@@ -240,7 +275,7 @@ namespace Automatica.Driver.ShellyFactory
         }
 
 
-        private void InitShellyParams(INodeTemplateFactory factory, Guid parentGuid, bool hasUsername=true)
+        private void InitShellyParams(INodeTemplateFactory factory, Guid parentGuid, ShellyGeneration generation)
         {
             factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 5), "SHELLY.TEMPERATURE.NAME", "SHELLY.TEMPERATURE.DESCRIPTIONS", "temperature", parentGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, true, false, true,
@@ -255,7 +290,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 1), "SHELLY.PROPERTIES.ID.NAME",
                 "SHELLY.PROPERTIES.ID.DESCRIPTION", DeviceIdPropertyKey, PropertyTemplateType.Text, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, 0, 0, 1);
 
-            if(hasUsername) 
+            if(generation == ShellyGeneration.Gen1) 
             {
                 factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 2), "SHELLY.PROPERTIES.USERNAME.NAME",
                 "SHELLY.PROPERTIES.USERNAME.DESCRIPTION", "shelly-username", PropertyTemplateType.Text, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 2, 3);
@@ -268,10 +303,10 @@ namespace Automatica.Driver.ShellyFactory
                 "SHELLY.PROPERTIES.USE_IP.DESCRIPTION", "shelly-use-ip", PropertyTemplateType.Bool, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, false, 0, 5);
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 7), "SHELLY.PROPERTIES.IP.NAME",
                 "SHELLY.PROPERTIES.IP.DESCRIPTION", "shelly-ip", PropertyTemplateType.Ip, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 6);
-            
 
 
-
+            factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 10), "SHELLY.PROPERTIES.GENERATION.NAME",
+                "SHELLY.PROPERTIES.GENERATION.DESCRIPTION", "shelly-generation", PropertyTemplateType.Integer, parentGuid, "COMMON.CATEGORY.ADDRESS", false, false, null, (int)generation, 0, 0);
         }
 
         private Guid GenerateNewGuid(Guid guid, int c)

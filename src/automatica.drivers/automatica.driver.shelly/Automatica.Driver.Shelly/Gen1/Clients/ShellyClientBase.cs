@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Driver.Shelly.Common;
-using Automatica.Driver.Shelly.Gen1.Dtos;
 using Automatica.Driver.Shelly.Gen1.Options;
 using Newtonsoft.Json;
 
@@ -14,18 +13,18 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
 {
     public abstract class ShellyClientBase : IShellyCommonClient
     {
-        private readonly ITelegramMonitorInstance _telegramMonitor;
+        protected ITelegramMonitorInstance TelegramMonitor { get; }
         protected readonly HttpClient ShellyHttpClient;
-        private readonly IShellyCommonOptions _shellyCommonOptions;
+        protected IShellyCommonOptions ShellyCommonOptions { get; }
         protected readonly Uri ServerUri;
 
         protected TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
 
-        protected ShellyClientBase(ITelegramMonitorInstance telegramMonitor, HttpClient httpClient, IShellyCommonOptions shellyCommonOptions)
+        protected ShellyClientBase(ITelegramMonitorInstance telegramMonitor, IShellyCommonOptions shellyCommonOptions)
         {
-            _telegramMonitor = telegramMonitor;
-            ShellyHttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _shellyCommonOptions = shellyCommonOptions ?? throw new ArgumentNullException(nameof(shellyCommonOptions));
+            TelegramMonitor = telegramMonitor;
+            ShellyCommonOptions = shellyCommonOptions ?? throw new ArgumentNullException(nameof(shellyCommonOptions));
+            ShellyHttpClient = new HttpClient { BaseAddress = new Uri($"http://{shellyCommonOptions.IpAddress}") };
 
             ServerUri = shellyCommonOptions.ServerUri;
 
@@ -35,24 +34,14 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             }
         }
 
-        public async Task<RelayDto> SetStatus(int channelId, bool value, CancellationToken token)
-        {
-            var turnValue = value ? "on" : "off";
-            var endpoint = ServerUri + $"/relay/{channelId}?turn={turnValue}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
-
-
-            await _telegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, turnValue, endpoint);
-
-            return await ExecuteRequestSetAsync<RelayDto>(requestMessage, token, default);
-        }
+       
         protected async Task<ShellyResult<T>> ExecuteRequestAsync<T>(HttpRequestMessage httpRequestMessage,
             CancellationToken cancellationToken, TimeSpan? timeout = null)
         {
             timeout = timeout ?? DefaultTimeout;
 
             using var timeoutTokenSource = new CancellationTokenSource(timeout.Value);
-            var authenticationString = $"{_shellyCommonOptions.UserName}:{_shellyCommonOptions.Password}";
+            var authenticationString = $"{ShellyCommonOptions.UserName}:{ShellyCommonOptions.Password}";
             var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
 
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
@@ -60,7 +49,7 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutTokenSource.Token, cancellationToken);
             var response = await ShellyHttpClient.SendAsync(httpRequestMessage, linkedTokenSource.Token);
 
-            await _telegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, "read", httpRequestMessage.RequestUri?.AbsoluteUri);
+            await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, "read", httpRequestMessage.RequestUri?.AbsoluteUri);
 
             if (response.StatusCode == 0)
             {
@@ -91,7 +80,7 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             timeout = timeout ?? DefaultTimeout;
 
             using var timeoutTokenSource = new CancellationTokenSource(timeout.Value);
-            var authenticationString = $"{_shellyCommonOptions.UserName}:{_shellyCommonOptions.Password}";
+            var authenticationString = $"{ShellyCommonOptions.UserName}:{ShellyCommonOptions.Password}";
             var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
 
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
@@ -103,7 +92,7 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             var readAsStringAsync = await response.Content.ReadAsStringAsync(linkedTokenSource.Token);
             var result = JsonConvert.DeserializeObject<T>(readAsStringAsync);
 
-            await _telegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
+            await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
 
             return result;
         }
@@ -112,7 +101,7 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
         {
             var readAsStringAsync = await response.Content.ReadAsStringAsync();
 
-            await _telegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
+            await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
             var shelly1Status = JsonConvert.DeserializeObject<T>(readAsStringAsync);
             return ShellyResult<T>.Success(shelly1Status);
         }

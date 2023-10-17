@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Automatica.Driver.Shelly.Gen1.Dtos;
 
 namespace Automatica.Driver.ShellyFactory.Types.Relay
 {
@@ -56,7 +55,8 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                             await Task.CompletedTask;
                             await Client.Client.SetRelayState(RelayId, o, CancellationToken.None);
                         },
-                        async client => await client.GetRelayState(RelayId, CancellationToken.None));
+                        async client => await client.GetRelayState(RelayId, CancellationToken.None), 
+                        notifyStatusEvent => notifyStatusEvent.GetSwitch(RelayId).Output);
                 case "relay-timer":
                     return new GenericValueNode<bool, bool>(ctx, Client,
                         async (o, client) =>

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Driver.Shelly.Common;
+using Automatica.Driver.Shelly.Gen2.Models;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
@@ -13,6 +14,7 @@ namespace Automatica.Driver.ShellyFactory.Types
         }
         
         internal abstract Task<object> GetValueFromShelly(IShellyClient shellyClient);
+        internal abstract Task<object> FromStatusUpdate(NotifyStatusEvent statusEvent);
     }
 
     internal class GenericValueNode<T, T2> : GenericValueNode<T2>
@@ -20,17 +22,41 @@ namespace Automatica.Driver.ShellyFactory.Types
         private readonly ShellyDriverDevice _client;
         private readonly Func<T, IShellyClient, Task> _writeValueTask;
         private readonly Func<IShellyClient, Task<T>> _getValueTask;
+        private readonly Func<NotifyStatusEvent, T> _fromStatusUpdate;
 
-        public GenericValueNode(IDriverContext driverContext, ShellyDriverDevice client, Func<T, IShellyClient, Task> writeValueTask, Func<IShellyClient, Task<T>> getValueTas) : base(driverContext)
+        public GenericValueNode(IDriverContext driverContext, 
+            ShellyDriverDevice client, 
+            Func<T, IShellyClient, Task> writeValueTask,
+            Func<IShellyClient, Task<T>> getValueTask, 
+            Func<NotifyStatusEvent, T> fromStatusUpdate = null) : base(driverContext)
         {
             _client = client;
             _writeValueTask = writeValueTask;
-            _getValueTask = getValueTas;
+            _getValueTask = getValueTask;
+            _fromStatusUpdate = fromStatusUpdate;
         }
 
         internal override async Task<object> GetValueFromShelly(IShellyClient shellyClient)
         {
             return await _getValueTask(shellyClient);
+        }
+
+        internal override async Task<object> FromStatusUpdate(NotifyStatusEvent statusEvent)
+        {
+            await Task.CompletedTask;
+            if (_fromStatusUpdate != null)
+            {
+                try
+                {
+                    return _fromStatusUpdate(statusEvent);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            return null;
         }
 
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
+using Automatica.Driver.Shelly.Gen2.Models;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
@@ -14,6 +15,7 @@ namespace Automatica.Driver.ShellyFactory.Types
         }
 
         internal abstract Task<object> ReadData();
+        internal abstract Task FromStatusUpdate(NotifyStatusEvent statusEvent);
     }
 
     internal abstract class ShellyContainerNode<T> : ShellyContainerNode 
@@ -46,6 +48,21 @@ namespace Automatica.Driver.ShellyFactory.Types
             }
 
             return dataObj;
+        }
+
+        internal override async Task FromStatusUpdate(NotifyStatusEvent statusEvent)
+        {
+            foreach (var containerNode in ContainerNodes)
+            {
+                await containerNode.FromStatusUpdate(statusEvent);
+            }
+
+            foreach (var valueNode in ValueNodes)
+            {
+                var value = await valueNode.FromStatusUpdate(statusEvent);
+                if(value!= null)
+                    valueNode.DispatchRead(value);
+            }
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())

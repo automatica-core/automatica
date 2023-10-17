@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Automatica.Driver.Shelly.Gen1.Dtos
+namespace Automatica.Driver.Shelly.Gen1.Models
 {
     public class RelayDto
     {

@@ -16,6 +16,8 @@ using Automatica.Driver.ShellyFactory.Types;
 using Automatica.Driver.Shelly.Gen1.Clients;
 using Automatica.Driver.Shelly.Gen1.Options;
 using Automatica.Driver.Shelly.Common;
+using Automatica.Driver.Shelly.Gen2;
+using Automatica.Driver.Shelly.Gen2.Models;
 
 namespace Automatica.Driver.ShellyFactory
 {
@@ -24,6 +26,7 @@ namespace Automatica.Driver.ShellyFactory
         private readonly ITelegramMonitorInstance _telegramMonitorInstance;
         private Timer _timer;
         public string ShellyId { get; }
+        public ShellyGeneration Generation { get; set; }
         public int PollingInterval { get; }
         public int PollFailCount { get; private set; }
 
@@ -38,11 +41,12 @@ namespace Automatica.Driver.ShellyFactory
             _telegramMonitorInstance = telegramMonitorInstance;
             ShellyId = GetPropertyValueString(ShellyFactory.DeviceIdPropertyKey);
             PollingInterval = GetPropertyValueInt("polling-interval");
+
+            Generation = (ShellyGeneration)GetPropertyValue("shelly-generation", ShellyGeneration.Gen1);
         }
 
         public override async Task<bool> Start(CancellationToken token = new CancellationToken())
         {
-
             var useIp = GetPropertyValueBool("shelly-use-ip");
 
             if (useIp.HasValue && useIp.Value)
@@ -63,28 +67,41 @@ namespace Automatica.Driver.ShellyFactory
                 _ipAddress = shellyDiscovery.IpAddress;
             }
 
+            if (Generation == ShellyGeneration.Gen1)
+            {
+                Client = new ShellyGen1Client(_telegramMonitorInstance,
+                    new ShellyOptions
+                    {
+                        UserName = GetPropertyValueString("shelly-username"),
+                        Password = GetPropertyValueString("shelly-password"),
+                        IpAddress = _ipAddress
+                    }, DriverContext.Logger);
 
-            Client = new ShellyClient(_telegramMonitorInstance, new HttpClient { BaseAddress = new Uri($"http://{_ipAddress}") },
-                new ShellyOptions
-                {
-                    UserName = GetPropertyValueString("shelly-username"),
-                    Password = GetPropertyValueString("shelly-password")
-                });
+            }
+            else if (Generation == ShellyGeneration.Gen2)
+            {
+                var gen2Client = new ShellyGen2Client(_telegramMonitorInstance,
+                    new ShellyOptions
+                    {
+                        Password = GetPropertyValueString("shelly-password"),
+                        IpAddress = _ipAddress
+                    }, DriverContext.Logger);
 
-            if (!await Poll(token))
+                gen2Client.OnNotifyEvent += Gen2ClientOnOnNotifyEvent;
+
+                Client = gen2Client;
+            }
+            else
             {
                 return false;
             }
 
-
-            _timer = new Timer(PollingInterval);
-
-
+            
             var ret = await base.Start(token);
 
             if (!ret)
             {
-                return ret;
+                return false;
             }
 
             var shellyInfo = await Client.GetInfo(token);
@@ -99,10 +116,31 @@ namespace Automatica.Driver.ShellyFactory
             {
                 return false;
             }
-
+            _timer = new Timer(PollingInterval);
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
+
+            await Client.Connect(token);
+
+          
             return true;
+        }
+
+        private async void Gen2ClientOnOnNotifyEvent(object sender, NotifyStatusEvent eventMessage)
+        {
+            try
+            {
+                foreach (var containerNode in ContainerNodes)
+                {
+                    await containerNode.FromStatusUpdate(eventMessage);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, "Something strange happened during an event message....");
+            }
+
         }
 
         private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -136,7 +174,7 @@ namespace Automatica.Driver.ShellyFactory
             }
         }
 
-        public override Task<bool> Stop(CancellationToken token = new CancellationToken())
+        public override async Task<bool> Stop(CancellationToken token = new CancellationToken())
         {
             if (_timer != null)
             {
@@ -145,7 +183,14 @@ namespace Automatica.Driver.ShellyFactory
                 _timer.Dispose();
             }
 
-            return base.Stop(token);
+            if (Client is ShellyGen2Client gen2Client)
+            {
+                gen2Client.OnNotifyEvent -= Gen2ClientOnOnNotifyEvent;
+            }
+
+            await Client.Disconnect(token);
+
+            return await base.Stop(token);
         }
 
         private async Task<bool> Poll(CancellationToken token = default)

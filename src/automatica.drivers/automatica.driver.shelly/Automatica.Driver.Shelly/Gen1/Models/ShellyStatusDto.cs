@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Automatica.Driver.Shelly.Gen1.Dtos
+namespace Automatica.Driver.Shelly.Gen1.Models
 {
     /// <summary>
     /// https://shelly-api-docs.shelly.cloud/gen1/#status
