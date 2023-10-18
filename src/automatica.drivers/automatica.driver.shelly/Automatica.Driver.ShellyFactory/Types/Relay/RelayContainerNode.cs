@@ -6,7 +6,7 @@ using Automatica.Core.Driver;
 namespace Automatica.Driver.ShellyFactory.Types.Relay
 {
 
-    internal class RelayContainerNode : ShellyContainerNode<bool>
+    internal class RelayContainerNode : ShellyContainerNode
     {
         public int RelayId { get; private set; }
 
@@ -23,11 +23,6 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                 RelayId = Convert.ToInt32(channelProperty);
             }
             return base.Init(token);
-        }
-
-        internal override async Task<bool> GetCorrespondingDataObject()
-        {
-            return await Client.Client.GetRelayState(RelayId, CancellationToken.None);
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
@@ -56,7 +51,7 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                             await Client.Client.SetRelayState(RelayId, o, CancellationToken.None);
                         },
                         async client => await client.GetRelayState(RelayId, CancellationToken.None), 
-                        notifyStatusEvent => notifyStatusEvent.GetSwitch(RelayId).Output);
+                        notifyStatusEvent => notifyStatusEvent.GetValueFromSwitch(RelayId, a => a.Output));
                 case "relay-timer":
                     return new GenericValueNode<bool, bool>(ctx, Client,
                         async (o, client) =>

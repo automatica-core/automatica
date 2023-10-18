@@ -6,7 +6,7 @@ namespace Automatica.Driver.Shelly.Gen2.Models
     internal class RpcModel
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("method")]
         public string Method { get; set; }

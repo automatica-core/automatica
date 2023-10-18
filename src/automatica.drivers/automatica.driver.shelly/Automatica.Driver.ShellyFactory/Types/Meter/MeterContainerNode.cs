@@ -1,21 +1,28 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 
 namespace Automatica.Driver.ShellyFactory.Types.Meter
 {
-    internal class MeterContainerNode : ShellyContainerNode<object>
+    internal class MeterContainerNode : ShellyContainerNode
     {
+        public int RelayId { get; private set; }
+
         public MeterContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext, client)
         {
         }
 
-
-        internal override Task<object> GetCorrespondingDataObject()
+        public override Task<bool> Init(CancellationToken token = new CancellationToken())
         {
-            throw new System.NotImplementedException();
-        }
+            var channelProperty = GetPropertyValue("shelly-relay-channel", null);
 
+            if (channelProperty != null)
+            {
+                RelayId = Convert.ToInt32(channelProperty);
+            }
+            return base.Init(token);
+        }
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             return Task.CompletedTask;
@@ -35,15 +42,39 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                 case "meter":
                     return new MeterContainerNode(ctx, Client);
                 case "meter-power":
-                    break;
+                    return new GenericValueNode<double, bool>(ctx, Client,
+                        async (o, client) =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        async client => await client.GetRelayPower(RelayId), @event => @event.GetValueFromSwitch(RelayId, a => a.Power));
                 case "meter-overpower":
-                    break;
+                    return new GenericValueNode<bool, bool>(ctx, Client,
+                        async (o, client) =>
+                        {
+                            await Task.CompletedTask;
+                        }, _ => Task.FromResult(false));
                 case "meter-is-valid":
-                    break;
-                case "meter-last-timestamp":
-                    break;
+
+                    return new GenericValueNode<bool, bool>(ctx, Client,
+                        async (o, client) =>
+                        {
+                            await Task.CompletedTask;
+                        }, _ => Task.FromResult(true));
+                case "meter-timestamp":
+                    return new GenericValueNode<long, bool>(ctx, Client,
+                        async (o, client) =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        async client => await client.GetRelayEnergyTimestamp(RelayId));
                 case "meter-total":
-                    break;
+                    return new GenericValueNode<double, bool>(ctx, Client,
+                        async (o, client) =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        async client => await client.GetRelayEnergy(RelayId));
             }
 
             return null;

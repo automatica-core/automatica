@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Automatica.Driver.Shelly.Gen2.Models
@@ -34,6 +37,16 @@ namespace Automatica.Driver.Shelly.Gen2.Models
         public SwitchStatusEvent Switch1 { get; set; }
 
         public List<SwitchStatusEvent> Switches => new() { Switch0, Switch1 };
+
+        public T GetValueFromSwitch<T>(int relayId, Expression<Func<SwitchStatusEvent, T>> getValueExpression)
+        {
+            if (Switches.Count >= relayId)
+            {
+                return getValueExpression.Compile().Invoke(Switches[relayId]);
+            }
+
+            return default;
+        }
 
         public SwitchStatusEvent GetSwitch(int relayId)
         {

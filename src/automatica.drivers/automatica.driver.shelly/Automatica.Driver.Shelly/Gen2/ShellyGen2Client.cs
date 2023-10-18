@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.WebSockets;
 using System.Security.Cryptography;
 using System.Text;
@@ -56,7 +58,7 @@ namespace Automatica.Driver.Shelly.Gen2
         {
             _logger.LogInformation($"Websocket message...." + message);
 
-            var response = JsonConvert.DeserializeObject<ResponseModel>(message);
+            var response = JsonConvert.DeserializeObject<ResponseModel<object>>(message);
 
             if (response.Method == "NotifyStatus")
             {
@@ -72,13 +74,30 @@ namespace Automatica.Driver.Shelly.Gen2
             }
         }
 
+        private async Task<ShellyResult<ResponseModel<T>>> SendPostMessage<T>(string method, Dictionary<string, object> param, CancellationToken token = default)
+        {
+            var rpcModel = new RpcModel
+            {
+                Id = $"{Guid.NewGuid()}",
+                Method = method,
+                Params = param,
+                Auth = _authModel,
+                Source = $"{ShellyCommonOptions.SourceId}"
+            };
+            var endpoint = ServerUri + "/rpc";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint);
+            requestMessage.Content = new StringContent(JsonConvert.SerializeObject(rpcModel), Encoding.UTF8);
+
+            return await ExecuteRequestAsync<ResponseModel<T>>(requestMessage, token, default);
+        }
+
         private async void _webSocket_OnOpened(object sender)
         {
             _logger.LogInformation($"Websocket opened....");
 
             await SendWebSocketMessage(new RpcModel
             {
-                Id = 1, Method = "Shelly.GetStatus", Source = $"{ShellyCommonOptions.SourceId}"
+                Id = "1", Method = "Shelly.GetStatus", Source = $"{ShellyCommonOptions.SourceId}"
             });
 
             OnOpened?.Invoke(this);
@@ -114,9 +133,48 @@ namespace Automatica.Driver.Shelly.Gen2
             return Task.FromResult(false);
         }
 
-        public Task<bool> GetRelayState(int channelId, CancellationToken token = default)
+        public async Task<bool> GetRelayState(int channelId, CancellationToken token = default)
         {
-            return Task.FromResult(false);
+            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
+                new Dictionary<string, object> { { "id", channelId } }, token);
+
+            return switchState.Value.Result.Output;
+        }
+
+        public async Task<double> GetRelayVoltage(int channelId, CancellationToken token = default)
+        {
+            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
+                new Dictionary<string, object> { { "id", channelId } }, token);
+            return switchState.Value.Result.Voltage;
+        }
+
+        public async Task<double> GetRelayPower(int channelId, CancellationToken token = default)
+        {
+
+            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
+                new Dictionary<string, object> { { "id", channelId } }, token);
+            return switchState.Value.Result.Apower;
+        }
+
+        public async Task<double> GetRelayCurrent(int channelId, CancellationToken token = default)
+        {
+            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
+                new Dictionary<string, object> { { "id", channelId } }, token);
+            return switchState.Value.Result.Current;
+        }
+
+        public async Task<double> GetRelayEnergy(int channelId, CancellationToken token = default)
+        {
+            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
+                new Dictionary<string, object> { { "id", channelId } }, token);
+            return switchState.Value.Result.Aenergy.Total;
+        }
+
+        public async Task<long> GetRelayEnergyTimestamp(int channelId, CancellationToken token = default)
+        {
+            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
+                new Dictionary<string, object> { { "id", channelId } }, token);
+            return switchState.Value.Result.Aenergy.MinuteTs;
         }
 
         public Task<bool> GetHasUpdate(CancellationToken token = default)

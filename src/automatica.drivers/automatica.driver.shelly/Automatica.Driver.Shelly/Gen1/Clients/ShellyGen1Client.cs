@@ -57,8 +57,36 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
         public async Task<bool> GetRelayState(int channelId, CancellationToken token)
         {
             var status = await GetStatus(token);
-
             return status.Value.Relays[channelId].IsOn;
+        }
+
+        public Task<double> GetRelayVoltage(int channelId, CancellationToken token = default)
+        {
+            return Task.FromResult(230d);
+        }
+
+        public async Task<double> GetRelayPower(int channelId, CancellationToken token = default)
+        {
+            var status = await GetStatus(token);
+            return status.Value.Meters[channelId].Power;
+        }
+
+        public async Task<double> GetRelayCurrent(int channelId, CancellationToken token = default)
+        {
+            var status = await GetStatus(token);
+            return status.Value.Meters[channelId].Power / 230;
+        }
+
+        public async Task<double> GetRelayEnergy(int channelId, CancellationToken token = default)
+        {
+            var status = await GetStatus(token);
+            return status.Value.Meters[channelId].Total;
+        }
+
+        public async Task<long> GetRelayEnergyTimestamp(int channelId, CancellationToken token = default)
+        {
+            var status = await GetStatus(token);
+            return status.Value.Meters[channelId].TimeStamp;
         }
 
         public async Task<bool> GetHasUpdate(CancellationToken token)

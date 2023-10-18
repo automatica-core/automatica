@@ -2,16 +2,16 @@
 
 namespace Automatica.Driver.Shelly.Gen2.Models
 {
-    internal class ResponseModel
+    internal class ResponseModel<T>
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [JsonProperty("src")]
         public string Src { get; set; }
 
         [JsonProperty("result")]
-        public object Result { get; set; }
+        public T Result { get; set; }
 
         [JsonProperty("error")]
         public ErrorModel Error { get; set; }

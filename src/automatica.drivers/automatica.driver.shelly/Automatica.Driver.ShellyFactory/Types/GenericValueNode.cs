@@ -7,14 +7,21 @@ using Automatica.Driver.Shelly.Gen2.Models;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
-    internal abstract class GenericValueNode<TValueObject> : DriverBase
+    internal abstract class GenericValueNode : DriverBase
+    {
+        protected GenericValueNode(IDriverContext driverContext) : base(driverContext)
+        {
+        }
+        internal abstract Task<object> GetValueFromShelly(IShellyClient shellyClient);
+        internal abstract Task<object> FromStatusUpdate(NotifyStatusEvent statusEvent);
+    }
+
+    internal abstract class GenericValueNode<TValueObject> : GenericValueNode
     {
         protected GenericValueNode(IDriverContext driverContext) : base(driverContext)
         {
         }
         
-        internal abstract Task<object> GetValueFromShelly(IShellyClient shellyClient);
-        internal abstract Task<object> FromStatusUpdate(NotifyStatusEvent statusEvent);
     }
 
     internal class GenericValueNode<T, T2> : GenericValueNode<T2>

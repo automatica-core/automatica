@@ -6,36 +6,25 @@ using Automatica.Driver.Shelly.Gen2.Models;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
+
     internal abstract class ShellyContainerNode : DriverBase
     {
-        public ShellyDriverDevice Client { get; }
-        protected ShellyContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext)
-        {
-            Client = client;
-        }
-
-        internal abstract Task<object> ReadData();
-        internal abstract Task FromStatusUpdate(NotifyStatusEvent statusEvent);
-    }
-
-    internal abstract class ShellyContainerNode<T> : ShellyContainerNode 
-    {
-        public List<GenericValueNode<T>> ValueNodes { get; }
+        public List<GenericValueNode> ValueNodes { get; }
 
         public List<ShellyContainerNode> ContainerNodes { get; }
 
-        protected ShellyContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext, client)
+        public ShellyDriverDevice Client { get; }
+
+        protected ShellyContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext)
         {
-            ValueNodes = new List<GenericValueNode<T>>();
+            Client = client;
+            ValueNodes = new List<GenericValueNode>();
             ContainerNodes = new List<ShellyContainerNode>();
         }
 
-        internal abstract Task<T> GetCorrespondingDataObject();
 
-        internal override async Task<object> ReadData()
+        internal async Task ReadData()
         {
-            var dataObj = await GetCorrespondingDataObject();
-
             foreach (var containerNode in ContainerNodes)
             {
                 await containerNode.ReadData();
@@ -47,10 +36,9 @@ namespace Automatica.Driver.ShellyFactory.Types
                 valueNode.DispatchRead(value);
             }
 
-            return dataObj;
         }
 
-        internal override async Task FromStatusUpdate(NotifyStatusEvent statusEvent)
+        internal async Task FromStatusUpdate(NotifyStatusEvent statusEvent)
         {
             foreach (var containerNode in ContainerNodes)
             {
@@ -83,7 +71,7 @@ namespace Automatica.Driver.ShellyFactory.Types
 
             if (node != null)
             {
-                if(node is GenericValueNode<T> genericValueNode)
+                if(node is GenericValueNode genericValueNode)
                     ValueNodes.Add(genericValueNode);
                 else if (node is ShellyContainerNode containerNode)
                     ContainerNodes.Add(containerNode);

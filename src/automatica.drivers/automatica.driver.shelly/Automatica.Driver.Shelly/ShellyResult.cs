@@ -1,8 +1,9 @@
+using Automatica.Driver.Shelly.Common;
 using System;
 
 namespace Automatica.Driver.Shelly
 {
-    public class ShellyResult<T>
+    public class ShellyResult<T> : IShellyResult<T>
     {
         public T Value => _value;
 

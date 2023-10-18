@@ -4,16 +4,10 @@ using Automatica.Core.Driver;
 
 namespace Automatica.Driver.ShellyFactory.Types.Roller
 {
-    internal class RollerContainerNode : ShellyContainerNode<object>
+    internal class RollerContainerNode : ShellyContainerNode
     {
         public RollerContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext, client)
         {
-        }
-
-
-        internal override Task<object> GetCorrespondingDataObject()
-        {
-            throw new System.NotImplementedException();
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
