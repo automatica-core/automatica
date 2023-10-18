@@ -133,6 +133,7 @@ namespace P3.Driver.HomeKitFactory
 
         private void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
         {
+            DriverContext.Logger.LogDebug($"Value changed for {e.Characteristic.Id} to {e.Value}");
             if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
             {
                 value.ForEach(a => a.SetValue(e.Value));
