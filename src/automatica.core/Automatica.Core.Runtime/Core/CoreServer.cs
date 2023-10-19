@@ -106,6 +106,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly IRemoteConnectService _remoteConnectService;
         private readonly ITrendingContext _trendingContext;
         private readonly INotifyDriver _notifyDriver;
+        private readonly ILogicPageCache _logicPageCache;
 
         private int _satelliteInstanceCount;
 
@@ -185,6 +186,7 @@ namespace Automatica.Core.Runtime.Core
             _notifyDriver = services.GetRequiredService<INotifyDriver>();
 
             _remoteConnectService = services.GetRequiredService<IRemoteConnectService>();
+            _logicPageCache = services.GetRequiredService<ILogicPageCache>();
             InitInternals();
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
@@ -226,6 +228,8 @@ namespace Automatica.Core.Runtime.Core
                     await ConfigureAndStart();
 
                     await _dispatcher.Init(cancellationToken);
+
+                    _logicPageCache.All();
 
                 }
                 catch (Exception e)

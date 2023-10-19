@@ -109,22 +109,22 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         public void AddRuleInstance(RuleInstance ruleInstance)
         {
-            if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
+            if (_rulePageCache.TryGetValue(ruleInstance.This2RulePage, out var value))
             {
-                _rulePageCache[ruleInstance.This2RulePage].RuleInstance.Add(ruleInstance);
+                value.RuleInstance.Add(ruleInstance);
             }
 
-            if (_ruleInstanceCache.ContainsKey(ruleInstance.This2RulePage))
+            if (_ruleInstanceCache.TryGetValue(ruleInstance.This2RulePage, out var value1))
             {
-                _ruleInstanceCache[ruleInstance.This2RulePage].Add(ruleInstance.ObjId, ruleInstance);
+                value1.Add(ruleInstance.ObjId, ruleInstance);
             }
         }
 
         public void AddNodeInstance(NodeInstance2RulePage nodeInstance)
         {
-            if (_rulePageCache.ContainsKey(nodeInstance.This2RulePage))
+            if (_rulePageCache.TryGetValue(nodeInstance.This2RulePage, out var value))
             {
-                _rulePageCache[nodeInstance.This2RulePage].NodeInstance2RulePage.Add(nodeInstance);
+                value.NodeInstance2RulePage.Add(nodeInstance);
             }
 
             if (_ruleInstanceCache.ContainsKey(nodeInstance.This2RulePage))
@@ -143,10 +143,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                 }
             }
 
-            if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
+            if (_rulePageCache.TryGetValue(ruleInstance.This2RulePage, out var page))
             {
-                var page = _rulePageCache[ruleInstance.This2RulePage];
-
                 if(page.RuleInstance.Any(a => a.ObjId == ruleInstance.ObjId)) {
 
                     var existing = page.RuleInstance.First(a => a.ObjId == ruleInstance.ObjId);
@@ -169,9 +167,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                     _nodeInstanceRefCache[nodeInstance.This2RulePage][nodeInstance.ObjId] = nodeInstance;
                 }
             }
-            if (_rulePageCache.ContainsKey(nodeInstance.This2RulePage))
+            if (_rulePageCache.TryGetValue(nodeInstance.This2RulePage, out var page))
             {
-                var page = _rulePageCache[nodeInstance.This2RulePage];
                 var existing = page.NodeInstance2RulePage.First(a => a.ObjId == nodeInstance.ObjId);
 
                 existing.X = nodeInstance.X;
@@ -181,9 +178,9 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         public void AddLink(Link link)
         {
-            if (_rulePageCache.ContainsKey(link.This2RulePage))
+            if (_rulePageCache.TryGetValue(link.This2RulePage, out var value))
             {
-                _rulePageCache[link.This2RulePage].Link.Add(link);
+                value.Link.Add(link);
             }
 
             if (_linkCache.ContainsKey(link.This2RulePage))
@@ -206,9 +203,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                     _linkCache[link.This2RulePage][link.ObjId] = link;
                 }
             }
-            if (_rulePageCache.ContainsKey(link.This2RulePage))
+            if (_rulePageCache.TryGetValue(link.This2RulePage, out var page))
             {
-                var page = _rulePageCache[link.This2RulePage];
                 var existing = page.Link.First(a => a.ObjId == link.ObjId);
 
                 existing.This2RuleInterfaceInstanceInput = link.This2RuleInterfaceInstanceInput;
@@ -254,9 +250,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                     _nodeInstanceRefCache[nodeInstance.This2RulePage].Remove(nodeInstance.ObjId);
                 }
             }
-            if (_rulePageCache.ContainsKey(nodeInstance.This2RulePage))
+            if (_rulePageCache.TryGetValue(nodeInstance.This2RulePage, out var page))
             {
-                var page = _rulePageCache[nodeInstance.This2RulePage];
                 var existing = page.NodeInstance2RulePage.First(a => a.ObjId == nodeInstance.ObjId);
 
                 page.NodeInstance2RulePage.Remove(existing);
@@ -273,9 +268,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                 }
             }
 
-            if (_rulePageCache.ContainsKey(ruleInstance.This2RulePage))
+            if (_rulePageCache.TryGetValue(ruleInstance.This2RulePage, out var page))
             {
-                var page = _rulePageCache[ruleInstance.This2RulePage];
                 var existing = page.RuleInstance.First(a => a.ObjId == ruleInstance.ObjId);
 
                 page.RuleInstance.Remove(existing);
@@ -291,9 +285,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                     _linkCache[link.This2RulePage][link.ObjId] = link;
                 }
             }
-            if (_rulePageCache.ContainsKey(link.This2RulePage))
+            if (_rulePageCache.TryGetValue(link.This2RulePage, out var page))
             {
-                var page = _rulePageCache[link.This2RulePage];
                 if (page.Link.Any(a => a.ObjId == link.ObjId))
                 {
                     var existing = page.Link.First(a => a.ObjId == link.ObjId);

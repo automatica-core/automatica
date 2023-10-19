@@ -7,6 +7,7 @@ using System.Reflection;
 using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using System;
+using Automatica.Core.EF.Interceptors;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
@@ -150,12 +151,11 @@ namespace Automatica.Core.EF.Models
             optionsBuilder.UseMySql(mariaDbConString, serverVersion, a =>
             {
                 a.CommandTimeout(300);
-            });
+            }).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
         private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
         {
-
             logger.LogInformation($"Using SQLite database engine...");
             string conString = Configuration.GetConnectionString("AutomaticaDatabaseSqlite");
             var sqliteConBuilder = new SqliteConnectionStringBuilder(conString);
@@ -168,7 +168,8 @@ namespace Automatica.Core.EF.Models
             {
                 File.Copy(dbInitFile, dbFile);
             }
-            optionsBuilder.UseSqlite(conString);
+
+            optionsBuilder.UseSqlite(conString).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
