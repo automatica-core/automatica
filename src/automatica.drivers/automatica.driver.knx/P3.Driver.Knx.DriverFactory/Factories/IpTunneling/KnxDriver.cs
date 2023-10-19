@@ -14,6 +14,7 @@ using Knx.Falcon.Sdk;
 using Knx.Falcon.Configuration;
 using System.Security;
 using Automatica.Core.Base.Cryptography;
+using Docker.DotNet.Models;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
@@ -100,31 +101,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             try
             {
-                var remoteIp = IPAddress.Parse(ipAddress); 
-                _remoteIp = remoteIp;
-                _remotePort = port;
-                var useNatValue = false;
-                useNatValue = useNat != null && useNat.Value;
-                var ip = new IpTunnelingConnectorParameters(ipAddress, ipPort: port, useNat: useNatValue)
-                    {
-                        AutoReconnect = true
-                    };
-                if (_secureDriver)
-                {
-                    var authPw = GetPropertyValueString("knx-auth-pw");
-                    var userPw = GetPropertyValueString("knx-user-pw");
-                    var userId = GetPropertyValueInt("knx-user-id");
-                    var iaAddress = GetPropertyValueString("knx-ia-address");
-                  
-                    ip.IndividualAddress = IndividualAddress.Parse(iaAddress);
-                    ip.DeviceAuthenticationCodeHash = IpUnicastConnectorParameters.GetDeviceAuthenticationCodeHash(PasswordToSecureString(authPw));
-                    ip.UserPasswordHash = IpUnicastConnectorParameters.GetUserPasswordHash(PasswordToSecureString(userPw));
-                    ip.UserId = (byte)userId;
-                }
-
-                _tunneling = new KnxBus(ip);
-                _tunneling.ConnectionStateChanged += _tunneling_ConnectionStateChanged;
-                _tunneling.GroupMessageReceived += _tunneling_GroupMessageReceived;
+                ConstructTunnelingConnection();
 
                 if (useTunnel.HasValue && useTunnel.Value)
                 {
@@ -147,6 +124,45 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             DriverContext.Logger.LogInformation($"Init done...");
 
             return await base.Init(token);
+        }
+
+        private void ConstructTunnelingConnection()
+        {
+            lock (_lock)
+            {
+                var ipAddress = GetProperty("knx-ip").ValueString;
+                var useNat = GetProperty("knx-use-nat").ValueBool;
+                var port = GetPropertyValueInt("knx-port");
+
+                var remoteIp = IPAddress.Parse(ipAddress);
+                _remoteIp = remoteIp;
+                _remotePort = port;
+                var useNatValue = false;
+                useNatValue = useNat != null && useNat.Value;
+                var ip = new IpTunnelingConnectorParameters(ipAddress, ipPort: port, useNat: useNatValue)
+                {
+                    AutoReconnect = true
+                };
+
+                if (_secureDriver)
+                {
+                    var authPw = GetPropertyValueString("knx-auth-pw");
+                    var userPw = GetPropertyValueString("knx-user-pw");
+                    var userId = GetPropertyValueInt("knx-user-id");
+                    var iaAddress = GetPropertyValueString("knx-ia-address");
+
+                    ip.IndividualAddress = IndividualAddress.Parse(iaAddress);
+                    ip.DeviceAuthenticationCodeHash =
+                        IpUnicastConnectorParameters.GetDeviceAuthenticationCodeHash(PasswordToSecureString(authPw));
+                    ip.UserPasswordHash =
+                        IpUnicastConnectorParameters.GetUserPasswordHash(PasswordToSecureString(userPw));
+                    ip.UserId = (byte)userId;
+                }
+
+                _tunneling = new KnxBus(ip);
+                _tunneling.ConnectionStateChanged += _tunneling_ConnectionStateChanged;
+                _tunneling.GroupMessageReceived += _tunneling_GroupMessageReceived;
+            }
         }
 
         private async void _tunneling_GroupMessageReceived(object sender, GroupEventArgs e)
@@ -200,6 +216,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
         {
+            DriverContext.Logger.LogError($"Connection state changed to {_tunneling.ConnectionState}");
             if (_tunneling != null)
             {
                 var state = _tunneling.ConnectionState == BusConnectionState.Connected;
@@ -207,8 +224,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
                 if (!state)
                 {
-                    DriverContext.Logger.LogDebug($"GW  {Name} disconnected");
-                    _tunneling.ConnectAsync().ConfigureAwait(false);
+                    DriverContext.Logger.LogDebug($"GW {Name} disconnected, try to reconnect");
+
+                    DisposeConnection();
+                    ConstructTunnelingConnection();
+                    StartConnection();
                 }
             }
         }
@@ -254,7 +274,6 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             {
                 return true;
             }
-            _gwState?.SetGatewayState(false);
             StartConnection();
 
             return await base.Start(token);
@@ -262,6 +281,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private void StartConnection()
         {
+            _gwState?.SetGatewayState(false);
             lock (_lock)
             {
                 _tunneling?.ConnectAsync().ConfigureAwait(false);
