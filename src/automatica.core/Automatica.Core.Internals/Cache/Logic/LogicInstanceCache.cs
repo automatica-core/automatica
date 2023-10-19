@@ -12,13 +12,15 @@ namespace Automatica.Core.Internals.Cache.Logic
     internal class LogicInstanceCache : AbstractCache<RuleInstance>, ILogicInstanceCache
     {
         private readonly ILinkCache _linkCache;
+        private readonly IAreaCache _areaCacheInstance;
         private readonly IDictionary<Guid, IList<RuleInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IDictionary<Guid, IList<RuleInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<RuleInstance>>();
         private readonly IDictionary<Guid, RuleInstance> _favorites = new ConcurrentDictionary<Guid, RuleInstance>();
 
-        public LogicInstanceCache(IConfiguration configuration, ILinkCache linkCache) : base(configuration)
+        public LogicInstanceCache(IConfiguration configuration, ILinkCache linkCache, IAreaCache areaCacheInstance) : base(configuration)
         {
             _linkCache = linkCache;
+            _areaCacheInstance = areaCacheInstance;
         }
 
         protected override IQueryable<RuleInstance> GetAll(AutomaticaContext context)
@@ -36,12 +38,7 @@ namespace Automatica.Core.Internals.Cache.Logic
             {
                 if (item.This2AreaInstance.HasValue)
                 {
-                    if (!_areaCache.ContainsKey(item.This2AreaInstance.Value))
-                    {
-                        _areaCache.Add(item.This2AreaInstance.Value, new List<RuleInstance>());
-                    }
-
-                    _areaCache[item.This2AreaInstance.Value].Add(item);
+                    AddToAreaCache(context, item, item.This2AreaInstance.Value);
                 }
 
                 if (item.This2CategoryInstance.HasValue)
@@ -69,6 +66,29 @@ namespace Automatica.Core.Internals.Cache.Logic
             }
 
             return all;
+        }
+        private void AddToAreaCache(AutomaticaContext context, RuleInstance item, Guid area)
+        {
+            if (!_areaCache.ContainsKey(area))
+            {
+                _areaCache.Add(area, new List<RuleInstance>());
+            }
+
+            var existing = _areaCache[area].FirstOrDefault(a => a.ObjId == item.ObjId);
+            if (existing != null)
+            {
+                _areaCache[area].Remove(existing);
+            }
+            _areaCache[area].Add(item);
+
+
+            var areaItem = _areaCacheInstance.GetSingle(context, area);
+            if (areaItem.This2Parent.HasValue)
+            {
+                var parentArea = areaItem.This2Parent.Value;
+                AddToAreaCache(context, item, parentArea);
+
+            }
         }
 
         public override void Clear()
@@ -99,12 +119,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             if (item.This2AreaInstance.HasValue)
             {
-                if (!_areaCache.ContainsKey(item.This2AreaInstance.Value))
-                {
-                    _areaCache.Add(item.This2AreaInstance.Value, new List<RuleInstance>());
-                }
-
-                _areaCache[item.This2AreaInstance.Value].Add(item);
+                AddToAreaCache(context, item, item.This2AreaInstance.Value);
             }
 
             if (item.This2CategoryInstance.HasValue)
@@ -144,9 +159,9 @@ namespace Automatica.Core.Internals.Cache.Logic
         {
             Initialize();
 
-            if (_categoryCache.ContainsKey(category))
+            if (_categoryCache.TryGetValue(category, out var byCategory))
             {
-                return _categoryCache[category];
+                return byCategory;
             }
             return new List<RuleInstance>();
         }
@@ -155,9 +170,9 @@ namespace Automatica.Core.Internals.Cache.Logic
         {
             Initialize();
 
-            if (_areaCache.ContainsKey(category))
+            if (_areaCache.TryGetValue(category, out var area))
             {
-                return _areaCache[category];
+                return area;
             }
             return new List<RuleInstance>();
         }
