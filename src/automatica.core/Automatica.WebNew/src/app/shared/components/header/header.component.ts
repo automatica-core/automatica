@@ -92,6 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
             this.translate.translation.setLocale({language: "en"});
         }
+        await this.translate.init();
 
         var user = this.loginService.getCurrentUser();
 
