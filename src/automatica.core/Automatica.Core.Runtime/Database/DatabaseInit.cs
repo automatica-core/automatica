@@ -17,6 +17,7 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
 using Automatica.Core.Runtime.BoardTypes.RaspberryPi;
 using System.Runtime.InteropServices;
+using Automatica.Core.Base;
 using Automatica.Core.Runtime.Recorder.Base;
 
 namespace Automatica.Core.Runtime.Database
@@ -317,6 +318,23 @@ namespace Automatica.Core.Runtime.Database
                 trendingRecorder.NeedsReloadOnChange = true;
                 trendingRecorder.ReloadContext = SettingReloadContext.Recorders;
                 context.Update(trendingRecorder);
+            }
+
+            var language = context.Settings.SingleOrDefault(a => a.ValueKey == "language");
+
+            if (language == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "language",
+                    Type = (long)PropertyTemplateType.Enum,
+                    Value = Language.English,
+                    Group = "SERVER.SETTINGS",
+                    IsVisible = true,
+                    Order = 1,
+                    Meta = PropertyHelper.CreateEnumMetaString(typeof(Language))
+                });
+
             }
 
             AddHostedGrafanaRecorderSettings(context);

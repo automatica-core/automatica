@@ -461,6 +461,11 @@
       },
       "HYPERSERIESPORT":{
         "NAME": "Port"
+      },
+      "LANGUAGE":{
+        "NAME": "Language",
+        "GERMAN": "German",
+        "ENGLISH": "English"
       }
     },
     "CATEGORY_INSTANCE": {

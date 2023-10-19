@@ -6,7 +6,7 @@ import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { DxPopupModule } from "devextreme-angular/ui/popup";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
-import { L10nTranslationModule } from "angular-l10n";
+import { L10nLocaleResolver, L10nTranslationModule } from "angular-l10n";
 import { LoginService } from "src/app/services/login.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 import { DxSpeedDialActionModule } from "devextreme-angular";
@@ -14,6 +14,12 @@ import { DxSpeedDialActionModule } from "devextreme-angular";
 import config from "devextreme/core/config";
 import { SettingsService } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
+import { TranslationConfigService } from "src/app/services/translation-config.service";
+
+export enum Language {
+    German = 0,
+    English = 1
+}
 
 config({
     floatingActionButtonConfig: {
@@ -68,13 +74,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private hubService: HubConnectionService,
         private changeRef: ChangeDetectorRef,
         private settingsService: SettingsService,
-        private themeService: ThemeService) { }
+        private themeService: ThemeService,
+        private translate: TranslationConfigService) { }
 
     async ngOnInit() {
 
         const projectName = await this.settingsService.getByKey("projectName");
         this.projectName = projectName.Value;
         document.title = this.projectName;
+
+        const languageProperty = await this.settingsService.getByKey("language");
+        const language = <Language>languageProperty.Value;
+        if (language == Language.German) {
+            this.translate.translation.setLocale({language: "de"});
+        }
+        else {
+
+            this.translate.translation.setLocale({language: "en"});
+        }
 
         var user = this.loginService.getCurrentUser();
 
