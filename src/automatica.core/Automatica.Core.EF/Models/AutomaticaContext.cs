@@ -151,6 +151,7 @@ namespace Automatica.Core.EF.Models
             optionsBuilder.UseMySql(mariaDbConString, serverVersion, a =>
             {
                 a.CommandTimeout(300);
+                a.EnableRetryOnFailure(3);
             }).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
