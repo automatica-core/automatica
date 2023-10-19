@@ -49,18 +49,6 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
 
-
-  constructor(
-    dataHubService: DataHubService,
-    notify: NotifyService,
-    translate: L10nTranslationService,
-    configService: ConfigService,
-    ruleInstanceVisuService: LogicInstanceVisuService,
-    appService: AppService) {
-    super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
-  }
-
-
   async ngOnInit() {
     this.baseOnInit();
 
@@ -78,8 +66,6 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
 
     const data = (await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId));
     const map = new Map(Object.entries(data));
-
-    console.log(map);
 
     map.forEach((value, key) => {
       this.onRuleInstanceValueChanged(key, value);

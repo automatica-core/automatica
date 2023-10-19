@@ -69,6 +69,13 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
     this.isMoving = this.dataHub.getCurrentValue(this.isMovingOutput?.ObjId)?.value;
     this.value = this.dataHub.getCurrentValue(this.absolutePositionInput.ObjId)?.value;
     this.updateIcon();
+
+    const data = (await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId));
+    const map = new Map(Object.entries(data));
+
+    map.forEach((value, key) => {
+      this.onRuleInstanceValueChanged(key, value);
+    });
   }
 
   private updateIcon() {

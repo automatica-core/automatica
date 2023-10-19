@@ -23,17 +23,6 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
   readOnly: boolean = false;
 
-  constructor(
-    dataHubService: DataHubService,
-    notify: NotifyService,
-    translate: L10nTranslationService,
-    configService: ConfigService,
-    ruleInstanceVisuService: LogicInstanceVisuService,
-    appService: AppService) {
-    super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
-  }
-
-
   async ngOnInit() {
     this.baseOnInit();
 
@@ -50,13 +39,17 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
     this.readOnly = this.getReadOnly() ?? false;
     this.value = this.dataHub.getCurrentValue(this.outputType.ObjId)?.value;
+
+    const data = (await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId));
+    const map = new Map(Object.entries(data));
+
+    map.forEach((value, key) => {
+      this.onRuleInstanceValueChanged(key, value);
+    });
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-    if (interfaceId == this.outputType.ObjId) {
-      this.value = value;
-    }
-    else if (interfaceId == this.stateType.ObjId) {
+    if (interfaceId == this.outputType.ObjId || interfaceId == this.stateType.ObjId) {
       this.value = value;
     }
   }
