@@ -347,23 +347,28 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task RemoveLink(Guid objId)
         {
-            await using var dbContext = new AutomaticaContext(_config);
-            var transaction = await dbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.Execute(async
+                () =>
             {
+                await using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
+                try
+                {
 
-                await RemoveLinkInternal(objId, dbContext);
+                    await RemoveLinkInternal(objId, dbContext);
 
-                await dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
+                    await dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
 
-                await _coreServer.ReloadLinks();
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(RemoveLink)} {objId}", e);
-            }
+                    await _coreServer.ReloadLinks();
+                }
+                catch (Exception e)
+                {
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(RemoveLink)} {objId}", e);
+                }
+            });
         }
 
         private async Task RemoveLinkInternal(Guid objId, AutomaticaContext dbContext, bool reload = true)

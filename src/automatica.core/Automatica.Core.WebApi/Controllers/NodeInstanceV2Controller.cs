@@ -202,40 +202,45 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task<(NodeInstance node, EntityState entityState)> AddNodeInternal(NodeInstance node)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var entityState = await AddOrUpdateNodeInstance(node);
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
-
-                var queue = new Queue<NodeInstance>();
-                queue.Enqueue(node);
-
-                while (queue.Count > 0)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    var item = queue.Dequeue();
-                    if (item.InverseThis2ParentNodeInstanceNavigation != null)
+                    var entityState = await AddOrUpdateNodeInstance(node);
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
+
+                    var queue = new Queue<NodeInstance>();
+                    queue.Enqueue(node);
+
+                    while (queue.Count > 0)
                     {
-                        foreach (var child in item.InverseThis2ParentNodeInstanceNavigation)
+                        var item = queue.Dequeue();
+                        if (item.InverseThis2ParentNodeInstanceNavigation != null)
                         {
-                            queue.Enqueue(child);
-                            _nodeInstanceCache.GetSingle(child.ObjId, DbContext);
+                            foreach (var child in item.InverseThis2ParentNodeInstanceNavigation)
+                            {
+                                queue.Enqueue(child);
+                                _nodeInstanceCache.GetSingle(child.ObjId, DbContext);
+                            }
                         }
+
                     }
 
+                    return (_nodeInstanceCache.Get(node.ObjId), entityState);
                 }
-
-                return (_nodeInstanceCache.Get(node.ObjId), entityState);
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
-                throw;
-            }
+                catch (Exception e)
+                {
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
+                    throw;
+                }
+            });
         }
 
         private async Task ReloadDriver(NodeInstance node, EntityState entityState)
@@ -278,66 +283,72 @@ namespace Automatica.Core.WebApi.Controllers
 
         [Route("delete")]
         [HttpPost]
-        public async Task DeleteNode([FromBody]NodeInstance node)
+        public async Task DeleteNode([FromBody] NodeInstance node)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation)
-                .SingleOrDefault(a => a.ObjId == node.ObjId);
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.Execute(async
+                () =>
             {
-                if (existingNode == null)
-                {
-                    return;
-                }
-                if (existingNode != null)
-                {
-                    DbContext.Entry(existingNode).State = EntityState.Deleted;
-                }
-
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation)
+                    .SingleOrDefault(a => a.ObjId == node.ObjId);
                 try
                 {
-                    if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
-                        existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
+                    if (existingNode == null)
                     {
                         return;
                     }
 
-                    var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
-
-                    if (rootNode.ObjId == node.ObjId)
+                    if (existingNode != null)
                     {
-                        var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
-                        if (driver != null)
+                        DbContext.Entry(existingNode).State = EntityState.Deleted;
+                    }
+
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    try
+                    {
+                        if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                            existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
                         {
-                            await _coreServer.StopDriver(driver);
+                            return;
+                        }
+
+                        var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
+
+                        if (rootNode.ObjId == node.ObjId)
+                        {
+                            var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
+                            if (driver != null)
+                            {
+                                await _coreServer.StopDriver(driver);
+                            }
+                        }
+                        else
+                        {
+                            await _notifyDriver.NotifyDeleted(node);
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        await _notifyDriver.NotifyDeleted(node);
+                        _logger.LogError(e, $"Error stopping driver {node.Name}...");
                     }
+
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Error stopping driver {node.Name}...");
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
+                    _nodeInstanceCache.Clear();
+                    throw;
                 }
+                finally
+                {
 
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
-                _nodeInstanceCache.Clear();
-                throw;
-            }
-            finally
-            {
-
-                _nodeInstanceCache.Remove(existingNode);
-            }
+                    _nodeInstanceCache.Remove(existingNode);
+                }
+            });
         }
 
         [Route("reload")]
@@ -355,47 +366,52 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var existingNode = _nodeInstanceCache.Get(node.ObjId);
-                var reloadServer = false;
-
-                if (existingNode != null)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    if (existingNode.This2Slave != node.This2Slave)
+                    var existingNode = _nodeInstanceCache.Get(node.ObjId);
+                    var reloadServer = false;
+
+                    if (existingNode != null)
                     {
-                        //slave changed, we need to reload all drivers!
-                        reloadServer = true;
+                        if (existingNode.This2Slave != node.This2Slave)
+                        {
+                            //slave changed, we need to reload all drivers!
+                            reloadServer = true;
+                        }
                     }
+
+
+                    var entityState = await AddOrUpdateNodeInstance(node);
+
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
+
+                    if (reloadServer)
+                    {
+                        await _coreServer.ReInit();
+                    }
+                    else
+                    {
+                        async void ReloadAndForget() => await ReloadDriver(node, entityState);
+                        ReloadAndForget();
+                    }
+
+                    return _nodeInstanceCache.Get(node.ObjId);
                 }
-                
-
-                var entityState = await AddOrUpdateNodeInstance(node);
-
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
-
-                if (reloadServer)
+                catch (Exception e)
                 {
-                    await _coreServer.ReInit();
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
+                    throw;
                 }
-                else
-                {
-                    async void ReloadAndForget() => await ReloadDriver(node, entityState);
-                    ReloadAndForget();
-                }
-
-                return _nodeInstanceCache.Get(node.ObjId);
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
-                throw;
-            }
+            });
         }
 
         [HttpPost]

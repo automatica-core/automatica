@@ -188,7 +188,10 @@ namespace Automatica.Driver.ShellyFactory
                 gen2Client.OnNotifyEvent -= Gen2ClientOnOnNotifyEvent;
             }
 
-            await Client.Disconnect(token);
+            if (Client != null)
+            {
+                await Client.Disconnect(token);
+            }
 
             return await base.Stop(token);
         }

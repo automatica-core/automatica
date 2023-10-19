@@ -67,27 +67,32 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             return all;
         }
+
         private void AddToAreaCache(RuleInstance item, Guid area)
         {
-            if (!_areaCache.ContainsKey(area))
+            lock (_areaCacheInstance)
             {
-                _areaCache.Add(area, new List<RuleInstance>());
-            }
+                if (!_areaCache.ContainsKey(area))
+                {
+                    _areaCache.Add(area, new List<RuleInstance>());
+                }
 
-            var existing = _areaCache[area].FirstOrDefault(a => a.ObjId == item.ObjId);
-            if (existing != null)
-            {
-                _areaCache[area].Remove(existing);
-            }
-            _areaCache[area].Add(item);
+                var existing = _areaCache[area].FirstOrDefault(a => a.ObjId == item.ObjId);
+                if (existing != null)
+                {
+                    _areaCache[area].Remove(existing);
+                }
+
+                _areaCache[area].Add(item);
 
 
-            var areaItem = _areaCacheInstance.Get( area);
-            if (areaItem.This2Parent.HasValue)
-            {
-                var parentArea = areaItem.This2Parent.Value;
-                AddToAreaCache(item, parentArea);
+                var areaItem = _areaCacheInstance.Get(area);
+                if (areaItem.This2Parent.HasValue)
+                {
+                    var parentArea = areaItem.This2Parent.Value;
+                    AddToAreaCache(item, parentArea);
 
+                }
             }
         }
 
