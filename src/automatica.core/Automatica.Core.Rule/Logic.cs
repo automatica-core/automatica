@@ -56,7 +56,23 @@ namespace Automatica.Core.Logic
                 }
             }
 
-            return ParameterValues;
+            var ret = new Dictionary<string, object>();
+
+            foreach (var param in ParameterValues)
+            {
+                ret.Add(param.Key, param.Value);
+            }
+
+            foreach (var value in _valueDictionary)
+            {
+                ret.Add($"{value.Key.ObjId}", value.Value);
+            }
+
+            foreach (var value in _inputValueDictionary)
+            {
+                ret.Add($"{value.Key.ObjId}", value.Value);
+            }
+            return ret;
         }
 
         public async Task<bool> Start(CancellationToken token = default)

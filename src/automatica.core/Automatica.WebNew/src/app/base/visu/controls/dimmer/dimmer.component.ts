@@ -72,12 +72,19 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
     this.outputValue = this.getInterfaceByKey("outputValue");
     this.outputState = this.getInterfaceByKey("outputState");
 
-    
+
     this.state = this.dataHub.getCurrentValue(this.valueInput.ObjId)?.value;
     this.stateValue = this.dataHub.getCurrentValue(this.valueInput.ObjId)?.value;
 
-    const data = await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId);
-    console.log(data);
+    const data = (await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId));
+    const map = new Map(Object.entries(data));
+
+    console.log(map);
+
+    map.forEach((value, key) => {
+      this.onRuleInstanceValueChanged(key, value);
+    });
+
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
