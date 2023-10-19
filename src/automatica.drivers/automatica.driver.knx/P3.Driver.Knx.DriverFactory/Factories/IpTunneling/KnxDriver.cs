@@ -128,6 +128,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private void ConstructTunnelingConnection()
         {
+            DriverContext.Logger.LogInformation($"Construct KNX driver...");
             lock (_lock)
             {
                 var ipAddress = GetProperty("knx-ip").ValueString;
@@ -163,6 +164,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 _tunneling.ConnectionStateChanged += _tunneling_ConnectionStateChanged;
                 _tunneling.GroupMessageReceived += _tunneling_GroupMessageReceived;
             }
+            DriverContext.Logger.LogInformation($"Construct KNX driver...done");
         }
 
         private async void _tunneling_GroupMessageReceived(object sender, GroupEventArgs e)
@@ -283,18 +285,22 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private void StartConnection()
         {
+            DriverContext.Logger.LogInformation($"Start KNX connection...");
             _gwState?.SetGatewayState(false);
             lock (_lock)
             {
                 _tunneling?.Connect();
             }
+            DriverContext.Logger.LogInformation($"Start KNX connection...done");
         }
 
         private void DisposeConnection()
         {
+            DriverContext.Logger.LogInformation($"Dispose KNX driver...");
             _tunneling.ConnectionStateChanged -= _tunneling_ConnectionStateChanged;
             _tunneling.GroupMessageReceived -= _tunneling_GroupMessageReceived;
             _tunneling.Dispose();
+            DriverContext.Logger.LogInformation($"Dispose KNX driver...done");
         }
 
         public override Task<bool> Stop(CancellationToken token = default)
