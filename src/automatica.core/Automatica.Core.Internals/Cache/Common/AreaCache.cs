@@ -34,6 +34,7 @@ namespace Automatica.Core.Internals.Cache.Common
 
         public override AreaInstance Get(Guid key)
         {
+            Initialize();
             return _allItems[key];
         }
 
@@ -60,7 +61,8 @@ namespace Automatica.Core.Internals.Cache.Common
                 _areaInstances.Add(loaded.ObjId, loaded);
             }
 
-            _allItems.Add(loaded.ObjId, loaded);
+            if(!_allItems.ContainsKey(loaded.ObjId))
+                _allItems.Add(loaded.ObjId, loaded);
             foreach (var child in loaded.InverseThis2ParentNavigation)
             {
                 newChildren.Add(RecursiveLoad(child, dbContext));
