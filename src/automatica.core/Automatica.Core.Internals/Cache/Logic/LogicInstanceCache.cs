@@ -38,7 +38,7 @@ namespace Automatica.Core.Internals.Cache.Logic
             {
                 if (item.This2AreaInstance.HasValue)
                 {
-                    AddToAreaCache(context, item, item.This2AreaInstance.Value);
+                    AddToAreaCache(item, item.This2AreaInstance.Value);
                 }
 
                 if (item.This2CategoryInstance.HasValue)
@@ -67,7 +67,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             return all;
         }
-        private void AddToAreaCache(AutomaticaContext context, RuleInstance item, Guid area)
+        private void AddToAreaCache(RuleInstance item, Guid area)
         {
             if (!_areaCache.ContainsKey(area))
             {
@@ -82,11 +82,11 @@ namespace Automatica.Core.Internals.Cache.Logic
             _areaCache[area].Add(item);
 
 
-            var areaItem = _areaCacheInstance.GetSingle(context, area);
+            var areaItem = _areaCacheInstance.Get( area);
             if (areaItem.This2Parent.HasValue)
             {
                 var parentArea = areaItem.This2Parent.Value;
-                AddToAreaCache(context, item, parentArea);
+                AddToAreaCache(item, parentArea);
 
             }
         }
@@ -119,7 +119,7 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             if (item.This2AreaInstance.HasValue)
             {
-                AddToAreaCache(context, item, item.This2AreaInstance.Value);
+                AddToAreaCache(item, item.This2AreaInstance.Value);
             }
 
             if (item.This2CategoryInstance.HasValue)

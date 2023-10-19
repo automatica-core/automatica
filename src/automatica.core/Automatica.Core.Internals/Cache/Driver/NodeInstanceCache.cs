@@ -81,7 +81,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 if (item.This2AreaInstance.HasValue)
                 {
-                    AddToAreaCache(context, item, item.This2AreaInstance.Value);
+                    AddToAreaCache(item, item.This2AreaInstance.Value);
                 }
 
                 if (item.This2CategoryInstance.HasValue)
@@ -117,7 +117,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             return items.AsQueryable();
         }
 
-        private void AddToAreaCache(AutomaticaContext context, NodeInstance item, Guid area)
+        private void AddToAreaCache(NodeInstance item, Guid area)
         {
             if (!_areaCache.ContainsKey(area))
             {
@@ -133,11 +133,11 @@ namespace Automatica.Core.Internals.Cache.Driver
             _areaCache[area].Add(item);
 
 
-            var areaItem = _areaCacheInstance.GetSingle(context, area);
+            var areaItem = _areaCacheInstance.Get( area);
             if (areaItem.This2Parent.HasValue)
             {
                 var parentArea = areaItem.This2Parent.Value;
-                AddToAreaCache(context, item, parentArea);
+                AddToAreaCache(item, parentArea);
 
             }
         }
@@ -225,7 +225,7 @@ namespace Automatica.Core.Internals.Cache.Driver
 
             if (item.This2AreaInstance.HasValue)
             {
-                AddToAreaCache(context, item, item.This2AreaInstance.Value);
+                AddToAreaCache(item, item.This2AreaInstance.Value);
             }
 
             if (item.This2CategoryInstance.HasValue)
