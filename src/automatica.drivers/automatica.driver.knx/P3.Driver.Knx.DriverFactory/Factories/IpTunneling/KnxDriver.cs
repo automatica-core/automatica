@@ -229,6 +229,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     DisposeConnection();
                     ConstructTunnelingConnection();
                     StartConnection();
+
+                    DriverContext.Logger.LogDebug($"State is now {_tunneling.ConnectionState}");
                 }
             }
         }
@@ -284,7 +286,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             _gwState?.SetGatewayState(false);
             lock (_lock)
             {
-                _tunneling?.ConnectAsync().ConfigureAwait(false);
+                _tunneling?.Connect();
             }
         }
 
