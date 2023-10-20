@@ -43,16 +43,16 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
   selectedFacility: LogFacility;
 
-  stop: boolean = false;
+  stop: boolean = true;
 
   logFileTree: LogFile[];
 
 
   menuItems: CustomMenuItem[] = [];
   menuStartStop: CustomMenuItem = {
-    id: "stop",
-    label: "Stop",
-    icon: "fa-stop",
+    id: "start",
+    label: "Start",
+    icon: "fa-start",
     items: undefined,
     command: (event) => {
       if (!this.stop) {
@@ -110,9 +110,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     try {
 
       super.registerEvent(this.loggingHub.pushEventLog, (data) => {
-        if (this.stop) {
-          return;
-        }
+      
         let facility: string = data[0];
         const log = data[1];
 
@@ -123,6 +121,9 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
           this.logFacilities.set(facility, logFacility);
           this.logFacilitiesArray.push(logFacility);
+        }
+        if (this.stop) {
+          return;
         }
         this.logFacilities.get(facility).logs.push({ facility: facility, log: log, timestamp: new Date() });
         this.logFacilities.get(this.allFacilityName).logs.push({ facility: this.allFacilityName, log: log, timestamp: new Date() });
