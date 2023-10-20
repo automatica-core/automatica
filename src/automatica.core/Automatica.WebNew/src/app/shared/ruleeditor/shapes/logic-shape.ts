@@ -18,7 +18,7 @@ export class LogicShapes {
                 } if (element.X < 0) {
                     element.X *= -1;
                 }
-                this._super($.extend({ id: element.key, bgColor: "#d7d7d7", alpha: 1, color: "#325862", stroke: 0, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false }, attr));
+                this._super($.extend({ id: element.key, bgColor: "#d7d7d7", alpha: 1, color: "#325862", stroke: 0, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, resizeable: false }, attr));
 
                 this.setUserData(element);
 
@@ -29,8 +29,9 @@ export class LogicShapes {
                     bgColor: "#457987",
                     radius: this.getRadius(),
                     padding: 10,
-                    resizeable: true,
-                    minWidth: 150
+                    resizeable: false,
+                    minWidth: 100,
+                    fontSize: 10
                 });
 
                 element.onNameChanged.subscribe((v) => {
@@ -46,7 +47,8 @@ export class LogicShapes {
                     radius: this.getRadius(),
                     padding: 10,
                     resizeable: true,
-                    minWidth: 150
+                    minWidth: 100,
+                    fontSize: 8
                 });
 
 
@@ -75,7 +77,7 @@ export class LogicShapes {
                         return this.classLabel.cachedMinWidth;
                     }
                 }
-                return 150;
+                return 100;
             },
             onDragEnd(x, y, shiftKey, ctrlKey) {
                 this._super();
@@ -140,7 +142,8 @@ export class LogicShapes {
                         bgColor: null,
                         fontColor: "#4a4a4a",
                         resizeable: true,
-                        padding: 5
+                        padding: 5,
+                        fontSize: 10
                     }, isInput ? 0 : 1, this.realParent);
 
                     let port = void 0;
@@ -222,9 +225,7 @@ export class LogicShapes {
                 } if (element.X < 0) {
                     element.X *= -1;
                 }
-                this._super($.extend({ id: element.key, bgColor: "#EEEEEE", alpha: 1, color: "#000000", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 150 }, attr));
-
-                this.setMinWidth(100);
+                this._super($.extend({ id: element.key, bgColor: "#EEEEEE", alpha: 1, color: "#000000", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 80 }, attr));
 
                 this.setUserData(element);
                 this.label = new draw2d.shape.basic.Label({
@@ -237,7 +238,9 @@ export class LogicShapes {
                     paddingLeft: 10,
                     paddingRight: 10,
                     fontColor: "#4a4a4a",
-                    resizeable: true
+                    resizeable: false,
+                    fontSize: 10,
+                    minWidth: 80
                 });
 
                 if (element.NodeInstance) {
@@ -247,8 +250,6 @@ export class LogicShapes {
                         }
                     });
                 }
-
-                this.label.setMinWidth(100);
 
                 if (element.Inputs.length > 0) {
                     const input = this.createPort("input");
@@ -292,7 +293,7 @@ export class LogicShapes {
                         paddingRight: 10,
                         fontColor: "lightgray",
                         fontSize: 9,
-                        resizeable: true
+                        resizeable: false
                     });
 
                     if (element.NodeInstance) {
@@ -368,9 +369,9 @@ export class LogicShapes {
             },
             getMinWidth() {
                 if (this.label) {
-                    return Math.max(this.label.cachedMinWidth, 100);;
+                    return Math.max(this.label.cachedMinWidth, 80);
                 }
-                return 100;
+                return 80;
             },
             onDragEnd(x, y, shiftKey, ctrlKey) {
                 this._super();
