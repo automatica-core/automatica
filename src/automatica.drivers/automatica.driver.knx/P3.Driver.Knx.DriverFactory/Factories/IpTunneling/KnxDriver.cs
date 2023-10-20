@@ -224,7 +224,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         }
 
-        private void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
+        private async void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
         {
             DriverContext.Logger.LogError($"Connection state changed to {_tunneling.ConnectionState}");
              if (_tunneling != null)
@@ -236,9 +236,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 {
                     DriverContext.Logger.LogDebug($"GW {Name} disconnected, try to reconnect");
 
-                    DisposeConnection();
-                    ConstructTunnelingConnection();
-                    StartConnection();
+                    await DisposeConnection();
+                    await ConstructTunnelingConnection();
+                    await StartConnection();
 
                     DriverContext.Logger.LogDebug($"State is now {_tunneling.ConnectionState}");
                 }
@@ -309,11 +309,23 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private async Task DisposeConnection()
         {
-            DriverContext.Logger.LogInformation($"Dispose KNX driver...");
-            _tunneling.ConnectionStateChanged -= _tunneling_ConnectionStateChanged;
-            _tunneling.GroupMessageReceived -= _tunneling_GroupMessageReceived;
-            await _tunneling.DisposeAsync();
-            DriverContext.Logger.LogInformation($"Dispose KNX driver...done");
+            await _semaphore.WaitAsync();
+            try
+            {
+                DriverContext.Logger.LogInformation($"Dispose KNX driver...");
+                _tunneling.ConnectionStateChanged -= _tunneling_ConnectionStateChanged;
+                _tunneling.GroupMessageReceived -= _tunneling_GroupMessageReceived;
+                await _tunneling.DisposeAsync();
+                DriverContext.Logger.LogInformation($"Dispose KNX driver...done");
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, "Error disposing connection properly....");
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)
