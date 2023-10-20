@@ -21,20 +21,25 @@
                     </dxi-item>
                     <dxi-item title="COMMON.FILE_LOGS" icon="file">
                         <div *dxTemplate>
-                            <dx-tree-list *ngIf="logFileTree" id="logFileTree" [dataSource]="logFileTree"
-                                itemsExpr="children" dataStructure="tree" [showRowLines]="true" [showBorders]="true"
-                                [columnAutoWidth]="true" [expandedRowKeys]="[1, 2]"
-                                (onSelectionChanged)="onSelectionChanged($event)">
-                                <dxi-column dataField="name" caption="Name"></dxi-column>
+                            <div class="grid-container">
+                                <dx-scroll-view [showScrollbar]="always">
+                                    <dx-tree-list *ngIf="logFileTree" id="logFileTree" [dataSource]="logFileTree"
+                                        itemsExpr="children" dataStructure="tree" [showRowLines]="true"
+                                        [showBorders]="true" [columnAutoWidth]="true" [expandedRowKeys]="[1, 2]"
+                                        (onSelectionChanged)="onSelectionChanged($event)" height="100%">
+                                        <dxi-column dataField="name" caption="Name"></dxi-column>
 
-                                <dxo-selection mode="single"></dxo-selection>
-                                <dxo-search-panel [visible]="true"></dxo-search-panel>
-                            </dx-tree-list>
+                                        <dxo-selection mode="single"></dxo-selection>
+                                        <dxo-search-panel [visible]="true"></dxo-search-panel>
+                                    </dx-tree-list>
+                                </dx-scroll-view>
+                            </div>
                         </div>
                     </dxi-item>
                     <div *dxTemplate="let item of 'title'">
                         <span title="{{item.title | translateAsync}}" class="nav-padding">
-                            <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true" [icon]="['fas', item.icon]">
+                            <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true"
+                                [icon]="['fas', item.icon]">
                             </fa-icon>
                             {{ item.title | translate }}</span>
 
@@ -43,22 +48,23 @@
                 </dx-tab-panel>
             </as-split-area>
             <as-split-area [size]="70">
+                <div class="grid-container">
+                    <dx-data-grid *ngIf="selectedFacility && selectedFacility.logs && selectedFacility.logs.length > 0"
+                        [dataSource]="selectedFacility.logs" [allowColumnReordering]="true" [allowColumnResizing]="true"
+                        [columnAutoWidth]="true" height="100%">
+                        <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc"
+                            dataField="timestamp" caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
+                        <dxi-column sortOrder="desc" dataField="log"
+                            caption="{{ 'COMMON.LOG' | translateAsync }}"></dxi-column>
 
-                <dx-data-grid *ngIf="selectedFacility && selectedFacility.logs && selectedFacility.logs.length > 0"
-                    [dataSource]="selectedFacility.logs" [allowColumnReordering]="true" [allowColumnResizing]="true"
-                    [columnAutoWidth]="true" height="100%">
-                    <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc" dataField="timestamp"
-                        caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
-                    <dxi-column sortOrder="desc" dataField="log"
-                        caption="{{ 'COMMON.LOG' | translateAsync }}"></dxi-column>
-
-                    <dxo-filter-row [visible]="true"></dxo-filter-row>
-                    <dxo-header-filter [visible]="true"></dxo-header-filter>
-                    <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxo-export [enabled]="true" [fileName]="selectedFacility.name"
-                        [allowExportSelectedData]="true"></dxo-export>
-                </dx-data-grid>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-header-filter [visible]="true"></dxo-header-filter>
+                        <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-export [enabled]="true" [fileName]="selectedFacility.name"
+                            [allowExportSelectedData]="true"></dxo-export>
+                    </dx-data-grid>
+                </div>
             </as-split-area>
         </as-split>
     </div>
