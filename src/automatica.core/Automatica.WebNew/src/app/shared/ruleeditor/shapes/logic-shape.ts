@@ -18,7 +18,20 @@ export class LogicShapes {
                 } if (element.X < 0) {
                     element.X *= -1;
                 }
-                this._super($.extend({ id: element.key, bgColor: "#d7d7d7", alpha: 1, color: "#325862", stroke: 0, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, resizeable: false }, attr));
+                this._super($.extend(
+                    {
+                        id: element.key,
+                        bgColor: "#d7d7d7",
+                        alpha: 1,
+                        color: "#325862",
+                        stroke: 0,
+                        radius: 0,
+                        x: element.X,
+                        y: element.Y,
+                        keepAspectRatio: false,
+                        resizeable: false,
+                        height: 25
+                    }, attr));
 
                 this.setUserData(element);
 
@@ -28,7 +41,7 @@ export class LogicShapes {
                     fontColor: "#000000",
                     bgColor: "#457987",
                     radius: this.getRadius(),
-                    padding: 10,
+                    padding: 5,
                     resizeable: false,
                     minWidth: 100,
                     fontSize: 10
@@ -45,10 +58,11 @@ export class LogicShapes {
                     fontColor: "#000000",
                     bgColor: "#d7d7d7",
                     radius: this.getRadius(),
-                    padding: 10,
+                    padding: 5,
                     resizeable: true,
                     minWidth: 100,
-                    fontSize: 8
+                    fontSize: 8,
+                    height: 20
                 });
 
 
@@ -141,9 +155,9 @@ export class LogicShapes {
                         radius: 0,
                         bgColor: null,
                         fontColor: "#4a4a4a",
-                        resizeable: true,
-                        padding: 5,
-                        fontSize: 10
+                        resizeable: false,
+                        padding: {top: 5, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5},
+                        fontSize: 8
                     }, isInput ? 0 : 1, this.realParent);
 
                     let port = void 0;
@@ -152,10 +166,12 @@ export class LogicShapes {
                         port = this.createPort("input", new logic.LogicInputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(3);
+                        port.setDiameter(8);
                     } else {
                         port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(1);
+                        port.setDiameter(8);
 
                         var dataLabel = new draw2d.shape.basic.Label({
                             text: portInstance.PortValue,

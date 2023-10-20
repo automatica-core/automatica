@@ -34,6 +34,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   name: string;
 
   _selectedItem: any[];
+
   @Input()
   public get selectedItems(): any[] {
     return this._selectedItem;
@@ -64,10 +65,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   public height: number;
 
-  
+
   @ViewChild("loadingPangel")
   loadingPangel: ElementRef;
-
+  router: any;
 
   constructor(private ruleEngineService: LogicEngineService,
     private dataHub: DataHubService,
@@ -77,6 +78,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     appService: AppService,
     private themeService: ThemeService) {
     super(notify, translate, appService);
+
+    this.router = new draw2d.layout.connection.ManhattanBridgedConnectionRouter();
+    this.linkService = new LinkService(this.page, this.translate, this.ruleEngineService, this.router);
   }
 
   notifyError(error: any) {
@@ -85,8 +89,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   async ngOnInit() {
 
-    
-    this.linkService = new LinkService(this.page, this.translate, this.ruleEngineService);
 
     super.registerEvent(this.ruleEngineService.add, (data: AddLogicData) => {
       if (data.pageId === this.page.ObjId) {
@@ -124,7 +126,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   ngAfterViewInit() {
     this.height = this.loadingPangel.nativeElement.clientHeight;
-    
+
     this.onInit();
   }
 
@@ -202,7 +204,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       }
       console.log(event);
     });
-    
+
   }
 
   onInit() {
@@ -261,7 +263,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     for (const link of data.Links) {
-      const c = new draw2d.Connection();
+      const c = new draw2d.Connection({ router: this.router, userData: link });
       c.setUserData(link);
       const sourcePort = this.getSourcePort(link.from, link.fromPort);
 
