@@ -80,7 +80,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.selectLogicPageById(pageId);
     const that = this;
 
-    this.route.params.subscribe(async (params) => {
+    await this.route.params.subscribe(async (params) => {
       that.selectLogicPageById(params.id);
     });
 

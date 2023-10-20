@@ -88,6 +88,8 @@
     "PASSWORD": "Password",
     "IMPORT_NODES": "Import",
     "IMPORT_NOTE": "Enter your password (if needed) prior selecting the file. After selecting the file press upload and the import will start",
+    "LIVE_LOGS": "Live logs",
+    "FILE_LOGS": "Datei logs",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {

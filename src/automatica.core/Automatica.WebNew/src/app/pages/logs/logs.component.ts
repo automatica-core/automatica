@@ -113,7 +113,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
         if (this.stop) {
           return;
         }
-        var facility: string = data[0];
+        let facility: string = data[0];
         const log = data[1];
 
         facility = facility.replaceAll("||sep||", "/");
@@ -136,13 +136,13 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   }
 
   async load() {
-    var logFiles = await this.logsService.getLogFiles();
+    let logFiles = await this.logsService.getLogFiles();
 
     this.logFileTree = [this.generateTreeFromPaths(logFiles)];
   }
 
   generateTreeFromPaths(paths: string[]): LogFile {
-    var key = 0;
+    let key = 0;
     const root: LogFile = { name: "root", isFile: false, children: [], path: "", key: key };
 
 
@@ -178,6 +178,10 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     }
 
     return root;
+  }
+
+  onTabSelectionChanged($event) {
+    this.selectedFacility = $event.addedItems[0];
   }
 
   async onSelectionChanged($event) {
