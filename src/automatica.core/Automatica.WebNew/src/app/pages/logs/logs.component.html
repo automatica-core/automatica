@@ -12,8 +12,10 @@
                         <div *dxTemplate>
                             <dx-list #logicPagesList [dataSource]="logFacilitiesArray" [repaintChangesOnly]="true"
                                 [selectedItems]="[selectedFacility]" height="90%" selectionMode="single"
-                                (onSelectionChanged)="onTabSelectionChanged($event)" showScrollbar="always" pageLoadMode="scrollBottom">
-                                <div *dxTemplate="let page of 'item'"> 
+                                (onSelectionChanged)="onTabSelectionChanged($event)" showScrollbar="always"
+                                [searchEnabled]="true"
+                                pageLoadMode="scrollBottom" searchExpr="name" searchMode="contains">
+                                <div *dxTemplate="let page of 'item'">
                                     <span>{{page.name}}</span>
                                 </div>
                             </dx-list>
