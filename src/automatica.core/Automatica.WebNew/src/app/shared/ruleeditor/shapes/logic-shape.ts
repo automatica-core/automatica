@@ -5,17 +5,80 @@ import { LinkService } from "../link.service";
 import { LogicEngineService, LogicUpdateScope } from "src/app/services/logicengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
+import { ILogicInfoHandler } from "../ilogicInfoHandler";
 declare let draw2d: any;
 declare let $: any;
 
 export class LogicShapes {
-    public static addShape(logic, ruleEngineService: LogicEngineService, errorHandler: ILogicErrorHandler) {
+    public static addShape(logic, ruleEngineService: LogicEngineService, errorHandler: ILogicErrorHandler, infoHandler: ILogicInfoHandler) {
+
+        logic.LogicInfoHeader = draw2d.shape.icon.Talkq.extend({
+            init: function (attr, setter, getter) {
+                this._super($.extend({}, attr), setter, getter);
+
+                this.on("click", () => {
+                    infoHandler.showInfoForLogic(logic);
+                });
+            }
+
+        
+        });
+
+        logic.LogicHeader = draw2d.shape.layout.FlexGridLayout.extend({
+            text: void 0,
+
+            init: function (attr, setter, getter) {
+                this._super($.extend({
+                    columns: "90px, 10px",
+                    rows: "grow",
+                    valign: "center",
+                    bgColor: "#457987",
+                    stroke: 0
+                }, attr),
+                    setter,
+                    getter);
+
+                this.classLabel = new logic.Label({
+                    text: this.text,
+                    stroke: 0,
+                    fontColor: "#000000",
+                    bgColor: "#457987",
+                    radius: this.getRadius(),
+                    padding: 5,
+                    resizeable: false,
+                    minWidth: 90,
+                    fontSize: 10
+                });
+
+                this.add(this.classLabel,
+                    {
+                        row: 0, col: 0,
+                        valign: "center",
+                    });
+                this.add(new logic.LogicInfoHeader(
+                    {
+                        width: 10,
+                        height: 10,
+                        bgColor: "#457987",
+                        padding: 5,
+                    }
+                ), {
+                    row: 0, col: 1,
+                    valign: "center",
+                });
+            },
+
+            setText: function setText(text) {
+                this.classLabel.setText(text);
+            }
+        });
+
 
         logic.LogicShape = draw2d.shape.layout.VerticalLayout.extend({
             init: function (attr, element: RuleInstance, linkService: LinkService) {
                 if (element.Y < 0) {
                     element.Y *= -1;
-                } 
+                }
                 if (element.X < 0) {
                     element.X *= -1;
                 }
@@ -37,32 +100,11 @@ export class LogicShapes {
                 this.setUserData(element);
 
 
-
-                this.classLabel = new logic.Label({
-                    text: element.Name,
-                    stroke: 0,
-                    fontColor: "#000000",
-                    bgColor: "#457987",
-                    radius: this.getRadius(),
-                    padding: 5,
-                    resizeable: false,
-                    minWidth: 100,
-                    fontSize: 10
-                });
-
-                // let headerLayout = draw2d.shape.layout.FlexGridLayout.extend({
-                //     init: function (attr, setter, getter) {
-                //         this._super($.extend({ columns: "grow, 10px" }, attr), setter, getter);
-
-                //         this.add(this.classLabel, { row: 0, col: 0 });
-                //         this.add(new draw2d.shape.icon.Talkq({ width: 50, height: 30 }), { row: 0, col: 1 });
-                //     }
-                // });
-
-                // this.headerLayout = headerLayout();
+                this.headerLayout = new logic.LogicHeader();
+                this.headerLayout.setText(element.Name);
 
                 element.onNameChanged.subscribe((v) => {
-                    this.classLabel.setText(v);
+                    this.headerLayout.setText(v);
                 });
 
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
@@ -94,7 +136,7 @@ export class LogicShapes {
                     }
                 });
 
-                this.add(this.classLabel);
+                this.add(this.headerLayout);
                 this.add(this.logicName);
 
                 this.add(new logic.PortShape({}, element, this, linkService));
@@ -187,7 +229,7 @@ export class LogicShapes {
                         port.setConnectionDirection(1);
                         port.setDiameter(8);
 
-                        var dataLabel = new draw2d.shape.basic.Label({
+                        let dataLabel = new draw2d.shape.basic.Label({
                             text: portInstance.PortValue,
                             textLength: "100%",
                             stroke: 0,
@@ -312,7 +354,7 @@ export class LogicShapes {
                     output.setName(element.Outputs[0].PortId);
                     output.setId(element.Outputs[0].PortId);
 
-                    var dataLabel = new draw2d.shape.basic.Label({
+                    let dataLabel = new draw2d.shape.basic.Label({
                         text: "",
                         textLength: "100%",
                         stroke: 0,

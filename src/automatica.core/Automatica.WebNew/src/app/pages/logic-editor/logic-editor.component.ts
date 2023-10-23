@@ -23,7 +23,7 @@ import { DataHubService } from "src/app/base/communication/hubs/data-hub.service
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import DataSource from "devextreme/data/data_source";
-import { DxListComponent } from "devextreme-angular";
+import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
 
 @Component({
@@ -49,10 +49,14 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   @ViewChild("logicPagesList")
   logicPageList: DxListComponent;
 
+  @ViewChild("infoPopup")
+  popupLearnMode: DxPopupComponent;
+
   areaInstances: AreaInstance[] = [];
   categoryInstances: CategoryInstance[] = [];
   userGroups: UserGroup[] = [];
 
+  public infoPopupVisible: boolean = false;
 
   constructor(private ruleEngineService: LogicEngineService,
     private configService: ConfigService,
@@ -72,6 +76,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     appService.setAppTitle("RULEENGINE.NAME");
   }
 
+  onPopupHiding($event) {
+    this.infoPopupVisible = false;
+  }
+
   async ngOnInit() {
 
     await this.loadData();
@@ -79,6 +87,12 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     const pageId = this.route.snapshot.params["id"];
     this.selectLogicPageById(pageId);
     const that = this;
+
+    super.registerEvent(this.ruleEngineService.showInfo, async (a) => {
+      this.infoPopupVisible = true;
+      this.changeRef.detectChanges();
+      await this.popupLearnMode.instance.show();
+    });
 
     await this.route.params.subscribe(async (params) => {
       that.selectLogicPageById(params.id);

@@ -17,6 +17,7 @@ import { AppService } from "src/app/services/app.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { Subscription } from "rxjs";
 import { ILogicErrorHandler } from "./ilogicErrorHandler";
+import { ILogicInfoHandler } from "./ilogicInfoHandler";
 
 declare var draw2d: any;
 
@@ -26,7 +27,7 @@ declare var draw2d: any;
   styleUrls: ["./ruleeditor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy, ILogicErrorHandler {
+export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy, ILogicErrorHandler, ILogicInfoHandler {
 
   @Input()
   page: RulePage;
@@ -64,7 +65,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   private themeChangedSubDraw2d: Subscription;
 
   public height: number;
-
+  public infoPopupVisible: boolean = false;
 
   @ViewChild("loadingPangel")
   loadingPangel: ElementRef;
@@ -82,6 +83,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   notifyError(error: any) {
     this.handleError(error);
+  }
+
+  showInfoForLogic(logic: RuleInstance) {
+    this.ruleEngineService.showInfo.emit(logic);
   }
 
   async ngOnInit() {
@@ -172,7 +177,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   init(): any {
 
-    LogicShapes.addShape(this.logic, this.ruleEngineService, this);
+    LogicShapes.addShape(this.logic, this.ruleEngineService, this, this);
     LogicLocators.addLocators(this.logic);
     LogicLables.addLables(this.logic);
 
@@ -206,7 +211,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   onInit() {
     this.init();
-    
+
     const router = new draw2d.layout.connection.ManhattanBridgedConnectionRouter();
     this.linkService = new LinkService(this.page, this.translate, this.ruleEngineService, router);
     this.loadModel(this.page, router);

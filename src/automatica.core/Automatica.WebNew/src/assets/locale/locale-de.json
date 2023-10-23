@@ -89,6 +89,7 @@
     "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
     "LIVE_LOGS": "Live logs",
     "FILE_LOGS": "Datei logs",
+    "INFO": "Information",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {

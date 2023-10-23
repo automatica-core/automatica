@@ -22,11 +22,11 @@
                                 [isLoading]="isLoading">
                             </p3-config-tree>
                         </div>
-                        <!-- ... -->
                     </dxi-item>
                     <dxi-item title="COMMON.LOGIC_PAGES" icon="play">
                         <div *dxTemplate>
-                            <dx-list #logicPagesList [dataSource]="pagesDataSource" [selectedItems]="[selectedPage]" height="90%" selectionMode="single"
+                            <dx-list #logicPagesList [dataSource]="pagesDataSource" [selectedItems]="[selectedPage]"
+                                height="90%" selectionMode="single"
                                 (onSelectionChanged)="onTabSelectionChanged($event)">
                                 <div *dxTemplate="let page of 'item'">
                                     <span>{{page.Name}}</span>
@@ -54,24 +54,21 @@
                             <p3-ruleeditor class="h-100" (selectedItemsChanged)="onSelectedItemsChanged($event)"
                                 [page]="page" id="{{page.ObjId}}" name="{{page.Name}}"
                                 [isLoading]="isLoading"></p3-ruleeditor>
-
                         </dx-scroll-view>
                     </ng-container>
-                    <!-- <dx-tab-panel #tabPanel height="100%" width="100%" [dataSource]="pages"
-                        [(selectedIndex)]="selectedPageIndex" [loop]="false" [animationEnabled]="false"
-                        [swipeEnabled]="false" [showNavButtons]="true"
-                        >
-                        <div *dxTemplate="let page of 'title'">
-                            <span>{{page.Name}}</span>
-                        </div>
-                        <div *dxTemplate="let page of 'item'">
-                            <p3-ruleeditor (selectedItemsChanged)="onSelectedItemsChanged($event)" [page]="page"
-                                id="{{page.ObjId}}" name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
-                        </div>
-                    </dx-tab-panel> -->
                 </div>
             </as-split-area>
 
         </as-split>
     </div>
 </div>
+
+
+
+<dx-popup #infoPopup [width]="'300px'" [height]="'300px'" [showTitle]="true" [hideOnOutsideClick]="true"
+    [title]="'COMMON.INFO' | translateAsync" [(visible)]="infoPopupVisible"
+    (onHiding)="onPopupHiding($event)">
+    <div *dxTemplate="let data of 'content'">
+        TODO!
+    </div>
+</dx-popup>
