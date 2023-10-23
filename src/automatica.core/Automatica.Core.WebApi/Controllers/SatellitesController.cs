@@ -53,40 +53,45 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<Slave>> SaveInstances([FromBody]IList<Slave> instances)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                foreach (var instance in instances)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    var existingArea = await DbContext.Slaves.SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
+                    foreach (var instance in instances)
+                    {
+                        var existingArea = await DbContext.Slaves.SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
 
-                    if (existingArea == null)
-                    {
-                        await DbContext.Slaves.AddAsync(instance);
+                        if (existingArea == null)
+                        {
+                            await DbContext.Slaves.AddAsync(instance);
+                        }
+                        else
+                        {
+                            DbContext.Entry(existingArea).State = EntityState.Detached;
+                            DbContext.Slaves.Update(instance);
+                        }
                     }
-                    else
-                    {
-                        DbContext.Entry(existingArea).State = EntityState.Detached;
-                        DbContext.Slaves.Update(instance);
-                    }
+
+                    var removedNodes = from c in DbContext.Slaves
+                        where !(from o in instances select o.ObjId).Contains(c.ObjId)
+                        select c;
+                    var removedList = removedNodes.ToList();
+                    DbContext.RemoveRange(removedList);
+
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
                 }
 
-                var removedNodes = from c in DbContext.Slaves
-                                   where !(from o in instances select o.ObjId).Contains(c.ObjId)
-                                   select c;
-                var removedList = removedNodes.ToList();
-                DbContext.RemoveRange(removedList);
-
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not save data");
-                await transaction.RollbackAsync();
-            }
-
-            return GetAll();
+                return GetAll();
+            });
         }
 
     }

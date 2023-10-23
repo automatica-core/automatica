@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.UserHelper;
@@ -41,99 +42,47 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpDelete]
         [Route("usergroup/{id}")]
-        public void DeleteUserGroup(Guid id)
+        public async Task DeleteUserGroup(Guid id)
         {
-            using var dbContext = new AutomaticaContext(_config);
-            var transaction = dbContext.Database.BeginTransaction();
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.Execute(async
+                () =>
+            {
+                await using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
 
-            try
-            {
-                var userGroup = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == id);
-                if (userGroup != null)
+                try
                 {
-                    dbContext.UserGroups.Remove(userGroup);
-                    transaction.Commit();
-                    dbContext.SaveChanges();
-                    _userGroupsCache.Clear();
+                    var userGroup = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == id);
+                    if (userGroup != null)
+                    {
+                        dbContext.UserGroups.Remove(userGroup);
+                        await transaction.CommitAsync();
+                        await dbContext.SaveChangesAsync();
+                        _userGroupsCache.Clear();
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not delete usergroup");
-                transaction.Rollback();
-            }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not delete usergroup");
+                    await transaction.RollbackAsync();
+                }
+            });
         }
 
         [HttpPost]
         [Route("usergroup")]
-        public UserGroup SaveUserGroup([FromBody] UserGroup instance)
+        public async Task<UserGroup> SaveUserGroup([FromBody] UserGroup instance)
         {
-            using var dbContext = new AutomaticaContext(_config);
-            var transaction = dbContext.Database.BeginTransaction();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-
-                var existing = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
-                var roles = instance.InverseThis2Roles;
-                instance.InverseThis2Roles = null;
-
-                if (existing == null)
+                await using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    dbContext.UserGroups.Add(instance);
-                }
-                else
-                {
-                    dbContext.Entry(existing).State = EntityState.Detached;
-                    dbContext.UserGroups.Update(instance);
-                }
 
-                foreach (var role in roles)
-                {
-                    var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a =>
-                        a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
-
-                    if (rolesExisting != null)
-                    {
-                        continue;
-                    }
-
-                    dbContext.UserGroup2Roles.Add(role);
-                }
-
-                if (instance.InverseThis2Roles != null)
-                {
-                    var removedUserRoles = from c in dbContext.UserGroup2Roles
-                        where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
-                        select c;
-
-                    var removedUserRolesList = removedUserRoles.ToList();
-                    dbContext.RemoveRange(removedUserRolesList);
-                }
-
-                dbContext.SaveChanges();
-                transaction.Commit();
-                _userGroupsCache.Clear();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not save data");
-                transaction.Rollback();
-            }
-
-            return GetUserGroup(instance.ObjId);
-        }
-
-
-        [HttpPost]
-        [Route("usergroups")]
-        public ICollection<UserGroup> SaveUserGroups([FromBody]IList<UserGroup> instances)
-        {
-            using var dbContext = new AutomaticaContext(_config);
-            var transaction = dbContext.Database.BeginTransaction();
-            try
-            {
-                foreach (var instance in instances)
-                {
                     var existing = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
                     var roles = instance.InverseThis2Roles;
                     instance.InverseThis2Roles = null;
@@ -150,7 +99,8 @@ namespace Automatica.Core.WebApi.Controllers
 
                     foreach (var role in roles)
                     {
-                        var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a => a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
+                        var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a =>
+                            a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
 
                         if (rolesExisting != null)
                         {
@@ -163,31 +113,98 @@ namespace Automatica.Core.WebApi.Controllers
                     if (instance.InverseThis2Roles != null)
                     {
                         var removedUserRoles = from c in dbContext.UserGroup2Roles
-                                               where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
-                                               select c;
+                            where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
+                            select c;
 
                         var removedUserRolesList = removedUserRoles.ToList();
                         dbContext.RemoveRange(removedUserRolesList);
                     }
+
+                    await dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    _userGroupsCache.Clear();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
                 }
 
-                var removedNodes = from c in dbContext.UserGroups
-                    where !(from o in instances select o.ObjId).Contains(c.ObjId)
-                    select c;
-                var removedList = removedNodes.ToList();
-                dbContext.RemoveRange(removedList);
+                return GetUserGroup(instance.ObjId);
+            });
+        }
 
-                dbContext.SaveChanges();
-                transaction.Commit();
-                _userGroupsCache.Clear();
-            }
-            catch (Exception e)
+
+        [HttpPost]
+        [Route("usergroups")]
+        public async Task<ICollection<UserGroup>> SaveUserGroups([FromBody]IList<UserGroup> instances)
+        {
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                _logger.LogError(e, "Could not save data");
-                transaction.Rollback();
-            }
+                await using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    foreach (var instance in instances)
+                    {
+                        var existing = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
+                        var roles = instance.InverseThis2Roles;
+                        instance.InverseThis2Roles = null;
 
-            return GetUserGroups();
+                        if (existing == null)
+                        {
+                            dbContext.UserGroups.Add(instance);
+                        }
+                        else
+                        {
+                            dbContext.Entry(existing).State = EntityState.Detached;
+                            dbContext.UserGroups.Update(instance);
+                        }
+
+                        foreach (var role in roles)
+                        {
+                            var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a =>
+                                a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
+
+                            if (rolesExisting != null)
+                            {
+                                continue;
+                            }
+
+                            dbContext.UserGroup2Roles.Add(role);
+                        }
+
+                        if (instance.InverseThis2Roles != null)
+                        {
+                            var removedUserRoles = from c in dbContext.UserGroup2Roles
+                                where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
+                                select c;
+
+                            var removedUserRolesList = removedUserRoles.ToList();
+                            dbContext.RemoveRange(removedUserRolesList);
+                        }
+                    }
+
+                    var removedNodes = from c in dbContext.UserGroups
+                        where !(from o in instances select o.ObjId).Contains(c.ObjId)
+                        select c;
+                    var removedList = removedNodes.ToList();
+                    dbContext.RemoveRange(removedList);
+
+                    await dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    _userGroupsCache.Clear();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
+                }
+
+                return GetUserGroups();
+            });
         }
 
         [HttpGet]
@@ -221,164 +238,179 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpDelete]
         [Route("user/{id}")]
-        public void DeleteUser(Guid id)
+        public async Task DeleteUser(Guid id)
         {
-            using var dbContext = new AutomaticaContext(_config);
-            var transaction = dbContext.Database.BeginTransaction();
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.Execute(async
+                () =>
+            {
+                await using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
 
-            try
-            {
-                var user = dbContext.Users.SingleOrDefault(a => a.ObjId == id);
-                if (user != null)
+                try
                 {
-                    dbContext.Users.Remove(user);
-                    transaction.Commit();
-                    dbContext.SaveChanges();
-                    _userCache.Clear();
+                    var user = dbContext.Users.SingleOrDefault(a => a.ObjId == id);
+                    if (user != null)
+                    {
+                        dbContext.Users.Remove(user);
+                        await transaction.CommitAsync();
+                        await dbContext.SaveChangesAsync();
+                        _userCache.Clear();
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not delete user");
-                transaction.Rollback();
-            }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not delete user");
+                    await transaction.RollbackAsync();
+                }
+            });
         }
 
         [HttpPost]
         [Route("user")]
-        public User SaveUser([FromBody] User user)
+        public async Task<User> SaveUser([FromBody] User user)
         {
-            using var dbContext = new AutomaticaContext(_config);
-            var transaction = dbContext.Database.BeginTransaction();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var user2Groups = user.InverseThis2UserGroups;
-                var roles = user.InverseThis2Roles;
-                user.InverseThis2UserGroups = null;
-                user.InverseThis2Roles = null;
-
-
-                var existing = dbContext.Users.SingleOrDefault(a => a.ObjId == user.ObjId);
-
-                if (user.Password != null && user.Password == user.PasswordConfirm)
+                await using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    var salt = UserHelper.GenerateNewSalt();
-                    user.Password = UserHelper.HashPassword(user.Password, salt);
-                    user.Salt = salt;
-                    user.PasswordConfirm = null;
-                }
-                else if (existing != null)
-                {
-                    user.Password = existing.Password;
-                    user.Salt = existing.Salt;
-                }
+                    var user2Groups = user.InverseThis2UserGroups;
+                    var roles = user.InverseThis2Roles;
+                    user.InverseThis2UserGroups = null;
+                    user.InverseThis2Roles = null;
 
-                if (existing == null)
-                {
-                    if (String.IsNullOrEmpty(user.Password))
+
+                    var existing = dbContext.Users.SingleOrDefault(a => a.ObjId == user.ObjId);
+
+                    if (user.Password != null && user.Password == user.PasswordConfirm)
                     {
-                        user.Password = UserHelper.GenerateNewSalt();
-                        user.Salt = UserHelper.GenerateNewSalt();
+                        var salt = UserHelper.GenerateNewSalt();
+                        user.Password = UserHelper.HashPassword(user.Password, salt);
+                        user.Salt = salt;
+                        user.PasswordConfirm = null;
+                    }
+                    else if (existing != null)
+                    {
+                        user.Password = existing.Password;
+                        user.Salt = existing.Salt;
                     }
 
-                    dbContext.Users.Add(user);
-                }
-                else
-                {
-                    dbContext.Entry(existing).State = EntityState.Detached;
-                    dbContext.Users.Update(user);
-                }
-
-                foreach (var user2Group in user2Groups)
-                {
-                    var user2GroupExisting = dbContext.User2Groups.SingleOrDefault(a =>
-                        a.This2User == user2Group.This2User && a.This2UserGroup == user2Group.This2UserGroup);
-
-                    if (user2GroupExisting != null)
+                    if (existing == null)
                     {
-                        continue;
+                        if (String.IsNullOrEmpty(user.Password))
+                        {
+                            user.Password = UserHelper.GenerateNewSalt();
+                            user.Salt = UserHelper.GenerateNewSalt();
+                        }
+
+                        dbContext.Users.Add(user);
+                    }
+                    else
+                    {
+                        dbContext.Entry(existing).State = EntityState.Detached;
+                        dbContext.Users.Update(user);
                     }
 
-                    dbContext.User2Groups.Add(user2Group);
-                }
-
-                var removedUserGroups = from c in dbContext.User2Groups
-                    where !(from o in user2Groups select o.This2UserGroup).Contains(c.This2UserGroup) &&
-                          c.This2User == user.ObjId
-                    select c;
-
-                var removedUserGroupsList = removedUserGroups.ToList();
-                dbContext.RemoveRange(removedUserGroupsList);
-
-
-                foreach (var role in roles)
-                {
-                    var rolesExisting = dbContext.User2Roles.SingleOrDefault(a =>
-                        a.This2User == role.This2User && a.This2Role == role.This2Role);
-
-                    if (rolesExisting != null)
+                    foreach (var user2Group in user2Groups)
                     {
-                        continue;
+                        var user2GroupExisting = dbContext.User2Groups.SingleOrDefault(a =>
+                            a.This2User == user2Group.This2User && a.This2UserGroup == user2Group.This2UserGroup);
+
+                        if (user2GroupExisting != null)
+                        {
+                            continue;
+                        }
+
+                        dbContext.User2Groups.Add(user2Group);
                     }
 
-                    dbContext.User2Roles.Add(role);
+                    var removedUserGroups = from c in dbContext.User2Groups
+                        where !(from o in user2Groups select o.This2UserGroup).Contains(c.This2UserGroup) &&
+                              c.This2User == user.ObjId
+                        select c;
+
+                    var removedUserGroupsList = removedUserGroups.ToList();
+                    dbContext.RemoveRange(removedUserGroupsList);
+
+
+                    foreach (var role in roles)
+                    {
+                        var rolesExisting = dbContext.User2Roles.SingleOrDefault(a =>
+                            a.This2User == role.This2User && a.This2Role == role.This2Role);
+
+                        if (rolesExisting != null)
+                        {
+                            continue;
+                        }
+
+                        dbContext.User2Roles.Add(role);
+                    }
+
+
+                    var removedUserRoles = from c in dbContext.User2Roles
+                        where !(from o in roles select o.This2Role).Contains(c.This2Role) &&
+                              c.This2User == user.ObjId
+                        select c;
+
+                    var removedUserRolesList = removedUserRoles.ToList();
+                    dbContext.RemoveRange(removedUserRolesList);
+
+
+                    _userCache.Clear();
+                    await dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
                 }
 
-
-                var removedUserRoles = from c in dbContext.User2Roles
-                    where !(from o in roles select o.This2Role).Contains(c.This2Role) &&
-                          c.This2User == user.ObjId
-                    select c;
-
-                var removedUserRolesList = removedUserRoles.ToList();
-                dbContext.RemoveRange(removedUserRolesList);
-
-
-                _userCache.Clear();
-                dbContext.SaveChanges();
-                transaction.Commit();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not save data");
-                transaction.Rollback();
-            }
-
-            return GetUser(user.ObjId);
+                return GetUser(user.ObjId);
+            });
         }
 
 
         [HttpPost]
         [Route("users")]
-        public ICollection<UserGroup> SaveUsers([FromBody] IList<User> users)
+        public async Task<ICollection<UserGroup>> SaveUsers([FromBody] IList<User> users)
         {
             foreach (var user in users)
             {
-                SaveUser(user);
+                await SaveUser(user);
             }
 
-            using var dbContext = new AutomaticaContext(_config);
-            var transaction = dbContext.Database.BeginTransaction();
-
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var removedNodes = from c in dbContext.Users
-                    where !(from o in users select o.ObjId).Contains(c.ObjId)
-                    select c;
-                var removedList = removedNodes.ToList();
-                dbContext.RemoveRange(removedList);
+                using var dbContext = new AutomaticaContext(_config);
+                var transaction = await dbContext.Database.BeginTransactionAsync();
 
-                dbContext.SaveChanges();
-                transaction.Commit();
-                _userCache.Clear();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not save data");
-                transaction.Rollback();
-            }
+                try
+                {
+                    var removedNodes = from c in dbContext.Users
+                        where !(from o in users select o.ObjId).Contains(c.ObjId)
+                        select c;
+                    var removedList = removedNodes.ToList();
+                    dbContext.RemoveRange(removedList);
 
-            return GetUserGroups();
+                    await dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    _userCache.Clear();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
+                }
+
+                return GetUserGroups();
+            });
         }
     }
 }

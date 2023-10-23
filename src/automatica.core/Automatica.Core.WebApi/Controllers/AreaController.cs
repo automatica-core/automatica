@@ -219,43 +219,47 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<AreaInstance>> SaveInstances([FromBody]IEnumerable<AreaInstance> areas)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var areaInstances = areas as AreaInstance[] ?? areas.ToArray();
-                var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
-                foreach (var area in areaInstances)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    await SaveAreaInstanceRec(area);
+                    var areaInstances = areas as AreaInstance[] ?? areas.ToArray();
+                    var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
+                    foreach (var area in areaInstances)
+                    {
+                        await SaveAreaInstanceRec(area);
+                    }
+
+                    await DbContext.SaveChangesAsync();
+
+
+
+                    var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()
+                        where !(from o in flatList select o.ObjId).Contains(c.ObjId)
+                        select c;
+                    var removedAreasList = removedNodes.ToList();
+                    DbContext.RemoveRange(removedAreasList);
+                    removedAreasList.ForEach(a => { _areaCache.Remove(a.ObjId); });
+
+
+                    await DbContext.SaveChangesAsync(true);
+                    await transaction.CommitAsync();
                 }
-
-                await DbContext.SaveChangesAsync();
-
-
-
-                var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()
-                    where !(from o in flatList select o.ObjId).Contains(c.ObjId)
-                    select c;
-                var removedAreasList = removedNodes.ToList();
-                DbContext.RemoveRange(removedAreasList);
-                removedAreasList.ForEach(a => { _areaCache.Remove(a.ObjId); });
-
-
-                await DbContext.SaveChangesAsync(true);
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not save data");
-                await transaction.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                _areaCache.Clear();
-            }
-
-            return GetInstances();
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                finally
+                {
+                    _areaCache.Clear();
+                }
+                return GetInstances();
+            });
         }
 
        

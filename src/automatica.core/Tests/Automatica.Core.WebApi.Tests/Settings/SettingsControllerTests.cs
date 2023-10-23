@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
 using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Tests.Base;
@@ -17,7 +18,7 @@ namespace Automatica.Core.WebApi.Tests.Settings
         }
 
         [Fact]
-        public void SaveSettings()
+        public async Task SaveSettings()
         {
             var settings = Controller.LoadSettings().ToList();
 
@@ -26,7 +27,7 @@ namespace Automatica.Core.WebApi.Tests.Settings
 
             cloudUrlSetting.ValueText = "my-new-test-url";
 
-            var savedSettings = Controller.SaveSettings(settings);
+            var savedSettings = await Controller.SaveSettings(settings);
 
             Assert.Equal(cloudUrlSetting.ValueText, savedSettings.First(a => a.ValueKey == "cloudUrl").ValueText);
         }
