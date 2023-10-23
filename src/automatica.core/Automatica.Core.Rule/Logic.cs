@@ -70,7 +70,8 @@ namespace Automatica.Core.Logic
 
             foreach (var value in _inputValueDictionary)
             {
-                ret.Add($"{value.Key.ObjId}", value.Value);
+                if(!ret.ContainsKey($"{value.Key.ObjId}"))
+                    ret.Add($"{value.Key.ObjId}", value.Value);
             }
             return ret;
         }
