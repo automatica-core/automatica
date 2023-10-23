@@ -41,7 +41,7 @@ namespace Automatica.Driver.ShellyFactory
             factory.CreateNodeTemplate(DriverGuid, "SHELLY.NAME", "SHELLY.DESCRIPTION", "SHELLY", GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet),
                 DriverGuid, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
 
-            factory.CreatePropertyTemplate(new Guid("b6b5e4ff-8511-44f4-aceb-bd80d01a141b"), "SHELLY.SCAN.NAME", "SHELLY.SCAN.DESCRIPTION",
+            factory.CreatePropertyTemplate(new Guid("fb92c117-9a38-46f8-8f14-ade2d2b1c26a"), "SHELLY.SCAN.NAME", "SHELLY.SCAN.DESCRIPTION",
                 "scan", PropertyTemplateType.Scan, DriverGuid, "COMMON.CATEGORY.DISCOVERY", true, false, "", null, 0,
                 0);
 
