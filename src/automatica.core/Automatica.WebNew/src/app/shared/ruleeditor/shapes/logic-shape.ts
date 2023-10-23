@@ -5,8 +5,8 @@ import { LinkService } from "../link.service";
 import { LogicEngineService, LogicUpdateScope } from "src/app/services/logicengine.service";
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
-declare var draw2d: any;
-declare var $: any;
+declare let draw2d: any;
+declare let $: any;
 
 export class LogicShapes {
     public static addShape(logic, ruleEngineService: LogicEngineService, errorHandler: ILogicErrorHandler) {
@@ -15,7 +15,8 @@ export class LogicShapes {
             init: function (attr, element: RuleInstance, linkService: LinkService) {
                 if (element.Y < 0) {
                     element.Y *= -1;
-                } if (element.X < 0) {
+                } 
+                if (element.X < 0) {
                     element.X *= -1;
                 }
                 this._super($.extend(
@@ -35,6 +36,8 @@ export class LogicShapes {
 
                 this.setUserData(element);
 
+
+
                 this.classLabel = new logic.Label({
                     text: element.Name,
                     stroke: 0,
@@ -46,6 +49,17 @@ export class LogicShapes {
                     minWidth: 100,
                     fontSize: 10
                 });
+
+                // let headerLayout = draw2d.shape.layout.FlexGridLayout.extend({
+                //     init: function (attr, setter, getter) {
+                //         this._super($.extend({ columns: "grow, 10px" }, attr), setter, getter);
+
+                //         this.add(this.classLabel, { row: 0, col: 0 });
+                //         this.add(new draw2d.shape.icon.Talkq({ width: 50, height: 30 }), { row: 0, col: 1 });
+                //     }
+                // });
+
+                // this.headerLayout = headerLayout();
 
                 element.onNameChanged.subscribe((v) => {
                     this.classLabel.setText(v);
@@ -156,7 +170,7 @@ export class LogicShapes {
                         bgColor: null,
                         fontColor: "#4a4a4a",
                         resizeable: false,
-                        padding: {top: 5, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5},
+                        padding: { top: 5, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5 },
                         fontSize: 8
                     }, isInput ? 0 : 1, this.realParent);
 

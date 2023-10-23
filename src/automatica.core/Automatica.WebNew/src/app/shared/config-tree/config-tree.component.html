@@ -28,7 +28,7 @@
                             </span>
                         </ng-container>
                         <ng-container
-                            *ngIf="data.data.State == NodeInstanceState.UnknownError || data.data.State == NodeInstanceState.Unknown">
+                            *ngIf="!data.data.IsAnyDisabled && (data.data.State == NodeInstanceState.UnknownError || data.data.State == NodeInstanceState.Unknown)">
                             <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
                                 <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNKNOWN.NAME</span><span>
                                     <fa-icon icon="question" style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
@@ -43,7 +43,7 @@
                                 </div>
                             </dx-popover>
                         </ng-container>
-                        <ng-container *ngIf="data.data.State == NodeInstanceState.OutOfDataPoints">
+                        <ng-container *ngIf="!data.data.IsAnyDisabled && data.data.State == NodeInstanceState.OutOfDataPoints">
                             <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
                                 <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.OUTOFLICENSE.NAME</span><span>
                                     <fa-icon icon="question" style="margin-left: 5px; margin-right: 2px;"></fa-icon>)
@@ -58,7 +58,7 @@
                             </dx-popover>
                         </ng-container>
 
-                        <ng-container *ngIf="data.data.State == NodeInstanceState.OutOfSatelliteLicenses">
+                        <ng-container *ngIf="!data.data.IsAnyDisabled && data.data.State == NodeInstanceState.OutOfSatelliteLicenses">
                             <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
                                 <span>(</span><span
                                     translate>COMMON.NODEINSTANCE.STATE.OUT_OF_SATELLITE_LICENSES.NAME</span><span>
@@ -75,7 +75,7 @@
                             </dx-popover>
                         </ng-container>
 
-                        <ng-container *ngIf="data.data.State == NodeInstanceState.Unloaded">
+                        <ng-container *ngIf="!data.data.IsAnyDisabled && data.data.State == NodeInstanceState.Unloaded">
                             <span class="node-instance-error" id="unknown_error_id-{{data.data.Id}}">
                                 <span>(</span><span translate>COMMON.NODEINSTANCE.STATE.UNLOADED.NAME</span><span>
                                     <fa-icon icon="question"></fa-icon>) </span>
