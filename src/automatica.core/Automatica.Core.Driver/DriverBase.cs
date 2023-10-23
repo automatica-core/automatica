@@ -89,6 +89,7 @@ namespace Automatica.Core.Driver
                 ChildrensCreated += 1;
                 if (driverNode == null)
                 {
+                    DriverContext.Logger.LogError($"Could not create node name: {node.Name}, objId: {node.ObjId}, templateId: {node.This2NodeTemplateNavigation.ObjId}");
                     continue;
                 }
                 ChildrenCreated(driverNode);
