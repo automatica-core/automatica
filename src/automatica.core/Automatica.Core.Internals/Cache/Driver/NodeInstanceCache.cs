@@ -274,14 +274,15 @@ namespace Automatica.Core.Internals.Cache.Driver
             _allCache.Remove(existingNode.ObjId);
             if (existingNode.This2ParentNodeInstance.HasValue)
             {
-                var parent = _allCache[existingNode.This2ParentNodeInstance.Value];
-
-                if (parent.InverseThis2ParentNodeInstanceNavigation != null)
+                if (existingNode.This2ParentNodeInstance.HasValue && _allCache.TryGetValue(existingNode.This2ParentNodeInstance.Value, out var parent))
                 {
-                    var parentExistingChild = parent.InverseThis2ParentNodeInstanceNavigation
-                        .Find(a => a.ObjId == existingNode.ObjId);
+                    if (parent.InverseThis2ParentNodeInstanceNavigation != null)
+                    {
+                        var parentExistingChild = parent.InverseThis2ParentNodeInstanceNavigation
+                            .Find(a => a.ObjId == existingNode.ObjId);
 
-                    parent.InverseThis2ParentNodeInstanceNavigation.Remove(parentExistingChild);
+                        parent.InverseThis2ParentNodeInstanceNavigation.Remove(parentExistingChild);
+                    }
                 }
             }
         }
