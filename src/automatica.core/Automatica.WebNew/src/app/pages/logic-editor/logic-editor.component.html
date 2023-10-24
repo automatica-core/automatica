@@ -3,9 +3,8 @@
         <p3-config-menu *ngIf="ruleTemplates" #configMenu (onRestart)="restart($event)" (onDelete)="delete($event)"
             [showRuleMenu]="true" [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)"
             (onAddRulePage)="addRulePage($event)" (onRemoveRulePage)="removeRulePage($event)"
-            (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" 
-            (onZoomIn)="onZoomIn($event)" (onZoomOut)="onZoomOut($event)" (onZoomToView)="onZoomToView($event)"
-            [isLoading]="isLoading">
+            (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" (onZoomIn)="onZoomIn($event)"
+            (onZoomOut)="onZoomOut($event)" (onZoomToView)="onZoomToView($event)" [isLoading]="isLoading">
         </p3-config-menu>
 
         <as-split direction="horizontal">
@@ -47,15 +46,14 @@
 
             </as-split-area>
             <as-split-area [size]="60">
-                <div class="logic-tab-panel" class="h-100">
-                    <ng-container *ngFor="let page of pages;" class="h-100">
+                <div class="logic-tab-panel">
+                    <ng-container *ngFor="let page of pages;">
                         <dx-scroll-view *ngIf="selectedPage.ObjId == page.ObjId" #scrollView id="scrollview"
-                            [scrollByContent]="false" [scrollByThumb]="fasle" [showScrollbar]="false"
-                            [bounceEnabled]="false" class="h-100">
+                            [scrollByContent]="false" [scrollByThumb]="false" showScrollbar="always"
+                            scrollDirection="both" [bounceEnabled]="false" [useNative]="true">
 
-                            <p3-ruleeditor class="h-100" (selectedItemsChanged)="onSelectedItemsChanged($event)"
-                                [page]="page" id="{{page.ObjId}}" name="{{page.Name}}"
-                                [isLoading]="isLoading"></p3-ruleeditor>
+                            <p3-ruleeditor style="display:inline-block" (selectedItemsChanged)="onSelectedItemsChanged($event)" [page]="page"
+                                id="{{page.ObjId}}" name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
                         </dx-scroll-view>
                     </ng-container>
                 </div>
@@ -68,8 +66,7 @@
 
 
 <dx-popup #infoPopup [width]="'300px'" [height]="'300px'" [showTitle]="true" [hideOnOutsideClick]="true"
-    [title]="'COMMON.INFO' | translateAsync" [(visible)]="infoPopupVisible"
-    (onHiding)="onPopupHiding($event)">
+    [title]="'COMMON.INFO' | translateAsync" [(visible)]="infoPopupVisible" (onHiding)="onPopupHiding($event)">
     <div *dxTemplate="let data of 'content'">
         TODO!
     </div>
