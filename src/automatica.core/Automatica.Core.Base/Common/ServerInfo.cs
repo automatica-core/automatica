@@ -22,6 +22,8 @@ namespace Automatica.Core.Base.Common
         public const string LogicsDirectory = "Rules";
         public const string PluginUpdateDirectoryName = "Automatica.Core.Plugins";
 
+
+        public const int ExitCodeRestart = 1;
         public const int ExitCodeUpdateInstall = 2;
         public const int ExitCodePluginUpdateInstall = 3;
         public const int ExitCodeUpdateInstallDocker = 4;

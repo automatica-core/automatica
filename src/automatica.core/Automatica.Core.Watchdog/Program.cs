@@ -107,7 +107,11 @@ namespace Automatica.Core.Watchdog
                     var exitCode = process.ExitCode;
                     _logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
-                    if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker && restartCount >= 10)
+                    if (exitCode == ServerInfo.ExitCodeRestart)
+                    {
+                        _logger.LogInformation($"Core system requested a normal restart....");
+                    }
+                    else if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker && restartCount >= 10)
                     {
                         Environment.Exit(2); //restart
                         return;

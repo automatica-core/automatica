@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Automatica.Core.Base.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -353,13 +354,9 @@ namespace Automatica.Core.WebApi.Controllers
 
         [Route("reload")]
         [HttpPost]
-        public async Task ReInit()
+        public void ReInit()
         {
-            _nodeInstanceCache.Clear();
-            _templateCache.Clear();
-            _driverNodeStore.Clear();
-
-            await _coreServer.ReInit();
+            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
         }
 
         [Route("update")]

@@ -257,7 +257,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  async save() {
+  async restart() {
     this.isLoading = true;
 
     try {

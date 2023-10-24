@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Driver;
@@ -402,9 +403,9 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         [Route("reload")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task Reload()
+        public void Reload()
         {
-            await _coreServer.ReloadLogicServices();
+            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
         }
 
 

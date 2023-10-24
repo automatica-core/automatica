@@ -80,10 +80,10 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   }
 
-  async save($event) {
+  async reload($event) {
     try {
       this.isLoading = true;
-      await this.configTree.save();
+      await this.configTree.reload();
     } catch (error) {
       this.notify.notifyError(error);
       throw error;

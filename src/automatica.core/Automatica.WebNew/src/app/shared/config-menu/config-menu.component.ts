@@ -40,7 +40,7 @@ export class ConfigMenuComponent implements OnInit {
   }
 
   @Output() onAddItem = new EventEmitter<NodeTemplate>();
-  @Output() onSave = new EventEmitter<any>();
+  @Output() onRestart = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
   @Output() onAddRule = new EventEmitter<RuleTemplate>();
   @Output() onAddRulePage = new EventEmitter<void>();
@@ -79,7 +79,7 @@ export class ConfigMenuComponent implements OnInit {
     label: "Reload",
     icon: "fa-save",
     items: undefined,
-    command: (event) => { this.save(); }
+    command: (event) => { this.restart(); }
   }
 
   menuDelete: CustomMenuItem = {
@@ -153,7 +153,7 @@ export class ConfigMenuComponent implements OnInit {
         this.menuItemNew.label = translate.translate("COMMON.NEW");
         this.export.label = translate.translate("COMMON.EXPORT");
         this.import.label = translate.translate("COMMON.IMPORT");
-        this.menuReload.label = translate.translate("COMMON.RELOAD");
+        this.menuReload.label = translate.translate("COMMON.RESTART");
         this.menuDelete.label = translate.translate("COMMON.DELETE");
 
         this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
@@ -165,8 +165,8 @@ export class ConfigMenuComponent implements OnInit {
     });
   }
 
-  save() {
-    this.onSave.emit();
+  restart() {
+    this.onRestart.emit();
   }
 
   delete() {
