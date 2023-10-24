@@ -262,12 +262,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     try {
       await this.ruleEngineService.reload();
-      this.notify.notifySuccess("COMMON.SAVED");
-
     } catch (error) {
-      this.notify.notifyError(error);
-      throw error;
+      //ignore error, we will not receive any callback!
     }
+    this.notify.notifySuccess("COMMON.RELOAD");
     this.isLoading = false;
   }
 

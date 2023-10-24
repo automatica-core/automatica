@@ -85,8 +85,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
       this.isLoading = true;
       await this.configTree.reload();
     } catch (error) {
-      this.notify.notifyError(error);
-      throw error;
+      //ignore error, we will not receive any callback!
     }
     this.isLoading = false;
   }
