@@ -24,6 +24,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
         private P3.Driver.EnOcean.Driver _driver;
         private EnOceanLearnedDevices _learnedDevices;
         private readonly IList<string> _teachedInDevices = new List<string>();
+        private string _port;
 
         public EnOceanDriver(IDriverContext driverContext, EnOceanTemplateFactory enoceanFactory) : base(driverContext, null)
         {
@@ -53,15 +54,16 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             {
                 return true;
             }
-            var port = GetProperty("enocean-port").ValueString;
+            _port = GetProperty("enocean-port").ValueString;
 
-            if (String.IsNullOrEmpty(port))
+            if (String.IsNullOrEmpty(_port))
             {
-                Logger.Logger.Instance.LogError($"{nameof(port)} cannot be empty");
+                Error = $"{nameof(_port)} cannot be empty";
+                Logger.Logger.Instance.LogError(Error);
                 return false;
             }
 
-            _driver = new P3.Driver.EnOcean.Driver(new SerialStream(port));
+            _driver = new P3.Driver.EnOcean.Driver(new SerialStream(_port));
 
             return await base.Init(token);
         }
@@ -74,6 +76,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             }
             if (!await _driver.Open())
             {
+                Error = $"Could not open port {_port}";
                 return false;
             }
 
