@@ -126,6 +126,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
     @JsonProperty()
     State: NodeInstanceState;
+    
+    @JsonProperty()
+    Error: string;
 
     public get ParentId() {
         if (this.This2BoardInterface) {

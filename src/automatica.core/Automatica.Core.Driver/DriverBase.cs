@@ -39,6 +39,7 @@ namespace Automatica.Core.Driver
 
         protected ITelegramMonitorInstance TelegramMonitor { get; private set; }
         public int ChildrensCreated { get; private set; }
+        public string Error { get; protected set; }
 
         public NodeInstanceState State => DriverContext.NodeInstance.State;
         
@@ -128,6 +129,7 @@ namespace Automatica.Core.Driver
                     }
                     else
                     {
+                        node.Error = driverNode.Error;
                         node.State = NodeInstanceState.UnknownError;
                         DriverContext.Logger.LogError($"Could not init {driverNode.Name}");
                     }
@@ -135,6 +137,7 @@ namespace Automatica.Core.Driver
                 catch (Exception e)
                 {
                     node.State = NodeInstanceState.UnknownError;
+                    node.Error = e.ToString();
                     DriverContext.Logger.LogError($"Could not init {driverNode.Name}. Error: {e}");
                 }
             }
@@ -270,6 +273,7 @@ namespace Automatica.Core.Driver
                     if (!driverStart)
                     {
                         node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                        node.DriverContext.NodeInstance.Error = node.Error;
                         DriverContext.Logger.LogError($"Could not start {node.Name}");
                     }
                     else
@@ -283,6 +287,7 @@ namespace Automatica.Core.Driver
                 catch (Exception e)
                 {
                     node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                    node.DriverContext.NodeInstance.Error = e.ToString();
                     DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
                 }
             });

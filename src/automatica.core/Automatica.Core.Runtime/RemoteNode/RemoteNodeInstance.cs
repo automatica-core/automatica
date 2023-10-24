@@ -120,6 +120,7 @@ namespace Automatica.Core.Runtime.RemoteNode
 
         //TODO: Implement
         public int ChildrensCreated => 0;
+        public string Error { get; protected set; }
         public NodeInstanceState State => NodeInstanceState.InUse;
 
         public async Task<bool> EnableLearnMode(CancellationToken token = default)

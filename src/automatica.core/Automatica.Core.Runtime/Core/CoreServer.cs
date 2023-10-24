@@ -949,17 +949,20 @@ namespace Automatica.Core.Runtime.Core
                 else
                 {
                     driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                    driver.DriverContext.NodeInstance.Error = driver.Error;
                     _logger.LogError($"Could not start driver {driver.Id} {driver.Name}");
                 }
             }
             catch (OperationCanceledException canceled)
             {
                 driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                driver.DriverContext.NodeInstance.Error = canceled.ToString();
                 _logger.LogError(canceled, $"Could not start driver {driver.Id} {driver.Name}. Task was canceled after 30seconds");
             }
             catch (Exception e)
             {
                 driver.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                driver.DriverContext.NodeInstance.Error = e.ToString();
                 _logger.LogError(e, $"Could not start driver {driver.Id} {driver.Name}");
             }
         }

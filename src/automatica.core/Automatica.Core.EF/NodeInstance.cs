@@ -56,6 +56,9 @@ namespace Automatica.Core.EF.Models
         [NotMapped]
         public NodeInstanceState State { get; set; }
 
+        [NotMapped]
+        public string Error { get; set; }
+
         public void SetProperty(string propertyKey, object value)
         {
             var prop = PropertyInstance.SingleOrDefault(a => a.This2PropertyTemplateNavigation.Key == propertyKey);
