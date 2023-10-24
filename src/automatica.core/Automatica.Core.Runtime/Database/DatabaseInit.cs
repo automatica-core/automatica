@@ -65,7 +65,22 @@ namespace Automatica.Core.Runtime.Database
                     Description = "Rules",
                     Key = "rules"
                 });
-               
+
+                context.VisuPageTypes.Add(new VisuPageType
+                {
+                    ObjId = 1,
+                    Name = "PC",
+                    Description = "PC",
+                    Key = "pc"
+                });
+                context.VisuPageTypes.Add(new VisuPageType
+                {
+                    ObjId = 2,
+                    Name = "Mobile",
+                    Description = "Mobile",
+                    Key = "mobile"
+                });
+
                 context.SaveChanges();
 
                 context.Slaves.Add(new Slave
