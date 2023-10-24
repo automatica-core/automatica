@@ -166,6 +166,8 @@
             [EnumName("KNX.DPT5.NAME", "5")]
             Dpt5 = 5,
 
+            [EnumName("KNX.DPT6.NAME", "6")]
+            Dpt6 = 6,
             [EnumName("KNX.DPT6.020.NAME", "6.020")]
             Dpt6_020 = 6,
             [EnumName("KNX.DPT7.NAME", "7")]

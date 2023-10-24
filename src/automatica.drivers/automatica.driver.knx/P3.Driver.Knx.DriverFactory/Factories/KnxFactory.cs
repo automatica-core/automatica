@@ -12,7 +12,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(2, 0, 0, 2);
+        public override Version DriverVersion => new Version(2, 1, 0, 2);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -226,10 +226,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Double, int.MaxValue, false);
 
-            AddAddressProperty(dpt5Guid, factory);
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt5Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt5Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt5Type)), (int)Dpt5Type.Dpt5_001, 0, 0);
+            InitDptType((int)DptType.Dpt5, dpt5Guid, factory);
         }
 
         private void AddDpt6Nodes(INodeTemplateFactory factory, Guid parentNode)
@@ -238,11 +235,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt6Guid, "KNX.DPT6.NAME", "KNX.DPT6.DESCRIPTION", "knx-dpt6",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Integer, int.MaxValue, false);
-            AddAddressProperty(dpt6Guid, factory);
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt6Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt6Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt6Type)), (int)Dpt6Type.Dpt6_001, 0, 0);
-
+            InitDptType((int)DptType.Dpt6, dpt6Guid, factory);
+           
             
             var dpt620InterfaceGuid = new Guid("cdce207b-5371-413b-bcb5-3512bb51205d");
             factory.CreateInterfaceType(dpt620InterfaceGuid, "KNX.DPT6.020.NAME", "KNX.DPT6.020.DESCRIPTION", 5,
@@ -291,11 +285,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt7Guid, "KNX.DPT7.NAME", "KNX.DPT7.DESCRIPTION", "knx-dpt7",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Integer, int.MaxValue, false);
-            AddAddressProperty(dpt7Guid, factory);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt7Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt7Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt7Type)), (int)Dpt7Type.Dpt7_001, 0, 0);
+            InitDptType((int)DptType.Dpt7, dpt7Guid, factory);
         }
 
         private void AddDpt8Nodes(INodeTemplateFactory factory, Guid parentNode)
@@ -304,11 +295,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt8Guid, "KNX.DPT8.NAME", "KNX.DPT8.DESCRIPTION", "knx-dpt8",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Integer, int.MaxValue, false);
-            AddAddressProperty(dpt8Guid, factory);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt8Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt8Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt8Type)), (int)Dpt8Type.Dpt8_002, 0, 0);
+
+            InitDptType((int)DptType.Dpt8, dpt8Guid, factory);
         }
 
         private void AddDpt9Nodes(INodeTemplateFactory factory, Guid parentNode)
@@ -317,13 +306,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt9Guid, "KNX.DPT9.NAME", "KNX.DPT9.DESCRIPTION", "knx-dpt9",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Double, int.MaxValue, false);
-            AddAddressProperty(dpt9Guid, factory);
 
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt9Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt9Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt9Type)), (int)Dpt9Type.Dpt9_001, 0, 0);
-
+            InitDptType((int)DptType.Dpt9, dpt9Guid, factory);
         }
 
 
@@ -387,7 +372,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 "KNX.GROUP.DPT", false, true, "", type, 0, 0);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(node, 5), "KNX.PROPERTIES.IS_READABLE_FROM_BUS.NAME", "KNX.PROPERTIES.IS_READABLE_FROM_BUS.DESCRIPTION","readable_from_bus", PropertyTemplateType.Bool,
-                node, "COMMON.CATEGORY.MISC", true, false, "", 0, 0, 0);
+                node, "COMMON.CATEGORY.MISC", true, false, "", 0, 0, 10);
+
         }
         private void AddAddressProperty(Guid nodeTemplate, INodeTemplateFactory factory, int maxAddress)
         {

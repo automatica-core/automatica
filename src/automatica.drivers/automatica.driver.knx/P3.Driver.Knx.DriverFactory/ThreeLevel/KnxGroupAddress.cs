@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -24,6 +25,17 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         protected KnxGroupAddress(IDriverContext driverContext, KnxDriver knxDriver) : base(driverContext, knxDriver)
         {
 
+        }
+
+        public override Task<bool> Start(CancellationToken token = new CancellationToken())
+        {
+            if (ReadableFromBus)
+            {
+                DriverContext.Logger.LogInformation($"Start initial read for {GroupAddress}");
+                ThreadPool.QueueUserWorkItem(async a => { await Driver.Read(GroupAddress); });
+            }
+
+            return base.Start(token);
         }
 
         public sealed override async Task<bool> Init(CancellationToken token = default)
