@@ -3,6 +3,7 @@ using System;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
-    partial class AutomaticaContextModelSnapshot : ModelSnapshot
+    [Migration("20231024161118_AddCreatedModifiedTimestamps")]
+    partial class AddCreatedModifiedTimestamps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -77,9 +80,6 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -95,9 +95,6 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1653,9 +1650,6 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1666,9 +1660,6 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1702,9 +1693,6 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1720,9 +1708,6 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1741,9 +1726,6 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1759,9 +1741,6 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
@@ -1820,18 +1799,12 @@ namespace Automatica.Core.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
-
-                    b.Property<DateTimeOffset>("ModifiedAt")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()

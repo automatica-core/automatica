@@ -65,6 +65,7 @@ namespace Automatica.Core.WebApi.Controllers
             node.InverseThis2ParentNodeInstanceNavigation = null;
             node.PropertyInstance = null;
             node.IsDeleted = false;
+            node.ModifiedAt = DateTimeOffset.Now;
 
             if (node.Description == null)
             {
@@ -96,6 +97,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
             else
             {
+                node.CreatedAt = DateTimeOffset.Now;
                 DbContext.Entry(node).State = EntityState.Added;
                 await DbContext.AddAsync(node);
                 entityState = EntityState.Added;
@@ -105,12 +107,14 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 prop.This2NodeInstanceNavigation = node;
                 prop.This2PropertyTemplateNavigation = null;
+                prop.ModifiedAt = DateTimeOffset.Now;
                 if (entityState == EntityState.Modified)
                 {
                     DbContext.Update(prop);
                 }
                 else
                 {
+                    prop.CreatedAt = DateTimeOffset.Now;
                     await DbContext.AddAsync(prop);
                 }
             }

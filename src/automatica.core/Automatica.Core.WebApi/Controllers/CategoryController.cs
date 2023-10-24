@@ -58,8 +58,10 @@ namespace Automatica.Core.WebApi.Controllers
                         var existingArea =
                             await DbContext.CategoryInstances.SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
 
+                        instance.ModifiedAt = DateTimeOffset.Now;
                         if (existingArea == null)
                         {
+                            instance.CreatedAt = DateTimeOffset.Now;
                             await DbContext.CategoryInstances.AddAsync(instance);
                         }
                         else

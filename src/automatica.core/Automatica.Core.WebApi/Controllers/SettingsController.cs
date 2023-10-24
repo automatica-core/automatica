@@ -102,6 +102,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                         originalSetting.Value = s.Value;
 
+                        originalSetting.ModifiedAt = DateTimeOffset.Now;
                         context.Update(originalSetting);
                     }
 

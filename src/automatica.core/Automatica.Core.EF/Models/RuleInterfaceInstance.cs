@@ -8,6 +8,8 @@ namespace Automatica.Core.EF.Models
     {
         public Guid ObjId { get; set; }
 
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
         public Guid This2RuleInstance { get; set; }
         public Guid This2RuleInterfaceTemplate { get; set; }
         public bool IsDeleted { get; set; }

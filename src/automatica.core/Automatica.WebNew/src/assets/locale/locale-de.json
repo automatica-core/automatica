@@ -474,6 +474,14 @@
         "NAME": "Sprache",
         "GERMAN": "Deutsch",
         "ENGLISH": "Englisch"
+      },
+      "CREATED_AT": {
+        "NAME": "Erstellt am",
+        "DESCRIPTION":""
+      },
+      "MODIFIED_AT": {
+        "NAME": "Geändert am",
+        "DESCRIPTION":""
       }
     },
     "CATEGORY_INSTANCE": {

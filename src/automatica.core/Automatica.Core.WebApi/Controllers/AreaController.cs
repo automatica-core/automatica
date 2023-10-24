@@ -139,7 +139,9 @@ namespace Automatica.Core.WebApi.Controllers
                 Description = building.Description,
                 Icon = icon,
                 This2AreaTemplate = typeGuid,
-                This2Parent = parent.ObjId
+                This2Parent = parent.ObjId,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             foreach (var part in building.Children)
@@ -166,6 +168,8 @@ namespace Automatica.Core.WebApi.Controllers
                 {
                     instance.InverseThis2ParentNavigation = null;
                     instance.This2ParentNavigation = null;
+                    instance.CreatedAt = DateTimeOffset.Now;
+                    instance.ModifiedAt = DateTimeOffset.Now;
                     await DbContext.AreaInstances.AddAsync(instance);
                 }
 
@@ -197,9 +201,11 @@ namespace Automatica.Core.WebApi.Controllers
             instance.This2ParentNavigation = null;
             instance.This2UserGroupNavigation = null;
             instance.This2AreaTemplateNavigation = null;
+            instance.ModifiedAt = DateTimeOffset.Now;
 
             if (existingArea == null)
             {
+                instance.CreatedAt = DateTimeOffset.Now;
                 await DbContext.AreaInstances.AddAsync(instance);
             }
             else

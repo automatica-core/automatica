@@ -12,6 +12,7 @@ using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -64,6 +65,8 @@ namespace Automatica.Core.WebApi.Controllers
         {
             await using var dbContext = new AutomaticaContext(_config);
 
+            page.CreatedAt = DateTimeOffset.Now;
+            page.ModifiedAt = DateTimeOffset.Now;
             dbContext.RulePages.Add(page);
             await dbContext.SaveChangesAsync();
             _logicCacheFacade.ClearInstances();
@@ -85,9 +88,10 @@ namespace Automatica.Core.WebApi.Controllers
                 dbContext.RuleInterfaceInstances.Add(ruleInterface);
                 dbContext.Entry(ruleInterface).State = EntityState.Added;
             }
-
             logicInstance.This2RulePage = pageId;
 
+            logicInstance.CreatedAt = DateTimeOffset.Now;
+            logicInstance.ModifiedAt = DateTimeOffset.Now;
             logicInstance.This2RuleTemplate = logicInstance.This2RuleTemplateNavigation.ObjId;
             logicInstance.This2RuleTemplateNavigation = null;
 
@@ -126,6 +130,7 @@ namespace Automatica.Core.WebApi.Controllers
             existingInstance.This2UserGroup = logicInstance.This2UserGroup;
             existingInstance.This2AreaInstance = logicInstance.This2AreaInstance;
             existingInstance.This2CategoryInstance = logicInstance.This2CategoryInstance;
+            existingInstance.ModifiedAt = DateTimeOffset.Now;
             
             foreach(var ruleInterfaceInstance in logicInstance.RuleInterfaceInstance)
             {
@@ -165,7 +170,6 @@ namespace Automatica.Core.WebApi.Controllers
 
             instance.This2RulePage = pageId;
             var nav = instance.This2NodeInstanceNavigation;
-
             instance.This2NodeInstanceNavigation = null;
             await dbContext.AddAsync(instance);
             dbContext.Entry(instance).State = EntityState.Added;
@@ -453,6 +457,7 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (rulePage != null)
             {
+                rulePage.ModifiedAt = DateTimeOffset.Now;
                 rulePage.Name = page.Name;
                 rulePage.Description = page.Description;
 

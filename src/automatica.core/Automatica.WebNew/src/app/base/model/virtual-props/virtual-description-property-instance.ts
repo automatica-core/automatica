@@ -27,7 +27,7 @@ export class VirtualDescriptionPropertyInstance extends VirtualPropertyInstance 
         this.PropertyTemplate.Description = "COMMON.PROPERTY.DESCRIPTION.DESCRIPTION";
         this.PropertyTemplate.Key = "description";
         this.PropertyTemplate.GroupOrder = 0;
-        this.PropertyTemplate.Order = 1;
+        this.PropertyTemplate.Order = 2;
         this.PropertyTemplate.IsReadonly = isReadonly;
     }
 

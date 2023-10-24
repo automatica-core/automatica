@@ -282,6 +282,7 @@ namespace Automatica.Core.WebApi.Controllers
                     var roles = user.InverseThis2Roles;
                     user.InverseThis2UserGroups = null;
                     user.InverseThis2Roles = null;
+                    user.CreatedAt = DateTimeOffset.Now;
 
 
                     var existing = dbContext.Users.SingleOrDefault(a => a.ObjId == user.ObjId);
@@ -297,6 +298,8 @@ namespace Automatica.Core.WebApi.Controllers
                     {
                         user.Password = existing.Password;
                         user.Salt = existing.Salt;
+
+                        user.ModifiedAt = DateTimeOffset.Now;
                     }
 
                     if (existing == null)

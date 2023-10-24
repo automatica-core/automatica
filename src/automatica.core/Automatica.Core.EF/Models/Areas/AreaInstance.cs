@@ -13,6 +13,8 @@ namespace Automatica.Core.EF.Models.Areas
             InverseThis2ParentNavigation = new List<AreaInstance>();
         }
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
 
         public Guid This2AreaTemplate { get; set; }
 

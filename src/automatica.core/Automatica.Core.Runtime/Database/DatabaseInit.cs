@@ -65,20 +65,7 @@ namespace Automatica.Core.Runtime.Database
                     Description = "Rules",
                     Key = "rules"
                 });
-                context.VisuPageTypes.Add(new VisuPageType
-                {
-                    ObjId = 1,
-                    Name = "PC",
-                    Description = "PC",
-                    Key = "pc"
-                });
-                context.VisuPageTypes.Add(new VisuPageType
-                {
-                    ObjId = 2,
-                    Name = "Mobile",
-                    Description = "Mobile",
-                    Key = "mobile"
-                });
+               
                 context.SaveChanges();
 
                 context.Slaves.Add(new Slave
@@ -87,7 +74,9 @@ namespace Automatica.Core.Runtime.Database
                     Name = "local",
                     Description = "this is me",
                     ClientId = "",
-                    ClientKey = ""
+                    ClientKey = "",
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
 
 
@@ -99,7 +88,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = 0,
                     Group = "ConfigVersion",
                     IsVisible = false,
-                    Order = 10
+                    Order = 10,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
                 context.SaveChanges();
             }
@@ -119,7 +110,9 @@ namespace Automatica.Core.Runtime.Database
                     IsVisible = true,
                     Order = 10,
                     ReloadContext = SettingReloadContext.Server,
-                    NeedsReloadOnChange = true
+                    NeedsReloadOnChange = true,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             else
@@ -140,7 +133,9 @@ namespace Automatica.Core.Runtime.Database
                     IsVisible = true,
                     Order = 11,
                     ReloadContext = SettingReloadContext.Server,
-                    NeedsReloadOnChange = true
+                    NeedsReloadOnChange = true,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             else
@@ -162,7 +157,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "",
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 0
+                    Order = 0,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
 
@@ -179,7 +176,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = false,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 20
+                    Order = 20,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             else
@@ -197,7 +196,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = new DateTime(2000, 12, 31, 2, 0, 0),
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 21
+                    Order = 21,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             else
@@ -216,7 +217,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = false,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 22
+                    Order = 22,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             else
@@ -236,7 +239,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "https://cloud-dev.automaticacore.com/",
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
 
             }
@@ -259,7 +264,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = cloudEnvironmentType,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 2
+                    Order = 2,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
 
@@ -274,7 +281,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = "Automatica.Core",
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 3
+                    Order = 3,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
 
@@ -290,7 +299,9 @@ namespace Automatica.Core.Runtime.Database
                     Value = 0,
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
-                    Order = 1
+                    Order = 1,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
 
             }
@@ -309,7 +320,9 @@ namespace Automatica.Core.Runtime.Database
                     Order = 0,
                     Meta = PropertyHelper.CreateMultiSelect(typeof(DataRecorderType)),
                     NeedsReloadOnChange = true,
-                    ReloadContext = SettingReloadContext.Recorders
+                    ReloadContext = SettingReloadContext.Recorders,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             else
@@ -332,7 +345,9 @@ namespace Automatica.Core.Runtime.Database
                     Group = "SERVER.SETTINGS",
                     IsVisible = true,
                     Order = 1,
-                    Meta = PropertyHelper.CreateEnumMetaString(typeof(Language))
+                    Meta = PropertyHelper.CreateEnumMetaString(typeof(Language)),
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
 
             }
@@ -512,26 +527,12 @@ namespace Automatica.Core.Runtime.Database
                 var rulePage = new RulePage
                 {
                     ObjId = Guid.NewGuid(),
-                    Name = "Page1",
+                    Name = "Logics",
                     Description = "",
                     This2RulePageType = 1
                 };
 
                 context.RulePages.Add(rulePage);
-            }
-
-            if (!context.VisuPages.Any())
-            {
-                var visuPage = new VisuPage
-                {
-                    ObjId = Guid.NewGuid(),
-                    Name = "Page1",
-                    Description = "",
-                    This2VisuPageType = 2,
-                    DefaultPage = true
-                };
-
-                context.VisuPages.Add(visuPage);
             }
 
             if (!context.Users.Any())
@@ -728,7 +729,9 @@ namespace Automatica.Core.Runtime.Database
                     IsVisible = true,
                     Order = 0,
                     ReloadContext = SettingReloadContext.Recorders,
-                    NeedsReloadOnChange = true
+                    NeedsReloadOnChange = true,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaApiKey");
@@ -744,7 +747,9 @@ namespace Automatica.Core.Runtime.Database
                     IsVisible = true,
                     Order = 1,
                     ReloadContext = SettingReloadContext.Recorders,
-                    NeedsReloadOnChange = true
+                    NeedsReloadOnChange = true,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
             var userId = context.Settings.SingleOrDefault(a => a.ValueKey == "hostedGrafanaUserId");
@@ -760,7 +765,9 @@ namespace Automatica.Core.Runtime.Database
                     IsVisible = true,
                     Order = 1,
                     ReloadContext = SettingReloadContext.Recorders,
-                    NeedsReloadOnChange = true
+                    NeedsReloadOnChange = true,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 });
             }
         }
@@ -775,7 +782,9 @@ namespace Automatica.Core.Runtime.Database
                 LastName = "admin",
                 Salt = salt,
                 Password = UserHelper.HashPassword("sa", salt),
-                ObjId = Guid.NewGuid()
+                ObjId = Guid.NewGuid(),
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             context.Add(saUser);
@@ -784,7 +793,9 @@ namespace Automatica.Core.Runtime.Database
             var adminGroup = new UserGroup
             {
                 ObjId = Guid.NewGuid(),
-                Name = "Admin"
+                Name = "Admin",
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             context.Add(adminGroup);
@@ -795,7 +806,9 @@ namespace Automatica.Core.Runtime.Database
                 ObjId = Guid.NewGuid(),
                 Name = "ROLES.ADMINISTRATOR.NAME",
                 Description = "ROLES.ADMINISTRATOR.DESCRIPTION",
-                Key = Role.AdminRole
+                Key = Role.AdminRole,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
             context.Add(adminRole);
 
@@ -804,7 +817,9 @@ namespace Automatica.Core.Runtime.Database
                 ObjId = Guid.NewGuid(),
                 Name = "PRIVILEDGE.ALL.NAME",
                 Description = "PRIVILEDGE.ALL.DESCRIPTION",
-                Key = "superuser"
+                Key = "superuser",
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             context.Add(priviliedge);
@@ -837,7 +852,9 @@ namespace Automatica.Core.Runtime.Database
                 LastName = "Visu",
                 Salt = salt,
                 Password = UserHelper.HashPassword("visu", salt),
-                ObjId = Guid.NewGuid()
+                ObjId = Guid.NewGuid(),
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             context.Add(visuUser);
@@ -845,7 +862,9 @@ namespace Automatica.Core.Runtime.Database
             var visuGroup = new UserGroup
             {
                 ObjId = Guid.NewGuid(),
-                Name = "Visu"
+                Name = "Visu",
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             context.Add(visuGroup);
@@ -862,7 +881,9 @@ namespace Automatica.Core.Runtime.Database
                 ObjId = Guid.NewGuid(),
                 Name = "ROLES.VISUALISATION.NAME",
                 Description = "ROLES.VISUALISATION.DESCRIPTION",
-                Key = Role.VisuRole
+                Key = Role.VisuRole,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
             context.Add(visuRole);
 
@@ -871,7 +892,9 @@ namespace Automatica.Core.Runtime.Database
                 ObjId = Guid.NewGuid(),
                 Name = "PRIVILEDGE.VISU.NAME",
                 Description = "PRIVILEDGE.VISU.DESCRIPTION",
-                Key = "visu"
+                Key = "visu",
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             context.Add(visuPriviliedge);
@@ -964,7 +987,11 @@ namespace Automatica.Core.Runtime.Database
                     var isNew = false;
                     if (areaTemplateDb == null)
                     {
-                        areaTemplateDb = new AreaTemplate();
+                        areaTemplateDb = new AreaTemplate
+                        {
+                            CreatedAt = DateTimeOffset.Now,
+                            ModifiedAt = DateTimeOffset.Now
+                        };
                         areaTemplateDb.ObjId = attribute.ObjId;
 
                         isNew = true;
@@ -1012,7 +1039,9 @@ namespace Automatica.Core.Runtime.Database
                 IsWriteableFixed = true,
                 MaxInstances = int.MaxValue,
                 This2NodeDataType = (int)NodeDataType.NoAttribute,
-                IsAdapterInterface = true
+                IsAdapterInterface = true,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbIr.ObjId) == null)
@@ -1039,7 +1068,9 @@ namespace Automatica.Core.Runtime.Database
                 IsWriteableFixed = true,
                 MaxInstances = int.MaxValue,
                 This2NodeDataType = (int)NodeDataType.NoAttribute,
-                IsAdapterInterface = true
+                IsAdapterInterface = true,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
 
@@ -1065,7 +1096,9 @@ namespace Automatica.Core.Runtime.Database
                 IsWriteableFixed = true,
                 MaxInstances = int.MaxValue,
                 This2NodeDataType = (int)NodeDataType.NoAttribute,
-                IsAdapterInterface = true
+                IsAdapterInterface = true,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usb232.ObjId) == null)
@@ -1094,7 +1127,9 @@ namespace Automatica.Core.Runtime.Database
                 IsWriteableFixed = true,
                 MaxInstances = int.MaxValue,
                 This2NodeDataType = (int)NodeDataType.NoAttribute,
-                IsAdapterInterface = true
+                IsAdapterInterface = true,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbIr.ObjId) == null)
@@ -1121,7 +1156,9 @@ namespace Automatica.Core.Runtime.Database
                 IsWriteableFixed = true,
                 MaxInstances = int.MaxValue,
                 This2NodeDataType = (int)NodeDataType.NoAttribute,
-                IsAdapterInterface = true
+                IsAdapterInterface = true,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs485.ObjId) == null)
@@ -1147,7 +1184,9 @@ namespace Automatica.Core.Runtime.Database
                 IsWriteableFixed = true,
                 MaxInstances = int.MaxValue,
                 This2NodeDataType = (int)NodeDataType.NoAttribute,
-                IsAdapterInterface = true
+                IsAdapterInterface = true,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             if (context.NodeTemplates.SingleOrDefault(a => a.ObjId == usbrs232.ObjId) == null)
@@ -1201,6 +1240,8 @@ namespace Automatica.Core.Runtime.Database
                     ProvidesInterface2InterfaceType = board.Type,
                     This2NodeDataType = (int)NodeDataType.NoAttribute,
                     This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
                 };
 
                 context.NodeTemplates.Add(boardNodeTemplate);
@@ -1233,6 +1274,8 @@ namespace Automatica.Core.Runtime.Database
                         ProvidesInterface2InterfaceType = boardInterface.This2InterfaceType,
                         This2NodeDataType = (int)NodeDataType.NoAttribute,
                         This2DefaultMobileVisuTemplate = VisuMobileObjectTemplateTypeAttribute.GetFromEnum(VisuMobileObjectTemplateTypes.Label),
+                        CreatedAt = DateTimeOffset.Now,
+                        ModifiedAt = DateTimeOffset.Now
                     };
 
                     context.NodeTemplates.Add(nodeTemplate);

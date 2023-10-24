@@ -153,6 +153,7 @@ namespace Automatica.Core.Internals.Cache.Logic
                     existing.Y = ruleInstance.Y;
 
                     existing.Name = ruleInstance.Name;
+                    existing.ModifiedAt = ruleInstance.ModifiedAt;
                 }
 
             }

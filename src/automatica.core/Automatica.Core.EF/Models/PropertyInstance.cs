@@ -16,6 +16,8 @@ namespace Automatica.Core.EF.Models
 
         [System.ComponentModel.DataAnnotations.Key]
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
         public Guid This2PropertyTemplate { get; set; }
         public Guid? This2NodeInstance { get; set; }
         public Guid? This2VisuObjectInstance { get; set; }

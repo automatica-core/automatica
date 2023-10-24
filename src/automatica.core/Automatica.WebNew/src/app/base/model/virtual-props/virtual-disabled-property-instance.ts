@@ -16,7 +16,7 @@ export class VirtualDisabledPropertyInstance extends VirtualPropertyInstance {
         this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Bool;
 
         this.PropertyTemplate.GroupOrder = 0;
-        this.PropertyTemplate.Order = 10;
+        this.PropertyTemplate.Order = 15;
     }
 
     get Value(): any {

@@ -31,6 +31,9 @@ import { VirtualIsFavoriteVisuPropertyInstance } from "./virtual-props/virtual-i
 import { VirtualSatellitePropertyInstance } from "./virtual-props/virtual-satellite-property-instance";
 import { VirtualDisabledPropertyInstance } from "./virtual-props/virtual-disabled-property-instance";
 import { VirtualOnlyWriteIfChangedPropertyInstance } from "./virtual-props/virtual-only-write-if-changed-property-instance";
+import { VirtualCreatedAtPropertyInstance } from "./virtual-props/virtual-created-at-property-instance";
+import { VirtualModifedAtPropertyInstance } from "./virtual-props/virtual-modified-at-property-instance";
+import { ITimestampModifiedTrackingModel } from "./ITimestampModifiedTrackingModel";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -110,7 +113,7 @@ export enum TrendingTypes {
 }
 
 @Model()
-export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel, INodeInstance {
+export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel, INodeInstance, ITimestampModifiedTrackingModel {
 
     @JsonProperty()
     ObjId: string;
@@ -129,6 +132,12 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
     
     @JsonProperty()
     Error: string;
+
+    @JsonProperty()
+    CreatedAt: Date;
+
+    @JsonProperty()
+    ModifiedAt: Date;
 
     public get ParentId() {
         if (this.This2BoardInterface) {
@@ -361,6 +370,9 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
         this.Properties.push(new VirtualNamePropertyInstance(this));
         this.Properties.push(new VirtualDescriptionPropertyInstance(this));
+
+        this.Properties.push(new VirtualCreatedAtPropertyInstance(this));
+        this.Properties.push(new VirtualModifedAtPropertyInstance(this));
 
         if (this.NodeTemplate) {
             this.Properties.push(new VirtualGenericPropertyInstance("TYPE", 2, this, () => this.translationService.translate(this.NodeTemplate.Name), void 0, true, PropertyTemplateType.Text, "COMMON.CATEGORY.MISC"));

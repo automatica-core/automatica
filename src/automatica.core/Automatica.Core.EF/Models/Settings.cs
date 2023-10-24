@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Automatica.Core.EF.Models
 {
     public enum SettingReloadContext
@@ -12,6 +14,8 @@ namespace Automatica.Core.EF.Models
     public partial class Setting
     {
         public long ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
         public string ValueKey { get; set; }
         public string ValueText { get; set; }
         public int? ValueInt { get; set; }
