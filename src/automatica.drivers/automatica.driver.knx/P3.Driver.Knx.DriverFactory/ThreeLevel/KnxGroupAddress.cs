@@ -26,8 +26,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
 
         }
-
-        public override Task<bool> Start(CancellationToken token = new CancellationToken())
+        protected override Task<bool> StartedInternal(CancellationToken token = new CancellationToken())
         {
             if (ReadableFromBus)
             {
@@ -35,7 +34,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 ThreadPool.QueueUserWorkItem(async a => { await Driver.Read(GroupAddress); });
             }
 
-            return base.Start(token);
+            return base.StartedInternal(token);
         }
 
         public sealed override async Task<bool> Init(CancellationToken token = default)
