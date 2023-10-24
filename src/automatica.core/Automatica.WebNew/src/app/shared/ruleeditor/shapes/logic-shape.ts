@@ -55,17 +55,17 @@ export class LogicShapes {
                         row: 0, col: 0,
                         valign: "center",
                     });
-                this.add(new logic.LogicInfoHeader(
-                    {
-                        width: 10,
-                        height: 10,
-                        bgColor: "#457987",
-                        padding: 5,
-                    }
-                ), {
-                    row: 0, col: 1,
-                    valign: "center",
-                });
+                // this.add(new logic.LogicInfoHeader(
+                //     {
+                //         width: 10,
+                //         height: 10,
+                //         bgColor: "#457987",
+                //         padding: 5,
+                //     }
+                // ), {
+                //     row: 0, col: 1,
+                //     valign: "center",
+                // });
             },
 
             setText: function setText(text) {

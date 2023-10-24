@@ -3,7 +3,9 @@
         <p3-config-menu *ngIf="ruleTemplates" #configMenu (onRestart)="restart($event)" (onDelete)="delete($event)"
             [showRuleMenu]="true" [ruleTemplates]="ruleTemplates" (onAddRule)="addRule($event)"
             (onAddRulePage)="addRulePage($event)" (onRemoveRulePage)="removeRulePage($event)"
-            (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" [isLoading]="isLoading">
+            (onImportData)="onImportData($event)" [(selectedItem)]="selectedItem" 
+            (onZoomIn)="onZoomIn($event)" (onZoomOut)="onZoomOut($event)" (onZoomToView)="onZoomToView($event)"
+            [isLoading]="isLoading">
         </p3-config-menu>
 
         <as-split direction="horizontal">

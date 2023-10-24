@@ -90,6 +90,11 @@
     "LIVE_LOGS": "Live logs",
     "FILE_LOGS": "Datei logs",
     "INFO": "Information",
+    "ZOOM": {
+      "IN":"Vergrößern",
+      "OUT": "Verkleinern",
+      "TO_VIEW": "Standard Zoom"
+    },
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {

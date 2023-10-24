@@ -117,6 +117,15 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       }
     });
 
+    super.registerEvent(this.page.onZoomIn, () => {
+      this.workplace.setZoom(this.workplace.getZoom() * 0.7, true);
+    });
+    super.registerEvent(this.page.onZoomToView, () => {
+      this.workplace.setZoom(1.0, true);
+    });
+    super.registerEvent(this.page.onZoomOut, () => {
+      this.workplace.setZoom(this.workplace.getZoom() * 1.3, true);
+    });
 
     this.changeRef.detectChanges();
   }

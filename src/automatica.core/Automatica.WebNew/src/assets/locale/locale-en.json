@@ -91,6 +91,11 @@
     "LIVE_LOGS": "Live logs",
     "FILE_LOGS": "Datei logs",
     "INFO": "Information",
+    "ZOOM": {
+      "IN":"Zoom in",
+      "OUT": "Zoom out",
+      "TO_VIEW": "Zoom default"
+    },
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {

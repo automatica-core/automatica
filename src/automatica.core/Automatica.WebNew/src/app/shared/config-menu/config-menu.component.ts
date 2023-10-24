@@ -47,6 +47,11 @@ export class ConfigMenuComponent implements OnInit {
   @Output() onRemoveRulePage = new EventEmitter<void>();
   @Output() onImportData = new EventEmitter<NodeInstance>();
 
+  
+  @Output() onZoomIn = new EventEmitter<void>();
+  @Output() onZoomToView = new EventEmitter<void>();
+  @Output() onZoomOut = new EventEmitter<void>();
+
   @Input()
   showRuleMenu: boolean = false;
 
@@ -133,6 +138,30 @@ export class ConfigMenuComponent implements OnInit {
     icon: "fa-file-import",
     disabled: true,
     command: (event) => { this.importNode(); }
+  };
+
+  zoomIn: CustomMenuItem = {
+    id: "zoomIn",
+    label: "Zoom In",
+    icon: "fa-zoon",
+    disabled: false,
+    command: (event) => { this.onZoomIn.emit(); }
+  };
+
+  zoomToView: CustomMenuItem = {
+    id: "zoomToView",
+    label: "Zoom ToView",
+    icon: "fa-zoon",
+    disabled: false,
+    command: (event) => { this.onZoomToView.emit(); }
+  };
+
+  zoomOut: CustomMenuItem = {
+    id: "zoomOut",
+    label: "Zoom Out",
+    icon: "fa-zoon",
+    disabled: false,
+    command: (event) => { this.onZoomOut.emit(); }
   };
 
   constructor(private configService: ConfigService,
@@ -341,6 +370,13 @@ export class ConfigMenuComponent implements OnInit {
 
       });
       this.menuItems.push(this.menuRules);
+
+      this.zoomIn.label = this.translate.translate("COMMON.ZOOM.IN");
+      this.zoomToView.label = this.translate.translate("COMMON.ZOOM.TO_VIEW");
+      this.zoomOut.label = this.translate.translate("COMMON.ZOOM.OUT");
+      this.menuItems.push(this.zoomIn);
+      this.menuItems.push(this.zoomToView);
+      this.menuItems.push(this.zoomOut);
     }
   }
 

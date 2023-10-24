@@ -94,7 +94,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       await this.popupLearnMode.instance.show();
     });
 
-    await this.route.params.subscribe(async (params) => {
+    this.route.params.subscribe(async (params) => {
       that.selectLogicPageById(params.id);
     });
 
@@ -409,5 +409,16 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   saveLearnedNodes($event: any) {
     this.configTree.saveLearnNodeInstances($event.nodeInstance, $event.learnedNodes);
+  }
+
+  onZoomIn($event) {
+    this.selectedPage.onZoomIn.emit();
+    
+  }
+  onZoomOut($event) {  
+    this.selectedPage.onZoomOut.emit();
+  }
+  onZoomToView($event) {
+    this.selectedPage.onZoomToView.emit();
   }
 }
