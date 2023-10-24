@@ -25,7 +25,7 @@ namespace Automatica.Core.WebApi.Tests.Logic
             Assert.NotEmpty(pages);
             Assert.Collection(pages, page =>
             {
-                Assert.Equal("Page1", page.Name);
+                Assert.Equal("Logics", page.Name);
             });
         }
 
