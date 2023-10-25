@@ -37,7 +37,7 @@ namespace P3.Driver.MachineFlags.Attributes
                 }
                 _value = dValue;
 
-                DriverContext.Logger.LogDebug($"{DriverContext.NodeInstance.ObjId} {DriverContext.NodeInstance.Name}: WriteValue {bValue}");
+                DriverContext.Logger.LogDebug($"{DriverContext.NodeInstance.ObjId} {DriverContext.NodeInstance.Name}: WriteValue {dValue}");
 
                 writeContext.DispatchValue(dValue, token);
 
