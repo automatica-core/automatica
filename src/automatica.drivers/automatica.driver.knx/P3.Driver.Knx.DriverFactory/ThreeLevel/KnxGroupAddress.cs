@@ -94,7 +94,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 var result = await Driver.Write(this, GroupAddress, decodedValue).ConfigureAwait(false);
                 await writeContext.DispatchValue(value, token);
 
-                if (!result)
+                if (result)
+                {
+                    DriverContext.Logger.LogDebug($"Successfully write value {value} {decodedValue} on {GroupAddress}");
+                }
+                else
                 {
                     DriverContext.Logger.LogWarning("Failed to write to Write datagram");
                 }
