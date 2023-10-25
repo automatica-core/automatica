@@ -18,6 +18,11 @@ namespace P3.Driver.MachineFlags.Attributes
 
         }
 
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        {
+            await readContext.DispatchValue(_value, token);
+            return true;
+        }
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             if (_value == value)
@@ -25,7 +30,7 @@ namespace P3.Driver.MachineFlags.Attributes
                 return Task.CompletedTask;
             }
             _value = value;
-            DriverContext.Logger.LogDebug($"WriteValue {value}");
+            DriverContext.Logger.LogDebug($"{DriverContext.NodeInstance.ObjId} {DriverContext.NodeInstance.Name}: WriteValue {value}");
 
             writeContext.DispatchValue(value, token);
             return Task.CompletedTask;
