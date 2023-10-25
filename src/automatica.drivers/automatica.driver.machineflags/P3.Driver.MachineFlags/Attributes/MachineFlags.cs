@@ -33,6 +33,8 @@ namespace P3.Driver.MachineFlags.Attributes
             DriverContext.Logger.LogDebug($"{DriverContext.NodeInstance.ObjId} {DriverContext.NodeInstance.Name}: WriteValue {value}");
 
             writeContext.DispatchValue(value, token);
+
+            DriverContext.Dispatcher.DispatchValue(this, value);
             return Task.CompletedTask;
         }
 

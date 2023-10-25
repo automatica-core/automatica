@@ -38,6 +38,8 @@ namespace P3.Driver.MachineFlags.Attributes
                 DriverContext.Logger.LogDebug($"{DriverContext.NodeInstance.ObjId} {DriverContext.NodeInstance.Name}: WriteValue {bValue}");
 
                 writeContext.DispatchValue(bValue, token);
+
+                DriverContext.Dispatcher.DispatchValue(this, value);
             }
             catch (Exception ex)
             {
