@@ -41,7 +41,7 @@ namespace P3.Driver.MachineFlags.Attributes
 
                 writeContext.DispatchValue(dValue, token);
 
-                DriverContext.Dispatcher.DispatchValue(this, value);
+                DriverContext.Dispatcher.DispatchValue(this, dValue);
             }
             catch (Exception ex)
             {
