@@ -6,12 +6,6 @@
 ### Frontend Build ###
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
-### Develop Automatica.Core.Cloud Status ###
-[![Cloud Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
-
-### SonarCloud ###
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=automaticacore&metric=alert_status)](https://sonarcloud.io/dashboard?id=automaticacore)
-
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine. Try it as your smart home hub today.
 
 # Table of contents
