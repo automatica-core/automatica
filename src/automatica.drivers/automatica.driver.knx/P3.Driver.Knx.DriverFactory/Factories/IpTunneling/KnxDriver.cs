@@ -51,7 +51,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             _secureDriver = secureDriver;
             _level = level;
-            Logger.Factory = new FalconLoggerFactory(DriverContext.Logger);
+            Logger.Factory = new FalconLoggerFactory(DriverContext.LoggerFactory.CreateLogger("KNXFalcon"));
         }
 
         protected override bool CreateTelegramMonitor()
