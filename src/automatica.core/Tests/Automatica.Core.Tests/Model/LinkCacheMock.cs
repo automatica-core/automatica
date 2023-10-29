@@ -7,9 +7,9 @@ namespace Automatica.Core.Tests.Model
 {
     public class LinkCacheMock : GuidStoreBase<Link>, ILinkCache
     {
-        public Link GetSingle(Guid objId, AutomaticaContext context)
+        public (Link link, bool isNew) GetSingle(Guid objId, AutomaticaContext context)
         {
-            return Get(objId);
+            return (Get(objId), false);
         }
 
         public bool IsRuleInterfaceMapped(Guid objId)

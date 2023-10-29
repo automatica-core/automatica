@@ -99,7 +99,8 @@ namespace Automatica.Core.Internals.Cache.Logic
                 var ruleInstances = context.RuleInstances.Where(a => a.This2RulePage == page.ObjId).ToList();
                 var useRuleInstances = new List<RuleInstance>();
                 foreach (var ruleInstance in ruleInstances)
-                { useRuleInstances .Add(_logicInstanceCache.Get(ruleInstance.ObjId));
+                {
+                    useRuleInstances .Add(_logicInstanceCache.Get(ruleInstance.ObjId));
                 }
                 page.RuleInstance = useRuleInstances;
 
