@@ -25,7 +25,7 @@ namespace Automatica.Core.EF.Helper
             }
             else
             {
-                logBuild.MinimumLevel.Error();
+                logBuild.MinimumLevel.Warning();
             }
 
             _logger = logBuild.CreateLogger();

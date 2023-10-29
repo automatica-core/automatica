@@ -17,7 +17,7 @@ namespace Automatica.Core.EF.Interceptors
         {
             if (eventData.Duration.TotalMilliseconds > 500)
             {
-                _logger.LogInformation($"Query {command.CommandText} took {eventData.Duration.TotalMilliseconds}ms");
+                _logger.LogWarning($"Query {command.CommandText} took {eventData.Duration.TotalMilliseconds}ms");
             }
 
 
