@@ -6,7 +6,7 @@ namespace Automatica.Core.Internals.Cache.Common
 {
     public interface ILinkCache : IStore<Link>
     {
-        Link GetSingle(Guid objId, AutomaticaContext context);
+        (Link link, bool isNew) GetSingle(Guid objId, AutomaticaContext context);
 
         bool IsRuleInterfaceMapped(Guid objId);
     }

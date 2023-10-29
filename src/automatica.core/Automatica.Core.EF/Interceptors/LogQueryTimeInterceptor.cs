@@ -20,7 +20,6 @@ namespace Automatica.Core.EF.Interceptors
                 _logger.LogWarning($"Query {command.CommandText} took {eventData.Duration.TotalMilliseconds}ms");
             }
 
-
             return base.ReaderExecuted(command, eventData, result);
         }
     }

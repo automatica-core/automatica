@@ -37,8 +37,16 @@ namespace Automatica.Core.Internals.Cache.Logic
                 .Include(a => a.This2CategoryInstanceNavigation)
                 .AsNoTracking();
 
+            var ret = new List<RuleInstance>();
             foreach (var item in all)
             {
+                foreach(var interfaces in item.RuleInterfaceInstance)
+                {
+                    var direction = context.RuleInterfaceDirections.Single(a =>
+                        a.ObjId == interfaces.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection);
+                    interfaces.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirectionNavigation = direction;
+                }
+
                 if (item.This2AreaInstance.HasValue)
                 {
                     AddToAreaCache(item, item.This2AreaInstance.Value);
@@ -58,9 +66,11 @@ namespace Automatica.Core.Internals.Cache.Logic
                         interfaceInstance.IsLinked = true;
                     }
                 }
+
+                ret.Add(item);
             }
 
-            return all;
+            return ret.AsQueryable();
         }
 
         private void AddToCategoryCache(RuleInstance item, Guid? category)
@@ -147,8 +157,14 @@ namespace Automatica.Core.Internals.Cache.Logic
             {
                 AddToAreaCache(item, item.This2AreaInstance.Value);
             }
+            foreach (var interfaces in item.RuleInterfaceInstance)
+            {
+                var direction = context.RuleInterfaceDirections.Single(a =>
+                    a.ObjId == interfaces.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection);
+                interfaces.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirectionNavigation = direction;
+            }
 
-          
+
             AddToCategoryCache(item, item.This2CategoryInstance);
             
 

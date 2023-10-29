@@ -38,13 +38,24 @@ namespace Automatica.Core.Internals.Cache.Logic
         public Task RemoveLink(Guid linkId)
         {
             LinkCache.Remove(linkId);
+            PageCache.Remove(linkId);
 
             return Task.CompletedTask;
         }
 
         public Task AddOrUpdateLink(Guid objId, AutomaticaContext dbContext)
         {
-            LinkCache.GetSingle(objId, dbContext);
+            var link = LinkCache.GetSingle(objId, dbContext);
+
+            if (link.isNew)
+            {
+                PageCache.AddLink(link.link);
+            }
+            else
+            {
+                PageCache.UpdateLink(link.link);
+            }
+
             return Task.CompletedTask;
         }
 

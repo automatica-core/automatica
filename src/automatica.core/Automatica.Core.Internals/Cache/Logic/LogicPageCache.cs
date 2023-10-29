@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Internals.Cache.Driver;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -9,8 +10,10 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     internal class LogicPageCache : AbstractCache<RulePage>, ILogicPageCache
     {
-        private readonly ILogicNodeInstanceCache _nodeInstanceCache;
-        private readonly ILogicInterfaceInstanceCache _logicInstanceCache;
+        private readonly ILogicNodeInstanceCache _logicNodeInstanceCache;
+        private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
+        private readonly ILogicInstanceCache _logicInstanceCache;
+        private readonly INodeInstanceCache _nodeInstanceCache;
 
         private readonly IDictionary<Guid, RulePage> _rulePageCache = new Dictionary<Guid, RulePage>();
 
@@ -19,40 +22,91 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         private readonly IDictionary<Guid, IDictionary<Guid, Link>> _linkCache = new Dictionary<Guid, IDictionary<Guid, Link>>();
 
-        public LogicPageCache(IConfiguration configuration, ILogicNodeInstanceCache nodeInstanceCache, ILogicInterfaceInstanceCache logicInstanceCache) : base(configuration)
+        public LogicPageCache(IConfiguration configuration, ILogicNodeInstanceCache logicLogicNodeInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, ILogicInstanceCache logicInstanceCache, INodeInstanceCache nodeInstanceCache) : base(configuration)
         {
-            _nodeInstanceCache = nodeInstanceCache;
+            _logicNodeInstanceCache = logicLogicNodeInstanceCache;
+            _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
             _logicInstanceCache = logicInstanceCache;
+            _nodeInstanceCache = nodeInstanceCache;
         }
 
         protected override IQueryable<RulePage> GetAll(AutomaticaContext context)
         {
-            return context.RulePages.Include(a => a.This2RulePageTypeNavigation)
-                .Include(a => a.Link)
-                    .ThenInclude(a => a.This2NodeInstance2RulePageInputNavigation)
-                    .ThenInclude(a => a.This2NodeInstanceNavigation)
-                    .ThenInclude(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.Link)
-                    .ThenInclude(a => a.This2NodeInstance2RulePageOutputNavigation)
-                    .ThenInclude(a => a.This2NodeInstanceNavigation)
-                    .ThenInclude(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.Link)
-                    .ThenInclude(a => a.This2RuleInterfaceInstanceInputNavigation)
-                    .ThenInclude(a => a.This2RuleInstanceNavigation)
-                .Include(a => a.Link)
-                    .ThenInclude(a => a.This2RuleInterfaceInstanceOutputNavigation)
-                    .ThenInclude(a => a.This2RuleInstanceNavigation)
-                .Include(a => a.NodeInstance2RulePage).ThenInclude(b => b.This2NodeInstanceNavigation)
-                .ThenInclude(x => x.PropertyInstance)
-                .Include(a => a.NodeInstance2RulePage).ThenInclude(b => b.This2NodeInstanceNavigation)
-                .ThenInclude(b => b.This2NodeTemplateNavigation)
-                .Include(a => a.RuleInstance).ThenInclude(a => a.This2RuleTemplateNavigation)
-                .ThenInclude(a => a.RuleInterfaceTemplate)
-                .Include(a => a.RuleInstance).ThenInclude(a => a.RuleInterfaceInstance)
-                .ThenInclude(a => a.This2RuleInterfaceTemplateNavigation)
-                .ThenInclude(a => a.This2RuleInterfaceDirectionNavigation)
-                .Include(a => a.RuleInstance).ThenInclude(a => a.This2AreaInstanceNavigation)
-                .Include(a => a.RuleInstance).ThenInclude(a => a.This2CategoryInstanceNavigation);
+            var pages = context.RulePages;
+
+            var ret = new List<RulePage>();
+            ret.AddRange(pages);
+            
+
+            foreach (var page in pages)
+            {
+                var pageType = context.RulePageTypes.FirstOrDefault(a => a.ObjId == page.This2RulePageType);
+                page.This2RulePageTypeNavigation = pageType;
+
+                var links = context.Links.Where(a => a.This2RulePage == page.ObjId).ToList();
+
+                foreach (var link in links)
+                {
+                    if (link.This2NodeInstance2RulePageInput.HasValue)
+                    {
+                        var nodeInstanceInput =
+                            context.NodeInstance2RulePages.FirstOrDefault(a =>
+                                a.ObjId == link.This2NodeInstance2RulePageInput);
+                        if (nodeInstanceInput != null)
+                        {
+                            nodeInstanceInput.This2NodeInstanceNavigation =
+                                _nodeInstanceCache.Get(nodeInstanceInput.This2NodeInstance);
+                        }
+                    }
+
+                    if (link.This2NodeInstance2RulePageOutput.HasValue)
+                    {
+                        var nodeInstanceOutput =
+                            context.NodeInstance2RulePages.FirstOrDefault(a =>
+                                a.ObjId == link.This2NodeInstance2RulePageOutput);
+                        if (nodeInstanceOutput != null)
+                        {
+                            nodeInstanceOutput.This2NodeInstanceNavigation =
+                                _nodeInstanceCache.Get(nodeInstanceOutput.This2NodeInstance);
+                        }
+                    }
+
+                    if (link.This2RuleInterfaceInstanceInput.HasValue)
+                    {
+                        var ruleInterfaceInstanceInput =
+                            context.RuleInterfaceInstances.FirstOrDefault(a =>
+                                a.ObjId == link.This2RuleInterfaceInstanceInput);
+                        if (ruleInterfaceInstanceInput != null)
+                        {
+                            ruleInterfaceInstanceInput.This2RuleInstanceNavigation =
+                                _logicInstanceCache.Get(ruleInterfaceInstanceInput.This2RuleInstance);
+                        }
+                    }
+
+                    if (link.This2RuleInterfaceInstanceOutput.HasValue)
+                    {
+                        var ruleInterfaceInstanceOutput =
+                            context.RuleInterfaceInstances.FirstOrDefault(a =>
+                                a.ObjId == link.This2RuleInterfaceInstanceOutput);
+                        if (ruleInterfaceInstanceOutput != null)
+                        {
+                            ruleInterfaceInstanceOutput.This2RuleInstanceNavigation =
+                                _logicInstanceCache.Get(ruleInterfaceInstanceOutput.This2RuleInstance);
+                        }
+                    }
+                }
+
+                var ruleInstances = context.RuleInstances.Where(a => a.This2RulePage == page.ObjId).ToList();
+                var useRuleInstances = new List<RuleInstance>();
+                foreach (var ruleInstance in ruleInstances)
+                { useRuleInstances .Add(_logicInstanceCache.Get(ruleInstance.ObjId));
+                }
+                page.RuleInstance = useRuleInstances;
+
+                page.Link = links;
+            }
+
+            return ret.AsQueryable();
         }
 
         public override void Add(Guid key, RulePage value)
@@ -221,24 +275,24 @@ namespace Automatica.Core.Internals.Cache.Logic
             if (link.This2RuleInterfaceInstanceInput.HasValue)
             {
                 link.This2RuleInterfaceInstanceInputNavigation =
-                    _logicInstanceCache.Get(link.This2RuleInterfaceInstanceInput.Value);
+                    _logicInterfaceInstanceCache.Get(link.This2RuleInterfaceInstanceInput.Value);
             }
             if (link.This2RuleInterfaceInstanceOutput.HasValue)
             {
                 link.This2RuleInterfaceInstanceOutputNavigation =
-                    _logicInstanceCache.Get(link.This2RuleInterfaceInstanceOutput.Value);
+                    _logicInterfaceInstanceCache.Get(link.This2RuleInterfaceInstanceOutput.Value);
             }
 
             if (link.This2NodeInstance2RulePageInput.HasValue)
             {
                 link.This2NodeInstance2RulePageInputNavigation =
-                    _nodeInstanceCache.Get(link.This2NodeInstance2RulePageInput.Value);
+                    _logicNodeInstanceCache.Get(link.This2NodeInstance2RulePageInput.Value);
             }
 
             if (link.This2NodeInstance2RulePageOutput.HasValue)
             {
                 link.This2NodeInstance2RulePageOutputNavigation =
-                    _nodeInstanceCache.Get(link.This2NodeInstance2RulePageOutput.Value);
+                    _logicNodeInstanceCache.Get(link.This2NodeInstance2RulePageOutput.Value);
             }
         }
 

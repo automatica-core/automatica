@@ -20,6 +20,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, NodeInstance> _allCache = new ConcurrentDictionary<Guid, NodeInstance>();
+        private readonly IDictionary<Guid, List<NodeInstance>> _allParentCache = new ConcurrentDictionary<Guid, List<NodeInstance>>();
         private readonly ConcurrentDictionary<Guid, NodeInstance> _favorites = new ConcurrentDictionary<Guid, NodeInstance>();
         private NodeInstance _root;
 
@@ -34,34 +35,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         {
             var rootItem = context.NodeInstances.AsNoTracking().First(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
 
-            var allItems = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .Include(a => a.PropertyInstance)
-                .ThenInclude(a => a.This2PropertyTemplateNavigation)
-                .ThenInclude(a => a.This2PropertyTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                .ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                    a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                    a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-                .ThenInclude(b => b.This2PropertyTypeNavigation)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-                .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-                .ThenInclude(a => a.ConstraintData)
-                .Include(a => a.This2AreaInstanceNavigation)
-                .Include(a => a.This2SlaveNavigation)
-                .Include(a => a.This2CategoryInstanceNavigation)
-                .Where(a => !a.IsDeleted && a.This2ParentNodeInstance != null).ToList();
+            var allItems = context.NodeInstances.AsNoTracking().Where(a => !a.IsDeleted && a.This2ParentNodeInstance != null).ToList();
 
             rootItem.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(allItems, rootItem.ObjId);
 
@@ -75,10 +49,26 @@ namespace Automatica.Core.Internals.Cache.Driver
             foreach (var item in allItems)
             {
                 _allCache.Add(item.ObjId, item);
+                FillItem(item, context);
+
+                if (item.This2ParentNodeInstance.HasValue)
+                {
+                    if (!_allParentCache.ContainsKey(item.This2ParentNodeInstance.Value))
+                    {
+                        _allParentCache.Add(item.This2ParentNodeInstance.Value, new List<NodeInstance>());
+                    }
+                    _allParentCache[item.This2ParentNodeInstance.Value].Add(item);
+                }
+
             }
 
             foreach (var item in allItems)
             {
+                if (_allParentCache.TryGetValue(item.ObjId, out var value))
+                {
+                    item.InverseThis2ParentNodeInstanceNavigation = value;
+                }
+
                 if (item.This2AreaInstance.HasValue)
                 {
                     AddToAreaCache(item, item.This2AreaInstance.Value);
@@ -113,8 +103,54 @@ namespace Automatica.Core.Internals.Cache.Driver
                 }
             }
 
-
             return items.AsQueryable();
+        }
+
+        private void FillItem(NodeInstance item, AutomaticaContext context)
+        {
+            var properties = context.PropertyInstances.AsNoTracking().Where(a => a.This2NodeInstance == item.ObjId).ToList();
+
+            foreach (var property in properties)
+            {
+                var propertyTemplate = context.PropertyTemplates.AsNoTracking().First(a => a.ObjId == property.This2PropertyTemplate);
+                var propertyType = context.PropertyTypes.AsNoTracking().First(a => a.Type == propertyTemplate.This2PropertyType);
+
+                property.This2PropertyTemplateNavigation = propertyTemplate;
+                propertyTemplate.This2PropertyTypeNavigation = propertyType;
+
+                var constraints = context.PropertyTemplateConstraints.AsNoTracking().Where(a => a.This2PropertyTemplate == propertyTemplate.ObjId).ToList();
+                propertyTemplate.Constraints = constraints;
+            }
+
+            item.PropertyInstance = properties;
+
+            var nodeTemplate = context.NodeTemplates.AsNoTracking().First(a => a.ObjId == item.This2NodeTemplate);
+            item.This2NodeTemplateNavigation = nodeTemplate;
+
+            var needsInterfaces = context.InterfaceTypes.AsNoTracking().First(a => a.Type == nodeTemplate.NeedsInterface2InterfacesType);
+            var providesInterface = context.InterfaceTypes.AsNoTracking().First(a => a.Type == nodeTemplate.ProvidesInterface2InterfaceType);
+
+            nodeTemplate.NeedsInterface2InterfacesTypeNavigation = needsInterfaces;
+            nodeTemplate.ProvidesInterface2InterfaceTypeNavigation = providesInterface;
+
+            if (item.This2Slave.HasValue)
+            {
+                item.This2SlaveNavigation =
+                    context.Slaves.AsNoTracking().FirstOrDefault(a => a.ObjId == item.This2Slave);
+            }
+
+            if (item.This2AreaInstance.HasValue)
+            {
+                item.This2AreaInstanceNavigation = context.AreaInstances.AsNoTracking()
+                    .FirstOrDefault(a => a.ObjId == item.This2AreaInstance);
+            }
+            
+            if (item.This2CategoryInstance.HasValue)
+            {
+                item.This2CategoryInstanceNavigation = context.CategoryInstances.AsNoTracking()
+                    .FirstOrDefault(a => a.ObjId == item.This2AreaInstance);
+            }
+
         }
 
         private void AddToAreaCache(NodeInstance item, Guid area)
@@ -149,32 +185,6 @@ namespace Automatica.Core.Internals.Cache.Driver
         {
 
             var item = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-               .Include(a => a.PropertyInstance)
-               .ThenInclude(a => a.This2PropertyTemplateNavigation)
-               .ThenInclude(a => a.This2PropertyTypeNavigation)
-               .Include(a => a.This2NodeTemplateNavigation)
-               .Include(a => a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-               .Include(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-               .Include(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-               .ThenInclude(b => b.This2PropertyTypeNavigation)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a => a.PropertyInstance)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-               .ThenInclude(a => a.This2NodeTemplateNavigation)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                   a.This2NodeTemplateNavigation.NeedsInterface2InterfacesTypeNavigation)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation).ThenInclude(a =>
-                   a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceTypeNavigation)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-               .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate)
-               .ThenInclude(b => b.This2PropertyTypeNavigation)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-               .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-               .Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-               .ThenInclude(a => a.This2NodeTemplateNavigation.PropertyTemplate).ThenInclude(b => b.Constraints)
-               .ThenInclude(a => a.ConstraintData)
-               .Include(a => a.This2AreaInstanceNavigation)
-               .Include(a => a.This2SlaveNavigation)
-               .Include(a => a.This2CategoryInstanceNavigation)
                .FirstOrDefault(a => a.ObjId == objId);
 
             if (item == null)
@@ -182,6 +192,8 @@ namespace Automatica.Core.Internals.Cache.Driver
                 return null;
 
             }
+
+            FillItem(item, context);
 
             if (_allCache.ContainsKey(item.ObjId))
             {
@@ -367,6 +379,8 @@ namespace Automatica.Core.Internals.Cache.Driver
             }
             private set => _root = value;
         }
+
+        public NodeInstance __ { get; set; }
 
         public NodeInstance GetDriverNodeInstanceFromChild(NodeInstance child)
         {
