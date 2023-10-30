@@ -4,9 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Discovery;
-using Automatica.Core.EF.Models;
+using Automatica.Core.EF.Models;   
 using Microsoft.Extensions.Logging;
-using P3.Driver.IkeaTradfri;
 
 namespace P3.Driver.IkeaTradfriDriverFactory
 {
