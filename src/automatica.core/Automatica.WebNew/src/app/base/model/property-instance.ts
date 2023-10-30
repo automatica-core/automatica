@@ -259,24 +259,27 @@ export class PropertyInstance extends BaseModel {
                 case PropertyConstraintType.None:
                     return true;
                 case PropertyConstraintType.Unique: {
-                    for (const x of this.Parent.Parent.Children) {
-                        if (x === this.Parent) {
-                            continue;
-                        }
-                        for (const prop of x.Properties) {
-                            if (prop.PropertyTemplate.Key === this.PropertyTemplate.Key) {
-                                if (prop.Value === this.Value) {
-                                    x.ValidationOk = false;
-                                    this.Parent.ValidationOk = false;
-                                    return false;
-                                } else {
-                                    x.ValidationOk = true;
+                    if (this.Parent && this.Parent.Parent && this.Parent.Parent.Children) {
+                        for (const x of this.Parent.Parent.Children) {
+                            if (x === this.Parent) {
+                                continue;
+                            }
+                            for (const prop of x.Properties) {
+                                if (prop.PropertyTemplate.Key === this.PropertyTemplate.Key) {
+                                    if (prop.Value === this.Value) {
+                                        x.ValidationOk = false;
+                                        this.Parent.ValidationOk = false;
+                                        return false;
+                                    } else {
+                                        x.ValidationOk = true;
+                                    }
                                 }
                             }
                         }
+                        this.Parent.ValidationOk = true;
+                        return true;
                     }
-                    this.Parent.ValidationOk = true;
-                    return true;
+                    return false;
                 } case PropertyConstraintType.UniqueOnCondition: {
                     const validationResult = PropertyInstanceMetaHelper.validate(this);
                     this.Parent.ValidationOk = validationResult;
