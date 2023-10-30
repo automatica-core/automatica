@@ -903,7 +903,6 @@ namespace Automatica.Core.Runtime.Core
 
                 return;
             }
-            _licenseContext.DecrementDriverCount(driver.ChildrensCreated);
 
             await StopDriver(driver);
             await InitializeAndStartDriver(rootNode, _nodeTemplateCache.Get(rootNode.This2NodeTemplate.Value));
