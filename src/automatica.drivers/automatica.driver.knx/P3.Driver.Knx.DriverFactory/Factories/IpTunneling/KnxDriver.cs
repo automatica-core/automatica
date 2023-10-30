@@ -104,7 +104,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             try
             {
-                ConstructTunnelingConnection();
+                await ConstructTunnelingConnection();
 
                 if (useTunnel.HasValue && useTunnel.Value)
                 {
@@ -299,6 +299,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             try
             {
                 await _tunneling.ConnectAsync(token);
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error connecting to KNX Interface {e}");
             }
             finally
             {
