@@ -334,25 +334,18 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public override async Task<bool> Stop(CancellationToken token = default)
         {
-            await _semaphore.WaitAsync(token);
-            try
+            DriverContext.Logger.LogInformation($"Stopping KNX driver...");
+            if (_tunneling != null)
             {
-                DriverContext.Logger.LogInformation($"Stopping KNX driver...");
-                if (_tunneling != null)
+                if (!_onlyUseTunnel)
                 {
-                    if (!_onlyUseTunnel)
-                    {
-                        await DisposeConnection();
-                    }
-
-                    _callbackMap.Clear();
-                    _tunneling = null;
+                    await DisposeConnection();
                 }
+
+                _callbackMap.Clear();
+                _tunneling = null;
             }
-            finally
-            {
-                _semaphore.Release();
-            }
+
             return await base.Stop(token);
         }
 
