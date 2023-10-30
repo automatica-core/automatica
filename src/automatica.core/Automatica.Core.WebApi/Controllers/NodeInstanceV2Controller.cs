@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
@@ -194,9 +196,7 @@ namespace Automatica.Core.WebApi.Controllers
                 return newNode.node;
             }
 
-            async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
-            ReloadAndForget();
-
+            _ = Task.Factory.StartNew(() => ReloadDriver(node, newNode.entityState).ConfigureAwait(false), CancellationToken.None);
 
             _logger.LogDebug($"Add Node...done");
 
@@ -400,8 +400,7 @@ namespace Automatica.Core.WebApi.Controllers
                     }
                     else
                     {
-                        async void ReloadAndForget() => await ReloadDriver(node, entityState);
-                        ReloadAndForget();
+                        _ = Task.Factory.StartNew(() => ReloadDriver(node, entityState).ConfigureAwait(false), CancellationToken.None);
                     }
 
                     return _nodeInstanceCache.Get(node.ObjId);
@@ -447,8 +446,7 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (savedNodesData.Any())
             {
-                async void ReloadAndForget() => await ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState);
-                ReloadAndForget();
+                _ = Task.Factory.StartNew(() => ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState).ConfigureAwait(false), CancellationToken.None);
             }
 
             return savedNodes;
