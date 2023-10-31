@@ -279,7 +279,7 @@ export class PropertyInstance extends BaseModel {
                         this.Parent.ValidationOk = true;
                         return true;
                     }
-                    return false;
+                    break;
                 } case PropertyConstraintType.UniqueOnCondition: {
                     const validationResult = PropertyInstanceMetaHelper.validate(this);
                     this.Parent.ValidationOk = validationResult;
