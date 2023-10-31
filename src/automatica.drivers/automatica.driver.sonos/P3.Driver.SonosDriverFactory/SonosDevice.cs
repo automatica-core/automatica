@@ -71,11 +71,6 @@ namespace P3.Driver.SonosDriverFactory
             return true;
         }
 
-        protected override bool CreateCustomLogger()
-        {
-            return true;
-        }
-
         public override Task<bool> Init(CancellationToken token = default)
         {
             _id = DriverContext.NodeInstance.GetPropertyValueString(SonosDriverFactory.IdAddressPropertyKey);
@@ -98,7 +93,7 @@ namespace P3.Driver.SonosDriverFactory
 
                 if (scan.Count == 0)
                 {
-                    DriverContext.Logger.LogError($"Could not find any sonos device..");
+                    DriverContext.Logger.LogError($"{Name}: Could not find any sonos device..");
                     return false;
                 }
 
@@ -106,7 +101,7 @@ namespace P3.Driver.SonosDriverFactory
 
                 if (device == null)
                 {
-                    DriverContext.Logger.LogError($"Could not find sonos device with id {_id}..");
+                    DriverContext.Logger.LogError($"{Name}: Could not find sonos device with id {_id}..");
                     return false;
                 }
 
@@ -140,7 +135,7 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     if (o is true)
                     {
-                        DriverContext.Logger.LogDebug($"Sonos play...");
+                        DriverContext.Logger.LogDebug($"{Name}: Sonos play...");
                         await _controller.PlayAsync();
                         return true;
                     }
@@ -158,7 +153,7 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     if (o is true)
                     {
-                        DriverContext.Logger.LogDebug($"Sonos pause...");
+                        DriverContext.Logger.LogDebug($"{Name}:Sonos pause...");
                         await _controller.PauseAsync();
                         return true;
                     }
@@ -169,7 +164,7 @@ namespace P3.Driver.SonosDriverFactory
             {
                 sonosAttribute = new SonosAttribute(ctx, null, async o =>
                 {
-                    DriverContext.Logger.LogDebug($"Sonos next track...");
+                    DriverContext.Logger.LogDebug($"{Name}: Sonos next track...");
                     if (o is true)
                     {
                         await _controller.NextTrackAsync();
@@ -183,7 +178,7 @@ namespace P3.Driver.SonosDriverFactory
             {
                 sonosAttribute = new SonosAttribute(ctx, null, async o =>
                 {
-                    DriverContext.Logger.LogDebug($"Sonos previous track...");
+                    DriverContext.Logger.LogDebug($"{Name}: Sonos previous track...");
                     if (o is true)
                     {
                         await _controller.PreviousTrackAsync();
@@ -203,7 +198,7 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     try
                     {
-                        DriverContext.Logger.LogDebug($"Sonos set volume to {o}...");
+                        DriverContext.Logger.LogDebug($"{Name}: Sonos set volume to {o}...");
                         var volume = Convert.ToInt32(o);
                         await _controller.SetVolumeAsync(new SonosVolume(volume));
                         return volume;
@@ -211,7 +206,7 @@ namespace P3.Driver.SonosDriverFactory
                     catch (Exception e)
                     {
                         _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
-                        DriverContext.Logger.LogError(e, "Could not set volume...");
+                        DriverContext.Logger.LogError(e, $"{Name}: Could not set volume...");
                     }
 
                     return null;

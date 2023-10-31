@@ -42,19 +42,17 @@ namespace P3.Driver.SonosDriverFactory.Attributes
                 var strValue = value.ToString();
                 var mediaUrl = String.Format(SonosController.TuneInMediaUrl, strValue);
 
-                if (mediaUrl != _currentMediaUrl)
-                {
-                    await Device.Controller.SetMediaUrl(mediaUrl);
-                    _currentMediaUrl = mediaUrl;
 
-                    await writeContext.DispatchValue(value, token);
+                await Device.Controller.SetMediaUrl(mediaUrl);
+                _currentMediaUrl = mediaUrl;
 
-                    DriverContext.Logger.LogDebug($"Sonos set radio to {mediaUrl}...");
-                }
+                await writeContext.DispatchValue(value, token);
+
+                DriverContext.Logger.LogDebug($"{Name}: Sonos set radio to {mediaUrl}...");
             }
             catch (Exception e)
             {
-                DriverContext.Logger.LogError(e, "Could not set radio...");
+                DriverContext.Logger.LogError(e, $"{Name}: Could not set radio...");
             }
         }
 

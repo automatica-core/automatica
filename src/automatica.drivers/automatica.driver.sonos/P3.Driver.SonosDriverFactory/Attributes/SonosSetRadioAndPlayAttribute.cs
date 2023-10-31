@@ -17,13 +17,13 @@ namespace P3.Driver.SonosDriverFactory.Attributes
         {
             try
             {
-                DriverContext.Logger.LogDebug($"Sonos play...");
+                DriverContext.Logger.LogDebug($"{Name}: Sonos play...");
                 await base.Write(value, writeContext, token);
                 await Device.Controller.PlayAsync();
             }
             catch (Exception e)
             {
-                DriverContext.Logger.LogError(e, "Could not set radio...");
+                DriverContext.Logger.LogError(e, $"{Name}: Could not set radio...");
             }
         }
 
