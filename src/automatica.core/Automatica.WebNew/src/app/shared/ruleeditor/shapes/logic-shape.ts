@@ -212,7 +212,7 @@ export class LogicShapes {
                         bgColor: null,
                         fontColor: "#4a4a4a",
                         resizeable: false,
-                        padding: { top: 5, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5 },
+                        padding: { top: 10, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5 },
                         fontSize: 8
                     }, isInput ? 0 : 1, this.realParent);
 
