@@ -213,8 +213,9 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
 
-                    instance.This2NodeInstanceNavigation = nav;
-                    _logicCacheFacade.PageCache.AddNodeInstance(instance);
+                    instance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(nav.ObjId, DbContext);
+         
+                    _logicCacheFacade.ClearInstances();
 
                     return instance;
                 }
@@ -346,6 +347,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await transaction.CommitAsync();
 
                     await _logicCacheFacade.RemoveLogic(instanceId);
+                    _logicCacheFacade.ClearInstances();
                 }
                 catch (Exception ex)
                 {
@@ -386,6 +388,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await transaction.CommitAsync();
 
                     await _logicCacheFacade.RemoveNodeInstance(instanceId);
+                    _logicCacheFacade.ClearInstances();
                 }
                 catch (Exception ex)
                 {
@@ -446,14 +449,7 @@ namespace Automatica.Core.WebApi.Controllers
                     var this2RuleOutputRuleId = link.This2RuleInterfaceInstanceOutputNavigation?.This2RuleInstance;
                     var this2RuleInputRuleId = link.This2RuleInterfaceInstanceInputNavigation?.This2RuleInstance;
 
-                    if (isAdded)
-                    {
-                        _logicCacheFacade.PageCache.AddLink(link);
-                    }
-                    else
-                    {
-                        _logicCacheFacade.PageCache.UpdateLink(link);
-                    }
+                   
                     if (this2RuleOutputRuleId.HasValue)
                     {
                         await _coreServer.ReloadLogic(this2RuleOutputRuleId.Value);
@@ -465,6 +461,7 @@ namespace Automatica.Core.WebApi.Controllers
                     }
 
                     await _logicCacheFacade.AddOrUpdateLink(link.ObjId, DbContext);
+                    _logicCacheFacade.ClearInstances();
                     await _coreServer.ReloadLinks();
                     return link;
                 }
@@ -495,6 +492,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
 
+                    _logicCacheFacade.ClearInstances();
                     await _coreServer.ReloadLinks();
                 }
                 catch (Exception e)

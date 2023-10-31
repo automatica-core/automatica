@@ -104,7 +104,15 @@ namespace Automatica.Core.Internals.Cache.Logic
                 }
                 page.RuleInstance = useRuleInstances;
 
+                var nodeInstances = context.NodeInstance2RulePages.Where(a => a.This2RulePage == page.ObjId).ToList();
+                var useNodeInstances = new List<NodeInstance2RulePage>();
+                foreach (var nodeInstance in nodeInstances)
+                {
+                    useNodeInstances.Add(_logicNodeInstanceCache.Get(nodeInstance.ObjId));
+                }
+
                 page.Link = links;
+                page.NodeInstance2RulePage = useNodeInstances;
             }
 
             return ret.AsQueryable();
@@ -186,6 +194,12 @@ namespace Automatica.Core.Internals.Cache.Logic
             {
                 _nodeInstanceRefCache[nodeInstance.This2RulePage].Add(nodeInstance.ObjId, nodeInstance);
             }
+
+            if (Contains(nodeInstance.This2RulePage))
+            {
+                var item = Get(nodeInstance.This2RulePage);
+                item.NodeInstance2RulePage.Add(nodeInstance);
+            } 
         }
 
         public void UpdateRuleInstance(RuleInstance ruleInstance)
@@ -225,10 +239,17 @@ namespace Automatica.Core.Internals.Cache.Logic
             }
             if (_rulePageCache.TryGetValue(nodeInstance.This2RulePage, out var page))
             {
-                var existing = page.NodeInstance2RulePage.First(a => a.ObjId == nodeInstance.ObjId);
+                var existing = page.NodeInstance2RulePage.FirstOrDefault(a => a.ObjId == nodeInstance.ObjId);
 
-                existing.X = nodeInstance.X;
-                existing.Y = nodeInstance.Y;
+                if (existing != null)
+                {
+                    existing.X = nodeInstance.X;
+                    existing.Y = nodeInstance.Y;
+                }
+                else
+                {
+                    Clear();
+                }
             }
         }
 
@@ -247,6 +268,11 @@ namespace Automatica.Core.Internals.Cache.Logic
                 }
             }
 
+            if (Contains(link.This2RulePage))
+            {
+                var item = Get(link.This2RulePage);
+                item.Link.Add(link);
+            }
             InitLink(link);
         }
 
@@ -308,9 +334,16 @@ namespace Automatica.Core.Internals.Cache.Logic
             }
             if (_rulePageCache.TryGetValue(nodeInstance.This2RulePage, out var page))
             {
-                var existing = page.NodeInstance2RulePage.First(a => a.ObjId == nodeInstance.ObjId);
+                var existing = page.NodeInstance2RulePage.FirstOrDefault(a => a.ObjId == nodeInstance.ObjId);
 
-                page.NodeInstance2RulePage.Remove(existing);
+                if (existing != null)
+                {
+                    page.NodeInstance2RulePage.Remove(existing);
+                }
+                else
+                {
+                    Clear();
+                }
             }
         }
 
