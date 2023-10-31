@@ -28,7 +28,7 @@ namespace P3.Driver.SonosDriverFactory
                 var write = await _writeAction.Invoke(value);
                 DriverContext.Logger.LogDebug($"Sonos write value {write}...");
 
-                if (write != null && write != _lastValue)
+                if (write != null && !write.Equals(_lastValue))
                 {
                     _lastValue = write;
                     await writeContext.DispatchValue(write, token);
@@ -48,7 +48,7 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     var value = await _readAction.Invoke();
 
-                    if (value != null && value != _lastValue)
+                    if (value != null && !value.Equals(_lastValue))
                     {
                         _lastValue = value;
                         await readContext.DispatchValue(value, token);
