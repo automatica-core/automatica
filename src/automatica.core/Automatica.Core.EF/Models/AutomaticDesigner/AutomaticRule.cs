@@ -16,8 +16,10 @@ namespace Automatica.Core.EF.Models.AutomaticDesigner
         public DateTime EndDate { get; set; }
 
 
-        public List<AutomaticAction> Actions { get; set; }
+
+        public List<AutomaticTrigger> Triggers { get; set; }
         public List<AutomaticCondition> Conditions { get; set; }
+        public List<AutomaticAction> Actions { get; set; }
 
         public bool ExecuteActionsDelayed { get; set; }
 
