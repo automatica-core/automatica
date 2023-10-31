@@ -69,6 +69,9 @@ export class ShutterComponent extends BaseMobileRuleComponent implements OnInit,
 
   onRuleInstanceValueChanged(interfaceId, value) {
     if (this.absolutePositionOutput.ObjId == interfaceId || this.absolutePositionInput.ObjId == interfaceId) {
+      if(value >= 100) {
+        value = 100;
+      }
       this.absolutePosition = value;
       this.value = value;
       this.displayValue = Math.round(value) + "%";
