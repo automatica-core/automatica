@@ -259,7 +259,7 @@ export class PropertyInstance extends BaseModel {
                 case PropertyConstraintType.None:
                     return true;
                 case PropertyConstraintType.Unique: {
-                    if (this.Parent && this.Parent.Parent && this.Parent.Parent.Children) {
+                    if (this.Parent?.Parent?.Children) {
                         for (const x of this.Parent.Parent.Children) {
                             if (x === this.Parent) {
                                 continue;
