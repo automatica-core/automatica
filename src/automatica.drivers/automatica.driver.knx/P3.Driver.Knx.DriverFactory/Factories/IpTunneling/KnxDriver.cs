@@ -395,6 +395,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             await _semaphore.WaitAsync();
             try
             {
+                if (_tunneling.ConnectionState != BusConnectionState.Connected)
+                {
+                    DriverContext.Logger.LogError($"Cannot read from KNX interface, not connected");
+                    return false;
+                }
                 return await _tunneling.RequestGroupValueAsync(GroupAddress.Parse(address));
             }
             finally
@@ -410,6 +415,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             await _semaphore.WaitAsync();
             try
             {
+                if (_tunneling.ConnectionState != BusConnectionState.Connected)
+                {
+                    DriverContext.Logger.LogError($"Cannot write to KNX interface, not connected");
+                    return false;
+                }
                 _lastGaValues[address] = groupValue;
                 return await _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue);
             }
