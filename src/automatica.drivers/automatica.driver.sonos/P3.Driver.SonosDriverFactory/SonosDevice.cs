@@ -33,7 +33,7 @@ namespace P3.Driver.SonosDriverFactory
             _sonosControllerFactory = new SonosControllerFactory();
 
             _readTimer.Elapsed += ReadTimerOnElapsed;
-            _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
+            _readTimer.Interval = TimeSpan.FromSeconds(30).TotalMilliseconds;
         }
 
         private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
@@ -50,7 +50,7 @@ namespace P3.Driver.SonosDriverFactory
 
                 _readTimer.Interval = isPlaying
                     ? TimeSpan.FromSeconds(1).TotalMilliseconds
-                    : TimeSpan.FromSeconds(15).TotalMilliseconds;
+                    : TimeSpan.FromSeconds(30).TotalMilliseconds;
 
                 foreach (var child in Children)
                 {
@@ -59,7 +59,7 @@ namespace P3.Driver.SonosDriverFactory
             }
             catch (Exception ex)
             {
-                _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
+                _readTimer.Interval = TimeSpan.FromSeconds(30).TotalMilliseconds;
                 DriverContext.Logger.LogError(ex, "Error reading...");
                 return false;
             }
@@ -205,7 +205,6 @@ namespace P3.Driver.SonosDriverFactory
                     }
                     catch (Exception e)
                     {
-                        _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
                         DriverContext.Logger.LogError(e, $"{Name}: Could not set volume...");
                     }
 
