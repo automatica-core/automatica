@@ -145,8 +145,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("copy/{nodeInstance}/{targetNodeInstance}")]
         public async Task<NodeInstance> Copy(Guid nodeInstance, Guid targetNodeInstance)
         {
-            await using var context = new AutomaticaContext(_config);
-            var instance = _nodeInstanceCache.GetSingle(nodeInstance, context);
+            var instance = _nodeInstanceCache.GetSingle(nodeInstance, DbContext);
 
             var copyInstance = JsonConvert.DeserializeObject<NodeInstance>(JsonConvert.SerializeObject(instance));
 

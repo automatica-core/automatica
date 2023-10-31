@@ -24,7 +24,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly IUserGroupsCache _userGroupsCache;
         private readonly IConfiguration _config;
 
-        public UserManagementController(ILogger<UserManagementController> logger, AutomaticaContext dbContext, IUserCache userCache, IUserGroupsCache userGroupsCache, IConfiguration config) : base(dbContext)
+        public UserManagementController(ILogger<UserManagementController> logger, AutomaticaContext DbContext, IUserCache userCache, IUserGroupsCache userGroupsCache, IConfiguration config) : base(DbContext)
         {
             _logger = logger;
             _userCache = userCache;
@@ -48,17 +48,16 @@ namespace Automatica.Core.WebApi.Controllers
             await strategy.Execute(async
                 () =>
             {
-                await using var dbContext = new AutomaticaContext(_config);
-                var transaction = await dbContext.Database.BeginTransactionAsync();
+                var transaction = await DbContext.Database.BeginTransactionAsync();
 
                 try
                 {
-                    var userGroup = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == id);
+                    var userGroup = DbContext.UserGroups.SingleOrDefault(a => a.ObjId == id);
                     if (userGroup != null)
                     {
-                        dbContext.UserGroups.Remove(userGroup);
+                        DbContext.UserGroups.Remove(userGroup);
+                        await DbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
-                        await dbContext.SaveChangesAsync();
                         _userGroupsCache.Clear();
                     }
                 }
@@ -78,28 +77,27 @@ namespace Automatica.Core.WebApi.Controllers
             return await strategy.Execute(async
                 () =>
             {
-                await using var dbContext = new AutomaticaContext(_config);
-                var transaction = await dbContext.Database.BeginTransactionAsync();
+                var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
 
-                    var existing = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
+                    var existing = DbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
                     var roles = instance.InverseThis2Roles;
                     instance.InverseThis2Roles = null;
 
                     if (existing == null)
                     {
-                        dbContext.UserGroups.Add(instance);
+                        DbContext.UserGroups.Add(instance);
                     }
                     else
                     {
-                        dbContext.Entry(existing).State = EntityState.Detached;
-                        dbContext.UserGroups.Update(instance);
+                        DbContext.Entry(existing).State = EntityState.Detached;
+                        DbContext.UserGroups.Update(instance);
                     }
 
                     foreach (var role in roles)
                     {
-                        var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a =>
+                        var rolesExisting = DbContext.UserGroup2Roles.SingleOrDefault(a =>
                             a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
 
                         if (rolesExisting != null)
@@ -107,20 +105,20 @@ namespace Automatica.Core.WebApi.Controllers
                             continue;
                         }
 
-                        dbContext.UserGroup2Roles.Add(role);
+                        DbContext.UserGroup2Roles.Add(role);
                     }
 
                     if (instance.InverseThis2Roles != null)
                     {
-                        var removedUserRoles = from c in dbContext.UserGroup2Roles
+                        var removedUserRoles = from c in DbContext.UserGroup2Roles
                             where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
                             select c;
 
                         var removedUserRolesList = removedUserRoles.ToList();
-                        dbContext.RemoveRange(removedUserRolesList);
+                        DbContext.RemoveRange(removedUserRolesList);
                     }
 
-                    await dbContext.SaveChangesAsync();
+                    await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
                     _userGroupsCache.Clear();
                 }
@@ -143,29 +141,28 @@ namespace Automatica.Core.WebApi.Controllers
             return await strategy.Execute(async
                 () =>
             {
-                await using var dbContext = new AutomaticaContext(_config);
-                var transaction = await dbContext.Database.BeginTransactionAsync();
+                var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
                     foreach (var instance in instances)
                     {
-                        var existing = dbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
+                        var existing = DbContext.UserGroups.SingleOrDefault(a => a.ObjId == instance.ObjId);
                         var roles = instance.InverseThis2Roles;
                         instance.InverseThis2Roles = null;
 
                         if (existing == null)
                         {
-                            dbContext.UserGroups.Add(instance);
+                            DbContext.UserGroups.Add(instance);
                         }
                         else
                         {
-                            dbContext.Entry(existing).State = EntityState.Detached;
-                            dbContext.UserGroups.Update(instance);
+                            DbContext.Entry(existing).State = EntityState.Detached;
+                            DbContext.UserGroups.Update(instance);
                         }
 
                         foreach (var role in roles)
                         {
-                            var rolesExisting = dbContext.UserGroup2Roles.SingleOrDefault(a =>
+                            var rolesExisting = DbContext.UserGroup2Roles.SingleOrDefault(a =>
                                 a.This2UserGroup == role.This2UserGroup && a.This2Role == role.This2Role);
 
                             if (rolesExisting != null)
@@ -173,27 +170,27 @@ namespace Automatica.Core.WebApi.Controllers
                                 continue;
                             }
 
-                            dbContext.UserGroup2Roles.Add(role);
+                            DbContext.UserGroup2Roles.Add(role);
                         }
 
                         if (instance.InverseThis2Roles != null)
                         {
-                            var removedUserRoles = from c in dbContext.UserGroup2Roles
+                            var removedUserRoles = from c in DbContext.UserGroup2Roles
                                 where !(from o in instance.InverseThis2Roles select o.This2Role).Contains(c.This2Role)
                                 select c;
 
                             var removedUserRolesList = removedUserRoles.ToList();
-                            dbContext.RemoveRange(removedUserRolesList);
+                            DbContext.RemoveRange(removedUserRolesList);
                         }
                     }
 
-                    var removedNodes = from c in dbContext.UserGroups
+                    var removedNodes = from c in DbContext.UserGroups
                         where !(from o in instances select o.ObjId).Contains(c.ObjId)
                         select c;
                     var removedList = removedNodes.ToList();
-                    dbContext.RemoveRange(removedList);
+                    DbContext.RemoveRange(removedList);
 
-                    await dbContext.SaveChangesAsync();
+                    await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
                     _userGroupsCache.Clear();
                 }
@@ -244,17 +241,16 @@ namespace Automatica.Core.WebApi.Controllers
             await strategy.Execute(async
                 () =>
             {
-                await using var dbContext = new AutomaticaContext(_config);
-                var transaction = await dbContext.Database.BeginTransactionAsync();
+                var transaction = await DbContext.Database.BeginTransactionAsync();
 
                 try
                 {
-                    var user = dbContext.Users.SingleOrDefault(a => a.ObjId == id);
+                    var user = DbContext.Users.SingleOrDefault(a => a.ObjId == id);
                     if (user != null)
                     {
-                        dbContext.Users.Remove(user);
+                        DbContext.Users.Remove(user);
+                        await DbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
-                        await dbContext.SaveChangesAsync();
                         _userCache.Clear();
                     }
                 }
@@ -274,8 +270,7 @@ namespace Automatica.Core.WebApi.Controllers
             return await strategy.Execute(async
                 () =>
             {
-                await using var dbContext = new AutomaticaContext(_config);
-                var transaction = await dbContext.Database.BeginTransactionAsync();
+                var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
                     var user2Groups = user.InverseThis2UserGroups;
@@ -285,7 +280,7 @@ namespace Automatica.Core.WebApi.Controllers
                     user.CreatedAt = DateTimeOffset.Now;
 
 
-                    var existing = dbContext.Users.SingleOrDefault(a => a.ObjId == user.ObjId);
+                    var existing = DbContext.Users.SingleOrDefault(a => a.ObjId == user.ObjId);
 
                     if (user.Password != null && user.Password == user.PasswordConfirm)
                     {
@@ -310,17 +305,17 @@ namespace Automatica.Core.WebApi.Controllers
                             user.Salt = UserHelper.GenerateNewSalt();
                         }
 
-                        dbContext.Users.Add(user);
+                        DbContext.Users.Add(user);
                     }
                     else
                     {
-                        dbContext.Entry(existing).State = EntityState.Detached;
-                        dbContext.Users.Update(user);
+                        DbContext.Entry(existing).State = EntityState.Detached;
+                        DbContext.Users.Update(user);
                     }
 
                     foreach (var user2Group in user2Groups)
                     {
-                        var user2GroupExisting = dbContext.User2Groups.SingleOrDefault(a =>
+                        var user2GroupExisting = DbContext.User2Groups.SingleOrDefault(a =>
                             a.This2User == user2Group.This2User && a.This2UserGroup == user2Group.This2UserGroup);
 
                         if (user2GroupExisting != null)
@@ -328,21 +323,21 @@ namespace Automatica.Core.WebApi.Controllers
                             continue;
                         }
 
-                        dbContext.User2Groups.Add(user2Group);
+                        DbContext.User2Groups.Add(user2Group);
                     }
 
-                    var removedUserGroups = from c in dbContext.User2Groups
+                    var removedUserGroups = from c in DbContext.User2Groups
                         where !(from o in user2Groups select o.This2UserGroup).Contains(c.This2UserGroup) &&
                               c.This2User == user.ObjId
                         select c;
 
                     var removedUserGroupsList = removedUserGroups.ToList();
-                    dbContext.RemoveRange(removedUserGroupsList);
+                    DbContext.RemoveRange(removedUserGroupsList);
 
 
                     foreach (var role in roles)
                     {
-                        var rolesExisting = dbContext.User2Roles.SingleOrDefault(a =>
+                        var rolesExisting = DbContext.User2Roles.SingleOrDefault(a =>
                             a.This2User == role.This2User && a.This2Role == role.This2Role);
 
                         if (rolesExisting != null)
@@ -350,21 +345,21 @@ namespace Automatica.Core.WebApi.Controllers
                             continue;
                         }
 
-                        dbContext.User2Roles.Add(role);
+                        DbContext.User2Roles.Add(role);
                     }
 
 
-                    var removedUserRoles = from c in dbContext.User2Roles
+                    var removedUserRoles = from c in DbContext.User2Roles
                         where !(from o in roles select o.This2Role).Contains(c.This2Role) &&
                               c.This2User == user.ObjId
                         select c;
 
                     var removedUserRolesList = removedUserRoles.ToList();
-                    dbContext.RemoveRange(removedUserRolesList);
+                    DbContext.RemoveRange(removedUserRolesList);
 
 
                     _userCache.Clear();
-                    await dbContext.SaveChangesAsync();
+                    await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
                 catch (Exception e)
@@ -391,19 +386,19 @@ namespace Automatica.Core.WebApi.Controllers
             return await strategy.Execute(async
                 () =>
             {
-                using var dbContext = new AutomaticaContext(_config);
-                var transaction = await dbContext.Database.BeginTransactionAsync();
+                var transaction = await DbContext.Database.BeginTransactionAsync();
 
                 try
                 {
-                    var removedNodes = from c in dbContext.Users
+                    var removedNodes = from c in DbContext.Users
                         where !(from o in users select o.ObjId).Contains(c.ObjId)
                         select c;
                     var removedList = removedNodes.ToList();
-                    dbContext.RemoveRange(removedList);
+                    DbContext.RemoveRange(removedList);
 
-                    await dbContext.SaveChangesAsync();
+                    await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
+                    
                     _userCache.Clear();
                 }
                 catch (Exception e)
