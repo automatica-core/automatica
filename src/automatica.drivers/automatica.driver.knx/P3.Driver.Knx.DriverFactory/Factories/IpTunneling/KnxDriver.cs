@@ -408,11 +408,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             }
         }
 
-        public async Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue)
+        public async Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue, CancellationToken token)
         {
             DriverContext.Logger.LogDebug($"Write datagram on GA {address} {groupValue.Value.ToHex(false)}");
 
-            await _semaphore.WaitAsync();
+            await _semaphore.WaitAsync(token);
             try
             {
                 if (_tunneling.ConnectionState != BusConnectionState.Connected)
@@ -420,8 +420,15 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     DriverContext.Logger.LogError($"Cannot write to KNX interface, not connected");
                     return false;
                 }
+
                 _lastGaValues[address] = groupValue;
-                return await _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue);
+                return await _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue,
+                    MessagePriority.High, token);
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error writing to KNX interface {e}");
+                throw;
             }
             finally
             {

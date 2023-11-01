@@ -91,7 +91,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
                 var decodedValue = dpt.ToGroupValue(dptValue);
 
-                var result = await Driver.Write(this, GroupAddress, decodedValue).ConfigureAwait(false);
+                var result = await Driver.Write(this, GroupAddress, decodedValue, token).ConfigureAwait(false);
                 await writeContext.DispatchValue(value, token);
 
                 if (result)
