@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -270,9 +271,10 @@ namespace Automatica.Core.Runtime.IO
                 {
                     try
                     {
+                        var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
                         _logger.LogInformation(
                             $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
-                        node.WriteValue(dispatchable, o);
+                        node.WriteValue(dispatchable, o, token.Token);
                     }
                     catch(Exception e)
                     {

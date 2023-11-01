@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -22,18 +23,18 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task NotifyUpdate(NodeInstance node)
         {
-            await ExecuteAction(node, _ => _?.OnSave(node));
+            await ExecuteAction(node, _ => _.OnSave(node));
         }
 
 
         public async Task NotifyAdd(NodeInstance node)
         {
-            await ExecuteAction(node, _ => _?.OnSave(node));
+            await ExecuteAction(node, _ => _.OnSave(node));
         }
 
         public async Task NotifyDeleted(NodeInstance node)
         {
-            await ExecuteAction(node, _ => _?.OnDelete(node));
+            await ExecuteAction(node, _ => _.OnDelete(node));
 
             var driverNode = _mapper.Get(node.ObjId);
 
@@ -52,36 +53,37 @@ namespace Automatica.Core.Runtime.Core
 
         public Task<IList<NodeInstance>> ScanBus(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _?.Scan());
+            return ExecuteAction(node, _ => _.Scan());
         }
 
         public Task<IList<NodeInstance>> CustomAction(NodeInstance node, string actionName)
         {
-            return ExecuteAction(node, _ => _?.CustomAction(actionName));
+            return ExecuteAction(node, _ => _.CustomAction(actionName));
         }
 
         public Task<bool> EnableLearnMode(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _?.EnableLearnMode());
+            return ExecuteAction(node, _ => _.EnableLearnMode());
         }
 
         public Task<bool> DisableLearnMode(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _?.DisableLearnMode());
+            return ExecuteAction(node, _ => _.DisableLearnMode());
         }
 
         public Task<bool> Read(NodeInstance node)
         {
-            return ExecuteAction(node, _ => _?.Read());
+            var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            return ExecuteAction(node, _ => _.Read(token.Token));
         }
 
         public Task<IList<NodeInstance>> Import(NodeInstance node, string fileName)
         {
-            return ExecuteAction(node, _ => _?.Import(fileName));
+            return ExecuteAction(node, _ => _.Import(fileName));
         }
         public Task<IList<NodeInstance>> Import(ImportConfig config)
         {
-            return ExecuteAction(config.Node, _ => _?.Import(config));
+            return ExecuteAction(config.Node, _ => _.Import(config));
         }
 
         private Task<T> ExecuteAction<T>(NodeInstance node, Func<IDriverNode, Task<T>> action)

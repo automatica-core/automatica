@@ -7,6 +7,7 @@ using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Automatica.Core.Driver
 {
@@ -53,8 +54,9 @@ namespace Automatica.Core.Driver
         }
 
 
-        private void Enqueue(IDispatchable source, DispatchValue value)
+        private async Task Enqueue(IDispatchable source, DispatchValue value)
         {
+            await Task.CompletedTask;
             _writeQueue.Enqueue((source, value));
             _writeSemaphore.Release(1);
         }
@@ -113,17 +115,24 @@ namespace Automatica.Core.Driver
 
                         await driverNode.Configure(token);
 
-                        await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
-                        {
-                            if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
-                            {
-                                return;
-                            }
-                            if (driverNode is DriverBase driverBase)
-                            {
-                                driverBase.Enqueue(source, value);
-                            }
-                        });
+
+                        //await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, async (source, value) =>
+                        //{
+                        //    if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
+                        //    {
+                        //        return;
+                        //    }
+
+                        //    if (source.Source == DispatchableSource.NodeInstance ||
+                        //        source.Source == DispatchableSource.RuleInstance)
+                        //    {
+                        //        return;
+                        //    }
+                        //    if (driverNode is DriverBase driverBase)
+                        //    {
+                        //        await driverBase.Enqueue(source, value);
+                        //    }
+                        //});
 
                         ChildrensCreated += driverNode.ChildrensCreated;
                     }
@@ -206,14 +215,10 @@ namespace Automatica.Core.Driver
             DriverContext.Logger.LogWarning("Learn mode not implemented");
             return Task.FromResult(false);
         }
-        public Task WriteValue(IDispatchable source, object value)
-        {
-            return Write(value, new WriteContext(DriverContext.Dispatcher, this));
-        }
 
-        public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
+        public async Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
-            return WriteValue(source, value.Value);
+            await Enqueue(source, value);
         }
 
         protected abstract Task Write(object value, IWriteContext writeContext, CancellationToken token = default);
@@ -332,7 +337,7 @@ namespace Automatica.Core.Driver
 
                     try
                     {
-                        await WriteValue(writeData.Item1, writeData.Item2, cts.Token);
+                        await Write(writeData.Item2.Value, new WriteContext(DriverContext.Dispatcher, this), cts.Token);
                     }
                     catch (Exception e)
                     {
