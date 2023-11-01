@@ -331,7 +331,8 @@ namespace Automatica.Core.Driver
 
                     var writeData = _writeQueue.Dequeue();
 
-                    DriverContext.Logger.LogInformation($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
+                    DriverContext.Logger.LogInformation(
+                        $"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
                     var cts = new CancellationTokenSource();
                     cts.CancelAfter(TimeSpan.FromSeconds(30));
@@ -346,9 +347,13 @@ namespace Automatica.Core.Driver
                     }
                 }
             }
-            catch(TaskCanceledException)
+            catch (TaskCanceledException)
             {
 
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, $"{Id} {FullName}: Error in write task");
             }
         }
 
