@@ -29,7 +29,7 @@ namespace P3.Driver.SonosDriverFactory
                 if (!value.Equals(_lastValue))
                 {
                     var write = await _writeAction.Invoke(value);
-                    DriverContext.Logger.LogDebug($"Sonos write value {write}...");
+                    DriverContext.Logger.LogDebug($"Sonos {Name} write value {write}...");
                     //  await writeContext.DispatchValue(write, token);
                 }
             }
