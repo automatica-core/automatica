@@ -27,7 +27,7 @@ namespace P3.Driver.SonosDriverFactory
             {
                 var write = await _writeAction.Invoke(value);
                 DriverContext.Logger.LogDebug($"Sonos write value {write}...");
-                await writeContext.DispatchValue(write, token);
+              //  await writeContext.DispatchValue(write, token);
             }
             catch (Exception e)
             {
