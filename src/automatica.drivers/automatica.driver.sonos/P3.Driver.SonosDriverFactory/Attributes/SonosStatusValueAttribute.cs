@@ -22,15 +22,13 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             return Parent.Read(token);
         }
 
-     
+
         internal void GetValueAndDispatch(GetPositionInfoResponse info)
         {
             var value = _getFunc(info);
-            if (value != null && !value.Equals(_previousValue))
-            {
-                _previousValue = value;
-                DispatchRead(value);
-            }
+            _previousValue = value;
+            DispatchRead(value);
+
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

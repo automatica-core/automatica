@@ -116,7 +116,7 @@ namespace P3.Driver.SonosDriverFactory
         public override async Task<bool> Stop(CancellationToken token = default)
         {
             _readTimer.Stop();
-            await _controller.StopAsync();
+            await _controller?.StopAsync();
             return await base.Stop(token);
         }
 
@@ -209,7 +209,7 @@ namespace P3.Driver.SonosDriverFactory
                     }
 
                     return null;
-                });
+                }, true);
             }
             if (nodeId == SonosDriverFactory.SetTuneInRadio)
             {
