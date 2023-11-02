@@ -1,0 +1,7 @@
+{
+  "name": "automatica-web",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

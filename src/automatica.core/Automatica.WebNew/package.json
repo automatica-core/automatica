@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng b --watch --configuration=development",
-    "build": "ng build --configuration=",
+    "start": "ng s --configuration=development  --host=0.0.0.0 --port=8100" ,
+    "start-dev": "ng b --watch --configuration=development" ,
+    "build": "ng build --configuration=development  --output-path ./dist",
     "build-docker": "ng build --configuration=production --output-path ./dist",
+    "build-prod": "ng build --configuration=production --output-path ./dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-themes": "devextreme build",
-    "set-version": "json -I -f package.json -e \"this.version='$VERSION'\""
+    "set-version": "json -I -f package.json -e \"this.version='$VERSION'\"",
+    "ionic:build": "npm run build",
+    "ionic:serve": "npm run start"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +27,10 @@
     "@angular/platform-browser": "^16.2.5",
     "@angular/platform-browser-dynamic": "^16.2.5",
     "@angular/router": "^16.2.5",
+    "@capacitor/android": "^5.5.1",
+    "@capacitor/cli": "^5.5.1",
+    "@capacitor/core": "^5.5.1",
+    "@capacitor/ios": "^5.5.1",
     "@fortawesome/angular-fontawesome": "^0.13.0",
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@fortawesome/fontawesome-pro": "^6.4.2",

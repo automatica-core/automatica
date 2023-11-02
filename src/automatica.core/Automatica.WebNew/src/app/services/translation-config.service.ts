@@ -34,12 +34,11 @@ import { Observable } from "rxjs";
       return this.http.get(url, options);
     }
   }
-
 }
 
-export const TranslationConfiguration: L10nConfig = {
+export const LocalLanguageConfigration: L10nConfig = {
   format: "language-region",
-  cache: false,
+  cache: true,
   keySeparator: ".",
   defaultLocale: { language: "de", currency: "EUR" },
   schema: [
@@ -51,8 +50,7 @@ export const TranslationConfiguration: L10nConfig = {
     { name: "visu", asset: "./assets/locale/permission/locale", options: { type: "file" } },
     { name: "visu_login", asset: "./assets/locale/visu/locale-visu", options: { type: "file" } },
     { name: "login", asset: "./assets/locale/login/locale", options: { type: "file" } },
-    { name: "error", asset: "./assets/locale/error/locale", options: { type: "file" } },
-    { name: "webapi", asset: "./webapi/localization", options: { type: "webapi" } }
+    { name: "error", asset: "./assets/locale/error/locale", options: { type: "file" } }
   ]
 };
 
@@ -74,6 +72,7 @@ export class TranslationConfigService {
 
   async init() {
     await this.l10Loader.init();
+
 
 
     loadMessages(deMessages);
