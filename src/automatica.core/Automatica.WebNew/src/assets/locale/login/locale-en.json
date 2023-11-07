@@ -3,6 +3,7 @@
         "NAME": "Login",
         "SIGN_IN": "Sign in...",
         "USERNAME": "Username",
-        "PASSWORD": "Password"
+        "PASSWORD": "Password",
+        "SERVER_IP": "Server address"
     }
 }

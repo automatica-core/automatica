@@ -10,7 +10,7 @@ import { BaseModel } from "../base/model/base-model";
 
 @Injectable()
 export class LoginService extends BaseService {
-
+ 
   private currentUser: User = void 0;
 
   constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
@@ -38,7 +38,12 @@ export class LoginService extends BaseService {
 
   getCurrentUser(): User {
     return this.currentUser;
+  } 
+  
+  serverUrl() {
+    return super.getS1Server();
   }
+
 
   hasPermission(role: string) {
     const user = this.getUserFromLocalStore();
@@ -72,7 +77,7 @@ export class LoginService extends BaseService {
 }
 
 @Injectable()
-export class HasRoleGuard  {
+export class HasRoleGuard {
 
   constructor(private router: Router, private userService: LoginService) {
 
@@ -95,7 +100,7 @@ export class HasRoleGuard  {
 }
 
 @Injectable()
-export class HomepageRouteGuard  {
+export class HomepageRouteGuard {
 
   constructor(private router: Router, private loginService: LoginService) {
   }

@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import * as deMessages from "devextreme/localization/messages/de.json";
 import * as enMessages from "devextreme/localization/messages/en.json";
 import { Observable } from "rxjs";
+import { BaseServiceHelper } from "./base-server-helper";
 
 @Injectable() export class HttpTranslationLoader implements L10nTranslationLoader {
 
@@ -26,7 +27,8 @@ import { Observable } from "rxjs";
 
     } else if (provider.options.type === "webapi") {
 
-      const url = `${provider.asset}/${language}`;
+      const url = `${BaseServiceHelper.getBaseUrl()}/${provider.asset}/${language}`;
+      console.log("load localization from...", url);
       const options = {
         headers: this.headers
       };

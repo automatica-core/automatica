@@ -152,6 +152,7 @@ namespace Automatica.Core
                         });
                     });
                 }
+                
             }).ConfigureAppConfiguration(a =>
             {
                 a.SetBasePath(ServerInfo.GetConfigDirectory())

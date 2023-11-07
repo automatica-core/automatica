@@ -4,6 +4,17 @@
         <dx-validation-group #validationGroup class="dx-fieldset">
             <div class="dx-fieldset-header" style="color: white" translate>LOGIN.NAME</div>
 
+            <ng-container *ngIf="!isWeb">
+                <div class="dx-field">
+                    <dx-text-box [(value)]="serverIp" placeholder="{{ 'LOGIN.SERVER_IP' | translateAsync }}" width="100%">
+                        <dx-validator>
+                            <dxi-validation-rule type="required" message="ServerIp is required"></dxi-validation-rule>
+                        </dx-validator>
+                    </dx-text-box>
+
+                </div>
+            </ng-container>
+
             <div class="dx-field">
                 <dx-text-box [(value)]="login" placeholder="{{ 'LOGIN.USERNAME' | translateAsync }}"
                     (onEnterKey)="onEnterPressed($event)" width="100%">

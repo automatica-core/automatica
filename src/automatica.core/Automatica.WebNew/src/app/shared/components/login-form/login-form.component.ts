@@ -5,6 +5,8 @@ import { Router } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
 import { DxValidationGroupComponent } from "devextreme-angular";
 import { L10N_LOCALE, L10nLocale } from "angular-l10n";
+import { Capacitor } from '@capacitor/core';
+import { BaseServiceHelper } from "src/app/services/base-server-helper";
 
 
 @Component({
@@ -15,6 +17,9 @@ import { L10N_LOCALE, L10nLocale } from "angular-l10n";
 export class LoginFormComponent implements OnInit {
     login = "";
     password = "";
+    serverIp = "";
+    
+    isWeb: boolean = false;
 
     @ViewChild("validationGroup", { static: true })
     validationGroup: DxValidationGroupComponent;
@@ -25,6 +30,10 @@ export class LoginFormComponent implements OnInit {
         private changeRef: ChangeDetectorRef,
         @Inject(L10N_LOCALE) public locale: L10nLocale) {
         localStorage.removeItem("jwt");
+
+         //this.isWeb = Capacitor.getPlatform() === "web";
+
+         this.serverIp = BaseServiceHelper.getSignalRBaseUrl();
     }
 
     ngOnInit() {
@@ -38,6 +47,11 @@ export class LoginFormComponent implements OnInit {
     }
 
     async onLoginClick(args) {
+
+        if(!this.isWeb) {
+            localStorage.setItem("s1server", this.serverIp);
+        }
+
         this.appService.isLoading = true;
         if (!this.validationGroup.instance.validate().isValid) {
             this.appService.isLoading = false;
