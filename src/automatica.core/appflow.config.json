@@ -2,7 +2,7 @@
     "apps":
     [
         {
-            "appId": "automatica.core",
+            "appId": "42f1ec87",
             "root": "Automatica.WebNew"
         }
     ]
