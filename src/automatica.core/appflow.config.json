@@ -1,0 +1,9 @@
+{
+    "apps":
+    [
+        {
+            "appId": "automatica.core",
+            "root": "Automatica.WebNew"
+        }
+    ]
+}
