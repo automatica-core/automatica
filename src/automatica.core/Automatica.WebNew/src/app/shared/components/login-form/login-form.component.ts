@@ -42,9 +42,7 @@ export class LoginFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.appService.isLoading = true;
-        this.changeRef.detectChanges();
-        this.appService.isLoading = false;
+       
     }
 
     async onEnterPressed($event) {
