@@ -18,12 +18,20 @@ export class FooterComponent implements OnInit {
 
     constructor(private config: ConfigService,
         private deviceService: DeviceDetectorService,
-        private changeRef: ChangeDetectorRef) {
+        private changeRef: ChangeDetectorRef,
+        private router: Router) {
         this.currentYear = new Date().getFullYear();
     }
 
     async ngOnInit() {
-        this.version = await this.config.getVersion();
+        try {
+            this.version = await this.config.getVersion();
+        }
+        catch (error) {
+            if(error.status == 401 || error.status == 404) {
+                await this.router.navigate(["/login"]);
+            }
+        }
 
         this.changeRef.detectChanges();
     }

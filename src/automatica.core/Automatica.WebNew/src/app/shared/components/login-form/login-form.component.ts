@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild, Inject } from "@angular/core";
+import { Component, ChangeDetectorRef, ViewChild, Inject, OnInit } from "@angular/core";
 
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
@@ -15,7 +15,7 @@ import { NotifyService } from "src/app/services/notify.service";
     templateUrl: "./login-form.component.html",
     styleUrls: ["./login-form.component.scss"]
 })
-export class LoginFormComponent{
+export class LoginFormComponent implements OnInit {
     login = "";
     password = "";
     serverIp = "";
@@ -34,13 +34,18 @@ export class LoginFormComponent{
         @Inject(L10N_LOCALE) public locale: L10nLocale) {
         localStorage.removeItem("jwt");
 
-        this.isWeb = Capacitor.getPlatform() === "web";
+        // this.isWeb = Capacitor.getPlatform() === "web";
 
         this.serverIp = BaseServiceHelper.getSignalRBaseUrl();
         this.login = localStorage.getItem("s1user");
         this.password = localStorage.getItem("s1pw");
 
+    }
+
+    ngOnInit(): void {
         this.appService.isLoading = false;
+        this.appService.isStarting = false;
+        this.changeRef.detectChanges();
     }
 
     async onEnterPressed($event) {
@@ -49,7 +54,7 @@ export class LoginFormComponent{
 
     async onDemoLogin($event) {
         localStorage.setItem("s1server", "https://demo.automaticacore.com");
-        
+
         this.serverIp = "https://demo.automaticacore.com";
         this.login = "sa";
         this.password = "sa";
@@ -57,37 +62,39 @@ export class LoginFormComponent{
     }
 
     async onLoginClick(args) {
-
-        if (!this.isWeb) {
-            localStorage.setItem("s1server", this.serverIp);
-        }
-        
-
         this.appService.isLoading = true;
-        if (!this.validationGroup.instance.validate().isValid) {
-            this.appService.isLoading = false;
-            return;
-        }
+        this.changeRef.detectChanges();
 
         try {
-            const value = await this.loginService.login(this.login, this.password);
-            if (!value) {
-                this.notifyService.notifyError("Login failed...");
-            } else {
-                this.loginService.saveToLocalStorage(value);
-                
-                if(this.saveLogin && !this.isWeb) {
-                    localStorage.setItem("s1user", this.login);
-                    localStorage.setItem("s1pw", this.password);
-                }
-                
-                this.router.navigate(["/"]);
+            if (!this.isWeb) {
+                localStorage.setItem("s1server", this.serverIp);
             }
-        } catch (error) {
-            this.notifyService.notifyError("Login failed..." + error.toString());
-        }
 
-        this.appService.isLoading = false;
+            if (!this.validationGroup.instance.validate().isValid) {
+                return;
+            }
+
+            try {
+                const value = await this.loginService.login(this.login, this.password);
+                if (!value) {
+                    this.notifyService.notifyError("Login failed...");
+                } else {
+                    this.loginService.saveToLocalStorage(value);
+
+                    if (this.saveLogin && !this.isWeb) {
+                        localStorage.setItem("s1user", this.login);
+                        localStorage.setItem("s1pw", this.password);
+                    }
+
+                    this.router.navigate(["/"]);
+                }
+            } catch (error) {
+                this.notifyService.notifyError("Login failed..." + error.toString());
+            }
+        }
+        finally {
+            this.appService.isLoading = false;
+        }
     }
 }
 

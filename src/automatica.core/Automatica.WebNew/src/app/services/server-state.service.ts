@@ -31,6 +31,9 @@ export class ServerStateService {
       return state === RunState.Started;
     } catch (error) {
       console.log(error);
+      if(error.status == 401 || error.status == 404) {
+        await this.router.navigate(["/login"]);
+      }
       return false;
     }
   }
