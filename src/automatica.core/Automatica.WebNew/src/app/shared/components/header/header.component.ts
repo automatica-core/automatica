@@ -69,6 +69,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     selectBoxOptions: any;
 
+    logoutButtonOptions: any;
+
 
     constructor(private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -78,10 +80,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private changeRef: ChangeDetectorRef,
         private settingsService: SettingsService,
         private themeService: ThemeService,
-        private translate: TranslationConfigService) { 
-            
-         this.isWeb = Capacitor.getPlatform() === "web";
+        private translate: TranslationConfigService) {
+
+        this.isWeb = Capacitor.getPlatform() === "web";
+
+        this.logoutButtonOptions = {
+            text: translate.translation.translate("COMMON.LOGOUT"),
+            onClick: () => {
+                this.logout();
+            }
         }
+    }
 
     async ngOnInit() {
 
@@ -92,11 +101,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const languageProperty = await this.settingsService.getByKey("language");
         const language = <Language>languageProperty.Value;
         if (language == Language.German) {
-            this.translate.translation.setLocale({language: "de"});
+            this.translate.translation.setLocale({ language: "de" });
         }
         else {
 
-            this.translate.translation.setLocale({language: "en"});
+            this.translate.translation.setLocale({ language: "en" });
         }
         await this.translate.init();
 
