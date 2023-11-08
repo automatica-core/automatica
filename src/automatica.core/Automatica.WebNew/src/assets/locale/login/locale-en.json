@@ -4,6 +4,7 @@
         "SIGN_IN": "Sign in...",
         "USERNAME": "Username",
         "PASSWORD": "Password",
-        "SERVER_IP": "Server address"
+        "SERVER_IP": "Server address",
+        "SAVE": "Save login"
     }
 }

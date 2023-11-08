@@ -4,6 +4,7 @@
         "SIGN_IN": "Anmelden...",
         "USERNAME": "Benutzername",
         "PASSWORD": "Passwort",
-        "SERVER_IP": "Server Adresse"
+        "SERVER_IP": "Server Adresse",
+        "SAVE": "Logindaten speichern"
     }
 }

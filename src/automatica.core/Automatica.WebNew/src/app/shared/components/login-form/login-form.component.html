@@ -6,7 +6,8 @@
 
             <ng-container *ngIf="!isWeb">
                 <div class="dx-field">
-                    <dx-text-box [(value)]="serverIp" placeholder="{{ 'LOGIN.SERVER_IP' | translateAsync }}" width="100%">
+                    <dx-text-box [(value)]="serverIp" placeholder="{{ 'LOGIN.SERVER_IP' | translateAsync }}"
+                        width="100%">
                         <dx-validator>
                             <dxi-validation-rule type="required" message="ServerIp is required"></dxi-validation-rule>
                         </dx-validator>
@@ -31,10 +32,18 @@
                     </dx-validator>
                 </dx-text-box>
             </div>
+            <ng-container *ngIf="!isWeb">
+                <div class="dx-field">
+                    <dx-check-box [(value)]="saveLogin" text="{{ 'LOGIN.SAVE' | translateAsync }}"></dx-check-box>
+
+                </div>
+            </ng-container>
+
             <div class="dx-field">
                 <dx-button type="default" text="{{ 'LOGIN.NAME' | translateAsync }}" (onClick)="onLoginClick($event)"
                     width="100%"></dx-button>
             </div>
+
         </dx-validation-group>
     </div>
 </div>
