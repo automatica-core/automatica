@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from "@angular/core";
+import { Component, ChangeDetectorRef, ViewChild, Inject } from "@angular/core";
 
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
@@ -15,7 +15,7 @@ import { NotifyService } from "src/app/services/notify.service";
     templateUrl: "./login-form.component.html",
     styleUrls: ["./login-form.component.scss"]
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent{
     login = "";
     password = "";
     serverIp = "";
@@ -39,13 +39,20 @@ export class LoginFormComponent implements OnInit {
         this.serverIp = BaseServiceHelper.getSignalRBaseUrl();
         this.login = localStorage.getItem("s1user");
         this.password = localStorage.getItem("s1pw");
-    }
 
-    ngOnInit() {
-       
+        this.appService.isLoading = false;
     }
 
     async onEnterPressed($event) {
+        await this.onLoginClick($event);
+    }
+
+    async onDemoLogin($event) {
+        localStorage.setItem("s1server", "https://demo.automaticacore.com");
+        
+        this.serverIp = "https://demo.automaticacore.com";
+        this.login = "sa";
+        this.password = "sa";
         await this.onLoginClick($event);
     }
 
@@ -69,7 +76,7 @@ export class LoginFormComponent implements OnInit {
             } else {
                 this.loginService.saveToLocalStorage(value);
                 
-                if(this.saveLogin) {
+                if(this.saveLogin && !this.isWeb) {
                     localStorage.setItem("s1user", this.login);
                     localStorage.setItem("s1pw", this.password);
                 }

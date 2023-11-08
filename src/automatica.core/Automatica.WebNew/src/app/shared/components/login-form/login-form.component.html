@@ -43,6 +43,14 @@
                     width="100%"></dx-button>
             </div>
 
+
+            <ng-container *ngIf="!isWeb">
+                <div class="dx-field" style="margin-top:50px;">
+                    <dx-button type="default" text="{{ 'LOGIN.DEMO' | translateAsync }}" (onClick)="onDemoLogin($event)"
+                        width="100%"></dx-button>
+                </div>
+            </ng-container>
+
         </dx-validation-group>
     </div>
 </div>

@@ -5,6 +5,7 @@
         "USERNAME": "Benutzername",
         "PASSWORD": "Passwort",
         "SERVER_IP": "Server Adresse",
-        "SAVE": "Logindaten speichern"
+        "SAVE": "Logindaten speichern",
+        "DEMO": "Demo Login"
     }
 }

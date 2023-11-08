@@ -5,6 +5,7 @@
         "USERNAME": "Username",
         "PASSWORD": "Password",
         "SERVER_IP": "Server address",
-        "SAVE": "Save login"
+        "SAVE": "Save login",
+        "DEMO": "Demo login"
     }
 }
