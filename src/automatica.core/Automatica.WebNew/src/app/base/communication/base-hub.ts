@@ -1,5 +1,6 @@
 import { EventEmitter } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
+import { BaseServiceHelper } from "src/app/services/base-server-helper";
 
 const METHODS = new Map<string, Array<string>>();
 export function SignalRMethod(target: any, propertyKey: string) {
@@ -66,7 +67,7 @@ export class BaseHub {
         }
 
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl("/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
+            .withUrl(BaseServiceHelper.getSignalRBaseUrl() + "/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
             .configureLogging(signalR.LogLevel.Warning)
             .build();
 

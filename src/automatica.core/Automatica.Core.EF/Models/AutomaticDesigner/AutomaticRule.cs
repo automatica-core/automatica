@@ -17,7 +17,6 @@ namespace Automatica.Core.EF.Models.AutomaticDesigner
 
 
 
-        public List<AutomaticTrigger> Triggers { get; set; }
         public List<AutomaticCondition> Conditions { get; set; }
         public List<AutomaticAction> Actions { get; set; }
 

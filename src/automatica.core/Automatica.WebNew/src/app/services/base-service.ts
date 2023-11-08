@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { WebApiException, ExceptionSeverity } from "../base/model/web-api-exception";
 import * as msgpack from "msgpack-lite";
 import { BaseModel } from "../base/model/base-model";
+import { BaseServiceHelper } from "./base-server-helper";
 
 export class BaseService {
     public static getValidBaseModels<T extends BaseModel>(jsonArr: any, translationService: L10nTranslationService) {
@@ -43,14 +44,8 @@ export class BaseService {
         return headers;
     }
 
-    private getS1Server() {
-        let s1Server = localStorage.getItem("s1server");
-
-        if (!s1Server) {
-            s1Server = environment.s1server;
-        }
-
-        return s1Server + "/webapi";
+    protected getS1Server() {
+     return BaseServiceHelper.getApiBaseUrl();
     }
 
     async get<T extends BaseModel>(url: string): Promise<T> {

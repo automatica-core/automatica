@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using MQTTnet.AspNetCore.Extensions;
@@ -62,6 +63,10 @@ namespace Automatica.Core
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(a => true));
+            });
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -207,12 +212,14 @@ namespace Automatica.Core
                 app.UseHttpsRedirection();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseRouting();
 
             app.UseResponseCompression();
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
 
 //app.UseMiddleware<WebApiErrorMiddleware>();
 

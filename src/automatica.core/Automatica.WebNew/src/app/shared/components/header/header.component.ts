@@ -6,7 +6,7 @@ import { DxToolbarModule } from "devextreme-angular/ui/toolbar";
 import { DxPopupModule } from "devextreme-angular/ui/popup";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
-import { L10nLocaleResolver, L10nTranslationModule } from "angular-l10n";
+import { L10nTranslationModule } from "angular-l10n";
 import { LoginService } from "src/app/services/login.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 import { DxSpeedDialActionModule } from "devextreme-angular";
@@ -15,6 +15,7 @@ import config from "devextreme/core/config";
 import { SettingsService } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
+import { Capacitor } from '@capacitor/core';
 
 export enum Language {
     German = 0,
@@ -34,6 +35,7 @@ config({
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {
+    isWeb: boolean;
 
     get title() {
         return this.projectName;
@@ -67,6 +69,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     selectBoxOptions: any;
 
+
     constructor(private router: Router,
         private activatedRoute: ActivatedRoute,
         public appService: AppService,
@@ -75,7 +78,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private changeRef: ChangeDetectorRef,
         private settingsService: SettingsService,
         private themeService: ThemeService,
-        private translate: TranslationConfigService) { }
+        private translate: TranslationConfigService) { 
+            
+         this.isWeb = Capacitor.getPlatform() === "web";
+        }
 
     async ngOnInit() {
 

@@ -17,25 +17,26 @@
             </div>
         </dxi-item>
         <dxi-item location="after" widget="dxSelectBox" locateInMenu="auto" [options]="selectBoxOptions"></dxi-item>
-        
+
         <dxi-item location="after" *ngIf="time">
             <div *dxTemplate="let data of 'item'">
                 <span style="margin-left: 20px; font-size: 20px; color: white;" translate>{{ time }}</span>
             </div>
         </dxi-item>
 
+        <ng-container *ngIf="isWeb">
+            <dx-speed-dial-action icon="preferences" label="{{ 'COMMON.ADMIN' | translateAsync }}" [index]="1"
+                [visible]="isAdminAvailable && !isAdminPage()" (onClick)="navigateToAdminPage()">
+            </dx-speed-dial-action>
 
-        <dx-speed-dial-action icon="preferences" label="{{ 'COMMON.ADMIN' | translateAsync }}" [index]="1"
-            [visible]="isAdminAvailable && !isAdminPage()" (onClick)="navigateToAdminPage()">
-        </dx-speed-dial-action>
+            <dx-speed-dial-action icon="home" label="{{ 'VISU.NAME' | translateAsync }}" [index]="1"
+                [visible]="isAdminPage()" (onClick)="navigateToVisualization()">
+            </dx-speed-dial-action>
 
-        <dx-speed-dial-action icon="home" label="{{ 'VISU.NAME' | translateAsync }}" [index]="1"
-            [visible]="isAdminPage()" (onClick)="navigateToVisualization()">
-        </dx-speed-dial-action>
-
-        <dx-speed-dial-action icon="export" label="{{ 'COMMON.LOGOUT' | translateAsync }}" [index]="3" [visible]="true"
-            (onClick)="logout()">
-        </dx-speed-dial-action>
+            <dx-speed-dial-action icon="export" label="{{ 'COMMON.LOGOUT' | translateAsync }}" [index]="3"
+                [visible]="true" (onClick)="logout()">
+            </dx-speed-dial-action>
+        </ng-container>
 
     </dx-toolbar>
 </header>
