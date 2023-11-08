@@ -34,7 +34,7 @@ export class LoginFormComponent implements OnInit {
         @Inject(L10N_LOCALE) public locale: L10nLocale) {
         localStorage.removeItem("jwt");
 
-        //  this.isWeb = Capacitor.getPlatform() === "web";
+        this.isWeb = Capacitor.getPlatform() === "web";
 
         this.serverIp = BaseServiceHelper.getSignalRBaseUrl();
         this.login = localStorage.getItem("s1user");
