@@ -100,10 +100,12 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     updateDrawer() {
         const isXSmall = this.breakpointObserver.isMatched(Breakpoints.XSmall);
 
-        // this.menuMode = this.isLargeScreen ? "shrink" : "overlap";
+        this.menuMode = this.isLargeScreen ? "shrink" : "overlap";
         this.menuRevealMode = isXSmall ? "slide" : "expand";
         this.minMenuSize = isXSmall ? 0 : 60;
         this.shaderEnabled = !this.isLargeScreen;
+
+        this.changeRef.detectChanges();
     }
 
     toggleMenu = (e) => {
@@ -134,6 +136,9 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     }
 
     get showMenuAfterClick() {
+        if (this.isLargeScreen) {
+            return false;
+        }
         return !this.menuOpened;
     }
 
@@ -149,18 +154,28 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
             }
 
             if (this.hideMenuAfterNavigation) {
-                this.menuOpened = false;
+                if (!this.isLargeScreen)
+                    this.menuOpened = false;
                 pointerEvent.stopPropagation();
             }
         } else {
+            this.menuOpened = true;
             pointerEvent.preventDefault();
         }
+
+        setTimeout(() => {
+            if (this.showMenuAfterClick) {
+                this.menuOpened = true;
+            }
+        });
     }
 
-    navigationClick() {
-        if (this.showMenuAfterClick) {
-            this.menuOpened = true;
-        }
+    navigationClick($event) {
+        // console.log($event);
+        // if (this.showMenuAfterClick) {
+
+        //     this.menuOpened = true;
+        // }
     }
 }
 
