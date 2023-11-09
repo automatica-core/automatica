@@ -140,8 +140,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
         };
         if (!this.isWeb) {
-            const { version } = await App.getInfo();
-            this.version = version;
+            const appInfo = await App.getInfo();
+            this.version = appInfo.version + "." + appInfo.build;
         }
     }
 
