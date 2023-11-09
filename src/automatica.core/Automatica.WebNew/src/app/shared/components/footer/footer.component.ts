@@ -1,6 +1,5 @@
 import { Component, NgModule, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ConfigService } from "src/app/services/config.service";
-import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { DeviceDetectorService } from "ngx-device-detector";

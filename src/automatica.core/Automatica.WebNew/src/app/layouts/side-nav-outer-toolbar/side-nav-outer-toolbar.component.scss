@@ -60,12 +60,3 @@ app-header {
         border-left: 0;
     }
 }
-
-.screen-x-small {
-    .content {
-        ::ng-deep h2, ::ng-deep .content-block, .footer {
-            margin-left: 20px;
-            margin-right: 20px;
-        }
-    }
-}

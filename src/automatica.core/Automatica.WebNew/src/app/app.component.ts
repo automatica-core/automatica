@@ -10,6 +10,10 @@ import { BaseComponent } from "./base/base-component";
 import { FaIconLibrary, FaConfig } from "@fortawesome/angular-fontawesome";
 import { DxLoadPanelComponent } from "devextreme-angular";
 import { ThemeService } from "./services/theme.service";
+import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
+import { semver } from 'semver';
+import { CacheService } from "ionic-cache";
 
 @Component({
   selector: "app-root",
@@ -30,7 +34,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     private library: FaIconLibrary,
     private ngZone: NgZone,
     private iconConfig: FaConfig,
-    private themeService: ThemeService) {
+    private themeService: ThemeService,
+    private cache: CacheService) {
     super(notify, translate, appService);
 
     const automaticaLogo = {
@@ -144,6 +149,32 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.dxLoadPanel.instance.hide();
       }
     });
+  }
+
+  clearCache() {
+
+  }
+  private async clearCacheIfAppWasUpdated() {
+    try {
+      if (Capacitor.getPlatform() != "web") {
+        const storedVersion = await localStorage.getItem('appVersion') as string;
+        const { version } = await App.getInfo();
+        // If it's the first start of the app, storedVersion isn't available. So set it.
+        if (!storedVersion) {
+          await localStorage.set('appVersion', version);
+          return;
+        }
+        console.log('STORED VERSION', storedVersion);
+        // Clear cache, if current app version is higher than stored app version
+        if (semver.compare(storedVersion, version) === -1) { // -1 means current version is larger
+          await this.cache.clearAll();
+          await localStorage.setItem('appVersion', version); // Update app version in store
+          console.log('Cache was cleared because App was updated to', version);
+        }
+      }
+    } catch (e) {
+      console.error('Error on function clearCacheIfAppWasUpdated()', e);
+    }
   }
 
 }

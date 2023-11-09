@@ -27,6 +27,9 @@ import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 import { ThemeService } from "./services/theme.service";
 import { L10nLazyResolver } from "./services/l10n-lazy-resolver";
+import { CacheModule } from "ionic-cache";  
+import { IonicStorageModule } from "@ionic/storage-angular";
+import { Drivers } from '@ionic/storage';
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -84,7 +87,12 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     StartingOverlayModule,
     DxListModule,
     DxTemplateModule,
-    DxHtmlEditorModule
+    DxHtmlEditorModule,
+    IonicStorageModule.forRoot({
+      name: 'localStorage',
+      driverOrder: [Drivers.LocalStorage]
+    }),
+    CacheModule.forRoot({keyPrefix: "cache"})
   ],
   providers: [
     {
