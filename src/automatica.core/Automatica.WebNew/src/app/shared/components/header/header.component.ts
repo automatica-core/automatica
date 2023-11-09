@@ -16,6 +16,7 @@ import { SettingsService } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
 import { Capacitor } from '@capacitor/core';
+import { App } from "@capacitor/app";
 
 export enum Language {
     German = 0,
@@ -49,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     time: string = "00:00:00";
     ticker: NodeJS.Timeout;
+    version: string;
 
     isAdminAvailable = false;
 
@@ -82,7 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private themeService: ThemeService,
         private translate: TranslationConfigService) {
 
-        this.isWeb = Capacitor.getPlatform() === "web";
+         this.isWeb = Capacitor.getPlatform() === "web";
 
         this.logoutButtonOptions = {
             text: translate.translation.translate("COMMON.LOGOUT"),
@@ -137,6 +139,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 this.themeService.applyTheme(args.value);
             }
         };
+        if (!this.isWeb) {
+            const { version } = await App.getInfo();
+            this.version = version;
+        }
     }
 
     ngOnDestroy() {

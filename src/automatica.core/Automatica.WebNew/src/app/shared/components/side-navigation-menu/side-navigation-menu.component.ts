@@ -111,7 +111,8 @@ export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDes
         event.component.option("deferRendering", false);
 
         setTimeout(() => {
-            this.menu.instance.collapseAll();
+            if (this.menu && this.menu.instance)
+                this.menu.instance.collapseAll();
         }, 100);
     }
 

@@ -17,9 +17,14 @@
             </div>
         </dxi-item>
         <dxi-item location="after" widget="dxSelectBox" locateInMenu="auto" [options]="selectBoxOptions"></dxi-item>
-        
+
         <ng-container *ngIf="!isWeb">
             <dxi-item location="after" widget="dxButton" locateInMenu="auto" [options]="logoutButtonOptions"></dxi-item>
+            <dxi-item location="before" *ngIf="version">
+                <div *dxTemplate="let data of 'item'">
+                    <span>{{ version }}</span>
+                </div>
+            </dxi-item>
         </ng-container>
 
         <dxi-item location="after" *ngIf="time">
