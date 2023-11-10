@@ -59,7 +59,7 @@
     "FILE": "File",
     "IMPORT_ETS_STRUCTURE": "Import ETS structure",
     "SAVE_BEFORE_CONTINUE": "You need to save your changes before starting this action",
-    "SERVER_STARTING": "Automatica.Core Server starting...",
+    "SERVER_STARTING": "Server starting...",
     "SIGNALR_CONNECTION": "SignalR connection",
     "LOADING_PLUGINS": "Load plugins",
     "STARTED": "Started",

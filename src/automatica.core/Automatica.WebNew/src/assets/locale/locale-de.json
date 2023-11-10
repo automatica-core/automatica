@@ -58,7 +58,7 @@
     "IMPORT_ETS_STRUCTURE": "Import ETS Struktur",
     "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
     "READ": "Lesen",
-    "SERVER_STARTING": "Automatica.Core Server fährt hoch...",
+    "SERVER_STARTING": "Server fährt hoch...",
     "SIGNALR_CONNECTION": "SignalR Verbindung",
     "LOADING_PLUGINS": "Lade Erweiterungen",
     "STARTED": "Gestartet",

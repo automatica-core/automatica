@@ -3,6 +3,8 @@ import { ConfigService } from "./config.service";
 import { Router } from "@angular/router";
 import { AppService } from "./app.service";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
+import { NotifyService } from "./notify.service";
+import { DeviceService } from "./device/device.service";
 
 export enum RunState {
   Constructed,
@@ -18,7 +20,12 @@ export class ServerStateService {
 
   public serverState: RunState;
 
-  constructor(private configService: ConfigService, private dataHub: DataHubService, private router: Router, private appService: AppService) {
+  constructor(private configService: ConfigService,
+    private dataHub: DataHubService,
+    private router: Router,
+    private appService: AppService,
+    private notifyService: NotifyService,
+    private deviceService: DeviceService) {
 
   }
 
@@ -31,8 +38,12 @@ export class ServerStateService {
       return state === RunState.Started;
     } catch (error) {
       console.log(error);
-      if(error.status == 401 || error.status == 404) {
+      if (error.status === 401 || error.status === 404) {
         await this.router.navigate(["/login"]);
+      }
+      else if (error.status === 0 && this.deviceService.isMobileApp) {
+        await this.router.navigate(["/login"]);
+        await this.notifyService.notifyError("ERROR.SERVER_NOT_AVAILABLE");
       }
       return false;
     }

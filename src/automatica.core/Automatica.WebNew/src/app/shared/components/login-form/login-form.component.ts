@@ -5,9 +5,9 @@ import { Router } from "@angular/router";
 import { AppService } from "src/app/services/app.service";
 import { DxValidationGroupComponent } from "devextreme-angular";
 import { L10N_LOCALE, L10nLocale } from "angular-l10n";
-import { Capacitor } from '@capacitor/core';
 import { BaseServiceHelper } from "src/app/services/base-server-helper";
 import { NotifyService } from "src/app/services/notify.service";
+import { DeviceService } from "src/app/services/device/device.service";
 
 
 @Component({
@@ -31,10 +31,11 @@ export class LoginFormComponent implements OnInit {
         private appService: AppService,
         private changeRef: ChangeDetectorRef,
         private notifyService: NotifyService,
-        @Inject(L10N_LOCALE) public locale: L10nLocale) {
+        @Inject(L10N_LOCALE) public locale: L10nLocale,
+        private deviceService: DeviceService) {
         localStorage.removeItem("jwt");
 
-         this.isWeb = Capacitor.getPlatform() === "web";
+        this.isWeb = deviceService.isWeb;
 
         this.serverIp = BaseServiceHelper.getSignalRBaseUrl();
         this.login = localStorage.getItem("s1user");
@@ -89,7 +90,15 @@ export class LoginFormComponent implements OnInit {
                     this.router.navigate(["/"]);
                 }
             } catch (error) {
-                this.notifyService.notifyError("Login failed..." + error.toString());
+                if (error.status === 0) {
+                    this.notifyService.notifyError("ERROR.SERVER_NOT_AVAILABLE");
+                }
+                else if (error.status === 401) {
+                    this.notifyService.notifyError("ERROR.INVALID_CREDENTIALS");
+                }
+                else {
+                    this.notifyService.notifyError("Login failed..." + error.toString());
+                }
             }
         }
         finally {

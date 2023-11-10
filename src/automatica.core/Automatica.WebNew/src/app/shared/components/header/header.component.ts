@@ -15,8 +15,8 @@ import config from "devextreme/core/config";
 import { SettingsService } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
-import { Capacitor } from '@capacitor/core';
 import { App } from "@capacitor/app";
+import { DeviceService } from "src/app/services/device/device.service";
 
 export enum Language {
     German = 0,
@@ -82,9 +82,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private changeRef: ChangeDetectorRef,
         private settingsService: SettingsService,
         private themeService: ThemeService,
-        private translate: TranslationConfigService) {
+        private translate: TranslationConfigService,
+        private deviceService: DeviceService) {
 
-         this.isWeb = Capacitor.getPlatform() === "web";
+         this.isWeb = deviceService.isWeb;
 
         this.logoutButtonOptions = {
             text: translate.translation.translate("COMMON.LOGOUT"),

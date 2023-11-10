@@ -16,7 +16,7 @@ namespace Automatica.Core.EF.Backup.SqLite
         {
             var file = connectionString.Replace("Data Source=", "");
 
-            File.Copy(file, targetFile);
+            File.Copy(file, targetFile, true);
             return Task.CompletedTask;
         }
     }
