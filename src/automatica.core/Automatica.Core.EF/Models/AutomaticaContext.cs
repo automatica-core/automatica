@@ -11,6 +11,7 @@ using Automatica.Core.EF.Interceptors;
 using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
+using Automatica.Core.EF.Configuration;
 
 namespace Automatica.Core.EF.Models
 {
@@ -72,6 +73,9 @@ namespace Automatica.Core.EF.Models
 
         public IConfiguration Configuration { get; }
 
+        public DatabaseTypeEnum DatabaseType { get; private set; }
+        private string _connectionString;
+
         public AutomaticaContext(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -86,42 +90,23 @@ namespace Automatica.Core.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
                 var logger = new DatabaseLoggerFactory();
-                var dbType = Configuration.GetConnectionString("AutomaticaDatabaseType");
-                var envDbType = Configuration["DATABASE_TYPE"];
                 var loggerInstance = logger.CreateLogger("database");
 
-                string useDbType = envDbType;
+                var dbParams = ConnectionStringHelper.GetConnectionString(Configuration, loggerInstance);
 
-                if (string.IsNullOrEmpty(envDbType))
-                {
-                    useDbType = dbType;
-                    loggerInstance.LogWarning($"Using databasetype from appsettings, environment variable \"DATABASE_TYPE\" is not set");
-                }
+                DatabaseType = dbParams.dbType;
+                _connectionString = dbParams.connectionString;
 
-                if (string.IsNullOrEmpty(dbType))
-                {
-                    loggerInstance.LogError($"No DatabaseType is set! Using sqlite database driver!");
-                    useDbType = "sqlite";
-                    dbType = useDbType;
-                }
-
-                
-
-                switch(useDbType.ToLower())
-                {
-                    case "sqlite":
-                        ConfigureSqLiteDatabase(optionsBuilder, loggerInstance);
+                switch(dbParams.dbType) {
+                    case DatabaseTypeEnum.SqLite:
+                        ConfigureSqLiteDatabase(optionsBuilder, loggerInstance, dbParams.connectionString);
                         break;
-                    case "mariadb":
-                        ConfigureMariaDatabase(optionsBuilder, loggerInstance);
+                    case DatabaseTypeEnum.MariaDb:
+                        ConfigureMariaDatabase(optionsBuilder, loggerInstance, dbParams.connectionString);
                         break;
-                        break;
-                    case "memory":
+                    case DatabaseTypeEnum.Memory:
                         optionsBuilder.UseInMemoryDatabase("automatica");
                         loggerInstance.LogInformation($"Using MemoryDatabase provider...");
-                        break;
-                    default:
-                        loggerInstance.LogCritical($"No or invalid database provider configured {dbType.ToLower()}\nSupported are sqlite, mariadb, memory");
                         break;
                 }
 
@@ -136,30 +121,22 @@ namespace Automatica.Core.EF.Models
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
-        private void ConfigureMariaDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
+        private void ConfigureMariaDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger, string connectionString)
         {
             logger.LogInformation($"Using MariaDB database engine...");
-
-            var mariaDbConString = $"Server={Configuration["MARIADB_HOST"]};User Id={Configuration["MARIADB_USER"]};Password={Configuration["MARIADB_PASSWORD"]};Database={Configuration["MARIADB_DATABASE"]}";
-
-            if(string.IsNullOrEmpty(Configuration["MARIADB_HOST"]))
-            {
-                mariaDbConString = Configuration.GetConnectionString($"AutomaticaDatabaseMaria");
-                logger.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
-            }
+            
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
-            optionsBuilder.UseMySql(mariaDbConString, serverVersion, a =>
+            optionsBuilder.UseMySql(connectionString, serverVersion, a =>
             {
                 a.CommandTimeout(300);
                 a.EnableRetryOnFailure(3);
             }).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
-        private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger)
+        private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger, string connectionString)
         {
             logger.LogInformation($"Using SQLite database engine...");
-            string conString = Configuration.GetConnectionString("AutomaticaDatabaseSqlite");
-            var sqliteConBuilder = new SqliteConnectionStringBuilder(conString);
+            var sqliteConBuilder = new SqliteConnectionStringBuilder(connectionString);
 
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             var dbFile = Path.Combine(fi.DirectoryName, sqliteConBuilder.DataSource);
@@ -170,7 +147,7 @@ namespace Automatica.Core.EF.Models
                 File.Copy(dbInitFile, dbFile);
             }
 
-            optionsBuilder.UseSqlite(conString).AddInterceptors(new LogQueryTimeInterceptor(logger));
+            optionsBuilder.UseSqlite(connectionString).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
+using Automatica.Core.EF.Backup;
 using Automatica.Core.EF.Models;
 using Automatica.Core.HyperSeries;
 using Automatica.Core.WebApi;
@@ -57,6 +58,8 @@ namespace Automatica.Core
 
 
             services.AddDbContext<AutomaticaContext>();
+            services.AddDatabaseBackup();
+
             services.AddHyperSeries();
             services.AddResponseCompression(options =>
             {
