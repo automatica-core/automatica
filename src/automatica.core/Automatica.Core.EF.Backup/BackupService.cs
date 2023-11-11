@@ -70,6 +70,16 @@ namespace Automatica.Core.EF.Backup
         {
             var backupServices = _serviceProvider.GetServices<IDatabaseBackup>().ToList();
 
+            try
+            {
+                Directory.CreateDirectory("bak");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Could not create backup direcotry {ex}");
+            }
+
+
             if (backupServices.Any(a => a.DbType == _context.DatabaseType))
             {
                 _backupService = backupServices.First(a => a.DbType == _context.DatabaseType);
