@@ -65,7 +65,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     ServicesModule,
     SharedModule,
     DxLoadPanelModule,
-    AutomaticaCommunicationModule,
+    AutomaticaCommunicationModule.forRoot(),
     AngularSplitModule,
     DndModule.forRoot(),
     DxTabPanelModule,

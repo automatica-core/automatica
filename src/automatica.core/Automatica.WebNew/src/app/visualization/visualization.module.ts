@@ -6,6 +6,7 @@ import { SideNavOuterToolbarModule, SideNavInnerToolbarModule } from "../layouts
 import { FooterModule } from "../shared/components/footer/footer.component";
 import { RouterModule } from "@angular/router";
 import { L10nTranslationModule } from "angular-l10n";
+import { AutomaticaCommunicationModule } from "../base/communication/automatica-communication.module";
 
 @NgModule({
   declarations: [VisualizationComponent],
@@ -14,6 +15,7 @@ import { L10nTranslationModule } from "angular-l10n";
     VisualizationRoutingModule,
     SideNavOuterToolbarModule,
     SideNavInnerToolbarModule,
+    AutomaticaCommunicationModule,
     FooterModule,
     RouterModule,
     L10nTranslationModule
