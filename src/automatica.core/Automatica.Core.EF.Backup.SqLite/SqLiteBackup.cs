@@ -15,9 +15,16 @@ namespace Automatica.Core.EF.Backup.SqLite
         public Task StartBackup(string connectionString, string targetFile, CancellationToken token = default)
         {
             var file = connectionString.Replace("Data Source=", "");
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(targetFile)!);
+                File.Copy(file, targetFile, true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error on backup database");
+            }
 
-            Directory.CreateDirectory(Path.GetDirectoryName(targetFile)!);
-            File.Copy(file, targetFile, true);
             return Task.CompletedTask;
         }
     }
