@@ -111,7 +111,7 @@ namespace P3.Logic.Time.Timer
                 if (isStartup)
                 {
                     Context.Logger.LogInformation($"Start event, set value to {false}");
-                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false, DispatchValueSource.Write);
+                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
                 }
 
                 _value = false;
@@ -140,7 +140,7 @@ namespace P3.Logic.Time.Timer
                 }
 
                 _value = !_value;
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value, DispatchValueSource.Write);
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value);
 
                 Context.Logger.LogInformation($"Tick received, set value to {_value}");
 
