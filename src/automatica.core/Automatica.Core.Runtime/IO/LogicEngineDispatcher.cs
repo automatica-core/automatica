@@ -242,7 +242,7 @@ namespace Automatica.Core.Runtime.IO
                         try
                         {
                             _logger.LogDebug(
-                                $"ValueDispatchToRule: {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
+                                $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
                             var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
 
                             foreach (var result in ruleResults)
