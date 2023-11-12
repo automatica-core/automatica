@@ -61,7 +61,7 @@ namespace P3.Logic.Time.Timer
 
         private void CalculateTickTime(bool isStartup=false)
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var nowTime = now.TimeOfDay;
 
             Context.Logger.LogInformation($"Now is {nowTime}");
