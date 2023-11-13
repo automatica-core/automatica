@@ -11,7 +11,7 @@ using Automatica.Core.Base.Tunneling;
 
 namespace Automatica.Core.Internals.Cloud
 {
-    public interface ICloudApi : IServerCloudApi
+    public interface ICloudApi
     {
         event EventHandler<DownloadProgressChangedEventArgs> DownloadUpdateProgressChanged;
         event EventHandler<EventArgs> DownloadUpdateFinished;

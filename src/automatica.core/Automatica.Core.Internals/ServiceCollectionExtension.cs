@@ -1,7 +1,9 @@
-﻿using Automatica.Core.Base.Templates;
+﻿using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Internals.Templates;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +44,10 @@ namespace Automatica.Core.Internals
             services.AddSingleton<ILogicNodeInstanceCache, LogicNodeInstanceCache>();
 
             services.AddSingleton<ILinkCache, LinkCache>();
+
+            services.AddTransient<IServerCloudApi, CloudApi>();
+            services.AddTransient<ICloudApi, CloudApi>();
+            services.AddTransient<ITextToSpeechApi, TextToSpeechApi>();
 
             services.AddTransient<TemplateFactoryProvider<LogicTemplateFactory>>();
             services.AddTransient<LogicTemplateFactory>();
