@@ -142,6 +142,22 @@ namespace Automatica.Core.Internals.Templates
             return retValue;
         }
 
+        private void MigrateExistingRuleInstances(Guid ruleTemplate, RuleInterfaceTemplate ruleInterfaceTemplate)
+        {
+            var ruleInstances = Db.RuleInstances.Where(a => a.This2RuleTemplate == ruleTemplate);
+
+            foreach (var ruleInstance in ruleInstances)
+            {
+                var interfaceExisting =
+                    Db.RuleInterfaceInstances.Any(a => a.This2RuleInterfaceTemplate == ruleInterfaceTemplate.ObjId);
+
+                if (!interfaceExisting)
+                {
+                    
+                }
+            }
+        }
+
 
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
             int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)

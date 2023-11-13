@@ -82,6 +82,21 @@ namespace Automatica.Core.EF.Models
             }
         }
 
+        public static RuleInterfaceInstance CreateFromTemplate(RuleInstance ruleInstance, RuleInterfaceTemplate ruleInterfaceTemplate)
+        {
+           
+                var ruleInterface = new RuleInterfaceInstance
+                {
+                    ObjId = Guid.NewGuid(),
+                    This2RuleInterfaceTemplate = ruleInterfaceTemplate.ObjId,
+                    This2RuleInterfaceTemplateNavigation = ruleInterfaceTemplate,
+                    Value = ruleInterfaceTemplate.DefaultValue,
+                    This2RuleInstance = ruleInstance.ObjId
+                };
+
+                return ruleInterface;
+        }
+
 
     }
 }

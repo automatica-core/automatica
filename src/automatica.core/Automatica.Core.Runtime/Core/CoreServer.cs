@@ -680,7 +680,15 @@ namespace Automatica.Core.Runtime.Core
                 throw new ArgumentException("Could not find factory for logic instance..");
             }
             var logger = _loggerFactory.CreateLogger($"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
-            var ruleContext = new LogicContext(ruleInstance, _dispatcher, _serviceProvider.GetRequiredService<TemplateFactoryProvider<LogicTemplateFactory>>().CreateInstance(factory.LogicGuid), _ruleInstanceVisuNotify, logger, _cloudApi, _licenseContext);
+            var ruleContext = new LogicContext(ruleInstance, 
+                _dispatcher, 
+                _serviceProvider.GetRequiredService<TemplateFactoryProvider<LogicTemplateFactory>>().CreateInstance(factory.LogicGuid), 
+                _ruleInstanceVisuNotify, 
+                logger,
+                _serviceProvider.GetRequiredService<IServerCloudApi>(), 
+                _licenseContext
+                );
+
             var rule = factory.CreateLogicInstance(ruleContext);
 
             if (rule != null)
@@ -872,8 +880,8 @@ namespace Automatica.Core.Runtime.Core
                 _telegramMonitor, 
                 _licenseContext.GetLicenseState(), 
                 logger, 
-                _learnMode, 
-                _cloudApi, 
+                _learnMode,
+                _serviceProvider.GetRequiredService<IServerCloudApi>(), 
                 _licenseContext, 
                 _loggerFactory, 
                 _serviceProvider,
