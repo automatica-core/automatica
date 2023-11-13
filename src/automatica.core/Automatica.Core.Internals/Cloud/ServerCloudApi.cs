@@ -1,7 +1,10 @@
 ﻿using Automatica.Core.Base.IO;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+
+[assembly:InternalsVisibleTo("Automatica.Core.Tests")]
 
 namespace Automatica.Core.Internals.Cloud
 {

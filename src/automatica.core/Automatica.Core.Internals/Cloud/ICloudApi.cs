@@ -6,12 +6,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Tunneling;
 
 namespace Automatica.Core.Internals.Cloud
 {
-    public interface ICloudApi
+    public interface ICloudApi 
     {
         event EventHandler<DownloadProgressChangedEventArgs> DownloadUpdateProgressChanged;
         event EventHandler<EventArgs> DownloadUpdateFinished;

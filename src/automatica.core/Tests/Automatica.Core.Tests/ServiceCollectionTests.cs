@@ -53,6 +53,7 @@ namespace Automatica.Core.Tests
 
             Runtime.ServiceCollectionExtensions.AddAutomaticaCoreService(moq, mockConfSection.Object, false);
             Runtime.ServiceCollectionExtensions.AddAutomaticaRemoteConnectWithFrp(moq, mockConfiguration.Object);
+            Internals.ServiceCollectionExtension.AddInternals(moq, mockConfiguration.Object);
 
 
             moq.AddSingleton(CreateHubContextMock<TelegramHub>());
@@ -156,7 +157,7 @@ namespace Automatica.Core.Tests
             AssertImplementationType<IVisualisationFactory, VisuTempInit>(moq);
 
             AssertImplementationType<ITelegramMonitor, TelegramMonitor>(moq);
-            AssertImplementationType<IServerCloudApi, CloudApi>(moq);
+            AssertImplementationType<IServerCloudApi, ServerCloudApi>(moq);
             AssertImplementationType<ICloudApi, CloudApi>(moq);
             AssertImplementationType<ILicenseContext, LicenseContext>(moq);
             AssertImplementationType<ILicenseContract, LicenseContext>(moq);

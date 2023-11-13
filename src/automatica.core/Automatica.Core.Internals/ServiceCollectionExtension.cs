@@ -45,9 +45,13 @@ namespace Automatica.Core.Internals
 
             services.AddSingleton<ILinkCache, LinkCache>();
 
-            services.AddTransient<IServerCloudApi, ServerCloudApi>();
-            services.AddTransient<ICloudApi, CloudApi>();
-            services.AddTransient<ITextToSpeechApi, TextToSpeechApi>();
+            services.AddTransient<ServerCloudApi>();
+            services.AddTransient<CloudApi>();
+            services.AddTransient<TextToSpeechApi>();
+
+            services.AddTransient<IServerCloudApi>(a => a.GetRequiredService<ServerCloudApi>());
+            services.AddTransient<ICloudApi>(a => a.GetRequiredService<CloudApi>());
+            services.AddTransient<ITextToSpeechApi>(a => a.GetRequiredService<TextToSpeechApi>());
 
             services.AddTransient<TemplateFactoryProvider<LogicTemplateFactory>>();
             services.AddTransient<LogicTemplateFactory>();
