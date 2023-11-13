@@ -331,19 +331,23 @@ namespace Automatica.Core.Driver
 
                     var writeData = _writeQueue.Dequeue();
 
-                    DriverContext.Logger.LogInformation(
-                        $"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
-
-                    var cts = new CancellationTokenSource();
-                    cts.CancelAfter(TimeSpan.FromSeconds(30));
-
-                    try
+                    if (writeData.Item1 != null)
                     {
-                        await Write(writeData.Item2.Value, new WriteContext(DriverContext.Dispatcher, this), cts.Token);
-                    }
-                    catch (Exception e)
-                    {
-                        DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                        DriverContext.Logger.LogInformation(
+                            $"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
+
+                        var cts = new CancellationTokenSource();
+                        cts.CancelAfter(TimeSpan.FromSeconds(30));
+
+                        try
+                        {
+                            await Write(writeData.Item2.Value, new WriteContext(DriverContext.Dispatcher, this),
+                                cts.Token);
+                        }
+                        catch (Exception e)
+                        {
+                            DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                        }
                     }
                 }
             }
