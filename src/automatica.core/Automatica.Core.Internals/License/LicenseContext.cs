@@ -36,6 +36,7 @@ namespace Automatica.Core.Internals.License
         public int MaxRemoteTunnels { get; private set; }
         public long MaxRecordingDataPoints { get; private set; }
         public int MaxSatellites { get; private set; }
+        public bool AllowTextToSpeech { get; private set; }
 
         private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
@@ -158,6 +159,11 @@ namespace Automatica.Core.Internals.License
                 {
                     MaxSatellites = Convert.ToInt32(_license.ProductFeatures.Get("MaxSatellites"));
                 }
+                if (_license.ProductFeatures.Contains("AllowTextToSpeech"))
+                {
+                    AllowTextToSpeech = Convert.ToBoolean(_license.ProductFeatures.Get("AllowTextToSpeech"));
+                }
+
 
                 if (!AllowRemoteControl)
                 {
@@ -173,15 +179,17 @@ namespace Automatica.Core.Internals.License
                 AllowRemoteControl = false;
                 IsLicensed = true;
                 MaxRecordingDataPoints = 50;
+                AllowTextToSpeech = false;
             }
 
-            _logger.LogInformation($"System is licensed to:");
+            _logger.LogInformation($"System is licensed to {_license?.Customer?.Email}:");
             _logger.LogInformation($"{nameof(MaxDataPoints)}: {MaxDataPoints}");
             _logger.LogInformation($"{nameof(MaxUsers)}: {MaxUsers}");
             _logger.LogInformation($"{nameof(MaxRemoteTunnels)}: {MaxRemoteTunnels}");
             _logger.LogInformation($"{nameof(AllowRemoteControl)}: {AllowRemoteControl}");
             _logger.LogInformation($"{nameof(MaxRecordingDataPoints)}: {MaxRecordingDataPoints}");
             _logger.LogInformation($"{nameof(MaxSatellites)}: {MaxSatellites}");
+            _logger.LogInformation($"{nameof(AllowTextToSpeech)}: {AllowTextToSpeech}");
             _logger.LogInformation($"{nameof(IsLicensed)}: {IsLicensed}");
             _logger.LogInformation($"Features: {JsonConvert.SerializeObject(_license?.ProductFeatures)}");
             
