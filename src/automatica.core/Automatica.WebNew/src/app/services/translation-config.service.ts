@@ -6,8 +6,9 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
 import * as deMessages from "devextreme/localization/messages/de.json";
 import * as enMessages from "devextreme/localization/messages/en.json";
-import { Observable } from "rxjs";
+import { Observable, timeout } from "rxjs";
 import { BaseServiceHelper } from "./base-server-helper";
+import { AppService } from "./app.service";
 
 @Injectable() export class HttpTranslationLoader implements L10nTranslationLoader {
 
@@ -23,17 +24,18 @@ import { BaseServiceHelper } from "./base-server-helper";
       const options = {
         headers: this.headers
       };
-      return this.http.get(url, options);
+      return this.http.get(url, options).pipe(timeout(2000));
 
     } else if (provider.options.type === "webapi") {
 
       const url = `${BaseServiceHelper.getBaseUrl()}/${provider.asset}/${language}`;
       console.log("load localization from...", url);
       const options = {
-        headers: this.headers
+        headers: this.headers,
+
       };
 
-      return this.http.get(url, options);
+      return this.http.get(url, options).pipe(timeout(2000));
     }
   }
 }
@@ -66,21 +68,29 @@ export function miss(path: string): string {
 
 @Injectable()
 export class TranslationConfigService {
-  constructor(public translation: L10nTranslationService, 
-    private http: HttpClient, 
-    private l10Loader: L10nLoader) {
+  constructor(public translation: L10nTranslationService,
+    private http: HttpClient,
+    private l10Loader: L10nLoader,
+    private appService: AppService) {
     // this.translation.translationError.subscribe((error: any) => console.log(error));
   }
 
   async init() {
-    await this.l10Loader.init();
+    this.appService.isLoading = true;
+
+    try {
+      await this.l10Loader.init();
 
 
 
-    loadMessages(deMessages);
-    loadMessages(enMessages);
+      loadMessages(deMessages);
+      loadMessages(enMessages);
 
-    locale("de");
+      locale("de");
+    }
+    finally {
+      this.appService.isLoading = false;
+    }
 
   }
 

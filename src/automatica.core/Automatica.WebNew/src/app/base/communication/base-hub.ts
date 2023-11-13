@@ -53,7 +53,6 @@ export class BaseHub {
 
     constructor(hubName: string) {
         this.hubName = hubName;
-        this.init();
     }
 
     public init() {
@@ -99,6 +98,8 @@ export class BaseHub {
         if (!localStorage.getItem("jwt")) {
             return;
         }
+        this.init();
+        
         if (!this.started) {
 
             try {

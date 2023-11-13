@@ -1,5 +1,6 @@
 package at.automatica.core;
 
+import android.net.http.SslCertificate;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.webkit.SslErrorHandler;
@@ -17,7 +18,11 @@ public class MainActivity extends BridgeActivity {
     this.bridge.getWebView().setWebViewClient(new BridgeWebViewClient(this.bridge) {
       @Override
       public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-        handler.proceed();
+        SslCertificate serverCertificate = error.getCertificate();
+        if(serverCertificate.getIssuedBy().getCName().equals("localhost") && serverCertificate.getIssuedTo().getCName().equals("localhost"))
+          handler.proceed();
+        else
+          handler.cancel();
       }
     });
 

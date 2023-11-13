@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable } from "rxjs";
+import { throwError as observableThrowError, Observable, timeout } from "rxjs";
 import { L10nTranslationService } from "angular-l10n";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
@@ -161,7 +161,7 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).pipe(timeout(2000)).toPromise();
 
             if (!response) {
                 return void 0;

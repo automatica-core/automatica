@@ -14,6 +14,7 @@ import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { semver } from 'semver';
 import { CacheService } from "ionic-cache";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-root",
@@ -35,7 +36,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     private ngZone: NgZone,
     private iconConfig: FaConfig,
     private themeService: ThemeService,
-    private cache: CacheService) {
+    private cache: CacheService,
+    private router: Router) {
     super(notify, translate, appService);
 
     const automaticaLogo = {
@@ -85,6 +87,11 @@ export class AppComponent extends BaseComponent implements OnInit {
       next: (error: any) => {
         if (error) {
           console.log(error);
+
+          if (error.name === 'TimeoutError') { 
+            this.notifyService.notifyError("ERROR.SERVER_NOT_AVAILABLE")
+            this.router.navigate(["/login"]);
+          }
         }
       }
     });
