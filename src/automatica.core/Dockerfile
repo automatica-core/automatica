@@ -5,6 +5,8 @@ WORKDIR /src
 COPY ./Automatica.WebNew /src
 
 RUN ls -lah
+
+RUN cat .npmrc
 RUN npm install 
 RUN npm run build-docker
 
