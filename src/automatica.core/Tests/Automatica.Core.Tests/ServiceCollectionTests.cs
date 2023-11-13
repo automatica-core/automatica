@@ -215,7 +215,7 @@ namespace Automatica.Core.Tests
 
         private void AssertLifecycle<T>(IServiceCollection moq, ServiceLifetime lifeTime)
         {
-            var item = moq.SingleOrDefault(t => t.ServiceType == typeof(T));
+            var item = moq.FirstOrDefault(t => t.ServiceType == typeof(T));
 
             Assert.NotNull(item);
 
