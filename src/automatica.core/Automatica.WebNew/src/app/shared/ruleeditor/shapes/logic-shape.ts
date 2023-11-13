@@ -328,6 +328,30 @@ export class LogicShapes {
                     input.setName(element.Inputs[0].PortId);
                     input.setId(element.Inputs[0].PortId);
 
+                    let dataLabel = new draw2d.shape.basic.Label({
+                        text: "",
+                        textLength: "100%",
+                        stroke: 0,
+                        radius: 0,
+                        bgColor: null,
+                        padding: 5,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        fontColor: "lightgray",
+                        fontSize: 9,
+                        resizeable: false
+                    });
+
+                    if (element.NodeInstance) {
+                        element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                            if (v.propertyName === "WriteValue") {
+                                dataLabel.setText((<any>v.object).WriteValue);
+                            }
+                        });
+                    }
+                    input.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginLeft: -30 }));
+
+
                     input.on("connect", async function (emitterPort, connection) {
                         try {
                             await LinkService.handleOnConnection(linkService, input, connection, true, element, ruleEngineService);
@@ -370,8 +394,8 @@ export class LogicShapes {
 
                     if (element.NodeInstance) {
                         element.NodeInstance.notifyChangeEvent.subscribe((v) => {
-                            if (v.propertyName === "Value") {
-                                dataLabel.setText((<any>v.object).Value);
+                            if (v.propertyName === "ReadValue") {
+                                dataLabel.setText((<any>v.object).ReadValue);
                             }
                         });
                     }

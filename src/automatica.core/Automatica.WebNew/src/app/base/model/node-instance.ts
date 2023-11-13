@@ -112,6 +112,12 @@ export enum TrendingTypes {
     OnChange = 4
 }
 
+export enum ValueSource {
+    Read,
+    Write,
+    User
+}
+
 @Model()
 export class NodeInstance extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel, IAreaInstanceModel, ICategoryInstanceModel, INodeInstance, ITimestampModifiedTrackingModel {
 
@@ -238,6 +244,36 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this._Value = v;
         this.notifyChange("Value");
     }
+
+    
+    private _writeValue : any;
+    public get WriteValue() : any {
+        return this._writeValue;
+    }
+    public set WriteValue(v : any) {
+        this._writeValue = v;
+        this.notifyChange("WriteValue");
+    }
+    
+    private _readValue : any;
+    public get ReadValue() : any {
+        return this._readValue;
+    }
+    public set ReadValue(v : any) {
+        this._readValue = v;
+        this.notifyChange("ReadValue");
+    }
+
+    private _valueSource : ValueSource;
+    public get ValueSource() : ValueSource {
+        return this._valueSource;
+    }
+    public set ValueSource(v : ValueSource) {
+        this._valueSource = v;
+        this.notifyChange("ValueSource");
+    }
+    
+    
 
 
     private _valueTimestamp: Date;
@@ -420,6 +456,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
             this.Properties.push(new VirtualGenericPropertyInstance("VALUE", 1, this, () => this.Value, void 0, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VALUE", false));
             this.Properties.push(new VirtualGenericPropertyInstance("VALUE_TIMESTAMP", 2, this, () => this.ValueTimestamp, void 0, false, PropertyTemplateType.DateTime, "COMMON.CATEGORY.VALUE", false));
+            this.Properties.push(new VirtualGenericPropertyInstance("VALUE_SOURCE", 3, this, () => ValueSource[this.ValueSource], void 0, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VALUE", false));
 
         }
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { ConfigService } from "./config.service";
-import { NodeInstance } from "../base/model/node-instance";
+import { NodeInstance, ValueSource } from "../base/model/node-instance";
 import { NodeTemplate } from "../base/model/node-template";
 import { VirtualSettingsPropertyInstance } from "../base/model/virtual-props/settings/settings-property-instance";
 import { SettingsService } from "./settings.service";
@@ -10,6 +10,7 @@ import { ITreeNode } from "../base/model/ITreeNode";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
 import { NodeTemplateService } from "./node-template.service";
 import { DataService } from "./data.service";
+
 
 @Injectable()
 export class NodeInstanceService {
@@ -68,8 +69,17 @@ export class NodeInstanceService {
 
     public setNodeInstanceValue(id: string, value: any) {
         if (this.hasNodeInstance(id)) {
-            this._nodeInstanceMap.get(id).Value = value.value;
-            this._nodeInstanceMap.get(id).ValueTimestamp = value.timestamp;
+            const nodeInstance = this._nodeInstanceMap.get(id);
+            nodeInstance.Value = value.value;
+            nodeInstance.ValueTimestamp = value.timestamp;
+            nodeInstance.ValueSource = value.valueSource;
+            
+            if(value.valueSource == ValueSource.Read) {
+                nodeInstance.ReadValue = value.value;
+            }
+            else  if(value.valueSource == ValueSource.Write) {
+                nodeInstance.WriteValue = value.value;
+            }
         }
     }
 
