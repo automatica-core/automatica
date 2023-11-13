@@ -128,6 +128,14 @@ namespace Automatica.Core.Internals.Templates
             {
                 Db.RuleInterfaceTemplates.Add(logicInterfaceTemplate);
                 Db.SaveChanges(true);
+                try
+                {
+                    MigrateExistingRuleInstances(ruleTemplate, logicInterfaceTemplate);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, $"Error migrate logicInstance {e}");
+                }
             }
             else
             {
@@ -153,7 +161,8 @@ namespace Automatica.Core.Internals.Templates
 
                 if (!interfaceExisting)
                 {
-                    
+                    var ruleInterface = RuleInterfaceInstance.CreateFromTemplate(ruleInstance, ruleInterfaceTemplate);
+                    Db.RuleInterfaceInstances.Add(ruleInterface);
                 }
             }
         }
@@ -204,6 +213,15 @@ namespace Automatica.Core.Internals.Templates
             {
                 Db.RuleInterfaceTemplates.Add(parameterLogicInterfaceTemplate);
                 Db.SaveChanges(true);
+
+                try
+                {
+                    MigrateExistingRuleInstances(ruleTemplate, parameterLogicInterfaceTemplate);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, $"Error migrate logicInstance {e}");
+                }
             }
             else
             {
