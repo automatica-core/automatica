@@ -79,6 +79,7 @@ namespace P3.Logic.Time.Timer
             
 
             var tickTime = startTime - nowTime;
+            Context.Logger.LogDebug($"Start time is {startTime} endTime is {stopTime} difference is {tickTime}");
             double timerTickTime;
 
             if (tickTime.TotalMilliseconds < 0)
