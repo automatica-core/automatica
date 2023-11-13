@@ -400,7 +400,13 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                     DriverContext.Logger.LogError($"Cannot read from KNX interface, not connected");
                     return false;
                 }
+
                 return await _tunneling.RequestGroupValueAsync(GroupAddress.Parse(address));
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError($"{address}: Could not read value {e}");
+                return false;
             }
             finally
             {
@@ -428,7 +434,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             catch (Exception e)
             {
                 DriverContext.Logger.LogError(e, $"Error writing to KNX interface {e}");
-                throw;
+                return false;
             }
             finally
             {
