@@ -1,0 +1,8 @@
+; begin auth token
+//automatica-core.pkgs.visualstudio.com/_packaging/automatica/npm/registry/:username=automatica-core
+//automatica-core.pkgs.visualstudio.com/_packaging/automatica/npm/registry/:_password=BASE64_ENCODED_PERSONAL_ACCESS_TOKEN
+//automatica-core.pkgs.visualstudio.com/_packaging/automatica/npm/registry/:email=npm requires email to be set but doesn't use the value
+//automatica-core.pkgs.visualstudio.com/_packaging/automatica/npm/:username=automatica-core
+//automatica-core.pkgs.visualstudio.com/_packaging/automatica/npm/:_password=BASE64_ENCODED_PERSONAL_ACCESS_TOKEN
+//automatica-core.pkgs.visualstudio.com/_packaging/automatica/npm/:email=npm requires email to be set but doesn't use the value
+; end auth token

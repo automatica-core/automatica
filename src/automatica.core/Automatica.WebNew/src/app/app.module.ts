@@ -7,7 +7,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { RouterModule } from "@angular/router";
 import { L10nTranslationModule, L10nLoader, L10nValidationModule } from "angular-l10n";
 import { TranslationConfigService, HttpTranslationLoader, LocalLanguageConfigration } from "./services/translation-config.service";
-import { AdminModule } from "./admin/admin.module";
 import { VisualizationModule } from "./visualization/visualization.module";
 import { HttpClientModule } from "@angular/common/http";
 import { LoginFormModule } from "./shared/components/login-form/login-form.module";
