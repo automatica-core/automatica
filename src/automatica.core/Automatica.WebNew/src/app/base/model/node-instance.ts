@@ -202,7 +202,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         if (this.Parent instanceof NodeInstance) {
             ret = this.Parent.FullName;
             if(this.Name)
-                ret += ` → ${this.Name}`;
+                ret += ` → ${this.DisplayName}`;
         }
 
         if(!ret) {
