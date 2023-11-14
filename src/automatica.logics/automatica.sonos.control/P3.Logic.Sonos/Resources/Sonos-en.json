@@ -82,6 +82,10 @@
       "NAME": "Media Url Trigger",
       "DESCRIPTION": ""
     },
+    "MEDIA_URL": {
+      "NAME": "Media Url",
+      "DESCRIPTION": ""
+    },
     "STATE": {
       "TITLE": {
         "NAME": "Title",
