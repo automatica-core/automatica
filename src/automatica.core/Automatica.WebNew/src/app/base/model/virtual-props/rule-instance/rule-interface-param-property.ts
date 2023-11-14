@@ -33,6 +33,11 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
             case RuleInterfaceParameterDataType.Color:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Color;
                 break;
+            case RuleInterfaceParameterDataType.Enum:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Enum;
+                this.PropertyTemplate.Meta = ruleInterface.Template.Meta;
+                this.PropertyTemplate.updatePropertyType();
+                break;
         }
 
     }

@@ -14,7 +14,8 @@ namespace Automatica.Core.EF.Models
         Text,
         Timer,
         ConstantString,
-        Color
+        Color,
+        Enum
     }
 
     public class TimerPropertyData : TypedObject
@@ -52,6 +53,7 @@ namespace Automatica.Core.EF.Models
         public string DefaultValue { get; set; }
 
         public bool IsLinkableParameter { get; set; }
+        public string Meta { get; set; }
 
         public RuleInterfaceType InterfaceType { get; set; }
 

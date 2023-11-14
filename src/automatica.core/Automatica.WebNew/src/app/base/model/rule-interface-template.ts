@@ -8,7 +8,8 @@ export enum RuleInterfaceParameterDataType {
     Text,
     Timer,
     ConstantString,
-    Color
+    Color,
+    Enum
 }
 
 export enum RuleInterfaceDirectionEnum {
@@ -65,6 +66,9 @@ export class RuleInterfaceTemplate extends BaseModel {
 
     @JsonProperty()
     InterfaceType: RuleInterfaceType;
+    
+    @JsonProperty()
+    Meta: string;
 
 
     protected getJsonProperty(): Map<string, JsonFieldInfo> {

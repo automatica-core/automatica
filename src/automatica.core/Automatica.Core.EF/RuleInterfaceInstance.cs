@@ -29,6 +29,7 @@ namespace Automatica.Core.EF.Models
                     case RuleInterfaceParameterDataType.Text:
                     case RuleInterfaceParameterDataType.ConstantString:
                     case RuleInterfaceParameterDataType.Color:
+                    case RuleInterfaceParameterDataType.Enum:
                         return ValueString;
                     case RuleInterfaceParameterDataType.Timer:
                         if (!String.IsNullOrEmpty(ValueString))
@@ -65,6 +66,7 @@ namespace Automatica.Core.EF.Models
                     case RuleInterfaceParameterDataType.Text:
                     case RuleInterfaceParameterDataType.ConstantString:
                     case RuleInterfaceParameterDataType.Color:
+                    case RuleInterfaceParameterDataType.Enum:
                         ValueString = value.ToString();
                         break;
                     case RuleInterfaceParameterDataType.Timer:

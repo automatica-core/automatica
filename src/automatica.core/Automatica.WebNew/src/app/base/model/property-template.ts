@@ -279,6 +279,10 @@ export class PropertyTemplate extends BaseModel {
         return "PropertyTemplate";
     }
 
+    public updatePropertyType() {
+        this.afterFromJson();
+    }
+
     protected afterFromJson() {
         switch (this.PropertyType.Type) {
             case PropertyTemplateType.Enum:
