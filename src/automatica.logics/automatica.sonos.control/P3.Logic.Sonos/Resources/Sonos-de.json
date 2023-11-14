@@ -62,6 +62,26 @@
       "NAME": "Maximale Lautstärke",
       "DESCRIPTION": ""
     },
+    "PLAY_SOUND_DURATION": {
+      "NAME": "Zeit für Media Trigger",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_COUNT": {
+      "NAME": "Wiederholung für Media Trigger",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_OUTPUT": {
+      "NAME": "Media Url",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_URL": {
+      "NAME": "Media Url",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_TRIGGER": {
+      "NAME": "Media Url Trigger",
+      "DESCRIPTION": ""
+    },
     "STATE": {
       "NAME": "Status",
       "DESCRIPTION": "",

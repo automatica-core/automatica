@@ -116,17 +116,19 @@ namespace Automatica.Core.Internals.Cloud
             var url = GetUrl();
             var apiKey = GetApiKey();
             var response = await client.PostAsync(new Uri(new Uri(url), apiUrl + "/" + apiKey), postObject, new JsonMediaTypeFormatter()).ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
-
+           
             await response.Content.ReadAsStringAsync().ContinueWith(x =>
             {
+                response.EnsureSuccessStatusCode();
                 if (x.IsFaulted)
                     throw x.Exception;
 
                 result = JsonConvert.DeserializeObject<T>(x.Result);
             });
 
+            response.EnsureSuccessStatusCode();
+
+           
             return result;
         }
     }

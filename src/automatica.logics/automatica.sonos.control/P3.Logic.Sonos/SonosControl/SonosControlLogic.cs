@@ -29,6 +29,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _volumeOnPlay;
     private readonly RuleInterfaceInstance _radioStation;
     private readonly RuleInterfaceInstance _maxVolume;
+    private readonly RuleInterfaceInstance _playMediaDuration;
+    private readonly RuleInterfaceInstance _playMediaCount;
 
     //Outputs
     private readonly RuleInterfaceInstance _playOutputStatus;
@@ -39,14 +41,21 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _prevOutput;
 
 
+    private readonly RuleInterfaceInstance _playMediaUrlInput;
+    private readonly RuleInterfaceInstance _playMediaUrlTrigger;
+    private readonly RuleInterfaceInstance _playMediaUrlOutput;
+
     private long _volumeOnPlayValue;
     private string _radioStationValue;
     private long _maxVolumeValue;
+    private long _playMediaDurationValue;
+    private long _playMediaCountValue;
 
     private long _currentVolume;
     private bool? _currentlyPlaying;
     private bool? _lastPlayValue;
-
+    private string _mediaPlayUrl;
+    
     public SonosControlLogic(ILogicContext context) : base(context)
     {
         _context = context;
@@ -80,6 +89,10 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStation);
         _maxVolume = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.MaxVolume);
+        _playMediaDuration = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundDuration);
+        _playMediaCount = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundCount);
 
 
         //Outputs
@@ -96,6 +109,14 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         _prevOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PreviousOutput);
 
+
+        _playMediaUrlInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundUrl);
+        _playMediaUrlTrigger = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundTrigger);
+        _playMediaUrlOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrlOutput);
+
     }
 
     protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -111,6 +132,15 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         if (instance.This2RuleInterfaceTemplate == _maxVolume.This2RuleInterfaceTemplate)
         {
             _maxVolumeValue = Convert.ToInt64(value);
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaDuration.This2RuleInterfaceTemplate)
+        {
+            _playMediaDurationValue = Convert.ToInt64(value);
+        }
+        if (instance.This2RuleInterfaceTemplate == _playMediaCount.This2RuleInterfaceTemplate)
+        {
+            _playMediaCountValue = Convert.ToInt64(value);
         }
 
         base.ParameterValueChanged(instance, source, value);
@@ -263,6 +293,20 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         if (instance.This2RuleInterfaceTemplate == _radioStationInput.This2RuleInterfaceTemplate)
         {
             ret.Add(new LogicOutputChanged(_radioStationOutputValue, _radioStationValue));
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaUrlInput.This2RuleInterfaceTemplate)
+        {
+            _mediaPlayUrl = value != null ? value.ToString() : String.Empty;
+            //ret.Add(new LogicOutputChanged(_playMediaUrlOutput, value));
+        }
+        if (instance.This2RuleInterfaceTemplate == _playMediaUrlTrigger.This2RuleInterfaceTemplate)
+        {
+            if (!String.IsNullOrEmpty(_mediaPlayUrl) && value is bool && (bool)value)
+            {
+                ret.Add(new LogicOutputChanged(_volumeOutputStatus, 50));
+                ret.Add(new LogicOutputChanged(_playMediaUrlOutput, _mediaPlayUrl));
+            }
         }
 
         return ret;

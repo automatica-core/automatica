@@ -3,18 +3,19 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Version>0.14.0.1</Version>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Rules\TextToSpeech</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\Automatica.Logic.TextToSpeech-de.json" />
-    <None Remove="Resources\Automatica.Logic.TextToSpeech.json" />
+    <None Remove="Resources\Automatica.Logic.TextToSpeech-en.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="automatica-manifest.json" />
     <EmbeddedResource Include="Resources\Automatica.Logic.TextToSpeech-de.json" />
-    <EmbeddedResource Include="Resources\Automatica.Logic.TextToSpeech.json" />
+    <EmbeddedResource Include="Resources\Automatica.Logic.TextToSpeech-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Logic" Version="7.5.1.1628" />
+    <PackageReference Include="Automatica.Core.Logic" Version="7.5.1.1630" />
   </ItemGroup>
 </Project>

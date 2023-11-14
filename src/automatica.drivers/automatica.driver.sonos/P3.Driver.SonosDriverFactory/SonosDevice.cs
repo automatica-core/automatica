@@ -225,6 +225,15 @@ namespace P3.Driver.SonosDriverFactory
                 sonosAttribute = new SonosStatusAttribute(ctx, this);
             }
 
+            if (nodeId == SonosDriverFactory.SetMediaUrl)
+            {
+                sonosAttribute = new SonosSetMediaUrlAttribute(ctx, this);
+            }
+            if (nodeId == SonosDriverFactory.SetMediaUrlAndPlay)
+            {
+                sonosAttribute = new SonosSetMediaUrlAndPlayAttribute(ctx, this);
+            }
+
             return sonosAttribute;
         }
     }

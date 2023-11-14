@@ -101,7 +101,8 @@ export class RuleInterfaceInstance extends BaseModel {
                 return this.ValueDouble;
             case RuleInterfaceParameterDataType.Integer:
                 return this.ValueInteger;
-            case RuleInterfaceParameterDataType.Text:
+                case RuleInterfaceParameterDataType.Text:
+            case RuleInterfaceParameterDataType.Enum:
             case RuleInterfaceParameterDataType.ConstantString:
             case RuleInterfaceParameterDataType.Color:
                 return this.ValueString;
@@ -128,6 +129,7 @@ export class RuleInterfaceInstance extends BaseModel {
             case RuleInterfaceParameterDataType.Text:
             case RuleInterfaceParameterDataType.ConstantString:
             case RuleInterfaceParameterDataType.Color:
+            case RuleInterfaceParameterDataType.Enum:
                 this.ValueString = value;
                 break;
             case RuleInterfaceParameterDataType.Timer:

@@ -62,6 +62,26 @@
       "NAME": "Max Volume",
       "DESCRIPTION": ""
     },
+    "PLAY_SOUND_DURATION": {
+      "NAME": "Time for media trigger",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_COUNT": {
+      "NAME": "Repeat count for media sound",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_OUTPUT": {
+      "NAME": "Media Url",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_URL": {
+      "NAME": "Media Url",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_TRIGGER": {
+      "NAME": "Media Url Trigger",
+      "DESCRIPTION": ""
+    },
     "STATE": {
       "TITLE": {
         "NAME": "Title",

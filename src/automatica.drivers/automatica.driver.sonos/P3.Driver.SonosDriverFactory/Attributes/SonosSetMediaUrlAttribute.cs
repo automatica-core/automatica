@@ -7,13 +7,13 @@ using P3.Driver.Sonos;
 
 namespace P3.Driver.SonosDriverFactory.Attributes
 {
-    public class SonosSetRadioAttribute : SonosAttribute
+    public class SonosSetMediaUrlAttribute : SonosAttribute
     {
         protected SonosDevice Device { get; }
 
         private string _currentMediaUrl = String.Empty;
 
-        public SonosSetRadioAttribute(IDriverContext driverContext, SonosDevice device) : base(driverContext, () => null, o => null)
+        public SonosSetMediaUrlAttribute(IDriverContext driverContext, SonosDevice device) : base(driverContext, () => null, o => null)
         {
             Device = device;
         }
@@ -39,8 +39,7 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             try
             {
                 var strValue = value.ToString();
-                var mediaUrl = String.Format(SonosController.TuneInMediaUrl, strValue);
-
+                var mediaUrl = strValue;
 
                 await Device.Controller.SetMediaUrl(mediaUrl);
                 _currentMediaUrl = mediaUrl;

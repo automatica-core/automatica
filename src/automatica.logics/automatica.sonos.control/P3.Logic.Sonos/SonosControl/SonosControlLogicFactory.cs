@@ -36,10 +36,16 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid DurationInput = new Guid("d799bf2f-a39f-47ca-9ab5-c28fe02fb7b9");
     public static readonly Guid RelativeTimeInput = new Guid("bb59da7b-826f-439d-88a5-eb630185c0aa");
 
+
+    public static readonly Guid PlaySoundUrl = new Guid("3c6d6c9b-3c67-49ab-85d9-8e0120e458f1");
+    public static readonly Guid PlaySoundTrigger = new Guid("1527ad05-5667-4d31-8db7-7dd4b395e053");
+
     //Params
     public static readonly Guid VolumeOnPlay = new Guid("c1af8a31-094b-4411-9db3-1cca9ee73235");
     public static readonly Guid RadioStation = new Guid("01bf3fb1-cac8-43c4-95c9-c024fde1a2af");
     public static readonly Guid MaxVolume = new Guid("ac7e676e-d562-4f38-b66b-4581a44bd9ba");
+    public static readonly Guid PlaySoundDuration = new Guid("b3ed64a7-658a-4baa-a0b0-fd9febb13d5d");
+    public static readonly Guid PlaySoundCount = new Guid("04587812-089d-4d85-8fb6-8753b1c9b0fe");
 
 
     //Outputs
@@ -49,6 +55,7 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid RadioStationOutputValue = new Guid("9a12a267-338c-4a48-9d7a-5af4fe8189be");
     public static readonly Guid NextOutput = new Guid("2aa90a39-8410-4e26-b707-96d7a5f10342");
     public static readonly Guid PreviousOutput = new Guid("d3fa805c-94f7-49e9-a979-fb421339db00");
+    public static readonly Guid PlayMediaUrlOutput = new Guid("9dc39aa4-4f48-4ca8-b575-8425bd542984");
 
     public static readonly long DefaultVolume = 10;
     public static readonly string DefaultRadioStation = "s8007";
@@ -64,6 +71,10 @@ public class SonosControlLogicFactory : LogicFactory
             "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", LogicGuid, 2, RuleInterfaceParameterDataType.Integer, DefaultVolume);
         factory.CreateParameterLogicInterfaceTemplate(MaxVolume, "SONOS_CONTROL.MAX_VOLUME.NAME",
             "SONOS_CONTROL.MAX_VOLUME.DESCRIPTION", LogicGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
+        factory.CreateParameterLogicInterfaceTemplate(PlaySoundDuration, "SONOS_CONTROL.PLAY_SOUND_DURATION.NAME",
+            "SONOS_CONTROL.PLAY_SOUND_DURATION.DESCRIPTION", LogicGuid, 4, RuleInterfaceParameterDataType.Integer, 5000);
+        factory.CreateParameterLogicInterfaceTemplate(PlaySoundCount, "SONOS_CONTROL.PLAY_SOUND_COUNT.NAME",
+            "SONOS_CONTROL.PLAY_SOUND_COUNT.DESCRIPTION", LogicGuid, 4, RuleInterfaceParameterDataType.Integer, 2);
 
         factory.CreateLogicInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", "play_pause", LogicGuid, LogicInterfaceDirection.Input, 0, 0, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(PlayDefaultTrigger, "SONOS_CONTROL.PLAY_DEFAULT.NAME", "SONOS_CONTROL.PLAY_DEFAULT.DESCRIPTION", "play_default", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Input);
@@ -85,6 +96,9 @@ public class SonosControlLogicFactory : LogicFactory
         factory.CreateLogicInterfaceTemplate(DurationInput, "SONOS_CONTROL.STATE.DURATION.NAME", "SONOS_CONTROL.STATE.DURATION.DESCRIPTION", "duration", LogicGuid, LogicInterfaceDirection.Input, 1, 14, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(RelativeTimeInput, "SONOS_CONTROL.STATE.RELATIVE_TIME.NAME", "SONOS_CONTROL.STATE.RELATIVE_TIME.DESCRIPTION", "relative_time", LogicGuid, LogicInterfaceDirection.Input, 1, 15, RuleInterfaceType.Input);
 
+        factory.CreateLogicInterfaceTemplate(PlaySoundUrl, "SONOS_CONTROL.PLAY_SOUND_URL.NAME", "SONOS_CONTROL.PLAY_SOUND_URL.DESCRIPTION", "play_sound", LogicGuid, LogicInterfaceDirection.Input, 1, 16, RuleInterfaceType.Input);
+        factory.CreateLogicInterfaceTemplate(PlaySoundTrigger, "SONOS_CONTROL.PLAY_SOUND_TRIGGER.NAME", "SONOS_CONTROL.PLAY_SOUND_TRIGGER.DESCRIPTION", "play_sound_trigger", LogicGuid, LogicInterfaceDirection.Input, 1, 17, RuleInterfaceType.Input);
+
 
         factory.CreateLogicInterfaceTemplate(PlayOutputStatus, "SONOS_CONTROL.PLAY_OUTPUT_STATE.NAME", "SONOS_CONTROL.PLAY_OUTPUT_STATE.DESCRIPTION", "play", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
         factory.CreateLogicInterfaceTemplate(PauseOutputStatus, "SONOS_CONTROL.PAUSE_OUTPUT_STATE.NAME", "SONOS_CONTROL.PAUSE_OUTPUT_STATE.DESCRIPTION", "pause", LogicGuid, LogicInterfaceDirection.Output, 0, 2, RuleInterfaceType.Output);
@@ -92,6 +106,7 @@ public class SonosControlLogicFactory : LogicFactory
         factory.CreateLogicInterfaceTemplate(RadioStationOutputValue, "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.NAME", "SONOS_CONTROL.RADIO_STATION_OUTPUT_VALUE.DESCRIPTION", "radio_station", LogicGuid, LogicInterfaceDirection.Output, 0, 4, RuleInterfaceType.Output);
         factory.CreateLogicInterfaceTemplate(PreviousOutput, "SONOS_CONTROL.PREV.NAME", "SONOS_CONTROL.PREV.DESCRIPTION", "prev", LogicGuid, LogicInterfaceDirection.Output, 0, 5, RuleInterfaceType.Output);
         factory.CreateLogicInterfaceTemplate(NextOutput, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", LogicGuid, LogicInterfaceDirection.Output, 0, 6, RuleInterfaceType.Output);
+        factory.CreateLogicInterfaceTemplate(PlayMediaUrlOutput, "SONOS_CONTROL.PLAY_SOUND_OUTPUT.NAME", "SONOS_CONTROL.PLAY_SOUND_OUTPUT.DESCRIPTION", "play_sound", LogicGuid, LogicInterfaceDirection.Output, 0, 7, RuleInterfaceType.Output);
 
         factory.ChangeDefaultVisuTemplate(LogicGuid, VisuMobileObjectTemplateTypes.MediaPlayer);
 

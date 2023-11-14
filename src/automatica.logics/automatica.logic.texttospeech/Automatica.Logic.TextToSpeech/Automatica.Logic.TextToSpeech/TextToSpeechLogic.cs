@@ -1,36 +1,93 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Automatica.Logic.TextToSpeech
 {
-    public class MessengerLogic: Automatica.Core.Logic.Logic
+    public class TextToSpeechLogic : Automatica.Core.Logic.Logic
     {
        
-        private object _value;
+        private string _url;
+        private RuleInterfaceInstance _output;
+        private RuleInterfaceInstance _text;
+        private RuleInterfaceInstance _voice;
 
-        public MessengerLogic(ILogicContext context) : base(context)
+        private string _textValue;
+        private Voices _voiceValue;
+
+        public TextToSpeechLogic(ILogicContext context) : base(context)
         {
         
             
         }
 
-        protected override async Task<bool> Start(RuleInstance instance, CancellationToken token = new CancellationToken())
+        protected override async Task<bool> Start(RuleInstance instance,
+            CancellationToken token = new CancellationToken())
         {
-            var url = await Context.CloudApi.Synthesize(Context.RuleInstance.ObjId, "This is very awesome", "en-US", "JennyNeural");
+
+            _output = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "output");
+            _text = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "text");
+            _voice = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "voice");
+
+
+            _textValue = _text.ValueString;
+            _voiceValue = (Voices)Convert.ToInt32(_voice.ValueString);
+
+            _ = Task.Run(LoadSynthesizer, token);
+
             return true;
+        }
+
+        private async Task LoadSynthesizer()
+        {
+            try
+            {
+                var voice = PropertyHelper.GetNameAttributeFromEnumValue(_voiceValue);
+                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), null);
+                _url = await Context.CloudApi.Synthesize(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
+                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), _url);
+            }
+            catch (Exception e)
+            {
+                Context.Logger.LogError(e, $"Could not synthesize text....{e}");
+            }
+        }
+
+        protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
+        {
+            if (source.Id == instance.ObjId)
+            {
+                return;
+            }
+            if (instance.ObjId == _text.ObjId)
+            {
+                _textValue = value.ToString();
+            }
+            else if (instance.ObjId == _voice.ObjId)
+            {
+                _voiceValue = (Voices)Convert.ToInt32(value.ToString());
+            }
+
+
+            _ = Task.Run(LoadSynthesizer);
+            base.ParameterValueChanged(instance, source, value);
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-
-           
-
-            _value = value;
-            return base.InputValueChanged(instance, source, value);
+            if (instance.ObjId == _text.ObjId)
+            {
+                _textValue = value.ToString();
+            }
+            return SingleOutputChanged(new LogicOutputChanged(_output, _url));
         }
     }
 }

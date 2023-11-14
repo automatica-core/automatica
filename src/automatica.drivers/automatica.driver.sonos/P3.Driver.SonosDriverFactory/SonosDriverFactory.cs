@@ -22,6 +22,9 @@ namespace P3.Driver.SonosDriverFactory
         public static Guid SetTuneInRadioAndPlay = new("fc5c92c1-8011-4e8d-96fb-25e2accf10b9");
         public static Guid StatusGuid = new ("d317d318-3c65-46cc-b0ab-f894c2dc51d0");
 
+        public static Guid SetMediaUrl = new("96a53a5a-b833-49a8-89e4-b55548a50b78");
+        public static Guid SetMediaUrlAndPlay = new("df859942-8dc2-47c8-8086-9c592b9cc366");
+
 
         public const string IdAddressPropertyKey = "device-id";
         public const string UseFixedIpAddressPropertyKey = "use-fixed-ip";
@@ -31,7 +34,7 @@ namespace P3.Driver.SonosDriverFactory
         public override Guid DriverGuid => BusId;
         public override string ImageName => "automaticacore/plugin-p3.driver.sonos"; 
 
-        public override Version DriverVersion => new(1, 0, 0, 3);
+        public override Version DriverVersion => new(1, 1, 0, 3);
 
         
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -67,8 +70,12 @@ namespace P3.Driver.SonosDriverFactory
             CreateAction(factory, NextTrack, "next", true, false, NodeDataType.Boolean);
             CreateAction(factory, PreviousTrack, "previous", true, false, NodeDataType.Boolean);
 
-            CreateAction(factory, SetTuneInRadio, "set_tune_in", true, false, NodeDataType.Integer);
-            CreateAction(factory, SetTuneInRadioAndPlay, "set_tune_in_play", true, false, NodeDataType.Integer);
+            CreateAction(factory, SetTuneInRadio, "set_tune_in", true, false, NodeDataType.String);
+            CreateAction(factory, SetTuneInRadioAndPlay, "set_tune_in_play", true, false, NodeDataType.String);
+
+
+            CreateAction(factory, SetMediaUrl, "set_media_url", true, false, NodeDataType.String);
+            CreateAction(factory, SetMediaUrlAndPlay, "set_media_url_play", true, false, NodeDataType.String);
 
             CreateCurrentStatusItems(factory);
         }
@@ -95,7 +102,6 @@ namespace P3.Driver.SonosDriverFactory
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
             factory.CreateNodeTemplate(new Guid("a4f4af10-cff6-4b90-99f1-ac5c2963e158"), "SONOS.DEVICE.STATUS.RELATIVE_TIME.NAME", "SONOS.DEVICE.STATUS.RELATIVE_TIME.DESCRIPTION", "sonos-status-relative-time", statusGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, false, NodeDataType.String, 1, false);
-
         }
 
         private void CreateAction(INodeTemplateFactory factory, Guid guid, string name, bool writeAble, bool readAble, NodeDataType dataType)

@@ -27,8 +27,8 @@ namespace Automatica.Core.Internals.Cloud
             catch (Exception e)
             {
                 _logger.LogError($"Could not synthesize text ({text}, {language}, {voice}) {e}");
+                throw;
             }
-            throw new NotImplementedException();
         }
 
     }
