@@ -27,11 +27,7 @@ namespace Automatica.Logic.TextToSpeech
 
         public override Guid LogicGuid => new Guid("e846b61a-7a64-4c69-be31-1f44cb60ed8d");
 
-        public override Version LogicVersion => new Version(0, 1, 0, 1);
-
-        public override bool InDevelopmentMode => true;
-
-
+        public override Version LogicVersion => new Version(0, 1, 1, 1);
 
         public override ILogic CreateLogicInstance(ILogicContext context)
         {
