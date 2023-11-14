@@ -3,7 +3,7 @@
     "NAME": "Text to speech",
     "DESCRIPTION": "",
     "SYNTHESIZE": {
-      "NAME": "Synthesize (Text To Speech)",
+      "NAME": "Text To Speech",
       "DESCRIPTION": "",
       "TEXT": {
         "NAME": "Text"
