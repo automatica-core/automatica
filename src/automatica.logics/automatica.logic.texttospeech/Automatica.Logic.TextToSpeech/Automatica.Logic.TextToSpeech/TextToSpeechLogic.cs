@@ -53,7 +53,15 @@ namespace Automatica.Logic.TextToSpeech
                 if (!_voiceValue.HasValue || String.IsNullOrEmpty(_textValue))
                 {
                     Context.Logger.LogWarning($"Voice or text is null or empty, cannot synthesize text {_voice} and {_textValue}");
+                    return;
                 }
+
+                if (_output == null)
+                {
+                    Context.Logger.LogWarning($"Output field is null...cannot synthesize text");
+                    return;
+                }
+
                 var voice = PropertyHelper.GetNameAttributeFromEnumValue(_voiceValue);
                 await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
                 _url = await Context.CloudApi.Synthesize(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
