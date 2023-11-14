@@ -25,6 +25,7 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid Next = new Guid("1049fcc8-ecd8-43cd-be15-c351eadb75be");
     public static readonly Guid Previous = new Guid("b8e791ca-b290-4205-9f8f-365bb9b73501");
     public static readonly Guid RadioStationInput = new Guid("c24e12b1-79a1-4cc4-a926-b46bfa181625");
+    public static readonly Guid MediaUrl = new Guid("2e61ab0e-17f7-49dd-baf2-a5916e3d40fa");
 
 
     public static readonly Guid TitleInput = new Guid("e2ea8f7b-c7f5-4b07-ac27-57e04ad59b2a");
@@ -85,6 +86,7 @@ public class SonosControlLogicFactory : LogicFactory
         factory.CreateLogicInterfaceTemplate(Previous, "SONOS_CONTROL.PREV.NAME", "SONOS_CONTROL.PREV.DESCRIPTION", "prev", LogicGuid, LogicInterfaceDirection.Input, 0, 6, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(Next, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", LogicGuid, LogicInterfaceDirection.Input, 0, 7, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.RADIO_STATION.NAME", "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", "radio_station", LogicGuid, LogicInterfaceDirection.Input, 0, 8, RuleInterfaceType.Input);
+        factory.CreateLogicInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.MEDIA_URL.NAME", "SONOS_CONTROL.MEDIA_URL.DESCRIPTION", "media_url", LogicGuid, LogicInterfaceDirection.Input, 0, 9, RuleInterfaceType.Input);
 
 
         //additional inputs for UI
