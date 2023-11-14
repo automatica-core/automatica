@@ -86,7 +86,7 @@ public class SonosControlLogicFactory : LogicFactory
         factory.CreateLogicInterfaceTemplate(Previous, "SONOS_CONTROL.PREV.NAME", "SONOS_CONTROL.PREV.DESCRIPTION", "prev", LogicGuid, LogicInterfaceDirection.Input, 0, 6, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(Next, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", LogicGuid, LogicInterfaceDirection.Input, 0, 7, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.RADIO_STATION.NAME", "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", "radio_station", LogicGuid, LogicInterfaceDirection.Input, 0, 8, RuleInterfaceType.Input);
-        factory.CreateLogicInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.MEDIA_URL.NAME", "SONOS_CONTROL.MEDIA_URL.DESCRIPTION", "media_url", LogicGuid, LogicInterfaceDirection.Input, 0, 9, RuleInterfaceType.Input);
+        factory.CreateLogicInterfaceTemplate(MediaUrl, "SONOS_CONTROL.MEDIA_URL.NAME", "SONOS_CONTROL.MEDIA_URL.DESCRIPTION", "media_url", LogicGuid, LogicInterfaceDirection.Input, 0, 9, RuleInterfaceType.Input);
 
 
         //additional inputs for UI
