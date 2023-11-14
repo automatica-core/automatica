@@ -74,7 +74,7 @@ namespace P3.Driver.SonosDriverFactory
             CreateAction(factory, SetTuneInRadioAndPlay, "set_tune_in_play", true, false, NodeDataType.String);
 
 
-            CreateAction(factory, SetMediaUrl, "set_media_url", true, false, NodeDataType.String);
+            CreateAction(factory, SetMediaUrl, "set_media_url", true, true, NodeDataType.String);
             CreateAction(factory, SetMediaUrlAndPlay, "set_media_url_play", true, false, NodeDataType.String);
 
             CreateCurrentStatusItems(factory);
