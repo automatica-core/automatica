@@ -34,7 +34,7 @@ namespace P3.Driver.SonosDriverFactory
         public override Guid DriverGuid => BusId;
         public override string ImageName => "automaticacore/plugin-p3.driver.sonos"; 
 
-        public override Version DriverVersion => new(1, 1, 0, 3);
+        public override Version DriverVersion => new(1, 2, 0, 3);
 
         
         public override void InitNodeTemplates(INodeTemplateFactory factory)
