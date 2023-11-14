@@ -55,9 +55,9 @@ namespace Automatica.Logic.TextToSpeech
                     Context.Logger.LogWarning($"Voice or text is null or empty, cannot synthesize text {_voice} and {_textValue}");
                 }
                 var voice = PropertyHelper.GetNameAttributeFromEnumValue(_voiceValue);
-                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), String.Empty);
+                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
                 _url = await Context.CloudApi.Synthesize(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
-                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), _url);
+                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, _url, DateTime.Now, DispatchValueSource.Read));
             }
             catch (Exception e)
             {
