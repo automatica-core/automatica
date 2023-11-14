@@ -21,7 +21,7 @@ namespace Automatica.Logic.TextToSpeech
         private RuleInterfaceInstance _voice;
 
         private string _textValue;
-        private Voices _voiceValue;
+        private Voices? _voiceValue;
 
         public TextToSpeechLogic(ILogicContext context) : base(context)
         {
@@ -49,7 +49,11 @@ namespace Automatica.Logic.TextToSpeech
         private async Task LoadSynthesizer()
         {
             try
-            {
+            {   
+                if (!_voiceValue.HasValue || String.IsNullOrEmpty(_textValue))
+                {
+                    Context.Logger.LogWarning($"Voice or text is null or empty, cannot synthesize text {_voice} and {_textValue}");
+                }
                 var voice = PropertyHelper.GetNameAttributeFromEnumValue(_voiceValue);
                 await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), null);
                 _url = await Context.CloudApi.Synthesize(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
