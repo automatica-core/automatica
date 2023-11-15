@@ -166,6 +166,22 @@ namespace Automatica.Core.Base.Templates
         /// <returns><see cref="CreateTemplateCode"/></returns>
         CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable, string meta);
 
+        /// <summary>
+        /// Creates a parameter for the  <see cref="RuleTemplate"/>
+        /// </summary>
+        /// <param name="id">Unique id for the parameter</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="description">Description of the parameter</param>
+        /// <param name="key">Key of the parameter</param>
+        /// <param name="ruleTemplate">Unique id of the <see cref="RuleTemplate"/></param>
+        /// <param name="sortOrder">Sort order of all parameters</param>
+        /// <param name="dataType">Data type of the parameter, <see cref="RuleInterfaceParameterDataType"/></param>
+        /// <param name="defaultValue">Default value of the parameter</param>
+        /// <parma name="linkable">Defines if the parameter is linkable in the editor</parma>
+        /// <parma name="meta">Defines the meta information for the property grid</parma>
+        /// <parma name="meta">Group key for the property grid</parma>
+        /// <returns><see cref="CreateTemplateCode"/></returns>
+        CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,  string key, Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable, string meta, string group);
 
 
         /// <summary>

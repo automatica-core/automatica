@@ -54,6 +54,7 @@ namespace Automatica.Core.EF.Models
 
         public bool IsLinkableParameter { get; set; }
         public string Meta { get; set; }
+        public string Group { get; set; }
 
         public RuleInterfaceType InterfaceType { get; set; }
 

@@ -11,6 +11,8 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
         this.PropertyTemplate.Description = ruleInterface.Template.Description;
         this.PropertyTemplate.Key = ruleInterface.Template.Name;
 
+        this.PropertyTemplate.Order = ruleInterface.Template.SortOrder;
+
         this.PropertyTemplate.Group = "COMMON.CATEGORY.PARAMETERS";
 
         switch (ruleInterface.Template.ParameterDataType) {

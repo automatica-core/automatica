@@ -184,8 +184,10 @@ namespace Automatica.Core.Internals.Templates
                 defaultValue, linkable, null);
         }
 
-        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
-            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable, string meta)
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
+            string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue,
+            bool linkable, string meta, string group)
         {
             var parameterLogicInterfaceTemplate = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
             var retValue = CreateTemplateCode.Updated;
@@ -219,6 +221,7 @@ namespace Automatica.Core.Internals.Templates
             parameterLogicInterfaceTemplate.DefaultValue = Convert.ToString(defaultValue, CultureInfo.InvariantCulture);
 
             parameterLogicInterfaceTemplate.Meta = meta;
+            parameterLogicInterfaceTemplate.Group = group;
 
             if (isNewObject)
             {
@@ -244,6 +247,13 @@ namespace Automatica.Core.Internals.Templates
             }
 
             return retValue;
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable, string meta)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable, meta, null);
         }
 
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,

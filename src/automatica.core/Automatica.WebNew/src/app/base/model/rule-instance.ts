@@ -210,7 +210,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     }
 
     protected afterFromJson() {
-        this.Interfaces.sort(sortBySortOrder);
+        this.Interfaces = this.Interfaces.sort(sortBySortOrder);
 
         this.addVirtualProperties();
     }
