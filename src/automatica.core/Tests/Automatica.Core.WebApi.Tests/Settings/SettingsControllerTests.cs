@@ -29,7 +29,8 @@ namespace Automatica.Core.WebApi.Tests.Settings
 
             var savedSettings = await Controller.SaveSettings(settings);
 
-            Assert.Equal(cloudUrlSetting.ValueText, savedSettings.First(a => a.ValueKey == "cloudUrl").ValueText);
+            var savedValue = savedSettings.First(a => a.ValueKey == "cloudUrl").ValueText;
+            Assert.Equal(cloudUrlSetting.ValueText, savedValue);
         }
 
         private Setting CreateSetting(object value, PropertyTemplateType type)

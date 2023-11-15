@@ -118,6 +118,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await _updateHandler.ReInitialize().ConfigureAwait(false);
                     _settingsCache.Clear();
                     _config.Reload();
+                    await transaction.CommitAsync();
 
                     if (reloadServer)
                     {
