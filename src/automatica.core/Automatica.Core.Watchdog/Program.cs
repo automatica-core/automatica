@@ -111,7 +111,7 @@ namespace Automatica.Core.Watchdog
                     {
                         _logger.LogInformation($"Core system requested a normal restart....");
                     }
-                    else if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker || restartCount >= 10)
+                    else if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker)
                     {
                         Environment.Exit(2); //restart
                         return;
