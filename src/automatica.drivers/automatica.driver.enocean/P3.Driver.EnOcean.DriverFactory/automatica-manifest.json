@@ -18,7 +18,7 @@
     "Type": "driver",
     "Output": "P3.Driver.EnOcean.DriverFactory.dll",
     "Resources": [],
-    "Dependencies": [ "P3.Driver.EnOcean.dll", "System.IO.Ports.dll" ],
+    "Dependencies": [ "P3.Driver.EnOcean.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.enocean",
     "MinCoreServerVersion": {
       "Minor": 5,
