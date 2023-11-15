@@ -202,7 +202,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
 
 
         for (const x of this.Interfaces) {
-            if (x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
+            if (x.Template && x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
                 continue;
             }
             this.Properties.push(new RuleInterfaceParamProperty(x));

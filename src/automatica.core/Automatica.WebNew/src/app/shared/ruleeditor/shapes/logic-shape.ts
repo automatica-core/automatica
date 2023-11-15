@@ -9,6 +9,18 @@ import { ILogicInfoHandler } from "../ilogicInfoHandler";
 declare let draw2d: any;
 declare let $: any;
 
+class ValueHandler {
+    static handleValue(value: any) {
+        if (value) {
+            let strValue: string = value.toString();
+            if (strValue.length > 10) {
+                return strValue.substring(0, 10) + "...";
+            }
+        }
+        return value;
+    }
+}
+
 export class LogicShapes {
     public static addShape(logic, ruleEngineService: LogicEngineService, errorHandler: ILogicErrorHandler, infoHandler: ILogicInfoHandler) {
 
@@ -21,7 +33,7 @@ export class LogicShapes {
                 });
             }
 
-        
+
         });
 
         logic.LogicHeader = draw2d.shape.layout.FlexGridLayout.extend({
@@ -240,16 +252,20 @@ export class LogicShapes {
                             paddingRight: 10,
                             fontColor: "lightgray",
                             fontSize: 9,
-                            resizeable: true
+                            resizeable: true,
+
                         });
 
                         portInstance.notifyChangeEvent.subscribe((v) => {
                             if (v.propertyName === "PortValue") {
-                                dataLabel.setText((<any>v.object).PortValue);
+                                let value = ValueHandler.handleValue((<any>v.object).PortValue);
+
+                                dataLabel.setText(value);
                             }
                         });
 
                         port.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
+                        dataLabel.toBack();
 
                     }
 
@@ -329,7 +345,7 @@ export class LogicShapes {
                     input.setId(element.Inputs[0].PortId);
 
                     let dataLabel = new draw2d.shape.basic.Label({
-                        text: "",
+                        text: ValueHandler.handleValue((element.NodeInstance).WriteValue),
                         textLength: "100%",
                         stroke: 0,
                         radius: 0,
@@ -339,18 +355,22 @@ export class LogicShapes {
                         paddingRight: 10,
                         fontColor: "lightgray",
                         fontSize: 9,
-                        resizeable: false
+                        resizeable: false,
+                        width: 100
                     });
 
                     if (element.NodeInstance) {
                         element.NodeInstance.notifyChangeEvent.subscribe((v) => {
                             if (v.propertyName === "WriteValue") {
-                                dataLabel.setText((<any>v.object).WriteValue);
+                                let value = ValueHandler.handleValue((<any>v.object).WriteValue);
+
+                                dataLabel.setText(value);
                             }
+
                         });
                     }
                     input.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginLeft: -30 }));
-
+                    dataLabel.toBack();
 
                     input.on("connect", async function (emitterPort, connection) {
                         try {
@@ -379,7 +399,7 @@ export class LogicShapes {
                     output.setId(element.Outputs[0].PortId);
 
                     let dataLabel = new draw2d.shape.basic.Label({
-                        text: "",
+                        text: ValueHandler.handleValue((element.NodeInstance).ReadValue),
                         textLength: "100%",
                         stroke: 0,
                         radius: 0,
@@ -389,18 +409,20 @@ export class LogicShapes {
                         paddingRight: 10,
                         fontColor: "lightgray",
                         fontSize: 9,
-                        resizeable: false
+                        resizeable: false,
+                        width: 100
                     });
 
                     if (element.NodeInstance) {
                         element.NodeInstance.notifyChangeEvent.subscribe((v) => {
                             if (v.propertyName === "ReadValue") {
-                                dataLabel.setText((<any>v.object).ReadValue);
+                                let value = ValueHandler.handleValue((<any>v.object).ReadValue);
+                                dataLabel.setText(value);
                             }
                         });
                     }
                     output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
-
+                    dataLabel.toBack();
 
                     output.on("connect", async function (emitterPort, connection) {
                         try {

@@ -213,7 +213,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       if (event.figure !== null) {
         this.selectedItems = [event.figure.getUserData()];
       }
-      console.log(event);
     });
 
   }
