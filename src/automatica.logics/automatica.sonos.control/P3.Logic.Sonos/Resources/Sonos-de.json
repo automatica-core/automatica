@@ -75,50 +75,54 @@
       "DESCRIPTION": ""
     },
     "PLAY_SOUND_URL": {
-      "NAME": "Media Url",
+      "NAME": "Play Sound Url",
       "DESCRIPTION": ""
     },
     "PLAY_SOUND_TRIGGER": {
-      "NAME": "Media Url Trigger",
+      "NAME": "Play Sound Url Tr",
       "DESCRIPTION": ""
     },
     "MEDIA_URL": {
       "NAME": "Media Url",
       "DESCRIPTION": ""
     },
-  "STATE": {
-    "NAME": "Status",
-    "DESCRIPTION": "",
-    "TITLE": {
-      "NAME": "Titel",
-      "DESCRIPTION": ""
+    "PLAY_SOUND_VOLUME": {
+      "NAME": "Media Play Lautstärke",
+      "DESCRIPTION":  ""
     },
-    "CREATOR": {
-      "NAME": "Artist",
-      "DESCRIPTION": ""
+      "STATE": {
+        "NAME": "Status",
+        "DESCRIPTION": "",
+        "TITLE": {
+          "NAME": "Titel",
+          "DESCRIPTION": ""
+        },
+        "CREATOR": {
+          "NAME": "Artist",
+          "DESCRIPTION": ""
+        },
+        "ALBUM": {
+          "NAME": "Album",
+          "DESCRIPTION": ""
+        },
+        "ALBUM_ART_URI": {
+          "NAME": "Album Art Uri",
+          "DESCRIPTION": ""
+        },
+        "CLASS": {
+          "NAME": "Class",
+          "DESCRIPTION": ""
+        },
+        "DURATION": {
+          "NAME": "Dauer",
+          "DESCRIPTION": ""
+        },
+        "RELATIVE_TIME": {
+          "NAME": "Relative Dauer",
+          "DESCRIPTION": ""
+        }
+      }
     },
-    "ALBUM": {
-      "NAME": "Album",
-      "DESCRIPTION": ""
-    },
-    "ALBUM_ART_URI": {
-      "NAME": "Album Art Uri",
-      "DESCRIPTION": ""
-    },
-    "CLASS": {
-      "NAME": "Class",
-      "DESCRIPTION": ""
-    },
-    "DURATION": {
-      "NAME": "Dauer",
-      "DESCRIPTION": ""
-    },
-    "RELATIVE_TIME": {
-      "NAME": "Relative Dauer",
-      "DESCRIPTION": ""
-    }
-  }
-},
   "SONOS":  {
     "NAME": "Sonos Regeln" 
   }

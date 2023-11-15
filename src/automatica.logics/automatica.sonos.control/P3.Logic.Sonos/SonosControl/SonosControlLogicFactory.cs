@@ -47,6 +47,7 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid MaxVolume = new Guid("ac7e676e-d562-4f38-b66b-4581a44bd9ba");
     public static readonly Guid PlaySoundDuration = new Guid("b3ed64a7-658a-4baa-a0b0-fd9febb13d5d");
     public static readonly Guid PlaySoundCount = new Guid("04587812-089d-4d85-8fb6-8753b1c9b0fe");
+    public static readonly Guid PlaySoundVolume = new Guid("68f697a3-861a-4b53-aa4b-fbf3b9d6604e");
 
 
     //Outputs
@@ -72,10 +73,13 @@ public class SonosControlLogicFactory : LogicFactory
             "SONOS_CONTROL.VOLUME_ON_START.DESCRIPTION", LogicGuid, 2, RuleInterfaceParameterDataType.Integer, DefaultVolume);
         factory.CreateParameterLogicInterfaceTemplate(MaxVolume, "SONOS_CONTROL.MAX_VOLUME.NAME",
             "SONOS_CONTROL.MAX_VOLUME.DESCRIPTION", LogicGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
+
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundDuration, "SONOS_CONTROL.PLAY_SOUND_DURATION.NAME",
             "SONOS_CONTROL.PLAY_SOUND_DURATION.DESCRIPTION", LogicGuid, 4, RuleInterfaceParameterDataType.Integer, 5000);
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundCount, "SONOS_CONTROL.PLAY_SOUND_COUNT.NAME",
-            "SONOS_CONTROL.PLAY_SOUND_COUNT.DESCRIPTION", LogicGuid, 4, RuleInterfaceParameterDataType.Integer, 2);
+            "SONOS_CONTROL.PLAY_SOUND_COUNT.DESCRIPTION", LogicGuid, 5, RuleInterfaceParameterDataType.Integer, 2);
+        factory.CreateParameterLogicInterfaceTemplate(PlaySoundVolume, "SONOS_CONTROL.PLAY_SOUND_VOLUME.NAME",
+            "SONOS_CONTROL.PLAY_SOUND_VOLUME.DESCRIPTION", LogicGuid, 6, RuleInterfaceParameterDataType.Integer, 50, true);
 
         factory.CreateLogicInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", "play_pause", LogicGuid, LogicInterfaceDirection.Input, 0, 0, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(PlayDefaultTrigger, "SONOS_CONTROL.PLAY_DEFAULT.NAME", "SONOS_CONTROL.PLAY_DEFAULT.DESCRIPTION", "play_default", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Input);

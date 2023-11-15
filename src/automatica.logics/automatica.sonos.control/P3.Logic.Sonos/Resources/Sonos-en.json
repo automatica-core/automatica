@@ -75,15 +75,19 @@
       "DESCRIPTION": ""
     },
     "PLAY_SOUND_URL": {
-      "NAME": "Media Url",
+      "NAME": "Play Media",
       "DESCRIPTION": ""
     },
     "PLAY_SOUND_TRIGGER": {
-      "NAME": "Media Url Trigger",
+      "NAME": "Play Media Trigger",
       "DESCRIPTION": ""
     },
     "MEDIA_URL": {
       "NAME": "Media Url",
+      "DESCRIPTION": ""
+    },
+    "PLAY_SOUND_VOLUME": {
+      "NAME": "Media play volume",
       "DESCRIPTION": ""
     },
     "STATE": {
