@@ -185,12 +185,21 @@ namespace Automatica.Core.Supervisor.Runtime
             return null;
         }
 
+        private async Task<ContainerListResponse> GetStoppedContainerInstances()
+        {
+            var fullImageName = $"{_supervisorImage}:{_supervisorImageTag}";
+            var result = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters {All = true});
+
+            var ret = result.SingleOrDefault(a => a.Image == fullImageName && a.State.ToLowerInvariant() == "exited"); 
+            return ret;
+        }
+
         private async Task<ContainerListResponse> GetRunningContainerInstance()
         {
             var fullImageName = $"{_supervisorImage}:{_supervisorImageTag}";
             var result = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters());
 
-            var ret = result.SingleOrDefault(a => a.Image == fullImageName);
+            var ret = result.SingleOrDefault(a => a.Image == fullImageName && a.State.ToLowerInvariant() == "running");
 
             return ret;
         }
@@ -267,13 +276,44 @@ namespace Automatica.Core.Supervisor.Runtime
                 };
 
                 var envVariables = new List<string>();
+                var envDictionary = new Dictionary<string, string>();  
 
                 foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
                 {
                     var envVar = $"{env.Key}={env.Value}";
                     envVariables.Add(envVar);
+                    envDictionary.Add($"{env.Key}", $"{env.Value}");
 
                     _logger.LogDebug($"Using env variable: {envVar}");
+                }
+
+                var exposedPorts = new Dictionary<string, EmptyStruct>();
+
+                if (envDictionary.TryGetValue("server:port", out var value))
+                {
+                    portBindings.Add($"{value}/tcp",
+                        new List<PortBinding>()
+                        {
+                            new()
+                            {
+                                HostPort = $"{value}"
+                            }
+
+                        });
+                    exposedPorts.Add($"{value}/tcp", new EmptyStruct());
+                }
+                if (envDictionary.TryGetValue("server:ssl_port", out var sslValue))
+                {
+                    portBindings.Add($"{sslValue}/tcp",
+                        new List<PortBinding>()
+                        {
+                            new()
+                            {
+                                HostPort = $"{sslValue}"
+                            }
+
+                        });
+                    exposedPorts.Add($"{sslValue}/tcp", new EmptyStruct());
                 }
 
                 envVariables.Add($"AUTOMATICA_SUPERVISOR_HOSTED=1");
@@ -320,8 +360,11 @@ namespace Automatica.Core.Supervisor.Runtime
                     {
                         PortBindings = portBindings
                     },
-                    Env = envVariables
+                    Env = envVariables,
+                    ExposedPorts = exposedPorts
                 };
+
+               
 
                 createContainerParams.HostConfig.Mounts = new List<Mount>();
 
@@ -416,10 +459,25 @@ namespace Automatica.Core.Supervisor.Runtime
                 try
                 {
                     _isPullingImage = true;
-                    _logger.LogInformation($"Pull latest image.");
 
+                    _logger.LogInformation($"Check if we need to pull the latest image...");
+                    var lastContainerImage = await GetStoppedContainerInstances();
+                    if (lastContainerImage != null)
+                    {
+                        _logger.LogInformation($"Stopped container with id {lastContainerImage.ID} found...");
+                        var inspect = await _dockerClient.Containers.InspectContainerAsync(lastContainerImage.ID);
 
-                    _logger.LogInformation($"Pulling image");
+                        _logger.LogInformation($"{lastContainerImage.ID} stopped with exit code {inspect.State.ExitCode} (target for a new pull is '2')...");
+                        if (inspect.State.ExitCode == 2) //watchdog indicates we should pull a new image
+                        {
+                            _logger.LogInformation($"Pull latest image.");
+                            await CheckForNewerImage();
+                        }
+                    }
+
+                    
+
+                    _logger.LogInformation($"Create image");
                     await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
                     {
                         Tag = _supervisorImageTag,

@@ -1,7 +1,10 @@
 {
   "profiles": {
     "Automatica.Core.Supervisor": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "server:port": "4000"
+      }
     }
   }
 }
