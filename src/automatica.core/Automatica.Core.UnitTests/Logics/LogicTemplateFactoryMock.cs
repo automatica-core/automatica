@@ -121,7 +121,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
              int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
         {
             return CreateParameterLogicInterfaceTemplate(ui, name, description, ruleTemplate, sortOrder, dataType,
-                defaultValue);
+                defaultValue, false);
         }
 
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
