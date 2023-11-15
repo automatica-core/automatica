@@ -471,7 +471,10 @@ namespace Automatica.Core.Supervisor.Runtime
                         if (inspect.State.ExitCode == 2) //watchdog indicates we should pull a new image
                         {
                             _logger.LogInformation($"Pull latest image.");
-                            await CheckForNewerImage();
+                            if (await CheckForNewerImage())
+                            {
+                                _logger.LogInformation($"Found newer image. will pull it....");
+                            }
                         }
                     }
 
