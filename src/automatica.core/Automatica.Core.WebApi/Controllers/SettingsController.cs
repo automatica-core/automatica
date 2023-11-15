@@ -72,7 +72,6 @@ namespace Automatica.Core.WebApi.Controllers
             return await strategy.Execute(async
                 () =>
             {
-                await using var context = new AutomaticaContext(_config);
                 var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
@@ -112,10 +111,10 @@ namespace Automatica.Core.WebApi.Controllers
                         originalSetting.Value = s.Value;
 
                         originalSetting.ModifiedAt = DateTimeOffset.Now;
-                        context.Update(originalSetting);
+                        DbContext.Update(originalSetting);
                     }
 
-                    await context.SaveChangesAsync();
+                    await DbContext.SaveChangesAsync();
                     await _updateHandler.ReInitialize().ConfigureAwait(false);
                     _settingsCache.Clear();
                     _config.Reload();
