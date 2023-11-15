@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data;
 using P3.Driver.EnOcean.Data.Packets;
@@ -43,7 +44,7 @@ namespace P3.Driver.EnOcean
                 Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}");
 
                 var readIdBase = await SendTelegram(new CommonCommandPacket(CommonCommands.CO_RD_IDBASE));
-
+                Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}: {Utils.ByteArrayToString(readIdBase.Data)}");
 
                 if (readIdBase != null)
                 {
