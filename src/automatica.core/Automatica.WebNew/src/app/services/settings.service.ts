@@ -6,6 +6,12 @@ import { L10nTranslationService } from "angular-l10n";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { Setting } from "../base/model/setting";
 
+export enum Language
+{
+    German = 0,
+    English = 1
+}
+
 @Injectable()
 export class SettingsService extends BaseService {
 
@@ -20,6 +26,10 @@ export class SettingsService extends BaseService {
 
     getByKey(key: string): Promise<Setting> {
         return this.get<Setting>("settings/key/" + key);
+    }
+
+    getLanguage(): Promise<Setting> {
+        return this.get<Setting>("settings/language");
     }
 
     saveSettings(settings: Setting[]): Promise<Setting[]> {

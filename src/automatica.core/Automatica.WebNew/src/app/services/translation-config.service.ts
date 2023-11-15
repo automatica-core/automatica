@@ -9,6 +9,7 @@ import * as enMessages from "devextreme/localization/messages/en.json";
 import { Observable, timeout } from "rxjs";
 import { BaseServiceHelper } from "./base-server-helper";
 import { AppService } from "./app.service";
+import { Language, SettingsService } from "./settings.service";
 
 @Injectable() export class HttpTranslationLoader implements L10nTranslationLoader {
 
@@ -71,7 +72,8 @@ export class TranslationConfigService {
   constructor(public translation: L10nTranslationService,
     private http: HttpClient,
     private l10Loader: L10nLoader,
-    private appService: AppService) {
+    private appService: AppService,
+    private settingsService: SettingsService) {
     // this.translation.translationError.subscribe((error: any) => console.log(error));
   }
 
@@ -86,7 +88,23 @@ export class TranslationConfigService {
       loadMessages(deMessages);
       loadMessages(enMessages);
 
-      locale("de");
+      try {
+        var language = await this.settingsService.getLanguage();
+        var enumLanguage = <Language>language.ValueInt!;
+
+        switch(enumLanguage) {
+          case Language.German:
+            locale("de");
+            break;
+          case Language.English:
+            locale("en");
+            break;
+        }
+       
+      }
+      catch (error) {
+        locale("en");
+      }
     }
     finally {
       this.appService.isLoading = false;

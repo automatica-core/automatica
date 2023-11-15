@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -19,6 +20,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Base.Localization;
+using Automatica.Core.Internals.Cache.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -34,6 +37,8 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly IConfiguration _config;
         private readonly IRecorderContext _recorderContext;
+        private readonly ISettingsCache _settingsCache;
+        private readonly ILocalizationProvider _localizationProvider;
         private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
@@ -46,6 +51,8 @@ namespace Automatica.Core.WebApi.Controllers
             INodeInstanceService nodeInstanceService,
             IConfiguration config,
             IRecorderContext recorderContext,
+            ISettingsCache settingsCache,
+            ILocalizationProvider localizationProvider,
             ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
@@ -56,6 +63,8 @@ namespace Automatica.Core.WebApi.Controllers
             _nodeInstanceService = nodeInstanceService;
             _config = config;
             _recorderContext = recorderContext;
+            _settingsCache = settingsCache;
+            _localizationProvider = localizationProvider;
             _logger = logger;
         }
 
@@ -432,6 +441,20 @@ namespace Automatica.Core.WebApi.Controllers
             return new List<NodeInstance>();
         }
 
+        private string ConvertLanguageEnum(Language language)
+        {
+            switch (language)
+            {
+                case Language.German:
+                    return "de";
+                case Language.English:
+                    return "en";
+
+            }
+
+            return "en";
+        }
+
         private async Task<IList<NodeInstance>> SaveAndReloadNodeInstances(IList<NodeInstance> nodeInstances)
         {
             var savedNodes = new List<NodeInstance>();
@@ -451,6 +474,20 @@ namespace Automatica.Core.WebApi.Controllers
             return savedNodes;
         }
 
+        private void TranslateNodesRecursive(NodeInstance node, string curLanguage)
+        {
+            node.Name = _localizationProvider.GetTranslation(curLanguage, node.Name);
+            node.Description = _localizationProvider.GetTranslation(curLanguage, node.Description);
+
+            if (node.InverseThis2ParentNodeInstanceNavigation != null)
+            {
+                foreach (var child in node.InverseThis2ParentNodeInstanceNavigation)
+                {
+                    TranslateNodesRecursive(child, curLanguage);
+                }
+            }
+        }
+
         [HttpPost]
         [Route("scan")]
         [Authorize(Policy = Role.AdminRole)]
@@ -461,10 +498,14 @@ namespace Automatica.Core.WebApi.Controllers
                 _logger.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
                 var scan = await _notifyDriver.ScanBus(instance);
 
+                var curLanguage = (Language)_settingsCache.GetByKey("language").ValueInt;
+                var languageCode = ConvertLanguageEnum(curLanguage);
+
                 if (scan != null)
                 {
                     foreach (var s in scan)
                     {
+                        TranslateNodesRecursive(s, languageCode);
                         s.This2ParentNodeInstance = instance.ObjId;
                     }
 

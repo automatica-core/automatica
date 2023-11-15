@@ -8,6 +8,7 @@ using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.Recorder;
 using Automatica.Core.Runtime.RemoteConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,14 @@ namespace Automatica.Core.WebApi.Controllers
         public ICollection<Setting> LoadSettings()
         {
             return _settingsCache.All();
+        }
+
+        [HttpGet]
+        [Route("language")]
+        [AllowAnonymous]
+        public Setting GetLanguageSetting()
+        {
+            return _settingsCache.GetByKey("language");
         }
 
         [HttpGet]
