@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data;
 using Automatica.Core.Driver.Utility;
-using RJCP.IO.Ports;
+using System.IO.Ports;
+using Parity = System.IO.Ports.Parity;
 
 namespace P3.Driver.EnOcean.Serial
 {
     public class SerialStream : BaseStream
     {
         private readonly string _serialPort;
-        private SerialPortStream _stream;
+        private SerialPort _stream;
         private bool _connected;
 
         public override event EventHandler<PacketReceivedEventArgs> TelegramReceived;
@@ -38,13 +39,9 @@ namespace P3.Driver.EnOcean.Serial
         {
             try
             {
-                _stream = new SerialPortStream(_serialPort, 57600, 8, Parity.None,
-                    StopBits.One)
+                _stream = new SerialPort(_serialPort, 57600, Parity.None, 8, StopBits.One)
                 {
-                    ReadTimeout = 1000,
-                    WriteTimeout = 1000,
-                    ReadBufferSize = 65535,
-                    WriteBufferSize = 65535
+                   
                 };
 
                 _stream.DataReceived += _stream_DataReceived;
@@ -137,7 +134,7 @@ namespace P3.Driver.EnOcean.Serial
                 if (firstChar == EnOcean.SyncByte)
                 {
                     var dataLen = new byte[2];
-                    var dataLenRead = await _stream.ReadAsync(dataLen, 0, 2);
+                    var dataLenRead = _stream.Read(dataLen, 0, 2);
 
                     if (dataLenRead == 2)
                     {
@@ -150,15 +147,15 @@ namespace P3.Driver.EnOcean.Serial
                         var header = new byte[] {firstChar, dataLen[0], dataLen[1], optLen, packetType, crc8Header};
 
                         var data = new byte[dataLenShort];
+                        var read = _stream.Read(data, 0, dataLenShort);
                         Memory<byte> dataMemory = new Memory<byte>(data);
-                        var read = await _stream.ReadAsync(dataMemory);
 
                         if (read == dataLenShort)
                         {
                             var optData = new byte[optLen];
-                            Memory<byte> optMemory = new Memory<byte>(optData);
 
-                            read = await _stream.ReadAsync(optMemory);
+                            read = _stream.Read(optData, 0, optLen);
+                            Memory<byte> optMemory = new Memory<byte>(optData);
 
                             if (read == optLen)
                             {

@@ -19,20 +19,20 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="7.5.1.1515" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.1.1515" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.1.1515" />
+    <PackageReference Include="Automatica.Core.Driver" Version="7.5.1.1630" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.1.1630" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.1.1630" />
     <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit" Version="2.6.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\P3.Driver.EnOcean.DriverFactory\P3.Driver.EnOcean.DriverFactory.csproj" />
