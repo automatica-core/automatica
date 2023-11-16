@@ -15,14 +15,14 @@ namespace Automatica.Core.Internals.Cloud
             _logger = logger;
         }
 
-        public async Task<string> Synthesize(Guid id, string text, string language, string voice)
+        public async Task<TextToSpeechResponse> Synthesize(Guid id, string text, string language, string voice)
         {
 
             try
             {
                 var response = await PostRequest<TextToSpeechResponse>($"/{WebApiPrefix}/{WebApiVersion}/tts",
                     new TextToSpeechRequest { Id = id, Language = language, Text = text, Voice = voice });
-                return response.Url;
+                return response;
             }
             catch (Exception e)
             {

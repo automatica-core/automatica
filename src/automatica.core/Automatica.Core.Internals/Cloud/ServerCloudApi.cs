@@ -24,9 +24,16 @@ namespace Automatica.Core.Internals.Cloud
             return _cloudApi.SendEmail(to, subject, message);
         }
 
-        public Task<string> Synthesize(Guid id, string text, string language, string voice)
+        public async Task<string> Synthesize(Guid id, string text, string language, string voice)
         {
-            return _textToSpeedApi.Synthesize(id, text, language, voice);
+            return (await _textToSpeedApi.Synthesize(id, text, language, voice)).Url;
+        }
+
+        public async Task<(string uri, TimeSpan audioDuration)> SynthesizeWithAudioDuration(Guid id, string text, string language, string voice)
+        {
+            var response = await _textToSpeedApi.Synthesize(id, text, language, voice);
+
+            return (response.Url, response.AudioDuration);
         }
     }
 }

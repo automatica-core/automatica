@@ -16,5 +16,10 @@ namespace Automatica.Core.UnitTests.Base.Common
         {
             return Task.FromResult(String.Empty);
         }
+
+        public Task<(string uri, TimeSpan audioDuration)> SynthesizeWithAudioDuration(Guid id, string text, string language, string voice)
+        {
+            return Task.FromResult((String.Empty, TimeSpan.Zero));
+        }
     }
 }

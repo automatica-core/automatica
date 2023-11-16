@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Automatica.Core.Internals.Cloud.Model;
+using System;
 using System.Threading.Tasks;
 
 namespace Automatica.Core.Internals.Cloud
@@ -13,6 +14,6 @@ namespace Automatica.Core.Internals.Cloud
         /// <param name="language">Source text language</param>
         /// <param name="voice">Voice for the audio</param>
         /// <returns></returns>
-        Task<string> Synthesize(Guid id, string text, string language, string voice);
+        Task<TextToSpeechResponse> Synthesize(Guid id, string text, string language, string voice);
     }
 }
