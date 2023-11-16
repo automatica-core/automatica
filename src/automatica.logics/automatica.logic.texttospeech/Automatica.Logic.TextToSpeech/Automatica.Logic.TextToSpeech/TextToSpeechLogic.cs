@@ -35,7 +35,7 @@ namespace Automatica.Logic.TextToSpeech
             CancellationToken token = new CancellationToken())
         {
             _output = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "output");
-            _duration = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "duration");
+            _duration = instance.RuleInterfaceInstance.FirstOrDefault(a => a.This2RuleInterfaceTemplateNavigation.Key == "duration");
             _text = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "text");
             _voice = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "voice");
 
@@ -67,14 +67,16 @@ namespace Automatica.Logic.TextToSpeech
 
                 var voice = PropertyHelper.GetNameAttributeFromEnumValue(_voiceValue);
                 await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
-                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_duration), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
+                if(_duration != null)
+                    await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_duration), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
 
                 var value = await Context.CloudApi.SynthesizeWithAudioDuration(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
                 _url = value.uri;
                 _durationValue = value.audioDuration;
 
                 await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, _url, DateTime.Now, DispatchValueSource.Read));
-                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_duration), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, _durationValue, DateTime.Now, DispatchValueSource.Read));
+                if (_duration != null)
+                    await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_duration), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, _durationValue, DateTime.Now, DispatchValueSource.Read));
             }
             catch (Exception e)
             {
