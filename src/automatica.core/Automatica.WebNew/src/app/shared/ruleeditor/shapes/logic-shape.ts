@@ -6,6 +6,7 @@ import { LogicEngineService, LogicUpdateScope } from "src/app/services/logicengi
 import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 import { ILogicInfoHandler } from "../ilogicInfoHandler";
+import { LogicInterfaceDirection } from "src/app/base/model/rule-interface-direction";
 declare let draw2d: any;
 declare let $: any;
 
@@ -235,6 +236,16 @@ export class LogicShapes {
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(3);
                         port.setDiameter(8);
+
+                        if(portInstance.Template.InterfaceDirection.ObjId === LogicInterfaceDirection.Param) {
+                            port.setColor("orange");
+                            port.setBackgroundColor("orange");
+                        }
+                        else {
+                            port.setColor("red");
+                            port.setBackgroundColor("red");
+                        }
+                        
                     } else {
                         port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
