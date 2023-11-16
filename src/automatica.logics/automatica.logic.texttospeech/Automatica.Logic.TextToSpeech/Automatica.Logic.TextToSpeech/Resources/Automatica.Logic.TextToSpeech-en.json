@@ -13,6 +13,9 @@
       },
       "OUTPUT": {
         "NAME": "O"
+      },
+      "DURATION": {
+        "Name": "D"
       }
     }
 

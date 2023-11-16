@@ -16,6 +16,6 @@
     <EmbeddedResource Include="Resources\Automatica.Logic.TextToSpeech-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Logic" Version="7.5.1.1630" />
+    <PackageReference Include="Automatica.Core.Logic" Version="7.5.1.1644" />
   </ItemGroup>
 </Project>

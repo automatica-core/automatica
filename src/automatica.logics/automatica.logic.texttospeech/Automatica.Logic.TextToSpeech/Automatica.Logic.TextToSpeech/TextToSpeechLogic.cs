@@ -17,11 +17,13 @@ namespace Automatica.Logic.TextToSpeech
        
         private string _url;
         private RuleInterfaceInstance _output;
+        private RuleInterfaceInstance _duration;
         private RuleInterfaceInstance _text;
         private RuleInterfaceInstance _voice;
 
         private string _textValue;
         private Voices? _voiceValue;
+        private TimeSpan? _durationValue;
 
         public TextToSpeechLogic(ILogicContext context) : base(context)
         {
@@ -32,16 +34,17 @@ namespace Automatica.Logic.TextToSpeech
         protected override async Task<bool> Start(RuleInstance instance,
             CancellationToken token = new CancellationToken())
         {
-
             _output = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "output");
+            _duration = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "duration");
             _text = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "text");
             _voice = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "voice");
-
 
             _textValue = _text.ValueString;
             _voiceValue = (Voices)Convert.ToInt32(_voice.ValueString);
 
             _ = Task.Run(LoadSynthesizer, token);
+
+            await Task.CompletedTask;
 
             return true;
         }
@@ -64,8 +67,14 @@ namespace Automatica.Logic.TextToSpeech
 
                 var voice = PropertyHelper.GetNameAttributeFromEnumValue(_voiceValue);
                 await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
-                _url = await Context.CloudApi.Synthesize(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
+                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_duration), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, String.Empty, DateTime.Now, DispatchValueSource.Read));
+
+                var value = await Context.CloudApi.SynthesizeWithAudioDuration(Context.RuleInstance.ObjId, _textValue, voice.TranslationKey, "");
+                _url = value.uri;
+                _durationValue = value.audioDuration;
+
                 await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, _url, DateTime.Now, DispatchValueSource.Read));
+                await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_duration), new DispatchValue(_output.ObjId, DispatchableType.RuleInstance, _durationValue, DateTime.Now, DispatchValueSource.Read));
             }
             catch (Exception e)
             {

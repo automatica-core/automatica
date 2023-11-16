@@ -41,6 +41,8 @@ namespace Automatica.Logic.TextToSpeech
 
             factory.CreateLogicInterfaceTemplate(new Guid("6837b80d-ef8a-40ce-b713-4a0eb13aaffc"), "TEXT_TO_SPEECH.SYNTHESIZE.OUTPUT.NAME", "TEXT_TO_SPEECH.SYNTHESIZE.OUTPUT.DESCRIPTION", "output",
                 LogicGuid, LogicInterfaceDirection.Output, 0, 1);
+            factory.CreateLogicInterfaceTemplate(new Guid("d759de1d-40b4-4e38-b505-2075fded6672"), "TEXT_TO_SPEECH.SYNTHESIZE.DURATION.NAME", "TEXT_TO_SPEECH.SYNTHESIZE.DURATION.DESCRIPTION", "duration",
+                LogicGuid, LogicInterfaceDirection.Output, 0, 2);
 
             factory.CreateParameterLogicInterfaceTemplate(new Guid("90b44e5c-24d1-485f-a1fd-15b0f2a84820"), "TEXT_TO_SPEECH.SYNTHESIZE.TEXT.NAME", "TEXT_TO_SPEECH.SYNTHESIZE.TEXT.DESCRIPTION", "text", LogicGuid, 1,
                 RuleInterfaceParameterDataType.Text, "", true);
