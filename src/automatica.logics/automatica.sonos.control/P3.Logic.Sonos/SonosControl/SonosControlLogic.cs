@@ -43,6 +43,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
 
     private readonly RuleInterfaceInstance _playMediaUrlInput;
+    private readonly RuleInterfaceInstance _playMediaUrlAndStartInput;
     private readonly RuleInterfaceInstance _playMediaUrlTrigger;
     private readonly RuleInterfaceInstance _playMediaUrlOutput;
     private readonly RuleInterfaceInstance _playMediaVolume;
@@ -87,7 +88,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         _radioStationInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStationInput);
         _mediaUrlInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.MediaUrl);
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrl);
 
         //Params
         _volumeOnPlay = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
@@ -126,6 +127,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         _playMediaVolume = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundVolume);
 
+        _playMediaUrlAndStartInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrlAndStart);
     }
 
     protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -320,11 +323,15 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         {
             if (!String.IsNullOrEmpty(_mediaPlayUrl) && value is bool && (bool)value)
             {
-                if (!_mediaPlayerTaskRunning)
-                {
-                    _mediaPlayerTaskRunning = true;
-                    _ = Task.Run(RunMediaPlayerButtonTask);
-                }
+                StartPlayMediaUrl();
+            }
+        }
+        if (instance.This2RuleInterfaceTemplate == _playMediaUrlAndStartInput.This2RuleInterfaceTemplate)
+        {
+            _mediaPlayUrl = value != null ? value.ToString() : String.Empty;
+            if (!String.IsNullOrEmpty(_mediaPlayUrl))
+            {
+                StartPlayMediaUrl();
             }
         }
 
@@ -337,6 +344,15 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         }
 
         return ret;
+    }
+
+    private void StartPlayMediaUrl()
+    {
+        if (!_mediaPlayerTaskRunning)
+        {
+            _mediaPlayerTaskRunning = true;
+            _ = Task.Run(RunMediaPlayerButtonTask);
+        }
     }
 
     private async Task RunMediaPlayerButtonTask()

@@ -7,7 +7,7 @@ namespace P3.Logic.Sonos.SonosControl;
 
 public class SonosControlLogicFactory : LogicFactory
 {
-    public override Version LogicVersion => new Version(1, 1, 0, 1);
+    public override Version LogicVersion => new Version(1, 2, 0, 1);
 
     public override bool InDevelopmentMode => true;
 
@@ -25,7 +25,6 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid Next = new Guid("1049fcc8-ecd8-43cd-be15-c351eadb75be");
     public static readonly Guid Previous = new Guid("b8e791ca-b290-4205-9f8f-365bb9b73501");
     public static readonly Guid RadioStationInput = new Guid("c24e12b1-79a1-4cc4-a926-b46bfa181625");
-    public static readonly Guid MediaUrl = new Guid("2e61ab0e-17f7-49dd-baf2-a5916e3d40fa");
 
 
     public static readonly Guid TitleInput = new Guid("e2ea8f7b-c7f5-4b07-ac27-57e04ad59b2a");
@@ -45,6 +44,10 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid VolumeOnPlay = new Guid("c1af8a31-094b-4411-9db3-1cca9ee73235");
     public static readonly Guid RadioStation = new Guid("01bf3fb1-cac8-43c4-95c9-c024fde1a2af");
     public static readonly Guid MaxVolume = new Guid("ac7e676e-d562-4f38-b66b-4581a44bd9ba");
+
+
+    public static readonly Guid PlayMediaUrl = new Guid("2e61ab0e-17f7-49dd-baf2-a5916e3d40fa");
+    public static readonly Guid PlayMediaUrlAndStart = new Guid("b8f31aa5-a2e1-4ad0-8018-d05c8c2a0e3a");
     public static readonly Guid PlaySoundDuration = new Guid("b3ed64a7-658a-4baa-a0b0-fd9febb13d5d");
     public static readonly Guid PlaySoundCount = new Guid("04587812-089d-4d85-8fb6-8753b1c9b0fe");
     public static readonly Guid PlaySoundVolume = new Guid("68f697a3-861a-4b53-aa4b-fbf3b9d6604e");
@@ -90,8 +93,7 @@ public class SonosControlLogicFactory : LogicFactory
         factory.CreateLogicInterfaceTemplate(Previous, "SONOS_CONTROL.PREV.NAME", "SONOS_CONTROL.PREV.DESCRIPTION", "prev", LogicGuid, LogicInterfaceDirection.Input, 0, 6, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(Next, "SONOS_CONTROL.NEXT.NAME", "SONOS_CONTROL.NEXT.DESCRIPTION", "next", LogicGuid, LogicInterfaceDirection.Input, 0, 7, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(RadioStationInput, "SONOS_CONTROL.RADIO_STATION.NAME", "SONOS_CONTROL.RADIO_STATION.DESCRIPTION", "radio_station", LogicGuid, LogicInterfaceDirection.Input, 0, 8, RuleInterfaceType.Input);
-        factory.CreateLogicInterfaceTemplate(MediaUrl, "SONOS_CONTROL.MEDIA_URL.NAME", "SONOS_CONTROL.MEDIA_URL.DESCRIPTION", "media_url", LogicGuid, LogicInterfaceDirection.Input, 0, 9, RuleInterfaceType.Input);
-
+       
 
         //additional inputs for UI
         factory.CreateLogicInterfaceTemplate(TitleInput, "SONOS_CONTROL.STATE.TITLE.NAME", "SONOS_CONTROL.STATE.TITLE.DESCRIPTION", "title", LogicGuid, LogicInterfaceDirection.Input, 1, 9, RuleInterfaceType.Input);
@@ -104,6 +106,8 @@ public class SonosControlLogicFactory : LogicFactory
 
         factory.CreateLogicInterfaceTemplate(PlaySoundUrl, "SONOS_CONTROL.PLAY_SOUND_URL.NAME", "SONOS_CONTROL.PLAY_SOUND_URL.DESCRIPTION", "play_sound", LogicGuid, LogicInterfaceDirection.Input, 1, 16, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(PlaySoundTrigger, "SONOS_CONTROL.PLAY_SOUND_TRIGGER.NAME", "SONOS_CONTROL.PLAY_SOUND_TRIGGER.DESCRIPTION", "play_sound_trigger", LogicGuid, LogicInterfaceDirection.Input, 1, 17, RuleInterfaceType.Input);
+        factory.CreateLogicInterfaceTemplate(PlayMediaUrl, "SONOS_CONTROL.MEDIA_URL.NAME", "SONOS_CONTROL.MEDIA_URL.DESCRIPTION", "media_url", LogicGuid, LogicInterfaceDirection.Input, 0, 9, RuleInterfaceType.Input);
+        factory.CreateLogicInterfaceTemplate(PlayMediaUrlAndStart, "SONOS_CONTROL.MEDIA_URL_PLAY.NAME", "SONOS_CONTROL.MEDIA_URL_PLAY.DESCRIPTION", "media_url_play", LogicGuid, LogicInterfaceDirection.Input, 0, 10, RuleInterfaceType.Input);
 
 
         factory.CreateLogicInterfaceTemplate(PlayOutputStatus, "SONOS_CONTROL.PLAY_OUTPUT_STATE.NAME", "SONOS_CONTROL.PLAY_OUTPUT_STATE.DESCRIPTION", "play", LogicGuid, LogicInterfaceDirection.Output, 0, 1, RuleInterfaceType.Output);
