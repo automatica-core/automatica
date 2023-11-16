@@ -7,7 +7,7 @@ namespace P3.Logic.Sonos.SonosControl;
 
 public class SonosControlLogicFactory : LogicFactory
 {
-    public override Version LogicVersion => new Version(1, 0, 0, 1);
+    public override Version LogicVersion => new Version(1, 1, 0, 1);
 
     public override bool InDevelopmentMode => true;
 
@@ -75,7 +75,7 @@ public class SonosControlLogicFactory : LogicFactory
             "SONOS_CONTROL.MAX_VOLUME.DESCRIPTION", LogicGuid, 3, RuleInterfaceParameterDataType.Integer, 100);
 
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundDuration, "SONOS_CONTROL.PLAY_SOUND_DURATION.NAME",
-            "SONOS_CONTROL.PLAY_SOUND_DURATION.DESCRIPTION", LogicGuid, 4, RuleInterfaceParameterDataType.Integer, 5000);
+            "SONOS_CONTROL.PLAY_SOUND_DURATION.DESCRIPTION", LogicGuid, 4, RuleInterfaceParameterDataType.Integer, 5000, true);
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundCount, "SONOS_CONTROL.PLAY_SOUND_COUNT.NAME",
             "SONOS_CONTROL.PLAY_SOUND_COUNT.DESCRIPTION", LogicGuid, 5, RuleInterfaceParameterDataType.Integer, 2);
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundVolume, "SONOS_CONTROL.PLAY_SOUND_VOLUME.NAME",
