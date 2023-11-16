@@ -24,6 +24,7 @@ namespace Automatica.Logic.TextToSpeech
         private string _textValue;
         private Voices? _voiceValue;
         private TimeSpan? _durationValue;
+        private RuleInterfaceInstance _trigger;
 
         public TextToSpeechLogic(ILogicContext context) : base(context)
         {
@@ -38,6 +39,8 @@ namespace Automatica.Logic.TextToSpeech
             _duration = instance.RuleInterfaceInstance.FirstOrDefault(a => a.This2RuleInterfaceTemplateNavigation.Key == "duration");
             _text = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "text");
             _voice = instance.RuleInterfaceInstance.First(a => a.This2RuleInterfaceTemplateNavigation.Key == "voice");
+
+            _trigger = instance.RuleInterfaceInstance.FirstOrDefault(a => a.This2RuleInterfaceTemplateNavigation.Key == "trigger");
 
             _textValue = _text.ValueString;
             _voiceValue = (Voices)Convert.ToInt32(_voice.ValueString);
@@ -106,11 +109,23 @@ namespace Automatica.Logic.TextToSpeech
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            if (instance.ObjId == _text.ObjId)
+            var ret = new List<ILogicOutputChanged>();
+            if (_trigger != null && instance.ObjId == _trigger.ObjId)
             {
-                _textValue = value.ToString();
+              
+                if (String.IsNullOrEmpty(_textValue))
+                {
+                    LoadSynthesizer().RunSynchronously();
+                }
+
+                ret.Add(new LogicOutputChanged(_text, _textValue));
+                if (_duration != null)
+                {
+                    ret.Add(new LogicOutputChanged(_duration, _durationValue));
+                }
             }
-            return SingleOutputChanged(new LogicOutputChanged(_output, _url));
+
+            return ret;
         }
     }
 }

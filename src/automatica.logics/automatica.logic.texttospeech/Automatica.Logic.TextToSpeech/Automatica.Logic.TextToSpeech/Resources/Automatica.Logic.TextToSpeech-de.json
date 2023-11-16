@@ -15,7 +15,10 @@
         "NAME": "O"
       },
       "DURATION": {
-        "Name":  "D"
+        "Name": "D"
+      },
+      "TRIGGER":  {
+        "NAME": "Trigger"
       }
     }
 

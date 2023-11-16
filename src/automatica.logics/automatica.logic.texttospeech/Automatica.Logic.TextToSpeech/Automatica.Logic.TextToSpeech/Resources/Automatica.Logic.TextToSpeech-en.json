@@ -16,6 +16,9 @@
       },
       "DURATION": {
         "Name": "D"
+      },
+      "TRIGGER": {
+        "NAME": "Trigger"
       }
     }
 
