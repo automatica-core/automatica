@@ -14,6 +14,7 @@ import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
   selector: "app-config",
@@ -41,7 +42,8 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     translate: L10nTranslationService,
     private userGroupsService: GroupsService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService) {
+    private nodeInstanceService: NodeInstanceService,
+    private hubConnectionService: HubConnectionService) {
     super(notify, translate, appService);
 
     appService.setAppTitle("CONFIGURATION.NAME");
@@ -49,6 +51,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
 
   async load() {
     try {
+      await this.hubConnectionService.init();
       this.isLoading = true;
 
       const [userGroups, areaInstances, categoryInstances] = await Promise.all(

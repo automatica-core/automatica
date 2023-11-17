@@ -355,6 +355,10 @@ export class LogicShapes {
                     input.setName(element.Inputs[0].PortId);
                     input.setId(element.Inputs[0].PortId);
 
+                    
+                    input.setColor("red");
+                    input.setBackgroundColor("red");
+
                     let dataLabel = new draw2d.shape.basic.Label({
                         text: ValueHandler.handleValue((element.NodeInstance).WriteValue),
                         textLength: "100%",

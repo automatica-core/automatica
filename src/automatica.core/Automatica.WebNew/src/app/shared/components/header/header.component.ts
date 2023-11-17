@@ -97,6 +97,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     async ngOnInit() {
 
+
+        await this.hubService.init();
+
         const projectName = await this.settingsService.getByKey("projectName");
         this.projectName = projectName.Value;
         document.title = this.projectName;

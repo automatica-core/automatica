@@ -25,6 +25,7 @@ import { NodeInstanceService } from "src/app/services/node-instance.service";
 import DataSource from "devextreme/data/data_source";
 import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
+import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
   selector: "app-logic-editor",
@@ -70,7 +71,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     private nodeInstanceService: NodeInstanceService,
     private changeRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private hubConnectionService: HubConnectionService) {
     super(notify, translate, appService);
 
     appService.setAppTitle("RULEENGINE.NAME");
@@ -81,7 +83,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async ngOnInit() {
-
+    await this.hubConnectionService.init();
     await this.loadData();
 
     const pageId = this.route.snapshot.params["id"];
