@@ -1,5 +1,4 @@
 ﻿using System;
-using MessagePack;
 
 
 namespace Automatica.Core.EF.Models
@@ -14,7 +13,6 @@ namespace Automatica.Core.EF.Models
         public Guid This2RuleInterfaceTemplate { get; set; }
         public bool IsDeleted { get; set; }
 
-        [IgnoreMember]
         public RuleInstance This2RuleInstanceNavigation { get; set; }
         public RuleInterfaceTemplate This2RuleInterfaceTemplateNavigation { get; set; }
 

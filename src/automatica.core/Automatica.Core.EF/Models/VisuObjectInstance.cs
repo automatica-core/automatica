@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 using Newtonsoft.Json;
 
 
@@ -31,10 +30,9 @@ namespace Automatica.Core.EF.Models
         public bool IsFavorite { get; set; }
         public int Rating { get; set; }
 
-        [IgnoreMember]
         public UserGroup This2UserGroupNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public VisuPage This2VisuPageNavigation { get; set; }
        
         public VisuObjectTemplate This2VisuObjectTemplateNavigation { get; set; }

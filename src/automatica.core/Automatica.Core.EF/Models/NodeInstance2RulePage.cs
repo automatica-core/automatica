@@ -1,6 +1,5 @@
 ﻿using System;
 using Automatica.Core.Model;
-using MessagePack;
 using Newtonsoft.Json;
 
 
@@ -18,7 +17,7 @@ namespace Automatica.Core.EF.Models
 
         public NodeInstance This2NodeInstanceNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public RulePage This2RulePageNavigation { get; set; }
 
         

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automatica.Core.Model;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
@@ -27,7 +26,7 @@ namespace Automatica.Core.EF.Models
 
         public List<PropertyTemplateConstraintData> ConstraintData { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public PropertyTemplate This2PropertyTemplateNavigation { get; set; }
 
 

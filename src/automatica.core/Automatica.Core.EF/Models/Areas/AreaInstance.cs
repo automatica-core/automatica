@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 
 namespace Automatica.Core.EF.Models.Areas
 {
@@ -25,7 +24,6 @@ namespace Automatica.Core.EF.Models.Areas
 
         public string Icon { get; set; }
 
-        [IgnoreMember]
         public AreaInstance This2ParentNavigation { get; set; }
 
         public AreaTemplate This2AreaTemplateNavigation { get; set; }

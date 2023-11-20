@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 
 
 namespace Automatica.Core.EF.Models
@@ -30,7 +29,6 @@ namespace Automatica.Core.EF.Models
         public int Rating { get; set; }
 
 
-        [IgnoreMember]
         public UserGroup This2UserGroupNavigation { get; set; }
 
         public VisuPageType This2VisuPageTypeNavigation { get; set; }

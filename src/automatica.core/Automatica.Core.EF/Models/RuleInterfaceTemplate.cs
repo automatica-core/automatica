@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automatica.Core.Model;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
@@ -60,7 +59,7 @@ namespace Automatica.Core.EF.Models
 
         public RuleInterfaceDirection This2RuleInterfaceDirectionNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public RuleTemplate This2RuleTemplateNavigation { get; set; }
         
     }

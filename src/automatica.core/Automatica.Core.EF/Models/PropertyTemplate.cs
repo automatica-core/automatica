@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
@@ -32,10 +31,10 @@ namespace Automatica.Core.EF.Models
 
         public Guid FactoryReference { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public NodeTemplate This2NodeTemplateNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public VisuObjectTemplate This2VisuObjectTemplateNavigation { get; set; }
         public PropertyType This2PropertyTypeNavigation { get; set; }
 

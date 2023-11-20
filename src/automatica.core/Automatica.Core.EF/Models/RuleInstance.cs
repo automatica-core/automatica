@@ -4,7 +4,6 @@ using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 using Newtonsoft.Json;
 
 
@@ -42,7 +41,7 @@ namespace Automatica.Core.EF.Models
         public Guid? This2CategoryInstance { get; set; }
         public CategoryInstance This2CategoryInstanceNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public RulePage This2RulePageNavigation { get; set; }
 
         public RuleTemplate This2RuleTemplateNavigation { get; set; }

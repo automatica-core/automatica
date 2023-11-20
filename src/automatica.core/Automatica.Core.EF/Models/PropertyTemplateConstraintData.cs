@@ -1,6 +1,5 @@
 ﻿using System;
 using Automatica.Core.Model;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
@@ -21,7 +20,7 @@ namespace Automatica.Core.EF.Models
 
 
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public PropertyTemplateConstraint This2PropertyTemplateConstraintNavigation { get; set; }
     }
 }
