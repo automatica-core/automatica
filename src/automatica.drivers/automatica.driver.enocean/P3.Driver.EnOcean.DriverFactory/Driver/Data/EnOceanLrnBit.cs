@@ -13,6 +13,8 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
         public override void TelegramReceived(RadioErp1Packet telegram)
         {
             var value = GetValueGeneric(telegram);
+
+            DriverContext.Logger.LogDebug($"Parsed data {value}");
             if (value != null && value is int bValue)
             {
                 DispatchRead(bValue == 0);

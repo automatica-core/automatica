@@ -19,14 +19,14 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.1.1630" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.1.1630" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.1.1644" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="7.5.1.1644" />
     <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.6.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

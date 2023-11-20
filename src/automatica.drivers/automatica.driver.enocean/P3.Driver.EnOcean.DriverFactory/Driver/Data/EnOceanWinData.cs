@@ -1,6 +1,7 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 
@@ -19,6 +20,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
 
             var action = (value & 0x70) >> 4;
 
+            DriverContext.Logger.LogDebug($"Parsed data {value} action is {action}");
             switch (action)
             {
                 case 0x07:
