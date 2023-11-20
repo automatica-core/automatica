@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.Serial;
-using P3.Driver.EnOcean.Tcp;
 
 namespace P3.Driver.EnOcean.Console
 {

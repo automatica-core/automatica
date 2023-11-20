@@ -1,8 +1,6 @@
 
         using System;
-        using System.Collections.Generic;
         using System.Diagnostics.CodeAnalysis;
-        using System.Text;
         using Automatica.Core.Base.Templates;
         using Automatica.Core.EF.Models;
         using P3.Driver.EnOcean.DriverFactory.Templates;

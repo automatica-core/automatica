@@ -1,9 +1,6 @@
 
             using System;
-            using System.Collections.Generic;
-            using System.Text;
             using Automatica.Core.UnitTests.Base.Drivers;
-            using Automatica.Core.UnitTests.Drivers;
             using Xunit;
 
             namespace P3.Driver.EnOcean.DriverFactory.Tests

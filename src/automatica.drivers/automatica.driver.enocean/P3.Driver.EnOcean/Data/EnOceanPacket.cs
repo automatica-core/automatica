@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using P3.Driver.EnOcean.Data.Packets;
 using Automatica.Core.Driver.Utility;
 
 namespace P3.Driver.EnOcean.Data
