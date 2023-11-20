@@ -144,6 +144,8 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
 
         private void DriverOnTelegramReceived(object sender, PacketReceivedEventArgs packetReceivedEventArgs)
         {
+            DriverContext.Logger.LogInformation($"Received telegram {packetReceivedEventArgs.Telegram.GetType()}");
+
             if (packetReceivedEventArgs.Telegram is RadioErp1Packet radio)
             {
                 TelegramMonitor.NotifyTelegram(Automatica.Core.Base.TelegramMonitor.TelegramDirection.Input, radio.SenderIdString, radio.Packet.DestinationIdString, radio.Packet.ToString(), Utils.ByteArrayToString(radio.Data));

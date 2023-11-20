@@ -4,6 +4,7 @@ using P3.Driver.EnOcean.DriverFactory.Driver.Data;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.EnOcean.DriverFactory.Driver
 {
@@ -22,10 +23,16 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             return base.Init(token);
         }
 
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
+
         public override void TelegramReceived(RadioErp1Packet telegram)
         {
             if (telegram.SenderIdString == _serial)
             {
+                DriverContext.Logger.LogDebug($"Telegram received for {_serial}");
                 base.TelegramReceived(telegram);
             }
         }

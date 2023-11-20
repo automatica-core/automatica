@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Driver;
+using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.DriverFactory.Driver.Learned;
 
@@ -13,6 +14,8 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
         public override void TelegramReceived(RadioErp1Packet telegram)
         {
             var data = GetValueGeneric(telegram);
+
+            DriverContext.Logger.LogDebug($"Parsed data {data}");
 
             if (data != null)
             {
