@@ -29,8 +29,8 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
-            dotnet tool install automatica-cli  --global  2>/dev/null
-            dotnet tool update automatica-cli -g  2>/dev/null
+            dotnet tool install automatica-cli  --global
+            dotnet tool update automatica-cli -g
 
       - task: DotNetCoreCLI@2
         displayName: Restore
