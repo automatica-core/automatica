@@ -27,7 +27,7 @@ steps:
     projects: '**/*[Tt]ests.csproj'
     arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
-- task: AutomaticaCoreDockerMultiArchCli@8
+- task: AutomaticaCoreDockerMultiArchCli@9
   displayName: Docker multi-arch
   inputs:
     dockerRegistryEndpoint: 'DockerHub'
