@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>{FD6AFFB8-7382-4DE7-B491-8B30065EE768}</ProjectGuid>
@@ -17,6 +17,6 @@
     <EmbeddedResource Include="Resources\Lightning-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Logic" Version="7.5.0.1363" />
+    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1652" />
   </ItemGroup>
 </Project>

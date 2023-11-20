@@ -7,7 +7,7 @@ RUN npm install --global devextreme
 RUN npm install
 RUN npm run build-docker
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 ARG VERSION
@@ -22,7 +22,7 @@ COPY . /src
 RUN automatica-cli setversion $VERSION -W /src/src
 RUN dotnet publish -c Release -o /app/satellite /src/src/ -r linux-x64
 
-FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-8 AS runtime
 WORKDIR /app/satellite
 
 COPY --from=node /www/dist /app/satellite/wwwroot

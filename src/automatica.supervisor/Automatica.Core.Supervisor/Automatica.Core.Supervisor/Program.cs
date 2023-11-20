@@ -27,7 +27,7 @@ namespace Automatica.Core.Supervisor
 
             var logBuild = new LoggerConfiguration()
               .WriteTo.Console()
-              .WriteTo.RollingFile(Path.Combine("logs", "logs.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 30)
+              .WriteTo.File(Path.Combine("logs", "logs.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 30)
               .MinimumLevel.Verbose();
 
             Log.Logger = logBuild.CreateLogger();
@@ -54,7 +54,7 @@ namespace Automatica.Core.Supervisor
                     a.AddJsonFile("appsettings.json", true);
 
                 })
-                .UseStartup<Startup>().UseUrls($"http://*:8080/").UseSerilog();
+                .UseStartup<Startup>().UseUrls($"http://*:8080/");
         }
     }
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>6.0.0.8395</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>2958669F-DBA7-4B06-9464-93F5DFF772DC</ProjectGuid>
-    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net7.0\Drivers\Vking</BaseOutputPath>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net8.0\Drivers\Vking</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
@@ -20,9 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SolarCalculator" Version="3.3.0" />
-    <PackageReference Include="Automatica.Core.EF" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Driver" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1652" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.VkingBms.Driver\P3.Driver.VkingBms.Driver.csproj" />
