@@ -11,7 +11,7 @@ RUN npm install
 RUN npm run build-docker
 
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 RUN apt-get update 
@@ -52,7 +52,7 @@ RUN mv frp_*/* frp/
 RUN ./frp/frpc --version
 
 
-FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-8 AS runtime
 WORKDIR /app/
 
 ARG VERSION
