@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM automaticacore/automatica-plugin-build:latest-amd64 AS build
 WORKDIR /app
 
 ARG VERSION
