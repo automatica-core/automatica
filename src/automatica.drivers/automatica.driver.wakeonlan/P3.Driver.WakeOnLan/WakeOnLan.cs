@@ -3,8 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility;
@@ -19,7 +19,7 @@ namespace P3.Driver.WakeOnLan
         {
         }
 
-        public override Task WriteValue(IDispatchable source, object value)
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var mac = GetPropertyValueString("mac");
             if (!String.IsNullOrEmpty(mac))
@@ -30,9 +30,8 @@ namespace P3.Driver.WakeOnLan
                     DriverContext.Logger.LogError($"Could not wake up {mac}");
                 }
 
-                DispatchRead(mac);
+                await writeContext.DispatchValue(mac, token);
             }
-            return Task.CompletedTask;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -74,7 +73,7 @@ namespace P3.Driver.WakeOnLan
                 return packet;
             }
 
-            return new byte[0];
+            return Array.Empty<byte>();
         }
 
         public static bool WakeUp(ILogger logger, string macAddress, IDriverContext ctx)
@@ -89,17 +88,15 @@ namespace P3.Driver.WakeOnLan
             if (packet.Length > 0)
             {
                 // WOL packet is sent over UDP 255.255.255.0:40000.
-                using (UdpClient client = new UdpClient())
+                using var client = new UdpClient();
+                client.Client.Connect(IPAddress.Broadcast, 40000);
+                client.EnableBroadcast = true;
+                // Submit
+                int result = client.Client.Send(packet);
+                logger.LogHexOut(packet);
+                if (result > 0)
                 {
-                    client.Client.Connect(IPAddress.Broadcast, 40000);
-                    client.EnableBroadcast = true;
-                    // Submit
-                    int result = client.Client.Send(packet);
-                    logger.LogHexOut(packet);
-                    if (result > 0)
-                    {
-                        retVal = true;
-                    }
+                    retVal = true;
                 }
             }
 
