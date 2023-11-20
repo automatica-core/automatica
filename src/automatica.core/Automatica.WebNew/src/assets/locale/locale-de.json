@@ -482,6 +482,10 @@
       "MODIFIED_AT": {
         "NAME": "Geändert am",
         "DESCRIPTION":""
+      },
+      "VALUE_SOURCE": {
+        "NAME": "Quelle",
+        "DESCRIPTION": ""
       }
     },
     "CATEGORY_INSTANCE": {
