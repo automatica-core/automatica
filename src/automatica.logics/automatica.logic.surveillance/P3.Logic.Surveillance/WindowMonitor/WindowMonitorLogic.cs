@@ -11,15 +11,6 @@ using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Surveillance.WindowMonitor
 {
-    internal enum WindowState
-    {
-        Undefined,
-        Open = 1,
-        Closed = 2,
-        Tilt = 3,
-        Locked = 4,
-        Unlocked = 5
-    }
 
     public class WindowMonitorLogic : Automatica.Core.Logic.Logic
     {
@@ -49,7 +40,7 @@ namespace P3.Logic.Surveillance.WindowMonitor
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-            var windowState = WindowState.Undefined;
+            WindowState? windowState = null;
             if (instance.This2RuleInterfaceTemplate == WindowMonitorFactory.Ct || instance.This2RuleInterfaceTemplate == WindowMonitorFactory.Cti)
             {
                 var boolValue = !Convert.ToBoolean(value);
@@ -58,7 +49,7 @@ namespace P3.Logic.Surveillance.WindowMonitor
                 {
                     boolValue = !boolValue;
                 }
-                windowState = boolValue ? WindowState.Tilt : WindowState.Closed;
+                windowState = boolValue ? WindowState.Tilted : WindowState.Closed;
             }
             if (instance.This2RuleInterfaceTemplate == WindowMonitorFactory.Co || instance.This2RuleInterfaceTemplate == WindowMonitorFactory.Coi)
             {
@@ -79,16 +70,16 @@ namespace P3.Logic.Surveillance.WindowMonitor
                 {
                     boolValue = !boolValue;
                 }
-                windowState = boolValue ? WindowState.Unlocked : WindowState.Locked;
+              //  windowState = boolValue ? WindowState.Unlocked : WindowState.Locked;
             }
 
-            if (!States.ContainsKey(source.Id))
+            if (!States.ContainsKey(source.Id) && windowState.HasValue)
             {
-                States.Add(source.Id, new Tuple<IDispatchable, WindowState>(source, windowState));
+                States.Add(source.Id, new Tuple<IDispatchable, WindowState>(source, windowState.Value));
             }
-            else
+            else if (windowState.HasValue)
             {
-                States[source.Id] = new Tuple<IDispatchable, WindowState>(source, windowState);
+                States[source.Id] = new Tuple<IDispatchable, WindowState>(source, windowState.Value);
             }
 
             // TODO: Notify only if a state changes???
