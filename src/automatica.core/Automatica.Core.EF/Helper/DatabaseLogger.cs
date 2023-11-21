@@ -16,7 +16,7 @@ namespace Automatica.Core.EF.Helper
             _facility = "database";
 
             var logBuild = new LoggerConfiguration()
-            .WriteTo.RollingFile(Path.Combine("logs", $"{_facility}.log"), fileSizeLimitBytes: 31457280, retainedFileCountLimit: 10, restrictedToMinimumLevel: LogEventLevel.Verbose, flushToDiskInterval: TimeSpan.FromSeconds(30))
+            .WriteTo.File(Path.Combine("logs", $"{_facility}.log"), fileSizeLimitBytes: 31457280, retainedFileCountLimit: 10, restrictedToMinimumLevel: LogEventLevel.Verbose, flushToDiskInterval: TimeSpan.FromSeconds(30))
             .WriteTo.Console();
 
             if(!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_DEBUG_LOG")))

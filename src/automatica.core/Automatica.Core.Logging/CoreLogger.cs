@@ -64,11 +64,11 @@ namespace Automatica.Core.Logging
 
             if (isFrameworkLog)
             {
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"),
+                logBuild.WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"),
                         fileSizeLimitBytes: 31457280,
                         retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
-                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                    .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728, //128mb
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
                         shared: true,
@@ -92,11 +92,11 @@ namespace Automatica.Core.Logging
                 }
 
                 logBuild
-                    .WriteTo.RollingFile(fileName,
+                    .WriteTo.File(fileName,
                         fileSizeLimitBytes: 31457280, //~32mb
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
-                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                    .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728, //128mb
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
                         shared: true,
