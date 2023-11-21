@@ -8,8 +8,8 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-	  <PackageReference Include="BouncyCastle.NetCore" Version="1.9.0" />
+	  <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
     <PackageReference Include="PureWebSockets" Version="4.0.0" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1424" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
   </ItemGroup>
 </Project>

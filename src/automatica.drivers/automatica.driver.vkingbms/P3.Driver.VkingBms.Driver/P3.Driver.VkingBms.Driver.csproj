@@ -9,8 +9,8 @@
 	<ItemGroup>
 
 		<PackageReference Include="SerialPortStream" Version="2.4.1" />
-		<PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1652" />
-		<PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1652" />
+		<PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
+		<PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
 	</ItemGroup>
 
 </Project>

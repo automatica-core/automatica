@@ -1,4 +1,5 @@
-﻿using Automatica.Core.UnitTests.Base.Common;
+﻿using System.Threading.Tasks;
+using Automatica.Core.UnitTests.Base.Common;
 using Xunit;
 
 namespace P3.Driver.ModBus.Tests
@@ -6,9 +7,9 @@ namespace P3.Driver.ModBus.Tests
     public class ModBus2ByteRegisterTests : ModBusBaseTest
     {
         [Fact]
-        public void ModBus2ByteRegister()
+        public async Task ModBus2ByteRegister()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register2ByteGuid);
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register2ByteGuid);
             var modBusAttribute = attribute.Attribute;
             var data = modBusAttribute.ConvertValueToBus(123, out var convertedValue);
 

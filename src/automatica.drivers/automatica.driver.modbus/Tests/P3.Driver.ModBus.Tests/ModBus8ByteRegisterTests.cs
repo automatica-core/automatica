@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Automatica.Core.UnitTests.Base.Common;
 using P3.Driver.ModBusDriverFactory;
 using Xunit;
@@ -8,9 +9,9 @@ namespace P3.Driver.ModBus.Tests
     public class ModBus8ByteRegisterTests : ModBusBaseTest
     {
         [Fact]
-        public void ModBus8ByteRegister_AB_CD_EF_GH()
+        public async Task ModBus8ByteRegister_AB_CD_EF_GH()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.AB_CD_EF_GH;
@@ -31,9 +32,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteRegister_GH_EF_CD_AB()
+        public async Task ModBus8ByteRegister_GH_EF_CD_AB()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.GH_EF_CD_AB;
@@ -52,9 +53,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteRegister_BA_DC_FE_HG()
+        public async Task ModBus8ByteRegister_BA_DC_FE_HG()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.BA_DC_FE_HG;
@@ -74,9 +75,9 @@ namespace P3.Driver.ModBus.Tests
 
 
         [Fact]
-        public void ModBus8ByteRegister_HF_FE_DC_BA()
+        public async Task ModBus8ByteRegister_HF_FE_DC_BA()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.HF_FE_DC_BA;
@@ -96,9 +97,9 @@ namespace P3.Driver.ModBus.Tests
 
 
         [Fact]
-        public void ModBus8ByteRegister_AB_CD_EF_GH2()
+        public async Task ModBus8ByteRegister_AB_CD_EF_GH2()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.AB_CD_EF_GH;
@@ -117,9 +118,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteRegister_GH_EF_CD_AB2()
+        public async Task ModBus8ByteRegister_GH_EF_CD_AB2()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.GH_EF_CD_AB;
@@ -139,9 +140,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteRegister_BA_DC_FE_HG2()
+        public async Task ModBus8ByteRegister_BA_DC_FE_HG2()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.BA_DC_FE_HG;
@@ -161,9 +162,9 @@ namespace P3.Driver.ModBus.Tests
 
 
         [Fact]
-        public void ModBus8ByteRegister_HF_FE_DC_BA2()
+        public async Task ModBus8ByteRegister_HF_FE_DC_BA2()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteGuid, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.HF_FE_DC_BA;
@@ -182,9 +183,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteFloat_AB_CD_EF_GH()
+        public async Task ModBus8ByteFloat_AB_CD_EF_GH()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.AB_CD_EF_GH;
@@ -204,9 +205,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteFloat_GH_EF_CD_AB()
+        public async Task ModBus8ByteFloat_GH_EF_CD_AB()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.GH_EF_CD_AB;
@@ -225,9 +226,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteFloat_BA_DC_FE_HG()
+        public async Task ModBus8ByteFloat_BA_DC_FE_HG()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.BA_DC_FE_HG;
@@ -246,9 +247,9 @@ namespace P3.Driver.ModBus.Tests
         }
 
         [Fact]
-        public void ModBus8ByteFloat_HF_FE_DC_BA()
+        public async Task ModBus8ByteFloat_HF_FE_DC_BA()
         {
-            var attribute = InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
+            var attribute = await InitAttribute(ModBusDriverFactory.ModBusDriverFactory.Register8ByteFloat, instance =>
             {
                 var prop = instance.GetProperty("modbus-byte-order");
                 prop.Value = ModBus8ByteOrder.HF_FE_DC_BA;

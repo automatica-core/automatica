@@ -19,8 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SolarCalculator" Version="3.3.0" />
-    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1652" />
-    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1652" />
-    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
   </ItemGroup>
 </Project>

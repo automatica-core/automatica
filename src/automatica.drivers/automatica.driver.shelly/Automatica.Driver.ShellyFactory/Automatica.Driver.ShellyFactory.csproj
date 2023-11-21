@@ -15,7 +15,7 @@
     <EmbeddedResource Include="Resources\Shelly-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Driver.Shelly\Automatica.Driver.Shelly.csproj" />

@@ -21,8 +21,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="7.5.0.1355" />
-    <PackageReference Include="OpenWeatherMap" Version="1.1.0" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
+    <PackageReference Include="OpenWeatherMap" Version="1.1.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Ressources\OpenWeatherMap-de.json">
