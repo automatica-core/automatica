@@ -5,6 +5,7 @@ import { L10nTranslationService } from "angular-l10n";
 import { BaseComponent } from "src/app/base/base-component";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
   selector: "app-starting-overlay",
@@ -23,6 +24,7 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
     private ngZone: NgZone,
     private translationConfigService: TranslationConfigService,
     private actiavtedRoute: ActivatedRoute,
+    private hubConnectionService: HubConnectionService,
     private router: Router) {
     super(notify, translation, appService);
   }
@@ -40,6 +42,7 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
 
       if (!v) {
         await this.translationConfigService.init();
+        await this.hubConnectionService.init();
       }
     });
   }
