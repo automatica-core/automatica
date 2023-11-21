@@ -6,8 +6,6 @@ using Automatica.Core.Driver.Utility.Network;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace P3.Driver.HueBridge
