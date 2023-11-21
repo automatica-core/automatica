@@ -103,7 +103,7 @@ namespace P3.Driver.HueBridge
 
             var webHost = WebHost.CreateDefaultBuilder(args)
                 .UseStartup<HueStartup>()
-                .UseUrls($"http://*:{port}/").UseSerilog();
+                .UseUrls($"http://*:{port}/");
 
             return webHost.Build();
         }

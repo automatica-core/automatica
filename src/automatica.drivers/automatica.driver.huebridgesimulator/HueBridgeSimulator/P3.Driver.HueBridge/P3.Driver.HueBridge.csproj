@@ -10,14 +10,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.10" />
-    <PackageReference Include="Rssdp" Version="4.0.4" />
-    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1355" />
-    <PackageReference Include="Serilog" Version="3.0.1" />
-    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
+    <PackageReference Include="Rssdp.NetStd" Version="4.0.4" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1652" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00771" />
   </ItemGroup>
 </Project>
