@@ -19,21 +19,21 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.1.1">
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1652" />
-    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1652" />
-    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1652" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1652" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="8.0.0.1655" />
     <ProjectReference Include="..\P3.Logic.Compare.BaseOperations\P3.Logic.Compare.BaseOperations.csproj" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit" Version="2.6.2" />
     <PackageReference Include="OpenCover" Version="4.7.1221">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -41,6 +41,6 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
 </Project>

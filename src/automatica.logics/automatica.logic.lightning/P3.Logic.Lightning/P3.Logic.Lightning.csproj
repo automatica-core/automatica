@@ -18,7 +18,7 @@
     <EmbeddedResource Include="Resources\Lightning-en.json" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1652" />
-	  <PackageReference Include="Microsoft.Build.Framework" Version="17.3.2" />
+	  <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1655" />
+	  <PackageReference Include="Microsoft.Build.Framework" Version="17.8.3" />
   </ItemGroup>
 </Project>

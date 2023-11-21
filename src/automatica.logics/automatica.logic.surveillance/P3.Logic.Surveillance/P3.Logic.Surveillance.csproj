@@ -10,6 +10,6 @@
     <EmbeddedResource Include="automatica-manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1652" />
+    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1655" />
   </ItemGroup>
 </Project>
