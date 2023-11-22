@@ -48,8 +48,8 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 }
             }
 
-            string corePath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
-            var fileName = Path.Combine(corePath, $"{assemblyName.Name}.dll");
+            var corePath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName!;
+            var fileName = Path.Combine(corePath, $"{assemblyName.Name!}.dll");
 
             if (File.Exists(fileName))
             {
@@ -94,7 +94,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 var loaded = await LoadFolders<T>(subFolders, searchPattern, recCount++, logger, config,
                     isInDevMode);
 
-                if (loaded != null && loaded.Count > 0)
+                if (loaded.Count > 0)
                 {
                     list.AddRange(loaded);
                 }
@@ -106,7 +106,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
         private static bool IsCandidateLibrary(RuntimeLibrary library, AssemblyName assemblyName)
         {
             return (library.Name == (assemblyName.Name))
-                    || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name)));
+                    || (library.Dependencies.Any(d => d.Name.StartsWith(assemblyName.Name!)));
         }
 
         public static async Task<List<T>> LoadSingle<T>(string file, ILogger logger, IConfiguration config, bool isInDevMode)
@@ -122,19 +122,24 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 AssemblyLoader loader;
                 if (isInDevMode)
                 {
-                    loader = new AssemblyLoader(folder,
-                        new FileInfo(Assembly.GetCallingAssembly().Location).DirectoryName, folder);
+                    loader = new AssemblyLoader(folder!,
+                        new FileInfo(Assembly.GetCallingAssembly().Location).DirectoryName!, folder!);
                 }
                 else
                 {
-                    loader = new AssemblyLoader(folder, folder);
+                    loader = new AssemblyLoader(folder!, folder!);
 
                 }
 
-                Func<AssemblyLoadContext, AssemblyName, Assembly> assemblyLoader = (context, name) =>
+                Func<AssemblyLoadContext, AssemblyName, Assembly?> assemblyLoader = (context, name) =>
                 {
                     logger.LogInformation($"Try to load assembly {name} for {file}");
                     // avoid loading *.resources dll, because of: https://github.com/dotnet/coreclr/issues/8416
+                    if (name.Name == null)
+                    {
+                        throw new ArgumentNullException(nameof(name.Name));
+                    }
+
                     if (name.Name.EndsWith("resources"))
                     {
                         return null;
@@ -142,7 +147,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                     logger.LogInformation($"Try to load assembly from {folder}");
                     var foundDll =
-                        Directory.GetFileSystemEntries(folder, name.Name + ".dll", SearchOption.AllDirectories);
+                        Directory.GetFileSystemEntries(folder!, name.Name + ".dll", SearchOption.AllDirectories);
                     if (foundDll.Any())
                     {
                         return context.LoadFromAssemblyPath(foundDll[0]);
@@ -150,13 +155,16 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                     var secondPath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
                     logger.LogInformation($"Try to load assembly from second path: {secondPath}");
-                    foundDll = Directory.GetFileSystemEntries(secondPath, name.Name + ".dll",
+                    foundDll = Directory.GetFileSystemEntries(secondPath!, name.Name + ".dll",
                         SearchOption.AllDirectories);
                     if (foundDll.Any())
                     {
                         return context.LoadFromAssemblyPath(foundDll[0]);
                     }
-
+                    if (DependencyContext.Default == null)
+                    {
+                        throw new ArgumentNullException(nameof(DependencyContext.Default));
+                    }
                     var dependencies = DependencyContext.Default.RuntimeLibraries;
                     foreach (var library in dependencies)
                     {
@@ -180,7 +188,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 {
                     if (fl.HResult != -2146232799) // Assembly already loaded, can be ignored here
                     {
-                        logger.LogError(fl, "Could not load assembly {file}");
+                        logger.LogError(fl, $"Could not load assembly {file}");
                     }
                     return list;
                 }

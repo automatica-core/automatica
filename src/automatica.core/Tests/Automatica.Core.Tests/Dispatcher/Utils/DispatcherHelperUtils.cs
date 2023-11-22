@@ -113,7 +113,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             mockNode.InverseThis2ParentNodeInstanceNavigation.Add(mockNodeChild);
             var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory()));
 
-            mock.Configure();
+            await mock.Configure();
             await mock.Start();
 
             store?.Add(mock.Id, mock);

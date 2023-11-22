@@ -18,7 +18,7 @@ namespace Automatica.Core.Logging
             Configuration = config;
         }
 
-        public static ILogger GetLogger(IConfiguration config, IServiceProvider serviceProvider, string name)
+        public static ILogger GetLogger(IConfiguration? config, IServiceProvider? serviceProvider, string name)
         {
             lock (Lock)
             {

@@ -8,8 +8,6 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     internal class LogicCacheFacade : ILogicCacheFacade
     {
-        private readonly ILogicDataHandler _logicStore;
-
         public LogicCacheFacade(ILogicInstanceCache instanceCache, ILogicPageCache pageCache, ILogicTemplateCache templateCache, ILinkCache linkCache, ILogicNodeInstanceCache logicNodeInstanceCache)
         {
             LinkCache = linkCache;

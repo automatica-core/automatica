@@ -385,7 +385,7 @@ namespace Automatica.Core.Runtime.Database
                 }
 
                 var type = propertyType.GetType();
-                var memInfo = type!.GetMember(propertyType.ToString());
+                var memInfo = type!.GetMember(propertyType!.ToString()!);
                 var attributes = memInfo[0].GetCustomAttributes(typeof(PropertyTemplateTypeAttribute), false);
 
                 if (attributes.Length > 0 && attributes[0] is PropertyTemplateTypeAttribute attribute)
@@ -426,7 +426,7 @@ namespace Automatica.Core.Runtime.Database
                 }
 
                 var type = nodeDataType.GetType();
-                var memInfo = type!.GetMember(nodeDataType.ToString());
+                var memInfo = type!.GetMember(nodeDataType!.ToString()!);
                 var attributes = memInfo[0].GetCustomAttributes(typeof(NodeDataTypeEnumAttribute), false);
 
                 if (attributes.Length > 0 && attributes[0] is NodeDataTypeEnumAttribute attribute)
@@ -505,7 +505,10 @@ namespace Automatica.Core.Runtime.Database
 
             var rootNodeTemplate = context.NodeTemplates.SingleOrDefault(a =>
                 a.ObjId == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
-
+            if (rootNodeTemplate == null)
+            {
+                throw new ArgumentNullException(nameof(rootNodeTemplate));
+            }
             var rootNode = context.NodeInstances.SingleOrDefault(a => a.This2NodeTemplate == rootNodeTemplate.ObjId);
 
             if (rootNode == null)
@@ -945,7 +948,8 @@ namespace Automatica.Core.Runtime.Database
             foreach (var areaType in areaTypes)
             {
                 var type = areaType.GetType();
-                var memInfo = type.GetMember(areaType.ToString());
+                var memInfo = type.GetMember(
+                    areaType.ToString()!);
                 var attributes = memInfo[0].GetCustomAttributes(typeof(AreaTypeAttribute), false);
 
                 if (attributes.Length == 0)
@@ -988,7 +992,7 @@ namespace Automatica.Core.Runtime.Database
             foreach (var areaTemplate in areaTemplates)
             {
                 var type = areaTemplate.GetType();
-                var memInfo = type.GetMember(areaTemplate.ToString());
+                var memInfo = type.GetMember(areaTemplate.ToString()!);
                 var attributes = memInfo[0].GetCustomAttributes(typeof(AreaTemplateAttribute), false);
 
                 if (attributes.Length == 0)
@@ -1215,9 +1219,15 @@ namespace Automatica.Core.Runtime.Database
         private static void AddBoard(AutomaticaContext context, IDatabaseBoardType boardType)
         {
             var board = context.BoardTypes.SingleOrDefault(a => a.Type == GuidTemplateTypeAttribute.GetFromEnum(boardType.BoardType));
+            if (board == null)
+            {
+                throw new ArgumentNullException(nameof(board));
+            }
             var boardNodeTemplate = context.NodeTemplates.SingleOrDefault(a => a.ObjId == board.Type);
 
             var boardInterfaceType = context.InterfaceTypes.SingleOrDefault(a => a.Type == board.Type);
+
+           
 
             if (boardInterfaceType == null)
             {
@@ -1305,7 +1315,7 @@ namespace Automatica.Core.Runtime.Database
             foreach (var boardTypeEnum in boards)
             {
                 var type = boardTypeEnum.GetType();
-                var memInfo = type.GetMember(boardTypeEnum.ToString());
+                var memInfo = type.GetMember(boardTypeEnum.ToString()!);
                 var attributes = memInfo[0].GetCustomAttributes(typeof(GuidTemplateTypeAttribute), false);
                 if (attributes.Length > 0 && attributes[0] is GuidTemplateTypeAttribute attribute)
                 {
@@ -1337,7 +1347,7 @@ namespace Automatica.Core.Runtime.Database
             foreach (var interfaceTypeEnum in interfaceTypes)
             {
                 var type = interfaceTypeEnum.GetType();
-                var memInfo = type.GetMember(interfaceTypeEnum.ToString());
+                var memInfo = type.GetMember(interfaceTypeEnum.ToString()!);
                 var attributes = memInfo[0].GetCustomAttributes(typeof(GuidTemplateTypeAttribute), false);
                 if (attributes.Length > 0 && attributes[0] is GuidTemplateTypeAttribute attribute)
                 {

@@ -25,6 +25,16 @@ using Automatica.Core.Internals.Cache.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
+    public enum UpdateScope
+    {
+        Unknown = 0,
+        GenericProperty = 1,
+        SpecificProperty = 2, 
+        ParentChanged = 3,
+        Imported = 4
+    }
+
+
     [Route("webapi/nodeInstancesV2")]
     [Authorize(Roles = Role.AdminRole)]
     public class NodeInstanceV2Controller : BaseController
@@ -250,7 +260,7 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     await transaction.RollbackAsync();
-                    _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
+                    _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)} {e}");
                     throw;
                 }
             });
@@ -352,7 +362,7 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     await transaction.RollbackAsync();
-                    _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
+                    _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)} {e}");
                     _nodeInstanceCache.Clear();
                     throw;
                 }
@@ -373,7 +383,8 @@ namespace Automatica.Core.WebApi.Controllers
 
         [Route("update")]
         [HttpPost]
-        public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node)
+        public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node,
+            [FromQuery] UpdateScope updateScope = UpdateScope.Unknown)
         {
             var strategy = DbContext.Database.CreateExecutionStrategy();
             return await strategy.Execute(async
@@ -408,7 +419,16 @@ namespace Automatica.Core.WebApi.Controllers
                     }
                     else
                     {
-                        _ = Task.Factory.StartNew(() => ReloadDriver(node, entityState).ConfigureAwait(false), CancellationToken.None);
+                        if (updateScope == UpdateScope.SpecificProperty)
+                        {
+                            _logger.LogInformation($"Reload driver {node.ObjId} {node.FullName}");
+                            _ = Task.Factory.StartNew(() => ReloadDriver(node, entityState).ConfigureAwait(false),
+                                CancellationToken.None);
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Ignore reload for driver update scope is {updateScope} {node.ObjId} {node.FullName}");
+                        }
                     }
 
                     return _nodeInstanceCache.Get(node.ObjId);
@@ -416,7 +436,7 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     await transaction.RollbackAsync();
-                    _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
+                    _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)} {e}");
                     throw;
                 }
             });

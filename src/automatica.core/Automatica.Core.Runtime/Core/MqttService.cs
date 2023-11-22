@@ -139,6 +139,11 @@ namespace Automatica.Core.Runtime.Core
                 var learnModeDtoJson = messageEvent.Message;
                 var learnModeDto = JsonConvert.DeserializeObject<LearnModeDto>(learnModeDtoJson);
 
+                if (learnModeDto == null)
+                {
+                    throw new ArgumentNullException(nameof(learnModeDto));
+                }
+
                 _logger.LogInformation($"{messageEvent.ClientId} Received LearnMode message");
                 await _learnModeHandler.NotifyLearnNode(learnModeDto.Name, learnModeDto.Description, learnModeDto.Self,
                     learnModeDto.Templates, learnModeDto.PropertyInstances);
@@ -240,7 +245,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError("Could not send action", e);
+                _logger.LogError($"Could not send action {e}");
             }
         }
 
@@ -259,7 +264,7 @@ namespace Automatica.Core.Runtime.Core
             }
             catch (Exception e)
             {
-                _logger.LogError("Could not send action", e);
+                _logger.LogError($"Could not send action {e}");
             }
         }
 

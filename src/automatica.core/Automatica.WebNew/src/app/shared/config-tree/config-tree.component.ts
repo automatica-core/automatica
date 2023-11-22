@@ -13,7 +13,7 @@ import { ITreeNode } from "src/app/base/model/ITreeNode";
 import { NodeTemplate } from "src/app/base/model/node-template";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { BoardInterface } from "src/app/base/model/board-interface";
-import { PropertyInstance } from "src/app/base/model/property-instance";
+import { PropertyInstance, UpdateScope } from "src/app/base/model/property-instance";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { NodeTemplateService } from "src/app/services/node-template.service";
@@ -420,7 +420,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       this.appService.isLoading = true;
       this.tree.instance.refresh();
-      await this.configService.update(drag);
+      await this.configService.update(drag, UpdateScope.ParentChanged);
       this.appService.isLoading = false;
     }
   }
@@ -561,7 +561,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
           }
         }
 
-        await this.configService.update(nodeInstance);
+        await this.configService.update(nodeInstance, UpdateScope.SpecificProperty);
 
       }
 

@@ -42,6 +42,10 @@ namespace Automatica.Core.Runtime.Recorder
                     var trendingKvp =
                         JsonConvert.DeserializeObject<IList<KeyValuePair<DataRecorderType, String>>>(trendingRecorder
                             .ValueText);
+                    if (trendingKvp == null)
+                    {
+                        throw new ArgumentNullException(nameof(trendingKvp));
+                    }
 
                     foreach (var kvp in trendingKvp)
                     {

@@ -12,23 +12,22 @@ namespace Automatica.Core.Logging
 {
     public class CoreLogger : Microsoft.Extensions.Logging.ILogger
     {
-        private readonly IConfiguration _config;
         private readonly IServiceProvider? _serviceProvider;
         private readonly string _facility;
         private readonly string _logNameFacility;
         private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
 
-        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider) : this(config, serviceProvider, "core")
+        public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider) : this(config, serviceProvider, "core")
         {
         }
 
-        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider, string facility) : this(config, serviceProvider, facility, null)
+        public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider, string facility) : this(config, serviceProvider, facility, null)
         {
             
         }
 
-        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider, string facility, LogLevel? level, bool isFrameworkLog = false) {
+        public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider, string facility, LogLevel? level, bool isFrameworkLog = false) {
             _serviceProvider = serviceProvider;
             _facility = facility;
 
@@ -48,7 +47,7 @@ namespace Automatica.Core.Logging
                 }
                 else
                 {
-                    _level = Parse(config["server:log_level"]);
+                    _level = Parse(config["server:log_level"]!);
                 }
             }
             
@@ -168,7 +167,8 @@ namespace Automatica.Core.Logging
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            return null;
+            var s = state as IDisposable;
+            return s!;
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -207,11 +207,11 @@ namespace Automatica.Core.Logging
             return level;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception,
             Func<TState, Exception, string> formatter)
         {
             var level = ConvertLogLevel(logLevel);
-            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception)}";
+            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception!)}";
             _logger.Write(level, exception, msg);
         }
     }

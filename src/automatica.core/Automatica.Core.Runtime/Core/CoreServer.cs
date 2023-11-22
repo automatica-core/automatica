@@ -696,7 +696,7 @@ namespace Automatica.Core.Runtime.Core
                 _logicInstanceStore.Add(ruleInstance, rule);
             }
 
-            return new KeyValuePair<RuleInstance, ILogic>(ruleInstance, rule);
+            return new KeyValuePair<RuleInstance, ILogic>(ruleInstance, rule!);
         }
 
 
@@ -830,7 +830,7 @@ namespace Automatica.Core.Runtime.Core
 
         }
 
-        public async Task<IDriver> InitializeDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
+        public async Task<IDriver?> InitializeDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)
         {
             if (nodeInstance.This2Slave.HasValue && nodeInstance.This2Slave != ServerInfo.SelfSlaveGuid)
             {
@@ -913,7 +913,7 @@ namespace Automatica.Core.Runtime.Core
             }
 
             await StopDriver(driver);
-            await InitializeAndStartDriver(rootNode, _nodeTemplateCache.Get(rootNode.This2NodeTemplate.Value));
+            await InitializeAndStartDriver(rootNode, _nodeTemplateCache.Get(rootNode!.This2NodeTemplate!.Value));
         }
 
         public async Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate)

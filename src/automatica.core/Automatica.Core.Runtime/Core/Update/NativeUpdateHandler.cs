@@ -31,7 +31,7 @@ namespace Automatica.Core.Runtime.Core.Update
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void _timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             _logger.LogInformation("Check for update");
             _timer.Stop();

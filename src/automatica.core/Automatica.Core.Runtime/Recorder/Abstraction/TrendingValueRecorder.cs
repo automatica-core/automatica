@@ -44,7 +44,7 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
             return Task.CompletedTask;
         }
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void _timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             RecordValue();
         }

@@ -1,6 +1,5 @@
 import { PropertyInstance } from "../property-instance"
 import { PropertyTemplate, PropertyTemplateType } from "../property-template"
-import { PropertyType } from "../property-type"
 import { NodeInstance } from "../node-instance"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
 import { IDescriptionModel } from "../IDescriptionModel";

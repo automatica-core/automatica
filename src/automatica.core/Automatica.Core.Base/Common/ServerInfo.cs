@@ -146,7 +146,9 @@ namespace Automatica.Core.Base.Common
         /// <returns></returns>
         public static string GetServerVersion()
         {
-            return Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            var version =  Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+            return version.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
         }
 
         public static string GetBasePath()

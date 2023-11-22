@@ -20,8 +20,11 @@ namespace Automatica.Core.Runtime.RemoteNode
         public string Name => _node.Name;
         public Guid Id => _node.ObjId;
         public bool IsRemanent => _node.IsRemanent;
-        public IDriverContext DriverContext => null;
+        public IDriverContext? DriverContext => null;
         public IList<IDriverNode> Children => new List<IDriverNode>();
+
+
+        public IDriverNode? Parent { get; set; }
 
         public RemoteNodeInstance(Guid driverInstanceGuid, NodeInstance node, IRemoteHandler remoteHandler)
         {
@@ -39,7 +42,6 @@ namespace Automatica.Core.Runtime.RemoteNode
             return Task.FromResult(true);
         }
 
-        public IDriverNode Parent { get; set; }
         public Task<bool> Start(CancellationToken token = default)
         {
             return Task.FromResult(true);
@@ -120,7 +122,7 @@ namespace Automatica.Core.Runtime.RemoteNode
 
         //TODO: Implement
         public int ChildrensCreated => 0;
-        public string Error { get; protected set; }
+        public string? Error { get; protected set; }
         public NodeInstanceState State => NodeInstanceState.InUse;
 
         public async Task<bool> EnableLearnMode(CancellationToken token = default)

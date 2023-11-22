@@ -15,7 +15,6 @@ namespace Automatica.Core.EF.Configuration
             if (string.IsNullOrEmpty(envDbType))
             {
                 useDbType = dbType;
-                loggerInstance.LogWarning($"Using databasetype from appsettings, environment variable \"DATABASE_TYPE\" is not set");
             }
 
             if (string.IsNullOrEmpty(dbType))

@@ -246,7 +246,9 @@ namespace Automatica.Core.Internals.Cloud
 
         public async Task<byte[]> DownloadFile(string url)
         {
+#pragma warning disable SYSLIB0014 //ignore for now, need to have a download progress
             using var webClient = new WebClient();
+#pragma warning restore SYSLIB0014
             webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
 
             try

@@ -14,6 +14,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { ConfigService } from "src/app/services/config.service";
 import { AppService } from "src/app/services/app.service";
+import { UpdateScope } from "src/app/base/model/property-instance";
 
 @Component({
   selector: "p3-config-menu",
@@ -289,7 +290,7 @@ export class ConfigMenuComponent implements OnInit {
       newNodeInstance.Children.push(child);
     }
 
-    await this.configService.update(newNodeInstance);
+    await this.configService.update(newNodeInstance, UpdateScope.Imported);
     return newNodeInstance;
   }
 

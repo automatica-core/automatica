@@ -609,7 +609,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this.appService.isLoading = true;
     try {
       if (this.item instanceof NodeInstance) {
-        await this.config.update(this.item);
+        await this.config.update(this.item, prop.updateScope);
 
         if (!this.item.ParentId) {
           this.nodeInstanceService.saveSettings();

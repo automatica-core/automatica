@@ -351,7 +351,7 @@ namespace Automatica.Core.Driver
                     }
                 }
             }
-            catch (TaskCanceledException)
+            catch (OperationCanceledException)
             {
 
             }

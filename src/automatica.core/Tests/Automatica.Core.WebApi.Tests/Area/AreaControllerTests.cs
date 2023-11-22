@@ -98,7 +98,7 @@ namespace Automatica.Core.WebApi.Tests.Area
         }
 
         [Fact, TestOrder(3)]
-        public async Task TestEtsImport()
+        public Task TestEtsImport()
         {
             //var formFileMoq = new Mock<IFormFile>();
 
@@ -135,6 +135,7 @@ namespace Automatica.Core.WebApi.Tests.Area
             //var garage = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Garage");
             //Assert.NotNull(garage);
             //Assert.Empty(garage.InverseThis2ParentNavigation);
+            return Task.CompletedTask;
         }
     }
 }

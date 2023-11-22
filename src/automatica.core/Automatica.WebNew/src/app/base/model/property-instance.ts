@@ -85,6 +85,15 @@ class PropertyInstanceMetaHelper {
     }
 }
 
+export enum UpdateScope
+{
+    Unknown = 0,
+    GenericProperty = 1,
+    SpecificProperty = 2,
+    ParentChanged = 3,
+    Imported = 4
+}
+
 @Model()
 export class PropertyInstance extends BaseModel {
 
@@ -198,6 +207,9 @@ export class PropertyInstance extends BaseModel {
         this.propertyChanged.emit(this);
     }
 
+    public get updateScope() : UpdateScope {
+        return UpdateScope.SpecificProperty;
+    }
 
     @JsonPropertyName("This2PropertyTemplateNavigation")
     PropertyTemplate: PropertyTemplate;

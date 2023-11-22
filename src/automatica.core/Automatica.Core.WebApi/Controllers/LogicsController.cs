@@ -114,6 +114,7 @@ namespace Automatica.Core.WebApi.Controllers
                 }
                 catch (Exception e)
                 {
+                    _logger.LogError(e, $"Error add logicInstance {e}");
                     await transaction.RollbackAsync();
                     throw;
                 }
@@ -430,12 +431,10 @@ namespace Automatica.Core.WebApi.Controllers
                     link.This2NodeInstance2RulePageInputNavigation = null;
                     link.This2NodeInstance2RulePageOutputNavigation = null;
 
-                    bool isAdded = false;
                     if (DbContext.Links.AsNoTracking().SingleOrDefault(a => a.ObjId == link.ObjId) == null)
                     {
                         await DbContext.AddAsync(link);
                         DbContext.Entry(link).State = EntityState.Added;
-                        isAdded = true;
                     }
                     else
                     {
