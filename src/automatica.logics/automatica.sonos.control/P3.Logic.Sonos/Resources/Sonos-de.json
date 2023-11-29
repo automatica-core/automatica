@@ -86,6 +86,10 @@
       "NAME": "Media Url",
       "DESCRIPTION": ""
     },
+    "MEDIA_URL_PLAY": {
+      "NAME": "Media Url & Play",
+      "DESCRIPTION": ""
+    },
     "PLAY_SOUND_VOLUME": {
       "NAME": "Media Play Lautstärke",
       "DESCRIPTION": ""

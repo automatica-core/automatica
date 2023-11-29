@@ -79,11 +79,15 @@
       "DESCRIPTION": ""
     },
     "PLAY_SOUND_TRIGGER": {
-      "NAME": "Play Media Trigger",
+      "NAME": "Play media trigger",
       "DESCRIPTION": ""
     },
     "MEDIA_URL": {
-      "NAME": "Media Url",
+      "NAME": "Media url",
+      "DESCRIPTION": ""
+    },
+    "MEDIA_URL_PLAY": {
+      "NAME": "Media url & play",
       "DESCRIPTION": ""
     },
     "PLAY_SOUND_VOLUME": {
