@@ -16,7 +16,7 @@ RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor
 RUN rm -rf /src
 RUN rm -rf /app/supervisor/appsettings.json
 
-FROM automaticacore/automatica-plugin-standalone:amd64-latest AS runtime
+FROM automaticacore/automatica-plugin-standalone:latest-develop AS runtime
 WORKDIR /app/supervisor
 
 ARG DEFAULT_IMAGE
