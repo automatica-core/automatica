@@ -14,7 +14,8 @@ namespace Automatica.Core.EF.Models
         Timer,
         ConstantString,
         Color,
-        Enum
+        Enum,
+        Bool
     }
 
     public class TimerPropertyData : TypedObject

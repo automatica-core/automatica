@@ -40,6 +40,9 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
                 this.PropertyTemplate.Meta = ruleInterface.Template.Meta;
                 this.PropertyTemplate.updatePropertyType();
                 break;
+            case RuleInterfaceParameterDataType.Bool:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Bool;
+                break;
         }
 
     }

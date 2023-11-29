@@ -9,7 +9,8 @@ export enum RuleInterfaceParameterDataType {
     Timer,
     ConstantString,
     Color,
-    Enum
+    Enum,
+    Bool
 }
 
 export enum RuleInterfaceDirectionEnum {
