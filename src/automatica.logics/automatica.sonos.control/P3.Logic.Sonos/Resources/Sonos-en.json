@@ -90,6 +90,10 @@
       "NAME": "Media play volume",
       "DESCRIPTION": ""
     },
+    "PLAY_SOUND_ENABLED": {
+      "NAME": "Media play enabled",
+      "DESCRIPTION": ""
+    },
     "STATE": {
       "TITLE": {
         "NAME": "Title",

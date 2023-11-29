@@ -51,6 +51,7 @@ public class SonosControlLogicFactory : LogicFactory
     public static readonly Guid PlaySoundDuration = new Guid("b3ed64a7-658a-4baa-a0b0-fd9febb13d5d");
     public static readonly Guid PlaySoundCount = new Guid("04587812-089d-4d85-8fb6-8753b1c9b0fe");
     public static readonly Guid PlaySoundVolume = new Guid("68f697a3-861a-4b53-aa4b-fbf3b9d6604e");
+    public static readonly Guid PlaySoundEnabled = new Guid("ed19f42a-793c-4741-bf93-01e99606e8a5");
 
 
     //Outputs
@@ -83,6 +84,8 @@ public class SonosControlLogicFactory : LogicFactory
             "SONOS_CONTROL.PLAY_SOUND_COUNT.DESCRIPTION", LogicGuid, 5, RuleInterfaceParameterDataType.Integer, 2);
         factory.CreateParameterLogicInterfaceTemplate(PlaySoundVolume, "SONOS_CONTROL.PLAY_SOUND_VOLUME.NAME",
             "SONOS_CONTROL.PLAY_SOUND_VOLUME.DESCRIPTION", LogicGuid, 6, RuleInterfaceParameterDataType.Integer, 50, true);
+        factory.CreateParameterLogicInterfaceTemplate(PlaySoundEnabled, "SONOS_CONTROL.PLAY_SOUND_ENABLED.NAME",
+            "SONOS_CONTROL.PLAY_SOUND_ENABLED.DESCRIPTION", LogicGuid, 7, RuleInterfaceParameterDataType.Bool, true, true);
 
         factory.CreateLogicInterfaceTemplate(PlayPauseTrigger, "SONOS_CONTROL.PLAY_PAUSE.NAME", "SONOS_CONTROL.PLAY_PAUSE.DESCRIPTION", "play_pause", LogicGuid, LogicInterfaceDirection.Input, 0, 0, RuleInterfaceType.Input);
         factory.CreateLogicInterfaceTemplate(PlayDefaultTrigger, "SONOS_CONTROL.PLAY_DEFAULT.NAME", "SONOS_CONTROL.PLAY_DEFAULT.DESCRIPTION", "play_default", LogicGuid, LogicInterfaceDirection.Input, 0, 1, RuleInterfaceType.Input);

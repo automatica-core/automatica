@@ -47,6 +47,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _playMediaUrlTrigger;
     private readonly RuleInterfaceInstance _playMediaUrlOutput;
     private readonly RuleInterfaceInstance _playMediaVolume;
+    private readonly RuleInterfaceInstance _playMediaEnabled;
 
     private long _volumeOnPlayValue;
     private string _radioStationValue;
@@ -61,6 +62,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private bool _mediaPlayerTaskRunning;
     private string _currentMediaUrlValue;
     private long _playMediaVolumeValue = 50;
+    private bool _playMediaEnabledValue = true;
 
     public SonosControlLogic(ILogicContext context) : base(context)
     {
@@ -89,6 +91,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStationInput);
         _mediaUrlInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrl);
+        
 
         //Params
         _volumeOnPlay = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
@@ -129,6 +132,8 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
 
         _playMediaUrlAndStartInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrlAndStart);
+        _playMediaEnabled = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundEnabled);
     }
 
     protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -158,6 +163,11 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         if (instance.This2RuleInterfaceTemplate == _playMediaVolume.This2RuleInterfaceTemplate)
         {
             _playMediaVolumeValue = Convert.ToInt64(value);
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaEnabled.This2RuleInterfaceTemplate)
+        {
+            _playMediaEnabledValue = Convert.ToBoolean(value);
         }
         base.ParameterValueChanged(instance, source, value);
     }
@@ -321,7 +331,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         }
         if (instance.This2RuleInterfaceTemplate == _playMediaUrlTrigger.This2RuleInterfaceTemplate)
         {
-            if (!String.IsNullOrEmpty(_mediaPlayUrl) && value is bool && (bool)value)
+            if (_playMediaEnabledValue && !String.IsNullOrEmpty(_mediaPlayUrl) && value is bool && (bool)value)
             {
                 StartPlayMediaUrl();
             }
@@ -329,7 +339,7 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         if (instance.This2RuleInterfaceTemplate == _playMediaUrlAndStartInput.This2RuleInterfaceTemplate)
         {
             _mediaPlayUrl = value != null ? value.ToString() : String.Empty;
-            if (!String.IsNullOrEmpty(_mediaPlayUrl))
+            if (_playMediaEnabledValue && !String.IsNullOrEmpty(_mediaPlayUrl))
             {
                 StartPlayMediaUrl();
             }
@@ -341,6 +351,11 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             {
                 _currentMediaUrlValue = value?.ToString();
             }
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaEnabled.This2RuleInterfaceTemplate)
+        {
+            _playMediaEnabledValue = Convert.ToBoolean(value);
         }
 
         return ret;

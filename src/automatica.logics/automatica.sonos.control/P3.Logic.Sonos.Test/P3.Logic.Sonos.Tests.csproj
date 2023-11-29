@@ -32,12 +32,12 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.EF" Version="8.0.0.1662" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1662" />
+    <PackageReference Include="Automatica.Core.Logic" Version="8.0.0.1662" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1662" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="8.0.0.1662" />
     <ProjectReference Include="..\P3.Logic.Sonos\P3.Logic.Sonos.csproj" />
   </ItemGroup>
 </Project>
