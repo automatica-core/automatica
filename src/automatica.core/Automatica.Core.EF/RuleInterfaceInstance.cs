@@ -26,6 +26,8 @@ namespace Automatica.Core.EF.Models
                         return ValueDouble;
                     case RuleInterfaceParameterDataType.Integer:
                         return ValueInteger;
+                    case RuleInterfaceParameterDataType.Bool:
+                        return ValueBool;
                     case RuleInterfaceParameterDataType.Text:
                     case RuleInterfaceParameterDataType.ConstantString:
                     case RuleInterfaceParameterDataType.Color:
@@ -57,6 +59,9 @@ namespace Automatica.Core.EF.Models
                 }
                 switch (This2RuleInterfaceTemplateNavigation.ParameterDataType)
                 {
+                    case RuleInterfaceParameterDataType.Bool:
+                        ValueBool = Convert.ToBoolean(value);
+                        break;
                     case RuleInterfaceParameterDataType.Double:
                         ValueDouble = Convert.ToDouble(value);
                         break;
