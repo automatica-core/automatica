@@ -299,16 +299,17 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             try
             {
                 await _tunneling.ConnectAsync(token);
+                DriverContext.Logger.LogInformation($"Start KNX connection...done");
             }
             catch (Exception e)
             {
                 DriverContext.Logger.LogError(e, $"Error connecting to KNX Interface {e}");
+                throw;
             }
             finally
             {
                 _semaphore.Release();
             }
-            DriverContext.Logger.LogInformation($"Start KNX connection...done");
         }
 
         private async Task DisposeConnection()
