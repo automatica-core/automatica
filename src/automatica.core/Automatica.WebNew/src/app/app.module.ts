@@ -29,6 +29,7 @@ import { L10nLazyResolver } from "./services/l10n-lazy-resolver";
 import { CacheModule } from "ionic-cache";  
 import { IonicStorageModule } from "@ionic/storage-angular";
 import { Drivers } from '@ionic/storage';
+import { AppService } from "./services/app.service";
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -111,7 +112,8 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
       useClass: DeviceDetectorService
     },
     ThemeService,
-    L10nLazyResolver
+    L10nLazyResolver,
+    AppService
   ],
   bootstrap: [
     AppComponent
