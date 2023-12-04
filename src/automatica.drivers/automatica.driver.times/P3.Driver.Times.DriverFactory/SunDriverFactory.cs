@@ -9,7 +9,7 @@ namespace P3.Driver.Times.DriverFactory
     { 
         public static readonly Guid DriverGuidId = new Guid("78a865b6-9d52-449e-b855-255df86c0316");
         public override Guid DriverGuid => DriverGuidId;
-        public override Version DriverVersion => new Version(1, 0, 0, 0);
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
 
         public static readonly Guid SunInterfaceGuid = new Guid("124d1808-3e02-4fcf-a3e9-f13ab9511d12");
 
