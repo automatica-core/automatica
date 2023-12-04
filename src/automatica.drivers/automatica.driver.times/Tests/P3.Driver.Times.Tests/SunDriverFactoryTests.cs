@@ -17,8 +17,8 @@ namespace P3.Driver.Times.Tests
 {
     public class SunDriverFactoryTests : DriverFactoryTestBase<SunDriverFactory>
     {
-        private const double Longitude = 48.1341337;
-        private const double Latitude = 14.1515088;
+        private const double Latitude = 48.1341337;
+        private const double Longitude = 14.1515088;
 
         private static readonly Angle LatitudeAngle = new Angle(Latitude);
         private static readonly Angle LongitudeAngle = new Angle(Longitude);
@@ -216,6 +216,116 @@ namespace P3.Driver.Times.Tests
             Assert.IsType<bool>(busDt);
 
             Assert.False((bool) busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+
+        [Fact]
+        public async Task TestIsDaylight_True1()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.IsDaylight);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = new DateTime(2023, 12, 04, 15, 00, 00);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.NotNull(busDt);
+            Assert.IsType<bool>(busDt);
+
+            Assert.True((bool)busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+        [Fact]
+        public async Task TestIsDaylight_True2()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.IsDaylight);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = new DateTime(2023, 12, 04, 08, 00, 00);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.NotNull(busDt);
+            Assert.IsType<bool>(busDt);
+
+            Assert.True((bool)busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+
+        [Fact]
+        public async Task TestIsDaylight_False1()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.IsDaylight);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = new DateTime(2023, 12, 04, 18, 00, 00);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.NotNull(busDt);
+            Assert.IsType<bool>(busDt);
+
+            Assert.False((bool)busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+        [Fact]
+        public async Task TestIsDaylight_False2()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.IsDaylight);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = new DateTime(2023, 12, 04, 05, 00, 00);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.NotNull(busDt);
+            Assert.IsType<bool>(busDt);
+
+            Assert.False((bool)busDt);
 
             await driver.Stop();
             await Dispatcher.ClearValues();

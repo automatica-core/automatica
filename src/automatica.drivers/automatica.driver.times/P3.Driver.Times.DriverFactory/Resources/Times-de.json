@@ -25,6 +25,9 @@
       },
       "IS_SUNRISE": {
         "NAME": "Ist Sonnenaufgang"
+      },
+      "IS_DAYLIGHT": {
+        "NAME":  "Tageslicht"
       }
     },
     "DATETIME": {

@@ -20,6 +20,7 @@ namespace P3.Driver.Times.DriverFactory
 
         public static readonly Guid SunDusk = new Guid("241ae3de-2fc1-4d2e-88df-aeee4da6b19e");
         public static readonly Guid SunDawn = new Guid("25e927d7-bbda-4bae-8d1a-159f0eb34c44");
+        public static readonly Guid IsDaylight = new Guid("5993a971-0727-46b1-904a-e7d770a0c29f");
 
         public override string ImageName => "automaticacore/plugin-p3.driver.times";
         public override void InitNodeTemplates(INodeTemplateFactory factory)
@@ -38,6 +39,7 @@ namespace P3.Driver.Times.DriverFactory
 
             factory.CreateNodeTemplate(SunIsSetGuid, "TIMES.SUN.IS_SUNSET.NAME", "TIMES.SUN.IS_SUNSET.DESCRIPTION", "is-sunset", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
             factory.CreateNodeTemplate(SunIsRiseGuid, "TIMES.SUN.IS_SUNRISE.NAME", "TIMES.SUN.IS_SUNRISE.DESCRIPTION", "is-sunrise", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
+            factory.CreateNodeTemplate(IsDaylight, "TIMES.SUN.IS_DAYLIGHT.NAME", "TIMES.SUN.IS_DAYLIGHT.DESCRIPTION", "is-daylight", SunInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Boolean, 1, false);
 
         }
 
