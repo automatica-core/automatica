@@ -24,7 +24,6 @@ import { L10nTranslationModule } from "angular-l10n";
 import { AngularSplitModule } from "angular-split";
 import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxTextBoxModule, DxScrollViewModule, DxListModule, DxHtmlEditorModule } from "devextreme-angular";
 import { DndModule } from "p3root-angular-dnd";
-import { AutomaticaCommunicationModule } from "../base/communication/automatica-communication.module";
 import { StartingOverlayModule } from "../shared/starting-overlay/starting-overlay.module";
 import { MobileModule } from "../visualization/mobile/mobile.module";
 import { VisualizationModule } from "../visualization/visualization.module";
@@ -60,7 +59,6 @@ import { AdminRoutingModule } from "./admin-routing.module";
     RouterModule,
     L10nTranslationModule,
     DxLoadPanelModule,
-    AutomaticaCommunicationModule,
     AngularSplitModule,
     DndModule.forRoot(),
     DxTabPanelModule,

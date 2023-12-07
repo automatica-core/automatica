@@ -12,7 +12,8 @@ export class AutomaticaCommunicationModule {
   static forRoot(): ModuleWithProviders<AutomaticaCommunicationModule> {
     return {
       ngModule: AutomaticaCommunicationModule,
-      providers: [DataHubService,
+      providers: [
+        DataHubService,
         TelegramHubService,
         UpdateHubService,
         HubConnectionService,
