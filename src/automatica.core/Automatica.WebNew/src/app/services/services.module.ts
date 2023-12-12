@@ -55,7 +55,6 @@ import { HyperSeriesService } from "./hyperseries.service";
     LicenseService,
     SystemService,
     PluginsService,
-    AppService,
     SatelliteService,
     NodeTemplateService,
     LogsService,

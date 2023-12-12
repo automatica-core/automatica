@@ -447,9 +447,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     if (ok) {
       this.selectedProperty.Value = this.timerEditValue;
+      
     }
+    this.valueChanged($event, {data: this.selectedProperty});
+    
     this.selectedProperty = void 0;
     this.timerEditValue = void 0;
+    
   }
 
   translateName = (data: PropertyInstance) => {
