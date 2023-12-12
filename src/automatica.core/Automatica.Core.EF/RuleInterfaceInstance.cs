@@ -47,6 +47,20 @@ namespace Automatica.Core.EF.Models
                         }
 
                         return null;
+                    case RuleInterfaceParameterDataType.Calendar:
+                        if (!String.IsNullOrEmpty(ValueString))
+                        {
+                            try
+                            {
+                                return JsonConvert.DeserializeObject<CalendarPropertyData>(ValueString);
+                            }
+                            catch
+                            {
+                                return null;
+                            }
+                        }
+
+                        return null;
                 }
 
                 return null;
@@ -75,6 +89,7 @@ namespace Automatica.Core.EF.Models
                         ValueString = value.ToString();
                         break;
                     case RuleInterfaceParameterDataType.Timer:
+                    case RuleInterfaceParameterDataType.Calendar:
                         if (value is string strValue)
                         {
                             ValueString = strValue;
@@ -89,19 +104,19 @@ namespace Automatica.Core.EF.Models
             }
         }
 
-        public static RuleInterfaceInstance CreateFromTemplate(RuleInstance ruleInstance, RuleInterfaceTemplate ruleInterfaceTemplate)
+        public static RuleInterfaceInstance CreateFromTemplate(RuleInstance ruleInstance,
+            RuleInterfaceTemplate ruleInterfaceTemplate)
         {
-           
-                var ruleInterface = new RuleInterfaceInstance
-                {
-                    ObjId = Guid.NewGuid(),
-                    This2RuleInterfaceTemplate = ruleInterfaceTemplate.ObjId,
-                    This2RuleInterfaceTemplateNavigation = ruleInterfaceTemplate,
-                    Value = ruleInterfaceTemplate.DefaultValue,
-                    This2RuleInstance = ruleInstance.ObjId
-                };
+            var ruleInterface = new RuleInterfaceInstance
+            {
+                ObjId = Guid.NewGuid(),
+                This2RuleInterfaceTemplate = ruleInterfaceTemplate.ObjId,
+                This2RuleInterfaceTemplateNavigation = ruleInterfaceTemplate,
+                Value = ruleInterfaceTemplate.DefaultValue,
+                This2RuleInstance = ruleInstance.ObjId
+            };
 
-                return ruleInterface;
+            return ruleInterface;
         }
 
 

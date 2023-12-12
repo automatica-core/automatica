@@ -7,15 +7,16 @@ namespace Automatica.Core.EF.Models
 {
     public enum RuleInterfaceParameterDataType
     {
-        NoParameter,
-        Integer,
-        Double,
-        Text,
-        Timer,
-        ConstantString,
-        Color,
-        Enum,
-        Bool
+        NoParameter = 0,
+        Integer = 1,
+        Double = 2,
+        Text = 3,
+        Timer = 4,
+        ConstantString = 5,
+        Color = 6,
+        Enum = 7,
+        Bool = 8,
+        Calendar = 9
     }
 
     public class TimerPropertyData : TypedObject
@@ -24,6 +25,16 @@ namespace Automatica.Core.EF.Models
         public DateTime StopTime { get; set; }
         public IList<DayOfWeek> EnabledDays { get; set; }
     }
+
+    public class CalendarPropertyData : TypedObject
+    {
+        public string Text { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string RecurrenceRule { get; set; }
+        public string RecurrenceException { get; set; }
+    }
+
 
     public enum RuleInterfaceType
     {
