@@ -49,7 +49,7 @@ namespace P3.Logic.Time.AdvancedTimer
             }
 
             
-            CalculateTickTime(true);
+            CalculateTickTime();
             
 
 
@@ -58,14 +58,13 @@ namespace P3.Logic.Time.AdvancedTimer
             return base.Start(ruleInstance, token);
         }
 
-        private void CalculateTickTime(bool isStartup=false)
-        {
+        private void CalculateTickTime()
+        { 
             if (_timerPropertyData == null || _timerPropertyData.Value == null)
             {
                 return;
             }
             
-            var tickTimes = new List<double>();
             var list = new List<(DateTime startTime, DateTime endTime)>();
             
             foreach (var entry in _timerPropertyData.Value)
@@ -80,13 +79,21 @@ namespace P3.Logic.Time.AdvancedTimer
                 var next = list.First();
                 if (next.startTime.IsToday())
                 {
-                    CalculateTickTime(next.startTime, next.endTime, isStartup);
+                    CalculateTickTime(next.startTime, next.endTime);
                 }
+                else
+                {
+                    _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+                }
+            }
+            else
+            {
+                _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
             }
 
         }
 
-        private void CalculateTickTime(DateTime start, DateTime end, bool isStartup = false)
+        private void CalculateTickTime(DateTime start, DateTime end)
         {
             var now = DateTime.Now;
             var nowTime = now.TimeOfDay;
@@ -104,42 +111,41 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (tickTime.TotalMilliseconds < 0)
             {
-
                 timerTickTime = (stopTime - nowTime).TotalMilliseconds;
                 if (timerTickTime < 0)
                 {
-                    _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime).TotalMilliseconds;
-                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
-                    if (isStartup)
-                    {
-                        Context.Logger.LogInformation($"Start event, set value to {false}");
-                        Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
-                    }
+                    _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime)
+                        .TotalMilliseconds;
+                    Context.Logger.LogDebug(
+                        $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
+
+                    Context.Logger.LogInformation($"Set value to {false}");
+                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
+
                     _value = false;
                     return;
                 }
-                if (isStartup)
-                {
-                    Context.Logger.LogInformation($"Start event, set value to {true}");
-                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
-                }
+
+                Context.Logger.LogInformation($"Set value to {true}");
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
+
 
                 _value = true;
             }
             else
             {
                 timerTickTime = tickTime.TotalMilliseconds;
-                if (isStartup)
-                {
-                    Context.Logger.LogInformation($"Start event, set value to {false}");
-                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
-                }
+
+                Context.Logger.LogInformation($"Set value to {false}");
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
+
 
                 _value = false;
             }
 
             _timer.Interval = timerTickTime;
-            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
+            Context.Logger.LogDebug(
+                $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
         }
 
@@ -176,11 +182,22 @@ namespace P3.Logic.Time.AdvancedTimer
                 endDates = endDates.Where(a => a > DateTime.Now).OrderBy(time => time);
             }
 
-            if (startDates != null && endDates != null && startDates.Any() && endDates.Any())
+            var startDateList = startDates?.ToList();
+            var endDateList = endDates?.ToList();
+
+            if (startDateList != null && endDateList != null)
             {
-                var startDate = startDates.FirstOrDefault();
-                var endDate = endDates.FirstOrDefault();
-                return (startDate, endDate);
+                if (startDateList.Any() && endDateList.Any())
+                {
+                    var startDate = startDateList.FirstOrDefault();
+                    var endDate = endDateList.FirstOrDefault();
+                    return (startDate, endDate);
+                }
+                if (!startDateList.Any() && endDateList.Any())
+                {
+                    var endDate = endDateList.FirstOrDefault();
+                    return (DateTime.Now.StartOfDay(), endDate);
+                }
             }
             return (DateTime.MaxValue, DateTime.MaxValue);
         }
@@ -197,16 +214,6 @@ namespace P3.Logic.Time.AdvancedTimer
             _timer.Stop();
             lock (_lock)
             {
-                if (_timerPropertyData == null)
-                {
-                    return;
-                }
-
-                _value = !_value;
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value);
-
-                Context.Logger.LogInformation($"Tick received, set value to {_value}");
-
                 CalculateTickTime();
             }
         }

@@ -2,7 +2,7 @@
 
 namespace Automatica.Core.Base.Calendar
 {
-    internal static class DateTimeHelper
+    public static class DateTimeHelper
     {
         public static DateTime StartOfDay(this DateTime theDate)
         {
