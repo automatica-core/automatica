@@ -38,10 +38,10 @@ namespace Automatica.Core.Base.Calendar
         {
             #region --[Fields: Public]------------------------------------
             public Frequency Frequency;
-            public DayOfWeek Wkst;
+            public DayOfWeek? Wkst;
             public DateTime Until;
-            public int Count;
-            public int Interval;
+            public int? Count;
+            public int? Interval;
             public int[] BySetPos;
             public int[] BySecond;
             public int[] ByMinute;
@@ -77,19 +77,19 @@ namespace Automatica.Core.Base.Calendar
                     s.Append(Until);
                 }
 
-                if (Count != 0)
+                if (Count.HasValue && Count != 0)
                 {
                     s.Append(";COUNT=");
                     s.Append(Count);
                 }
 
-                if (Interval != 1)
+                if (Interval.HasValue && Interval != 1)
                 {
                     s.Append(";INTERVAL=");
                     s.Append(Interval);
                 }
 
-                if (Wkst != DayOfWeek.Monday)
+                if (Wkst.HasValue)
                 {
                     s.Append(";WKST=");
                     s.Append(Wkst);
@@ -103,13 +103,18 @@ namespace Automatica.Core.Base.Calendar
 
                     foreach (var byday in ByDay)
                     {
+                        if (byday.Item2 == -1)
+                        {
+                            continue;
+                        }
+                        
                         s.Append(sep);
                         sep = ',';
 
                         if (byday.Item2 != 0)
                             s.Append(byday.Item2);
 
-                        s.Append(byday.Item1);
+                        s.Append(WeekdayToString(byday.Item1));
                     }
                 }
 
@@ -149,8 +154,6 @@ namespace Automatica.Core.Base.Calendar
                 var wkst = false;
                 var inte = false;
 
-                Interval = 1;
-                Wkst = DayOfWeek.Monday;
 
                 foreach (var rulepart in value.Split(';'))
                 {
@@ -171,7 +174,12 @@ namespace Automatica.Core.Base.Calendar
                             /**/
                             wkst = true;
 
-                            if (TryParseWeekday(value, out Wkst)) continue;
+                            if (TryParseWeekday(value, out var wkstValue))
+                            {
+                                Wkst = wkstValue;
+                                continue;
+                                
+                            }
                             else return false;
 
                         case "INTERVAL":
@@ -179,7 +187,9 @@ namespace Automatica.Core.Base.Calendar
                             /**/
                             inte = true;
 
-                            if (Int32.TryParse(value, out Interval) && Interval > 0) continue;
+                            if (Int32.TryParse(value, out var interval) && interval > 0)
+                            {
+                                Interval = interval; continue;}
                             else return false;
 
                         case "UNTIL":
@@ -192,7 +202,9 @@ namespace Automatica.Core.Base.Calendar
                         case "COUNT":
                             if (Until == default(DateTime) &&
                                 Count == 0 &&
-                                Int32.TryParse(value, out Count) && Count > 0) continue;
+                                Int32.TryParse(value, out var count) && count > 0)
+                            {
+                                Count = count;continue;}
                             else return false;
 
                         case "BYDAY":
@@ -283,14 +295,37 @@ namespace Automatica.Core.Base.Calendar
             {
                 switch (value.ToUpperInvariant())
                 {
-                    case "SU": result = DayOfWeek.Sunday; return true;
-                    case "MO": result = DayOfWeek.Monday; return true;
-                    case "TU": result = DayOfWeek.Tuesday; return true;
-                    case "WE": result = DayOfWeek.Wednesday; return true;
-                    case "TH": result = DayOfWeek.Thursday; return true;
-                    case "FR": result = DayOfWeek.Friday; return true;
-                    case "SA": result = DayOfWeek.Saturday; return true;
+                    case "SU": case "SUNDAY": result = DayOfWeek.Sunday; return true;
+                    case "MO": case "MONDAY": result = DayOfWeek.Monday; return true;
+                    case "TU": case "TUESDAY": result = DayOfWeek.Tuesday; return true;
+                    case "WE": case "WEDNESDAY": result = DayOfWeek.Wednesday; return true;
+                    case "TH": case "THURSDAY": result = DayOfWeek.Thursday; return true;
+                    case "FR": case "FRIDAY": result = DayOfWeek.Friday; return true;
+                    case "SA": case "SATURDAY": result = DayOfWeek.Saturday; return true;
                     default: result = default(DayOfWeek); return false;
+                }
+            }
+
+            private static string WeekdayToString(DayOfWeek dayOfWeek)
+            {
+                switch (dayOfWeek)
+                {
+                    case DayOfWeek.Sunday:
+                        return "SU";
+                    case DayOfWeek.Monday:
+                        return "MO";
+                    case DayOfWeek.Tuesday:
+                        return "TU";
+                    case DayOfWeek.Wednesday:
+                        return "WE";
+                    case DayOfWeek.Thursday:
+                        return "TH";
+                    case DayOfWeek.Friday:
+                        return "FR";
+                    case DayOfWeek.Saturday:
+                        return "SA";
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(dayOfWeek), dayOfWeek, null);
                 }
             }
 
@@ -403,13 +438,14 @@ namespace Automatica.Core.Base.Calendar
         private IEnumerable<DateTime> DoIterate(IEnumerable<DateTime> g)
         {
             int count = 0;
+            var useCount = r.Count ?? 0;
 
             foreach (var t in g)
             {
                 if (r.Until != default(DateTime) && t > r.Until)
                     yield break;
 
-                if (r.Count >= ++count)
+                if (count++ > useCount)
                     yield break;
 
                 yield return t;
@@ -418,7 +454,7 @@ namespace Automatica.Core.Base.Calendar
 
         private int DoYfirstWeekStart(DateTime t)
         {
-            var d = FirstOf(r.Wkst, new DateTime(t.Year, 1, 1));
+            var d = FirstOf(r.Wkst.Value, new DateTime(t.Year, 1, 1));
             if (d > 4) d -= 7;
 
             return d;
@@ -565,7 +601,9 @@ namespace Automatica.Core.Base.Calendar
             if (r.ByMinute != null) minfreq = Frequency.MINUTELY;
             if (r.BySecond != null) minfreq = Frequency.SECONDLY;
 
-            var freqinter = direction == Direction.Forward ? r.Interval : -r.Interval;
+            var interval = r.Interval ?? 1;
+
+            var freqinter = direction == Direction.Forward ? interval : -interval;
             var freqadder = GetAdder(r.Frequency);
 
             if ((int)minfreq >= (int)r.Frequency)

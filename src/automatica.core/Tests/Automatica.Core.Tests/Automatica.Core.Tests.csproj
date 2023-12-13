@@ -27,6 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
@@ -51,10 +52,14 @@
     <EmbeddedResource Include="P3.Driver.HueBridgeSimulator.DriverFactory-0.3.0.1.acpkg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Common.Update\Automatica.Core.Common.Update.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Runtime\Automatica.Core.Runtime.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.UnitTests\Automatica.Core.UnitTests.Base.csproj" />
     <ProjectReference Include="..\..\Automatica.Core.Driver.Utility\Automatica.Core.Driver.Utility.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Calendar\" />
   </ItemGroup>
 </Project>

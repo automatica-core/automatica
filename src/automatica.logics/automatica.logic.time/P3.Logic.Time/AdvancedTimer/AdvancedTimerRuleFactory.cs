@@ -3,7 +3,6 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Newtonsoft.Json;
-using P3.Logic.Time.Timer;
 using LogicInterfaceDirection = Automatica.Core.Base.Templates.LogicInterfaceDirection;
 
 namespace P3.Logic.Time.AdvancedTimer
@@ -35,7 +34,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
         public override ILogic CreateLogicInstance(ILogicContext context)
         {
-            return new TimerRule(context);
+            return new AdvancedTimerRule(context);
         }
 
     }

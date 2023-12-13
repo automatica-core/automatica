@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
@@ -25,10 +26,10 @@ namespace P3.Logic.Time.AdvancedTimer
         public AdvancedTimerRule(ILogicContext context) : base(context)
         {
             _timerProperty = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == TimerLogicFactory.RuleTimerParameter);
+                a.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleTimerParameter);
 
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == TimerLogicFactory.RuleOutput);
+                a.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleOutput);
 
             _timer = new System.Timers.Timer();
 
@@ -47,9 +48,11 @@ namespace P3.Logic.Time.AdvancedTimer
                 return Task.FromResult(false);
             }
 
-            CalculateTickTime(true);
-
             
+            CalculateTickTime(true);
+            
+
+
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
             return base.Start(ruleInstance, token);
@@ -57,16 +60,43 @@ namespace P3.Logic.Time.AdvancedTimer
 
         private void CalculateTickTime(bool isStartup=false)
         {
+            if (_timerPropertyData == null || _timerPropertyData.Value == null)
+            {
+                return;
+            }
+            
+            var tickTimes = new List<double>();
+            var list = new List<(DateTime startTime, DateTime endTime)>();
+            
+            foreach (var entry in _timerPropertyData.Value)
+            {
+                list.Add(GetStartEndTime(entry));
+            }
+            
+            list = list.OrderBy(a => a.startTime).ToList();
+
+            if (list.Any())
+            {
+                var next = list.First();
+                if (next.startTime.IsToday())
+                {
+                    CalculateTickTime(next.startTime, next.endTime, isStartup);
+                }
+            }
+
+        }
+
+        private void CalculateTickTime(DateTime start, DateTime end, bool isStartup = false)
+        {
             var now = DateTime.Now;
             var nowTime = now.TimeOfDay;
 
             Context.Logger.LogInformation($"Now is {nowTime}");
-            
 
 
-            var startTime = _timerPropertyData.StartDate.ToLocalTime().TimeOfDay;
-            var stopTime = _timerPropertyData.EndDate.ToLocalTime().TimeOfDay;
-            
+            var startTime = start.TimeOfDay;
+            var stopTime = end.TimeOfDay;
+
 
             var tickTime = startTime - nowTime;
             Context.Logger.LogDebug($"Start time is {startTime} endTime is {stopTime} difference is {tickTime}");
@@ -74,7 +104,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (tickTime.TotalMilliseconds < 0)
             {
-              
+
                 timerTickTime = (stopTime - nowTime).TotalMilliseconds;
                 if (timerTickTime < 0)
                 {
@@ -111,6 +141,48 @@ namespace P3.Logic.Time.AdvancedTimer
             _timer.Interval = timerTickTime;
             Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
+        }
+
+        private (DateTime startTime, DateTime endTime) GetStartEndTime(CalendarPropertyDataEntry entry)
+        {
+            if (entry.AllDay)
+            {
+                return (DateTime.Now.StartOfDay(), DateTime.Now.EndOfDay());
+            }
+
+            if (String.IsNullOrEmpty(entry.RecurrenceRule))
+            {
+                return (entry.StartDate, entry.EndDate);
+            }
+
+            var rfcStart = new RFC2445Recur(entry.StartDate, entry.RecurrenceRule);
+
+            if (!rfcStart.Freq.IsValid)
+            {
+                Context.Logger.LogWarning($"Rule is not valid {entry.RecurrenceRule}");
+                return (DateTime.MaxValue, DateTime.MaxValue);
+            }
+
+            var startDates = rfcStart.Iterate(Direction.Forward);
+
+            if (startDates != null)
+            {
+                startDates = startDates.Where(a => a > DateTime.Now).OrderBy(time => time);
+            }
+
+            var endDates = new RFC2445Recur(entry.EndDate, entry.RecurrenceRule).Iterate(Direction.Forward);
+            if (endDates != null)
+            {
+                endDates = endDates.Where(a => a > DateTime.Now).OrderBy(time => time);
+            }
+
+            if (startDates != null && endDates != null && startDates.Any() && endDates.Any())
+            {
+                var startDate = startDates.FirstOrDefault();
+                var endDate = endDates.FirstOrDefault();
+                return (startDate, endDate);
+            }
+            return (DateTime.MaxValue, DateTime.MaxValue);
         }
 
         protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
