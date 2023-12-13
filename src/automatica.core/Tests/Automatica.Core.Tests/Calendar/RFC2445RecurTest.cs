@@ -93,7 +93,9 @@ public class RFC2445RecurTest
         var rfc2445Recur = new RFC2445Recur(start, recurrenceRule);
 
         var dates = rfc2445Recur.Iterate(Direction.Forward).ToList();
-        Assert.Empty(dates);
+        Assert.Single(dates);
+
+        Assert.False(dates.ToList().First().IsToday());
     }
 
     [Fact]
@@ -117,5 +119,6 @@ public class RFC2445RecurTest
 
         var dates = rfc2445Recur.Iterate(Direction.Forward).ToList();
         Assert.Single(dates);
+        Assert.True(dates.ToList().First().IsToday());
     }
 }

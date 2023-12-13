@@ -194,14 +194,14 @@ namespace Automatica.Core.Base.Calendar
 
                         case "UNTIL":
                             if (Until == default(DateTime) &&
-                                Count == 0 &&
+                                !Count.HasValue &&
                                 DateTime.TryParse(value, out Until) &&
                                (Until == Until.Date || Until.Kind == DateTimeKind.Utc)) continue;
                             else return false;
 
                         case "COUNT":
                             if (Until == default(DateTime) &&
-                                Count == 0 &&
+                                !Count.HasValue &&
                                 Int32.TryParse(value, out var count) && count > 0)
                             {
                                 Count = count;continue;}
