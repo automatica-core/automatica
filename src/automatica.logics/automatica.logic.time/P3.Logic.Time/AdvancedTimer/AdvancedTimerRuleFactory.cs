@@ -15,7 +15,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
         public override string LogicName => "P3.Logic.Time.AdvancedTimer";
         public override Guid LogicGuid => new Guid("8094b053-e226-4f0c-8e2e-bbb71fda9eb9");
-        public override Version LogicVersion => new Version(0, 0, 0, 1);
+        public override Version LogicVersion => new Version(0, 1, 0, 1);
         public override bool InDevelopmentMode => true;
         
         public override void InitTemplates(ILogicTemplateFactory factory)
@@ -28,7 +28,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
             factory.CreateLogicInterfaceTemplate(RuleOutput, "O", "TIME.ADVANCED_TIMER.OUTPUT.DESCRIPTION", LogicGuid, LogicInterfaceDirection.Output, 0, 1);
 
-            factory.CreateParameterLogicInterfaceTemplate(RuleTimerParameter, "TIME.ADVANCED_TIMER.NAME", "TIME.ADVANCED_TIMER.DESCRIPTION", "delay", LogicGuid, 1, RuleInterfaceParameterDataType.Calendar, JsonConvert.SerializeObject(new TimerPropertyData()));
+            factory.CreateParameterLogicInterfaceTemplate(RuleTimerParameter, "TIME.ADVANCED_TIMER.NAME", "TIME.ADVANCED_TIMER.DESCRIPTION", "delay", LogicGuid, 1, RuleInterfaceParameterDataType.Calendar, JsonConvert.SerializeObject(new CalendarPropertyData()));
             
         }
 
