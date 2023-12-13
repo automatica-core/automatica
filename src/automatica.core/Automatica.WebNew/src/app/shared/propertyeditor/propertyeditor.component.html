@@ -318,7 +318,7 @@
 <dx-popup *ngIf="calendarEditPopupVisible" #calendarEditPopup width="80%" height="80%" [showTitle]="true"
     [title]="'COMMON.PROPERTY.CALENDAR.NAME' | translateAsync" [visible]="calendarEditPopupVisible"
     (onHiding)="onCalendarEditPopupClosing($event, true)">
-    <dx-scheduler [dataSource]="calendarEditValue.Value" [views]="['week']"
+    <dx-scheduler [dataSource]="calendarEditValue.Value" [views]="['day', 'week', 'month']"
         currentView="week" [currentDate]="currentDate" [startDayHour]="0" [height]="'100%'">
     </dx-scheduler>
 </dx-popup>

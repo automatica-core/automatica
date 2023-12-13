@@ -380,6 +380,9 @@
           "SUNDAY": "Sonntag"
         }
       },
+      "CALENDAR": {
+        "NAME": "Kalendar"
+      },
       "CLOUDURL": {
         "NAME": "Cloud Url",
         "DESCRIPTION": ""
