@@ -20,6 +20,10 @@
     "TIMER": {
       "NAME": "Timer",
       "DESCRIPTION": ""
+    },
+    "ADVANCED_TIMER": {
+      "NAME": "Advanced timer",
+      "DESCRIPTION": ""
     }
   }
 }

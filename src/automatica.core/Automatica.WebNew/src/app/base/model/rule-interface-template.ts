@@ -2,15 +2,16 @@ import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from 
 import { RuleInterfaceDirection } from "./rule-interface-direction"
 
 export enum RuleInterfaceParameterDataType {
-    NoParameter,
-    Integer,
-    Double,
-    Text,
-    Timer,
-    ConstantString,
-    Color,
-    Enum,
-    Bool
+    NoParameter = 0,
+    Integer = 1,
+    Double = 2,
+    Text = 3,
+    Timer = 4,
+    ConstantString = 5,
+    Color = 6,
+    Enum = 7,
+    Bool = 8,
+    Calendar = 9
 }
 
 export enum RuleInterfaceDirectionEnum {

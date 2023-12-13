@@ -38,6 +38,7 @@ export enum PropertyTemplateType {
     Timer = 24,
     Time = 25,
     DateTime = 26,
+    Calendar = 27,
 
     AreaIcon = 100,
     AreaInstance = 101,

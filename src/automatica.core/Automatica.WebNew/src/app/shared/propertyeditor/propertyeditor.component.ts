@@ -35,6 +35,7 @@ import { NodeInstanceImportComponent } from "./node-instance-ets-import/node-ins
 import { NodeInstanceImportSerivce } from "./node-instance-ets-import/node-instance-import.service";
 import { Router } from "@angular/router";
 import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props/virtual-generic-property-instance";
+import { CalendarPropertyData } from "src/app/base/model/calendar-property-data";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -171,6 +172,15 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   popupTimerEdit: DxPopupComponent;
   public timerEditPopupVisible: boolean = false;
   public timerEditValue: TimerPropertyData = void 0;
+
+
+  @ViewChild("calendarEditPopup")
+  popupCalendarEdit: DxPopupComponent;
+  public calendarEditPopupVisible: boolean = false;
+  public calendarEditValue: CalendarPropertyData = void 0;
+  public calendarEditDataSource: any;
+  public currentDate = Date.now();
+
   public selectedProperty: PropertyInstance = void 0;
 
   @ViewChild("nodeInstanceImport")
@@ -442,18 +452,43 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this.timerEditPopupVisible = true;
   }
 
+  onCalendarEditClick($event, prop: PropertyInstance) {
+    this.calendarEditValue = new CalendarPropertyData();
+    this.selectedProperty = prop;
+
+    if (prop.Value && prop.Value instanceof CalendarPropertyData) {
+      this.calendarEditValue = prop.Value.copy() as CalendarPropertyData;
+    }
+
+    this.calendarEditPopupVisible = true;
+  }
+
+  onCalendarEditPopupClosing($event, ok: boolean) {
+    this.calendarEditPopupVisible = false;
+
+    if (ok) {
+      this.selectedProperty.Value = this.calendarEditValue;
+
+    }
+    this.valueChanged($event, { data: this.selectedProperty });
+
+    this.selectedProperty = void 0;
+    this.calendarEditValue = void 0;
+
+  }
+
   onTimerEditPopupClosing($event, ok: boolean) {
     this.timerEditPopupVisible = false;
 
     if (ok) {
       this.selectedProperty.Value = this.timerEditValue;
-      
+
     }
-    this.valueChanged($event, {data: this.selectedProperty});
-    
+    this.valueChanged($event, { data: this.selectedProperty });
+
     this.selectedProperty = void 0;
     this.timerEditValue = void 0;
-    
+
   }
 
   translateName = (data: PropertyInstance) => {

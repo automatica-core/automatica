@@ -5,6 +5,7 @@ import { IKey } from "./IKey";
 import { Guid } from "../utils/Guid";
 import { TimerPropertyData } from "./timer-property-data";
 import { L10nTranslationService } from "angular-l10n";
+import { CalendarPropertyData } from "./calendar-property-data";
 
 @Model()
 export class RuleInterfaceInstance extends BaseModel {
@@ -101,7 +102,7 @@ export class RuleInterfaceInstance extends BaseModel {
                 return this.ValueDouble;
             case RuleInterfaceParameterDataType.Integer:
                 return this.ValueInteger;
-                case RuleInterfaceParameterDataType.Text:
+            case RuleInterfaceParameterDataType.Text:
             case RuleInterfaceParameterDataType.Enum:
             case RuleInterfaceParameterDataType.ConstantString:
             case RuleInterfaceParameterDataType.Color:
@@ -112,6 +113,13 @@ export class RuleInterfaceInstance extends BaseModel {
                     timerProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
                 }
                 return timerProperty;
+            }
+            case RuleInterfaceParameterDataType.Calendar: {
+                const calendarProperty = new CalendarPropertyData();
+                if (this.ValueString) {
+                    calendarProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
+                }
+                return calendarProperty;
             }
         }
 
@@ -135,6 +143,15 @@ export class RuleInterfaceInstance extends BaseModel {
             case RuleInterfaceParameterDataType.Timer:
                 {
                     if (value instanceof TimerPropertyData) {
+                        this.ValueString = JSON.stringify(value.toJson());
+                    } else {
+                        this.ValueString = void 0;
+                    }
+                    break;
+                }
+            case RuleInterfaceParameterDataType.Calendar:
+                {
+                    if (value instanceof CalendarPropertyData) {
                         this.ValueString = JSON.stringify(value.toJson());
                     } else {
                         this.ValueString = void 0;

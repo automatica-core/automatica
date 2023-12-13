@@ -19,7 +19,11 @@
     },
     "TIMER": {
       "NAME": "Zeitschaltuhr",
-      "DESCRIPTION":  "" 
-    } 
+      "DESCRIPTION": ""
+    },
+    "ADVANCED_TIMER": {
+      "NAME": "Erweiterte Zeitschaltuhr",
+      "DESCRIPTION": ""
+    }
   }
 }
