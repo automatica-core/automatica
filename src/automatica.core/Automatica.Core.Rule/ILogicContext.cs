@@ -3,7 +3,9 @@ using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
 namespace Automatica.Core.Logic
 {
     /// <summary>

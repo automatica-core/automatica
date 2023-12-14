@@ -22,7 +22,7 @@ namespace Automatica.Core.Logic
             LicenseContract = licenseContract;
         }
 
-        public RuleInstance RuleInstance { get; }
+        public RuleInstance RuleInstance { get; set; }
         public IDispatcher Dispatcher { get; }
         public ILogicTemplateFactory Factory { get; }
         public IRuleInstanceVisuNotify Notify { get; }

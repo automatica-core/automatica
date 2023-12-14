@@ -10,6 +10,7 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
+using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -169,7 +170,7 @@ namespace Automatica.Core.WebApi.Controllers
                     DbContext.Entry(existingInstance).State = EntityState.Modified;
 
                     await DbContext.SaveChangesAsync();
-
+                    
                     _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
                     _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId,
                         _logicCacheFacade.InstanceCache.GetSingle(DbContext, logicInstance.ObjId));

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
@@ -7,6 +8,7 @@ using Automatica.Core.Logic;
 using Automatica.Core.UnitTests.Base.Common;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+
 
 namespace Automatica.Core.UnitTests.Base.Logics
 {
@@ -32,7 +34,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
             Dispatcher = dispatcher;
             Factory = factory;
         }
-        public RuleInstance RuleInstance { get; }
+        public RuleInstance RuleInstance { get; set; }
         public IDispatcher Dispatcher { get; }
         public ILogicTemplateFactory Factory { get; }
 
