@@ -46,13 +46,17 @@ export class LogicShapes {
                     rows: "grow",
                     valign: "center",
                     bgColor: "#457987",
-                    stroke: 0
+                    stroke: 0,
+                    width: 100
                 }, attr),
                     setter,
                     getter);
 
+                const fontSize = this.text?.length <= 18 ? 10 : 8;
+
                 this.classLabel = new logic.Label({
-                    text: this.text,
+                    text: this.truncate(this.text, fontSize),
+                    fontSize: fontSize,
                     stroke: 0,
                     fontColor: "#000000",
                     bgColor: "#457987",
@@ -60,29 +64,37 @@ export class LogicShapes {
                     padding: 5,
                     resizeable: false,
                     minWidth: 90,
-                    fontSize: 10
+                    width: 100,
                 });
 
                 this.add(this.classLabel,
                     {
                         row: 0, col: 0,
-                        valign: "center",
+                        valign: "center"
                     });
-                // this.add(new logic.LogicInfoHeader(
-                //     {
-                //         width: 10,
-                //         height: 10,
-                //         bgColor: "#457987",
-                //         padding: 5,
-                //     }
-                // ), {
-                //     row: 0, col: 1,
-                //     valign: "center",
-                // });
             },
 
             setText: function setText(text) {
-                this.classLabel.setText(text);
+                const fontSize = text?.length <= 18 ? 10 : 8;
+                this.classLabel.setFontSize(fontSize);
+                this.classLabel.setText(this.truncate(text, fontSize));
+            },
+
+            truncate: function (input, fontSize) {
+                if (!input) {
+                    return input;
+                }
+                if (fontSize == 8) {
+                    if (input.length > 22) {
+                        return input.substring(0, 18) + '...';
+                    }
+                }
+                else if (fontSize == 10) {
+                    if (input.length > 18) {
+                        return input.substring(0, 15) + '...';
+                    }
+                }
+                return input;
             }
         });
 
@@ -115,6 +127,7 @@ export class LogicShapes {
 
                 this.headerLayout = new logic.LogicHeader();
                 this.headerLayout.setText(element.Name);
+
 
                 element.onNameChanged.subscribe((v) => {
                     this.headerLayout.setText(v);
@@ -153,6 +166,9 @@ export class LogicShapes {
                 this.add(this.logicName);
 
                 this.add(new logic.PortShape({}, element, this, linkService));
+
+
+                console.log(this.headerLayout.getWidth());
             },
             getMinWidth() {
                 if (this.classLabel) {
@@ -237,7 +253,7 @@ export class LogicShapes {
                         port.setConnectionDirection(3);
                         port.setDiameter(8);
 
-                        if(portInstance.Template.InterfaceDirection.ObjId === LogicInterfaceDirection.Param) {
+                        if (portInstance.Template.InterfaceDirection.ObjId === LogicInterfaceDirection.Param) {
                             port.setColor("orange");
                             port.setBackgroundColor("orange");
                         }
@@ -245,7 +261,7 @@ export class LogicShapes {
                             port.setColor("red");
                             port.setBackgroundColor("red");
                         }
-                        
+
                     } else {
                         port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
@@ -355,7 +371,7 @@ export class LogicShapes {
                     input.setName(element.Inputs[0].PortId);
                     input.setId(element.Inputs[0].PortId);
 
-                    
+
                     input.setColor("red");
                     input.setBackgroundColor("red");
 
