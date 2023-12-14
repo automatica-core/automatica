@@ -23,7 +23,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
         private readonly ILoadedStore _store;
         private readonly ILogicFactoryStore _logicFactoryStore;
         private readonly ILogicTemplateCache _logicTemplateCache;
-        private readonly TemplateFactoryProvider<LogicTemplateFactory> _logicTemplateFactory;
+        private readonly IServiceProvider _serviceProvider;
 
         public LogicLoader(ILogger<LogicLoader> logger, 
             AutomaticaContext dbContext, 
@@ -32,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             ILoadedStore store, 
             ILogicFactoryStore logicFactoryStore, 
             ILogicTemplateCache logicTemplateCache,
-            TemplateFactoryProvider<LogicTemplateFactory> logicTemplateFactory)
+            IServiceProvider serviceProvider)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -41,7 +41,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             _store = store;
             _logicFactoryStore = logicFactoryStore;
             _logicTemplateCache = logicTemplateCache;
-            _logicTemplateFactory = logicTemplateFactory;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task Load(ILogicFactory factory, IBoardType boardType)
@@ -88,7 +88,8 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                 {
                     _logger.LogDebug($"Init logic templates for {factory.LogicName}...");
 
-                    var logicTemplateFactory = _logicTemplateFactory.CreateInstance(factory.LogicGuid);
+                    var logicTemplateFactoryProvider = new LogicTemplateFactoryProvider(_serviceProvider);
+                    var logicTemplateFactory = logicTemplateFactoryProvider.CreateInstance(factory.LogicGuid);
 
                     logicTemplateFactory.SetFactory(factory);
 

@@ -6,10 +6,23 @@ using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Templates
 {
+    public class LogicTemplateFactoryProvider(IServiceProvider serviceProvider)
+        : TemplateFactoryProvider<LogicTemplateFactory>(serviceProvider)
+    {
+        protected override LogicTemplateFactory CreateFactory(Guid owner, IServiceProvider serviceProvider)
+        {
+            var config = serviceProvider.GetRequiredService<IConfiguration>();
+
+            var databaseContext = new AutomaticaContext(config);
+            return new LogicTemplateFactory(serviceProvider.GetRequiredService<ILogger<LogicTemplateFactory>>(), databaseContext, config);
+        }
+    }
+    
     public class LogicTemplateFactory : PropertyTemplateFactory, ILogicTemplateFactory
     {
         public IDictionary<Guid, RuleTemplate> LogicTemplates { get; }

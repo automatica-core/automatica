@@ -67,7 +67,7 @@ namespace Automatica.Core.Logging
                         fileSizeLimitBytes: 31457280,
                         rollingInterval: RollingInterval.Day,
                         rollOnFileSizeLimit: true,
-                        retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        retainedFileCountLimit: 2, restrictedToMinimumLevel: LogEventLevel.Warning,
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
                     .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728, //128mb
