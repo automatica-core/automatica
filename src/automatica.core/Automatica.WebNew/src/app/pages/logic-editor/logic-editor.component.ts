@@ -106,6 +106,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     await this.loadData();
   }
 
+  unselectItem() {
+    this.selectedItem = void 0;
+  }
+
   initPages() {
     this.selectedItem = this.pages[0];
     this.selectedPage = this.selectedItem;
@@ -225,6 +229,24 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     if (this.selectedItem instanceof NodeInstance) {
       this.configTree.add($event, this.selectedItem);
     }
+  }
+
+  async removeSelectedItem($event) {
+    const item = $event.item;
+    const page: RulePage = $event.page;
+    if (item instanceof RuleInstance) {
+      if (this.selectedItem && this.selectedItem.ObjId === item.ObjId) {
+        page.removeRuleInstance(item.ObjId);
+        await this.ruleEngineService.removeItem(item);
+        $event.removed = true;
+      }
+    }
+    else if (item instanceof NodeInstance2RulePage) {
+      page.removeNodeInstance(item.ObjId);
+      await this.ruleEngineService.removeItem(item);
+      $event.removed = true;
+    }
+
   }
 
   onSelectedItemsChanged($event) {
@@ -415,9 +437,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   onZoomIn($event) {
     this.selectedPage.onZoomIn.emit();
-    
+
   }
-  onZoomOut($event) {  
+  onZoomOut($event) {
     this.selectedPage.onZoomOut.emit();
   }
   onZoomToView($event) {

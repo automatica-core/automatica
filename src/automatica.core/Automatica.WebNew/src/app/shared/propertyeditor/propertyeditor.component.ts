@@ -194,6 +194,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @Output()
   public saveLearnedNodes = new EventEmitter<any>();
 
+  @Output()
+  public unselectItem = new EventEmitter<any>(); 
+
   learnModeSub: any;
 
   @Input()
@@ -461,6 +464,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
 
     this.calendarEditPopupVisible = true;
+    this.unselectItem.emit();
   }
 
   onCalendarEditPopupClosing($event, ok: boolean) {

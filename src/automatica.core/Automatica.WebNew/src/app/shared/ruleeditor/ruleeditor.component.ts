@@ -52,6 +52,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   selectedItemChange = new EventEmitter<any[]>();
   @Output()
   selectedItemsChanged = new EventEmitter<any>();
+  @Output()
+  removeSelectedItem = new EventEmitter<any>();
+
 
   private completeMap = new Map<string, any>();
   private nodeInstance2RulePageMap = new Map<string, NodeInterfaceInstance[]>();
@@ -238,9 +241,11 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     const d = new this.logic.ItemShape({}, element, this.linkService);
 
     d.on("removed", async () => {
-      page.removeNodeInstance(element.ObjId);
-
-      await this.ruleEngineService.removeItem(element);
+      var item = { item: element, page: page, removed: false };
+      this.removeSelectedItem.emit(item);
+      if (!item.removed) {
+        this.workplace.add(d);
+      }
     });
 
     this.workplace.add(d);
@@ -256,8 +261,12 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     const d = new this.logic.LogicShape({}, element, this.linkService);
 
     d.on("removed", async () => {
-      page.removeRuleInstance(element.ObjId);
-      await this.ruleEngineService.removeItem(element);
+      var item = { item: element, page: page, removed: false };
+      this.removeSelectedItem.emit(item);
+
+      if (!item.removed) {
+        this.workplace.add(d);
+      }
     });
 
     this.workplace.add(d);
