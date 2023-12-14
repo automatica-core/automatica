@@ -35,13 +35,11 @@ namespace Automatica.Core.EF.Configuration
                     if (string.IsNullOrEmpty(config["MARIADB_HOST"]))
                     {
                         mariaDbConString = config.GetConnectionString($"AutomaticaDatabaseMaria");
-                        loggerInstance.LogWarning($"Using connection string from appsettings.json because to environment variable is defined");
                     }
 
                     return (DatabaseTypeEnum.MariaDb, mariaDbConString);
 
                 case DatabaseType.Memory:
-                    loggerInstance.LogInformation($"Using MemoryDatabase provider...");
                     return (DatabaseTypeEnum.Memory, "");
                 default:
                     loggerInstance.LogCritical($"No or invalid database provider configured {dbType.ToLower()}\nSupported are sqlite, mariadb, memory");
