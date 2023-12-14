@@ -146,6 +146,45 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             await Logic.Stop();
         }
 
+
+
+        [Fact]
+        public async void TestTimerRule2()
+        {
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
+            await Logic.Stop();
+
+            var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
+            paramDelay.Value = new CalendarPropertyData()
+            {
+                Value = new List<CalendarPropertyDataEntry>
+                {
+                    new CalendarPropertyDataEntry
+                    {
+                        StartDate =DateTime.Now.AddHours(-2),
+                        EndDate = DateTime.Now.AddHours(2),
+                        RecurrenceRule = "FREQ=DAILY"
+                    }
+                }
+            };
+            await Logic.Start();
+            await Task.Delay(2500);
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Equal(1, values.Count);
+            //Assert.Equal(true, values.First().Value.Value);
+
+            await Task.Delay(2500);
+
+            values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(true, values.First().Value.Value);
+            await Logic.Stop();
+        }
+
     }
 }
 

@@ -70,6 +70,20 @@ public class RFC2445RecurTest
         Assert.Single(endDates);
 
     }
+    [Fact]
+    public void TestRFC2445RecurIterate3()
+    {
+        var start = DateTime.Now.AddHours(-5);
+        var end = DateTime.Now.AddHours(2);
+        var rfc2445Recur = new RFC2445Recur(start, "FREQ=DAILY");
+        var rfc2445RecurEnd = new RFC2445Recur(end, "FREQ=DAILY");
+        var startDates = rfc2445Recur.Iterate(Direction.Forward).ToList();
+        var endDates = rfc2445RecurEnd.Iterate(Direction.Forward).ToList();
+
+        Assert.Single(startDates);
+        Assert.Single(endDates);
+
+    }
 
     [Fact]
     public void TestRFC2445RecIterateByDay_ExcepctToday()
