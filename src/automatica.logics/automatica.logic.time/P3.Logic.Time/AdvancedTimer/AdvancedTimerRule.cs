@@ -14,9 +14,9 @@ namespace P3.Logic.Time.AdvancedTimer
 {
     public class AdvancedTimerRule : Automatica.Core.Logic.Logic
     {
-        private readonly RuleInterfaceInstance _timerProperty;
+        private RuleInterfaceInstance _timerProperty;
         private CalendarPropertyData _timerPropertyData;
-        private readonly RuleInterfaceInstance _output;
+        private RuleInterfaceInstance _output;
         private readonly System.Timers.Timer _timer;
         private readonly object _lock = new object();
         
@@ -25,18 +25,20 @@ namespace P3.Logic.Time.AdvancedTimer
 
         public AdvancedTimerRule(ILogicContext context) : base(context)
         {
-            _timerProperty = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleTimerParameter);
-
-            _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
-                a.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleOutput);
-
+           
             _timer = new System.Timers.Timer();
 
         }
 
         protected override Task<bool> Start(RuleInstance ruleInstance, CancellationToken token = new CancellationToken())
         {
+            _timerProperty = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                a.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleTimerParameter);
+
+            _output = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+                a.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleOutput);
+
+            
             if (_timerProperty?.Value != null)
             {
                 _timerPropertyData = (CalendarPropertyData)_timerProperty.Value;
