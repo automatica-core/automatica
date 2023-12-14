@@ -39,11 +39,15 @@ namespace P3.Logic.Time.AdvancedTimer
         {
             if (_timerProperty?.Value != null)
             {
+                
                 _timerPropertyData = (CalendarPropertyData)_timerProperty.Value;
 
             }
             else
             {
+                Context.Logger.LogError(_timerProperty == null
+                    ? "No timer property found"
+                    : $"No timer property value found ({_timerProperty?.Value})");
                 Context.Logger.LogError("No or invalid timer property found");
                 return Task.FromResult(false);
             }
