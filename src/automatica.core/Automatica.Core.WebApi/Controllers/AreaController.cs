@@ -161,27 +161,33 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("add")]
         public async Task<IEnumerable<AreaInstance>> AddAreaInstances([FromBody]IEnumerable<AreaInstance> instances)
         {
-            await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                foreach (var instance in instances)
+                await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    instance.InverseThis2ParentNavigation = null;
-                    instance.This2ParentNavigation = null;
-                    instance.CreatedAt = DateTimeOffset.Now;
-                    instance.ModifiedAt = DateTimeOffset.Now;
-                    await DbContext.AreaInstances.AddAsync(instance);
+                    foreach (var instance in instances)
+                    {
+                        instance.InverseThis2ParentNavigation = null;
+                        instance.This2ParentNavigation = null;
+                        instance.CreatedAt = DateTimeOffset.Now;
+                        instance.ModifiedAt = DateTimeOffset.Now;
+                        await DbContext.AreaInstances.AddAsync(instance);
+                    }
+
+                    await DbContext.SaveChangesAsync();
+
+                }
+                finally
+                {
+                    await DbContext.Database.CommitTransactionAsync();
+                    _areaCache.Clear();
                 }
 
-                await DbContext.SaveChangesAsync();
-                
-            }
-            finally
-            {
-                await DbContext.Database.CommitTransactionAsync();
-                _areaCache.Clear();
-            }
-            return GetInstances();
+                return GetInstances();
+            });
         }
 
         [HttpGet]
