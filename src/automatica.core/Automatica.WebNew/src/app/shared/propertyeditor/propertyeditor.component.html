@@ -319,9 +319,11 @@
     [title]="'COMMON.PROPERTY.CALENDAR.NAME' | translateAsync" [visible]="calendarEditPopupVisible"
     (onHiding)="onCalendarEditPopupClosing($event, true)">
     <dx-scheduler [dataSource]="calendarEditValue.Value" [views]="['day', 'week', 'month']" currentView="week"
-        [currentDate]="currentDate" [startDayHour]="0" [height]="'100%'">
-        <dxo-editing [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true"
-            [allowResizing]="true" [allowDragging]="true"></dxo-editing>
+        [currentDate]="currentDate" [startDayHour]="0" [height]="'100%'" textExpr="Text" startDateExpr="StartDate"
+        endDateExpr="EndDate" allDayExpr="AllDay" recurrenceRuleExpr="RecurrenceRule" descriptionExpr="Description" 
+        recurrenceExceptionExpr="RecurrenceException">
+        <dxo-editing [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true" [allowResizing]="true"
+            [allowDragging]="true"></dxo-editing>
     </dx-scheduler>
 </dx-popup>
 

@@ -198,6 +198,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public unselectItem = new EventEmitter<any>(); 
 
   learnModeSub: any;
+  calendarEditSource: IPropertyModel;
 
   @Input()
   set item(value: IPropertyModel) {
@@ -458,6 +459,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   onCalendarEditClick($event, prop: PropertyInstance) {
     this.calendarEditValue = new CalendarPropertyData();
     this.selectedProperty = prop;
+    this.calendarEditSource = this.item;
 
     if (prop.Value && prop.Value instanceof CalendarPropertyData) {
       this.calendarEditValue = prop.Value.copy() as CalendarPropertyData;
@@ -471,13 +473,16 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this.calendarEditPopupVisible = false;
 
     if (ok) {
+      this.item = this.calendarEditSource;
       this.selectedProperty.Value = this.calendarEditValue;
+      
 
     }
     this.valueChanged($event, { data: this.selectedProperty });
 
     this.selectedProperty = void 0;
     this.calendarEditValue = void 0;
+    this.calendarEditSource = void 0;
 
   }
 
