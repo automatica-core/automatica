@@ -89,11 +89,17 @@ namespace P3.Logic.Time.AdvancedTimer
                 else
                 {
                     _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+
+                    Context.Logger.LogInformation($"Set value to {false}");
+                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
                 }
             }
             else
             {
                 _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+
+                Context.Logger.LogInformation($"Set value to {false}");
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
             }
 
         }
@@ -163,10 +169,10 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (String.IsNullOrEmpty(entry.RecurrenceRule))
             {
-                return (entry.StartDate, entry.EndDate);
+                return (entry.StartDate.ToLocalTime(), entry.EndDate.ToLocalTime());
             }
 
-            var rfcStart = new RFC2445Recur(entry.StartDate, entry.RecurrenceRule);
+            var rfcStart = new RFC2445Recur(entry.StartDate.ToLocalTime(), entry.RecurrenceRule);
 
             if (!rfcStart.Freq.IsValid)
             {
@@ -181,7 +187,7 @@ namespace P3.Logic.Time.AdvancedTimer
                 startDates = startDates.Where(a => a > DateTime.Now).OrderBy(time => time);
             }
 
-            var endDates = new RFC2445Recur(entry.EndDate, entry.RecurrenceRule).Iterate(Direction.Forward);
+            var endDates = new RFC2445Recur(entry.EndDate.ToLocalTime(), entry.RecurrenceRule).Iterate(Direction.Forward);
             if (endDates != null)
             {
                 endDates = endDates.Where(a => a > DateTime.Now).OrderBy(time => time);
