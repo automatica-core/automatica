@@ -39,9 +39,8 @@ namespace P3.Logic.Time.AdvancedTimer
         {
             if (_timerProperty?.Value != null)
             {
-                
                 _timerPropertyData = (CalendarPropertyData)_timerProperty.Value;
-
+                Context.Logger.LogInformation($"Timer {Context.RuleInstance.Name}: {_timerProperty?.ValueString}");
             }
             else
             {
