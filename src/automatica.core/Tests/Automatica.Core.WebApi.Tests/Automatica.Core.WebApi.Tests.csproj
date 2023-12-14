@@ -45,9 +45,12 @@
     <ProjectReference Include="..\..\Automatica.Core.WebApi\Automatica.Core.WebApi.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Area\ETS5_Simple_ThreeLevel.knxproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+	  <None Include="Area\ETS5_Simple_ThreeLevel.knxproj">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Area\ETS6_Project.knxproj">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Visualization\" />
