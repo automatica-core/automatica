@@ -104,6 +104,7 @@ namespace Automatica.Core.Logic
 
         public async Task<bool> Restart(RuleInstance instance, CancellationToken token = default)
         {
+            Context.RuleInstance = instance;
             await Start(instance, token);
 
             foreach (var param in instance.RuleInterfaceInstance.Where(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==

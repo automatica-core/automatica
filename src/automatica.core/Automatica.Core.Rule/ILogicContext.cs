@@ -14,7 +14,7 @@ namespace Automatica.Core.Logic
         /// <summary>
         /// The <see cref="RuleInstance"/> itself
         /// </summary>
-        RuleInstance RuleInstance { get; }
+        RuleInstance RuleInstance { get; internal set; }
 
         /// <summary>
         /// The <see cref="IDispatcher"/> instance
