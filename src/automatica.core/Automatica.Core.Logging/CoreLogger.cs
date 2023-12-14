@@ -65,10 +65,14 @@ namespace Automatica.Core.Logging
             {
                 logBuild.WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"),
                         fileSizeLimitBytes: 31457280,
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
                         retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
                     .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728, //128mb
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
@@ -93,10 +97,14 @@ namespace Automatica.Core.Logging
                 logBuild
                     .WriteTo.File(fileName,
                         fileSizeLimitBytes: 31457280, //~32mb
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: 20, restrictedToMinimumLevel: ConvertLogLevel(_level),
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
                     .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
-                        fileSizeLimitBytes: 134217728, //128mb
+                        fileSizeLimitBytes: 134217728*2, //256mb
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
                         retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
