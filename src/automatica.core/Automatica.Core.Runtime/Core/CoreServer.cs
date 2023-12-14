@@ -682,7 +682,7 @@ namespace Automatica.Core.Runtime.Core
             var logger = _loggerFactory.CreateLogger($"{factory.LogicName}{LoggerConstants.FileSeparator}{ruleInstance.ObjId}");
             var ruleContext = new LogicContext(ruleInstance, 
                 _dispatcher, 
-                _serviceProvider.GetRequiredService<TemplateFactoryProvider<LogicTemplateFactory>>().CreateInstance(factory.LogicGuid), 
+                new LogicTemplateFactoryProvider(_serviceProvider).CreateInstance(factory.LogicGuid), 
                 _ruleInstanceVisuNotify, 
                 logger,
                 _serviceProvider.GetRequiredService<IServerCloudApi>(), 
@@ -876,7 +876,7 @@ namespace Automatica.Core.Runtime.Core
                 nodeInstance, 
                 factory,
                 _dispatcher, 
-               _serviceProvider.GetRequiredService<TemplateFactoryProvider<NodeTemplateFactory>>().CreateInstance(manifest.Automatica.PluginGuid),
+               new NodeTemplateFactoryProvider(_serviceProvider).CreateInstance(manifest.Automatica.PluginGuid),
                 _telegramMonitor, 
                 _licenseContext.GetLicenseState(), 
                 logger, 

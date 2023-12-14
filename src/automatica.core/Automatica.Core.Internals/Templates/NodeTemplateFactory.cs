@@ -17,6 +17,7 @@ namespace Automatica.Core.Internals.Templates
         {
             var config = serviceProvider.GetRequiredService<IConfiguration>();
 
+            //create a new instance in purpose - we don't want to share the same instance between different owners
             var databaseContext = new AutomaticaContext(config);
             return new NodeTemplateFactory(
                 serviceProvider.GetRequiredService<ILogger<NodeTemplateFactory>>(),

@@ -53,10 +53,6 @@ namespace Automatica.Core.Internals
             services.AddTransient<ICloudApi>(a => a.GetRequiredService<CloudApi>());
             services.AddTransient<ITextToSpeechApi>(a => a.GetRequiredService<TextToSpeechApi>());
 
-            services.AddTransient<TemplateFactoryProvider<LogicTemplateFactory>>();
-            services.AddTransient<LogicTemplateFactory>();
-            services.AddTransient<TemplateFactoryProvider<NodeTemplateFactory>>();
-            services.AddTransient<NodeTemplateFactory>();
             services.AddTransient<SettingsFactory>();
         }
     }

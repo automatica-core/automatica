@@ -17,7 +17,7 @@ namespace Automatica.Core.Internals.Templates
         protected override LogicTemplateFactory CreateFactory(Guid owner, IServiceProvider serviceProvider)
         {
             var config = serviceProvider.GetRequiredService<IConfiguration>();
-
+            //create a new instance in purpose - we don't want to share the same instance between different owners
             var databaseContext = new AutomaticaContext(config);
             return new LogicTemplateFactory(serviceProvider.GetRequiredService<ILogger<LogicTemplateFactory>>(), databaseContext, config);
         }
