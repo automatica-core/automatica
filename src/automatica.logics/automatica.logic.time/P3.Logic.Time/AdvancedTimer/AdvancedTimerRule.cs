@@ -47,7 +47,7 @@ namespace P3.Logic.Time.AdvancedTimer
             {
                 Context.Logger.LogError(_timerProperty == null
                     ? "No timer property found"
-                    : $"No timer property value found ({_timerProperty?.Value})");
+                    : $"No timer property value found ({_timerProperty?.ValueString})");
                 Context.Logger.LogError("No or invalid timer property found");
                 return Task.FromResult(false);
             }
