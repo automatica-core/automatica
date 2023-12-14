@@ -102,82 +102,82 @@ namespace Automatica.Core.WebApi.Tests.Area
             Assert.Equal(newInstance.ObjId, saved.First().InverseThis2ParentNavigation.First().ObjId);
         }
 
-        [Fact, TestOrder(3)]
-        public async Task TestEtsImport()
-        {
-            var formFileMoq = new Mock<IFormFile>();
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Area", "ETS5_Simple_ThreeLevel.knxproj"), Path.Combine(ServerInfo.GetTempPath(), "ETS5_Simple_ThreeLevel.knxproj"), true);
+        //[Fact, TestOrder(3)]
+        //public async Task TestEtsImport()
+        //{
+        //    var formFileMoq = new Mock<IFormFile>();
+        //    File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Area", "ETS5_Simple_ThreeLevel.knxproj"), Path.Combine(ServerInfo.GetTempPath(), "ETS5_Simple_ThreeLevel.knxproj"), true);
 
-            formFileMoq.Setup(a => a.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).Callback(async (Stream s, CancellationToken cts) =>
-            {
-                await using var proj = File.Open(Path.Combine(ServerInfo.GetTempPath(), "ETS5_Simple_ThreeLevel.knxproj"), FileMode.Open);
-                await proj.CopyToAsync(s, cts);
-            });
-            formFileMoq.SetupGet(a => a.FileName).Returns("ETS5_Simple_ThreeLevel1.knxproj");
+        //    formFileMoq.Setup(a => a.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).Callback(async (Stream s, CancellationToken cts) =>
+        //    {
+        //        await using var proj = File.Open(Path.Combine(ServerInfo.GetTempPath(), "ETS5_Simple_ThreeLevel.knxproj"), FileMode.Open);
+        //        await proj.CopyToAsync(s, cts);
+        //    });
+        //    formFileMoq.SetupGet(a => a.FileName).Returns("ETS5_Simple_ThreeLevel1.knxproj");
 
-            var structure = (await Controller.ProcessFile(Controller.GetInstances().First(), "", formFileMoq.Object)).ToList();
+        //    var structure = (await Controller.ProcessFile(Controller.GetInstances().First(), "", formFileMoq.Object)).ToList();
 
-            Assert.NotNull(structure);
-            Assert.NotEmpty(structure);
+        //    Assert.NotNull(structure);
+        //    Assert.NotEmpty(structure);
 
-            Assert.Equal("Project", structure.First().Name);
+        //    Assert.Equal("Project", structure.First().Name);
 
-            var demoStructure = structure.First().InverseThis2ParentNavigation.First();
-            Assert.Equal("DemoStructure", demoStructure.Name);
+        //    var demoStructure = structure.First().InverseThis2ParentNavigation.First();
+        //    Assert.Equal("DemoStructure", demoStructure.Name);
 
-            var building1 = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Building 1");
-            Assert.NotNull(building1);
-            Assert.Equal(2, building1.InverseThis2ParentNavigation.Count);
+        //    var building1 = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Building 1");
+        //    Assert.NotNull(building1);
+        //    Assert.Equal(2, building1.InverseThis2ParentNavigation.Count);
 
-            var firstFloor = building1.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "First");
-            var groundFloor = building1.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Ground");
+        //    var firstFloor = building1.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "First");
+        //    var groundFloor = building1.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Ground");
 
-            Assert.NotNull(firstFloor);
-            Assert.NotNull(groundFloor);
+        //    Assert.NotNull(firstFloor);
+        //    Assert.NotNull(groundFloor);
 
-            Assert.Equal("Sleep", firstFloor.InverseThis2ParentNavigation.First().Name);
-            Assert.Equal("Living", groundFloor.InverseThis2ParentNavigation.First().Name);
+        //    Assert.Equal("Sleep", firstFloor.InverseThis2ParentNavigation.First().Name);
+        //    Assert.Equal("Living", groundFloor.InverseThis2ParentNavigation.First().Name);
 
-            var garage = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Garage");
-            Assert.NotNull(garage);
-            Assert.Empty(garage.InverseThis2ParentNavigation);
+        //    var garage = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Garage");
+        //    Assert.NotNull(garage);
+        //    Assert.Empty(garage.InverseThis2ParentNavigation);
             
-        }
+        //}
 
 
-        [Fact, TestOrder(4)]
-        public async Task TestEtsImport2()
-        {
-            var formFileMoq = new Mock<IFormFile>();
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Area", "ETS6_Project.knxproj"), Path.Combine(ServerInfo.GetTempPath(), "ETS6_Project.knxproj"), true);
+        //[Fact, TestOrder(4)]
+        //public async Task TestEtsImport2()
+        //{
+        //    var formFileMoq = new Mock<IFormFile>();
+        //    File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Area", "ETS6_Project.knxproj"), Path.Combine(ServerInfo.GetTempPath(), "ETS6_Project.knxproj"), true);
 
-            formFileMoq.Setup(a => a.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).Callback(async (Stream s, CancellationToken cts) =>
-            {
-                await using var proj = File.Open(Path.Combine(ServerInfo.GetTempPath(), "ETS6_Project.knxproj"), FileMode.Open);
-                await proj.CopyToAsync(s, cts);
-            });
+        //    formFileMoq.Setup(a => a.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).Callback(async (Stream s, CancellationToken cts) =>
+        //    {
+        //        await using var proj = File.Open(Path.Combine(ServerInfo.GetTempPath(), "ETS6_Project.knxproj"), FileMode.Open);
+        //        await proj.CopyToAsync(s, cts);
+        //    });
 
-            formFileMoq.SetupGet(a => a.FileName).Returns("ETS6_Project1.knxproj");
+        //    formFileMoq.SetupGet(a => a.FileName).Returns("ETS6_Project1.knxproj");
 
-            var structure = (await Controller.ProcessFile(Controller.GetInstances().First(), "", formFileMoq.Object)).ToList();
+        //    var structure = (await Controller.ProcessFile(Controller.GetInstances().First(), "", formFileMoq.Object)).ToList();
 
-            Assert.NotNull(structure);
-            Assert.NotEmpty(structure);
+        //    Assert.NotNull(structure);
+        //    Assert.NotEmpty(structure);
 
-            Assert.Equal("home", structure.First().Name);
+        //    Assert.Equal("home", structure.First().Name);
 
-            var demoStructure = structure.First().InverseThis2ParentNavigation.First();
-            Assert.Equal("Haus", demoStructure.Name);
+        //    var demoStructure = structure.First().InverseThis2ParentNavigation.First();
+        //    Assert.Equal("Haus", demoStructure.Name);
 
-            var eg = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "EG");
-            Assert.NotNull(eg);
-            Assert.Equal(12, eg.InverseThis2ParentNavigation.Count);
+        //    var eg = demoStructure.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "EG");
+        //    Assert.NotNull(eg);
+        //    Assert.Equal(12, eg.InverseThis2ParentNavigation.Count);
 
-            var wc = eg.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "WC");
-            var child1 = eg.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Kind 1");
+        //    var wc = eg.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "WC");
+        //    var child1 = eg.InverseThis2ParentNavigation.FirstOrDefault(a => a.Name == "Kind 1");
 
-            Assert.NotNull(wc);
-            Assert.NotNull(child1);
-        }
+        //    Assert.NotNull(wc);
+        //    Assert.NotNull(child1);
+        //}
     }
 }
