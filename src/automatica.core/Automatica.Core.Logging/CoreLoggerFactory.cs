@@ -51,7 +51,7 @@ namespace Automatica.Core.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return GetLogger(Configuration, _serviceProvider, categoryName, null, categoryName.Contains("Microsoft") || categoryName.Contains("System"));
+            return GetLogger(Configuration, _serviceProvider, categoryName, null, categoryName.ToLowerInvariant().Contains("mcrosoft") || categoryName.ToLowerInvariant().Contains("system"));
         }
 
         public void AddProvider(ILoggerProvider provider)
