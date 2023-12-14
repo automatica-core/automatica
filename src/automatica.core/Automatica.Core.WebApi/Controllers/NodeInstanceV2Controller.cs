@@ -82,7 +82,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var childs = node.InverseThis2ParentNodeInstanceNavigation ?? new List<NodeInstance>();
             var props = node.PropertyInstance;
-
+                
             node.InverseThis2ParentNodeInstanceNavigation = null;
             node.PropertyInstance = null;
             node.IsDeleted = false;
@@ -124,25 +124,31 @@ namespace Automatica.Core.WebApi.Controllers
                 entityState = EntityState.Added;
             }
 
-            foreach (var prop in props)
+            if (props != null)
             {
-                prop.This2NodeInstanceNavigation = node;
-                prop.This2PropertyTemplateNavigation = null;
-                prop.ModifiedAt = DateTimeOffset.Now;
-                if (entityState == EntityState.Modified)
+                foreach (var prop in props)
                 {
-                    DbContext.Update(prop);
-                }
-                else
-                {
-                    prop.CreatedAt = DateTimeOffset.Now;
-                    await DbContext.AddAsync(prop);
+                    prop.This2NodeInstanceNavigation = node;
+                    prop.This2PropertyTemplateNavigation = null;
+                    prop.ModifiedAt = DateTimeOffset.Now;
+                    if (entityState == EntityState.Modified)
+                    {
+                        DbContext.Update(prop);
+                    }
+                    else
+                    {
+                        prop.CreatedAt = DateTimeOffset.Now;
+                        await DbContext.AddAsync(prop);
+                    }
                 }
             }
 
-            foreach (var child in childs)
+            if (childs != null)
             {
-                await AddOrUpdateNodeInstance(child);
+                foreach (var child in childs)
+                {
+                    await AddOrUpdateNodeInstance(child);
+                }
             }
 
             return entityState;
