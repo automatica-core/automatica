@@ -93,7 +93,7 @@ namespace P3.Logic.Time.AdvancedTimer
                     Context.Logger.LogInformation($"Set value to {false}");
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
                 }
-            }
+            } 
             else
             {
                 _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;

@@ -94,7 +94,8 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Empty(values);
+            Assert.Single(values);
+            Assert.False((bool)values.First().Value.Value);
             await Logic.Stop();
         }
 
