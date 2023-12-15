@@ -242,7 +242,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     d.on("removed", async () => {
       var item = { item: element, page: page, removed: false };
-      this.removeSelectedItem.emit(item);
+      await this.removeSelectedItem.emit(item);
       if (!item.removed) {
         this.workplace.add(d);
       }
@@ -262,7 +262,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     d.on("removed", async () => {
       var item = { item: element, page: page, removed: false };
-      this.removeSelectedItem.emit(item);
+      await this.removeSelectedItem.emit(item);
 
       if (!item.removed) {
         this.workplace.add(d);

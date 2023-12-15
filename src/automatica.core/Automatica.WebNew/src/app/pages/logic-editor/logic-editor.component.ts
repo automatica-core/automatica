@@ -237,14 +237,14 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     if (item instanceof RuleInstance) {
       if (this.selectedItem && this.selectedItem.ObjId === item.ObjId) {
         page.removeRuleInstance(item.ObjId);
-        await this.ruleEngineService.removeItem(item);
         $event.removed = true;
+        await this.ruleEngineService.removeItem(item);
       }
     }
     else if (item instanceof NodeInstance2RulePage) {
       page.removeNodeInstance(item.ObjId);
-      await this.ruleEngineService.removeItem(item);
       $event.removed = true;
+      await this.ruleEngineService.removeItem(item);
     }
 
   }
