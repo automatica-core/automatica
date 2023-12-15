@@ -68,6 +68,7 @@ RUN mkdir -p /app/automatica/frp
 COPY ./Automatica.Core/frp/* /app/automatica/frp/
 
 VOLUME /app/plugins
+COPY --from=build /app/plugins /app/plugins
 
 EXPOSE 1883/tcp
 EXPOSE 5000-6000
