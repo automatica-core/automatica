@@ -20,6 +20,7 @@ RUN apt-get install zip net-tools -y
 ARG VERSION
 ARG CLOUD_API_KEY
 ARG CLOUD_URL
+ARG AUTOMATICA_CLOUD_ENVIRONMENT
 
 #install automatica-cli
 RUN dotnet tool install --global automatica-cli
@@ -41,7 +42,7 @@ COPY ./Automatica.Core/appsettings.json .
 
 RUN mkdir -p /app/plugins
 RUN echo $VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL -Cl $AUTOMATICA_CLOUD_ENVIRONMENT
 
 RUN rm -rf /src
 
