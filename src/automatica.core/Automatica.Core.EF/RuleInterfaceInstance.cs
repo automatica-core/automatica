@@ -61,6 +61,20 @@ namespace Automatica.Core.EF.Models
                         }
 
                         return null;
+                    case RuleInterfaceParameterDataType.Controls:
+                        if (!String.IsNullOrEmpty(ValueString))
+                        {
+                            try
+                            {
+                                return JsonConvert.DeserializeObject<ControlConfigurationBase>(ValueString);
+                            }
+                            catch
+                            {
+                                return null;
+                            }
+                        }
+
+                        return null;
                 }
 
                 return null;
@@ -90,6 +104,7 @@ namespace Automatica.Core.EF.Models
                         break;
                     case RuleInterfaceParameterDataType.Timer:
                     case RuleInterfaceParameterDataType.Calendar:
+                    case RuleInterfaceParameterDataType.Controls:
                         if (value is string strValue)
                         {
                             ValueString = strValue;

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Automatica.Core.Model;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
 {
@@ -112,8 +113,10 @@ namespace Automatica.Core.EF.Models
 
         [PropertyTemplateType("CustomAction")]
         CustomAction = 500,
-        
 
+
+        [PropertyTemplateType("Controls")]
+        Controls = 600,
 
 
 
@@ -185,6 +188,20 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.ImportData:
                     case PropertyTemplateType.LearnMode:
                     case PropertyTemplateType.CustomAction:
+                        return null;
+                    case PropertyTemplateType.Controls:
+                        if (!String.IsNullOrEmpty(ValueString))
+                        {
+                            try
+                            {
+                                return JsonConvert.DeserializeObject<ControlConfigurationBase>(ValueString);
+                            }
+                            catch
+                            {
+                                return null;
+                            }
+                        }
+
                         return null;
                     case PropertyTemplateType.Invalid:
                         return "INVALID";
@@ -324,6 +341,17 @@ namespace Automatica.Core.EF.Models
                             {
                                 ValueLong = Convert.ToInt64(ValueDouble);
                             }
+                        }
+
+                        break;
+                    case PropertyTemplateType.Controls:
+                        if (value is string strValueJson)
+                        {
+                            ValueString = strValueJson;
+                        }
+                        else
+                        {
+                            ValueString = JsonConvert.SerializeObject(value);
                         }
 
                         break;

@@ -17,7 +17,8 @@ namespace Automatica.Core.EF.Models
         Color = 6,
         Enum = 7,
         Bool = 8,
-        Calendar = 9
+        Calendar = 9,
+        Controls = 10
     }
 
     public class TimerPropertyData : TypedObject
