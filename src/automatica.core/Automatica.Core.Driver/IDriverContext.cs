@@ -2,6 +2,7 @@
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
+using Automatica.Core.Control;
 using Automatica.Core.Driver.Discovery;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
@@ -82,6 +83,12 @@ namespace Automatica.Core.Driver
         ITunnelingProvider TunnelingProvider { get; }
 
         IZeroconfDiscovery ZeroconfDiscovery { get; }
+
+
+        /// <summary>
+        /// Provides the control context
+        /// </summary>
+        IControlContext ControlContext { get; }
 
         IDriverContext Copy(NodeInstance node, ILogger logger);
     }

@@ -38,6 +38,7 @@ using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.Control;
 using Automatica.Core.Control.Cache;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.RemoteConnect;
@@ -110,6 +111,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly ILogicPageCache _logicPageCache;
 
         private readonly IControlCache _controlCache;
+        private readonly IControlContext _controlContext;
 
         private int _satelliteInstanceCount;
 
@@ -192,6 +194,7 @@ namespace Automatica.Core.Runtime.Core
             _logicPageCache = services.GetRequiredService<ILogicPageCache>();
 
             _controlCache = services.GetRequiredService<IControlCache>();
+            _controlContext = services.GetRequiredService<IControlContext>();
             InitInternals();
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
@@ -691,7 +694,8 @@ namespace Automatica.Core.Runtime.Core
                 _ruleInstanceVisuNotify, 
                 logger,
                 _serviceProvider.GetRequiredService<IServerCloudApi>(), 
-                _licenseContext
+                _licenseContext,
+                _controlContext
                 );
 
             var rule = factory.CreateLogicInstance(ruleContext);
@@ -890,6 +894,7 @@ namespace Automatica.Core.Runtime.Core
                 _licenseContext, 
                 _loggerFactory, 
                 _serviceProvider,
+                _controlContext,
                 false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);

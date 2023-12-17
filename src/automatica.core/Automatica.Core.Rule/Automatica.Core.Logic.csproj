@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Control\Automatica.Core.Control.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
   </ItemGroup>
 </Project>

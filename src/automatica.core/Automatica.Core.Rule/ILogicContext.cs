@@ -4,6 +4,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
+using Automatica.Core.Control;
 
 [assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
 namespace Automatica.Core.Logic
@@ -47,5 +48,10 @@ namespace Automatica.Core.Logic
         /// Gives information about the current used license
         /// </summary>
         ILicenseContract LicenseContract { get; }
+
+        /// <summary>
+        /// Provides the control context
+        /// </summary>
+        IControlContext ControlContext { get; }
     }
 }

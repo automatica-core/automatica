@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Control;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Automatica.Core.UnitTests.Base.Common;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
 
 namespace Automatica.Core.UnitTests.Base.Logics
@@ -33,6 +35,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
             Notify = new LogicInstanceVisuNotifyMock();
             Dispatcher = dispatcher;
             Factory = factory;
+            ControlContext = new Mock<IControlContext>().Object;
         }
         public RuleInstance RuleInstance { get; set; }
         public IDispatcher Dispatcher { get; }
@@ -44,6 +47,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public IServerCloudApi CloudApi => new CloudApiMock();
         public ILicenseContract LicenseContract => new LicenseContractMock();
 
+        public IControlContext ControlContext { get; }
     }
 
    

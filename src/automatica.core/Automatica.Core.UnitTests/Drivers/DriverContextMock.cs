@@ -1,7 +1,9 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System.Drawing;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
+using Automatica.Core.Control;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.Discovery;
 using Automatica.Core.Driver.LeanMode;
@@ -11,6 +13,7 @@ using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Drivers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
 namespace Automatica.Core.UnitTests.Base.Drivers
 {
@@ -26,6 +29,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             LoggerFactory = loggerFactory;
             Factory = factory;
             TunnelingProvider = new TunnelingProviderMock();
+            ControlContext = new Mock<IControlContext>().Object;
         }
 
         public NodeInstance NodeInstance { get; }
@@ -45,6 +49,8 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public ILoggerFactory LoggerFactory { get; }
         public ITunnelingProvider TunnelingProvider { get; }
         public IZeroconfDiscovery ZeroconfDiscovery { get; }
+
+        public IControlContext ControlContext { get; }
 
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {

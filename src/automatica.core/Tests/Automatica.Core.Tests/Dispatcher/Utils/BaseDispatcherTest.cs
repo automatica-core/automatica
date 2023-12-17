@@ -1,5 +1,6 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Cache;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
@@ -32,7 +33,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 
             Dispatcher = dispatcher;
 
-            LogicInstancesStore = new LogicInstanceStore(new Mock<ILogicInstanceCache>().Object);
+            LogicInstancesStore = new LogicInstanceStore(new Mock<ILogicInstanceCache>().Object, new Mock<IControlCache>().Object);
             DriverNodesStore = new DriverNodesStore();
             NodeInstanceCache = new NodeInstanceCacheMock();
             LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
