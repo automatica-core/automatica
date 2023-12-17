@@ -13,6 +13,8 @@ namespace Automatica.Core.Internals.Cache
         private bool _initialized = false;
         private readonly object _lock = new object();
 
+        public bool Initialized => _initialized;
+
         protected AbstractCache(IConfiguration configuration)
         {
             _configuration = configuration;

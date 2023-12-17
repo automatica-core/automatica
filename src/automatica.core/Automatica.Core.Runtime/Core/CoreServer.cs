@@ -38,6 +38,7 @@ using Automatica.Core.Runtime.Abstraction.Remote;
 using Automatica.Core.Runtime.Core.Plugins;
 using Automatica.Core.Runtime.RemoteNode;
 using Automatica.Core.Base.Logger;
+using Automatica.Core.Control.Cache;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Core.Runtime.Recorder.Abstraction;
@@ -107,6 +108,8 @@ namespace Automatica.Core.Runtime.Core
         private readonly ITrendingContext _trendingContext;
         private readonly INotifyDriver _notifyDriver;
         private readonly ILogicPageCache _logicPageCache;
+
+        private readonly IControlCache _controlCache;
 
         private int _satelliteInstanceCount;
 
@@ -187,6 +190,8 @@ namespace Automatica.Core.Runtime.Core
 
             _remoteConnectService = services.GetRequiredService<IRemoteConnectService>();
             _logicPageCache = services.GetRequiredService<ILogicPageCache>();
+
+            _controlCache = services.GetRequiredService<IControlCache>();
             InitInternals();
 
             AppDomain currentDomain = AppDomain.CurrentDomain;

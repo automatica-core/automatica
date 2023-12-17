@@ -24,4 +24,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
     <PackageReference Include="Standard.Licensing" Version="1.1.5" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cache\NewFolder\" />
+  </ItemGroup>
 </Project>

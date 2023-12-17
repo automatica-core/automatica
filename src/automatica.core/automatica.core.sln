@@ -75,7 +75,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.EF.Backup.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.EF.Backup", "Automatica.Core.EF.Backup\Automatica.Core.EF.Backup.csproj", "{F9DCFB7A-4079-45B6-A060-7256CD52E815}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.EF.Backup.SqLite", "Automatica.Core.EF.Backup.SqLite\Automatica.Core.EF.Backup.SqLite.csproj", "{64D3EEF4-E118-4F36-8263-3AC94C2A0535}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automatica.Core.EF.Backup.SqLite", "Automatica.Core.EF.Backup.SqLite\Automatica.Core.EF.Backup.SqLite.csproj", "{64D3EEF4-E118-4F36-8263-3AC94C2A0535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatica.Core.Control", "Automatica.Core.Control\Automatica.Core.Control.csproj", "{55C5A921-2C64-4B93-8754-00CFF80630AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -765,6 +767,30 @@ Global
 		{64D3EEF4-E118-4F36-8263-3AC94C2A0535}.Release|x64.Build.0 = Release|Any CPU
 		{64D3EEF4-E118-4F36-8263-3AC94C2A0535}.Release|x86.ActiveCfg = Release|Any CPU
 		{64D3EEF4-E118-4F36-8263-3AC94C2A0535}.Release|x86.Build.0 = Release|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Debug|x64.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Debug|x86.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugLocal|x64.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugLocal|x64.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugLocal|x86.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugLocal|x86.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugTests|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugTests|Any CPU.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugTests|x64.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugTests|x64.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugTests|x86.ActiveCfg = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.DebugTests|x86.Build.0 = Debug|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Release|x64.ActiveCfg = Release|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Release|x64.Build.0 = Release|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Release|x86.ActiveCfg = Release|Any CPU
+		{55C5A921-2C64-4B93-8754-00CFF80630AE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -801,6 +827,7 @@ Global
 		{F98C0E3B-1926-46FE-A477-5F1F12CEB8F9} = {CA4A8805-88B4-4759-B4E7-B8FAEC6B2D61}
 		{F9DCFB7A-4079-45B6-A060-7256CD52E815} = {CA4A8805-88B4-4759-B4E7-B8FAEC6B2D61}
 		{64D3EEF4-E118-4F36-8263-3AC94C2A0535} = {CA4A8805-88B4-4759-B4E7-B8FAEC6B2D61}
+		{55C5A921-2C64-4B93-8754-00CFF80630AE} = {AB29E770-A012-4773-823B-51F696E3B4F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FBBCDCF-EF03-4621-9894-35C829FA855F}

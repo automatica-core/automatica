@@ -1,6 +1,9 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Control;
+using Automatica.Core.Control.Cache;
 using Automatica.Core.Internals.Cache.Common;
+using Automatica.Core.Internals.Cache.Control;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Cloud;
@@ -29,6 +32,8 @@ namespace Automatica.Core.Internals
             services.AddSingleton<IUserCache, UserCache>();
             services.AddSingleton<IUserGroupsCache, UserGroupsCache>();
 
+            services.AddSingleton<IControlCache, ControlCache>();
+
 
             services.AddSingleton<ICategoryCache, CategoryCache>();
             services.AddSingleton<ICategoryGroupCache, CategoryGroupCache>();
@@ -54,6 +59,8 @@ namespace Automatica.Core.Internals
             services.AddTransient<ITextToSpeechApi>(a => a.GetRequiredService<TextToSpeechApi>());
 
             services.AddTransient<SettingsFactory>();
+
+            services.AddControlContext();
         }
     }
 }

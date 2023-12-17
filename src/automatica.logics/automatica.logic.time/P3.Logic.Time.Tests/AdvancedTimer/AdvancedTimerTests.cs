@@ -213,14 +213,12 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
                 }
             };
             await Logic.Start();
-            await Task.Delay(2500);
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
             Assert.Equal(1, values.Count);
             //Assert.Equal(true, values.First().Value.Value);
 
-            await Task.Delay(2500);
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
