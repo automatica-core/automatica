@@ -36,6 +36,7 @@ import { NodeInstanceImportSerivce } from "./node-instance-ets-import/node-insta
 import { Router } from "@angular/router";
 import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props/virtual-generic-property-instance";
 import { CalendarPropertyData } from "src/app/base/model/calendar-property-data";
+import { ControlsService } from "src/app/services/controls.service";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -335,7 +336,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private ruleEngineService: LogicEngineService,
     private changeDetection: ChangeDetectorRef,
     private router: Router,
-    private nodeInstanceImportService: NodeInstanceImportSerivce) {
+    private nodeInstanceImportService: NodeInstanceImportSerivce,
+    private controlsService: ControlsService) {
     super(notify, translate, appService);
   }
 

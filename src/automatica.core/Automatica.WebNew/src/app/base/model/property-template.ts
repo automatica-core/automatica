@@ -53,6 +53,8 @@ export enum PropertyTemplateType {
     MultiSelect = 300,
 
     CustomAction = 500,
+    
+    Controls = 600,
 
     Invalid = 2147483647
 }
