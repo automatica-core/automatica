@@ -2,6 +2,6 @@
 {
     public interface ITypedObject
     {
-        public string TypeInfo { get; }
+        string TypeInfo { get; }
     }
 }
