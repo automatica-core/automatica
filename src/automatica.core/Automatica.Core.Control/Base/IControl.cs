@@ -4,9 +4,9 @@ namespace Automatica.Core.Control.Base
 {
     public interface IControl : ITypedObject
     {
-        public Guid Id { get;  }
-        public string Name { get; }
+        Guid Id { get;  }
+        string Name { get; }
 
-        public new string TypeInfo => "Control";
+        string ITypedObject.TypeInfo => "Control";
     }
 }
