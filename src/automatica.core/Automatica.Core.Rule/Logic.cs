@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.Logic
 {
@@ -34,8 +35,9 @@ namespace Automatica.Core.Logic
         /// <summary>
         /// Returns the given instance of the <see cref="ILogicContext"/>
         /// </summary>
+        [JsonIgnore]
         public ILogicContext Context { get; }
-
+        [JsonIgnore]
         public virtual bool IgnoreDuplicateValues => false;
 
 
