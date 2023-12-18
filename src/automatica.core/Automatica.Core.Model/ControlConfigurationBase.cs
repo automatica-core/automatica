@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Automatica.Core.Model
 {
-    public class ControlConfigurationBase
+    public class ControlConfigurationBase : TypedObject
     {
         [JsonProperty("switches")]
         public List<Guid> Switches { get; set; } = new();

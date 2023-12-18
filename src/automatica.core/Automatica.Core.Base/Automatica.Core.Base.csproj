@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>8.1.0.0</Version>
+    <Version>8.2.0.0</Version>
     <Configurations>Debug;Release</Configurations>
     <ProjectGuid>EFBC4EED-183B-4E60-8E6D-A1753CBE42FA</ProjectGuid>
     <LangVersion>latest</LangVersion>

@@ -60,6 +60,9 @@ namespace P3.Driver.HomeKitFactory
                 "APPLE_HOMEKIT_SERVER.CLEAN_PAIRINGS.DESCRIPTION", ClearPairingsKey, PropertyTemplateType.CustomAction,
                 DriverGuid, "APPLE_HOMEKIT_SERVER.PAIRING", true, true, null, null, 1, 1);
 
+            factory.CreatePropertyTemplate(new Guid("0a441a62-6a1c-46ca-b6a0-b9aa5451e81e"), "COMMON.PROPERTY.CONTROLS.NAME", "COMMON.PROPERTY.CONTROLS.DESCRIPTION", "controls",
+                PropertyTemplateType.Controls, DriverGuid, "COMMON.CATEGORY.CONTROLS", true, false, null, null, 0, 0);
+
             CreateLight(factory);
             CreatePowerOutlet(factory);
             CreateContactSensor(factory);
