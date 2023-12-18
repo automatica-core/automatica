@@ -14,6 +14,7 @@
     <Compile Include="..\Automatica.Core.Model\Models\User\UserGroup.cs" Link="Models\User\UserGroup.cs" />
     <Compile Include="..\Automatica.Core.Model\Models\User\UserGroup2Role.cs" Link="Models\User\UserGroup2Role.cs" />
     <Compile Include="..\Automatica.Core.Model\TypedObject.cs" Link="TypedObject.cs" />
+    <Compile Include="..\Automatica.Core.Model\ITypedObject.cs" Link="ITypedObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\User\" />
