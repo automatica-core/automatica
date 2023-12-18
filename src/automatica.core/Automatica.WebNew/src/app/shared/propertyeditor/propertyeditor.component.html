@@ -283,6 +283,12 @@
                         (click)="onCalendarEditClick($event, data.data)"></dx-button>
                 </ng-container>
 
+                <ng-container *ngSwitchCase="PropertyTemplateType.Controls">
+                    <dx-button #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
+                        width="100%" text="{{ 'COMMON.EDIT' | translateAsync }}"
+                        (click)="onControlsClick($event, data.data)"></dx-button>
+                </ng-container>
+
                 <ng-container *ngSwitchCase="PropertyTemplateType.Time">
                     <dx-date-box #control [elementAttr]="{ uid: data.data.ObjId }" id="control-{{data.data.ObjId}}"
                         [(value)]="data.data.Value" type="time" [readOnly]="data.data.IsReadonly"
@@ -315,12 +321,19 @@
     </dx-data-grid>
 </div>
 
+<dx-popup *ngIf="controlsPopupVisible" #controlsPopup width="400" height="80%" [showTitle]="true"
+    [title]="'COMMON.PROPERTY.CONTROLS.NAME' | translateAsync" [visible]="controlsPopupVisible"
+    (onHiding)="onControlsPopupClosing($event, true)">
+    <dx-list #list [dataSource]="availableControlsList" [height]="400" [selectionMode]="'all'" keyExpr="Id" displayExpr="Name"
+        [showSelectionControls]="true" [(selectedItemKeys)]="controlsEditValue.All" [selectByClick]="true"></dx-list>
+</dx-popup>
+
 <dx-popup *ngIf="calendarEditPopupVisible" #calendarEditPopup width="80%" height="80%" [showTitle]="true"
     [title]="'COMMON.PROPERTY.CALENDAR.NAME' | translateAsync" [visible]="calendarEditPopupVisible"
     (onHiding)="onCalendarEditPopupClosing($event, true)">
     <dx-scheduler [dataSource]="calendarEditValue.Value" [views]="['day', 'week', 'month']" currentView="week"
         [currentDate]="currentDate" [startDayHour]="0" [height]="'100%'" textExpr="Text" startDateExpr="StartDate"
-        endDateExpr="EndDate" allDayExpr="AllDay" recurrenceRuleExpr="RecurrenceRule" descriptionExpr="Description" 
+        endDateExpr="EndDate" allDayExpr="AllDay" recurrenceRuleExpr="RecurrenceRule" descriptionExpr="Description"
         recurrenceExceptionExpr="RecurrenceException">
         <dxo-editing [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true" [allowResizing]="true"
             [allowDragging]="true"></dxo-editing>

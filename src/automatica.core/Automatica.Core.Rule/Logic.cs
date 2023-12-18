@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@ namespace Automatica.Core.Logic
     /// <summary>
     /// Base implementation of <see cref="ILogic"/>
     /// </summary>
-    public abstract class Logic : ILogic
+    public abstract class Logic : TypedObject, ILogic
     {
         private readonly Dictionary<RuleInterfaceInstance, object> _valueDictionary = new();
 
@@ -217,7 +218,7 @@ namespace Automatica.Core.Logic
         }
 
         /// <summary>
-        /// Internal method to notify a parameter value has changed, if the parameter changed needs no notify a dispatch of a value, use the <see cref="Context.Dispatcher.DispatchValue"> DispatchValue</see>
+        /// Internal method to notify a parameter value has changed, if the parameter changed needs no notify a dispatch of a value, use the <see cref="DispatchValue"> DispatchValue</see>
         /// </summary>
         /// <param name="instance">The <see cref="RuleInterfaceInstance"/> instance</param>
         /// <param name="source">The source who dispatched the value (<see cref="IDispatchable"/>)</param>
@@ -241,5 +242,7 @@ namespace Automatica.Core.Logic
                 value
             };
         }
+
+        public sealed override string TypeInfo => "Control";
     }
 }

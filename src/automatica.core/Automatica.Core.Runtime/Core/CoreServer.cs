@@ -682,7 +682,7 @@ namespace Automatica.Core.Runtime.Core
             var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
             var factory = _logicFactoryStore.Get(ruleInstance.This2RuleTemplate);
 
-            if (factory == null)
+             if (factory == null)
             {
                 _logger.LogError($"Could not find logic factory for {ruleInstance.This2RuleTemplateNavigation.Name}");
                 throw new ArgumentException("Could not find factory for logic instance..");

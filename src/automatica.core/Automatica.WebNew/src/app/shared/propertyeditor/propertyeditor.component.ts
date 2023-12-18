@@ -37,6 +37,7 @@ import { Router } from "@angular/router";
 import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props/virtual-generic-property-instance";
 import { CalendarPropertyData } from "src/app/base/model/calendar-property-data";
 import { ControlsService } from "src/app/services/controls.service";
+import { ControlConfiguration } from "src/app/base/model/control-configuration";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -182,6 +183,12 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public calendarEditDataSource: any;
   public currentDate = Date.now();
 
+  @ViewChild("controlsPopup")
+  popupControls: DxPopupComponent;
+  controlsPopupVisible: boolean = false;
+  controlsEditValue: ControlConfiguration;
+
+
   public selectedProperty: PropertyInstance = void 0;
 
   @ViewChild("nodeInstanceImport")
@@ -196,10 +203,11 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public saveLearnedNodes = new EventEmitter<any>();
 
   @Output()
-  public unselectItem = new EventEmitter<any>(); 
+  public unselectItem = new EventEmitter<any>();
 
   learnModeSub: any;
   calendarEditSource: IPropertyModel;
+  availableControlsList: import("c:/dev/automatica.core/automatica/src/automatica.core/Automatica.WebNew/src/app/base/model/control").Control[];
 
   @Input()
   set item(value: IPropertyModel) {
@@ -477,7 +485,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if (ok) {
       this.item = this.calendarEditSource;
       this.selectedProperty.Value = this.calendarEditValue;
-      
+
 
     }
     this.valueChanged($event, { data: this.selectedProperty });
@@ -728,5 +736,32 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  onControlsPopupClosing($event) {
+    this.controlsPopupVisible = false;
+
+
+    this.selectedProperty.Value = this.controlsEditValue;
+    this.valueChanged($event, { data: this.selectedProperty });
+
+    this.selectedProperty = void 0;
+    this.controlsEditValue = void 0;
+  }
+
+  async onControlsClick($event, prop: PropertyInstance) {
+    this.selectedProperty = prop;
+
+    this.availableControlsList = await this.controlsService.getAll();
+
+    this.controlsPopupVisible = true;
+    this.controlsEditValue = new ControlConfiguration();
+
+    if (prop.Value && prop.Value instanceof ControlConfiguration) {
+      this.controlsEditValue = prop.Value.copy() as ControlConfiguration;
+    }
+
+    this.changeDetection.detectChanges();
+
   }
 }

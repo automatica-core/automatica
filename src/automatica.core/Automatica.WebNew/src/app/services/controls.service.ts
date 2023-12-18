@@ -12,7 +12,7 @@ export class ControlsService extends BaseService {
         super(http, pRouter, translationService);
     }
 
-    getCategoryGroups(): Promise<Control[]> {
+    getAll(): Promise<Control[]> {
         return super.getMultiple<Control>("controls/all");
     }
 }

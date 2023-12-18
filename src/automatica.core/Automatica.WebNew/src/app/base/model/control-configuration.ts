@@ -13,6 +13,8 @@ export class ControlConfiguration extends BaseModel {
     @JsonProperty()
     public Blinds: string[] = [];
 
+    @JsonProperty()
+    public All: string[] = [];
    
     constructor() {
         super();
@@ -20,7 +22,7 @@ export class ControlConfiguration extends BaseModel {
       
     }
     protected afterFromJson() {
-      
+        this.All = [...this.Switches, ...this.Dimmer, ...this.Blinds];
     }
 
 

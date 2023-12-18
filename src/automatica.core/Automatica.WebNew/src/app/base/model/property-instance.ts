@@ -8,6 +8,7 @@ import { PropertyConstraintConditionType } from "./property-template-constraint-
 ;
 import { Guid } from "../utils/Guid";
 import { TimerPropertyData } from "./timer-property-data";
+import { ControlConfiguration } from "./control-configuration";
 
 class PropertyInstanceMetaHelper {
     public static validate(propertyInstance: PropertyInstance): boolean {
@@ -386,12 +387,12 @@ export class PropertyInstance extends BaseModel {
             case PropertyTemplateType.Stopbits:
             case PropertyTemplateType.Numeric:
                 return this.ValueDouble;
-            case PropertyTemplateType.Timer: {
-                const timerProperty = new TimerPropertyData();
+            case PropertyTemplateType.Controls: {
+                const controlsProperty = new ControlConfiguration();
                 if (this.ValueString) {
-                    timerProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
+                    controlsProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
                 }
-                return timerProperty;
+                return controlsProperty;
             }
         }
     }
@@ -466,9 +467,9 @@ export class PropertyInstance extends BaseModel {
                     this.ValueDouble = 0;
                 }
                 break;
-            case PropertyTemplateType.Timer:
+            case PropertyTemplateType.Controls:
                 {
-                    if (value instanceof TimerPropertyData) {
+                    if (value instanceof ControlConfiguration) {
                         this.ValueString = JSON.stringify(value.toJson());
                     } else {
                         this.ValueString = void 0;

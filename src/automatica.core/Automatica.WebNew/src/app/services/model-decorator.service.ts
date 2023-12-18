@@ -20,6 +20,8 @@ import { Trending } from "../base/model/trending/trending";
 import { Satellite } from "../base/model/satellites/satellite";
 import { VisualizationDataFacade } from "../base/model/visualization-data-facade";
 import { CalendarPropertyData, CalendarPropertyDataEntry } from "../base/model/calendar-property-data";
+import { ControlConfiguration } from "../base/model/control-configuration";
+import { Control } from "../base/model/control";
 
 @Injectable()
 export class ModelDecoratorService {
@@ -59,6 +61,8 @@ export class ModelDecoratorService {
         new CalendarPropertyData();
         new CalendarPropertyDataEntry();
 
+        new Control();
+        new ControlConfiguration();
         // tslint:enable:no-unused-expression
     }
 }
