@@ -1,1 +1,32 @@
-{"Automatica":{"manifest-version":{"Minor":1,"Major":0,"Build":0,"Revision":0},"plugin-version":{"Minor":1,"Major":0,"Build":0,"Revision":0},"PluginGuid":"fc7a4dbb-5657-4ef2-b906-adc501c4cec0","Name":"P3.Logic.Operations","ComponentName":"Operations","Type":"rule","Output":"P3.Logic.Operations.dll","Resources":[],"Dependencies":[],"ProjectPage":"https://github.com/automatica-core/automatica.logic.operations","MinCoreServerVersion":{"Minor":0,"Major":8,"Build":0,"Revision":1655},"MandatoryLicenseFeatures":[],"OptionalLicenseFeatures":[]}}
+{
+  "Automatica": {
+    "manifest-version": {
+      "Minor": 1,
+      "Major": 0,
+      "Build": 0,
+      "Revision": 0
+    },
+    "plugin-version": {
+      "Minor": 1,
+      "Major": 0,
+      "Build": 0,
+      "Revision": 0
+    },
+    "PluginGuid": "fc7a4dbb-5657-4ef2-b906-adc501c4cec0",
+    "Name": "P3.Logic.Operations",
+    "ComponentName": "Operations",
+    "Type": "rule",
+    "Output": "P3.Logic.Operations.dll",
+    "Resources": [],
+    "Dependencies": [],
+    "ProjectPage": "https://github.com/automatica-core/automatica.logic.operations",
+    "MinCoreServerVersion": {
+      "Minor": 1,
+      "Major": 8,
+      "Build": 0,
+      "Revision": 1699
+    },
+    "MandatoryLicenseFeatures": [],
+    "OptionalLicenseFeatures": []
+  }
+}
