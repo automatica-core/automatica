@@ -1,6 +1,5 @@
 ﻿using Automatica.Core.Control.Base;
 using Automatica.Core.Control.Cache;
-using Automatica.Core.Control.Configuration;
 
 namespace Automatica.Core.Control
 {
@@ -13,11 +12,7 @@ namespace Automatica.Core.Control
             _cache = cache;
         }
 
-        public Task<List<IControl>> GetAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
-        {
-            var list = configuration.Controls.Select(x => x.Id).ToList();
-            return GetAsync(list, cancellationToken);
-        }
+    
 
         public Task<List<IControl>> GetAsync(List<Guid> switches, CancellationToken cancellationToken = default)
         {
@@ -41,12 +36,7 @@ namespace Automatica.Core.Control
             return Task.FromResult(controlContext);
         }
 
-        public Task<List<ISwitch>> GetSwitchesAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
-        {
-           var list = configuration.Controls.Where(a => a is ISwitch).Select(x => x.Id).ToList();
-           return GetSwitchesAsync(list, cancellationToken);
-        }
-
+       
         public Task<List<ISwitch>> GetSwitchesAsync(List<Guid> switches, CancellationToken cancellationToken = default)
         {
             var ret = new List<ISwitch>();
@@ -68,12 +58,7 @@ namespace Automatica.Core.Control
             return Task.FromResult(switchContext as ISwitch);
         }
 
-        public Task<List<IDimmer>> GetDimmerAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
-        {
-            var list = configuration.Controls.Where(a => a is IDimmer).Select(x => x.Id).ToList();
-            return GetDimmerAsync(list, cancellationToken);
-        }
-
+       
         public Task<List<IDimmer>> GetDimmerAsync(List<Guid> switches, CancellationToken cancellationToken = default)
         {
             var ret = new List<IDimmer>();
@@ -95,12 +80,7 @@ namespace Automatica.Core.Control
             return Task.FromResult(switchContext as IDimmer);
         }
 
-        public Task<List<IBlind>> GetBlindsAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
-        {
-            var list = configuration.Controls.Where(a => a is IBlind).Select(x => x.Id).ToList();
-            return GetBlindsAsync(list, cancellationToken);
-        }
-
+     
         public Task<List<IBlind>> GetBlindsAsync(List<Guid> switches, CancellationToken cancellationToken = default)
         {
             var ret = new List<IBlind>();

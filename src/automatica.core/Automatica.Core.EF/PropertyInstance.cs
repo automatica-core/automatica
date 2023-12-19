@@ -194,7 +194,7 @@ namespace Automatica.Core.EF.Models
                         {
                             try
                             {
-                                return JsonConvert.DeserializeObject<ControlConfigurationBase>(ValueString);
+                                return JsonConvert.DeserializeObject<ControlConfiguration>(ValueString);
                             }
                             catch
                             {
