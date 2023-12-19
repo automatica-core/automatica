@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList } from "@angular/core";
-import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
 import { L10nTranslationService } from "angular-l10n";
-import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent, DxDropDownBoxComponent, DxComponent, DxTextBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -38,7 +37,7 @@ import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props
 import { CalendarPropertyData } from "src/app/base/model/calendar-property-data";
 import { ControlsService } from "src/app/services/controls.service";
 import { ControlConfiguration } from "src/app/base/model/control-configuration";
-import { Control, ControlGrouped } from "c:/dev/automatica.core/automatica/src/automatica.core/Automatica.WebNew/src/app/base/model/control";
+import { Control, ControlGrouped } from "src/app/base/model/control";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
