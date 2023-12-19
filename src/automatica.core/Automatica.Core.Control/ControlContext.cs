@@ -12,7 +12,35 @@ namespace Automatica.Core.Control
         {
             _cache = cache;
         }
-        
+
+        public Task<List<IControl>> GetAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
+        {
+            var list = configuration.Controls.Select(x => x.Id).ToList();
+            return GetAsync(list, cancellationToken);
+        }
+
+        public Task<List<IControl>> GetAsync(List<Guid> switches, CancellationToken cancellationToken = default)
+        {
+            var ret = new List<IControl>();
+            foreach (var @switch in switches)
+            {
+                var controlContext = _cache.Get(@switch);
+                if(controlContext != null)
+                {
+                    ret.Add(controlContext);
+                }
+                
+            }
+
+            return Task.FromResult(ret);
+        }
+
+        public Task<IControl> GetAsync(Guid controlId, CancellationToken cancellationToken = default)
+        {
+            var controlContext = _cache.Get(controlId);
+            return Task.FromResult(controlContext);
+        }
+
         public Task<List<ISwitch>> GetSwitchesAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
         {
            var list = configuration.Controls.Where(a => a is ISwitch).Select(x => x.Id).ToList();
