@@ -15,7 +15,7 @@ namespace Automatica.Core.Control
         
         public Task<List<ISwitch>> GetSwitchesAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
         {
-           var list = configuration.Switches.Select(x => x.Id).ToList();
+           var list = configuration.Controls.Where(a => a is ISwitch).Select(x => x.Id).ToList();
            return GetSwitchesAsync(list, cancellationToken);
         }
 
@@ -42,7 +42,7 @@ namespace Automatica.Core.Control
 
         public Task<List<IDimmer>> GetDimmerAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
         {
-            var list = configuration.Switches.Select(x => x.Id).ToList();
+            var list = configuration.Controls.Where(a => a is IDimmer).Select(x => x.Id).ToList();
             return GetDimmerAsync(list, cancellationToken);
         }
 
@@ -69,7 +69,7 @@ namespace Automatica.Core.Control
 
         public Task<List<IBlind>> GetBlindsAsync(ControlConfiguration configuration, CancellationToken cancellationToken = default)
         {
-            var list = configuration.Switches.Select(x => x.Id).ToList();
+            var list = configuration.Controls.Where(a => a is IBlind).Select(x => x.Id).ToList();
             return GetBlindsAsync(list, cancellationToken);
         }
 

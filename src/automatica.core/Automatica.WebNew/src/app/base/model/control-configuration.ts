@@ -1,20 +1,13 @@
 import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from "./base-model"
 
 
+
 @Model()
 export class ControlConfiguration extends BaseModel {
 
-    @JsonProperty()
-    public Switches: string[] = [];
 
     @JsonProperty()
-    public Dimmer: string[] = [];
-
-    @JsonProperty()
-    public Blinds: string[] = [];
-
-    @JsonProperty()
-    public All: string[] = [];
+    public Controls: string[] = [];
    
     constructor() {
         super();
@@ -22,7 +15,6 @@ export class ControlConfiguration extends BaseModel {
       
     }
     protected afterFromJson() {
-        this.All = [...this.Switches, ...this.Dimmer, ...this.Blinds];
     }
 
 

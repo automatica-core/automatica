@@ -1,5 +1,10 @@
-import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from "./base-model"
+import { BaseModel, JsonFieldInfo, JsonProperty, Model } from "./base-model"
 
+
+export class ControlGrouped {
+    key: string;
+    items: Control[];
+  }
 
 @Model()
 export class Control extends BaseModel {
@@ -10,7 +15,9 @@ export class Control extends BaseModel {
     @JsonProperty()
     public Name: string;
 
-   
+    @JsonProperty()
+    public Key: string;
+
     constructor() {
         super();
 

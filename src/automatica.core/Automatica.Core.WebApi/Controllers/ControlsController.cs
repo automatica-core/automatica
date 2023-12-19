@@ -1,4 +1,5 @@
-﻿using Automatica.Core.Control.Cache;
+﻿using System;
+using Automatica.Core.Control.Cache;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,26 @@ using Automatica.Core.Control.Base;
 
 namespace Automatica.Core.WebApi.Controllers
 {
+    public class ControlInfo : IControl
+    {
+        public ControlInfo()
+        {
+            
+        }
+
+        public ControlInfo(IControl control)
+        {
+            Id = control.Id;
+            Name = control.Name;
+            Type = control.GetType().Name;
+        }
+        
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string TypeInfo => "Control";
+    }
+    
     [Route("webapi/controls")]
     public class ControlsController : BaseController
     {
@@ -21,9 +42,17 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("all")]
         [Authorize(Policy = Role.AdminRole)]
-        public IEnumerable<IControl> GetControls()
+        public IEnumerable<ControlInfo> GetControls()
         {
-            return _controlCache.All();
+            var ret = new List<ControlInfo>();
+            var controls = _controlCache.All();
+
+            foreach (var control in controls)
+            {
+                ret.Add(new ControlInfo(control));
+            }
+
+            return ret;
         }
     }
 }

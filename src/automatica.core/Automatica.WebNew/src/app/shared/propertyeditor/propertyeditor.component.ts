@@ -38,6 +38,7 @@ import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props
 import { CalendarPropertyData } from "src/app/base/model/calendar-property-data";
 import { ControlsService } from "src/app/services/controls.service";
 import { ControlConfiguration } from "src/app/base/model/control-configuration";
+import { Control, ControlGrouped } from "c:/dev/automatica.core/automatica/src/automatica.core/Automatica.WebNew/src/app/base/model/control";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -187,7 +188,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   popupControls: DxPopupComponent;
   controlsPopupVisible: boolean = false;
   controlsEditValue: ControlConfiguration;
-
+  controlsGroup: ControlGrouped[] = [];
 
   public selectedProperty: PropertyInstance = void 0;
 
@@ -759,9 +760,26 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     if (prop.Value && prop.Value instanceof ControlConfiguration) {
       this.controlsEditValue = prop.Value.copy() as ControlConfiguration;
+
+      var map = new Map<string, Control[]>();
+
+      for (let control of this.availableControlsList) {
+        if (map.has(control.Key)) {
+          map.set(control.Key, []);
+        }
+        map[control.Key].push(control);
+      }
+
+      this.controlsGroup = [];
+      for(let key of map.keys()) {
+        var group = new ControlGrouped();
+        group.key = key;
+        group.items = map[key];
+        this.controlsGroup.push(group);
+      }
+
+      this.changeDetection.detectChanges();
+
     }
-
-    this.changeDetection.detectChanges();
-
   }
 }
