@@ -763,17 +763,17 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       var map = new Map<string, Control[]>();
 
       for (let control of this.availableControlsList) {
-        if (map.has(control.Key)) {
-          map.set(control.Key, []);
+        if (!map.has(control.Type)) {
+          map.set(control.Type, []);
         }
-        map[control.Key].push(control);
+        map.get(control.Type).push(control);
       }
 
       this.controlsGroup = [];
       for(let key of map.keys()) {
         var group = new ControlGrouped();
         group.key = key;
-        group.items = map[key];
+        group.items = map.get(key);
         this.controlsGroup.push(group);
       }
 

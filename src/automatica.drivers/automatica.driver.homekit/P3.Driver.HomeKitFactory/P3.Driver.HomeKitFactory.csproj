@@ -21,7 +21,7 @@
     <EmbeddedResource Include="Resources\HomeKit-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1704" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1715" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit\P3.Driver.HomeKit.csproj" />

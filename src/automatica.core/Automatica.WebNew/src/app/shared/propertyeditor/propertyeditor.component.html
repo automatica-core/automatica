@@ -325,7 +325,7 @@
     [title]="'COMMON.PROPERTY.CONTROLS.NAME' | translateAsync" [visible]="controlsPopupVisible"
     (onHiding)="onControlsPopupClosing($event, true)">
     <dx-list #list [dataSource]="controlsGroup" [grouped]="true" [height]="400" [selectionMode]="'all'" keyExpr="Id" displayExpr="Name"
-        [showSelectionControls]="true" [(selectedItemKeys)]="controlsEditValue.Switches" [selectByClick]="true"></dx-list>
+        [showSelectionControls]="true" [(selectedItemKeys)]="controlsEditValue.Controls" [selectByClick]="true"></dx-list>
 </dx-popup>
 
 <dx-popup *ngIf="calendarEditPopupVisible" #calendarEditPopup width="80%" height="80%" [showTitle]="true"

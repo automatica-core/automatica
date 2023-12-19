@@ -16,8 +16,10 @@
             {
                 Id = aid
             };
+            
+            a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
+            a2.Services.Add(a2.AccessoryInfo);
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
             a2.Services.Add(CreateLightBulb(a2, 7, name, value));
 
 
@@ -29,8 +31,10 @@
             {
                 Id = aid
             };
+            
+            a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
+            a2.Services.Add(a2.AccessoryInfo);
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
             a2.Services.Add(CreateOutlet(a2, 7, value));
 
 
@@ -43,7 +47,9 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
+            a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
+            a2.Services.Add(a2.AccessoryInfo);
+            
             a2.Services.Add(CreateContactSensor(a2, 7, value));
 
 
@@ -56,8 +62,12 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
-            a2.Services.Add(CreateSwitch(a2, 7, value));
+
+            a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
+            a2.Services.Add(a2.AccessoryInfo);
+            
+            a2.Specific = CreateSwitch(a2, 7, value);
+            a2.Services.Add(a2.Specific);
 
 
             return a2;
@@ -71,7 +81,9 @@
                 Id = aid
             };
 
-            a2.Services.Add(CreateAccessoryInfo(a2, 1, name, manufacturer, serial));
+            a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
+            a2.Services.Add(a2.AccessoryInfo);
+
             a2.Services.Add(CreateTemperatureSensor(a2, 7, value));
 
             return a2;

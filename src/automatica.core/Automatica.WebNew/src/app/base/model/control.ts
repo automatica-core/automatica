@@ -16,7 +16,7 @@ export class Control extends BaseModel {
     public Name: string;
 
     @JsonProperty()
-    public Key: string;
+    public Type: string;
 
     constructor() {
         super();

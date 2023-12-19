@@ -37,33 +37,35 @@ namespace P3.Logic.Operations.Switch
             return new List<ILogicOutputChanged>();
         }
 
-        public override object GetDataForVisu()
-        {
-            return base.GetDataForVisu();
-        }
-
         public Guid Id => Context.RuleInstance.ObjId;
         public string Name => Context.RuleInstance.Name;
+        public Guid InputId => _input.ObjId;
+        public Guid OutputId => _output.ObjId;
         public Task<bool> SwitchAsync(bool state, CancellationToken cancellationToken = new CancellationToken())
         {
+            _value = state;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), _value);
             return Task.FromResult(true);
         }
 
         public Task<bool> SwitchAsync(SwitchState state, CancellationToken cancellationToken = new CancellationToken())
         {
-
+            _value = state == SwitchState.On;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), _value);
             return Task.FromResult(true);
         }
 
         public Task<bool> SwitchOnAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-
+            _value = true;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), _value);
             return Task.FromResult(true);
         }
 
         public Task<bool> SwitchOffAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-
+            _value = false;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_output), _value);
             return Task.FromResult(true);
         }
 

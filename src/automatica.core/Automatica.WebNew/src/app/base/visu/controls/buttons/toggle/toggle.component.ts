@@ -25,6 +25,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
     this.stateType = this.getInterfaceByType(RuleInterfaceType.Status);
     this.inputType = this.getInterfaceByType(RuleInterfaceType.Input);
     this.outputType = this.getInterfaceByType(RuleInterfaceType.Output);
+    
     super.registerEvent(this.dataHub.dispatchValue, async (args) => {
       const nodeId = args[1];
 

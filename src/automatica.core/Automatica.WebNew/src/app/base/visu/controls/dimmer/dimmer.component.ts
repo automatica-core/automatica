@@ -18,7 +18,6 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   private _state: boolean;
   valueInput: RuleInterfaceInstance;
   stateInput: RuleInterfaceInstance;
-  outputType: RuleInterfaceInstance;
 
 
   outputValue: RuleInterfaceInstance;

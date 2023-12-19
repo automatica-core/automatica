@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit;
 using P3.Driver.HomeKit.Hap;
@@ -24,8 +28,11 @@ namespace P3.Driver.HomeKitFactory
 
         private readonly List<Accessory> _accessories = new List<Accessory>();
         private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new Dictionary<Characteristic, List<BaseNode>>();
+        private readonly Dictionary<Characteristic, IControl> _characteristicControlMap = new Dictionary<Characteristic, IControl>();
 
         private readonly AccessoryInstanceIdGenerator _aidGenerator;
+        
+        private readonly List<IControl> _controls = new List<IControl>();
 
         public HomeKitDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -77,6 +84,12 @@ namespace P3.Driver.HomeKitFactory
 
         }
 
+        public override async Task<bool> Init(CancellationToken token = new CancellationToken())
+        {
+           
+            return await base.Init(token);
+        }
+
         public override async Task<bool> Start(CancellationToken token = default)
         {
             _ltpkProperty = GetProperty("ltpk-private");
@@ -115,6 +128,45 @@ namespace P3.Driver.HomeKitFactory
             _server.ValueChanged += ServerOnValueChanged;
 
             await _server.Start();
+            
+            var controlsProperty = GetProperty("controls");
+            if (controlsProperty.Value is ControlConfiguration controlConfig)
+            {
+                foreach (var control in controlConfig.Controls)
+                {
+                    _controls.Add(await DriverContext.ControlContext.GetAsync(control, token));
+                }
+            }
+
+            foreach (var control in _controls)
+            {
+                if (control == null)
+                {
+                    continue;
+                }
+
+                var aid = _aidGenerator.GetNextAidInstance();
+                var accessory = AccessoryFactory.CreateSwitchAccessory(aid, control.Name, "AutomaticaCore",
+                    control.Id.ToString(), false);
+
+                accessory.Id = _server.AddAccessory(accessory);
+                var characteristic = accessory.Specific.Characteristics.First();
+
+                _characteristicControlMap.Add(characteristic, control);
+
+                if (control is ISwitch iSwitch)
+                {
+                    await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.Visualization, iSwitch.InputId,
+                        (dispatchable, value) =>
+                        {
+
+                            characteristic.Value = value.Value;
+
+                            WriteCharacteristic(characteristic);
+
+                        });
+                }
+            }
 
             return await base.Start(token);
         }
@@ -131,12 +183,37 @@ namespace P3.Driver.HomeKitFactory
             return base.CustomAction(actionName, token);
         }
 
-        private void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
+        private async void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
         {
             DriverContext.Logger.LogDebug($"Value changed for {e.Characteristic.Id} to {e.Value}");
             if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
             {
                 value.ForEach(a => a.SetValue(e.Value));
+            }
+            else if (_characteristicControlMap.TryGetValue(e.Characteristic, out var control))
+            {
+                if (control is ISwitch iSwitch)
+                {
+                    if (e.Value is bool bValue)
+                    {
+                        await iSwitch.SwitchAsync(bValue);
+                    }
+                    else if (e.Value is int intValue)
+                    {
+                        await iSwitch.SwitchAsync(intValue == 1);
+                    }
+                    else if (e.Value is double dValue)
+                    {
+                        await iSwitch.SwitchAsync(dValue == 1);
+                    }
+                    else if (e.Value is long lValue)
+                    {
+                        await iSwitch.SwitchAsync(lValue == 1);
+                    }
+                    var dispatchAble = new GenericDispatchableNode($"{control.Name}", iSwitch.OutputId,
+                        DispatchableSource.RuleInstance);
+                    await DriverContext.Dispatcher.DispatchValue(dispatchAble, new DispatchValue(iSwitch.OutputId, DispatchableType.RuleInstance, e.Value, DateTime.Now, DispatchValueSource.Write));
+                }
             }
         }
 
