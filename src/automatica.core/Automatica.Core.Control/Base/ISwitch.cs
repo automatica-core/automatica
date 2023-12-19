@@ -10,6 +10,10 @@
     public interface ISwitch : IControl
     {
         public SwitchState State { get; }
+
+        public Guid InputId { get; set; }
+        public Guid OutputId { get; set; }
+        
         public Task<bool> SwitchAsync(bool state, CancellationToken cancellationToken = default);
         public Task<bool> SwitchAsync(SwitchState state, CancellationToken cancellationToken = default);
 

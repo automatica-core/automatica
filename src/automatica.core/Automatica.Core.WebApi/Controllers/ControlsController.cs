@@ -20,7 +20,22 @@ namespace Automatica.Core.WebApi.Controllers
         {
             Id = control.Id;
             Name = control.Name;
-            Type = control.GetType().Name;
+
+            switch (control)
+            {
+                case IDimmer:
+                    Type = "dimmer";
+                    break;
+                case ISwitch: 
+                    Type = "switch";
+                    break;
+                case IBlind:
+                    Type = "blind";
+                    break;
+                default:
+                    Type = control.GetType().Name;
+                    break;
+            }
         }
         
         public Guid Id { get; set; }

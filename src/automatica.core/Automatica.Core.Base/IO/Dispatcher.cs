@@ -191,9 +191,8 @@ namespace Automatica.Core.Base.IO
             {
                 foreach (var all in _registrationMap)
                 {
-                    if (all.Value.ContainsKey(self.Id))
+                    if (all.Value.TryGetValue(self.Id, out var dispatch))
                     {
-                        var dispatch = all.Value[self.Id];
                         await ExecuteDispatch(self, value, dispatch, dispatchAction);
                     }
                 }
