@@ -207,7 +207,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   learnModeSub: any;
   calendarEditSource: IPropertyModel;
-  availableControlsList: import("c:/dev/automatica.core/automatica/src/automatica.core/Automatica.WebNew/src/app/base/model/control").Control[];
+  availableControlsList: Control[];
 
   @Input()
   set item(value: IPropertyModel) {
