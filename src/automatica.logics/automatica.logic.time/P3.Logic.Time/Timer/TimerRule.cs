@@ -88,16 +88,27 @@ namespace P3.Logic.Time.Timer
                 timerTickTime = (stopTime - nowTime).TotalMilliseconds;
                 if (timerTickTime < 0)
                 {
-                    _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime).TotalMilliseconds;
-                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
+
+                    //timer is negative, tick is the next day!
+                    var nnwTickTime =
+                        (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime)
+                        .TotalMilliseconds + startTime.TotalMilliseconds;
+
+                    _timer.Interval = nnwTickTime;
+                    Context.Logger.LogDebug(
+                        $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
+
+
                     if (isStartup)
                     {
                         Context.Logger.LogInformation($"Start event, set value to {false}");
                         Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
                     }
+
                     _value = false;
                     return;
                 }
+
                 if (isStartup)
                 {
                     Context.Logger.LogInformation($"Start event, set value to {true}");
