@@ -18,7 +18,7 @@ namespace P3.Driver.HomeKitFactory
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
-        public override Version DriverVersion => new Version(1, 0, 0, 0);
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
 
         public override bool InDevelopmentMode => false;
 
@@ -48,6 +48,8 @@ namespace P3.Driver.HomeKitFactory
             factory.CreatePropertyTemplate(new Guid("4085d4eb-11c0-48ff-b005-045020729d85"), "LTSK_PRIVATE", "LTSK_PRIVATE", "ltsk-private",
                 PropertyTemplateType.Text, DriverGuid, "", false, true, null, null, 0, 0);
             factory.CreatePropertyTemplate(new Guid("4bd1b665-61ec-4f43-b80d-ec236983d365"), "LTPK_PRIVATE", "LTPK_PRIVATE", "ltpk-private",
+                PropertyTemplateType.Text, DriverGuid, "", false, true, null, null, 0, 0);
+            factory.CreatePropertyTemplate(new Guid("b91c2de6-150d-41d3-8e83-0625115a406a"), "PAIR_CODE", "PAIR_CODE", "pair-code",
                 PropertyTemplateType.Text, DriverGuid, "", false, true, null, null, 0, 0);
 
             factory.CreatePropertyTemplate(new Guid("c3759cf5-6a9b-4afb-b0e4-32941db684ca"), "CONFIG_VERSION", "CONFIG_VERSION", "config-version",

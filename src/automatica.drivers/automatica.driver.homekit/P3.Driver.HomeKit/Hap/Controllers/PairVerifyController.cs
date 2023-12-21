@@ -67,8 +67,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg02"));
 
                 var encryptedOutput = AeadAlgorithm.ChaCha20Poly1305.Encrypt(
-                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce,
-                    new byte[0], plaintext);
+                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce, Array.Empty<byte>(), plaintext);
 
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 2);
@@ -88,8 +87,8 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var infoRead = Encoding.UTF8.GetBytes("Control-Read-Encryption-Key");
                 var infoWrite = Encoding.UTF8.GetBytes("Control-Write-Encryption-Key");
 
-                session.AccessoryToControllerKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), encSalt, infoRead, 32);
-                session.ControllerToAccessoryKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), encSalt, infoWrite, 32);
+                session.AccessoryToControllerKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret, SharedSecretBlobFormat.RawSharedSecret), encSalt, infoRead, 32);
+                session.ControllerToAccessoryKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret, SharedSecretBlobFormat.RawSharedSecret), encSalt, infoWrite, 32);
 
                 return new PairVerifyReturn
                 {

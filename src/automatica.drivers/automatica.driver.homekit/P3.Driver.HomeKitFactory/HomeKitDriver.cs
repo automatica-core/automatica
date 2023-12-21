@@ -23,6 +23,7 @@ namespace P3.Driver.HomeKitFactory
         private HomeKitServer _server;
         private PropertyInstance _ltskProperty;
         private PropertyInstance _ltpkProperty;
+        private PropertyInstance _pairCodeProperty;
 
         private PairingKeyNode _pairingNode;
 
@@ -94,17 +95,31 @@ namespace P3.Driver.HomeKitFactory
         {
             _ltpkProperty = GetProperty("ltpk-private");
             _ltskProperty = GetProperty("ltsk-private");
+            _pairCodeProperty = GetProperty("pair-code");
 
             var objId = DriverContext.NodeInstance.ObjId.ToString().Replace("-", "");
 
             var homekitId =
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
-            string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
-          
+            var pairCode = "";
+
+            if (String.IsNullOrEmpty(_pairCodeProperty.ValueString))
+            {
+                string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_pairCodeProperty.ObjId, code); //save to database
+                pairCode = code;
+            }
+            else
+            {
+                pairCode = _pairCodeProperty.ValueString;
+            }
+
+
+
             var configProperty = GetPropertyValueInt("config-version");
 
-            if(configProperty <= 0)
+            if (configProperty <= 0)
             {
                 configProperty = 1;
             }
@@ -113,22 +128,24 @@ namespace P3.Driver.HomeKitFactory
 
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty);
 
-            DriverContext.Logger.LogDebug($"Start homekit server with LTSK {_ltskProperty.ValueSlave} and LTPK {_ltpkProperty.ValueSlave}");
-            _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"), DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
-                code, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
+            DriverContext.Logger.LogDebug(
+                $"Start homekit server with LTSK {_ltskProperty.Value} and LTPK {_ltpkProperty.Value}");
+            _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"),
+                DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
+                pairCode, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
 
-            _pairingNode.DispatchRead(code);
+            _pairingNode.DispatchRead(pairCode);
 
             foreach (var accessory in _accessories)
             {
-               accessory.Id = _server.AddAccessory(accessory);
+                accessory.Id = _server.AddAccessory(accessory);
             }
 
             _server.PairingCompleted += ServerOnPairingCompleted;
             _server.ValueChanged += ServerOnValueChanged;
 
             await _server.Start();
-            
+
             var controlsProperty = GetProperty("controls");
             if (controlsProperty.Value is ControlConfiguration controlConfig)
             {

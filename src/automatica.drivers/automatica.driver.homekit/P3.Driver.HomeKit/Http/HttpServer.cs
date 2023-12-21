@@ -59,7 +59,7 @@ namespace P3.Driver.HomeKit.Http
                     while (true)
                     {
                         _logger.LogDebug("Waiting for new tcp connection");
-                        var tcpClient = await _listener.AcceptTcpClientAsync();
+                        var tcpClient = await _listener.AcceptTcpClientAsync(_cts.Token);
 
                         _logger.LogDebug($"New tcp connection from {((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address}");
 
