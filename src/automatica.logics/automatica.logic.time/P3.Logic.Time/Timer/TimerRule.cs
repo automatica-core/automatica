@@ -96,7 +96,7 @@ namespace P3.Logic.Time.Timer
 
                     _timer.Interval = nnwTickTime;
                     Context.Logger.LogDebug(
-                        $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
+                        $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
 
 
                     if (isStartup)
@@ -130,7 +130,7 @@ namespace P3.Logic.Time.Timer
             }
 
             _timer.Interval = timerTickTime;
-            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
+            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
             _timer.Start();
         }
 
@@ -146,6 +146,7 @@ namespace P3.Logic.Time.Timer
             _timer.Stop();
             lock (_lock)
             {
+                Context.Logger.LogInformation($"Tick received, set value to {_value}");
                 if (_timerPropertyData == null)
                 {
                     return;
@@ -154,7 +155,6 @@ namespace P3.Logic.Time.Timer
                 _value = !_value;
                 Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value);
 
-                Context.Logger.LogInformation($"Tick received, set value to {_value}");
 
                 CalculateTickTime();
             }
