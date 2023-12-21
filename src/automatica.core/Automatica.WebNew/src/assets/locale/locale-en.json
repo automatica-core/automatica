@@ -171,7 +171,8 @@
       "DISCOVERY": "Discovery",
       "TRENDING": "Trendings",
       "SATELLITE": "Satellite",
-      "VALUE": "Value"
+      "VALUE": "Value",
+      "CONTROL":"Controls"
     },
     "FACTOR": {
       "NAME": "Factor",
@@ -182,6 +183,10 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
+      "CONTROLS":{
+        "NAME": "Controls",
+        "DESCRIPTION": ""
+      },
       "TYPE": {
         "NAME": "Typ",
         "DESCRIPTION": ""

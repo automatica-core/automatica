@@ -34,6 +34,7 @@ export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, 
 
     this.readOnly = this.getReadOnly() ?? false;
     this.value = this.dataHub.getCurrentValue(this.outputType.ObjId)?.value;
+    
 
     const data = (await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId));
     const map = new Map(Object.entries(data));

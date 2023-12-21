@@ -171,7 +171,8 @@
       "DISCOVERY": "Suchen",
       "TRENDING": "Datenaufzeichnung",
       "SATELLITE": "Satellite",
-      "VALUE": "Wert"
+      "VALUE": "Wert",
+      "CONTROL":"Steuerung"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -182,6 +183,10 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
+      "CONTROLS":{
+        "NAME": "Steuerung",
+        "DESCRIPTION": ""
+      },
       "TYPE": {
         "NAME": "Typ",
         "DESCRIPTION": ""

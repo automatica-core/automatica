@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO.Remanent;
 using Automatica.Core.Base.Remote;
+using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 
@@ -20,6 +21,7 @@ namespace Automatica.Core.Base.IO
         private readonly IDataBroadcast _dataBroadcast;
         private readonly IRemoteSender _remoteSender;
         private readonly IRemanentHandler _remanentHandler;
+        private readonly IRuleInstanceVisuNotify _ruleNotifier;
         private readonly ILogger _logger;
         private readonly object _lock = new object();
         
@@ -35,11 +37,12 @@ namespace Automatica.Core.Base.IO
 
         private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>>();
 
-        public Dispatcher(ILogger<Dispatcher> logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender, IRemanentHandler remanentHandler)
+        public Dispatcher(ILogger<Dispatcher> logger, IDataBroadcast dataBroadcast, IRemoteSender remoteSender, IRemanentHandler remanentHandler, IRuleInstanceVisuNotify ruleNotifier)
         {
             _dataBroadcast = dataBroadcast;
             _remoteSender = remoteSender;
             _remanentHandler = remanentHandler;
+            _ruleNotifier = ruleNotifier;
 
             _logger = logger;
 
@@ -166,6 +169,11 @@ namespace Automatica.Core.Base.IO
         private async Task Dispatch(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
         {
             StoreValue(self, value);
+
+            if (self.Type == DispatchableType.RuleInstance)
+            {
+                await _ruleNotifier.NotifyValueChanged(self, value);
+            }
 
             if (!_hopCounts.ContainsKey(self.Id))
             {

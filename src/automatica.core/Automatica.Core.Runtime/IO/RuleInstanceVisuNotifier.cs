@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace Automatica.Core.Runtime.IO
 {
-    public class RuleInstanceVisuNotifier : IRuleInstanceVisuNotify
+    public class RuleInstanceVisuNotifier(IHubContext<DataHub> hub) : IRuleInstanceVisuNotify
     {
-        private readonly IHubContext<DataHub> _hub;
-
-        public RuleInstanceVisuNotifier(IHubContext<DataHub> hub)
+        public Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
         {
-            this._hub = hub;
+            return hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value);
         }
-        public async Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
+        public Task NotifyValueChanged(IDispatchable instance, DispatchValue value)
         {
-            await _hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value);
+            return hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.Id, value.Value);
         }
     }
 }
