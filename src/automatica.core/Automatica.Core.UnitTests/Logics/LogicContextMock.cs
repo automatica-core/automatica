@@ -25,6 +25,11 @@ namespace Automatica.Core.UnitTests.Base.Logics
         {
             return Task.CompletedTask;
         }
+
+        public Task NotifyValueChanged(IDispatchable instance, DispatchValue value)
+        {
+            return Task.CompletedTask;
+        }
     }
 
     public class LogicContextMock : ILogicContext
