@@ -13,7 +13,7 @@ namespace Automatica.Core.Tests
         private readonly IDispatcher _dispatcher;
         public DispatcherTest()
         {
-            _dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object, new Mock<IRemanentHandler>().Object);
+            _dispatcher = new Base.IO.Dispatcher(NullLogger<Base.IO.Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object, new Mock<IRemanentHandler>().Object, new Mock<IRuleInstanceVisuNotify>().Object);
         }
 
         [Fact]
