@@ -115,7 +115,7 @@ namespace Automatica.Core.Logging
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
             {
-                logBuild.WriteTo.Console(theme: ConsoleTheme.None);
+                logBuild.WriteTo.Console(theme: ConsoleTheme.None, restrictedToMinimumLevel: ConvertLogLevel(_level));
             }
 
             switch (_level)
