@@ -207,7 +207,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                 if (resources == null)
                 {
-                    logger.LogWarning($"{file} does not contain a manifest files");
+                    logger.LogInformation($"{file} does not contain a manifest files");
                     throw new NoManifestFoundException();
                 }
 
