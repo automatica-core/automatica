@@ -19,16 +19,16 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Control" Version="8.1.0.1715" />
+    <PackageReference Include="Automatica.Core.Control" Version="8.1.0.1728" />
     <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.6.3" />
+    <PackageReference Include="xunit" Version="2.6.4" />
     <PackageReference Include="OpenCover" Version="4.7.1221">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

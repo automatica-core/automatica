@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Operations.Dimmer
 {
-    public class DimmerLogic: Automatica.Core.Logic.Logic
+    public class DimmerLogic: Automatica.Core.Logic.Logic, IDimmer
     {
         private readonly RuleInterfaceInstance _value;
         private readonly RuleInterfaceInstance _state;
@@ -90,9 +93,62 @@ namespace P3.Logic.Operations.Dimmer
             return new List<ILogicOutputChanged>();
         }
 
-        public override object GetDataForVisu()
+        public Guid Id => Context.RuleInstance.ObjId;
+        public string Name => Context.RuleInstance.Name;
+        public Task<bool> SwitchAsync(bool state, CancellationToken cancellationToken = new CancellationToken())
         {
-            return base.GetDataForVisu();
+            _lastState = state;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            return Task.FromResult(true);
         }
+
+        public Task<bool> SwitchAsync(SwitchState state, CancellationToken cancellationToken = new CancellationToken())
+        {
+            _lastState = state == SwitchState.On;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> SwitchOnAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            _lastState = true;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> SwitchOffAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            _lastState = false;
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> DimAsync(int value, CancellationToken cancellationToken = default)
+        { 
+
+            if (value > 0)
+            {
+                if (value > 100)
+                {
+                    value = 100;
+                }
+                _lastState = true;
+            }
+            else
+            {
+                _lastState = false;
+            }
+            _lastValue = value;
+
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _lastState);
+            return Task.FromResult(true);
+        }
+
+        public SwitchState State => _lastState.HasValue && _lastState.Value ? SwitchState.On : SwitchState.Off;
+        public Guid InputId => _state.ObjId;
+        public Guid OutputId => _dimmerState.ObjId;
+        public Guid DimmerOutputValueId => _dimmerValue.ObjId;
+        public Guid DimmerInputValueId => _value.ObjId;
     }
 }
