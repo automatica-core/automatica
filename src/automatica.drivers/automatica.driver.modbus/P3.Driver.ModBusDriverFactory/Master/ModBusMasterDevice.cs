@@ -23,6 +23,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
         private readonly System.Timers.Timer _pollTimer = new System.Timers.Timer();
 
         private readonly SemaphoreSlim _waitSemaphore;
+        private CancellationTokenSource _cts;
 
         public ModBusMasterDevice(IDriverContext driverContext, IModBusMasterDriver modBusDriver, SemaphoreSlim semaphore) : base(driverContext)
         {
@@ -48,6 +49,8 @@ namespace P3.Driver.ModBusDriverFactory.Master
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
 
+            _cts = new CancellationTokenSource();
+
 #pragma warning disable 4014
             PollAttributes();
 #pragma warning restore 4014
@@ -56,20 +59,29 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         private async void PollTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            await _waitSemaphore.WaitAsync();
+            await _waitSemaphore.WaitAsync(_cts.Token);
             try
             {
+                _cts.Token.ThrowIfCancellationRequested();
+
                 if (!_modBusDriver.Connected)
                 {
                     DriverContext.Logger
-                        .LogWarning($"Could not read device {DeviceId}, connection state is false, try to reconnect...");
+                        .LogWarning(
+                            $"Could not read device {DeviceId}, connection state is false, try to reconnect...");
 
                     await _modBusDriver.Reconnect();
 
                     return;
                 }
-                DriverContext.Logger.LogInformation($"Start polling {DriverContext.NodeInstance.Name} at address: {DeviceId}...");
+
+                DriverContext.Logger.LogInformation(
+                    $"Start polling {DriverContext.NodeInstance.Name} at address: {DeviceId}...");
                 await PollAttributes();
+            }
+            catch (OperationCanceledException)
+            {
+                _pollTimer.Dispose();
             }
             finally
             {
@@ -85,7 +97,7 @@ namespace P3.Driver.ModBusDriverFactory.Master
                 {
                     if (attribute.DriverContext.NodeInstance.IsReadable)
                     {
-                        var value = await attribute.ReadValue();
+                        var value = await attribute.ReadValue(_cts.Token);
                         if (value != null)
                         {
                             attribute.DispatchRead(value);
@@ -112,6 +124,9 @@ namespace P3.Driver.ModBusDriverFactory.Master
         public override async Task<bool> Stop(CancellationToken token = default)
         {
             _pollTimer.Elapsed -= PollTimerOnElapsed;
+            _pollTimer.Dispose();
+
+            await _cts.CancelAsync();
             
             return await base.Stop(token);
         }
