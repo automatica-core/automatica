@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
@@ -33,7 +34,7 @@ namespace P3.Driver.HomeKit.Http
             _httpServer = httpServer;
         }
 
-        internal Task HandleClient()
+        internal Task HandleClient(CancellationToken token)
         {
             _remoteEndPoint = _client.Client.RemoteEndPoint;
             _logger.LogDebug($"Start client socket on port {_remoteEndPoint}");
@@ -48,15 +49,18 @@ namespace P3.Driver.HomeKit.Http
             {
                 using (var networkStream = _client.GetStream())
                 {
-                    byte[] receiveBuffer = new byte[_client.ReceiveBufferSize];
+                    var receiveBuffer = new byte[_client.ReceiveBufferSize];
 
                     while (_client.Connected)
                     {
+                        token.ThrowIfCancellationRequested();
+
                         _logger.LogDebug("Waiting for more data from the client....");
 
                         // This is blocking and will wait for data to come from the client.
                         //
-                        var bytesRead = networkStream.Read(receiveBuffer, 0, _client.ReceiveBufferSize);;
+                        var bytesRead = networkStream.Read(receiveBuffer, 0, _client.ReceiveBufferSize);
+                        ;
 
                         lock (_connectionSession)
                         {
@@ -98,7 +102,7 @@ namespace P3.Driver.HomeKit.Http
 
                             string line;
 
-                            Dictionary<string, string> httpHeaders = new Dictionary<string, string>();
+                            var httpHeaders = new Dictionary<string, string>();
 
                             while ((line = sr.ReadLine()) != null)
                             {
@@ -122,23 +126,23 @@ namespace P3.Driver.HomeKit.Http
                             var contentLengthHeader =
                                 httpHeaders.ContainsKey("content-length");
 
-                            var contentLenght = 0;
+                            var contentLength = 0;
 
                             if (contentLengthHeader)
                             {
-                                contentLenght =
+                                contentLength =
                                     Convert.ToInt32(
                                         httpHeaders.Single(a => a.Key == "content-length").Value);
                             }
 
                             var datLen = content.Length;
-                            var data = content.AsSpan(datLen - contentLenght, contentLenght).ToArray();
+                            var data = content.AsSpan(datLen - contentLength, contentLength).ToArray();
 
 
                             var result = _middleware.Invoke(session, url, method, data, _session);
                             var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2, DateTime.Now);
 
-                                _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
+                            _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
 
                             if (_connectionSession.IsVerified && !_connectionSession.SkipFirstEncryption)
                             {
@@ -170,6 +174,16 @@ namespace P3.Driver.HomeKit.Http
                     _httpServer.ConnectionClosed(this);
                 }
             }
+            catch (TaskCanceledException)
+            {
+                _middleware.TerminateSession(session);
+                _logger.LogError($"Task cancelled...");
+            }
+            catch (OperationCanceledException)
+            {
+                _middleware.TerminateSession(session);
+                _logger.LogError($"Operation cancelled...");
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error occured in http server");
@@ -181,7 +195,7 @@ namespace P3.Driver.HomeKit.Http
 
         internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date)
         {
-            var response = new byte[0];
+            var response = Array.Empty<byte>();
             var returnChars = new byte[2];
             returnChars[0] = 0x0D;
             returnChars[1] = 0x0A;
@@ -224,11 +238,11 @@ namespace P3.Driver.HomeKit.Http
 
         internal static byte[] EncryptData(byte[] plainData, HapSession session)
         {
-            var resultData = new byte[0];
+            var resultData = Array.Empty<byte>();
 
-            for (int offset = 0; offset < plainData.Length;)
+            for (var offset = 0; offset < plainData.Length;)
             {
-                int length = Math.Min(plainData.Length - offset, 1024);
+                var length = Math.Min(plainData.Length - offset, 1024);
 
                 var dataLength = BitConverter.GetBytes((short)length);
 
@@ -252,19 +266,19 @@ namespace P3.Driver.HomeKit.Http
 
         internal static byte[] DecryptData(byte[] content, HapSession session)
         {
-            var encryptionResult = new byte[0];
+            var encryptionResult = Array.Empty<byte>();
 
-            for (int offset = 0; offset < content.Length;)
+            for (var offset = 0; offset < content.Length;)
             {
                 // The first type bytes represent the length of the data.
                 //
-                byte[] twoBytes = new Byte[] { content[0], content[1] };
+                var twoBytes = new Byte[] { content[0], content[1] };
 
                 offset += 2;
 
-                UInt16 frameLength = BitConverter.ToUInt16(twoBytes, 0);
+                var frameLength = BitConverter.ToUInt16(twoBytes, 0);
 
-                int availableDataLength = content.Length - offset;
+                var availableDataLength = content.Length - offset;
                 var message = content.AsSpan(offset, availableDataLength);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
