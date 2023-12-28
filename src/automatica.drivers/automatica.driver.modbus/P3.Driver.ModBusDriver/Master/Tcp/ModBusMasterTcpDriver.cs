@@ -130,6 +130,10 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
         protected override async Task<bool> WriteFrame(byte[] data, CancellationToken cts = default)
         {
             ModBus.Logger.LogHexOut(data);
+            if (_networkStream == null)
+            {
+                return false;
+            }
             await _networkStream.WriteAsync(data, 0, data.Length, cts);
             return true;
         }
