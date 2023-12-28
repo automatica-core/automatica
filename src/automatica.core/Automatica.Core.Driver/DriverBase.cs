@@ -350,17 +350,10 @@ namespace Automatica.Core.Driver
                             await Write(writeData.Item2.Value, new WriteContext(DriverContext.Dispatcher, this),
                                 cts.Token);
                         }
-                        catch (TaskCanceledException)
-                        {
-                            await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3+1);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3 + 1);
-                        }
                         catch (Exception e)
                         {
                             DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                            await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3 + 1);
                         }
                     }
                 }
