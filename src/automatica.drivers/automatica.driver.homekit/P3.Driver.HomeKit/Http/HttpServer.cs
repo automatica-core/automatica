@@ -74,12 +74,11 @@ namespace P3.Driver.HomeKit.Http
                 }
                 catch (TaskCanceledException)
                 {
-                    _listener.Stop();
+                    //ignore
                 }
                 catch (OperationCanceledException)
                 {
-
-                    _listener.Stop();
+                    //ignore
                 }
                 catch (Exception e)
                 {

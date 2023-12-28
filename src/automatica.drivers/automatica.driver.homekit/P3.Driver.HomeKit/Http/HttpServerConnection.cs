@@ -174,6 +174,11 @@ namespace P3.Driver.HomeKit.Http
                     _httpServer.ConnectionClosed(this);
                 }
             }
+            catch (IOException)
+            {
+                _middleware.TerminateSession(session);
+                _logger.LogError($"IO Exception...");
+            }
             catch (TaskCanceledException)
             {
                 _middleware.TerminateSession(session);
