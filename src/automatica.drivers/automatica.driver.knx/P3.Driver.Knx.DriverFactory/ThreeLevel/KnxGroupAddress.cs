@@ -101,6 +101,8 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 else
                 {
                     DriverContext.Logger.LogWarning($"{GroupAddress}: Failed to write to Write datagram {value} {decodedValue}");
+                    throw new ArgumentException(
+                        $"{GroupAddress}: Failed to write to Write datagram {value} {decodedValue}");
                 }
             }
             catch (NotImplementedException)
