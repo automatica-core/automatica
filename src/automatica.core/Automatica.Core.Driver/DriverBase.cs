@@ -24,7 +24,7 @@ namespace Automatica.Core.Driver
         public bool WriteOnlyIfChanged => DriverContext.NodeInstance.WriteOnlyIfChanged;
         public string Name => DriverContext?.NodeInstance.Name;
 
-        private readonly Queue<(IDispatchable, DispatchValue)> _writeQueue = new Queue<(IDispatchable, DispatchValue)>();
+        private readonly Queue<(IDispatchable, DispatchValue, int)> _writeQueue = new Queue<(IDispatchable, DispatchValue, int)>();
         private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(0, short.MaxValue);
         private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
         private Task _writeTask;
@@ -54,10 +54,10 @@ namespace Automatica.Core.Driver
         }
 
 
-        private async Task Enqueue(IDispatchable source, DispatchValue value)
+        private async Task Enqueue(IDispatchable source, DispatchValue value, int count = 0)
         {
             await Task.CompletedTask;
-            _writeQueue.Enqueue((source, value));
+            _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
         }
 
@@ -336,13 +336,27 @@ namespace Automatica.Core.Driver
                         DriverContext.Logger.LogInformation(
                             $"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
+                        if (writeData.Item3 > 5)
+                        {
+                            DriverContext.Logger.LogWarning($"{FullName}: Write retry exceeded...ignore item");
+                            continue;
+                        }
+
                         var cts = new CancellationTokenSource();
-                        cts.CancelAfter(TimeSpan.FromSeconds(30));
+                        cts.CancelAfter(TimeSpan.FromSeconds(45));
 
                         try
                         {
                             await Write(writeData.Item2.Value, new WriteContext(DriverContext.Dispatcher, this),
                                 cts.Token);
+                        }
+                        catch (TaskCanceledException)
+                        {
+                            await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3+1);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3 + 1);
                         }
                         catch (Exception e)
                         {
@@ -353,7 +367,7 @@ namespace Automatica.Core.Driver
             }
             catch (OperationCanceledException)
             {
-
+                DriverContext.Logger.LogError("Write task was cancelled...");
             }
             catch (Exception ex)
             {
