@@ -33,7 +33,7 @@ namespace Automatica.Core.Logging
 
             if (isFrameworkLog)
             {
-                _level = LogLevel.Information;
+                _level = LogLevel.Warning;
             }
             else if (level.HasValue)
             {
