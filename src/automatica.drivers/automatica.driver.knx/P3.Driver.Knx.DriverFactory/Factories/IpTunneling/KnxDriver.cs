@@ -432,9 +432,17 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 return await _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue,
                     MessagePriority.High, token);
             }
+            catch (TaskCanceledException)
+            {
+                throw;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
-                DriverContext.Logger.LogError(e, $"Error writing to KNX interface {e}");
+                DriverContext.Logger.LogError(e, $"Error writing to KNX interface {address} {groupValue.Value.ToHex(true)} {e}");
                 return false;
             }
             finally
