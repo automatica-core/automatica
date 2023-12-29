@@ -22,7 +22,7 @@ import { UsergroupConfigComponent } from "../pages/usergroup-config/usergroup-co
 import { VisualisationEditComponent } from "../pages/visualisation-edit/visualisation-edit.component";
 import { L10nTranslationModule } from "angular-l10n";
 import { AngularSplitModule } from "angular-split";
-import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxTextBoxModule, DxScrollViewModule, DxListModule, DxHtmlEditorModule } from "devextreme-angular";
+import { DxLoadPanelModule, DxTabPanelModule, DxCheckBoxModule, DxTemplateModule, DxMenuModule, DxTreeListModule, DxPopupModule, DxFileUploaderModule, DxButtonModule, DxDataGridModule, DxColorBoxModule, DxTextAreaModule, DxProgressBarModule, DxTextBoxModule, DxScrollViewModule, DxListModule, DxHtmlEditorModule, DxSelectBoxModule } from "devextreme-angular";
 import { DndModule } from "p3root-angular-dnd";
 import { StartingOverlayModule } from "../shared/starting-overlay/starting-overlay.module";
 import { MobileModule } from "../visualization/mobile/mobile.module";
@@ -83,7 +83,8 @@ import { AdminRoutingModule } from "./admin-routing.module";
     DxHtmlEditorModule,
     FontAwesomeModule,
     ServicesModule,
-    SharedModule
+    SharedModule,
+    DxSelectBoxModule
   ],
   exports: [
     AdminComponent

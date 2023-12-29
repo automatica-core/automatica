@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Logging
 {
-    public class CoreLoggerFactory : ILoggerFactory
+    public class CoreLoggerFactory : ICoreLoggerFactory
     {
         private readonly IServiceProvider _serviceProvider;
         private static readonly object Lock = new();
-        private static readonly IDictionary<string, ILogger> LoggerInstances = new ConcurrentDictionary<string, ILogger>();
+        private static readonly IDictionary<string, ICoreLogger> LoggerInstances = new ConcurrentDictionary<string, ICoreLogger>();
         
         public IConfiguration Configuration { get; }
 
@@ -52,6 +52,34 @@ namespace Automatica.Core.Logging
         public ILogger CreateLogger(string categoryName)
         {
             return GetLogger(Configuration, _serviceProvider, categoryName, null, categoryName.ToLowerInvariant().Contains("microsoft") || categoryName.ToLowerInvariant().Contains("system"));
+        }
+
+        public IEnumerable<ICoreLogger> GetLoggers()
+        {
+            lock (Lock)
+            {
+                return LoggerInstances.Values;
+            }
+        }
+
+        public void SetLogLevel(string name, LogLevel level)
+        {
+            lock (Lock)
+            {
+                if (LoggerInstances.TryGetValue(name, out var instance))
+                    instance.LogLevel = level;
+            }
+        }
+
+        public void SetLogLevel(LogLevel level)
+        {
+            lock (Lock)
+            {
+                foreach (var logger in LoggerInstances)
+                {
+                    logger.Value.LogLevel = level;
+                }
+            }
         }
 
         public void AddProvider(ILoggerProvider provider)

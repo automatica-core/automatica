@@ -156,6 +156,23 @@ export class BaseService {
         }
         return new Uint8Array(msgpack.encode(data)).buffer;
     }
+    async postRaw(url: string, body: any, withCredentials: boolean = true): Promise<any> {
+        try {
+            const data = this.encode(url, body);
+            const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
+                { withCredentials: withCredentials, headers: this.headers() }).pipe(timeout(2000)).toPromise();
+
+            if (!response) {
+                return void 0;
+            }
+
+            const json = response;
+            return json;
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
+    }
 
     async post<T extends BaseModel>(url: string, body: any, withCredentials: boolean = true): Promise<T> {
         try {

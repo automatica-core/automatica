@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { CategoryService } from "src/app/services/categories.service";
 import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -7,10 +6,17 @@ import { BaseComponent } from "src/app/base/base-component";
 import { LogHubService } from "src/app/base/communication/hubs/log-hub.service";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { LogsService } from "src/app/services/logs.service";
+import { LogLevel } from "@microsoft/signalr";
+import ArrayStore from "devextreme/data/array_store";
+import CustomStore from "devextreme/data/custom_store";
 
 interface LogFacility {
   name: string;
   logs: LogEntry[];
+}
+interface Logger {
+  facility: string;
+  logLevel: LogLevel;
 }
 
 interface LogEntry {
@@ -40,13 +46,19 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   logFacilities: Map<string, LogFacility> = new Map<string, LogFacility>();
 
   logFacilitiesArray: LogFacility[] = [];
+  logger: Logger[] = [];
+
+  loggerDataSource: CustomStore;
 
   selectedFacility: LogFacility;
+  selectedLogger: Logger;
 
   stop: boolean = true;
 
   logFileTree: LogFile[];
 
+  logLevels: { key: number, name: string }[] = [];
+  logLevelsDataSource;
 
   menuItems: CustomMenuItem[] = [];
   menuStartStop: CustomMenuItem = {
@@ -95,7 +107,23 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
     this.menuItems.push(this.menuStartStop);
     this.menuItems.push(this.menuRefresh);
+
+    this.logLevels.push({ key: LogLevel.Trace, name: LogLevel[LogLevel.Trace] });
+    this.logLevels.push({ key: LogLevel.Information, name: LogLevel[LogLevel.Information] });
+    this.logLevels.push({ key: LogLevel.Debug, name: LogLevel[LogLevel.Debug] });
+    this.logLevels.push({ key: LogLevel.Warning, name: LogLevel[LogLevel.Warning] });
+    this.logLevels.push({ key: LogLevel.Error, name: LogLevel[LogLevel.Error] });
+    this.logLevels.push({ key: LogLevel.Critical, name: LogLevel[LogLevel.Critical] });
+    this.logLevels.push({ key: LogLevel.None, name: LogLevel[LogLevel.None] });
+
+    this.logLevelsDataSource = new ArrayStore({
+      data: this.logLevels,
+      key: 'key'
+    });
   }
+
+
+
   itemClick($event) {
     const item: CustomMenuItem = $event.itemData;
 
@@ -110,7 +138,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     try {
 
       super.registerEvent(this.loggingHub.pushEventLog, (data) => {
-      
+
         let facility: string = data[0];
         const log = data[1];
 
@@ -140,6 +168,19 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     let logFiles = await this.logsService.getLogFiles();
 
     this.logFileTree = [this.generateTreeFromPaths(logFiles)];
+
+    this.logger = JSON.parse(await this.logsService.getLogger());
+
+    this.loggerDataSource = new CustomStore({
+
+      load: async () => JSON.parse(await this.logsService.getLogger()),
+      update: async (key, value) => {
+        console.log(key, value);
+        await this.logsService.setLogLevel(key, value.logLevel);
+      },
+      key: "facility"
+    });
+
   }
 
   generateTreeFromPaths(paths: string[]): LogFile {
@@ -217,6 +258,10 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     }
 
     this.isLoading = false;
+  }
+
+  logLevelEnumName(data) {
+    return LogLevel[data.logLevel];
   }
 
   ngOnDestroy(): void {

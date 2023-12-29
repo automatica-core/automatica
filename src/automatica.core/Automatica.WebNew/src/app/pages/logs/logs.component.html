@@ -13,8 +13,8 @@
                             <dx-list #logicPagesList [dataSource]="logFacilitiesArray" [repaintChangesOnly]="true"
                                 [selectedItems]="[selectedFacility]" height="90%" selectionMode="single"
                                 (onSelectionChanged)="onTabSelectionChanged($event)" showScrollbar="always"
-                                [searchEnabled]="true"
-                                pageLoadMode="scrollBottom" searchExpr="name" searchMode="contains">
+                                [searchEnabled]="true" pageLoadMode="scrollBottom" searchExpr="name"
+                                searchMode="contains">
                                 <div *dxTemplate="let page of 'item'">
                                     <span>{{page.name}}</span>
                                 </div>
@@ -38,8 +38,37 @@
                             </div>
                         </div>
                     </dxi-item>
-                    <div *dxTemplate="let item of 'title'">
-                        <span title="{{item.title | translateAsync}}" class="nav-padding">
+                    <dxi-item title="COMMON.LOGGER_LEVEL" icon="file">
+                        <div *dxTemplate>
+                            <div class="grid-container">
+
+                                <dx-data-grid id="gridContainer" [height]="'100%'" [dataSource]="loggerDataSource"
+                                    keyExpr="facility" [showBorders]="true" [allowColumnResizing]="true">
+
+                                    <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false"
+                                        [allowDeleting]="false" e>
+                                    </dxo-editing>
+                                    <dxo-filter-row visible="true"></dxo-filter-row>
+
+                                    <dxi-column dataField="facility" [allowEditing]="false" sortOrder="asc"
+                                        caption="Name"></dxi-column>
+                                    <dxi-column dataField="logLevel" [calculateCellValue]="logLevelEnumName"
+                                        editCellTemplate="logLevelEditor" [width]="100"></dxi-column>
+
+                                    <div *dxTemplate="let cellInfo of 'logLevelEditor'">
+                                        <dx-select-box [(value)]="cellInfo.value" [dataSource]="logLevelsDataSource"
+                                            displayExpr="name" valueExpr="key"
+                                            (onValueChanged)="cellInfo.setValue($event.value)"
+                                            (onSelectionChanged)="cellInfo.component.updateDimensions()">
+                                        </dx-select-box>
+                                    </div>
+                                </dx-data-grid>
+
+                            </div>
+                        </div>
+                    </dxi-item>
+                    <div *dxTemplate=" let item of 'title'">
+                        <span title=" {{item.title | translateAsync}}" class="nav-padding">
                             <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true"
                                 [icon]="['fas', item.icon]">
                             </fa-icon>

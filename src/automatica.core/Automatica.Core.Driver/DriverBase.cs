@@ -59,6 +59,8 @@ namespace Automatica.Core.Driver
             await Task.CompletedTask;
             _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
+
+            DriverContext.Logger.LogWarning($"{FullName} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
         }
 
         public async Task<bool> Configure(CancellationToken token = default)
@@ -217,9 +219,9 @@ namespace Automatica.Core.Driver
             return Task.FromResult(false);
         }
 
-        public async Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
+        public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
-            await Enqueue(source, value);
+            return Enqueue(source, value);
         }
 
         protected abstract Task Write(object value, IWriteContext writeContext, CancellationToken token = default);
