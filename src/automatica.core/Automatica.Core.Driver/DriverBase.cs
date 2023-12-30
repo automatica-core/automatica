@@ -339,6 +339,12 @@ namespace Automatica.Core.Driver
                 {
                     await _writeSemaphore.WaitAsync( _cancellationToken.Token);
 
+                    if (_cancellationToken.IsCancellationRequested)
+                    {
+                        DriverContext.Logger.LogWarning($"{FullName}: Write task was cancelled...");
+                        return;
+                    }
+
                     if (DriverContext.NodeInstance.IsDisabled)
                     {
                         DriverContext.Logger.LogWarning($"{FullName}: Node is disabled, stop write task");
@@ -394,6 +400,7 @@ namespace Automatica.Core.Driver
         {
             _isRunning = false;
             await _cancellationToken.CancelAsync();
+            _writeSemaphore.Release(1);
 
             foreach (var node in Children)
             {
