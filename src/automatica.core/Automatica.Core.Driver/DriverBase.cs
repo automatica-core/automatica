@@ -24,10 +24,9 @@ namespace Automatica.Core.Driver
         public bool WriteOnlyIfChanged => DriverContext.NodeInstance.WriteOnlyIfChanged;
         public string Name => DriverContext?.NodeInstance.Name;
 
-        private readonly Queue<(IDispatchable, DispatchValue, int)> _writeQueue = new Queue<(IDispatchable, DispatchValue, int)>();
-        private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(0, short.MaxValue);
-        private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
-        private Task _writeTask;
+        private readonly Queue<(IDispatchable, DispatchValue, int)> _writeQueue = new();
+        private readonly SemaphoreSlim _writeSemaphore = new(0, short.MaxValue);
+        private readonly CancellationTokenSource _cancellationToken = new();
 
         public string FullName => DriverContext.NodeInstance.FullName;
 
@@ -261,7 +260,7 @@ namespace Automatica.Core.Driver
         public virtual Task<bool> Start(CancellationToken token = default)
         {
             _isRunning = true;
-            _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
+            _ = Task.Run(WriteTask, _cancellationToken.Token);
 
             Parallel.ForEach(Children, async node => {
                 var cts = new CancellationTokenSource();
@@ -375,7 +374,7 @@ namespace Automatica.Core.Driver
         public virtual async Task<bool> Stop(CancellationToken token = default)
         {
             _isRunning = false;
-            _cancellationToken.Cancel();
+            await _cancellationToken.CancelAsync();
 
             foreach (var node in Children)
             {
