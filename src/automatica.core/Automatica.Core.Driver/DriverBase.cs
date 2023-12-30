@@ -59,7 +59,21 @@ namespace Automatica.Core.Driver
             _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
 
-            DriverContext.Logger.LogWarning($"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            if (_writeQueue.Count > 10)
+            {
+                DriverContext.Logger.LogWarning(
+                    $"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            }
+            else if (_writeQueue.Count > 100)
+            {
+                DriverContext.Logger.LogError(
+                    $"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            }
+            else
+            {
+                DriverContext.Logger.LogInformation(
+                    $"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            }
         }
 
         public async Task<bool> Configure(CancellationToken token = default)
@@ -323,7 +337,7 @@ namespace Automatica.Core.Driver
                 DriverContext.Logger.LogInformation($"{FullName} {Id}: Start write task");
                 while (_isRunning)
                 {
-                    await _writeSemaphore.WaitAsync(_cancellationToken.Token);
+                    await _writeSemaphore.WaitAsync( _cancellationToken.Token);
 
                     if (DriverContext.NodeInstance.IsDisabled)
                     {
@@ -331,6 +345,11 @@ namespace Automatica.Core.Driver
                         return;
                     }
 
+                    if (_writeQueue.Count == 0)
+                    {
+                        DriverContext.Logger.LogWarning($"{FullName}: Write queue is empty, ignore");
+                        continue;
+                    }
                     var writeData = _writeQueue.Dequeue();
 
                     if (writeData.Item1 != null)
@@ -354,7 +373,7 @@ namespace Automatica.Core.Driver
                         }
                         catch (Exception e)
                         {
-                            DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                            DriverContext.Logger.LogError(e, $"{FullName}: Error write value...requeue write task");
                             await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3 + 1);
                         }
                     }
