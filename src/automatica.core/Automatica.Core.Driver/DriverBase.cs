@@ -341,19 +341,19 @@ namespace Automatica.Core.Driver
 
                     if (_cancellationToken.IsCancellationRequested)
                     {
-                        DriverContext.Logger.LogWarning($"{FullName}: Write task was cancelled...");
+                        DriverContext.Logger.LogWarning($"{FullName} {Id}: Write task was cancelled...");
                         return;
                     }
 
                     if (DriverContext.NodeInstance.IsDisabled)
                     {
-                        DriverContext.Logger.LogWarning($"{FullName}: Node is disabled, stop write task");
+                        DriverContext.Logger.LogWarning($"{FullName} {Id}: Node is disabled, stop write task");
                         return;
                     }
 
                     if (_writeQueue.Count == 0)
                     {
-                        DriverContext.Logger.LogWarning($"{FullName}: Write queue is empty, ignore");
+                        DriverContext.Logger.LogWarning($"{FullName} {Id}: Write queue is empty, ignore");
                         continue;
                     }
                     var writeData = _writeQueue.Dequeue();
@@ -361,11 +361,11 @@ namespace Automatica.Core.Driver
                     if (writeData.Item1 != null)
                     {
                         DriverContext.Logger.LogInformation(
-                            $"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
+                            $"{FullName} {Id}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
 
                         if (writeData.Item3 > 5)
                         {
-                            DriverContext.Logger.LogWarning($"{FullName}: Write retry exceeded...ignore item");
+                            DriverContext.Logger.LogWarning($"{FullName} {Id}: Write retry exceeded...ignore item");
                             continue;
                         }
 
@@ -379,7 +379,7 @@ namespace Automatica.Core.Driver
                         }
                         catch (Exception e)
                         {
-                            DriverContext.Logger.LogError(e, $"{FullName}: Error write value...requeue write task");
+                            DriverContext.Logger.LogError(e, $"{FullName} {Id}: Error write value...requeue write task");
                             await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3 + 1);
                         }
                     }
@@ -387,11 +387,11 @@ namespace Automatica.Core.Driver
             }
             catch (OperationCanceledException)
             {
-                DriverContext.Logger.LogError("Write task was cancelled...");
+                DriverContext.Logger.LogError($"{FullName} {Id}: Write task was cancelled...");
             }
             catch (Exception ex)
             {
-                DriverContext.Logger.LogError(ex, $"{Id} {FullName}: Error in write task");
+                DriverContext.Logger.LogError(ex, $"{FullName} {Id}: Error in write task");
             }
             DriverContext.Logger.LogWarning($"{FullName} {Id}: End write task");
         }
