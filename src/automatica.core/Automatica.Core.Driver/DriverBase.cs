@@ -276,13 +276,18 @@ namespace Automatica.Core.Driver
                 return false;
             }
 
-            return await Start(token);
+            DriverContext.Logger.LogInformation($"{FullName} {Id}: Starting...");
+            var result = await Start(token);
+            DriverContext.Logger.LogInformation($"{FullName} {Id}: Started...");
+
+            return result;
         }
 
         public virtual Task<bool> Start(CancellationToken token = default)
         {
             _isRunning = true;
             _ = Task.Run(WriteTask, _cancellationToken.Token);
+
 
             Parallel.ForEach(Children, async node => {
                 var cts = new CancellationTokenSource();
