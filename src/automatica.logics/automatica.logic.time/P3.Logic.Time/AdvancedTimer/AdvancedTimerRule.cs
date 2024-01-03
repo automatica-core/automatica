@@ -85,7 +85,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
                 if (next.startTime.IsToday())
                 {
-                    CalculateTickTime(next.startTime, next.endTime);
+                    CalculateTickTime(next.startTime.ToLocalTime(), next.endTime.ToLocalTime());
                 }
                 else
                 {
@@ -218,12 +218,12 @@ namespace P3.Logic.Time.AdvancedTimer
                     if (startDate.Date == entry.StartDate.Date)
                     {
                         startDate = new DateTime(DateOnly.FromDateTime(DateTime.Now),
-                            new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second));
+                            new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
                     }
                     if (endDate.Date == entry.EndDate.Date)
                     {
                         endDate = new DateTime(DateOnly.FromDateTime(DateTime.Now),
-                            new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second));
+                            new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
                     }
 
                     return (startDate, endDate);
