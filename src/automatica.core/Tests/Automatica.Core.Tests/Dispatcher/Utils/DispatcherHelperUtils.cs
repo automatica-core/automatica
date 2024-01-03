@@ -25,6 +25,12 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         {
         }
 
+        public override Task<bool> Start(CancellationToken token = default)
+        {
+            DriverContext.NodeInstance.State = NodeInstanceState.InUse;
+            return base.Start(token);
+        }
+
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = default)
         {
             WriteReceived = true;
@@ -114,7 +120,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory()));
 
             await mock.Configure();
-            await mock.Start();
+            await mock.StartInternal();
 
             store?.Add(mock.Id, mock);
             store?.Add(mock.Children[0].Id, mock.Children[0]);
