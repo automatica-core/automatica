@@ -7,10 +7,7 @@
     <ProjectGuid>54D90188-19AB-4FA3-8F25-878D11C92D4D</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AsyncKeyedLock" Version="6.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+	  <PackageReference Include="AsyncKeyedLock" Version="6.2.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
