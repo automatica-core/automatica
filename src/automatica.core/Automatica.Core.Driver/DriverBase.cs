@@ -293,7 +293,7 @@ namespace Automatica.Core.Driver
                 var cts = new CancellationTokenSource();
                 cts.CancelAfter(TimeSpan.FromMinutes(2));
 
-
+                int retry = 0;
                 var pipeline = DriverContext.RetryContext.GetPipeline();
                 await pipeline.ExecuteAsync(async a =>
                 {
@@ -313,21 +313,20 @@ namespace Automatica.Core.Driver
                         {
                             node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
                             node.DriverContext.NodeInstance.Error = node.Error;
-                            DriverContext.Logger.LogError($"Could not start {node.Name}");
+                            throw new ArgumentException($"{FullName} {Id}: Error starting...Retry: {retry+1}");
                         }
-                        else
+
+                        if (node.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
                         {
-                            if (node.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
-                            {
-                                node.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
-                            }
+                            node.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
                         }
                     }
                     catch (Exception e)
                     {
                         node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
                         node.DriverContext.NodeInstance.Error = e.ToString();
-                        DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
+                        DriverContext.Logger.LogError(e, $"{FullName} {Id}:Could not start...Retry: {retry + 1}");
+                        retry++;
                         throw;
                     }
                 }, cts.Token);
