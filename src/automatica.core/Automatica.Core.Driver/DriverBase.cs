@@ -279,38 +279,45 @@ namespace Automatica.Core.Driver
             Parallel.ForEach(Children, async node => {
                 var cts = new CancellationTokenSource();
                 cts.CancelAfter(TimeSpan.FromMinutes(2));
-                try
-                {
-                    bool driverStart;
-                    if (node is DriverBase driverNode)
-                    {
-                        driverStart = await driverNode.StartInternal(cts.Token);
-                    }
-                    else
-                    {
-                        driverStart = await node.Start(cts.Token);
-                    }
 
-                    if (!driverStart)
+
+                var pipeline = DriverContext.RetryContext.GetPipeline();
+                await pipeline.ExecuteAsync(async a =>
+                {
+                    try
                     {
-                        node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                        node.DriverContext.NodeInstance.Error = node.Error;
-                        DriverContext.Logger.LogError($"Could not start {node.Name}");
-                    }
-                    else
-                    {
-                        if (node.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
+                        bool driverStart;
+                        if (node is DriverBase driverNode)
                         {
-                            node.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
+                            driverStart = await driverNode.StartInternal(cts.Token);
+                        }
+                        else
+                        {
+                            driverStart = await node.Start(cts.Token);
+                        }
+
+                        if (!driverStart)
+                        {
+                            node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                            node.DriverContext.NodeInstance.Error = node.Error;
+                            DriverContext.Logger.LogError($"Could not start {node.Name}");
+                        }
+                        else
+                        {
+                            if (node.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
+                            {
+                                node.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
+                            }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                    node.DriverContext.NodeInstance.Error = e.ToString();
-                    DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
-                }
+                    catch (Exception e)
+                    {
+                        node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                        node.DriverContext.NodeInstance.Error = e.ToString();
+                        DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
+                        throw;
+                    }
+                }, cts.Token);
             });
             
             return Task.FromResult(true);

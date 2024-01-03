@@ -1,6 +1,7 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Control;
@@ -40,6 +41,8 @@ namespace Automatica.Core.Driver
         public IZeroconfDiscovery ZeroconfDiscovery { get; }
 
         public IControlContext ControlContext { get; }
+
+        public IRetryContext RetryContext { get; }
 
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
@@ -84,6 +87,8 @@ namespace Automatica.Core.Driver
             TunnelingProvider = provider.Invoke(this);
 
             ZeroconfDiscovery = serviceProvider.GetRequiredService<IZeroconfDiscovery>();
+
+            RetryContext = serviceProvider.GetRequiredService<IRetryContext>();
         }
     }
 }

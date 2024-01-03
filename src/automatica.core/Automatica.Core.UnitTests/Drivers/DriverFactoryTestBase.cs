@@ -22,7 +22,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
 
             DriverFactory = (T)Activator.CreateInstance(typeof(T));
 
-            DriverFactory.InitNodeTemplates(Factory);
+            DriverFactory!.InitNodeTemplates(Factory);
         }
 
         protected NodeInstance CreateNodeInstance(Guid guid)

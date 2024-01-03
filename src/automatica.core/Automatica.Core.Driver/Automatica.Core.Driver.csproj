@@ -20,6 +20,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Polly" Version="8.2.0" />
+    <PackageReference Include="Polly.Core" Version="8.2.0" />
+    <PackageReference Include="Polly.Extensions" Version="8.2.0" />
     <PackageReference Include="Zeroconf" Version="3.6.11" />
   </ItemGroup>
   <ItemGroup>

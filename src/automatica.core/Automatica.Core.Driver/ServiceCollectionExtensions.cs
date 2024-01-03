@@ -13,6 +13,7 @@ namespace Automatica.Core.Driver
 
             services.AddSingleton<IDriverFactoryLoader, DriverFactoryLoader>();
             services.AddSingleton<IZeroconfDiscovery, ZeroconfDiscoveryService>();
+
         }
     }
 }

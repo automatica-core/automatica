@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Control;
@@ -89,6 +90,8 @@ namespace Automatica.Core.Driver
         /// Provides the control context
         /// </summary>
         IControlContext ControlContext { get; }
+
+        IRetryContext RetryContext { get; }
 
         IDriverContext Copy(NodeInstance node, ILogger logger);
     }

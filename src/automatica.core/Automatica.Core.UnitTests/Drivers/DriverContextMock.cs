@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using Automatica.Core.Base.IO;
+﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
 using Automatica.Core.Control;
@@ -30,6 +30,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             Factory = factory;
             TunnelingProvider = new TunnelingProviderMock();
             ControlContext = new Mock<IControlContext>().Object;
+            RetryContext = new RetryContextMock();
         }
 
         public NodeInstance NodeInstance { get; }
@@ -51,6 +52,8 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public IZeroconfDiscovery ZeroconfDiscovery { get; }
 
         public IControlContext ControlContext { get; }
+
+        public IRetryContext RetryContext { get; }
 
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
