@@ -81,7 +81,8 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (list.Any())
             {
-                var next = list.First();
+                var next = list.MinBy(t => Math.Abs((t.startTime - DateTime.Now).Ticks));
+
                 if (next.startTime.IsToday())
                 {
                     CalculateTickTime(next.startTime, next.endTime);
@@ -120,9 +121,18 @@ namespace P3.Logic.Time.AdvancedTimer
             Context.Logger.LogDebug($"Start time is {startTime} endTime is {stopTime} difference is {tickTime}");
             double timerTickTime;
 
+            
             if (tickTime.TotalMilliseconds < 0)
             {
-                timerTickTime = (stopTime - nowTime).TotalMilliseconds;
+                if (startTime > stopTime)
+                {
+                    timerTickTime = (nowTime - startTime).TotalMilliseconds;
+                }
+                else
+                {
+                    timerTickTime = (stopTime - nowTime).TotalMilliseconds;
+                }
+                
                 if (timerTickTime < 0)
                 {
                     _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime)
@@ -162,6 +172,8 @@ namespace P3.Logic.Time.AdvancedTimer
 
         private (DateTime startTime, DateTime endTime) GetStartEndTime(CalendarPropertyDataEntry entry)
         {
+            
+            
             if (entry.AllDay)
             {
                 return (DateTime.Now.StartOfDay(), DateTime.Now.EndOfDay());
@@ -184,13 +196,13 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (startDates != null)
             {
-                startDates = startDates.Where(a => a > DateTime.Now).OrderBy(time => time);
+                startDates = startDates.Where(a => a > DateTime.Now || a.Date.Date == entry.StartDate.Date).OrderBy(time => time);
             }
 
             var endDates = new RFC2445Recur(entry.EndDate.ToLocalTime(), entry.RecurrenceRule).Iterate(Direction.Forward);
             if (endDates != null)
             {
-                endDates = endDates.Where(a => a > DateTime.Now).OrderBy(time => time);
+                endDates = endDates.Where(a => a > DateTime.Now || a.Date.Date == entry.StartDate.Date).OrderBy(time => time);
             }
 
             var startDateList = startDates?.ToList();
@@ -202,6 +214,18 @@ namespace P3.Logic.Time.AdvancedTimer
                 {
                     var startDate = startDateList.FirstOrDefault();
                     var endDate = endDateList.FirstOrDefault();
+
+                    if (startDate.Date == entry.StartDate.Date)
+                    {
+                        startDate = new DateTime(DateOnly.FromDateTime(DateTime.Now),
+                            new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second));
+                    }
+                    if (endDate.Date == entry.EndDate.Date)
+                    {
+                        endDate = new DateTime(DateOnly.FromDateTime(DateTime.Now),
+                            new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second));
+                    }
+
                     return (startDate, endDate);
                 }
                 if (!startDateList.Any() && endDateList.Any())

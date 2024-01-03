@@ -12,7 +12,7 @@ public class RFC2445RecurTest
     [Fact]
     public void TestRFC2445RecurConstructorWithRule()
     {
-        var rule = new RFC2445Recur.Rule { Frequency = Frequency.DAILY, Count = 5, Interval = 1};
+        var rule = new RFC2445Recur.Rule { Frequency = Frequency.DAILY, Count = 5, Interval = 1 };
         var start = DateTime.Now;
         var rfc2445Recur = new RFC2445Recur(start, rule);
 
@@ -102,8 +102,8 @@ public class RFC2445RecurTest
         };
 
         recurrenceRule.Frequency = Frequency.DAILY;
-        
-        
+
+
         var rfc2445Recur = new RFC2445Recur(start, recurrenceRule);
 
         var dates = rfc2445Recur.Iterate(Direction.Forward).ToList();
@@ -134,5 +134,15 @@ public class RFC2445RecurTest
         var dates = rfc2445Recur.Iterate(Direction.Forward).ToList();
         Assert.Single(dates);
         Assert.True(dates.ToList().First().IsToday());
+    }
+
+    [Fact]
+    public void TestRFC2445RecIterateByFreqDaily()
+    {
+        var start = new DateTime(new DateOnly(2023, 12, 12), new TimeOnly(15, 0), DateTimeKind.Utc);
+        var recurrenceRule = new RFC2445Recur(start, "FREQ=DAILY");
+        
+        var dates = recurrenceRule.Iterate(Direction.Forward).ToList();
+        
     }
 }
