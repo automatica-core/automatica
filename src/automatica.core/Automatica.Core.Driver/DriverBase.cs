@@ -56,6 +56,14 @@ namespace Automatica.Core.Driver
         private async Task Enqueue(IDispatchable source, DispatchValue value, int count = 0)
         {
             await Task.CompletedTask;
+
+            if (DriverContext.NodeInstance.State != NodeInstanceState.InUse)
+            {
+                DriverContext.Logger.LogWarning(
+                    $"{FullName} {Id} Node is not started...ignore write...");
+                return;
+            }
+
             _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
 
