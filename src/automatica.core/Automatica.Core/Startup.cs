@@ -151,9 +151,7 @@ namespace Automatica.Core
 
             services.AddSingleton<DiscoveryService>();
             services.AddAutomaticaCoreService(Configuration, false);
-
-            services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
-            services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
+            services.AddCoreLogger(Configuration);
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())

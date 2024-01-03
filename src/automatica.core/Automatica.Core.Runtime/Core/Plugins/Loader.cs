@@ -63,7 +63,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
     {
         public static async Task<IList<T>> Load<T>(string folder, string searchPattern, ILogger logger, IConfiguration config, bool isInDevMode)
         {
-            logger.LogInformation($"Loading files from {folder}");
+            logger.LogDebug($"Loading files from {folder}");
             var folders = Directory.GetDirectories(folder);
             var rootItems = await LoadFromFolder<T>(folder, searchPattern, logger, config, isInDevMode);
 
@@ -145,7 +145,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                         return null;
                     }
 
-                    logger.LogInformation($"Try to load assembly from {folder}");
+                    logger.LogDebug($"Try to load assembly from {folder}");
                     var foundDll =
                         Directory.GetFileSystemEntries(folder!, name.Name + ".dll", SearchOption.AllDirectories);
                     if (foundDll.Any())
@@ -154,7 +154,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     }
 
                     var secondPath = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
-                    logger.LogInformation($"Try to load assembly from second path: {secondPath}");
+                    logger.LogDebug($"Try to load assembly from second path: {secondPath}");
                     foundDll = Directory.GetFileSystemEntries(secondPath!, name.Name + ".dll",
                         SearchOption.AllDirectories);
                     if (foundDll.Any())
@@ -207,7 +207,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
                 if (resources == null)
                 {
-                    logger.LogInformation($"{file} does not contain a manifest files");
+                    logger.LogWarning($"{file} does not contain a manifest files");
                     throw new NoManifestFoundException();
                 }
 
@@ -290,7 +290,7 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
         private static async Task<List<T>> LoadFromFolder<T>(string folder, string searchPattern, ILogger logger, IConfiguration config, bool isInDevMode)
         {
-            logger.LogInformation($"Loading files from {folder} and check for {typeof(T)}");
+            logger.LogDebug($"Loading files from {folder} and check for {typeof(T)}");
             var list = new List<T>();
             foreach (var file in Directory.GetFiles(folder, searchPattern))
             {

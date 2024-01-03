@@ -3,6 +3,7 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Logger;
 using Automatica.Core.Push.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
@@ -17,6 +18,7 @@ namespace Automatica.Core.Logging
         private readonly Serilog.ILogger _logger;
         private readonly LoggingLevelSwitch _levelSwitch;
         private LogLevel _logLevel;
+
 
         public LogLevel LogLevel
         {
@@ -40,9 +42,10 @@ namespace Automatica.Core.Logging
         }
 
         public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider, string facility, LogLevel? level, bool isFrameworkLog = false) {
-            var serviceProvider1 = serviceProvider;
+            
             Facility = facility; 
             _levelSwitch = new LoggingLevelSwitch();
+
 
             if (isFrameworkLog)
             {
@@ -124,8 +127,8 @@ namespace Automatica.Core.Logging
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
 
-                logBuild.WriteTo.PushSignalR(serviceProvider1, "all");
-                logBuild.WriteTo.PushSignalR(serviceProvider1, facility);
+                logBuild.WriteTo.PushSignalR(serviceProvider, "all");
+                logBuild.WriteTo.PushSignalR(serviceProvider, facility);
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
@@ -137,7 +140,7 @@ namespace Automatica.Core.Logging
             _logger = logBuild.CreateLogger();
         }
 
-        private LogLevel Parse(string logLevel)
+        internal static LogLevel Parse(string logLevel)
         {
 			if(String.IsNullOrEmpty(logLevel)) {
 				return LogLevel.Debug;

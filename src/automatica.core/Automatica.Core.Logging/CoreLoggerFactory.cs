@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Logging
@@ -9,13 +10,15 @@ namespace Automatica.Core.Logging
         private readonly IServiceProvider _serviceProvider;
         private static readonly object Lock = new();
         private static readonly IDictionary<string, ICoreLogger> LoggerInstances = new ConcurrentDictionary<string, ICoreLogger>();
-        
+
+        private readonly ICoreLoggerSettings _coreLoggerSettings;
         public IConfiguration Configuration { get; }
 
         public CoreLoggerFactory(IConfiguration config, IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             Configuration = config;
+            _coreLoggerSettings = serviceProvider.GetRequiredService<ICoreLoggerSettings>();
         }
 
         public static ILogger GetLogger(IConfiguration? config, IServiceProvider? serviceProvider, string name)
@@ -51,7 +54,7 @@ namespace Automatica.Core.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return GetLogger(Configuration, _serviceProvider, categoryName, null, categoryName.ToLowerInvariant().Contains("microsoft") || categoryName.ToLowerInvariant().Contains("system"));
+            return GetLogger(Configuration, _serviceProvider, categoryName, _coreLoggerSettings.GetLogLevel(categoryName), categoryName.ToLowerInvariant().Contains("microsoft") || categoryName.ToLowerInvariant().Contains("system"));
         }
 
         public IEnumerable<ICoreLogger> GetLoggers()
@@ -67,7 +70,10 @@ namespace Automatica.Core.Logging
             lock (Lock)
             {
                 if (LoggerInstances.TryGetValue(name, out var instance))
+                {
                     instance.LogLevel = level;
+                    _coreLoggerSettings.Save(LoggerInstances);
+                }
             }
         }
 
@@ -77,8 +83,9 @@ namespace Automatica.Core.Logging
             {
                 foreach (var logger in LoggerInstances)
                 {
-                    logger.Value.LogLevel = level;
+                    logger.Value.LogLevel = level; 
                 }
+                _coreLoggerSettings.Save(LoggerInstances);
             }
         }
 
