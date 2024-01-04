@@ -20,7 +20,10 @@ namespace Automatica.Core.Base.Serialization
                 Value = obj
             };
 
-            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(serializedObject));
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(serializedObject, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
         }
         public static object Deserialize(byte[] obj)
         {
