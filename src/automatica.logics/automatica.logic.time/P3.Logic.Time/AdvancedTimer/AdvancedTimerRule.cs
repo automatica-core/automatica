@@ -20,6 +20,8 @@ namespace P3.Logic.Time.AdvancedTimer
         private readonly System.Timers.Timer _timer;
         private readonly object _lock = new object();
         
+        private readonly TimeProvider _timeProvider = TimeProvider.System;
+        
 
         private bool _value = false;
 
@@ -81,7 +83,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (list.Any())
             {
-                var next = list.MinBy(t => Math.Abs((t.startTime - DateTime.Now).Ticks));
+                var next = list.MinBy(t => Math.Abs((t.startTime - Context.TimeProvider.GetLocalNow()).Ticks));
 
                 if (next.startTime.IsToday())
                 {
@@ -107,7 +109,7 @@ namespace P3.Logic.Time.AdvancedTimer
 
         private void CalculateTickTime(DateTime start, DateTime end)
         {
-            var now = DateTime.Now;
+            var now = Context.TimeProvider.GetLocalNow();
             var nowTime = now.TimeOfDay;
 
             Context.Logger.LogInformation($"Now is {nowTime}");
@@ -133,10 +135,9 @@ namespace P3.Logic.Time.AdvancedTimer
                     timerTickTime = (stopTime - nowTime).TotalMilliseconds;
                 }
                 
-                if (timerTickTime < 0)
+                if (timerTickTime <= 0)
                 {
-                    _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime)
-                        .TotalMilliseconds;
+                    _timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds;
                     Context.Logger.LogDebug(
                         $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
 
@@ -164,7 +165,7 @@ namespace P3.Logic.Time.AdvancedTimer
                 _value = false;
             }
 
-            _timer.Interval = timerTickTime;
+            _timer.Interval = timerTickTime == 0 ? 1 : timerTickTime;
             Context.Logger.LogDebug(
                 $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
@@ -176,7 +177,7 @@ namespace P3.Logic.Time.AdvancedTimer
             
             if (entry.AllDay)
             {
-                return (DateTime.Now.StartOfDay(), DateTime.Now.EndOfDay());
+                return (Context.TimeProvider.GetLocalNow().DateTime.StartOfDay(), Context.TimeProvider.GetLocalNow().DateTime.EndOfDay());
             }
 
             if (String.IsNullOrEmpty(entry.RecurrenceRule))
@@ -196,13 +197,13 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (startDates != null)
             {
-                startDates = startDates.Where(a => a > DateTime.Now || a.Date.Date == entry.StartDate.Date).OrderBy(time => time);
+                startDates = startDates.Where(a => a > Context.TimeProvider.GetLocalNow() || a.Date.Date == entry.StartDate.Date).OrderBy(time => time);
             }
 
             var endDates = new RFC2445Recur(entry.EndDate.ToLocalTime(), entry.RecurrenceRule).Iterate(Direction.Forward);
             if (endDates != null)
             {
-                endDates = endDates.Where(a => a > DateTime.Now || a.Date.Date == entry.StartDate.Date).OrderBy(time => time);
+                endDates = endDates.Where(a => a > Context.TimeProvider.GetLocalNow() || a.Date.Date == entry.StartDate.Date).OrderBy(time => time);
             }
 
             var startDateList = startDates?.ToList();
@@ -217,12 +218,12 @@ namespace P3.Logic.Time.AdvancedTimer
 
                     if (startDate.Date == entry.StartDate.Date)
                     {
-                        startDate = new DateTime(DateOnly.FromDateTime(DateTime.Now),
+                        startDate = new DateTime(DateOnly.FromDateTime(Context.TimeProvider.GetLocalNow().DateTime),
                             new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
                     }
                     if (endDate.Date == entry.EndDate.Date)
                     {
-                        endDate = new DateTime(DateOnly.FromDateTime(DateTime.Now),
+                        endDate = new DateTime(DateOnly.FromDateTime(Context.TimeProvider.GetLocalNow().DateTime),
                             new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
                     }
 
@@ -231,7 +232,7 @@ namespace P3.Logic.Time.AdvancedTimer
                 if (!startDateList.Any() && endDateList.Any())
                 {
                     var endDate = endDateList.FirstOrDefault();
-                    return (DateTime.Now.StartOfDay(), endDate);
+                    return (Context.TimeProvider.GetLocalNow().DateTime.StartOfDay(), endDate);
                 }
             }
             return (DateTime.MaxValue, DateTime.MaxValue);

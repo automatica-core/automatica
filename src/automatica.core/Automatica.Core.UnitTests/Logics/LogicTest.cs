@@ -21,6 +21,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public LogicTest()
         {
             DateTimeHelper.ProviderInstance = FakeTimeProvider.Instance;
+            FakeTimeProvider.Instance.SetDateTime(DateTime.UtcNow);
             
             Instance = Activator.CreateInstance<T>();
 

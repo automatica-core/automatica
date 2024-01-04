@@ -61,7 +61,7 @@ namespace P3.Logic.Time.Timer
 
         private void CalculateTickTime(bool isStartup=false)
         {
-            var now = DateTime.Now;
+            var now = Context.TimeProvider.GetLocalNow();
             var nowTime = now.TimeOfDay;
 
             Context.Logger.LogInformation($"Now is {nowTime}");
@@ -153,8 +153,7 @@ namespace P3.Logic.Time.Timer
                 }
 
                 _value = !_value;
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value);
-
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value).ConfigureAwait(false);
 
                 CalculateTickTime();
             }

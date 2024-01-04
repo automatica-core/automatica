@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.UnitTests.Base.Logics;
@@ -11,6 +12,7 @@ namespace P3.Logic.Time.Tests.DelayedOn
         [Fact]
         public async void TestDelayedOnRule()
         {
+            FakeTimeProvider.SetDateTime(DateTime.UtcNow);
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
 
@@ -27,6 +29,7 @@ namespace P3.Logic.Time.Tests.DelayedOn
         [Fact]
         public async void TestDelayedOnRule2()
         {
+            FakeTimeProvider.SetDateTime(DateTime.UtcNow);
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
 
