@@ -96,7 +96,7 @@ namespace Automatica.Core.Runtime.Core.Update
 
                 if (autoUpdate != null && (bool) autoUpdate.Value && autoUpdateTime != null && autoUpdateTime.Value is DateTime updateTime)
                 {
-                    var now = DateTime.Now;
+                    var now = DateTimeHelper.ProviderInstance.GetLocalNow().DateTime;
                     var updateTimeToday = new DateTime(now.Year, now.Month, now.Day, updateTime.Hour, updateTime.Minute,
                         updateTime.Second);
 

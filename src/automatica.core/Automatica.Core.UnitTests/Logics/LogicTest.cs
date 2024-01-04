@@ -1,4 +1,5 @@
 ﻿using System;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Automatica.Core.UnitTests.Base.Common;
@@ -19,6 +20,8 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
         public LogicTest()
         {
+            DateTimeHelper.ProviderInstance = FakeTimeProvider.Instance;
+            
             Instance = Activator.CreateInstance<T>();
 
             Factory = new LogicTemplateFactoryMock();

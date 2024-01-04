@@ -1,4 +1,5 @@
-﻿using Automatica.Core.EF.Configuration;
+﻿using Automatica.Core.Base.Calendar;
+using Automatica.Core.EF.Configuration;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +29,7 @@ namespace Automatica.Core.EF.Backup
 
         private static int CalculateDiffToMidnight()
         {
-            var now = DateTime.Now;
+            var now = DateTimeHelper.ProviderInstance.GetLocalNow().DateTime;
 
             var midnight = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 0);
 
@@ -41,7 +42,7 @@ namespace Automatica.Core.EF.Backup
             {
                 await _backupService.StartBackup(
                     ConnectionStringHelper.GetConnectionString(_config, _logger).connectionString,
-                    Path.Combine("bak",$"{_context.DatabaseType}-{DateTime.Now:yyyy-MM-dd}.bak"));
+                    Path.Combine("bak",$"{_context.DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak"));
             }
 
             await ClearOldBackups();

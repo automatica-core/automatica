@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF.Backup.MySql\Automatica.Core.EF.Backup.MySql.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF.Backup.SqLite\Automatica.Core.EF.Backup.SqLite.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />

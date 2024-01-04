@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO.Remanent;
 using Automatica.Core.Base.Remote;
 using Microsoft.Extensions.Logging;
@@ -270,7 +271,7 @@ namespace Automatica.Core.Base.IO
 
         public Task DispatchValue(IDispatchable self, object value, DispatchValueSource valueSource)
         {
-            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTime.Now, valueSource);
+            var dispatchable = new DispatchValue(self.Id, self.Type, value, DateTimeHelper.ProviderInstance.GetLocalNow().DateTime, valueSource);
             return DispatchValue(self, dispatchable);
         }
 

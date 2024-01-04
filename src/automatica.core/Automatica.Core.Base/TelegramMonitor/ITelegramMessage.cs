@@ -18,7 +18,7 @@ namespace Automatica.Core.Base.TelegramMonitor
     public interface ITelegramMessage
     {
         /// <summary>
-        /// Instance <see cref="Guid"/> for the message
+        /// ProviderInstance <see cref="Guid"/> for the message
         /// </summary>
         Guid BusId { get; set; }
 

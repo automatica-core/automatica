@@ -43,6 +43,7 @@ using Automatica.Core.Control.Cache;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.RemoteConnect;
 using Automatica.Core.Runtime.Recorder.Abstraction;
+using Automatica.Core.Base.Calendar;
 
 [assembly: InternalsVisibleTo("Automatica.Core.CI.CreateDatabase")]
 [assembly: InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -696,7 +697,7 @@ namespace Automatica.Core.Runtime.Core
                 _serviceProvider.GetRequiredService<IServerCloudApi>(), 
                 _licenseContext,
                 _controlContext,
-                TimeProvider.System);
+                DateTimeHelper.ProviderInstance);
 
             var rule = factory.CreateLogicInstance(ruleContext);
 

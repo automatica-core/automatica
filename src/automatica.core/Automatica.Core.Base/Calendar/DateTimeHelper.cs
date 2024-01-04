@@ -4,6 +4,8 @@ namespace Automatica.Core.Base.Calendar
 {
     public static class DateTimeHelper
     {
+        public static TimeProvider ProviderInstance { get; internal set; } = TimeProvider.System;
+        
         public static DateTime StartOfDay(this DateTime theDate)
         {
             return theDate.Date;
@@ -16,7 +18,7 @@ namespace Automatica.Core.Base.Calendar
 
         public static bool IsToday(this DateTime theDate)
         {
-            var now = DateTime.Now;
+            var now = ProviderInstance.GetLocalNow();
             
             return theDate.Date == now.Date;
         }

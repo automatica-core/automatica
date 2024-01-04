@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -60,7 +61,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
 
     public class FakeTimeProvider : TimeProvider
     {
-        private DateTime _dateTime;
+        private DateTime _dateTime = DateTime.Now;
 
         public static FakeTimeProvider Instance { get; } = new FakeTimeProvider();
 
