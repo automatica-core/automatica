@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.UnitTests.Base.Logics;
 using P3.Logic.Time.AdvancedTimer;
 using Xunit;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace P3.Logic.Time.Tests.AdvancedTimer
 {
@@ -25,27 +23,27 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
             paramDelay.Value = new CalendarPropertyData()
             {
-                Value = new List<CalendarPropertyDataEntry>
-                {
-                    new CalendarPropertyDataEntry
+                Value =
+                [
+                    new()
                     {
                         AllDay = true
                     }
-                }
+                ]
             };
             await Logic.Start();
             await Task.Delay(200);
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             //Assert.Equal(true, values.First().Value.Value);
 
             await Task.Delay(200);
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(true, values.First().Value.Value);
             await Logic.Stop();
         }
@@ -75,17 +73,17 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             
             recurrenceRule.Frequency = Frequency.DAILY;
 
-            var timerData = new CalendarPropertyData()
+            var timerData = new CalendarPropertyData
             {
-                Value = new List<CalendarPropertyDataEntry>
-                {
-                    new CalendarPropertyDataEntry
+                Value =
+                [
+                    new()
                     {
                         StartDate = DateTime.Now.AddSeconds(1),
-                        EndDate= DateTime.Now.AddSeconds(2),
-                        RecurrenceRule = recurrenceRule.ToString()  
+                        EndDate = DateTime.Now.AddSeconds(2),
+                        RecurrenceRule = recurrenceRule.ToString()
                     }
-                }
+                ]
             };
 
             paramDelay.Value = timerData;
@@ -126,15 +124,15 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
             var timerData = new CalendarPropertyData()
             {
-                Value = new List<CalendarPropertyDataEntry>
-                {
-                    new CalendarPropertyDataEntry
+                Value =
+                [
+                    new()
                     {
                         StartDate = DateTime.Now.AddHours(-1),
-                        EndDate= DateTime.Now.AddHours(2),
+                        EndDate = DateTime.Now.AddHours(2),
                         RecurrenceRule = recurrenceRule.ToString()
                     }
-                }
+                ]
             };
 
             paramDelay.Value = timerData;
@@ -162,29 +160,29 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
             paramDelay.Value = new CalendarPropertyData()
             {
-                Value = new List<CalendarPropertyDataEntry>
-                {
+                Value =
+                [
                     new CalendarPropertyDataEntry
                     {
-                        StartDate =DateTime.Now.AddHours(-2),
+                        StartDate = DateTime.Now.AddHours(-2),
                         EndDate = DateTime.Now.AddHours(2),
                         RecurrenceRule = "FREQ=DAILY"
                     }
-                }
+                ]
             };
             await Logic.Start();
             await Task.Delay(200);
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             //Assert.Equal(true, values.First().Value.Value);
 
             await Task.Delay(200);
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(true, values.First().Value.Value);
             await Logic.Stop();
         }
@@ -200,33 +198,34 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
             paramDelay.Value = new CalendarPropertyData()
             {
-                Value = new List<CalendarPropertyDataEntry>
-                {
-                    new CalendarPropertyDataEntry
+                Value =
+                [
+                    new()
                     {
-                        StartDate =DateTime.Now.AddHours(-2),
+                        StartDate = DateTime.Now.AddHours(-2),
                         EndDate = DateTime.Now.AddHours(2),
                         RecurrenceRule = "FREQ=DAILY"
                     },
-                    new CalendarPropertyDataEntry
+
+                    new()
                     {
-                        StartDate =DateTime.Now.AddHours(-8),
+                        StartDate = DateTime.Now.AddHours(-8),
                         EndDate = DateTime.Now.AddHours(-6),
                         RecurrenceRule = "FREQ=DAILY"
                     }
-                }
+                ]
             };
             await Logic.Start();
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(true, values.First().Value.Value);
 
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(true, values.First().Value.Value);
             await Logic.Stop();
         }
@@ -269,6 +268,7 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
+            
             var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
             paramDelay.ValueString =
                 "{\"Value\":[{\"Text\":\"Morgens\",\"StartDate\":\"2023-12-13T23:00:00.000Z\",\"EndDate\":\"2023-12-14T05:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1},{\"Text\":\"Abends\",\"StartDate\":\"2024-01-03T15:00:00.000Z\",\"EndDate\":\"2024-01-03T23:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1},{\"Text\":\"Mittags\",\"StartDate\":\"2024-01-01T11:00:00.000Z\",\"EndDate\":\"2024-01-01T12:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1}],\"TrackingState\":1}";
