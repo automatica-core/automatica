@@ -233,17 +233,45 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
         [Theory]
         [MemberData(nameof(TestTimerRuleWithDifferentNowData))]
-        
+
         public async void TestTimerRule_WithDifferentNow(DateTime now, bool result)
         {
             FakeTimeProvider.SetDateTime(now);
-            
+
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
             var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
             paramDelay.ValueString =
                 "{\"Value\":[{\"Text\":\"Morgens\",\"StartDate\":\"2023-12-14T05:00:00.000Z\",\"EndDate\":\"2023-12-14T07:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1},{\"Text\":\"Abends\",\"StartDate\":\"2024-01-03T15:00:00.000Z\",\"EndDate\":\"2024-01-03T23:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1},{\"Text\":\"Mittags\",\"StartDate\":\"2024-01-01T11:00:00.000Z\",\"EndDate\":\"2024-01-01T12:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1}],\"TrackingState\":1}";
+
+            await Logic.Start();
+            await Task.Delay(200);
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Equal(result, values.First().Value.Value);
+
+
+            values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Equal(result, values.First().Value.Value);
+            await Logic.Stop();
+        }
+
+        [Theory]
+        [MemberData(nameof(TestTimerRuleWithDifferentNowData2))]
+
+        public async void TestTimerRule_WithDifferentNow2(DateTime now, bool result)
+        {
+            FakeTimeProvider.SetDateTime(now);
+
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
+            await Logic.Stop();
+            var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
+            paramDelay.ValueString =
+                "{\"Value\":[{\"Text\":\"Morgens\",\"StartDate\":\"2023-12-13T23:00:00.000Z\",\"EndDate\":\"2023-12-14T05:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1},{\"Text\":\"Abends\",\"StartDate\":\"2024-01-03T15:00:00.000Z\",\"EndDate\":\"2024-01-03T23:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1},{\"Text\":\"Mittags\",\"StartDate\":\"2024-01-01T11:00:00.000Z\",\"EndDate\":\"2024-01-01T12:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false,\"TrackingState\":1}],\"TrackingState\":1}";
 
             await Logic.Start();
             await Task.Delay(200);
@@ -274,6 +302,31 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(15, 28), DateTimeKind.Utc), true },
 
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false },
+
+                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(20, 12), DateTimeKind.Utc), true },
+
+                new object[] { DateTime.MaxValue, false },
+                new object[] { DateTime.MinValue, false },
+            };
+
+        public static IEnumerable<object[]> TestTimerRuleWithDifferentNowData2 =>
+
+            new List<object[]>
+            {
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(1, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(4, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(7, 0), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 30), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(17, 0), DateTimeKind.Utc), true },
+
+
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(10, 0), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(13, 30), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(15, 28), DateTimeKind.Utc), true },
+
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false },
+
+                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(20, 12), DateTimeKind.Utc), true },
 
                 new object[] { DateTime.MaxValue, false },
                 new object[] { DateTime.MinValue, false },
