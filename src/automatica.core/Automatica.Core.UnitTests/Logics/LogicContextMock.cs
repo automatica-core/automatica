@@ -65,14 +65,22 @@ namespace Automatica.Core.UnitTests.Base.Logics
     public class FakeTimeProvider : TimeProvider
     {
         private DateTime _dateTime = DateTime.Now;
+        private TimeZoneInfo _localTimeZone = TimeZoneInfo.Local;
 
         public static FakeTimeProvider Instance { get; } = new FakeTimeProvider();
+
+        public override TimeZoneInfo LocalTimeZone => _localTimeZone;
 
         public override DateTimeOffset GetUtcNow()
         {
             return _dateTime.ToUniversalTime();
         }
 
+        public void SetTimeZone(TimeZoneInfo timeZone)
+        {
+            _localTimeZone = timeZone;
+        }
+        
         public void SetDateTime(DateTime dateTime)
         {
             _dateTime = dateTime;
