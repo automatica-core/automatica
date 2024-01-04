@@ -5,6 +5,7 @@ using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Control;
+using System;
 
 [assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
 namespace Automatica.Core.Logic
@@ -53,5 +54,10 @@ namespace Automatica.Core.Logic
         /// Provides the control context
         /// </summary>
         IControlContext ControlContext { get; }
+
+        /// <summary>
+        /// Provides date and times (also fake ones for tests)
+        /// </summary>
+        TimeProvider TimeProvider { get; }
     }
 }

@@ -15,6 +15,8 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public LogicContextMock Context { get; }
         protected DispatchableMock Dispatchable { get; }
 
+        protected FakeTimeProvider FakeTimeProvider => FakeTimeProvider.Instance;
+
         public LogicTest()
         {
             Instance = Activator.CreateInstance<T>();

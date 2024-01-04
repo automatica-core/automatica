@@ -695,8 +695,8 @@ namespace Automatica.Core.Runtime.Core
                 logger,
                 _serviceProvider.GetRequiredService<IServerCloudApi>(), 
                 _licenseContext,
-                _controlContext
-                );
+                _controlContext,
+                TimeProvider.System);
 
             var rule = factory.CreateLogicInstance(ruleContext);
 

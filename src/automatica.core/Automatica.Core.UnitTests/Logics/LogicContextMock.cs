@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -53,7 +54,24 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public ILicenseContract LicenseContract => new LicenseContractMock();
 
         public IControlContext ControlContext { get; }
+
+        public TimeProvider TimeProvider => FakeTimeProvider.Instance;
     }
 
-   
+    public class FakeTimeProvider : TimeProvider
+    {
+        private DateTime _dateTime;
+
+        public static FakeTimeProvider Instance { get; } = new FakeTimeProvider();
+
+        public override DateTimeOffset GetUtcNow()
+        {
+            return _dateTime.ToUniversalTime();
+        }
+
+        public void SetDateTime(DateTime dateTime)
+        {
+            _dateTime = dateTime;
+        }
+    }
 }
