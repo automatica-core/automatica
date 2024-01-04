@@ -28,6 +28,8 @@ export class BaseService {
 
     }
 
+    private timeout: number = 5000;
+
 
     private headers(): HttpHeaders {
         let headers = new HttpHeaders();
@@ -160,7 +162,7 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers() }).pipe(timeout(2000)).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             if (!response) {
                 return void 0;
@@ -178,7 +180,7 @@ export class BaseService {
         try {
             const data = this.encode(url, body);
             const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
-                { withCredentials: withCredentials, headers: this.headers() }).pipe(timeout(2000)).toPromise();
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
 
             if (!response) {
                 return void 0;
