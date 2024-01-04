@@ -150,5 +150,7 @@ namespace P3.Logic.Operations.Dimmer
         public Guid OutputId => _dimmerState.ObjId;
         public Guid DimmerOutputValueId => _dimmerValue.ObjId;
         public Guid DimmerInputValueId => _value.ObjId;
+        public bool DimmerState => _lastState ?? false;
+        public int DimmerValue => _lastValue ?? 0;
     }
 }

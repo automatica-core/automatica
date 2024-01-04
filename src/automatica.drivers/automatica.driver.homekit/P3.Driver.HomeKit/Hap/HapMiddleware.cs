@@ -37,7 +37,8 @@ namespace P3.Driver.HomeKit.Hap
         internal static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.None,
-            NullValueHandling = NullValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
         public HapMiddleware(ILogger logger, string pairCode, HomeKitServer homeKitServer)

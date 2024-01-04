@@ -59,6 +59,9 @@ namespace P3.Driver.HomeKit.Hap.Model
         [JsonIgnore]
         public Service Service { get; }
 
+        [JsonIgnore]
+        public Accessory Accessory => Service.Accessory;
+
         public Characteristic() : base(typeof(object))
         {
             //should only be used from json converter

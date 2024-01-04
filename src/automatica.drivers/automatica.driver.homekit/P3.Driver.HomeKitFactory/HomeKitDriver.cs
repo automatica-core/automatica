@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using P3.Driver.HomeKit;
 using P3.Driver.HomeKit.Hap;
 using P3.Driver.HomeKit.Hap.EventArgs;
@@ -28,12 +30,12 @@ namespace P3.Driver.HomeKitFactory
         private PairingKeyNode _pairingNode;
 
         private readonly List<Accessory> _accessories = new List<Accessory>();
-        private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new Dictionary<Characteristic, List<BaseNode>>();
-        private readonly Dictionary<Characteristic, IControl> _characteristicControlMap = new Dictionary<Characteristic, IControl>();
+        private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new();
+        private readonly Dictionary<Accessory, IControl> _characteristicControlMap = new();
 
         private readonly AccessoryInstanceIdGenerator _aidGenerator;
         
-        private readonly List<IControl> _controls = new List<IControl>();
+        private readonly List<IControl> _controls = new();
 
         public HomeKitDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -134,6 +136,7 @@ namespace P3.Driver.HomeKitFactory
                 DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
                 pairCode, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
 
+            _pairingNode.Code = pairCode;
             _pairingNode.DispatchRead(pairCode);
 
             foreach (var accessory in _accessories)
@@ -163,25 +166,41 @@ namespace P3.Driver.HomeKitFactory
                 }
 
                 var aid = _aidGenerator.GetNextAidInstance();
-                var accessory = AccessoryFactory.CreateSwitchAccessory(aid, control.Name, "AutomaticaCore",
-                    control.Id.ToString(), false);
-
-                accessory.Id = _server.AddAccessory(accessory);
-                var characteristic = accessory.Specific.Characteristics.First();
-
-                _characteristicControlMap.Add(characteristic, control);
-
-                if (control is ISwitch iSwitch)
+                if (control is IDimmer dimmer)
                 {
-                    await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.Visualization, iSwitch.InputId,
-                        (dispatchable, value) =>
-                        {
+                    var accessory = AccessoryFactory.CreateLightBulbAccessory(aid, control.Name, "AutomaticaCore",
+                        control.Id.ToString(), false, 0);
 
-                            characteristic.Value = value.Value;
+                    accessory.Id = _server.AddAccessory(accessory);
+                    _characteristicControlMap.Add(accessory, control);
+                    var characteristic = accessory.Specific.Characteristics.First();
+                    var dimValueChar = accessory.Specific.Characteristics.Last();
 
-                            WriteCharacteristic(characteristic);
+                    dimmer.RegisterValueCallback(() =>
+                    {
+                        characteristic.Value = dimmer.DimmerState;
+                        dimValueChar.Value = dimmer.DimmerValue;
 
-                        });
+                        WriteCharacteristic(dimValueChar);
+                        WriteCharacteristic(characteristic);
+                    });
+
+                }
+                else if (control is ISwitch iSwitch)
+                {
+                    var accessory = AccessoryFactory.CreateSwitchAccessory(aid, control.Name, "AutomaticaCore",
+                        control.Id.ToString(), false);
+
+                    accessory.Id = _server.AddAccessory(accessory);
+                    var characteristic = accessory.Specific.Characteristics.First();
+
+                    _characteristicControlMap.Add(accessory, control);
+
+                    iSwitch.RegisterValueCallback(() =>
+                    {
+                        characteristic.Value = iSwitch.State == SwitchState.On;
+                        WriteCharacteristic(characteristic);
+                    });
                 }
             }
 
@@ -193,8 +212,11 @@ namespace P3.Driver.HomeKitFactory
             if (actionName == HomeKitFactory.ClearPairingsKey)
             {
                 DriverContext.Logger.LogInformation($"Clear pairings...");
-                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, null);  //save to database
-                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, null); //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, String.Empty);  //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, String.Empty); //save to database
+
+                _ltskProperty.Value = String.Empty;
+                _ltpkProperty.Value = String.Empty;
                 DriverContext.Logger.LogInformation($"Clear pairings...done");
             }
             return base.CustomAction(actionName, token);
@@ -207,30 +229,43 @@ namespace P3.Driver.HomeKitFactory
             {
                 value.ForEach(a => a.SetValue(e.Value));
             }
-            else if (_characteristicControlMap.TryGetValue(e.Characteristic, out var control))
+            else if (_characteristicControlMap.TryGetValue(e.Characteristic.Accessory, out var control))
             {
-                if (control is ISwitch iSwitch)
+                if (control is IDimmer iDimmer)
                 {
-                    if (e.Value is bool bValue)
+                    if (e.Characteristic.Format == "int")
                     {
-                        await iSwitch.SwitchAsync(bValue);
+                        await iDimmer.DimAsync(Convert.ToInt32(e.Value));
                     }
-                    else if (e.Value is int intValue)
+                    else
                     {
-                        await iSwitch.SwitchAsync(intValue == 1);
+                        await Switch(e.Value, iDimmer);
                     }
-                    else if (e.Value is double dValue)
-                    {
-                        await iSwitch.SwitchAsync(dValue == 1);
-                    }
-                    else if (e.Value is long lValue)
-                    {
-                        await iSwitch.SwitchAsync(lValue == 1);
-                    }
-                    var dispatchAble = new GenericDispatchableNode($"{control.Name}", iSwitch.OutputId,
-                        DispatchableSource.RuleInstance);
-                    await DriverContext.Dispatcher.DispatchValue(dispatchAble, new DispatchValue(iSwitch.OutputId, DispatchableType.RuleInstance, e.Value, DateTime.Now, DispatchValueSource.Write));
                 }
+                else if (control is ISwitch iSwitch)
+                {
+                    await Switch(e.Value, iSwitch);
+                }
+            }
+        }
+
+        private async Task Switch(object value, ISwitch control)
+        {
+            if (value is bool bValue)
+            {
+                await control.SwitchAsync(bValue);
+            }
+            else if (value is int intValue)
+            {
+                await control.SwitchAsync(intValue == 1);
+            }
+            else if (value is double dValue)
+            {
+                await control.SwitchAsync(dValue == 1);
+            }
+            else if (value is long lValue)
+            {
+                await control.SwitchAsync(lValue == 1);
             }
         }
 
@@ -296,7 +331,7 @@ namespace P3.Driver.HomeKitFactory
             {
                 case "light-bulb-folder":
                     accessory = AccessoryFactory.CreateLightBulbAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
-                        ctx.NodeInstance.ObjId.ToString(), false);
+                        ctx.NodeInstance.ObjId.ToString(), false, 0);
                     break;
                 case "power-outlet-folder":
                     accessory = AccessoryFactory.CreateOutletAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",

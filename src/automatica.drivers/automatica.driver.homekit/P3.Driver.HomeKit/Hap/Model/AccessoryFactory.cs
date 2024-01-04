@@ -10,7 +10,7 @@
         public const string SwitchType = "49";
         public const string TemperatureSensorType = "8A";
 
-        public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool? value)
+        public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool? value, int? dimValue)
         {
             var a2 = new Accessory
             {
@@ -20,7 +20,8 @@
             a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
             a2.Services.Add(a2.AccessoryInfo);
 
-            a2.Services.Add(CreateLightBulb(a2, 7, name, value));
+            a2.Specific = CreateLightBulb(a2, 7, name, value, dimValue);
+            a2.Services.Add(a2.Specific);
 
 
             return a2;
@@ -72,6 +73,7 @@
 
             return a2;
         }
+
 
         public static Accessory CreateTemperatureSensorAccessory(int aid, string name, string manufacturer,
             string serial, double value)
@@ -128,7 +130,7 @@
             return service;
         }
 
-        public static Service CreateLightBulb(Accessory accessory, int id, string name, bool? value)
+        public static Service CreateLightBulb(Accessory accessory, int id, string name, bool? value, int? dimValue)
         {
             var service = new Service(accessory)
             {
@@ -139,12 +141,11 @@
             var bulbC = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.OnType, value, 8), "bool");
             bulbC.Value = value;
 
+            var bulbB = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.BrightnessType, value, 9), "int");
+            bulbB.Value = dimValue;
+
             service.Characteristics.Add(bulbC);
-            
-
-
-
-
+            service.Characteristics.Add(bulbB);
 
             return service;
         }
