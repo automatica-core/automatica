@@ -83,9 +83,9 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (list.Any())
             {
-                var next = list.MinBy(t => Math.Abs((t.startTime - Context.TimeProvider.GetLocalNow()).Ticks));
+                var next = list.MinBy(t => Math.Abs((t.startTime.TimeOfDay - Context.TimeProvider.GetLocalNow().TimeOfDay).Ticks));
 
-                if (next.startTime.IsToday())
+                if (next.startTime.IsToday() || next.endTime.IsToday())
                 {
                     CalculateTickTime(next.startTime.ToLocalTime(), next.endTime.ToLocalTime());
                 }
@@ -197,13 +197,13 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (startDates != null)
             {
-                startDates = startDates.Where(a => a >= Context.TimeProvider.GetLocalNow() || a.Date.Date == entry.StartDate.Date || a.StartOfDay().AddDays(-1) == entry.StartDate.ToLocalTime().StartOfDay()).OrderBy(time => time);
+                startDates = startDates.Where(a => a <= Context.TimeProvider.GetLocalNow() || a.StartOfDay().AddDays(-1) == entry.StartDate.ToLocalTime().StartOfDay()).OrderBy(time => time);
             }
 
             var endDates = new RFC2445Recur(entry.EndDate.ToLocalTime(), entry.RecurrenceRule).Iterate(Direction.Forward);
             if (endDates != null)
             {
-                endDates = endDates.Where(a => a > Context.TimeProvider.GetLocalNow() || a.Date.Date == entry.StartDate.Date || a.EndOfDay() == entry.EndDate.ToLocalTime().EndOfDay()).OrderBy(time => time);
+                endDates = endDates.Where(a => a > Context.TimeProvider.GetLocalNow() ||  a.EndOfDay() == entry.EndDate.ToLocalTime().EndOfDay()).OrderBy(time => time);
             }
 
             var startDateList = startDates?.ToList();
@@ -242,7 +242,8 @@ namespace P3.Logic.Time.AdvancedTimer
                 if (!startDateList.Any() && endDateList.Any())
                 {
                     var endDate = endDateList.FirstOrDefault();
-                    return (Context.TimeProvider.GetLocalNow().DateTime.StartOfDay(), endDate);
+                    var startDate = entry.StartDate.ToLocalTime();
+                    return (startDate, endDate);
                 }
             }
             return (DateTime.MaxValue, DateTime.MaxValue);
