@@ -86,10 +86,7 @@ namespace Automatica.Core.Watchdog
             
             processInfo.WorkingDirectory = Environment.CurrentDirectory;
 
-            if (!String.IsNullOrEmpty(tz))
-            {
-                processInfo.EnvironmentVariables.Add("TZ", tz);
-            }
+          
 
             Process process = null;
             try
