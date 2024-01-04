@@ -369,7 +369,7 @@ namespace Automatica.Core.Runtime.Database
 
             AddHostedGrafanaRecorderSettings(context);
             AddRemoteConnectSettings(context);
-            AddHyperSeriesRecorderSettings(context);
+            AddHyperSeriesRecorderSettings(context, config);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -618,7 +618,7 @@ namespace Automatica.Core.Runtime.Database
             }
         }
 
-        private static void AddHyperSeriesRecorderSettings(AutomaticaContext context)
+        private static void AddHyperSeriesRecorderSettings(AutomaticaContext context, IConfiguration config)
         {
             var host = context.Settings.SingleOrDefault(a => a.ValueKey == "hyperSeriesHost");
 
@@ -628,7 +628,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "hyperSeriesHost",
                     Type = (long)PropertyTemplateType.Text,
-                    Value = "",
+                    Value = config["db:hyperSeriesHost"],
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
                     Order = 0,
@@ -651,7 +651,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "hyperSeriesPort",
                     Type = (long)PropertyTemplateType.Numeric,
-                    Value = "5432",
+                    Value = config["db:hyperSeriesPort"] ?? "5432",
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
                     Order = 0,
@@ -673,7 +673,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "hyperSeriesUser",
                     Type = (long)PropertyTemplateType.Text,
-                    Value = "",
+                    Value = config["db:hyperSeriesUser"],
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
                     Order = 1,
@@ -695,7 +695,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "hyperSeriesPassword",
                     Type = (long)PropertyTemplateType.Password,
-                    Value = "",
+                    Value = config["db:hyperSeriesPassword"],
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
                     Order = 2,
@@ -716,7 +716,7 @@ namespace Automatica.Core.Runtime.Database
                 {
                     ValueKey = "hyperSeriesDatabase",
                     Type = (long)PropertyTemplateType.Text,
-                    Value = "",
+                    Value = config["db:hyperSeriesDatabase"],
                     Group = "SERVER.RECORDERS.HYPERSERIES",
                     IsVisible = true,
                     Order = 3,
