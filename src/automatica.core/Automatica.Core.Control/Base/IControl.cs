@@ -2,9 +2,9 @@
 
 namespace Automatica.Core.Control.Base
 {
-    public interface IControlValueCallback<out T>
+    public interface IControlValueCallback
     {
-        public Guid RegisterValueCallback(Action<T> callback);
+        public Guid RegisterValueCallback(Action callback);
         public void UnregisterValueCallback(Guid id);
     }
     

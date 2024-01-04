@@ -7,7 +7,7 @@
         On = 1,
     }
     
-    public interface ISwitch : IControl, IControlValueCallback<ISwitch>
+    public interface ISwitch : IControl, IControlValueCallback
     {
         public SwitchState State { get; }
 
