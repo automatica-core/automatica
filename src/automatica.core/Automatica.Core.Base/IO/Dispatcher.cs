@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using Automatica.Core.Base.IO.Remanent;
 using Automatica.Core.Base.Remote;
-using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 
@@ -74,9 +73,9 @@ namespace Automatica.Core.Base.IO
 
             lock (_lock)
             {
-                if (Values.ContainsKey(id))
+                if (Values.TryGetValue(id, out var value))
                 {
-                    return Values[id];
+                    return value;
                 }
             }
 
@@ -117,10 +116,8 @@ namespace Automatica.Core.Base.IO
                     continue;
                 }
 
-                foreach (var rnode in node.Value)
+                foreach (var (self, value) in node.Value)
                 {
-                    var self = rnode.Key;
-                    var value = rnode.Value;
                     await _dataBroadcast.DispatchValue(node.Key, self, value);
                 }
             }
@@ -140,18 +137,9 @@ namespace Automatica.Core.Base.IO
 
                 if (!NodeValues[self.Type].ContainsKey(self.Id))
                 {
-                   
                     NodeValues[self.Type].Add(self.Id, dispatchable);
 
-                    if (!Values.ContainsKey(self.Id))
-                    {
-                        Values.Add(self.Id, dispatchable);
-                    }
-                    else
-                    {
-                        Values[self.Id] = dispatchable;
-                    }
-                    
+                    Values[self.Id] = dispatchable;
                 }
                 else
                 {
@@ -204,16 +192,13 @@ namespace Automatica.Core.Base.IO
             }
             else if (self.Source != DispatchableSource.Remote)
             {
-                _logger.LogInformation($"Dispatch value via mqtt dispatcher");
-
                 await _remoteSender.DispatchValue(self, value);
             }
             
-
             await _dataBroadcast.DispatchValue(self.Type, self.Id, value);
         }
 
-        private Task ExecuteDispatch(IDispatchable self, DispatchValue value, IList<Action<IDispatchable, DispatchValue>> dispatch, Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
+        private Task ExecuteDispatch(IDispatchable self, DispatchValue value, IEnumerable<Action<IDispatchable, DispatchValue>> dispatch, Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
         {
             foreach (var dis in dispatch)
             {
@@ -236,9 +221,9 @@ namespace Automatica.Core.Base.IO
 
                     ResetHopCount(self, dis);
                 }
-                catch (DispatchLoopDetectedException dlde)
+                catch (DispatchLoopDetectedException dispatchLoopDetectedException)
                 {
-                    _logger.LogError(dlde, $"Detected a dispatch loop while dispatching {dlde.Dispatchable.Id}-{dlde.Dispatchable.Name}");
+                    _logger.LogError(dispatchLoopDetectedException, $"Detected a dispatch loop while dispatching {dispatchLoopDetectedException.Dispatchable.Id}-{dispatchLoopDetectedException.Dispatchable.Name}");
                     throw;
                 }
                 catch (Exception e)
@@ -289,14 +274,14 @@ namespace Automatica.Core.Base.IO
             return DispatchValue(self, dispatchable);
         }
 
-        public virtual async Task DispatchValue(IDispatchable self, DispatchValue value)
+        public virtual Task DispatchValue(IDispatchable self, DispatchValue value)
         {
             async void DispatchAction(IDispatchable a, DispatchValue b, Action<IDispatchable, DispatchValue> c)
             {
                 await DispatchValueInternal(self, value, c);
             }
 
-            await Dispatch(self, value, DispatchAction);
+            return Dispatch(self, value, DispatchAction);
         }
 
 
