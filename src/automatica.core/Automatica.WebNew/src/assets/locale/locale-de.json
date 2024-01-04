@@ -96,6 +96,7 @@
       "OUT": "Verkleinern",
       "TO_VIEW": "Standard Zoom"
     },
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "Änderungen von System Settings benötigen einen Neustart des Servers um wirksam zu werden. Dieser passiert automatisch!",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {

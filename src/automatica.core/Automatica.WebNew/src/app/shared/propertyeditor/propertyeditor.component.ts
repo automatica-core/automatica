@@ -671,6 +671,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
         if (!this.item.ParentId) {
           this.nodeInstanceService.saveSettings();
+          this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);

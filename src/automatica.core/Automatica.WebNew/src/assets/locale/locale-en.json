@@ -97,6 +97,7 @@
       "OUT": "Zoom out",
       "TO_VIEW": "Zoom default"
     },
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "System settings changes require a reboot. This happens automatically!",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {
