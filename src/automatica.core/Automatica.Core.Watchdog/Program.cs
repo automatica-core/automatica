@@ -37,6 +37,12 @@ namespace Automatica.Core.Watchdog
             _logger = CoreLoggerFactory.GetLogger(config,null, "Watchdog");
             _logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
 
+            var tz = config["TZ"] ?? config["server:TZ"];
+            if (!String.IsNullOrEmpty(tz))
+            {
+                Environment.SetEnvironmentVariable("TZ", tz);
+            }
+
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             var appName = Path.Combine(fi.DirectoryName, ServerInfo.ServerExecutable);
 
@@ -80,6 +86,11 @@ namespace Automatica.Core.Watchdog
             }
             
             processInfo.WorkingDirectory = Environment.CurrentDirectory;
+
+            if (!String.IsNullOrEmpty(tz))
+            {
+                processInfo.EnvironmentVariables.Add("TZ", tz);
+            }
 
             Process process = null;
             try
