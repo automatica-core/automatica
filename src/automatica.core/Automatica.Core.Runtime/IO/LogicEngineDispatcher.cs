@@ -10,6 +10,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Logging;
 
@@ -243,6 +244,7 @@ namespace Automatica.Core.Runtime.IO
                         {
                             _logger.LogDebug(
                                 $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
+
                             var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
 
                             foreach (var result in ruleResults)

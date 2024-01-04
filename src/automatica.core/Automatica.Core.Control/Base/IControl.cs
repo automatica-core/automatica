@@ -7,6 +7,7 @@ namespace Automatica.Core.Control.Base
         Guid Id { get;  }
         string Name { get; }
 
+        public void RegisterValueChanged(Action<IControl> callback);
         string ITypedObject.TypeInfo => "Control";
     }
 }

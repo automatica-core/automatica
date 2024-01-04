@@ -13,7 +13,8 @@
 
         public Guid InputId { get; }
         public Guid OutputId { get; }
-        
+
+
         public Task<bool> SwitchAsync(bool state, CancellationToken cancellationToken = default);
         public Task<bool> SwitchAsync(SwitchState state, CancellationToken cancellationToken = default);
 
