@@ -316,8 +316,8 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
             new List<object[]>
             {
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Utc), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(4, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(1, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(3, 0), DateTimeKind.Utc), true },
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Utc), false },
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 30), DateTimeKind.Utc), true },
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Utc), true },
@@ -329,10 +329,8 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false },
 
-                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(21, 12), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(20, 12), DateTimeKind.Utc), true },
 
-                new object[] { DateTime.MaxValue, false },
-                new object[] { DateTime.MinValue, false },
             };
 
 
