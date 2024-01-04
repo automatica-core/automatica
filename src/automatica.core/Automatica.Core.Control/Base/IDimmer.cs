@@ -1,6 +1,6 @@
 ﻿namespace Automatica.Core.Control.Base
 {
-    public interface IDimmer : ISwitch
+    public interface IDimmer : ISwitch, IControlValueCallback<IDimmer>
     {
         public Guid DimmerOutputValueId { get;  }
         public Guid DimmerInputValueId { get; }

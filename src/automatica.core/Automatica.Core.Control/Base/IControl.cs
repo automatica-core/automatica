@@ -2,12 +2,16 @@
 
 namespace Automatica.Core.Control.Base
 {
+    public interface IControlValueCallback<out T>
+    {
+        public void RegisterValueChanged(Action<T> callback);
+    }
+    
     public interface IControl : ITypedObject
     {
         Guid Id { get;  }
         string Name { get; }
 
-        public void RegisterValueChanged(Action<IControl> callback);
         string ITypedObject.TypeInfo => "Control";
     }
 }

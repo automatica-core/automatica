@@ -41,10 +41,6 @@ namespace Automatica.Core.WebApi.Controllers
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        public void RegisterValueChanged(Action<IControl> callback)
-        {
-            //not needed here
-        }
 
         public string TypeInfo => "Control";
     }
