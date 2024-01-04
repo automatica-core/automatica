@@ -4,7 +4,8 @@ namespace Automatica.Core.Control.Base
 {
     public interface IControlValueCallback<out T>
     {
-        public void RegisterValueChanged(Action<T> callback);
+        public Guid RegisterValueCallback(Action<T> callback);
+        public void UnregisterValueCallback(Guid id);
     }
     
     public interface IControl : ITypedObject
