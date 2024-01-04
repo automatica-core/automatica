@@ -33,6 +33,10 @@ namespace Automatica.Core.Base.IO
 
         private readonly IDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>> _registrationMap = new ConcurrentDictionary<DispatchableType, IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>>();
 
+        private readonly IDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>> _universalRegistrationMap =
+            new ConcurrentDictionary<Guid, IList<Action<IDispatchable, DispatchValue>>>();
+
+
         private readonly Timer _notifyTimer = new Timer();
 
         private readonly IDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>> _hopCounts = new ConcurrentDictionary<Guid, IDictionary<Action<IDispatchable, DispatchValue>, int>>();
@@ -60,7 +64,6 @@ namespace Automatica.Core.Base.IO
                 await DispatchValue(new RemanentDispatchable(keyPair.Key), keyPair.Value);
             }
         }
-
 
         public IDictionary<Guid, DispatchValue> GetValues()
         {
@@ -187,14 +190,16 @@ namespace Automatica.Core.Base.IO
                 await _remanentHandler.SaveValueAsync(self.Id, value);
             }
 
+            if (_universalRegistrationMap.TryGetValue(self.Id, out var dispatch1))
+            {
+                await ExecuteDispatch(self, value, dispatch1, dispatchAction);
+            }
 
             if (_registrationMap.ContainsKey(self.Type) && _registrationMap[self.Type].ContainsKey(self.Id))
             {
                 var dispatch = _registrationMap[self.Type][self.Id];
                 await ExecuteDispatch(self, value, dispatch, dispatchAction);
-
             }
-           
             else if (self.Type == DispatchableType.Visualization)
             {
                 foreach (var all in _registrationMap)
@@ -312,6 +317,15 @@ namespace Automatica.Core.Base.IO
 
             return Task.CompletedTask;
         }
+        public Task UnRegisterDispatch(Guid id, Action<IDispatchable, DispatchValue> callback)
+        {
+            if (_universalRegistrationMap.ContainsKey(id))
+            {
+                _universalRegistrationMap.Remove(id);
+            }
+
+            return Task.CompletedTask;
+        }
 
         protected virtual Task DispatchValueInternal(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue> dis)
         {
@@ -336,10 +350,22 @@ namespace Automatica.Core.Base.IO
             return Task.CompletedTask;
         }
 
+        public Task RegisterDispatch(Guid id, Action<IDispatchable, DispatchValue> callback)
+        {
+            if (!_universalRegistrationMap.ContainsKey(id))
+            {
+                _universalRegistrationMap.Add(id, new List<Action<IDispatchable, DispatchValue>>());
+            }
+
+            _universalRegistrationMap[id].Add(callback);
+            return Task.CompletedTask;
+        }
+
 
         public virtual Task ClearRegistrations()
         {
             _registrationMap.Clear();
+            _universalRegistrationMap.Clear();
             _hopCounts.Clear();
             return Task.CompletedTask;
         }
