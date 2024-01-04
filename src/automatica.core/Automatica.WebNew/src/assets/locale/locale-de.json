@@ -646,7 +646,9 @@
     "LICENSE": "Lizenz",
     "UPDATE_AVAILABLE": "Update verfügbar",
     "NO_UPDATE_AVAILABLE": "Kein Update verfügbar",
-    "NO_LICENSE_FOUND": "Keine Lizenz gefunden"
+    "NO_LICENSE_FOUND": "Keine Lizenz gefunden",
+    "INSTALLING_UPDATE": "Update wird installiert. Dies kann einige Minuten dauern. Der Server wird automatisch neu gestartet.",
+    "DOWNLOADING_UPDATE": "Update wird geladen..."
   },
   "LICENSE": {
     "NAME": "Lizenz"

@@ -646,7 +646,9 @@
     "LICENSE": "License",
     "UPDATE_AVAILABLE": "Update available",
     "NO_UPDATE_AVAILABLE": "No update available",
-    "NO_LICENSE_FOUND": "No license found"
+    "NO_LICENSE_FOUND": "No license found",
+    "INSTALLING_UPDATE": "Installing update. This can take several minutes. Server will be restarted automatically!",
+    "DOWNLOADING_UPDATE": "Downloading update..."
   },
   "LICENSE": {
     "NAME": "License"
