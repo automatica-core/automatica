@@ -8,7 +8,6 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
-using P3.Logic.Time.Timer;
 
 namespace P3.Logic.Time.AdvancedTimer
 {
@@ -23,7 +22,7 @@ namespace P3.Logic.Time.AdvancedTimer
         private readonly TimeProvider _timeProvider = TimeProvider.System;
         
 
-        private bool _value = false;
+        private bool _value;
 
         public AdvancedTimerRule(ILogicContext context) : base(context)
         {
@@ -76,7 +75,9 @@ namespace P3.Logic.Time.AdvancedTimer
             
             foreach (var entry in _timerPropertyData.Value)
             {
-                list.Add(GetStartEndTime(entry));
+                var values = GetStartEndTime(entry);
+                Context.Logger.LogDebug($"Date values are start: {values.startTime} and end: {values.endTime}");
+                list.Add(values);
             }
             
             list = list.OrderBy(a => a.startTime).ToList();

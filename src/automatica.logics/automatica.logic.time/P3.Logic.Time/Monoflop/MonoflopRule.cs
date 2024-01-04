@@ -15,7 +15,7 @@ namespace P3.Logic.Time.Monoflop
         private long _delay;
         private readonly RuleInterfaceInstance _output;
         private System.Threading.Timer _timer;
-        private bool _timerRunning = false;
+        private bool _timerRunning;
 
         public MonoflopRule(ILogicContext context) : base(context)
         {

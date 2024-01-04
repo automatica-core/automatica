@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Time.DelayedOn
 {
@@ -16,7 +15,7 @@ namespace P3.Logic.Time.DelayedOn
         private long _delay;
         private readonly RuleInterfaceInstance _output;
         private readonly System.Timers.Timer _timer;
-        private bool _timerRunning = false;
+        private bool _timerRunning;
 
         public DelayedOnRule(ILogicContext context) : base(context)
         {

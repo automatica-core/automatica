@@ -19,7 +19,7 @@ namespace P3.Logic.Time.Timer
         private readonly object _lock = new object();
         
 
-        private bool _value = false;
+        private bool _value;
 
         public TimerRule(ILogicContext context) : base(context)
         {

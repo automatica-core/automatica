@@ -17,7 +17,7 @@ namespace P3.Logic.Time.DelayedOff
         private readonly RuleInterfaceInstance _output;
         private readonly System.Timers.Timer _timer;
 
-        private bool _timerRunning = false;
+        private bool _timerRunning;
     
 
         public DelayedOffRule(ILogicContext context) : base(context)
