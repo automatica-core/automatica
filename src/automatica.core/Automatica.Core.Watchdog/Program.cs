@@ -23,7 +23,6 @@ namespace Automatica.Core.Watchdog
             var config = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
                 .AddJsonFile("appsettings.json", false)
-                .AddEnvironmentVariables()
                 .Build();
 
             Console.Title = "Automatica.Core.Watchdog";
