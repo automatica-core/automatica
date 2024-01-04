@@ -680,8 +680,11 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     } catch (error) {
       this.handleError(error);
     }
+    finally {
+      this.appService.isLoading = false;
+      this.changeDetection.detectChanges();
+    }
 
-    this.appService.isLoading = false;
   }
 
 
