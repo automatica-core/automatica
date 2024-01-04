@@ -173,11 +173,10 @@ namespace P3.Logic.Time.AdvancedTimer
 
         private (DateTime startTime, DateTime endTime) GetStartEndTime(CalendarPropertyDataEntry entry)
         {
-            
-            
+            var localNow = Context.TimeProvider.GetLocalNow().DateTime.ToLocalTime();
             if (entry.AllDay)
             {
-                return (Context.TimeProvider.GetLocalNow().DateTime.StartOfDay(), Context.TimeProvider.GetLocalNow().DateTime.EndOfDay());
+                return (localNow.StartOfDay(), localNow.EndOfDay());
             }
 
             if (String.IsNullOrEmpty(entry.RecurrenceRule))
@@ -197,13 +196,13 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (startDates != null)
             {
-                startDates = startDates.Where(a => a <= Context.TimeProvider.GetLocalNow() || a.StartOfDay().AddDays(-1) == entry.StartDate.ToLocalTime().StartOfDay()).OrderBy(time => time);
+                startDates = startDates.Where(a => a <= localNow || a.StartOfDay().AddDays(-1) == entry.StartDate.ToLocalTime().StartOfDay()).OrderBy(time => time);
             }
 
             var endDates = new RFC2445Recur(entry.EndDate.ToLocalTime(), entry.RecurrenceRule).Iterate(Direction.Forward);
             if (endDates != null)
             {
-                endDates = endDates.Where(a => a > Context.TimeProvider.GetLocalNow() ||  a.EndOfDay() == entry.EndDate.ToLocalTime().EndOfDay()).OrderBy(time => time);
+                endDates = endDates.Where(a => a > localNow ||  a.EndOfDay() == entry.EndDate.ToLocalTime().EndOfDay()).OrderBy(time => time);
             }
 
             var startDateList = startDates?.ToList();
@@ -218,22 +217,22 @@ namespace P3.Logic.Time.AdvancedTimer
 
                     if (startDate.Date == entry.StartDate.Date)
                     {
-                        startDate = new DateTime(DateOnly.FromDateTime(Context.TimeProvider.GetLocalNow().DateTime),
+                        startDate = new DateTime(DateOnly.FromDateTime(localNow),
                             new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
                     }
                     else if (startDate.Date == entry.StartDate.Date.AddDays(-1))
                     {
-                        startDate = new DateTime(DateOnly.FromDateTime(Context.TimeProvider.GetLocalNow().DateTime),
+                        startDate = new DateTime(DateOnly.FromDateTime(localNow),
                             new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
                     }
                     if (endDate.Date == entry.EndDate.Date)
                     {
-                        endDate = new DateTime(DateOnly.FromDateTime(Context.TimeProvider.GetLocalNow().DateTime),
+                        endDate = new DateTime(DateOnly.FromDateTime(localNow),
                             new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
                     }
                     else if (endDate.Date == entry.EndDate.Date.AddDays(1))
                     {
-                        endDate = new DateTime(DateOnly.FromDateTime(Context.TimeProvider.GetLocalNow().DateTime),
+                        endDate = new DateTime(DateOnly.FromDateTime(localNow),
                             new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
                     }
 
