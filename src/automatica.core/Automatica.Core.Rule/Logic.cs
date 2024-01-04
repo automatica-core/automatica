@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
@@ -14,7 +16,7 @@ namespace Automatica.Core.Logic
     /// <summary>
     /// Base implementation of <see cref="ILogic"/>
     /// </summary>
-    public abstract class Logic : TypedObject, ILogic
+    public abstract class Logic : TypedObject, ILogic, IControlValueCallback
     {
         private readonly Dictionary<RuleInterfaceInstance, object> _valueDictionary = new();
 
@@ -23,6 +25,7 @@ namespace Automatica.Core.Logic
 
 
         protected readonly Dictionary<string, object> ParameterValues = new Dictionary<string, object>();
+        private readonly IDictionary<Guid, Action> _callbacks = new ConcurrentDictionary<Guid, Action>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logic"/> class.
@@ -192,6 +195,11 @@ namespace Automatica.Core.Logic
                         _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
                     }
 
+                    foreach (var callback in _callbacks)
+                    {
+                        callback.Value();
+                    }
+
                     return values;
                 }
                 catch (Exception ex)
@@ -244,5 +252,19 @@ namespace Automatica.Core.Logic
         }
 
         public sealed override string TypeInfo => "Control";
+
+        public Guid RegisterValueCallback(Action callback)
+        {
+            var guid = Guid.NewGuid();
+            
+            _callbacks.Add(guid, callback);
+            return guid;
+        }
+
+        public void UnregisterValueCallback(Guid id)
+        {
+            if(_callbacks.ContainsKey(id))
+                _callbacks.Remove(id);
+        }
     }
 }
