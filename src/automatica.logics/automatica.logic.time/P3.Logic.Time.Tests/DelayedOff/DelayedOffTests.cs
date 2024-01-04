@@ -22,7 +22,7 @@ namespace P3.Logic.Time.Tests.DelayedOff
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(false, values.First().Value.Value);
         }
 
@@ -42,7 +42,7 @@ namespace P3.Logic.Time.Tests.DelayedOff
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(false, values.First().Value.Value);
         }
 
@@ -69,7 +69,7 @@ namespace P3.Logic.Time.Tests.DelayedOff
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(0, values.Count);
+            Assert.Empty(values);
         }
     }
 }

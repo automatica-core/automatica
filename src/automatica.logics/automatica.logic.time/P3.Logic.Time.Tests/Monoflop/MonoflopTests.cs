@@ -29,7 +29,7 @@ namespace P3.Logic.Time.Tests.Monoflop
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(false, values.First().Value.Value);
         }
 
@@ -49,14 +49,15 @@ namespace P3.Logic.Time.Tests.Monoflop
             
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+
+            Assert.Single(values);
             Assert.Equal(true, values.First().Value.Value);
 
             await Task.Delay(1600);
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(false, values.First().Value.Value);
         }
     }
