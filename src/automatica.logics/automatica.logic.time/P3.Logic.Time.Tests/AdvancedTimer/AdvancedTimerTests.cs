@@ -316,20 +316,20 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
             new List<object[]>
             {
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Local), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(5, 0), DateTimeKind.Local), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Local), false },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(12, 30), DateTimeKind.Local), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Local), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(4, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 30), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Utc), true },
 
 
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 0), DateTimeKind.Local), false },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 30), DateTimeKind.Local), false },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(16, 28), DateTimeKind.Local), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 0), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 30), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(16, 28), DateTimeKind.Utc), true },
 
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(15, 28), DateTimeKind.Local), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false },
 
-                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(21, 12), DateTimeKind.Local), true },
+                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(21, 12), DateTimeKind.Utc), true },
 
                 new object[] { DateTime.MaxValue, false },
                 new object[] { DateTime.MinValue, false },
