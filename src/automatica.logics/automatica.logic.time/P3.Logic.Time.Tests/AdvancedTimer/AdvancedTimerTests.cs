@@ -285,10 +285,12 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
         [Theory]
         [MemberData(nameof(TestTimerRuleWithDifferentNowData2))]
+        [MemberData(nameof(TestTimerRuleWithDifferentNowData2_1))]
 
-        public async void TestTimerRule_WithDifferentNow2(DateTime now, bool result)
+        public async void TestTimerRule_WithDifferentNow2(DateTime now, bool result, TimeZoneInfo timeZone)
         {
             FakeTimeProvider.SetDateTime(now);
+            FakeTimeProvider.SetTimeZone(timeZone);
 
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
@@ -316,20 +318,40 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
 
             new List<object[]>
             {
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(1, 0), DateTimeKind.Utc), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Utc), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Utc), false },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 30), DateTimeKind.Utc), true },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(1, 0), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Utc), false, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(12, 30), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
 
 
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 0), DateTimeKind.Utc), false },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 30), DateTimeKind.Utc), false },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(16, 28), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 0), DateTimeKind.Utc), false, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 30), DateTimeKind.Utc), false, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(16, 28), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
 
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false, TimeZoneInfo.Utc },
 
-                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(19, 12), DateTimeKind.Utc), true },
+                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(19, 12), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
+
+            };
+        public static IEnumerable<object[]> TestTimerRuleWithDifferentNowData2_1 =>
+
+            new List<object[]>
+            {
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(1, 0), DateTimeKind.Utc), true, TimeZoneInfo.Local },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Utc), true, TimeZoneInfo.Local},
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Utc), false, TimeZoneInfo.Local },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 30), DateTimeKind.Utc), true, TimeZoneInfo.Local},
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Utc), true, TimeZoneInfo.Local },
+
+
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 0), DateTimeKind.Utc), false, TimeZoneInfo.Local },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 30), DateTimeKind.Utc), false, TimeZoneInfo.Local },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(16, 28), DateTimeKind.Utc), true, TimeZoneInfo.Local },
+
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(14, 28), DateTimeKind.Utc), false, TimeZoneInfo.Local },
+
+                new object[] { new DateTime(new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), new TimeOnly(19, 12), DateTimeKind.Utc), true, TimeZoneInfo.Local },
 
             };
 

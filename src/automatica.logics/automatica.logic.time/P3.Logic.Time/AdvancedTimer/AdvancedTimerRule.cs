@@ -8,6 +8,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Time.AdvancedTimer
 {
@@ -70,7 +71,10 @@ namespace P3.Logic.Time.AdvancedTimer
             {
                 return;
             }
-            
+            var now = Context.TimeProvider.GetLocalNow();
+
+            Context.Logger.LogInformation($"Now is {now}");
+
             var list = new List<(DateTime startTime, DateTime endTime)>();
             
             foreach (var entry in _timerPropertyData.Value)
@@ -84,11 +88,12 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (list.Any())
             {
-                var next = list.MinBy(t => Math.Abs((t.startTime.TimeOfDay - Context.TimeProvider.GetLocalNow().TimeOfDay).Ticks));
+                var next = list.MinBy(t => Math.Abs((t.startTime.TimeOfDay - now.TimeOfDay).Ticks));
 
+                 Context.Logger.LogDebug($"Next is start: {next.startTime} and end: {next.endTime}");
                 if (next.startTime.IsToday() || next.endTime.IsToday())
                 {
-                    CalculateTickTime(next.startTime.ToLocalTime(), next.endTime.ToLocalTime());
+                    CalculateTickTime(next.startTime, next.endTime);
                 }
                 else
                 {
@@ -237,7 +242,7 @@ namespace P3.Logic.Time.AdvancedTimer
                             new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
                     }
 
-                    return (startDate, endDate);
+                    return (startDate.ToLocalTime(), endDate.ToLocalTime());
                 }
                 if (!startDateList.Any() && endDateList.Any())
                 {
