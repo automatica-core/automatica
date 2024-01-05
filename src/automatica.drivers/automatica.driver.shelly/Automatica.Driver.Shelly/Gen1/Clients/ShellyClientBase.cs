@@ -38,41 +38,52 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
         protected async Task<ShellyResult<T>> ExecuteRequestAsync<T>(HttpRequestMessage httpRequestMessage,
             CancellationToken cancellationToken, TimeSpan? timeout = null)
         {
-            timeout = timeout ?? DefaultTimeout;
-
-            using var timeoutTokenSource = new CancellationTokenSource(timeout.Value);
-            var authenticationString = $"{ShellyCommonOptions.UserName}:{ShellyCommonOptions.Password}";
-            var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
-
-            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
-
-            var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutTokenSource.Token, cancellationToken);
-            var response = await ShellyHttpClient.SendAsync(httpRequestMessage, linkedTokenSource.Token);
-
-            await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, "read", httpRequestMessage.RequestUri?.AbsoluteUri);
-
-            if (response.StatusCode == 0)
+            try
             {
-                // Status code of 0 means timeout reached
-                return ShellyResult<T>.TransientFailure("Device did not respond within timeout period");
-            }
+                timeout = timeout ?? DefaultTimeout;
 
-            if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+                using var timeoutTokenSource = new CancellationTokenSource(timeout.Value);
+                var authenticationString = $"{ShellyCommonOptions.UserName}:{ShellyCommonOptions.Password}";
+                var base64EncodedAuthenticationString =
+                    Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(authenticationString));
+
+                httpRequestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Basic", base64EncodedAuthenticationString);
+
+                var linkedTokenSource =
+                    CancellationTokenSource.CreateLinkedTokenSource(timeoutTokenSource.Token, cancellationToken);
+                var response = await ShellyHttpClient.SendAsync(httpRequestMessage, linkedTokenSource.Token);
+
+                await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "self",
+                    ShellyHttpClient!.BaseAddress!.AbsoluteUri, "read", httpRequestMessage.RequestUri?.AbsoluteUri);
+
+                if (response.StatusCode == 0)
+                {
+                    // Status code of 0 means timeout reached
+                    return ShellyResult<T>.TransientFailure("Device did not respond within timeout period");
+                }
+
+                if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+                {
+                    return ShellyResult<T>.TransientFailure("Device responded with ServiceUnavailable");
+                }
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return ShellyResult<T>.Success(default, "Device responded with NotFound");
+                }
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return ShellyResult<T>.Failure($"Device responded with http status code {response.StatusCode}");
+                }
+
+                return await HandleOkResponse<T>(response);
+            }
+            catch (Exception ex)
             {
-                return ShellyResult<T>.TransientFailure("Device responded with ServiceUnavailable");
+                return ShellyResult<T>.Failure(ex.Message);
             }
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return ShellyResult<T>.Success(default, "Device responded with NotFound");
-            }
-
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                return ShellyResult<T>.Failure($"Device responded with http status code {response.StatusCode}");
-            }
-
-            return await HandleOkResponse<T>(response);
         }
 
         protected async Task<T> ExecuteRequestSetAsync<T>(HttpRequestMessage httpRequestMessage, CancellationToken cancellationToken, TimeSpan? timeout = null)

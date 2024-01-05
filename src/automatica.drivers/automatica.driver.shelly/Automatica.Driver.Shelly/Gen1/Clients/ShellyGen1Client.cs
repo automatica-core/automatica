@@ -57,7 +57,9 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
         public async Task<bool> GetRelayState(int channelId, CancellationToken token)
         {
             var status = await GetStatus(token);
-            return status.Value.Relays[channelId].IsOn;
+            if(status.IsSuccess)
+                return status.Value.Relays[channelId].IsOn;
+            throw new Exception(status.Message);
         }
 
         public Task<double> GetRelayVoltage(int channelId, CancellationToken token = default)
@@ -93,7 +95,12 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
         {
             var status = await GetStatus(token);
 
-            return status.Value.HasUpdate;
+            if (status.IsSuccess)
+            {
+
+                return status.Value.HasUpdate;
+            }
+            else return false;
         }
     }
 }

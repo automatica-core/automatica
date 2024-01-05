@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Timer = System.Timers.Timer;
 using Automatica.Driver.ShellyFactory.Discovery;
 using Automatica.Core.Base.TelegramMonitor;
+using Automatica.Core.EF.Models;
 using Automatica.Driver.ShellyFactory.Types;
 using Automatica.Driver.Shelly.Gen1.Clients;
 using Automatica.Driver.Shelly.Gen1.Options;
@@ -55,7 +56,7 @@ namespace Automatica.Driver.ShellyFactory
             }
             else
             {
-                var shellyDiscovery = (Parent as ShellyDriver).DiscoveredShellys.FirstOrDefault(a => a.Id == ShellyId);
+                var shellyDiscovery = (Parent as ShellyDriver).DiscoveredShellys.FirstOrDefault(a => a.Id.Split("-")[^1] == ShellyId);
 
                 if (shellyDiscovery == null)
                 {
@@ -106,16 +107,24 @@ namespace Automatica.Driver.ShellyFactory
 
             var shellyInfo = await Client.GetInfo(token);
 
-            if (ShellyId.ToLowerInvariant() != shellyInfo.Mac.ToLowerInvariant())
+            if (ShellyId.ToLowerInvariant() != shellyInfo.Mac.ToLowerInvariant().Trim())
             {
                 DriverContext.Logger.LogError($"Invalid shelly id....");
                 return false;
             }
 
-            if (!await Poll(token))
+            try
             {
-                return false;
+                if (!await Poll(token))
+                {
+                    return false;
+                }
             }
+            catch (Exception e)
+            {
+                throw;
+            }
+
             _timer = new Timer(PollingInterval);
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
@@ -174,6 +183,11 @@ namespace Automatica.Driver.ShellyFactory
             }
         }
 
+        public override Task OnDelete(NodeInstance instance, CancellationToken token = new CancellationToken())
+        {
+            return Parent.OnDelete(instance, token);
+        }
+
         public override async Task<bool> Stop(CancellationToken token = new CancellationToken())
         {
             if (_timer != null)
@@ -210,9 +224,8 @@ namespace Automatica.Driver.ShellyFactory
             catch (Exception ex)
             {
                 DriverContext.Logger.LogError(ex, "Something strange happened....");
+                throw;
             }
-
-            return false;
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())

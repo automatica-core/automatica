@@ -6,6 +6,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Driver.ShellyFactory.Discovery;
 using Automatica.Driver.ShellyFactory.Types;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Driver.ShellyFactory
@@ -48,10 +49,32 @@ namespace Automatica.Driver.ShellyFactory
             return true;
         }
 
+        public override Task OnDelete(NodeInstance instance, CancellationToken token = new CancellationToken())
+        {
+            var toRemove = new List<ShellyDriverDevice>();
+            foreach (var device in _devices)
+            {
+                if (device.DriverContext.NodeInstance.ObjId == instance.ObjId)
+                {
+                    toRemove.Add(device);
+                    break;
+                }
+            }
+
+            foreach (var device in toRemove)
+            {
+                _devices.Remove(device);
+            }
+            
+            return base.OnDelete(instance, token);
+        }
+
         public override async Task<IList<NodeInstance>> Scan(CancellationToken token = new CancellationToken())
         {
             var devices = await DiscoveryService.SearchShellys();
             var ret = new List<NodeInstance>();
+
+            DiscoveredShellys = devices;
 
             foreach (var device in devices)
             {
@@ -76,7 +99,7 @@ namespace Automatica.Driver.ShellyFactory
                 
                 }
                 var idProp = node.GetProperty(ShellyFactory.DeviceIdPropertyKey);
-                idProp.Value = device.Id;
+                idProp.Value = device.Id.Split("-")[^1];
                 node.Name = device.Name;
 
                 ret.Add(node);
