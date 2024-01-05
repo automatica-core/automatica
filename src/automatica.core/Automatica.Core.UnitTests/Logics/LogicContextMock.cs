@@ -67,7 +67,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
         private DateTime _dateTime = DateTime.Now;
         private TimeZoneInfo _localTimeZone = TimeZoneInfo.Local;
 
-        public static FakeTimeProvider Instance { get; } = new FakeTimeProvider();
+        public static FakeTimeProvider Instance { get; } = new();
 
         public override TimeZoneInfo LocalTimeZone => _localTimeZone;
 
