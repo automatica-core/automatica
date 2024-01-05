@@ -321,7 +321,7 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(1, 0), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(2, 0), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(8, 0), DateTimeKind.Utc), false, TimeZoneInfo.Utc },
-                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(12, 30), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
+                new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(11, 30), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
                 new object[] { new DateTime(new DateOnly(2024, 1, 1), new TimeOnly(18, 0), DateTimeKind.Utc), true, TimeZoneInfo.Utc },
 
 
