@@ -8,6 +8,7 @@ using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using Polly;
 
 namespace Automatica.Core.Driver
 {
@@ -294,8 +295,10 @@ namespace Automatica.Core.Driver
                 cts.CancelAfter(TimeSpan.FromMinutes(2));
 
                 int retry = 0;
+                var context = ResilienceContextPool.Shared.Get();
+                
                 var pipeline = DriverContext.RetryContext.GetPipeline();
-                await pipeline.ExecuteAsync(async a =>
+                _ = await pipeline.ExecuteOutcomeAsync(async (_, _) =>
                 {
                     try
                     {
@@ -313,13 +316,20 @@ namespace Automatica.Core.Driver
                         {
                             node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
                             node.DriverContext.NodeInstance.Error = node.Error;
-                            throw new ArgumentException($"{FullName} {Id}: Error starting...Retry: {retry+1}");
+                            throw new DriverDidNotStartProperlyException(
+                                $"{FullName} {Id}: Error starting...Retry: {retry + 1}");
                         }
 
                         if (node.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
                         {
                             node.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
                         }
+
+                        return Outcome.FromResult(true);
+                    }
+                    catch (DriverDidNotStartProperlyException ex)
+                    {
+                        return Outcome.FromException<bool>(ex);
                     }
                     catch (Exception e)
                     {
@@ -327,9 +337,9 @@ namespace Automatica.Core.Driver
                         node.DriverContext.NodeInstance.Error = e.ToString();
                         DriverContext.Logger.LogError(e, $"{FullName} {Id}:Could not start...Retry: {retry + 1}");
                         retry++;
-                        throw;
+                        return Outcome.FromException<bool>(e);
                     }
-                }, cts.Token);
+                }, context, cts.Token);
             });
             
             return Task.FromResult(true);
