@@ -29,6 +29,8 @@ import { VirtualObjIdPropertyInstance } from "./virtual-props/virtual-objid-prop
 import { ITimestampModifiedTrackingModel } from "./ITimestampModifiedTrackingModel"
 import { VirtualCreatedAtPropertyInstance } from "./virtual-props/virtual-created-at-property-instance"
 import { VirtualModifedAtPropertyInstance } from "./virtual-props/virtual-modified-at-property-instance"
+import { PropertyTemplateType } from "./property-template"
+import { VirtualGenericPropertyInstance } from "./virtual-props/virtual-generic-property-instance"
 
 function sortBySortOrder(a: RuleInterfaceInstance, b: RuleInterfaceInstance) {
     if (!a.Template) {
@@ -60,6 +62,8 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         this.onNameChanged?.emit(v);
     }
     
+    @JsonProperty()
+    VisuName: string;
 
     @JsonProperty()
     Description: string;
@@ -134,8 +138,15 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         return this.Name;
     }
 
-    public get VisuDisplayName(): string {
-        return this.Name;
+    public get VisuDisplayName() {
+        if (this.VisuName) {
+            return this.VisuName;
+        }
+        if (this.DisplayName) {
+            return `${this.DisplayName}`;
+        }
+        
+        return this._name;
     }
 
     private _DisplayDescription: string;
@@ -198,8 +209,8 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         this.Properties.push(new VirtualCategoryPropertyInstance(this));
         this.Properties.push(new VirtualIsFavoriteVisuPropertyInstance(this));
 
-        this.Properties.push(new VirtualUserGroupPropertyInstance(this));
-
+        this.Properties.push(new VirtualUserGroupPropertyInstance(this)); 
+        this.Properties.push(new VirtualGenericPropertyInstance("VISU_NAME", 5, this, () => this.VisuName, (value) => this.VisuName = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
 
         for (const x of this.Interfaces) {
             if (x.Template && x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
