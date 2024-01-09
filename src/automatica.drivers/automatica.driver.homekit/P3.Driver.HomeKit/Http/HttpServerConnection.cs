@@ -60,7 +60,7 @@ namespace P3.Driver.HomeKit.Http
                         // This is blocking and will wait for data to come from the client.
                         //
                         var bytesRead = networkStream.Read(receiveBuffer, 0, _client.ReceiveBufferSize);
-                        ;
+                        
 
                         lock (_connectionSession)
                         {
