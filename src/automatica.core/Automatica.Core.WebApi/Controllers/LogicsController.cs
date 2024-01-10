@@ -142,6 +142,7 @@ namespace Automatica.Core.WebApi.Controllers
                     var existingInstance = DbContext.RuleInstances.Single(a => a.ObjId == logicInstance.ObjId);
 
                     existingInstance.Name = logicInstance.Name;
+                    existingInstance.VisuName = logicInstance.VisuName;
                     existingInstance.X = logicInstance.X;
                     existingInstance.Y = logicInstance.Y;
                     existingInstance.UseInVisu = logicInstance.UseInVisu;
