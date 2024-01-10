@@ -130,6 +130,7 @@ namespace Automatica.Core.EF.Models
             {
                 a.CommandTimeout(300);
                 a.EnableRetryOnFailure(3);
+                a.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
             }).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
@@ -147,7 +148,10 @@ namespace Automatica.Core.EF.Models
                 File.Copy(dbInitFile, dbFile);
             }
 
-            optionsBuilder.UseSqlite(connectionString).AddInterceptors(new LogQueryTimeInterceptor(logger));
+            optionsBuilder.UseSqlite(connectionString, a =>
+            {
+                a.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+            }).AddInterceptors(new LogQueryTimeInterceptor(logger));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
