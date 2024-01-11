@@ -45,9 +45,10 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INotifyDriver _notifyDriver;
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ICoreServer _coreServer;
+        private readonly ILogicInstancesStore _logicInstanceStore;
 
         public LogicsController(ILogger<LogicsController> logger, AutomaticaContext db, ILogicDataHandler logicDataHandler, ILogicCacheFacade logicCacheFacade, IConfiguration config, 
-            INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer coreServer)
+            INotifyDriver notifyDriver, INodeInstanceCache nodeInstanceCache, ICoreServer coreServer, ILogicInstancesStore logicInstanceStore)
             : base(db)
         {
             _logger = logger;
@@ -57,6 +58,7 @@ namespace Automatica.Core.WebApi.Controllers
             _notifyDriver = notifyDriver;
             _nodeInstanceCache = nodeInstanceCache;
             _coreServer = coreServer;
+            _logicInstanceStore = logicInstanceStore;
         }
 
         [HttpPost]
@@ -350,6 +352,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await transaction.CommitAsync();
 
                     await _logicCacheFacade.RemoveLogic(instanceId);
+                    
                     _logicCacheFacade.ClearInstances();
                 }
                 catch (Exception ex)
@@ -371,6 +374,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                 _logicCacheFacade.PageCache.RemoveRuleInstance(ruleInstance);
                 dbContext.RuleInstances.Remove(ruleInstance);
+                _logicInstanceStore.Remove(ruleInstance);
             }
         }
 
