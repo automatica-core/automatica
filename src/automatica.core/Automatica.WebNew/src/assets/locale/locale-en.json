@@ -174,7 +174,8 @@
       "TRENDING": "Trendings",
       "SATELLITE": "Satellite",
       "VALUE": "Value",
-      "CONTROL":"Controls"
+      "CONTROL":"Controls",
+      "CONTROLS":"Controls"
     },
     "FACTOR": {
       "NAME": "Factor",
