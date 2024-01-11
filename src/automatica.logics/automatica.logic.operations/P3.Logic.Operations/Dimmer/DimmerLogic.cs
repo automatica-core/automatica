@@ -98,6 +98,9 @@ namespace P3.Logic.Operations.Dimmer
         public Task<bool> SwitchAsync(bool state, CancellationToken cancellationToken = new CancellationToken())
         {
             _lastState = state;
+            _lastValue = _lastState.Value ? 100 : 0;
+
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
             return Task.FromResult(true);
         }
@@ -105,6 +108,9 @@ namespace P3.Logic.Operations.Dimmer
         public Task<bool> SwitchAsync(SwitchState state, CancellationToken cancellationToken = new CancellationToken())
         {
             _lastState = state == SwitchState.On;
+            _lastValue = _lastState.Value ? 100 : 0;
+
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
             return Task.FromResult(true);
         }
@@ -112,6 +118,9 @@ namespace P3.Logic.Operations.Dimmer
         public Task<bool> SwitchOnAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             _lastState = true;
+            _lastValue = _lastState.Value ? 100 : 0;
+
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
             return Task.FromResult(true);
         }
@@ -119,6 +128,9 @@ namespace P3.Logic.Operations.Dimmer
         public Task<bool> SwitchOffAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             _lastState = false;
+            _lastValue = _lastState.Value ? 100 : 0;
+
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
             return Task.FromResult(true);
         }
