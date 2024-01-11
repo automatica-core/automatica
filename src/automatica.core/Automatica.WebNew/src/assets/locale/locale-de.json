@@ -2,7 +2,7 @@
   "ERROR": {
     "UNAUTHORISED": "Not authorised"
   },
-  "SERVER":{
+  "SERVER": {
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder",
       "HYPERSERIES": "Hyperseries"
@@ -89,10 +89,10 @@
     "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
     "LIVE_LOGS": "Live logs",
     "FILE_LOGS": "Datei logs",
-    "LOGGER_LEVEL":"Log Level",
+    "LOGGER_LEVEL": "Log Level",
     "INFO": "Information",
     "ZOOM": {
-      "IN":"Vergrößern",
+      "IN": "Vergrößern",
       "OUT": "Verkleinern",
       "TO_VIEW": "Standard Zoom"
     },
@@ -174,7 +174,8 @@
       "TRENDING": "Datenaufzeichnung",
       "SATELLITE": "Satellite",
       "VALUE": "Wert",
-      "CONTROL":"Steuerung"
+      "CONTROL": "Steuerung",
+      "CONTROLS": "Steuerung"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -185,7 +186,7 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
-      "CONTROLS":{
+      "CONTROLS": {
         "NAME": "Steuerung",
         "DESCRIPTION": ""
       },
@@ -422,17 +423,17 @@
         "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
-            "NAME":  "Client Id"
+          "NAME": "Client Id"
         },
         "CLIENTKEY": {
-            "NAME": "Client Key"
+          "NAME": "Client Key"
         }
       },
       "TIMEZONEOFFSET": {
         "NAME": "Zeitzone Differenz [h]",
         "DESCRIPTION": ""
       },
-      "TRENDINGRECORDERS":{
+      "TRENDINGRECORDERS": {
         "NAME": "Trending Ziele"
       },
       "HOSTEDGRAFANAAPIKEY": {
@@ -456,42 +457,42 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
       },
-      "REMOTEDOMAIN" : {
+      "REMOTEDOMAIN": {
         "NAME": "Domain"
       },
-      "REMOTEENABLED" : {
+      "REMOTEENABLED": {
         "NAME": "Aktiv"
       },
-      "REMOTETOKEN" : {
+      "REMOTETOKEN": {
         "NAME": "Token"
       },
-      "HYPERSERIESUSER":{
+      "HYPERSERIESUSER": {
         "NAME": "Benutzer"
       },
-      "HYPERSERIESHOST":{
+      "HYPERSERIESHOST": {
         "NAME": "Host"
       },
-      "HYPERSERIESPASSWORD":{
+      "HYPERSERIESPASSWORD": {
         "NAME": "Passwort"
       },
-      "HYPERSERIESDATABASE":{
+      "HYPERSERIESDATABASE": {
         "NAME": "Datenbank"
       },
-      "HYPERSERIESPORT":{
+      "HYPERSERIESPORT": {
         "NAME": "Port"
       },
-      "LANGUAGE":{
+      "LANGUAGE": {
         "NAME": "Sprache",
         "GERMAN": "Deutsch",
         "ENGLISH": "Englisch"
       },
       "CREATED_AT": {
         "NAME": "Erstellt am",
-        "DESCRIPTION":""
+        "DESCRIPTION": ""
       },
       "MODIFIED_AT": {
         "NAME": "Geändert am",
-        "DESCRIPTION":""
+        "DESCRIPTION": ""
       },
       "VALUE_SOURCE": {
         "NAME": "Quelle",
