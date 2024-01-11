@@ -231,15 +231,17 @@ namespace P3.Driver.HomeKitFactory
             }
             else if (_characteristicControlMap.TryGetValue(e.Characteristic.Accessory, out var control))
             {
+                DriverContext.Logger.LogDebug($"Target is a control {control.Name}");
                 if (control is IDimmer iDimmer)
                 {
-                    if (e.Characteristic.Format == "int")
-                    {
-                        await iDimmer.DimAsync(Convert.ToInt32(e.Value));
-                    }
-                    else
+                    if (e.Value is bool)
                     {
                         await Switch(e.Value, iDimmer);
+                    }
+                    else if(e.Value is long or int)
+                    {
+                        DriverContext.Logger.LogDebug($"Dim value to {e.Value}");
+                        await iDimmer.DimAsync(Convert.ToInt32(e.Value));
                     }
                 }
                 else if (control is ISwitch iSwitch)
@@ -251,6 +253,7 @@ namespace P3.Driver.HomeKitFactory
 
         private async Task Switch(object value, ISwitch control)
         {
+            DriverContext.Logger.LogDebug($"Switch {control.Name} to {value}");
             if (value is bool bValue)
             {
                 await control.SwitchAsync(bValue);
