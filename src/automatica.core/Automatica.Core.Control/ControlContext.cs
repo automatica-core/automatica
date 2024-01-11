@@ -3,23 +3,14 @@ using Automatica.Core.Control.Cache;
 
 namespace Automatica.Core.Control
 {
-    internal class ControlContext : IControlContext
+    internal class ControlContext(IControlCache cache) : IControlContext
     {
-        private readonly IControlCache _cache;
-
-        public ControlContext(IControlCache cache)
-        {
-            _cache = cache;
-        }
-
-    
-
         public Task<List<IControl>> GetAsync(List<Guid> switches, CancellationToken cancellationToken = default)
         {
             var ret = new List<IControl>();
             foreach (var @switch in switches)
             {
-                var controlContext = _cache.Get(@switch);
+                var controlContext = cache.Get(@switch);
                 if(controlContext != null)
                 {
                     ret.Add(controlContext);
@@ -32,7 +23,7 @@ namespace Automatica.Core.Control
 
         public Task<IControl> GetAsync(Guid controlId, CancellationToken cancellationToken = default)
         {
-            var controlContext = _cache.Get(controlId);
+            var controlContext = cache.Get(controlId);
             return Task.FromResult(controlContext);
         }
 
@@ -42,7 +33,7 @@ namespace Automatica.Core.Control
             var ret = new List<ISwitch>();
             foreach (var @switch in switches)
             {
-                var switchContext = _cache.Get(@switch);
+                var switchContext = cache.Get(@switch);
                 if (switchContext != null && switchContext is ISwitch iSwitch)
                 {
                     ret.Add(iSwitch);
@@ -54,7 +45,7 @@ namespace Automatica.Core.Control
 
         public Task<ISwitch> GetSwitchAsync(Guid switchId, CancellationToken cancellationToken = default)
         {
-            var switchContext = _cache.Get(switchId);
+            var switchContext = cache.Get(switchId);
             return Task.FromResult(switchContext as ISwitch);
         }
 
@@ -64,7 +55,7 @@ namespace Automatica.Core.Control
             var ret = new List<IDimmer>();
             foreach (var dimmer in switches)
             {
-                var switchContext = _cache.Get(dimmer);
+                var switchContext = cache.Get(dimmer);
                 if (switchContext != null && switchContext is IDimmer iSwitch)
                 {
                     ret.Add(iSwitch);
@@ -76,7 +67,7 @@ namespace Automatica.Core.Control
 
         public Task<IDimmer> GetDimmerAsync(Guid switchId, CancellationToken cancellationToken = default)
         {
-            var switchContext = _cache.Get(switchId);
+            var switchContext = cache.Get(switchId);
             return Task.FromResult(switchContext as IDimmer);
         }
 
@@ -86,7 +77,7 @@ namespace Automatica.Core.Control
             var ret = new List<IBlind>();
             foreach (var dimmer in switches)
             {
-                var switchContext = _cache.Get(dimmer);
+                var switchContext = cache.Get(dimmer);
                 if (switchContext != null && switchContext is IBlind iSwitch)
                 {
                     ret.Add(iSwitch);
@@ -98,7 +89,7 @@ namespace Automatica.Core.Control
 
         public Task<IBlind> GetBlindAsync(Guid switchId, CancellationToken cancellationToken = default)
         {
-            var switchContext = _cache.Get(switchId);
+            var switchContext = cache.Get(switchId);
             return Task.FromResult(switchContext as IBlind);
         }
     }
