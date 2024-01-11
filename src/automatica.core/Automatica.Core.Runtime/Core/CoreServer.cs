@@ -203,6 +203,7 @@ namespace Automatica.Core.Runtime.Core
             {
                 Exception e = (Exception)args.ExceptionObject;
                 _logger.LogError(e, $"Unhandled exception occurred {e}");
+                Console.Error.WriteLine($"Unhandled exception occurred {e}");
             };
         }
 
