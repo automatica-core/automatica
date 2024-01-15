@@ -1,4 +1,6 @@
-﻿namespace P3.Driver.HomeKit.Hap.Model
+﻿using Newtonsoft.Json;
+
+namespace P3.Driver.HomeKit.Hap.Model
 {
     public class WindowCovering : Accessory
     {
@@ -6,10 +8,14 @@
         {
             
         }
-        
+
+        [JsonIgnore]
         public Characteristic CurrentPosition { get; internal set; }
+
+        [JsonIgnore]
         public Characteristic TargetPosition { get; internal set; }
 
+        [JsonIgnore]
         public Characteristic PositionType { get; internal set; }
     }
 }
