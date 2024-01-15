@@ -324,7 +324,7 @@
 <dx-popup *ngIf="controlsPopupVisible" #controlsPopup width="400" height="80%" [showTitle]="true"
     [title]="'COMMON.PROPERTY.CONTROLS.NAME' | translateAsync" [visible]="controlsPopupVisible"
     (onHiding)="onControlsPopupClosing($event, true)">
-    <dx-list #list [dataSource]="controlsGroup" [grouped]="true" [height]="400" [selectionMode]="'all'" keyExpr="Id" displayExpr="Name"
+    <dx-list #list [dataSource]="controlsGroup" [grouped]="true" [height]="'100%'" [selectionMode]="'all'" keyExpr="Id" displayExpr="Name"
         [showSelectionControls]="true" [(selectedItemKeys)]="controlsEditValue.Controls" [selectByClick]="true"></dx-list>
 </dx-popup>
 
