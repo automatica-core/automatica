@@ -25,7 +25,7 @@
     <EmbeddedResource Include="Resources\Operations-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Control" Version="8.1.0.1793" />
-    <PackageReference Include="Automatica.Core.Logic" Version="8.1.0.1793" />
+    <PackageReference Include="Automatica.Core.Control" Version="8.1.0.1794" />
+    <PackageReference Include="Automatica.Core.Logic" Version="8.1.0.1794" />
   </ItemGroup>
 </Project>

@@ -32,8 +32,16 @@ namespace P3.Logic.Operations.Shutter
 
         private bool _locked = false;
         private int _direction = 0;
-        private double _position;
+        private int _position;
         private bool _moving = false;
+
+
+
+        public bool IsMoving => _moving;
+        public int Direction => _direction;
+        public int Position => _position;
+        public Guid Id => Context.RuleInstance.ObjId;
+        public string Name => Context.RuleInstance.Name;
 
         public ShutterLogic(ILogicContext context) : base(context)
         {
@@ -107,13 +115,15 @@ namespace P3.Logic.Operations.Shutter
                 var dValue = Convert.ToDouble(value);
                 ret.AddRange(MoveAbsolute(dValue));
             }
-
+            
             return ret;
         }
 
         private IList<ILogicOutputChanged> MoveAbsolute(double dValue)
         {
             var ret = new List<ILogicOutputChanged>();
+
+            var intValue = Convert.ToInt32(dValue);
 
             if (Math.Ceiling(dValue) >= 100)
             {
@@ -125,7 +135,7 @@ namespace P3.Logic.Operations.Shutter
                 _moving = false;
                 ret.Add(new LogicOutputChanged(_isMovingOutput, false));
             }
-            _position = dValue;
+            _position = intValue;
             ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
 
             return ret;
@@ -207,5 +217,6 @@ namespace P3.Logic.Operations.Shutter
                         DispatchValueSource.Read));
             }
         }
+
     }
 }
