@@ -168,14 +168,10 @@ namespace Automatica.Core.Logic
                 Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}) value {value}");
 
                 object prevValue = null;
-                if (_inputValueDictionary.ContainsKey(instance))
+                if (!_inputValueDictionary.TryAdd(instance, value))
                 {
                     prevValue = _inputValueDictionary[instance];
                     _inputValueDictionary[instance] = value;
-                }
-                else
-                {
-                    _inputValueDictionary.Add(instance, value);
                 }
 
                 if (IgnoreDuplicateValues && _inputValueDictionary[instance] == prevValue)
