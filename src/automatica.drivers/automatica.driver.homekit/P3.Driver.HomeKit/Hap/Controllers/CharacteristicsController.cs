@@ -108,7 +108,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
             foreach (var s in data)
             {
                 var split = s.Split(".");
-                var accessoryId = Convert.ToInt32(split[0]);
+                var accessoryId = Convert.ToUInt64(split[0]);
                 var characteristicId = Convert.ToInt32(split[1]);
 
                 var accessory = all.SingleOrDefault(a => a.Id == accessoryId);

@@ -11,7 +11,7 @@ namespace P3.Driver.HomeKit.Hap.Model
         }
 
         [JsonProperty("aid")]
-        public int Id { get; set; }
+        public ulong Id { get; set; }
 
         [JsonProperty("services")]
         public List<Service> Services { get; set; }

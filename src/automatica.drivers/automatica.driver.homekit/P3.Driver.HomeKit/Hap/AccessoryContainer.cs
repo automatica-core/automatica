@@ -9,7 +9,7 @@ namespace P3.Driver.HomeKit.Hap
     {
         internal AccessoryContainer()
         {
-            AccessoryMap = new Dictionary<int, Accessory>();
+            AccessoryMap = new Dictionary<ulong, Accessory>();
         }
 
         public List<Accessory> Accessories => AccessoryMap.Values.ToList();
@@ -24,6 +24,6 @@ namespace P3.Driver.HomeKit.Hap
             AccessoryMap.Add(accessory.Id, accessory);
         }
 
-        public Dictionary<int, Accessory> AccessoryMap { get; set; }
+        public Dictionary<ulong, Accessory> AccessoryMap { get; }
     }
 }

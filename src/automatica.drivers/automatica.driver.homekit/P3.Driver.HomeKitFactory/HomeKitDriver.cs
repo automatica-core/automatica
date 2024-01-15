@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Control.Base;
@@ -162,7 +163,7 @@ namespace P3.Driver.HomeKitFactory
                     continue;
                 }
 
-                var aid = _aidGenerator.GetNextAidInstance();
+                var aid = GuidToUint64(control.Id);
                 if (control is IDimmer dimmer)
                 {
                     var accessory = AccessoryFactory.CreateLightBulbAccessory(aid, control.Name, "AutomaticaCore",
@@ -217,6 +218,11 @@ namespace P3.Driver.HomeKitFactory
             }
 
             return await base.Start(token);
+        }
+
+        public UInt64 GuidToUint64(Guid guid)
+        {
+            return BitConverter.ToUInt64(guid.ToByteArray(), 0);
         }
 
         public override Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
@@ -346,7 +352,7 @@ namespace P3.Driver.HomeKitFactory
             }
 
             Accessory accessory = null;
-            var aid = Convert.ToInt32(ctx.NodeInstance.GetPropertyValueDouble(HomeKitFactory.AidPropertyKey));
+            var aid = Convert.ToUInt64(ctx.NodeInstance.GetPropertyValueDouble(HomeKitFactory.AidPropertyKey));
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {

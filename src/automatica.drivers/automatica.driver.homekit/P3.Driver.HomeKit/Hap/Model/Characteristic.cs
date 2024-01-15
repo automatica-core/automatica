@@ -44,7 +44,7 @@ namespace P3.Driver.HomeKit.Hap.Model
         public int Id { get; set; }
 
         [JsonProperty("aid")]
-        public virtual int? AccessoryId { get; set; }
+        public virtual ulong? AccessoryId { get; set; }
 
         [JsonProperty("value")]
         public object Value { get; set; }
@@ -63,7 +63,7 @@ namespace P3.Driver.HomeKit.Hap.Model
     public class SentCharacteristic : Characteristic
     {
         [JsonProperty("aid")]
-        public int AccessoryNumber { get; set; }
+        public ulong AccessoryNumber { get; set; }
     }
 
     public class Characteristic : CharacteristicBase
@@ -101,7 +101,7 @@ namespace P3.Driver.HomeKit.Hap.Model
         [JsonProperty("ev")]
         public bool? EventBasedNotification { get; set; }
 
-        [JsonIgnore] public override int? AccessoryId => null;
+        [JsonIgnore] public override ulong? AccessoryId => null;
     }
 
     public static class CharacteristicFactory

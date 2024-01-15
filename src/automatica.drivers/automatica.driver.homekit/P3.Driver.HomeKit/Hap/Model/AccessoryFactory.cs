@@ -11,7 +11,7 @@
         public const string TemperatureSensorType = "8A";
         public const string WindowCoveringType = "8C";
 
-        public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool? value, int? dimValue)
+        public static Accessory CreateLightBulbAccessory(ulong aid, string name, string manufacturer, string serial, bool? value, int? dimValue)
         {
             var a2 = new Accessory
             {
@@ -28,7 +28,7 @@
             return a2;
         }
 
-        public static WindowCovering CreateWindowCovering(int aid, string name, string manufacturer, string serial, int? currentPosition)
+        public static WindowCovering CreateWindowCovering(ulong aid, string name, string manufacturer, string serial, int? currentPosition)
         {
             var a2 = new WindowCovering
             {
@@ -45,7 +45,7 @@
             return a2;
         }
 
-        public static Accessory CreateOutletAccessory(int aid, string name, string manufacturer, string serial, bool value)
+        public static Accessory CreateOutletAccessory(ulong aid, string name, string manufacturer, string serial, bool value)
         {
             var a2 = new Accessory
             {
@@ -60,7 +60,7 @@
 
             return a2;
         }
-        public static Accessory CreateContactSensorAccessory(int aid, string name, string manufacturer, string serial, int value)
+        public static Accessory CreateContactSensorAccessory(ulong aid, string name, string manufacturer, string serial, int value)
         {
             var a2 = new Accessory
             {
@@ -75,7 +75,7 @@
 
             return a2;
         }
-        public static Accessory CreateSwitchAccessory(int aid, string name, string manufacturer, string serial, bool value)
+        public static Accessory CreateSwitchAccessory(ulong aid, string name, string manufacturer, string serial, bool value)
         {
             var a2 = new Accessory
             {
@@ -94,7 +94,7 @@
         }
 
 
-        public static Accessory CreateTemperatureSensorAccessory(int aid, string name, string manufacturer,
+        public static Accessory CreateTemperatureSensorAccessory(ulong aid, string name, string manufacturer,
             string serial, double value)
         {
             var a2 = new Accessory
@@ -206,7 +206,7 @@
             currentPos.Value = currentPosition;
             accessory.CurrentPosition = currentPos;
 
-            var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentPositionType, 2, 10), "int");
+            var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.PositionStateType, 2, 10), "int");
             positionType.Value = 2;
             accessory.PositionType = positionType;
 

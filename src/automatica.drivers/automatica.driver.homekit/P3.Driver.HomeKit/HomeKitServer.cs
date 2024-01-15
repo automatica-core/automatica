@@ -147,7 +147,7 @@ namespace P3.Driver.HomeKit
             return true;
         }
 
-        public int AddAccessory(Accessory accessory)
+        public ulong AddAccessory(Accessory accessory)
         {
             _accessoryContainer.AddAccessory(accessory);
             return accessory.Id;
