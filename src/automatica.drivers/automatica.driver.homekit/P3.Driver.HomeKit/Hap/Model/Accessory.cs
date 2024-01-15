@@ -16,6 +16,7 @@ namespace P3.Driver.HomeKit.Hap.Model
         [JsonProperty("services")]
         public List<Service> Services { get; set; }
 
+        [JsonIgnore]
         public Service AccessoryInfo { get; set; }
         
         [JsonIgnore]
