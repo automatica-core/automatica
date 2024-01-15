@@ -207,7 +207,6 @@
             accessory.CurrentPosition = currentPos;
 
             var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.PositionStateType, 2, 10), "int");
-            positionType.Value = 2;
             accessory.PositionType = positionType;
 
             service.Characteristics.Add(targetPos);

@@ -222,7 +222,8 @@ namespace P3.Driver.HomeKitFactory
 
         public UInt64 GuidToUint64(Guid guid)
         {
-            return BitConverter.ToUInt64(guid.ToByteArray(), 0);
+            var val= BitConverter.ToUInt64(guid.ToByteArray(), 0);
+            return val/2;
         }
 
         public override Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
