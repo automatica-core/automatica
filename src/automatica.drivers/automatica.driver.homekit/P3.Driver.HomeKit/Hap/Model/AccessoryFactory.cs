@@ -122,7 +122,7 @@
             service.Characteristics.Add(CharacteristicFactory.CreateName(service, name, 2));
             service.Characteristics.Add(CharacteristicFactory.CreateManufacturer(service, manufacturer, 3));
             service.Characteristics.Add(CharacteristicFactory.CreateSerial(service, serial, 4));
-            service.Characteristics.Add(CharacteristicFactory.CreateModel(service, name, 5));
+            service.Characteristics.Add(CharacteristicFactory.CreateModel(service, serial, 5));
             service.Characteristics.Add(CharacteristicFactory.CreateIdentify(service, 6));
 
             return service;
