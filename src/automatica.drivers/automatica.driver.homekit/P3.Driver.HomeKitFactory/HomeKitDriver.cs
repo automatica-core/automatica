@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Automatica.Core.Base.IO;
 using Automatica.Core.Control.Base;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using P3.Driver.HomeKit;
 using P3.Driver.HomeKit.Hap;
 using P3.Driver.HomeKit.Hap.EventArgs;
@@ -202,6 +199,21 @@ namespace P3.Driver.HomeKitFactory
                         WriteCharacteristic(characteristic);
                     });
                 }
+                else if (control is IBlind iBlind)
+                {
+                    var accessory = AccessoryFactory.CreateWindowCovering(aid, control.Name, "AutomaticaCore",
+                        control.Id.ToString(), 0);
+                    
+                    accessory.Id = _server.AddAccessory(accessory);
+                    var characteristic = accessory.Specific.Characteristics.First();
+
+                    _characteristicControlMap.Add(accessory, control);
+                    iBlind.RegisterValueCallback(() =>
+                    {
+                        accessory.CurrentPosition.Value = iBlind.Position;
+                        WriteCharacteristic(characteristic);
+                    });
+                }
             }
 
             return await base.Start(token);
@@ -247,6 +259,10 @@ namespace P3.Driver.HomeKitFactory
                 else if (control is ISwitch iSwitch)
                 {
                     await Switch(e.Value, iSwitch);
+                }
+                else if (control is IBlind iBlind)
+                {
+                    await iBlind.MoveAbsoluteAsync(Convert.ToInt32(e.Value));
                 }
             }
         }

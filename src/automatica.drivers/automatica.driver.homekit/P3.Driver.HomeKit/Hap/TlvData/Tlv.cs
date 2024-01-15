@@ -24,7 +24,7 @@ namespace P3.Driver.HomeKit.Hap.TlvData
 
         public void AddType(Constants type, byte[] value)
         {
-            if (Values.ContainsKey(type))
+            if (!Values.TryAdd(type, value))
             {
                 if (value.Length == 0)
                 {
@@ -43,10 +43,6 @@ namespace P3.Driver.HomeKit.Hap.TlvData
                 {
                     throw new TlvTypeDuplicationException(type);
                 }
-            }
-            else
-            {
-                Values.Add(type, value);
             }
         }
 

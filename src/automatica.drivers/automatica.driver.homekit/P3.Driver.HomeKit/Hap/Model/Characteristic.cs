@@ -22,6 +22,18 @@ namespace P3.Driver.HomeKit.Hap.Model
         public const string FirmwareRevision = "52";
         public const string Version = "37";
 
+        public const string TargetPositionType = "7C";
+        public const string CurrentPositionType = "6D";
+        public const string CurrentVerticalTiltAngleType = "6E";
+        public const string TargetVerticalTiltAngleType = "7D";
+        
+        public const string HoldPositionType = "6F";
+        public const string PositionStateType = "72";
+        
+        public const string CurrentHorizontalTiltAngleType = "6C";
+        public const string TargetHorizontalTiltAngleType = "7B";
+        
+
         internal CharacteristicBase(Type defaultType)
         {
             DefaultType = defaultType;

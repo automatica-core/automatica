@@ -9,6 +9,7 @@
         public const string ContactSensorType = "80";
         public const string SwitchType = "49";
         public const string TemperatureSensorType = "8A";
+        public const string WindowCoveringType = "8C";
 
         public static Accessory CreateLightBulbAccessory(int aid, string name, string manufacturer, string serial, bool? value, int? dimValue)
         {
@@ -26,6 +27,24 @@
 
             return a2;
         }
+
+        public static WindowCovering CreateWindowCovering(int aid, string name, string manufacturer, string serial, int? currentPosition)
+        {
+            var a2 = new WindowCovering
+            {
+                Id = aid
+            };
+
+            a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
+            a2.Services.Add(a2.AccessoryInfo);
+
+            a2.Specific = CreateWindowCovering(a2, 7, name, currentPosition);
+            a2.Services.Add(a2.Specific);
+
+
+            return a2;
+        }
+
         public static Accessory CreateOutletAccessory(int aid, string name, string manufacturer, string serial, bool value)
         {
             var a2 = new Accessory
@@ -169,6 +188,33 @@
             accessory.Services[1].Characteristics.Add(characteristic);
 
             return characteristic;
+        }
+
+        public static Service CreateWindowCovering(WindowCovering accessory, int id, string name, int? currentPosition)
+        {
+            var service = new Service(accessory)
+            {
+                Type = WindowCoveringType,
+                Id = id
+            };
+
+            var targetPos = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.TargetPositionType, currentPosition, 8), "int");
+            targetPos.Value = currentPosition;
+            accessory.TargetPosition = targetPos;
+
+            var currentPos = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentPositionType, currentPosition, 9), "int");
+            currentPos.Value = currentPosition;
+            accessory.CurrentPosition = currentPos;
+
+            var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentPositionType, 2, 10), "int");
+            positionType.Value = 2;
+            accessory.PositionType = positionType;
+
+            service.Characteristics.Add(targetPos);
+            service.Characteristics.Add(currentPos);
+            service.Characteristics.Add(positionType);
+
+            return service;
         }
 
         public static Service CreateOutlet(Accessory accessory, int id, bool value)
