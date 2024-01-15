@@ -262,7 +262,9 @@ namespace P3.Driver.HomeKitFactory
                 }
                 else if (control is IBlind iBlind)
                 {
-                    await iBlind.MoveAbsoluteAsync(Convert.ToInt32(e.Value));
+                    var targetBlind = Convert.ToInt32(e.Value); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
+                    var newTarget = Math.Abs(targetBlind - 100);
+                    await iBlind.MoveAbsoluteAsync(newTarget);
                 }
             }
         }
