@@ -368,7 +368,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
         {
             factory.CreatePropertyTemplate(GenerateNewGuid(node, 10), "KNX.PROPERTIES.DPT_SUB.NAME", "", "knx-dpt-sub",
                 PropertyTemplateType.Enum, node, "COMMON.CATEGORY.ADDRESS", true, false,
-                PropertyHelper.CreateEnumMetaString(subType, 0, 1), defaultType, 0, 0);
+                PropertyHelper.CreateEnumMetaString(subType), defaultType, 0, 0);
         }
 
         private void InitDptType(int type, Guid node, INodeTemplateFactory factory)
