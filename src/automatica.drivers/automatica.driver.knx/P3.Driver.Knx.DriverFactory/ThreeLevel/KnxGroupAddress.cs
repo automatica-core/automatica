@@ -54,8 +54,16 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
 
             var dptValueProp = GetProperty("knx-dpt");
+
+            var dptSubType = GetProperty("knx-dpt-sub");
+            
             DptType = ImplementationDptType;
             DptSubType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
+
+            if (dptSubType != null)
+            {
+                DptSubType = Convert.ToInt32(dptSubType.Value);
+            }
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 

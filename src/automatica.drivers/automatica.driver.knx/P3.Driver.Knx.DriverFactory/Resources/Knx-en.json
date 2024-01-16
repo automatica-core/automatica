@@ -48,6 +48,10 @@
         "NAME": "DPT",
         "DESCRIPTION": ""
       },
+      "DPT_SUB": {
+        "NAME": "DPT Sub",
+        "DESCRIPTION": ""
+      },
       "ONLY_USE_TUNNEL": {
         "NAME": "Only tunnel connection",
         "DESCRIPTION": ""

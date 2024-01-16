@@ -11,7 +11,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
     public class KnxIpDriverFactory : KnxFactory
     {
         public override string DriverName => "P3.Driver.Knx";
-        public override Guid DriverGuid => KnxGatway;
+        public override Guid DriverGuid => KnxGateway;
 
         public override string ImageName => "plugin-p3.driver.knx";
 

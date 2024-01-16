@@ -17,7 +17,7 @@ namespace P3.Driver.Knx.Tests.ETS
             var path = GetFile("ETS5_ImportTest");
 
             var p = new EtsProjectParser().ParseEtsFile(path);
-            var knxInterface = CreateNodeInstance(KnxIpDriverFactory.KnxGatway);
+            var knxInterface = CreateNodeInstance(KnxIpDriverFactory.KnxGateway);
 
             var nodes = await EtsProjectToNodeConverter.ConvertToNodeInstances(Factory, p, knxInterface);
 

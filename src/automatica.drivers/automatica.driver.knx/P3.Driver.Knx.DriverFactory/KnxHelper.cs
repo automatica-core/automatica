@@ -31,17 +31,17 @@
         // ReSharper disable once InconsistentNaming
         public enum Dpt5Type
         {
-            [EnumName("KNX.DPT5.001.NAME", "5.001")]
+            [EnumName("KNX.DPT5.001.NAME", "1")]
             Dpt5_001 = 1,
-            [EnumName("KNX.DPT5.003.NAME", "5.003")]
+            [EnumName("KNX.DPT5.003.NAME", "3")]
             Dpt5_003 = 3,
-            [EnumName("KNX.DPT5.004.NAME", "5.004")]
+            [EnumName("KNX.DPT5.004.NAME", "4")]
             Dpt5_004 = 4,
-            [EnumName("KNX.DPT5.005.NAME", "5.005")]
+            [EnumName("KNX.DPT5.005.NAME", "5")]
             Dpt5_005 = 5,
-            [EnumName("KNX.DPT5.006.NAME", "5.006")]
+            [EnumName("KNX.DPT5.006.NAME", "6")]
             Dpt5_006 = 6,
-            [EnumName("KNX.DPT5.010.NAME", "5.010")]
+            [EnumName("KNX.DPT5.010.NAME", "10")]
             Dpt5_010 = 10
         }
 
