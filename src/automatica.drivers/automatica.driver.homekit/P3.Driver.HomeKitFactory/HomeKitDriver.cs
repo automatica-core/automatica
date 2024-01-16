@@ -221,8 +221,9 @@ namespace P3.Driver.HomeKitFactory
                         {
                             accessory.PositionType.Value = 2; //stopped
                         }
-                        
-                        
+                        DriverContext.Logger.LogInformation($"Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
+
+
                         WriteCharacteristic(characteristic);
                     });
                 }
