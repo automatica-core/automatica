@@ -212,7 +212,17 @@ namespace P3.Driver.HomeKitFactory
                     iBlind.RegisterValueCallback(() =>
                     {
                         accessory.CurrentPosition.Value = iBlind.Position;
-                        accessory.PositionType.Value = iBlind.IsMoving ? 0 : 2;
+
+                        if (iBlind.IsMoving)
+                        {
+                            accessory.PositionType.Value = iBlind.Direction == 0 ? 1 : 0;
+                        }
+                        else
+                        {
+                            accessory.PositionType.Value = 2; //stopped
+                        }
+                        
+                        
                         WriteCharacteristic(characteristic);
                     });
                 }
