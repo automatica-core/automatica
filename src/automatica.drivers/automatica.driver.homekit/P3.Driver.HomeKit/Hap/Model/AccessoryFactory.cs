@@ -38,7 +38,7 @@
             a2.AccessoryInfo = CreateAccessoryInfo(a2, 1, name, manufacturer, serial);
             a2.Services.Add(a2.AccessoryInfo);
 
-            a2.Specific = CreateWindowCovering(a2, 7, name, currentPosition);
+            a2.Specific = CreateWindowCovering(a2, 7, currentPosition);
             a2.Services.Add(a2.Specific);
 
 
@@ -190,7 +190,7 @@
             return characteristic;
         }
 
-        public static Service CreateWindowCovering(WindowCovering accessory, int id, string name, int? currentPosition)
+        public static Service CreateWindowCovering(WindowCovering accessory, int id, int? currentPosition)
         {
             var service = new Service(accessory)
             {
@@ -202,11 +202,11 @@
             targetPos.Value = currentPosition;
             accessory.TargetPosition = targetPos;
 
-            var currentPos = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentPositionType, currentPosition, 9), "int");
+            var currentPos = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.CurrentPositionType, currentPosition, 9), "int", false);
             currentPos.Value = currentPosition;
             accessory.CurrentPosition = currentPos;
 
-            var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.PositionStateType, 2, 10), "int");
+            var positionType = SetCharacteristicOptions(CharacteristicFactory.Create<bool>(service, CharacteristicBase.PositionStateType, 2, 10), "int", false);
             accessory.PositionType = positionType;
 
             service.Characteristics.Add(targetPos);
