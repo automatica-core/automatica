@@ -110,11 +110,11 @@ namespace P3.Logic.Operations.Shutter
                 ret.Add(new LogicOutputChanged(_moveOutput, moveValue));
                 ret.Add(new LogicOutputChanged(_isMovingOutput, true));
             }
-            //else if (instance.ObjId == _absolutePositionInput.ObjId)
-            //{
-            //    var dValue = Convert.ToDouble(value);
-            //    ret.AddRange(MoveAbsolute(dValue));
-            //}
+            else if (instance.ObjId == _absolutePositionInput.ObjId)
+            {
+                var dValue = Convert.ToDouble(value);
+                ret.AddRange(MoveAbsolute(dValue));
+            }
             
             return ret;
         }
@@ -136,7 +136,7 @@ namespace P3.Logic.Operations.Shutter
                 ret.Add(new LogicOutputChanged(_isMovingOutput, false));
             }
             _position = intValue;
-            ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
+          //  ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
 
             return ret;
         }
