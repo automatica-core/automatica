@@ -113,13 +113,13 @@ namespace P3.Logic.Operations.Shutter
             else if (instance.ObjId == _absolutePositionInput.ObjId)
             {
                 var dValue = Convert.ToDouble(value);
-                ret.AddRange(MoveAbsolute(dValue));
+                ret.AddRange(MoveAbsolute(dValue, false));
             }
             
             return ret;
         }
 
-        private IList<ILogicOutputChanged> MoveAbsolute(double dValue)
+        private IList<ILogicOutputChanged> MoveAbsolute(double dValue, bool setOutput)
         {
             var ret = new List<ILogicOutputChanged>();
 
@@ -136,7 +136,8 @@ namespace P3.Logic.Operations.Shutter
                 ret.Add(new LogicOutputChanged(_isMovingOutput, false));
             }
             _position = intValue;
-          //  ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
+            if(setOutput)
+              ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
 
             return ret;
         }
@@ -204,7 +205,7 @@ namespace P3.Logic.Operations.Shutter
 
         public Task MoveAbsoluteAsync(int pos, CancellationToken token = new CancellationToken())
         {
-            var values = MoveAbsolute(pos);
+            var values = MoveAbsolute(pos, true);
             return DispatchValues(values);
         }
 
