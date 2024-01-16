@@ -7,6 +7,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Time.Timer
 {
@@ -106,16 +107,13 @@ namespace P3.Logic.Time.Timer
                     }
 
                     _value = false;
-                    return;
                 }
-
-                if (isStartup)
+                else if (isStartup)
                 {
                     Context.Logger.LogInformation($"Start event, set value to {true}");
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
+                    _value = true;
                 }
-
-                _value = true;
             }
             else
             {
