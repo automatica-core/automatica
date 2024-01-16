@@ -485,10 +485,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     if (ok) {
       this.item = this.calendarEditSource;
       this.selectedProperty.Value = this.calendarEditValue;
-
-
+      this.valueChanged($event, { data: this.selectedProperty });
     }
-    this.valueChanged($event, { data: this.selectedProperty });
 
     this.selectedProperty = void 0;
     this.calendarEditValue = void 0;
@@ -501,9 +499,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     if (ok) {
       this.selectedProperty.Value = this.timerEditValue;
-
+      this.valueChanged($event, { data: this.selectedProperty });
     }
-    this.valueChanged($event, { data: this.selectedProperty });
 
     this.selectedProperty = void 0;
     this.timerEditValue = void 0;
@@ -742,12 +739,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     return false;
   }
 
-  onControlsPopupClosing($event) {
+  onControlsPopupClosing($event, ok: boolean) {
     this.controlsPopupVisible = false;
 
 
-    this.selectedProperty.Value = this.controlsEditValue;
-    this.valueChanged($event, { data: this.selectedProperty });
+    if (ok) {
+      this.selectedProperty.Value = this.controlsEditValue;
+      this.valueChanged($event, { data: this.selectedProperty });
+    }
 
     this.selectedProperty = void 0;
     this.controlsEditValue = void 0;
@@ -774,7 +773,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       }
 
       this.controlsGroup = [];
-      for(let key of map.keys()) {
+      for (let key of map.keys()) {
         var group = new ControlGrouped();
         group.key = key;
         group.items = map.get(key);

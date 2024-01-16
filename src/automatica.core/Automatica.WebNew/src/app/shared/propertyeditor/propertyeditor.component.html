@@ -323,21 +323,35 @@
 
 <dx-popup *ngIf="controlsPopupVisible" #controlsPopup width="400" height="80%" [showTitle]="true"
     [title]="'COMMON.PROPERTY.CONTROLS.NAME' | translateAsync" [visible]="controlsPopupVisible"
-    (onHiding)="onControlsPopupClosing($event, true)">
-    <dx-list #list [dataSource]="controlsGroup" [grouped]="true" [height]="'100%'" [selectionMode]="'all'" keyExpr="Id" displayExpr="Name"
+    (onHiding)="onControlsPopupClosing($event, false)">
+    <dx-list #list [dataSource]="controlsGroup" [grouped]="true" [height]="'80%'" [selectionMode]="'all'" keyExpr="Id" displayExpr="Name"
         [showSelectionControls]="true" [(selectedItemKeys)]="controlsEditValue.Controls" [selectByClick]="true"></dx-list>
+
+        <div class="dx-field">
+            <div class="dx-field-value-static">
+                <dx-button [disabled]="timerSaveButtonDisabled" text="{{ 'COMMON.SAVE' | translateAsync }}"
+                    (click)="onControlsPopupClosing($event, true)"></dx-button>
+            </div>
+        </div>
 </dx-popup>
 
 <dx-popup *ngIf="calendarEditPopupVisible" #calendarEditPopup width="80%" height="80%" [showTitle]="true"
     [title]="'COMMON.PROPERTY.CALENDAR.NAME' | translateAsync" [visible]="calendarEditPopupVisible"
-    (onHiding)="onCalendarEditPopupClosing($event, true)">
+    (onHiding)="onCalendarEditPopupClosing($event, false)">
     <dx-scheduler [dataSource]="calendarEditValue.Value" [views]="['day', 'week', 'month']" currentView="week"
-        [currentDate]="currentDate" [startDayHour]="0" [height]="'100%'" textExpr="Text" startDateExpr="StartDate"
+        [currentDate]="currentDate" [startDayHour]="0" [height]="'80%'" textExpr="Text" startDateExpr="StartDate"
         endDateExpr="EndDate" allDayExpr="AllDay" recurrenceRuleExpr="RecurrenceRule" descriptionExpr="Description"
         recurrenceExceptionExpr="RecurrenceException">
         <dxo-editing [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true" [allowResizing]="true"
             [allowDragging]="true"></dxo-editing>
     </dx-scheduler>
+
+    <div class="dx-field">
+        <div class="dx-field-value-static">
+            <dx-button [disabled]="timerSaveButtonDisabled" text="{{ 'COMMON.SAVE' | translateAsync }}"
+                (click)="onCalendarEditPopupClosing($event, true)"></dx-button>
+        </div>
+    </div>
 </dx-popup>
 
 <dx-popup *ngIf="timerEditPopupVisible" #timerEditPopup width="400" height="500" [showTitle]="true"
