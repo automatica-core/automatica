@@ -223,12 +223,22 @@ namespace P3.Driver.HomeKitFactory
                         accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
                         accessory.PositionType.Value = ToHapPositionState(iBlind);
                         
-                        DriverContext.Logger.LogInformation($"{Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
-                        DriverContext.Logger.LogInformation($"{Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
+                        DriverContext.Logger.LogInformation($"{control.Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
+                        DriverContext.Logger.LogInformation($"{control.Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
 
 
                         WriteCharacteristic(characteristic);
                     });
+                }
+            }
+
+            foreach (var accessory in _server.AccessoryContainer.Accessories)
+            {
+                DriverContext.Logger.LogInformation($"Accessory: {accessory.Id} is {accessory.AccessoryInfo.Name.Value}");
+
+                foreach (var service in accessory.Services)
+                {
+                    DriverContext.Logger.LogInformation($"Service: {service.Id} has type {service.Type}");
                 }
             }
 

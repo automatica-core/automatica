@@ -110,18 +110,23 @@
             return a2;
         }
 
-        public static Service CreateAccessoryInfo(Accessory accessory, int id, string name, string manufacturer, string serial)
+        public static AccessoryInfoService CreateAccessoryInfo(Accessory accessory, int id, string name, string manufacturer, string serial)
         {
-            var service = new Service(accessory)
+            var service = new AccessoryInfoService(accessory)
             {
                 Type = AccessoryInformationType,
                 Id = id
             };
 
 
-            service.Characteristics.Add(CharacteristicFactory.CreateName(service, name, 2));
+            service.Name = CharacteristicFactory.CreateName(service, name, 2);
+            service.Characteristics.Add(service.Name);
+            
             service.Characteristics.Add(CharacteristicFactory.CreateManufacturer(service, manufacturer, 3));
-            service.Characteristics.Add(CharacteristicFactory.CreateSerial(service, serial, 4));
+            
+            service.Serial = CharacteristicFactory.CreateSerial(service, serial, 4);
+            service.Characteristics.Add(service.Serial);
+            
             service.Characteristics.Add(CharacteristicFactory.CreateModel(service, serial, 5));
             service.Characteristics.Add(CharacteristicFactory.CreateIdentify(service, 6));
 
@@ -141,7 +146,7 @@
             return service;
         }
 
-        public static Service CreateAccessoryInfo(Accessory accessory, int id, string name, string manufacturer, string serial, string firmwareRevision)
+        public static AccessoryInfoService CreateAccessoryInfo(Accessory accessory, int id, string name, string manufacturer, string serial, string firmwareRevision)
         {
             var service = CreateAccessoryInfo(accessory, id, name, manufacturer, serial);
             service.Characteristics.Add(CharacteristicFactory.CreateFirmwareRevision(service, firmwareRevision, 7));
