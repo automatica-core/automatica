@@ -30,6 +30,7 @@ namespace P3.Driver.HomeKit.Hap.TlvData
                 while (currentIndex < data.Length)
                 {
                     var tag = (Constants)data[currentIndex];
+
                     currentIndex++;
                     var length = data[currentIndex];
                     currentIndex++;

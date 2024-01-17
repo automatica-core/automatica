@@ -39,10 +39,6 @@ namespace P3.Driver.HomeKit.Hap.TlvData
                     }
                     Values[type] = Combine(Values[type], value);
                 }
-                else
-                {
-                    throw new TlvTypeDuplicationException(type);
-                }
             }
         }
 
