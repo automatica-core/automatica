@@ -35,6 +35,7 @@ namespace P3.Logic.Operations.Shutter
         private int _position;
         private bool _moving = false;
 
+        private int? _targetPosition;
 
 
         public bool IsMoving => _moving;
@@ -115,6 +116,19 @@ namespace P3.Logic.Operations.Shutter
                 var dValue = Convert.ToDouble(value);
                 ret.AddRange(MoveAbsolute(dValue, false));
             }
+            else if (instance.ObjId == _absolutePositionInput.ObjId)
+            {
+                if (_targetPosition.HasValue)
+                {
+                    var intValue = Convert.ToInt32(value);
+
+                    if (_targetPosition == intValue)
+                    {
+                        _moving = false;
+                        ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
+                    }
+                }
+            }
             
             return ret;
         }
@@ -141,8 +155,11 @@ namespace P3.Logic.Operations.Shutter
             ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
             
             _position = intValue;
-            if(setOutput)
-              ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
+            if (setOutput)
+            {
+                ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
+                _targetPosition = intValue;
+            }
 
             return ret;
         }
