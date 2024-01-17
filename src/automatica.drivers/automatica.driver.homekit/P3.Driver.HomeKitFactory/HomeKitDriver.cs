@@ -222,7 +222,6 @@ namespace P3.Driver.HomeKitFactory
                     {
                         
                         accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
-                        accessory.TargetPosition.Value = ToHapPositionState(iBlind);
                         accessory.PositionType.Value = ToHapPositionState(iBlind);
                         
                         DriverContext.Logger.LogInformation($"{control.Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
