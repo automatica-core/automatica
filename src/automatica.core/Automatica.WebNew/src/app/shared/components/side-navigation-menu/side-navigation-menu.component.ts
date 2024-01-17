@@ -4,7 +4,7 @@ import { L10nTranslationModule } from "angular-l10n";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
-import { DxScrollViewModule } from "devextreme-angular";
+import { DxLoadIndicatorModule, DxScrollViewModule } from "devextreme-angular";
 
 @Component({
     selector: "app-side-navigation-menu",
@@ -111,7 +111,8 @@ export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDes
         event.component.option("deferRendering", false);
 
         setTimeout(() => {
-            this.menu.instance.collapseAll();
+            if (this.menu && this.menu.instance)
+                this.menu.instance.collapseAll();
         }, 100);
     }
 
@@ -127,7 +128,7 @@ export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDes
 }
 
 @NgModule({
-    imports: [CommonModule, DxTreeViewModule, L10nTranslationModule, FontAwesomeModule, DxScrollViewModule],
+    imports: [CommonModule, DxTreeViewModule, L10nTranslationModule, FontAwesomeModule, DxScrollViewModule, DxLoadIndicatorModule],
     declarations: [SideNavigationMenuComponent],
     exports: [SideNavigationMenuComponent]
 })

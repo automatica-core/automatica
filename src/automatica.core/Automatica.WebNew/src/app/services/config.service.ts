@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { NodeTemplate } from "../base/model/node-template";
 import { NodeInstance } from "../base/model/node-instance";
-import { PropertyInstance } from "../base/model/property-instance";
+import { PropertyInstance, UpdateScope } from "../base/model/property-instance";
 import { LearnNodeInstance } from "../shared/propertyeditor/propertyeditor.component";
 
 @Injectable()
@@ -68,8 +68,8 @@ export class ConfigService extends BaseService {
         return await super.put<NodeInstance>("nodeInstancesV2/add", nodeInstance.toJson());
     }
 
-    async update(nodeInstance: NodeInstance): Promise<NodeInstance> {
-        return await super.post<NodeInstance>("nodeInstancesV2/update", nodeInstance.toJson());
+    async update(nodeInstance: NodeInstance, updateScope: UpdateScope): Promise<NodeInstance> {
+        return await super.post<NodeInstance>(`nodeInstancesV2/update?updateScope=${updateScope}`, nodeInstance.toJson());
     }
 
     async reload(): Promise<any> {

@@ -11,14 +11,12 @@ namespace Automatica.Core.Internals.Cache.Common
     internal class LinkCache : AbstractCache<Link>, ILinkCache
     {
         private readonly ILogicInterfaceInstanceCache _logicInterfaceCache;
-        private readonly ILogicPageCache _logicPageCache;
 
         private readonly Dictionary<Guid, List<Link>> _fromRuleInstanceCache = new();
 
-        public LinkCache(IConfiguration configuration, ILogicInterfaceInstanceCache logicInterfaceCache, ILogicPageCache logicPageCache) : base(configuration)
+        public LinkCache(IConfiguration configuration, ILogicInterfaceInstanceCache logicInterfaceCache) : base(configuration)
         {
             _logicInterfaceCache = logicInterfaceCache;
-            _logicPageCache = logicPageCache;
         }
 
         protected override IQueryable<Link> GetAll(AutomaticaContext context)
@@ -55,7 +53,7 @@ namespace Automatica.Core.Internals.Cache.Common
             return all;
         }
 
-        public Link GetSingle(Guid objId, AutomaticaContext context)
+        public (Link link, bool isNew) GetSingle(Guid objId, AutomaticaContext context)
         {
             var item = context.Links
                 .Include(a => a.This2NodeInstance2RulePageInputNavigation)
@@ -64,19 +62,19 @@ namespace Automatica.Core.Internals.Cache.Common
                 .Include(a => a.This2RuleInterfaceInstanceOutputNavigation)
                 .AsNoTracking().Single(a => a.ObjId == objId);
 
+            var isNew = false;
             if (Contains(objId))
             {
                 Update(objId, item);
-                _logicPageCache.UpdateLink(item);
             }
             else
             {
+                isNew = true;
                 Add(objId, item);
-                _logicPageCache.AddLink(item);
             }
 
 
-            return item;
+            return (item, isNew);
         }
 
         public bool IsRuleInterfaceMapped(Guid objId)
@@ -87,7 +85,6 @@ namespace Automatica.Core.Internals.Cache.Common
 
         public override void Remove(Guid key)
         {
-            _logicPageCache.RemoveLink(Get(key));
             base.Remove(key);
         }
 

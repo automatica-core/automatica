@@ -1,6 +1,5 @@
 import { PropertyInstance } from "../property-instance"
 import { PropertyTemplate, PropertyTemplateType } from "../property-template"
-import { PropertyType } from "../property-type"
 import { NodeInstance } from "../node-instance"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
 import { IDescriptionModel } from "../IDescriptionModel";
@@ -27,7 +26,7 @@ export class VirtualDescriptionPropertyInstance extends VirtualPropertyInstance 
         this.PropertyTemplate.Description = "COMMON.PROPERTY.DESCRIPTION.DESCRIPTION";
         this.PropertyTemplate.Key = "description";
         this.PropertyTemplate.GroupOrder = 0;
-        this.PropertyTemplate.Order = 1;
+        this.PropertyTemplate.Order = 2;
         this.PropertyTemplate.IsReadonly = isReadonly;
     }
 

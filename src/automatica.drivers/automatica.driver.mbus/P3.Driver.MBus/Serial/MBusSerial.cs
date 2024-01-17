@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
@@ -7,14 +8,13 @@ using Microsoft.Extensions.Logging;
 using P3.Driver.MBus.Config;
 using P3.Driver.MBus.Frames;
 using Automatica.Core.Driver.Utility;
-using RJCP.IO.Ports;
 
 namespace P3.Driver.MBus.Serial
 {
     public class MBusSerial : MBusConnection
     {
         private readonly MBusSerialConfig _config;
-        private SerialPortStream _stream;
+        private SerialPort _stream;
         private bool _connected;
 
         public MBusSerial(MBusSerialConfig config, ITelegramMonitorInstance monitor, ILogger loggerInstance) : base(config, monitor, loggerInstance)
@@ -38,18 +38,20 @@ namespace P3.Driver.MBus.Serial
         {
             try
             {
-                _stream = new SerialPortStream(_config.Port, _config.Baudrate, 8, Parity.None,
-                    StopBits.One)
+                if (!_connected)
                 {
-                    ReadTimeout = _config.Timeout,
-                    WriteTimeout = _config.Timeout
-                };
+                    _stream = new SerialPort(_config.Port, _config.Baudrate, Parity.None, 8,
+                        StopBits.One)
+                    {
+                        ReadTimeout = _config.Timeout,
+                        WriteTimeout = _config.Timeout
+                    };
 
-                _stream.DataReceived += StreamOnDataReceived;
+                    _stream.DataReceived += StreamOnDataReceived;
 
-                _stream.Open();
-                _connected = true;
-
+                    _stream.Open();
+                    _connected = true;
+                }
             }
             catch (Exception e)
             {
@@ -86,7 +88,7 @@ namespace P3.Driver.MBus.Serial
         public override async Task WriteRaw(ReadOnlyMemory<byte> data)
         {
             Logger.LogHexOut(data);
-            await _stream.WriteAsync(data);
+            await _stream.BaseStream.WriteAsync(data.ToArray(), 0, data.Length);
         }
 
         protected override Task<MBusFrame> ReadFrame()
@@ -106,7 +108,7 @@ namespace P3.Driver.MBus.Serial
                     Thread.Sleep(100);
                     byte[] shortFrame = new byte[5];
                     shortFrame[0] = (byte) firstChar;
-                    var bytesRead = await _stream.ReadAsync(shortFrame, 1, 4);
+                    var bytesRead = await _stream.BaseStream.ReadAsync(shortFrame, 1, 4);
 
                     if (bytesRead != 4)
                     {
@@ -134,7 +136,7 @@ namespace P3.Driver.MBus.Serial
 
                     byte[] headerBuffer = new byte[4];
                     headerBuffer[0] = (byte) firstChar;
-                    var bytesRead = await _stream.ReadAsync(headerBuffer, 1, 3);
+                    var bytesRead = await _stream.BaseStream.ReadAsync(headerBuffer, 1, 3);
 
                     Logger.LogHexIn(headerBuffer);
 
@@ -151,7 +153,7 @@ namespace P3.Driver.MBus.Serial
                         byte[] data = new byte[lengthToRead];
                         var dataMemory = new Memory<byte>(data);
 
-                        bytesRead = await _stream.ReadAsync(dataMemory);
+                        bytesRead = await _stream.BaseStream.ReadAsync(dataMemory);
 
                         Logger.LogHexIn(dataMemory);
 

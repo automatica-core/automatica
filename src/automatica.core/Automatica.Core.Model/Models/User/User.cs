@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.Model.Models.User
@@ -16,6 +15,8 @@ namespace Automatica.Core.Model.Models.User
         }
 
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
         public string UserName { get; set; }
         public string Description { get; set; }
 
@@ -26,7 +27,7 @@ namespace Automatica.Core.Model.Models.User
 
         public string PasswordConfirm { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public string Salt { get; set; }
 
         public string Token { get; set; }

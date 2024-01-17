@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable } from "rxjs";
+import { throwError as observableThrowError, Observable, timeout } from "rxjs";
 import { L10nTranslationService } from "angular-l10n";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { WebApiException, ExceptionSeverity } from "../base/model/web-api-exception";
 import * as msgpack from "msgpack-lite";
 import { BaseModel } from "../base/model/base-model";
+import { BaseServiceHelper } from "./base-server-helper";
 
 export class BaseService {
     public static getValidBaseModels<T extends BaseModel>(jsonArr: any, translationService: L10nTranslationService) {
@@ -27,6 +28,8 @@ export class BaseService {
 
     }
 
+    private timeout: number = 5000;
+
 
     private headers(): HttpHeaders {
         let headers = new HttpHeaders();
@@ -43,14 +46,8 @@ export class BaseService {
         return headers;
     }
 
-    private getS1Server() {
-        let s1Server = localStorage.getItem("s1server");
-
-        if (!s1Server) {
-            s1Server = environment.s1server;
-        }
-
-        return s1Server + "/webapi";
+    protected getS1Server() {
+     return BaseServiceHelper.getApiBaseUrl();
     }
 
     async get<T extends BaseModel>(url: string): Promise<T> {
@@ -160,6 +157,23 @@ export class BaseService {
             console.log(url, "encoded json", data);
         }
         return new Uint8Array(msgpack.encode(data)).buffer;
+    }
+    async postRaw(url: string, body: any, withCredentials: boolean = true): Promise<any> {
+        try {
+            const data = this.encode(url, body);
+            const response = await this.httpService.post(this.getS1Server() + "/" + url, data,
+                { withCredentials: withCredentials, headers: this.headers() }).toPromise();
+
+            if (!response) {
+                return void 0;
+            }
+
+            const json = response;
+            return json;
+
+        } catch (error) {
+            throw this.handleError(error);
+        }
     }
 
     async post<T extends BaseModel>(url: string, body: any, withCredentials: boolean = true): Promise<T> {

@@ -50,6 +50,11 @@ namespace Automatica.Core
                 logger.LogError($"Could not find appsettings.json in {ServerInfo.GetConfigDirectory()}");
             }
 
+            var tz = config["TZ"];
+            if (!String.IsNullOrEmpty(tz)) {
+                Environment.SetEnvironmentVariable("TZ", tz);
+            }
+
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MQTT_LOG_VERBOSE")))
             {
                 //MqttNetGlobalLogger.LogMessagePublished += (s, e) =>
@@ -152,6 +157,7 @@ namespace Automatica.Core
                         });
                     });
                 }
+                
             }).ConfigureAppConfiguration(a =>
             {
                 a.SetBasePath(ServerInfo.GetConfigDirectory())

@@ -1,6 +1,5 @@
 ﻿using System;
 using Automatica.Core.Model;
-using MessagePack;
 using Newtonsoft.Json;
 
 
@@ -21,7 +20,7 @@ namespace Automatica.Core.EF.Models
         public Guid? This2NodeInstance2RulePageOutput { get; set; }
         public bool IsDeleted { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public RulePage This2RulePageNavigation { get; set; }
 
         public RuleInterfaceInstance This2RuleInterfaceInstanceInputNavigation

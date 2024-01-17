@@ -29,8 +29,7 @@ export class LinkService {
         }
 
         if (userData) {
-
-            connection.connection.setRouter(new draw2d.layout.connection.ManhattanBridgedConnectionRouter());
+            connection.connection.setRouter(linkService.router);
             const existingLink: Link = userData;
 
             if (element instanceof RuleInterfaceInstance) {
@@ -92,7 +91,7 @@ export class LinkService {
         this._isInit = v;
     }
 
-    constructor(private page: RulePage, public translate: L10nTranslationService, private ruleEngineService: LogicEngineService) {
+    constructor(private page: RulePage, public translate: L10nTranslationService, private ruleEngineService: LogicEngineService, public router) {
 
     }
 

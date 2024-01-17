@@ -11,6 +11,8 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
         this.PropertyTemplate.Description = ruleInterface.Template.Description;
         this.PropertyTemplate.Key = ruleInterface.Template.Name;
 
+        this.PropertyTemplate.Order = ruleInterface.Template.SortOrder;
+
         this.PropertyTemplate.Group = "COMMON.CATEGORY.PARAMETERS";
 
         switch (ruleInterface.Template.ParameterDataType) {
@@ -26,12 +28,23 @@ export class RuleInterfaceParamProperty extends VirtualPropertyInstance {
             case RuleInterfaceParameterDataType.Timer:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Timer;
                 break;
+            case RuleInterfaceParameterDataType.Calendar:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Calendar;
+                break;
             case RuleInterfaceParameterDataType.ConstantString:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Text;
                 this.PropertyTemplate.IsReadonly = true;
                 break;
             case RuleInterfaceParameterDataType.Color:
                 this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Color;
+                break;
+            case RuleInterfaceParameterDataType.Enum:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Enum;
+                this.PropertyTemplate.Meta = ruleInterface.Template.Meta;
+                this.PropertyTemplate.updatePropertyType();
+                break;
+            case RuleInterfaceParameterDataType.Bool:
+                this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Bool;
                 break;
         }
 

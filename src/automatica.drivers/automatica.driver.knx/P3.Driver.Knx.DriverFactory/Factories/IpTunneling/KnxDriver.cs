@@ -12,8 +12,11 @@ using Automatica.Core.EF.Exceptions;
 using Knx.Falcon;
 using Knx.Falcon.Sdk;
 using Knx.Falcon.Configuration;
+using Knx.Falcon.Logging;
 using System.Security;
 using Automatica.Core.Base.Cryptography;
+using Docker.DotNet.Models;
+using P3.Driver.Knx.DriverFactory.Logging;
 
 namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 {
@@ -31,7 +34,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private KnxGatewayState _gwState;
 
         private Knx3Level _knxTree;
-        private readonly object _lock = new object();
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
 
         private readonly Dictionary<string, List<Action<GroupEventArgs>>> _callbackMap = new();
@@ -48,6 +51,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         {
             _secureDriver = secureDriver;
             _level = level;
+            Logger.Factory = new FalconLoggerFactory(DriverContext.LoggerFactory.CreateLogger("KNXFalcon"));
         }
 
         protected override bool CreateTelegramMonitor()
@@ -100,31 +104,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
             try
             {
-                var remoteIp = IPAddress.Parse(ipAddress); 
-                _remoteIp = remoteIp;
-                _remotePort = port;
-                var useNatValue = false;
-                useNatValue = useNat != null && useNat.Value;
-                var ip = new IpTunnelingConnectorParameters(ipAddress, ipPort: port, useNat: useNatValue)
-                    {
-                        AutoReconnect = true
-                    };
-                if (_secureDriver)
-                {
-                    var authPw = GetPropertyValueString("knx-auth-pw");
-                    var userPw = GetPropertyValueString("knx-user-pw");
-                    var userId = GetPropertyValueInt("knx-user-id");
-                    var iaAddress = GetPropertyValueString("knx-ia-address");
-                  
-                    ip.IndividualAddress = IndividualAddress.Parse(iaAddress);
-                    ip.DeviceAuthenticationCodeHash = IpUnicastConnectorParameters.GetDeviceAuthenticationCodeHash(PasswordToSecureString(authPw));
-                    ip.UserPasswordHash = IpUnicastConnectorParameters.GetUserPasswordHash(PasswordToSecureString(userPw));
-                    ip.UserId = (byte)userId;
-                }
-
-                _tunneling = new KnxBus(ip);
-                _tunneling.ConnectionStateChanged += _tunneling_ConnectionStateChanged;
-                _tunneling.GroupMessageReceived += _tunneling_GroupMessageReceived;
+                await ConstructTunnelingConnection();
 
                 if (useTunnel.HasValue && useTunnel.Value)
                 {
@@ -147,6 +127,52 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             DriverContext.Logger.LogInformation($"Init done...");
 
             return await base.Init(token);
+        }
+
+        private async Task ConstructTunnelingConnection()
+        {
+            DriverContext.Logger.LogInformation($"Construct KNX driver...");
+            await _semaphore.WaitAsync();
+            try
+            {
+                var ipAddress = GetProperty("knx-ip").ValueString;
+                var useNat = GetProperty("knx-use-nat").ValueBool;
+                var port = GetPropertyValueInt("knx-port");
+
+                var remoteIp = IPAddress.Parse(ipAddress);
+                _remoteIp = remoteIp;
+                _remotePort = port;
+                var useNatValue = false;
+                useNatValue = useNat != null && useNat.Value;
+                var ip = new IpTunnelingConnectorParameters(ipAddress, ipPort: port, useNat: useNatValue)
+                {
+                    AutoReconnect = true
+                };
+
+                if (_secureDriver)
+                {
+                    var authPw = GetPropertyValueString("knx-auth-pw");
+                    var userPw = GetPropertyValueString("knx-user-pw");
+                    var userId = GetPropertyValueInt("knx-user-id");
+                    var iaAddress = GetPropertyValueString("knx-ia-address");
+
+                    ip.IndividualAddress = IndividualAddress.Parse(iaAddress);
+                    ip.DeviceAuthenticationCodeHash =
+                        IpUnicastConnectorParameters.GetDeviceAuthenticationCodeHash(PasswordToSecureString(authPw));
+                    ip.UserPasswordHash =
+                        IpUnicastConnectorParameters.GetUserPasswordHash(PasswordToSecureString(userPw));
+                    ip.UserId = (byte)userId;
+                }
+
+                _tunneling = new KnxBus(ip);
+                _tunneling.ConnectionStateChanged += _tunneling_ConnectionStateChanged;
+                _tunneling.GroupMessageReceived += _tunneling_GroupMessageReceived;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+            DriverContext.Logger.LogInformation($"Construct KNX driver...done");
         }
 
         private async void _tunneling_GroupMessageReceived(object sender, GroupEventArgs e)
@@ -198,17 +224,23 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         }
 
-        private void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
+        private async void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
         {
-            if (_tunneling != null)
+            DriverContext.Logger.LogError($"Connection state changed to {_tunneling.ConnectionState}");
+             if (_tunneling != null)
             {
                 var state = _tunneling.ConnectionState == BusConnectionState.Connected;
                 _gwState?.SetGatewayState(state);
 
                 if (!state)
                 {
-                    DriverContext.Logger.LogDebug($"GW  {Name} disconnected");
-                    _tunneling.ConnectAsync().ConfigureAwait(false);
+                    DriverContext.Logger.LogDebug($"GW {Name} disconnected, try to reconnect");
+
+                    await DisposeConnection();
+                    await ConstructTunnelingConnection();
+                    await StartConnection();
+
+                    DriverContext.Logger.LogDebug($"State is now {_tunneling.ConnectionState}");
                 }
             }
         }
@@ -254,44 +286,68 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             {
                 return true;
             }
-            _gwState?.SetGatewayState(false);
-            StartConnection();
+            await StartConnection(token);
 
             return await base.Start(token);
         }
 
-        private void StartConnection()
+        private async Task StartConnection(CancellationToken token = default)
         {
-            lock (_lock)
+            DriverContext.Logger.LogInformation($"Start KNX connection...");
+            _gwState?.SetGatewayState(false);
+            await _semaphore.WaitAsync(token);
+            try
             {
-                _tunneling?.ConnectAsync().ConfigureAwait(false);
+                await _tunneling.ConnectAsync(token);
+                DriverContext.Logger.LogInformation($"Start KNX connection...done");
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error connecting to KNX Interface {e}");
+                throw;
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 
-        private void DisposeConnection()
+        private async Task DisposeConnection()
         {
-            _tunneling.ConnectionStateChanged -= _tunneling_ConnectionStateChanged;
-            _tunneling.GroupMessageReceived -= _tunneling_GroupMessageReceived;
-            _tunneling.Dispose();
+            await _semaphore.WaitAsync();
+            try
+            {
+                DriverContext.Logger.LogInformation($"Dispose KNX driver...");
+                _tunneling.ConnectionStateChanged -= _tunneling_ConnectionStateChanged;
+                _tunneling.GroupMessageReceived -= _tunneling_GroupMessageReceived;
+                await _tunneling.DisposeAsync();
+                DriverContext.Logger.LogInformation($"Dispose KNX driver...done");
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, "Error disposing connection properly....");
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
-            lock (_lock)
+            DriverContext.Logger.LogInformation($"Stopping KNX driver...");
+            if (_tunneling != null)
             {
-                DriverContext.Logger.LogInformation($"Stopping KNX driver...");
-                if (_tunneling != null)
+                if (!_onlyUseTunnel)
                 {
-                    if (!_onlyUseTunnel)
-                    {
-                        DisposeConnection();
-                    }
-
-                    _callbackMap.Clear();
-                    _tunneling = null;
+                    await DisposeConnection();
                 }
+
+                _callbackMap.Clear();
+                _tunneling = null;
             }
-            return base.Stop(token);
+
+            return await base.Stop(token);
         }
 
         internal void AddGroupAddress(string groupAddress, Action<GroupEventArgs> callback)
@@ -333,36 +389,66 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             _gaMap.Add(address, ga);
         }
 
-        public  Task<bool> Read(string address)
+        public async Task<bool> Read(string address)
         {
             DriverContext.Logger.LogDebug($"Read datagram on GA {address}");
 
-            lock (_lock)
+            await _semaphore.WaitAsync();
+            try
             {
-                return _tunneling.RequestGroupValueAsync(GroupAddress.Parse(address));
+                if (_tunneling.ConnectionState != BusConnectionState.Connected)
+                {
+                    DriverContext.Logger.LogError($"Cannot read from KNX interface, not connected");
+                    return false;
+                }
+
+                return await _tunneling.RequestGroupValueAsync(GroupAddress.Parse(address));
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError($"{address}: Could not read value {e}");
+                return false;
+            }
+            finally
+            {
+                _semaphore.Release(1);
             }
         }
 
-        public Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue)
+        public async Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue, CancellationToken token)
         {
             DriverContext.Logger.LogDebug($"Write datagram on GA {address} {groupValue.Value.ToHex(false)}");
 
-            lock (_lock)
+            await _semaphore.WaitAsync(token);
+            try
             {
+                if (_tunneling.ConnectionState != BusConnectionState.Connected)
+                {
+                    DriverContext.Logger.LogError($"Cannot write to KNX interface, not connected");
+                    return false;
+                }
+
                 _lastGaValues[address] = groupValue;
-                return _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue);
+                return await _tunneling.WriteGroupValueAsync(GroupAddress.Parse(address), groupValue,
+                    MessagePriority.High, token);
+            }
+            catch (TaskCanceledException)
+            {
+                throw;
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error writing to KNX interface {address} {groupValue.Value.ToHex(true)} {e}");
+                return false;
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
-
-        public Task Connected()
-        {
-            DriverContext.Logger.LogDebug($"GW {Name} connected");
-            _gwState?.SetGatewayState(true);
-
-            _knxTree?.ConnectionEstablished();
-
-            return Task.CompletedTask;
-        }
-
     }
 }

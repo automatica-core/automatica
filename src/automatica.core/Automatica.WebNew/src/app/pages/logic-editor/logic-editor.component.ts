@@ -23,8 +23,9 @@ import { DataHubService } from "src/app/base/communication/hubs/data-hub.service
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import DataSource from "devextreme/data/data_source";
-import { DxListComponent } from "devextreme-angular";
+import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
+import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
   selector: "app-logic-editor",
@@ -49,10 +50,14 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   @ViewChild("logicPagesList")
   logicPageList: DxListComponent;
 
+  @ViewChild("infoPopup")
+  popupLearnMode: DxPopupComponent;
+
   areaInstances: AreaInstance[] = [];
   categoryInstances: CategoryInstance[] = [];
   userGroups: UserGroup[] = [];
 
+  public infoPopupVisible: boolean = false;
 
   constructor(private ruleEngineService: LogicEngineService,
     private configService: ConfigService,
@@ -66,19 +71,30 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     private nodeInstanceService: NodeInstanceService,
     private changeRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private hubConnectionService: HubConnectionService) {
     super(notify, translate, appService);
 
     appService.setAppTitle("RULEENGINE.NAME");
   }
 
-  async ngOnInit() {
+  onPopupHiding($event) {
+    this.infoPopupVisible = false;
+  }
 
+  async ngOnInit() {
+    await this.hubConnectionService.init();
     await this.loadData();
 
     const pageId = this.route.snapshot.params["id"];
     this.selectLogicPageById(pageId);
     const that = this;
+
+    super.registerEvent(this.ruleEngineService.showInfo, async (a) => {
+      this.infoPopupVisible = true;
+      this.changeRef.detectChanges();
+      await this.popupLearnMode.instance.show();
+    });
 
     this.route.params.subscribe(async (params) => {
       that.selectLogicPageById(params.id);
@@ -88,6 +104,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
   async load() {
     await this.loadData();
+  }
+
+  unselectItem() {
+    this.selectedItem = void 0;
   }
 
   initPages() {
@@ -211,6 +231,24 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
+  async removeSelectedItem($event) {
+    const item = $event.item;
+    const page: RulePage = $event.page;
+    if (item instanceof RuleInstance) {
+      if (this.selectedItem && this.selectedItem.ObjId === item.ObjId) {
+        page.removeRuleInstance(item.ObjId);
+        $event.removed = true;
+        await this.ruleEngineService.removeItem(item);
+      }
+    }
+    else if (item instanceof NodeInstance2RulePage) {
+      page.removeNodeInstance(item.ObjId);
+      $event.removed = true;
+      await this.ruleEngineService.removeItem(item);
+    }
+
+  }
+
   onSelectedItemsChanged($event) {
     const page = $event.page;
     const items: any[] = $event.items;
@@ -243,17 +281,15 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     }
   }
 
-  async save() {
+  async restart() {
     this.isLoading = true;
 
     try {
       await this.ruleEngineService.reload();
-      this.notify.notifySuccess("COMMON.SAVED");
-
     } catch (error) {
-      this.notify.notifyError(error);
-      throw error;
+      //ignore error, we will not receive any callback!
     }
+    this.notify.notifySuccess("COMMON.RELOAD");
     this.isLoading = false;
   }
 
@@ -397,5 +433,16 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   saveLearnedNodes($event: any) {
     this.configTree.saveLearnNodeInstances($event.nodeInstance, $event.learnedNodes);
+  }
+
+  onZoomIn($event) {
+    this.selectedPage.onZoomIn.emit();
+
+  }
+  onZoomOut($event) {
+    this.selectedPage.onZoomOut.emit();
+  }
+  onZoomToView($event) {
+    this.selectedPage.onZoomToView.emit();
   }
 }

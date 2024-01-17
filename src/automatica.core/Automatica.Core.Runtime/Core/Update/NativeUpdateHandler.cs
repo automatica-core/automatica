@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cloud;
@@ -31,7 +32,7 @@ namespace Automatica.Core.Runtime.Core.Update
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        private async void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void _timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             _logger.LogInformation("Check for update");
             _timer.Stop();
@@ -96,7 +97,7 @@ namespace Automatica.Core.Runtime.Core.Update
 
                 if (autoUpdate != null && (bool) autoUpdate.Value && autoUpdateTime != null && autoUpdateTime.Value is DateTime updateTime)
                 {
-                    var now = DateTime.Now;
+                    var now = DateTimeHelper.ProviderInstance.GetLocalNow().DateTime;
                     var updateTimeToday = new DateTime(now.Year, now.Month, now.Day, updateTime.Hour, updateTime.Minute,
                         updateTime.Second);
 

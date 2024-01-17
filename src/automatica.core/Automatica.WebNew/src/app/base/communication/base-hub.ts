@@ -1,5 +1,6 @@
 import { EventEmitter } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
+import { BaseServiceHelper } from "src/app/services/base-server-helper";
 
 const METHODS = new Map<string, Array<string>>();
 export function SignalRMethod(target: any, propertyKey: string) {
@@ -52,7 +53,6 @@ export class BaseHub {
 
     constructor(hubName: string) {
         this.hubName = hubName;
-        this.init();
     }
 
     public init() {
@@ -66,7 +66,7 @@ export class BaseHub {
         }
 
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl("/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
+            .withUrl(BaseServiceHelper.getSignalRBaseUrl() + "/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
             .configureLogging(signalR.LogLevel.Warning)
             .build();
 
@@ -98,6 +98,8 @@ export class BaseHub {
         if (!localStorage.getItem("jwt")) {
             return;
         }
+        this.init();
+
         if (!this.started) {
 
             try {
@@ -137,7 +139,7 @@ export class BaseHub {
         this.subscriptions = [];
     }
 
-    callHubProxyWithParam(methodName: string, param: any): Promise<any> {
+    async callHubProxyWithParam(methodName: string, param: any): Promise<any> {
 
         if (!this.started) {
             this._cachedRequests.push({
@@ -149,10 +151,15 @@ export class BaseHub {
         }
 
         const proxy = this.connection;
-        return proxy.invoke(methodName, param);
+
+        if (proxy.state !== signalR.HubConnectionState.Connected) {
+            await proxy.start();
+        }
+
+        return await proxy.invoke(methodName, param);
     }
 
-    callHubProxyWithParams(methodName: string, ...args: any[]): Promise<any> {
+    async callHubProxyWithParams(methodName: string, ...args: any[]): Promise<any> {
 
         if (!this.started) {
             this._cachedRequests.push({
@@ -163,10 +170,14 @@ export class BaseHub {
             return;
         }
         const proxy = this.connection;
-        return proxy.send(methodName, ...args);
+        if (proxy.state !== signalR.HubConnectionState.Connected) {
+            await proxy.start();
+        }
+
+        return await proxy.send(methodName, ...args);
     }
 
-    callHubProxy(methodName: string): Promise<any> {
+    async callHubProxy(methodName: string): Promise<any> {
 
         if (!this.started) {
             this._cachedRequests.push({
@@ -177,7 +188,11 @@ export class BaseHub {
         }
 
         const proxy = this.connection;
-        return proxy.send(methodName);
+        if (proxy.state !== signalR.HubConnectionState.Connected) {
+            await proxy.start();
+        }
+
+        return await proxy.send(methodName);
     }
 
     private methodCalled(methodName: string, args) {

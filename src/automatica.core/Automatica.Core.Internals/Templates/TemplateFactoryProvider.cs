@@ -1,20 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 
 namespace Automatica.Core.Internals.Templates
 {
-    public class TemplateFactoryProvider<T> where T : PropertyTemplateFactory
+    public abstract class TemplateFactoryProvider<T> where T : PropertyTemplateFactory
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public TemplateFactoryProvider(IServiceProvider serviceProvider)
+        protected TemplateFactoryProvider(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
+        
+        protected abstract T CreateFactory(Guid owner, IServiceProvider serviceProvider);
+        
         public T CreateInstance(Guid owner)
         {
-            var factory = _serviceProvider.GetRequiredService<T>();
-
+            var factory = CreateFactory(owner, _serviceProvider);
             factory.Owner = owner;
             factory.AllowOwnerOverride = true; //TODO: disable in 2 versions again
             return factory;

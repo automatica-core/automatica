@@ -13,11 +13,13 @@ import { ITreeNode } from "src/app/base/model/ITreeNode";
 import { NodeTemplate } from "src/app/base/model/node-template";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { BoardInterface } from "src/app/base/model/board-interface";
-import { PropertyInstance } from "src/app/base/model/property-instance";
+import { PropertyInstance, UpdateScope } from "src/app/base/model/property-instance";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { NodeInstanceService } from "src/app/services/node-instance.service";
 import { NodeTemplateService } from "src/app/services/node-template.service";
 import { DataService } from "src/app/services/data.service";
+import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
+import { WindowState } from "src/app/base/model/window-state";
 
 @Component({
   selector: "p3-config-tree",
@@ -27,6 +29,9 @@ import { DataService } from "src/app/services/data.service";
 
 })
 export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDestroy {
+
+  NodeDataTypeEnum: typeof NodeDataTypeEnum = NodeDataTypeEnum
+  WindowState: typeof WindowState = WindowState;
 
   NodeInstanceState: typeof NodeInstanceState = NodeInstanceState;
   expandedRowKeys: any[] = ["b0"];
@@ -333,7 +338,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
 
-  public async save() {
+  public async reload() {
     this.notify.notifySuccess("COMMON.RELOADED");
     this.configService.reload();
     this.selectNode(void 0);
@@ -415,7 +420,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       this.appService.isLoading = true;
       this.tree.instance.refresh();
-      await this.configService.update(drag);
+      await this.configService.update(drag, UpdateScope.ParentChanged);
       this.appService.isLoading = false;
     }
   }
@@ -556,7 +561,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
           }
         }
 
-        await this.configService.update(nodeInstance);
+        await this.configService.update(nodeInstance, UpdateScope.SpecificProperty);
 
       }
 

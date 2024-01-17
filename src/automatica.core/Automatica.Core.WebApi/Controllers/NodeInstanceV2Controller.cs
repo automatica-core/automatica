@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -16,9 +19,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Automatica.Core.Base.Common;
+using Automatica.Core.Base.Localization;
+using Automatica.Core.Internals.Cache.Common;
 
 namespace Automatica.Core.WebApi.Controllers
 {
+    public enum UpdateScope
+    {
+        Unknown = 0,
+        GenericProperty = 1,
+        SpecificProperty = 2, 
+        ParentChanged = 3,
+        Imported = 4
+    }
+
+
     [Route("webapi/nodeInstancesV2")]
     [Authorize(Roles = Role.AdminRole)]
     public class NodeInstanceV2Controller : BaseController
@@ -31,6 +47,8 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly INodeInstanceService _nodeInstanceService;
         private readonly IConfiguration _config;
         private readonly IRecorderContext _recorderContext;
+        private readonly ISettingsCache _settingsCache;
+        private readonly ILocalizationProvider _localizationProvider;
         private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
@@ -43,6 +61,8 @@ namespace Automatica.Core.WebApi.Controllers
             INodeInstanceService nodeInstanceService,
             IConfiguration config,
             IRecorderContext recorderContext,
+            ISettingsCache settingsCache,
+            ILocalizationProvider localizationProvider,
             ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
@@ -53,6 +73,8 @@ namespace Automatica.Core.WebApi.Controllers
             _nodeInstanceService = nodeInstanceService;
             _config = config;
             _recorderContext = recorderContext;
+            _settingsCache = settingsCache;
+            _localizationProvider = localizationProvider;
             _logger = logger;
         }
 
@@ -60,10 +82,11 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var childs = node.InverseThis2ParentNodeInstanceNavigation ?? new List<NodeInstance>();
             var props = node.PropertyInstance;
-
+                
             node.InverseThis2ParentNodeInstanceNavigation = null;
             node.PropertyInstance = null;
             node.IsDeleted = false;
+            node.ModifiedAt = DateTimeOffset.Now;
 
             if (node.Description == null)
             {
@@ -95,28 +118,37 @@ namespace Automatica.Core.WebApi.Controllers
             }
             else
             {
+                node.CreatedAt = DateTimeOffset.Now;
                 DbContext.Entry(node).State = EntityState.Added;
                 await DbContext.AddAsync(node);
                 entityState = EntityState.Added;
             }
 
-            foreach (var prop in props)
+            if (props != null)
             {
-                prop.This2NodeInstanceNavigation = node;
-                prop.This2PropertyTemplateNavigation = null;
-                if (entityState == EntityState.Modified)
+                foreach (var prop in props)
                 {
-                    DbContext.Update(prop);
-                }
-                else
-                {
-                    await DbContext.AddAsync(prop);
+                    prop.This2NodeInstanceNavigation = node;
+                    prop.This2PropertyTemplateNavigation = null;
+                    prop.ModifiedAt = DateTimeOffset.Now;
+                    if (entityState == EntityState.Modified)
+                    {
+                        DbContext.Update(prop);
+                    }
+                    else
+                    {
+                        prop.CreatedAt = DateTimeOffset.Now;
+                        await DbContext.AddAsync(prop);
+                    }
                 }
             }
 
-            foreach (var child in childs)
+            if (childs != null)
             {
-                await AddOrUpdateNodeInstance(child);
+                foreach (var child in childs)
+                {
+                    await AddOrUpdateNodeInstance(child);
+                }
             }
 
             return entityState;
@@ -138,8 +170,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("copy/{nodeInstance}/{targetNodeInstance}")]
         public async Task<NodeInstance> Copy(Guid nodeInstance, Guid targetNodeInstance)
         {
-            await using var context = new AutomaticaContext(_config);
-            var instance = _nodeInstanceCache.GetSingle(nodeInstance, context);
+            var instance = _nodeInstanceCache.GetSingle(nodeInstance, DbContext);
 
             var copyInstance = JsonConvert.DeserializeObject<NodeInstance>(JsonConvert.SerializeObject(instance));
 
@@ -189,9 +220,7 @@ namespace Automatica.Core.WebApi.Controllers
                 return newNode.node;
             }
 
-            async void ReloadAndForget() => await ReloadDriver(node, newNode.entityState);
-            ReloadAndForget();
-
+            _ = Task.Factory.StartNew(() => ReloadDriver(node, newNode.entityState).ConfigureAwait(false), CancellationToken.None);
 
             _logger.LogDebug($"Add Node...done");
 
@@ -202,40 +231,45 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task<(NodeInstance node, EntityState entityState)> AddNodeInternal(NodeInstance node)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var entityState = await AddOrUpdateNodeInstance(node);
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
-
-                var queue = new Queue<NodeInstance>();
-                queue.Enqueue(node);
-
-                while (queue.Count > 0)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    var item = queue.Dequeue();
-                    if (item.InverseThis2ParentNodeInstanceNavigation != null)
+                    var entityState = await AddOrUpdateNodeInstance(node);
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
+
+                    var queue = new Queue<NodeInstance>();
+                    queue.Enqueue(node);
+
+                    while (queue.Count > 0)
                     {
-                        foreach (var child in item.InverseThis2ParentNodeInstanceNavigation)
+                        var item = queue.Dequeue();
+                        if (item.InverseThis2ParentNodeInstanceNavigation != null)
                         {
-                            queue.Enqueue(child);
-                            _nodeInstanceCache.GetSingle(child.ObjId, DbContext);
+                            foreach (var child in item.InverseThis2ParentNodeInstanceNavigation)
+                            {
+                                queue.Enqueue(child);
+                                _nodeInstanceCache.GetSingle(child.ObjId, DbContext);
+                            }
                         }
+
                     }
 
+                    return (_nodeInstanceCache.Get(node.ObjId), entityState);
                 }
-
-                return (_nodeInstanceCache.Get(node.ObjId), entityState);
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)}", e);
-                throw;
-            }
+                catch (Exception e)
+                {
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(AddNode)} {nameof(NodeInstance)} {e}");
+                    throw;
+                }
+            });
         }
 
         private async Task ReloadDriver(NodeInstance node, EntityState entityState)
@@ -273,145 +307,145 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task StopStartDriver(NodeInstance node)
         {
-            var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
-            await _notifyDriver.NotifyAdd(node);
-            if (rootNode == null)
-            {
-                return;
-            }
-            var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
-            if (driver == null)
-            {
-                _logger.LogWarning(
-                    $"Could not hot-reload driver, seems that the driver wasn't loaded at the moment");
-
-                return;
-            }
-            await _coreServer.StopDriver(driver);
-            await _coreServer.InitializeAndStartDriver(rootNode,
-                _templateCache.Get(rootNode.This2NodeTemplate.Value));
+            await _coreServer.StartStopDriver(node);
         }
 
         [Route("delete")]
         [HttpPost]
-        public async Task DeleteNode([FromBody]NodeInstance node)
+        public async Task DeleteNode([FromBody] NodeInstance node)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation)
-                .SingleOrDefault(a => a.ObjId == node.ObjId);
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            await strategy.Execute(async
+                () =>
             {
-                if (existingNode == null)
-                {
-                    return;
-                }
-                if (existingNode != null)
-                {
-                    DbContext.Entry(existingNode).State = EntityState.Deleted;
-                }
-
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                var existingNode = DbContext.NodeInstances.AsNoTracking().Include(a => a.This2NodeTemplateNavigation)
+                    .SingleOrDefault(a => a.ObjId == node.ObjId);
                 try
                 {
-                    if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
-                        existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
+                    if (existingNode == null)
                     {
                         return;
                     }
 
-                    var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
-
-                    if (rootNode.ObjId == node.ObjId)
+                    if (existingNode != null)
                     {
-                        var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
-                        if (driver != null)
+                        DbContext.Entry(existingNode).State = EntityState.Deleted;
+                    }
+
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    try
+                    {
+                        if (existingNode.This2NodeTemplateNavigation.IsAdapterInterface.HasValue &&
+                            existingNode.This2NodeTemplateNavigation.IsAdapterInterface.Value)
                         {
-                            await _coreServer.StopDriver(driver);
+                            return;
+                        }
+
+                        var rootNode = _nodeInstanceCache.GetDriverNodeInstanceFromChild(node);
+
+                        if (rootNode.ObjId == node.ObjId)
+                        {
+                            var driver = _driverNodeStore.GetDriver(rootNode.ObjId);
+                            if (driver != null)
+                            {
+                                await _coreServer.StopDriver(driver);
+                            }
+                        }
+                        else
+                        {
+                            await _notifyDriver.NotifyDeleted(node);
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        await _notifyDriver.NotifyDeleted(node);
+                        _logger.LogError(e, $"Error stopping driver {node.Name}...");
                     }
+
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Error stopping driver {node.Name}...");
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)} {e}");
+                    _nodeInstanceCache.Clear();
+                    throw;
                 }
+                finally
+                {
 
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(DeleteNode)} {nameof(NodeInstance)}", e);
-                _nodeInstanceCache.Clear();
-                throw;
-            }
-            finally
-            {
-
-                _nodeInstanceCache.Remove(existingNode);
-            }
+                    _nodeInstanceCache.Remove(existingNode);
+                }
+            });
         }
 
         [Route("reload")]
         [HttpPost]
-        public async Task ReInit()
+        public void ReInit()
         {
-            _nodeInstanceCache.Clear();
-            _templateCache.Clear();
-            _driverNodeStore.Clear();
-
-            await _coreServer.ReInit();
+            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
         }
 
         [Route("update")]
         [HttpPost]
-        public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node)
+        public async Task<NodeInstance> UpdateNode([FromBody]NodeInstance node,
+            [FromQuery] UpdateScope updateScope = UpdateScope.Unknown)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var existingNode = _nodeInstanceCache.Get(node.ObjId);
-                var reloadServer = false;
-
-                if (existingNode != null)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    if (existingNode.This2Slave != node.This2Slave)
+                    var existingNode = _nodeInstanceCache.Get(node.ObjId);
+                    var reloadServer = false;
+
+                    if (existingNode != null)
                     {
-                        //slave changed, we need to reload all drivers!
-                        reloadServer = true;
+                        if (existingNode.This2Slave != node.This2Slave)
+                        {
+                            //slave changed, we need to reload all drivers!
+                            reloadServer = true;
+                        }
                     }
+
+
+                    var entityState = await AddOrUpdateNodeInstance(node);
+
+                    await DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
+
+                    if (reloadServer)
+                    {
+                        await _coreServer.ReInit();
+                    }
+                    else
+                    {
+                        if (updateScope == UpdateScope.SpecificProperty)
+                        {
+                            _logger.LogInformation($"Reload driver {node.ObjId} {node.FullName}");
+                            _ = Task.Factory.StartNew(() => ReloadDriver(node, entityState).ConfigureAwait(false),
+                                CancellationToken.None);
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Ignore reload for driver update scope is {updateScope} {node.ObjId} {node.FullName}");
+                        }
+                    }
+
+                    return _nodeInstanceCache.Get(node.ObjId);
                 }
-                
-
-                var entityState = await AddOrUpdateNodeInstance(node);
-
-                await DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                _nodeInstanceCache.GetSingle(node.ObjId, DbContext);
-
-                if (reloadServer)
+                catch (Exception e)
                 {
-                    await _coreServer.ReInit();
+                    await transaction.RollbackAsync();
+                    _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)} {e}");
+                    throw;
                 }
-                else
-                {
-                    async void ReloadAndForget() => await ReloadDriver(node, entityState);
-                    ReloadAndForget();
-                }
-
-                return _nodeInstanceCache.Get(node.ObjId);
-            }
-            catch (Exception e)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(e, $"Could not {nameof(UpdateNode)} {nameof(NodeInstance)}", e);
-                throw;
-            }
+            });
         }
 
         [HttpPost]
@@ -433,6 +467,20 @@ namespace Automatica.Core.WebApi.Controllers
             return new List<NodeInstance>();
         }
 
+        private string ConvertLanguageEnum(Language language)
+        {
+            switch (language)
+            {
+                case Language.German:
+                    return "de";
+                case Language.English:
+                    return "en";
+
+            }
+
+            return "en";
+        }
+
         private async Task<IList<NodeInstance>> SaveAndReloadNodeInstances(IList<NodeInstance> nodeInstances)
         {
             var savedNodes = new List<NodeInstance>();
@@ -446,11 +494,24 @@ namespace Automatica.Core.WebApi.Controllers
 
             if (savedNodesData.Any())
             {
-                async void ReloadAndForget() => await ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState);
-                ReloadAndForget();
+                _ = Task.Factory.StartNew(() => ReloadDriver(savedNodesData.First().node, savedNodesData.First().entityState).ConfigureAwait(false), CancellationToken.None);
             }
 
             return savedNodes;
+        }
+
+        private void TranslateNodesRecursive(NodeInstance node, string curLanguage)
+        {
+            node.Name = _localizationProvider.GetTranslation(curLanguage, node.Name);
+            node.Description = _localizationProvider.GetTranslation(curLanguage, node.Description);
+
+            if (node.InverseThis2ParentNodeInstanceNavigation != null)
+            {
+                foreach (var child in node.InverseThis2ParentNodeInstanceNavigation)
+                {
+                    TranslateNodesRecursive(child, curLanguage);
+                }
+            }
         }
 
         [HttpPost]
@@ -463,10 +524,14 @@ namespace Automatica.Core.WebApi.Controllers
                 _logger.LogInformation($"Start scan for {instance.Name} ({instance.ObjId})");
                 var scan = await _notifyDriver.ScanBus(instance);
 
+                var curLanguage = (Language)_settingsCache.GetByKey("language").ValueInt;
+                var languageCode = ConvertLanguageEnum(curLanguage);
+
                 if (scan != null)
                 {
                     foreach (var s in scan)
                     {
+                        TranslateNodesRecursive(s, languageCode);
                         s.This2ParentNodeInstance = instance.ObjId;
                     }
 

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using P3.Driver.EnOcean.Data.Packets;
 using P3.Driver.EnOcean.Serial;
-using P3.Driver.EnOcean.Tcp;
 
 namespace P3.Driver.EnOcean.Console
 {
@@ -46,7 +45,7 @@ namespace P3.Driver.EnOcean.Console
             var logger =  new ConsoleLogger();
             Logger.Logger.Instance = logger;
 
-            var driver = new Driver(new TcpSerialStream("192.168.8.125", 5100));
+            var driver = new Driver(new SerialStream("COM13"));
             await driver.Open();
              
              driver.StartTeachInMode();
@@ -68,7 +67,7 @@ namespace P3.Driver.EnOcean.Console
 
         private static void Driver_TelegramReceived(object sender, Data.PacketReceivedEventArgs e)
         {
-           // System.Console.WriteLine(e.Telegram.ToPacket().ToString());
+            System.Console.WriteLine(e.Telegram.ToPacket().ToString());
         }
     }
 

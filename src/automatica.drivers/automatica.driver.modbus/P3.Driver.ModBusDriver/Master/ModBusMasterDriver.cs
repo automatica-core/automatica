@@ -445,9 +445,13 @@ namespace P3.Driver.ModBusDriver.Master
 
             await Monitor.NotifyTelegram(TelegramDirection.Output, "MASTER", slaveId.ToString(),
                 Utils.ByteArrayToString(frame), $"GetFrame Address: {address} number{numberOfRegisters} function {function}");
-            await WriteFrame(frame, cts);
+            if (await WriteFrame(frame, cts))
+            {
 
-            return await RequestFrame(slaveId, function, numberOfRegisters, cts);
+                return await RequestFrame(slaveId, function, numberOfRegisters, cts);
+            }
+
+            return new ModBusFrameReturn(ModBusRequestStatus.Exception, new List<byte>());
         }
 
         protected virtual byte[] ParseFrame(byte slaveId, ModBusFunction function, int numberOfRegisters, byte[] input)

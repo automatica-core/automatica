@@ -46,6 +46,10 @@ namespace P3.Driver.SonosDriverFactory
 
             return ret;
         }
+        protected override bool CreateCustomLogger()
+        {
+            return true;
+        }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {

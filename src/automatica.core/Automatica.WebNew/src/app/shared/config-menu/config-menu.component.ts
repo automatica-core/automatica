@@ -14,6 +14,7 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { ConfigService } from "src/app/services/config.service";
 import { AppService } from "src/app/services/app.service";
+import { UpdateScope } from "src/app/base/model/property-instance";
 
 @Component({
   selector: "p3-config-menu",
@@ -40,12 +41,17 @@ export class ConfigMenuComponent implements OnInit {
   }
 
   @Output() onAddItem = new EventEmitter<NodeTemplate>();
-  @Output() onSave = new EventEmitter<any>();
+  @Output() onRestart = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
   @Output() onAddRule = new EventEmitter<RuleTemplate>();
   @Output() onAddRulePage = new EventEmitter<void>();
   @Output() onRemoveRulePage = new EventEmitter<void>();
   @Output() onImportData = new EventEmitter<NodeInstance>();
+
+  
+  @Output() onZoomIn = new EventEmitter<void>();
+  @Output() onZoomToView = new EventEmitter<void>();
+  @Output() onZoomOut = new EventEmitter<void>();
 
   @Input()
   showRuleMenu: boolean = false;
@@ -79,7 +85,7 @@ export class ConfigMenuComponent implements OnInit {
     label: "Reload",
     icon: "fa-save",
     items: undefined,
-    command: (event) => { this.save(); }
+    command: (event) => { this.restart(); }
   }
 
   menuDelete: CustomMenuItem = {
@@ -135,6 +141,30 @@ export class ConfigMenuComponent implements OnInit {
     command: (event) => { this.importNode(); }
   };
 
+  zoomIn: CustomMenuItem = {
+    id: "zoomIn",
+    label: "Zoom In",
+    icon: "fa-zoon",
+    disabled: false,
+    command: (event) => { this.onZoomIn.emit(); }
+  };
+
+  zoomToView: CustomMenuItem = {
+    id: "zoomToView",
+    label: "Zoom ToView",
+    icon: "fa-zoon",
+    disabled: false,
+    command: (event) => { this.onZoomToView.emit(); }
+  };
+
+  zoomOut: CustomMenuItem = {
+    id: "zoomOut",
+    label: "Zoom Out",
+    icon: "fa-zoon",
+    disabled: false,
+    command: (event) => { this.onZoomOut.emit(); }
+  };
+
   constructor(private configService: ConfigService,
     private translate: L10nTranslationService,
     private notify: NotifyService,
@@ -153,7 +183,7 @@ export class ConfigMenuComponent implements OnInit {
         this.menuItemNew.label = translate.translate("COMMON.NEW");
         this.export.label = translate.translate("COMMON.EXPORT");
         this.import.label = translate.translate("COMMON.IMPORT");
-        this.menuReload.label = translate.translate("COMMON.RELOAD");
+        this.menuReload.label = translate.translate("COMMON.RESTART");
         this.menuDelete.label = translate.translate("COMMON.DELETE");
 
         this.menuRulePages.label = translate.translate("COMMON.LOGIC_PAGE");
@@ -165,8 +195,8 @@ export class ConfigMenuComponent implements OnInit {
     });
   }
 
-  save() {
-    this.onSave.emit();
+  restart() {
+    this.onRestart.emit();
   }
 
   delete() {
@@ -260,7 +290,7 @@ export class ConfigMenuComponent implements OnInit {
       newNodeInstance.Children.push(child);
     }
 
-    await this.configService.update(newNodeInstance);
+    await this.configService.update(newNodeInstance, UpdateScope.Imported);
     return newNodeInstance;
   }
 
@@ -341,6 +371,13 @@ export class ConfigMenuComponent implements OnInit {
 
       });
       this.menuItems.push(this.menuRules);
+
+      this.zoomIn.label = this.translate.translate("COMMON.ZOOM.IN");
+      this.zoomToView.label = this.translate.translate("COMMON.ZOOM.TO_VIEW");
+      this.zoomOut.label = this.translate.translate("COMMON.ZOOM.OUT");
+      this.menuItems.push(this.zoomIn);
+      this.menuItems.push(this.zoomToView);
+      this.menuItems.push(this.zoomOut);
     }
   }
 

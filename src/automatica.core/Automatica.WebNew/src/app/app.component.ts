@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
-import { faClock, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
-import { fad } from "@fortawesome/pro-duotone-svg-icons";
+import { faClock, faFile, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
+import { faWavePulse, fad } from "@fortawesome/pro-duotone-svg-icons";
 import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank } from "@fortawesome/pro-solid-svg-icons";
 import { fas, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
@@ -10,6 +10,11 @@ import { BaseComponent } from "./base/base-component";
 import { FaIconLibrary, FaConfig } from "@fortawesome/angular-fontawesome";
 import { DxLoadPanelComponent } from "devextreme-angular";
 import { ThemeService } from "./services/theme.service";
+import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
+import { semver } from 'semver';
+import { CacheService } from "ionic-cache";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-root",
@@ -30,7 +35,9 @@ export class AppComponent extends BaseComponent implements OnInit {
     private library: FaIconLibrary,
     private ngZone: NgZone,
     private iconConfig: FaConfig,
-    private themeService: ThemeService) {
+    private themeService: ThemeService,
+    private cache: CacheService,
+    private router: Router) {
     super(notify, translate, appService);
 
     const automaticaLogo = {
@@ -63,6 +70,8 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.addIcon(faFireplace);
     this.addIcon(faAirConditioner);
     this.addIcon(faOutlet);
+    this.addIcon(faWavePulse);
+    this.addIcon(faFile);
 
 
     library.addIcons(<IconDefinition>{
@@ -78,6 +87,11 @@ export class AppComponent extends BaseComponent implements OnInit {
       next: (error: any) => {
         if (error) {
           console.log(error);
+
+          if (error.name === 'TimeoutError') { 
+            this.notifyService.notifyError("ERROR.SERVER_NOT_AVAILABLE")
+            this.router.navigate(["/login"]);
+          }
         }
       }
     });
@@ -142,6 +156,32 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.dxLoadPanel.instance.hide();
       }
     });
+  }
+
+  clearCache() {
+
+  }
+  private async clearCacheIfAppWasUpdated() {
+    try {
+      if (Capacitor.getPlatform() != "web") {
+        const storedVersion = await localStorage.getItem('appVersion') as string;
+        const { version } = await App.getInfo();
+        // If it's the first start of the app, storedVersion isn't available. So set it.
+        if (!storedVersion) {
+          await localStorage.set('appVersion', version);
+          return;
+        }
+        console.log('STORED VERSION', storedVersion);
+        // Clear cache, if current app version is higher than stored app version
+        if (semver.compare(storedVersion, version) === -1) { // -1 means current version is larger
+          await this.cache.clearAll();
+          await localStorage.setItem('appVersion', version); // Update app version in store
+          console.log('Cache was cleared because App was updated to', version);
+        }
+      }
+    } catch (e) {
+      console.error('Error on function clearCacheIfAppWasUpdated()', e);
+    }
   }
 
 }

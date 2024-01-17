@@ -7,6 +7,8 @@ using Automatica.Core.Base.Logger;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using Polly;
 
 namespace Automatica.Core.Driver
 {
@@ -23,10 +25,9 @@ namespace Automatica.Core.Driver
         public bool WriteOnlyIfChanged => DriverContext.NodeInstance.WriteOnlyIfChanged;
         public string Name => DriverContext?.NodeInstance.Name;
 
-        private readonly Queue<(IDispatchable, DispatchValue)> _writeQueue = new Queue<(IDispatchable, DispatchValue)>();
-        private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(0, short.MaxValue);
-        private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
-        private Task _writeTask;
+        private readonly Queue<(IDispatchable, DispatchValue, int)> _writeQueue = new();
+        private readonly SemaphoreSlim _writeSemaphore = new(0, short.MaxValue);
+        private readonly CancellationTokenSource _cancellationToken = new();
 
         public string FullName => DriverContext.NodeInstance.FullName;
 
@@ -39,6 +40,7 @@ namespace Automatica.Core.Driver
 
         protected ITelegramMonitorInstance TelegramMonitor { get; private set; }
         public int ChildrensCreated { get; private set; }
+        public string Error { get; protected set; }
 
         public NodeInstanceState State => DriverContext.NodeInstance.State;
         
@@ -52,16 +54,53 @@ namespace Automatica.Core.Driver
         }
 
 
-        private void Enqueue(IDispatchable source, DispatchValue value)
+        private async Task Enqueue(IDispatchable source, DispatchValue value, int count = 0)
         {
-            _writeQueue.Enqueue((source, value));
+            await Task.CompletedTask;
+
+            if (DriverContext.NodeInstance.State != NodeInstanceState.InUse)
+            {
+                DriverContext.Logger.LogWarning(
+                    $"{FullName} {Id} Node is not started...ignore write...");
+                return;
+            }
+
+            _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
+
+            if (_writeQueue.Count > 10)
+            {
+                DriverContext.Logger.LogWarning(
+                    $"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            }
+            else if (_writeQueue.Count > 100)
+            {
+                DriverContext.Logger.LogError(
+                    $"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            }
+            else
+            {
+                DriverContext.Logger.LogInformation(
+                    $"{FullName} {Id} Enqueue write! WriteQueue has {_writeQueue.Count} elements...");
+            }
         }
 
         public async Task<bool> Configure(CancellationToken token = default)
         {
+            if (DriverContext.NodeInstance.IsDisabled)
+            {
+                DriverContext.Logger.LogWarning($"Node {Name} {Id} is disabled");
+                return false;
+            }
             foreach (var node in DriverContext.NodeInstance.InverseThis2ParentNodeInstanceNavigation)
             {
+                if (node.IsDisabled)
+                {
+                    node.State = NodeInstanceState.Disabled;
+                    DriverContext.Logger.LogWarning($"Node {node.Name} {node.ObjId} is disabled");
+                    continue;
+                }
+
                 node.State = NodeInstanceState.Loaded;
 
                 var logger = DriverContext.Logger;
@@ -77,6 +116,7 @@ namespace Automatica.Core.Driver
                 ChildrensCreated += 1;
                 if (driverNode == null)
                 {
+                    DriverContext.Logger.LogError($"Could not create node name: {node.Name}, objId: {node.ObjId}, templateId: {node.This2NodeTemplateNavigation.ObjId}");
                     continue;
                 }
                 ChildrenCreated(driverNode);
@@ -99,15 +139,23 @@ namespace Automatica.Core.Driver
 
                         await driverNode.Configure(token);
 
-                        await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, (source, value) =>
+
+                        await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, async (source, value) =>
                         {
                             if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
                             {
                                 return;
                             }
-                            if (driverNode is DriverBase driverBase)
+
+                            if (source.Source == DispatchableSource.RemanentValue ||
+                                source.Source == DispatchableSource.Visualization ||
+                                source.Source == DispatchableSource.Remote)
                             {
-                                driverBase.Enqueue(source, value);
+                                if (driverNode is DriverBase driverBase)
+                                {
+                                    DriverContext.Logger.LogInformation($"{Id} {Name}: Dispatch direct write {value} ");
+                                    await driverBase.Enqueue(source, value);
+                                }
                             }
                         });
 
@@ -115,6 +163,7 @@ namespace Automatica.Core.Driver
                     }
                     else
                     {
+                        node.Error = driverNode.Error;
                         node.State = NodeInstanceState.UnknownError;
                         DriverContext.Logger.LogError($"Could not init {driverNode.Name}");
                     }
@@ -122,6 +171,7 @@ namespace Automatica.Core.Driver
                 catch (Exception e)
                 {
                     node.State = NodeInstanceState.UnknownError;
+                    node.Error = e.ToString();
                     DriverContext.Logger.LogError($"Could not init {driverNode.Name}. Error: {e}");
                 }
             }
@@ -190,14 +240,10 @@ namespace Automatica.Core.Driver
             DriverContext.Logger.LogWarning("Learn mode not implemented");
             return Task.FromResult(false);
         }
-        public Task WriteValue(IDispatchable source, object value)
-        {
-            return Write(value, new WriteContext(DriverContext.Dispatcher, this));
-        }
 
         public Task WriteValue(IDispatchable source, DispatchValue value, CancellationToken token = default)
         {
-            return WriteValue(source, value.Value);
+            return Enqueue(source, value);
         }
 
         protected abstract Task Write(object value, IWriteContext writeContext, CancellationToken token = default);
@@ -231,47 +277,69 @@ namespace Automatica.Core.Driver
                 return false;
             }
 
-            return await Start(token);
+            DriverContext.Logger.LogInformation($"{FullName} {Id}: Starting...");
+            var result = await Start(token);
+            DriverContext.Logger.LogInformation($"{FullName} {Id}: Started...");
+
+            return result;
         }
 
         public virtual Task<bool> Start(CancellationToken token = default)
         {
             _isRunning = true;
-            _writeTask = Task.Run(WriteTask, _cancellationToken.Token);
+            _ = Task.Run(WriteTask, _cancellationToken.Token);
+
 
             Parallel.ForEach(Children, async node => {
                 var cts = new CancellationTokenSource();
                 cts.CancelAfter(TimeSpan.FromMinutes(2));
-                try
-                {
-                    bool driverStart;
-                    if (node is DriverBase driverNode)
-                    {
-                        driverStart = await driverNode.StartInternal(cts.Token);
-                    }
-                    else
-                    {
-                        driverStart = await node.Start(cts.Token);
-                    }
 
-                    if (!driverStart)
+                int retry = 0;
+                var context = ResilienceContextPool.Shared.Get();
+                
+                var pipeline = DriverContext.RetryContext.GetPipeline();
+                _ = await pipeline.ExecuteOutcomeAsync(async (_, _) =>
+                {
+                    try
                     {
-                        node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                        DriverContext.Logger.LogError($"Could not start {node.Name}");
-                    }
-                    else
-                    {
+                        bool driverStart;
+                        if (node is DriverBase driverNode)
+                        {
+                            driverStart = await driverNode.StartInternal(cts.Token);
+                        }
+                        else
+                        {
+                            driverStart = await node.Start(cts.Token);
+                        }
+
+                        if (!driverStart)
+                        {
+                            node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                            node.DriverContext.NodeInstance.Error = node.Error;
+                            throw new DriverDidNotStartProperlyException(
+                                $"{FullName} {Id}: Error starting...Retry: {retry + 1}");
+                        }
+
                         if (node.DriverContext.NodeInstance.State == NodeInstanceState.Initialized)
                         {
                             node.DriverContext.NodeInstance.State = NodeInstanceState.InUse;
                         }
+
+                        return Outcome.FromResult(true);
                     }
-                }
-                catch (Exception e)
-                {
-                    node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
-                    DriverContext.Logger.LogError(e, $"Could not start {node.Name}");
-                }
+                    catch (DriverDidNotStartProperlyException ex)
+                    {
+                        return Outcome.FromException<bool>(ex);
+                    }
+                    catch (Exception e)
+                    {
+                        node.DriverContext.NodeInstance.State = NodeInstanceState.UnknownError;
+                        node.DriverContext.NodeInstance.Error = e.ToString();
+                        DriverContext.Logger.LogError(e, $"{FullName} {Id}:Could not start...Retry: {retry + 1}");
+                        retry++;
+                        return Outcome.FromException<bool>(e);
+                    }
+                }, context, cts.Token);
             });
             
             return Task.FromResult(true);
@@ -295,43 +363,73 @@ namespace Automatica.Core.Driver
         {
             try
             {
+                DriverContext.Logger.LogInformation($"{FullName} {Id}: Start write task");
                 while (_isRunning)
                 {
-                    await _writeSemaphore.WaitAsync(_cancellationToken.Token);
+                    await _writeSemaphore.WaitAsync( _cancellationToken.Token);
 
-                    if (DriverContext.NodeInstance.IsDisabled)
+                    if (_cancellationToken.IsCancellationRequested)
                     {
-                        DriverContext.Logger.LogWarning($"{FullName}: Node is disabled, stop write task");
+                        DriverContext.Logger.LogWarning($"{FullName} {Id}: Write task was cancelled...");
                         return;
                     }
 
+                    if (DriverContext.NodeInstance.IsDisabled)
+                    {
+                        DriverContext.Logger.LogWarning($"{FullName} {Id}: Node is disabled, stop write task");
+                        return;
+                    }
+
+                    if (_writeQueue.Count == 0)
+                    {
+                        DriverContext.Logger.LogWarning($"{FullName} {Id}: Write queue is empty, ignore");
+                        continue;
+                    }
                     var writeData = _writeQueue.Dequeue();
 
-                    DriverContext.Logger.LogInformation($"{FullName}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
-
-                    var cts = new CancellationTokenSource();
-                    cts.CancelAfter(TimeSpan.FromSeconds(30));
-
-                    try
+                    if (writeData.Item1 != null)
                     {
-                        await WriteValue(writeData.Item1, writeData.Item2, cts.Token);
-                    }
-                    catch (Exception e)
-                    {
-                        DriverContext.Logger.LogError(e, $"{FullName}: Error write value...");
+                        DriverContext.Logger.LogInformation(
+                            $"{FullName} {Id}: Dequeue write value from {writeData.Item1.Name} with value {writeData.Item2}");
+
+                        if (writeData.Item3 > 5)
+                        {
+                            DriverContext.Logger.LogWarning($"{FullName} {Id}: Write retry exceeded...ignore item");
+                            continue;
+                        }
+
+                        var cts = new CancellationTokenSource();
+                        cts.CancelAfter(TimeSpan.FromSeconds(45));
+
+                        try
+                        {
+                            await Write(writeData.Item2.Value, new WriteContext(DriverContext.Dispatcher, this),
+                                cts.Token);
+                        }
+                        catch (Exception e)
+                        {
+                            DriverContext.Logger.LogError(e, $"{FullName} {Id}: Error write value...requeue write task");
+                            await Enqueue(writeData.Item1, writeData.Item2, writeData.Item3 + 1);
+                        }
                     }
                 }
             }
-            catch(TaskCanceledException)
+            catch (OperationCanceledException)
             {
-
+                DriverContext.Logger.LogError($"{FullName} {Id}: Write task was cancelled...");
             }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, $"{FullName} {Id}: Error in write task");
+            }
+            DriverContext.Logger.LogWarning($"{FullName} {Id}: End write task");
         }
 
         public virtual async Task<bool> Stop(CancellationToken token = default)
         {
             _isRunning = false;
-            _cancellationToken.Cancel();
+            await _cancellationToken.CancelAsync();
+            _writeSemaphore.Release(1);
 
             foreach (var node in Children)
             {

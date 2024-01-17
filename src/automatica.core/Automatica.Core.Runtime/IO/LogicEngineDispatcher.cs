@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
@@ -9,6 +10,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Logging;
 
@@ -241,7 +243,8 @@ namespace Automatica.Core.Runtime.IO
                         try
                         {
                             _logger.LogDebug(
-                                $"ValueDispatchToRule: {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name}");
+                                $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
+
                             var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
 
                             foreach (var result in ruleResults)
@@ -270,9 +273,10 @@ namespace Automatica.Core.Runtime.IO
                 {
                     try
                     {
+                        var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
                         _logger.LogInformation(
                             $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
-                        node.WriteValue(dispatchable, o);
+                        node.WriteValue(dispatchable, o, token.Token);
                     }
                     catch(Exception e)
                     {

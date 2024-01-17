@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
+using Automatica.Core.EF.Backup;
 using Automatica.Core.EF.Models;
 using Automatica.Core.HyperSeries;
 using Automatica.Core.WebApi;
@@ -31,6 +32,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using MQTTnet.AspNetCore.Extensions;
@@ -56,12 +58,18 @@ namespace Automatica.Core
 
 
             services.AddDbContext<AutomaticaContext>();
+            services.AddDatabaseBackup();
+
             services.AddHyperSeries();
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(a => true));
+            });
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -143,9 +151,7 @@ namespace Automatica.Core
 
             services.AddSingleton<DiscoveryService>();
             services.AddAutomaticaCoreService(Configuration, false);
-
-            services.Replace(ServiceDescriptor.Singleton(typeof(ILogger), typeof(CoreLogger)));
-            services.Replace(ServiceDescriptor.Singleton(typeof(ILoggerFactory), typeof(CoreLoggerFactory)));
+            services.AddCoreLogger(Configuration);
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
@@ -207,12 +213,14 @@ namespace Automatica.Core
                 app.UseHttpsRedirection();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseRouting();
 
             app.UseResponseCompression();
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
 
 //app.UseMiddleware<WebApiErrorMiddleware>();
 

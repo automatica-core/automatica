@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { DeviceDetectorService, OrientationType } from "ngx-device-detector";
 
+import { Capacitor } from '@capacitor/core';
 export enum Orientation {
     Unknown,
     Landscape,
@@ -57,5 +58,13 @@ export class DeviceService {
 
     isMobile() {
         return this.deviceServiceDetector.isMobile() || this.deviceServiceDetector.isTablet();
+    }
+
+    get isWeb(): boolean {
+        return Capacitor.getPlatform() === "web";
+    }
+
+    get isMobileApp(): boolean {
+        return !this.isWeb;
     }
 }

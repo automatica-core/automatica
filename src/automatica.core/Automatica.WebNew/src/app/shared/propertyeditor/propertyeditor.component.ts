@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList } from "@angular/core";
-import { CommonModule, NgSwitch, NgSwitchCase, NgSwitchDefault } from "@angular/common";
 import { ConfigService } from "../../services/config.service";
 import { L10nTranslationService } from "angular-l10n";
-import { DxDataGridComponent, DxCheckBoxComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent, DxDropDownBoxComponent, DxComponent, DxTextBoxComponent, DxSelectBoxComponent } from "devextreme-angular";
+import { DxDataGridComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent } from "devextreme-angular";
 import { BaseService } from "src/app/services/base-service";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -35,6 +34,10 @@ import { NodeInstanceImportComponent } from "./node-instance-ets-import/node-ins
 import { NodeInstanceImportSerivce } from "./node-instance-ets-import/node-instance-import.service";
 import { Router } from "@angular/router";
 import { VirtualGenericPropertyInstance } from "src/app/base/model/virtual-props/virtual-generic-property-instance";
+import { CalendarPropertyData } from "src/app/base/model/calendar-property-data";
+import { ControlsService } from "src/app/services/controls.service";
+import { ControlConfiguration } from "src/app/base/model/control-configuration";
+import { Control, ControlGrouped } from "src/app/base/model/control";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -171,6 +174,21 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   popupTimerEdit: DxPopupComponent;
   public timerEditPopupVisible: boolean = false;
   public timerEditValue: TimerPropertyData = void 0;
+
+
+  @ViewChild("calendarEditPopup")
+  popupCalendarEdit: DxPopupComponent;
+  public calendarEditPopupVisible: boolean = false;
+  public calendarEditValue: CalendarPropertyData = void 0;
+  public calendarEditDataSource: any;
+  public currentDate = Date.now();
+
+  @ViewChild("controlsPopup")
+  popupControls: DxPopupComponent;
+  controlsPopupVisible: boolean = false;
+  controlsEditValue: ControlConfiguration;
+  controlsGroup: ControlGrouped[] = [];
+
   public selectedProperty: PropertyInstance = void 0;
 
   @ViewChild("nodeInstanceImport")
@@ -184,7 +202,12 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @Output()
   public saveLearnedNodes = new EventEmitter<any>();
 
+  @Output()
+  public unselectItem = new EventEmitter<any>();
+
   learnModeSub: any;
+  calendarEditSource: IPropertyModel;
+  availableControlsList: Control[];
 
   @Input()
   set item(value: IPropertyModel) {
@@ -321,7 +344,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private ruleEngineService: LogicEngineService,
     private changeDetection: ChangeDetectorRef,
     private router: Router,
-    private nodeInstanceImportService: NodeInstanceImportSerivce) {
+    private nodeInstanceImportService: NodeInstanceImportSerivce,
+    private controlsService: ControlsService) {
     super(notify, translate, appService);
   }
 
@@ -442,14 +466,45 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this.timerEditPopupVisible = true;
   }
 
+  onCalendarEditClick($event, prop: PropertyInstance) {
+    this.calendarEditValue = new CalendarPropertyData();
+    this.selectedProperty = prop;
+    this.calendarEditSource = this.item;
+
+    if (prop.Value && prop.Value instanceof CalendarPropertyData) {
+      this.calendarEditValue = prop.Value.copy() as CalendarPropertyData;
+    }
+
+    this.calendarEditPopupVisible = true;
+    this.unselectItem.emit();
+  }
+
+  onCalendarEditPopupClosing($event, ok: boolean) {
+    this.calendarEditPopupVisible = false;
+
+    if (ok) {
+      this.item = this.calendarEditSource;
+      this.selectedProperty.Value = this.calendarEditValue;
+      this.valueChanged($event, { data: this.selectedProperty });
+    }
+
+    this.selectedProperty = void 0;
+    this.calendarEditValue = void 0;
+    this.calendarEditSource = void 0;
+
+  }
+
   onTimerEditPopupClosing($event, ok: boolean) {
     this.timerEditPopupVisible = false;
 
     if (ok) {
       this.selectedProperty.Value = this.timerEditValue;
+      this.valueChanged($event, { data: this.selectedProperty });
     }
+
     this.selectedProperty = void 0;
     this.timerEditValue = void 0;
+
   }
 
   translateName = (data: PropertyInstance) => {
@@ -609,9 +664,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     this.appService.isLoading = true;
     try {
       if (this.item instanceof NodeInstance) {
-        await this.config.update(this.item);
+        await this.config.update(this.item, prop.updateScope);
 
         if (!this.item.ParentId) {
+          this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
           this.nodeInstanceService.saveSettings();
         }
       } else if (this.item instanceof RuleInstance) {
@@ -622,8 +678,11 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     } catch (error) {
       this.handleError(error);
     }
+    finally {
+      this.appService.isLoading = false;
+      this.changeDetection.detectChanges();
+    }
 
-    this.appService.isLoading = false;
   }
 
 
@@ -678,5 +737,51 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  onControlsPopupClosing($event, ok: boolean) {
+    this.controlsPopupVisible = false;
+
+
+    if (ok) {
+      this.selectedProperty.Value = this.controlsEditValue;
+      this.valueChanged($event, { data: this.selectedProperty });
+    }
+
+    this.selectedProperty = void 0;
+    this.controlsEditValue = void 0;
+  }
+
+  async onControlsClick($event, prop: PropertyInstance) {
+    this.selectedProperty = prop;
+
+    this.availableControlsList = await this.controlsService.getAll();
+
+    this.controlsPopupVisible = true;
+    this.controlsEditValue = new ControlConfiguration();
+
+    if (prop.Value && prop.Value instanceof ControlConfiguration) {
+      this.controlsEditValue = prop.Value.copy() as ControlConfiguration;
+
+      var map = new Map<string, Control[]>();
+
+      for (let control of this.availableControlsList) {
+        if (!map.has(control.Type)) {
+          map.set(control.Type, []);
+        }
+        map.get(control.Type).push(control);
+      }
+
+      this.controlsGroup = [];
+      for (let key of map.keys()) {
+        var group = new ControlGrouped();
+        group.key = key;
+        group.items = map.get(key);
+        this.controlsGroup.push(group);
+      }
+
+      this.changeDetection.detectChanges();
+
+    }
   }
 }

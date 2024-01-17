@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.Logic
 {
     /// <summary>
     /// Base implementation of <see cref="ILogic"/>
     /// </summary>
-    public abstract class Logic : ILogic
+    public abstract class Logic : TypedObject, ILogic, IControlValueCallback
     {
         private readonly Dictionary<RuleInterfaceInstance, object> _valueDictionary = new();
 
@@ -21,6 +25,7 @@ namespace Automatica.Core.Logic
 
 
         protected readonly Dictionary<string, object> ParameterValues = new Dictionary<string, object>();
+        private readonly IDictionary<Guid, Action> _callbacks = new ConcurrentDictionary<Guid, Action>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logic"/> class.
@@ -34,8 +39,9 @@ namespace Automatica.Core.Logic
         /// <summary>
         /// Returns the given instance of the <see cref="ILogicContext"/>
         /// </summary>
+        [JsonIgnore]
         public ILogicContext Context { get; }
-
+        [JsonIgnore]
         public virtual bool IgnoreDuplicateValues => false;
 
 
@@ -56,7 +62,24 @@ namespace Automatica.Core.Logic
                 }
             }
 
-            return ParameterValues;
+            var ret = new Dictionary<string, object>();
+
+            foreach (var param in ParameterValues)
+            {
+                ret.Add(param.Key, param.Value);
+            }
+
+            foreach (var value in _valueDictionary)
+            {
+                ret.Add($"{value.Key.ObjId}", value.Value);
+            }
+
+            foreach (var value in _inputValueDictionary)
+            {
+                if(!ret.ContainsKey($"{value.Key.ObjId}"))
+                    ret.Add($"{value.Key.ObjId}", value.Value);
+            }
+            return ret;
         }
 
         public async Task<bool> Start(CancellationToken token = default)
@@ -87,6 +110,7 @@ namespace Automatica.Core.Logic
 
         public async Task<bool> Restart(RuleInstance instance, CancellationToken token = default)
         {
+            Context.RuleInstance = instance;
             await Start(instance, token);
 
             foreach (var param in instance.RuleInterfaceInstance.Where(a => a.This2RuleInterfaceTemplateNavigation.This2RuleInterfaceDirection ==
@@ -144,14 +168,10 @@ namespace Automatica.Core.Logic
                 Context.Logger.LogDebug($"RuleInput changed {instance.This2RuleInstanceNavigation.Name} - {instance.This2RuleInterfaceTemplateNavigation.Name} (from {source?.GetType()}-{source?.Name}) value {value}");
 
                 object prevValue = null;
-                if (_inputValueDictionary.ContainsKey(instance))
+                if (!_inputValueDictionary.TryAdd(instance, value))
                 {
                     prevValue = _inputValueDictionary[instance];
                     _inputValueDictionary[instance] = value;
-                }
-                else
-                {
-                    _inputValueDictionary.Add(instance, value);
                 }
 
                 if (IgnoreDuplicateValues && _inputValueDictionary[instance] == prevValue)
@@ -169,6 +189,11 @@ namespace Automatica.Core.Logic
                         Context.Logger.LogDebug($"RuleOutput changed {ruleOutValue.Instance.Name} value {ruleOutValue.Value}");
 
                         _valueDictionary[ruleOutValue.Instance.RuleInterfaceInstance] = ruleOutValue.Value;
+                    }
+
+                    foreach (var callback in _callbacks)
+                    {
+                        callback.Value();
                     }
 
                     return values;
@@ -197,7 +222,7 @@ namespace Automatica.Core.Logic
         }
 
         /// <summary>
-        /// Internal method to notify a parameter value has changed, if the parameter changed needs no notify a dispatch of a value, use the <see cref="Context.Dispatcher.DispatchValue"> DispatchValue</see>
+        /// Internal method to notify a parameter value has changed, if the parameter changed needs no notify a dispatch of a value, use the <see cref="DispatchValue"> DispatchValue</see>
         /// </summary>
         /// <param name="instance">The <see cref="RuleInterfaceInstance"/> instance</param>
         /// <param name="source">The source who dispatched the value (<see cref="IDispatchable"/>)</param>
@@ -220,6 +245,22 @@ namespace Automatica.Core.Logic
             {
                 value
             };
+        }
+
+        public sealed override string TypeInfo => "Control";
+
+        public Guid RegisterValueCallback(Action callback)
+        {
+            var guid = Guid.NewGuid();
+            
+            _callbacks.Add(guid, callback);
+            return guid;
+        }
+
+        public void UnregisterValueCallback(Guid id)
+        {
+            if(_callbacks.ContainsKey(id))
+                _callbacks.Remove(id);
         }
     }
 }

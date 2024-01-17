@@ -1,5 +1,11 @@
 @import "../../../themes/generated/variables.base.scss";
 
+:host {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
 .layout {
     height: 100%;
     //  background-color: blue;

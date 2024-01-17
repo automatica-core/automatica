@@ -6,10 +6,23 @@ using System.Linq;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Templates
 {
+    public class LogicTemplateFactoryProvider(IServiceProvider serviceProvider)
+        : TemplateFactoryProvider<LogicTemplateFactory>(serviceProvider)
+    {
+        protected override LogicTemplateFactory CreateFactory(Guid owner, IServiceProvider serviceProvider)
+        {
+            var config = serviceProvider.GetRequiredService<IConfiguration>();
+            //create a new instance in purpose - we don't want to share the same instance between different owners
+            var databaseContext = new AutomaticaContext(config);
+            return new LogicTemplateFactory(serviceProvider.GetRequiredService<ILogger<LogicTemplateFactory>>(), databaseContext, config);
+        }
+    }
+    
     public class LogicTemplateFactory : PropertyTemplateFactory, ILogicTemplateFactory
     {
         public IDictionary<Guid, RuleTemplate> LogicTemplates { get; }
@@ -128,6 +141,14 @@ namespace Automatica.Core.Internals.Templates
             {
                 Db.RuleInterfaceTemplates.Add(logicInterfaceTemplate);
                 Db.SaveChanges(true);
+                try
+                {
+                    MigrateExistingRuleInstances(ruleTemplate, logicInterfaceTemplate);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, $"Error migrate logicInstance {e}");
+                }
             }
             else
             {
@@ -142,6 +163,23 @@ namespace Automatica.Core.Internals.Templates
             return retValue;
         }
 
+        private void MigrateExistingRuleInstances(Guid ruleTemplate, RuleInterfaceTemplate ruleInterfaceTemplate)
+        {
+            var ruleInstances = Db.RuleInstances.Where(a => a.This2RuleTemplate == ruleTemplate);
+
+            foreach (var ruleInstance in ruleInstances)
+            {
+                var interfaceExisting =
+                    Db.RuleInterfaceInstances.Any(a => a.This2RuleInterfaceTemplate == ruleInterfaceTemplate.ObjId);
+
+                if (!interfaceExisting)
+                {
+                    var ruleInterface = RuleInterfaceInstance.CreateFromTemplate(ruleInstance, ruleInterfaceTemplate);
+                    Db.RuleInterfaceInstances.Add(ruleInterface);
+                }
+            }
+        }
+
 
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, Guid ruleTemplate,
             int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue)
@@ -150,8 +188,19 @@ namespace Automatica.Core.Internals.Templates
                 defaultValue, false);
         }
 
-        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
-            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
+            string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue,
+            bool linkable)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable, null);
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
+            string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue,
+            bool linkable, string meta, string group)
         {
             var parameterLogicInterfaceTemplate = Db.RuleInterfaceTemplates.SingleOrDefault(a => a.ObjId == id);
             var retValue = CreateTemplateCode.Updated;
@@ -184,10 +233,22 @@ namespace Automatica.Core.Internals.Templates
             parameterLogicInterfaceTemplate.IsLinkableParameter = linkable;
             parameterLogicInterfaceTemplate.DefaultValue = Convert.ToString(defaultValue, CultureInfo.InvariantCulture);
 
+            parameterLogicInterfaceTemplate.Meta = meta;
+            parameterLogicInterfaceTemplate.Group = group;
+
             if (isNewObject)
             {
                 Db.RuleInterfaceTemplates.Add(parameterLogicInterfaceTemplate);
                 Db.SaveChanges(true);
+
+                try
+                {
+                    MigrateExistingRuleInstances(ruleTemplate, parameterLogicInterfaceTemplate);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, $"Error migrate logicInstance {e}");
+                }
             }
             else
             {
@@ -199,6 +260,13 @@ namespace Automatica.Core.Internals.Templates
             }
 
             return retValue;
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable, string meta)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable, meta, null);
         }
 
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,

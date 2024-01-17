@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Automatica.Driver.Shelly</RootNamespace>
+    <Company>Automatica.Core</Company>
+    <Authors>Patrik Pfaffenbauer</Authors>
+    <PackageProjectUrl>https://github.com/automatica-core/automatica.driver.shelly</PackageProjectUrl>
+    <Description>.NET API for Shelly Devices</Description>
+    <PackageReleaseNotes />    
+  </PropertyGroup>
+
+  <ItemGroup>
+	     <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
+	     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	     <PackageReference Include="PureWebSockets" Version="4.0.0" />
+  </ItemGroup>
+
+</Project>

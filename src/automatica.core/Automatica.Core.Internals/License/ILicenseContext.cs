@@ -20,6 +20,8 @@ namespace Automatica.Core.Internals.License
         long MaxRecordingDataPoints { get; }
         int MaxSatellites { get; }
 
+        bool AllowTextToSpeech { get; }
+
         Task<string> GetLicense();
         Task SaveLicense(string license);
 

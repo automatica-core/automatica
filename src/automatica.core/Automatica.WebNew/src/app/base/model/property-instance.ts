@@ -8,6 +8,7 @@ import { PropertyConstraintConditionType } from "./property-template-constraint-
 ;
 import { Guid } from "../utils/Guid";
 import { TimerPropertyData } from "./timer-property-data";
+import { ControlConfiguration } from "./control-configuration";
 
 class PropertyInstanceMetaHelper {
     public static validate(propertyInstance: PropertyInstance): boolean {
@@ -83,6 +84,15 @@ class PropertyInstanceMetaHelper {
     private static isInRange(x1: number, x2: number, y1: number, y2: number): boolean {
         return Math.max(x1, y1) <= Math.min(x2, y2);
     }
+}
+
+export enum UpdateScope
+{
+    Unknown = 0,
+    GenericProperty = 1,
+    SpecificProperty = 2,
+    ParentChanged = 3,
+    Imported = 4
 }
 
 @Model()
@@ -198,6 +208,9 @@ export class PropertyInstance extends BaseModel {
         this.propertyChanged.emit(this);
     }
 
+    public get updateScope() : UpdateScope {
+        return UpdateScope.SpecificProperty;
+    }
 
     @JsonPropertyName("This2PropertyTemplateNavigation")
     PropertyTemplate: PropertyTemplate;
@@ -259,24 +272,27 @@ export class PropertyInstance extends BaseModel {
                 case PropertyConstraintType.None:
                     return true;
                 case PropertyConstraintType.Unique: {
-                    for (const x of this.Parent.Parent.Children) {
-                        if (x === this.Parent) {
-                            continue;
-                        }
-                        for (const prop of x.Properties) {
-                            if (prop.PropertyTemplate.Key === this.PropertyTemplate.Key) {
-                                if (prop.Value === this.Value) {
-                                    x.ValidationOk = false;
-                                    this.Parent.ValidationOk = false;
-                                    return false;
-                                } else {
-                                    x.ValidationOk = true;
+                    if (this.Parent?.Parent?.Children) {
+                        for (const x of this.Parent.Parent.Children) {
+                            if (x === this.Parent) {
+                                continue;
+                            }
+                            for (const prop of x.Properties) {
+                                if (prop.PropertyTemplate.Key === this.PropertyTemplate.Key) {
+                                    if (prop.Value === this.Value) {
+                                        x.ValidationOk = false;
+                                        this.Parent.ValidationOk = false;
+                                        return false;
+                                    } else {
+                                        x.ValidationOk = true;
+                                    }
                                 }
                             }
                         }
+                        this.Parent.ValidationOk = true;
+                        return true;
                     }
-                    this.Parent.ValidationOk = true;
-                    return true;
+                    break;
                 } case PropertyConstraintType.UniqueOnCondition: {
                     const validationResult = PropertyInstanceMetaHelper.validate(this);
                     this.Parent.ValidationOk = validationResult;
@@ -371,12 +387,12 @@ export class PropertyInstance extends BaseModel {
             case PropertyTemplateType.Stopbits:
             case PropertyTemplateType.Numeric:
                 return this.ValueDouble;
-            case PropertyTemplateType.Timer: {
-                const timerProperty = new TimerPropertyData();
+            case PropertyTemplateType.Controls: {
+                const controlsProperty = new ControlConfiguration();
                 if (this.ValueString) {
-                    timerProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
+                    controlsProperty.fromJson(JSON.parse(this.ValueString), this.translationService);
                 }
-                return timerProperty;
+                return controlsProperty;
             }
         }
     }
@@ -451,9 +467,9 @@ export class PropertyInstance extends BaseModel {
                     this.ValueDouble = 0;
                 }
                 break;
-            case PropertyTemplateType.Timer:
+            case PropertyTemplateType.Controls:
                 {
-                    if (value instanceof TimerPropertyData) {
+                    if (value instanceof ControlConfiguration) {
                         this.ValueString = JSON.stringify(value.toJson());
                     } else {
                         this.ValueString = void 0;

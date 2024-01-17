@@ -3,7 +3,11 @@ using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
+using Automatica.Core.Control;
+using System;
 
+[assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
 namespace Automatica.Core.Logic
 {
     /// <summary>
@@ -14,7 +18,7 @@ namespace Automatica.Core.Logic
         /// <summary>
         /// The <see cref="RuleInstance"/> itself
         /// </summary>
-        RuleInstance RuleInstance { get; }
+        RuleInstance RuleInstance { get; internal set; }
 
         /// <summary>
         /// The <see cref="IDispatcher"/> instance
@@ -45,5 +49,15 @@ namespace Automatica.Core.Logic
         /// Gives information about the current used license
         /// </summary>
         ILicenseContract LicenseContract { get; }
+
+        /// <summary>
+        /// Provides the control context
+        /// </summary>
+        IControlContext ControlContext { get; }
+
+        /// <summary>
+        /// Provides date and times (also fake ones for tests)
+        /// </summary>
+        TimeProvider TimeProvider { get; }
     }
 }

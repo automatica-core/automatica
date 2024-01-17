@@ -35,7 +35,7 @@ namespace Automatica.Core.Satellite
 
             var logBuild = new LoggerConfiguration()
              .WriteTo.Console()
-             .WriteTo.RollingFile(Path.Combine("logs", "logs.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 1000)
+             .WriteTo.File(Path.Combine("logs", "logs.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 1000)
              .MinimumLevel.Verbose();
 
             Log.Logger = logBuild.CreateLogger();

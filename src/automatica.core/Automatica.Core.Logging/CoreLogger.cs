@@ -3,52 +3,67 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Logger;
 using Automatica.Core.Push.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Automatica.Core.Logging
 {
-    public class CoreLogger : Microsoft.Extensions.Logging.ILogger
+    public class CoreLogger : ICoreLogger
     {
-        private readonly IConfiguration _config;
-        private readonly IServiceProvider? _serviceProvider;
-        private readonly string _facility;
         private readonly string _logNameFacility;
-        private readonly LogLevel _level;
         private readonly Serilog.ILogger _logger;
+        private readonly LoggingLevelSwitch _levelSwitch;
+        private LogLevel _logLevel;
 
-        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider) : this(config, serviceProvider, "core")
+
+        public LogLevel LogLevel
+        {
+            get => _logLevel;
+            set
+            {
+                _logLevel = value;
+                _levelSwitch.MinimumLevel = ConvertLogLevel(value);
+            }
+        }
+
+        public string Facility { get; }
+
+        public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider) : this(config, serviceProvider, "core")
         {
         }
 
-        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider, string facility) : this(config, serviceProvider, facility, null)
+        public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider, string facility) : this(config, serviceProvider, facility, null)
         {
             
         }
 
-        public CoreLogger(IConfiguration config, IServiceProvider? serviceProvider, string facility, LogLevel? level, bool isFrameworkLog = false) {
-            _serviceProvider = serviceProvider;
-            _facility = facility;
+        public CoreLogger(IConfiguration? config, IServiceProvider? serviceProvider, string facility, LogLevel? level, bool isFrameworkLog = false) {
+            
+            Facility = facility; 
+            _levelSwitch = new LoggingLevelSwitch();
+
 
             if (isFrameworkLog)
             {
-                _level = LogLevel.Information;
+                LogLevel = LogLevel.Warning;
             }
             else if (level.HasValue)
             {
-                _level = level.Value;
+                LogLevel = level.Value;
             }
             else
             {
                 if (config == null)
                 {
-                    _level = LogLevel.Information;
+                    LogLevel = LogLevel.Information;
                 }
                 else
                 {
-                    _level = Parse(config["server:log_level"]);
+                    LogLevel = Parse(config["server:log_level"]!);
                 }
             }
             
@@ -61,16 +76,22 @@ namespace Automatica.Core.Logging
             _logNameFacility = facility;
 
             var logBuild = new LoggerConfiguration();
+            
+            _levelSwitch.MinimumLevel = ConvertLogLevel(LogLevel);
 
             if (isFrameworkLog)
             {
-                logBuild.WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"),
+                logBuild.WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), $"framework-{facility}.log"),
                         fileSizeLimitBytes: 31457280,
-                        retainedFileCountLimit: 2, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: 2,
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
-                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                    .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
                         fileSizeLimitBytes: 134217728, //128mb
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: 10,
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
                 //logBuild.WriteTo.PushSignalR(_serviceProvider, "all.log", ConvertLogLevel(LogLevel.Warning));
@@ -92,56 +113,34 @@ namespace Automatica.Core.Logging
                 }
 
                 logBuild
-                    .WriteTo.RollingFile(fileName,
+                    .WriteTo.File(fileName,
                         fileSizeLimitBytes: 31457280, //~32mb
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(_level),
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: 20,
                         flushToDiskInterval: TimeSpan.FromSeconds(30))
-                    .WriteTo.RollingFile(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
-                        fileSizeLimitBytes: 134217728, //128mb
-                        retainedFileCountLimit: 10, restrictedToMinimumLevel: ConvertLogLevel(LogLevel.Warning),
+                    .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "all.log"),
+                        fileSizeLimitBytes: 134217728 * 2, //256mb
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: 10,
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
 
-                logBuild.WriteTo.PushSignalR(_serviceProvider, "all", ConvertLogLevel(LogLevel.Warning));
-                logBuild.WriteTo.PushSignalR(_serviceProvider, facility, ConvertLogLevel(_level));
+                logBuild.WriteTo.PushSignalR(serviceProvider, "all");
+                logBuild.WriteTo.PushSignalR(serviceProvider, facility);
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
             if (Debugger.IsAttached || ServerInfo.InDocker)
             {
                 logBuild.WriteTo.Console(theme: ConsoleTheme.None);
             }
-
-            switch (_level)
-            {
-                case LogLevel.Trace:
-                    logBuild.MinimumLevel.Verbose();
-                    break;
-                case LogLevel.Debug:
-                    logBuild.MinimumLevel.Debug();
-                    break;
-                case LogLevel.Information:
-                    logBuild.MinimumLevel.Information();
-                    break;
-                case LogLevel.Warning:
-                    logBuild.MinimumLevel.Warning();
-                    break;
-                case LogLevel.Error:
-                    logBuild.MinimumLevel.Error();
-                    break;
-                case LogLevel.Critical:
-                    logBuild.MinimumLevel.Fatal();
-                    break;
-                case LogLevel.None:
-                    break;
-                default:
-                    logBuild.MinimumLevel.Error();
-                    break;
-            }
+            logBuild.MinimumLevel.ControlledBy(_levelSwitch);
 
             _logger = logBuild.CreateLogger();
         }
 
-        private LogLevel Parse(string logLevel)
+        internal static LogLevel Parse(string logLevel)
         {
 			if(String.IsNullOrEmpty(logLevel)) {
 				return LogLevel.Debug;
@@ -168,7 +167,8 @@ namespace Automatica.Core.Logging
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            return null;
+            var s = state as IDisposable;
+            return s!;
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -201,18 +201,25 @@ namespace Automatica.Core.Logging
                     level = LogEventLevel.Fatal;
                     break;
                 case LogLevel.None:
-                    level = LogEventLevel.Verbose;
+                    level = LogEventLevel.Fatal;
                     break;
             }
             return level;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception,
             Func<TState, Exception, string> formatter)
         {
             var level = ConvertLogLevel(logLevel);
-            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception)}";
+
+            if (!_logger.IsEnabled(level))
+            {
+                return;
+            }
+
+            var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception!)}";
             _logger.Write(level, exception, msg);
         }
+
     }
 }

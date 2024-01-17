@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace P3.Driver.EepParser.Model
+﻿namespace P3.Driver.EepParser.Model
 {
     public class DataField : BaseModel
     {

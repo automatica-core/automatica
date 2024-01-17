@@ -24,11 +24,14 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _next;
     private readonly RuleInterfaceInstance _prev;
     private readonly RuleInterfaceInstance _radioStationInput;
+    private readonly RuleInterfaceInstance _mediaUrlInput;
 
     //Params
     private readonly RuleInterfaceInstance _volumeOnPlay;
     private readonly RuleInterfaceInstance _radioStation;
     private readonly RuleInterfaceInstance _maxVolume;
+    private readonly RuleInterfaceInstance _playMediaDuration;
+    private readonly RuleInterfaceInstance _playMediaCount;
 
     //Outputs
     private readonly RuleInterfaceInstance _playOutputStatus;
@@ -39,13 +42,27 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
     private readonly RuleInterfaceInstance _prevOutput;
 
 
+    private readonly RuleInterfaceInstance _playMediaUrlInput;
+    private readonly RuleInterfaceInstance _playMediaUrlAndStartInput;
+    private readonly RuleInterfaceInstance _playMediaUrlTrigger;
+    private readonly RuleInterfaceInstance _playMediaUrlOutput;
+    private readonly RuleInterfaceInstance _playMediaVolume;
+    private readonly RuleInterfaceInstance _playMediaEnabled;
+
     private long _volumeOnPlayValue;
     private string _radioStationValue;
     private long _maxVolumeValue;
+    private int _playMediaDurationValue = 2000;
+    private int _playMediaCountValue = 1;
 
     private long _currentVolume;
     private bool? _currentlyPlaying;
     private bool? _lastPlayValue;
+    private string _mediaPlayUrl;
+    private bool _mediaPlayerTaskRunning;
+    private string _currentMediaUrlValue;
+    private long _playMediaVolumeValue = 50;
+    private bool _playMediaEnabledValue = true;
 
     public SonosControlLogic(ILogicContext context) : base(context)
     {
@@ -72,6 +89,9 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.Previous);
         _radioStationInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStationInput);
+        _mediaUrlInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrl);
+        
 
         //Params
         _volumeOnPlay = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
@@ -80,6 +100,10 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.RadioStation);
         _maxVolume = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.MaxVolume);
+        _playMediaDuration = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundDuration);
+        _playMediaCount = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundCount);
 
 
         //Outputs
@@ -96,6 +120,20 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         _prevOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PreviousOutput);
 
+
+        _playMediaUrlInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundUrl);
+        _playMediaUrlTrigger = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundTrigger);
+        _playMediaUrlOutput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrlOutput);
+        _playMediaVolume = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundVolume);
+
+        _playMediaUrlAndStartInput = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlayMediaUrlAndStart);
+        _playMediaEnabled = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == SonosControlLogicFactory.PlaySoundEnabled);
     }
 
     protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -113,6 +151,24 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             _maxVolumeValue = Convert.ToInt64(value);
         }
 
+        if (instance.This2RuleInterfaceTemplate == _playMediaDuration.This2RuleInterfaceTemplate)
+        {
+            _playMediaDurationValue = Convert.ToInt32(value);
+        }
+        if (instance.This2RuleInterfaceTemplate == _playMediaCount.This2RuleInterfaceTemplate)
+        {
+            _playMediaCountValue = Convert.ToInt32(value);
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaVolume.This2RuleInterfaceTemplate)
+        {
+            _playMediaVolumeValue = Convert.ToInt64(value);
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaEnabled.This2RuleInterfaceTemplate)
+        {
+            _playMediaEnabledValue = Convert.ToBoolean(value);
+        }
         base.ParameterValueChanged(instance, source, value);
     }
 
@@ -126,6 +182,9 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         
         _maxVolumeValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
             a.This2RuleInterfaceTemplate == _maxVolume.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
+
+        _playMediaVolumeValue = Context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            a.This2RuleInterfaceTemplate == _playMediaVolume.This2RuleInterfaceTemplate)!.ValueInteger!.Value;
 
         return base.Start(instance, token);
     }
@@ -265,6 +324,84 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
             ret.Add(new LogicOutputChanged(_radioStationOutputValue, _radioStationValue));
         }
 
+        if (instance.This2RuleInterfaceTemplate == _playMediaUrlInput.This2RuleInterfaceTemplate)
+        {
+            _mediaPlayUrl = value != null ? value.ToString() : String.Empty;
+            //ret.Add(new LogicOutputChanged(_playMediaUrlOutput, value));
+        }
+        if (instance.This2RuleInterfaceTemplate == _playMediaUrlTrigger.This2RuleInterfaceTemplate)
+        {
+            if (_playMediaEnabledValue && !String.IsNullOrEmpty(_mediaPlayUrl) && value is bool && (bool)value)
+            {
+                StartPlayMediaUrl();
+            }
+        }
+        if (instance.This2RuleInterfaceTemplate == _playMediaUrlAndStartInput.This2RuleInterfaceTemplate)
+        {
+            _mediaPlayUrl = value != null ? value.ToString() : String.Empty;
+            if (_playMediaEnabledValue && !String.IsNullOrEmpty(_mediaPlayUrl))
+            {
+                StartPlayMediaUrl();
+            }
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _mediaUrlInput.This2RuleInterfaceTemplate)
+        {
+            if (!_mediaPlayerTaskRunning)
+            {
+                _currentMediaUrlValue = value?.ToString();
+            }
+        }
+
+        if (instance.This2RuleInterfaceTemplate == _playMediaEnabled.This2RuleInterfaceTemplate)
+        {
+            _playMediaEnabledValue = Convert.ToBoolean(value);
+        }
+
         return ret;
+    }
+
+    private void StartPlayMediaUrl()
+    {
+        if (!_mediaPlayerTaskRunning)
+        {
+            _mediaPlayerTaskRunning = true;
+            _ = Task.Run(RunMediaPlayerButtonTask);
+        }
+    }
+
+    private async Task RunMediaPlayerButtonTask()
+    {
+        var currentVolume = _currentVolume;
+        var currentlyPlaying = _currentlyPlaying;
+        var currentMedia = _mediaPlayUrl;
+
+        var count = 0;
+        while (true)
+        {
+            await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_volumeOutputStatus), _playMediaVolumeValue);
+            await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_playMediaUrlOutput),
+                _mediaPlayUrl);
+
+            await Task.Delay(_playMediaDurationValue);
+            count++;
+
+            if (count >= _playMediaCountValue)
+            {
+                break;
+            }
+        }
+
+        await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_volumeOutputStatus),
+            currentVolume);
+
+        if (currentlyPlaying.HasValue && currentlyPlaying.Value)
+        {
+            await Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_playMediaUrlOutput),
+                currentMedia);
+        }
+
+
+        _mediaPlayerTaskRunning = false;
     }
 }

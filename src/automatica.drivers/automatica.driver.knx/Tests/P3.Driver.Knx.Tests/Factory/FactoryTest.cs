@@ -10,7 +10,7 @@ namespace P3.Driver.Knx.Tests.Factory
         [Fact]
         public void TestGatewayProperties()
         {
-            var node = CreateNodeInstance(KnxIpDriverFactory.KnxGatway);
+            var node = CreateNodeInstance(KnxIpDriverFactory.KnxGateway);
 
             Assert.True(node.PropertyInstance.Count >= 3);
 

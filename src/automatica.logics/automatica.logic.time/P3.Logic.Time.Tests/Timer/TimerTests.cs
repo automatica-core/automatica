@@ -15,6 +15,7 @@ namespace P3.Logic.Time.Tests.Timer
         [Fact]
         public async void TestTimerRule()
         {
+            FakeTimeProvider.SetDateTime(DateTime.Now);
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
@@ -22,27 +23,31 @@ namespace P3.Logic.Time.Tests.Timer
             var paramDelay = GetLogicInterfaceByTemplate(TimerLogicFactory.RuleTimerParameter);
             paramDelay.Value = new TimerPropertyData()
             {
-                StartTime = DateTime.Now.AddSeconds(2),
-                StopTime = DateTime.Now.AddSeconds(4),
+                StartTime = DateTime.Now.AddSeconds(-1),
+                StopTime = DateTime.Now.AddSeconds(3),
                 EnabledDays = new List<DayOfWeek>()
                 {
                     DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday,
                     DayOfWeek.Saturday, DayOfWeek.Sunday
                 }
             };
+
+            FakeTimeProvider.SetDateTime(DateTime.Now);
             await Logic.Start();
-            await Task.Delay(2500);
+
+            FakeTimeProvider.SetDateTime(DateTime.Now);
+            await Task.Delay(200);
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
-            //Assert.Equal(true, values.First().Value.Value);
+            Assert.Single(values);
+            Assert.Equal(true, values.First().Value.Value);
 
-            await Task.Delay(2500);
+            await Task.Delay(5000);
 
             values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Equal(1, values.Count);
+            Assert.Single(values);
             Assert.Equal(false, values.First().Value.Value);
             await Logic.Stop();
         }
@@ -50,10 +55,12 @@ namespace P3.Logic.Time.Tests.Timer
         [Fact]
         public async void TestTimerRule2()
         {
+            FakeTimeProvider.SetDateTime(DateTime.Now);
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
 
+            FakeTimeProvider.SetDateTime(DateTime.Now);
             var paramDelay = GetLogicInterfaceByTemplate(TimerLogicFactory.RuleTimerParameter);
             var timerData = new TimerPropertyData()
             {
@@ -74,8 +81,8 @@ namespace P3.Logic.Time.Tests.Timer
             await Task.Delay(1500);
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
-
-            Assert.Equal(0, values.Count);
+            
+            Assert.Empty(values);
             await Logic.Stop();
         }
 
@@ -85,6 +92,7 @@ namespace P3.Logic.Time.Tests.Timer
         [Fact]
         public async void TestTimerRule3()
         {
+            FakeTimeProvider.SetDateTime(DateTime.Now);
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
@@ -98,8 +106,8 @@ namespace P3.Logic.Time.Tests.Timer
             await Task.Delay(1500);
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
-
-            Assert.Equal(1, values.Count);
+            
+            Assert.Single(values);
             await Logic.Stop();
         }
     }

@@ -139,7 +139,9 @@ namespace Automatica.Core.WebApi.Controllers
                 Description = building.Description,
                 Icon = icon,
                 This2AreaTemplate = typeGuid,
-                This2Parent = parent.ObjId
+                This2Parent = parent.ObjId,
+                CreatedAt = DateTimeOffset.Now,
+                ModifiedAt = DateTimeOffset.Now
             };
 
             foreach (var part in building.Children)
@@ -159,25 +161,33 @@ namespace Automatica.Core.WebApi.Controllers
         [Route("add")]
         public async Task<IEnumerable<AreaInstance>> AddAreaInstances([FromBody]IEnumerable<AreaInstance> instances)
         {
-            await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                foreach (var instance in instances)
+                await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    instance.InverseThis2ParentNavigation = null;
-                    instance.This2ParentNavigation = null;
-                    await DbContext.AreaInstances.AddAsync(instance);
+                    foreach (var instance in instances)
+                    {
+                        instance.InverseThis2ParentNavigation = null;
+                        instance.This2ParentNavigation = null;
+                        instance.CreatedAt = DateTimeOffset.Now;
+                        instance.ModifiedAt = DateTimeOffset.Now;
+                        await DbContext.AreaInstances.AddAsync(instance);
+                    }
+
+                    await DbContext.SaveChangesAsync();
+
+                }
+                finally
+                {
+                    await DbContext.Database.CommitTransactionAsync();
+                    _areaCache.Clear();
                 }
 
-                await DbContext.SaveChangesAsync();
-                
-            }
-            finally
-            {
-                await DbContext.Database.CommitTransactionAsync();
-                _areaCache.Clear();
-            }
-            return GetInstances();
+                return GetInstances();
+            });
         }
 
         [HttpGet]
@@ -197,9 +207,11 @@ namespace Automatica.Core.WebApi.Controllers
             instance.This2ParentNavigation = null;
             instance.This2UserGroupNavigation = null;
             instance.This2AreaTemplateNavigation = null;
+            instance.ModifiedAt = DateTimeOffset.Now;
 
             if (existingArea == null)
             {
+                instance.CreatedAt = DateTimeOffset.Now;
                 await DbContext.AreaInstances.AddAsync(instance);
             }
             else
@@ -219,43 +231,47 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<AreaInstance>> SaveInstances([FromBody]IEnumerable<AreaInstance> areas)
         {
-            var transaction = await DbContext.Database.BeginTransactionAsync();
-            try
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
             {
-                var areaInstances = areas as AreaInstance[] ?? areas.ToArray();
-                var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
-                foreach (var area in areaInstances)
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    await SaveAreaInstanceRec(area);
+                    var areaInstances = areas as AreaInstance[] ?? areas.ToArray();
+                    var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
+                    foreach (var area in areaInstances)
+                    {
+                        await SaveAreaInstanceRec(area);
+                    }
+
+                    await DbContext.SaveChangesAsync();
+
+
+
+                    var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()
+                        where !(from o in flatList select o.ObjId).Contains(c.ObjId)
+                        select c;
+                    var removedAreasList = removedNodes.ToList();
+                    DbContext.RemoveRange(removedAreasList);
+                    removedAreasList.ForEach(a => { _areaCache.Remove(a.ObjId); });
+
+
+                    await DbContext.SaveChangesAsync(true);
+                    await transaction.CommitAsync();
                 }
-
-                await DbContext.SaveChangesAsync();
-
-
-
-                var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()
-                    where !(from o in flatList select o.ObjId).Contains(c.ObjId)
-                    select c;
-                var removedAreasList = removedNodes.ToList();
-                DbContext.RemoveRange(removedAreasList);
-                removedAreasList.ForEach(a => { _areaCache.Remove(a.ObjId); });
-
-
-                await DbContext.SaveChangesAsync(true);
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Could not save data");
-                await transaction.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                _areaCache.Clear();
-            }
-
-            return GetInstances();
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                finally
+                {
+                    _areaCache.Clear();
+                }
+                return GetInstances();
+            });
         }
 
        

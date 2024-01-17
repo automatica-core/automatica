@@ -1,5 +1,12 @@
 import { BaseModel, JsonFieldInfo, JsonProperty, Model } from "./base-model"
 
+export enum LogicInterfaceDirection
+{
+    Input  = 1,
+    Output = 2,
+    Param = 3
+}
+
 @Model()
 export class RuleInterfaceDirection extends BaseModel {
 

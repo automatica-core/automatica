@@ -1,10 +1,10 @@
 <div class="layout" [ngClass]="sizeClasses" [style.background-color]="backgroundColor">
-    <dx-drawer class="drawer" [closeOnOutsideClick]="true" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
+    <dx-drawer class="drawer" [closeOnOutsideClick]="!this.isLargeScreen" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
         [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
 
         <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute"
             class="dx-swatch-additional" *dxTemplate="let dataMenu of 'panel'"
-            (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick()" [(menuOpened)]="menuOpened">
+            (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick($event)" [(menuOpened)]="menuOpened">
             <dx-toolbar id="navigation-header">
                 <dxi-item *ngIf="minMenuSize !== 0" location="before" widget="dxButton" [options]="{
                             icon: 'menu',

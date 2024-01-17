@@ -59,7 +59,7 @@
     "FILE": "File",
     "IMPORT_ETS_STRUCTURE": "Import ETS structure",
     "SAVE_BEFORE_CONTINUE": "You need to save your changes before starting this action",
-    "SERVER_STARTING": "Automatica.Core Server starting...",
+    "SERVER_STARTING": "Server starting...",
     "SIGNALR_CONNECTION": "SignalR connection",
     "LOADING_PLUGINS": "Load plugins",
     "STARTED": "Started",
@@ -88,6 +88,16 @@
     "PASSWORD": "Password",
     "IMPORT_NODES": "Import",
     "IMPORT_NOTE": "Enter your password (if needed) prior selecting the file. After selecting the file press upload and the import will start",
+    "LIVE_LOGS": "Live logs",
+    "FILE_LOGS": "Datei logs",
+    "LOGGER_LEVEL":"Log level",
+    "INFO": "Information",
+    "ZOOM": {
+      "IN":"Zoom in",
+      "OUT": "Zoom out",
+      "TO_VIEW": "Zoom default"
+    },
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "System settings changes require a reboot. This happens automatically!",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {
@@ -163,7 +173,9 @@
       "DISCOVERY": "Discovery",
       "TRENDING": "Trendings",
       "SATELLITE": "Satellite",
-      "VALUE": "Value"
+      "VALUE": "Value",
+      "CONTROL":"Controls",
+      "CONTROLS":"Controls"
     },
     "FACTOR": {
       "NAME": "Factor",
@@ -174,6 +186,10 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
+      "CONTROLS":{
+        "NAME": "Controls",
+        "DESCRIPTION": ""
+      },
       "TYPE": {
         "NAME": "Typ",
         "DESCRIPTION": ""
@@ -372,6 +388,9 @@
           "SUNDAY": "Sunday"
         }
       },
+      "CALENDAR": {
+        "NAME": "Calendar"
+      },
       "CLOUDURL": {
         "NAME": "Cloud url",
         "DESCRIPTION": ""
@@ -430,7 +449,7 @@
         "NAME": "Remanent"
       },
       "ONLY_WRITE_IF_CHANGED": {
-        "NAME": "Nur Schreiben wenn geändert"
+        "NAME": "Write only if changed"
       },
       "VALUE": {
         "NAME": "Value"
@@ -461,6 +480,23 @@
       },
       "HYPERSERIESPORT":{
         "NAME": "Port"
+      },
+      "LANGUAGE":{
+        "NAME": "Language",
+        "GERMAN": "German",
+        "ENGLISH": "English"
+      },
+      "CREATED_AT": {
+        "NAME": "Created at",
+        "DESCRIPTION":""
+      },
+      "MODIFIED_AT": {
+        "NAME": "Modified at",
+        "DESCRIPTION":""
+      },
+      "VALUE_SOURCE": {
+        "NAME": "Source",
+        "DESCRIPTION": ""
       }
     },
     "CATEGORY_INSTANCE": {
@@ -611,7 +647,9 @@
     "LICENSE": "License",
     "UPDATE_AVAILABLE": "Update available",
     "NO_UPDATE_AVAILABLE": "No update available",
-    "NO_LICENSE_FOUND": "No license found"
+    "NO_LICENSE_FOUND": "No license found",
+    "INSTALLING_UPDATE": "Installing update. This can take several minutes. Server will be restarted automatically!",
+    "DOWNLOADING_UPDATE": "Downloading update..."
   },
   "LICENSE": {
     "NAME": "License"

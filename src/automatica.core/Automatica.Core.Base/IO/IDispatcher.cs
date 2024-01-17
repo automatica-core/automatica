@@ -46,7 +46,6 @@ namespace Automatica.Core.Base.IO
 
         Task UnRegisterDispatch(DispatchableType type, Guid id);
         Task RegisterDispatch(DispatchableType type, Guid id, Action<IDispatchable, DispatchValue> callback);
-
         IDictionary<Guid, DispatchValue> GetValues();
 
         IDictionary<Guid, DispatchValue> GetValues(DispatchableType type);

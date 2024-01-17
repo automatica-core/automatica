@@ -27,6 +27,7 @@ import { NodeInstanceService } from "./node-instance.service";
 import { NodeTemplateService } from "./node-template.service";
 import { LogsService } from "./logs.service";
 import { HyperSeriesService } from "./hyperseries.service";
+import { ControlsService } from "./controls.service";
 
 @NgModule({
   imports: [
@@ -55,11 +56,11 @@ import { HyperSeriesService } from "./hyperseries.service";
     LicenseService,
     SystemService,
     PluginsService,
-    AppService,
     SatelliteService,
     NodeTemplateService,
     LogsService,
-    HyperSeriesService
+    HyperSeriesService,
+    ControlsService
 
   ]
 })

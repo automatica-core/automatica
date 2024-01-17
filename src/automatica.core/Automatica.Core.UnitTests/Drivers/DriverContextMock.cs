@@ -1,8 +1,11 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
+using Automatica.Core.Control;
 using Automatica.Core.Driver;
+using Automatica.Core.Driver.Discovery;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
@@ -10,6 +13,7 @@ using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Drivers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
 
 namespace Automatica.Core.UnitTests.Base.Drivers
 {
@@ -25,6 +29,8 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             LoggerFactory = loggerFactory;
             Factory = factory;
             TunnelingProvider = new TunnelingProviderMock();
+            ControlContext = new Mock<IControlContext>().Object;
+            RetryContext = new RetryContextMock();
         }
 
         public NodeInstance NodeInstance { get; }
@@ -43,6 +49,12 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public ILicenseContract LicenseContract => new LicenseContractMock();
         public ILoggerFactory LoggerFactory { get; }
         public ITunnelingProvider TunnelingProvider { get; }
+        public IZeroconfDiscovery ZeroconfDiscovery { get; }
+
+        public IControlContext ControlContext { get; }
+
+        public IRetryContext RetryContext { get; }
+
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
             return new DriverContextMock(node, Factory, NodeTemplateFactory, Dispatcher, LoggerFactory);

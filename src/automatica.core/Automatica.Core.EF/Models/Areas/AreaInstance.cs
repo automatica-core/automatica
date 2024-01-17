@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 
 namespace Automatica.Core.EF.Models.Areas
 {
@@ -13,6 +12,8 @@ namespace Automatica.Core.EF.Models.Areas
             InverseThis2ParentNavigation = new List<AreaInstance>();
         }
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
 
         public Guid This2AreaTemplate { get; set; }
 
@@ -23,7 +24,6 @@ namespace Automatica.Core.EF.Models.Areas
 
         public string Icon { get; set; }
 
-        [IgnoreMember]
         public AreaInstance This2ParentNavigation { get; set; }
 
         public AreaTemplate This2AreaTemplateNavigation { get; set; }

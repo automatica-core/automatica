@@ -8,8 +8,6 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     internal class LogicCacheFacade : ILogicCacheFacade
     {
-        private readonly ILogicDataHandler _logicStore;
-
         public LogicCacheFacade(ILogicInstanceCache instanceCache, ILogicPageCache pageCache, ILogicTemplateCache templateCache, ILinkCache linkCache, ILogicNodeInstanceCache logicNodeInstanceCache)
         {
             LinkCache = linkCache;
@@ -38,13 +36,24 @@ namespace Automatica.Core.Internals.Cache.Logic
         public Task RemoveLink(Guid linkId)
         {
             LinkCache.Remove(linkId);
+            PageCache.Remove(linkId);
 
             return Task.CompletedTask;
         }
 
         public Task AddOrUpdateLink(Guid objId, AutomaticaContext dbContext)
         {
-            LinkCache.GetSingle(objId, dbContext);
+            var link = LinkCache.GetSingle(objId, dbContext);
+
+            if (link.isNew)
+            {
+                PageCache.AddLink(link.link);
+            }
+            else
+            {
+                PageCache.UpdateLink(link.link);
+            }
+
             return Task.CompletedTask;
         }
 

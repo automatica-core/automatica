@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Version>7.5.2.0</Version>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>8.2.0.0</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>A07B806E-69D6-452D-BB29-7ED80501C39F</ProjectGuid>
     <Nullable>enable</Nullable>
@@ -16,9 +16,8 @@
     <EmbeddedResource Include="Resources\Runtime-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Connections" Version="1.1.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="5.0.0-preview.5.20278.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
     <PackageReference Include="MQTTnet" Version="3.1.2" />
     <PackageReference Include="MQTTnet.AspNetCore" Version="3.1.2" />
     <PackageReference Include="Telegraf.Channel.Http" Version="1.0.3" />

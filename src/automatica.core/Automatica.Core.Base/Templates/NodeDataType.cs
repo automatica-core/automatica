@@ -10,18 +10,20 @@ namespace Automatica.Core.Base.Templates
         [NodeDataTypeEnum("NoAttribute")]
         NoAttribute = 0,
         [NodeDataTypeEnum("Integer")]
-        Integer,
+        Integer = 1,
         [NodeDataTypeEnum("Double")]
-        Double,
+        Double = 2,
         [NodeDataTypeEnum("String")]
-        String,
+        String = 3,
         [NodeDataTypeEnum("Boolean")]
-        Boolean,
+        Boolean = 4,
         [NodeDataTypeEnum("DateTime")]
-        DateTime,
+        DateTime = 5,
         [NodeDataTypeEnum("Time")]
-        Time,
+        Time = 6,
         [NodeDataTypeEnum("Date")]
-        Date
+        Date = 7,
+        [NodeDataTypeEnum("WindowState")]
+        WindowState = 8
     }
 }

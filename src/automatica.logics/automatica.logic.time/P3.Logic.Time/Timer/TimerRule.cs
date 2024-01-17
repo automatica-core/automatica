@@ -7,6 +7,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Time.Timer
 {
@@ -19,7 +20,7 @@ namespace P3.Logic.Time.Timer
         private readonly object _lock = new object();
         
 
-        private bool _value = false;
+        private bool _value;
 
         public TimerRule(ILogicContext context) : base(context)
         {
@@ -61,7 +62,7 @@ namespace P3.Logic.Time.Timer
 
         private void CalculateTickTime(bool isStartup=false)
         {
-            var now = DateTime.UtcNow;
+            var now = Context.TimeProvider.GetLocalNow();
             var nowTime = now.TimeOfDay;
 
             Context.Logger.LogInformation($"Now is {nowTime}");
@@ -79,6 +80,7 @@ namespace P3.Logic.Time.Timer
             
 
             var tickTime = startTime - nowTime;
+            Context.Logger.LogDebug($"Start time is {startTime} endTime is {stopTime} difference is {tickTime}");
             double timerTickTime;
 
             if (tickTime.TotalMilliseconds < 0)
@@ -87,23 +89,31 @@ namespace P3.Logic.Time.Timer
                 timerTickTime = (stopTime - nowTime).TotalMilliseconds;
                 if (timerTickTime < 0)
                 {
-                    _timer.Interval = (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime).TotalMilliseconds;
-                    Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {stopTime}");
+
+                    //timer is negative, tick is the next day!
+                    var nnwTickTime =
+                        (new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 99).TimeOfDay - nowTime)
+                        .TotalMilliseconds + startTime.TotalMilliseconds;
+
+                    _timer.Interval = nnwTickTime;
+                    Context.Logger.LogDebug(
+                        $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
+
+
                     if (isStartup)
                     {
                         Context.Logger.LogInformation($"Start event, set value to {false}");
                         Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
                     }
+
                     _value = false;
-                    return;
                 }
-                if (isStartup)
+                else if (isStartup)
                 {
                     Context.Logger.LogInformation($"Start event, set value to {true}");
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
+                    _value = true;
                 }
-
-                _value = true;
             }
             else
             {
@@ -118,7 +128,7 @@ namespace P3.Logic.Time.Timer
             }
 
             _timer.Interval = timerTickTime;
-            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
+            Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
             _timer.Start();
         }
 
@@ -134,15 +144,14 @@ namespace P3.Logic.Time.Timer
             _timer.Stop();
             lock (_lock)
             {
+                Context.Logger.LogInformation($"Tick received, set value to {_value}");
                 if (_timerPropertyData == null)
                 {
                     return;
                 }
 
                 _value = !_value;
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value);
-
-                Context.Logger.LogInformation($"Tick received, set value to {_value}");
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, _value).Instance, _value).ConfigureAwait(false);
 
                 CalculateTickTime();
             }

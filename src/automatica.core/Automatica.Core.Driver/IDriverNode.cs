@@ -136,6 +136,7 @@ namespace Automatica.Core.Driver
 
 
         int ChildrensCreated { get; }
+        string Error { get; }
 
         /// <summary>
         /// Returns the state of the NodeInstance

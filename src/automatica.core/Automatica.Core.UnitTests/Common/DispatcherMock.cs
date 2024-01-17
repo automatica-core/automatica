@@ -13,7 +13,7 @@ namespace Automatica.Core.UnitTests.Base.Common
     {
         public static DispatcherMock Instance { get; } = new DispatcherMock();
 
-        public DispatcherMock() : base(NullLogger<Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object, new Mock<IRemanentHandler>().Object)
+        public DispatcherMock() : base(NullLogger<Dispatcher>.Instance, new Mock<IDataBroadcast>().Object, new Mock<IRemoteSender>().Object, new Mock<IRemanentHandler>().Object, new Mock<IRuleInstanceVisuNotify>().Object)
         {
         }
 

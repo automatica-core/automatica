@@ -6,7 +6,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - group: automatica.core variables
+  - group: automatica.core.8
 
 steps:
 - task: UseDotNet@2
@@ -27,7 +27,7 @@ steps:
     projects: '**/*[Tt]ests.csproj'
     arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
-- task: AutomaticaCoreDockerMultiArchCli@8
+- task: AutomaticaCoreDockerMultiArchCli@9
   displayName: Docker multi-arch
   inputs:
     dockerRegistryEndpoint: 'DockerHub'

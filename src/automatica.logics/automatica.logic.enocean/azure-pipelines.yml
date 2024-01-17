@@ -6,7 +6,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - group: automatica.core variables
+  - group: automatica.core.8
 
 steps:
 - task: UseDotNet@2

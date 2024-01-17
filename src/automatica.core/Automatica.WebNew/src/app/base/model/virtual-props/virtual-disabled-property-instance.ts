@@ -1,4 +1,5 @@
 import { NodeInstance } from "../node-instance";
+import { UpdateScope } from "../property-instance";
 import { PropertyTemplateType } from "../property-template"
 import { VirtualPropertyInstance } from "./virtual-property-instance"
 
@@ -16,7 +17,11 @@ export class VirtualDisabledPropertyInstance extends VirtualPropertyInstance {
         this.PropertyTemplate.PropertyType.Type = PropertyTemplateType.Bool;
 
         this.PropertyTemplate.GroupOrder = 0;
-        this.PropertyTemplate.Order = 10;
+        this.PropertyTemplate.Order = 15;
+    }
+
+    public get updateScope(): UpdateScope {
+        return UpdateScope.SpecificProperty;
     }
 
     get Value(): any {

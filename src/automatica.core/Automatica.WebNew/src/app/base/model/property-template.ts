@@ -38,6 +38,7 @@ export enum PropertyTemplateType {
     Timer = 24,
     Time = 25,
     DateTime = 26,
+    Calendar = 27,
 
     AreaIcon = 100,
     AreaInstance = 101,
@@ -52,6 +53,8 @@ export enum PropertyTemplateType {
     MultiSelect = 300,
 
     CustomAction = 500,
+    
+    Controls = 600,
 
     Invalid = 2147483647
 }
@@ -277,6 +280,10 @@ export class PropertyTemplate extends BaseModel {
     }
     public typeInfo(): string {
         return "PropertyTemplate";
+    }
+
+    public updatePropertyType() {
+        this.afterFromJson();
     }
 
     protected afterFromJson() {

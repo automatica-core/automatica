@@ -15,6 +15,7 @@ export class VirtualNamePropertyInstance extends VirtualPropertyInstance {
         this.PropertyTemplate.IsReadonly = isReadonly;
 
         this.PropertyTemplate.GroupOrder = -100;
+        this.PropertyTemplate.Order = 1;
     }
 
     get Value(): any {

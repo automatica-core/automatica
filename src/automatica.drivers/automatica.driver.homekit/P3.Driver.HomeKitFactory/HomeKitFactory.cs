@@ -18,7 +18,7 @@ namespace P3.Driver.HomeKitFactory
 
         public override Guid DriverGuid => new Guid("c0491f87-83e4-4510-bad2-e21ebbc490d1");
         
-        public override Version DriverVersion => new Version(0, 7, 0, 5);
+        public override Version DriverVersion => new Version(1, 1, 0, 0);
 
         public override bool InDevelopmentMode => false;
 
@@ -49,6 +49,8 @@ namespace P3.Driver.HomeKitFactory
                 PropertyTemplateType.Text, DriverGuid, "", false, true, null, null, 0, 0);
             factory.CreatePropertyTemplate(new Guid("4bd1b665-61ec-4f43-b80d-ec236983d365"), "LTPK_PRIVATE", "LTPK_PRIVATE", "ltpk-private",
                 PropertyTemplateType.Text, DriverGuid, "", false, true, null, null, 0, 0);
+            factory.CreatePropertyTemplate(new Guid("b91c2de6-150d-41d3-8e83-0625115a406a"), "PAIR_CODE", "PAIR_CODE", "pair-code",
+                PropertyTemplateType.Text, DriverGuid, "", false, true, null, null, 0, 0);
 
             factory.CreatePropertyTemplate(new Guid("c3759cf5-6a9b-4afb-b0e4-32941db684ca"), "CONFIG_VERSION", "CONFIG_VERSION", "config-version",
                 PropertyTemplateType.Integer, DriverGuid, "", false, true, null, 1, 0, 0);
@@ -59,6 +61,9 @@ namespace P3.Driver.HomeKitFactory
             factory.CreatePropertyTemplate(new Guid("9eaa6a7e-14ca-4682-b600-3b4e5f6f704b"), "APPLE_HOMEKIT_SERVER.CLEAN_PAIRINGS.NAME",
                 "APPLE_HOMEKIT_SERVER.CLEAN_PAIRINGS.DESCRIPTION", ClearPairingsKey, PropertyTemplateType.CustomAction,
                 DriverGuid, "APPLE_HOMEKIT_SERVER.PAIRING", true, true, null, null, 1, 1);
+
+            factory.CreatePropertyTemplate(new Guid("0a441a62-6a1c-46ca-b6a0-b9aa5451e81e"), "COMMON.PROPERTY.CONTROLS.NAME", "COMMON.PROPERTY.CONTROLS.DESCRIPTION", "controls",
+                PropertyTemplateType.Controls, DriverGuid, "COMMON.CATEGORY.CONTROLS", true, false, null, null, 0, 0);
 
             CreateLight(factory);
             CreatePowerOutlet(factory);

@@ -23,5 +23,7 @@ namespace Automatica.Core.EF.Models.Areas
         public AreaType This2AreaTypeNavigation { get; set; }
         public AreaType ProvidesThis2AreayTypeNavigation { get; set; }
         public AreaType NeedsThis2AreaTypeNavigation { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Automatica.Core.Tests")]
@@ -26,14 +27,14 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
         private readonly ILoadedStore _store;
         private readonly IDriverFactoryStore _driverFactoryStore;
         private readonly INodeInstanceService _nodeInstanceService;
-        private readonly TemplateFactoryProvider<NodeTemplateFactory> _nodeTemplateFactory;
+        private readonly IServiceProvider _serviceProvider;
 
         public DriverLoader(
             ILogger<DriverLoader> logger, AutomaticaContext dbContext, 
             ILocalizationProvider localizationProvider, IConfiguration config, 
             ILoadedStore store, IDriverFactoryStore driverFactoryStore,
             INodeInstanceService nodeInstanceService,
-            TemplateFactoryProvider<NodeTemplateFactory> nodeTemplateFactory)
+            IServiceProvider serviceProvider)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -42,7 +43,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
             _store = store;
             _driverFactoryStore = driverFactoryStore;
             _nodeInstanceService = nodeInstanceService;
-            _nodeTemplateFactory = nodeTemplateFactory;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task Load(IDriverFactory factory, IBoardType boardType)
@@ -94,7 +95,9 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 if (initNodeTemplates || factory.InDevelopmentMode ||
                     factory.GetType().Assembly.GetName().Version < new Version(2, 3))
                 {
-                    var nodeTemplateFactory = _nodeTemplateFactory.CreateInstance(manifest.Automatica.PluginGuid);
+                    var logicTemplateFactoryProvider = new NodeTemplateFactoryProvider(_serviceProvider);
+                    var nodeTemplateFactory = logicTemplateFactoryProvider.CreateInstance(factory.DriverGuid);
+                    
                     nodeTemplateFactory.SetFactory(factory);
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
                     factory.InitNodeTemplates(nodeTemplateFactory);

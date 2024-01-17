@@ -24,7 +24,7 @@ namespace Automatica.Core.Runtime.Telegraf
         private bool _disposing;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly TimeSpan _disposingWaitTaskTimeout;
-        private readonly string _authorizationHeaderValue;
+        private readonly string? _authorizationHeaderValue;
 
         public bool SupportsBatchedWrites => true;
 
@@ -32,14 +32,16 @@ namespace Automatica.Core.Runtime.Telegraf
             Uri uri,
             TimeSpan disposingWaitTaskTimeout,
             TimeSpan? httpTimeout = null,
-            string authorizationHeaderValue = null)
+            string? authorizationHeaderValue = null)
         {
             _uri = uri ?? throw new ArgumentNullException(nameof(uri));
             httpTimeout = httpTimeout ?? TimeSpan.FromSeconds(15);
 
             _httpTimeout = (int)httpTimeout.Value.TotalMilliseconds;
             _disposingWaitTaskTimeout = disposingWaitTaskTimeout;
-            _authorizationHeaderValue = authorizationHeaderValue;
+
+            if(authorizationHeaderValue != null)
+                _authorizationHeaderValue = authorizationHeaderValue;
 
             _httpClient = new HttpClient();
 

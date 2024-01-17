@@ -124,8 +124,27 @@ namespace Automatica.Core.UnitTests.Base.Logics
                 defaultValue, false);
         }
 
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
+            string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue,
+            bool linkable)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable, null);
+        }
+
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,
-            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable)
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue, bool linkable, string meta)
+        {
+            return CreateParameterLogicInterfaceTemplate(id, name, description, key, ruleTemplate, sortOrder, dataType,
+                defaultValue, linkable, meta, null);
+        }
+
+        public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description,
+            string key,
+            Guid ruleTemplate, int sortOrder, RuleInterfaceParameterDataType dataType, object defaultValue,
+            bool linkable,
+            string meta, string group)
         {
             var interfaceType = new RuleInterfaceTemplate();
 
@@ -147,9 +166,12 @@ namespace Automatica.Core.UnitTests.Base.Logics
             interfaceType.SortOrder = sortOrder;
             interfaceType.ParameterDataType = dataType;
             interfaceType.DefaultValue = Convert.ToString(defaultValue, CultureInfo.InvariantCulture);
+            interfaceType.Meta = meta;
+            interfaceType.Group = group;
 
             _ruleInterfaceTemplates[id] = interfaceType;
             return retValue;
+
         }
 
         public CreateTemplateCode CreateParameterLogicInterfaceTemplate(Guid id, string name, string description, string key,

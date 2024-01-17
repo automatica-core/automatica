@@ -23,7 +23,6 @@ namespace Automatica.Core.Watchdog
             var config = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
                 .AddJsonFile("appsettings.json", false)
-                .AddEnvironmentVariables()
                 .Build();
 
             Console.Title = "Automatica.Core.Watchdog";
@@ -36,6 +35,12 @@ namespace Automatica.Core.Watchdog
 
             _logger = CoreLoggerFactory.GetLogger(config,null, "Watchdog");
             _logger.LogInformation($"Starting WatchDog...Version {ServerInfo.GetServerVersion()}, Datetime {ServerInfo.StartupTime}");
+
+            var tz = config["TZ"] ?? config["server:TZ"];
+            if (!String.IsNullOrEmpty(tz))
+            {
+                Environment.SetEnvironmentVariable("TZ", tz);
+            }
 
             var fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             var appName = Path.Combine(fi.DirectoryName, ServerInfo.ServerExecutable);
@@ -81,25 +86,39 @@ namespace Automatica.Core.Watchdog
             
             processInfo.WorkingDirectory = Environment.CurrentDirectory;
 
+          
+
             Process process = null;
             try
             {
-
+                int restartCount = 0;
                 while (true)
                 {
                     _logger.LogInformation($"Starting {appName}");
-                    
+
+                    var startTime = DateTime.Now;
                     process = Process.Start(processInfo);
                     process!.ErrorDataReceived += ProcessOnErrorDataReceived;
 
                     process.WaitForExit();
+                    restartCount++;
+
+                    var diffNow = DateTime.Now - startTime;
+                    if (diffNow.TotalMinutes >= 30)
+                    {
+                        restartCount = 0;
+                    }
 
 
                     process.ErrorDataReceived -= ProcessOnErrorDataReceived;
                     var exitCode = process.ExitCode;
                     _logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
-                    if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker)
+                    if (exitCode == ServerInfo.ExitCodeRestart)
+                    {
+                        _logger.LogInformation($"Core system requested a normal restart....");
+                    }
+                    else if (PrepareUpdateIfExists() || process.ExitCode == ServerInfo.ExitCodeUpdateInstallDocker)
                     {
                         Environment.Exit(2); //restart
                         return;

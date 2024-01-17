@@ -1,6 +1,8 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Templates;
+using Automatica.Core.Control;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +13,7 @@ namespace Automatica.Core.Logic
     /// </summary>
     public class LogicContext : ILogicContext
     {
-        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract)
+        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider)
         {
             RuleInstance = ruleInstance;
             Dispatcher = dispatcher;
@@ -20,9 +22,11 @@ namespace Automatica.Core.Logic
             Logger = logger;
             CloudApi = api;
             LicenseContract = licenseContract;
+            ControlContext = controlContext;
+            TimeProvider = timeProvider;
         }
 
-        public RuleInstance RuleInstance { get; }
+        public RuleInstance RuleInstance { get; set; }
         public IDispatcher Dispatcher { get; }
         public ILogicTemplateFactory Factory { get; }
         public IRuleInstanceVisuNotify Notify { get; }
@@ -31,5 +35,9 @@ namespace Automatica.Core.Logic
         public IServerCloudApi CloudApi { get; }
 
         public ILicenseContract LicenseContract { get; }
+
+        public IControlContext ControlContext { get; }
+
+        public TimeProvider TimeProvider { get; }
     }
 }

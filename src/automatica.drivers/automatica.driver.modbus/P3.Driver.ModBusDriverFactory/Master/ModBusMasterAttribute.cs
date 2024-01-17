@@ -29,11 +29,6 @@ namespace P3.Driver.ModBusDriverFactory.Master
             _attribute = attribute;
         }
 
-        public override async Task WriteValue(IDispatchable source, object value)
-        {
-           
-        }
-
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try

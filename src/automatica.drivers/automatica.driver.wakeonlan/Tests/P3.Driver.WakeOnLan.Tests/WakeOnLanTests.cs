@@ -1,4 +1,8 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
+using Automatica.Core.Driver;
 using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Xunit;
@@ -19,29 +23,26 @@ namespace P3.Driver.WakeOnLan.Tests
         [Fact]
         public async void Test_WakeOnLanValue()
         {
-            var root = CreateNodeInstance(WakeOnLanDriverFactory.BusId);
-            var node = CreateNodeInstance(WakeOnLanDriverFactory.ValueId);
+            var driver = await CreateDriver<WakeOnLanDriver>(WakeOnLanDriverFactory.BusId, WakeOnLanDriverFactory.ValueId);
 
-            root.InverseThis2ParentNodeInstanceNavigation.Add(node);
-
-            var prop = node.PropertyInstance.SingleOrDefault(a => a.This2PropertyTemplate == WakeOnLanDriverFactory.MacId);
+            var prop = driver.Children[0].DriverContext.NodeInstance.PropertyInstance.SingleOrDefault(a => a.This2PropertyTemplate == WakeOnLanDriverFactory.MacId);
             Assert.NotNull(prop);
             prop.Value = "AABBCCDDEEFF";
 
-            var driver = await CreateDriver(root);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<WakeOnLan>(driver.Children[0]);
 
+            await driver.Init();
             var con = driver.Children[0] as WakeOnLan;
 
             
             Assert.NotNull(con);
-            con.WriteValue(DispatchableMock.Instance, 100);
+            await ((DriverBase)con).WriteValue(DispatchableMock.Instance, new DispatchValue(con.Id, DispatchableType.NodeInstance, 100, DateTime.Now,DispatchValueSource.Read));
 
+            await Task.Delay(200);
 
-            var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
-
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, con.Id);
             Assert.Equal("AABBCCDDEEFF", value.Value);
 
         }

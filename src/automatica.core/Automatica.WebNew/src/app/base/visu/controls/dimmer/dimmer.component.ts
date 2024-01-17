@@ -1,11 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
-import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
-import { NotifyService } from "src/app/services/notify.service";
-import { L10nTranslationService } from "angular-l10n";
-import { ConfigService } from "src/app/services/config.service";
-import { LogicInstanceVisuService } from "src/app/services/logic-visu.service";
-import { AppService } from "src/app/services/app.service";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 
@@ -24,7 +18,6 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   private _state: boolean;
   valueInput: RuleInterfaceInstance;
   stateInput: RuleInterfaceInstance;
-  outputType: RuleInterfaceInstance;
 
 
   outputValue: RuleInterfaceInstance;
@@ -49,18 +42,6 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
 
-
-  constructor(
-    dataHubService: DataHubService,
-    notify: NotifyService,
-    translate: L10nTranslationService,
-    configService: ConfigService,
-    ruleInstanceVisuService: LogicInstanceVisuService,
-    appService: AppService) {
-    super(dataHubService, notify, translate, configService, ruleInstanceVisuService, appService);
-  }
-
-
   async ngOnInit() {
     this.baseOnInit();
 
@@ -72,30 +53,29 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
     this.outputValue = this.getInterfaceByKey("outputValue");
     this.outputState = this.getInterfaceByKey("outputState");
 
-    
-    this.state = this.dataHub.getCurrentValue(this.outputState.ObjId)?.value;
-    this.stateValue = this.dataHub.getCurrentValue(this.outputValue.ObjId)?.value;
 
-    const data = await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId);
-    console.log(data);
+    this.state = this.dataHub.getCurrentValue(this.valueInput.ObjId)?.value;
+    this.stateValue = this.dataHub.getCurrentValue(this.valueInput.ObjId)?.value;
+
+    const data = (await this.ruleInstanceVisuService.getRuleInstanceData(this.ruleInstance.ObjId));
+    const map = new Map(Object.entries(data));
+
+    map.forEach((value, key) => {
+      this.onRuleInstanceValueChanged(key, value);
+    });
+    if(this.stateValue > 0) {
+      this.state = true;
+    }
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-
-    if (this.stateInput && this.stateInput.ObjId === interfaceId) {
-      this.state = value;
-    }
-    else if (this.valueInput && this.valueInput.ObjId == interfaceId) {
-      this.displayValue = `${Math.round(value)}%`;
-      this.stateValue = value;
-    }
-    // else if (this.outputState && this.outputState.ObjId === interfaceId) {
-    //   this.state = value;
-    // }
-    // else if (this.outputValue && this.outputValue.ObjId == interfaceId) {
-    //   this.displayValue = `${Math.round(value)}%`;
-    //   this.stateValue = value;
-    // }
+     if (this.outputState && this.outputState.ObjId === interfaceId) {
+       this.state = value;
+     }
+     else if (this.outputValue && this.outputValue.ObjId == interfaceId) {
+       this.displayValue = `${Math.round(value)}%`;
+       this.stateValue = value;
+     }
   }
 
   onValueChanged($event) {

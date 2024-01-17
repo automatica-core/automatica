@@ -10,6 +10,7 @@ export class LogicLables {
             NAME: "LogicLabel",
 
             direction: 0,
+            fontSize: 10,
             realParent: void 0,
 
             init: function (attr, direction, realParent) {
@@ -36,6 +37,7 @@ export class LogicLables {
 
         logic.Label = draw2d.shape.basic.Label.extend({
             NAME: "Label",
+            fontSize: 10,
 
             init: function (attr) {
                 this._super(attr);

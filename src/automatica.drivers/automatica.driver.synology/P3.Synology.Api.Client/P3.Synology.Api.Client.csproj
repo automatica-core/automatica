@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
@@ -15,8 +15,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
-		<PackageReference Include="System.IO.Abstractions" Version="19.2.67" />
+		<PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+		<PackageReference Include="System.IO.Abstractions" Version="19.2.87" />
 	</ItemGroup>
 
 </Project>

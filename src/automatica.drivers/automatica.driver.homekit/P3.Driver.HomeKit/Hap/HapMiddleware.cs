@@ -32,12 +32,14 @@ namespace P3.Driver.HomeKit.Hap
         private PairSetupController _pairController;
 
         public static event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
+        public TlvParser TlvParser { get; }
 
         private readonly ConcurrentDictionary<string, HapSession> _sessions = new ConcurrentDictionary<string, HapSession>();
         internal static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.None,
-            NullValueHandling = NullValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
         public HapMiddleware(ILogger logger, string pairCode, HomeKitServer homeKitServer)
@@ -45,6 +47,8 @@ namespace P3.Driver.HomeKit.Hap
             _logger = logger;
             _pairCode = pairCode;
             _homeKitServer = homeKitServer;
+
+            TlvParser = new TlvParser(logger);
         }
 
 
@@ -108,6 +112,7 @@ namespace P3.Driver.HomeKit.Hap
                             _logger.LogDebug($"Working on pair-setup request");
                             if (_pairController != null && state == 1)
                             {
+                                _logger.LogWarning($"Error busy...");
                                 return ReturnError(state, ErrorCodes.Busy);
                             }
 
@@ -174,10 +179,10 @@ namespace P3.Driver.HomeKit.Hap
 
                         if (url.EndsWith("identify"))
                         {
-                            var identify = new IdentifyController();
+                            var identify = new IdentifyController(_logger);
                             var data = identify.Post(inputData);
 
-                            return new Tuple<string, byte[]>(data.ContentType, new byte[0]);
+                            return new Tuple<string, byte[]>(data.ContentType, Array.Empty<byte>());
                         }
                     }
                     else if (method == "PUT")
@@ -189,7 +194,7 @@ namespace P3.Driver.HomeKit.Hap
                             var data = c.Put(inputData, _sessions[connectionId], _homeKitServer);
 
                             // response with no data if the call was successful - errors need to be implemented
-                            return new Tuple<string, byte[]>(data.ContentType, new byte[0]);
+                            return new Tuple<string, byte[]>(data.ContentType, Array.Empty<byte>());
                         }
                     }
                 }

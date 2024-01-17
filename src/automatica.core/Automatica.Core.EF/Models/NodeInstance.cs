@@ -4,7 +4,6 @@ using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using Automatica.Core.EF.Models.Trendings;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 using Newtonsoft.Json;
 
 
@@ -26,6 +25,8 @@ namespace Automatica.Core.EF.Models
 
         [System.ComponentModel.DataAnnotations.Key]
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
 
         public Guid? This2NodeTemplate { get; set; }
         public Guid? This2ParentNodeInstance { get; set; }
@@ -71,15 +72,15 @@ namespace Automatica.Core.EF.Models
 
         public bool IsRemanent { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public NodeInstance This2ParentNodeInstanceNavigation { get; set; }
         public List<NodeInstance> InverseThis2ParentNodeInstanceNavigation { get; set; }
 
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public Slave This2SlaveNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public List<NodeInstance2RulePage> NodeInstance2RulePage { get; set; }
 
         public List<PropertyInstance> PropertyInstance { get; set; }

@@ -22,6 +22,18 @@ namespace P3.Driver.HomeKit.Hap.Model
         public const string FirmwareRevision = "52";
         public const string Version = "37";
 
+        public const string TargetPositionType = "7C";
+        public const string CurrentPositionType = "6D";
+        public const string CurrentVerticalTiltAngleType = "6E";
+        public const string TargetVerticalTiltAngleType = "7D";
+        
+        public const string HoldPositionType = "6F";
+        public const string PositionStateType = "72";
+        
+        public const string CurrentHorizontalTiltAngleType = "6C";
+        public const string TargetHorizontalTiltAngleType = "7B";
+        
+
         internal CharacteristicBase(Type defaultType)
         {
             DefaultType = defaultType;
@@ -32,7 +44,7 @@ namespace P3.Driver.HomeKit.Hap.Model
         public int Id { get; set; }
 
         [JsonProperty("aid")]
-        public virtual int? AccessoryId { get; set; }
+        public virtual ulong? AccessoryId { get; set; }
 
         [JsonProperty("value")]
         public object Value { get; set; }
@@ -51,13 +63,16 @@ namespace P3.Driver.HomeKit.Hap.Model
     public class SentCharacteristic : Characteristic
     {
         [JsonProperty("aid")]
-        public int AccessoryNumber { get; set; }
+        public ulong AccessoryNumber { get; set; }
     }
 
     public class Characteristic : CharacteristicBase
     {
         [JsonIgnore]
         public Service Service { get; }
+
+        [JsonIgnore]
+        public Accessory Accessory => Service.Accessory;
 
         public Characteristic() : base(typeof(object))
         {
@@ -86,7 +101,7 @@ namespace P3.Driver.HomeKit.Hap.Model
         [JsonProperty("ev")]
         public bool? EventBasedNotification { get; set; }
 
-        [JsonIgnore] public override int? AccessoryId => null;
+        [JsonIgnore] public override ulong? AccessoryId => null;
     }
 
     public static class CharacteristicFactory

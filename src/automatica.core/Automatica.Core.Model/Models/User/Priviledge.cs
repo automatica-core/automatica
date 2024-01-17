@@ -18,5 +18,7 @@ namespace Automatica.Core.Model.Models.User
 
 
         public List<Priviledge2Role> InverseThis2Roles { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
     }
 }

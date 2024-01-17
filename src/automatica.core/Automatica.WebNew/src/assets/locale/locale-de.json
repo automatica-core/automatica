@@ -2,7 +2,7 @@
   "ERROR": {
     "UNAUTHORISED": "Not authorised"
   },
-  "SERVER":{
+  "SERVER": {
     "RECORDERS": {
       "HOSTED_GRAFANA": "Hosted Grafana Recorder",
       "HYPERSERIES": "Hyperseries"
@@ -58,7 +58,7 @@
     "IMPORT_ETS_STRUCTURE": "Import ETS Struktur",
     "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
     "READ": "Lesen",
-    "SERVER_STARTING": "Automatica.Core Server fährt hoch...",
+    "SERVER_STARTING": "Server fährt hoch...",
     "SIGNALR_CONNECTION": "SignalR Verbindung",
     "LOADING_PLUGINS": "Lade Erweiterungen",
     "STARTED": "Gestartet",
@@ -87,6 +87,16 @@
     "PASSWORD": "Passwort",
     "IMPORT_NODES": "Import",
     "IMPORT_NOTE": "Fülle zuerst das Passwort Feld aus (sollte es ein Passwort geben) und dann die Datei. Drücke anschließend 'Hochladen' um den Import zu starten.",
+    "LIVE_LOGS": "Live logs",
+    "FILE_LOGS": "Datei logs",
+    "LOGGER_LEVEL": "Log Level",
+    "INFO": "Information",
+    "ZOOM": {
+      "IN": "Vergrößern",
+      "OUT": "Verkleinern",
+      "TO_VIEW": "Standard Zoom"
+    },
+    "SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT": "Änderungen von System Settings benötigen einen Neustart des Servers um wirksam zu werden. Dieser passiert automatisch!",
     "NODEINSTANCE": {
       "STATE": {
         "UNKNOWN": {
@@ -163,7 +173,9 @@
       "DISCOVERY": "Suchen",
       "TRENDING": "Datenaufzeichnung",
       "SATELLITE": "Satellite",
-      "VALUE": "Wert"
+      "VALUE": "Wert",
+      "CONTROL": "Steuerung",
+      "CONTROLS": "Steuerung"
     },
     "FACTOR": {
       "NAME": "Faktor",
@@ -174,6 +186,10 @@
       "DESCRIPTION": "+= offset"
     },
     "PROPERTY": {
+      "CONTROLS": {
+        "NAME": "Steuerung",
+        "DESCRIPTION": ""
+      },
       "TYPE": {
         "NAME": "Typ",
         "DESCRIPTION": ""
@@ -372,6 +388,9 @@
           "SUNDAY": "Sonntag"
         }
       },
+      "CALENDAR": {
+        "NAME": "Kalendar"
+      },
       "CLOUDURL": {
         "NAME": "Cloud Url",
         "DESCRIPTION": ""
@@ -404,17 +423,17 @@
         "NAME": "Satellite",
         "DESCRIPTION": "",
         "CLIENTID": {
-            "NAME":  "Client Id"
+          "NAME": "Client Id"
         },
         "CLIENTKEY": {
-            "NAME": "Client Key"
+          "NAME": "Client Key"
         }
       },
       "TIMEZONEOFFSET": {
         "NAME": "Zeitzone Differenz [h]",
         "DESCRIPTION": ""
       },
-      "TRENDINGRECORDERS":{
+      "TRENDINGRECORDERS": {
         "NAME": "Trending Ziele"
       },
       "HOSTEDGRAFANAAPIKEY": {
@@ -438,29 +457,46 @@
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
       },
-      "REMOTEDOMAIN" : {
+      "REMOTEDOMAIN": {
         "NAME": "Domain"
       },
-      "REMOTEENABLED" : {
+      "REMOTEENABLED": {
         "NAME": "Aktiv"
       },
-      "REMOTETOKEN" : {
+      "REMOTETOKEN": {
         "NAME": "Token"
       },
-      "HYPERSERIESUSER":{
+      "HYPERSERIESUSER": {
         "NAME": "Benutzer"
       },
-      "HYPERSERIESHOST":{
+      "HYPERSERIESHOST": {
         "NAME": "Host"
       },
-      "HYPERSERIESPASSWORD":{
+      "HYPERSERIESPASSWORD": {
         "NAME": "Passwort"
       },
-      "HYPERSERIESDATABASE":{
+      "HYPERSERIESDATABASE": {
         "NAME": "Datenbank"
       },
-      "HYPERSERIESPORT":{
+      "HYPERSERIESPORT": {
         "NAME": "Port"
+      },
+      "LANGUAGE": {
+        "NAME": "Sprache",
+        "GERMAN": "Deutsch",
+        "ENGLISH": "Englisch"
+      },
+      "CREATED_AT": {
+        "NAME": "Erstellt am",
+        "DESCRIPTION": ""
+      },
+      "MODIFIED_AT": {
+        "NAME": "Geändert am",
+        "DESCRIPTION": ""
+      },
+      "VALUE_SOURCE": {
+        "NAME": "Quelle",
+        "DESCRIPTION": ""
       }
     },
     "CATEGORY_INSTANCE": {
@@ -611,7 +647,9 @@
     "LICENSE": "Lizenz",
     "UPDATE_AVAILABLE": "Update verfügbar",
     "NO_UPDATE_AVAILABLE": "Kein Update verfügbar",
-    "NO_LICENSE_FOUND": "Keine Lizenz gefunden"
+    "NO_LICENSE_FOUND": "Keine Lizenz gefunden",
+    "INSTALLING_UPDATE": "Update wird installiert. Dies kann einige Minuten dauern. Der Server wird automatisch neu gestartet.",
+    "DOWNLOADING_UPDATE": "Update wird geladen..."
   },
   "LICENSE": {
     "NAME": "Lizenz"

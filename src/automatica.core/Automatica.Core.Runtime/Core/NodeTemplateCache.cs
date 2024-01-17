@@ -103,31 +103,31 @@ namespace Automatica.Core.Runtime.Core
             Initialize();
         }
 
-        public NodeTemplate GetByKey(string key)
+        public NodeTemplate? GetByKey(string key)
         {
             if (_templatesKeyDictionary.Count == 0)
             {
                 InitCache();
             }
 
-            if (_templatesKeyDictionary.ContainsKey(key))
+            if (_templatesKeyDictionary.TryGetValue(key, out var byKey))
             {
-                return _templatesKeyDictionary[key];
+                return byKey;
             }
 
             return null;
         }
 
-        public NodeTemplate GetByKey(Guid key)
+        public NodeTemplate? GetByKey(Guid key)
         {
             if (_templatesKeyDictionary.Count == 0)
             {
                 InitCache();
             }
 
-            if(_templateIdDictionary.ContainsKey(key))
+            if(_templateIdDictionary.TryGetValue(key, out var byKey))
             {
-                return _templateIdDictionary[key];
+                return byKey;
             }
 
             return null;

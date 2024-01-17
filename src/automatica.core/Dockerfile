@@ -1,21 +1,17 @@
 FROM node:18-alpine as node
 WORKDIR /src
 
-ARG FONTAWESOME_TOKEN
-
-
 # Copy everything else and build
 COPY ./Automatica.WebNew /src
 
-RUN ls -lah /src
-RUN npm config set "@fortawesome:registry" https://npm.fontawesome.com/
-RUN npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_TOKEN
+RUN ls -lah
 
+RUN cat .npmrc
 RUN npm install 
 RUN npm run build-docker
 
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 RUN apt-get update 
@@ -24,6 +20,7 @@ RUN apt-get install zip net-tools -y
 ARG VERSION
 ARG CLOUD_API_KEY
 ARG CLOUD_URL
+ARG AUTOMATICA_CLOUD_ENVIRONMENT
 
 #install automatica-cli
 RUN dotnet tool install --global automatica-cli
@@ -45,18 +42,18 @@ COPY ./Automatica.Core/appsettings.json .
 
 RUN mkdir -p /app/plugins
 RUN echo $VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL
+RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL -Cl $AUTOMATICA_CLOUD_ENVIRONMENT
 
 RUN rm -rf /src
 
-RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.51.2/frp_0.51.2_linux_amd64.tar.gz
+RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.51.3/frp_0.51.3_linux_amd64.tar.gz
 RUN tar xvzf frp.tgz
 RUN mkdir -p frp
 RUN mv frp_*/* frp/
 RUN ./frp/frpc --version
 
 
-FROM automaticacore/automatica-plugin-runtime:amd64-7 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-8 AS runtime
 WORKDIR /app/
 
 ARG VERSION
@@ -72,6 +69,7 @@ RUN mkdir -p /app/automatica/frp
 COPY ./Automatica.Core/frp/* /app/automatica/frp/
 
 VOLUME /app/plugins
+COPY --from=build /app/plugins /app/plugins
 
 EXPOSE 1883/tcp
 EXPOSE 5000-6000

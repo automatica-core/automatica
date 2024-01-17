@@ -57,8 +57,6 @@ namespace Automatica.Core.Runtime
 
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
-            services.AddTransient<IServerCloudApi, CloudApi>();
-            services.AddTransient<ICloudApi, CloudApi>();
             services.AddSingleton<ILicenseContext, LicenseContext>();
             services.AddSingleton<ILicenseContract>(provider => provider.GetRequiredService<ILicenseContext>());
             services.AddSingleton<ILearnMode, LearnMode>();

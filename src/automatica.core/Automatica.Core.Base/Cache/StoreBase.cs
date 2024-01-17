@@ -70,22 +70,28 @@ namespace Automatica.Core.Base.Cache
 
         public ICollection<T2> Get(params T1[] keys)
         {
-            var ret = new List<T2>();
-
-            foreach (var key in keys)
+            lock (_lock)
             {
-                if (Contains(key))
-                {
-                    ret.Add(_store[key]);
-                }
-            }
+                var ret = new List<T2>();
 
-            return ret;
+                foreach (var key in keys)
+                {
+                    if (Contains(key))
+                    {
+                        ret.Add(_store[key]);
+                    }
+                }
+
+                return ret;
+            }
         }
 
         public virtual ICollection<T2> All()
         {
-            return _store.Values;
+            lock (_lock)
+            {
+                return _store.Values;
+            }
         }
 
         public void ClearAndLoad()
@@ -96,12 +102,18 @@ namespace Automatica.Core.Base.Cache
 
         public IDictionary<T1, T2> Dictionary()
         {
-            return _store;
+            lock (_lock)
+            {
+                return _store;
+            }
         }
 
         public virtual void Clear()
         {
-            _store.Clear();
+            lock (_lock)
+            {
+                _store?.Clear();
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Version>0.14.0.1</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>EB9A2D3E-A62B-4A5A-845C-78A4092B7D4C</ProjectGuid>
@@ -19,8 +19,8 @@
     <EmbeddedResource Include="Resources\WakeOnLan-en.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Driver" Version="7.5.0.1355" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="7.5.0.1355" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
   </ItemGroup>
 </Project>

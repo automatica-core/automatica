@@ -17,5 +17,7 @@ namespace Automatica.Core.Internals.Core
 
         Task StopDriver(IDriver driver);
         Task InitializeAndStartDriver(NodeInstance nodeInstance, NodeTemplate nodeTemplate);
+
+        Task StartStopDriver(NodeInstance nodeInstance);
     }
 }

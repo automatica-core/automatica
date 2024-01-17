@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using Automatica.Core.Base.TelegramMonitor;
 using Automatica.Core.Driver.Utility;
-using Microsoft.Extensions.Logging.Abstractions;
 using P3.Driver.MBus.Config;
 using P3.Driver.MBus.Frames;
-using P3.Driver.MBus.Udp;
+using P3.Driver.MBus.Serial;
 
 namespace P3.Driver.MBus.ConsoleTest
 {
@@ -14,15 +12,17 @@ namespace P3.Driver.MBus.ConsoleTest
     {
         static async Task Main(string[] args)
         {
-            var mbusUdp = new MBusUdp(new MBusUdpConfig
+            var mbus = new MBusSerial(new MBusSerialConfig
             {
-                IpAddress = IPAddress.Parse("192.168.8.32"),
-                Port = 10030
+               Port = "COM10",
+               Baudrate = 300,
+               ResetBeforeRead = true
             }, new EmptyTelegramMonitorInstance(), new ConsoleLogger());
+
 
             while (true)
             {
-                var frame = await mbusUdp.ReadDevice(20, false, 15000);
+                var frame = await mbus.ReadDevice(93, true, 15000);
 
                 if (frame is VariableDataFrame vdf)
                     foreach (var data in vdf.DataBlocks)

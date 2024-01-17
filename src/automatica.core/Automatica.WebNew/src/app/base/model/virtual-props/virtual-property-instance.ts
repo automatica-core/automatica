@@ -1,4 +1,4 @@
-import { PropertyInstance } from "../property-instance"
+import { PropertyInstance, UpdateScope } from "../property-instance"
 import { PropertyTemplate, PropertyTemplateType } from "../property-template"
 import { PropertyType } from "../property-type"
 import { v4 as uuidv4 } from 'uuid';
@@ -21,6 +21,10 @@ export class VirtualPropertyInstance extends PropertyInstance {
         this.PropertyTemplate.IsVisible = true;
     }
 
+
+    public get updateScope(): UpdateScope {
+        return UpdateScope.GenericProperty;
+    }
 
     protected _updateOnChanges: boolean = true;
     public get updateOnChanges(): boolean {

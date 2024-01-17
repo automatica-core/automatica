@@ -8,6 +8,7 @@ import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { DesignTimeDataService } from "src/app/services/design-time-data.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
+import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 
 function versionCompare(v1: Version, v2: Version) {
@@ -251,6 +252,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
     private translationService: L10nTranslationService,
     private designTimeDataService: DesignTimeDataService,
     private translationConfigService: TranslationConfigService,
+    private hubConnectionService: HubConnectionService,
     appService: AppService) {
     super(notify, translationService, appService);
 
@@ -283,6 +285,8 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   async ngOnInit() {
+    this.appService.isLoading = true;
+    this.hubConnectionService.init();
     this.translationService.onChange().subscribe({
       next: () => {
         this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
@@ -299,7 +303,6 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
 
     this.baseOnInit();
 
-    this.appService.isLoading = true;
     try {
       await this.load();
 

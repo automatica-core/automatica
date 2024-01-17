@@ -35,6 +35,14 @@
         "NAME": "Radio & Play",
         "DESCRIPTION": ""
       },
+      "SET_MEDIA_URL": {
+        "NAME": "Media URL",
+        "DESCRIPTION": ""
+      },
+      "SET_MEDIA_URL_PLAY": {
+        "NAME": "Media URL & play",
+        "DESCRIPTION": ""
+      },
       "STATUS": {
         "NAME": "Status",
         "DESCRIPTION": "",

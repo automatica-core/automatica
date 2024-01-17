@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using P3.Driver.EnOcean.Data;
+﻿using P3.Driver.EnOcean.Data;
 using P3.Driver.EnOcean.Data.Packets;
 using Xunit;
 

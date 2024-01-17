@@ -4,7 +4,7 @@ namespace Automatica.Core.Logging
 {
     public class SystemLogger
     {
-        private static ILogger _instance;
+        private static ILogger? _instance;
         public static ILogger Instance
         {
             get

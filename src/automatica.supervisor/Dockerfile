@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG RUNTIME_IMAGE_TAG
+FROM automaticacore/automatica-plugin-build:latest-amd64 AS build
 WORKDIR /app
 
 ARG VERSION
@@ -16,7 +17,7 @@ RUN dotnet publish -c Release -o /app/supervisor /src/Automatica.Core.Supervisor
 RUN rm -rf /src
 RUN rm -rf /app/supervisor/appsettings.json
 
-FROM automaticacore/automatica-plugin-standalone:amd64-latest AS runtime
+FROM automaticacore/automatica-plugin-standalone:$RUNTIME_IMAGE_TAG AS runtime
 WORKDIR /app/supervisor
 
 ARG DEFAULT_IMAGE

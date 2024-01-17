@@ -7,43 +7,95 @@
 
         <as-split direction="horizontal" style="margin-top: 20px; ">
             <as-split-area [size]="30">
-                <dx-tree-list *ngIf="logFileTree" id="logFileTree" [dataSource]="logFileTree" itemsExpr="children"
-                    dataStructure="tree" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
-                    [expandedRowKeys]="[1, 2]" (onSelectionChanged)="onSelectionChanged($event)">
-                    <dxi-column dataField="name" caption="Name"></dxi-column>
+                <dx-tab-panel class="h-100" itemTitleTemplate="title">
+                    <dxi-item title="COMMON.LIVE_LOGS" icon="wave-pulse">
+                        <div *dxTemplate>
+                            <dx-list #logicPagesList [dataSource]="logFacilitiesArray" [repaintChangesOnly]="true"
+                                [selectedItems]="[selectedFacility]" height="90%" selectionMode="single"
+                                (onSelectionChanged)="onTabSelectionChanged($event)" showScrollbar="always"
+                                [searchEnabled]="true" pageLoadMode="scrollBottom" searchExpr="name"
+                                searchMode="contains">
+                                <div *dxTemplate="let page of 'item'">
+                                    <span>{{page.name}}</span>
+                                </div>
+                            </dx-list>
+                        </div>
+                    </dxi-item>
+                    <dxi-item title="COMMON.FILE_LOGS" icon="file">
+                        <div *dxTemplate>
+                            <div class="grid-container">
+                                <dx-scroll-view [showScrollbar]="always">
+                                    <dx-tree-list *ngIf="logFileTree" id="logFileTree" [dataSource]="logFileTree"
+                                        itemsExpr="children" dataStructure="tree" [showRowLines]="true"
+                                        [showBorders]="true" [columnAutoWidth]="true" [expandedRowKeys]="[1, 2]"
+                                        (onSelectionChanged)="onSelectionChanged($event)" height="100%">
+                                        <dxi-column dataField="name" caption="Name"></dxi-column>
 
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxo-search-panel [visible]="true"></dxo-search-panel>
-                </dx-tree-list>
+                                        <dxo-selection mode="single"></dxo-selection>
+                                        <dxo-search-panel [visible]="true"></dxo-search-panel>
+                                    </dx-tree-list>
+                                </dx-scroll-view>
+                            </div>
+                        </div>
+                    </dxi-item>
+                    <dxi-item title="COMMON.LOGGER_LEVEL" icon="file">
+                        <div *dxTemplate>
+                            <div class="grid-container">
+
+                                <dx-data-grid id="gridContainer" [height]="'100%'" [dataSource]="loggerDataSource"
+                                    keyExpr="facility" [showBorders]="true" [allowColumnResizing]="true">
+
+                                    <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false"
+                                        [allowDeleting]="false" e>
+                                    </dxo-editing>
+                                    <dxo-filter-row visible="true"></dxo-filter-row>
+
+                                    <dxi-column dataField="facility" [allowEditing]="false" sortOrder="asc"
+                                        caption="Name"></dxi-column>
+                                    <dxi-column dataField="logLevel" [calculateCellValue]="logLevelEnumName"
+                                        editCellTemplate="logLevelEditor" [width]="100"></dxi-column>
+
+                                    <div *dxTemplate="let cellInfo of 'logLevelEditor'">
+                                        <dx-select-box [(value)]="cellInfo.value" [dataSource]="logLevelsDataSource"
+                                            displayExpr="name" valueExpr="key"
+                                            (onValueChanged)="cellInfo.setValue($event.value)"
+                                            (onSelectionChanged)="cellInfo.component.updateDimensions()">
+                                        </dx-select-box>
+                                    </div>
+                                </dx-data-grid>
+
+                            </div>
+                        </div>
+                    </dxi-item>
+                    <div *dxTemplate=" let item of 'title'">
+                        <span title=" {{item.title | translateAsync}}" class="nav-padding">
+                            <fa-icon title="{{item.title | translateAsync}}" [fixedWidth]="true"
+                                [icon]="['fas', item.icon]">
+                            </fa-icon>
+                            {{ item.title | translate }}</span>
+
+                    </div>
+
+                </dx-tab-panel>
             </as-split-area>
             <as-split-area [size]="70">
+                <div class="grid-container">
+                    <dx-data-grid *ngIf="selectedFacility && selectedFacility.logs && selectedFacility.logs.length > 0"
+                        [dataSource]="selectedFacility.logs" [allowColumnReordering]="true" [allowColumnResizing]="true"
+                        [columnAutoWidth]="true" height="100%">
+                        <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc"
+                            dataField="timestamp" caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
+                        <dxi-column sortOrder="desc" dataField="log"
+                            caption="{{ 'COMMON.LOG' | translateAsync }}"></dxi-column>
 
-                <dx-tab-panel [dataSource]="logFacilitiesArray" [(selectedItem)]="selectedFacility" [loop]="false"
-                    [animationEnabled]="false" [swipeEnabled]="false" [showNavButtons]="true" style="height: 100%">
-                    <div *dxTemplate="let facility of 'title'">
-                        <span>{{facility.name}}</span>
-                    </div>
-                    <div *dxTemplate="let facility of 'item'">
-                        <div class="grid-container">
-                            <dx-data-grid *ngIf="facility.logs && facility.logs.length > 0" [dataSource]="facility.logs"
-                                [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
-                                height="100%">
-                                <dxi-column dataType="datetime" format="dd.MM.yyyy HH:mm:ss" sortOrder="desc"
-                                    dataField="timestamp"
-                                    caption="{{ 'COMMON.TIMESTAMP' | translateAsync }}"></dxi-column>
-                                <dxi-column sortOrder="desc" dataField="log"
-                                    caption="{{ 'COMMON.LOG' | translateAsync }}"></dxi-column>
-
-                                <dxo-filter-row [visible]="true"></dxo-filter-row>
-                                <dxo-header-filter [visible]="true"></dxo-header-filter>
-                                <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
-                                <dxo-selection mode="single"></dxo-selection>
-                                <dxo-export [enabled]="true" [fileName]="facility.name"
-                                    [allowExportSelectedData]="true"></dxo-export>
-                            </dx-data-grid>
-                        </div>
-                    </div>
-                </dx-tab-panel>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-header-filter [visible]="true"></dxo-header-filter>
+                        <dxo-search-panel [visible]="true" [width]="240"></dxo-search-panel>
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-export [enabled]="true" [fileName]="selectedFacility.name"
+                            [allowExportSelectedData]="true"></dxo-export>
+                    </dx-data-grid>
+                </div>
             </as-split-area>
         </as-split>
     </div>

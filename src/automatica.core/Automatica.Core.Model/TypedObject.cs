@@ -1,6 +1,6 @@
 ﻿namespace Automatica.Core.Model
 {
-    public class TypedObject
+    public class TypedObject : ITypedObject
     {
         public virtual string TypeInfo => GetType().Name;
     }

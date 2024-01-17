@@ -18,7 +18,9 @@ namespace Automatica.Core.Tests.Dispatcher
             var driverMock = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName", DispatcherMock.Instance);
             var driverMock2 = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "MockName2", DispatcherMock.Instance);
 
-            await driverMock.WriteValue(driverMock2, true);
+            await driverMock.WriteValue(driverMock2, new DispatchValue(Guid.NewGuid(), DispatchableType.NodeInstance, true, DateTime.Now, DispatchValueSource.User));
+
+            await Task.Delay(500);
 
             Assert.True(driverMock.WriteReceived);
         }

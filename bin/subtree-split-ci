@@ -76,6 +76,7 @@ remote automatica.driver.sonos git@github.com:automatica-core/automatica.driver.
 remote automatica.driver.vkingbms git@github.com:automatica-core/automatica.driver.vkingbms.git
 remote automatica.driver.pixoo64 git@github.com:automatica-core/automatica.driver.pixoo64.git
 remote automatica.driver.synology git@github.com:automatica-core/automatica.driver.synology.git
+remote automatica.driver.shelly git@github.com:automatica-core/automatica.driver.shelly.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -89,6 +90,7 @@ remote automatica.logic.string.baseoperations git@github.com:automatica-core/aut
 remote automatica.logic.operations git@github.com:automatica-core/automatica.logic.operations.git
 remote automatica.sonos.control git@github.com:automatica-core/automatica.sonos.control.git
 remote automatica.logic.lightning git@github.com:automatica-core/automatica.logic.lightning.git
+remote automatica.logic.texttospeech git@github.com:automatica-core/automatica.logic.texttospeech.git
 
 # core repos
 split src/automatica.core automatica.core
@@ -120,6 +122,7 @@ split src/automatica.drivers/automatica.driver.sonos automatica.driver.sonos
 split src/automatica.drivers/automatica.driver.vkingbms automatica.driver.vkingbms
 split src/automatica.drivers/automatica.driver.pixoo64 automatica.driver.pixoo64
 split src/automatica.drivers/automatica.driver.synology automatica.driver.synology
+split src/automatica.drivers/automatica.driver.shelly automatica.driver.shelly
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
@@ -134,6 +137,7 @@ split src/automatica.logics/automatica.logic.string.baseoperations automatica.lo
 split src/automatica.logics/automatica.logic.operations automatica.logic.operations
 split src/automatica.logics/automatica.sonos.control automatica.sonos.control
 split src/automatica.logics/automatica.logic.lightning automatica.logic.lightning
+split src/automatica.logics/automatica.logic.texttospeech automatica.logic.texttospeech
 
 
 

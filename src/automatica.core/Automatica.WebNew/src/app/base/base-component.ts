@@ -62,6 +62,7 @@ export class BaseComponent {
     }
 
     protected handleError(error) {
+        console.log(error);
         if (error instanceof WebApiException) {
             const errorText = this.translate.translate("ERROR." + error.ErrorText);
             switch (error.Severity) {
@@ -84,7 +85,6 @@ export class BaseComponent {
             this.notifyService.notifyError(error);
         }
 
-        console.log(error);
     }
 
     protected baseOnDestroy() {

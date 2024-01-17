@@ -12,7 +12,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 {
     public abstract class KnxFactory : Automatica.Core.Driver.DriverFactory
     {
-        public override Version DriverVersion => new Version(2, 0, 0, 2);
+        public override Version DriverVersion => new Version(2, 2, 0, 2);
 
         // interfaces
         internal static readonly Guid KnxIpGateway3LevelInterface = new Guid("249a13fe-f287-44ff-891a-963ba8c92160");
@@ -22,12 +22,12 @@ namespace P3.Driver.Knx.DriverFactory.Factories
         internal static readonly Guid KnxInterface = new Guid("eb9e7115-22fa-49e0-a1e8-2293e7f07e74");
 
         //node types
-        internal static readonly Guid KnxGatway = new Guid("5754edc3-6eb5-4d77-91c8-278e4e6c8f96");
+        internal static readonly Guid KnxGateway = new Guid("5754edc3-6eb5-4d77-91c8-278e4e6c8f96");
         internal static readonly Guid KnxBaos = new Guid("569d4454-7973-4780-8b46-b3f3ae4c5733");
-        internal static readonly Guid KnxSecureGatway = new Guid("ee218537-9b35-4e10-b929-418748dc1728");
+        internal static readonly Guid KnxSecureGateway = new Guid("ee218537-9b35-4e10-b929-418748dc1728");
 
         //state
-        internal static readonly Guid KnxGatwayStatus = new Guid("1d3c5d3f-92c7-4c9d-9fb6-c8ba7be51408");
+        internal static readonly Guid KnxGatewayStatus = new Guid("1d3c5d3f-92c7-4c9d-9fb6-c8ba7be51408");
 
         //3 level knx
         internal static readonly Guid KnxInterface3Level = new Guid("a1f1b389-e5ff-4dcf-9318-a3020e8c2820");
@@ -50,60 +50,60 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 
             factory.CreateInterfaceType(KnxBaos, "KNX.BAOS.NAME", "KNX.BAOS.DESCRIPTION", 0, 1, true);
 
-            factory.CreateNodeTemplate(KnxGatway, "KNX.GATEWAY.NAME", "KNX.GATEWAY.DESCRIPTION", "knx-gw",
+            factory.CreateNodeTemplate(KnxGateway, "KNX.GATEWAY.NAME", "KNX.GATEWAY.DESCRIPTION", "knx-gw",
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), KnxInterface, false, false, true, false, true,
                 NodeDataType.NoAttribute, int.MaxValue, false);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxGatway, 1), "COMMON.PROPERTY.IP.NAME", "COMMON.PROPERTY.IP.DESCRIPTION",
-                "knx-ip", PropertyTemplateType.Ip, KnxGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+            factory.CreatePropertyTemplate(GenerateNewGuid(KnxGateway, 1), "COMMON.PROPERTY.IP.NAME", "COMMON.PROPERTY.IP.DESCRIPTION",
+                "knx-ip", PropertyTemplateType.Ip, KnxGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
                 1);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxGatway, 2), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION",
-                "knx-port", PropertyTemplateType.Range, KnxGatway, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), "3671", 1,
+            factory.CreatePropertyTemplate(GenerateNewGuid(KnxGateway, 2), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION",
+                "knx-port", PropertyTemplateType.Range, KnxGateway, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), "3671", 1,
                 2);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxGatway, 3), "COMMON.PROPERTY.USE_NAT.NAME", "COMMON.PROPERTY.USE_NAT.DESCRIPTION",
-                "knx-use-nat", PropertyTemplateType.Bool, KnxGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
+            factory.CreatePropertyTemplate(GenerateNewGuid(KnxGateway, 3), "COMMON.PROPERTY.USE_NAT.NAME", "COMMON.PROPERTY.USE_NAT.DESCRIPTION",
+                "knx-use-nat", PropertyTemplateType.Bool, KnxGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", false, 1,
                 3);
 
 
             factory.CreatePropertyTemplate(UseTunnel, "COMMON.PROPERTY.ENABLE_TUNNEL.NAME", "COMMON.PROPERTY.ENABLE_TUNNEL.DESCRIPTION",
-                "knx-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                "knx-use-tunnel", PropertyTemplateType.Bool, KnxGateway, "SERVER.REMOTE", true, false, "", false, 1,
                 1); 
             
             factory.CreatePropertyTemplate(OnlyUseTunnel, "KNX.PROPERTIES.ONLY_USE_TUNNEL.NAME", "KNX.PROPERTIES.ONLY_USE_TUNNEL.DESCRIPTION",
-                "knx-only-use-tunnel", PropertyTemplateType.Bool, KnxGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                "knx-only-use-tunnel", PropertyTemplateType.Bool, KnxGateway, "SERVER.REMOTE", true, false, "", false, 1,
                 1);
 
-             factory.CreateNodeTemplate(KnxSecureGatway, "KNX.SECURE_GATEWAY.NAME", "KNX.SECURE_GATEWAY.DESCRIPTION", "knx-secure-gw",
+             factory.CreateNodeTemplate(KnxSecureGateway, "KNX.SECURE_GATEWAY.NAME", "KNX.SECURE_GATEWAY.DESCRIPTION", "knx-secure-gw",
                   GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), KnxInterface, false, false, true, false, true,
                   NodeDataType.NoAttribute, int.MaxValue, false);
-              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 1), "COMMON.PROPERTY.IP.NAME", "COMMON.PROPERTY.IP.DESCRIPTION",
-                  "knx-ip", PropertyTemplateType.Ip, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 1), "COMMON.PROPERTY.IP.NAME", "COMMON.PROPERTY.IP.DESCRIPTION",
+                  "knx-ip", PropertyTemplateType.Ip, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
                   1);
-              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 2), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION",
-                  "knx-port", PropertyTemplateType.Range, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), "3671", 1,
+              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 2), "COMMON.PROPERTY.IPPORT.NAME", "COMMON.PROPERTY.IPPORT.DESCRIPTION",
+                  "knx-port", PropertyTemplateType.Range, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), "3671", 1,
                   2);
-              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 3), "KNX.PROPERTIES.SECURE.AUTHPW.NAME", "KNX.PROPERTIES.SECURE.AUTHPW.DESCRIPTION",
-                  "knx-auth-pw", PropertyTemplateType.Password, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 3), "KNX.PROPERTIES.SECURE.AUTHPW.NAME", "KNX.PROPERTIES.SECURE.AUTHPW.DESCRIPTION",
+                  "knx-auth-pw", PropertyTemplateType.Password, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
                   3);
-              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 4), "KNX.PROPERTIES.SECURE.USERPW.NAME", "KNX.PROPERTIES.SECURE.USERPW.DESCRIPTION",
-                  "knx-user-pw", PropertyTemplateType.Password, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
+              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 4), "KNX.PROPERTIES.SECURE.USERPW.NAME", "KNX.PROPERTIES.SECURE.USERPW.DESCRIPTION",
+                  "knx-user-pw", PropertyTemplateType.Password, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", "", 1,
                   4);
-              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 5), "KNX.PROPERTIES.SECURE.IA_ADDRESS.NAME", "KNX.PROPERTIES.SECURE.IA_ADDRESS.DESCRIPTION",
-                  "knx-ia-address", PropertyTemplateType.Text, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", 0, 1,
+              factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 5), "KNX.PROPERTIES.SECURE.IA_ADDRESS.NAME", "KNX.PROPERTIES.SECURE.IA_ADDRESS.DESCRIPTION",
+                  "knx-ia-address", PropertyTemplateType.Text, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", 0, 1,
                   5);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 6), "KNX.PROPERTIES.SECURE.USER_ID.NAME", "KNX.PROPERTIES.SECURE.USER_ID.DESCRIPTION",
-                  "knx-user-id", PropertyTemplateType.Integer, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false, "", 0, 1,
+            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 6), "KNX.PROPERTIES.SECURE.USER_ID.NAME", "KNX.PROPERTIES.SECURE.USER_ID.DESCRIPTION",
+                  "knx-user-id", PropertyTemplateType.Integer, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false, "", 0, 1,
                   6);
-            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGatway, 7), "COMMON.PROPERTY.USE_NAT.NAME",
+            factory.CreatePropertyTemplate(GenerateNewGuid(KnxSecureGateway, 7), "COMMON.PROPERTY.USE_NAT.NAME",
                   "COMMON.PROPERTY.USE_NAT.DESCRIPTION",
-                  "knx-use-nat", PropertyTemplateType.Bool, KnxSecureGatway, "COMMON.CATEGORY.ADDRESS", true, false,
+                  "knx-use-nat", PropertyTemplateType.Bool, KnxSecureGateway, "COMMON.CATEGORY.ADDRESS", true, false,
                   "", false, 1,
                   7);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(UseTunnel, 1), "COMMON.PROPERTY.ENABLE_TUNNEL.NAME", "COMMON.PROPERTY.ENABLE_TUNNEL.DESCRIPTION",
-                "knx-use-tunnel", PropertyTemplateType.Bool, KnxSecureGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                "knx-use-tunnel", PropertyTemplateType.Bool, KnxSecureGateway, "SERVER.REMOTE", true, false, "", false, 1,
                 1);
             factory.CreatePropertyTemplate(GenerateNewGuid(OnlyUseTunnel, 1), "KNX.PROPERTIES.ONLY_USE_TUNNEL.NAME", "KNX.PROPERTIES.ONLY_USE_TUNNEL.DESCRIPTION",
-                "knx-only-use-tunnel", PropertyTemplateType.Bool, KnxSecureGatway, "SERVER.REMOTE", true, false, "", false, 1,
+                "knx-only-use-tunnel", PropertyTemplateType.Bool, KnxSecureGateway, "SERVER.REMOTE", true, false, "", false, 1,
                 1);
 
 
@@ -115,7 +115,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 "knx-baos", KnxBaos, KnxInterface3LevelMiddle, true, false, true, false, true,
                 NodeDataType.NoAttribute, 1, false);
 
-            factory.CreateNodeTemplate(KnxGatwayStatus, "KNX.GW_STATUS.NAME", "KNX.GW_STATUS.DESCRITPION",
+            factory.CreateNodeTemplate(KnxGatewayStatus, "KNX.GW_STATUS.NAME", "KNX.GW_STATUS.DESCRITPION",
                 "knx-gw-state", KnxInterface, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false, false);
 
@@ -226,10 +226,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Double, int.MaxValue, false);
 
-            AddAddressProperty(dpt5Guid, factory);
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt5Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt5Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt5Type)), (int)Dpt5Type.Dpt5_001, 0, 0);
+            InitDptType((int)DptType.Dpt5, dpt5Guid, factory);
+            InitDptSubType(typeof(Dpt5Type), (int)Dpt5Type.Dpt5_001, dpt5Guid, factory);
         }
 
         private void AddDpt6Nodes(INodeTemplateFactory factory, Guid parentNode)
@@ -238,11 +236,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt6Guid, "KNX.DPT6.NAME", "KNX.DPT6.DESCRIPTION", "knx-dpt6",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Integer, int.MaxValue, false);
-            AddAddressProperty(dpt6Guid, factory);
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt6Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt6Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt6Type)), (int)Dpt6Type.Dpt6_001, 0, 0);
-
+            InitDptType((int)DptType.Dpt6, dpt6Guid, factory);
+           
             
             var dpt620InterfaceGuid = new Guid("cdce207b-5371-413b-bcb5-3512bb51205d");
             factory.CreateInterfaceType(dpt620InterfaceGuid, "KNX.DPT6.020.NAME", "KNX.DPT6.020.DESCRIPTION", 5,
@@ -291,11 +286,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt7Guid, "KNX.DPT7.NAME", "KNX.DPT7.DESCRIPTION", "knx-dpt7",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Integer, int.MaxValue, false);
-            AddAddressProperty(dpt7Guid, factory);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt7Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt7Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt7Type)), (int)Dpt7Type.Dpt7_001, 0, 0);
+            InitDptType((int)DptType.Dpt7, dpt7Guid, factory);
         }
 
         private void AddDpt8Nodes(INodeTemplateFactory factory, Guid parentNode)
@@ -304,11 +296,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt8Guid, "KNX.DPT8.NAME", "KNX.DPT8.DESCRIPTION", "knx-dpt8",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Integer, int.MaxValue, false);
-            AddAddressProperty(dpt8Guid, factory);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt8Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt8Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt8Type)), (int)Dpt8Type.Dpt8_002, 0, 0);
+
+            InitDptType((int)DptType.Dpt8, dpt8Guid, factory);
         }
 
         private void AddDpt9Nodes(INodeTemplateFactory factory, Guid parentNode)
@@ -317,13 +307,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt9Guid, "KNX.DPT9.NAME", "KNX.DPT9.DESCRIPTION", "knx-dpt9",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
                 NodeDataType.Double, int.MaxValue, false);
-            AddAddressProperty(dpt9Guid, factory);
 
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(dpt9Guid, 2), "KNX.PROPERTIES.DPT.NAME",
-                "KNX.PROPERTIES.DPT.DESCRIPTION", "knx-dpt", PropertyTemplateType.Enum, dpt9Guid,
-                "KNX.GROUP.DPT", true, false, PropertyHelper.CreateEnumMetaString(typeof(Dpt9Type)), (int)Dpt9Type.Dpt9_001, 0, 0);
-
+            InitDptType((int)DptType.Dpt9, dpt9Guid, factory);
         }
 
 
@@ -378,6 +364,13 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.ChangeNodeTemplateMetaName(node, "{PROPERTY:knx-address:3}{CONST:-}{NODE:Name}");
         }
 
+        private void InitDptSubType(Type subType, int defaultType, Guid node, INodeTemplateFactory factory)
+        {
+            factory.CreatePropertyTemplate(GenerateNewGuid(node, 10), "KNX.PROPERTIES.DPT_SUB.NAME", "", "knx-dpt-sub",
+                PropertyTemplateType.Enum, node, "COMMON.CATEGORY.ADDRESS", true, false,
+                PropertyHelper.CreateEnumMetaString(subType), defaultType, 0, 0);
+        }
+
         private void InitDptType(int type, Guid node, INodeTemplateFactory factory)
         {
             AddAddressProperty(node, factory);
@@ -387,7 +380,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories
                 "KNX.GROUP.DPT", false, true, "", type, 0, 0);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(node, 5), "KNX.PROPERTIES.IS_READABLE_FROM_BUS.NAME", "KNX.PROPERTIES.IS_READABLE_FROM_BUS.DESCRIPTION","readable_from_bus", PropertyTemplateType.Bool,
-                node, "COMMON.CATEGORY.MISC", true, false, "", 0, 0, 0);
+                node, "COMMON.CATEGORY.MISC", true, false, "", 0, 0, 10);
+
         }
         private void AddAddressProperty(Guid nodeTemplate, INodeTemplateFactory factory, int maxAddress)
         {

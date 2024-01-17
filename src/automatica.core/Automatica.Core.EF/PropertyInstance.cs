@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Automatica.Core.Model;
+using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
 {
@@ -86,6 +87,8 @@ namespace Automatica.Core.EF.Models
         Time = 25,
         [PropertyTemplateType("DATETIME")]
         DateTime = 26,
+        [PropertyTemplateType("CALENDAR")]
+        Calendar = 27,
 
         [PropertyTemplateType("AREA_ICON", "shoe-prints,alarm-clock,volume-up,lightbulb,th-large,plug,square,temperature-hot,temperature-frigid,compact-disc,solar-panel,bolt,memory,thermometer,sun,home,project-diagram,building,box,bed,tv,bath,fork-knife,apple-core,heat,toilet-paper-blank,toilet-portable,bed-front,bed-bunk,dryer-heat,fireplace,air-conditioner,wind,industry,outlet,charging-station,poop,fan")]
         AreaIcon = 100,
@@ -110,8 +113,10 @@ namespace Automatica.Core.EF.Models
 
         [PropertyTemplateType("CustomAction")]
         CustomAction = 500,
-        
 
+
+        [PropertyTemplateType("Controls")]
+        Controls = 600,
 
 
 
@@ -183,6 +188,20 @@ namespace Automatica.Core.EF.Models
                     case PropertyTemplateType.ImportData:
                     case PropertyTemplateType.LearnMode:
                     case PropertyTemplateType.CustomAction:
+                        return null;
+                    case PropertyTemplateType.Controls:
+                        if (!String.IsNullOrEmpty(ValueString))
+                        {
+                            try
+                            {
+                                return JsonConvert.DeserializeObject<ControlConfiguration>(ValueString);
+                            }
+                            catch
+                            {
+                                return null;
+                            }
+                        }
+
                         return null;
                     case PropertyTemplateType.Invalid:
                         return "INVALID";
@@ -322,6 +341,17 @@ namespace Automatica.Core.EF.Models
                             {
                                 ValueLong = Convert.ToInt64(ValueDouble);
                             }
+                        }
+
+                        break;
+                    case PropertyTemplateType.Controls:
+                        if (value is string strValueJson)
+                        {
+                            ValueString = strValueJson;
+                        }
+                        else
+                        {
+                            ValueString = JsonConvert.SerializeObject(value);
                         }
 
                         break;

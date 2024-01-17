@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace P3.Driver.EepParser.Generator
+﻿namespace P3.Driver.EepParser.Generator
 {
     public static class FactoryCodeGeneratorTemplates
     {

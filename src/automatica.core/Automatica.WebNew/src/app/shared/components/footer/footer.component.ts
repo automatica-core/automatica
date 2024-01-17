@@ -1,6 +1,5 @@
 import { Component, NgModule, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ConfigService } from "src/app/services/config.service";
-import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { DeviceDetectorService } from "ngx-device-detector";
@@ -18,12 +17,20 @@ export class FooterComponent implements OnInit {
 
     constructor(private config: ConfigService,
         private deviceService: DeviceDetectorService,
-        private changeRef: ChangeDetectorRef) {
+        private changeRef: ChangeDetectorRef,
+        private router: Router) {
         this.currentYear = new Date().getFullYear();
     }
 
     async ngOnInit() {
-        this.version = await this.config.getVersion();
+        try {
+            this.version = await this.config.getVersion();
+        }
+        catch (error) {
+            if(error.status == 401 || error.status == 404) {
+                await this.router.navigate(["/login"]);
+            }
+        }
 
         this.changeRef.detectChanges();
     }

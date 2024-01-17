@@ -49,7 +49,7 @@ namespace P3.Driver.HomeKit.Http
 #pragma warning disable 4014
             Task.Run(async () =>
             {
-                
+
                 try
                 {
                     _listener = TcpListener.Create(_port);
@@ -59,21 +59,26 @@ namespace P3.Driver.HomeKit.Http
                     while (true)
                     {
                         _logger.LogDebug("Waiting for new tcp connection");
-                        var tcpClient = await _listener.AcceptTcpClientAsync();
+                        var tcpClient = await _listener.AcceptTcpClientAsync(_cts.Token);
 
-                        _logger.LogDebug($"New tcp connection from {((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address}");
+                        _logger.LogDebug(
+                            $"New tcp connection from {((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address}");
 
                         ThreadPool.QueueUserWorkItem(async state =>
                         {
                             var connection = new HttpServerConnection(_middleware, _logger, (TcpClient)state, this);
                             _connections.Add(connection);
-                            await connection.HandleClient().ConfigureAwait(false);
+                            await connection.HandleClient(_cts.Token).ConfigureAwait(false);
                         }, tcpClient);
                     }
                 }
                 catch (TaskCanceledException)
                 {
-                    _listener.Stop();
+                    //ignore
+                }
+                catch (OperationCanceledException)
+                {
+                    //ignore
                 }
                 catch (Exception e)
                 {
@@ -83,6 +88,7 @@ namespace P3.Driver.HomeKit.Http
             }, _cts.Token).ConfigureAwait(false);
 #pragma warning restore 4014
 
+           
             return Task.FromResult(true);
         }
 

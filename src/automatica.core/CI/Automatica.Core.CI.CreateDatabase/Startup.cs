@@ -37,6 +37,7 @@ namespace Automatica.Core.CI.CreateDatabase
             services.AddSingleton<IMqttServer, EmptyMqttServer>();
 
             services.AddAutomaticaCoreService(Configuration, false);
+            services.AddAutomaticaRemoteConnectWithFrp(Configuration);
 
             services.AddSingleton<ILogger>(NullLogger.Instance);
 

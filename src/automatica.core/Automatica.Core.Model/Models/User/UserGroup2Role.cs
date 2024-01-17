@@ -1,5 +1,4 @@
 ﻿using System;
-using MessagePack;
 
 namespace Automatica.Core.Model.Models.User
 {
@@ -8,10 +7,8 @@ namespace Automatica.Core.Model.Models.User
         public Guid This2UserGroup { get; set; }
         public Guid This2Role { get; set; }
 
-        [IgnoreMember]
         public UserGroup This2UserGroupNavigation { get; set; }
 
-        [IgnoreMember]
         public Role This2RoleNavigation { get; set; }
     }
 }

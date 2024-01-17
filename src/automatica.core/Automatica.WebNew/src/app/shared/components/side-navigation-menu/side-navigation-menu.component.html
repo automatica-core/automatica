@@ -2,23 +2,29 @@
 
 
 <div class="menu-container">
-    <dx-scroll-view height="100vh" style="background-color: #363640;">
-        <dx-tree-view expandEvent="click" [items]="items" (onInitialized)="onMenuInitialized($event)"
-            (onItemClick)="onItemClick($event)" (onContentReady)="updateSelection($event)"
-            (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single" keyExpr="path"
-            [style.padding-bottom]="'120px'" [style.background-color]="'#363640'">
-            <div *dxTemplate="let data of 'item'" style="background-color: #363640;">
+    <ng-container *ngIf="items && items.length > 0">
+        <dx-scroll-view height="100vh" style="background-color: #363640;">
 
-                <ng-container *ngIf="data.seperator">
-                    <span title="{{data.text | translateAsync}}">{{data.text | translateAsync}}</span>
-                </ng-container>
+            <dx-tree-view expandEvent="click" [items]="items" (onInitialized)="onMenuInitialized($event)"
+                (onItemClick)="onItemClick($event)" (onContentReady)="updateSelection($event)"
+                (onSelectionChanged)="updateSelection($event)" [selectByClick]="true" selectionMode="single"
+                keyExpr="path" [style.padding-bottom]="'120px'" [style.background-color]="'#363640'">
+                <div *dxTemplate="let data of 'item'" style="background-color: #363640;">
 
-                <ng-container *ngIf="!data.seperator">
-                    <fa-icon title="{{data.text | translateAsync}}" [fixedWidth]="true" [icon]="data.icon">
-                    </fa-icon>
-                    <span title="{{data.text | translateAsync}}" class="nav-padding">{{data.text | translateAsync}}</span>
-                </ng-container>
-            </div>
-        </dx-tree-view>
-    </dx-scroll-view>
+                    <ng-container *ngIf="data.seperator">
+                        <span title="{{data.text | translateAsync}}">{{data.text | translateAsync}}</span>
+                    </ng-container>
+
+                    <ng-container *ngIf="!data.seperator">
+                        <fa-icon title="{{data.text | translateAsync}}" [fixedWidth]="true" [icon]="data.icon">
+                        </fa-icon>
+                        <span title="{{data.text | translateAsync}}" class="nav-padding">{{data.text |
+                            translateAsync}}</span>
+                    </ng-container>
+                </div>
+            </dx-tree-view>
+        </dx-scroll-view>
+
+    </ng-container>
+    <dx-load-indicator *ngIf="!items || items.length == 0" height="30" width="30"></dx-load-indicator>
 </div>

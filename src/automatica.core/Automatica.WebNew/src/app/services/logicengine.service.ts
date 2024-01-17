@@ -27,6 +27,8 @@ export class LogicEngineService extends BaseService {
   public reInit: EventEmitter<RulePage> = new EventEmitter<RulePage>();
   public add = new EventEmitter<AddLogicData>();
 
+  public showInfo = new EventEmitter<RuleInstance>();
+
   constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designService: DesignTimeDataService) {
     super(http, pRouter, translationService);
   }

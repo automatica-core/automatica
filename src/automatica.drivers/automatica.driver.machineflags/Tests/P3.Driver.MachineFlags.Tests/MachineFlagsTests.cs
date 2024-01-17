@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+using Automatica.Core.Base.IO;
 using Automatica.Core.UnitTests.Base.Common;
 using Automatica.Core.UnitTests.Base.Drivers;
 using Xunit;
@@ -6,16 +9,16 @@ namespace P3.Driver.MachineFlags.Tests
 {
     public class MachineFlagsTests : DriverFactoryTestBase<MachineFlagsDriverFactory>
     {
+        private DispatchValue Create(Guid id, object value)
+        {
+            return new DispatchValue(id, DispatchableType.NodeInstance, value, DateTime.Now,
+                DispatchValueSource.Read);
+        }
+
         [Fact]
         public async void Test_MachineFlagsValue()
         {
-            var constantsRoot = CreateNodeInstance(MachineFlagsDriverFactory.BusId);
-            var valueId = CreateNodeInstance(MachineFlagsDriverFactory.ValueId);
-
-            
-            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
-
-            var driver = await CreateDriver(constantsRoot);
+            var driver = await CreateDriver<MachineFlagsDriver>(MachineFlagsDriverFactory.BusId, MachineFlagsDriverFactory.ValueId);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Attributes.MachineFlags>(driver.Children[0]);
@@ -24,7 +27,8 @@ namespace P3.Driver.MachineFlags.Tests
 
             
             Assert.NotNull(con);
-            await con.WriteValue(DispatchableMock.Instance, 100);
+            await con.WriteValue(DispatchableMock.Instance, Create(con.Id, 100));
+            await Task.Delay(100);
 
 
             var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
@@ -36,13 +40,7 @@ namespace P3.Driver.MachineFlags.Tests
         [Fact]
         public async void Test_DoubleFlagsValue()
         {
-            var constantsRoot = CreateNodeInstance(MachineFlagsDriverFactory.BusId);
-            var valueId = CreateNodeInstance(MachineFlagsDriverFactory.NumberId);
-
-
-            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
-
-            var driver = await CreateDriver(constantsRoot);
+            var driver = await CreateDriver<MachineFlagsDriver>(MachineFlagsDriverFactory.BusId, MachineFlagsDriverFactory.NumberId);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Attributes.DoubleBinaryFlag>(driver.Children[0]);
@@ -51,10 +49,11 @@ namespace P3.Driver.MachineFlags.Tests
 
 
             Assert.NotNull(con);
-            await con.WriteValue(DispatchableMock.Instance, 100);
+            await con.WriteValue(DispatchableMock.Instance, Create(con.Id, 100));
+            await Task.Delay(200);
 
 
-            var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, con.Id);
 
             Assert.Equal(100d, value.Value);
 
@@ -64,13 +63,7 @@ namespace P3.Driver.MachineFlags.Tests
         [Fact]
         public async void Test_StringFlagsValue()
         {
-            var constantsRoot = CreateNodeInstance(MachineFlagsDriverFactory.BusId);
-            var valueId = CreateNodeInstance(MachineFlagsDriverFactory.StringId);
-
-
-            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
-
-            var driver = await CreateDriver(constantsRoot);
+            var driver = await CreateDriver<MachineFlagsDriver>(MachineFlagsDriverFactory.BusId, MachineFlagsDriverFactory.StringId);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Attributes.StringBinaryFlag>(driver.Children[0]);
@@ -79,7 +72,8 @@ namespace P3.Driver.MachineFlags.Tests
 
 
             Assert.NotNull(con);
-            await con.WriteValue(DispatchableMock.Instance, 100);
+            await con.WriteValue(DispatchableMock.Instance, Create(con.Id, 100));
+            await Task.Delay(100);
 
 
             var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
@@ -91,13 +85,7 @@ namespace P3.Driver.MachineFlags.Tests
         [Fact]
         public async void Test_BinaryFlagsValue()
         {
-            var constantsRoot = CreateNodeInstance(MachineFlagsDriverFactory.BusId);
-            var valueId = CreateNodeInstance(MachineFlagsDriverFactory.BinaryId);
-
-
-            constantsRoot.InverseThis2ParentNodeInstanceNavigation.Add(valueId);
-
-            var driver = await CreateDriver(constantsRoot);
+            var driver = await CreateDriver<MachineFlagsDriver>(MachineFlagsDriverFactory.BusId, MachineFlagsDriverFactory.BinaryId);
 
             Assert.True(driver.Children.Count == 1);
             Assert.IsType<Attributes.BinaryFlag>(driver.Children[0]);
@@ -106,17 +94,18 @@ namespace P3.Driver.MachineFlags.Tests
 
 
             Assert.NotNull(con);
-            await con.WriteValue(DispatchableMock.Instance, 100);
+            await con.WriteValue(DispatchableMock.Instance, Create(con.Id, 100));
 
-
+            await Task.Delay(100);
             var value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
 
             Assert.Equal(true, value.Value);
 
 
 
-            await con.WriteValue(DispatchableMock.Instance, 0);
+            await con.WriteValue(DispatchableMock.Instance, Create(con.Id, 0));
 
+            await Task.Delay(100);
 
             value = Dispatcher.GetValue(Automatica.Core.Base.IO.DispatchableType.NodeInstance, con.Id);
 

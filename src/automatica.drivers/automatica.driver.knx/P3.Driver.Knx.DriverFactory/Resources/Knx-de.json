@@ -48,6 +48,10 @@
         "NAME": "DPT",
         "DESCRIPTION": ""
       },
+      "DPT_SUB": {
+        "NAME": "DPT Sub",
+        "DESCRIPTION": ""
+      },
       "ONLY_USE_TUNNEL": {
         "NAME": "Nur Tunneln",
         "DESCRIPTION": ""
@@ -83,7 +87,7 @@
           "NAME": "IA Address"
         },
         "USER_ID": {
-          "NAME":  "User ID"
+          "NAME": "User ID"
         }
       }
     },

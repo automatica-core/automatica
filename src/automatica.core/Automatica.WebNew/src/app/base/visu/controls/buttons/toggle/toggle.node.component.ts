@@ -33,7 +33,7 @@ export class ToggleNodeComponent extends BaseMobileComponent implements OnInit, 
 
     
     var cachedValue = this.dataHub.getCurrentValue(this.getPropertyValue("nodeInstance"));
-    this.value = cachedValue.value;
+    this.value = cachedValue?.value;
   }
 
   public get displayValue() {

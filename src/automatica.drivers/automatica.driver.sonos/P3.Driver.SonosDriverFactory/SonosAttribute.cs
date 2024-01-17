@@ -11,27 +11,26 @@ namespace P3.Driver.SonosDriverFactory
     {
         private readonly Func<Task<object>> _readAction;
         private readonly Func<object, Task<object>> _writeAction;
+        private readonly bool _alwaysDispatch;
 
         private object? _lastValue = null;
 
-        public SonosAttribute(IDriverContext ctx, Func<Task<object>> readAction, Func<object, Task<object>> writeAction) : base(ctx)
+        public SonosAttribute(IDriverContext ctx, Func<Task<object>> readAction, Func<object, Task<object>> writeAction, bool alwaysDispatch=false) : base(ctx)
         {
             _readAction = readAction;
             _writeAction = writeAction;
-
+            _alwaysDispatch = alwaysDispatch;
         }
 
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             try
             {
-                var write = await _writeAction.Invoke(value);
-                DriverContext.Logger.LogDebug($"Sonos write value {write}...");
-
-                if (write != null && write != _lastValue)
+                if (!value.Equals(_lastValue))
                 {
-                    _lastValue = write;
-                    await writeContext.DispatchValue(write, token);
+                    var write = await _writeAction.Invoke(value);
+                    DriverContext.Logger.LogDebug($"Sonos {Name} write value {write}...");
+                    //  await writeContext.DispatchValue(write, token);
                 }
             }
             catch (Exception e)
@@ -48,7 +47,12 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     var value = await _readAction.Invoke();
 
-                    if (value != null && value != _lastValue)
+                    if (_alwaysDispatch)
+                    {
+                        _lastValue = value;
+                        await readContext.DispatchValue(value, token);
+                    }
+                    if (value != null && !value.Equals(_lastValue))
                     {
                         _lastValue = value;
                         await readContext.DispatchValue(value, token);

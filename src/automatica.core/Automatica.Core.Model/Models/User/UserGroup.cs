@@ -13,6 +13,8 @@ namespace Automatica.Core.Model.Models.User
         }
 
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 

@@ -14,6 +14,14 @@ import { DxSpeedDialActionModule } from "devextreme-angular";
 import config from "devextreme/core/config";
 import { SettingsService } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
+import { TranslationConfigService } from "src/app/services/translation-config.service";
+import { App } from "@capacitor/app";
+import { DeviceService } from "src/app/services/device/device.service";
+
+export enum Language {
+    German = 0,
+    English = 1
+}
 
 config({
     floatingActionButtonConfig: {
@@ -28,6 +36,7 @@ config({
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {
+    isWeb: boolean;
 
     get title() {
         return this.projectName;
@@ -41,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     time: string = "00:00:00";
     ticker: NodeJS.Timeout;
+    version: string;
 
     isAdminAvailable = false;
 
@@ -61,6 +71,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     selectBoxOptions: any;
 
+    logoutButtonOptions: any;
+
+
     constructor(private router: Router,
         private activatedRoute: ActivatedRoute,
         public appService: AppService,
@@ -68,13 +81,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private hubService: HubConnectionService,
         private changeRef: ChangeDetectorRef,
         private settingsService: SettingsService,
-        private themeService: ThemeService) { }
+        private themeService: ThemeService,
+        private translate: TranslationConfigService,
+        private deviceService: DeviceService) {
+
+         this.isWeb = deviceService.isWeb;
+
+        this.logoutButtonOptions = {
+            text: translate.translation.translate("COMMON.LOGOUT"),
+            onClick: () => {
+                this.logout();
+            }
+        }
+    }
 
     async ngOnInit() {
+
+
+        await this.hubService.init();
 
         const projectName = await this.settingsService.getByKey("projectName");
         this.projectName = projectName.Value;
         document.title = this.projectName;
+
+        const languageProperty = await this.settingsService.getByKey("language");
+        const language = <Language>languageProperty.Value;
+        if (language == Language.German) {
+            this.translate.translation.setLocale({ language: "de" });
+        }
+        else {
+
+            this.translate.translation.setLocale({ language: "en" });
+        }
+        await this.translate.init();
 
         var user = this.loginService.getCurrentUser();
 
@@ -104,6 +143,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 this.themeService.applyTheme(args.value);
             }
         };
+        if (!this.isWeb) {
+            const appInfo = await App.getInfo();
+            this.version = appInfo.version + "." + appInfo.build;
+        }
     }
 
     ngOnDestroy() {

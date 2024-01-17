@@ -1,8 +1,11 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
+using Automatica.Core.Control;
+using Automatica.Core.Driver.Discovery;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
@@ -35,7 +38,12 @@ namespace Automatica.Core.Driver
         public ILicenseContract LicenseContract { get; }
         public ILoggerFactory LoggerFactory { get; }
         public ITunnelingProvider TunnelingProvider { get; }
-        
+        public IZeroconfDiscovery ZeroconfDiscovery { get; }
+
+        public IControlContext ControlContext { get; }
+
+        public IRetryContext RetryContext { get; }
+
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
             return new DriverContext(
@@ -51,12 +59,13 @@ namespace Automatica.Core.Driver
                 LicenseContract,
                 LoggerFactory,
                 _serviceProvider,
+                ControlContext,
                 IsTest);
         }
 
         public DriverContext(NodeInstance nodeInstance, IDriverFactory factory, IDispatcher dispatcher,
             INodeTemplateFactory nodeTemplateFactory, ITelegramMonitor telegramMonitor, ILicenseState licenseState,
-            ILogger logger, ILearnMode learnMode, IServerCloudApi api, ILicenseContract licenseContract, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, bool isTest)
+            ILogger logger, ILearnMode learnMode, IServerCloudApi api, ILicenseContract licenseContract, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IControlContext controlContext, bool isTest)
         {
             _serviceProvider = serviceProvider;
 
@@ -65,6 +74,7 @@ namespace Automatica.Core.Driver
             Dispatcher = dispatcher;
             NodeTemplateFactory = nodeTemplateFactory;
             IsTest = isTest;
+            ControlContext = controlContext;
             TelegramMonitor = telegramMonitor;
             LicenseState = licenseState;
             Logger = logger;
@@ -75,6 +85,10 @@ namespace Automatica.Core.Driver
 
             var provider = serviceProvider.GetRequiredService<Func<IDriverContext, ITunnelingProvider>>();
             TunnelingProvider = provider.Invoke(this);
+
+            ZeroconfDiscovery = serviceProvider.GetRequiredService<IZeroconfDiscovery>();
+
+            RetryContext = serviceProvider.GetRequiredService<IRetryContext>();
         }
     }
 }

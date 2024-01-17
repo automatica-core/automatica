@@ -5,6 +5,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Automatica.Core.Tests.Dispatcher.Utils;
+using Automatica.Core.UnitTests.Base.Logics;
 using Moq;
 using Xunit;
 

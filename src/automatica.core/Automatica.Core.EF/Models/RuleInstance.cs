@@ -4,7 +4,6 @@ using Automatica.Core.EF.Models.Areas;
 using Automatica.Core.EF.Models.Categories;
 using Automatica.Core.Model;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 using Newtonsoft.Json;
 
 
@@ -19,7 +18,10 @@ namespace Automatica.Core.EF.Models
 
 
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
         public string Name { get; set; }
+        public string VisuName { get; set; }
         public string Description { get; set; }
         public Guid This2RuleTemplate { get; set; }
         public Guid This2RulePage { get; set; }
@@ -40,7 +42,7 @@ namespace Automatica.Core.EF.Models
         public Guid? This2CategoryInstance { get; set; }
         public CategoryInstance This2CategoryInstanceNavigation { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public RulePage This2RulePageNavigation { get; set; }
 
         public RuleTemplate This2RuleTemplateNavigation { get; set; }
@@ -64,15 +66,8 @@ namespace Automatica.Core.EF.Models
 
             foreach (var ruleInterfaceTemplate in template.RuleInterfaceTemplate)
             {
-                var ruleInterface = new RuleInterfaceInstance
-                {
-                    ObjId = Guid.NewGuid(),
-                    This2RuleInterfaceTemplate = ruleInterfaceTemplate.ObjId,
-                    This2RuleInterfaceTemplateNavigation = ruleInterfaceTemplate,
-                    Value = ruleInterfaceTemplate.DefaultValue,
-                    This2RuleInstance = ruleInstance.ObjId
-                };
-
+                var ruleInterface =
+                    Models.RuleInterfaceInstance.CreateFromTemplate(ruleInstance, ruleInterfaceTemplate);
                 ruleInstance.RuleInterfaceInstance.Add(ruleInterface);
 
             }

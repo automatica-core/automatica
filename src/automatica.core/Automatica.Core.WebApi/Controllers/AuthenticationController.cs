@@ -8,7 +8,6 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
-using MessagePack;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +24,8 @@ namespace Automatica.Core.WebApi.Controllers
             
         }
 
-        [Key("username")]
         public string Username { get; set; }
 
-        [Key("password")]
         public string Password { get; set; }
     }
 

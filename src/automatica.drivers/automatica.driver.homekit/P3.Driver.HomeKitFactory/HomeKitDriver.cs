@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Control.Base;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Model;
 using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit;
 using P3.Driver.HomeKit.Hap;
@@ -19,13 +24,17 @@ namespace P3.Driver.HomeKitFactory
         private HomeKitServer _server;
         private PropertyInstance _ltskProperty;
         private PropertyInstance _ltpkProperty;
+        private PropertyInstance _pairCodeProperty;
 
         private PairingKeyNode _pairingNode;
 
         private readonly List<Accessory> _accessories = new List<Accessory>();
-        private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new Dictionary<Characteristic, List<BaseNode>>();
+        private readonly Dictionary<Characteristic, List<BaseNode>> _characteristicNodeMap = new();
+        private readonly Dictionary<Accessory, IControl> _characteristicControlMap = new();
 
         private readonly AccessoryInstanceIdGenerator _aidGenerator;
+        
+        private readonly List<IControl> _controls = new();
 
         public HomeKitDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -77,21 +86,41 @@ namespace P3.Driver.HomeKitFactory
 
         }
 
+        public override async Task<bool> Init(CancellationToken token = new CancellationToken())
+        {
+           
+            return await base.Init(token);
+        }
+
         public override async Task<bool> Start(CancellationToken token = default)
         {
             _ltpkProperty = GetProperty("ltpk-private");
             _ltskProperty = GetProperty("ltsk-private");
+            _pairCodeProperty = GetProperty("pair-code");
 
             var objId = DriverContext.NodeInstance.ObjId.ToString().Replace("-", "");
 
             var homekitId =
                 $"{objId[0]}{objId[1]}:{objId[2]}{objId[3]}:{objId[4]}{objId[5]}:{objId[6]}{objId[7]}:{objId[8]}{objId[9]}:{objId[10]}{objId[11]}";
 
-            string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
-          
+            var pairCode = "";
+
+            if (String.IsNullOrEmpty(_pairCodeProperty.ValueString))
+            {
+                string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_pairCodeProperty.ObjId, code); //save to database
+                pairCode = code;
+            }
+            else
+            {
+                pairCode = _pairCodeProperty.ValueString;
+            }
+
+
+
             var configProperty = GetPropertyValueInt("config-version");
 
-            if(configProperty <= 0)
+            if (configProperty <= 0)
             {
                 configProperty = 1;
             }
@@ -100,15 +129,18 @@ namespace P3.Driver.HomeKitFactory
 
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty);
 
-            DriverContext.Logger.LogDebug($"Start homekit server with LTSK {_ltskProperty.ValueSlave} and LTPK {_ltpkProperty.ValueSlave}");
-            _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"), DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
-                code, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
+            DriverContext.Logger.LogDebug(
+                $"Start homekit server with LTSK {_ltskProperty.Value} and LTPK {_ltpkProperty.Value}");
+            _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"),
+                DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
+                pairCode, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
 
-            _pairingNode.DispatchRead(code);
+            _pairingNode.Code = pairCode;
+            _pairingNode.DispatchRead(pairCode);
 
             foreach (var accessory in _accessories)
             {
-               accessory.Id = _server.AddAccessory(accessory);
+                accessory.Id = _server.AddAccessory(accessory);
             }
 
             _server.PairingCompleted += ServerOnPairingCompleted;
@@ -116,7 +148,130 @@ namespace P3.Driver.HomeKitFactory
 
             await _server.Start();
 
+            var controlsProperty = GetProperty("controls");
+            if (controlsProperty.Value is ControlConfiguration controlConfig)
+            {
+                foreach (var control in controlConfig.Controls)
+                {
+                    _controls.Add(await DriverContext.ControlContext.GetAsync(control, token));
+                }
+            }
+
+            foreach (var control in _controls)
+            {
+                if (control == null)
+                {
+                    continue;
+                }
+
+                var aid = GuidToUint64(control.Id);
+                if (control is IDimmer dimmer)
+                {
+                    var accessory = AccessoryFactory.CreateLightBulbAccessory(aid, control.Name, "AutomaticaCore",
+                        control.Id.ToString(), false, 0);
+
+                    accessory.Id = _server.AddAccessory(accessory);
+                    _characteristicControlMap.Add(accessory, control);
+                    var characteristic = accessory.Specific.Characteristics.First();
+                    var dimValueChar = accessory.Specific.Characteristics.Last();
+
+                    characteristic.Value = dimmer.DimmerState;
+                    dimValueChar.Value = dimmer.DimmerValue;
+                    
+                    dimmer.RegisterValueCallback(() =>
+                    {
+                        characteristic.Value = dimmer.DimmerState;
+                        dimValueChar.Value = dimmer.DimmerValue;
+
+                        WriteCharacteristic(dimValueChar);
+                        WriteCharacteristic(characteristic);
+                    });
+
+                }
+                else if (control is ISwitch iSwitch)
+                {
+                    var accessory = AccessoryFactory.CreateSwitchAccessory(aid, control.Name, "AutomaticaCore",
+                        control.Id.ToString(), false);
+
+                    accessory.Id = _server.AddAccessory(accessory);
+                    var characteristic = accessory.Specific.Characteristics.First();
+
+                    _characteristicControlMap.Add(accessory, control);
+                    characteristic.Value = iSwitch.State == SwitchState.On;
+
+                    iSwitch.RegisterValueCallback(() =>
+                    {
+                        characteristic.Value = iSwitch.State == SwitchState.On;
+                        WriteCharacteristic(characteristic);
+                    });
+                }
+                else if (control is IBlind iBlind)
+                {
+                    var accessory = AccessoryFactory.CreateWindowCovering(aid, control.Name, "AutomaticaCore",
+                        control.Id.ToString(), 0);
+                    
+                    accessory.Id = _server.AddAccessory(accessory);
+                    var characteristic = accessory.Specific.Characteristics.First();
+
+                    accessory.PositionType.Value = ToHapPositionState(iBlind);
+                    accessory.TargetPosition.Value = ToHapPositionState(iBlind);
+                    accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
+
+                    _characteristicControlMap.Add(accessory, control);
+                    iBlind.RegisterValueCallback(() =>
+                    {
+                        
+                        accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
+                        accessory.PositionType.Value = ToHapPositionState(iBlind);
+                        
+                        DriverContext.Logger.LogInformation($"{control.Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
+                        DriverContext.Logger.LogInformation($"{control.Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
+
+
+                        WriteCharacteristic(characteristic);
+                    });
+                }
+            }
+
+            foreach (var accessory in _server.AccessoryContainer.Accessories)
+            {
+                DriverContext.Logger.LogInformation($"Accessory: {accessory.Id} is {accessory.AccessoryInfo.Name.Value}");
+
+                foreach (var service in accessory.Services)
+                {
+                    DriverContext.Logger.LogInformation($"Service: {service.Id} has type {service.Type}");
+                }
+            }
+
             return await base.Start(token);
+        }
+
+        private int ToHapPosition(int input)
+        {
+            var currentBlind = Convert.ToInt32(input); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
+            var hapCurrentBlind = Math.Abs(currentBlind - 100);
+            return hapCurrentBlind;
+        }
+
+        private int ToHapPositionState(IBlind iBlind)
+        {
+            int value = 0;
+            if (iBlind.IsMoving)
+            {
+                value = iBlind.Direction == 0 ? 1 : 0;
+            }
+            else
+            {
+                value = 2; //stopped
+            }
+
+            return value;
+        }
+
+        public UInt64 GuidToUint64(Guid guid)
+        {
+            var val= BitConverter.ToUInt64(guid.ToByteArray(), 0);
+            return val/2;
         }
 
         public override Task<IList<NodeInstance>> CustomAction(string actionName, CancellationToken token = default)
@@ -124,18 +279,69 @@ namespace P3.Driver.HomeKitFactory
             if (actionName == HomeKitFactory.ClearPairingsKey)
             {
                 DriverContext.Logger.LogInformation($"Clear pairings...");
-                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, null);  //save to database
-                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, null); //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, String.Empty);  //save to database
+                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, String.Empty); //save to database
+
+                _ltskProperty.Value = String.Empty;
+                _ltpkProperty.Value = String.Empty;
                 DriverContext.Logger.LogInformation($"Clear pairings...done");
             }
             return base.CustomAction(actionName, token);
         }
 
-        private void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
+        private async void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
         {
+            DriverContext.Logger.LogDebug($"Value changed for {e.Characteristic.Id} to {e.Value}");
             if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
             {
                 value.ForEach(a => a.SetValue(e.Value));
+            }
+            else if (_characteristicControlMap.TryGetValue(e.Characteristic.Accessory, out var control))
+            {
+                DriverContext.Logger.LogDebug($"Target is a control {control.Name}");
+                if (control is IDimmer iDimmer)
+                {
+                    if (e.Value is bool)
+                    {
+                        await Switch(e.Value, iDimmer);
+                    }
+                    else if(e.Value is long or int)
+                    {
+                        DriverContext.Logger.LogDebug($"Dim value to {e.Value}");
+                        await iDimmer.DimAsync(Convert.ToInt32(e.Value));
+                    }
+                }
+                else if (control is ISwitch iSwitch)
+                {
+                    await Switch(e.Value, iSwitch);
+                }
+                else if (control is IBlind iBlind)
+                {
+                    var targetBlind = Convert.ToInt32(e.Value); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
+                    var newTarget = Math.Abs(targetBlind - 100);
+                    await iBlind.MoveAbsoluteAsync(newTarget);
+                }
+            }
+        }
+
+        private async Task Switch(object value, ISwitch control)
+        {
+            DriverContext.Logger.LogDebug($"Switch {control.Name} to {value}");
+            if (value is bool bValue)
+            {
+                await control.SwitchAsync(bValue);
+            }
+            else if (value is int intValue)
+            {
+                await control.SwitchAsync(intValue == 1);
+            }
+            else if (value is double dValue)
+            {
+                await control.SwitchAsync(dValue == 1);
+            }
+            else if (value is long lValue)
+            {
+                await control.SwitchAsync(lValue == 1);
             }
         }
 
@@ -195,13 +401,13 @@ namespace P3.Driver.HomeKitFactory
             }
 
             Accessory accessory = null;
-            var aid = Convert.ToInt32(ctx.NodeInstance.GetPropertyValueDouble(HomeKitFactory.AidPropertyKey));
+            var aid = Convert.ToUInt64(ctx.NodeInstance.GetPropertyValueDouble(HomeKitFactory.AidPropertyKey));
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "light-bulb-folder":
                     accessory = AccessoryFactory.CreateLightBulbAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
-                        ctx.NodeInstance.ObjId.ToString(), false);
+                        ctx.NodeInstance.ObjId.ToString(), false, 0);
                     break;
                 case "power-outlet-folder":
                     accessory = AccessoryFactory.CreateOutletAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",

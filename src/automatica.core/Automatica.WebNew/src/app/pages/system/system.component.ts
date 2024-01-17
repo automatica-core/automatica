@@ -92,10 +92,12 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   async installClick($event) {
+    this.notifyService.notifyInfo(this.translate.translate("SYSTEM.INSTALLING_UPDATE"));
     await this.systemService.installUpdate(this.update);
   }
 
   async downloadClick($event) {
+    this.notifyService.notifyInfo(this.translate.translate("SYSTEM.DOWNLOADING_UPDATE"));
     await this.updateHubService.downloadUpdate(this.update);
   }
 

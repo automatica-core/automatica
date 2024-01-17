@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
@@ -14,28 +13,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.Core.Plugins
 {
-    internal class PluginHandler : IPluginHandler
+    internal class PluginHandler(ILogger<PluginHandler> logger, IDriverLoader driverLoader, ILogicLoader logicLoader,
+            INodeTemplateCache nodeTemplateCache, IConfiguration config, IPluginInstaller pluginInstaller)
+        : IPluginHandler
     {
-        private readonly ILogger<PluginHandler> _logger;
-        private readonly AutomaticaContext _dbContext;
-        private readonly IDriverLoader _driverLoader;
-        private readonly ILogicLoader _logicLoader;
-        private readonly INodeTemplateCache _nodeTemplateCache;
-        private readonly IConfiguration _config;
-        private readonly IPluginInstaller _pluginInstaller;
-        private readonly object _lock = new object();
-
-        public PluginHandler(ILogger<PluginHandler> logger, AutomaticaContext dbContext, IDriverLoader driverLoader, ILogicLoader logicLoader, INodeTemplateCache nodeTemplateCache, IConfiguration config, IPluginInstaller pluginInstaller)
-        {
-            _logger = logger;
-            _dbContext = dbContext;
-            _driverLoader = driverLoader;
-            _logicLoader = logicLoader;
-            _nodeTemplateCache = nodeTemplateCache;
-            _config = config;
-            _pluginInstaller = pluginInstaller;
-        }
-
         public async Task CheckAndInstallPluginUpdates()
         {
             var updateDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
@@ -52,12 +33,12 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 var tmp = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
                 try
                 {
-                    var manifest = Common.Update.Plugin.GetPluginManifest(_logger, f, tmp);
-                    await _pluginInstaller.InstallPlugin(manifest, f);
+                    var manifest = Common.Update.Plugin.GetPluginManifest(logger, f, tmp);
+                    await pluginInstaller.InstallPlugin(manifest, f);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Could not install plugin");
+                    logger.LogError(e, "Could not install plugin");
                 }
                 finally
                 {
@@ -71,30 +52,25 @@ namespace Automatica.Core.Runtime.Core.Plugins
         {
             if (plugin.PluginType == PluginType.Driver)
             {
-                var factories = PluginLoader.LoadSingle(_logger, plugin, _config);
+                var factories = PluginLoader.LoadSingle(logger, plugin, config);
 
                 foreach (var factory in await factories)
                 {
-                    await _driverLoader.Load(factory, ServerInfo.BoardType);
+                    await driverLoader.Load(factory, ServerInfo.BoardType);
                 }
             }
             else if (plugin.PluginType == PluginType.Logic)
             {
-                var factories = RuleLoader.LoadSingle(_logger, plugin, _config);
+                var factories = RuleLoader.LoadSingle(logger, plugin, config);
 
                 foreach (var factory in await factories)
                 {
-                    await _logicLoader.Load(factory, ServerInfo.BoardType);
+                    await logicLoader.Load(factory, ServerInfo.BoardType);
                 }
             }
 
-            _nodeTemplateCache.Clear();
+            nodeTemplateCache.Clear();
 
-        }
-
-        private string GetEntryAssemblyPath()
-        {
-            return Assembly.GetEntryAssembly()?.Location;
         }
     }
 }

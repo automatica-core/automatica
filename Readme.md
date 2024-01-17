@@ -6,12 +6,6 @@
 ### Frontend Build ###
 [![Build Status Web](https://automatica-core.visualstudio.com/automatica/_apis/build/status/automatica.web?branchName=develop)](https://automatica-core.visualstudio.com/automatica/_build/latest?definitionId=8&branchName=develop)
 
-### Develop Automatica.Core.Cloud Status ###
-[![Cloud Status](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)](https://img.shields.io/uptimerobot/status/m782134180-e0676a55743d9e39de694e00.svg)
-
-### SonarCloud ###
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=automaticacore&metric=alert_status)](https://sonarcloud.io/dashboard?id=automaticacore)
-
 Automatica is a building management system thats runs on .NET Core and is built to run on every OS. It is able to connect different automation systems and generate a rich visualization with a powerfull rule engine. Try it as your smart home hub today.
 
 # Table of contents
@@ -229,7 +223,7 @@ services:
 Things I want to implement in the near future - help is appreciated!
 
 ## Roadmap core   
-* Automatica.Core Mobile
+* Automatica.Core Mobile ... done (Android)
 * Alarms
 * Automatic editor - to generate time/trigger based actions
    * Simulate movement in the building when you are on vacation,etc...
@@ -242,9 +236,9 @@ Things I want to implement in the near future - help is appreciated!
 * ...
 
 ## Roadmap cloud
-* Gateway to connect your server via the cloud
-* Backup
-* Insights (Repoting, ...)
+* Gateway to connect your server via the cloud...done
+* Backup...done
+* Insights (Reporting, ...)...done
 * ...
 
 ## Roadmap Drivers
@@ -262,6 +256,9 @@ Things I want to implement in the near future - help is appreciated!
 * ...
 
 # Screenshots
+
+![Configuration](./images/visualization.jpg) Visualization
+
 ![Configuration](./images/config.png) Configuration
 
 ![Logic-editor](./images/logic.png) Logic editor

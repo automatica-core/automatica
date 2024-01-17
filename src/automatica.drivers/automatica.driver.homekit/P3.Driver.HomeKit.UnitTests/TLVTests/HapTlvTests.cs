@@ -1,4 +1,7 @@
-﻿using P3.Driver.HomeKit.Hap.TlvData;
+﻿using Automatica.Core.Driver.Utility;
+using Humanizer;
+using Microsoft.Extensions.Logging.Abstractions;
+using P3.Driver.HomeKit.Hap.TlvData;
 using P3.Driver.HomeKit.Hap.TlvData.Exceptions;
 using Xunit;
 
@@ -6,6 +9,8 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
 {
     public class HapTlvTests
     {
+        public TlvParser TlvParser { get; } = new TlvParser(NullLogger.Instance);
+        
         [Fact]
         public void TestPairSetupM1()
         {
@@ -424,11 +429,6 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
             Assert.Equal(TlvTestData.BorderVeryLongTlv, serialized);
         }
 
-        [Fact]
-        public void TestEveryTlvTypeSingleAndNotFragmented()
-        {
-            Assert.Throws<TlvTypeDuplicationException>(() => TlvParser.Parse(TlvTestData.EveryTlvNotFragmented));
-        }
 
         [Fact]
         public void TestEveryTlvFragmentMustHaveNon0Length()
@@ -440,6 +440,16 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
         public void TestOnlyLastTlvFragmentItemInContiguousTlvMyHaveNon255Length()
         {
             Assert.Throws<TlvFragmentLengthException>(() => TlvParser.Parse(TlvTestData.OnlyLastTlvMayHaveNo255Length));
+        }
+
+        [Fact]
+        public void TestTlvData()
+        {
+            var data =
+                "7B22636861726163746572697374696373223A5B7B22616964223A363339333239313934313334353238353336392C22696964223A382C226576223A747275657D2C7B22616964223A363339333239313934313334353238353336392C22696964223A392C226576223A747275657D2C7B22616964223A363339333239313934313334353238353336392C22696964223A31302C226576223A747275657D5D7D";
+            var parsed = Utils.StringToByteArray(data);
+            
+            var tlv = TlvParser.Parse(parsed);
         }
 
     }

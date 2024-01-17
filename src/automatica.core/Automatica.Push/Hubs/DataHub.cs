@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
@@ -110,14 +111,14 @@ namespace Automatica.Push.Hubs
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
                 _dispatcher.DispatchValue(dispatchable,
-                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now, DispatchValueSource.User));
+                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTimeHelper.ProviderInstance.GetLocalNow().DateTime, DispatchValueSource.User));
             }
             else
             {
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, false);
                 _dispatcher.DispatchValue(dispatchable,
-                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTime.Now, DispatchValueSource.User));
+                    new DispatchValue(instanceId, DispatchableType.Visualization, convertedValue, DateTimeHelper.ProviderInstance.GetLocalNow().DateTime, DispatchValueSource.User));
             }
         }
     }

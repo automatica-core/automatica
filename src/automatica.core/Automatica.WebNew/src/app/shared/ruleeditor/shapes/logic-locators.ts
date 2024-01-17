@@ -17,13 +17,10 @@ export class LogicLocators {
             relocate: function (index, target) {
                 const parent = this.realParent;
                 const boundingBox = parent.getBoundingBox()
-                let offset = (parent instanceof draw2d.Port) ? boundingBox.h / 2 : 0
-
-                offset += 12;
-                const y = (index + 1) * this.label.height;
+                const y = this.label.y + this.label.height / 2;
 
                 if (target instanceof draw2d.Port) {
-                    target.setPosition(boundingBox.w, y - offset)
+                    target.setPosition(boundingBox.w, y)
                 }
             }
         });
@@ -38,16 +35,11 @@ export class LogicLocators {
                 this.label = label;
             },
             relocate: function (index, target) {
-                const parent = target.getParent()
-                const boundingBox = parent.getBoundingBox()
-
-                let offset = (parent instanceof draw2d.Port) ? boundingBox.h / 2 : 0
-
-                offset += 12;
-                const y = (index + 1) * this.label.height;
+            
+                const y = this.label.y + this.label.height / 2;
 
                 if (target instanceof draw2d.Port) {
-                    target.setPosition(0, y - offset)
+                    target.setPosition(0, y)
                 }
             }
         });

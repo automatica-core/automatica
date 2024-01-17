@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Version>7.5.2.0</Version>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>8.2.0.0</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>91142F5E-C914-4738-86FE-2BDA3D4B9509</ProjectGuid>
     <Authors>p3oort</Authors>
@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
+    <ProjectReference Include="..\Automatica.Core.Control\Automatica.Core.Control.csproj" />
     <ProjectReference Include="..\Automatica.Core.EF\Automatica.Core.EF.csproj" />
   </ItemGroup>
 </Project>

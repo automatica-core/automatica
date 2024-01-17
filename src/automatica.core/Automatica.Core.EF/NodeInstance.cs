@@ -20,7 +20,8 @@ namespace Automatica.Core.EF.Models
         Unloaded = 7,
         Unknown = 8,
         Remote = 9,
-        OutOfSatelliteLicenses = 10
+        OutOfSatelliteLicenses = 10,
+        Disabled = 11
     }
     public partial class NodeInstance : TypedObject
     {
@@ -54,6 +55,9 @@ namespace Automatica.Core.EF.Models
 
         [NotMapped]
         public NodeInstanceState State { get; set; }
+
+        [NotMapped]
+        public string Error { get; set; }
 
         public void SetProperty(string propertyKey, object value)
         {

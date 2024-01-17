@@ -15,7 +15,7 @@ export class VirtualObjIdPropertyInstance extends VirtualPropertyInstance {
         this.PropertyTemplate.Description = "COMMON.PROPERTY.OBJID.DESCRIPTION";
         this.PropertyTemplate.Key = "objid";
         this.PropertyTemplate.GroupOrder = 0;
-        this.PropertyTemplate.Order = 1;
+        this.PropertyTemplate.Order = 3;
         this.PropertyTemplate.IsReadonly = true;
     }
 

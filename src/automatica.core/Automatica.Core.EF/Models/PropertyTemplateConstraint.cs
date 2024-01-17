@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Automatica.Core.Model;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.EF.Models
@@ -13,6 +12,8 @@ namespace Automatica.Core.EF.Models
             ConstraintData = new List<PropertyTemplateConstraintData>();
         }
         public Guid ObjId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
 
         public Guid? Owner { get; set; }
         public string Name { get; set; }
@@ -25,7 +26,7 @@ namespace Automatica.Core.EF.Models
 
         public List<PropertyTemplateConstraintData> ConstraintData { get; set; }
 
-        [JsonIgnore, IgnoreMember]
+        [JsonIgnore]
         public PropertyTemplate This2PropertyTemplateNavigation { get; set; }
 
 

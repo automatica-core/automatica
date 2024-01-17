@@ -4,6 +4,8 @@ import { NotifyService } from "src/app/services/notify.service";
 import { L10nTranslationService } from "angular-l10n";
 import { BaseComponent } from "src/app/base/base-component";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
   selector: "app-starting-overlay",
@@ -20,18 +22,27 @@ export class StartingOverlayComponent extends BaseComponent implements OnInit {
     notify: NotifyService,
     translation: L10nTranslationService,
     private ngZone: NgZone,
-    private translationConfigService: TranslationConfigService) {
+    private translationConfigService: TranslationConfigService,
+    private actiavtedRoute: ActivatedRoute,
+    private hubConnectionService: HubConnectionService,
+    private router: Router) {
     super(notify, translation, appService);
   }
 
   ngOnInit() {
     super.registerEvent(this.appService.isStartingChanged, async (v) => {
       this.ngZone.runOutsideAngular(() => {
-        this.popupVisible = v;
+
+        if (this.router.url.endsWith("login")) {
+          this.popupVisible = false;
+        } else {
+          this.popupVisible = v;
+        }
       });
 
       if (!v) {
         await this.translationConfigService.init();
+        await this.hubConnectionService.init();
       }
     });
   }

@@ -8,7 +8,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
     {
         private readonly ILogger _logger;
 
-        public AccesoriesController(ILogger logger)
+        public AccesoriesController(ILogger logger) : base(logger)
         {
             _logger = logger;
         }

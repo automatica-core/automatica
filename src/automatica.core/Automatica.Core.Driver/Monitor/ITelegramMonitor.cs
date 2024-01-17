@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Model;
+using Automatica.Core.Base.Calendar;
 
 namespace Automatica.Core.Driver.Monitor
 { 
@@ -20,7 +21,7 @@ namespace Automatica.Core.Driver.Monitor
             TargetAddress = targetAddress;
             Data =  hexData;
             AdditionalMessageString = additionalMessageString;
-            TimeStamp = DateTime.Now;
+            TimeStamp = DateTimeHelper.ProviderInstance.GetLocalNow().DateTime;
         }
 
         public Guid BusId { get; set; }
@@ -70,7 +71,7 @@ namespace Automatica.Core.Driver.Monitor
         /// <summary>
         /// Creates a new instance of <see cref="ITelegramMonitorInstance"/>
         /// </summary>
-        /// <param name="instance">Instance</param>
+        /// <param name="instance">ProviderInstance</param>
         /// <param name="type">The type shown in the UI</param>
         /// <returns></returns>
         ITelegramMonitorInstance CreateTelegramMonitor(NodeInstance instance, string type);

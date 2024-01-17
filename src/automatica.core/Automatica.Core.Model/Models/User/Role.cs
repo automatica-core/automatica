@@ -24,6 +24,7 @@ namespace Automatica.Core.Model.Models.User
         public bool IsDeleteable { get; set; }
 
         public List<Priviledge2Role> InverseThis2Priviledges { get; set; }
-
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ModifiedAt { get; set; }
     }
 }

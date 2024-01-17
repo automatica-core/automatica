@@ -5,10 +5,26 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Internals.Templates
 {
+    public class NodeTemplateFactoryProvider(IServiceProvider serviceProvider)
+        : TemplateFactoryProvider<NodeTemplateFactory>(serviceProvider)
+    {
+        protected override NodeTemplateFactory CreateFactory(Guid owner, IServiceProvider serviceProvider)
+        {
+            var config = serviceProvider.GetRequiredService<IConfiguration>();
+
+            //create a new instance in purpose - we don't want to share the same instance between different owners
+            var databaseContext = new AutomaticaContext(config);
+            return new NodeTemplateFactory(
+                serviceProvider.GetRequiredService<ILogger<NodeTemplateFactory>>(),
+                databaseContext, config, serviceProvider.GetRequiredService<INodeInstanceService>());
+        }
+    }
+    
     public class NodeTemplateFactory : PropertyTemplateFactory, INodeTemplateFactory
     {
         private readonly INodeInstanceService _nodeInstanceService;

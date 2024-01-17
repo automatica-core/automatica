@@ -1,8 +1,6 @@
 
         using System;
-        using System.Collections.Generic;
         using System.Diagnostics.CodeAnalysis;
-        using System.Text;
         using Automatica.Core.Base.Templates;
         using Automatica.Core.EF.Models;
         using P3.Driver.EnOcean.DriverFactory.Templates;
@@ -4464,7 +4462,7 @@ AddDataFieldD2_03_00_1_RI2Templates(factory, interfaceGuid);
             var nodeGuid = DataFieldD2_03_10_2_WIN_Guid;
             factory.CreateNodeTemplate(nodeGuid, "ENOCEAN.RORG_D2.FUNCTION_03.TYPE_10_2.SHORTCUT_WIN.NAME", "ENOCEAN.RORG_D2.FUNCTION_03.TYPE_10_2.SHORTCUT_WIN.DESCRIPTION",
                 "enocean-shortcut-WIN", typeInterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
-                NodeDataType.Integer, 1, false);
+                NodeDataType.WindowState, 1, false);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(nodeGuid, 1), "ENOCEAN.RORG_D2.FUNCTION_03.TYPE_10_2.SHORTCUT_WINWIN.OFFSET", "ENOCEAN.RORG_D2.FUNCTION_03.TYPE_10_2.SHORTCUT_WINWIN.OFFSET",
                 "enocean-bitoffset", PropertyTemplateType.Integer, nodeGuid, "ENOCEAN", false, true, null, "0", 0, 0);

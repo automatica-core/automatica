@@ -352,7 +352,7 @@ export abstract class BaseModel {
             if (!this._originalJson) {
                 this._originalJson = this.toJson();
             }
-            BaseModel.fromJson(this._originalJson, model, this.translationService);
+            model.fromJson(this._originalJson, this.translationService);
             model._isNewObject = true;
             model._isDirty = true;
         }

@@ -22,7 +22,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
     {
         private readonly ILogger _logger;
 
-        public PairVerifyController(ILogger logger)
+        public PairVerifyController(ILogger logger) : base(logger)
         {
             _logger = logger;
         }
@@ -67,8 +67,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg02"));
 
                 var encryptedOutput = AeadAlgorithm.ChaCha20Poly1305.Encrypt(
-                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce,
-                    new byte[0], plaintext);
+                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce, Array.Empty<byte>(), plaintext);
 
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 2);
@@ -88,8 +87,8 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var infoRead = Encoding.UTF8.GetBytes("Control-Read-Encryption-Key");
                 var infoWrite = Encoding.UTF8.GetBytes("Control-Write-Encryption-Key");
 
-                session.AccessoryToControllerKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), encSalt, infoRead, 32);
-                session.ControllerToAccessoryKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret), encSalt, infoWrite, 32);
+                session.AccessoryToControllerKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret, SharedSecretBlobFormat.RawSharedSecret), encSalt, infoRead, 32);
+                session.ControllerToAccessoryKey = hdkf.DeriveBytes(SharedSecret.Import(sharedSecret, SharedSecretBlobFormat.RawSharedSecret), encSalt, infoWrite, 32);
 
                 return new PairVerifyReturn
                 {
@@ -113,6 +112,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 if (!decrypt)
                 {
+                    _logger.LogWarning($"Error decrypting message...");
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.State, 4);
                     errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
@@ -134,6 +134,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
               
                 if (!Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
                 {
+                    _logger.LogWarning($"Error decrypting message...");
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.State, 4);
                     errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);

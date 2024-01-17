@@ -8,9 +8,14 @@ import { INameModel } from "./INameModel";
 import { IDescriptionModel } from "./IDescriptionModel";
 import { PropertyInstance } from "./property-instance";
 import { VirtualNamePropertyInstance, VirtualDescriptionPropertyInstance } from "./virtual-props";
+import { EventEmitter } from "@angular/core"
 
 @Model()
 export class RulePage extends BaseModel implements IPropertyModel, INameModel, IDescriptionModel {
+
+    onZoomIn = new EventEmitter<void>();
+    onZoomToView = new EventEmitter<void>();
+    onZoomOut = new EventEmitter<void>();
 
     public get DisplayName(): string {
         return this.Name;

@@ -1,5 +1,4 @@
 ﻿using System;
-using P3.Driver.EnOcean.Data.Packets;
 
 namespace P3.Driver.EnOcean.Data
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -25,6 +26,16 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
 
         }
+        protected override Task<bool> StartedInternal(CancellationToken token = new CancellationToken())
+        {
+            if (ReadableFromBus)
+            {
+                DriverContext.Logger.LogInformation($"Start initial read for {GroupAddress}");
+                ThreadPool.QueueUserWorkItem(async a => { await Driver.Read(GroupAddress); });
+            }
+
+            return base.StartedInternal(token);
+        }
 
         public sealed override async Task<bool> Init(CancellationToken token = default)
         {
@@ -43,8 +54,18 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
 
             var dptValueProp = GetProperty("knx-dpt");
+
+            
+            
             DptType = ImplementationDptType;
             DptSubType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
+            
+            var dptSubType = GetPropertyValue("knx-dpt-sub", DptSubType);
+            
+            if (dptSubType != null)
+            {
+                DptSubType = Convert.ToInt32(dptSubType);
+            }
 
             DriverContext.Logger.LogDebug($"GA {GroupAddress} - DptType {DptType}");
 
@@ -80,12 +101,18 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
                 var decodedValue = dpt.ToGroupValue(dptValue);
 
-                var result = await Driver.Write(this, GroupAddress, decodedValue).ConfigureAwait(false);
+                var result = await Driver.Write(this, GroupAddress, decodedValue, token).ConfigureAwait(false);
                 await writeContext.DispatchValue(value, token);
 
-                if (!result)
+                if (result)
                 {
-                    DriverContext.Logger.LogWarning("Failed to write to Write datagram");
+                    DriverContext.Logger.LogDebug($"Successfully write value {value} {decodedValue} on {GroupAddress}");
+                }
+                else
+                {
+                    DriverContext.Logger.LogWarning($"{GroupAddress}: Failed to write to Write datagram {value} {decodedValue}");
+                    throw new ArgumentException(
+                        $"{GroupAddress}: Failed to write to Write datagram {value} {decodedValue}");
                 }
             }
             catch (NotImplementedException)

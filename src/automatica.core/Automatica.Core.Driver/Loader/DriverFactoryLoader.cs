@@ -36,12 +36,14 @@ namespace Automatica.Core.Driver.Loader
                 }
                 else
                 {
+                    nodeInstance.Error = driver.Error;
                     nodeInstance.State = NodeInstanceState.UnknownError;
                 }
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error initialize driver {factory.DriverName} {e}");
+                nodeInstance.Error = e.ToString();
                 nodeInstance.State = NodeInstanceState.UnknownError;
             }
 
