@@ -217,14 +217,14 @@ namespace P3.Driver.HomeKitFactory
 
                         if (iBlind.IsMoving)
                         {
-                            accessory.PositionType.Value = iBlind.Direction == 0 ? 0 : 1;
+                            accessory.PositionType.Value = iBlind.Direction == 0 ? 1 : 0;
                         }
                         else
                         {
                             accessory.PositionType.Value = 2; //stopped
                         }
-                        DriverContext.Logger.LogInformation($"Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({hapCurrentBlind})");
-                        DriverContext.Logger.LogInformation($"Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
+                        DriverContext.Logger.LogInformation($"{Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({hapCurrentBlind})");
+                        DriverContext.Logger.LogInformation($"{Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
 
 
                         WriteCharacteristic(characteristic);
