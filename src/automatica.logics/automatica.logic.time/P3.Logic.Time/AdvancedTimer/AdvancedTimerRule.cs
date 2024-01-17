@@ -175,24 +175,21 @@ namespace P3.Logic.Time.AdvancedTimer
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
 
                     _value = false;
-                    return;
                 }
+                else
+                {
 
-                Context.Logger.LogInformation($"Set value to {true}");
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
-
-
-                _value = true;
+                    Context.Logger.LogInformation($"Set value to {true}");
+                    Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
+                    _value = true;
+                }
             }
             else
             {
-                
-                
                 timerTickTime = tickTime.TotalMilliseconds;
 
                 Context.Logger.LogInformation($"Set value to {false}");
                 Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
-
 
                 _value = false;
             }
