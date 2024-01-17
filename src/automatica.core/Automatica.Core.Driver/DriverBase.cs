@@ -431,6 +431,8 @@ namespace Automatica.Core.Driver
             await _cancellationToken.CancelAsync();
             _writeSemaphore.Release(1);
 
+            _cancellationToken.Dispose();
+
             foreach (var node in Children)
             {
                 try
