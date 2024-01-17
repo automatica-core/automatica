@@ -51,6 +51,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
             }
             else
             {
+                _logger.LogWarning($"Returning error busy...");
                 responseTlv.AddType(Constants.State, 2);
                 responseTlv.AddType(Constants.Error, ErrorCodes.Busy);
             }

@@ -167,12 +167,12 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
 
                 var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(
-                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce,
-                    new byte[0], iOsEncryptedData, out var output);
+                    Key.Import(AeadAlgorithm.ChaCha20Poly1305, hkdfEncKey, KeyBlobFormat.RawSymmetricKey), nonce, Array.Empty<byte>(), iOsEncryptedData, out var output);
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 6);
                 if (!decrypt)
                 {
+                    _logger.LogWarning($"Error decrypting message...");
                     responseTlv.AddType(Constants.Error, ErrorCodes.Authentication);
                     return new PairSetupReturn
                     {
@@ -203,6 +203,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 {
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
+                    _logger.LogWarning($"Error decrypting message...");
                     return new PairSetupReturn
                     {
                         State = 5,

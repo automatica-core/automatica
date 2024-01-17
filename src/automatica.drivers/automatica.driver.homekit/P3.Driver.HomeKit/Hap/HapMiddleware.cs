@@ -109,6 +109,7 @@ namespace P3.Driver.HomeKit.Hap
                             _logger.LogDebug($"Working on pair-setup request");
                             if (_pairController != null && state == 1)
                             {
+                                _logger.LogWarning($"Error busy...");
                                 return ReturnError(state, ErrorCodes.Busy);
                             }
 

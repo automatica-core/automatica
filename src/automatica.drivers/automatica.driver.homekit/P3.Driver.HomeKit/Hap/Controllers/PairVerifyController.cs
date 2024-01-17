@@ -112,6 +112,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 if (!decrypt)
                 {
+                    _logger.LogWarning($"Error decrypting message...");
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.State, 4);
                     errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
@@ -133,6 +134,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
               
                 if (!Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
                 {
+                    _logger.LogWarning($"Error decrypting message...");
                     var errorTlv = new Tlv();
                     errorTlv.AddType(Constants.State, 4);
                     errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
