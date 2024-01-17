@@ -18,7 +18,7 @@
     "Type": "driver",
     "Output": "P3.Driver.HueBridgeSimulator.DriverFactory.dll",
     "Resources": [],
-    "Dependencies": [ "P3.Driver.HueBridge.dll", "Rssdp.dll" ],
+    "Dependencies": [ "P3.Driver.HueBridge.dll", "Rssdp.NetStd.dll" ],
     "ProjectPage": "https://github.com/automatica-core/automatica.driver.huebridgesimulator",
     "MinCoreServerVersion": {
       "Minor": 0,
