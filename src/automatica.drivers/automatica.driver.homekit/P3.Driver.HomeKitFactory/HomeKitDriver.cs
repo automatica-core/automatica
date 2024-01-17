@@ -211,16 +211,19 @@ namespace P3.Driver.HomeKitFactory
                     _characteristicControlMap.Add(accessory, control);
                     iBlind.RegisterValueCallback(() =>
                     {
-                        accessory.CurrentPosition.Value = iBlind.Position;
+                        var currentBlind = Convert.ToInt32(iBlind.Position); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
+                        var hapCurrentBlind = Math.Abs(currentBlind - 100);
+                        accessory.CurrentPosition.Value = hapCurrentBlind;
 
                         if (iBlind.IsMoving)
                         {
-                            accessory.PositionType.Value = iBlind.Direction == 0 ? 1 : 0;
+                            accessory.PositionType.Value = iBlind.Direction == 0 ? 0 : 1;
                         }
                         else
                         {
                             accessory.PositionType.Value = 2; //stopped
                         }
+                        DriverContext.Logger.LogInformation($"Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({hapCurrentBlind})");
                         DriverContext.Logger.LogInformation($"Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
 
 
