@@ -87,6 +87,7 @@ namespace P3.Driver.HomeKit.UnitTests.Setup
 
     public class PairSetupTests
     {
+        public TlvParser TlvParser { get; } = new TlvParser(NullLogger.Instance);
         public PairSetupTests()
         {
             HapControllerServer.HapControllerId = "FC:22:3D:E3:CE:F2";

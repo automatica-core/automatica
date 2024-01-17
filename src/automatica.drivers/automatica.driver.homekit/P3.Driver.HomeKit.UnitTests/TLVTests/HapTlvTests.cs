@@ -1,4 +1,5 @@
-﻿using P3.Driver.HomeKit.Hap.TlvData;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using P3.Driver.HomeKit.Hap.TlvData;
 using P3.Driver.HomeKit.Hap.TlvData.Exceptions;
 using Xunit;
 
@@ -6,6 +7,8 @@ namespace P3.Driver.HomeKit.UnitTests.TLVTests
 {
     public class HapTlvTests
     {
+        public TlvParser TlvParser { get; } = new TlvParser(NullLogger.Instance);
+        
         [Fact]
         public void TestPairSetupM1()
         {

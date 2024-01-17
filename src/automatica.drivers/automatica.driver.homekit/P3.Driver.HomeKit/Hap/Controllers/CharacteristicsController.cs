@@ -27,7 +27,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
     {
         private readonly ILogger _logger;
 
-        public CharacteristicsController(ILogger logger)
+        public CharacteristicsController(ILogger logger) : base(logger)
         {
             _logger = logger;
         }

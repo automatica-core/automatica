@@ -34,7 +34,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
         private const string Username = "Pair-Setup";
 
-        public PairSetupController(ILogger logger, string code)
+        public PairSetupController(ILogger logger, string code) : base(logger)
         {
             _logger = logger;
             _code = code;

@@ -22,7 +22,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
     {
         private readonly ILogger _logger;
 
-        public PairVerifyController(ILogger logger)
+        public PairVerifyController(ILogger logger) : base(logger)
         {
             _logger = logger;
         }

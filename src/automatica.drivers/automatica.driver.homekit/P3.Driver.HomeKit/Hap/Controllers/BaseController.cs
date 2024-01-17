@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using P3.Driver.HomeKit.Hap.TlvData;
 
 namespace P3.Driver.HomeKit.Hap.Controllers
 {
@@ -12,6 +14,15 @@ namespace P3.Driver.HomeKit.Hap.Controllers
     }
     internal class BaseController
     {
+        public ILogger Logger { get; }
+        public TlvParser TlvParser { get; }
+
+        public BaseController(ILogger logger)
+        {
+            Logger = logger;
+            TlvParser = new TlvParser(Logger);
+        }
+        
         public static byte[] StringToByteArray(String hex)
         {
             return Automatica.Core.Driver.Utility.Utils.StringToByteArray(hex);

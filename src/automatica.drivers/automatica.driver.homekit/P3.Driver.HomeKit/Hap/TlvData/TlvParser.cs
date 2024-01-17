@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Automatica.Core.Base.Cryptography;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Driver.HomeKit.Hap.TlvData
 {
     public class TlvParser
     {
-        public static Tlv Parse(byte[] data)
+        private readonly ILogger _logger;
+
+        public TlvParser(ILogger logger)
+        {
+            _logger = logger;
+        }
+        public Tlv Parse(byte[] data)
         {
             int currentIndex = 0;
             var result = new Tlv();
@@ -17,24 +25,31 @@ namespace P3.Driver.HomeKit.Hap.TlvData
                 return result;
             }
 
-            while (currentIndex < data.Length)
+            try
             {
-                var tag = (Constants)data[currentIndex];
-                currentIndex++;
-                var length = data[currentIndex];
-                currentIndex++;
+                while (currentIndex < data.Length)
+                {
+                    var tag = (Constants)data[currentIndex];
+                    currentIndex++;
+                    var length = data[currentIndex];
+                    currentIndex++;
 
-                byte[] value = data.Skip(currentIndex).Take(length).ToArray();
+                    byte[] value = data.Skip(currentIndex).Take(length).ToArray();
 
-                result.AddType(tag, value);
+                    result.AddType(tag, value);
 
-                currentIndex += length;
+                    currentIndex += length;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error parsing tlv data....{data.ToHex(true)}");
             }
 
             return result;
         }
 
-        public static byte[] Serialize(Tlv item)
+        public byte[] Serialize(Tlv item)
         {
             using (MemoryStream ms = new MemoryStream())
             {

@@ -9,11 +9,11 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         public Tlv TlvData { get; set; }
     }
 
-    internal class PairingController
+    internal class PairingController : BaseController
     {
         private readonly ILogger _logger;
 
-        public PairingController(ILogger logger)
+        public PairingController(ILogger logger) : base(logger)
         {
             _logger = logger;
         }
