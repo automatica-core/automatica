@@ -44,6 +44,7 @@ namespace P3.Driver.HomeKit.Hap.TlvData
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error parsing tlv data....{data.ToHex(true)}");
+                throw;
             }
 
             return result;
