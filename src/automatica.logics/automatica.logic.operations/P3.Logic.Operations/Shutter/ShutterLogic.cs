@@ -128,13 +128,18 @@ namespace P3.Logic.Operations.Shutter
             if (Math.Ceiling(dValue) >= 100)
             {
                 _moving = false;
-                ret.Add(new LogicOutputChanged(_isMovingOutput, false));
             }
             else if (Math.Floor(dValue) <= 0)
             {
                 _moving = false;
-                ret.Add(new LogicOutputChanged(_isMovingOutput, false));
             }
+            else
+            {
+                _moving = true;
+            }
+            
+            ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
+            
             _position = intValue;
             if(setOutput)
               ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
