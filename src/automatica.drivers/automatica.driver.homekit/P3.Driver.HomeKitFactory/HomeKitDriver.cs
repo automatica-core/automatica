@@ -214,6 +214,7 @@ namespace P3.Driver.HomeKitFactory
                     var characteristic = accessory.Specific.Characteristics.First();
 
                     accessory.PositionType.Value = ToHapPositionState(iBlind);
+                    accessory.TargetPosition.Value = ToHapPositionState(iBlind);
                     accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
 
                     _characteristicControlMap.Add(accessory, control);
@@ -221,6 +222,7 @@ namespace P3.Driver.HomeKitFactory
                     {
                         
                         accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
+                        accessory.TargetPosition.Value = ToHapPositionState(iBlind);
                         accessory.PositionType.Value = ToHapPositionState(iBlind);
                         
                         DriverContext.Logger.LogInformation($"{control.Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
