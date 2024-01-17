@@ -223,7 +223,7 @@ services:
 Things I want to implement in the near future - help is appreciated!
 
 ## Roadmap core   
-* Automatica.Core Mobile
+* Automatica.Core Mobile ... done (Android)
 * Alarms
 * Automatic editor - to generate time/trigger based actions
    * Simulate movement in the building when you are on vacation,etc...
@@ -236,9 +236,9 @@ Things I want to implement in the near future - help is appreciated!
 * ...
 
 ## Roadmap cloud
-* Gateway to connect your server via the cloud
-* Backup
-* Insights (Repoting, ...)
+* Gateway to connect your server via the cloud...done
+* Backup...done
+* Insights (Reporting, ...)...done
 * ...
 
 ## Roadmap Drivers
@@ -256,6 +256,9 @@ Things I want to implement in the near future - help is appreciated!
 * ...
 
 # Screenshots
+
+![Configuration](./images/visualization.jpg) Visualization
+
 ![Configuration](./images/config.png) Configuration
 
 ![Logic-editor](./images/logic.png) Logic editor
