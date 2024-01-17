@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -174,6 +175,9 @@ namespace P3.Driver.HomeKitFactory
                     var characteristic = accessory.Specific.Characteristics.First();
                     var dimValueChar = accessory.Specific.Characteristics.Last();
 
+                    characteristic.Value = dimmer.DimmerState;
+                    dimValueChar.Value = dimmer.DimmerValue;
+                    
                     dimmer.RegisterValueCallback(() =>
                     {
                         characteristic.Value = dimmer.DimmerState;
@@ -193,6 +197,7 @@ namespace P3.Driver.HomeKitFactory
                     var characteristic = accessory.Specific.Characteristics.First();
 
                     _characteristicControlMap.Add(accessory, control);
+                    characteristic.Value = iSwitch.State == SwitchState.On;
 
                     iSwitch.RegisterValueCallback(() =>
                     {
@@ -208,24 +213,17 @@ namespace P3.Driver.HomeKitFactory
                     accessory.Id = _server.AddAccessory(accessory);
                     var characteristic = accessory.Specific.Characteristics.First();
 
-                    accessory.PositionType.Value = 2;
+                    accessory.PositionType.Value = ToHapPositionState(iBlind);
+                    accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
 
                     _characteristicControlMap.Add(accessory, control);
                     iBlind.RegisterValueCallback(() =>
                     {
-                        var currentBlind = Convert.ToInt32(iBlind.Position); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
-                        var hapCurrentBlind = Math.Abs(currentBlind - 100);
-                        accessory.CurrentPosition.Value = hapCurrentBlind;
-
-                        if (iBlind.IsMoving)
-                        {
-                            accessory.PositionType.Value = iBlind.Direction == 0 ? 1 : 0;
-                        }
-                        else
-                        {
-                            accessory.PositionType.Value = 2; //stopped
-                        }
-                        DriverContext.Logger.LogInformation($"{Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({hapCurrentBlind})");
+                        
+                        accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
+                        accessory.PositionType.Value = ToHapPositionState(iBlind);
+                        
+                        DriverContext.Logger.LogInformation($"{Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
                         DriverContext.Logger.LogInformation($"{Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
 
 
@@ -235,6 +233,28 @@ namespace P3.Driver.HomeKitFactory
             }
 
             return await base.Start(token);
+        }
+
+        private int ToHapPosition(int input)
+        {
+            var currentBlind = Convert.ToInt32(input); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
+            var hapCurrentBlind = Math.Abs(currentBlind - 100);
+            return hapCurrentBlind;
+        }
+
+        private int ToHapPositionState(IBlind iBlind)
+        {
+            int value = 0;
+            if (iBlind.IsMoving)
+            {
+                value = iBlind.Direction == 0 ? 1 : 0;
+            }
+            else
+            {
+                value = 2; //stopped
+            }
+
+            return value;
         }
 
         public UInt64 GuidToUint64(Guid guid)
