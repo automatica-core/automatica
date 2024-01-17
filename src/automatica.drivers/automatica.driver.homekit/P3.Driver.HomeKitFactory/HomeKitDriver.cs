@@ -208,6 +208,8 @@ namespace P3.Driver.HomeKitFactory
                     accessory.Id = _server.AddAccessory(accessory);
                     var characteristic = accessory.Specific.Characteristics.First();
 
+                    accessory.PositionType.Value = 2;
+
                     _characteristicControlMap.Add(accessory, control);
                     iBlind.RegisterValueCallback(() =>
                     {
