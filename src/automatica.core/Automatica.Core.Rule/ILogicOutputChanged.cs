@@ -16,7 +16,7 @@ namespace Automatica.Core.Logic
         /// <summary>
         /// The value
         /// </summary>
-        object Value { get; }
+        object Value { get;  }
 
         /// <summary>
         /// Source information

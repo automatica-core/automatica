@@ -35,6 +35,18 @@ export class RuleInterfaceInstance extends BaseModel {
     @JsonProperty()
     IsLinked: boolean;
 
+    private _inverted: boolean;
+    
+    @JsonProperty()
+    public get Inverted(): boolean {
+        return this._inverted;
+    }
+    public set Inverted(v: boolean) {
+        this._inverted = v;
+        this.notifyChange("Inverted");
+    }
+
+
     @JsonProperty()
     This2RuleInterfaceTemplate: string;
 

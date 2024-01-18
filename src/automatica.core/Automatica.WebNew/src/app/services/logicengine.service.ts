@@ -18,7 +18,8 @@ export interface AddLogicData {
 
 export enum LogicUpdateScope {
   Unknown = 0,
-  Drag = 1
+  Drag = 1,
+  InvertedValueUpdated = 2
 }
 
 @Injectable()

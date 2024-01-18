@@ -30,6 +30,8 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     @JsonProperty()
     ObjId: string;
 
+    public itemMoved: boolean = false;
+
     _x: number;
     public get X() {
         return Math.round(this._x);
@@ -37,6 +39,7 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     @JsonProperty()
     public set X(value: number) {
         this._x = value;
+        this.itemMoved = true;
     }
 
     _y: number;
@@ -46,10 +49,22 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     @JsonProperty()
     public set Y(value: number) {
         this._y = value;
+        this.itemMoved = true;
     }
 
     public get FullName() {
         return this.NodeInstance.FullName;
+    }
+
+    private _inverted: boolean;
+    
+    @JsonProperty()
+    public get Inverted(): boolean {
+        return this._inverted;
+    }
+    public set Inverted(v: boolean) {
+        this._inverted = v;
+        this.notifyChange("Inverted");
     }
 
     @JsonPropertyName("This2NodeInstanceNavigation")
@@ -65,6 +80,10 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
     Inputs: NodeInterfaceInstance[] = [];
     Outputs: NodeInterfaceInstance[] = [];
+
+    public setSaved(): void {
+        this.itemMoved = false;
+    }
 
     public static createFromNodeInstance(nodeInstance: NodeInstance, rulePage: RulePage) {
         const nd = new NodeInstance2RulePage();
@@ -103,7 +122,7 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
 
     get Name(): string {
-        if(!this.NodeInstance) {
+        if (!this.NodeInstance) {
             return "unknown";
         }
         return this.NodeInstance.Name;

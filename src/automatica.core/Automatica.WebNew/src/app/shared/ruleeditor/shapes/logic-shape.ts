@@ -147,15 +147,17 @@ export class LogicShapes {
                     height: 20
                 });
 
-
                 this.on("move", (context) => {
                     element.X = context.x;
                     element.Y = context.y;
                 });
 
+
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+                        if (element.itemMoved) {
+                            await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+                        }
                     }
                     catch (error) {
                         errorHandler.notifyError(error);
@@ -166,9 +168,6 @@ export class LogicShapes {
                 this.add(this.logicName);
 
                 this.add(new logic.PortShape({}, element, this, linkService));
-
-
-                console.log(this.headerLayout.getWidth());
             },
             getMinWidth() {
                 if (this.classLabel) {
@@ -186,7 +185,7 @@ export class LogicShapes {
             }
         });
 
-        logic.PortShape = draw2d.shape.layout.TableLayout.extend({
+        logic.PortShape = logic.LogicBaseShape.extend({
 
             NAME: "LogicShape",
             realParent: void 0,
@@ -225,30 +224,32 @@ export class LogicShapes {
                 }
 
                 for (const x of list) {
-                    this.createPortInstances(x.items, linkService);
+                    this.createPortInstances(element, x.items, linkService);
                 }
             },
 
 
-            createPortInstances: function (portInstances: RuleInterfaceInstance[], linkService: LinkService) {
+            createPortInstances: function (parent: RuleInstance, portInstances: RuleInterfaceInstance[], linkService: LinkService) {
                 const data = [];
                 for (const portInstance of portInstances) {
                     const isInput = portInstance.Template.InterfaceDirection.Key === "I" || portInstance.Template.InterfaceDirection.Key === "P";
-                    const label = new logic.LogicText({
+                    const label = new logic.LogicPortText({
                         text: portInstance.Name,
                         stroke: 0,
                         radius: 0,
                         bgColor: null,
-                        fontColor: "#4a4a4a",
+                        fontColor: portInstance.Inverted ? "red" : "#4a4a4a",
                         resizeable: false,
                         padding: { top: 5, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5 },
                         fontSize: 8
-                    }, isInput ? 0 : 1, this.realParent);
+                    }, isInput ? 0 : 1, this.realParent, portInstance);
 
                     let port = void 0;
 
+                    let dataLabel = void 0;
+
                     if (isInput) {
-                        port = this.createPort("input", new logic.LogicInputPortLocator(this.realParent, label));
+                        port = this.createPort("input", new logic.LogicInputPortLocator(this.realParent, label), portInstance);
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(3);
                         port.setDiameter(8);
@@ -263,12 +264,14 @@ export class LogicShapes {
                         }
 
                     } else {
-                        port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
+                        port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label), portInstance);
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(1);
                         port.setDiameter(8);
+                        port.setColor("green");
+                        port.setBackgroundColor("green");
 
-                        let dataLabel = new draw2d.shape.basic.Label({
+                        dataLabel = new draw2d.shape.basic.Label({
                             text: portInstance.PortValue,
                             textLength: "100%",
                             stroke: 0,
@@ -283,18 +286,28 @@ export class LogicShapes {
 
                         });
 
-                        portInstance.notifyChangeEvent.subscribe((v) => {
-                            if (v.propertyName === "PortValue") {
-                                let value = ValueHandler.handleValue((<any>v.object).PortValue);
-
-                                dataLabel.setText(value);
-                            }
-                        });
-
                         port.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
                         dataLabel.toBack();
 
                     }
+
+                    portInstance.notifyChangeEvent.subscribe(async (v) => {
+                        if (v.propertyName === "Inverted") {
+                            label.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
+
+                            try {
+                                await ruleEngineService.updateItem(parent, LogicUpdateScope.InvertedValueUpdated);
+                            }
+                            catch (error) {
+                                errorHandler.notifyError(error);
+                            }
+                        }
+                        else if (!isInput && v.propertyName === "PortValue" && dataLabel) {
+                            let value = ValueHandler.handleValue((<any>v.object).PortValue);
+
+                            dataLabel.setText(value);
+                        }
+                    });
 
                     port.setMaxFanOut(portInstance.FromMaxLinks);
                     port.setUserData(portInstance);
@@ -328,7 +341,7 @@ export class LogicShapes {
 
 
 
-        logic.ItemShape = draw2d.shape.layout.VerticalLayout.extend({
+        logic.NodeInstanceShape = draw2d.shape.layout.HorizontalLayout.extend({
 
 
             init: function (attr, element: NodeInstance2RulePage, linkService: LinkService) {
@@ -343,6 +356,19 @@ export class LogicShapes {
                 this._super($.extend({ id: element.key, bgColor: "#EEEEEE", alpha: 1, color: "#000000", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 80 }, attr));
 
                 this.setUserData(element);
+
+                this.qLabel = new logic.NodeInstanceText({
+                    text: "Q",
+                    padding: { top: 2.5, right: 5, bottom: 2, left: 5 },
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    fontColor: element.Inverted ? "red" : "#4a4a4a",
+                    stroke: 0,
+                    radius: 0,
+                    resizeable: false,
+                    fontSize: 8,
+                }, this.realParent, element);
+
                 this.label = new draw2d.shape.basic.Label({
                     text: element.Name,
                     textLength: "100%",
@@ -365,6 +391,21 @@ export class LogicShapes {
                         }
                     });
                 }
+
+                element.notifyChangeEvent.subscribe(async (v) => {
+                    if (v.propertyName === "Inverted") {
+                        this.qLabel.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
+
+                        try {
+
+                            if (element.itemMoved) {
+                                await ruleEngineService.updateItem(element, LogicUpdateScope.InvertedValueUpdated);
+                            }
+                        } catch (error) {
+                            errorHandler.notifyError(error);
+                        }
+                    }
+                });
 
                 if (element.Inputs.length > 0) {
                     const input = this.createPort("input");
@@ -499,20 +540,23 @@ export class LogicShapes {
                 this.on("move", (context) => {
                     element.X = context.x;
                     element.Y = context.y;
-
                     this.hideTooltip();
                 });
 
-
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+
+                        if (element.itemMoved) {
+                            await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+                        }
                     } catch (error) {
                         errorHandler.notifyError(error);
                     }
                 });
 
 
+                if (element.Inputs.length > 0)
+                    this.add(this.qLabel);
 
                 this.add(this.label);
             },
@@ -550,7 +594,8 @@ export class LogicShapes {
                 pos.y += this.canvas.getScrollTop()
 
                 this.tooltip.css({ 'top': pos.y, 'left': pos.x })
-            }, hideTooltip: function () {
+            },
+            hideTooltip: function () {
                 if (this.tooltip !== null) {
                     this.tooltip.remove();
                     this.tooltip = null;

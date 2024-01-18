@@ -1,0 +1,2 @@
+2024-01-18 14:29:11.774 +01:00 [WRN] database: Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2024-01-18 19:53:54.862 +01:00 [WRN] database: Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.

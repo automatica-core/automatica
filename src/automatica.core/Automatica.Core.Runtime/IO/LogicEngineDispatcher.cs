@@ -29,6 +29,7 @@ namespace Automatica.Core.Runtime.IO
         private readonly ILogger<LogicEngineDispatcher> _logger;
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotifier;
         private readonly IRemanentHandler _remanentHandler;
+        private readonly ILogicNodeInstanceCache _logicNodeInstanceCache;
         private readonly object _lock = new object();
 
         private readonly List<(DispatchableType type, Guid id, Guid target)> _dispatchRegistrations =
@@ -42,7 +43,8 @@ namespace Automatica.Core.Runtime.IO
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache,
             ILogger<LogicEngineDispatcher> logger,
             IRuleInstanceVisuNotify ruleInstanceVisuNotifier,
-            IRemanentHandler remanentHandler)
+            IRemanentHandler remanentHandler,
+            ILogicNodeInstanceCache logicNodeInstanceCache)
         {
             _linkCache = linkCache;
             _dispatcher = dispatcher;
@@ -53,6 +55,7 @@ namespace Automatica.Core.Runtime.IO
             _logger = logger;
             _ruleInstanceVisuNotifier = ruleInstanceVisuNotifier;
             _remanentHandler = remanentHandler;
+            _logicNodeInstanceCache = logicNodeInstanceCache;
         }
 
         private void GetFullName(NodeInstance node, List<string> names)
@@ -109,6 +112,13 @@ namespace Automatica.Core.Runtime.IO
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
+                            var logicNodeInstance = _logicNodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.ObjId);
+
+                            if (logicNodeInstance is { Inverted: true } && o.Value is bool bValueInt)
+                            {
+                                o.Value = !bValueInt;
+                            }
+
                             await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
                             ValueDispatched(dispatchable, o, targetNode.ObjId);
                         }
@@ -132,6 +142,10 @@ namespace Automatica.Core.Runtime.IO
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
+                            if (targetNode.Inverted && o.Value is bool bValueInt)
+                            {
+                                o.Value = !bValueInt;
+                            }
                             ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
                         }
                     });
@@ -154,6 +168,10 @@ namespace Automatica.Core.Runtime.IO
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
+                            if (targetNode.Inverted && o.Value is bool bValueInt)
+                            {
+                                o.Value = !bValueInt;
+                            }
                             ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
                         }
                     });
@@ -177,6 +195,12 @@ namespace Automatica.Core.Runtime.IO
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
+                            var logicNodeInstance = _logicNodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.ObjId);
+
+                            if (logicNodeInstance is { Inverted: true } && o.Value is bool bValueInt)
+                            {
+                                o.Value = !bValueInt;
+                            }
                             ValueDispatched(dispatchable, o, targetNode.ObjId);
                         }
                     });
@@ -245,14 +269,20 @@ namespace Automatica.Core.Runtime.IO
                             _logger.LogDebug(
                                 $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
 
+                            
                             var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
 
                             foreach (var result in ruleResults)
                             {
+                                var value = result.Value;
+                                if (result.Instance.RuleInterfaceInstance.Inverted && value is bool bValueInt)
+                                {
+                                    value = !bValueInt;
+                                }
                                 Task.Run(async () =>
                                 {
-                                    await _dispatcher.DispatchValue(result.Instance, result.Value);
-                                    await _ruleInstanceVisuNotifier.NotifyValueChanged(result.Instance.RuleInterfaceInstance, result.Value);
+                                    await _dispatcher.DispatchValue(result.Instance, value);
+                                    await _ruleInstanceVisuNotifier.NotifyValueChanged(result.Instance.RuleInterfaceInstance, value);
                                 }).ConfigureAwait(false);
                             }
                         }

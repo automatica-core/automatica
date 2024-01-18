@@ -13,7 +13,6 @@ using Automatica.Core.Model.Models.User;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -24,7 +23,8 @@ namespace Automatica.Core.WebApi.Controllers
     public enum LogicUpdateScope
     {
         Unknown = 0,
-        Drag = 1
+        Drag = 1,
+        InvertedValueUpdated = 2
     }
     public class SaveAllLogicEditor : TypedObject
     {
@@ -164,6 +164,7 @@ namespace Automatica.Core.WebApi.Controllers
                         existingRuleInterfaceInstance.ValueString = ruleInterfaceInstance.ValueString;
                         existingRuleInterfaceInstance.ValueDouble = ruleInterfaceInstance.ValueDouble;
                         existingRuleInterfaceInstance.ValueInteger = ruleInterfaceInstance.ValueInteger;
+                        existingRuleInterfaceInstance.Inverted = ruleInterfaceInstance.Inverted;
 
                         DbContext.Update(existingRuleInterfaceInstance);
                         DbContext.Entry(existingRuleInterfaceInstance).State = EntityState.Modified;
@@ -177,7 +178,6 @@ namespace Automatica.Core.WebApi.Controllers
                     _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
                     _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId,
                         _logicCacheFacade.InstanceCache.GetSingle(DbContext, logicInstance.ObjId));
-
 
                     await transaction.CommitAsync();
                 }
@@ -219,7 +219,8 @@ namespace Automatica.Core.WebApi.Controllers
                     await transaction.CommitAsync();
 
                     instance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(nav.ObjId, DbContext);
-         
+
+                    _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(instance.ObjId, instance);
                     _logicCacheFacade.ClearInstances();
 
                     return instance;
@@ -257,6 +258,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                     existingInstance.X = nodeInstance.X;
                     existingInstance.Y = nodeInstance.Y;
+                    existingInstance.Inverted = nodeInstance.Inverted;
 
                     DbContext.Update(existingInstance);
                     DbContext.Entry(existingInstance).State = EntityState.Modified;
@@ -264,6 +266,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
 
                     _logicCacheFacade.PageCache.UpdateNodeInstance(existingInstance);
+                    _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(existingInstance.ObjId, existingInstance);
                     await transaction.CommitAsync();
                 }
                 catch (Exception e)

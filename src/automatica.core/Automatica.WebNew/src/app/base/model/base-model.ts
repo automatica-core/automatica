@@ -362,6 +362,9 @@ export abstract class BaseModel {
     public setDeleted() {
         this._trackingState = TrackingState.Deleted;
     }
+    public setSaved() {
+        
+    }
 
     private registerChanges() {
         this._notifyChanges = true;

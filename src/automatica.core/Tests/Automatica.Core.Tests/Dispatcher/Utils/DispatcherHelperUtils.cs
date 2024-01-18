@@ -63,7 +63,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         {
             WriteReceived = true;
 
-            return new List<ILogicOutputChanged>() {new LogicOutputChanged(Output, true)};
+            return new List<ILogicOutputChanged>() {new LogicOutputChanged(Output, value)};
         }
     }
 

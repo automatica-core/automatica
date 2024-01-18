@@ -16,6 +16,8 @@ namespace Automatica.Core.EF.Models
         public RuleInstance This2RuleInstanceNavigation { get; set; }
         public RuleInterfaceTemplate This2RuleInterfaceTemplateNavigation { get; set; }
 
+        public bool Inverted { get; set; }
+
         public bool? ValueBool { get; set; }
         public long? ValueInteger { get; set; }
         public double? ValueDouble { get; set; }

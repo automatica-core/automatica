@@ -3,6 +3,7 @@ using System;
 using Automatica.Core.EF.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Automatica.Core.EF.Migrations
 {
     [DbContext(typeof(AutomaticaContext))]
-    partial class AutomaticaContextModelSnapshot : ModelSnapshot
+    [Migration("20240118132913_RuleInterfaceInstanceInvertedProperty")]
+    partial class RuleInterfaceInstanceInvertedProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -531,9 +534,6 @@ namespace Automatica.Core.EF.Migrations
                 {
                     b.Property<Guid>("ObjId")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Inverted")
-                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

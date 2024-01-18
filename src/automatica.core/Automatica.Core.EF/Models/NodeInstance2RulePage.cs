@@ -14,7 +14,8 @@ namespace Automatica.Core.EF.Models
         public bool IsDeleted { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
-
+        public bool Inverted { get; set; }
+        
         public NodeInstance This2NodeInstanceNavigation { get; set; }
 
         [JsonIgnore]
