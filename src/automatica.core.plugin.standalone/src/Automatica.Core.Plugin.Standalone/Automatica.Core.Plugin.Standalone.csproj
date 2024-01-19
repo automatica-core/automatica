@@ -2,16 +2,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>automatica-plugin-standalone</AssemblyName>
     <PackageId>automatica-plugin-standalone</PackageId>
 	  
-    <PackageVersion>7.0.0.835</PackageVersion>
+    <PackageVersion>8.0.0.835</PackageVersion>
     <Authors>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Authors>
     <Description>Tool for running a automatica.core plugin standalone</Description>
     <Copyright>p3-software | p3root | automatica.core | Patrik Pfaffenbauer</Copyright>
     <LangVersion>7.3</LangVersion>
-    <Version>7.0.0.835</Version>
+    <Version>8.0.0.835</Version>
 	
 	<PackageType>DotnetCliTool</PackageType>
 	  <PackAsTool>true</PackAsTool>
