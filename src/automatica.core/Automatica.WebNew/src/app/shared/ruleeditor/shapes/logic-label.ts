@@ -132,7 +132,7 @@ export class LogicLables {
                 if (this.direction === 1) {
                     pos = this.canvas.fromCanvasToDocumentCoordinate(
                         this.getAbsoluteX() + this.getWidth() / 2 - 8,
-                        this.getAbsoluteY() - this.getHeight())
+                        this.getAbsoluteY() - this.getHeight() - 1)
                 }
                 else {
                     var pos = this.canvas.fromCanvasToDocumentCoordinate(
