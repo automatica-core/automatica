@@ -115,7 +115,7 @@ export class LogicLables {
                 if (this.direction === 1) {
                     return this.realParent.width - 30;
                 }
-                return this.x;
+                return this.x + 3;
             },
             showTooltip: function () {
                 this.tooltip = $('<div class="invert_tooltip">°</div>')
@@ -128,10 +128,18 @@ export class LogicLables {
                     return
                 }
 
-                var width = this.tooltip.outerWidth(true)
-                var pos = this.canvas.fromCanvasToDocumentCoordinate(
-                    this.getAbsoluteX(),
-                    this.getAbsoluteY() - this.getHeight() + 5)
+                var pos = void 0;
+                if (this.direction === 1) {
+                    pos = this.canvas.fromCanvasToDocumentCoordinate(
+                        this.getAbsoluteX() + this.getWidth() / 2 - 8,
+                        this.getAbsoluteY() - this.getHeight())
+                }
+                else {
+                    var pos = this.canvas.fromCanvasToDocumentCoordinate(
+                        this.getAbsoluteX() - 3,
+                        this.getAbsoluteY() - this.getHeight() / 2 + 3)
+
+                }
 
                 // remove the scrolling part from the tooltip because the tooltip is placed 
                 // inside the scrolling container
