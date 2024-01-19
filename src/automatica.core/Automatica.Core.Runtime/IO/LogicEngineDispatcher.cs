@@ -199,7 +199,7 @@ namespace Automatica.Core.Runtime.IO
                         {
                             var logicNodeInstance = _logicNodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.ObjId);
 
-                            var value = new DispatchValue(o);
+                            var value = o;
                             if (logicNodeInstance is { Inverted: true } && value.Value is bool bValueInt)
                             {
                                 value.Value = !bValueInt;
