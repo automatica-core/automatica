@@ -15,7 +15,10 @@ namespace Automatica.Core.Base.IO
     public class DispatchValue
     {
 
-
+        public DispatchValue()
+        {
+            
+        }
         public DispatchValue(Guid id, DispatchableType dispatchableType, object value, DateTime timestamp, DispatchValueSource valueSource)
         {
             Id = id;

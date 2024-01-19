@@ -20,6 +20,7 @@ namespace Automatica.Core.Base.Remote
     {
         public static void MqttDispatch(this IDispatcher self, string topic, string data)
         {
+
             var split = topic.Split("/");
 
             if (Enum.TryParse(split[1], out DispatchableType enu))
@@ -39,6 +40,7 @@ namespace Automatica.Core.Base.Remote
 
                 self.DispatchValue(remoteDispatch, remoteDispatchValue.Value);
             }
+
         }
     }
 }

@@ -313,7 +313,7 @@ namespace Automatica.Core.Runtime.IO
                         var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
                         _logger.LogInformation(
                             $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
-                        node.WriteValue(dispatchable, o, token.Token);
+                        node.WriteValue(dispatchable, o, token.Token);  
                     }
                     catch(Exception e)
                     {

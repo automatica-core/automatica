@@ -103,16 +103,15 @@ namespace Automatica.Core.Runtime.Core
 
             if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.CONFIG_TOPIC}/#"))
             {
-                if (_mqttNodes.ContainsKey(subscribedEvent.ClientId))
+                if (_mqttNodes.TryGetValue(subscribedEvent.ClientId, out var node))
                 {
-                    await PublishConfig(subscribedEvent.ClientId, _mqttNodes[subscribedEvent.ClientId]);
+                    await PublishConfig(subscribedEvent.ClientId, node);
                 }
             }
             else if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/+/actions"))
             {
-                if (_mqttSlaves.ContainsKey(subscribedEvent.ClientId))
+                if (_mqttSlaves.TryGetValue(subscribedEvent.ClientId, out var factoryNode))
                 {
-                    var factoryNode = _mqttSlaves[subscribedEvent.ClientId];
                     foreach (var node in factoryNode)
                     {
                         await StartInstance(subscribedEvent.ClientId, node.Value, node.Key);
@@ -125,28 +124,38 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}...");
 
-            if(!_connectedMqttClients.Contains(messageEvent.ClientId))
+            try
             {
-                _connectedMqttClients.Add(messageEvent.ClientId);
-            }
-
-            if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
-            {
-                _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
-            }
-            else if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.ACTION_TOPIC_START}/+/{RemoteTopicConstants.NOTIFY_LEARN_MODE}"))
-            {
-                var learnModeDtoJson = messageEvent.Message;
-                var learnModeDto = JsonConvert.DeserializeObject<LearnModeDto>(learnModeDtoJson);
-
-                if (learnModeDto == null)
+                if (!_connectedMqttClients.Contains(messageEvent.ClientId))
                 {
-                    throw new ArgumentNullException(nameof(learnModeDto));
+                    _connectedMqttClients.Add(messageEvent.ClientId);
                 }
 
-                _logger.LogInformation($"{messageEvent.ClientId} Received LearnMode message");
-                await _learnModeHandler.NotifyLearnNode(learnModeDto.Name, learnModeDto.Description, learnModeDto.Self,
-                    learnModeDto.Templates, learnModeDto.PropertyInstances);
+                if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
+                {
+                    _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
+                }
+                else if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic,
+                             $"{RemoteTopicConstants.ACTION_TOPIC_START}/+/{RemoteTopicConstants.NOTIFY_LEARN_MODE}"))
+                {
+                    var learnModeDtoJson = messageEvent.Message;
+                    var learnModeDto = JsonConvert.DeserializeObject<LearnModeDto>(learnModeDtoJson);
+
+                    if (learnModeDto == null)
+                    {
+                        throw new ArgumentNullException(nameof(learnModeDto));
+                    }
+
+                    _logger.LogInformation($"{messageEvent.ClientId} Received LearnMode message");
+                    await _learnModeHandler.NotifyLearnNode(learnModeDto.Name, learnModeDto.Description,
+                        learnModeDto.Self,
+                        learnModeDto.Templates, learnModeDto.PropertyInstances);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error handling message on {messageEvent.Topic} from {messageEvent.ClientId}");
+                throw;
             }
         }
 
