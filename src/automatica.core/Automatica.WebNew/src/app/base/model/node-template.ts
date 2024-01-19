@@ -1,5 +1,5 @@
 import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from "./base-model"
-import { NodeDataType } from "./node-data-type";
+import { NodeDataType, NodeDataTypeEnum } from "./node-data-type";
 import { InterfaceType } from "./interface-type"
 import { PropertyType } from "./property-type"
 import { PropertyTemplate } from "./property-template"
@@ -59,6 +59,8 @@ export class NodeTemplate extends BaseModel {
     @JsonPropertyName("This2NodeDataTypeNavigation")
     NodeType: NodeDataType;
 
+    NodeTypeEnum: NodeDataTypeEnum;
+
     @JsonPropertyName("ProvidesInterface2InterfaceTypeNavigation")
     ProvidesInterface: InterfaceType;
 
@@ -78,6 +80,10 @@ export class NodeTemplate extends BaseModel {
 
     public static ValueInterfaceId(): string {
         return "00000000-0000-0000-0000-000000000001";
+    }
+
+    protected afterFromJson(): void {
+        this.NodeTypeEnum = <NodeDataTypeEnum>this.This2NodeDataType;
     }
 
     public isDriverNode() {

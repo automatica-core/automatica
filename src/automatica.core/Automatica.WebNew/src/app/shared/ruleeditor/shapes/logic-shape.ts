@@ -7,6 +7,7 @@ import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 import { ILogicInfoHandler } from "../ilogicInfoHandler";
 import { LogicInterfaceDirection } from "src/app/base/model/rule-interface-direction";
+import { NodeDataType, NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 declare let draw2d: any;
 declare let $: any;
 
@@ -357,8 +358,41 @@ export class LogicShapes {
 
                 this.setUserData(element);
 
-                this.qLabel = new logic.NodeInstanceText({
-                    text: "Q",
+                let dataType = "b";
+
+                switch (element.NodeInstance.NodeTemplate.NodeTypeEnum) {
+                    case NodeDataTypeEnum.Boolean:
+                        dataType = "b";
+                        break;
+                    case NodeDataTypeEnum.Date:
+                        dataType = "d";
+                        break;
+                    case NodeDataTypeEnum.DateTime:
+                        dataType = "dt";
+                        break;
+                    case NodeDataTypeEnum.Double:
+                        dataType = "db";
+                        break;
+                    case NodeDataTypeEnum.Integer:
+                        dataType = "i";
+                        break;
+                    case NodeDataTypeEnum.String:
+                        dataType = "s";
+                        break;
+                    case NodeDataTypeEnum.Time:
+                        dataType = "t";
+                        break;
+                    case NodeDataTypeEnum.WindowState:
+                        dataType = "ws";
+                        break;
+                    case NodeDataTypeEnum.NoAttribute:
+                        dataType = "error";
+                        break;
+
+                }
+
+                this.dataTypeLabel = new logic.NodeInstanceText({
+                    text: dataType,
                     padding: { top: 2.5, right: 5, bottom: 2, left: 5 },
                     paddingLeft: 10,
                     paddingRight: 10,
@@ -394,7 +428,7 @@ export class LogicShapes {
 
                 element.notifyChangeEvent.subscribe(async (v) => {
                     if (v.propertyName === "Inverted") {
-                        this.qLabel.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
+                        this.dataTypeLabel.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
 
                         try {
 
@@ -555,8 +589,9 @@ export class LogicShapes {
                 });
 
 
-                if (element.Inputs.length > 0)
-                    this.add(this.qLabel);
+                if (element.Inputs.length > 0) {
+                    this.add(this.dataTypeLabel);
+                }
 
                 this.add(this.label);
             },

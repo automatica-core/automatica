@@ -24,6 +24,12 @@ export class NodeDataType extends BaseModel {
     @JsonProperty()
     Description: string;
 
+    NodeDataTypeEnum: NodeDataTypeEnum;
+
+    protected afterFromJson(): void {
+        this.NodeDataTypeEnum = <NodeDataTypeEnum>this.Type;
+    }
+
 
     protected getJsonProperty(): Map<string, JsonFieldInfo> {
         return void 0;

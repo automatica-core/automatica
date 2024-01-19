@@ -1,3 +1,4 @@
+import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 
@@ -23,13 +24,17 @@ export class LogicLables {
                     this.hideTooltip()
                 });
                 this.on("click", () => {
-                    this.instance.Inverted = !this.instance.Inverted;
+                    if (this.instance.NodeInstance.NodeTemplate.NodeTypeEnum == NodeDataTypeEnum.Boolean)
+                        this.instance.Inverted = !this.instance.Inverted;
                 });
             },
             showTooltip: function () {
-                this.tooltip = $('<div class="invert_tooltip">°</div>')
-                    .appendTo('body');
-                this.positionTooltip();
+
+                if (this.instance.NodeInstance.NodeTemplate.NodeTypeEnum === NodeDataTypeEnum.Boolean) {
+                    this.tooltip = $('<div class="invert_tooltip">°</div>')
+                        .appendTo('body');
+                    this.positionTooltip();
+                }
             },
 
             positionTooltip: function () {
@@ -49,9 +54,11 @@ export class LogicLables {
                 this.tooltip.css({ 'top': pos.y, 'left': pos.x })
             },
             hideTooltip: function () {
-                if (this.tooltip !== null) {
-                    this.tooltip.remove();
-                    this.tooltip = null;
+                if (this.instance.NodeInstance.NodeTemplate.NodeTypeEnum === NodeDataTypeEnum.Boolean) {
+                    if (this.tooltip !== null) {
+                        this.tooltip.remove();
+                        this.tooltip = null;
+                    }
                 }
             },
             getX() {
