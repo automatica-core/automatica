@@ -146,7 +146,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
           this.nodeInstanceService.load()
         ]);
 
-      this.pages = this.sortPages(pages);;
+      this.pages = this.sortPages(pages);
 
 
       this.pagesDataSource = new DataSource({

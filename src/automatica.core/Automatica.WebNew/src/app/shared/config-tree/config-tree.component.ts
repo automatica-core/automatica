@@ -70,6 +70,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   @Input() useContextMenu: boolean;
 
+  @Input() loadLogicNodeInstances: boolean = false;
+
 
   @Input()
   showLoadingPanel = false;
@@ -79,15 +81,13 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   constructor(
     private configService: ConfigService,
-    private designTimeDataService: DesignTimeDataService,
     public nodeInstanceService: NodeInstanceService,
     translate: L10nTranslationService,
     private notify: NotifyService,
     private hub: DataHubService,
     appService: AppService,
     private changeRef: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private nodeTemplateService: NodeTemplateService) {
+    private ngZone: NgZone) {
 
     super(notify, translate, appService);
     this.useContextMenu = true;

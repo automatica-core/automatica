@@ -25,6 +25,10 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
         return this.NodeInstance.Properties;
     }
 
+    public set Properties(value) {
+
+    }
+
     public static KeyPrefix: string = "Attribute";
 
     @JsonProperty()
@@ -80,6 +84,17 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
     Inputs: NodeInterfaceInstance[] = [];
     Outputs: NodeInterfaceInstance[] = [];
+
+    public get Id() {
+        return this.ObjId;
+    }
+
+    public get ParentId() {
+        return this.This2NodeInstance;
+    }
+    public get DisplayName() {
+        return this.RulePage.Name;
+    }
 
     public setSaved(): void {
         this.itemMoved = false;

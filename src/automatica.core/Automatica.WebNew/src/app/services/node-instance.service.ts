@@ -10,15 +10,19 @@ import { ITreeNode } from "../base/model/ITreeNode";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
 import { NodeTemplateService } from "./node-template.service";
 import { DataService } from "./data.service";
+import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
 
+type NodeInstanceOrLogicNodeInstance = NodeInstance | NodeInstance2RulePage;
 
 @Injectable()
 export class NodeInstanceService {
 
     private _nodeTemplates: NodeTemplate[];
     private _nodeInstanceMap: Map<string, NodeInstance>;
-    private _nodeInstanceList: NodeInstance[];
+    private _nodeInstanceList: NodeInstanceOrLogicNodeInstance[];
     private _settings: Setting[];
+
+    private _logicNodeInstance: Map<string, NodeInstance2RulePage>;
 
 
     private _rootNode: NodeInstance;
@@ -30,7 +34,7 @@ export class NodeInstanceService {
         this._rootNode = v;
     }
 
-    public get nodeInstanceList(): NodeInstance[] {
+    public get nodeInstanceList(): NodeInstanceOrLogicNodeInstance[] {
         return this._nodeInstanceList;
     }
 
@@ -73,11 +77,11 @@ export class NodeInstanceService {
             nodeInstance.Value = value.value;
             nodeInstance.ValueTimestamp = value.timestamp;
             nodeInstance.ValueSource = value.valueSource;
-            
-            if(value.valueSource == ValueSource.Read) {
+
+            if (value.valueSource == ValueSource.Read) {
                 nodeInstance.ReadValue = value.value;
             }
-            else  if(value.valueSource == ValueSource.Write) {
+            else if (value.valueSource == ValueSource.Write) {
                 nodeInstance.WriteValue = value.value;
             }
         }
@@ -85,10 +89,20 @@ export class NodeInstanceService {
 
     private async loadConfig() {
         const instances = await this.configService.getNodeInstances();
+        const logicNodeInstances = await this.configService.getLogicNodeInstances();
 
         this.convertConfig(instances);
+        this.convertLogicNodeInstances(logicNodeInstances);
 
+    }
+    convertLogicNodeInstances(logicNodeInstances: NodeInstance2RulePage[]) {
+        this._logicNodeInstance = new Map<string, NodeInstance2RulePage>();
 
+        for (const node of logicNodeInstances) {
+            this._logicNodeInstance.set(node.This2RulePage, node);
+
+            this._nodeInstanceList.push(node);
+        }
     }
 
     updateNodeInstance(nodeInstance: NodeInstance) {
@@ -106,7 +120,7 @@ export class NodeInstanceService {
 
         this._nodeInstanceList = [];
 
-        const tmpConfig: NodeInstance[] = [];
+        const tmpConfig: NodeInstanceOrLogicNodeInstance[] = [];
 
         for (const node of instances) {
             this.addNodeInstancesRec(node, tmpConfig);
@@ -115,7 +129,7 @@ export class NodeInstanceService {
 
         this._nodeInstanceList = tmpConfig;
 
-        const rootNode = this._nodeInstanceList.filter(a => !a.This2ParentNodeInstance)[0];
+        const rootNode = this._nodeInstanceList.filter(a => a instanceof NodeInstance &&  !a.This2ParentNodeInstance)[0];
         const rootNodeSettings: VirtualSettingsPropertyInstance[] = [];
 
         for (const x of this._settings) {
@@ -123,8 +137,8 @@ export class NodeInstanceService {
         }
 
         rootNode.Properties = [...rootNode.Properties, ...rootNodeSettings];
-
-        this.rootNode = rootNode;
+        if(rootNode instanceof NodeInstance)
+            this.rootNode = rootNode;
 
         return this._nodeInstanceList;
     }
@@ -139,7 +153,7 @@ export class NodeInstanceService {
         this._nodeInstanceMap.delete(node.Id);
     }
 
-    public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstance[]) {
+    public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstanceOrLogicNodeInstance[]) {
         this._nodeInstanceMap.set(node.Id, node);
         tmpConfig.push(node);
 
@@ -188,4 +202,7 @@ export class NodeInstanceService {
         }
         await this.settingsService.saveSettings(settings);
     }
+
+
+
 }

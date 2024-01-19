@@ -20,7 +20,7 @@
                     <dxi-item title="COMMON.CONFIGURATION" icon="cogs">
                         <div *dxTemplate>
                             <p3-config-tree class="h-100" #configTree (onNodeSelect)="nodeSelect($event)"
-                                [isLoading]="isLoading">
+                                [isLoading]="isLoading" [loadLogicNodeInstances]="true">
                             </p3-config-tree>
                         </div>
                     </dxi-item>

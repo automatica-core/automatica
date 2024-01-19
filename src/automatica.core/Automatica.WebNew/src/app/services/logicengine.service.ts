@@ -50,6 +50,7 @@ export class LogicEngineService extends BaseService {
     return super.get<RulePage>("logics/page/" + id);
   }
 
+
   getRuleTemplates(): Promise<RuleTemplate[]> {
     return this.designService.getLogicTemplates();
   }

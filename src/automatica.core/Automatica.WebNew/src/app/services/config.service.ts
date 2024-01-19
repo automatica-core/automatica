@@ -8,6 +8,7 @@ import { NodeTemplate } from "../base/model/node-template";
 import { NodeInstance } from "../base/model/node-instance";
 import { PropertyInstance, UpdateScope } from "../base/model/property-instance";
 import { LearnNodeInstance } from "../shared/propertyeditor/propertyeditor.component";
+import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
 
 @Injectable()
 export class ConfigService extends BaseService {
@@ -98,5 +99,9 @@ export class ConfigService extends BaseService {
 
     copy(item: NodeInstance, target: NodeInstance) {
         return super.post<NodeInstance>(`nodeInstancesV2/copy/${item.ObjId}/${target.ObjId}`, void 0);
+    }
+
+    getLogicNodeInstances(): Promise<NodeInstance2RulePage[]> {
+        return super.getMultiple<NodeInstance2RulePage>("nodeInstancesV2/logicNodeInstances");
     }
 }

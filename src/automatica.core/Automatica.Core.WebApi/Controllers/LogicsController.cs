@@ -570,6 +570,7 @@ namespace Automatica.Core.WebApi.Controllers
             return _logicCacheFacade.PageCache.Get(id);
         }
 
+
         [HttpGet]
         [Route("templates")]
         [Authorize(Policy = Role.AdminRole)]
