@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Base;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
@@ -56,6 +57,7 @@ namespace Automatica.Core.Plugin.Standalone
                 return driverContext => provider.GetRequiredService<ITunnelingProvider>();
             });
 
+            serviceCollection.AddRetryHandler();
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
 
@@ -68,6 +70,7 @@ namespace Automatica.Core.Plugin.Standalone
             _user = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_USER");
             _password = Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_PASSWORD");
             _nodeId = Environment.GetEnvironmentVariable("AUTOMATICA_NODE_ID");
+
         }
 
         public async Task<bool> Start()

@@ -18,11 +18,11 @@
     
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Base" Version="8.1.0.1794" />
-    <PackageReference Include="Automatica.Core.Common.Update" Version="8.1.0.1794" />
-    <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1794" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.1.0.1794" />
-    <PackageReference Include="Automatica.Core.EF" Version="8.1.0.1794" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.1.0.1811" />
+    <PackageReference Include="Automatica.Core.Common.Update" Version="8.1.0.1811" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1811" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.1.0.1811" />
+    <PackageReference Include="Automatica.Core.EF" Version="8.1.0.1811" />
     <PackageReference Include="Automatica.Core.Rule" Version="7.3.0.1128" />
     <PackageReference Include="MQTTnet" Version="3.1.2" />
     <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.1.2" />      
