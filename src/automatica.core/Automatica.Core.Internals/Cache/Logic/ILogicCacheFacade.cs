@@ -13,9 +13,11 @@ namespace Automatica.Core.Internals.Cache.Logic
         ILogicTemplateCache TemplateCache{ get; }
         ILogicNodeInstanceCache LogicNodeInstanceCache { get; }
 
+        ILogicInterfaceInstanceCache LogicInterfaceInstanceCache { get; }
+
 
         void ClearInstances();
-
+        void UpdateLogic(RuleInstance logic);
         Task RemoveLink(Guid linkId);
         Task AddOrUpdateLink(Guid objId, AutomaticaContext dbContext);
         Task RemoveNodeInstance(Guid instanceId);

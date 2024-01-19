@@ -25,6 +25,15 @@ namespace Automatica.Core.Base.IO
             ValueSource = valueSource;
         }
 
+        public DispatchValue(DispatchValue copy)
+        {
+            Id = copy.Id;
+            Type = copy.Type;
+            Value = copy.Value;
+            Timestamp = copy.Timestamp;
+            ValueSource = copy.ValueSource;
+        }
+
         public DispatchableType Type { get; set; }
         public Guid Id { get; set; }
         public object Value { get; set; }

@@ -176,7 +176,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
                     
                     _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
-                    _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId,
+                    _logicCacheFacade.UpdateLogic(
                         _logicCacheFacade.InstanceCache.GetSingle(DbContext, logicInstance.ObjId));
 
                     await transaction.CommitAsync();
@@ -256,9 +256,15 @@ namespace Automatica.Core.WebApi.Controllers
 
                     var existingInstance = DbContext.NodeInstance2RulePages.Single(a => a.ObjId == nodeInstance.ObjId);
 
-                    existingInstance.X = nodeInstance.X;
-                    existingInstance.Y = nodeInstance.Y;
-                    existingInstance.Inverted = nodeInstance.Inverted;
+                    if (updateScope == LogicUpdateScope.Drag)
+                    {
+                        existingInstance.X = nodeInstance.X; 
+                        existingInstance.Y = nodeInstance.Y;
+                    }
+                    else if (updateScope == LogicUpdateScope.InvertedValueUpdated)
+                    {
+                        existingInstance.Inverted = nodeInstance.Inverted;
+                    }
 
                     DbContext.Update(existingInstance);
                     DbContext.Entry(existingInstance).State = EntityState.Modified;

@@ -166,13 +166,15 @@ namespace Automatica.Core.Runtime.IO
                     _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId, targetNode.ObjId));
                     await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
                     {
+                        targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
-                            if (targetNode.Inverted && o.Value is bool bValueInt)
+                            var value = o.Value;
+                            if (targetNode.Inverted && value is bool bValueInt)
                             {
-                                o.Value = !bValueInt;
+                                value = !bValueInt;
                             }
-                            ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
+                            ValueDispatchToRule(dispatchable, value, targetNode.This2RuleInstance, targetNode);
                         }
                     });
                 }
@@ -197,11 +199,12 @@ namespace Automatica.Core.Runtime.IO
                         {
                             var logicNodeInstance = _logicNodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.ObjId);
 
-                            if (logicNodeInstance is { Inverted: true } && o.Value is bool bValueInt)
+                            var value = new DispatchValue(o);
+                            if (logicNodeInstance is { Inverted: true } && value.Value is bool bValueInt)
                             {
-                                o.Value = !bValueInt;
+                                value.Value = !bValueInt;
                             }
-                            ValueDispatched(dispatchable, o, targetNode.ObjId);
+                            ValueDispatched(dispatchable, value, targetNode.ObjId);
                         }
                     });
                 }
