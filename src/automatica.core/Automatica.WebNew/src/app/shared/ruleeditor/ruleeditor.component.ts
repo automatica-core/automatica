@@ -18,9 +18,6 @@ import { ThemeService } from "src/app/services/theme.service";
 import { Subscription } from "rxjs";
 import { ILogicErrorHandler } from "./ilogicErrorHandler";
 import { ILogicInfoHandler } from "./ilogicInfoHandler";
-import { InputPort } from "./shapes/ports/input-port";
-import { OutputPort } from "./shapes/ports/output-port";
-import { LogicBaseShape } from "./shapes/logic-base-shape";
 
 declare var draw2d: any;
 
@@ -192,15 +189,9 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
   init(): any {
 
-    LogicBaseShape.addLogicBaseShapes(this.logic);
-
     LogicShapes.addShape(this.logic, this.ruleEngineService, this, this);
     LogicLocators.addLocators(this.logic);
     LogicLables.addLables(this.logic);
-
-    
-    InputPort.addInputPort(this.logic);
-    OutputPort.addOutputPort(this.logic);
 
     this.workplace = new draw2d.Canvas("ruleditor-" + this.page.ObjId);
     // this.workplace.setZoom(1.3);

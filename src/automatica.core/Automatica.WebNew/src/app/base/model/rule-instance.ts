@@ -220,7 +220,10 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         this.Properties.push(new VirtualGenericPropertyInstance("VISU_NAME", 5, this, () => this.VisuName, (value) => this.VisuName = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
 
         for (const x of this.Interfaces) {
-            if (x.Template && x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
+            if(!x.Template) {
+                continue;
+            }
+            if (x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
                 continue;
             }
             this.Properties.push(new RuleInterfaceParamProperty(x));

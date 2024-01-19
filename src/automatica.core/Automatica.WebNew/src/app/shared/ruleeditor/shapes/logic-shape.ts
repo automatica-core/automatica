@@ -186,7 +186,7 @@ export class LogicShapes {
             }
         });
 
-        logic.PortShape = logic.LogicBaseShape.extend({
+        logic.PortShape = draw2d.shape.layout.TableLayout.extend({
 
             NAME: "LogicShape",
             realParent: void 0,
@@ -250,7 +250,7 @@ export class LogicShapes {
                     let dataLabel = void 0;
 
                     if (isInput) {
-                        port = this.createPort("input", new logic.LogicInputPortLocator(this.realParent, label), portInstance);
+                        port = this.createPort("input", new logic.LogicInputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(3);
                         port.setDiameter(8);
@@ -265,7 +265,7 @@ export class LogicShapes {
                         }
 
                     } else {
-                        port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label), portInstance);
+                        port = this.createPort("output", new logic.LogicOutputPortLocator(this.realParent, label));
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(1);
                         port.setDiameter(8);
@@ -591,6 +591,7 @@ export class LogicShapes {
 
                 if (element.Inputs.length > 0) {
                     this.add(this.dataTypeLabel);
+
                 }
 
                 this.add(this.label);
