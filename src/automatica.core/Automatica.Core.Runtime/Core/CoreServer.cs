@@ -451,7 +451,10 @@ namespace Automatica.Core.Runtime.Core
                 await StopLogic(oldLogic.Value, oldLogic.Key, false);
                 await oldLogic.Value.Reload();
                 var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
+                
+                _logicInstanceStore.Update(ruleInstance, oldLogic.Value);
                 await RestartLogic(oldLogic.Value, ruleInstance);
+
             }
             else
             {

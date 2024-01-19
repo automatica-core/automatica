@@ -278,14 +278,18 @@ namespace Automatica.Core.Runtime.IO
                             foreach (var result in ruleResults)
                             {
                                 var value = result.Value;
-                                if (result.Instance.RuleInterfaceInstance.Inverted && value is bool bValueInt)
+                                var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a =>
+                                    a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
+                                
+                                
+                                if (interfaceInstance.Inverted && value is bool bValueInt)
                                 {
                                     value = !bValueInt;
                                 }
                                 Task.Run(async () =>
                                 {
                                     await _dispatcher.DispatchValue(result.Instance, value);
-                                    await _ruleInstanceVisuNotifier.NotifyValueChanged(result.Instance.RuleInterfaceInstance, value);
+                                    await _ruleInstanceVisuNotifier.NotifyValueChanged(interfaceInstance, value);
                                 }).ConfigureAwait(false);
                             }
                         }
