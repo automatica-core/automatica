@@ -7,9 +7,6 @@
     <ProjectGuid>54D90188-19AB-4FA3-8F25-878D11C92D4D</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-	  <PackageReference Include="AsyncKeyedLock" Version="6.2.6" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
     <ProjectReference Include="..\Automatica.Core.Internals\Automatica.Core.Internals.csproj" />
     <ProjectReference Include="..\Automatica.Core.Logging.SignalR\Automatica.Core.Logging.SignalR.csproj" />
