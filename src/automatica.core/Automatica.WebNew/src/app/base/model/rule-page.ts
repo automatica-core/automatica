@@ -102,6 +102,10 @@ export class RulePage extends BaseModel implements IPropertyModel, INameModel, I
         this.addVirtualProperties();
     }
 
+    protected createInstance(): BaseModel {
+        return new RulePage();
+    }
+
     protected getJsonProperty(): Map<string, JsonFieldInfo> {
         return void 0;
     }

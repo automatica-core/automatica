@@ -13,6 +13,7 @@ using Automatica.Core.Model.Models.User;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -209,9 +210,11 @@ namespace Automatica.Core.WebApi.Controllers
                 var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
+                    instance.This2RulePageNavigation = null;
                     instance.This2RulePage = pageId;
                     var nav = instance.This2NodeInstanceNavigation;
                     instance.This2NodeInstanceNavigation = null;
+                    
                     await DbContext.AddAsync(instance);
                     DbContext.Entry(instance).State = EntityState.Added;
 
@@ -219,6 +222,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await transaction.CommitAsync();
 
                     instance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(nav.ObjId, DbContext);
+                    instance.This2RulePageNavigation = _logicCacheFacade.PageCache.Get(pageId);
 
                     _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(instance.ObjId, instance);
                     _logicCacheFacade.ClearInstances();
@@ -266,10 +270,14 @@ namespace Automatica.Core.WebApi.Controllers
                         existingInstance.Inverted = nodeInstance.Inverted;
                     }
 
+
                     DbContext.Update(existingInstance);
                     DbContext.Entry(existingInstance).State = EntityState.Modified;
 
                     await DbContext.SaveChangesAsync();
+
+                    existingInstance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(existingInstance.This2NodeInstance, DbContext);
+                    existingInstance.This2RulePageNavigation = _logicCacheFacade.PageCache.Get(existingInstance.This2RulePage);
 
                     _logicCacheFacade.PageCache.UpdateNodeInstance(existingInstance);
                     _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(existingInstance.ObjId, existingInstance);

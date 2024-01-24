@@ -22,11 +22,18 @@ export enum LogicUpdateScope {
   InvertedValueUpdated = 2
 }
 
+export interface SelectLogicNodeInstance {
+  logicNodeInstance: NodeInstance2RulePage;
+  logicPage: RulePage;
+}
+
 @Injectable()
 export class LogicEngineService extends BaseService {
 
   public reInit: EventEmitter<RulePage> = new EventEmitter<RulePage>();
   public add = new EventEmitter<AddLogicData>();
+  public selected = new EventEmitter<SelectLogicNodeInstance>();
+  public removed = new EventEmitter<SelectLogicNodeInstance>();
 
   public showInfo = new EventEmitter<RuleInstance>();
 

@@ -1,6 +1,7 @@
 {
   "ERROR": {
-    "UNAUTHORISED": "Not authorised"
+    "UNAUTHORISED": "Nicht berechtigt",
+    "UNKNOWN": "Unbekannter Fehler"
   },
   "SERVER": {
     "RECORDERS": {

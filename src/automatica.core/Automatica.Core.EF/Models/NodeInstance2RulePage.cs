@@ -17,8 +17,6 @@ namespace Automatica.Core.EF.Models
         public bool Inverted { get; set; }
         
         public NodeInstance This2NodeInstanceNavigation { get; set; }
-
-        [JsonIgnore]
         public RulePage This2RulePageNavigation { get; set; }
 
         

@@ -17,6 +17,7 @@ type NodeInstanceOrLogicNodeInstance = NodeInstance | NodeInstance2RulePage;
 @Injectable()
 export class NodeInstanceService {
 
+
     private _nodeTemplates: NodeTemplate[];
     private _nodeInstanceMap: Map<string, NodeInstance>;
     private _nodeInstanceList: NodeInstanceOrLogicNodeInstance[];
@@ -63,6 +64,9 @@ export class NodeInstanceService {
     public getNodeInstance(id: string): NodeInstance {
         return this._nodeInstanceMap.get(id);
     }
+    getLogicNodeInstance(id: any) {
+        return this._logicNodeInstance.get(id);
+    }
 
     public hasNodeInstance(id: string) {
         if (!this._nodeInstanceMap) {
@@ -99,10 +103,15 @@ export class NodeInstanceService {
         this._logicNodeInstance = new Map<string, NodeInstance2RulePage>();
 
         for (const node of logicNodeInstances) {
-            this._logicNodeInstance.set(node.This2RulePage, node);
+            this._logicNodeInstance.set(node.ObjId, node);
 
             this._nodeInstanceList.push(node);
         }
+    }
+
+    public addLogicNodeInstance(node: NodeInstance2RulePage) {
+        this._logicNodeInstance.set(node.Id, node);
+        this._nodeInstanceList.push(node);
     }
 
     updateNodeInstance(nodeInstance: NodeInstance) {
@@ -129,7 +138,7 @@ export class NodeInstanceService {
 
         this._nodeInstanceList = tmpConfig;
 
-        const rootNode = this._nodeInstanceList.filter(a => a instanceof NodeInstance &&  !a.This2ParentNodeInstance)[0];
+        const rootNode = this._nodeInstanceList.filter(a => a instanceof NodeInstance && !a.This2ParentNodeInstance)[0];
         const rootNodeSettings: VirtualSettingsPropertyInstance[] = [];
 
         for (const x of this._settings) {
@@ -137,7 +146,7 @@ export class NodeInstanceService {
         }
 
         rootNode.Properties = [...rootNode.Properties, ...rootNodeSettings];
-        if(rootNode instanceof NodeInstance)
+        if (rootNode instanceof NodeInstance)
             this.rootNode = rootNode;
 
         return this._nodeInstanceList;
@@ -145,7 +154,13 @@ export class NodeInstanceService {
 
     public addNodeInstance(node: NodeInstance) {
         this._nodeInstanceMap.set(node.Id, node);
-        this._nodeInstanceList = Array.from(this._nodeInstanceMap.values());
+        this._nodeInstanceList.push(node);
+    }
+
+    removeLogicNodeInstance(item: NodeInstance2RulePage) {
+        this._nodeInstanceList = this._nodeInstanceList.filter(a => a.Id !== item.Id);
+        if(this._logicNodeInstance.has(item.Id))
+            this._logicNodeInstance.delete(item.Id);
     }
 
     public removeItem(node: ITreeNode) {

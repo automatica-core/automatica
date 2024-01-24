@@ -20,6 +20,7 @@ import { NodeTemplateService } from "src/app/services/node-template.service";
 import { DataService } from "src/app/services/data.service";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { WindowState } from "src/app/base/model/window-state";
+import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
 
 @Component({
   selector: "p3-config-tree",
@@ -67,6 +68,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Output() onNodeSelect = new EventEmitter<ITreeNode>();
   @Output() onNodeDrag: EventEmitter<any> = new EventEmitter();
   @Output() onConfigLoaded = new EventEmitter();
+  @Output() onLogicNodeInstanceRemoved = new EventEmitter<NodeInstance2RulePage>();
 
   @Input() useContextMenu: boolean;
 
@@ -197,8 +199,17 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
 
   onRowClicked($event) {
-    const item = this.nodeInstanceService.getNodeInstance($event.data.ObjId);
-    this.selectNode(item);
+
+    const item = $event.data;
+
+    if (item instanceof NodeInstance2RulePage) {
+      const item = this.nodeInstanceService.getLogicNodeInstance($event.data.ObjId);
+      this.selectNode(item);
+    }
+    else {
+      const item = this.nodeInstanceService.getNodeInstance($event.data.ObjId);
+      this.selectNode(item);
+    }
   }
 
   selectNode(node: ITreeNode) {
@@ -338,10 +349,14 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
 
-  public async reload() {
+  public async restart() {
     this.notify.notifySuccess("COMMON.RELOADED");
     this.configService.reload();
     this.selectNode(void 0);
+  }
+
+  public refreshTree() {
+    this.tree.instance.refresh();
   }
 
   allowDrop(dropTarget: ITreeNode) {
@@ -349,6 +364,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     return (dragData: any) => {
 
       if (!dragData || !dropTarget) {
+        return false;
+      }
+
+      if (dragData instanceof NodeInstance2RulePage) {
         return false;
       }
 
@@ -458,56 +477,67 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.popoverVisible = false;
     const that = this;
     const treeNode: ITreeNode = $event.row.data;
-    const nodeInstance = this.nodeInstanceService.getNodeInstance(treeNode.Id);
 
-    this.selectNode(nodeInstance);
-
-    const addMenu = [];
     const items = [];
+    if (treeNode instanceof NodeInstance) {
+      const nodeInstance = this.nodeInstanceService.getNodeInstance(treeNode.Id);
 
-    $event.items = [];
+      this.selectNode(nodeInstance);
 
-    if (!nodeInstance.ParentId) {
-      return;
+      $event.items = [];
+
+      if (!nodeInstance.ParentId) {
+        return;
+      }
+
+      const addMenu = [];
+      let nodeTemplates: NodeTemplate[] = await this.nodeInstanceService.getSupportedNodeTemplates(nodeInstance);
+
+      if (nodeTemplates) {
+        nodeTemplates = nodeTemplates.sort(this.sortByName);
+      }
+
+      if (nodeTemplates) {
+        for (const x of nodeTemplates) {
+          addMenu.push({ text: this.translate.translate(x.Name), key: "add", onItemClick: async function () { await that.createItem(nodeInstance, x); } });
+        }
+
+        if (addMenu.length > 0) {
+          items.push({ text: this.translate.translate("COMMON.NEW"), items: addMenu });
+        }
+      }
+
+      if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
+        items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
+
+
+
+        if (this.copyItem && nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === this.copyItem.NodeTemplate.NeedsInterface2InterfacesType) {
+          items.push({ text: this.translate.translate("COMMON.PASTE"), data: nodeInstance, onItemClick: function () { that.copy(that.copyItem, nodeInstance); } });
+        }
+
+        if (nodeInstance.NodeTemplate.IsDeleteable) {
+          items.push({ text: this.translate.translate("COMMON.DELETE"), data: nodeInstance, onItemClick: function () { that.deleteItem(nodeInstance); } });
+        }
+
+        if (nodeInstance.NodeTemplate.This2NodeDataType > 0 && !nodeInstance.isNewObject) {
+          items.push({ beginGroup: true, text: this.translate.translate("COMMON.READ"), data: nodeInstance, onItemClick: function () { that.readNode(nodeInstance); } });
+        }
+        items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () { navigator.clipboard.writeText(nodeInstance.Value); } });
+      }
+
+
+    }
+    else if (treeNode instanceof NodeInstance2RulePage) {
+      $event.items = [];
+
+      items.push({ text: this.translate.translate("COMMON.DELETE"), data: treeNode, onItemClick: function () { that.onLogicNodeInstanceRemoved?.emit(treeNode); } });      
     }
 
-    let nodeTemplates: NodeTemplate[] = await this.nodeInstanceService.getSupportedNodeTemplates(nodeInstance);
-
-    if (nodeTemplates) {
-      nodeTemplates = nodeTemplates.sort(this.sortByName);
+    if (items.length > 0) {
+      this.contextMenu.instance.option({ items: items, target: $event.event });
+      await this.contextMenu.instance.show();
     }
-
-    if (nodeTemplates) {
-      for (const x of nodeTemplates) {
-        addMenu.push({ text: this.translate.translate(x.Name), key: "add", onItemClick: async function () { await that.createItem(nodeInstance, x); } });
-      }
-
-      if (addMenu.length > 0) {
-        items.push({ text: this.translate.translate("COMMON.NEW"), items: addMenu });
-      }
-    }
-
-    if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
-      items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
-
-
-
-      if (this.copyItem && nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === this.copyItem.NodeTemplate.NeedsInterface2InterfacesType) {
-        items.push({ text: this.translate.translate("COMMON.PASTE"), data: nodeInstance, onItemClick: function () { that.copy(that.copyItem, nodeInstance); } });
-      }
-
-      if (nodeInstance.NodeTemplate.IsDeleteable) {
-        items.push({ text: this.translate.translate("COMMON.DELETE"), data: nodeInstance, onItemClick: function () { that.deleteItem(nodeInstance); } });
-      }
-
-      if (nodeInstance.NodeTemplate.This2NodeDataType > 0 && !nodeInstance.isNewObject) {
-        items.push({ beginGroup: true, text: this.translate.translate("COMMON.READ"), data: nodeInstance, onItemClick: function () { that.readNode(nodeInstance); } });
-      }
-      items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () { navigator.clipboard.writeText(nodeInstance.Value); } });
-    }
-
-    this.contextMenu.instance.option({ items: items, target: $event.event });
-    await this.contextMenu.instance.show();
   }
 
   async readNode(node: NodeInstance) {

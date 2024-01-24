@@ -10,8 +10,11 @@ export interface ITreeNode {
     Parent: ITreeNode;
 
     ValidationOk: boolean;
+    Validate: boolean;
 
     Value?: any;
+
+    Icon: string;
 
     getPropertyValue(property: string): any;
     getPropertyValueById(id: string): any;
