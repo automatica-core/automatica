@@ -383,6 +383,19 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
     }
 
+    
+    public get Validate(): boolean {
+        return true;
+    }
+
+    public get Icon(): string {
+        
+        if(this.NodeTemplate && this.NodeTemplate.ProvidesInterface2InterfaceType && this.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
+            return "object-union";
+        }
+        return "folder";
+    }
+
     constructor(public Parent: ITreeNode) {
         super();
         this.This2ParentNodeInstance = null;

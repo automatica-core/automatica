@@ -5,6 +5,7 @@ import { RulePage } from "./rule-page"
 import { Guid } from "../utils/Guid";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
 import { PropertyInstance } from "./property-instance";
+import { ITreeNode } from "./ITreeNode";
 
 export class NodeInterfaceInstance {
     ObjId: string;
@@ -17,12 +18,16 @@ export class NodeInterfaceInstance {
 
 @Model()
 
-export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
+export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, ITreeNode {
     public get Properties(): PropertyInstance[] {
         if (!this.NodeInstance) {
             return [];
         }
         return this.NodeInstance.Properties;
+    }
+
+    public set Properties(value) {
+
     }
 
     public static KeyPrefix: string = "Attribute";
@@ -57,7 +62,7 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     }
 
     private _inverted: boolean;
-    
+
     @JsonProperty()
     public get Inverted(): boolean {
         return this._inverted;
@@ -69,7 +74,8 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
     @JsonPropertyName("This2NodeInstanceNavigation")
     NodeInstance: NodeInstance;
-    @JsonProperty()
+
+    @JsonPropertyName("This2RulePageNavigation")
     RulePage: RulePage;
 
     @JsonProperty()
@@ -80,6 +86,24 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
     Inputs: NodeInterfaceInstance[] = [];
     Outputs: NodeInterfaceInstance[] = [];
+
+    public get Id() {
+        return this.ObjId;
+    }
+
+    public get Validate(): boolean {
+        return false;
+    }
+
+    public get ParentId() {
+        return this.This2NodeInstance;
+    }
+    public get DisplayName() {
+        if (!this.RulePage) {
+            return "";
+        }
+        return this.RulePage.Name;
+    }
 
     public setSaved(): void {
         this.itemMoved = false;
@@ -97,6 +121,25 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
     constructor() {
         super();
+    }
+
+    Children: ITreeNode[] = [];
+    get Description(): string {
+        return "";
+    }
+    Parent: ITreeNode;
+    ValidationOk: boolean = true;
+    Value?: any = void 0;
+    Icon: string = "file";
+
+    getPropertyValue(property: string) {
+        throw new Error("Method not implemented.");
+    }
+    getPropertyValueById(id: string) {
+        throw new Error("Method not implemented.");
+    }
+    validate(): boolean {
+        throw new Error("Method not implemented.");
     }
 
     afterFromJson() {

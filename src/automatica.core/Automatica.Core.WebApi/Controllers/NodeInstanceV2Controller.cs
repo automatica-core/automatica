@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Internals.Cache.Common;
+using Automatica.Core.Internals.Cache.Logic;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -49,6 +50,7 @@ namespace Automatica.Core.WebApi.Controllers
         private readonly IRecorderContext _recorderContext;
         private readonly ISettingsCache _settingsCache;
         private readonly ILocalizationProvider _localizationProvider;
+        private readonly ILogicCacheFacade _logicCacheFacade;
         private readonly ILogger _logger;
 
         public NodeInstanceV2Controller(
@@ -63,6 +65,7 @@ namespace Automatica.Core.WebApi.Controllers
             IRecorderContext recorderContext,
             ISettingsCache settingsCache,
             ILocalizationProvider localizationProvider,
+            ILogicCacheFacade logicCacheFacade,
             ILogger<NodeInstanceV2Controller> logger) : base(dbContext)
         {
             _nodeInstanceCache = nodeInstanceCache;
@@ -75,6 +78,7 @@ namespace Automatica.Core.WebApi.Controllers
             _recorderContext = recorderContext;
             _settingsCache = settingsCache;
             _localizationProvider = localizationProvider;
+            _logicCacheFacade = logicCacheFacade;
             _logger = logger;
         }
 
@@ -546,6 +550,23 @@ namespace Automatica.Core.WebApi.Controllers
                 _logger.LogError(e, "Could not scan driver");
                 throw;
             }
+        }
+
+
+        [HttpGet]
+        [Route("logicNodeInstances")]
+        [Authorize(Policy = Role.AdminRole)]
+        public ICollection<NodeInstance2RulePage> GetNodeInstances()
+        {
+            var ret = _logicCacheFacade.LogicNodeInstanceCache.All();
+
+            foreach (var nodeInstance in ret)
+            {
+                var page = _logicCacheFacade.PageCache.Get(nodeInstance.This2RulePage);
+                nodeInstance.This2RulePageNavigation = page;
+            }
+
+            return ret;
         }
     }
 }

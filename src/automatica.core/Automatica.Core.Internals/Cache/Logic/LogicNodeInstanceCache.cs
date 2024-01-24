@@ -11,7 +11,10 @@ namespace Automatica.Core.Internals.Cache.Logic
     {
         protected override IQueryable<NodeInstance2RulePage> GetAll(AutomaticaContext context)
         {
-            return context.NodeInstance2RulePages.Include(a => a.This2NodeInstanceNavigation).ThenInclude(a => a.This2NodeTemplateNavigation);
+            return context.NodeInstance2RulePages.
+                Include(a => a.This2NodeInstanceNavigation).
+                    ThenInclude(a => a.This2NodeTemplateNavigation).
+                Include(a => a.This2RulePageNavigation);
         }
 
         protected override Guid GetKey(NodeInstance2RulePage obj)

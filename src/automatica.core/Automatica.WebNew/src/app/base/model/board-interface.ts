@@ -1,7 +1,6 @@
 import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from "./base-model"
 import { BoardType } from "./board-type"
 import { InterfaceType } from "./interface-type"
-import { NodeInstance } from "./node-instance"
 import { ITreeNode } from "./ITreeNode";
 import { PropertyInstance } from "./property-instance";
 import { VirtualNamePropertyInstance } from "./virtual-props/virtual-name-property-instance";
@@ -12,6 +11,9 @@ import { IPropertyModel } from "./interfaces/ipropertyModel";
 
 @Model()
 export class BoardInterface extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel {
+    Icon: string = "fa-sharp fa-light fa-network-wired";
+    Validate: boolean = false;
+    Value?: any;
     ValidationOk: boolean = true;
 
     public Parent: ITreeNode;

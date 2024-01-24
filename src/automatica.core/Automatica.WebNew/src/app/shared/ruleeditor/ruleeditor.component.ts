@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
-import { LogicEngineService, AddLogicData } from "../../services/logicengine.service";
+import { LogicEngineService, AddLogicData, SelectLogicNodeInstance } from "../../services/logicengine.service";
 import { L10nTranslationService } from "angular-l10n";
 import { RulePage } from "src/app/base/model/rule-page";
 import { NotifyService } from "src/app/services/notify.service";
@@ -18,6 +18,9 @@ import { ThemeService } from "src/app/services/theme.service";
 import { Subscription } from "rxjs";
 import { ILogicErrorHandler } from "./ilogicErrorHandler";
 import { ILogicInfoHandler } from "./ilogicInfoHandler";
+import { NodeTemplate } from "src/app/base/model/node-template";
+import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { BaseModel } from "src/app/base/model/base-model";
 
 declare var draw2d: any;
 
@@ -79,6 +82,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     translate: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
     appService: AppService,
+    private nodeInstanceService: NodeInstanceService,
     private themeService: ThemeService) {
     super(notify, translate, appService);
 
@@ -102,6 +106,23 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
         } else if (data.data instanceof NodeInstance2RulePage) {
           this.addNode(data.data, this.page);
         }
+      }
+    });
+
+    super.registerEvent(this.ruleEngineService.selected, (data: SelectLogicNodeInstance) => {
+      if (data.logicPage.ObjId === this.page.ObjId) {
+        // this.selectedItems = [data.logicNodeInstance];
+        const object = this.completeMap.get(data.logicNodeInstance.ObjId);
+        this.workplace.setCurrentSelection(object);
+      }
+    });
+
+
+    super.registerEvent(this.ruleEngineService.removed, (data: SelectLogicNodeInstance) => {
+      if (data.logicPage.ObjId === this.page.ObjId) {
+        // this.selectedItems = [data.logicNodeInstance];
+        const object = this.completeMap.get(data.logicNodeInstance.ObjId);
+        this.workplace.remove(object);
       }
     });
 
@@ -158,7 +179,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     if ($event.dragData instanceof NodeInstance) {
 
       const nodeInstance: NodeInstance = $event.dragData;
-      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
+      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== NodeTemplate.ValueInterfaceId()) {
 
         for (const child of nodeInstance.Children) {
           const success = await this.addNodeInstanceToPage(child, point)
@@ -173,7 +194,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   }
 
   async addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
-    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
+    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== NodeTemplate.ValueInterfaceId()) {
       return false;
     }
 
@@ -182,8 +203,15 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     node.X = point.getX();
     node.Y = point.getY();
+    const copyRulePage = <RulePage>this.page.copy();
+    copyRulePage.NodeInstances = [];
+    copyRulePage.RuleInstances = [];
+
+    node.RulePage = copyRulePage;
 
     await this.ruleEngineService.addItem({ data: node, pageId: this.page.ObjId });
+    this.nodeInstanceService.addLogicNodeInstance(node);
+
     return true;
   }
 
@@ -247,6 +275,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
         this.workplace.add(d);
       }
     });
+
+    this.completeMap.set(element.ObjId, d);
 
     this.workplace.add(d);
   }
