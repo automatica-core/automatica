@@ -14,6 +14,9 @@
         <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>
         <dxi-column dataField="Value" dataType="string" cellTemplate="valueTemplate"></dxi-column>
         <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaConfigTree"></dxo-state-storing>
+        <dxo-paging [enabled]="false"> </dxo-paging>
+
+        <dxo-scrolling mode="standard"> </dxo-scrolling>
 
         <div id="{{ data.data.Id }}" *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
             <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
@@ -22,14 +25,21 @@
                     <fa-icon [icon]="['fas', 'exclamation']"
                         *ngIf="data.data.Validate && !data.data.ValidationOk"></fa-icon>
 
-                    <fa-icon [icon]="['fas', data.data.Icon]" [style.color]="data.data.IsAnyDisabled ? 'red' : 'white'" style="margin-right: 2px"></fa-icon>
+                    <fa-icon [icon]="['fas', data.data.Icon]" [style.color]="data.data.IsAnyDisabled ? 'red' : 'white'"
+                        style="margin-right: 2px"></fa-icon>
 
                     <span id="{{ data.data.Id }}">
                         <ng-container *ngIf="data.data.Validate">
 
                             <ng-container *ngIf="data.data.IsAnyDisabled">
-                                <span class="node-instance-disabled">
+                                <span id="node-instance-disabled-{{data.data.Id}}" class="node-instance-disabled">
                                     <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.NAME</span><span>) </span>
+
+                                    <dx-tooltip target="#node-instance-disabled-{{data.data.Id}}" showEvent="mouseenter"
+                                        hideEvent="mouseleave" [hideOnOutsideClick]="false" position="right">
+                                        <div *dxTemplate="let data = data; of: 'content'"> <span
+                                                translate>COMMON.PROPERTY.ISDISABLED.DESCRIPTION</span> </div>
+                                    </dx-tooltip>
                                 </span>
                             </ng-container>
                             <ng-container

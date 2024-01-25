@@ -277,8 +277,8 @@
         "DESCRIPTION": ""
       },
       "ISDISABLED": {
-        "NAME": "Disabled",
-        "DESCRIPTION": ""
+        "NAME": "D",
+        "DESCRIPTION": "Node is deactivated"
       },
       "ISWRITEABLE": {
         "NAME": "Writeable",
