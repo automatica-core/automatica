@@ -313,21 +313,19 @@ namespace Automatica.Core.Runtime.IO
 
         private void ValueDispatched(IDispatchable dispatchable, DispatchValue o, Guid to)
         {
-            foreach (var node in _driverNodesStore.All())
+            var node = _driverNodesStore.Get(to);
+            if (node.Id == to)
             {
-                if (node.Id == to)
+                try
                 {
-                    try
-                    {
-                        var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                        _logger.LogInformation(
-                            $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
-                        node.WriteValue(dispatchable, o, token.Token);  
-                    }
-                    catch(Exception e)
-                    {
-                        _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
-                    }
+                    var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                    _logger.LogInformation(
+                        $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
+                    node.WriteValue(dispatchable, o, token.Token);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
                 }
             }
         }
