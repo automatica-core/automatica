@@ -46,7 +46,7 @@ namespace P3.Logic.Operations.Dimmer
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
-            if (instance.ObjId == _state.ObjId)
+            if (instance.ObjId == _state.ObjId && source.Source == DispatchableSource.Visualization)
             {
                 var booleanValue = Convert.ToBoolean(value);
 
