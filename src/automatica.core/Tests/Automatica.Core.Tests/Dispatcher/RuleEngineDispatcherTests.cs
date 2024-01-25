@@ -296,7 +296,7 @@ namespace Automatica.Core.Tests.Dispatcher
             targetOutputInterface.Inverted = true;
 
             await Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(outputInterface), true);
-            await Task.Delay(400);
+            await Task.Delay(200);
 
             Assert.True(target.WriteReceived);
             var value = Dispatcher.GetValue(DispatchableType.RuleInstance, targetOutputInterface.ObjId);
