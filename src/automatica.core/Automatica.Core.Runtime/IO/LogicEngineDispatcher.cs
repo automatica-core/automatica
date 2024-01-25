@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
@@ -310,6 +311,11 @@ namespace Automatica.Core.Runtime.IO
         {
             var node = _driverNodesStore.Get(to);
 
+            if (node == null)
+            {
+                _logger.LogError($"Could not dispatch value ({o.Value}) to {to}, we could not find id....");
+                return;
+            }
             try
             {
                 var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));

@@ -258,7 +258,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         const item = items[0];
 
         if (item instanceof NodeInstance2RulePage) {
-          if (this.selectedItem.ObjId != item.ObjId)
+          if (this.selectedItem && this.selectedItem.ObjId != item.ObjId)
             this.configTree.selectNodeById(item.This2NodeInstance);
 
           const node = this.nodeInstanceService.getNodeInstance(item.This2NodeInstance);
