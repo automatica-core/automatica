@@ -1,7 +1,14 @@
+@import "../../../themes/generated/variables.base.scss";
+
 .logic-tab-panel {
-    height: 100%;
+    height: calc(100% - 95px);
 }
 
 .as-split-area {
     overflow:hidden !important;
+}
+:host{
+    .dx-tab-selected {
+        background-color: $base-accent !important;
+    }
 }

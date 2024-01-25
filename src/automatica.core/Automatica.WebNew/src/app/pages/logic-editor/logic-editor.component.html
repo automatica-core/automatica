@@ -12,7 +12,8 @@
                 <p3-propertyeditor #propertyEditor (validate)="validate($event)" (scan)="scan($event)"
                     (fileUploaded)="fileUploaded($event)" [userGroups]="userGroups" [item]="selectedItem"
                     [areaInstances]="areaInstances" [categoryInstances]="categoryInstances"
-                    (saveLearnedNodes)="saveLearnedNodes($event)" (unselectItem)="unselectItem()" [isLoading]="isLoading"></p3-propertyeditor>
+                    (saveLearnedNodes)="saveLearnedNodes($event)" (unselectItem)="unselectItem()"
+                    [isLoading]="isLoading"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="20">
 
@@ -20,7 +21,8 @@
                     <dxi-item title="COMMON.CONFIGURATION" icon="cogs">
                         <div *dxTemplate>
                             <p3-config-tree class="h-100" #configTree (onNodeSelect)="nodeSelect($event)"
-                                [isLoading]="isLoading" [loadLogicNodeInstances]="true" (onLogicNodeInstanceRemoved)="onLogicNodeInstanceRemoved($event)">
+                                [isLoading]="isLoading" [loadLogicNodeInstances]="true"
+                                (onLogicNodeInstanceRemoved)="onLogicNodeInstanceRemoved($event)">
                             </p3-config-tree>
                         </div>
                     </dxi-item>
@@ -52,11 +54,19 @@
                             [scrollByContent]="false" [scrollByThumb]="false" showScrollbar="always"
                             scrollDirection="both" [bounceEnabled]="false" [useNative]="true">
 
-                            <p3-ruleeditor style="display:inline-block" (selectedItemsChanged)="onSelectedItemsChanged($event)" (removeSelectedItem)="removeSelectedItem($event)" [page]="page"
-                                id="{{page.ObjId}}" name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
+                            <p3-ruleeditor style="display:inline-block"
+                                (selectedItemsChanged)="onSelectedItemsChanged($event)"
+                                (removeSelectedItem)="removeSelectedItem($event)" [page]="page" id="{{page.ObjId}}"
+                                name="{{page.Name}}" [isLoading]="isLoading"></p3-ruleeditor>
                         </dx-scroll-view>
                     </ng-container>
+
                 </div>
+                <dx-tabs *ngIf="pages" width="100%" [showNavButtons]="true" [dataSource]="pagesDataSource"  [(selectedItem)]="selectedPage" itemTemplate="items">
+                    <div *dxTemplate="let item of 'items'">
+                        {{item.Name}}
+                    </div>
+                </dx-tabs>
             </as-split-area>
 
         </as-split>

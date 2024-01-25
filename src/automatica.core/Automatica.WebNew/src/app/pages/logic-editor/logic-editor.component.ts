@@ -26,6 +26,11 @@ import { DxListComponent, DxPopupComponent } from "devextreme-angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 import { ITreeNode } from "src/app/base/model/ITreeNode";
+export class Tab {
+  id: string;
+  text: string;
+  page: RulePage;
+}
 
 @Component({
   selector: "app-logic-editor",
@@ -146,8 +151,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         ]);
 
       this.pages = this.sortPages(this.nodeInstanceService.pages);
-
-
+     
       this.pagesDataSource = new DataSource({
         paginate: false,
         pageSize: 1000,
@@ -295,7 +299,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = false;
   }
 
-  async onLogicNodeInstanceRemoved(item: NodeInstance2RulePage){
+  async onLogicNodeInstanceRemoved(item: NodeInstance2RulePage) {
     const page = item.RulePage;
     page.NodeInstances = page.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
     this.pages.filter(a => a.ObjId === page.ObjId)[0].NodeInstances = page.NodeInstances;
@@ -304,7 +308,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     await this.ruleEngineService.removeItem(item);
     this.nodeInstanceService.removeLogicNodeInstance(item);
-    await this.ruleEngineService.removed.emit({logicNodeInstance: item, logicPage: item.RulePage});
+    await this.ruleEngineService.removed.emit({ logicNodeInstance: item, logicPage: item.RulePage });
   }
 
   async delete() {
