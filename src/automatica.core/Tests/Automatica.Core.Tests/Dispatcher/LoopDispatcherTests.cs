@@ -82,9 +82,9 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestLoopRules()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
-            var target2 = await DispatcherHelperUtils.CreateLogicMock("Target_Loop_Back", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var target2 = await DispatcherHelperUtils.CreateLogicMock("Target_Loop_Back", Dispatcher, LogicInstanceCache, LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var inputInterfaceSource = source.Context.RuleInstance.RuleInterfaceInstance
                 .Single(b => b.This2RuleInterfaceTemplateNavigation.Name == "Input");
@@ -146,7 +146,7 @@ namespace Automatica.Core.Tests.Dispatcher
         public async Task TestLoopNode2Rule()
         {
             var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", Dispatcher, NodeInstanceCache, DriverNodesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache, LogicInterfaceInstanceCache, LogicInstancesStore);
 
             CreateLink(a =>
             {
@@ -182,7 +182,7 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestLoopRule2Node()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null, LogicInterfaceInstanceCache, LogicInstancesStore);
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache, LogicInterfaceInstanceCache, LogicInstancesStore);
             var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", Dispatcher, NodeInstanceCache, DriverNodesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
