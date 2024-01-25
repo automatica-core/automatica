@@ -45,6 +45,8 @@ namespace Automatica.Core.Logic
         public virtual bool IgnoreDuplicateValues => false;
 
 
+       
+
         /// <summary>
         /// Returns UI specific data
         /// </summary>
@@ -132,12 +134,12 @@ namespace Automatica.Core.Logic
         {
             return Task.FromResult(true);
         }
-        /// <summary>
-        /// Will be called if a input parameter of the <see cref="ILogic"/> has changed
-        /// </summary>
-        /// <param name="instance">The <see cref="RuleInterfaceInstance"/> instance</param>
-        /// <param name="value">The changed value</param>
-        /// <returns></returns>
+
+        public IList<ILogicOutputChanged> ValueChanged(RuleInterfaceInstance instance, IDispatchable source, DispatchValue value)
+        {
+            return ValueChanged(instance, source, value.Value);
+        }
+
         public IList<ILogicOutputChanged> ValueChanged(RuleInterfaceInstance instance, object value)
         {
             return ValueChanged(instance, null, value);

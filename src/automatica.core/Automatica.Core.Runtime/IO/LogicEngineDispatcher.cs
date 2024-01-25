@@ -13,6 +13,7 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
 using Microsoft.Extensions.Logging;
+using DispatchValue = Automatica.Core.Base.IO.DispatchValue;
 
 [assembly: InternalsVisibleTo("Automatica.Core.Tests")]
 
@@ -114,13 +115,14 @@ namespace Automatica.Core.Runtime.IO
                         {
                             var logicNodeInstance = _logicNodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.ObjId);
 
+                            var dispatchValue = new DispatchValue(o);
                             if (logicNodeInstance is { Inverted: true } && o.Value is bool bValueInt)
                             {
-                                o.Value = !bValueInt;
+                                dispatchValue.Value = !bValueInt;
                             }
 
-                            await _remanentHandler.SaveValueAsync(targetNode.ObjId, o);
-                            ValueDispatched(dispatchable, o, targetNode.ObjId);
+                            await _remanentHandler.SaveValueAsync(targetNode.ObjId, dispatchValue);
+                            ValueDispatched(dispatchable, dispatchValue, targetNode.ObjId);
                         }
                     });
                 }
@@ -169,10 +171,10 @@ namespace Automatica.Core.Runtime.IO
                         targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
-                            var value = o.Value;
-                            if (targetNode.Inverted && value is bool bValueInt)
+                            var value = new DispatchValue(o);
+                            if (targetNode.Inverted && value.Value is bool bValueInt)
                             {
-                                value = !bValueInt;
+                                value.Value = !bValueInt;
                             }
                             ValueDispatchToRule(dispatchable, value, targetNode.This2RuleInstance, targetNode);
                         }
@@ -199,7 +201,7 @@ namespace Automatica.Core.Runtime.IO
                         {
                             var logicNodeInstance = _logicNodeInstanceCache.Get(entry.This2NodeInstance2RulePageInputNavigation.ObjId);
 
-                            var value = o;
+                            var value = new DispatchValue(o);
                             if (logicNodeInstance is { Inverted: true } && value.Value is bool bValueInt)
                             {
                                 value.Value = !bValueInt;
@@ -272,10 +274,17 @@ namespace Automatica.Core.Runtime.IO
                             _logger.LogDebug(
                                 $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
 
-                            
-                            var ruleResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
+                            IList<ILogicOutputChanged> logicResults;
+                            if (o is DispatchValue dispatchValue)
+                            {
+                                logicResults = rule.Value.ValueChanged(toInterface, dispatchable, dispatchValue);
+                            }
+                            else
+                            {
+                                logicResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
+                            }
 
-                            foreach (var result in ruleResults)
+                            foreach (var result in logicResults)
                             {
                                 var value = result.Value;
                                 var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a =>

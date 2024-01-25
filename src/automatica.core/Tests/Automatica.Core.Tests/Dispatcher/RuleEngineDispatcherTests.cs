@@ -80,7 +80,7 @@ namespace Automatica.Core.Tests.Dispatcher
             await Task.Delay(200);
 
             Assert.True(((DriverNodeMock)target.Children[0]).WriteReceived);
-            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);
             Assert.False((bool)value.Value);
@@ -115,7 +115,7 @@ namespace Automatica.Core.Tests.Dispatcher
             await Task.Delay(200);
 
             Assert.True(target.WriteReceived);
-            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, source.Children[0].Id);
+            var value = Dispatcher.GetValue(DispatchableType.RuleInstance, target.Output.ObjId);
 
             Assert.IsType<bool>(value.Value);
             Assert.True((bool) value.Value);
@@ -401,7 +401,7 @@ namespace Automatica.Core.Tests.Dispatcher
             await Task.Delay(200);
 
             Assert.True(((DriverNodeMock) target.Children[0]).WriteReceived);
-            var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);
             Assert.True((bool) value.Value);
@@ -440,7 +440,7 @@ namespace Automatica.Core.Tests.Dispatcher
             await Task.Delay(200);
 
             Assert.True(((DriverNodeMock)target.Children[0]).WriteReceived);
-            var value = Dispatcher.GetValue(DispatchableType.RuleInstance, outputInterface.ObjId);
+            var value = Dispatcher.GetValue(DispatchableType.NodeInstance, target.Children[0].Id);
 
             Assert.IsType<bool>(value.Value);
             Assert.False((bool)value.Value);
