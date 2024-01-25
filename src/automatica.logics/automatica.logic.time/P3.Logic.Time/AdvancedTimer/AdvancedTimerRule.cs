@@ -194,7 +194,7 @@ namespace P3.Logic.Time.AdvancedTimer
                 _value = false;
             }
 
-            _timer.Interval = timerTickTime == 0 ? 1 : timerTickTime;
+            _timer.Interval = timerTickTime == 0 ? 1 : (timerTickTime < 0 ? timerTickTime * -1 : timerTickTime);
             Context.Logger.LogDebug(
                 $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
