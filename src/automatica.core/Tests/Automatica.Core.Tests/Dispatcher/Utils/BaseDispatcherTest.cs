@@ -28,6 +28,8 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         protected IRuleInstanceVisuNotify RuleNotify { get; set; }
         
         protected ILogicNodeInstanceCache LogicNodeInstanceCache { get; set; }
+        
+        protected ILogicInstanceCache LogicInstanceCache { get;  }
 
         protected BaseDispatcherTest(IDispatcher dispatcher, IRemanentHandler remanentHandler)
         {
@@ -35,7 +37,8 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 
             Dispatcher = dispatcher;
 
-            LogicInstancesStore = new LogicInstanceStore(new Mock<ILogicInstanceCache>().Object, new Mock<IControlCache>().Object);
+            LogicInstanceCache = new LogicInstanceCacheMock();
+            LogicInstancesStore = new LogicInstanceStore(LogicInstanceCache, new Mock<IControlCache>().Object);
             DriverNodesStore = new DriverNodesStore();
             NodeInstanceCache = new NodeInstanceCacheMock();
             LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();

@@ -91,7 +91,7 @@ namespace Automatica.Core.Tests.Dispatcher
         {
             var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", Dispatcher,
                 NodeInstanceCache, DriverNodesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null,
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
 
             CreateLink(a =>
@@ -126,7 +126,7 @@ namespace Automatica.Core.Tests.Dispatcher
         {
             var source = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Source", Dispatcher,
                 NodeInstanceCache, DriverNodesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null,
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var ruleOutputTarget = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "test", Dispatcher,
@@ -180,9 +180,9 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2RuleDispatch()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null,
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null,
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
@@ -219,9 +219,9 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2RuleDispatchWithInvertedInput()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null,
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null,
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
@@ -264,9 +264,9 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2RuleDispatchWithInvertedOutput()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null,
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null,
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
@@ -308,9 +308,9 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2RuleDispatchWithInvertedInputAndInvertedOutput()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null,
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
-            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, null,
+            var target = await DispatcherHelperUtils.CreateLogicMock("Target", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
 
             var outputInterface = source.Context.RuleInstance.RuleInterfaceInstance
@@ -372,7 +372,7 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2NodeDispatch()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null,
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
             var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", Dispatcher,
                 NodeInstanceCache, DriverNodesStore);
@@ -410,7 +410,7 @@ namespace Automatica.Core.Tests.Dispatcher
         [Fact]
         public async Task TestRule2NodeDispatch_TargetInverted()
         {
-            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, null,
+            var source = await DispatcherHelperUtils.CreateLogicMock("Source", Dispatcher, LogicInstanceCache,
                 LogicInterfaceInstanceCache, LogicInstancesStore);
             var target = await DispatcherHelperUtils.CreateNodeMock(Guid.NewGuid(), "Target", Dispatcher,
                 NodeInstanceCache, DriverNodesStore);

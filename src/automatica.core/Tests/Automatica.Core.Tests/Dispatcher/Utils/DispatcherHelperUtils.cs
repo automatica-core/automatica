@@ -178,6 +178,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             ruleInstance.RuleInterfaceInstance.Add(input);
             ruleInstance.RuleInterfaceInstance.Add(output);
 
+            instanceCache.Add(ruleInstance.ObjId, ruleInstance);
             var mock = new LogicMock(new LogicContextMock(ruleInstance, new LogicTemplateFactoryMock(), dispatcher));
 
             await mock.Start();

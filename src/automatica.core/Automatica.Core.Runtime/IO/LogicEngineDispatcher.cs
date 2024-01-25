@@ -260,73 +260,66 @@ namespace Automatica.Core.Runtime.IO
         {
             lock (_lock)
             {
-                Task.Run(async () =>
-                {
-                    await _ruleInstanceVisuNotifier.NotifyValueChanged(toInterface, o);
-                }).ConfigureAwait(false);
+                Task.Run(async () => { await _ruleInstanceVisuNotifier.NotifyValueChanged(toInterface, o); })
+                    .ConfigureAwait(false);
 
-                foreach (var rule in _logicInstancesStore.Dictionary())
+                var rule = _logicInstancesStore.GetByRuleInstanceId(toRule);
+                try
                 {
-                    if (rule.Key.ObjId == toRule)
+                    _logger.LogDebug(
+                        $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
+
+                    IList<ILogicOutputChanged> logicResults;
+                    if (o is DispatchValue dispatchValue)
                     {
-                        try
-                        {
-                            _logger.LogDebug(
-                                $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
+                        logicResults = rule.Value.ValueChanged(toInterface, dispatchable, dispatchValue);
+                    }
+                    else
+                    {
+                        logicResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
+                    }
 
-                            IList<ILogicOutputChanged> logicResults;
-                            if (o is DispatchValue dispatchValue)
-                            {
-                                logicResults = rule.Value.ValueChanged(toInterface, dispatchable, dispatchValue);
-                            }
-                            else
-                            {
-                                logicResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
-                            }
+                    foreach (var result in logicResults)
+                    {
+                        var value = result.Value;
+                        var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a =>
+                            a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
 
-                            foreach (var result in logicResults)
-                            {
-                                var value = result.Value;
-                                var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a =>
-                                    a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
-                                
-                                
-                                if (interfaceInstance.Inverted && value is bool bValueInt)
-                                {
-                                    value = !bValueInt;
-                                }
-                                Task.Run(async () =>
-                                {
-                                    await _dispatcher.DispatchValue(result.Instance, value);
-                                    await _ruleInstanceVisuNotifier.NotifyValueChanged(interfaceInstance, value);
-                                }).ConfigureAwait(false);
-                            }
-                        }
-                        catch (Exception e)
+
+                        if (interfaceInstance.Inverted && value is bool bValueInt)
                         {
-                            _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+                            value = !bValueInt;
                         }
+
+                        Task.Run(async () =>
+                        {
+                            await _dispatcher.DispatchValue(result.Instance, value);
+                            await _ruleInstanceVisuNotifier.NotifyValueChanged(interfaceInstance, value);
+                        }).ConfigureAwait(false);
                     }
                 }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+                }
+
             }
         }
 
         private void ValueDispatched(IDispatchable dispatchable, DispatchValue o, Guid to)
         {
             var node = _driverNodesStore.Get(to);
-            if (node.Id == to)
+
+            try
             {
-                try
-                {
-                    var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                    _logger.LogInformation(
-                        $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
-                    node.WriteValue(dispatchable, o, token.Token);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
-                }
+                var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                _logger.LogInformation(
+                    $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
+                node.WriteValue(dispatchable, o, token.Token);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
             }
         }
 
