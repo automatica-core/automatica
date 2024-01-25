@@ -139,26 +139,6 @@ namespace Automatica.Core.Driver
 
                         await driverNode.Configure(token);
 
-
-                        await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, async (source, value) =>
-                        {
-                            if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
-                            {
-                                return;
-                            }
-
-                            if (source.Source == DispatchableSource.RemanentValue ||
-                                source.Source == DispatchableSource.Visualization ||
-                                source.Source == DispatchableSource.Remote)
-                            {
-                                if (driverNode is DriverBase driverBase)
-                                {
-                                    DriverContext.Logger.LogInformation($"{Id} {Name}: Dispatch direct write {value} ");
-                                    await driverBase.Enqueue(source, value);
-                                }
-                            }
-                        });
-
                         ChildrensCreated += driverNode.ChildrensCreated;
                     }
                     else
