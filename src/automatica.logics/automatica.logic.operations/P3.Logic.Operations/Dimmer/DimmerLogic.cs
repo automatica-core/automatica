@@ -72,7 +72,7 @@ namespace P3.Logic.Operations.Dimmer
                 return ret;
             }
 
-            if (instance.ObjId == _value.ObjId)
+            if (instance.ObjId == _value.ObjId && source.Source == DispatchableSource.Visualization)
             {
                 int intValue = Convert.ToInt32(value);
 
