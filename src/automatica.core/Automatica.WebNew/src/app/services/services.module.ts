@@ -23,7 +23,7 @@ import { SystemService } from "./system.service";
 import { PluginsService } from "./plugins.service";
 import { AppService } from "./app.service";
 import { SatelliteService } from "./satellite.services";
-import { NodeInstanceService } from "./node-instance.service";
+import { LogicEditorInstanceService } from "./logic-editor-instance.service";
 import { NodeTemplateService } from "./node-template.service";
 import { LogsService } from "./logs.service";
 import { HyperSeriesService } from "./hyperseries.service";
@@ -38,7 +38,7 @@ import { ControlsService } from "./controls.service";
     AreaService,
     CategoryService,
     ConfigService,
-    NodeInstanceService,
+    LogicEditorInstanceService,
     DataService,
     DesignTimeDataService,
     LoginService,

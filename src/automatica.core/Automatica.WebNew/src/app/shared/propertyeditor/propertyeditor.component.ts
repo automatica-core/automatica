@@ -24,7 +24,7 @@ import { Satellite } from "src/app/base/model/satellites/satellite";
 import { SatelliteService } from "src/app/services/satellite.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { LogicEngineService } from "src/app/services/logicengine.service";
 import { RulePage } from "src/app/base/model/rule-page";
@@ -340,7 +340,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private notify: NotifyService,
     private satellitesService: SatelliteService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private ruleEngineService: LogicEngineService,
     private changeDetection: ChangeDetectorRef,
     private router: Router,

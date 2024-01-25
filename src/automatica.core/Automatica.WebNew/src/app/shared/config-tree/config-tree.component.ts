@@ -2,7 +2,6 @@ import { ViewChild, Component, OnInit, Input, Output, EventEmitter, OnDestroy, C
 import { ConfigService } from "../../services/config.service";
 import { DxTreeListComponent, DxContextMenuComponent } from "devextreme-angular";
 import { L10nTranslationService } from "angular-l10n";
-import { SettingsService } from "src/app/services/settings.service";
 import { LearnNodeInstance } from "../propertyeditor/propertyeditor.component";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -14,10 +13,7 @@ import { NodeTemplate } from "src/app/base/model/node-template";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { BoardInterface } from "src/app/base/model/board-interface";
 import { PropertyInstance, UpdateScope } from "src/app/base/model/property-instance";
-import { DesignTimeDataService } from "src/app/services/design-time-data.service";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
-import { NodeTemplateService } from "src/app/services/node-template.service";
-import { DataService } from "src/app/services/data.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { WindowState } from "src/app/base/model/window-state";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
@@ -83,7 +79,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   constructor(
     private configService: ConfigService,
-    public nodeInstanceService: NodeInstanceService,
+    public nodeInstanceService: LogicEditorInstanceService,
     translate: L10nTranslationService,
     private notify: NotifyService,
     private hub: DataHubService,

@@ -60,6 +60,7 @@
     "SAVE_BEFORE_CONTINUE": "Du musst deine Änderungen speichern bevor du diese Aktion ausführen kannst",
     "READ": "Lesen",
     "SERVER_STARTING": "Server fährt hoch...",
+    "CONNECTING_TO_SERVER": "Verbinde mit Server...",
     "SIGNALR_CONNECTION": "SignalR Verbindung",
     "LOADING_PLUGINS": "Lade Erweiterungen",
     "STARTED": "Gestartet",

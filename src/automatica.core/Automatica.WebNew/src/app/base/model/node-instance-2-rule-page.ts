@@ -72,8 +72,18 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, 
         this.notifyChange("Inverted");
     }
 
+    
+    private _NodeInstance : NodeInstance;
+    
     @JsonPropertyName("This2NodeInstanceNavigation")
-    NodeInstance: NodeInstance;
+    public get NodeInstance() : NodeInstance {
+        return this._NodeInstance;
+    }
+    public set NodeInstance(v : NodeInstance) {
+        this._NodeInstance = v;
+        this.afterFromJson();
+    }
+    
 
     @JsonPropertyName("This2RulePageNavigation")
     RulePage: RulePage;
@@ -143,23 +153,25 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, 
     }
 
     afterFromJson() {
-        if (this.NodeInstance.NodeTemplate.IsReadable) {
-            const intf = new NodeInterfaceInstance();
-            intf.Name = this.ObjId + "O";
-            intf.PortId = this.ObjId + "O";
-            intf.ObjId = this.This2NodeInstance;
-            intf.NodeInstance2RulePageId = this.ObjId;
+        if (this.NodeInstance) {
+            if (this.NodeInstance.NodeTemplate.IsReadable) {
+                const intf = new NodeInterfaceInstance();
+                intf.Name = this.ObjId + "O";
+                intf.PortId = this.ObjId + "O";
+                intf.ObjId = this.This2NodeInstance;
+                intf.NodeInstance2RulePageId = this.ObjId;
 
-            this.Outputs.push(intf);
-        }
-        if (this.NodeInstance.NodeTemplate.IsWriteable) {
-            const intf = new NodeInterfaceInstance();
-            intf.Name = this.ObjId + "I";
-            intf.PortId = this.ObjId + "I";
-            intf.ObjId = this.This2NodeInstance;
-            intf.NodeInstance2RulePageId = this.ObjId;
+                this.Outputs.push(intf);
+            }
+            if (this.NodeInstance.NodeTemplate.IsWriteable) {
+                const intf = new NodeInterfaceInstance();
+                intf.Name = this.ObjId + "I";
+                intf.PortId = this.ObjId + "I";
+                intf.ObjId = this.This2NodeInstance;
+                intf.NodeInstance2RulePageId = this.ObjId;
 
-            this.Inputs.push(intf);
+                this.Inputs.push(intf);
+            }
         }
     }
 

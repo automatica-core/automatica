@@ -9,7 +9,7 @@
         [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
         [columnAutoWidth]="true" [expandedRowKeys]="expandedRowKeys"
         (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false"
-        [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)">
+        [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false">
         <dxo-selection mode="single"></dxo-selection>
         <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>
         <dxi-column dataField="Value" dataType="string" cellTemplate="valueTemplate"></dxi-column>

@@ -560,12 +560,6 @@ namespace Automatica.Core.WebApi.Controllers
         {
             var ret = _logicCacheFacade.LogicNodeInstanceCache.All();
 
-            foreach (var nodeInstance in ret)
-            {
-                var page = _logicCacheFacade.PageCache.Get(nodeInstance.This2RulePage);
-                nodeInstance.This2RulePageNavigation = page;
-            }
-
             return ret;
         }
     }

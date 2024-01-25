@@ -221,9 +221,6 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
 
-                    instance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(nav.ObjId, DbContext);
-                    instance.This2RulePageNavigation = _logicCacheFacade.PageCache.Get(pageId);
-
                     _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(instance.ObjId, instance);
                     _logicCacheFacade.ClearInstances();
 
@@ -275,9 +272,6 @@ namespace Automatica.Core.WebApi.Controllers
                     DbContext.Entry(existingInstance).State = EntityState.Modified;
 
                     await DbContext.SaveChangesAsync();
-
-                    existingInstance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(existingInstance.This2NodeInstance, DbContext);
-                    existingInstance.This2RulePageNavigation = _logicCacheFacade.PageCache.Get(existingInstance.This2RulePage);
 
                     _logicCacheFacade.PageCache.UpdateNodeInstance(existingInstance);
                     _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(existingInstance.ObjId, existingInstance);

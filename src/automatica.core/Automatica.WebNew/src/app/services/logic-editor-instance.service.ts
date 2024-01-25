@@ -11,11 +11,13 @@ import { DataHubService } from "../base/communication/hubs/data-hub.service";
 import { NodeTemplateService } from "./node-template.service";
 import { DataService } from "./data.service";
 import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
+import { RulePage } from "../base/model/rule-page";
+import { LogicEngineService } from "./logicengine.service";
 
 type NodeInstanceOrLogicNodeInstance = NodeInstance | NodeInstance2RulePage;
 
 @Injectable()
-export class NodeInstanceService {
+export class LogicEditorInstanceService {
 
 
     private _nodeTemplates: NodeTemplate[];
@@ -25,8 +27,10 @@ export class NodeInstanceService {
 
     private _logicNodeInstance: Map<string, NodeInstance2RulePage>;
 
+    private _logicPages: RulePage[] = [];
 
     private _rootNode: NodeInstance;
+    private _logicPageMap: Map<string, RulePage>;
 
     public get rootNode(): NodeInstance {
         return this._rootNode;
@@ -39,12 +43,17 @@ export class NodeInstanceService {
         return this._nodeInstanceList;
     }
 
+    public get pages(): RulePage[] {
+        return this._logicPages;
+    }
+
     constructor(private designTimeDataService: DesignTimeDataService,
         private configService: ConfigService,
         private settingsService: SettingsService,
         private dataHubService: DataHubService,
         private nodeTemplateService: NodeTemplateService,
-        private dataService: DataService) {
+        private dataService: DataService,
+        private logicEngineService: LogicEngineService) {
 
     }
 
@@ -92,20 +101,37 @@ export class NodeInstanceService {
     }
 
     private async loadConfig() {
-        const instances = await this.configService.getNodeInstances();
-        const logicNodeInstances = await this.configService.getLogicNodeInstances();
+        
+        const [instances, logicNodeInstances, pages] = await Promise.all([
+            await this.configService.getNodeInstances(),
+            await this.configService.getLogicNodeInstances(),
+            await this.logicEngineService.getPages()
+        ]);
 
+        this.convertPages(pages);
         this.convertConfig(instances);
         this.convertLogicNodeInstances(logicNodeInstances);
-
     }
+
+    convertPages(pages: RulePage[]) {
+        this._logicPages = pages;
+
+        this._logicPageMap = new Map<string, RulePage>();
+        for (const page of pages) {
+            this._logicPageMap.set(page.ObjId, page);
+        }
+    }
+
+
     convertLogicNodeInstances(logicNodeInstances: NodeInstance2RulePage[]) {
         this._logicNodeInstance = new Map<string, NodeInstance2RulePage>();
 
         for (const node of logicNodeInstances) {
             this._logicNodeInstance.set(node.ObjId, node);
-
             this._nodeInstanceList.push(node);
+
+            node.RulePage = this._logicPageMap.get(node.This2RulePage);
+            node.NodeInstance = this._nodeInstanceMap.get(node.This2NodeInstance);
         }
     }
 
@@ -159,7 +185,7 @@ export class NodeInstanceService {
 
     removeLogicNodeInstance(item: NodeInstance2RulePage) {
         this._nodeInstanceList = this._nodeInstanceList.filter(a => a.Id !== item.Id);
-        if(this._logicNodeInstance.has(item.Id))
+        if (this._logicNodeInstance.has(item.Id))
             this._logicNodeInstance.delete(item.Id);
     }
 

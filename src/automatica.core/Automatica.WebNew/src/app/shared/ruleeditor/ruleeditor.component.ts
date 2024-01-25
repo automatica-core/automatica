@@ -19,7 +19,7 @@ import { Subscription } from "rxjs";
 import { ILogicErrorHandler } from "./ilogicErrorHandler";
 import { ILogicInfoHandler } from "./ilogicInfoHandler";
 import { NodeTemplate } from "src/app/base/model/node-template";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { BaseModel } from "src/app/base/model/base-model";
 
 declare var draw2d: any;
@@ -82,7 +82,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     translate: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private themeService: ThemeService) {
     super(notify, translate, appService);
 

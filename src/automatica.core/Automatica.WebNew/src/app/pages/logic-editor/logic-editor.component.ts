@@ -16,15 +16,14 @@ import { BaseComponent } from "src/app/base/base-component";
 import { RuleTemplate } from "src/app/base/model/rule-template";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
-import { NodeTemplate } from "src/app/base/model/node-template";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import DataSource from "devextreme/data/data_source";
 import { DxListComponent, DxPopupComponent } from "devextreme-angular";
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 import { ITreeNode } from "src/app/base/model/ITreeNode";
 
@@ -69,7 +68,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     private userGroupsService: GroupsService,
     appService: AppService,
     private dataHub: DataHubService,
-    private nodeInstanceService: NodeInstanceService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private changeRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
@@ -136,9 +135,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     try {
       this.isLoading = true;
 
-      const [pages, ruleTemplates, linkableNodes, areaInstances, categoryInstances, userGroups] = await Promise.all(
+      const [ruleTemplates, linkableNodes, areaInstances, categoryInstances, userGroups] = await Promise.all(
         [
-          this.ruleEngineService.getPages(),
           this.ruleEngineService.getRuleTemplates(),
           this.configService.getLinkableNodes(),
           this.areaService.getAreaInstances(),
@@ -147,7 +145,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
           this.nodeInstanceService.load()
         ]);
 
-      this.pages = this.sortPages(pages);
+      this.pages = this.sortPages(this.nodeInstanceService.pages);
 
 
       this.pagesDataSource = new DataSource({
@@ -348,7 +346,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
       setTimeout(() => {
         this.ruleEngineService.selected.emit({ logicNodeInstance: event, logicPage: this.selectedPage });
-      });
+      }, 10);
     }
   }
 
