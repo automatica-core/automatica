@@ -11,17 +11,12 @@ using Newtonsoft.Json.Linq;
 
 namespace Automatica.Core.Base.Localization
 {
-    public class LocalizationProvider : ILocalizationProvider
+    public class LocalizationProvider(ILogger<LocalizationProvider> logger) : ILocalizationProvider
     {
         private readonly Dictionary<string, JObject> _localizationStreams = new Dictionary<string, JObject>();
 
         private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
-        private readonly ILogger _logger;
-
-        public LocalizationProvider(ILogger<LocalizationProvider> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger _logger = logger;
 
         public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
         {
@@ -46,12 +41,12 @@ namespace Automatica.Core.Base.Localization
             }
 
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
-            _logger.LogInformation($"Add localization for {culture.TwoLetterISOLanguageName} and {fileName}");
+            _logger.LogDebug($"Add localization for {culture.TwoLetterISOLanguageName} and {fileName}");
         }
 
         public void LoadFromAssembly(Assembly assembly)
         {
-            _logger.LogInformation($"Load localization for {assembly.FullName}");
+            _logger.LogDebug($"Load localization for {assembly.FullName}");
             if (_loadedAssemblies.Contains(assembly))
             {
                 return;
