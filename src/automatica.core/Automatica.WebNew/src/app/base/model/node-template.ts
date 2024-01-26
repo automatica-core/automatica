@@ -78,10 +78,6 @@ export class NodeTemplate extends BaseModel {
         return this.translationService.translate(this.Name);
     }
 
-    public static ValueInterfaceId(): string {
-        return "00000000-0000-0000-0000-000000000001";
-    }
-
     protected afterFromJson(): void {
         this.NodeTypeEnum = <NodeDataTypeEnum>this.This2NodeDataType;
     }

@@ -10,7 +10,7 @@ import { IPropertyModel } from "./interfaces/ipropertyModel";
 
 @Model()
 export class BoardType extends BaseModel implements ITreeNode, INameModel, IDescriptionModel, IPropertyModel {
-    Icon: string = "fa-sharp fa-light fa-network-wired";
+    Icon: string = "automatica-logo";
     Validate: boolean = false;
     Value?: any;
     Parent: ITreeNode;

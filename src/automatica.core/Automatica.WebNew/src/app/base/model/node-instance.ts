@@ -34,6 +34,7 @@ import { VirtualOnlyWriteIfChangedPropertyInstance } from "./virtual-props/virtu
 import { VirtualCreatedAtPropertyInstance } from "./virtual-props/virtual-created-at-property-instance";
 import { VirtualModifedAtPropertyInstance } from "./virtual-props/virtual-modified-at-property-instance";
 import { ITimestampModifiedTrackingModel } from "./ITimestampModifiedTrackingModel";
+import { InterfaceTypeEnum } from "./interface-type";
 
 class NodeInstanceMetaHelper {
     private static pad(num, size) {
@@ -135,7 +136,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
     @JsonProperty()
     State: NodeInstanceState;
-    
+
     @JsonProperty()
     Error: string;
 
@@ -182,7 +183,7 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         if (this._displayName) {
             return `${this._displayName}`;
         }
-        
+
         return this._name;
     }
 
@@ -201,11 +202,11 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
 
         if (this.Parent instanceof NodeInstance) {
             ret = this.Parent.FullName;
-            if(this.Name)
+            if (this.Name)
                 ret += ` → ${this.DisplayName}`;
         }
 
-        if(!ret) {
+        if (!ret) {
             return "Root";
         }
 
@@ -245,35 +246,35 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         this.notifyChange("Value");
     }
 
-    
-    private _writeValue : any;
-    public get WriteValue() : any {
+
+    private _writeValue: any;
+    public get WriteValue(): any {
         return this._writeValue;
     }
-    public set WriteValue(v : any) {
+    public set WriteValue(v: any) {
         this._writeValue = v;
         this.notifyChange("WriteValue");
     }
-    
-    private _readValue : any;
-    public get ReadValue() : any {
+
+    private _readValue: any;
+    public get ReadValue(): any {
         return this._readValue;
     }
-    public set ReadValue(v : any) {
+    public set ReadValue(v: any) {
         this._readValue = v;
         this.notifyChange("ReadValue");
     }
 
-    private _valueSource : ValueSource;
-    public get ValueSource() : ValueSource {
+    private _valueSource: ValueSource;
+    public get ValueSource(): ValueSource {
         return this._valueSource;
     }
-    public set ValueSource(v : ValueSource) {
+    public set ValueSource(v: ValueSource) {
         this._valueSource = v;
         this.notifyChange("ValueSource");
     }
-    
-    
+
+
 
 
     private _valueTimestamp: Date;
@@ -383,16 +384,42 @@ export class NodeInstance extends BaseModel implements ITreeNode, INameModel, ID
         }
     }
 
-    
+
     public get Validate(): boolean {
         return true;
     }
 
     public get Icon(): string {
-        
-        if(this.NodeTemplate && this.NodeTemplate.ProvidesInterface2InterfaceType && this.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
-            return "object-union";
+
+        if(!this.ParentId || this.ParentId === "") {
+            return "automatica-logo";
         }
+
+        if (this.NodeTemplate && this.NodeTemplate.ProvidesInterface2InterfaceType) {
+            switch (this.NodeTemplate.ProvidesInterface2InterfaceType) {
+                case InterfaceTypeEnum.Value:
+                    return "object-union";
+                case InterfaceTypeEnum.Ethernet:
+                    return "ethernet";
+                case InterfaceTypeEnum.Board:
+                    return "automatica-logo";
+                case InterfaceTypeEnum.RemoteUsb:
+                    return "laptop-arrow-down";
+                case InterfaceTypeEnum.Usb:
+                case InterfaceTypeEnum.UsbIr:
+                    return "usb-drive";
+                case InterfaceTypeEnum.Rs232:
+                case InterfaceTypeEnum.Rs485:
+                    return "tty";
+                case InterfaceTypeEnum.Virtual:
+                    return "vr-cardboard";
+
+                default:
+                    return "folder";
+            }
+
+        }
+
         return "folder";
     }
 

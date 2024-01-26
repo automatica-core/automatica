@@ -38,6 +38,7 @@ import { CalendarPropertyData } from "src/app/base/model/calendar-property-data"
 import { ControlsService } from "src/app/services/controls.service";
 import { ControlConfiguration } from "src/app/base/model/control-configuration";
 import { Control, ControlGrouped } from "src/app/base/model/control";
+import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -407,7 +408,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
 
   nodeSelect($event) {
-    if ($event instanceof NodeInstance && $event.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
+    if ($event instanceof NodeInstance && $event.NodeTemplate.ProvidesInterface2InterfaceType === InterfaceTypeEnum.Value) {
       this.selectedNodeInstance = $event;
     } else {
       this.selectedNodeInstance = void 0;

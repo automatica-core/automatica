@@ -283,8 +283,7 @@ namespace Automatica.Core.Runtime.IO
                     foreach (var result in logicResults)
                     {
                         var value = result.Value;
-                        var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a =>
-                            a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
+                        var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a => a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
 
 
                         if (interfaceInstance.Inverted && value is bool bValueInt)

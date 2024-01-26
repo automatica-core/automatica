@@ -13,6 +13,7 @@ import { DataService } from "./data.service";
 import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
 import { RulePage } from "../base/model/rule-page";
 import { LogicEngineService } from "./logicengine.service";
+import { InterfaceTypeEnum } from "../base/model/interface-type";
 
 type NodeInstanceOrLogicNodeInstance = NodeInstance | NodeInstance2RulePage;
 
@@ -227,7 +228,7 @@ export class LogicEditorInstanceService {
 
     public async getSupportedNodeTemplates(node: NodeInstance) {
 
-        if (node.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
+        if (node.NodeTemplate.ProvidesInterface2InterfaceType === InterfaceTypeEnum.Value) {
             return [];
         }
 

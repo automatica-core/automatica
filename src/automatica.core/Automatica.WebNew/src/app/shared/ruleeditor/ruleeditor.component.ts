@@ -21,6 +21,7 @@ import { ILogicInfoHandler } from "./ilogicInfoHandler";
 import { NodeTemplate } from "src/app/base/model/node-template";
 import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { BaseModel } from "src/app/base/model/base-model";
+import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 
 declare var draw2d: any;
 
@@ -179,7 +180,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     if ($event.dragData instanceof NodeInstance) {
 
       const nodeInstance: NodeInstance = $event.dragData;
-      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== NodeTemplate.ValueInterfaceId()) {
+      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== InterfaceTypeEnum.Value) {
 
         for (const child of nodeInstance.Children) {
           const success = await this.addNodeInstanceToPage(child, point)
@@ -194,7 +195,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   }
 
   async addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
-    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== NodeTemplate.ValueInterfaceId()) {
+    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== InterfaceTypeEnum.Value) {
       return false;
     }
 
