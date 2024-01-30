@@ -39,7 +39,7 @@ namespace Automatica.Core.Internals.License
         public int MaxSatellites { get; private set; }
         public bool AllowTextToSpeech { get; private set; }
 
-        private AsyncNonKeyedLocker _semaphore = new(1);
+        private readonly AsyncNonKeyedLocker _semaphore = new(1);
 
         public bool DriverLicenseCountExceeded()
         {

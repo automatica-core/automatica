@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using AsyncKeyedLock;
 using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO.Remanent;
 using Automatica.Core.Base.Remote;
@@ -24,7 +25,8 @@ namespace Automatica.Core.Base.IO
         private readonly IRuleInstanceVisuNotify _ruleNotifier;
         private readonly ILogger _logger;
         private readonly object _lock = new object();
-        
+
+        private readonly AsyncKeyedLocker<Guid> _semaphore = new();
 
         protected readonly IDictionary<DispatchableType, IDictionary<Guid, DispatchValue>> NodeValues =
             new ConcurrentDictionary<DispatchableType, IDictionary<Guid, DispatchValue>>();
@@ -154,8 +156,11 @@ namespace Automatica.Core.Base.IO
             }
         }
 
-        private async Task Dispatch(IDispatchable self, DispatchValue value, Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
+        private async Task Dispatch(IDispatchable self, DispatchValue value,
+            Action<IDispatchable, DispatchValue, Action<IDispatchable, DispatchValue>> dispatchAction)
         {
+            using var releaser = await _semaphore.LockAsync(self.Id).ConfigureAwait(false);
+
             StoreValue(self, value);
 
             if (self.Type == DispatchableType.RuleInstance)
@@ -168,7 +173,8 @@ namespace Automatica.Core.Base.IO
                 _hopCounts.Add(self.Id, new ConcurrentDictionary<Action<IDispatchable, DispatchValue>, int>());
             }
 
-            _logger.LogInformation($"Driver {self.Id}-{self.Name} dispatched value {value.Value} from a {value.ValueSource} operation");
+            _logger.LogInformation(
+                $"Driver {self.Id}-{self.Name} dispatched value {value.Value} from a {value.ValueSource} operation");
 
             if (self.IsRemanent && self is not RemanentDispatchable)
             {
@@ -195,7 +201,7 @@ namespace Automatica.Core.Base.IO
             {
                 await _remoteSender.DispatchValue(self, value);
             }
-            
+
             await _dataBroadcast.DispatchValue(self.Type, self.Id, value);
         }
 
