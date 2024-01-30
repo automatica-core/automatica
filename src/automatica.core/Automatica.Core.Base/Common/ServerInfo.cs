@@ -196,6 +196,12 @@ namespace Automatica.Core.Base.Common
             return remanentDirectory;
         }
 
+        public static string GetDefaultPluginDirectory()
+        {
+            var pluginsDirectory = Path.Combine(GetPersistentDirectory(), "plugins");
+            return pluginsDirectory;
+        }
+
         public static string GetPersistentDirectory()
         {
             var persistentDirectory = GetBasePath();

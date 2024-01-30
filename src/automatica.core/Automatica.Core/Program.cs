@@ -87,7 +87,7 @@ namespace Automatica.Core
                 }
                 else
                 {
-                    ServerInfo.PluginDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+                    ServerInfo.PluginDirectory = ServerInfo.GetDefaultPluginDirectory();
                 }
             }
 
