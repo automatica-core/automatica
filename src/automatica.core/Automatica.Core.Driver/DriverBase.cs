@@ -58,13 +58,6 @@ namespace Automatica.Core.Driver
         {
             await Task.CompletedTask;
 
-            if (DriverContext.NodeInstance.State != NodeInstanceState.InUse)
-            {
-                DriverContext.Logger.LogWarning(
-                    $"{FullName} {Id} Node is not started...ignore write...");
-                return;
-            }
-
             _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
 
