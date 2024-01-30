@@ -14,6 +14,7 @@ using Automatica.Core.Runtime.Database;
 using Serilog;
 using Automatica.Core.Internals;
 using System.Collections;
+using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using Automatica.Core.Logging;
 using Microsoft.AspNetCore.Builder;
@@ -87,7 +88,7 @@ namespace Automatica.Core
                 }
                 else
                 {
-                    ServerInfo.PluginDirectory = ServerInfo.GetDefaultPluginDirectory();
+                    ServerInfo.PluginDirectory = Debugger.IsAttached ? new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName : ServerInfo.GetDefaultPluginDirectory();
                 }
             }
 
