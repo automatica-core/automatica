@@ -33,7 +33,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public List<string> GetLogFiles()
         {
-            var files = GetFilesForSubDirectory(Path.Combine(ServerInfo.GetBasePath(), "logs"));
+            var files = GetFilesForSubDirectory(ServerInfo.GetLogDirectory());
 
             return files.Select(a => a.FullName.Replace(ServerInfo.GetBasePath(), "").Replace("\\", "/")).ToList();
         }
@@ -45,7 +45,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task GetLogFile([FromQuery] string file)
         {
-            var files = GetFilesForSubDirectory(Path.Combine(ServerInfo.GetBasePath(), "logs"));
+            var files = GetFilesForSubDirectory(ServerInfo.GetLogDirectory());
 
             var logList = files.Select(a => a.FullName.Replace(ServerInfo.GetBasePath(), "").Replace("\\", "/")).ToList();
 
