@@ -42,7 +42,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
     translate: L10nTranslationService,
     private configService: ConfigService,
     appService: AppService,
-    private dataService: DataService) {
+    private dataService: DataService,
+    private router: Router) {
 
     super(notify, translate, appService);
   }
@@ -58,8 +59,6 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
       this.initPage(page, page.ObjId);
     });
 
-
-
     for (const v of this.visuTemplates) {
       this.visuTemplatesMap.set(v.ObjId, v);
     }
@@ -69,14 +68,18 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
       if (!this.page) {
         if (this.route.snapshot.data.loadHomepage) {
-          this.pageGroupType = VisuPageGroupType.Favorites;
-          const data = await this.visuService.getFavorites();
-          this.initPage(data, void 0);
 
+          if (window.localStorage["lastVisuPage"] && window.localStorage["lastVisuPageType"]) {
+            this.router.navigate(["/visualization/page", window.localStorage["lastVisuPageType"], window.localStorage["lastVisuPage"]]);
+          }
+          else {
+            this.loadFavorites();
+          }
+
+        } else if (this.route.snapshot.data.loadFavorites) {
+          this.loadFavorites();
         } else {
           super.registerObservable(this.route.params, async (params) => {
-
-            this.appService.isLoading = true;
             if (!params.id) {
               return;
             }
@@ -84,21 +87,8 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
             const id = params["id"];
             const type = params["type"];
 
-            if (!type) {
-              return;
-            }
+            await this.loadPageById(id, type);
 
-            if (type === "area") {
-              this.pageGroupType = VisuPageGroupType.Area;
-            } else {
-              this.pageGroupType = VisuPageGroupType.Category;
-            }
-
-            const data = await this.visuService.getVisuPage(id);
-            this.initPage(data, id);
-
-
-            this.appService.isLoading = false;
           });
         }
 
@@ -110,11 +100,39 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
     this.appService.isLoading = false;
   }
+  private async loadFavorites() {
+    this.pageGroupType = VisuPageGroupType.Favorites;
+    const data = await this.visuService.getFavorites();
+    this.initPage(data, void 0);
+  }
+
+  private async loadPageById(id: string, type: string) {
+    this.appService.isLoading = true;
+
+    if (!type) {
+      return;
+    }
+
+    window.localStorage["lastVisuPage"] = id;
+    window.localStorage["lastVisuPageType"] = type;
+
+    if (type === "area") {
+      this.pageGroupType = VisuPageGroupType.Area;
+    } else {
+      this.pageGroupType = VisuPageGroupType.Category;
+    }
+
+    const data = await this.visuService.getVisuPage(id);
+    this.initPage(data, id);
+
+
+    this.appService.isLoading = false;
+  }
 
   private initPage(data: VisuPage | VisualizationDataFacade, id: any) {
     if (data instanceof VisualizationDataFacade) {
       var page = new VisuFacadePage();
-      
+
       page.Height = 3;
       page.Width = 5;
       page.visuPageType = this.pageGroupType;
