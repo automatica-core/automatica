@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Base.Calendar;
+using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Configuration;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
@@ -42,7 +43,7 @@ namespace Automatica.Core.EF.Backup
             {
                 await _backupService.StartBackup(
                     ConnectionStringHelper.GetConnectionString(_config, _logger).connectionString,
-                    Path.Combine("bak",$"{_context.DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak"));
+                    Path.Combine(ServerInfo.GetBackupDirectory(), $"{_context.DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak"));
             }
 
             await ClearOldBackups();
@@ -51,7 +52,7 @@ namespace Automatica.Core.EF.Backup
         private async Task ClearOldBackups()
         {
             await Task.CompletedTask;
-            var files = Directory.GetFiles($"bak", $"{_context.DatabaseType}-*");
+            var files = Directory.GetFiles(ServerInfo.GetBackupDirectory(), $"{_context.DatabaseType}-*");
             var sortedFiles = files.OrderBy(a => a).ToList();
 
             if (sortedFiles.Count < BackupRetentionDays)
@@ -73,11 +74,11 @@ namespace Automatica.Core.EF.Backup
 
             try
             {
-                Directory.CreateDirectory("bak");
+                Directory.CreateDirectory(ServerInfo.GetBackupDirectory());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Could not create backup direcotry {ex}");
+                _logger.LogError(ex, $"Could not create backup directory {ex}");
             }
 
 
