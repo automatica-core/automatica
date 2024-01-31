@@ -62,12 +62,7 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
     protected async mobileRuleInit() {
         this.registerEvent(this.dataHubService.ruleInstanceValueChanged, (data) => {
             if (this.ruleInstance && this.ruleInstance.Interfaces && this.ruleInstance.Interfaces.filter(a => a.ObjId === data[0]).length > 0) {
-                if (data[1].type) {
-                    this.onRuleInstanceValueChanged(data[0], data[1].value);
-                }
-                else {
-                    this.onRuleInstanceValueChanged(data[0], data[1]);
-                }
+                this.onRuleInstanceValueChanged(data[0], data[1]);
             }
         });
     }
