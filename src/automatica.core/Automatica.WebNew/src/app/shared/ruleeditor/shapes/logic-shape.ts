@@ -111,8 +111,7 @@ export class LogicShapes {
                 this._super($.extend(
                     {
                         id: element.key,
-                        bgColor: "#d7d7d7",
-                        alpha: 1,
+                        bgColor: "#dbddde", 
                         color: "#325862",
                         stroke: 0,
                         radius: 0,
@@ -120,7 +119,8 @@ export class LogicShapes {
                         y: element.Y,
                         keepAspectRatio: false,
                         resizeable: false,
-                        height: 25
+                        height: 25,
+                        width: 100
                     }, attr));
 
                 this.setUserData(element);
@@ -136,7 +136,6 @@ export class LogicShapes {
 
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
                 this.logicName = new logic.Label({
-                    text: translatedName,
                     stroke: 0,
                     fontColor: "#000000",
                     bgColor: "#d7d7d7",
@@ -144,9 +143,12 @@ export class LogicShapes {
                     padding: 5,
                     resizeable: true,
                     minWidth: 100,
+                    width: 100,
                     fontSize: 8,
                     height: 20
                 });
+
+                this.setText(translatedName)
 
                 this.on("move", (context) => {
                     element.X = context.x;
@@ -183,6 +185,28 @@ export class LogicShapes {
 
                 this.fireEvent("dragEnd", { x: x, y: y });
 
+            },
+            setText: function setText(text) {
+                const fontSize = text?.length <= 18 ? 8 : 6;
+                this.logicName.setFontSize(fontSize);
+                this.logicName.setText(this.truncate(text, fontSize));
+            },
+
+            truncate: function (input, fontSize) {
+                if (!input) {
+                    return input;
+                }
+                if (fontSize == 6) {
+                    if (input.length > 22) {
+                        return input.substring(0, 18) + '...';
+                    }
+                }
+                else if (fontSize == 8) {
+                    if (input.length > 18) {
+                        return input.substring(0, 15) + '...';
+                    }
+                }
+                return input;
             }
         });
 
@@ -195,7 +219,6 @@ export class LogicShapes {
             init: function (attr, element: RuleInstance, realParent, linkService: LinkService) {
                 this._super($.extend(
                     {
-                        bgColor: "#dbddde",
                         color: "#d7d7d7",
                         stroke: 0,
                         radius: 0,
@@ -234,8 +257,17 @@ export class LogicShapes {
                 const data = [];
                 for (const portInstance of portInstances) {
                     const isInput = portInstance.Template.InterfaceDirection.Key === "I" || portInstance.Template.InterfaceDirection.Key === "P";
+
+                    let portName = portInstance.Name;
+                    if(portName.length > 10 && portInstances.length > 1) {
+                        portName = portName.substring(0, 8) + "...";
+                    }
+                    else if(portName.length > 15) {
+                        portName = portName.substring(0, 12) + "...";
+                    }
+
                     const label = new logic.LogicPortText({
-                        text: portInstance.Name,
+                        text: portName,
                         stroke: 0,
                         radius: 0,
                         bgColor: null,

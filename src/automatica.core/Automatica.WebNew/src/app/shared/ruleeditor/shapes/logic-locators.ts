@@ -15,12 +15,14 @@ export class LogicLocators {
                 this.label = label;
             },
             relocate: function (index, target) {
+                target.setVisible(true);
                 const parent = this.realParent;
                 const boundingBox = parent.getBoundingBox()
                 const y = this.label.y + this.label.height / 2;
 
                 if (target instanceof draw2d.Port) {
-                    target.setPosition(boundingBox.w, y)
+                    target.setPosition(boundingBox.w, y);
+                    this.label.setPosition(boundingBox.w, y);
                 }
             }
         });
@@ -33,8 +35,10 @@ export class LogicLocators {
                 this._super();
                 this.realParent = realParent;
                 this.label = label;
+                
             },
             relocate: function (index, target) {
+                target.setVisible(true);
             
                 const y = this.label.y + this.label.height / 2;
 

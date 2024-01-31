@@ -52,7 +52,7 @@
                     <ng-container *ngFor="let page of pages;">
                         <dx-scroll-view *ngIf="selectedPage.ObjId == page.ObjId" #scrollView id="scrollview"
                             [scrollByContent]="false" [scrollByThumb]="false" showScrollbar="always"
-                            scrollDirection="both" [bounceEnabled]="false" [useNative]="true">
+                            direction="both" [bounceEnabled]="false" [useNative]="true">
 
                             <p3-ruleeditor style="display:inline-block"
                                 (selectedItemsChanged)="onSelectedItemsChanged($event)"
