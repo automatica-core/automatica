@@ -83,12 +83,15 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
 
   onValueChanged($event) {
     this.switch($event.value);
+
   }
 
   switch(value) {
     if (this.stateInput)
-      if (this.state != value)
+      if (this.state != value) {
         this.dataHub.setValue(this.stateInput.ObjId, value);
+        this.state = value;
+      }
   }
 
   sliderUpdate(value) {
