@@ -149,7 +149,7 @@ namespace Automatica.Core.Runtime.IO
                             {
                                 o.Value = !bValueInt;
                             }
-                            ValueDispatchToRule(dispatchable, o.Value, targetNode.This2RuleInstance, targetNode);
+                            ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
                         }
                     });
                 }
@@ -218,7 +218,7 @@ namespace Automatica.Core.Runtime.IO
             foreach (var logicInterface in logicInterfaces)
             {
                 await _dispatcher.RegisterDispatch(DispatchableType.Visualization, logicInterface.ObjId,
-                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o.Value, logicInterface.This2RuleInstance, logicInterface); });
+                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface); });
             }
 
             return true;
@@ -257,7 +257,7 @@ namespace Automatica.Core.Runtime.IO
         }
 
 
-        private void ValueDispatchToRule(IDispatchable dispatchable, object o, Guid toRule, RuleInterfaceInstance toInterface)
+        private void ValueDispatchToRule(IDispatchable dispatchable, DispatchValue o, Guid toRule, RuleInterfaceInstance toInterface)
         {
             lock (_lock)
             {
@@ -294,7 +294,7 @@ namespace Automatica.Core.Runtime.IO
                         Task.Run(async () =>
                         {
                             await _dispatcher.DispatchValue(result.Instance, value);
-                            await _ruleInstanceVisuNotifier.NotifyValueChanged(interfaceInstance, value);
+                            await _ruleInstanceVisuNotifier.NotifyValueChanged(interfaceInstance, new DispatchValue(result.Instance.Id, DispatchableType.RuleInstance, value, DateTime.Now, DispatchValueSource.Read));
                         }).ConfigureAwait(false);
                     }
                 }

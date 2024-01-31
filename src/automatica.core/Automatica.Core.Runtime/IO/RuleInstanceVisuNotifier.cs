@@ -10,11 +10,11 @@ namespace Automatica.Core.Runtime.IO
 {
     public class RuleInstanceVisuNotifier(IHubContext<DataHub> hub, ILogger<RuleInstanceVisuNotifier> logger) : IRuleInstanceVisuNotify
     {
-        public Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
+        public Task NotifyValueChanged(RuleInterfaceInstance instance, DispatchValue value)
         {
             try
             {
-                return hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value);
+                return hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value.Value);
             }
             catch (Exception e)
             {

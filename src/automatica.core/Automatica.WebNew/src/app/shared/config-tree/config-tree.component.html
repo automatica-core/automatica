@@ -8,7 +8,7 @@
     <dx-tree-list height="100%" #tree itemsExpr="Children" id="config"
         [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
         [columnAutoWidth]="true" [expandedRowKeys]="expandedRowKeys"
-        (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false"
+        (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false" [allowColumnResizing]="true"
         [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false">
         <dxo-selection mode="single"></dxo-selection>
         <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>
@@ -33,7 +33,7 @@
 
                             <ng-container *ngIf="data.data.IsAnyDisabled">
                                 <span id="node-instance-disabled-{{data.data.Id}}" class="node-instance-disabled">
-                                    <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.NAME</span><span>) </span>
+                                    <span>(</span><span translate>COMMON.PROPERTY.ISDISABLED.SHORT</span><span>) </span>
 
                                     <dx-tooltip target="#node-instance-disabled-{{data.data.Id}}" showEvent="mouseenter"
                                         hideEvent="mouseleave" [hideOnOutsideClick]="false" position="right">

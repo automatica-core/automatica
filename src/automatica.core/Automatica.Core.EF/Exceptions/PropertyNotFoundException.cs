@@ -2,13 +2,10 @@
 
 namespace Automatica.Core.EF.Exceptions
 {
-    public class PropertyNotFoundException : Exception
+    public class PropertyNotFoundException(string propertyName) : Exception
     {
-        public string PropertyName { get; }
+        public string PropertyName { get; } = propertyName;
 
-        public PropertyNotFoundException(string propertyName)
-        {
-            PropertyName = propertyName;
-        }
+        public override string Message => base.Message + $"Property {PropertyName} could not be found";
     }
 }

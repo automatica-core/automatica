@@ -87,12 +87,12 @@ export class LogicShapes {
                 }
                 if (fontSize == 8) {
                     if (input.length > 22) {
-                        return input.substring(0, 18) + '...';
+                        return input.substring(0, 16) + '...';
                     }
                 }
                 else if (fontSize == 10) {
                     if (input.length > 18) {
-                        return input.substring(0, 15) + '...';
+                        return input.substring(0, 13) + '...';
                     }
                 }
                 return input;

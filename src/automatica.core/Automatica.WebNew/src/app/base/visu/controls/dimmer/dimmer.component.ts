@@ -63,19 +63,22 @@ export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, 
     map.forEach((value, key) => {
       this.onRuleInstanceValueChanged(key, value);
     });
-    if(this.stateValue > 0) {
+    if (this.stateValue > 0) {
       this.state = true;
     }
   }
 
   onRuleInstanceValueChanged(interfaceId, value) {
-     if (this.outputState && this.outputState.ObjId === interfaceId) {
-       this.state = value;
-     }
-     else if (this.outputValue && this.outputValue.ObjId == interfaceId) {
-       this.displayValue = `${Math.round(value)}%`;
-       this.stateValue = value;
-     }
+    if ((this.outputState && this.outputState.ObjId === interfaceId) ||
+      (this.stateInput && this.stateInput.ObjId === interfaceId)) {
+
+      this.state = value;
+    }
+    else if ((this.outputValue && this.outputValue.ObjId == interfaceId) ||
+      (this.valueInput && this.valueInput.ObjId == interfaceId)) {
+      this.displayValue = `${Math.round(value)}%`;
+      this.stateValue = value;
+    }
   }
 
   onValueChanged($event) {

@@ -277,7 +277,8 @@
         "DESCRIPTION": ""
       },
       "ISDISABLED": {
-        "NAME": "D",
+        "NAME": "Deaktiviert",
+        "SHORT":"D",
         "DESCRIPTION": "Knoten ist deaktiviert!"
       },
       "ISWRITEABLE": {

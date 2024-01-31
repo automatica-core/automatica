@@ -377,13 +377,22 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     try {
       const currentPage = this.selectedPage;
-
+   
       await this.ruleEngineService.removePage(currentPage);
+
+      for (const node of currentPage.NodeInstances) {
+        await this.nodeInstanceService.removeLogicNodeInstance(node);
+      }
 
       this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
       this.logicPageList.selectedItems = [];
+    
+      this.selectedItem = void 0;
+      this.selectedPage = void 0;
 
       await this.pagesDataSource.reload();
+      
+      this.configTree.refreshTree();
       this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
@@ -408,10 +417,11 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
       this.selectedPage = rulePage;
       this.selectedItem = rulePage;
-
+      
+      await this.pagesDataSource.reload();
+      
       this.logicPageList.selectedItems = [rulePage];
 
-      await this.pagesDataSource.reload();
       this.changeRef.detectChanges();
 
     } catch (error) {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -22,7 +20,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
             return Task.CompletedTask;
         }
 
-        public Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
+        public Task NotifyValueChanged(RuleInterfaceInstance instance, DispatchValue value)
         {
             return Task.CompletedTask;
         }
