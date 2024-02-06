@@ -7,7 +7,6 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.Control.Base;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
-using Newtonsoft.Json.Linq;
 
 namespace P3.Logic.Operations.Dimmer
 {
@@ -22,7 +21,7 @@ namespace P3.Logic.Operations.Dimmer
 
         private bool? _lastState;
         private int? _lastValue;
-        private bool? _lastOutputState;
+        private bool? _lastOutputState = null;
 
         public DimmerLogic(ILogicContext context) : base(context)
         {
@@ -50,15 +49,9 @@ namespace P3.Logic.Operations.Dimmer
             {
                 var booleanValue = Convert.ToBoolean(value);
 
-                if (_lastState == booleanValue)
-                {
-                    return new List<ILogicOutputChanged>();
-                }
-
                 _lastState = booleanValue;
 
-                var ret = new List<ILogicOutputChanged>();
-                ret.Add(new LogicOutputChanged(_dimmerState, booleanValue));
+                var ret = new List<ILogicOutputChanged> { new LogicOutputChanged(_dimmerState, booleanValue) };
 
                 if (booleanValue && _lastValue.HasValue)
                 {
@@ -74,7 +67,7 @@ namespace P3.Logic.Operations.Dimmer
 
             if (instance.ObjId == _value.ObjId && source.Source == DispatchableSource.Visualization)
             {
-                int intValue = Convert.ToInt32(value);
+                var intValue = Convert.ToInt32(value);
 
                 if (_lastValue.HasValue && _lastValue.Value == intValue)
                 {
