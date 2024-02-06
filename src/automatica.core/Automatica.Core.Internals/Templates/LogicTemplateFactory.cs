@@ -126,6 +126,14 @@ namespace Automatica.Core.Internals.Templates
                 throw new ArgumentException("You are not allowed to modify this template...");
             }
 
+            var allOther = Db.RuleInterfaceTemplates.Where(a => a.This2RuleTemplate == ruleTemplate && a.This2RuleInterfaceDirection == (long)direction);
+
+            while (allOther.Any(a => a.SortOrder == sortOrder))
+            {
+                sortOrder += 1;
+            }
+            
+
             logicInterfaceTemplate.Owner = Owner;
             logicInterfaceTemplate.Name = name;
             logicInterfaceTemplate.Key = key;
