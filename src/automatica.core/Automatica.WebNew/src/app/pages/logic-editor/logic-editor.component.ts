@@ -151,7 +151,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         ]);
 
       this.pages = this.sortPages(this.nodeInstanceService.pages);
-     
+
       this.pagesDataSource = new DataSource({
         paginate: false,
         pageSize: 1000,
@@ -308,7 +308,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     await this.ruleEngineService.removeItem(item);
     this.nodeInstanceService.removeLogicNodeInstance(item);
-    await this.ruleEngineService.removed.emit({ logicNodeInstance: item, logicPage: item.RulePage });
+    this.ruleEngineService.removed.emit({ logicNodeInstance: item, logicPage: item.RulePage });
   }
 
   async delete() {
@@ -367,7 +367,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   itemClick($event) {
     const item: CustomMenuItem = $event.itemData;
 
-    if (item && item.command) {
+    if (item?.command) {
       item.command($event);
     }
   }
@@ -377,21 +377,21 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
     try {
       const currentPage = this.selectedPage;
-   
+
       await this.ruleEngineService.removePage(currentPage);
 
       for (const node of currentPage.NodeInstances) {
-        await this.nodeInstanceService.removeLogicNodeInstance(node);
+        this.nodeInstanceService.removeLogicNodeInstance(node);
       }
 
       this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
       this.logicPageList.selectedItems = [];
-    
+
       this.selectedItem = void 0;
       this.selectedPage = void 0;
 
       await this.pagesDataSource.reload();
-      
+
       this.configTree.refreshTree();
       this.changeRef.detectChanges();
     } catch (error) {
@@ -415,12 +415,15 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       await this.ruleEngineService.addPage(rulePage);
       this.pages.push(rulePage);
 
+      this.pages = this.sortPages(this.pages);
+
       this.selectedPage = rulePage;
       this.selectedItem = rulePage;
-      
+
       await this.pagesDataSource.reload();
-      
-      this.logicPageList.selectedItems = [rulePage];
+
+      if (this.logicPageList)
+        this.logicPageList.selectedItems = [rulePage];
 
       this.changeRef.detectChanges();
 

@@ -184,7 +184,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
             instance.Interfaces.push(intre);
         });
 
-        instance.addVirtualProperties();
+        instance.afterFromJson();
         return instance;
     }
 

@@ -87,6 +87,7 @@ export class LoginFormComponent implements OnInit {
                         localStorage.setItem("s1pw", this.password);
                     }
 
+                    this.loginService.userLoggedIn.emit(value);
                     this.router.navigate(["/"]);
                 }
             } catch (error) {

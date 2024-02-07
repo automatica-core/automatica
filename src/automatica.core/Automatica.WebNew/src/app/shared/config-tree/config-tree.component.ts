@@ -17,6 +17,8 @@ import { LogicEditorInstanceService } from "src/app/services/logic-editor-instan
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { WindowState } from "src/app/base/model/window-state";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
+import DataSource from "devextreme/data/data_source";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 
 @Component({
   selector: "p3-config-tree",
@@ -42,7 +44,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   copyItem: NodeInstance;
 
   private _selectedNode: ITreeNode;
-  refreshTimeout: NodeJS.Timeout;
+  dataSource: any;
   public get selectedNode(): ITreeNode {
     return this._selectedNode;
   }
@@ -84,6 +86,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     private notify: NotifyService,
     private hub: DataHubService,
     appService: AppService,
+    private logicEngineService: LogicEngineService,
     private changeRef: ChangeDetectorRef,
     private ngZone: NgZone) {
 
@@ -96,9 +99,17 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     super.baseOnInit();
 
-    this.refreshTimeout = setInterval(() => {
-      this.changeRef.detectChanges();
-    }, 1000);
+
+    this.dataSource = new DataSource({
+      paginate: false,
+      pageSize: 100000,
+      load: (loadOptions) => {
+        return new Promise(async (resolve, reject) => {
+          await this.nodeInstanceService.load();
+          resolve(this.nodeInstanceService.nodeInstanceList);
+        });
+      },
+    });
 
     try {
       super.registerEvent(this.hub.dispatchValue, (data) => {
@@ -108,6 +119,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
           if (data[0] === 0) { // 0 = nodeinstance value
             const id = data[1];
             this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
+            this.changeRef.detectChanges();
           }
 
         });
@@ -117,6 +129,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         this.changeRef.detectChanges();
       });
 
+      super.registerEvent(this.logicEngineService.add, () => {
+        this.changeRef.detectChanges();
+        this.tree.instance.refresh();
+      });
+
     } catch (error) {
       super.handleError(error);
     }
@@ -124,11 +141,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public async load(): Promise<any> {
-    await this.nodeInstanceService.load();
+    await this.dataSource.reload();
   }
 
   async ngOnDestroy() {
-    clearTimeout(this.refreshTimeout);
     super.baseOnDestroy();
   }
 
@@ -200,15 +216,15 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     if (item instanceof NodeInstance2RulePage) {
       const item = this.nodeInstanceService.getLogicNodeInstance($event.data.ObjId);
-      this.selectNode(item);
+      this.selectNodeInternal(item, true);
     }
     else {
       const item = this.nodeInstanceService.getNodeInstance($event.data.ObjId);
-      this.selectNode(item);
+      this.selectNodeInternal(item, true);
     }
   }
 
-  selectNode(node: ITreeNode) {
+  private selectNodeInternal(node: ITreeNode, onlySelect: boolean) {
     if (!node) {
       this.selectedRowKeys = [];
       this.selectedNode = void 0;
@@ -218,15 +234,22 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     if (!this.selectedNode || this.selectedNode.Id !== node.Id) {
       this.selectedRowKeys = [node.Id];
       this.selectedNode = node;
-      this.expandRowRecursive(node);
 
-      //scroll to element...does not work right now!
-       const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
-       const rowElement = this.tree.instance.getRowElement(nodeIndex)
-       this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
-       this.tree.instance.repaint();
+      if (!onlySelect) {
+        this.expandRowRecursive(node);
+
+        //scroll to element...does not work right now!
+        const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
+        const rowElement = this.tree.instance.getRowElement(nodeIndex)
+        this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
+        this.tree.instance.repaint();
+      }
     }
 
+  }
+
+  selectNode(node: ITreeNode) {
+    this.selectNodeInternal(node, false);
   }
 
   expandRowRecursive(node: ITreeNode) {
@@ -270,9 +293,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       await this.load();
     }
-
-    this.tree.instance.refresh();
-    this.appService.isLoading = false;
+    finally {
+      this.changeRef.detectChanges();
+      this.tree.instance.refresh();
+      this.appService.isLoading = false;
+    }
   }
 
 
@@ -286,10 +311,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       await this.load();
     }
-
-
-    this.tree.instance.refresh();
-    this.appService.isLoading = false;
+    finally {
+      this.changeRef.detectChanges();
+      this.tree.instance.refresh();
+      this.appService.isLoading = false;
+    }
   }
 
   private async addItem(parentNode: NodeInstance, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
@@ -352,6 +378,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public refreshTree() {
+    this.changeRef.detectChanges();
     this.tree.instance.refresh();
   }
 
@@ -527,7 +554,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     else if (treeNode instanceof NodeInstance2RulePage) {
       $event.items = [];
 
-      items.push({ text: this.translate.translate("COMMON.DELETE"), data: treeNode, onItemClick: function () { that.onLogicNodeInstanceRemoved?.emit(treeNode); } });      
+      items.push({ text: this.translate.translate("COMMON.DELETE"), data: treeNode, onItemClick: function () { that.onLogicNodeInstanceRemoved?.emit(treeNode); } });
     }
 
     if (items.length > 0) {

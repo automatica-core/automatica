@@ -312,7 +312,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     for (const element of data.NodeInstances) {
-      this.addNode(element, data);
+      if(element.NodeInstance)
+        this.addNode(element, data);
     }
 
     for (const link of data.Links) {

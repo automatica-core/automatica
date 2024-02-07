@@ -1,6 +1,7 @@
 import { EventEmitter } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
 import { BaseServiceHelper } from "src/app/services/base-server-helper";
+import { v4 as uuidv4 } from 'uuid';
 
 const METHODS = new Map<string, Array<string>>();
 export function SignalRMethod(target: any, propertyKey: string) {
@@ -31,6 +32,13 @@ export class BaseHub {
     private subscriptions: any[] = [];
     private connection: signalR.HubConnection;
     private started = false;
+
+    
+    private _id : string = uuidv4();
+    public get Id() : string {
+        return this._id;
+    }
+    
 
     public connectionStateChanged = new EventEmitter<any>();
 
@@ -98,6 +106,9 @@ export class BaseHub {
         if (!localStorage.getItem("jwt")) {
             return;
         }
+
+        console.log(`start ${this.Id} ${this.hubName}`);
+
         this.init();
 
         if (!this.started) {

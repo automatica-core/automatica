@@ -6,17 +6,20 @@
     </dx-context-menu>
 
     <dx-tree-list height="100%" #tree itemsExpr="Children" id="config"
-        [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
-        [columnAutoWidth]="true" [expandedRowKeys]="expandedRowKeys"
+        [dataSource]="dataSource" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
+        [expandedRowKeys]="expandedRowKeys"
         (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false" [allowColumnResizing]="true"
-        [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false">
+        [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false" >
+        
+        <dxi-column dataField="DisplayName" [renderAsync]="false" cellTemplate="cellTemplate"></dxi-column>
+        <dxi-column dataField="Value" [renderAsync]="true" cellTemplate="valueTemplate"></dxi-column>
+       
         <dxo-selection mode="single"></dxo-selection>
-        <dxi-column dataField="DisplayName" cellTemplate="cellTemplate"></dxi-column>
-        <dxi-column dataField="Value" dataType="string" cellTemplate="valueTemplate"></dxi-column>
         <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaConfigTree"></dxo-state-storing>
         <dxo-paging [enabled]="false"> </dxo-paging>
+        <dxo-load-panel [enabled]="false"></dxo-load-panel>
 
-        <dxo-scrolling mode="standard"> </dxo-scrolling>
+        <dxo-scrolling mode="standard" > </dxo-scrolling>
 
         <div id="{{ data.data.Id }}" *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
             <div dnd-draggable [dragEnabled]="true" [dragData]="data.data">
