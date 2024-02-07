@@ -34,6 +34,11 @@ namespace P3.Logic.Time.DelayedOff
         {
             _timer.Stop();
             _timerRunning = false;
+            ExecuteAction();
+        }
+
+        private void ExecuteAction()
+        {
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
 
             Context.Logger.LogDebug($">>> Dispatching value <<<");
@@ -64,8 +69,16 @@ namespace P3.Logic.Time.DelayedOff
         {
             _timer.Stop();
             _timer.Interval = _delay * 1000;
-            _timer.Start();
-            _timerRunning = true;
+
+            if (_timer.Interval <= 0)
+            {
+                ExecuteAction();
+            }
+            else
+            {
+                _timer.Start();
+                _timerRunning = true;
+            }
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -77,7 +90,7 @@ namespace P3.Logic.Time.DelayedOff
             }
             else if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleReset)
             {
-                Context.Logger.LogDebug($">>> Stoping timer <<<");
+                Context.Logger.LogDebug($">>> Stopping timer <<<");
                 _timer.Stop();
                 _timerRunning = false;
             }

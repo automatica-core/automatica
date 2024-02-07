@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
 
 namespace P3.Logic.Time.DelayedOn
 {
@@ -31,7 +32,14 @@ namespace P3.Logic.Time.DelayedOn
         {
             _timer.Stop();
             _timerRunning = false;
+            ExecuteAction();
+        }
+
+        private void ExecuteAction()
+        {
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, true);
+
+            Context.Logger.LogDebug($">>> Dispatching value <<<");
         }
 
         protected override void ParameterValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
@@ -58,9 +66,16 @@ namespace P3.Logic.Time.DelayedOn
         private void StartStopTimer()
         {
             _timer.Stop();
-            _timer.Interval = _delay * 1000;
-            _timer.Start();
-            _timerRunning = false;
+
+            if (_timer.Interval <= 0)
+            {
+                ExecuteAction();
+            }
+            else
+            {
+                _timer.Start();
+                _timerRunning = true;
+            }
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
