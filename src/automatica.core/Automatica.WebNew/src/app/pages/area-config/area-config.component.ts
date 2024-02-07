@@ -201,7 +201,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     }
   }
 
-  addItem(parent: AreaInstance, template: AreaTemplate) {
+  async addItem(parent: AreaInstance, template: AreaTemplate) {
     const newInstance = AreaInstance.createFromTemplate(template, parent);
     newInstance.Name = this.translate.translate(newInstance.Name);
 
@@ -212,12 +212,15 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     this._isDirty = true;
     this.menuSave.color = "red";
+
+    await this.save();
   }
 
-  delete() {
-    this.deleteItem(this.selectedNode);
+  async delete() {
+    await this.deleteItem(this.selectedNode);
     this._isDirty = true;
     this.menuSave.color = "red";
+    
   }
 
   importEts(): any {
@@ -257,7 +260,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     this.appService.isLoading = false;
   }
 
-  deleteItem(item: AreaInstance) {
+  async deleteItem(item: AreaInstance) {
     const parentNode = item.This2ParentNavigation;
     this.selectNode(parentNode);
 
@@ -266,6 +269,8 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     this._isDirty = true;
     this.menuSave.color = "red";
+    
+    await this.save();
   }
 
   onContextMenuPreparing($event) {

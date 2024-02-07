@@ -37,8 +37,12 @@ export class AppService {
     }
     public set isLoading(v: boolean) {
         if (v !== this._isLoading) {
-            this.isLoadingChanged.emit(v);
             this._isLoading = v;
+
+            //only emit if after 50ms still loading
+            setTimeout(() => {
+                this.isLoadingChanged.emit(v);
+            }, 50);
         }
     }
 

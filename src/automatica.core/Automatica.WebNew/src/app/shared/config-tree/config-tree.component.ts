@@ -120,6 +120,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
             const id = data[1];
             this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
             this.changeRef.detectChanges();
+            // this.tree.instance.refresh();
           }
 
         });

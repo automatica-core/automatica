@@ -73,11 +73,11 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
             this.router.navigate(["/visualization/page", window.localStorage["lastVisuPageType"], window.localStorage["lastVisuPage"]]);
           }
           else {
-            this.loadFavorites();
+            await this.loadFavorites();
           }
 
         } else if (this.route.snapshot.data.loadFavorites) {
-          this.loadFavorites();
+          await this.loadFavorites();
         } else {
           super.registerObservable(this.route.params, async (params) => {
             if (!params.id) {
@@ -109,23 +109,21 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   private async loadPageById(id: string, type: string) {
     this.appService.isLoading = true;
 
-    if (!type) {
-      return;
+    if (type) {
+
+      window.localStorage["lastVisuPage"] = id;
+      window.localStorage["lastVisuPageType"] = type;
+
+      if (type === "area") {
+        this.pageGroupType = VisuPageGroupType.Area;
+      } else {
+        this.pageGroupType = VisuPageGroupType.Category;
+      }
+
+      const data = await this.visuService.getVisuPage(id);
+      this.initPage(data, id);
+
     }
-
-    window.localStorage["lastVisuPage"] = id;
-    window.localStorage["lastVisuPageType"] = type;
-
-    if (type === "area") {
-      this.pageGroupType = VisuPageGroupType.Area;
-    } else {
-      this.pageGroupType = VisuPageGroupType.Category;
-    }
-
-    const data = await this.visuService.getVisuPage(id);
-    this.initPage(data, id);
-
-
     this.appService.isLoading = false;
   }
 
