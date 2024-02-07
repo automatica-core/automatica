@@ -72,12 +72,6 @@ namespace P3.Logic.Time.DelayedOff
         {
             if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleTrigger)
             {
-                if (!Convert.ToBoolean(value))
-                {
-                    Context.Logger.LogDebug($">>> Stoping timer <<<");
-                    _timer.Stop();
-                    return new List<ILogicOutputChanged>();
-                }
                 Context.Logger.LogDebug($">>> Starting timer - ticks in {_delay * 1000} <<<");
                 StartStopTimer();
             }
