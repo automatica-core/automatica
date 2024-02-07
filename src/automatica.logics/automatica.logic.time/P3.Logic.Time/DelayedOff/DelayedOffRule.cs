@@ -68,14 +68,14 @@ namespace P3.Logic.Time.DelayedOff
         private void StartStopTimer()
         {
             _timer.Stop();
-            _timer.Interval = _delay * 1000;
 
-            if (_timer.Interval <= 0)
+            if (_delay <= 0)
             {
                 ExecuteAction();
             }
             else
             {
+                _timer.Interval = _delay * 1000;
                 _timer.Start();
                 _timerRunning = true;
             }

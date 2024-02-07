@@ -67,12 +67,13 @@ namespace P3.Logic.Time.DelayedOn
         {
             _timer.Stop();
 
-            if (_timer.Interval <= 0)
+            if (_delay <= 0)
             {
                 ExecuteAction();
             }
             else
             {
+                _timer.Interval = _delay * 1000;
                 _timer.Start();
                 _timerRunning = true;
             }
