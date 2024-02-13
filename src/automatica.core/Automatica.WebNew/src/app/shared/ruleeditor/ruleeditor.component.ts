@@ -12,15 +12,14 @@ import { NodeInstance } from "src/app/base/model/node-instance";
 import { LogicShapes } from "./shapes/logic-shape";
 import { LogicLocators } from "./shapes/logic-locators";
 import { LogicLables } from "./shapes/logic-label";
+import { LogicConnectionPolicy } from "./shapes/logic-connection-policy";
 import { LinkService } from "./link.service";
 import { AppService } from "src/app/services/app.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { Subscription } from "rxjs";
 import { ILogicErrorHandler } from "./ilogicErrorHandler";
 import { ILogicInfoHandler } from "./ilogicInfoHandler";
-import { NodeTemplate } from "src/app/base/model/node-template";
 import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
-import { BaseModel } from "src/app/base/model/base-model";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 
 declare var draw2d: any;
@@ -221,6 +220,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     LogicShapes.addShape(this.logic, this.ruleEngineService, this, this);
     LogicLocators.addLocators(this.logic);
     LogicLables.addLables(this.logic);
+    LogicConnectionPolicy.addPolicy(this.logic);
 
     this.workplace = new draw2d.Canvas("ruleditor-" + this.page.ObjId);
     // this.workplace.setZoom(1.3);
@@ -268,6 +268,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     const d = new this.logic.NodeInstanceShape({}, element, this.linkService);
+    d.installEditPolicy(new this.logic.LogicSelectionPolicy());
 
     d.on("removed", async () => {
       var item = { item: element, page: page, removed: false };
@@ -290,6 +291,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
+    d.installEditPolicy(new this.logic.LogicSelectionPolicy());
+      
 
     d.on("removed", async () => {
       var item = { item: element, page: page, removed: false };
@@ -317,8 +320,13 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     for (const link of data.Links) {
-      const c = new draw2d.Connection({ router: router, userData: link });
+      const c = new draw2d.Connection({ userData: link });
+      c.installEditPolicy(new this.logic.ConnectionPolicy());
+      c.setRouter(router);
       c.setUserData(link);
+      c.setColor("#457987");
+      c.setGlowColor("#457987");
+
       const sourcePort = this.getSourcePort(link.from, link.fromPort);
 
       if (!sourcePort) {
