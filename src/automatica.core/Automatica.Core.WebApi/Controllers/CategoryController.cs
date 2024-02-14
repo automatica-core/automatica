@@ -62,12 +62,9 @@ namespace Automatica.Core.WebApi.Controllers
                 var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var area = _categoryCache.Get(categoryId);
-                    
-                    await DbContext.SaveChangesAsync();
+                    var category = _categoryCache.Get(categoryId);
 
-
-                    DbContext.Remove(area);
+                    DbContext.CategoryInstances.Remove(DbContext.CategoryInstances.Single(a => a.ObjId == categoryId));
                     _categoryCache.Remove(categoryId);
                     await DbContext.SaveChangesAsync();
 
@@ -85,7 +82,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpPut]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<IEnumerable<CategoryInstance>> AddOrUpdateInstance([FromBody] CategoryInstance instance)
+        public async Task<CategoryInstance> AddOrUpdateInstance([FromBody] CategoryInstance instance)
         {
             var strategy = DbContext.Database.CreateExecutionStrategy();
             return await strategy.Execute(async
@@ -96,7 +93,7 @@ namespace Automatica.Core.WebApi.Controllers
                 {
 
                     var existingArea =
-                        await DbContext.CategoryInstances.SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
+                        await DbContext.CategoryInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
 
                     instance.ModifiedAt = DateTimeOffset.Now;
                     if (existingArea == null)
@@ -124,58 +121,7 @@ namespace Automatica.Core.WebApi.Controllers
                     throw;
                 }
 
-                return GetInstances();
-            });
-        }
-
-
-        [HttpPost]
-        [Authorize(Policy = Role.AdminRole)]
-        public async Task<IEnumerable<CategoryInstance>> SaveInstances([FromBody]IList<CategoryInstance> instances)
-        {
-            var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
-                () =>
-            {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
-                try
-                {
-                    foreach (var instance in instances)
-                    {
-                        var existingArea =
-                            await DbContext.CategoryInstances.SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
-
-                        instance.ModifiedAt = DateTimeOffset.Now;
-                        if (existingArea == null)
-                        {
-                            instance.CreatedAt = DateTimeOffset.Now;
-                            await DbContext.CategoryInstances.AddAsync(instance);
-                        }
-                        else
-                        {
-                            DbContext.Entry(existingArea).State = EntityState.Detached;
-                            DbContext.CategoryInstances.Update(instance);
-                        }
-                    }
-
-                    var removedNodes = from c in DbContext.CategoryInstances
-                        where !(from o in instances select o.ObjId).Contains(c.ObjId)
-                        select c;
-                    var removedList = removedNodes.ToList();
-                    DbContext.RemoveRange(removedList);
-
-                    await DbContext.SaveChangesAsync();
-                    await transaction.CommitAsync();
-                    _categoryCache.Clear();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
-                    throw;
-                }
-
-                return GetInstances();
+                return instance;
             });
         }
     }

@@ -46,7 +46,7 @@ namespace Automatica.Core.WebApi.Tests.Category
             instances.Add(newInstance);
 
             // add instance
-            await Assert.ThrowsAsync<DbUpdateException>(async () => await Controller.SaveInstances(instances));
+            await Assert.ThrowsAsync<DbUpdateException>(async () => await Controller.AddOrUpdateInstance(newInstance));
         }
 
         [Fact]
@@ -69,9 +69,9 @@ namespace Automatica.Core.WebApi.Tests.Category
             instances.Add(newInstance);
 
             // add instance
-            var saved = (await Controller.SaveInstances(instances)).ToList();
+            var saved = await Controller.AddOrUpdateInstance(newInstance);
 
-            var savedInstance = saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId);
+            var savedInstance = saved;
             Assert.NotNull(savedInstance);
             Assert.Equal(newInstance.Name, savedInstance.Name);
             Assert.Equal(newInstance.This2CategoryGroup, savedInstance.This2CategoryGroup);
@@ -83,9 +83,9 @@ namespace Automatica.Core.WebApi.Tests.Category
 
             // update instance
             savedInstance.Name = "update name...";
-            saved = (await Controller.SaveInstances(saved)).ToList();
+            saved = await Controller.AddOrUpdateInstance(savedInstance);
 
-            var updatedInstance = saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId);
+            var updatedInstance = saved;
             Assert.NotNull(updatedInstance);
             Assert.Equal(savedInstance.Name, updatedInstance.Name);
             Assert.Equal(savedInstance.This2CategoryGroup, updatedInstance.This2CategoryGroup);
@@ -96,11 +96,10 @@ namespace Automatica.Core.WebApi.Tests.Category
 
 
             //remove instance
-            instances.Remove(newInstance);
             await Controller.RemoveInstance(newInstance.ObjId);
-            saved = Controller.GetAllInstances().ToList();
+            var all = Controller.GetAllInstances().ToList();
 
-            Assert.Null(saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId));
+            Assert.Null(all.FirstOrDefault(a => a.ObjId == newInstance.ObjId));
         }
 
         [Fact]

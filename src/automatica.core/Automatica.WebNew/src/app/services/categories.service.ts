@@ -35,13 +35,4 @@ export class CategoryService extends BaseService {
         return super.putJson("categories", json);
     }
 
-    saveCategoryInstances(categoryInstances: CategoryInstance[]) {
-        const data = new Array<any>();
-        for (const set of categoryInstances) {
-            data.push(set.toJson());
-        }
-        return super.postMultiple("categories", data);
-    }
-
-
 }
