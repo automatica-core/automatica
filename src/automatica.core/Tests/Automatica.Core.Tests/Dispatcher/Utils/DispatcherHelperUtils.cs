@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -117,7 +118,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             cache?.Add(mockNodeChild.ObjId, mockNodeChild);
 
             mockNode.InverseThis2ParentNodeInstanceNavigation.Add(mockNodeChild);
-            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory()));
+            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory(), DateTimeHelper.ProviderInstance));
 
             await mock.Configure();
             await mock.StartInternal();

@@ -701,7 +701,8 @@ namespace Automatica.Core.Runtime.Core
                 _serviceProvider.GetRequiredService<IServerCloudApi>(), 
                 _licenseContext,
                 _controlContext,
-                DateTimeHelper.ProviderInstance);
+                DateTimeHelper.ProviderInstance,
+                _serviceProvider.GetRequiredService<ILocalizationProvider>());
 
             var rule = factory.CreateLogicInstance(ruleContext);
 
@@ -900,6 +901,7 @@ namespace Automatica.Core.Runtime.Core
                 _loggerFactory, 
                 _serviceProvider,
                 _controlContext,
+                DateTimeHelper.ProviderInstance,
                 false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);

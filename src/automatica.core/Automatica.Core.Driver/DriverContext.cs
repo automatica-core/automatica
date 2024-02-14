@@ -1,6 +1,7 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
@@ -41,6 +42,8 @@ namespace Automatica.Core.Driver
         public IZeroconfDiscovery ZeroconfDiscovery { get; }
 
         public IControlContext ControlContext { get; }
+        public TimeProvider TimeProvider { get; }
+        public ILocalizationProvider LocalizationProvider { get; }
 
         public IRetryContext RetryContext { get; }
 
@@ -60,12 +63,13 @@ namespace Automatica.Core.Driver
                 LoggerFactory,
                 _serviceProvider,
                 ControlContext,
+                TimeProvider,
                 IsTest);
         }
 
         public DriverContext(NodeInstance nodeInstance, IDriverFactory factory, IDispatcher dispatcher,
             INodeTemplateFactory nodeTemplateFactory, ITelegramMonitor telegramMonitor, ILicenseState licenseState,
-            ILogger logger, ILearnMode learnMode, IServerCloudApi api, ILicenseContract licenseContract, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IControlContext controlContext, bool isTest)
+            ILogger logger, ILearnMode learnMode, IServerCloudApi api, ILicenseContract licenseContract, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, IControlContext controlContext, TimeProvider timeProvider, bool isTest)
         {
             _serviceProvider = serviceProvider;
 
@@ -82,6 +86,7 @@ namespace Automatica.Core.Driver
             LearnMode = learnMode;
             LicenseContract = licenseContract;
             LoggerFactory = loggerFactory;
+            TimeProvider = timeProvider;
 
             var provider = serviceProvider.GetRequiredService<Func<IDriverContext, ITunnelingProvider>>();
             TunnelingProvider = provider.Invoke(this);
@@ -89,6 +94,8 @@ namespace Automatica.Core.Driver
             ZeroconfDiscovery = serviceProvider.GetRequiredService<IZeroconfDiscovery>();
 
             RetryContext = serviceProvider.GetRequiredService<IRetryContext>();
+
+            LocalizationProvider = serviceProvider.GetRequiredService<ILocalizationProvider>();
         }
     }
 }

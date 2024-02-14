@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
@@ -9,6 +10,7 @@ using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Automatica.Core.Driver
 {
@@ -91,6 +93,15 @@ namespace Automatica.Core.Driver
         /// </summary>
         IControlContext ControlContext { get; }
 
+
+        /// <summary>
+        /// Provides date and times (also fake ones for tests)
+        /// </summary>
+        TimeProvider TimeProvider { get; }
+        /// <summary>
+        /// Provides access to localizations
+        /// </summary>
+        public ILocalizationProvider LocalizationProvider { get; }
         IRetryContext RetryContext { get; }
 
         IDriverContext Copy(NodeInstance node, ILogger logger);
