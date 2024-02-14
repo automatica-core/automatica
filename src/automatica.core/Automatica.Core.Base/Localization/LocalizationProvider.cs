@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using Automatica.Core.Base.Templates;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -23,7 +24,9 @@ namespace Automatica.Core.Base.Localization
         {
             _logger = logger;
 
-            _locale = config["db:language"];
+            var locale = (Language)Convert.ToInt32(config["db:language"]);
+            _locale = PropertyHelper.GetNameAttributeFromEnumValue(locale).EnumValue;
+
         }
 
         public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
