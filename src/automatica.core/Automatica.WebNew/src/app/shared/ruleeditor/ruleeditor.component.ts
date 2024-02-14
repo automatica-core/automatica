@@ -22,7 +22,7 @@ import { ILogicInfoHandler } from "./ilogicInfoHandler";
 import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 
-declare var draw2d: any;
+declare let draw2d: any;
 
 @Component({
   selector: "p3-ruleeditor",
@@ -111,7 +111,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     super.registerEvent(this.ruleEngineService.selected, (data: SelectLogicNodeInstance) => {
       if (data.logicPage.ObjId === this.page.ObjId) {
-        // this.selectedItems = [data.logicNodeInstance];
         const object = this.completeMap.get(data.logicNodeInstance.ObjId);
         this.workplace.setCurrentSelection(object);
       }
@@ -120,7 +119,6 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     super.registerEvent(this.ruleEngineService.removed, (data: SelectLogicNodeInstance) => {
       if (data.logicPage.ObjId === this.page.ObjId) {
-        // this.selectedItems = [data.logicNodeInstance];
         const object = this.completeMap.get(data.logicNodeInstance.ObjId);
         this.workplace.remove(object);
       }
@@ -223,8 +221,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     LogicConnectionPolicy.addPolicy(this.logic);
 
     this.workplace = new draw2d.Canvas("ruleditor-" + this.page.ObjId);
-    // this.workplace.setZoom(1.3);
-    // this.workplace.setScrollArea(window);
+
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToGeometryEditPolicy());
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToInBetweenEditPolicy());
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToCenterEditPolicy());
@@ -271,8 +268,8 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     d.installEditPolicy(new this.logic.LogicSelectionPolicy());
 
     d.on("removed", async () => {
-      var item = { item: element, page: page, removed: false };
-      await this.removeSelectedItem.emit(item);
+      let item = { item: element, page: page, removed: false };
+      this.removeSelectedItem.emit(item);
       if (!item.removed) {
         this.workplace.add(d);
       }
@@ -292,11 +289,11 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
     d.installEditPolicy(new this.logic.LogicSelectionPolicy());
-      
+
 
     d.on("removed", async () => {
-      var item = { item: element, page: page, removed: false };
-      await this.removeSelectedItem.emit(item);
+      let item = { item: element, page: page, removed: false };
+      this.removeSelectedItem.emit(item);
 
       if (!item.removed) {
         this.workplace.add(d);
@@ -315,7 +312,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     for (const element of data.NodeInstances) {
-      if(element.NodeInstance)
+      if (element.NodeInstance)
         this.addNode(element, data);
     }
 
