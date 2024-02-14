@@ -97,7 +97,8 @@ namespace Automatica.Core.WebApi.Tests.Category
 
             //remove instance
             instances.Remove(newInstance);
-            saved = (await Controller.SaveInstances(instances)).ToList();
+            await Controller.RemoveInstance(newInstance.ObjId);
+            saved = Controller.GetAllInstances().ToList();
 
             Assert.Null(saved.FirstOrDefault(a => a.ObjId == newInstance.ObjId));
         }
