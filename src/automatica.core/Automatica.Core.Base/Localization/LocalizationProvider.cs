@@ -25,7 +25,7 @@ namespace Automatica.Core.Base.Localization
             _logger = logger;
 
             var locale = (Language)Convert.ToInt32(config["db:language"]);
-            _locale = PropertyHelper.GetNameAttributeFromEnumValue(locale).EnumValue;
+            _locale = LanguageHelper.GetLanguage(locale);
 
         }
 
