@@ -43,22 +43,11 @@ namespace P3.Logic.Messenger
             {
                 try
                 {
-                    bool execute = false;
-                    if (value is bool bValue)
-                        execute = bValue;
-                    else
-                        execute = true;
 
-                    if (execute)
-                    {
-                        Context.Logger.LogInformation($"Send email to {String.Join(";", _to)}");
-                        Context.CloudApi.SendEmail(_to, _subject,
-                            $"\"{Context.RuleInstance.Name}\" received value \"{value}\" from source \"{source.Name}\"");
-                    }
-                    else
-                    {
-                        Context.Logger.LogInformation($"Ignore message, because value is either false or hasn't changed newValue {value} oldValue {_value}");
-                    }
+                    Context.Logger.LogInformation($"Send email to {String.Join(";", _to)}");
+                    Context.CloudApi.SendEmail(_to, _subject,
+                        $"\"{Context.RuleInstance.Name}\" received value \"{value}\" from source \"{source.Name}\"");
+
                 }
                 catch (Exception e)
                 {
