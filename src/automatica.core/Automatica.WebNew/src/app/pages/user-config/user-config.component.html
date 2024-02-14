@@ -1,20 +1,15 @@
 <div class="content-block">
     <div class="dx-card wide-card panel-height">
-        <dx-menu #menu [items]="menuItems" itemsExpr="items" displayExpr="label" [showFirstSubmenuMode]="true"
-            orientation="horizontal" submenuDirection="auto" [hideSubmenuOnMouseLeave]="false"
-            (onItemClick)="itemClick($event)">
-        </dx-menu>
 
         <as-split direction="horizontal">
             <as-split-area [size]="30">
-                <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" [roles]="roles"></p3-propertyeditor>
+                <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups" [roles]="roles" (onChanged)="onChanged($event)"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="70">
                 <div style="padding-bottom: 100px;">
                     <dx-data-grid #grid [dataSource]="users" keyExpr="ObjId" (onRowClick)="onRowClicked($event)"
-                        (onRowRemoving)="onRowRemoving($event)" (onRowUpdating)="onRowUpdating($event)"
-                        (onRowInserting)="onRowInserting($event)" (onInitNewRow)="onInitNewRow($event)"
-                        (onInitialized)="onInitialized($event)">
+                        (onRowRemoving)="onRowRemoving($event)" (onRowInserting)="onRowInserting($event)"
+                        (onInitNewRow)="onInitNewRow($event)" (onInitialized)="onInitialized($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="row" [allowUpdating]="false" [allowDeleting]="true" [allowAdding]="true">
                             <dxo-texts confirmDeleteMessage="{{ 'COMMON.CONFIRM_DELETE' | translateAsync }}"
@@ -24,9 +19,12 @@
                         </dxo-editing>
                         <dxo-selection mode="single"></dxo-selection>
 
-                        <dxi-column dataField="UserName" caption="{{ 'COMMON.USERNAME' | translateAsync }}"></dxi-column>
-                        <dxi-column dataField="FirstName" caption="{{ 'COMMON.FIRSTNAME' | translateAsync }}"></dxi-column>
-                        <dxi-column dataField="LastName" caption="{{ 'COMMON.LASTNAME' | translateAsync }}"></dxi-column>
+                        <dxi-column dataField="UserName"
+                            caption="{{ 'COMMON.USERNAME' | translateAsync }}"></dxi-column>
+                        <dxi-column dataField="FirstName"
+                            caption="{{ 'COMMON.FIRSTNAME' | translateAsync }}"></dxi-column>
+                        <dxi-column dataField="LastName"
+                            caption="{{ 'COMMON.LASTNAME' | translateAsync }}"></dxi-column>
 
                     </dx-data-grid>
                 </div>

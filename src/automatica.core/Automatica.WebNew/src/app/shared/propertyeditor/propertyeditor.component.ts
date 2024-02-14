@@ -252,6 +252,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   @Output()
   validate = new EventEmitter<any>();
+  @Output()
+  onChanged = new EventEmitter<any>();
 
 
   private _areaInstances: AreaInstance[] = [];
@@ -332,6 +334,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
+  
   @ViewChildren('control') controls: QueryList<any>;
 
   constructor(
@@ -656,6 +659,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     this.validate.emit(prop);
 
+    this.onChanged.emit({ item: this.item, property: prop });
     if (prop instanceof VirtualGenericPropertyInstance) {
       if (!prop.updateOnChanges) {
         return;
@@ -676,6 +680,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       } else if (this.item instanceof RulePage) {
         await this.ruleEngineService.updatePage(this.item);
       }
+
     } catch (error) {
       this.handleError(error);
     }

@@ -30,41 +30,13 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   roles: Role[] = [];
 
 
-  menuItems: CustomMenuItem[] = [];
-
-  menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
-    icon: "fa-save",
-    items: undefined,
-    command: (event) => { this.save(); }
-  }
-
-  menuRefresh: CustomMenuItem = {
-    id: "reload",
-    label: "Reload",
-    icon: "fa-reload",
-    items: undefined,
-    command: (event) => { this.load(); }
-  }
-
-  constructor(private catService: UsersService,
+  constructor(private userService: UsersService,
     translate: L10nTranslationService,
-    private notify: NotifyService,
+    notify: NotifyService,
     private userGroupService: GroupsService,
     appService: AppService) {
 
     super(notify, translate, appService);
-    this.menuItems.push(this.menuSave);
-    this.menuItems.push(this.menuRefresh);
-
-    this.translate.onChange().subscribe({
-      next: () => {
-        this.menuSave.label = this.translate.translate("COMMON.SAVE");
-        this.menuRefresh.label = this.translate.translate("COMMON.RELOAD");
-      }
-    });
-
 
     appService.setAppTitle("USERS.NAME");
   }
@@ -78,22 +50,18 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     try {
 
       var selectedNode = void 0;
-      if(this.selectedNode) {
+      if (this.selectedNode) {
         selectedNode = this.selectedNode.ObjId;
       }
 
-      this.users = await this.catService.getUsers();
-
+      this.users = await this.userService.getUsers();
       this.userGroups = await this.userGroupService.getUserGroups();
+      this.roles = await this.userService.getRoles();
 
-      this.roles = await this.catService.getRoles();
-
-      if(selectedNode) {
+      if (selectedNode) {
         this.selectedNode = this.users.find(x => x.ObjId === selectedNode);
         this.grid.instance.selectRows([selectedNode], false);
       }
-
-
     } catch (error) {
       super.handleError(error);
     }
@@ -103,10 +71,7 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   async delete() {
     this.appService.isLoading = true;
     try {
-      await this.catService.deleteUser(this.selectedNode);
-      this.notify.notifySuccess("COMMON.SAVED");
-
-      this.load();
+      await this.userService.deleteUser(this.selectedNode);
     }
     catch (error) {
       super.handleError(error);
@@ -114,36 +79,6 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     this.appService.isLoading = false;
   }
 
-  async save() {
-    this.appService.isLoading = true;
-
-    try {
-
-
-      let validated = true;
-      for (const newUser of this.users) {
-        if (!newUser.validate()) {
-          validated = false;
-        }
-      }
-
-      if (!validated) {
-        this.notify.notifyError("INVALID.VALIDATED");
-        this.appService.isLoading = false;
-        return;
-      }
-
-      this.selectedNode = await this.catService.saveUser(this.selectedNode);
-
-      this.load();
-
-      this.notify.notifySuccess("COMMON.SAVED");
-    } catch (error) {
-      super.handleError(error);
-    }
-
-    this.appService.isLoading = false;
-  }
 
   colorBoxOnValueChanged($event, cell) {
     cell.setValue($event.value);
@@ -162,10 +97,6 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     }
   }
 
-  onRowUpdating($event) {
-
-  }
-
   onInitNewRow($event) {
     const newObject = new User();
     newObject.Description = "";
@@ -173,20 +104,30 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     newObject.addVirtualProperties();
 
     $event.data = newObject;
-
   }
 
   onRowInserting($event) {
     const newObject = new User();
     newObject.addVirtualProperties();
 
-    Object.assign(newObject, $event.data);
+    newObject.UserName = $event.data.UserName;
+    newObject.Description = $event.data.Description;
+    newObject.FirstName = $event.data.FirstName;
+    newObject.LastName = $event.data.LastName;
+
     $event.data = newObject;
 
     this.grid.instance.selectRows([newObject.ObjId], false);
     this.selectedNode = newObject;
 
-    this.save();
+    this.appService.isLoading = true;
+    try {
+      this.userService.saveUser(newObject);
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
   }
 
   onRowClicked($event) {
@@ -195,6 +136,19 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
 
   onInitialized($event) {
     $event.component.columnOption("command:edit", "width", 150);
+  }
+
+  
+  async onChanged($event) {
+    var { item } = $event;
+
+    try {
+      this.userService.saveUser(item);
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
   }
 
 }

@@ -24,42 +24,13 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
   roles: Role[] = [];
   selectedNode: UserGroup = void 0;
 
-  menuItems: CustomMenuItem[] = [];
-
-  menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
-    icon: "fa-save",
-    items: undefined,
-    command: (event) => { this.save(); }
-  }  
-  
-  menuRefresh: CustomMenuItem = {
-    id: "reload",
-    label: "Reload",
-    icon: "fa-reload",
-    items: undefined,
-    command: (event) => { this.load(); }
-  }
-
   constructor(
-    private catService: GroupsService,
+    private userGroupService: GroupsService,
     translate: L10nTranslationService,
-    private notify: NotifyService,
+    notify: NotifyService,
     appService: AppService) {
 
     super(notify, translate, appService);
-    this.menuItems.push(this.menuSave);
-    this.menuItems.push(this.menuRefresh);
-
-    this.translate.onChange().subscribe({
-      next: () => {
-        this.menuSave.label = this.translate.translate("COMMON.SAVE");
-        this.menuRefresh.label = this.translate.translate("COMMON.RELOAD");
-      }
-    });
-
-
     appService.setAppTitle("USER_GROUPS.NAME");
   }
 
@@ -76,8 +47,8 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
         selectedNode = this.selectedNode.ObjId;
       }
 
-      this.groups = await this.catService.getUserGroups();
-      this.roles = await this.catService.getRoles();
+      this.groups = await this.userGroupService.getUserGroups();
+      this.roles = await this.userGroupService.getRoles();
 
       if (selectedNode) {
         this.selectedNode = this.groups.find(x => x.ObjId === selectedNode);
@@ -94,30 +65,11 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
   async delete() {
     this.appService.isLoading = true;
     try {
-      await this.catService.deleteUserGroup(this.selectedNode);
-      this.notify.notifySuccess("COMMON.SAVED");
-
-      this.load();
+      await this.userGroupService.deleteUserGroup(this.selectedNode);
     }
     catch (error) {
       super.handleError(error);
     }
-    this.appService.isLoading = false;
-  }
-
-  async save() {
-    this.appService.isLoading = true;
-
-    try {
-
-      await this.catService.saveUserGroup(this.selectedNode);
-
-      this.load();
-      this.notify.notifySuccess("COMMON.SAVED");
-    } catch (error) {
-      super.handleError(error);
-    }
-
     this.appService.isLoading = false;
   }
 
@@ -139,10 +91,6 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
     }
   }
 
-  onRowUpdating($event) {
-
-  }
-
   onInitNewRow($event) {
     const newObject = new UserGroup();
     newObject.ObjId = Guid.MakeNew().ToString();
@@ -161,7 +109,30 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
     this.grid.instance.selectRows([newObject.ObjId], false);
     this.selectedNode = newObject;
-    this.save();
+    
+
+    this.appService.isLoading = true;
+
+    try {
+
+      await this.userGroupService.saveUserGroup(this.selectedNode);
+    } catch (error) {
+      super.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
+  }
+   
+  async onChanged($event) {
+    var { item } = $event;
+
+    try {
+      this.userGroupService.saveUserGroup(item);
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
   }
 
   onRowClicked($event) {

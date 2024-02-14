@@ -144,8 +144,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         [
           this.ruleEngineService.getRuleTemplates(),
           this.configService.getLinkableNodes(),
-          this.areaService.getAreaInstances(),
-          this.categoryService.getCategoryInstances(),
+          this.areaService.getAllAreaInstances(),
+          this.categoryService.getAllCategoryInstances(),
           this.userGroupsService.getUserGroups(),
           this.nodeInstanceService.load()
         ]);

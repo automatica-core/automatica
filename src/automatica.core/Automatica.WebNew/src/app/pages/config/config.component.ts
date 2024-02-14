@@ -57,8 +57,8 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
       const [userGroups, areaInstances, categoryInstances] = await Promise.all(
         [
           this.userGroupsService.getUserGroups(),
-          this.areaService.getAreaInstances(),
-          this.categoryService.getCategoryInstances(),
+          this.areaService.getAllAreaInstances(),
+          this.categoryService.getAllCategoryInstances(),
           this.nodeInstanceService.load()
         ]);
 

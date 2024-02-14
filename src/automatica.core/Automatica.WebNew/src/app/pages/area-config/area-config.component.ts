@@ -8,6 +8,7 @@ import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { AreaInstance, AreaTemplate } from "src/app/base/model/areas";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
+import { GroupsService } from "src/app/services/groups.service";
 
 @Component({
   selector: "app-area-config",
@@ -18,8 +19,6 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   selectedNode: AreaInstance;
   templates: AreaTemplate[] = [];
   instances: AreaInstance[] = [];
-
-  _isDirty: boolean = false;
 
   @ViewChild("tree")
   tree: DxTreeListComponent;
@@ -32,13 +31,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   addItemsMenu: CustomMenuItem[] = void 0;
 
 
-  menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
-    icon: "fa fa-save",
-    items: undefined,
-    command: (event) => { this.save(); }
-  }
+
   menuImportEts: CustomMenuItem = {
     id: "ets-import",
     label: "EtsImport",
@@ -47,12 +40,13 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     items: undefined,
     command: (event) => { this.importEts(); }
   };
+  userGroups: any;
 
   constructor(
     private areasService: AreaService,
-    private translationService: L10nTranslationService,
-    private changeRef: ChangeDetectorRef,
-    private notify: NotifyService,
+    translationService: L10nTranslationService,
+    private userGroupService: GroupsService,
+    notify: NotifyService,
     private router: Router,
     private activeRoute: ActivatedRoute,
     appService: AppService) {
@@ -62,13 +56,11 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     appService.setAppTitle("AREAS.NAME");
 
-    this.menuItems.push(this.menuSave);
     this.menuItems.push(this.menuImportEts);
 
 
     this.translate.onChange().subscribe({
       next: () => {
-        this.menuSave.label = this.translate.translate("COMMON.SAVE");
         this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
       }
     });
@@ -102,9 +94,11 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
       const [templates, instances] = await Promise.all(
         [
           this.areasService.getAreaTemplates(),
-          this.areasService.getAreaInstances()
+          this.areasService.getAllAreaInstances()
         ]);
 
+        
+      this.userGroups = await this.userGroupService.getUserGroups();
       this.templates = templates;
 
       this.instances = [];
@@ -113,7 +107,6 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
       for (const node of instances) {
         this.mapList.set(node.ObjId, node);
-        this.addInstancesRec(node, tmpConfig);
 
         tmpConfig.push(node);
       }
@@ -208,69 +201,62 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     this.instances = [...this.instances, newInstance];
 
     this.selectNode(newInstance);
-    this.tree.instance.refresh();
-
-    this._isDirty = true;
-    this.menuSave.color = "red";
-
-    await this.save();
+    
+    this.appService.isLoading = true;
+    try {
+      this.areasService.addAreaInstances([newInstance]);
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
   }
 
   async delete() {
     await this.deleteItem(this.selectedNode);
-    this._isDirty = true;
-    this.menuSave.color = "red";
-    
+
   }
 
   importEts(): any {
-
-    if (this._isDirty) {
-      this.notify.notifyWarning("COMMON.SAVE_BEFORE_CONTINUE", 5000);
-      return;
-    }
-
     this.router.navigate([this.selectedNode.ObjId, "import-ets"], { relativeTo: this.activeRoute });
   }
 
+  async saveSingle(instance: AreaInstance) {
 
-  async save() {
     this.appService.isLoading = true;
-    const array = [];
-
-    for (const x of this.instances) {
-      if (!x.This2Parent) {
-        array.push(x);
-        break;
-      }
-    }
-
     try {
-      await this.areasService.saveAreaInstance(array);
-      await this.loadConfig();
-
-      this.notify.notifySuccess("COMMON.SAVED");
-
-      this._isDirty = false;
-      this.menuSave.color = void 0;
-    } catch (error) {
-      super.handleError(error);
+      await this.areasService.saveAreaInstance(instance);
     }
-
-    this.appService.isLoading = false;
+    catch (error) {
+      this.handleError(error);
+    }
+    finally {
+      this.appService.isLoading = false;
+    }
   }
+
 
   async deleteItem(item: AreaInstance) {
     const parentNode = item.This2ParentNavigation;
     this.selectNode(parentNode);
 
     this.instances = this.instances.filter(a => a.ObjId !== item.ObjId);
-    parentNode.InverseThis2ParentNavigation = parentNode.InverseThis2ParentNavigation.filter(a => a.ObjId !== item.ObjId);
 
-    this._isDirty = true;
-    this.menuSave.color = "red";
-    
-    await this.save();
+    this.appService.isLoading = true;
+    try {
+      await this.areasService.deleteAreaInstance(item);
+    } catch (error) {
+      super.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
+
+  }
+
+  async onChanged($event) {
+    var { item } = $event;
+
+    await this.saveSingle(item);
   }
 
   onContextMenuPreparing($event) {

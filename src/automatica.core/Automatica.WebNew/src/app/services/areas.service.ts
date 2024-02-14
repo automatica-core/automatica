@@ -10,6 +10,7 @@ import { AreaInstance, AreaTemplate } from "../base/model/areas";
 export class AreaService extends BaseService {
 
 
+
     public etsImported = new EventEmitter<AreaInstance[]>();
 
     constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService, private designData: DesignTimeDataService) {
@@ -20,16 +21,20 @@ export class AreaService extends BaseService {
         return this.designData.getAreaTemplates();
     }
 
+
     getAreaInstances(): Promise<AreaInstance[]> {
         return super.getMultiple<AreaInstance>("areas");
     }
 
-    saveAreaInstance(areaInstances: AreaInstance[]) {
-        const data = new Array<any>();
-        for (const set of areaInstances) {
-            data.push(set.toJson());
-        }
-        return super.postMultiple("areas", data);
+    getAllAreaInstances(): Promise<AreaInstance[]> {
+        return super.getMultiple<AreaInstance>("areas/all");
+    }
+
+    saveAreaInstance(areaInstance: AreaInstance) {
+        return super.putJson("areas", areaInstance.toJson());
+    }
+    deleteAreaInstance(areaInstance: AreaInstance) {
+        return super.deleteJson("areas/" + areaInstance.ObjId);
     }
 
     addAreaInstances(areaInstances: AreaInstance[]) {

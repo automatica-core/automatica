@@ -58,7 +58,7 @@ namespace Automatica.Core.WebApi.Controllers
                         DbContext.UserGroups.Remove(userGroup);
                         await DbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
-                        _userGroupsCache.Clear();
+                        _userGroupsCache.Remove(id);
                     }
                 }
                 catch (Exception e)
@@ -88,11 +88,13 @@ namespace Automatica.Core.WebApi.Controllers
                     if (existing == null)
                     {
                         DbContext.UserGroups.Add(instance);
+                        _userGroupsCache.Add(instance.ObjId, instance);
                     }
                     else
                     {
                         DbContext.Entry(existing).State = EntityState.Detached;
                         DbContext.UserGroups.Update(instance);
+                        _userGroupsCache.Update(instance.ObjId, instance);
                     }
 
                     foreach (var role in roles)
@@ -120,7 +122,7 @@ namespace Automatica.Core.WebApi.Controllers
 
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
-                    _userGroupsCache.Clear();
+                    
                 }
                 catch (Exception e)
                 {
@@ -153,11 +155,13 @@ namespace Automatica.Core.WebApi.Controllers
                         if (existing == null)
                         {
                             DbContext.UserGroups.Add(instance);
+                            _userGroupsCache.Add(instance.ObjId, instance);
                         }
                         else
                         {
                             DbContext.Entry(existing).State = EntityState.Detached;
                             DbContext.UserGroups.Update(instance);
+                            _userGroupsCache.Update(instance.ObjId, instance);
                         }
 
                         foreach (var role in roles)
@@ -251,7 +255,7 @@ namespace Automatica.Core.WebApi.Controllers
                         DbContext.Users.Remove(user);
                         await DbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
-                        _userCache.Clear();
+                        _userCache.Remove(id);
                     }
                 }
                 catch (Exception e)
@@ -306,11 +310,13 @@ namespace Automatica.Core.WebApi.Controllers
                         }
 
                         DbContext.Users.Add(user);
+                        _userCache.Add(user.ObjId, user);
                     }
                     else
                     {
                         DbContext.Entry(existing).State = EntityState.Detached;
                         DbContext.Users.Update(user);
+                        _userCache.Update(user.ObjId, user);
                     }
 
                     foreach (var user2Group in user2Groups)
@@ -357,8 +363,6 @@ namespace Automatica.Core.WebApi.Controllers
                     var removedUserRolesList = removedUserRoles.ToList();
                     DbContext.RemoveRange(removedUserRolesList);
 
-
-                    _userCache.Clear();
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
