@@ -5,6 +5,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
+using Polly;
 
 namespace P3.Logic.Messenger
 {
@@ -43,10 +44,12 @@ namespace P3.Logic.Messenger
             {
                 try
                 {
+                    var body = Context.LocalizationProvider.GetTranslation("MESSENGER.CLOUD_EMAIL.BODY");
+                    body = body.Replace("{{NAME}}", Context.RuleInstance.Name).Replace("{{VALUE}}", value.ToString())
+                        .Replace("{{SOURCE}}", source.Name);
 
                     Context.Logger.LogInformation($"Send email to {String.Join(";", _to)}");
-                    Context.CloudApi.SendEmail(_to, _subject,
-                        $"\"{Context.RuleInstance.Name}\" received value \"{value}\" from source \"{source.Name}\"");
+                    Context.CloudApi.SendEmail(_to, _subject, body);
 
                 }
                 catch (Exception e)

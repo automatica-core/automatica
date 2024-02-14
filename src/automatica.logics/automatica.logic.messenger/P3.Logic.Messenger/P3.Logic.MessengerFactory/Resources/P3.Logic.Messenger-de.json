@@ -6,13 +6,14 @@
       "NAME": "Cloud Email Dienst",
       "DESCRIPTION": "",
       "TO": {
-        "NAME": "Empfänger",
-        "DESCRIPTION": "Mailempfängeradressen (z.B: info@automaticacore.com). Mehrere Emfpänger können mit ';' angegben werden."
+        "NAME": "Empfï¿½nger",
+        "DESCRIPTION": "Mailempfï¿½ngeradressen (z.B: info@automaticacore.com). Mehrere Emfpï¿½nger kï¿½nnen mit ';' angegben werden."
       },
       "SUBJECT": {
         "NAME": "Betreff",
         "DESCRIPTION": "Wenn das Feld leer ist, wird 'Automatica.Core Message' eingesetzt."
-      } 
+      },
+      "BODY": "{{NAME}} hat den Zustand {{VALUE}} erreicht. Dieser wurde von {{SOURCE}} gemeldet."
     } 
   }
 }
