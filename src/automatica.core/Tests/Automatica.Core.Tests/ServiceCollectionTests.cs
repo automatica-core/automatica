@@ -87,7 +87,7 @@ namespace Automatica.Core.Tests
         {
             var moq = Initialize();
 
-            AssertLifecycle<ILocalizationProvider>(moq, ServiceLifetime.Transient);
+            AssertLifecycle<ILocalizationProvider>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IVisualisationFactory>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<ITelegramMonitor>(moq, ServiceLifetime.Singleton);
             AssertLifecycle<IServerCloudApi>(moq, ServiceLifetime.Transient);

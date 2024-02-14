@@ -53,7 +53,7 @@ namespace Automatica.Core.Runtime
             services.AddAutomaticaDrivers();
             services.AddDispatcher();
 
-            services.AddTransient<ILocalizationProvider, LocalizationProvider>();
+            services.AddSingleton<ILocalizationProvider, LocalizationProvider>();
 
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ITelegramMonitor, TelegramMonitor>();
