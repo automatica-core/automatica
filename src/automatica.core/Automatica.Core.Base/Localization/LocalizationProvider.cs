@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -11,12 +10,21 @@ using Newtonsoft.Json.Linq;
 
 namespace Automatica.Core.Base.Localization
 {
-    public class LocalizationProvider(ILogger<LocalizationProvider> logger) : ILocalizationProvider
+    public class LocalizationProvider : ILocalizationProvider
     {
         private readonly Dictionary<string, JObject> _localizationStreams = new Dictionary<string, JObject>();
 
         private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
-        private readonly ILogger _logger = logger;
+        private readonly ILogger _logger;
+
+        private readonly string _locale;
+
+        public LocalizationProvider(IConfiguration config, ILogger<LocalizationProvider> logger)
+        {
+            _logger = logger;
+
+            _locale = config["db:language"];
+        }
 
         public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
         {
@@ -123,6 +131,16 @@ namespace Automatica.Core.Base.Localization
             }
 
             return localePart.Value<string>();
+        }
+
+        public string GetTranslation(string key)
+        {
+            return GetTranslation(_locale, key);
+        }
+
+        public string GetLocale()
+        {
+            return _locale;
         }
 
         public object ToJson(string locale)
