@@ -106,6 +106,8 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       load: (loadOptions) => {
         return new Promise(async (resolve, reject) => {
           await this.nodeInstanceService.load();
+          let rootNode = this.nodeInstanceService.rootNode;
+          this.tree.instance.expandRow(rootNode.Id);
           resolve(this.nodeInstanceService.nodeInstanceList);
         });
       },
