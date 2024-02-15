@@ -79,16 +79,13 @@ export class VisualizationComponent implements OnInit {
       items: []
     };
 
-    this.addAreaRecursive(areasItem, this.areas[0].InverseThis2ParentNavigation);
 
-    menu.push(areasItem);
+    var map = new Map<string, AreaInstance>();
+    var menuMap = new Map<string, any>();
+    var root = this.areas.filter(a => a.This2Parent == null)[0];
 
-    this.menuItems = menu;
-  }
-
-
-  private addAreaRecursive(parent, areas: AreaInstance[]) {
-    for (const x of areas) {
+    this.areas.forEach(x => {
+      map.set(x.ObjId, x);
       const item = {
         text: x.DisplayName,
         path: "/visualization/page/area/" + x.ObjId,
@@ -96,12 +93,25 @@ export class VisualizationComponent implements OnInit {
         expanded: true,
         items: []
       };
-      parent.items.push(item);
+      menuMap.set(x.ObjId, item);
 
-      if (x.InverseThis2ParentNavigation) {
-        this.addAreaRecursive(item, x.InverseThis2ParentNavigation);
+      if(x.This2Parent == root.ObjId) {
+        areasItem.items.push(item);
       }
+    });
+
+    for (const x of areas) {
+      if (!x.This2Parent) {
+        continue;
+      }
+      const parent = menuMap.get(x.This2Parent);
+      console.log("add to parent", x, parent);
+      parent.items.push(menuMap.get(x.ObjId));
     }
+    
+    menu.push(areasItem);
+
+    this.menuItems = menu;
   }
 
 }
