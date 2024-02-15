@@ -143,11 +143,9 @@ export class AppComponent extends BaseComponent implements OnInit {
     console.log("");
     console.log("          MUCH WOW, MUCH COOL, MUCH N1");
     console.log("           MUCH LOVE AUTOMATICA.CORE");
-    console.log("            DONATE MUCH DOGE TO");
-    console.log("              DPVz6RSAJrXZqTF4sGXpS1dqwvU36hSaAQ");
     console.log("");
     console.log("            DONATE MUCH BITCOIN TO");
-    console.log("              1Ck4XgAxys3aBjdesKQQ62zx7m4vozUest");
+    console.log("              bc1qcrgffxm2rhl0prcjqnh6lp78n6hu2n084dk2r8");
     console.log("");
     console.log("");
     console.log("");
