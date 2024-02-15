@@ -323,6 +323,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       c.setUserData(link);
       c.setColor("#457987");
       c.setGlowColor("#457987");
+      c.setGlowStrokeSize(4.5);
 
       const sourcePort = this.getSourcePort(link.from, link.fromPort);
 
