@@ -105,7 +105,6 @@ export class VisualizationComponent implements OnInit {
         continue;
       }
       const parent = menuMap.get(x.This2Parent);
-      console.log("add to parent", x, parent);
       parent.items.push(menuMap.get(x.ObjId));
     }
     
