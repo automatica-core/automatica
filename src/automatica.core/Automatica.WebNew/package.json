@@ -48,7 +48,7 @@
     "acorn": "^8.8.2",
     "angular-l10n": "^16.0.0",
     "angular-split": "^16.2.1",
-    "automatica-draw2d": "1.0.11",
+    "automatica-draw2d": "1.1.0",
     "copyfiles": "^2.4.1",
     "core-js": "^3.35.1",
     "devextreme": "^23.2.3",
