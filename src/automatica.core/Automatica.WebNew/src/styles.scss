@@ -199,3 +199,9 @@ html, body {
   .w-100 {
     width: 100%;
   }
+ 
+@keyframes lineAnimation {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
