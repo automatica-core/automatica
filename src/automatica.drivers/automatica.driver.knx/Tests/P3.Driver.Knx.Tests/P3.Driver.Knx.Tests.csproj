@@ -23,17 +23,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="xunit" Version="2.6.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Automatica.Core.Base" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Driver" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
-    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="8.0.0.1655" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Automatica.Core.Base" Version="8.1.0.1865" />
+    <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1865" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.1.0.1865" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="8.1.0.1865" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ETS\ETS5_Password_Protected.knxproj">
