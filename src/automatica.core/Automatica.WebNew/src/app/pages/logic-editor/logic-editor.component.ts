@@ -488,4 +488,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   onZoomToView($event) {
     this.selectedPage.onZoomToView.emit();
   }
+
+  onPropertyChanged($event) {
+    this.changeRef.detectChanges();
+  }
 }
