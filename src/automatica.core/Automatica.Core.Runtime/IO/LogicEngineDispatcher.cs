@@ -264,9 +264,10 @@ namespace Automatica.Core.Runtime.IO
                 Task.Run(async () => { await _ruleInstanceVisuNotifier.NotifyValueChanged(toInterface, o); })
                     .ConfigureAwait(false);
 
-                var rule = _logicInstancesStore.GetByRuleInstanceId(toRule);
                 try
                 {
+                    var rule = _logicInstancesStore.GetByRuleInstanceId(toRule);
+                
                     _logger.LogDebug(
                         $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
 
