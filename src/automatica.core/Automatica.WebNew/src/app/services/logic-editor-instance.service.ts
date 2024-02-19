@@ -85,9 +85,10 @@ export class LogicEditorInstanceService {
         return this._nodeInstanceMap.has(id);
     }
 
-    public setNodeInstanceValue(id: string, value: any) {
+    public setNodeInstanceValue(id: string, value: any) : boolean {
         if (this.hasNodeInstance(id)) {
             const nodeInstance = this._nodeInstanceMap.get(id);
+            let curValue = nodeInstance.Value;
             nodeInstance.Value = value.value;
             nodeInstance.ValueTimestamp = value.timestamp;
             nodeInstance.ValueSource = value.valueSource;
@@ -98,7 +99,10 @@ export class LogicEditorInstanceService {
             else if (value.valueSource == ValueSource.Write) {
                 nodeInstance.WriteValue = value.value;
             }
+
+            return curValue != value;
         }
+        return false;
     }
 
     private async loadConfig() {

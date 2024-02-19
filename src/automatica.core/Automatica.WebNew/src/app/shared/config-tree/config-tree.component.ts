@@ -115,17 +115,13 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     try {
       super.registerEvent(this.hub.dispatchValue, (data) => {
-
-        this.ngZone.runOutsideAngular(() => {
-
-          if (data[0] === 0) { // 0 = nodeinstance value
-            const id = data[1];
-            this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
+        if (data[0] === 0) { // 0 = nodeinstance value
+          const id = data[1];
+          if(this.nodeInstanceService.setNodeInstanceValue(id, data[2])) {
             this.changeRef.detectChanges();
-            // this.tree.instance.refresh();
+            this.tree.instance.refresh(true);
           }
-
-        });
+        }
       });
 
       super.registerEvent(this.appService.isLoadingChanged, () => {
@@ -134,7 +130,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       super.registerEvent(this.logicEngineService.add, () => {
         this.changeRef.detectChanges();
-        this.tree.instance.refresh();
+        this.tree.instance.refresh(true);
       });
 
     } catch (error) {
@@ -298,7 +294,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
     finally {
       this.changeRef.detectChanges();
-      this.tree.instance.refresh();
+      this.tree.instance.refresh(true);
       this.appService.isLoading = false;
     }
   }
@@ -316,7 +312,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     }
     finally {
       this.changeRef.detectChanges();
-      this.tree.instance.refresh();
+      this.tree.instance.refresh(true);
       this.appService.isLoading = false;
     }
   }
@@ -382,7 +378,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   public refreshTree() {
     this.changeRef.detectChanges();
-    this.tree.instance.refresh();
+    this.tree.instance.refresh(true);
   }
 
   allowDrop(dropTarget: ITreeNode) {
@@ -464,7 +460,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       this.selectNode(drag);
 
       this.appService.isLoading = true;
-      this.tree.instance.refresh();
+      this.tree.instance.refresh(true);
       await this.configService.update(drag, UpdateScope.ParentChanged);
       this.appService.isLoading = false;
     }
@@ -589,7 +585,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       }
       prop.validate();
 
-      this.tree.instance.refresh();
+      this.tree.instance.refresh(true);
     }
   }
 
