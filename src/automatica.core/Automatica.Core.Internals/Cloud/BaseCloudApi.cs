@@ -75,27 +75,23 @@ namespace Automatica.Core.Internals.Cloud
 
         public async Task<T> GetRequest<T>(string apiUrl) where T : class
         {
-            T result = null;
+            using var client = SetupClient();
+            var response = await client.GetAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey()))
+                .ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new NoApiKeyException();
+            }
+
+            var responseText = await response.Content.ReadAsStringAsync();
             try
             {
-                using var client = SetupClient();
-                var response = await client.GetAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey()))
-                    .ConfigureAwait(false);
-
-                if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    throw new NoApiKeyException();
-                }
                 response.EnsureSuccessStatusCode();
 
-                await response.Content.ReadAsStringAsync().ContinueWith(x =>
-                {
-                    if (x.IsFaulted)
-                        throw x.Exception;
+                _logger.LogTrace($"Received {responseText} from {apiUrl}");
+                return JsonConvert.DeserializeObject<T>(responseText);
 
-                    _logger.LogTrace($"Received {x.Result} from {apiUrl}");
-                    result = JsonConvert.DeserializeObject<T>(x.Result);
-                });
             }
             catch (NoApiKeyException)
             {
@@ -103,10 +99,10 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Could not execute get request to cloud");
+                _logger.LogError(e, $"Could not execute get request to cloud: {apiUrl}: {responseText}");
             }
 
-            return result;
+            return default(T);
         }
 
         public async Task<T> PostRequest<T>(string apiUrl, object postObject) where T : class
