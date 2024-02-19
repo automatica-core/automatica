@@ -59,8 +59,6 @@ export class GaugeComponent extends BaseMobileRuleComponent implements OnInit, O
     this.scaleEndInterface = this.getInterfaceByKey("scale_end");
     this.ticksInterface = this.getInterfaceByKey("ticks");
     this.typeInterface = this.getInterfaceByKey("type");
-
-    console.log(dictionary);
   
     if (dictionary.hasOwnProperty("scale_start")) {
       this.scaleStart = dictionary["scale_start"];

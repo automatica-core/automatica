@@ -266,7 +266,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public set areaInstances(v: AreaInstance[]) {
     this._areaInstances = v;
     this.flattenAreaInit();
-    console.log(this.areaInstancesFlat);
   }
 
 
@@ -624,7 +623,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
           learnNode.init();
           this.learnNodeInstance = [...this.learnNodeInstance, learnNode];
-          console.log(this.learnNodeInstance);
           this.changeDetection.detectChanges();
         }
       });
@@ -640,13 +638,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
   async optionChanged(e, data) {
-    console.log(e);
-    console.log(data);
-
     if (e.name == "value") {
 
-      var oldValue = JSON.stringify(e.previousValue);
-      var newValue = JSON.stringify(e.value);
+      let oldValue = JSON.stringify(e.previousValue);
+      let newValue = JSON.stringify(e.value);
 
       if (newValue == oldValue) {
         return;

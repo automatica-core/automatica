@@ -175,7 +175,6 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   }
 
   onVolumeSliderChanged($event) {
-    console.log($event);
     this.dataHub.setValue(this.volumeState.ObjId, $event.value);
   }
 

@@ -35,7 +35,6 @@ export class DeviceService {
     private setOrientation() {
         const currentOrientation = this.orientation;
         try {
-            console.log(this.deviceServiceDetector.orientation);
             const orientation = this.deviceServiceDetector.orientation;
 
             if (orientation === OrientationType.Landscape) {

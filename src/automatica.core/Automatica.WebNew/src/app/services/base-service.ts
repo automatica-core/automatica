@@ -65,7 +65,6 @@ export class BaseService {
             // }
             const json = data;
             const model = BaseModel.getBaseModelFromJson<T>(json, void 0, this.translationService);
-            console.log(url, "data is", model);
             return model;
 
         } catch (error) {
@@ -102,7 +101,6 @@ export class BaseService {
             }
 
             const v = BaseService.getValidBaseModels<T>(json, this.translationService);
-            console.log(url, "data is", v);
             return v;
 
         } catch (error) {

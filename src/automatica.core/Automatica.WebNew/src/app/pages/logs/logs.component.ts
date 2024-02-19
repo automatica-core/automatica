@@ -175,7 +175,6 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
       load: async () => JSON.parse(await this.logsService.getLogger()),
       update: async (key, value) => {
-        console.log(key, value);
         await this.logsService.setLogLevel(key, value.logLevel);
       },
       key: "facility"
