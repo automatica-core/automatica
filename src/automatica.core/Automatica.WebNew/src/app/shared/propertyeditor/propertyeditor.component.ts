@@ -39,6 +39,7 @@ import { ControlsService } from "src/app/services/controls.service";
 import { ControlConfiguration } from "src/app/base/model/control-configuration";
 import { Control, ControlGrouped } from "src/app/base/model/control";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
+import { VirtualSettingsPropertyInstance } from "src/app/base/model/virtual-props/settings/settings-property-instance";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -671,9 +672,9 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       if (this.item instanceof NodeInstance) {
         await this.config.update(this.item, prop.updateScope);
 
-        if (!this.item.ParentId) {
+        if (!this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
           this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
-          this.nodeInstanceService.saveSettings();
+          this.nodeInstanceService.saveSetting(prop);
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);

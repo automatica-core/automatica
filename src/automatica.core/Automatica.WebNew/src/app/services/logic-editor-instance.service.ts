@@ -102,7 +102,7 @@ export class LogicEditorInstanceService {
     }
 
     private async loadConfig() {
-        
+
         const [instances, logicNodeInstances, pages] = await Promise.all([
             await this.configService.getNodeInstances(),
             await this.configService.getLogicNodeInstances(),
@@ -233,6 +233,10 @@ export class LogicEditorInstanceService {
         }
 
         return await this.nodeTemplateService.getSupportedTemplates(node, node.NodeTemplate.ProvidesInterface2InterfaceType);
+    }
+
+    public async saveSetting(property: VirtualSettingsPropertyInstance) {
+        await this.settingsService.saveSettings([property.setting]);
     }
 
     public async saveSettings() {
