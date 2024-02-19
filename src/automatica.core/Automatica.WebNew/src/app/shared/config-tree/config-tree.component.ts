@@ -17,7 +17,6 @@ import { LogicEditorInstanceService } from "src/app/services/logic-editor-instan
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { WindowState } from "src/app/base/model/window-state";
 import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
-import DataSource from "devextreme/data/data_source";
 import { LogicEngineService } from "src/app/services/logicengine.service";
 
 @Component({
@@ -99,27 +98,13 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     super.baseOnInit();
 
-
-    this.dataSource = new DataSource({
-      paginate: false,
-      pageSize: 100000,
-      load: (loadOptions) => {
-        return new Promise(async (resolve, reject) => {
-          await this.nodeInstanceService.load();
-          let rootNode = this.nodeInstanceService.rootNode;
-          this.tree.instance.expandRow(rootNode.Id);
-          resolve(this.nodeInstanceService.nodeInstanceList);
-        });
-      },
-    });
-
     try {
       super.registerEvent(this.hub.dispatchValue, (data) => {
         if (data[0] === 0) { // 0 = nodeinstance value
           const id = data[1];
           if(this.nodeInstanceService.setNodeInstanceValue(id, data[2])) {
             this.changeRef.detectChanges();
-            this.tree.instance.refresh(true);
+             this.tree.instance.refresh(true);
           }
         }
       });
@@ -140,7 +125,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public async load(): Promise<any> {
-    await this.dataSource.reload();
+    await this.nodeInstanceService.load();
+    let rootNode = this.nodeInstanceService.rootNode;
+    this.tree.instance.expandRow(rootNode.Id);
+    
   }
 
   async ngOnDestroy() {

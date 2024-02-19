@@ -6,7 +6,7 @@
     </dx-context-menu>
 
     <dx-tree-list height="100%" #tree itemsExpr="Children" id="config"
-        [dataSource]="dataSource" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
+        [dataSource]="nodeInstanceService.nodeInstanceList" keyExpr="Id" parentIdExpr="ParentId" [showRowLines]="true"
         [expandedRowKeys]="expandedRowKeys"
         (onContextMenuPreparing)="onContextMenuPreparing($event)" [showColumnLines]="false" [allowColumnResizing]="true"
         [selectedRowKeys]="selectedRowKeys" (onRowClick)="onRowClicked($event)" [twoWayBindingEnabled]="false" >
