@@ -36,13 +36,15 @@ namespace Automatica.Driver.Shelly.Gen2.Models
         [JsonProperty("switch:1")]
         public SwitchStatusEvent Switch1 { get; set; }
 
-        public List<SwitchStatusEvent> Switches => new() { Switch0, Switch1 };
+        public List<SwitchStatusEvent> Switches => [Switch0, Switch1];
 
-        public T GetValueFromSwitch<T>(int relayId, Expression<Func<SwitchStatusEvent, T>> getValueExpression)
+        public T? GetValueFromSwitch<T>(int relayId, Expression<Func<SwitchStatusEvent, T?>> getValueExpression)
         {
             if (Switches.Count >= relayId)
             {
-                return getValueExpression.Compile().Invoke(Switches[relayId]);
+                var switchValue = GetSwitch(relayId);
+                if(switchValue != null)
+                    return getValueExpression.Compile().Invoke(GetSwitch(relayId));
             }
 
             return default;
@@ -50,7 +52,7 @@ namespace Automatica.Driver.Shelly.Gen2.Models
 
         public SwitchStatusEvent GetSwitch(int relayId)
         {
-            if (Switches.Count > relayId+1)
+            if (Switches.Count > relayId)
             {
                 return Switches[relayId];
             }

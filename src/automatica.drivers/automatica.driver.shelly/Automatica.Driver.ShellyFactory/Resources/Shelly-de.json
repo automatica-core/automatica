@@ -6,6 +6,10 @@
       "NAME": "Shelly 1",
       "DESCRIPTION": ""
     },
+    "SCAN": {
+      "NAME": "Scan",
+      "DESCRIPTION": ""
+    },
     "25": {
       "NAME": "Shelly 2.5",
       "DESCRIPTION": ""
@@ -29,6 +33,12 @@
       },
       "SCAN": {
         "NAME": "Suche"
+      },
+      "USE_IP": {
+        "NAME": "Use IP"
+      },
+      "IP": {
+        "NAME": "IP"
       }
     },
     "METERS": {
@@ -60,7 +70,7 @@
     "RELAY": {
       "NAME": "Relais",
       "HAS_TIMER": {
-        "NAME": "Hat Timer"
+        "NAME": "Has Timer"
       },
       "STATUS": {
         "NAME": "Status"

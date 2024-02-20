@@ -93,6 +93,13 @@ namespace Automatica.Driver.ShellyFactory
                     case ShellyDeviceType.Shelly25:
                         node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly25Device);
                         break;
+
+                    case ShellyDeviceType.ShellyPlus1Pm:
+                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlus1PmDevice);
+                        break;
+                    case ShellyDeviceType.ShellyPlus2Pm:
+                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlus2PmDevice);
+                        break;
                     default:
                         DriverContext.Logger.LogInformation($"Device with id {device.Id} not supported...");
                         continue;
@@ -101,6 +108,9 @@ namespace Automatica.Driver.ShellyFactory
                 var idProp = node.GetProperty(ShellyFactory.DeviceIdPropertyKey);
                 idProp.Value = device.Id.Split("-")[^1];
                 node.Name = device.Name;
+
+                var ipProp = node.GetProperty(ShellyFactory.DeviceIpPropertyKey);
+                ipProp.Value = device.IpAddress;
 
                 ret.Add(node);
             }
