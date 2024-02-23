@@ -115,6 +115,9 @@ namespace Automatica.Driver.Shelly.Gen2
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint);
             requestMessage.Content = new StringContent(JsonConvert.SerializeObject(rpcModel), Encoding.UTF8);
 
+
+            await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, JsonConvert.SerializeObject(param), endpoint);
+
             return await ExecuteRequestAsync<ResponseModel<T>>(requestMessage, token, default);
         }
 
@@ -162,10 +165,16 @@ namespace Automatica.Driver.Shelly.Gen2
             return true;
         }
 
-        public async Task<bool> SetRelayState(int channelId, bool value, CancellationToken token = default)
+        public async Task<bool> SetRelayState(int channelId, bool value, int resetTimer, CancellationToken token = default)
         {
-             await SendPostMessage<SwitchStatus>("Switch.Set",
-                new Dictionary<string, object> { { "id", channelId}, { "on", value } }, token);
+            var valueDictionary = new Dictionary<string, object> { { "id", channelId }, { "on", value } };
+
+            if (resetTimer > 0)
+            {
+                valueDictionary.Add("toggle_after", resetTimer);
+            }
+
+            await SendPostMessage<SwitchStatus>("Switch.Set", valueDictionary, token);
             return true;
         }
 

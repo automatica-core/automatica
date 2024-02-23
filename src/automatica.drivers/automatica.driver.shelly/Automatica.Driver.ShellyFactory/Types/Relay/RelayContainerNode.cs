@@ -9,6 +9,7 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
     internal class RelayContainerNode : ShellyContainerNode
     {
         public int RelayId { get; private set; }
+        public int ResetTimer { get; private set; }
 
         public RelayContainerNode(IDriverContext driverContext, ShellyDriverDevice client) : base(driverContext, client)
         {
@@ -21,6 +22,13 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
             if (channelProperty != null)
             {
                 RelayId = Convert.ToInt32(channelProperty);
+            }
+
+            var resetProperty = GetPropertyValue("shelly-relay-flip-back-timer", 0);
+
+            if (resetProperty != null)
+            {
+                ResetTimer = Convert.ToInt32(resetProperty);
             }
             return base.Init(token);
         }
@@ -48,7 +56,9 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
-                            await Client.Client.SetRelayState(RelayId, o!.Value, CancellationToken.None);
+                            await Client.Client.SetRelayState(RelayId, o!.Value, ResetTimer,CancellationToken.None);
+                            var relayState = await Client.Client.GetRelayState(RelayId, CancellationToken.None);
+                            return relayState;
                         },
                         async client => await client.GetRelayState(RelayId, CancellationToken.None),
                         notifyStatusEvent =>
@@ -62,6 +72,7 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
+                            return false;
                         },
                         async client => await client.GetHasUpdate(default));
             }

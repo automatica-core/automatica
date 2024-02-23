@@ -74,6 +74,10 @@
       },
       "STATUS": {
         "NAME": "State"
+      },
+      "FLIP_BACK_TIMER": {
+        "NAME": "Reset timer",
+        "DESCRIPTION": "Reset timer in seconds"
       }
     },
     "ROLLER": {

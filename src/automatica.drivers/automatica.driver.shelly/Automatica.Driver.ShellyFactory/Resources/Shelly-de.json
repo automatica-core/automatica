@@ -74,6 +74,10 @@
       },
       "STATUS": {
         "NAME": "Status"
+      },
+      "FLIP_BACK_TIMER": {
+        "NAME": "Reset Interval",
+        "DESCRIPTION":  "Reset Interval in Sekunden"
       }
     },
     "ROLLER": {

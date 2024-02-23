@@ -4,6 +4,7 @@ using Automatica.Core.Driver;
 using Automatica.Core.EF.Migrations;
 using Automatica.Core.EF.Models;
 using Automatica.Driver.ShellyFactory.Discovery;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace Automatica.Driver.ShellyFactory
@@ -24,7 +25,7 @@ namespace Automatica.Driver.ShellyFactory
 
         public override string ImageName => "automaticacore/plugin-automatica.driver.shelly";
 
-        public override Version DriverVersion => new Version(0, 0, 0, 5);
+        public override Version DriverVersion => new Version(0, 0, 0, 6);
 
         public override bool InDevelopmentMode => true;
 
@@ -260,7 +261,8 @@ namespace Automatica.Driver.ShellyFactory
 
             factory.ChangeNodeTemplateMetaName(relayId, "{NODE:Name}{CONST:-}{PROPERTY:shelly-relay-channel}");
 
-            factory.CreateNodeTemplate(GenerateNewGuid(id, nextId++), "SHELLY.RELAY.STATUS.NAME",
+            var relayStateId = GenerateNewGuid(id, nextId++);
+            factory.CreateNodeTemplate(relayStateId, "SHELLY.RELAY.STATUS.NAME",
                 "SHELLY.RELAY.STATUS.DESCRIPTIONS", "relay-state", relayInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, true, false,
                 NodeDataType.Boolean, 1, false);
@@ -268,6 +270,10 @@ namespace Automatica.Driver.ShellyFactory
                 "SHELLY.RELAY.HAS_TIMER.DESCRIPTIONS", "relay-timer", relayInterfaceId,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(id, nextId++), "SHELLY.RELAY.FLIP_BACK_TIMER.NAME",
+                "SHELLY.RELAY.FLIP_BACK_TIMER.DESCRIPTION", "shelly-relay-flip-back-timer", PropertyTemplateType.Numeric, relayId,
+                "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(0, 60), 0, 0, 0);
         }
 
         private void CreateMeterInterface(INodeTemplateFactory factory, Guid id, Guid needsInterface, int meterIndex, int maxMeter)
@@ -308,36 +314,48 @@ namespace Automatica.Driver.ShellyFactory
 
         private void InitShellyParams(INodeTemplateFactory factory, Guid parentGuid, ShellyGeneration generation)
         {
-            factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 5), "SHELLY.TEMPERATURE.NAME", "SHELLY.TEMPERATURE.DESCRIPTIONS", "temperature", parentGuid,
+            factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 5), "SHELLY.TEMPERATURE.NAME",
+                "SHELLY.TEMPERATURE.DESCRIPTIONS", "temperature", parentGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Double, 1, false);
-            factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 6), "SHELLY.HAS_UPDATE.NAME", "SHELLY.HAS_UPDATE.DESCRIPTIONS", "has_update", parentGuid,
+            factory.CreateNodeTemplate(GenerateNewGuid(parentGuid, 6), "SHELLY.HAS_UPDATE.NAME",
+                "SHELLY.HAS_UPDATE.DESCRIPTIONS", "has_update", parentGuid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true,
                 NodeDataType.Boolean, 1, false);
 
-            factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 4), "SHELLY.PROPERTIES.POLLING_INTERVAL.NAME",
-                "SHELLY.PROPERTIES.POLLING_INTERVAL.DESCRIPTION", "polling-interval", PropertyTemplateType.Integer, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, 2000, 0, 0);
+
+            factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 4),
+                "SHELLY.PROPERTIES.POLLING_INTERVAL.NAME",
+                "SHELLY.PROPERTIES.POLLING_INTERVAL.DESCRIPTION", "polling-interval", PropertyTemplateType.Integer,
+                parentGuid, "COMMON.CATEGORY.ADDRESS", generation == ShellyGeneration.Gen1, false, null, 2000, 0, 0);
+
 
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 1), "SHELLY.PROPERTIES.ID.NAME",
-                "SHELLY.PROPERTIES.ID.DESCRIPTION", DeviceIdPropertyKey, PropertyTemplateType.Text, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, 0, 0, 1);
+                "SHELLY.PROPERTIES.ID.DESCRIPTION", DeviceIdPropertyKey, PropertyTemplateType.Text, parentGuid,
+                "COMMON.CATEGORY.ADDRESS", true, false, null, 0, 0, 1);
 
-            if(generation == ShellyGeneration.Gen1) 
+            if (generation == ShellyGeneration.Gen1)
             {
                 factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 2), "SHELLY.PROPERTIES.USERNAME.NAME",
-                "SHELLY.PROPERTIES.USERNAME.DESCRIPTION", "shelly-username", PropertyTemplateType.Text, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 2, 3);
+                    "SHELLY.PROPERTIES.USERNAME.DESCRIPTION", "shelly-username", PropertyTemplateType.Text, parentGuid,
+                    "COMMON.CATEGORY.ADDRESS", true, false, null, "", 2, 3);
             }
 
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 3), "SHELLY.PROPERTIES.PASSWORD.NAME",
-                "SHELLY.PROPERTIES.PASSWORD.DESCRIPTION", "shelly-password", PropertyTemplateType.Password, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 4);
+                "SHELLY.PROPERTIES.PASSWORD.DESCRIPTION", "shelly-password", PropertyTemplateType.Password, parentGuid,
+                "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 4);
 
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 6), "SHELLY.PROPERTIES.USE_IP.NAME",
-                "SHELLY.PROPERTIES.USE_IP.DESCRIPTION", "shelly-use-ip", PropertyTemplateType.Bool, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, false, 0, 5);
+                "SHELLY.PROPERTIES.USE_IP.DESCRIPTION", "shelly-use-ip", PropertyTemplateType.Bool, parentGuid,
+                "COMMON.CATEGORY.ADDRESS", true, false, null, false, 0, 5);
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 7), "SHELLY.PROPERTIES.IP.NAME",
-                "SHELLY.PROPERTIES.IP.DESCRIPTION", DeviceIpPropertyKey, PropertyTemplateType.Ip, parentGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 6);
+                "SHELLY.PROPERTIES.IP.DESCRIPTION", DeviceIpPropertyKey, PropertyTemplateType.Ip, parentGuid,
+                "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 6);
 
 
             factory.CreatePropertyTemplate(GenerateNewGuid(parentGuid, 10), "SHELLY.PROPERTIES.GENERATION.NAME",
-                "SHELLY.PROPERTIES.GENERATION.DESCRIPTION", "shelly-generation", PropertyTemplateType.Integer, parentGuid, "COMMON.CATEGORY.ADDRESS", false, false, null, (int)generation, 0, 0);
+                "SHELLY.PROPERTIES.GENERATION.DESCRIPTION", "shelly-generation", PropertyTemplateType.Integer,
+                parentGuid, "COMMON.CATEGORY.ADDRESS", false, false, null, (int)generation, 0, 0);
         }
 
         private Guid GenerateNewGuid(Guid guid, int c)

@@ -26,12 +26,16 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             return await ExecuteRequestAsync<ShellyStatusDto>(requestMessage, cancellationToken, timeout);
         }
 
-        public async Task<RelayDto> SetStatus(int channelId, bool value, CancellationToken token)
+        public async Task<RelayDto> SetStatus(int channelId, bool value, int resetTimer, CancellationToken token)
         {
             var turnValue = value ? "on" : "off";
             var endpoint = ServerUri + $"/relay/{channelId}?turn={turnValue}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
 
+            if (resetTimer > 0)
+            {
+                endpoint += $"&timer={resetTimer}";
+            }
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
 
             await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, turnValue, endpoint);
 
@@ -48,9 +52,9 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             return Task.FromResult(true);
         }
 
-        public async Task<bool> SetRelayState(int channelId, bool value, CancellationToken token)
+        public async Task<bool> SetRelayState(int channelId, bool value, int resetTimer, CancellationToken token)
         {
-            var result =  await SetStatus(channelId, value, token);
+            var result =  await SetStatus(channelId, value, resetTimer,token);
             return result.IsOn;
         }
 
