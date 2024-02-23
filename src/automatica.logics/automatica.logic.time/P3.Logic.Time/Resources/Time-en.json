@@ -24,6 +24,10 @@
     "ADVANCED_TIMER": {
       "NAME": "Advanced timer",
       "DESCRIPTION": ""
+    },
+    "TRIGGER_ONLY_IF_TRUE": {
+      "NAME": "Trigger only if true",
+      "DESCRIPTION": ""
     }
   }
 }

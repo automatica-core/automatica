@@ -24,6 +24,10 @@
     "ADVANCED_TIMER": {
       "NAME": "Erweiterte Zeitschaltuhr",
       "DESCRIPTION": ""
+    },
+    "TRIGGER_ONLY_IF_TRUE": {
+      "NAME": "Trigger wenn Wert Wahr",
+      "DESCRIPTION": ""
     }
   }
 }
