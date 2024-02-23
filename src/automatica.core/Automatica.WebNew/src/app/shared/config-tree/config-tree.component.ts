@@ -2,7 +2,6 @@ import { ViewChild, Component, OnInit, Input, Output, EventEmitter, OnDestroy, C
 import { ConfigService } from "../../services/config.service";
 import { DxTreeListComponent, DxContextMenuComponent } from "devextreme-angular";
 import { L10nTranslationService } from "angular-l10n";
-import { SettingsService } from "src/app/services/settings.service";
 import { LearnNodeInstance } from "../propertyeditor/propertyeditor.component";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -14,12 +13,11 @@ import { NodeTemplate } from "src/app/base/model/node-template";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { BoardInterface } from "src/app/base/model/board-interface";
 import { PropertyInstance, UpdateScope } from "src/app/base/model/property-instance";
-import { DesignTimeDataService } from "src/app/services/design-time-data.service";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
-import { NodeTemplateService } from "src/app/services/node-template.service";
-import { DataService } from "src/app/services/data.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 import { WindowState } from "src/app/base/model/window-state";
+import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-page";
+import { LogicEngineService } from "src/app/services/logicengine.service";
 
 @Component({
   selector: "p3-config-tree",
@@ -45,7 +43,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   copyItem: NodeInstance;
 
   private _selectedNode: ITreeNode;
-  refreshTimeout: NodeJS.Timeout;
+  dataSource: any;
   public get selectedNode(): ITreeNode {
     return this._selectedNode;
   }
@@ -67,8 +65,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   @Output() onNodeSelect = new EventEmitter<ITreeNode>();
   @Output() onNodeDrag: EventEmitter<any> = new EventEmitter();
   @Output() onConfigLoaded = new EventEmitter();
+  @Output() onLogicNodeInstanceRemoved = new EventEmitter<NodeInstance2RulePage>();
 
   @Input() useContextMenu: boolean;
+
+  @Input() loadLogicNodeInstances: boolean = false;
 
 
   @Input()
@@ -79,15 +80,14 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   constructor(
     private configService: ConfigService,
-    private designTimeDataService: DesignTimeDataService,
-    public nodeInstanceService: NodeInstanceService,
+    public nodeInstanceService: LogicEditorInstanceService,
     translate: L10nTranslationService,
     private notify: NotifyService,
     private hub: DataHubService,
     appService: AppService,
+    private logicEngineService: LogicEngineService,
     private changeRef: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private nodeTemplateService: NodeTemplateService) {
+    private ngZone: NgZone) {
 
     super(notify, translate, appService);
     this.useContextMenu = true;
@@ -98,25 +98,24 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
     super.baseOnInit();
 
-    this.refreshTimeout = setInterval(() => {
-      this.changeRef.detectChanges();
-    }, 1000);
-
     try {
       super.registerEvent(this.hub.dispatchValue, (data) => {
-
-        this.ngZone.runOutsideAngular(() => {
-
-          if (data[0] === 0) { // 0 = nodeinstance value
-            const id = data[1];
-            this.nodeInstanceService.setNodeInstanceValue(id, data[2]);
+        if (data[0] === 0) { // 0 = nodeinstance value
+          const id = data[1];
+          if(this.nodeInstanceService.setNodeInstanceValue(id, data[2])) {
+            this.changeRef.detectChanges();
+             this.tree.instance.refresh(true);
           }
-
-        });
+        }
       });
 
       super.registerEvent(this.appService.isLoadingChanged, () => {
         this.changeRef.detectChanges();
+      });
+
+      super.registerEvent(this.logicEngineService.add, () => {
+        this.changeRef.detectChanges();
+        this.tree.instance.refresh(true);
       });
 
     } catch (error) {
@@ -127,10 +126,12 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
   public async load(): Promise<any> {
     await this.nodeInstanceService.load();
+    let rootNode = this.nodeInstanceService.rootNode;
+    this.tree.instance.expandRow(rootNode.Id);
+    
   }
 
   async ngOnDestroy() {
-    clearTimeout(this.refreshTimeout);
     super.baseOnDestroy();
   }
 
@@ -197,11 +198,20 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
 
   onRowClicked($event) {
-    const item = this.nodeInstanceService.getNodeInstance($event.data.ObjId);
-    this.selectNode(item);
+
+    const item = $event.data;
+
+    if (item instanceof NodeInstance2RulePage) {
+      const item = this.nodeInstanceService.getLogicNodeInstance($event.data.ObjId);
+      this.selectNodeInternal(item, true);
+    }
+    else {
+      const item = this.nodeInstanceService.getNodeInstance($event.data.ObjId);
+      this.selectNodeInternal(item, true);
+    }
   }
 
-  selectNode(node: ITreeNode) {
+  private selectNodeInternal(node: ITreeNode, onlySelect: boolean) {
     if (!node) {
       this.selectedRowKeys = [];
       this.selectedNode = void 0;
@@ -211,15 +221,22 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     if (!this.selectedNode || this.selectedNode.Id !== node.Id) {
       this.selectedRowKeys = [node.Id];
       this.selectedNode = node;
-      this.expandRowRecursive(node);
 
-      //scroll to element...does not work right now!
-      // const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
-      // const rowElement = this.tree.instance.getRowElement(nodeIndex)
-      // this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
-      this.tree.instance.repaint();
+      if (!onlySelect) {
+        this.expandRowRecursive(node);
+
+        // //scroll to element...does not work right now!
+        // const nodeIndex = this.tree.instance.getRowIndexByKey(node.Id);
+        // const rowElement = this.tree.instance.getRowElement(nodeIndex)
+        // this.tree.instance.getScrollable().scrollToElement(rowElement[0]);
+        // this.tree.instance.repaint();
+      }
     }
 
+  }
+
+  selectNode(node: ITreeNode) {
+    this.selectNodeInternal(node, false);
   }
 
   expandRowRecursive(node: ITreeNode) {
@@ -263,9 +280,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       await this.load();
     }
-
-    this.tree.instance.refresh();
-    this.appService.isLoading = false;
+    finally {
+      this.changeRef.detectChanges();
+      this.tree.instance.refresh(true);
+      this.appService.isLoading = false;
+    }
   }
 
 
@@ -279,10 +298,11 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       await this.load();
     }
-
-
-    this.tree.instance.refresh();
-    this.appService.isLoading = false;
+    finally {
+      this.changeRef.detectChanges();
+      this.tree.instance.refresh(true);
+      this.appService.isLoading = false;
+    }
   }
 
   private async addItem(parentNode: NodeInstance, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
@@ -338,10 +358,15 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
 
-  public async reload() {
+  public async restart() {
     this.notify.notifySuccess("COMMON.RELOADED");
     this.configService.reload();
     this.selectNode(void 0);
+  }
+
+  public refreshTree() {
+    this.changeRef.detectChanges();
+    this.tree.instance.refresh(true);
   }
 
   allowDrop(dropTarget: ITreeNode) {
@@ -349,6 +374,10 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     return (dragData: any) => {
 
       if (!dragData || !dropTarget) {
+        return false;
+      }
+
+      if (dragData instanceof NodeInstance2RulePage) {
         return false;
       }
 
@@ -419,7 +448,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       this.selectNode(drag);
 
       this.appService.isLoading = true;
-      this.tree.instance.refresh();
+      this.tree.instance.refresh(true);
       await this.configService.update(drag, UpdateScope.ParentChanged);
       this.appService.isLoading = false;
     }
@@ -458,56 +487,67 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     this.popoverVisible = false;
     const that = this;
     const treeNode: ITreeNode = $event.row.data;
-    const nodeInstance = this.nodeInstanceService.getNodeInstance(treeNode.Id);
 
-    this.selectNode(nodeInstance);
-
-    const addMenu = [];
     const items = [];
+    if (treeNode instanceof NodeInstance) {
+      const nodeInstance = this.nodeInstanceService.getNodeInstance(treeNode.Id);
 
-    $event.items = [];
+      this.selectNode(nodeInstance);
 
-    if (!nodeInstance.ParentId) {
-      return;
+      $event.items = [];
+
+      if (!nodeInstance.ParentId) {
+        return;
+      }
+
+      const addMenu = [];
+      let nodeTemplates: NodeTemplate[] = await this.nodeInstanceService.getSupportedNodeTemplates(nodeInstance);
+
+      if (nodeTemplates) {
+        nodeTemplates = nodeTemplates.sort(this.sortByName);
+      }
+
+      if (nodeTemplates) {
+        for (const x of nodeTemplates) {
+          addMenu.push({ text: this.translate.translate(x.Name), key: "add", onItemClick: async function () { await that.createItem(nodeInstance, x); } });
+        }
+
+        if (addMenu.length > 0) {
+          items.push({ text: this.translate.translate("COMMON.NEW"), items: addMenu });
+        }
+      }
+
+      if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
+        items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
+
+
+
+        if (this.copyItem && nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === this.copyItem.NodeTemplate.NeedsInterface2InterfacesType) {
+          items.push({ text: this.translate.translate("COMMON.PASTE"), data: nodeInstance, onItemClick: function () { that.copy(that.copyItem, nodeInstance); } });
+        }
+
+        if (nodeInstance.NodeTemplate.IsDeleteable) {
+          items.push({ text: this.translate.translate("COMMON.DELETE"), data: nodeInstance, onItemClick: function () { that.deleteItem(nodeInstance); } });
+        }
+
+        if (nodeInstance.NodeTemplate.This2NodeDataType > 0 && !nodeInstance.isNewObject) {
+          items.push({ beginGroup: true, text: this.translate.translate("COMMON.READ"), data: nodeInstance, onItemClick: function () { that.readNode(nodeInstance); } });
+        }
+        items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () { navigator.clipboard.writeText(nodeInstance.Value); } });
+      }
+
+
+    }
+    else if (treeNode instanceof NodeInstance2RulePage) {
+      $event.items = [];
+
+      items.push({ text: this.translate.translate("COMMON.DELETE"), data: treeNode, onItemClick: function () { that.onLogicNodeInstanceRemoved?.emit(treeNode); } });
     }
 
-    let nodeTemplates: NodeTemplate[] = await this.nodeInstanceService.getSupportedNodeTemplates(nodeInstance);
-
-    if (nodeTemplates) {
-      nodeTemplates = nodeTemplates.sort(this.sortByName);
+    if (items.length > 0) {
+      this.contextMenu.instance.option({ items: items, target: $event.event });
+      await this.contextMenu.instance.show();
     }
-
-    if (nodeTemplates) {
-      for (const x of nodeTemplates) {
-        addMenu.push({ text: this.translate.translate(x.Name), key: "add", onItemClick: async function () { await that.createItem(nodeInstance, x); } });
-      }
-
-      if (addMenu.length > 0) {
-        items.push({ text: this.translate.translate("COMMON.NEW"), items: addMenu });
-      }
-    }
-
-    if (nodeInstance.ParentId && nodeInstance instanceof NodeInstance) {
-      items.push({ text: this.translate.translate("COMMON.COPY"), data: nodeInstance, onItemClick: function () { that.copyItem = nodeInstance; } });
-
-
-
-      if (this.copyItem && nodeInstance.NodeTemplate.ProvidesInterface2InterfaceType === this.copyItem.NodeTemplate.NeedsInterface2InterfacesType) {
-        items.push({ text: this.translate.translate("COMMON.PASTE"), data: nodeInstance, onItemClick: function () { that.copy(that.copyItem, nodeInstance); } });
-      }
-
-      if (nodeInstance.NodeTemplate.IsDeleteable) {
-        items.push({ text: this.translate.translate("COMMON.DELETE"), data: nodeInstance, onItemClick: function () { that.deleteItem(nodeInstance); } });
-      }
-
-      if (nodeInstance.NodeTemplate.This2NodeDataType > 0 && !nodeInstance.isNewObject) {
-        items.push({ beginGroup: true, text: this.translate.translate("COMMON.READ"), data: nodeInstance, onItemClick: function () { that.readNode(nodeInstance); } });
-      }
-      items.push({ beginGroup: true, text: this.translate.translate("COMMON.COPY_VALUE"), data: nodeInstance, onItemClick: function () { navigator.clipboard.writeText(nodeInstance.Value); } });
-    }
-
-    this.contextMenu.instance.option({ items: items, target: $event.event });
-    await this.contextMenu.instance.show();
   }
 
   async readNode(node: NodeInstance) {
@@ -533,7 +573,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
       }
       prop.validate();
 
-      this.tree.instance.refresh();
+      this.tree.instance.refresh(true);
     }
   }
 

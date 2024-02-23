@@ -1,6 +1,7 @@
 {
   "ERROR": {
-    "UNAUTHORISED": "Nicht berechtigt"
+    "UNAUTHORISED": "Not authorised",
+    "UNKNOWN": "Unknown error"
   },
   "SERVER": {
     "RECORDERS": {
@@ -60,6 +61,7 @@
     "IMPORT_ETS_STRUCTURE": "Import ETS structure",
     "SAVE_BEFORE_CONTINUE": "You need to save your changes before starting this action",
     "SERVER_STARTING": "Server starting...",
+    "CONNECTING_TO_SERVER": "Connecting to server...",
     "SIGNALR_CONNECTION": "SignalR connection",
     "LOADING_PLUGINS": "Load plugins",
     "STARTED": "Started",
@@ -276,7 +278,8 @@
       },
       "ISDISABLED": {
         "NAME": "Disabled",
-        "DESCRIPTION": ""
+        "SHORT": "D",
+        "DESCRIPTION": "Node is deactivated"
       },
       "ISWRITEABLE": {
         "NAME": "Writeable",

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -18,9 +17,15 @@ namespace Automatica.Core.Base.Localization
         private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
         private readonly ILogger _logger;
 
-        public LocalizationProvider(ILogger<LocalizationProvider> logger)
+        private readonly string _locale;
+
+        public LocalizationProvider(IConfiguration config, ILogger<LocalizationProvider> logger)
         {
             _logger = logger;
+
+            var locale = (Language)Convert.ToInt32(config["db:language"]);
+            _locale = LanguageHelper.GetLanguage(locale);
+
         }
 
         public void AddLocalization(TextReader stream, CultureInfo culture, string fileName)
@@ -46,12 +51,12 @@ namespace Automatica.Core.Base.Localization
             }
 
             _localizationStreams[culture.TwoLetterISOLanguageName] = jObject;
-            _logger.LogInformation($"Add localization for {culture.TwoLetterISOLanguageName} and {fileName}");
+            _logger.LogDebug($"Add localization for {culture.TwoLetterISOLanguageName} and {fileName}");
         }
 
         public void LoadFromAssembly(Assembly assembly)
         {
-            _logger.LogInformation($"Load localization for {assembly.FullName}");
+            _logger.LogDebug($"Load localization for {assembly.FullName}");
             if (_loadedAssemblies.Contains(assembly))
             {
                 return;
@@ -128,6 +133,16 @@ namespace Automatica.Core.Base.Localization
             }
 
             return localePart.Value<string>();
+        }
+
+        public string GetTranslation(string key)
+        {
+            return GetTranslation(_locale, key);
+        }
+
+        public string GetLocale()
+        {
+            return _locale;
         }
 
         public object ToJson(string locale)

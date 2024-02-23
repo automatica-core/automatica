@@ -5,27 +5,27 @@
       "NAME": "Switch",
       "DESCRIPTION": "Switch",
       "INPUT": {
-        "NAME": "I",
+        "NAME": "Input",
         "DESCRIPTION": "Value (On/Off)",
         "VALUE": {
-          "NAME": "I",
+          "NAME": "Input",
           "DESCRIPTION": "Value (On/Off)"
         },
         "STATE": {
-          "NAME": "V",
+          "NAME": "Value",
           "DESCRIPTION": "Absolute value (0-100%)"
         },
         "RESET": {
-          "NAME": "R",
+          "NAME": "Reset",
           "DESCRIPTION": "Reset (Sets the value to 0%)"
         }
       },
       "STATE": {
-        "NAME": "S",
+        "NAME": "State",
         "DESCRIPTION": "S"
       },
       "OUTPUT": {
-        "NAME": "O",
+        "NAME": "Output",
         "DESCRIPTION": "O"
       }
     },
@@ -33,7 +33,7 @@
       "NAME": "Push Button",
       "DESCRIPTION": "",
       "INPUT": {
-        "NAME": "Tr",
+        "NAME": "Trigger",
         "DESCRIPTION": ""
       },
       "DURATION": {
@@ -41,7 +41,7 @@
         "DESCRIPTION": ""
       },
       "OUTPUT": {
-        "NAME": "O",
+        "NAME": "Output",
         "DESCRIPTION": "O"
       }
     },
@@ -50,25 +50,25 @@
       "DESCRIPTION": "Dimmer",
       "INPUT": {
         "STATE": {
-          "NAME": "S",
+          "NAME": "State",
           "DESCRIPTION": "S"
         },
         "RESET": {
-          "NAME": "R",
+          "NAME": "Reset",
           "DESCRIPTION": "R"
         },
         "VALUE": {
-          "NAME": "V",
+          "NAME": "Value",
           "Description": "Dimm Value"
         }
       },
       "OUTPUT": {
         "VALUE": {
-          "NAME": "V",
+          "NAME": "Value",
           "DESCRIPTION": "V"
         },
         "STATE": {
-          "NAME": "S",
+          "NAME": "State",
           "DESCRIPTION": "S"
         }
       }
@@ -78,15 +78,15 @@
       "DESCRIPTION": "Slider",
       "INPUT": {
         "STATE": {
-          "NAME": "S",
+          "NAME": "State",
           "DESCRIPTION": "S"
         },
         "RESET": {
-          "NAME": "R",
+          "NAME": "Reset",
           "DESCRIPTION": "R"
         },
         "VALUE": {
-          "NAME": "V",
+          "NAME": "Value",
           "Description": "Value"
         },
         "VALUE_MIN": {
@@ -100,11 +100,11 @@
       },
       "OUTPUT": {
         "VALUE": {
-          "NAME": "V",
+          "NAME": "Value",
           "DESCRIPTION": "V"
         },
         "STATE": {
-          "NAME": "S",
+          "NAME": "State",
           "DESCRIPTION": "S"
         }
       }

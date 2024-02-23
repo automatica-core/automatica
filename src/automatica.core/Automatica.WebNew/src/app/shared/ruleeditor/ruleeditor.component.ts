@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
-import { LogicEngineService, AddLogicData } from "../../services/logicengine.service";
+import { LogicEngineService, AddLogicData, SelectLogicNodeInstance } from "../../services/logicengine.service";
 import { L10nTranslationService } from "angular-l10n";
 import { RulePage } from "src/app/base/model/rule-page";
 import { NotifyService } from "src/app/services/notify.service";
@@ -12,14 +12,17 @@ import { NodeInstance } from "src/app/base/model/node-instance";
 import { LogicShapes } from "./shapes/logic-shape";
 import { LogicLocators } from "./shapes/logic-locators";
 import { LogicLables } from "./shapes/logic-label";
+import { LogicConnectionPolicy } from "./shapes/logic-connection-policy";
 import { LinkService } from "./link.service";
 import { AppService } from "src/app/services/app.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { Subscription } from "rxjs";
 import { ILogicErrorHandler } from "./ilogicErrorHandler";
 import { ILogicInfoHandler } from "./ilogicInfoHandler";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
+import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 
-declare var draw2d: any;
+declare let draw2d: any;
 
 @Component({
   selector: "p3-ruleeditor",
@@ -79,6 +82,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     translate: L10nTranslationService,
     private changeRef: ChangeDetectorRef,
     appService: AppService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private themeService: ThemeService) {
     super(notify, translate, appService);
 
@@ -102,6 +106,21 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
         } else if (data.data instanceof NodeInstance2RulePage) {
           this.addNode(data.data, this.page);
         }
+      }
+    });
+
+    super.registerEvent(this.ruleEngineService.selected, (data: SelectLogicNodeInstance) => {
+      if (data.logicPage.ObjId === this.page.ObjId) {
+        const object = this.completeMap.get(data.logicNodeInstance.ObjId);
+        this.workplace.setCurrentSelection(object);
+      }
+    });
+
+
+    super.registerEvent(this.ruleEngineService.removed, (data: SelectLogicNodeInstance) => {
+      if (data.logicPage.ObjId === this.page.ObjId) {
+        const object = this.completeMap.get(data.logicNodeInstance.ObjId);
+        this.workplace.remove(object);
       }
     });
 
@@ -158,7 +177,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     if ($event.dragData instanceof NodeInstance) {
 
       const nodeInstance: NodeInstance = $event.dragData;
-      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
+      if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== InterfaceTypeEnum.Value) {
 
         for (const child of nodeInstance.Children) {
           const success = await this.addNodeInstanceToPage(child, point)
@@ -173,7 +192,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   }
 
   async addNodeInstanceToPage(nodeInstance: NodeInstance, point) {
-    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== "00000000-0000-0000-0000-000000000001") {
+    if (nodeInstance.NodeTemplate.ProvidesInterface.Type !== InterfaceTypeEnum.Value) {
       return false;
     }
 
@@ -182,8 +201,15 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
     node.X = point.getX();
     node.Y = point.getY();
+    const copyRulePage = <RulePage>this.page.copy();
+    copyRulePage.NodeInstances = [];
+    copyRulePage.RuleInstances = [];
+
+    node.RulePage = copyRulePage;
 
     await this.ruleEngineService.addItem({ data: node, pageId: this.page.ObjId });
+    this.nodeInstanceService.addLogicNodeInstance(node);
+
     return true;
   }
 
@@ -192,10 +218,10 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     LogicShapes.addShape(this.logic, this.ruleEngineService, this, this);
     LogicLocators.addLocators(this.logic);
     LogicLables.addLables(this.logic);
+    LogicConnectionPolicy.addPolicy(this.logic);
 
     this.workplace = new draw2d.Canvas("ruleditor-" + this.page.ObjId);
-    // this.workplace.setZoom(1.3);
-    // this.workplace.setScrollArea(window);
+
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToGeometryEditPolicy());
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToInBetweenEditPolicy());
     this.workplace.installEditPolicy(new draw2d.policy.canvas.SnapToCenterEditPolicy());
@@ -238,15 +264,18 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
       this.buildNodeInstanceMap(x);
     }
 
-    const d = new this.logic.ItemShape({}, element, this.linkService);
+    const d = new this.logic.NodeInstanceShape({}, element, this.linkService);
+    d.installEditPolicy(new this.logic.LogicSelectionPolicy());
 
     d.on("removed", async () => {
-      var item = { item: element, page: page, removed: false };
-      await this.removeSelectedItem.emit(item);
+      let item = { item: element, page: page, removed: false };
+      this.removeSelectedItem.emit(item);
       if (!item.removed) {
         this.workplace.add(d);
       }
     });
+
+    this.completeMap.set(element.ObjId, d);
 
     this.workplace.add(d);
   }
@@ -259,10 +288,12 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     const d = new this.logic.LogicShape({}, element, this.linkService);
+    d.installEditPolicy(new this.logic.LogicSelectionPolicy());
+
 
     d.on("removed", async () => {
-      var item = { item: element, page: page, removed: false };
-      await this.removeSelectedItem.emit(item);
+      let item = { item: element, page: page, removed: false };
+      this.removeSelectedItem.emit(item);
 
       if (!item.removed) {
         this.workplace.add(d);
@@ -281,12 +312,19 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     }
 
     for (const element of data.NodeInstances) {
-      this.addNode(element, data);
+      if (element.NodeInstance)
+        this.addNode(element, data);
     }
 
     for (const link of data.Links) {
-      const c = new draw2d.Connection({ router: router, userData: link });
+      const c = new draw2d.Connection({ userData: link });
+      c.installEditPolicy(new this.logic.ConnectionPolicy());
+      c.setRouter(router);
       c.setUserData(link);
+      c.setColor("#457987");
+      c.setGlowColor("#457987");
+      c.setGlowStrokeSize(4.5);
+
       const sourcePort = this.getSourcePort(link.from, link.fromPort);
 
       if (!sourcePort) {

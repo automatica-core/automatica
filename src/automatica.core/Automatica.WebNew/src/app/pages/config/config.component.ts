@@ -13,7 +13,7 @@ import { NodeInstance } from "src/app/base/model/node-instance";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
@@ -42,7 +42,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
     translate: L10nTranslationService,
     private userGroupsService: GroupsService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private hubConnectionService: HubConnectionService) {
     super(notify, translate, appService);
 
@@ -57,8 +57,8 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
       const [userGroups, areaInstances, categoryInstances] = await Promise.all(
         [
           this.userGroupsService.getUserGroups(),
-          this.areaService.getAreaInstances(),
-          this.categoryService.getCategoryInstances(),
+          this.areaService.getAllAreaInstances(),
+          this.categoryService.getAllCategoryInstances(),
           this.nodeInstanceService.load()
         ]);
 
@@ -86,7 +86,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   async reload($event) {
     try {
       this.isLoading = true;
-      await this.configTree.reload();
+      await this.configTree.restart();
     } catch (error) {
       //ignore error, we will not receive any callback!
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Control;
 using Automatica.Core.EF.Models;
@@ -13,7 +14,7 @@ namespace Automatica.Core.Logic
     /// </summary>
     public class LogicContext : ILogicContext
     {
-        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider)
+        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider, ILocalizationProvider localizationProvider)
         {
             RuleInstance = ruleInstance;
             Dispatcher = dispatcher;
@@ -24,6 +25,7 @@ namespace Automatica.Core.Logic
             LicenseContract = licenseContract;
             ControlContext = controlContext;
             TimeProvider = timeProvider;
+            LocalizationProvider = localizationProvider;
         }
 
         public RuleInstance RuleInstance { get; set; }
@@ -39,5 +41,7 @@ namespace Automatica.Core.Logic
         public IControlContext ControlContext { get; }
 
         public TimeProvider TimeProvider { get; }
+
+        public ILocalizationProvider LocalizationProvider { get; }
     }
 }

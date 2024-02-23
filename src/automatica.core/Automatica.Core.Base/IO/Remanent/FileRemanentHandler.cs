@@ -12,7 +12,7 @@ namespace Automatica.Core.Base.IO.Remanent
     {
         public async Task<IDictionary<Guid, DispatchValue>> GetAllAsync(CancellationToken token = default)
         {
-            var dirName = Path.Combine(ServerInfo.GetBasePath(), "remanent");
+            var dirName = ServerInfo.GetRemanentDirectory();
             if (!Directory.Exists(dirName))
             {
                 return new Dictionary<Guid, DispatchValue>();
@@ -38,7 +38,7 @@ namespace Automatica.Core.Base.IO.Remanent
 
         public async Task<DispatchValue> GetLastValue(Guid nodeInstanceId, CancellationToken token = default)
         {
-            var dirName = Path.Combine(ServerInfo.GetBasePath(), "remanent");
+            var dirName = ServerInfo.GetRemanentDirectory();
             if (!Directory.Exists(dirName))
             {
                 return null;
@@ -68,7 +68,7 @@ namespace Automatica.Core.Base.IO.Remanent
         {
             try
             {
-                var dirName = Path.Combine(ServerInfo.GetBasePath(), "remanent");
+                var dirName = ServerInfo.GetRemanentDirectory();
                 if (!Directory.Exists(dirName))
                 {
                     Directory.CreateDirectory(dirName);

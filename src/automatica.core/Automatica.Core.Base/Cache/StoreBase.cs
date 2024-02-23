@@ -86,6 +86,14 @@ namespace Automatica.Core.Base.Cache
             }
         }
 
+        public virtual ICollection<T1> Keys()
+        {
+            lock (_lock)
+            {
+                return _store.Keys;
+            }
+        }
+
         public virtual ICollection<T2> All()
         {
             lock (_lock)

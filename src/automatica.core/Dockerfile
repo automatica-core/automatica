@@ -40,9 +40,9 @@ COPY ./Automatica.Core/appsettings.json /app/automatica/appsettings.json
 RUN echo docker has some strange errors sometimes
 COPY ./Automatica.Core/appsettings.json .
 
-RUN mkdir -p /app/plugins
+RUN mkdir -p /app/automatica/persistent/plugins
 RUN echo $VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL -Cl $AUTOMATICA_CLOUD_ENVIRONMENT
+RUN automatica-cli InstallLatestPlugins -I /app/automatica/persistent/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL -Cl $AUTOMATICA_CLOUD_ENVIRONMENT
 
 RUN rm -rf /src
 
@@ -68,12 +68,11 @@ COPY --from=build /app/ ./
 RUN mkdir -p /app/automatica/frp
 COPY ./Automatica.Core/frp/* /app/automatica/frp/
 
-VOLUME /app/plugins
-COPY --from=build /app/plugins /app/plugins
+VOLUME /app/automatica/persistent
+COPY --from=build /app/automatica/persistent/plugins /app/automatica/persistent/plugins
 
 EXPOSE 1883/tcp
 EXPOSE 5000-6000
-ENV AUTOMATICA_PLUGIN_DIR=/app/plugins
 
 # Build runtime image
 ENTRYPOINT ["/app/automatica/Automatica.Core.Watchdog"]

@@ -8,6 +8,6 @@
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Knx.Falcon.Sdk" Version="6.0.4942" />
+    <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
   </ItemGroup>
 </Project>

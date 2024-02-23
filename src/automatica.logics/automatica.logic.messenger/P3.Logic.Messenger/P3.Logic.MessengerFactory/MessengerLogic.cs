@@ -5,6 +5,7 @@ using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
 using Microsoft.Extensions.Logging;
+using Polly;
 
 namespace P3.Logic.Messenger
 {
@@ -39,26 +40,17 @@ namespace P3.Logic.Messenger
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
 
-            if (_to.Count > 0 && value != _value)
+            if (_to.Count > 0 &&  value != null && value != _value)
             {
                 try
                 {
-                    bool execute = false;
-                    if (value is bool bValue)
-                        execute = bValue;
-                    else
-                        execute = true;
+                    var body = Context.LocalizationProvider.GetTranslation("MESSENGER.CLOUD_EMAIL.BODY");
+                    body = body.Replace("{{NAME}}", Context.RuleInstance.Name).Replace("{{VALUE}}", value.ToString())
+                        .Replace("{{SOURCE}}", source.Name);
 
-                    if (execute)
-                    {
-                        Context.Logger.LogInformation($"Send email to {String.Join(";", _to)}");
-                        Context.CloudApi.SendEmail(_to, _subject,
-                            $"\"{Context.RuleInstance.Name}\" received value \"{value}\" from source \"{source.Name}\"");
-                    }
-                    else
-                    {
-                        Context.Logger.LogInformation($"Ignore message, because value is either false or hasn't changed newValue {value} oldValue {_value}");
-                    }
+                    Context.Logger.LogInformation($"Send email to {String.Join(";", _to)}");
+                    Context.CloudApi.SendEmail(_to, _subject, body);
+
                 }
                 catch (Exception e)
                 {

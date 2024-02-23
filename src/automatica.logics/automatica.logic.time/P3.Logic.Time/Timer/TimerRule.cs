@@ -127,6 +127,12 @@ namespace P3.Logic.Time.Timer
                 _value = false;
             }
 
+
+            if (timerTickTime < 0)
+            {
+                timerTickTime *= -1;
+            }
+            
             _timer.Interval = timerTickTime;
             Context.Logger.LogDebug($"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms");
             _timer.Start();

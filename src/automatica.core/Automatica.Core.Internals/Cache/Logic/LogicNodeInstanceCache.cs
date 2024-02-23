@@ -6,20 +6,29 @@ using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Internals.Cache.Logic
 {
-    internal class LogicNodeInstanceCache : AbstractCache<NodeInstance2RulePage>, ILogicNodeInstanceCache
+    internal class LogicNodeInstanceCache(IConfiguration configuration)
+        : AbstractCache<NodeInstance2RulePage>(configuration), ILogicNodeInstanceCache
     {
-        public LogicNodeInstanceCache(IConfiguration configuration) : base(configuration)
-        {
-        }
-
         protected override IQueryable<NodeInstance2RulePage> GetAll(AutomaticaContext context)
         {
-            return context.NodeInstance2RulePages.Include(a => a.This2NodeInstanceNavigation).ThenInclude(a => a.This2NodeTemplateNavigation);
+            return context.NodeInstance2RulePages;
         }
 
         protected override Guid GetKey(NodeInstance2RulePage obj)
         {
             return obj.ObjId;
+        }
+
+        public void AddOrUpdate(Guid objId, NodeInstance2RulePage instance)
+        {
+            if (Contains(objId))
+            {
+                Update(objId, instance);
+            }
+            else
+            {
+                Add(objId, instance);
+            }
         }
     }
 }

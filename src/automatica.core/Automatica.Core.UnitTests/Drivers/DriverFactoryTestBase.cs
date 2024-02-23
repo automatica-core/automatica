@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
@@ -34,7 +35,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
 
         protected async Task<IDriver> CreateDriver(NodeInstance node)
         {
-            var driverContext = new DriverContextMock(node, DriverFactory, Factory, Dispatcher, new NullLoggerFactory());
+            var driverContext = new DriverContextMock(node, DriverFactory, Factory, Dispatcher, new NullLoggerFactory(), DateTimeHelper.ProviderInstance);
             var driver = DriverFactory.CreateDriver(driverContext);
 
             await driver.Configure();

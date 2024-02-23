@@ -10,10 +10,8 @@ namespace Automatica.Core.Base
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddDispatcher(this IServiceCollection serviceCollection)
+        public static void AddRetryHandler(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IDispatcher, Dispatcher>();
-            serviceCollection.AddSingleton<IRemanentHandler, FileRemanentHandler>();
             serviceCollection.AddSingleton<IRetryContext, RetryContext>();
 
             serviceCollection.AddResiliencePipeline("start-pipeline", builder =>
@@ -26,6 +24,15 @@ namespace Automatica.Core.Base
                     MaxRetryAttempts = 3
                 });
             });
+        }
+        
+        public static void AddDispatcher(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IDispatcher, Dispatcher>();
+            serviceCollection.AddSingleton<IRemanentHandler, FileRemanentHandler>();
+
+            AddRetryHandler(serviceCollection);
+
         }
     }
 }

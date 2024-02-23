@@ -6,7 +6,7 @@
     <Version>0.14.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.0.0.1655" />
+    <PackageReference Include="Automatica.Core.Driver.Utility" Version="8.1.0.1865" />
     <PackageReference Include="SerialPortStream" Version="2.4.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>

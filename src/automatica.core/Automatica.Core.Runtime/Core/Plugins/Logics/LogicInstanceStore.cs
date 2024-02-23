@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Automatica.Core.Base.Cache;
 using Automatica.Core.Control.Base;
 using Automatica.Core.Control.Cache;
@@ -56,12 +57,24 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
 
         public override void Update(RuleInstance key, ILogic value)
         {
+            var instance = Keys().SingleOrDefault(a => a.ObjId == key.ObjId);
+
+            if (instance != null)
+            {
+                Remove(instance);
+            }
+
+            Add(key, value);
+            
             _ruleInstanceRuleMap[key.ObjId] = value;
       
             if (value is IControl iControl)
             {
                 _controlCache.Update(iControl.Id, iControl);
             }
+
+           
+            
             base.Update(key, value);
         }
 

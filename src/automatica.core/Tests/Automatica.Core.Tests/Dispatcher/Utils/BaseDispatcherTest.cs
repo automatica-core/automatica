@@ -26,6 +26,10 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 
         protected ILogicEngineDispatcher LogicEngineDispatcher { get; set; }
         protected IRuleInstanceVisuNotify RuleNotify { get; set; }
+        
+        protected ILogicNodeInstanceCache LogicNodeInstanceCache { get; set; }
+        
+        protected ILogicInstanceCache LogicInstanceCache { get;  }
 
         protected BaseDispatcherTest(IDispatcher dispatcher, IRemanentHandler remanentHandler)
         {
@@ -33,16 +37,18 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
 
             Dispatcher = dispatcher;
 
-            LogicInstancesStore = new LogicInstanceStore(new Mock<ILogicInstanceCache>().Object, new Mock<IControlCache>().Object);
+            LogicInstanceCache = new LogicInstanceCacheMock();
+            LogicInstancesStore = new LogicInstanceStore(LogicInstanceCache, new Mock<IControlCache>().Object);
             DriverNodesStore = new DriverNodesStore();
             NodeInstanceCache = new NodeInstanceCacheMock();
             LogicInterfaceInstanceCache = new LogicInterfaceInstanceCacheMock();
+            LogicNodeInstanceCache = new LogicNodeInstanceCacheMock();
 
             var notifyMock = new Mock<IRuleInstanceVisuNotify>();
             RuleNotify = notifyMock.Object;
 
             LogicEngineDispatcher = new LogicEngineDispatcher(LinkCache, dispatcher, LogicInstancesStore,
-                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<LogicEngineDispatcher>.Instance, RuleNotify, remanentHandler);
+                DriverNodesStore, NodeInstanceCache, LogicInterfaceInstanceCache, NullLogger<LogicEngineDispatcher>.Instance, RuleNotify, remanentHandler, LogicNodeInstanceCache);
         }
 
 
@@ -61,6 +67,20 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             action.Invoke(link);
 
             LinkCache.Add(link.ObjId, link);
+        }
+
+        protected NodeInstance2RulePage CreateLogicNodeInstance(Action<NodeInstance2RulePage> action)
+        {
+            var ret = new NodeInstance2RulePage()
+            {
+                ObjId = Guid.NewGuid()
+            };
+
+            action.Invoke(ret);
+
+            LogicNodeInstanceCache.AddOrUpdate(ret.ObjId, ret);
+
+            return ret;
         }
     }
 }

@@ -138,7 +138,7 @@ namespace Automatica.Core.Bootloader
             {
                 try
                 {
-                    if (dirPath == "logs" || dirPath == "framework")
+                    if (dirPath == "persistent" || dirPath == "logs" || dirPath == "framework")
                     {
                         Console.WriteLine("Ignoring logs/framework directory...");
                         continue;

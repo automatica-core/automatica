@@ -17,7 +17,8 @@
 
         <as-split direction="horizontal">
             <as-split-area [size]="30">
-                <p3-propertyeditor [item]="selectedNode"></p3-propertyeditor>
+                <p3-propertyeditor [item]="selectedNode" [userGroups]="userGroups"
+                    (onChanged)="onChanged($event)"></p3-propertyeditor>
             </as-split-area>
             <as-split-area [size]="70">
                 <div style="padding-bottom: 100px;">
@@ -25,8 +26,9 @@
                         keyExpr="ObjId" parentIdExpr="This2Parent" [showRowLines]="true" [columnAutoWidth]="true"
                         [showColumnLines]="false" (onContextMenuPreparing)="onContextMenuPreparing($event)"
                         (onSelectionChanged)="selectionChanged($event)">
-                        <dxo-state-storing [enabled]="true" type="localStorage" storageKey="automaticaAreaTree"></dxo-state-storing>
-                        
+                        <dxo-state-storing [enabled]="true" type="localStorage"
+                            storageKey="automaticaAreaTree"></dxo-state-storing>
+
                         <dxo-selection mode="single"></dxo-selection>
 
                         <dxi-column dataField="Name" cellTemplate="cellTemplate"

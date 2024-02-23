@@ -16,6 +16,7 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly INodeInstanceStateHandler _nodeInstanceStateHandler;
         private readonly INodeTemplateCache _nodeTemplateCache;
         private readonly IAreaCache _areaCacheInstance;
+        private readonly ICategoryCache _categoryCacheInstance;
 
         private readonly IDictionary<Guid, IList<NodeInstance>> _categoryCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
         private readonly IDictionary<Guid, IList<NodeInstance>> _areaCache = new ConcurrentDictionary<Guid, IList<NodeInstance>>();
@@ -24,18 +25,20 @@ namespace Automatica.Core.Internals.Cache.Driver
         private readonly ConcurrentDictionary<Guid, NodeInstance> _favorites = new ConcurrentDictionary<Guid, NodeInstance>();
         private NodeInstance _root;
 
-        public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache, IAreaCache areaCache) : base(configuration)
+        public NodeInstanceCache(IConfiguration configuration, INodeInstanceStateHandler nodeInstanceStateHandler, INodeTemplateCache nodeTemplateCache, IAreaCache areaCache, ICategoryCache categoryCacheInstance) : base(configuration)
         {
             _nodeInstanceStateHandler = nodeInstanceStateHandler;
             _nodeTemplateCache = nodeTemplateCache;
             _areaCacheInstance = areaCache;
+            _categoryCacheInstance = categoryCacheInstance;
         }
 
         protected override IQueryable<NodeInstance> GetAll(AutomaticaContext context)
         {
             var rootItem = context.NodeInstances.AsNoTracking().First(a => a.This2ParentNodeInstance == null && !a.IsDeleted);
 
-            var allItems = context.NodeInstances.AsNoTracking().Where(a => !a.IsDeleted && a.This2ParentNodeInstance != null).ToList();
+            var allItems = context.NodeInstances.AsNoTracking()
+                .Where(a => !a.IsDeleted && a.This2ParentNodeInstance != null).ToList();
 
             rootItem.InverseThis2ParentNodeInstanceNavigation = NodeInstanceHelper.FillRecursive(allItems, rootItem.ObjId);
 
@@ -148,7 +151,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             if (item.This2CategoryInstance.HasValue)
             {
                 item.This2CategoryInstanceNavigation = context.CategoryInstances.AsNoTracking()
-                    .FirstOrDefault(a => a.ObjId == item.This2AreaInstance);
+                    .FirstOrDefault(a => a.ObjId == item.This2CategoryInstance);
             }
 
         }
@@ -183,9 +186,8 @@ namespace Automatica.Core.Internals.Cache.Driver
 
         public NodeInstance GetSingle(Guid objId, AutomaticaContext context)
         {
-
             var item = context.NodeInstances.AsNoTracking().Include(a => a.InverseThis2ParentNodeInstanceNavigation)
-               .FirstOrDefault(a => a.ObjId == objId);
+                .FirstOrDefault(a => a.ObjId == objId);
 
             if (item == null)
             {
@@ -256,6 +258,7 @@ namespace Automatica.Core.Internals.Cache.Driver
                     _categoryCache[item.This2CategoryInstance.Value].Remove(existing);
                 }
 
+                
                 _categoryCache[item.This2CategoryInstance.Value].Add(item);
             }
 

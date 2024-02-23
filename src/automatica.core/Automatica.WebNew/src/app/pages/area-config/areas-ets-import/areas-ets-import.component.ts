@@ -29,7 +29,7 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
   private mapList: Map<any, AreaInstance> = new Map<any, AreaInstance>();
 
 
-  private _selectedRowKeys: string[];
+  private _selectedRowKeys: string[] = [];
   public get selectedRowKeys(): string[] {
     return this._selectedRowKeys;
   }
@@ -88,48 +88,24 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
         }
       }
 
-      const tmpConfig = [];
-      for (const node of list) {
-        this.addInstancesRec(node, tmpConfig);
-
-        tmpConfig.push(node);
-      }
+      const tmpConfig = [...list];
       tmpConfig.sort((a, b) => (a.Name.localeCompare(b.Name) - (b.Name.localeCompare(a.Name))));
 
       this.instances = tmpConfig;
+      this.dxTree.instance.refresh();
     }
   }
 
 
-  addInstancesRec(instance: AreaInstance, tmpConfig: AreaInstance[]): any {
-    for (const x of instance.InverseThis2ParentNavigation) {
-      tmpConfig.push(x);
-      this.mapList.set(x.ObjId, x);
+  selectRecurisve(childs: AreaInstance[]): AreaInstance[] {
+    let ret = [];
+    for (const child of childs) {
+      var retChild = this.selectRecurisve(this.instances.filter(a => a.This2Parent === child.ObjId));
 
-      this.addInstancesRec(x, tmpConfig);
+      ret.push(child);
+      ret.push(...retChild)
     }
-  }
-
-  addParents(instance: AreaInstance, array: AreaInstance[]) {
-    if (!instance || instance.ObjId === this.parentObjId || instance.This2ParentNavigation.ObjId === this.parentObjId) {
-      return;
-    }
-
-    if (!array.find(a => a.ObjId === instance.This2ParentNavigation.ObjId)) {
-      array.push(instance.This2ParentNavigation);
-    }
-    this.addParents(instance.This2ParentNavigation, array);
-  }
-
-  selectRecurisve(childs: AreaInstance[], selected: string[]) {
-    for (const x of childs) {
-
-      if (!selected.find(a => a === x.ObjId)) {
-        selected.push(x.ObjId);
-      }
-
-      this.selectRecurisve(x.InverseThis2ParentNavigation, selected);
-    }
+    return ret;
   }
 
   removeDuplicates(arr) {
@@ -143,34 +119,16 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
   }
 
   async saveClick($event) {
-    const areaInstances: AreaInstance[] = this.instances;
-    const toSave: AreaInstance[] = [];
-    const selected = [...this.selectedRowKeys];
 
-    for (const x of this.selectedRowKeys) {
-      if (x === this.parentObjId) {
-        const childs = this.instances.filter(a => a.This2Parent === this.parentObjId);
-        this.selectRecurisve(childs, selected);
-      } else {
-        const childs = this.mapList.get(x).InverseThis2ParentNavigation;
-        this.selectRecurisve(childs, selected);
-      }
-    }
+    let selectedItems = this.selectRecurisve(this.instances.filter(a => this.selectedRowKeys.includes(a.ObjId)));
+    selectedItems = this.removeDuplicates(selectedItems);
 
-    for (const x of areaInstances) {
-      if (selected.find(a => x.ObjId === a)) {
+    let root = selectedItems.filter(a => a.This2Parent === null);
 
-        if (!toSave.find(a => a.ObjId === x.ObjId)) {
-          toSave.push(x);
-        }
-        this.addParents(x, toSave);
-      }
-    }
-
-    const fixed = this.removeDuplicates(toSave).filter(a => a.ObjId !== this.parentObjId);
+    root[0].This2Parent = this.parentObjId;
 
     try {
-      const data = await this.areaService.addAreaInstances(fixed);
+      const data = await this.areaService.addAreaInstances(selectedItems);
 
       this.areaService.etsImported.emit(data);
       this.onHiding($event);

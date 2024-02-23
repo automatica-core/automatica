@@ -9,7 +9,7 @@ namespace Automatica.Driver.Shelly.Common
         Task<bool> Disconnect(CancellationToken token = default);
 
 
-        Task<bool> SetRelayState(int channelId, bool value, CancellationToken token = default);
+        Task<bool> SetRelayState(int channelId, bool value, int resetTimer, CancellationToken token = default);
         Task<bool> GetRelayState(int channelId, CancellationToken token = default);
         Task<double> GetRelayVoltage(int channelId, CancellationToken token = default);
         Task<double> GetRelayPower(int channelId, CancellationToken token = default);

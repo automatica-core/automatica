@@ -30,7 +30,6 @@ import { Language, SettingsService } from "./settings.service";
     } else if (provider.options.type === "webapi") {
 
       const url = `${BaseServiceHelper.getBaseUrl()}/${provider.asset}/${language}`;
-      console.log("load localization from...", url);
       const options = {
         headers: this.headers,
 

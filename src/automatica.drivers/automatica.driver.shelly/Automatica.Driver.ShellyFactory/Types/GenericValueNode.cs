@@ -27,13 +27,13 @@ namespace Automatica.Driver.ShellyFactory.Types
     internal class GenericValueNode<T, T2> : GenericValueNode<T2>
     {
         private readonly ShellyDriverDevice _client;
-        private readonly Func<T, IShellyClient, Task> _writeValueTask;
+        private readonly Func<T, IShellyClient, Task<T>> _writeValueTask;
         private readonly Func<IShellyClient, Task<T>> _getValueTask;
         private readonly Func<NotifyStatusEvent, T> _fromStatusUpdate;
 
         public GenericValueNode(IDriverContext driverContext, 
             ShellyDriverDevice client, 
-            Func<T, IShellyClient, Task> writeValueTask,
+            Func<T, IShellyClient, Task<T>> writeValueTask,
             Func<IShellyClient, Task<T>> getValueTask, 
             Func<NotifyStatusEvent, T> fromStatusUpdate = null) : base(driverContext)
         {
@@ -68,8 +68,10 @@ namespace Automatica.Driver.ShellyFactory.Types
 
         protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
-            await _writeValueTask.Invoke((T)value, _client.Client);
+            var result = await _writeValueTask.Invoke((T)value, _client.Client);
             await writeContext.DispatchValue(value, token);
+
+            DispatchRead(result);
         }
 
         protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())

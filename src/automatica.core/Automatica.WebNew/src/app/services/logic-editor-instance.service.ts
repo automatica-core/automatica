@@ -10,18 +10,28 @@ import { ITreeNode } from "../base/model/ITreeNode";
 import { DataHubService } from "../base/communication/hubs/data-hub.service";
 import { NodeTemplateService } from "./node-template.service";
 import { DataService } from "./data.service";
+import { NodeInstance2RulePage } from "../base/model/node-instance-2-rule-page";
+import { RulePage } from "../base/model/rule-page";
+import { LogicEngineService } from "./logicengine.service";
+import { InterfaceTypeEnum } from "../base/model/interface-type";
 
+type NodeInstanceOrLogicNodeInstance = NodeInstance | NodeInstance2RulePage;
 
 @Injectable()
-export class NodeInstanceService {
+export class LogicEditorInstanceService {
+
 
     private _nodeTemplates: NodeTemplate[];
     private _nodeInstanceMap: Map<string, NodeInstance>;
-    private _nodeInstanceList: NodeInstance[];
+    private _nodeInstanceList: NodeInstanceOrLogicNodeInstance[];
     private _settings: Setting[];
 
+    private _logicNodeInstance: Map<string, NodeInstance2RulePage>;
+
+    private _logicPages: RulePage[] = [];
 
     private _rootNode: NodeInstance;
+    private _logicPageMap: Map<string, RulePage>;
 
     public get rootNode(): NodeInstance {
         return this._rootNode;
@@ -30,8 +40,12 @@ export class NodeInstanceService {
         this._rootNode = v;
     }
 
-    public get nodeInstanceList(): NodeInstance[] {
+    public get nodeInstanceList(): NodeInstanceOrLogicNodeInstance[] {
         return this._nodeInstanceList;
+    }
+
+    public get pages(): RulePage[] {
+        return this._logicPages;
     }
 
     constructor(private designTimeDataService: DesignTimeDataService,
@@ -39,7 +53,8 @@ export class NodeInstanceService {
         private settingsService: SettingsService,
         private dataHubService: DataHubService,
         private nodeTemplateService: NodeTemplateService,
-        private dataService: DataService) {
+        private dataService: DataService,
+        private logicEngineService: LogicEngineService) {
 
     }
 
@@ -59,6 +74,9 @@ export class NodeInstanceService {
     public getNodeInstance(id: string): NodeInstance {
         return this._nodeInstanceMap.get(id);
     }
+    getLogicNodeInstance(id: any) {
+        return this._logicNodeInstance.get(id);
+    }
 
     public hasNodeInstance(id: string) {
         if (!this._nodeInstanceMap) {
@@ -67,28 +85,64 @@ export class NodeInstanceService {
         return this._nodeInstanceMap.has(id);
     }
 
-    public setNodeInstanceValue(id: string, value: any) {
+    public setNodeInstanceValue(id: string, value: any) : boolean {
         if (this.hasNodeInstance(id)) {
             const nodeInstance = this._nodeInstanceMap.get(id);
+            let curValue = nodeInstance.Value;
             nodeInstance.Value = value.value;
             nodeInstance.ValueTimestamp = value.timestamp;
             nodeInstance.ValueSource = value.valueSource;
-            
-            if(value.valueSource == ValueSource.Read) {
+
+            if (value.valueSource == ValueSource.Read) {
                 nodeInstance.ReadValue = value.value;
             }
-            else  if(value.valueSource == ValueSource.Write) {
+            else if (value.valueSource == ValueSource.Write) {
                 nodeInstance.WriteValue = value.value;
             }
+
+            return curValue != value;
         }
+        return false;
     }
 
     private async loadConfig() {
-        const instances = await this.configService.getNodeInstances();
 
+        const [instances, logicNodeInstances, pages] = await Promise.all([
+            await this.configService.getNodeInstances(),
+            await this.configService.getLogicNodeInstances(),
+            await this.logicEngineService.getPages()
+        ]);
+
+        this.convertPages(pages);
         this.convertConfig(instances);
+        this.convertLogicNodeInstances(logicNodeInstances);
+    }
+
+    convertPages(pages: RulePage[]) {
+        this._logicPages = pages;
+
+        this._logicPageMap = new Map<string, RulePage>();
+        for (const page of pages) {
+            this._logicPageMap.set(page.ObjId, page);
+        }
+    }
 
 
+    convertLogicNodeInstances(logicNodeInstances: NodeInstance2RulePage[]) {
+        this._logicNodeInstance = new Map<string, NodeInstance2RulePage>();
+
+        for (const node of logicNodeInstances) {
+            this._logicNodeInstance.set(node.ObjId, node);
+            this._nodeInstanceList.push(node);
+
+            node.RulePage = this._logicPageMap.get(node.This2RulePage);
+            node.NodeInstance = this._nodeInstanceMap.get(node.This2NodeInstance);
+        }
+    }
+
+    public addLogicNodeInstance(node: NodeInstance2RulePage) {
+        this._logicNodeInstance.set(node.Id, node);
+        this._nodeInstanceList.push(node);
     }
 
     updateNodeInstance(nodeInstance: NodeInstance) {
@@ -106,7 +160,7 @@ export class NodeInstanceService {
 
         this._nodeInstanceList = [];
 
-        const tmpConfig: NodeInstance[] = [];
+        const tmpConfig: NodeInstanceOrLogicNodeInstance[] = [];
 
         for (const node of instances) {
             this.addNodeInstancesRec(node, tmpConfig);
@@ -115,7 +169,7 @@ export class NodeInstanceService {
 
         this._nodeInstanceList = tmpConfig;
 
-        const rootNode = this._nodeInstanceList.filter(a => !a.This2ParentNodeInstance)[0];
+        const rootNode = this._nodeInstanceList.filter(a => a instanceof NodeInstance && !a.This2ParentNodeInstance)[0];
         const rootNodeSettings: VirtualSettingsPropertyInstance[] = [];
 
         for (const x of this._settings) {
@@ -123,15 +177,21 @@ export class NodeInstanceService {
         }
 
         rootNode.Properties = [...rootNode.Properties, ...rootNodeSettings];
-
-        this.rootNode = rootNode;
+        if (rootNode instanceof NodeInstance)
+            this.rootNode = rootNode;
 
         return this._nodeInstanceList;
     }
 
     public addNodeInstance(node: NodeInstance) {
         this._nodeInstanceMap.set(node.Id, node);
-        this._nodeInstanceList = Array.from(this._nodeInstanceMap.values());
+        this._nodeInstanceList.push(node);
+    }
+
+    removeLogicNodeInstance(item: NodeInstance2RulePage) {
+        this._nodeInstanceList = this._nodeInstanceList.filter(a => a.Id !== item.Id);
+        if (this._logicNodeInstance.has(item.Id))
+            this._logicNodeInstance.delete(item.Id);
     }
 
     public removeItem(node: ITreeNode) {
@@ -139,7 +199,7 @@ export class NodeInstanceService {
         this._nodeInstanceMap.delete(node.Id);
     }
 
-    public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstance[]) {
+    public addNodeInstancesRec(node: NodeInstance, tmpConfig: NodeInstanceOrLogicNodeInstance[]) {
         this._nodeInstanceMap.set(node.Id, node);
         tmpConfig.push(node);
 
@@ -172,11 +232,15 @@ export class NodeInstanceService {
 
     public async getSupportedNodeTemplates(node: NodeInstance) {
 
-        if (node.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
+        if (node.NodeTemplate.ProvidesInterface2InterfaceType === InterfaceTypeEnum.Value) {
             return [];
         }
 
         return await this.nodeTemplateService.getSupportedTemplates(node, node.NodeTemplate.ProvidesInterface2InterfaceType);
+    }
+
+    public async saveSetting(property: VirtualSettingsPropertyInstance) {
+        await this.settingsService.saveSettings([property.setting]);
     }
 
     public async saveSettings() {
@@ -188,4 +252,7 @@ export class NodeInstanceService {
         }
         await this.settingsService.saveSettings(settings);
     }
+
+
+
 }

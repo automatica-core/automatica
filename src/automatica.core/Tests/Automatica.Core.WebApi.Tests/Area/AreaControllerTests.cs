@@ -53,24 +53,21 @@ namespace Automatica.Core.WebApi.Tests.Area
                 This2Parent = rootInstance.ObjId
             };
             rootInstance.InverseThis2ParentNavigation.Add(newInstance);
-            
-            var saved = (await Controller.SaveInstances(instances)).ToList();
+
+            await Controller.AddAreaInstances(new List<AreaInstance> { newInstance });
+            var saved = Controller.GetAllInstances().ToList();
 
             Assert.NotNull(saved);
             Assert.NotEmpty(saved);
-            Assert.Equal(newInstance.Name, saved.First().InverseThis2ParentNavigation.First().Name);
-            Assert.Equal(newInstance.Description, saved.First().InverseThis2ParentNavigation.First().Description);
-            Assert.Equal(newInstance.ObjId, saved.First().InverseThis2ParentNavigation.First().ObjId);
-            Assert.Equal(newInstance.Icon, saved.First().InverseThis2ParentNavigation.First().Icon);
-            Assert.Equal(newInstance.Rating, saved.First().InverseThis2ParentNavigation.First().Rating);
-            Assert.Equal(newInstance.IsFavorite, saved.First().InverseThis2ParentNavigation.First().IsFavorite);
+            Assert.Equal(newInstance.Name, saved.First(a => a.ObjId == newInstance.ObjId).Name);
+            Assert.Equal(newInstance.Description, saved.First(a => a.ObjId == newInstance.ObjId).Description);
+            Assert.Equal(newInstance.ObjId, saved.First(a => a.ObjId == newInstance.ObjId).ObjId);
+            Assert.Equal(newInstance.Icon, saved.First(a => a.ObjId == newInstance.ObjId).Icon);
+            Assert.Equal(newInstance.Rating, saved.First(a => a.ObjId == newInstance.ObjId).Rating);
+            Assert.Equal(newInstance.IsFavorite, saved.First(a => a.ObjId == newInstance.ObjId).IsFavorite);
             Assert.Equal(newInstance.This2Parent, rootInstance.ObjId);
 
-            Assert.Equal(template.ObjId, saved.First().InverseThis2ParentNavigation.First().This2AreaTemplate);
-
-            saved = (await Controller.SaveInstances(instances)).ToList();
-
-            Assert.Empty(saved.First().InverseThis2ParentNavigation);
+            Assert.Equal(template.ObjId, saved.First(a => a.ObjId == newInstance.ObjId).This2AreaTemplate);
         }
 
         [Fact, TestOrder(2)]
@@ -98,8 +95,8 @@ namespace Automatica.Core.WebApi.Tests.Area
 
             Assert.NotNull(saved);
             Assert.NotEmpty(saved);
-            Assert.Equal(newInstance.Name, saved.First().InverseThis2ParentNavigation.First().Name);
-            Assert.Equal(newInstance.ObjId, saved.First().InverseThis2ParentNavigation.First().ObjId);
+            Assert.Equal(newInstance.Name, saved.First(a => a.ObjId == newInstance.ObjId).Name);
+            Assert.Equal(newInstance.ObjId, saved.First(a => a.ObjId == newInstance.ObjId).ObjId);
         }
 
         //[Fact, TestOrder(3)]

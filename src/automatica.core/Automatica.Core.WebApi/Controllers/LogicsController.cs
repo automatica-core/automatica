@@ -24,7 +24,8 @@ namespace Automatica.Core.WebApi.Controllers
     public enum LogicUpdateScope
     {
         Unknown = 0,
-        Drag = 1
+        Drag = 1,
+        InvertedValueUpdated = 2
     }
     public class SaveAllLogicEditor : TypedObject
     {
@@ -164,6 +165,8 @@ namespace Automatica.Core.WebApi.Controllers
                         existingRuleInterfaceInstance.ValueString = ruleInterfaceInstance.ValueString;
                         existingRuleInterfaceInstance.ValueDouble = ruleInterfaceInstance.ValueDouble;
                         existingRuleInterfaceInstance.ValueInteger = ruleInterfaceInstance.ValueInteger;
+                        existingRuleInterfaceInstance.ValueBool = ruleInterfaceInstance.ValueBool;
+                        existingRuleInterfaceInstance.Inverted = ruleInterfaceInstance.Inverted;
 
                         DbContext.Update(existingRuleInterfaceInstance);
                         DbContext.Entry(existingRuleInterfaceInstance).State = EntityState.Modified;
@@ -175,9 +178,8 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
                     
                     _logicCacheFacade.PageCache.UpdateRuleInstance(existingInstance);
-                    _logicCacheFacade.InstanceCache.Update(logicInstance.ObjId,
+                    _logicCacheFacade.UpdateLogic(
                         _logicCacheFacade.InstanceCache.GetSingle(DbContext, logicInstance.ObjId));
-
 
                     await transaction.CommitAsync();
                 }
@@ -209,17 +211,18 @@ namespace Automatica.Core.WebApi.Controllers
                 var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
+                    instance.This2RulePageNavigation = null;
                     instance.This2RulePage = pageId;
                     var nav = instance.This2NodeInstanceNavigation;
                     instance.This2NodeInstanceNavigation = null;
+                    
                     await DbContext.AddAsync(instance);
                     DbContext.Entry(instance).State = EntityState.Added;
 
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
 
-                    instance.This2NodeInstanceNavigation = _nodeInstanceCache.GetSingle(nav.ObjId, DbContext);
-         
+                    _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(instance.ObjId, instance);
                     _logicCacheFacade.ClearInstances();
 
                     return instance;
@@ -255,8 +258,16 @@ namespace Automatica.Core.WebApi.Controllers
 
                     var existingInstance = DbContext.NodeInstance2RulePages.Single(a => a.ObjId == nodeInstance.ObjId);
 
-                    existingInstance.X = nodeInstance.X;
-                    existingInstance.Y = nodeInstance.Y;
+                    if (updateScope == LogicUpdateScope.Drag)
+                    {
+                        existingInstance.X = nodeInstance.X; 
+                        existingInstance.Y = nodeInstance.Y;
+                    }
+                    else if (updateScope == LogicUpdateScope.InvertedValueUpdated)
+                    {
+                        existingInstance.Inverted = nodeInstance.Inverted;
+                    }
+
 
                     DbContext.Update(existingInstance);
                     DbContext.Entry(existingInstance).State = EntityState.Modified;
@@ -264,6 +275,7 @@ namespace Automatica.Core.WebApi.Controllers
                     await DbContext.SaveChangesAsync();
 
                     _logicCacheFacade.PageCache.UpdateNodeInstance(existingInstance);
+                    _logicCacheFacade.LogicNodeInstanceCache.AddOrUpdate(existingInstance.ObjId, existingInstance);
                     await transaction.CommitAsync();
                 }
                 catch (Exception e)
@@ -560,6 +572,7 @@ namespace Automatica.Core.WebApi.Controllers
         {
             return _logicCacheFacade.PageCache.Get(id);
         }
+
 
         [HttpGet]
         [Route("templates")]

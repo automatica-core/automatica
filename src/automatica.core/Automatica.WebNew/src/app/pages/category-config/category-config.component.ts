@@ -7,6 +7,7 @@ import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 import { CategoryGroup, CategoryInstance } from "src/app/base/model/categories";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
+import { GroupsService } from "src/app/services/groups.service";
 
 @Component({
   selector: "app-category-config",
@@ -20,31 +21,15 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
 
 
   menuItems: CustomMenuItem[] = [];
-
-  menuSave: CustomMenuItem = {
-    id: "save",
-    label: "Save",
-    icon: "fa-save",
-    items: undefined,
-    command: (event) => { this.save(); }
-  }
-
+  userGroups: any;
   constructor(
     private catService: CategoryService,
+    private userGroupService: GroupsService,
     translate: L10nTranslationService,
-    private notify: NotifyService,
+    notify: NotifyService,
     appService: AppService) {
     super(notify, translate, appService);
     appService.setAppTitle("CATEGORIES.NAME");
-
-
-    this.menuItems.push(this.menuSave);
-
-    this.translate.onChange().subscribe({
-      next: () => {
-        this.menuSave.label = this.translate.translate("COMMON.SAVE");
-      }
-    });
 
   }
 
@@ -55,25 +40,16 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
       const [groups, categories] = await Promise.all(
         [
           this.catService.getCategoryGroups(),
-          this.catService.getCategoryInstances()
+          this.catService.getAllCategoryInstances()
         ]);
       this.groups = groups;
       this.categories = categories;
 
+      
+      this.userGroups = await this.userGroupService.getUserGroups();
+
     } catch (error) {
       this.handleError(error);
-    }
-
-    this.appService.isLoading = false;
-  }
-  save(): any {
-    this.appService.isLoading = true;
-
-    try {
-      this.catService.saveAreaInstance(this.categories);
-      this.notify.notifySuccess("COMMON.SAVED");
-    } catch (error) {
-      super.handleError(error);
     }
 
     this.appService.isLoading = false;
@@ -85,7 +61,17 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
   onRowRemoving($event) {
     const data: CategoryInstance = $event.data;
 
-    if (!data.IsDeleteable) {
+    if (data.IsDeleteable) {
+      this.appService.isLoading = true;
+      try {
+        this.catService.removeCategoryInstance(data);
+      } catch (error) {
+        this.handleError(error);
+      } finally {
+        this.appService.isLoading = false;
+      }
+    }
+    else {
       $event.cancel = true;
     }
   }
@@ -104,6 +90,20 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     if ($event.newData.DisplayName || $event.newData.DisplayDescription) {
       $event.newData.DisplayName = this.translate.translate(oldData.Name);
       $event.newData.DisplayDescription = ""; // oldData.Description;
+      this.appService.isLoading = true;
+
+    }
+  }
+
+  async onChanged($event) {
+    var { item } = $event;
+
+    try {
+      this.catService.saveCategoryInstance(item);
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
     }
   }
 
@@ -113,15 +113,27 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     newObject.addVirtualProperties();
 
     $event.data = newObject;
-
   }
 
   onRowInserting($event) {
     const newObject = new CategoryInstance();
     newObject.addVirtualProperties();
 
-    Object.assign(newObject, $event.data);
+    newObject.Name = $event.data.Name;
+    newObject.Description = $event.data.Description;
+    newObject.This2UserGroup = $event.data.This2UserGroup;
+
     $event.data = newObject;
+    this.selectedNode = newObject;
+
+    this.appService.isLoading = true;
+    try {
+      this.catService.saveCategoryInstance(newObject);
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.appService.isLoading = false;
+    }
   }
 
   onRowClicked($event) {

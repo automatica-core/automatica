@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
@@ -63,7 +64,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
         {
             WriteReceived = true;
 
-            return new List<ILogicOutputChanged>() {new LogicOutputChanged(Output, true)};
+            return new List<ILogicOutputChanged>() {new LogicOutputChanged(Output, value)};
         }
     }
 
@@ -117,7 +118,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             cache?.Add(mockNodeChild.ObjId, mockNodeChild);
 
             mockNode.InverseThis2ParentNodeInstanceNavigation.Add(mockNodeChild);
-            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory()));
+            var mock = new DriverNodeMock(new DriverContextMock(mockNode, new DriverFactoryMock(), new NodeTemplateFactoryMock(), dispatcher, new NullLoggerFactory(), DateTimeHelper.ProviderInstance));
 
             await mock.Configure();
             await mock.StartInternal();
@@ -178,6 +179,7 @@ namespace Automatica.Core.Tests.Dispatcher.Utils
             ruleInstance.RuleInterfaceInstance.Add(input);
             ruleInstance.RuleInterfaceInstance.Add(output);
 
+            instanceCache.Add(ruleInstance.ObjId, ruleInstance);
             var mock = new LogicMock(new LogicContextMock(ruleInstance, new LogicTemplateFactoryMock(), dispatcher));
 
             await mock.Start();

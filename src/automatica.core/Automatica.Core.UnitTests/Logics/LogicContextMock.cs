@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Control;
 using Automatica.Core.EF.Models;
@@ -22,7 +21,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
             return Task.CompletedTask;
         }
 
-        public Task NotifyValueChanged(RuleInterfaceInstance instance, object value)
+        public Task NotifyValueChanged(RuleInterfaceInstance instance, DispatchValue value)
         {
             return Task.CompletedTask;
         }
@@ -42,7 +41,7 @@ namespace Automatica.Core.UnitTests.Base.Logics
             Dispatcher = dispatcher;
             Factory = factory;
             ControlContext = new Mock<IControlContext>().Object;
-
+            LocalizationProvider = new Mock<ILocalizationProvider>().Object;
 
             Logger = new ConsoleTestLogger();
         }
@@ -60,6 +59,8 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public IControlContext ControlContext { get; }
 
         public TimeProvider TimeProvider => FakeTimeProvider.Instance;
+
+        public ILocalizationProvider LocalizationProvider { get; }
     }
 
     public class FakeTimeProvider : TimeProvider

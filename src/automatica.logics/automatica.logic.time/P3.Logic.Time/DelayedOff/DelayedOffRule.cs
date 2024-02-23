@@ -18,6 +18,7 @@ namespace P3.Logic.Time.DelayedOff
         private readonly System.Timers.Timer _timer;
 
         private bool _timerRunning;
+        private bool _triggerOnlyIfTrue = false;
     
 
         public DelayedOffRule(ILogicContext context) : base(context)
@@ -34,6 +35,11 @@ namespace P3.Logic.Time.DelayedOff
         {
             _timer.Stop();
             _timerRunning = false;
+            ExecuteAction();
+        }
+
+        private void ExecuteAction()
+        {
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
 
             Context.Logger.LogDebug($">>> Dispatching value <<<");
@@ -57,33 +63,49 @@ namespace P3.Logic.Time.DelayedOff
                     StartStopTimer();
                 }
             }
+            else if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.TriggerOnlyIfTrue)
+            {
+                _triggerOnlyIfTrue = Convert.ToBoolean(value);
+            }
             base.ParameterValueChanged(instance, source, value);
         }
 
         private void StartStopTimer()
         {
             _timer.Stop();
-            _timer.Interval = _delay * 1000;
-            _timer.Start();
-            _timerRunning = true;
+
+            if (_delay <= 0)
+            {
+                ExecuteAction();
+            }
+            else
+            {
+                _timer.Interval = _delay * 1000;
+                _timer.Start();
+                _timerRunning = true;
+            }
         }
 
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
             if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleTrigger)
             {
-                if (!Convert.ToBoolean(value))
+                if (_triggerOnlyIfTrue)
                 {
-                    Context.Logger.LogDebug($">>> Stoping timer <<<");
-                    _timer.Stop();
-                    return new List<ILogicOutputChanged>();
+                    var inputValue = Convert.ToBoolean(value);
+
+                    if (!inputValue)
+                    {
+                        return new  List<ILogicOutputChanged>();
+                    }
                 }
+
                 Context.Logger.LogDebug($">>> Starting timer - ticks in {_delay * 1000} <<<");
                 StartStopTimer();
             }
             else if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleReset)
             {
-                Context.Logger.LogDebug($">>> Stoping timer <<<");
+                Context.Logger.LogDebug($">>> Stopping timer <<<");
                 _timer.Stop();
                 _timerRunning = false;
             }

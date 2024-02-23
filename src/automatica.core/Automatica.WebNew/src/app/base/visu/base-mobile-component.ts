@@ -208,7 +208,6 @@ export abstract class BaseMobileComponent extends BaseComponent {
 
                 if (this._primaryNodeInstance === nodeId) {
                     this.value = args[2].value;
-                    console.log("nodevalue dispatch: ", this.value);
                 }
                 await this.nodeValueReceived(nodeId, args[2]);
             }

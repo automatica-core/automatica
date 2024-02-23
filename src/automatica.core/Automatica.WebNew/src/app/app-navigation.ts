@@ -4,11 +4,13 @@ export const navigation = [
         path: "home",
         icon: "automatica-logo",
         default: true
-    }, {
-        text: "COMMON.CONFIGURATION",
-        path: "config",
-        icon: "cogs"
-    }, {
+    },
+    //  {
+    //     text: "COMMON.CONFIGURATION",
+    //     path: "config",
+    //     icon: "cogs"
+    // }, 
+    {
         text: "COMMON.RULEENGINE",
         path: "logic-editor",
         icon: "play"

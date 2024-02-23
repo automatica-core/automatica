@@ -20,6 +20,11 @@ export class NotifyService {
     }
 
     notifyError(error: string, timeout = 5000) {
+        try {
         notify(this.translate.translate(error), "error", timeout);
+        }
+        catch(e) {
+            notify(this.translate.translate("ERROR.UNKNOWN"), "error", timeout);
+        }
     }
 }

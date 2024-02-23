@@ -12,7 +12,10 @@ using Newtonsoft.Json;
 using MQTTnet.Client;
 using MQTTnet.Server.Internal;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Automatica.Core.Control;
+using Automatica.Core.Control.Base;
 using RemoteDispatchValue = Automatica.Core.Base.Remote.RemoteDispatchValue;
 
 namespace Automatica.Core.Plugin.Standalone
@@ -68,7 +71,7 @@ namespace Automatica.Core.Plugin.Standalone
                 var factory = _connection.Factories.First(a => a.DriverGuid == dto.This2NodeTemplate);
                 var context = new DriverContext(dto, factory, _connection.Dispatcher, _connection.NodeTemplateFactory,
                     new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(_connection),
-                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), _serviceProvider, false);
+                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), _serviceProvider, new RemoteControlContext(), false);
 
              
 
@@ -135,6 +138,49 @@ namespace Automatica.Core.Plugin.Standalone
                     await node.Read();
                 }
             }
+        }
+    }
+
+    internal class RemoteControlContext : IControlContext
+    {
+        public Task<List<IControl>> GetAsync(List<Guid> controls, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult(new List<IControl>());
+        }
+
+        public Task<IControl> GetAsync(Guid controlId, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult((IControl)null);
+        }
+
+        public Task<List<ISwitch>> GetSwitchesAsync(List<Guid> switches, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult(new List<ISwitch>());
+        }
+
+        public Task<ISwitch> GetSwitchAsync(Guid switchId, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult((ISwitch)null);
+        }
+
+        public Task<List<IDimmer>> GetDimmerAsync(List<Guid> dimmer, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult(new List<IDimmer>());
+        }
+
+        public Task<IDimmer> GetDimmerAsync(Guid dimmerId, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult((IDimmer)null);
+        }
+
+        public Task<List<IBlind>> GetBlindsAsync(List<Guid> blinds, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult(new List<IBlind>());
+        }
+
+        public Task<IBlind> GetBlindAsync(Guid blindId, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return Task.FromResult((IBlind)null);
         }
     }
 }

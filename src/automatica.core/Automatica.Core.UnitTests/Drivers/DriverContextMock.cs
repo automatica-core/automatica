@@ -1,5 +1,7 @@
-﻿using Automatica.Core.Base.IO;
+﻿using System;
+using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
+using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Retry;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Base.Tunneling;
@@ -19,7 +21,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
 {
     public class DriverContextMock : IDriverContext
     {
-        public DriverContextMock(NodeInstance nodeInstance, IDriverFactory factory, INodeTemplateFactory nodeTemplateFactory, IDispatcher dispatcher, ILoggerFactory loggerFactory)
+        public DriverContextMock(NodeInstance nodeInstance, IDriverFactory factory, INodeTemplateFactory nodeTemplateFactory, IDispatcher dispatcher, ILoggerFactory loggerFactory, TimeProvider timeProvider)
         {
             NodeInstance = nodeInstance;
             NodeTemplateFactory = nodeTemplateFactory;
@@ -31,6 +33,9 @@ namespace Automatica.Core.UnitTests.Base.Drivers
             TunnelingProvider = new TunnelingProviderMock();
             ControlContext = new Mock<IControlContext>().Object;
             RetryContext = new RetryContextMock();
+            TimeProvider = timeProvider;
+
+            LocalizationProvider = new Mock<ILocalizationProvider>().Object;
         }
 
         public NodeInstance NodeInstance { get; }
@@ -44,7 +49,7 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public ILicenseState LicenseState { get;}
 
         public ILogger Logger => NullLogger.Instance;
-        public ILearnMode LearnMode => null;
+        public ILearnMode LearnMode => null; 
         public IServerCloudApi CloudApi => new CloudApiMock();
         public ILicenseContract LicenseContract => new LicenseContractMock();
         public ILoggerFactory LoggerFactory { get; }
@@ -52,12 +57,14 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public IZeroconfDiscovery ZeroconfDiscovery { get; }
 
         public IControlContext ControlContext { get; }
+        public TimeProvider TimeProvider { get; }
+        public ILocalizationProvider LocalizationProvider { get; }
 
         public IRetryContext RetryContext { get; }
 
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
-            return new DriverContextMock(node, Factory, NodeTemplateFactory, Dispatcher, LoggerFactory);
+            return new DriverContextMock(node, Factory, NodeTemplateFactory, Dispatcher, LoggerFactory, TimeProvider);
         }
     }
 }

@@ -19,6 +19,7 @@ using Automatica.Driver.Shelly.Gen1.Options;
 using Automatica.Driver.Shelly.Common;
 using Automatica.Driver.Shelly.Gen2;
 using Automatica.Driver.Shelly.Gen2.Models;
+using Newtonsoft.Json;
 
 namespace Automatica.Driver.ShellyFactory
 {
@@ -125,9 +126,12 @@ namespace Automatica.Driver.ShellyFactory
                 throw;
             }
 
-            _timer = new Timer(PollingInterval);
-            _timer.Elapsed += _timer_Elapsed;
-            _timer.Start();
+            if (Generation == ShellyGeneration.Gen1)
+            {
+                _timer = new Timer(PollingInterval);
+                _timer.Elapsed += _timer_Elapsed;
+                _timer.Start();
+            }
 
             await Client.Connect(token);
 
@@ -139,6 +143,7 @@ namespace Automatica.Driver.ShellyFactory
         {
             try
             {
+                DriverContext.Logger.LogDebug($"Notify event {JsonConvert.SerializeObject(eventMessage)}");
                 foreach (var containerNode in ContainerNodes)
                 {
                     await containerNode.FromStatusUpdate(eventMessage);

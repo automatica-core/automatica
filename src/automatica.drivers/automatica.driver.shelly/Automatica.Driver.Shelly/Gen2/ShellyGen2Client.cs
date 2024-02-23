@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net.Http;
 using System.Net.WebSockets;
 using System.Security.Cryptography;
@@ -19,8 +20,9 @@ namespace Automatica.Driver.Shelly.Gen2
 {
     public class ShellyGen2Client: ShellyClientBase, IShellyClient
     {
+        private readonly IShellyCommonOptions _shellyCommonOptions;
         private readonly ILogger _logger;
-        private readonly PureWebSocket _webSocket;
+        private PureWebSocket _webSocket;
         private AuthModel? _authModel;
 
 
@@ -32,16 +34,41 @@ namespace Automatica.Driver.Shelly.Gen2
 
         public ShellyGen2Client(ITelegramMonitorInstance telegramMonitor, IShellyCommonOptions shellyCommonOptions, ILogger logger) : base(telegramMonitor, shellyCommonOptions)
         {
+            _shellyCommonOptions = shellyCommonOptions;
             _logger = logger;
-            _webSocket = new PureWebSocket($"ws://{shellyCommonOptions.IpAddress}/rpc", new PureWebSocketOptions());
+
+            CreateWebSocket();
+        }
+
+        private void CreateWebSocket()
+        {
+            if (_webSocket != null)
+            {
+                _webSocket.OnOpened -= _webSocket_OnOpened;
+                _webSocket.OnMessage -= _webSocket_OnMessage;
+                _webSocket.OnClosed -= _webSocket_OnClosed;
+                _webSocket.OnError -= WebSocketOnOnError;
+                _webSocket.Dispose();
+            }
+
+            _webSocket = new PureWebSocket($"ws://{_shellyCommonOptions.IpAddress}/rpc", new PureWebSocketOptions());
             _webSocket.OnOpened += _webSocket_OnOpened;
             _webSocket.OnMessage += _webSocket_OnMessage;
             _webSocket.OnClosed += _webSocket_OnClosed;
-          
+            _webSocket.OnError += WebSocketOnOnError;
+        }
+
+        private async void WebSocketOnOnError(object sender, Exception ex)
+        {
+            _logger.LogInformation($"Websocket closed...." + ex);
+
+            await Restart();
+            OnClosed?.Invoke(this, WebSocketCloseStatus.Empty);
         }
 
         private async Task Restart()
         {
+            CreateWebSocket();
             await Connect();
         }
        
@@ -88,6 +115,9 @@ namespace Automatica.Driver.Shelly.Gen2
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint);
             requestMessage.Content = new StringContent(JsonConvert.SerializeObject(rpcModel), Encoding.UTF8);
 
+
+            await TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "self", ShellyHttpClient!.BaseAddress!.AbsoluteUri, JsonConvert.SerializeObject(param), endpoint);
+
             return await ExecuteRequestAsync<ResponseModel<T>>(requestMessage, token, default);
         }
 
@@ -110,7 +140,14 @@ namespace Automatica.Driver.Shelly.Gen2
 
         public async Task<bool> Connect(CancellationToken token = default)
         {
-            return await _webSocket.ConnectAsync();
+            try
+            {
+                return await _webSocket.ConnectAsync();
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task<bool> Disconnect(CancellationToken token = default)
@@ -128,9 +165,17 @@ namespace Automatica.Driver.Shelly.Gen2
             return true;
         }
 
-        public Task<bool> SetRelayState(int channelId, bool value, CancellationToken token = default)
+        public async Task<bool> SetRelayState(int channelId, bool value, int resetTimer, CancellationToken token = default)
         {
-            return Task.FromResult(false);
+            var valueDictionary = new Dictionary<string, object> { { "id", channelId }, { "on", value } };
+
+            if (resetTimer > 0)
+            {
+                valueDictionary.Add("toggle_after", resetTimer);
+            }
+
+            await SendPostMessage<SwitchStatus>("Switch.Set", valueDictionary, token);
+            return true;
         }
 
         public async Task<bool> GetRelayState(int channelId, CancellationToken token = default)

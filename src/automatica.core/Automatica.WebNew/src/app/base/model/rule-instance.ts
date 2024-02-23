@@ -71,6 +71,8 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     @JsonProperty()
     This2RuleTemplate: string;
 
+    public itemMoved = false;
+
     _x: number;
     public get X() {
         return Math.round(this._x);
@@ -78,6 +80,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     @JsonProperty()
     public set X(value: number) {
         this._x = value;
+        this.itemMoved = true;
     }
 
     _y: number;
@@ -87,6 +90,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
     @JsonProperty()
     public set Y(value: number) {
         this._y = value;
+        this.itemMoved = true;
     }
 
     @JsonPropertyName("This2RuleTemplateNavigation")
@@ -160,6 +164,9 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         this._DisplayDescription = v;
     }
 
+    public setSaved(): void {
+        this.itemMoved = false;
+    }
 
     public static fromRuleTemplate(template: RuleTemplate, translationService: L10nTranslationService): RuleInstance {
         const instance = new RuleInstance();
@@ -177,7 +184,7 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
             instance.Interfaces.push(intre);
         });
 
-        instance.addVirtualProperties();
+        instance.afterFromJson();
         return instance;
     }
 
@@ -213,7 +220,10 @@ export class RuleInstance extends BaseModel implements VisuObjectType, IKey, IDe
         this.Properties.push(new VirtualGenericPropertyInstance("VISU_NAME", 5, this, () => this.VisuName, (value) => this.VisuName = value, false, PropertyTemplateType.Text, "COMMON.CATEGORY.VISU"));
 
         for (const x of this.Interfaces) {
-            if (x.Template && x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
+            if(!x.Template) {
+                continue;
+            }
+            if (x.Template.ParameterDataType === RuleInterfaceParameterDataType.NoParameter) {
                 continue;
             }
             this.Properties.push(new RuleInterfaceParamProperty(x));

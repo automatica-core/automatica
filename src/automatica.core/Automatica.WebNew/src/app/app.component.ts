@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone, ViewChild } from "@angular/core";
-import { faClock, faFile, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
-import { faWavePulse, fad } from "@fortawesome/pro-duotone-svg-icons";
-import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank } from "@fortawesome/pro-solid-svg-icons";
+import { faClock, faFile, faFolder, far, IconDefinition } from "@fortawesome/free-regular-svg-icons";
+import { faLaptopArrowDown, faObjectUnion, faTty, faUsbDrive, faVrCardboard, faWavePulse, fad } from "@fortawesome/pro-duotone-svg-icons";
+import { faAirConditioner, faAppleCore, faBedBunk, faBedFront, faBoothCurtain, faDryerHeat, faFireplace, faForkKnife, faHeat, faOutlet, faTemperatureHot, faTemperatureSnow, faTemperatureSun, faToiletPaperBlank, faEthernet } from "@fortawesome/pro-solid-svg-icons";
 import { fas, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { AppService } from "./services/app.service";
 import { NotifyService } from "./services/notify.service";
@@ -72,6 +72,13 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.addIcon(faOutlet);
     this.addIcon(faWavePulse);
     this.addIcon(faFile);
+    this.addIcon(faFolder);
+    this.addIcon(faObjectUnion);
+    this.addIcon(faEthernet);
+    this.addIcon(faUsbDrive);
+    this.addIcon(faTty);
+    this.addIcon(faVrCardboard);
+    this.addIcon(faLaptopArrowDown);
 
 
     library.addIcons(<IconDefinition>{
@@ -136,11 +143,9 @@ export class AppComponent extends BaseComponent implements OnInit {
     console.log("");
     console.log("          MUCH WOW, MUCH COOL, MUCH N1");
     console.log("           MUCH LOVE AUTOMATICA.CORE");
-    console.log("            DONATE MUCH DOGE TO");
-    console.log("              DPVz6RSAJrXZqTF4sGXpS1dqwvU36hSaAQ");
     console.log("");
     console.log("            DONATE MUCH BITCOIN TO");
-    console.log("              1Ck4XgAxys3aBjdesKQQ62zx7m4vozUest");
+    console.log("              bc1qcrgffxm2rhl0prcjqnh6lp78n6hu2n084dk2r8");
     console.log("");
     console.log("");
     console.log("");

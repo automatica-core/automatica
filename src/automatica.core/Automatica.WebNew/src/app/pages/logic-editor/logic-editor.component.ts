@@ -16,16 +16,21 @@ import { BaseComponent } from "src/app/base/base-component";
 import { RuleTemplate } from "src/app/base/model/rule-template";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
-import { NodeTemplate } from "src/app/base/model/node-template";
 import { AreaInstance } from "src/app/base/model/areas";
 import { CategoryInstance } from "src/app/base/model/categories";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import DataSource from "devextreme/data/data_source";
 import { DxListComponent, DxPopupComponent } from "devextreme-angular";
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
+import { ITreeNode } from "src/app/base/model/ITreeNode";
+export class Tab {
+  id: string;
+  text: string;
+  page: RulePage;
+}
 
 @Component({
   selector: "app-logic-editor",
@@ -68,7 +73,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     private userGroupsService: GroupsService,
     appService: AppService,
     private dataHub: DataHubService,
-    private nodeInstanceService: NodeInstanceService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private changeRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
@@ -135,19 +140,17 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     try {
       this.isLoading = true;
 
-      const [pages, ruleTemplates, linkableNodes, areaInstances, categoryInstances, userGroups] = await Promise.all(
+      const [ruleTemplates, linkableNodes, areaInstances, categoryInstances, userGroups] = await Promise.all(
         [
-          this.ruleEngineService.getPages(),
           this.ruleEngineService.getRuleTemplates(),
           this.configService.getLinkableNodes(),
-          this.areaService.getAreaInstances(),
-          this.categoryService.getCategoryInstances(),
+          this.areaService.getAllAreaInstances(),
+          this.categoryService.getAllCategoryInstances(),
           this.userGroupsService.getUserGroups(),
           this.nodeInstanceService.load()
         ]);
 
-      this.pages = this.sortPages(pages);;
-
+      this.pages = this.sortPages(this.nodeInstanceService.pages);
 
       this.pagesDataSource = new DataSource({
         paginate: false,
@@ -245,6 +248,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       page.removeNodeInstance(item.ObjId);
       $event.removed = true;
       await this.ruleEngineService.removeItem(item);
+      this.nodeInstanceService.removeLogicNodeInstance(item);
+      this.configTree.refreshTree();
     }
 
   }
@@ -257,7 +262,8 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
         const item = items[0];
 
         if (item instanceof NodeInstance2RulePage) {
-          this.configTree.selectNodeById(item.This2NodeInstance);
+          if (this.selectedItem && this.selectedItem.ObjId != item.ObjId)
+            this.configTree.selectNodeById(item.This2NodeInstance);
 
           const node = this.nodeInstanceService.getNodeInstance(item.This2NodeInstance);
           this.selectedItem = node; // this.configTree.selectNodeById(item.This2NodeInstance); // this class will set the selectedItem anyway
@@ -293,16 +299,22 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     this.isLoading = false;
   }
 
+  async onLogicNodeInstanceRemoved(item: NodeInstance2RulePage) {
+    const page = item.RulePage;
+    page.NodeInstances = page.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
+    this.pages.filter(a => a.ObjId === page.ObjId)[0].NodeInstances = page.NodeInstances;
+
+    this.ruleEngineService.reInit.emit(page);
+
+    await this.ruleEngineService.removeItem(item);
+    this.nodeInstanceService.removeLogicNodeInstance(item);
+    this.ruleEngineService.removed.emit({ logicNodeInstance: item, logicPage: item.RulePage });
+  }
+
   async delete() {
     try {
       if (this.selectedItem instanceof NodeInstance2RulePage) {
-        const selectedPage = this.selectedPage;
-        selectedPage.NodeInstances = selectedPage.NodeInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
-
-        this.ruleEngineService.reInit.emit(this.selectedPage);
-
-        await this.ruleEngineService.removeItem(this.selectedItem);
-
+        this.onLogicNodeInstanceRemoved(this.selectedItem);
       } else if (this.selectedItem instanceof RuleInstance) {
         const selectedPage = this.selectedPage;
         selectedPage.RuleInstances = selectedPage.RuleInstances.filter(a => a.ObjId !== this.selectedItem.ObjId);
@@ -324,8 +336,22 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
   }
 
-  nodeSelect(event: NodeInstance) {
-    this.selectedItem = event;
+  async nodeSelect(event: ITreeNode) {
+    if (event instanceof NodeInstance) {
+      this.selectedItem = event;
+    }
+    else if (event instanceof NodeInstance2RulePage) {
+      const toPage = this.pages.find(a => a.ObjId === event.This2RulePage);
+      if (this.selectedPage.ObjId != toPage.ObjId) {
+        await this.router.navigate(["../", toPage.ObjId], { relativeTo: this.route });
+      }
+      this.selectedItem = event;
+      this.selectedPage = toPage;
+
+      setTimeout(() => {
+        this.ruleEngineService.selected.emit({ logicNodeInstance: event, logicPage: this.selectedPage });
+      }, 10);
+    }
   }
 
   scan(nodeInstance: NodeInstance) {
@@ -341,7 +367,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   itemClick($event) {
     const item: CustomMenuItem = $event.itemData;
 
-    if (item && item.command) {
+    if (item?.command) {
       item.command($event);
     }
   }
@@ -354,10 +380,19 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
 
       await this.ruleEngineService.removePage(currentPage);
 
+      for (const node of currentPage.NodeInstances) {
+        this.nodeInstanceService.removeLogicNodeInstance(node);
+      }
+
       this.pages = this.pages.filter(a => a.ObjId != currentPage.ObjId);
       this.logicPageList.selectedItems = [];
 
+      this.selectedItem = void 0;
+      this.selectedPage = void 0;
+
       await this.pagesDataSource.reload();
+
+      this.configTree.refreshTree();
       this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
@@ -380,12 +415,16 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       await this.ruleEngineService.addPage(rulePage);
       this.pages.push(rulePage);
 
+      this.pages = this.sortPages(this.pages);
+
       this.selectedPage = rulePage;
       this.selectedItem = rulePage;
 
-      this.logicPageList.selectedItems = [rulePage];
-
       await this.pagesDataSource.reload();
+
+      if (this.logicPageList)
+        this.logicPageList.selectedItems = [rulePage];
+
       this.changeRef.detectChanges();
 
     } catch (error) {
@@ -424,6 +463,10 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
           data: node,
           pageId: this.selectedPage.ObjId
         });
+
+        this.nodeInstanceService.addLogicNodeInstance(node);
+
+        this.configTree.refreshTree();
       }
     }
     catch (error) {
@@ -444,5 +487,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
   onZoomToView($event) {
     this.selectedPage.onZoomToView.emit();
+  }
+
+  onPropertyChanged($event) {
+    this.changeRef.detectChanges();
   }
 }

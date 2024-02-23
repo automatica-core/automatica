@@ -18,6 +18,7 @@ const routes: Routes = [
     data: {
       title: "Visualization",
       loadHomepage: true,
+      loadFavorites: false,
       editable: false,
       requiresRole: Role.VISU_ROLE
     },
@@ -27,7 +28,8 @@ const routes: Routes = [
     component: MobileContainerComponent,
     data: {
       title: "Visualization",
-      loadHomepage: true,
+      loadHomepage: false,
+      loadFavorites: true,
       editable: false,
       requiresRole: Role.VISU_ROLE
     },

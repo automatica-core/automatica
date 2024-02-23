@@ -58,13 +58,6 @@ namespace Automatica.Core.Driver
         {
             await Task.CompletedTask;
 
-            if (DriverContext.NodeInstance.State != NodeInstanceState.InUse)
-            {
-                DriverContext.Logger.LogWarning(
-                    $"{FullName} {Id} Node is not started...ignore write...");
-                return;
-            }
-
             _writeQueue.Enqueue((source, value, count));
             _writeSemaphore.Release(1);
 
@@ -138,26 +131,6 @@ namespace Automatica.Core.Driver
                         }
 
                         await driverNode.Configure(token);
-
-
-                        await DriverContext.Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, node.ObjId, async (source, value) =>
-                        {
-                            if (source.Id == node.ObjId && source.Source == DispatchableSource.NodeInstance)
-                            {
-                                return;
-                            }
-
-                            if (source.Source == DispatchableSource.RemanentValue ||
-                                source.Source == DispatchableSource.Visualization ||
-                                source.Source == DispatchableSource.Remote)
-                            {
-                                if (driverNode is DriverBase driverBase)
-                                {
-                                    DriverContext.Logger.LogInformation($"{Id} {Name}: Dispatch direct write {value} ");
-                                    await driverBase.Enqueue(source, value);
-                                }
-                            }
-                        });
 
                         ChildrensCreated += driverNode.ChildrensCreated;
                     }
@@ -430,6 +403,8 @@ namespace Automatica.Core.Driver
             _isRunning = false;
             await _cancellationToken.CancelAsync();
             _writeSemaphore.Release(1);
+
+            _cancellationToken.Dispose();
 
             foreach (var node in Children)
             {

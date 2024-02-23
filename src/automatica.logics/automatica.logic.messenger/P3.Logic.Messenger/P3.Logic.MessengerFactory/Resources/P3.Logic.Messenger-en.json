@@ -12,7 +12,8 @@
       "SUBJECT": {
         "NAME": "Subject",
         "DESCRIPTION": ""
-      }
+      },
+      "BODY":  "{{NAME}} has value {{VALUE}} from source {{SOURCE}}"
     }
   }
 }

@@ -46,6 +46,7 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
+                            return 0;
                         },
                         async client => await client.GetRelayPower(RelayId), @event => @event.GetValueFromSwitch(RelayId, a => a.Power));
                 case "meter-overpower":
@@ -53,6 +54,7 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
+                            return false;
                         }, _ => Task.FromResult(false));
                 case "meter-is-valid":
 
@@ -60,12 +62,14 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
+                            return false;
                         }, _ => Task.FromResult(true));
                 case "meter-timestamp":
                     return new GenericValueNode<long, bool>(ctx, Client,
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
+                            return 0;
                         },
                         async client => await client.GetRelayEnergyTimestamp(RelayId));
                 case "meter-total":
@@ -73,6 +77,7 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                         async (o, client) =>
                         {
                             await Task.CompletedTask;
+                            return 0;
                         },
                         async client => await client.GetRelayEnergy(RelayId));
             }

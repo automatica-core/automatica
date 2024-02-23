@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BaseService } from "./base-service";
@@ -12,6 +12,8 @@ import { BaseModel } from "../base/model/base-model";
 export class LoginService extends BaseService {
  
   private currentUser: User = void 0;
+
+  public userLoggedIn: EventEmitter<User> = new EventEmitter<User>();
 
   constructor(http: HttpClient, pRouter: Router, translationService: L10nTranslationService) {
     super(http, pRouter, translationService);

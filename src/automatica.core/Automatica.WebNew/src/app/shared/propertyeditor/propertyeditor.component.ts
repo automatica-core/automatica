@@ -24,7 +24,7 @@ import { Satellite } from "src/app/base/model/satellites/satellite";
 import { SatelliteService } from "src/app/services/satellite.services";
 import { LearnModeNodeTemplate } from "src/app/base/model/learnmode/learn-mode-node-template";
 import { AppService } from "src/app/services/app.service";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 import { RuleInstance } from "src/app/base/model/rule-instance";
 import { LogicEngineService } from "src/app/services/logicengine.service";
 import { RulePage } from "src/app/base/model/rule-page";
@@ -38,6 +38,8 @@ import { CalendarPropertyData } from "src/app/base/model/calendar-property-data"
 import { ControlsService } from "src/app/services/controls.service";
 import { ControlConfiguration } from "src/app/base/model/control-configuration";
 import { Control, ControlGrouped } from "src/app/base/model/control";
+import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
+import { VirtualSettingsPropertyInstance } from "src/app/base/model/virtual-props/settings/settings-property-instance";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -251,6 +253,8 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
   @Output()
   validate = new EventEmitter<any>();
+  @Output()
+  onChanged = new EventEmitter<any>();
 
 
   private _areaInstances: AreaInstance[] = [];
@@ -262,7 +266,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   public set areaInstances(v: AreaInstance[]) {
     this._areaInstances = v;
     this.flattenAreaInit();
-    console.log(this.areaInstancesFlat);
   }
 
 
@@ -331,6 +334,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   @ViewChild("endDateValidator")
   endDateValidator: DxValidatorComponent;
 
+  
   @ViewChildren('control') controls: QueryList<any>;
 
   constructor(
@@ -340,7 +344,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     private notify: NotifyService,
     private satellitesService: SatelliteService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService,
+    private nodeInstanceService: LogicEditorInstanceService,
     private ruleEngineService: LogicEngineService,
     private changeDetection: ChangeDetectorRef,
     private router: Router,
@@ -407,7 +411,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
 
   nodeSelect($event) {
-    if ($event instanceof NodeInstance && $event.NodeTemplate.ProvidesInterface2InterfaceType === NodeTemplate.ValueInterfaceId()) {
+    if ($event instanceof NodeInstance && $event.NodeTemplate.ProvidesInterface2InterfaceType === InterfaceTypeEnum.Value) {
       this.selectedNodeInstance = $event;
     } else {
       this.selectedNodeInstance = void 0;
@@ -619,7 +623,6 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
           learnNode.init();
           this.learnNodeInstance = [...this.learnNodeInstance, learnNode];
-          console.log(this.learnNodeInstance);
           this.changeDetection.detectChanges();
         }
       });
@@ -635,13 +638,10 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
     }
   }
   async optionChanged(e, data) {
-    console.log(e);
-    console.log(data);
-
     if (e.name == "value") {
 
-      var oldValue = JSON.stringify(e.previousValue);
-      var newValue = JSON.stringify(e.value);
+      let oldValue = JSON.stringify(e.previousValue);
+      let newValue = JSON.stringify(e.value);
 
       if (newValue == oldValue) {
         return;
@@ -655,6 +655,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
 
     this.validate.emit(prop);
 
+    this.onChanged.emit({ item: this.item, property: prop });
     if (prop instanceof VirtualGenericPropertyInstance) {
       if (!prop.updateOnChanges) {
         return;
@@ -666,15 +667,16 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
       if (this.item instanceof NodeInstance) {
         await this.config.update(this.item, prop.updateScope);
 
-        if (!this.item.ParentId) {
+        if (!this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
           this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
-          this.nodeInstanceService.saveSettings();
+          this.nodeInstanceService.saveSetting(prop);
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);
       } else if (this.item instanceof RulePage) {
         await this.ruleEngineService.updatePage(this.item);
       }
+
     } catch (error) {
       this.handleError(error);
     }

@@ -46,7 +46,7 @@ namespace Automatica.Core.Control
         public Task<ISwitch> GetSwitchAsync(Guid switchId, CancellationToken cancellationToken = default)
         {
             var switchContext = cache.Get(switchId);
-            return Task.FromResult(switchContext as ISwitch);
+            return Task.FromResult((ISwitch)switchContext);
         }
 
        
@@ -68,7 +68,7 @@ namespace Automatica.Core.Control
         public Task<IDimmer> GetDimmerAsync(Guid switchId, CancellationToken cancellationToken = default)
         {
             var switchContext = cache.Get(switchId);
-            return Task.FromResult(switchContext as IDimmer);
+            return Task.FromResult((IDimmer)switchContext);
         }
 
      
@@ -90,7 +90,7 @@ namespace Automatica.Core.Control
         public Task<IBlind> GetBlindAsync(Guid switchId, CancellationToken cancellationToken = default)
         {
             var switchContext = cache.Get(switchId);
-            return Task.FromResult(switchContext as IBlind);
+            return Task.FromResult((IBlind)switchContext);
         }
     }
 }

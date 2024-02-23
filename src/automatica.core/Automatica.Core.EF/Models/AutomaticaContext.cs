@@ -814,6 +814,8 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.This2RuleInterfaceTemplate);
 
+
+                entity.Property(e => e.ValueBool);
                 entity.Property(e => e.ValueDouble);
                 entity.Property(e => e.ValueInteger);
                 entity.Property(e => e.ValueString);

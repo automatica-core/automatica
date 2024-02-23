@@ -16,3 +16,13 @@
 
     color: #4a4a4a;
 }
+
+::ng-deep .invert_tooltip {
+	position: absolute;
+	background: transparent;
+	padding:10px;
+
+    color: #4a4a4a;
+    pointer-events: none;
+    
+}

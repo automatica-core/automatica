@@ -7,6 +7,7 @@ import { ILogicErrorHandler } from "../ilogicErrorHandler";
 import { LogicShapeValueLocator } from "./logic-shape-value-locator";
 import { ILogicInfoHandler } from "../ilogicInfoHandler";
 import { LogicInterfaceDirection } from "src/app/base/model/rule-interface-direction";
+import { NodeDataType, NodeDataTypeEnum } from "src/app/base/model/node-data-type";
 declare let draw2d: any;
 declare let $: any;
 
@@ -86,12 +87,12 @@ export class LogicShapes {
                 }
                 if (fontSize == 8) {
                     if (input.length > 22) {
-                        return input.substring(0, 18) + '...';
+                        return input.substring(0, 16) + '...';
                     }
                 }
                 else if (fontSize == 10) {
                     if (input.length > 18) {
-                        return input.substring(0, 15) + '...';
+                        return input.substring(0, 13) + '...';
                     }
                 }
                 return input;
@@ -110,8 +111,7 @@ export class LogicShapes {
                 this._super($.extend(
                     {
                         id: element.key,
-                        bgColor: "#d7d7d7",
-                        alpha: 1,
+                        bgColor: "#dbddde", 
                         color: "#325862",
                         stroke: 0,
                         radius: 0,
@@ -119,7 +119,8 @@ export class LogicShapes {
                         y: element.Y,
                         keepAspectRatio: false,
                         resizeable: false,
-                        height: 25
+                        height: 25,
+                        width: 100
                     }, attr));
 
                 this.setUserData(element);
@@ -135,7 +136,6 @@ export class LogicShapes {
 
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
                 this.logicName = new logic.Label({
-                    text: translatedName,
                     stroke: 0,
                     fontColor: "#000000",
                     bgColor: "#d7d7d7",
@@ -143,19 +143,24 @@ export class LogicShapes {
                     padding: 5,
                     resizeable: true,
                     minWidth: 100,
+                    width: 100,
                     fontSize: 8,
                     height: 20
                 });
 
+                this.setText(translatedName)
 
                 this.on("move", (context) => {
                     element.X = context.x;
                     element.Y = context.y;
                 });
 
+
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+                        if (element.itemMoved) {
+                            await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+                        }
                     }
                     catch (error) {
                         errorHandler.notifyError(error);
@@ -166,9 +171,6 @@ export class LogicShapes {
                 this.add(this.logicName);
 
                 this.add(new logic.PortShape({}, element, this, linkService));
-
-
-                console.log(this.headerLayout.getWidth());
             },
             getMinWidth() {
                 if (this.classLabel) {
@@ -183,6 +185,28 @@ export class LogicShapes {
 
                 this.fireEvent("dragEnd", { x: x, y: y });
 
+            },
+            setText: function setText(text) {
+                const fontSize = text?.length <= 18 ? 8 : 6;
+                this.logicName.setFontSize(fontSize);
+                this.logicName.setText(this.truncate(text, fontSize));
+            },
+
+            truncate: function (input, fontSize) {
+                if (!input) {
+                    return input;
+                }
+                if (fontSize == 6) {
+                    if (input.length > 22) {
+                        return input.substring(0, 18) + '...';
+                    }
+                }
+                else if (fontSize == 8) {
+                    if (input.length > 18) {
+                        return input.substring(0, 15) + '...';
+                    }
+                }
+                return input;
             }
         });
 
@@ -195,7 +219,6 @@ export class LogicShapes {
             init: function (attr, element: RuleInstance, realParent, linkService: LinkService) {
                 this._super($.extend(
                     {
-                        bgColor: "#dbddde",
                         color: "#d7d7d7",
                         stroke: 0,
                         radius: 0,
@@ -225,27 +248,38 @@ export class LogicShapes {
                 }
 
                 for (const x of list) {
-                    this.createPortInstances(x.items, linkService);
+                    this.createPortInstances(element, x.items, linkService);
                 }
             },
 
 
-            createPortInstances: function (portInstances: RuleInterfaceInstance[], linkService: LinkService) {
+            createPortInstances: function (parent: RuleInstance, portInstances: RuleInterfaceInstance[], linkService: LinkService) {
                 const data = [];
                 for (const portInstance of portInstances) {
                     const isInput = portInstance.Template.InterfaceDirection.Key === "I" || portInstance.Template.InterfaceDirection.Key === "P";
-                    const label = new logic.LogicText({
-                        text: portInstance.Name,
+
+                    let portName = portInstance.Name;
+                    if(portName.length > 10 && portInstances.length > 1) {
+                        portName = portName.substring(0, 8) + "...";
+                    }
+                    else if(portName.length > 15) {
+                        portName = portName.substring(0, 12) + "...";
+                    }
+
+                    const label = new logic.LogicPortText({
+                        text: portName,
                         stroke: 0,
                         radius: 0,
                         bgColor: null,
-                        fontColor: "#4a4a4a",
+                        fontColor: portInstance.Inverted ? "red" : "#4a4a4a",
                         resizeable: false,
                         padding: { top: 5, right: isInput ? 0 : 10, bottom: 5, left: isInput ? 7 : 5 },
                         fontSize: 8
-                    }, isInput ? 0 : 1, this.realParent);
+                    }, isInput ? 0 : 1, this.realParent, portInstance);
 
                     let port = void 0;
+
+                    let dataLabel = void 0;
 
                     if (isInput) {
                         port = this.createPort("input", new logic.LogicInputPortLocator(this.realParent, label));
@@ -267,8 +301,10 @@ export class LogicShapes {
                         port.setName(portInstance.PortId);
                         port.setConnectionDirection(1);
                         port.setDiameter(8);
+                        port.setColor("green");
+                        port.setBackgroundColor("green");
 
-                        let dataLabel = new draw2d.shape.basic.Label({
+                        dataLabel = new draw2d.shape.basic.Label({
                             text: portInstance.PortValue,
                             textLength: "100%",
                             stroke: 0,
@@ -283,18 +319,28 @@ export class LogicShapes {
 
                         });
 
-                        portInstance.notifyChangeEvent.subscribe((v) => {
-                            if (v.propertyName === "PortValue") {
-                                let value = ValueHandler.handleValue((<any>v.object).PortValue);
-
-                                dataLabel.setText(value);
-                            }
-                        });
-
                         port.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
                         dataLabel.toBack();
 
                     }
+
+                    portInstance.notifyChangeEvent.subscribe(async (v) => {
+                        if (v.propertyName === "Inverted") {
+                            label.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
+
+                            try {
+                                await ruleEngineService.updateItem(parent, LogicUpdateScope.InvertedValueUpdated);
+                            }
+                            catch (error) {
+                                errorHandler.notifyError(error);
+                            }
+                        }
+                        else if (!isInput && v.propertyName === "PortValue" && dataLabel) {
+                            let value = ValueHandler.handleValue((<any>v.object).PortValue);
+
+                            dataLabel.setText(value);
+                        }
+                    });
 
                     port.setMaxFanOut(portInstance.FromMaxLinks);
                     port.setUserData(portInstance);
@@ -328,7 +374,7 @@ export class LogicShapes {
 
 
 
-        logic.ItemShape = draw2d.shape.layout.VerticalLayout.extend({
+        logic.NodeInstanceShape = draw2d.shape.layout.HorizontalLayout.extend({
 
 
             init: function (attr, element: NodeInstance2RulePage, linkService: LinkService) {
@@ -343,6 +389,52 @@ export class LogicShapes {
                 this._super($.extend({ id: element.key, bgColor: "#EEEEEE", alpha: 1, color: "#000000", stroke: 1, radius: 0, x: element.X, y: element.Y, keepAspectRatio: false, minWidth: 80 }, attr));
 
                 this.setUserData(element);
+
+                let dataType = "b";
+
+                switch (element.NodeInstance.NodeTemplate.NodeTypeEnum) {
+                    case NodeDataTypeEnum.Boolean:
+                        dataType = "b";
+                        break;
+                    case NodeDataTypeEnum.Date:
+                        dataType = "d";
+                        break;
+                    case NodeDataTypeEnum.DateTime:
+                        dataType = "dt";
+                        break;
+                    case NodeDataTypeEnum.Double:
+                        dataType = "db";
+                        break;
+                    case NodeDataTypeEnum.Integer:
+                        dataType = "i";
+                        break;
+                    case NodeDataTypeEnum.String:
+                        dataType = "s";
+                        break;
+                    case NodeDataTypeEnum.Time:
+                        dataType = "t";
+                        break;
+                    case NodeDataTypeEnum.WindowState:
+                        dataType = "ws";
+                        break;
+                    case NodeDataTypeEnum.NoAttribute:
+                        dataType = "error";
+                        break;
+
+                }
+
+                this.dataTypeLabel = new logic.NodeInstanceText({
+                    text: dataType,
+                    padding: { top: 2.5, right: 5, bottom: 2, left: 5 },
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    fontColor: element.Inverted ? "red" : "#4a4a4a",
+                    stroke: 0,
+                    radius: 0,
+                    resizeable: false,
+                    fontSize: 8,
+                }, this.realParent, element);
+
                 this.label = new draw2d.shape.basic.Label({
                     text: element.Name,
                     textLength: "100%",
@@ -365,6 +457,21 @@ export class LogicShapes {
                         }
                     });
                 }
+
+                element.notifyChangeEvent.subscribe(async (v) => {
+                    if (v.propertyName === "Inverted") {
+                        this.dataTypeLabel.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
+
+                        try {
+
+                            if (element.itemMoved) {
+                                await ruleEngineService.updateItem(element, LogicUpdateScope.InvertedValueUpdated);
+                            }
+                        } catch (error) {
+                            errorHandler.notifyError(error);
+                        }
+                    }
+                });
 
                 if (element.Inputs.length > 0) {
                     const input = this.createPort("input");
@@ -499,20 +606,25 @@ export class LogicShapes {
                 this.on("move", (context) => {
                     element.X = context.x;
                     element.Y = context.y;
-
                     this.hideTooltip();
                 });
 
-
                 this.on("dragEnd", async (context, data) => {
                     try {
-                        await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+
+                        if (element.itemMoved) {
+                            await ruleEngineService.updateItem(element, LogicUpdateScope.Drag);
+                        }
                     } catch (error) {
                         errorHandler.notifyError(error);
                     }
                 });
 
 
+                if (element.Inputs.length > 0) {
+                    this.add(this.dataTypeLabel);
+
+                }
 
                 this.add(this.label);
             },
@@ -550,7 +662,8 @@ export class LogicShapes {
                 pos.y += this.canvas.getScrollTop()
 
                 this.tooltip.css({ 'top': pos.y, 'left': pos.x })
-            }, hideTooltip: function () {
+            },
+            hideTooltip: function () {
                 if (this.tooltip !== null) {
                     this.tooltip.remove();
                     this.tooltip = null;

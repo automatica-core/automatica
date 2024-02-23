@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Control;
 using System;
+using Automatica.Core.Base.Localization;
 
 [assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
 namespace Automatica.Core.Logic
@@ -59,5 +60,10 @@ namespace Automatica.Core.Logic
         /// Provides date and times (also fake ones for tests)
         /// </summary>
         TimeProvider TimeProvider { get; }
+
+        /// <summary>
+        /// Provides access to localizations
+        /// </summary>
+        public ILocalizationProvider LocalizationProvider { get; }
     }
 }

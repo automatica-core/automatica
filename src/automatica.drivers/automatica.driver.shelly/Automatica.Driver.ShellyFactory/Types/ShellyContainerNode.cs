@@ -48,7 +48,7 @@ namespace Automatica.Driver.ShellyFactory.Types
             foreach (var valueNode in ValueNodes)
             {
                 var value = await valueNode.FromStatusUpdate(statusEvent);
-                if(value!= null)
+                if(value != null)
                     valueNode.DispatchRead(value);
             }
         }

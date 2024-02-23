@@ -15,7 +15,7 @@ import { VisuObjectInstance, VisuObjectSourceType } from "src/app/base/model/vis
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { AreaInstance } from "src/app/base/model/areas";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
-import { NodeInstanceService } from "src/app/services/node-instance.service";
+import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 
 @Component({
   selector: "app-visualisation-edit",
@@ -101,7 +101,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
     private areaService: AreaService,
     private userGroupsService: GroupsService,
     appService: AppService,
-    private nodeInstanceService: NodeInstanceService) {
+    private nodeInstanceService: LogicEditorInstanceService) {
     super(notify, translate, appService);
 
     appService.setAppTitle("VISU.NAME");

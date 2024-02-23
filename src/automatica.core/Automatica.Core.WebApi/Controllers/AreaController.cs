@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Base.LinqExtensions;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
 using P3.Knx.Core.Ets;
 
 [assembly:InternalsVisibleTo("Automatica.Core.WebApi.Tests")]
@@ -63,7 +65,19 @@ namespace Automatica.Core.WebApi.Controllers
 
             try
             {
-                return await ProcessFile(parentInstance, password, myFile);
+                var response =  (await ProcessFile(password, myFile)).ToList();
+
+                response.First().This2Parent = null;
+                var flatten = response.Flatten(a => a.InverseThis2ParentNavigation).ToList();
+
+                foreach (var area in flatten)
+                {
+                    area.InverseThis2ParentNavigation = null;
+                    area.This2ParentNavigation = null;
+                    area.This2AreaTemplateNavigation = null;
+                }
+
+                return flatten;
             }
             catch
             {
@@ -73,7 +87,7 @@ namespace Automatica.Core.WebApi.Controllers
             return new List<AreaInstance>();
         }
 
-        internal async Task<IEnumerable<AreaInstance>> ProcessFile(AreaInstance parentInstance, string password, IFormFile formFile)
+        internal async Task<IEnumerable<AreaInstance>> ProcessFile(string password, IFormFile formFile)
         {
             var targetLocation = ServerInfo.GetTempPath();
             var path = Path.Combine(targetLocation, formFile.FileName);
@@ -86,18 +100,14 @@ namespace Automatica.Core.WebApi.Controllers
 
 
             var etsProject = new EtsProjectParser().ParseEtsFile(path, password, GroupAddressStyle.ThreeLevel);
-
+            var instances = new List<AreaInstance>();
             foreach (var b in etsProject.Buildings)
             {
-                var bInstance = CreateAreaInstance(parentInstance, b);
-
-                parentInstance.InverseThis2ParentNavigation.Add(bInstance);
+                var bInstance = CreateAreaInstance(null, b);
+                instances.Add(bInstance);
             }
 
-            return new List<AreaInstance>
-            {
-                parentInstance
-            };
+            return instances;
         }
 
         private AreaInstance CreateAreaInstance(AreaInstance parent, EtsBuildingPart building)
@@ -139,7 +149,7 @@ namespace Automatica.Core.WebApi.Controllers
                 Description = building.Description,
                 Icon = icon,
                 This2AreaTemplate = typeGuid,
-                This2Parent = parent.ObjId,
+                This2Parent = parent?.ObjId,
                 CreatedAt = DateTimeOffset.Now,
                 ModifiedAt = DateTimeOffset.Now
             };
@@ -170,8 +180,10 @@ namespace Automatica.Core.WebApi.Controllers
                 {
                     foreach (var instance in instances)
                     {
+                        instance.This2AreaTemplateNavigation = null;
                         instance.InverseThis2ParentNavigation = null;
                         instance.This2ParentNavigation = null;
+
                         instance.CreatedAt = DateTimeOffset.Now;
                         instance.ModifiedAt = DateTimeOffset.Now;
                         await DbContext.AreaInstances.AddAsync(instance);
@@ -198,11 +210,17 @@ namespace Automatica.Core.WebApi.Controllers
             return _areaCache.All().Where(a => IsUserInGroup(a.This2UserGroup));
         }
 
-        private async Task SaveAreaInstanceRec(AreaInstance instance)
+        [HttpGet("all")]
+        [Authorize]
+        [Authorize(Policy = Role.AdminRole)]
+        public IEnumerable<AreaInstance> GetAllInstances()
+        {
+            return _areaCache.All();
+        }
+
+        private async Task SaveAreaInstance(AreaInstance instance)
         {
             var existingArea = await DbContext.AreaInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
-            var childrens = instance.InverseThis2ParentNavigation ?? new List<AreaInstance>(); 
-
             instance.InverseThis2ParentNavigation = null;
             instance.This2ParentNavigation = null;
             instance.This2UserGroupNavigation = null;
@@ -213,17 +231,98 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 instance.CreatedAt = DateTimeOffset.Now;
                 await DbContext.AreaInstances.AddAsync(instance);
+                _areaCache.Add(instance.ObjId, instance);
             }
             else
             {
                 DbContext.Entry(instance).State = EntityState.Modified;
                 DbContext.AreaInstances.Update(instance);
+                _areaCache.Update(instance.ObjId, instance);
             }
 
-            foreach (var child in childrens)
+        }
+
+        private async Task RemoveInstanceRecursive(AreaInstance parent)
+        {
+            var area = _areaCache.GetSingle(DbContext, parent.ObjId);
+            foreach (var child in area.InverseThis2ParentNavigation)
             {
-                await SaveAreaInstanceRec(child);
+                await RemoveInstanceRecursive(child);
+
+                child.InverseThis2ParentNavigation = null;
+                child.This2AreaTemplateNavigation = null;
+                child.This2ParentNavigation = null;
+
+                DbContext.Remove(child);
+                _areaCache.Remove(child.ObjId);
             }
+
+            parent.This2AreaTemplateNavigation = null;
+            parent.This2ParentNavigation = null;
+            parent.InverseThis2ParentNavigation = null;
+
+            DbContext.Remove(parent);
+            _areaCache.Remove(parent.ObjId);
+
+        }
+
+        [HttpDelete("{areaInstanceId}")]
+        [Authorize]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IEnumerable<AreaInstance>> RemoveInstance(Guid areaInstanceId)
+        {
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
+            {
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    var area = _areaCache.GetSingle(DbContext, areaInstanceId);
+
+                    await RemoveInstanceRecursive(area);
+
+                    await DbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                return GetInstances();
+            });
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Authorize(Policy = Role.AdminRole)]
+        public async Task<IEnumerable<AreaInstance>> SaveInstance([FromBody] AreaInstance area)
+        {
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+            return await strategy.Execute(async
+                () =>
+            {
+                var transaction = await DbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    await SaveAreaInstance(area);
+
+                    await DbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not save data");
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+
+                return GetInstances();
+            });
         }
 
         [HttpPost]
@@ -238,37 +337,19 @@ namespace Automatica.Core.WebApi.Controllers
                 var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var areaInstances = areas as AreaInstance[] ?? areas.ToArray();
-                    var flatList = areaInstances.Flatten(a => a.InverseThis2ParentNavigation).ToList();
-                    foreach (var area in areaInstances)
+                    foreach (var area in areas)
                     {
-                        await SaveAreaInstanceRec(area);
+                        await SaveAreaInstance(area);
                     }
 
                     await DbContext.SaveChangesAsync();
 
-
-
-                    var removedNodes = from c in DbContext.AreaInstances.AsNoTracking()
-                        where !(from o in flatList select o.ObjId).Contains(c.ObjId)
-                        select c;
-                    var removedAreasList = removedNodes.ToList();
-                    DbContext.RemoveRange(removedAreasList);
-                    removedAreasList.ForEach(a => { _areaCache.Remove(a.ObjId); });
-
-
-                    await DbContext.SaveChangesAsync(true);
-                    await transaction.CommitAsync();
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
                     await transaction.RollbackAsync();
                     throw;
-                }
-                finally
-                {
-                    _areaCache.Clear();
                 }
                 return GetInstances();
             });

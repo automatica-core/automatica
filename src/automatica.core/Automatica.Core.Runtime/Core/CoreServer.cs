@@ -451,7 +451,10 @@ namespace Automatica.Core.Runtime.Core
                 await StopLogic(oldLogic.Value, oldLogic.Key, false);
                 await oldLogic.Value.Reload();
                 var ruleInstance = _logicInstanceCache.Get(ruleInstanceId);
+                
+                _logicInstanceStore.Update(ruleInstance, oldLogic.Value);
                 await RestartLogic(oldLogic.Value, ruleInstance);
+
             }
             else
             {
@@ -698,7 +701,8 @@ namespace Automatica.Core.Runtime.Core
                 _serviceProvider.GetRequiredService<IServerCloudApi>(), 
                 _licenseContext,
                 _controlContext,
-                DateTimeHelper.ProviderInstance);
+                DateTimeHelper.ProviderInstance,
+                _serviceProvider.GetRequiredService<ILocalizationProvider>());
 
             var rule = factory.CreateLogicInstance(ruleContext);
 
@@ -897,6 +901,7 @@ namespace Automatica.Core.Runtime.Core
                 _loggerFactory, 
                 _serviceProvider,
                 _controlContext,
+                DateTimeHelper.ProviderInstance,
                 false);
 
             var driver = await _driverFactoryLoader.LoadDriverFactory(nodeInstance, factory, config);

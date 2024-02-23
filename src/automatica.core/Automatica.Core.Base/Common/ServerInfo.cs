@@ -175,22 +175,44 @@ namespace Automatica.Core.Base.Common
 
         public static string GetLogDirectory()
         {
-            var logDirectory = GetBasePath();
-            logDirectory = Path.Combine(logDirectory, "logs");
+            var logDirectory = Path.Combine(GetPersistentDirectory(), "logs");
             return logDirectory;
         }
         public static string GetTrendingDirectory()
         {
-            var logDirectory = GetBasePath();
-            logDirectory = Path.Combine(logDirectory, "trending");
-            return logDirectory;
+            var trendingDirectory = Path.Combine(GetPersistentDirectory(), "trending");
+            return trendingDirectory;
         }
 
         public static string GetRemanentDirectory()
         {
-            var logDirectory = GetBasePath();
-            logDirectory = Path.Combine(logDirectory, "remanent");
-            return logDirectory;
+            var remanentDirectory = Path.Combine(GetPersistentDirectory(), "remanent");
+            return remanentDirectory;
+        }
+
+        public static string GetBackupDirectory()
+        {
+            var remanentDirectory = Path.Combine(GetPersistentDirectory(), "backup");
+            return remanentDirectory;
+        }
+
+        public static string GetDefaultPluginDirectory()
+        {
+            var pluginsDirectory = Path.Combine(GetPersistentDirectory(), "plugins");
+            return pluginsDirectory;
+        }
+
+        public static string GetPersistentDirectory()
+        {
+            var persistentDirectory = GetBasePath();
+            persistentDirectory = Path.Combine(persistentDirectory, "persistent");
+
+            if (!Directory.Exists(persistentDirectory))
+            {
+                Directory.CreateDirectory(persistentDirectory);
+            }
+            
+            return persistentDirectory;
         }
     }
 }

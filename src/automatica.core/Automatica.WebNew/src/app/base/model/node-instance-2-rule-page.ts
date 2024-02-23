@@ -5,6 +5,7 @@ import { RulePage } from "./rule-page"
 import { Guid } from "../utils/Guid";
 import { IPropertyModel } from "./interfaces/ipropertyModel";
 import { PropertyInstance } from "./property-instance";
+import { ITreeNode } from "./ITreeNode";
 
 export class NodeInterfaceInstance {
     ObjId: string;
@@ -17,7 +18,7 @@ export class NodeInterfaceInstance {
 
 @Model()
 
-export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
+export class NodeInstance2RulePage extends BaseModel implements IPropertyModel, ITreeNode {
     public get Properties(): PropertyInstance[] {
         if (!this.NodeInstance) {
             return [];
@@ -25,10 +26,16 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
         return this.NodeInstance.Properties;
     }
 
+    public set Properties(value) {
+
+    }
+
     public static KeyPrefix: string = "Attribute";
 
     @JsonProperty()
     ObjId: string;
+
+    public itemMoved: boolean = false;
 
     _x: number;
     public get X() {
@@ -37,6 +44,7 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     @JsonProperty()
     public set X(value: number) {
         this._x = value;
+        this.itemMoved = true;
     }
 
     _y: number;
@@ -46,15 +54,38 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
     @JsonProperty()
     public set Y(value: number) {
         this._y = value;
+        this.itemMoved = true;
     }
 
     public get FullName() {
         return this.NodeInstance.FullName;
     }
 
-    @JsonPropertyName("This2NodeInstanceNavigation")
-    NodeInstance: NodeInstance;
+    private _inverted: boolean;
+
     @JsonProperty()
+    public get Inverted(): boolean {
+        return this._inverted;
+    }
+    public set Inverted(v: boolean) {
+        this._inverted = v;
+        this.notifyChange("Inverted");
+    }
+
+    
+    private _NodeInstance : NodeInstance;
+    
+    @JsonPropertyName("This2NodeInstanceNavigation")
+    public get NodeInstance() : NodeInstance {
+        return this._NodeInstance;
+    }
+    public set NodeInstance(v : NodeInstance) {
+        this._NodeInstance = v;
+        this.afterFromJson();
+    }
+    
+
+    @JsonPropertyName("This2RulePageNavigation")
     RulePage: RulePage;
 
     @JsonProperty()
@@ -65,6 +96,28 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
 
     Inputs: NodeInterfaceInstance[] = [];
     Outputs: NodeInterfaceInstance[] = [];
+
+    public get Id() {
+        return this.ObjId;
+    }
+
+    public get Validate(): boolean {
+        return false;
+    }
+
+    public get ParentId() {
+        return this.This2NodeInstance;
+    }
+    public get DisplayName() {
+        if (!this.RulePage) {
+            return "";
+        }
+        return this.RulePage.Name;
+    }
+
+    public setSaved(): void {
+        this.itemMoved = false;
+    }
 
     public static createFromNodeInstance(nodeInstance: NodeInstance, rulePage: RulePage) {
         const nd = new NodeInstance2RulePage();
@@ -80,30 +133,51 @@ export class NodeInstance2RulePage extends BaseModel implements IPropertyModel {
         super();
     }
 
+    Children: ITreeNode[] = [];
+    get Description(): string {
+        return "";
+    }
+    Parent: ITreeNode;
+    ValidationOk: boolean = true;
+    Value?: any = void 0;
+    Icon: string = "file";
+
+    getPropertyValue(property: string) {
+        throw new Error("Method not implemented.");
+    }
+    getPropertyValueById(id: string) {
+        throw new Error("Method not implemented.");
+    }
+    validate(): boolean {
+        throw new Error("Method not implemented.");
+    }
+
     afterFromJson() {
-        if (this.NodeInstance.NodeTemplate.IsReadable) {
-            const intf = new NodeInterfaceInstance();
-            intf.Name = this.ObjId + "O";
-            intf.PortId = this.ObjId + "O";
-            intf.ObjId = this.This2NodeInstance;
-            intf.NodeInstance2RulePageId = this.ObjId;
+        if (this.NodeInstance) {
+            if (this.NodeInstance.NodeTemplate.IsReadable) {
+                const intf = new NodeInterfaceInstance();
+                intf.Name = this.ObjId + "O";
+                intf.PortId = this.ObjId + "O";
+                intf.ObjId = this.This2NodeInstance;
+                intf.NodeInstance2RulePageId = this.ObjId;
 
-            this.Outputs.push(intf);
-        }
-        if (this.NodeInstance.NodeTemplate.IsWriteable) {
-            const intf = new NodeInterfaceInstance();
-            intf.Name = this.ObjId + "I";
-            intf.PortId = this.ObjId + "I";
-            intf.ObjId = this.This2NodeInstance;
-            intf.NodeInstance2RulePageId = this.ObjId;
+                this.Outputs.push(intf);
+            }
+            if (this.NodeInstance.NodeTemplate.IsWriteable) {
+                const intf = new NodeInterfaceInstance();
+                intf.Name = this.ObjId + "I";
+                intf.PortId = this.ObjId + "I";
+                intf.ObjId = this.This2NodeInstance;
+                intf.NodeInstance2RulePageId = this.ObjId;
 
-            this.Inputs.push(intf);
+                this.Inputs.push(intf);
+            }
         }
     }
 
 
     get Name(): string {
-        if(!this.NodeInstance) {
+        if (!this.NodeInstance) {
             return "unknown";
         }
         return this.NodeInstance.Name;

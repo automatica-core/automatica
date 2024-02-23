@@ -8,13 +8,14 @@ namespace Automatica.Core.Internals.Cache.Logic
 {
     internal class LogicCacheFacade : ILogicCacheFacade
     {
-        public LogicCacheFacade(ILogicInstanceCache instanceCache, ILogicPageCache pageCache, ILogicTemplateCache templateCache, ILinkCache linkCache, ILogicNodeInstanceCache logicNodeInstanceCache)
+        public LogicCacheFacade(ILogicInstanceCache instanceCache, ILogicPageCache pageCache, ILogicTemplateCache templateCache, ILinkCache linkCache, ILogicNodeInstanceCache logicNodeInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache)
         {
             LinkCache = linkCache;
             InstanceCache = instanceCache;
             PageCache = pageCache;
             TemplateCache = templateCache;
             LogicNodeInstanceCache = logicNodeInstanceCache;
+            LogicInterfaceInstanceCache = logicInterfaceInstanceCache;
         }
 
         public ILinkCache LinkCache { get; }
@@ -22,6 +23,8 @@ namespace Automatica.Core.Internals.Cache.Logic
         public ILogicPageCache PageCache { get; }
         public ILogicTemplateCache TemplateCache { get; }
         public ILogicNodeInstanceCache LogicNodeInstanceCache { get; }
+
+        public ILogicInterfaceInstanceCache LogicInterfaceInstanceCache { get; }
 
         public void ClearInstances()
         {
@@ -31,7 +34,16 @@ namespace Automatica.Core.Internals.Cache.Logic
 
             LogicNodeInstanceCache.Clear();
         }
-        
+
+
+        public void UpdateLogic(RuleInstance logic)
+        {
+            InstanceCache.Update(logic.ObjId, logic);
+            foreach(var ruleInterface in logic.RuleInterfaceInstance)
+            {
+                LogicInterfaceInstanceCache.Update(ruleInterface.ObjId, ruleInterface);
+            }
+        }
 
         public Task RemoveLink(Guid linkId)
         {

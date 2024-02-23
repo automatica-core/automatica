@@ -20,6 +20,16 @@ namespace Automatica.Core.Logic
         /// <returns>A list of <see cref="ILogicOutputChanged"/> with the output values who has changed</returns>
         IList<ILogicOutputChanged> ValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value);
 
+
+        /// <summary>
+        /// Will be called when an input value has changed
+        /// </summary>
+        /// <param name="instance">The instance of the interface</param>
+        /// <param name="source">The source of the value</param>
+        /// <param name="value">The dispatch value itself</param>
+        /// <returns>A list of <see cref="ILogicOutputChanged"/> with the output values who has changed</returns>
+        IList<ILogicOutputChanged> ValueChanged(RuleInterfaceInstance instance, IDispatchable source, DispatchValue value);
+
         /// <summary>
         /// Special data for the UI
         /// </summary>

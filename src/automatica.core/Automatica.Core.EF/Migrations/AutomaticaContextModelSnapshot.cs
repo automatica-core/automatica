@@ -532,6 +532,9 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<Guid>("ObjId")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Inverted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -1098,6 +1101,9 @@ namespace Automatica.Core.EF.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Inverted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

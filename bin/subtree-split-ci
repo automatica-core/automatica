@@ -91,6 +91,7 @@ remote automatica.logic.operations git@github.com:automatica-core/automatica.log
 remote automatica.sonos.control git@github.com:automatica-core/automatica.sonos.control.git
 remote automatica.logic.lightning git@github.com:automatica-core/automatica.logic.lightning.git
 remote automatica.logic.texttospeech git@github.com:automatica-core/automatica.logic.texttospeech.git
+remote automatica.logic.metering git@github.com:automatica-core/automatica.logic.metering.git
 
 # core repos
 split src/automatica.core automatica.core
@@ -138,6 +139,7 @@ split src/automatica.logics/automatica.logic.operations automatica.logic.operati
 split src/automatica.logics/automatica.sonos.control automatica.sonos.control
 split src/automatica.logics/automatica.logic.lightning automatica.logic.lightning
 split src/automatica.logics/automatica.logic.texttospeech automatica.logic.texttospeech
+split src/automatica.logics/automatica.logic.metering automatica.logic.metering
 
 
 
