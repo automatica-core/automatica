@@ -18,6 +18,7 @@ namespace P3.Logic.Time.DelayedOff
         private readonly System.Timers.Timer _timer;
 
         private bool _timerRunning;
+        private bool _triggerOnlyIfTrue = false;
     
 
         public DelayedOffRule(ILogicContext context) : base(context)
@@ -62,6 +63,10 @@ namespace P3.Logic.Time.DelayedOff
                     StartStopTimer();
                 }
             }
+            else if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.TriggerOnlyIfTrue)
+            {
+                _triggerOnlyIfTrue = Convert.ToBoolean(value);
+            }
             base.ParameterValueChanged(instance, source, value);
         }
 
@@ -85,6 +90,16 @@ namespace P3.Logic.Time.DelayedOff
         {
             if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleTrigger)
             {
+                if (_triggerOnlyIfTrue)
+                {
+                    var inputValue = Convert.ToBoolean(value);
+
+                    if (!inputValue)
+                    {
+                        return new  List<ILogicOutputChanged>();
+                    }
+                }
+
                 Context.Logger.LogDebug($">>> Starting timer - ticks in {_delay * 1000} <<<");
                 StartStopTimer();
             }
