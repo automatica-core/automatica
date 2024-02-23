@@ -165,6 +165,7 @@ namespace Automatica.Core.WebApi.Controllers
                         existingRuleInterfaceInstance.ValueString = ruleInterfaceInstance.ValueString;
                         existingRuleInterfaceInstance.ValueDouble = ruleInterfaceInstance.ValueDouble;
                         existingRuleInterfaceInstance.ValueInteger = ruleInterfaceInstance.ValueInteger;
+                        existingRuleInterfaceInstance.ValueBool = ruleInterfaceInstance.ValueBool;
                         existingRuleInterfaceInstance.Inverted = ruleInterfaceInstance.Inverted;
 
                         DbContext.Update(existingRuleInterfaceInstance);

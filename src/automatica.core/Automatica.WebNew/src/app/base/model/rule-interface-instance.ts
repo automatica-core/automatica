@@ -22,6 +22,7 @@ export class RuleInterfaceInstance extends BaseModel {
     }
 
 
+    private _valueBoolean: boolean;
     private _valueDouble: number;
     private _valueInteger: number;
     private _valueString: string
@@ -36,7 +37,7 @@ export class RuleInterfaceInstance extends BaseModel {
     IsLinked: boolean;
 
     private _inverted: boolean;
-    
+
     @JsonProperty()
     public get Inverted(): boolean {
         return this._inverted;
@@ -110,6 +111,9 @@ export class RuleInterfaceInstance extends BaseModel {
 
     public get Value(): any {
         switch (this.Template.ParameterDataType) {
+
+            case RuleInterfaceParameterDataType.Bool:
+                return this.ValueBool;
             case RuleInterfaceParameterDataType.Double:
                 return this.ValueDouble;
             case RuleInterfaceParameterDataType.Integer:
@@ -140,6 +144,9 @@ export class RuleInterfaceInstance extends BaseModel {
 
     public set Value(value: any) {
         switch (this.Template.ParameterDataType) {
+            case RuleInterfaceParameterDataType.Bool:
+                this.ValueBool = value === true || value === 'true' || value === 1;
+                break;
             case RuleInterfaceParameterDataType.Double:
                 this.ValueDouble = parseFloat(value);
                 break;
@@ -207,6 +214,15 @@ export class RuleInterfaceInstance extends BaseModel {
     public set ValueDouble(v: number) {
         this._valueDouble = v;
     }
+
+    @JsonProperty()
+    public get ValueBool(): boolean {
+        return this._valueBoolean;
+    }
+    public set ValueBool(v: boolean) {
+        this._valueBoolean = v;
+    }
+
 
 
 
