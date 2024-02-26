@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Automatica.Driver.Shelly.Common;
 using Automatica.Driver.Shelly.Gen2.Models;
+using Microsoft.Build.Framework;
 
 namespace Automatica.Driver.ShellyFactory.Types
 {
@@ -29,13 +30,13 @@ namespace Automatica.Driver.ShellyFactory.Types
         private readonly ShellyDriverDevice _client;
         private readonly Func<T, IShellyClient, Task<T>> _writeValueTask;
         private readonly Func<IShellyClient, Task<T>> _getValueTask;
-        private readonly Func<NotifyStatusEvent, T> _fromStatusUpdate;
+        private readonly Func<IShellyClient, NotifyStatusEvent, Task<T>> _fromStatusUpdate;
 
         public GenericValueNode(IDriverContext driverContext, 
             ShellyDriverDevice client, 
             Func<T, IShellyClient, Task<T>> writeValueTask,
             Func<IShellyClient, Task<T>> getValueTask, 
-            Func<NotifyStatusEvent, T> fromStatusUpdate = null) : base(driverContext)
+            Func<IShellyClient, NotifyStatusEvent, Task<T>> fromStatusUpdate = null) : base(driverContext)
         {
             _client = client;
             _writeValueTask = writeValueTask;
@@ -50,12 +51,11 @@ namespace Automatica.Driver.ShellyFactory.Types
 
         internal override async Task<object> FromStatusUpdate(NotifyStatusEvent statusEvent)
         {
-            await Task.CompletedTask;
             if (_fromStatusUpdate != null)
             {
                 try
                 {
-                    return _fromStatusUpdate(statusEvent);
+                    return await _fromStatusUpdate(_client.Client, statusEvent);
                 }
                 catch
                 {
@@ -76,7 +76,8 @@ namespace Automatica.Driver.ShellyFactory.Types
 
         protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            await Parent.Read(token); //delegate to parent, we need our parent to give us our base value
+            var value = await _getValueTask.Invoke(_client.Client);
+            DispatchRead(value);
             return true;
         }
 
