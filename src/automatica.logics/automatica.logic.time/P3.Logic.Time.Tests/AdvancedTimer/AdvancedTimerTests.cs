@@ -441,7 +441,7 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
         public async void TestTimerRule_Every10Minutes2()
         {
             var now = DateTime.Now;
-            FakeTimeProvider.SetDateTime(new DateTime(now.Year, now.Month, now.Day, now.Hour-1, 59, 59));
+            FakeTimeProvider.SetDateTime(new DateTime(now.Year, now.Month, now.Day, now.Hour - 1, 59, 59));
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
@@ -465,9 +465,40 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             Assert.Single(values);
             Assert.Equal(true, values.First().Value.Value);
             await Logic.Stop();
+
         }
 
+        [Fact]
+            public async void TestTimerRule_Every10Minutes3()
+            {
+                var now = DateTime.Now;
+                FakeTimeProvider.SetDateTime(new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0));
+                await Context.Dispatcher.ClearValues();
+                await Context.Dispatcher.ClearRegistrations();
+                await Logic.Stop();
 
-    }
+                var paramDelay = GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter);
+                paramDelay.ValueString =
+                    "{\"Value\":[{\"Text\":\"Every10Minutes\",\"StartDate\":\"2024-02-09T23:00:00.000Z\",\"EndDate\":\"2024-02-09T23:10:00.000Z\",\"RecurrenceRule\":\"FREQ=HOURLY\",\"AllDay\":false,\"TrackingState\":1}],\"TrackingState\":1}";
+                await Logic.Start();
+                FakeTimeProvider.SetDateTime(new DateTime(now.Year, now.Month, now.Day, now.Hour, 01, 00));
+                await Task.Delay(1200);
+
+                var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+                Assert.Single(values);
+                //Assert.Equal(true, values.First().Value.Value);
+
+                await Task.Delay(200);
+
+                values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+                Assert.Single(values);
+                Assert.Equal(true, values.First().Value.Value);
+                await Logic.Stop();
+            }
+
+
+        }
 }
 

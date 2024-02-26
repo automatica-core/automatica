@@ -289,7 +289,7 @@ namespace P3.Logic.Time.AdvancedTimer
                         endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day,
                             _timeProvider.GetLocalNow().Hour, endDate.Minute, endDate.Second);
 
-                        if (startDate < localNow)
+                        if (startDate.AddMinutes(5) < localNow)
                         {
                             startDate = startDate.AddHours(1);
                             endDate = endDate.AddHours(1);
