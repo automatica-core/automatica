@@ -18,6 +18,10 @@
       "NAME": "Shelly 1PM",
       "DESCRIPTION": ""
     },
+    "PLUGS": {
+      "NAME": "Shelly PlugS",
+      "DESCRIPTION": ""
+    },
     "PROPERTIES": {
       "ID": {
         "NAME": "Id"
@@ -38,7 +42,7 @@
         "NAME": "Use IP"
       },
       "IP": {
-        "NAME":  "IP"
+        "NAME": "IP"
       }
     },
     "METERS": {

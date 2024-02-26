@@ -19,9 +19,21 @@ namespace Automatica.Driver.ShellyFactory.Discovery
 
         public async Task<List<ShellyDevice>> SearchShellys()
         {
-            var devices = await _discovery.DiscoverAsync("_http._tcp.local.", default);
+            var httpLocal = await SearchShellys("_http._tcp.local.");
+            var shellyTcp = await SearchShellys("_shelly._tcp.local.");
 
-            var shellyList= devices.Where(a => a.DisplayName.Contains("shelly"));
+            var retList = new List<ShellyDevice>();
+            retList.AddRange(httpLocal);
+            retList.AddRange(shellyTcp);
+
+            return retList.DistinctBy(a => a.Id).ToList();
+        }
+
+        private async Task<List<ShellyDevice>> SearchShellys(string service)
+        {
+            var devices = await _discovery.DiscoverAsync(service, default);
+
+            var shellyList = devices.Where(a => a.DisplayName.Contains("shelly") || a.Services.Any(a => a.Value.ServiceName.Contains("shelly")));
             var ret = new List<ShellyDevice>();
 
             foreach (var shelly in shellyList)
@@ -51,13 +63,16 @@ namespace Automatica.Driver.ShellyFactory.Discovery
                     case "plus1pm":
                         type = ShellyDeviceType.ShellyPlus1Pm;
                         break;
+                    case "plusplugs":
+                        type = ShellyDeviceType.ShellyPlugS;
+                        break;
                     default:
                         continue;
                 }
 
                 ShellyGeneration generation;
 
-                var httpService = shelly.Services.First(a => a.Key.EndsWith("_http._tcp.local."));
+                var httpService = shelly.Services.First(a => a.Key.EndsWith(service));
 
                 if (httpService.Value.Properties.First().Any(a => a.Key == "gen"))
                 {
@@ -79,8 +94,8 @@ namespace Automatica.Driver.ShellyFactory.Discovery
                 {
                     generation = ShellyGeneration.Gen1;
                 }
-
-                ret.Add(new ShellyDevice(id, name,type, shelly.IpAddress, generation));
+                
+                ret.Add(new ShellyDevice(id, name, id.Split("-")[^1], type, shelly.IpAddress, generation));
             }
 
             return ret;

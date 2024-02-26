@@ -19,13 +19,14 @@ namespace Automatica.Driver.ShellyFactory
 
         public static Guid ShellyPlus1PmDevice = new Guid("10f3e8f5-0d46-4aa7-aa93-c66abc67775b");
         public static Guid ShellyPlus2PmDevice = new Guid("851de89f-3ce3-42d5-85fb-62901fd09d2a");
+        public static Guid ShellyPlugS = new Guid("7b34fcf1-560d-49e5-b34e-76b38dd2fac6");
         public override string DriverName => "Shelly";
 
         public override Guid DriverGuid => DriverId;
 
         public override string ImageName => "automaticacore/plugin-automatica.driver.shelly";
 
-        public override Version DriverVersion => new Version(0, 0, 0, 6);
+        public override Version DriverVersion => new Version(0, 1, 0, 0);
 
         public override bool InDevelopmentMode => true;
 
@@ -54,6 +55,7 @@ namespace Automatica.Driver.ShellyFactory
 
             InitShellyPlus1PmTemplates(factory);
             InitShellyPlus2PmTemplates(factory);
+            InitShellyPlugSTemplates(factory);
         }
 
         private void InitShelly1Templates(INodeTemplateFactory factory)
@@ -170,6 +172,34 @@ namespace Automatica.Driver.ShellyFactory
 
         }
 
+        private void InitShellyPlugSTemplates(INodeTemplateFactory factory)
+        {
+            var guid = ShellyPlugS;
+            factory.CreateInterfaceType(guid, "SHELLY.PLUGS.NAME", "SHELLY.PLUGS.DESCRIPTION", int.MaxValue, int.MaxValue, false);
+            factory.CreateNodeTemplate(guid, "SHELLY.PLUGS.NAME", "SHELLY.PLUGS.DESCRIPTION", "shelly-plugs", DriverGuid,
+                guid, false, true, true, false, true, NodeDataType.NoAttribute, Int32.MaxValue, false);
+
+            InitShellyParams(factory, guid, ShellyGeneration.Gen2);
+
+            var shelly1RelayInterface = new Guid("d38c9e65-85fe-4e7c-8d61-50ea77a458c9");
+            factory.CreateInterfaceType(shelly1RelayInterface, "SHELLY.RELAYS.NAME",
+                "SHELLY.RELAYS.DESCRIPTION", 1, 1, false);
+            factory.CreateNodeTemplate(shelly1RelayInterface, "SHELLY.RELAYS.NAME",
+                "SHELLY.RELAYS.DESCRIPTION", "shelly-relays", guid, shelly1RelayInterface,
+                true, false, true, false, true, NodeDataType.NoAttribute, 1, false, true);
+
+            CreateRelayInterface(factory, new Guid("45d2e1fb-55ca-4eba-a08d-5a654973d947"), shelly1RelayInterface, 0, 1);
+
+            var shellyMeterInterface = new Guid("0fbb5c5b-091e-42ee-bb5e-eec14e9e7245");
+            factory.CreateInterfaceType(shellyMeterInterface, "SHELLY.METERS.NAME",
+                "SHELLY.METERS.DESCRIPTION", 2, 1, false);
+            factory.CreateNodeTemplate(shellyMeterInterface, "SHELLY.METERS.NAME",
+                "SHELLY.METERS.DESCRIPTION", "shelly-meters", guid, shellyMeterInterface,
+                true, false, true, false, true, NodeDataType.NoAttribute, 1, false, true);
+
+            CreateMeterInterface(factory, new Guid("e1ab3229-544c-4f5e-8eea-05f3c4c5f66f"), shellyMeterInterface, 0, 1);
+
+        }
 
         private void InitShelly25Templates(INodeTemplateFactory factory)
         {

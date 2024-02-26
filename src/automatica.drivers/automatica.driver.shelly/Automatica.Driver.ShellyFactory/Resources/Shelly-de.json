@@ -18,6 +18,10 @@
       "NAME": "Shelly 1PM",
       "DESCRIPTION": ""
     },
+    "PLUGS": {
+      "NAME": "Shelly PlugS",
+      "DESCRIPTION": ""
+    },
     "PROPERTIES": {
       "ID": {
         "NAME": "Id"
@@ -77,7 +81,7 @@
       },
       "FLIP_BACK_TIMER": {
         "NAME": "Reset Interval",
-        "DESCRIPTION":  "Reset Interval in Sekunden"
+        "DESCRIPTION": "Reset Interval in Sekunden"
       }
     },
     "ROLLER": {

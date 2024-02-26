@@ -1,9 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Automatica.Driver.Shelly.Gen2.Models
 {
@@ -13,10 +11,10 @@ namespace Automatica.Driver.Shelly.Gen2.Models
         public int Id { get; set; }
 
         [JsonProperty("apower")]
-        public int Power { get; set; }
+        public double Power { get; set; }
 
         [JsonProperty("current")]
-        public int Current { get; set; }
+        public double Current { get; set; }
 
         [JsonProperty("output")]
         public bool Output { get; set; }

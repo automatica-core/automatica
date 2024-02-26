@@ -78,7 +78,7 @@ namespace Automatica.Driver.ShellyFactory
 
             foreach (var device in devices)
             {
-                if (_devices.Any(a => a.ShellyId == device.Id))
+                if (_devices.Any(a => a.ShellyId == device.DeviceId))
                 {
                     DriverContext.Logger.LogInformation($"Device with id {device.Id} already added...");
                     continue;   
@@ -100,13 +100,16 @@ namespace Automatica.Driver.ShellyFactory
                     case ShellyDeviceType.ShellyPlus2Pm:
                         node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlus2PmDevice);
                         break;
+                    case ShellyDeviceType.ShellyPlugS:
+                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.ShellyPlugS);
+                        break;
                     default:
                         DriverContext.Logger.LogInformation($"Device with id {device.Id} not supported...");
                         continue;
                 
                 }
                 var idProp = node.GetProperty(ShellyFactory.DeviceIdPropertyKey);
-                idProp.Value = device.Id.Split("-")[^1];
+                idProp.Value = device.DeviceId;
                 node.Name = device.Name;
 
                 var ipProp = node.GetProperty(ShellyFactory.DeviceIpPropertyKey);

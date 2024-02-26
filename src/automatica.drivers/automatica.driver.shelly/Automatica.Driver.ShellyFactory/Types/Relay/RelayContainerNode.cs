@@ -61,11 +61,9 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                             return relayState;
                         },
                         async client => await client.GetRelayState(RelayId, CancellationToken.None),
-                        notifyStatusEvent =>
+                        async (client, notifyStatusEvent) =>
                         {
-                            if(notifyStatusEvent.GetSwitch(RelayId) != null)
-                                return notifyStatusEvent.GetValueFromSwitch(RelayId, a => a.Output);
-                            return null;
+                            return await client.GetRelayState(RelayId, CancellationToken.None);
                         });
                 case "relay-timer":
                     return new GenericValueNode<bool, bool>(ctx, Client,

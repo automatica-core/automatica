@@ -48,7 +48,11 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                             await Task.CompletedTask;
                             return 0;
                         },
-                        async client => await client.GetRelayPower(RelayId), @event => @event.GetValueFromSwitch(RelayId, a => a.Power));
+                        async client => await client.GetRelayPower(RelayId), 
+                        async (client, @event) =>
+                        {
+                            return await client.GetRelayPower(RelayId);
+                        });
                 case "meter-overpower":
                     return new GenericValueNode<bool, bool>(ctx, Client,
                         async (o, client) =>
