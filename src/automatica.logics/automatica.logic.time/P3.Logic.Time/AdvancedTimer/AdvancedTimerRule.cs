@@ -288,6 +288,12 @@ namespace P3.Logic.Time.AdvancedTimer
                             _timeProvider.GetLocalNow().Hour, startDate.Minute, startDate.Second);
                         endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day,
                             _timeProvider.GetLocalNow().Hour, endDate.Minute, endDate.Second);
+
+                        if (startDate < localNow)
+                        {
+                            startDate = startDate.AddHours(1);
+                            endDate = endDate.AddHours(1);
+                        }
                     }
                     
                     return (TimeZoneInfo.ConvertTime(startDate, timezone), TimeZoneInfo.ConvertTime(endDate, timezone));

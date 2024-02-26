@@ -411,7 +411,7 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
         public async void TestTimerRule_Every10Minutes()
         {
             var now = DateTime.Now;
-            FakeTimeProvider.SetDateTime(new DateTime(now.Year, now.Month, now.Day, 16, 0, 0));
+            FakeTimeProvider.SetDateTime(new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0));
             await Context.Dispatcher.ClearValues();
             await Context.Dispatcher.ClearRegistrations();
             await Logic.Stop();
