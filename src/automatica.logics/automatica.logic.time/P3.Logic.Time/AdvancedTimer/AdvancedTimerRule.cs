@@ -141,7 +141,7 @@ namespace P3.Logic.Time.AdvancedTimer
                 }
             }
 
-            if (tickTime.TotalMilliseconds < 0)
+            if (tickTime.TotalMilliseconds <= 0)
             {
                 if (!isDayDif)
                 {
@@ -194,7 +194,7 @@ namespace P3.Logic.Time.AdvancedTimer
                 _value = false;
             }
 
-            _timer.Interval = timerTickTime == 0 ? 1 : (timerTickTime < 0 ? timerTickTime * -1 : timerTickTime);
+            _timer.Interval = timerTickTime == 0 ? 1000 : (timerTickTime < 0 ? timerTickTime * -1 : timerTickTime);
             Context.Logger.LogDebug(
                 $"Timer {Context.RuleInstance.Name}: Next tick time is {_timer.Interval}ms at {startTime}");
             _timer.Start();
@@ -280,6 +280,14 @@ namespace P3.Logic.Time.AdvancedTimer
                     if (startDate > endDate)
                     {
                         startDate = startDate.AddDays(-1);
+                    }
+
+                    if (rfcStart.Freq.Frequency == Frequency.HOURLY)
+                    {
+                        startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day,
+                            _timeProvider.GetLocalNow().Hour, startDate.Minute, startDate.Second);
+                        endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day,
+                            _timeProvider.GetLocalNow().Hour, endDate.Minute, endDate.Second);
                     }
                     
                     return (TimeZoneInfo.ConvertTime(startDate, timezone), TimeZoneInfo.ConvertTime(endDate, timezone));
