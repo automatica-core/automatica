@@ -34,8 +34,8 @@ namespace P3.Driver.SonosDriverFactory.Attributes
             }
             catch (Exception ex)
             {
-                DriverContext.Logger.LogError(ex, "Error reading...");
-                return false;
+                DriverContext.Logger.LogError(ex, $"Error reading attribute {FullName}...");
+                throw;
             }
         }
 

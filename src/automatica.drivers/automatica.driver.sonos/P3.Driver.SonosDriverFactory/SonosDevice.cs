@@ -24,6 +24,7 @@ namespace P3.Driver.SonosDriverFactory
 
         public SonosController Controller => _controller;
         private readonly Timer _readTimer = new Timer();
+        private int _errorReadCount = 0;
 
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
@@ -56,16 +57,36 @@ namespace P3.Driver.SonosDriverFactory
                 {
                     await child.Read(token);
                 }
+
+                _errorReadCount = 0;
             }
             catch (Exception ex)
             {
+                _errorReadCount++;
                 _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
                 DriverContext.Logger.LogError(ex, "Error reading...");
                 return false;
             }
             finally
             {
+                if (_errorReadCount >= 10)
+                {
+                    //if we do use a variable ip....
+                    if (_useFixedIp.HasValue && !_useFixedIp.Value)
+                    {
+                        var newDeviceIp = await GetDeviceIp();
+
+                        if (!string.IsNullOrEmpty(newDeviceIp))
+                        {
+                            DriverContext.Logger.LogInformation($"Created a new controller index with ip {newDeviceIp} for device with id {_id}");
+                            _controller = _sonosControllerFactory.Create(newDeviceIp, DriverContext.Logger);
+                        }
+                    }
+                    _errorReadCount = 0;
+                }
+
                 _semaphoreSlim.Release();
+
             }
 
             return true;
@@ -89,28 +110,40 @@ namespace P3.Driver.SonosDriverFactory
             }
             else
             {
-                var scan = await SonosDiscovery.DiscoverSonos();
+                var dynamicIp = await GetDeviceIp();
 
-                if (scan.Count == 0)
+                if (string.IsNullOrEmpty(dynamicIp))
                 {
-                    DriverContext.Logger.LogError($"{Name}: Could not find any sonos device..");
                     return false;
                 }
 
-                var device = scan.FirstOrDefault(a => a.Uuid == _id);
-
-                if (device == null)
-                {
-                    DriverContext.Logger.LogError($"{Name}: Could not find sonos device with id {_id}..");
-                    return false;
-                }
-
-                ip = device.Location.Host;
+                ip = dynamicIp;
             }
 
             _controller = _sonosControllerFactory.Create(ip, DriverContext.Logger);
             _readTimer.Start();
             return await base.Start(token);
+        }
+
+        private async Task<string?> GetDeviceIp()
+        {
+            var scan = await SonosDiscovery.DiscoverSonos();
+
+            if (scan.Count == 0)
+            {
+                DriverContext.Logger.LogError($"{Name}: Could not find any sonos device..");
+                return null;
+            }
+
+            var device = scan.FirstOrDefault(a => a.Uuid == _id);
+
+            if (device == null)
+            {
+                DriverContext.Logger.LogError($"{Name}: Could not find sonos device with id {_id}..");
+                return null;
+            }
+
+            return device.Location.Host;
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)
