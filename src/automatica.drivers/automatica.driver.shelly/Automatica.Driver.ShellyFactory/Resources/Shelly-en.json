@@ -18,6 +18,14 @@
       "NAME": "Shelly 1PM",
       "DESCRIPTION": ""
     },
+    "PLUS_1PM": {
+      "NAME": "Shelly Plus 1PM",
+      "DESCRIPTION": ""
+    },
+    "PLUS_2PM": {
+      "NAME": "Shelly Plus 2PM",
+      "DESCRIPTION": ""
+    },
     "PLUGS": {
       "NAME": "Shelly PlugS",
       "DESCRIPTION": ""
