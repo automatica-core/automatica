@@ -233,9 +233,6 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         {
             var play = Convert.ToBoolean(value);
 
-            if(_lastPlayValue == play)
-                return ret;
-
             _lastPlayValue = play;
             if (play)
             {
