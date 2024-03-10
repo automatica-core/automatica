@@ -233,6 +233,9 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
         {
             var play = Convert.ToBoolean(value);
 
+            if(_lastPlayValue == play)
+                return ret;
+
             _lastPlayValue = play;
             if (play)
             {
@@ -243,8 +246,14 @@ public class SonosControlLogic : Automatica.Core.Logic.Logic
                 ret.Add(new LogicOutputChanged(_pauseOutputStatus, false));
                 ret.Add(new LogicOutputChanged(_volumeOutputStatus, _currentVolume));
                 ret.Add(new LogicOutputChanged(_playOutputStatus, true));
+
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(100);
+                    await Context.Dispatcher.DispatchValue(new LogicOutputChanged(_playOutputStatus, true).Instance, true);
+                });
             }
-            else if (_currentlyPlaying.HasValue)
+            else if (_currentlyPlaying.HasValue && _currentlyPlaying.Value)
             {
                 _currentlyPlaying = false;
                 ret.Add(new LogicOutputChanged(_pauseOutputStatus, true));
