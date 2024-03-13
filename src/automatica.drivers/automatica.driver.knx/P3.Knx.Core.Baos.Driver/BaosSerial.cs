@@ -1,9 +1,9 @@
 ﻿using Automatica.Core.Driver.Utility;
 using Microsoft.Extensions.Logging;
 using P3.Knx.Core.Baos.Driver.Frames;
-using RJCP.IO.Ports;
 using System;
 using System.IO;
+using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +12,7 @@ namespace P3.Knx.Core.Baos.Driver
     public class BaosSerial
     {
         private readonly string _port;
-        private SerialPortStream _stream;
+        private SerialPort _stream;
         private bool _connected;
         private bool _eventHandling = true;
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
@@ -44,7 +44,7 @@ namespace P3.Knx.Core.Baos.Driver
                 _stream.DiscardOutBuffer();
                 var buffer = frame.ToByteFrame();
                 Logger.LogHexOut(buffer);
-                await _stream.WriteAsync(buffer);
+                _stream.Write(buffer.ToArray(),0, buffer.Length);
 
                 if (frame is AckFrame)
                 {
@@ -67,7 +67,7 @@ namespace P3.Knx.Core.Baos.Driver
         {
             try
             {
-                _stream = new SerialPortStream(_port, 19200, 8, Parity.Even,
+                _stream = new SerialPort(_port, 19200,  Parity.Even, 8,
                     StopBits.One);
 
                 _stream.ReadTimeout = 500;
@@ -159,7 +159,7 @@ namespace P3.Knx.Core.Baos.Driver
                     Thread.Sleep(100);
                     byte[] shortFrame = new byte[5];
                     shortFrame[0] = (byte)firstChar;
-                    var bytesRead = await _stream.ReadAsync(shortFrame, 1, 4);
+                    var bytesRead = _stream.Read(shortFrame, 1, 4);
 
                     if (bytesRead != 4)
                     {
@@ -185,7 +185,7 @@ namespace P3.Knx.Core.Baos.Driver
 
                     byte[] headerBuffer = new byte[4];
                     headerBuffer[0] = (byte)firstChar;
-                    var bytesRead = await _stream.ReadAsync(headerBuffer, 1, 3);
+                    var bytesRead = _stream.Read(headerBuffer, 1, 3);
 
                     Logger.LogHexIn(headerBuffer);
 
@@ -200,10 +200,10 @@ namespace P3.Knx.Core.Baos.Driver
                     {
                         int lengthToRead = headerBuffer[1] + 2; //read with checksum and stop byte
                         byte[] data = new byte[lengthToRead];
+
+                        bytesRead = _stream.Read(data, 0, data.Length);
+
                         var dataMemory = new Memory<byte>(data);
-
-                        bytesRead = await _stream.ReadAsync(dataMemory);
-
                         Logger.LogHexIn(dataMemory);
 
                         if (bytesRead != lengthToRead)
