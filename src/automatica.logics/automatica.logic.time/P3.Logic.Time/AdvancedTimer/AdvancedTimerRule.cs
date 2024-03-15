@@ -20,8 +20,8 @@ namespace P3.Logic.Time.AdvancedTimer
         private readonly System.Timers.Timer _timer;
         private readonly object _lock = new object();
         
-        private readonly TimeProvider _timeProvider = TimeProvider.System;
-        
+        private readonly TimeProvider _timeProvider = DateTimeHelper.ProviderInstance;
+
 
         private bool _value;
 
@@ -97,7 +97,9 @@ namespace P3.Logic.Time.AdvancedTimer
                 }
                 else
                 {
-                    _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+                    Context.Logger.LogInformation($"Next tick is not today, recalculate in 1 minute again");
+                    _timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds;
+                    _timer.Start();
 
                     Context.Logger.LogInformation($"Set value to {false}");
                     Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
@@ -105,7 +107,9 @@ namespace P3.Logic.Time.AdvancedTimer
             } 
             else
             {
-                _timer.Interval = TimeSpan.FromHours(1).TotalMilliseconds;
+                Context.Logger.LogInformation($"Next tick is not found, recalculate in 15 minute again");
+                _timer.Interval = TimeSpan.FromMinutes(15).TotalMilliseconds;
+                _timer.Start();
 
                 Context.Logger.LogInformation($"Set value to {false}");
                 Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, false).Instance, false);
