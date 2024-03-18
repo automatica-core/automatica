@@ -146,7 +146,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 useNatValue = useNat != null && useNat.Value;
                 var ip = new IpTunnelingConnectorParameters(ipAddress, ipPort: port, useNat: useNatValue)
                 {
-                    AutoReconnect = true
+                    AutoReconnect = false
                 };
 
                 if (_secureDriver)
@@ -232,16 +232,16 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 var state = _tunneling.ConnectionState == BusConnectionState.Connected;
                 _gwState?.SetGatewayState(state);
 
-                //if (!state)
-                //{
-                //    DriverContext.Logger.LogDebug($"GW {Name} disconnected, try to reconnect");
+                if (!state)
+                {
+                    DriverContext.Logger.LogDebug($"GW {Name} disconnected, try to reconnect");
 
-                //    await DisposeConnection();
-                //    await ConstructTunnelingConnection();
-                //    await StartConnection();
-                     
-                //    DriverContext.Logger.LogDebug($"State is now {_tunneling.ConnectionState}");
-                //}
+                    await DisposeConnection();
+                    await ConstructTunnelingConnection();
+                    await StartConnection();
+
+                    DriverContext.Logger.LogDebug($"State is now {_tunneling.ConnectionState}");
+                }
             }
         }
 
