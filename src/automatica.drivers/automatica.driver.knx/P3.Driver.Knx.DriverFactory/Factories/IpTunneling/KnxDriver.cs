@@ -227,20 +227,20 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private async void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
         {
             DriverContext.Logger.LogError($"Connection state changed to {_tunneling.ConnectionState}");
-             if (_tunneling != null)
+            if (_tunneling != null)
             {
                 var state = _tunneling.ConnectionState == BusConnectionState.Connected;
                 _gwState?.SetGatewayState(state);
 
                 if (!state)
                 {
-                    DriverContext.Logger.LogDebug($"GW {Name} disconnected, try to reconnect");
+                    DriverContext.Logger.LogError($"GW {Name} disconnected, try to reconnect");
 
                     await DisposeConnection();
                     await ConstructTunnelingConnection();
                     await StartConnection();
 
-                    DriverContext.Logger.LogDebug($"State is now {_tunneling.ConnectionState}");
+                    DriverContext.Logger.LogError($"State is now {_tunneling.ConnectionState}");
                 }
             }
         }
