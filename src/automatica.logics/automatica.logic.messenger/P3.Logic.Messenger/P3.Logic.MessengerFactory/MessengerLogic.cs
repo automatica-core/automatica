@@ -40,7 +40,7 @@ namespace P3.Logic.Messenger
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
 
-            if (_to.Count > 0 &&  value != null && value != _value)
+            if (_to.Count > 0 &&  value != null && value != _value && _value != null)
             {
                 try
                 {
