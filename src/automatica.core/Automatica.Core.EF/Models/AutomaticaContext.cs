@@ -71,6 +71,8 @@ namespace Automatica.Core.EF.Models
         public virtual DbSet<Trending> Trendings { get; set; }
         public virtual DbSet<Slave> Slaves { get; set; }
 
+        public virtual DbSet<Notification> Notifications { get; set; }
+
         public IConfiguration Configuration { get; }
 
         public DatabaseTypeEnum DatabaseType { get; private set; }
@@ -1417,6 +1419,33 @@ namespace Automatica.Core.EF.Models
 
                 entity.Property(e => e.ClientId);
                 entity.Property(e => e.ClientKey);
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasKey(e => e.ObjId);
+                entity.Property(e => e.ObjId).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Subject).IsRequired();
+                entity.Property(e => e.Body).IsRequired();
+
+                entity.Property(e => e.This2NodeInstance);
+                entity.Property(e => e.This2RuleInstance);
+                entity.Property(e => e.CreatedAt).HasColumnType("date"); 
+                entity.Property(e => e.DismissDate).HasColumnType("date"); 
+                entity.Property(e => e.Severity);
+
+                entity.HasOne(d => d.This2NodeInstanceNavigation)
+                    .WithMany().HasForeignKey(d => d.This2NodeInstance)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("NodeInstance2Notification");
+
+                entity.HasOne(d => d.This2RuleInstanceNavigation)
+                    .WithMany().HasForeignKey(a => a.This2RuleInstance)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("RuleInstance2Notification");
+
+                entity.Ignore(e => e.TypeInfo);
             });
         }
     }

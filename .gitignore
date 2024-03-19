@@ -40,3 +40,4 @@ src/automatica.core/Automatica.Core/wwwroot/
 src/automatica.core/Automatica.Web/dist
 
 packages/
+logs/*.log

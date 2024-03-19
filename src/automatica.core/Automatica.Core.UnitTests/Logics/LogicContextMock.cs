@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
@@ -61,6 +62,12 @@ namespace Automatica.Core.UnitTests.Base.Logics
         public TimeProvider TimeProvider => FakeTimeProvider.Instance;
 
         public ILocalizationProvider LocalizationProvider { get; }
+
+
+        public Task CreateNotification(string subject, string body, NotificationSeverity severity, CancellationToken token = default)
+        {
+            return Task.CompletedTask;
+        }
     }
 
     public class FakeTimeProvider : TimeProvider

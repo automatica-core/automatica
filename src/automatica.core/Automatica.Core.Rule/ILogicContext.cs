@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using Automatica.Core.Control;
 using System;
 using Automatica.Core.Base.Localization;
+using System.Threading.Tasks;
+using System.Threading;
 
 [assembly: InternalsVisibleTo("Automatica.Core.UnitTests.Base")]
 namespace Automatica.Core.Logic
@@ -64,6 +66,9 @@ namespace Automatica.Core.Logic
         /// <summary>
         /// Provides access to localizations
         /// </summary>
-        public ILocalizationProvider LocalizationProvider { get; }
+        ILocalizationProvider LocalizationProvider { get; }
+
+        Task CreateNotification(string subject, string body, NotificationSeverity severity,
+            CancellationToken token = default);
     }
 }

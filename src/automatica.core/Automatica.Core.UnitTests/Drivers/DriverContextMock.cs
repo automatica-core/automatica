@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
@@ -61,6 +63,11 @@ namespace Automatica.Core.UnitTests.Base.Drivers
         public ILocalizationProvider LocalizationProvider { get; }
 
         public IRetryContext RetryContext { get; }
+
+        public Task CreateNotification(string subject, string body, NotificationSeverity severity, CancellationToken token = default)
+        {
+            return Task.CompletedTask;
+        }
 
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {

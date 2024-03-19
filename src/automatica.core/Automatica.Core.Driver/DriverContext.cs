@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
@@ -10,6 +12,7 @@ using Automatica.Core.Driver.Discovery;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Notification;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -46,6 +49,14 @@ namespace Automatica.Core.Driver
         public ILocalizationProvider LocalizationProvider { get; }
 
         public IRetryContext RetryContext { get; }
+
+        private readonly INotificationManager _notificationManager;
+
+        public Task CreateNotification(string subject, string body, NotificationSeverity severity, CancellationToken token = default)
+        {
+            return _notificationManager.CreateNotification(NodeInstance, LocalizationProvider.GetTranslation(subject),
+                LocalizationProvider.GetTranslation(body), severity, token);
+        }
 
         public IDriverContext Copy(NodeInstance node, ILogger logger)
         {
@@ -96,6 +107,7 @@ namespace Automatica.Core.Driver
             RetryContext = serviceProvider.GetRequiredService<IRetryContext>();
 
             LocalizationProvider = serviceProvider.GetRequiredService<ILocalizationProvider>();
+            _notificationManager = serviceProvider.GetRequiredService<INotificationManager>();
         }
     }
 }

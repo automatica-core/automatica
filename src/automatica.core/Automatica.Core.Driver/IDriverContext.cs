@@ -11,6 +11,8 @@ using Automatica.Core.Driver.Monitor;
 using Automatica.Core.EF.Models;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Automatica.Core.Driver
 {
@@ -101,8 +103,20 @@ namespace Automatica.Core.Driver
         /// <summary>
         /// Provides access to localizations
         /// </summary>
-        public ILocalizationProvider LocalizationProvider { get; }
+        ILocalizationProvider LocalizationProvider { get; }
+
+        /// <summary>
+        /// Retry context
+        /// </summary>
         IRetryContext RetryContext { get; }
+
+        /// <summary>
+        /// Create a notification for the user within this instance
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        Task CreateNotification(string subject, string body, NotificationSeverity severity, CancellationToken token = default);
 
         IDriverContext Copy(NodeInstance node, ILogger logger);
     }

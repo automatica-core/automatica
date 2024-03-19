@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.License;
 using Automatica.Core.Base.Localization;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Control;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Notification;
 using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Logic
@@ -14,7 +17,8 @@ namespace Automatica.Core.Logic
     /// </summary>
     public class LogicContext : ILogicContext
     {
-        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider, ILocalizationProvider localizationProvider)
+        private readonly INotificationManager _notificationManager;
+        public LogicContext(RuleInstance ruleInstance, IDispatcher dispatcher, ILogicTemplateFactory factory, IRuleInstanceVisuNotify notify, ILogger logger, IServerCloudApi api, ILicenseContract licenseContract, IControlContext controlContext, TimeProvider timeProvider, ILocalizationProvider localizationProvider, INotificationManager notificationManager)
         {
             RuleInstance = ruleInstance;
             Dispatcher = dispatcher;
@@ -26,6 +30,7 @@ namespace Automatica.Core.Logic
             ControlContext = controlContext;
             TimeProvider = timeProvider;
             LocalizationProvider = localizationProvider;
+            _notificationManager = notificationManager;
         }
 
         public RuleInstance RuleInstance { get; set; }
@@ -43,5 +48,10 @@ namespace Automatica.Core.Logic
         public TimeProvider TimeProvider { get; }
 
         public ILocalizationProvider LocalizationProvider { get; }
+        public Task CreateNotification(string subject, string body, NotificationSeverity severity, CancellationToken token = default)
+        {
+            return _notificationManager.CreateNotification(RuleInstance, LocalizationProvider.GetTranslation(subject),
+                LocalizationProvider.GetTranslation(body), severity, token);
+        }
     }
 }
