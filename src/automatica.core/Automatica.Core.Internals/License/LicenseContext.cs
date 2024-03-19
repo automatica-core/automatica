@@ -3,6 +3,7 @@ using Standard.Licensing;
 using Standard.Licensing.Validation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -181,6 +182,11 @@ namespace Automatica.Core.Internals.License
                     IsLicensed = true;
                     MaxRecordingDataPoints = 50;
                     AllowTextToSpeech = false;
+
+                    if (Debugger.IsAttached)
+                    {
+                        MaxDataPoints = 2000;
+                    }
                 }
 
                 _logger.LogInformation($"System is licensed to {_license?.Customer?.Email}:");
