@@ -15,9 +15,9 @@ namespace Automatica.Core.EF.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    ObjId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    This2NodeInstance = table.Column<Guid>(type: "TEXT", nullable: true),
-                    This2RuleInstance = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ObjId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    This2NodeInstance = table.Column<Guid>(type: "char(36)", nullable: true),
+                    This2RuleInstance = table.Column<Guid>(type: "char(36)", nullable: false),
                     Subject = table.Column<string>(type: "TEXT", nullable: false),
                     Body = table.Column<string>(type: "TEXT", nullable: false),
                     Severity = table.Column<int>(type: "INTEGER", nullable: false),
