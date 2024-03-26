@@ -46,6 +46,7 @@ namespace Automatica.Core.Satellite.Runtime
         private bool _connected;
         private bool _containerStarted;
         private readonly IConfiguration _config;
+        private string _masterPort;
 
         public bool Connected => _connected;
         public bool ContainerStarted => _containerStarted;
@@ -167,6 +168,8 @@ namespace Automatica.Core.Satellite.Runtime
         private void Init()
         {
             _masterAddress = _config["server:master"];
+            _masterPort = _config["server:masterPort"];
+
             _clientKey = _config["server:clientKey"];
 
             _slaveId = _config["server:clientId"];
@@ -174,10 +177,12 @@ namespace Automatica.Core.Satellite.Runtime
             _useDockerTag = _config["server:dockerTag"];
             _logLevel = _config["Logging:LogLevel:Default"];
 
+            
+
             _options = new MqttClientOptionsBuilder()
                 .WithClientId(_slaveId)
                 //   .WithWebSocketServer("localhost:5001/mqtt")
-                .WithTcpServer(_masterAddress, 1883)
+                .WithTcpServer(_masterAddress, String.IsNullOrEmpty(_masterPort) ? 1883 : Convert.ToInt32(_masterPort))
                 .WithCredentials(_slaveId, _clientKey)
                 .WithCleanSession()
                 .Build();
