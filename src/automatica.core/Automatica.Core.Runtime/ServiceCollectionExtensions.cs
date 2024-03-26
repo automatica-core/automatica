@@ -19,6 +19,7 @@ using Automatica.Core.Internals.License;
 using Automatica.Core.Internals.Plugins;
 using Automatica.Core.Internals.Recorder;
 using Automatica.Core.Logging;
+using Automatica.Core.Notification;
 using Automatica.Core.Runtime.Abstraction;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
@@ -145,6 +146,7 @@ namespace Automatica.Core.Runtime
 
             services.AddAutomaticaVisualization(configuration);
             services.AddInternals(configuration);
+            services.AddNotificationManager();
         }
 
         public static void AddAutomaticaRemoteConnectWithFrp(this IServiceCollection services,
