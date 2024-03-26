@@ -125,9 +125,7 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<IDataBroadcast, DataBroadcastService>();
 
                 services.AddSingleton<DatabaseTrendingValueStore, DatabaseTrendingValueStore>();
-
             }
-
 
             var mqttServerOptions = new MqttServerOptions()
             {
@@ -137,7 +135,10 @@ namespace Automatica.Core.Runtime
             mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkAddress = IPAddress.Any;
             mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkV6Address = IPAddress.None;
             mqttServerOptions.DefaultEndpointOptions.IsEnabled = true;
-            mqttServerOptions.DefaultEndpointOptions.Port = 1883;
+
+            var mqttServerPort = configuration["server:mqttPort"];
+
+            mqttServerOptions.DefaultEndpointOptions.Port = String.IsNullOrEmpty(mqttServerPort) ? 1883 : Convert.ToInt32(mqttServerPort);
             mqttServerOptions.DefaultEndpointOptions.ConnectionBacklog = 1000;
 
             services.AddHostedMqttServer(mqttServerOptions);

@@ -190,7 +190,6 @@ namespace Automatica.Core.Runtime.Core
         {
             foreach(var client in _connectedMqttClients)
             {
-
                 _logger.LogInformation($"Send reinit to client {client}");
                 await _mqttServer.PublishAsync(new MqttApplicationMessage
                 {
@@ -200,8 +199,6 @@ namespace Automatica.Core.Runtime.Core
                     Retain = true
                 });
             }
-
-           
         }
 
         public async Task AddNode(string id, NodeInstance node)
