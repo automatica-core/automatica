@@ -15,15 +15,16 @@ namespace Automatica.Core.EF.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -37,10 +38,11 @@ namespace Automatica.Core.EF.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsFavorite")
+                    b.Property<int>("IsFavorite")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -51,13 +53,14 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("This2AreaTemplate")
+                    b.Property<string>("This2AreaTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2Parent")
+                    b.Property<string>("This2Parent")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -68,16 +71,17 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("AreaInstances");
+                    b.ToTable("AreaInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaTemplate", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -91,12 +95,13 @@ namespace Automatica.Core.EF.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleteable")
+                    b.Property<int>("IsDeleteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(1);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -104,13 +109,16 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("NeedsThis2AreaType")
+                    b.Property<string>("NeedsThis2AreaType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProvidesThis2AreayType")
+                    b.Property<string>("ProvidesThis2AreayType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2AreaType")
+                    b.Property<string>("This2AreaType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -121,12 +129,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2AreaType");
 
-                    b.ToTable("AreaTemplates");
+                    b.ToTable("AreaTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaType", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -144,12 +152,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("AreaTypes");
+                    b.ToTable("AreaTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardInterface", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -169,10 +177,12 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2BoardType")
+                    b.Property<string>("This2BoardType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2InterfaceType")
+                    b.Property<string>("This2InterfaceType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -181,12 +191,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2InterfaceType");
 
-                    b.ToTable("BoardInterfaces");
+                    b.ToTable("BoardInterfaces", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.BoardType", b =>
                 {
-                    b.Property<Guid>("Type")
+                    b.Property<string>("Type")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -203,12 +213,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("BoardTypes");
+                    b.ToTable("BoardTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Categories.CategoryGroup", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -226,12 +236,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("CategoryGroups");
+                    b.ToTable("CategoryGroups", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Categories.CategoryInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -242,7 +252,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("rgba(255, 255, 255, 1)");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -257,17 +268,18 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleteable")
+                    b.Property<int>("IsDeleteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(1);
 
-                    b.Property<bool>("IsFavorite")
+                    b.Property<int>("IsFavorite")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -278,10 +290,11 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("This2CategoryGroup")
+                    b.Property<string>("This2CategoryGroup")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -290,18 +303,18 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("CategoryInstances");
+                    b.ToTable("CategoryInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.InterfaceType", b =>
                 {
-                    b.Property<Guid>("Type")
+                    b.Property<string>("Type")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("CanProvideBoardType")
+                    b.Property<int>("CanProvideBoardType")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -310,13 +323,14 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<Guid>("FactoryReference")
+                    b.Property<string>("FactoryReference")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDriverInterface")
+                    b.Property<int>("IsDriverInterface")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<int>("MaxChilds")
                         .HasColumnType("INTEGER");
@@ -329,37 +343,38 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Type");
 
-                    b.ToTable("InterfaceTypes");
+                    b.ToTable("InterfaceTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Link", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<Guid?>("This2NodeInstance2RulePageInput")
+                    b.Property<string>("This2NodeInstance2RulePageInput")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2NodeInstance2RulePageOutput")
+                    b.Property<string>("This2NodeInstance2RulePageOutput")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2RuleInterfaceInstanceInput")
+                    b.Property<string>("This2RuleInterfaceInstanceInput")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2RuleInterfaceInstanceOutput")
+                    b.Property<string>("This2RuleInterfaceInstanceOutput")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RulePage")
+                    b.Property<string>("This2RulePage")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -374,12 +389,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RulePage");
 
-                    b.ToTable("Links");
+                    b.ToTable("Links", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeDataType", b =>
                 {
-                    b.Property<long>("Type")
+                    b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -396,15 +411,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("NodeDataTypes");
+                    b.ToTable("NodeDataTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -414,31 +430,32 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsDisabled")
+                    b.Property<int>("IsDisabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsFavorite")
+                    b.Property<int>("IsFavorite")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsReadable")
+                    b.Property<int>("IsReadable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsRemanent")
+                    b.Property<int>("IsRemanent")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsWriteable")
+                    b.Property<int>("IsWriteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -469,45 +486,45 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("1");
 
-                    b.Property<Guid?>("This2AreaInstance")
+                    b.Property<string>("This2AreaInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2CategoryInstance")
+                    b.Property<string>("This2CategoryInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2NodeTemplate")
+                    b.Property<string>("This2NodeTemplate")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2ParentNodeInstance")
+                    b.Property<string>("This2ParentNodeInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2Slave")
+                    b.Property<string>("This2Slave")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Trending")
+                    b.Property<int>("Trending")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TrendingInterval")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("TrendingToCloud")
+                    b.Property<int>("TrendingToCloud")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("TrendingType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("UseInVisu")
+                    b.Property<int>("UseInVisu")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("VisuName")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("WriteOnlyIfChanged")
+                    b.Property<int>("WriteOnlyIfChanged")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ObjId");
@@ -524,32 +541,34 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("NodeInstances");
+                    b.ToTable("NodeInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeInstance2RulePage", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Inverted")
+                    b.Property<int>("Inverted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<Guid>("This2NodeInstance")
+                    b.Property<string>("This2NodeInstance")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RulePage")
+                    b.Property<string>("This2RulePage")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("X")
+                    b.Property<double>("X")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("Y")
+                    b.Property<double>("Y")
                         .HasColumnType("REAL");
 
                     b.HasKey("ObjId");
@@ -558,21 +577,22 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RulePage");
 
-                    b.ToTable("NodeInstance2RulePages");
+                    b.ToTable("NodeInstance2RulePages", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.NodeTemplate", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("DefaultCreated")
+                    b.Property<int>("DefaultCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -581,38 +601,39 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<Guid>("FactoryReference")
+                    b.Property<string>("FactoryReference")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsAdapterInterface")
+                    b.Property<int?>("IsAdapterInterface")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsDeleteable")
+                    b.Property<int>("IsDeleteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsReadable")
+                    b.Property<int>("IsReadable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsReadableFixed")
+                    b.Property<int>("IsReadableFixed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsWriteable")
+                    b.Property<int>("IsWriteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsWriteableFixed")
+                    b.Property<int>("IsWriteableFixed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -622,7 +643,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("MaxInstances")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -633,21 +655,24 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("NameMeta")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("NeedsInterface2InterfacesType")
+                    b.Property<string>("NeedsInterface2InterfacesType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProvidesInterface2InterfaceType")
+                    b.Property<string>("ProvidesInterface2InterfaceType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2DefaultMobileVisuTemplate")
+                    b.Property<string>("This2DefaultMobileVisuTemplate")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new Guid("16780dfd-887a-4a0a-9b2a-4d62ccc32c93"));
+                        .HasDefaultValue("16780dfd-887a-4a0a-9b2a-4d62ccc32c93");
 
-                    b.Property<long>("This2NodeDataType")
+                    b.Property<int>("This2NodeDataType")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ObjId");
@@ -660,50 +685,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2NodeDataType");
 
-                    b.ToTable("NodeTemplates");
-                });
-
-            modelBuilder.Entity("Automatica.Core.EF.Models.Notification", b =>
-                {
-                    b.Property<Guid>("ObjId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime?>("DismissDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("Severity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("This2NodeInstance")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("This2RuleInstance")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ObjId");
-
-                    b.HasIndex("This2NodeInstance");
-
-                    b.HasIndex("This2RuleInstance");
-
-                    b.ToTable("Notifications");
+                    b.ToTable("NodeTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Plugin", b =>
                 {
-                    b.Property<Guid?>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -716,13 +703,13 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("ComponentName")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("IsPrerelease")
+                    b.Property<int?>("IsPrerelease")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool?>("IsPublic")
+                    b.Property<int?>("IsPublic")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Loaded")
+                    b.Property<int>("Loaded")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("MinCoreServerVersion")
@@ -731,7 +718,7 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("PluginGuid")
+                    b.Property<string>("PluginGuid")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PluginType")
@@ -745,43 +732,46 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Plugins");
+                    b.ToTable("Plugins", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2NodeInstance")
+                    b.Property<string>("This2NodeInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2PropertyTemplate")
+                    b.Property<string>("This2PropertyTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2VisuObjectInstance")
+                    b.Property<string>("This2VisuObjectInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ValueAreaInstance")
+                    b.Property<string>("ValueAreaInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("ValueBool")
+                    b.Property<int?>("ValueBool")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<Guid?>("ValueCategoryInstance")
+                    b.Property<string>("ValueCategoryInstance")
                         .HasColumnType("TEXT");
 
                     b.Property<double?>("ValueDouble")
@@ -790,22 +780,22 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int?>("ValueInt")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("ValueLong")
+                    b.Property<int?>("ValueLong")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ValueNodeInstance")
+                    b.Property<string>("ValueNodeInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ValueRulePage")
+                    b.Property<string>("ValueRulePage")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ValueSlave")
+                    b.Property<string>("ValueSlave")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ValueString")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ValueVisuPage")
+                    b.Property<string>("ValueVisuPage")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -828,15 +818,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("ValueVisuPage");
 
-                    b.ToTable("PropertyInstances");
+                    b.ToTable("PropertyInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplate", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DefaultValue")
@@ -850,7 +841,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<Guid>("FactoryReference")
+                    b.Property<string>("FactoryReference")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Group")
@@ -863,15 +855,15 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValueSql("1");
 
-                    b.Property<bool>("IsReadonly")
+                    b.Property<int>("IsReadonly")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsVisible")
+                    b.Property<int>("IsVisible")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -882,7 +874,8 @@ namespace Automatica.Core.EF.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -895,16 +888,16 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValueSql("1");
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2NodeTemplate")
+                    b.Property<string>("This2NodeTemplate")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("This2PropertyType")
+                    b.Property<int>("This2PropertyType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("This2VisuObjectTemplate")
+                    b.Property<string>("This2VisuObjectTemplate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -915,22 +908,23 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2VisuObjectTemplate");
 
-                    b.ToTable("PropertyTemplates");
+                    b.ToTable("PropertyTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraint", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("ConstraintLevel")
+                    b.Property<int>("ConstraintLevel")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ConstraintType")
+                    b.Property<int>("ConstraintType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -940,7 +934,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -948,29 +943,31 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2PropertyTemplate")
+                    b.Property<string>("This2PropertyTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
                     b.HasIndex("This2PropertyTemplate");
 
-                    b.ToTable("PropertyTemplateConstraints");
+                    b.ToTable("PropertyTemplateConstraints", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyTemplateConstraintData", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("ConditionType")
+                    b.Property<int>("ConditionType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Factor")
@@ -978,7 +975,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("REAL")
                         .HasDefaultValue(1.0);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Offset")
@@ -986,25 +984,26 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("REAL")
                         .HasDefaultValue(0.0);
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PropertyKey")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2PropertyTemplateConstraint")
+                    b.Property<string>("This2PropertyTemplateConstraint")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
 
                     b.HasIndex("This2PropertyTemplateConstraint");
 
-                    b.ToTable("PropertyTemplateConstraintData");
+                    b.ToTable("PropertyTemplateConstraintData", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyType", b =>
                 {
-                    b.Property<long>("Type")
+                    b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -1025,15 +1024,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("Type");
 
-                    b.ToTable("PropertyTypes");
+                    b.ToTable("PropertyTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1042,15 +1042,16 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<bool>("IsFavorite")
+                    b.Property<int>("IsFavorite")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1061,33 +1062,35 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("This2AreaInstance")
+                    b.Property<string>("This2AreaInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2CategoryInstance")
+                    b.Property<string>("This2CategoryInstance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RulePage")
+                    b.Property<string>("This2RulePage")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RuleTemplate")
+                    b.Property<string>("This2RuleTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("UseInVisu")
+                    b.Property<int>("UseInVisu")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("VisuName")
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("X")
+                    b.Property<double>("X")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("Y")
+                    b.Property<double>("Y")
                         .HasColumnType("REAL");
 
                     b.HasKey("ObjId");
@@ -1102,12 +1105,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("RuleInstances");
+                    b.ToTable("RuleInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceDirection", b =>
                 {
-                    b.Property<long>("ObjId")
+                    b.Property<int>("ObjId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -1129,41 +1132,45 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("RuleInterfaceDirections");
+                    b.ToTable("RuleInterfaceDirections", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Inverted")
+                    b.Property<int>("Inverted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RuleInstance")
+                    b.Property<string>("This2RuleInstance")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2RuleInterfaceTemplate")
+                    b.Property<string>("This2RuleInterfaceTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool?>("ValueBool")
+                    b.Property<int?>("ValueBool")
                         .HasColumnType("INTEGER");
 
                     b.Property<double?>("ValueDouble")
                         .HasColumnType("REAL");
 
-                    b.Property<long?>("ValueInteger")
+                    b.Property<int?>("ValueInteger")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ValueString")
@@ -1175,15 +1182,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RuleInterfaceTemplate");
 
-                    b.ToTable("RuleInterfaceInstances");
+                    b.ToTable("RuleInterfaceInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleInterfaceTemplate", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DefaultValue")
@@ -1202,7 +1210,7 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("InterfaceType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsLinkableParameter")
+                    b.Property<int>("IsLinkableParameter")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Key")
@@ -1214,7 +1222,8 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("Meta")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1222,7 +1231,7 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ParameterDataType")
@@ -1231,10 +1240,11 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("This2RuleInterfaceDirection")
+                    b.Property<int>("This2RuleInterfaceDirection")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("This2RuleTemplate")
+                    b.Property<string>("This2RuleTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ObjId");
@@ -1243,15 +1253,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2RuleTemplate");
 
-                    b.ToTable("RuleInterfaceTemplates");
+                    b.ToTable("RuleInterfaceTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RulePage", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1261,12 +1272,13 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1274,19 +1286,19 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("This2RulePageType")
+                    b.Property<int>("This2RulePageType")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ObjId");
 
                     b.HasIndex("This2RulePageType");
 
-                    b.ToTable("RulePages");
+                    b.ToTable("RulePages", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RulePageType", b =>
                 {
-                    b.Property<long>("ObjId")
+                    b.Property<int>("ObjId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -1308,15 +1320,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("RulePageTypes");
+                    b.ToTable("RulePageTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.RuleTemplate", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1331,7 +1344,7 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Height")
+                    b.Property<double>("Height")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Key")
@@ -1339,7 +1352,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1347,31 +1361,33 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("Owner")
+                    b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2DefaultMobileVisuTemplate")
+                    b.Property<string>("This2DefaultMobileVisuTemplate")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new Guid("16780dfd-887a-4a0a-9b2a-4d62ccc32c93"));
+                        .HasDefaultValue("16780dfd-887a-4a0a-9b2a-4d62ccc32c93");
 
-                    b.Property<float>("Width")
+                    b.Property<double>("Width")
                         .HasColumnType("REAL");
 
                     b.HasKey("ObjId");
 
                     b.HasIndex("This2DefaultMobileVisuTemplate");
 
-                    b.ToTable("RuleTemplates");
+                    b.ToTable("RuleTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Setting", b =>
                 {
-                    b.Property<long>("ObjId")
+                    b.Property<int>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Group")
@@ -1379,23 +1395,24 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("System");
 
-                    b.Property<bool>("IsReadonly")
+                    b.Property<int>("IsReadonly")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsVisible")
+                    b.Property<int>("IsVisible")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Meta")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("NeedsReloadOnChange")
+                    b.Property<int>("NeedsReloadOnChange")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Order")
@@ -1404,7 +1421,7 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("ReloadContext")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("Type")
+                    b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
                     b.Property<double?>("ValueDouble")
@@ -1422,12 +1439,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Slave", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -1437,13 +1454,15 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<string>("ClientKey")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1451,12 +1470,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Slaves");
+                    b.ToTable("Slaves", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Trendings.Trending", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -1464,10 +1483,12 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2NodeInstance")
+                    b.Property<string>("This2NodeInstance")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<string>("Timestamp")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Value")
@@ -1477,16 +1498,16 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2NodeInstance");
 
-                    b.ToTable("Trendings");
+                    b.ToTable("Trendings", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VersionInformation", b =>
                 {
-                    b.Property<long>("ObjId")
+                    b.Property<int>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("DriverGuid")
+                    b.Property<string>("DriverGuid")
                         .HasMaxLength(36)
                         .HasColumnType("TEXT");
 
@@ -1494,7 +1515,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("RuleGuid")
+                    b.Property<string>("RuleGuid")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .HasColumnType("TEXT");
 
@@ -1505,12 +1527,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("VersionInformations");
+                    b.ToTable("VersionInformations", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectInstance", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1519,10 +1541,10 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<float>("Height")
+                    b.Property<double>("Height")
                         .HasColumnType("REAL");
 
-                    b.Property<bool>("IsFavorite")
+                    b.Property<int>("IsFavorite")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -1533,22 +1555,24 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2VisuObjectTemplate")
+                    b.Property<string>("This2VisuObjectTemplate")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2VisuPage")
+                    b.Property<string>("This2VisuPage")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Width")
+                    b.Property<double>("Width")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("X")
+                    b.Property<double>("X")
                         .HasColumnType("REAL");
 
-                    b.Property<float>("Y")
+                    b.Property<double>("Y")
                         .HasColumnType("REAL");
 
                     b.HasKey("ObjId");
@@ -1559,12 +1583,12 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasIndex("This2VisuPage");
 
-                    b.ToTable("VisuObjectInstances");
+                    b.ToTable("VisuObjectInstances", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuObjectTemplate", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1579,29 +1603,29 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Height")
+                    b.Property<double>("Height")
                         .HasColumnType("REAL");
 
-                    b.Property<bool>("IsVisibleForUser")
+                    b.Property<int>("IsVisibleForUser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<float?>("MaxHeight")
+                    b.Property<double?>("MaxHeight")
                         .HasColumnType("REAL");
 
-                    b.Property<float?>("MaxWidth")
+                    b.Property<double?>("MaxWidth")
                         .HasColumnType("REAL");
 
-                    b.Property<float?>("MinHeight")
+                    b.Property<double?>("MinHeight")
                         .HasColumnType("REAL");
 
-                    b.Property<float?>("MinWidth")
+                    b.Property<double?>("MinWidth")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
@@ -1609,25 +1633,25 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("This2VisuPageType")
+                    b.Property<int>("This2VisuPageType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Width")
+                    b.Property<double>("Width")
                         .HasColumnType("REAL");
 
                     b.HasKey("ObjId");
 
                     b.HasIndex("This2VisuPageType");
 
-                    b.ToTable("VisuObjectTemplates");
+                    b.ToTable("VisuObjectTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuPage", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("DefaultPage")
+                    b.Property<int>("DefaultPage")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -1642,7 +1666,7 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("REAL")
                         .HasDefaultValue(4.0);
 
-                    b.Property<bool>("IsFavorite")
+                    b.Property<int>("IsFavorite")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -1653,10 +1677,10 @@ namespace Automatica.Core.EF.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("This2VisuPageType")
+                    b.Property<int>("This2VisuPageType")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Width")
@@ -1673,12 +1697,12 @@ namespace Automatica.Core.EF.Migrations
                     b.HasIndex("This2VisuPageType")
                         .HasDatabaseName("This2VisuPageType");
 
-                    b.ToTable("VisuPages");
+                    b.ToTable("VisuPages", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.VisuPageType", b =>
                 {
-                    b.Property<long>("ObjId")
+                    b.Property<int>("ObjId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -1700,16 +1724,17 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("VisuPageTypes");
+                    b.ToTable("VisuPageTypes", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Priviledge", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1724,7 +1749,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1734,31 +1760,33 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Priviledges");
+                    b.ToTable("Priviledges", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Priviledge2Role", b =>
                 {
-                    b.Property<Guid>("This2Role")
+                    b.Property<string>("This2Role")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2Priviledge")
+                    b.Property<string>("This2Priviledge")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("This2Role");
 
                     b.HasIndex("This2Priviledge");
 
-                    b.ToTable("Priviledge2Roles");
+                    b.ToTable("Priviledge2Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.Role", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1768,17 +1796,18 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<bool>("IsDeleteable")
+                    b.Property<int>("IsDeleteable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1788,16 +1817,17 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1817,7 +1847,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
@@ -1837,46 +1868,47 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User2Group", b =>
                 {
-                    b.Property<Guid>("This2User")
+                    b.Property<string>("This2User")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
                     b.HasKey("This2User", "This2UserGroup");
 
                     b.HasIndex("This2UserGroup");
 
-                    b.ToTable("User2Groups");
+                    b.ToTable("User2Groups", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.User2Role", b =>
                 {
-                    b.Property<Guid>("This2User")
+                    b.Property<string>("This2User")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2Role")
+                    b.Property<string>("This2Role")
                         .HasColumnType("TEXT");
 
                     b.HasKey("This2User", "This2Role");
 
                     b.HasIndex("This2Role");
 
-                    b.ToTable("User2Roles");
+                    b.ToTable("User2Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.UserGroup", b =>
                 {
-                    b.Property<Guid>("ObjId")
+                    b.Property<string>("ObjId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<string>("CreatedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -1886,7 +1918,8 @@ namespace Automatica.Core.EF.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
-                    b.Property<DateTimeOffset>("ModifiedAt")
+                    b.Property<string>("ModifiedAt")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -1896,22 +1929,22 @@ namespace Automatica.Core.EF.Migrations
 
                     b.HasKey("ObjId");
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("UserGroups", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.Model.Models.User.UserGroup2Role", b =>
                 {
-                    b.Property<Guid>("This2UserGroup")
+                    b.Property<string>("This2UserGroup")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("This2Role")
+                    b.Property<string>("This2Role")
                         .HasColumnType("TEXT");
 
                     b.HasKey("This2UserGroup", "This2Role");
 
                     b.HasIndex("This2Role");
 
-                    b.ToTable("UserGroup2Roles");
+                    b.ToTable("UserGroup2Roles", (string)null);
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.Areas.AreaInstance", b =>
@@ -2154,26 +2187,6 @@ namespace Automatica.Core.EF.Migrations
                     b.Navigation("THis2DefaultMobileVisuTemplateNavigation");
 
                     b.Navigation("This2NodeDataTypeNavigation");
-                });
-
-            modelBuilder.Entity("Automatica.Core.EF.Models.Notification", b =>
-                {
-                    b.HasOne("Automatica.Core.EF.Models.NodeInstance", "This2NodeInstanceNavigation")
-                        .WithMany()
-                        .HasForeignKey("This2NodeInstance")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("NodeInstance2Notification");
-
-                    b.HasOne("Automatica.Core.EF.Models.RuleInstance", "This2RuleInstanceNavigation")
-                        .WithMany()
-                        .HasForeignKey("This2RuleInstance")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("RuleInstance2Notification");
-
-                    b.Navigation("This2NodeInstanceNavigation");
-
-                    b.Navigation("This2RuleInstanceNavigation");
                 });
 
             modelBuilder.Entity("Automatica.Core.EF.Models.PropertyInstance", b =>
