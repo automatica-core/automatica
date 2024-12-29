@@ -68,7 +68,7 @@ namespace P3.Driver.Nuki.Driver
             factory.CreateNodeTemplate(new Guid("5195bf0b-eb1a-4cc0-ae3f-72e97be2e01e"), "NUKI.SMART_LOCK.BATTERY_CRITICAL.NAME", "NUKI.SMART_LOCK.BATTERY_CRITICAL.DESCRIPTION", "batteryCritical", uid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Boolean, 1, false);
 
-            factory.CreateNodeTemplate(new Guid("26af095b-8eef-4299-a171-fdb962eb4c25"), "NUKI.SMART_LOCK.BATTERY_CHARGING_STATE.NAME", "NUKI.SMART_LOCK.BATTERY_CHARGING_STATE.DESCRIPTION", "batteryChargeState", uid,
+            factory.CreateNodeTemplate(new Guid("26af095b-8eef-4299-a171-fdb962eb4c25"), "NUKI.SMART_LOCK.BATTERY_CHARGE_STATE.NAME", "NUKI.SMART_LOCK.BATTERY_CHARGE_STATE.DESCRIPTION", "batteryChargeState", uid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);
 
             factory.CreateNodeTemplate(new Guid("14986357-750a-45ca-83ed-917413c19cd9"), "NUKI.SMART_LOCK.TIMESTAMP.NAME", "NUKI.SMART_LOCK.TIMESTAMP.DESCRIPTION", "timestamp", uid,

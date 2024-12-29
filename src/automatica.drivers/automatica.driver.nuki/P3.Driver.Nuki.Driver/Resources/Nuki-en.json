@@ -16,6 +16,32 @@
     "ACCESS_TOKEN": {
       "NAME": "Access Token",
       "DESCRIPTION": ""
+    },
+    "SMART_LOCK": {
+      "ID": {
+        "NAME": "Nuki ID",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "State",
+        "DESCRIPTION": ""
+      },
+      "STATE_TEXT": {
+        "NAME": "State text",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_CRITICAL": {
+        "NAME": "Battery critical",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_CHARGE_STATE": {
+        "NAME": "Battery charge state",
+        "DESCRIPTION": ""
+      },
+      "TIMESTAMP": {
+        "NAME": "Timestamp",
+        "DESCRIPTION": ""
+      }
     }
   }
 }

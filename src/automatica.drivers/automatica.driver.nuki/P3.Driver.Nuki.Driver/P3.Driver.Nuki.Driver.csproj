@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Version>0.14.0.1</Version>
-    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net8.0\Drivers\BlockchainTicker</BaseOutputPath>
+    <BaseOutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net8.0\Drivers\Nuki</BaseOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net8.0\Drivers\BlockchainTicker</OutputPath>
+    <OutputPath>C:\dev\automatica.core\automatica\src\automatica.core\Automatica.Core\bin\Debug\net8.0\Drivers\Nuki</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="automatica-manifest.json" />
@@ -24,10 +24,10 @@
     <PackageReference Include="Automatica.Core.Driver" Version="8.1.0.1907" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Ressources\OpenWeatherMap-de.json">
+    <None Update="Ressources\Nuki-de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Ressources\OpenWeatherMap-en.json">
+    <None Update="Ressources\Nuki-de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
