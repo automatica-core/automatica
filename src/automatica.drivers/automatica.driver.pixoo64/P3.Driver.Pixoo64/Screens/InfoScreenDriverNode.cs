@@ -31,6 +31,9 @@ namespace P3.Driver.Pixoo64.Screens
                 case "info-inside":
                     Screen.Inside = dValue;
                     break;
+                case "door-lock-state":
+                    Screen.DoorLockState = value?.ToString();
+                    break;
             }
         }
     }
