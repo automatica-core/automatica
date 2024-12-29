@@ -1,0 +1,32 @@
+{
+	"Automatica": {
+		"manifest-version": {
+			"Minor": 1,
+			"Major": 0,
+			"Build": 0,
+			"Revision": 0
+		},
+		"plugin-version": {
+			"Minor": 1,
+			"Major": 0,
+			"Build": 0,
+			"Revision": 0
+		},
+		"PluginGuid": "7d7d9204-28d7-4768-b586-3fb9e0c7fc43",
+		"Name": "P3.Driver.Nuki.Driver",
+		"ComponentName": "Nuki",
+		"Type": "driver",
+		"Output": "P3.Driver.Nuki.Driver.dll",
+		"Resources": [],
+		"Dependencies": [],
+		"ProjectPage": "https://github.com/automatica-core/automatica.driver.nuki",
+		"MinCoreServerVersion": {
+			"Minor": 1,
+			"Major": 8,
+			"Build": 0,
+			"Revision": 1907
+		},
+		"MandatoryLicenseFeatures": [],
+		"OptionalLicenseFeatures": []
+	}
+}

@@ -1,0 +1,21 @@
+﻿{
+  "NUKI": {
+    "NAME": "Nuki",
+    "POLL_INTERVAL": {
+      "NAME": "Polling interval [s]",
+      "DESCRIPTION": ""
+    },
+    "IP_ADDRESS": {
+      "NAME": "IP Address",
+      "DESCRIPTION": ""
+    },
+    "PORT": {
+      "NAME": "Port",
+      "DESCRIPTION": ""
+    },
+    "ACCESS_TOKEN": {
+      "NAME": "Access Token",
+      "DESCRIPTION": ""
+    }
+  }
+}
