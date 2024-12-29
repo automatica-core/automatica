@@ -24,19 +24,18 @@ namespace P3.Driver.Pixoo64.Screens
         {
             await Task.CompletedTask;
 
-
             pixoo.DrawText(5, 5, Palette.Green, Title);
 
             if (Outside.HasValue)
                 pixoo.DrawText(5, 12, Palette.White, $"Out: {Math.Round(Outside.Value, 2)}°C");
             if (Inside.HasValue)
                 pixoo.DrawText(5, 22, Palette.White, $"In:  {Math.Round(Inside.Value, 2)}°C");
-            if (DoorLockState != null)
-                pixoo.DrawText(5, 52, Palette.White, $"Door: {DoorLockState}");
 
             pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
             pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
 
+            if (DoorLockState != null)
+                pixoo.DrawText(5, 52, Palette.White, $"Door: {DoorLockState}");
         }
     }
 }
