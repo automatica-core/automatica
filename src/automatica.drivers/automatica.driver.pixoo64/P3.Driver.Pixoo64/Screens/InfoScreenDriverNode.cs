@@ -22,14 +22,13 @@ namespace P3.Driver.Pixoo64.Screens
         protected override async Task SetScreenValue(object value, NodeInstance node, CancellationToken token = default)
         {
             await Task.CompletedTask;
-            var dValue = Convert.ToDouble(value);
             switch (node.This2NodeTemplateNavigation.Key)
             {
                 case "info-outside":
-                    Screen.Outside = dValue;
+                    Screen.Outside = Convert.ToDouble(value);
                     break;
                 case "info-inside":
-                    Screen.Inside = dValue;
+                    Screen.Inside = Convert.ToDouble(value);
                     break;
                 case "door-lock-state":
                     Screen.DoorLockState = value?.ToString();
