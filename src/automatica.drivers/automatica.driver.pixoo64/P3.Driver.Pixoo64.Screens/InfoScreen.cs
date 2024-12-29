@@ -32,7 +32,7 @@ namespace P3.Driver.Pixoo64.Screens
             if (Inside.HasValue)
                 pixoo.DrawText(5, 22, Palette.White, $"In:  {Math.Round(Inside.Value, 2)}°C");
             if (DoorLockState != null)
-                pixoo.DrawText(5, 52, Palette.White, $"Door:  {DoorLockState}");
+                pixoo.DrawText(5, 52, Palette.White, $"Door: {DoorLockState}");
 
             pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
             pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
