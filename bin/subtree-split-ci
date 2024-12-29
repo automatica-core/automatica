@@ -125,6 +125,7 @@ split src/automatica.drivers/automatica.driver.vkingbms automatica.driver.vkingb
 split src/automatica.drivers/automatica.driver.pixoo64 automatica.driver.pixoo64
 split src/automatica.drivers/automatica.driver.synology automatica.driver.synology
 split src/automatica.drivers/automatica.driver.shelly automatica.driver.shelly
+split src/automatica.drivers/automatica.driver.nuki automatica.driver.nuki
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations
