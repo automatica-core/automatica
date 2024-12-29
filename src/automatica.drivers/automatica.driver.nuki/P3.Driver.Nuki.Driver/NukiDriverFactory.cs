@@ -12,7 +12,7 @@ namespace P3.Driver.Nuki.Driver
 
         public override Guid DriverGuid => new Guid("da739d07-56a6-4cd3-a3dc-ac7c5d2d4fe5");
 
-        public override Version DriverVersion => new Version(1, 0, 0, 0);
+        public override Version DriverVersion => new Version(1, 0, 0, 1);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.nuki";
 
@@ -31,7 +31,7 @@ namespace P3.Driver.Nuki.Driver
             factory.CreateInterfaceType(DriverGuid, "NUKI.NAME", "NUKI.DESCRIPTION", int.MaxValue, 1, true);
 
             factory.CreateNodeTemplate(DriverGuid, "NUKI.NAME", "NUKI.DESCRIPTION", "NUKI", 
-                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Virtual), DriverGuid, false, false, true, false, true, NodeDataType.NoAttribute, 1, false);
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), DriverGuid, false, false, true, false, true, NodeDataType.NoAttribute, 1, false);
 
             factory.CreatePropertyTemplate(new Guid("243b2e63-21b4-40e0-8e4d-295bb0a4894c"), "NUKI.POLL_INTERVAL.NAME", "NUKI.POLL_INTERVAL.DESCRIPTION", "poll",
                 PropertyTemplateType.Range, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(TimeSpan.FromSeconds(1).TotalSeconds, TimeSpan.FromHours(2).TotalSeconds), TimeSpan.FromMinutes(2).TotalSeconds, 1, 1);
@@ -53,11 +53,12 @@ namespace P3.Driver.Nuki.Driver
             var uid = new Guid("6a557613-b20c-4dcd-b58f-1654dc11d8b2");
             factory.CreateInterfaceType(uid, "NUKI.SMART_LOCK.NAME", "NUKI.SMART_LOCK.DESCRIPTION", int.MaxValue, int.MaxValue, false);
 
-            factory.CreateNodeTemplate(new Guid("58e1dddc-03d4-4e5a-8a4b-164e9d183cbe"), "NUKI.SMART_LOCK.NAME", "NUKI.SMART_LOCK.DESCRIPTION", "smart_lock", DriverGuid,
+            var smartLockUid = new Guid("58e1dddc-03d4-4e5a-8a4b-164e9d183cbe");
+            factory.CreateNodeTemplate(smartLockUid, "NUKI.SMART_LOCK.NAME", "NUKI.SMART_LOCK.DESCRIPTION", "smart_lock", DriverGuid,
                 uid, true, true, true, false, true, NodeDataType.Date, 1, false);
 
             factory.CreatePropertyTemplate(new Guid("b5d42877-0fba-4a5b-be5e-47e6cbba2adf"), "NUKI.SMART_LOCK.ID.NAME", "NUKI.SMART_LOCK.ID.DESCRIPTION", "id",
-                PropertyTemplateType.Integer, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 1);
+                PropertyTemplateType.Integer, smartLockUid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 1);
 
             factory.CreateNodeTemplate(new Guid("d4122ed5-f1c1-4ec0-baf0-2d1cbbe13c5d"), "NUKI.SMART_LOCK.STATE.NAME", "NUKI.SMART_LOCK.STATE.DESCRIPTION", "state", uid,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);

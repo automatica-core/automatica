@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "P3.Driver.Blockchain.Ticker.Driver": {
+    "P3.Driver.Nuki.Driver": {
       "commandName": "Executable",
       "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp3.0\\Automatica.Core.exe",
       "commandLineArgs": "develop C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\netcoreapp3.0\\Drivers\\ *Driver.dll",
@@ -8,8 +8,8 @@
     },
     "Automatica": {
       "commandName": "Executable",
-      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\Automatica.Core.exe",
-      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net7.0\\"
+      "executablePath": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net8.0\\Automatica.Core.exe",
+      "workingDirectory": "C:\\dev\\automatica.core\\automatica\\src\\automatica.core\\Automatica.Core\\bin\\Debug\\net8.0\\"
     }
   }
 }

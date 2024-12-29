@@ -18,6 +18,7 @@
       "DESCRIPTION": ""
     },
     "SMART_LOCK": {
+      "NAME": "Smart Lock",
       "ID": {
         "NAME": "Nuki ID",
         "DESCRIPTION": ""
