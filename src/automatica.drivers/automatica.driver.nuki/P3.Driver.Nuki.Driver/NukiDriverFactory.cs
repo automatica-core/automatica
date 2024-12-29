@@ -34,7 +34,7 @@ namespace P3.Driver.Nuki.Driver
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Ethernet), DriverGuid, false, false, true, false, true, NodeDataType.NoAttribute, 1, false);
 
             factory.CreatePropertyTemplate(new Guid("243b2e63-21b4-40e0-8e4d-295bb0a4894c"), "NUKI.POLL_INTERVAL.NAME", "NUKI.POLL_INTERVAL.DESCRIPTION", "poll",
-                PropertyTemplateType.Range, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(TimeSpan.FromSeconds(1).TotalSeconds, TimeSpan.FromHours(2).TotalSeconds), TimeSpan.FromMinutes(2).TotalSeconds, 1, 1);
+                PropertyTemplateType.Range, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(TimeSpan.FromSeconds(1).TotalSeconds, TimeSpan.FromHours(2).TotalSeconds), TimeSpan.FromSeconds(2).TotalSeconds, 1, 1);
 
             factory.CreatePropertyTemplate(new Guid("d6d2f651-70e5-4bbc-9a7a-baf5576cfbae"), "NUKI.IP_ADDRESS.NAME", "NUKI.IP_ADDRESS.DESCRIPTION", "ip",
                 PropertyTemplateType.Ip, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 2);
