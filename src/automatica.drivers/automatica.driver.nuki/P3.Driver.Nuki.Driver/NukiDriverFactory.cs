@@ -45,6 +45,34 @@ namespace P3.Driver.Nuki.Driver
             factory.CreatePropertyTemplate(new Guid("2260ec26-9f88-4c90-91f8-072a852c92a3"), "NUKI.ACCESS_TOKEN.NAME", "NUKI.ACCESS_TOKEN.DESCRIPTION", "token",
                 PropertyTemplateType.Password, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 4);
 
+            CreateSmartLock(factory);
+        }
+
+        private void CreateSmartLock(INodeTemplateFactory factory)
+        {
+            var uid = new Guid("6a557613-b20c-4dcd-b58f-1654dc11d8b2");
+            factory.CreateInterfaceType(uid, "NUKI.SMART_LOCK.NAME", "NUKI.SMART_LOCK.DESCRIPTION", int.MaxValue, int.MaxValue, false);
+
+            factory.CreateNodeTemplate(new Guid("58e1dddc-03d4-4e5a-8a4b-164e9d183cbe"), "NUKI.SMART_LOCK.NAME", "NUKI.SMART_LOCK.DESCRIPTION", "smart_lock", DriverGuid,
+                uid, true, true, true, false, true, NodeDataType.Date, 1, false);
+
+            factory.CreatePropertyTemplate(new Guid("b5d42877-0fba-4a5b-be5e-47e6cbba2adf"), "NUKI.SMART_LOCK.ID.NAME", "NUKI.SMART_LOCK.ID.DESCRIPTION", "id",
+                PropertyTemplateType.Integer, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 1, 1);
+
+            factory.CreateNodeTemplate(new Guid("d4122ed5-f1c1-4ec0-baf0-2d1cbbe13c5d"), "NUKI.SMART_LOCK.STATE.NAME", "NUKI.SMART_LOCK.STATE.DESCRIPTION", "state", uid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);
+            factory.CreateNodeTemplate(new Guid("546a0769-5fbf-4054-bbdb-717ac184855e"), "NUKI.SMART_LOCK.STATE_TEXT.NAME", "NUKI.SMART_LOCK.STATE_TEXT.DESCRIPTION", "stateName", uid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.String, 1, false);
+
+
+            factory.CreateNodeTemplate(new Guid("5195bf0b-eb1a-4cc0-ae3f-72e97be2e01e"), "NUKI.SMART_LOCK.BATTERY_CRITICAL.NAME", "NUKI.SMART_LOCK.BATTERY_CRITICAL.DESCRIPTION", "batteryCritical", uid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Boolean, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("26af095b-8eef-4299-a171-fdb962eb4c25"), "NUKI.SMART_LOCK.BATTERY_CHARGING_STATE.NAME", "NUKI.SMART_LOCK.BATTERY_CHARGING_STATE.DESCRIPTION", "batteryChargeState", uid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.Integer, 1, false);
+
+            factory.CreateNodeTemplate(new Guid("14986357-750a-45ca-83ed-917413c19cd9"), "NUKI.SMART_LOCK.TIMESTAMP.NAME", "NUKI.SMART_LOCK.TIMESTAMP.DESCRIPTION", "timestamp", uid,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, true, false, true, NodeDataType.DateTime, 1, false);
         }
 
     }

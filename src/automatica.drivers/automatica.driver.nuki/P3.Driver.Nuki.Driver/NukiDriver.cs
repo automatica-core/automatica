@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using P3.Driver.Nuki.Driver.Model;
 using Timer = System.Threading.Timer;
 
 namespace P3.Driver.Nuki.Driver
@@ -14,6 +19,12 @@ namespace P3.Driver.Nuki.Driver
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly ILogger _logger;
         private int _pollTime;
+        private readonly List<NukiSmartLock> _smartLocks = new();
+
+        private string _bridgeAddress;
+        private string _token;
+
+        private HttpClient _httpClient = new();
 
         public NukiDriver(IDriverContext driverContext) : base(driverContext)
         {
@@ -24,6 +35,9 @@ namespace P3.Driver.Nuki.Driver
         {
             var pollTime = GetPropertyValueInt("poll");
             _pollTime = pollTime;
+
+            _bridgeAddress = $"http://{GetPropertyValueString("ip")}:{GetPropertyValueInt("port")}";
+            _token = GetPropertyValueString("token");
             return base.Init(token);
         }
 
@@ -67,7 +81,29 @@ namespace P3.Driver.Nuki.Driver
         {
             _logger.LogDebug($"Poll values...");
 
-           
+            var listResponse = await _httpClient.GetAsync($"{_bridgeAddress}/list?token={_token}", token);
+
+            var response = await listResponse.Content.ReadAsStringAsync(token);
+            _logger.LogDebug($"Response: {response}");
+
+            if (!listResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Error reading values: {listResponse.StatusCode}");
+                return;
+            }
+
+            var listResponseObj = JsonConvert.DeserializeObject<List<NukiObject>>(response);
+
+            foreach (var nuki in listResponseObj)
+            {
+                var nukiDriver = _smartLocks.FirstOrDefault(x => x.NukiId == nuki.NukiId);
+
+                if (nukiDriver != null)
+                {
+                    nukiDriver.UpdateState(nuki);
+                }
+            }
+
         }
 
         public override Task<bool> Stop(CancellationToken token = default)
@@ -78,9 +114,11 @@ namespace P3.Driver.Nuki.Driver
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-          
+            var smartLock = new NukiSmartLock(ctx);
 
-            return null;
+            _smartLocks.Add(smartLock);
+
+            return smartLock;
         }
     }
 }
