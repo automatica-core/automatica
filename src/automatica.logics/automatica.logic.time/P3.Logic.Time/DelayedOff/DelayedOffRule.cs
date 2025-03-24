@@ -15,7 +15,7 @@ namespace P3.Logic.Time.DelayedOff
     {
         private long _delay;
         private readonly RuleInterfaceInstance _output;
-        private readonly System.Timers.Timer _timer;
+        private System.Timers.Timer _timer;
 
         private bool _timerRunning;
         private bool _triggerOnlyIfTrue = false;
@@ -27,15 +27,14 @@ namespace P3.Logic.Time.DelayedOff
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleOutput);
 
-            _timer = new System.Timers.Timer();
-            _timer.Elapsed += _timer_Elapsed;
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            ExecuteAction();
+            Context.Logger.LogDebug($">>> Timer elapsed <<<");
             _timer.Stop();
             _timerRunning = false;
-            ExecuteAction();
         }
 
         private void ExecuteAction()
@@ -45,10 +44,18 @@ namespace P3.Logic.Time.DelayedOff
             Context.Logger.LogDebug($">>> Dispatching value <<<");
         }
 
+        protected override Task<bool> Start(RuleInstance instance, CancellationToken token = new CancellationToken())
+        {
+            _timer = new System.Timers.Timer();
+            _timer.Elapsed += _timer_Elapsed;
+            return base.Start(instance, token);
+        }
+
         protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
+            _timer = null;
             _timerRunning = false;
             return base.Stop(ruleInstance, token);
         }
