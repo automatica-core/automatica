@@ -102,6 +102,7 @@ namespace P3.Logic.Time.DelayedOff
 
                 Context.Logger.LogDebug($">>> Starting timer - ticks in {_delay * 1000} <<<");
                 StartStopTimer();
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
             }
             else if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleReset)
             {
