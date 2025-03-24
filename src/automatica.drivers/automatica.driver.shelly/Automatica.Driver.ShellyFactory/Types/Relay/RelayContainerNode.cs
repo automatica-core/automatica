@@ -61,8 +61,8 @@ namespace Automatica.Driver.ShellyFactory.Types.Relay
                                 await Client.Client.SetRelayState(RelayId, true, ResetTimer, CancellationToken.None);
                             }
                             else
-                            {
-                                await Client.Client.SetRelayState(RelayId, false, 0, CancellationToken.None);
+                            {   if(ResetTimer == 0) //only turn off if reset timer is not set, otherwise shelly gets confused
+                                    await Client.Client.SetRelayState(RelayId, false, 0, CancellationToken.None);
                             }
 
                             var relayState = await Client.Client.GetRelayState(RelayId, CancellationToken.None);
