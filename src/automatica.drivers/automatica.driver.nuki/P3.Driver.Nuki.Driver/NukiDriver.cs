@@ -43,20 +43,20 @@ namespace P3.Driver.Nuki.Driver
 
         private async void TimeElapsed(object state)
         {
-            try
+            if (await _semaphore.WaitAsync(TimeSpan.FromSeconds(1)))
             {
-                if (await _semaphore.WaitAsync(TimeSpan.FromSeconds(1)))
+                try
                 {
                     await ReadValues();
                 }
-            }
-            catch (Exception ex)
-            {
-                DriverContext.Logger.LogError(ex, "Error read values...");
-            }
-            finally
-            {
-                _semaphore.Release();
+                catch (Exception ex)
+                {
+                    DriverContext.Logger.LogError(ex, "Error read values...");
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
         }
 
