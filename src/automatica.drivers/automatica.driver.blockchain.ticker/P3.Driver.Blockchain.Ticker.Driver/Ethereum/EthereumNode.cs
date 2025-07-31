@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -12,64 +13,32 @@ using Newtonsoft.Json;
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
 {
-    internal class TickerPriceValue
+    public class PriceValue
     {
-        [JsonProperty("symbol")]
-        public string Symbol { get; set; }
+        [JsonProperty("usd")]
+        public double Usd { get; set; }
 
-        [JsonProperty("last_trade_price")]
-        public double LastTradePrice { get; set; }
+        [JsonProperty("eur")]
+        public double Eur { get; set; }
     }
 
-    internal class EthereumNode : CoinNode
+    public class TickerPriceValue
     {
-        private readonly List<EthereumValueNode> _nodes = new();
-        private readonly HttpClient _client;
+        [JsonProperty("ethereum")]
+        public PriceValue? Ethereum { get; set; }
 
-        public EthereumNode(IDriverContext driverContext) : base(driverContext)
-        {
-            _client = new HttpClient();
-            _client.Timeout = TimeSpan.FromSeconds(5);
-        }
+        [JsonProperty("cardano")]
+        public PriceValue? Cardano { get; set; }
 
-        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
-        {
-            await Refresh(token);
-            return true;
-        }
-        public override async Task Refresh(CancellationToken token = default)
-        {
-            try
-            {
-                using var response = await _client.GetAsync("https://api.blockchain.com/v3/exchange/tickers", token);
-                response.EnsureSuccessStatusCode();
+        [JsonProperty("bitcoin")]
+        public PriceValue? Bitcoin { get; set; }
+    }
 
-                var res = await response.Content.ReadAsStringAsync(token);
-
-                var jsonToken = JsonConvert.DeserializeObject<List<TickerPriceValue>>(res);
-
-                foreach (var node in _nodes)
-                {
-                    node.UpdateValue(jsonToken);
-                }
-            }
-            catch (Exception e)
-            {
-                DriverContext.Logger.LogError(e, "Could not refresh state");
-            }
-        }
-
-        internal void AddNode(EthereumValueNode node)
-        {
-            if (node != null)
-            {
-                _nodes.Add(node);
-            }
-        }
-
+    internal class EthereumNode(IDriverContext driverContext) : CoinNode<EthereumValueNode>(driverContext)
+    {
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            EthereumValueNode node = null;
+            EthereumValueNode? node = null;
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "blockchain-eth-usd":
