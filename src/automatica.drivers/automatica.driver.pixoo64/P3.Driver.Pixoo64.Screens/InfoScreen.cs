@@ -7,6 +7,7 @@ namespace P3.Driver.Pixoo64.Screens
     {
         public double? Outside { get; set; }
         public double? Inside { get; set; }
+        public string? DoorLockState { get; set; }
 
         public InfoScreen(IList<PixooSharp.Pixoo64> pixoo, ILogger logger) : base(pixoo, logger)
         {
@@ -23,7 +24,6 @@ namespace P3.Driver.Pixoo64.Screens
         {
             await Task.CompletedTask;
 
-
             pixoo.DrawText(5, 5, Palette.Green, Title);
 
             if (Outside.HasValue)
@@ -34,6 +34,8 @@ namespace P3.Driver.Pixoo64.Screens
             pixoo.DrawText(5, 32, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):HH:mm}");
             pixoo.DrawText(5, 42, Palette.White, $"{DateTime.Now.AddHours(DateTimeHourOffset):dd.MM.yyyy}");
 
+            if (DoorLockState != null)
+                pixoo.DrawText(5, 52, Palette.White, $"Door: {DoorLockState}");
         }
     }
 }

@@ -69,7 +69,7 @@ namespace P3.Logic.Time.Tests.DelayedOff
 
             var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
 
-            Assert.Empty(values);
+            Assert.Single(values);
         }
     }
 }

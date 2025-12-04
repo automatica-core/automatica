@@ -77,6 +77,7 @@ remote automatica.driver.vkingbms git@github.com:automatica-core/automatica.driv
 remote automatica.driver.pixoo64 git@github.com:automatica-core/automatica.driver.pixoo64.git
 remote automatica.driver.synology git@github.com:automatica-core/automatica.driver.synology.git
 remote automatica.driver.shelly git@github.com:automatica-core/automatica.driver.shelly.git
+remote automatica.driver.nuki git@github.com:automatica-core/automatica.driver.nuki.git
 
 remote automatica.logic.compare.baseoperations git@github.com:automatica-core/automatica.logic.compare.baseoperations.git
 remote automatica.logic.digitaltoanalog git@github.com:automatica-core/automatica.logic.digitaltoanalog.git
@@ -124,6 +125,7 @@ split src/automatica.drivers/automatica.driver.vkingbms automatica.driver.vkingb
 split src/automatica.drivers/automatica.driver.pixoo64 automatica.driver.pixoo64
 split src/automatica.drivers/automatica.driver.synology automatica.driver.synology
 split src/automatica.drivers/automatica.driver.shelly automatica.driver.shelly
+split src/automatica.drivers/automatica.driver.nuki automatica.driver.nuki
 
 # logics
 split src/automatica.logics/automatica.logic.compare.baseoperations automatica.logic.compare.baseoperations

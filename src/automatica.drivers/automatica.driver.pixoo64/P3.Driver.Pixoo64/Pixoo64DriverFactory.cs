@@ -12,7 +12,7 @@ namespace P3.Driver.Pixoo64
         public override Guid DriverGuid => new Guid("235b8a64-853a-498b-a0f9-077bec05eb1f");
 
 
-        public override Version DriverVersion => new Version(0, 10, 0, 2);
+        public override Version DriverVersion => new Version(0, 11, 0, 0);
 
         public override string ImageName => "automaticacore/plugin-p3.driver.pixoo64";
         
@@ -143,8 +143,6 @@ namespace P3.Driver.Pixoo64
                 "PIXOO64.PROPERTY.SCREENTIME.DESCRIPTION", "screen-time", PropertyTemplateType.Integer, infoScreen,
                 "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, 60), 5, 1, 1);
 
-
-
             factory.CreateNodeTemplate(new Guid("c2cae9d7-3ce9-41e4-8398-fd327ced88bd"), "PIXOO64.INFOSCREEN.OUTSIDE.NAME",
                 "PIXOO64.INFOSCREEN.OUTSIDE.DESCRIPTION", "info-outside", infoScreen,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
@@ -153,6 +151,12 @@ namespace P3.Driver.Pixoo64
                 "PIXOO64.INFOSCREEN.INSIDE.DESCRIPTION", "info-inside", infoScreen,
                 GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
                 NodeDataType.Double, 1, false);
+
+
+            factory.CreateNodeTemplate(new Guid("497b10a4-adab-40fa-9431-9b23a44bd3ae"), "PIXOO64.INFOSCREEN.DOOR_LOCK_STATE.NAME",
+                "PIXOO64.INFOSCREEN.DOOR_LOCK_STATE.DESCRIPTION", "door-lock-state", infoScreen,
+                GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, false, true, true, true,
+                NodeDataType.String, 1, false);
         }
 
         private void CreateMeterScreen(INodeTemplateFactory factory)

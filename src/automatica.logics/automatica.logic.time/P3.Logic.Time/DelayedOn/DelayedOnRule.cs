@@ -18,18 +18,14 @@ namespace P3.Logic.Time.DelayedOn
     {
         internal long Delay;
         private readonly RuleInterfaceInstance _output;
-        private readonly System.Timers.Timer _timer;
+        private System.Timers.Timer _timer;
         private bool _timerRunning;
         internal bool TriggerOnlyIfTrue = false;
 
         public DelayedOnRule(ILogicContext context) : base(context)
         {
-
             _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == DelayedOnLogicFactory.RuleOutput);
-
-            _timer = new System.Timers.Timer();
-            _timer.Elapsed += _timer_Elapsed;
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -63,10 +59,18 @@ namespace P3.Logic.Time.DelayedOn
             base.ParameterValueChanged(instance, source, value);
         }
 
+        protected override Task<bool> Start(RuleInstance instance, CancellationToken token = new CancellationToken())
+        {
+            _timer = new System.Timers.Timer();
+            _timer.Elapsed += _timer_Elapsed;
+            return base.Start(instance, token);
+        }
+
         protected override Task<bool> Stop(RuleInstance ruleInstance, CancellationToken token = default)
         {
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
+            _timer = null;
             _timerRunning = false;
             return base.Stop(ruleInstance, token);
         }

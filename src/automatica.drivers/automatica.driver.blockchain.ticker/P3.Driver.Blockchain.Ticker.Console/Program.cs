@@ -11,14 +11,15 @@ namespace P3.Driver.Blockchain.Ticker.Console
             System.Console.WriteLine("Hello World!");
 
             var node = new BitcoinNode(null);
-            node.AddNode(new BitcoinValueNode(null, "EUR", false, null));
-            node.AddNode(new BitcoinValueNode(null, "USD", false, null));
+            node.AddNode(new BitcoinValueNode(null, "EUR", false,"",  null));
+            node.AddNode(new BitcoinValueNode(null, "USD", false, "",null));
 
             var ethNode = new EthereumNode(null);
             ethNode.AddNode(new EthereumValueNode(null, "ETH-EUR", false, "", ethNode));
             ethNode.AddNode(new EthereumValueNode(null, "ETH-USD", false, "", ethNode));
 
             await ethNode.Refresh();
+            await node.Refresh();
 
             System.Console.ReadLine();
         }

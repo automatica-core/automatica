@@ -1,0 +1,48 @@
+﻿{
+  "NUKI": {
+    "NAME": "Nuki",
+    "POLL_INTERVAL": {
+      "NAME": "Abfrage Interval [s]",
+      "DESCRIPTION": ""
+    },
+    "IP_ADDRESS": {
+      "NAME": "IP Adresse",
+      "DESCRIPTION": ""
+    },
+    "PORT": {
+      "NAME": "Port",
+      "DESCRIPTION": ""
+    },
+    "ACCESS_TOKEN": {
+      "NAME": "Access Token",
+      "DESCRIPTION": ""
+    },
+    "SMART_LOCK": {
+      "NAME": "Smart Lock",
+      "ID": {
+        "NAME": "Nuki ID",
+        "DESCRIPTION": ""
+      },
+      "STATE": {
+        "NAME": "Status",
+        "DESCRIPTION": ""
+      },
+      "STATE_TEXT": {
+        "NAME": "Status Text",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_CRITICAL": {
+        "NAME": "Batterie Kritisch",
+        "DESCRIPTION": ""
+      },
+      "BATTERY_CHARGE_STATE": {
+        "NAME": "Batterie Ladezustand",
+        "DESCRIPTION": ""
+      },
+      "TIMESTAMP": {
+        "NAME": "Timestamp",
+        "DESCRIPTION": ""
+      }
+    }
+  }
+}

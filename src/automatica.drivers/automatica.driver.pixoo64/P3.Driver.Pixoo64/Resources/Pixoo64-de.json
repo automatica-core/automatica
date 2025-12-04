@@ -80,6 +80,10 @@
       "OUTSIDE": {
         "NAME": "Outside [°C]",
         "DESCRIPTION": ""
+      },
+      "DOOR_LOCK_STATE": {
+        "NAME": "Tür Status",
+        "DESCRIPTION": ""
       }
     },
     "METERSCREEN": {
