@@ -42,5 +42,10 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
           
             return node;
         }
+
+        protected override string GetUrl()
+        {
+            return "https://api.diadata.org/v1/assetQuotation/Bitcoin/0x0000000000000000000000000000000000000000";
+        }
     }
 }

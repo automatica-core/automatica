@@ -5,9 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
 
 [assembly: InternalsVisibleTo("P3.Driver.Blockchain.Ticker.Console")]
 
@@ -47,6 +44,11 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
             AddNode(node);
           
             return node;
+        }
+
+        protected override string GetUrl()
+        {
+            return "https://api.diadata.org/v1/assetQuotation/Cardano/0x000000000000000000000000000000000000000";
         }
     }
 }

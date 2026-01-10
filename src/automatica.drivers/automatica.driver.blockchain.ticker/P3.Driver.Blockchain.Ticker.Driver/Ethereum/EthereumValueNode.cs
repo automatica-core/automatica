@@ -1,4 +1,5 @@
 ﻿using Automatica.Core.Driver;
+using P3.Driver.Blockchain.Ticker.Driver.Dia;
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
 {
@@ -16,9 +17,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
             return null;
         }
 
-        public override PriceValue? GetPriceValue(TickerPriceValue tickerValue)
+        public override DiaAssetQuotation? GetPriceValue(DiaAssetQuotation tickerValue)
         {
-            return tickerValue.Ethereum;
+            return tickerValue;
         }
     }
 }

@@ -1,9 +1,5 @@
-﻿using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
-using Automatica.Core.Driver;
-using Microsoft.Extensions.Logging;
-using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
+﻿using Automatica.Core.Driver;
+using P3.Driver.Blockchain.Ticker.Driver.Dia;
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
 {
@@ -21,9 +17,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
             return null;
         }
 
-        public override PriceValue? GetPriceValue(TickerPriceValue tickerValue)
+        public override DiaAssetQuotation? GetPriceValue(DiaAssetQuotation tickerValue)
         {
-            return tickerValue.Cardano;
+            return tickerValue;
         }
     }
 }

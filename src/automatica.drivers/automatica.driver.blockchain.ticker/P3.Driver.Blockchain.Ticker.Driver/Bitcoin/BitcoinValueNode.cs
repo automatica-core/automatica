@@ -1,24 +1,8 @@
 ﻿using Automatica.Core.Driver;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
-using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
+using P3.Driver.Blockchain.Ticker.Driver.Dia;
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
 {
-    internal class BlockchainValue
-    {
-        [JsonProperty("last")]
-        public double Last { get; set; }
-
-        [JsonProperty("symbol")]
-        public string Symbol { get; set; }
-    }
-
-
     internal class BitcoinValueNode(
         IDriverContext driverContext,
         string currency,
@@ -35,9 +19,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
             return null;
         }
 
-        public override PriceValue GetPriceValue(TickerPriceValue tickerValue)
+        public override DiaAssetQuotation GetPriceValue(DiaAssetQuotation tickerValue)
         {
-            return tickerValue.Bitcoin;
+            return tickerValue;
         }
     }
 }

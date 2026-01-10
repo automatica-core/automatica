@@ -1,6 +1,7 @@
 ﻿using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using P3.Driver.Blockchain.Ticker.Driver.Dia;
 using P3.Driver.Blockchain.Ticker.Driver.Ethereum;
 using System;
 using System.Collections.Generic;
@@ -35,16 +36,18 @@ namespace P3.Driver.Blockchain.Ticker.Driver
             }
         }
 
+        protected abstract string GetUrl();
+
         internal override async Task Refresh(CancellationToken token = default)
         {
             try
             {
-                using var response = await _client.GetAsync("https://api.coingecko.com/api/v3/simple/price?ids=cardano,ethereum,bitcoin&vs_currencies=usd,eur,btc", token);
+                using var response = await _client.GetAsync(GetUrl(), token);
                 response.EnsureSuccessStatusCode();
 
                 var res = await response.Content.ReadAsStringAsync(token);
 
-                var jsonToken = JsonConvert.DeserializeObject<TickerPriceValue>(res);
+                var jsonToken = JsonConvert.DeserializeObject<DiaAssetQuotation>(res);
 
                 foreach (var node in _nodes)
                 {

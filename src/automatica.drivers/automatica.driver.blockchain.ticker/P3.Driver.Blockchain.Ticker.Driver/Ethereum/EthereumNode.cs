@@ -1,39 +1,11 @@
 ﻿#nullable enable
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using Automatica.Core.Driver;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 [assembly: InternalsVisibleTo("P3.Driver.Blockchain.Ticker.Console")]
 
 namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
 {
-    public class PriceValue
-    {
-        [JsonProperty("usd")]
-        public double Usd { get; set; }
-
-        [JsonProperty("eur")]
-        public double Eur { get; set; }
-    }
-
-    public class TickerPriceValue
-    {
-        [JsonProperty("ethereum")]
-        public PriceValue? Ethereum { get; set; }
-
-        [JsonProperty("cardano")]
-        public PriceValue? Cardano { get; set; }
-
-        [JsonProperty("bitcoin")]
-        public PriceValue? Bitcoin { get; set; }
-    }
-
     internal class EthereumNode(IDriverContext driverContext) : CoinNode<EthereumValueNode>(driverContext)
     {
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -58,6 +30,11 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Ethereum
             AddNode(node);
           
             return node;
+        }
+
+        protected override string GetUrl()
+        {
+            return "https://api.diadata.org/v1/assetQuotation/Ethereum/0x0000000000000000000000000000000000000000";
         }
     }
 }
