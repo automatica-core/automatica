@@ -36,11 +36,11 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-                using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
-                if (!releaser.EnteredSemaphore)
+                using var releaser = await _asyncKeyedLocker.LockOrNullAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                if (releaser is null)
                 {
                     return;
-                }
+                }                        
 
                 var previousState = 0;
                 _api.DownloadUpdateProgressChanged += (sender, e) =>
@@ -72,8 +72,8 @@ namespace Automatica.Push.Hubs
         {
             Task.Run(async () =>
             {
-                using var releaser = await _asyncKeyedLocker.LockAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
-                if (!releaser.EnteredSemaphore)
+                using var releaser = await _asyncKeyedLocker.LockOrNullAsync(nameof(UpdateHub), 10).ConfigureAwait(false);
+                if (releaser is null)
                 {
                     return;
                 }
