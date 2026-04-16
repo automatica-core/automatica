@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Version>8.2.0.0</Version>
     <Configurations>Debug;Release;DebugLocal</Configurations>
     <ProjectGuid>C7BD55D0-CF95-4410-BC9B-7AD6794B814F</ProjectGuid>
@@ -14,7 +14,7 @@
     <Product>Automatica.Core</Product>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Moq" Version="4.20.72" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automatica.Core.Base\Automatica.Core.Base.csproj" />
