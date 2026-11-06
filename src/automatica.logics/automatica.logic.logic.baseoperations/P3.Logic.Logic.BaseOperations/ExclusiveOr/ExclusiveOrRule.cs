@@ -10,10 +10,10 @@ namespace P3.Logic.Logic.BaseOperations.ExclusiveOr
 {
     public class ExclusiveOrRule : Automatica.Core.Logic.Logic
     {
-        private int? _i1 = null;
-        private int? _i2 = null;
+        private bool? _i1 = null;
+        private bool? _i2 = null;
 
-        private double? _o = null;
+        private bool _o;
 
         private readonly RuleInterfaceInstance _output1;
 
@@ -31,24 +31,27 @@ namespace P3.Logic.Logic.BaseOperations.ExclusiveOr
             {
                 if (instance.This2RuleInterfaceTemplate == ExclusiveOrLogicFactory.RuleInput1)
                 {
-                    _i1= Helper.ConvertValueToInt(value);
+                    _i1 = Helper.ConvertValueToBool(value);
                 }
 
                 if (instance.This2RuleInterfaceTemplate == ExclusiveOrLogicFactory.RuleInput2)
                 {
-                    _i2 = Helper.ConvertValueToInt(value);
+                    _i2 = Helper.ConvertValueToBool(value);
                 }
             }
 
-            if (_i1.HasValue && _i2.HasValue)
+            // same as Or: emit as soon as one input is known, an unknown input counts as false
+            if (_i1.HasValue || _i2.HasValue)
             {
-                _o = _i1.Value ^ _i2.Value;
+                _o = (_i1 ?? false) ^ (_i2 ?? false);
+
+                return new List<ILogicOutputChanged>
+                {
+                    new LogicOutputChanged(_output1, _o)
+                };
             }
 
-            return new List<ILogicOutputChanged>
-            {
-                new LogicOutputChanged(_output1, _o)
-            };
+            return new List<ILogicOutputChanged>();
         }
 
     }
