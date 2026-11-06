@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Remote;
@@ -109,7 +109,7 @@ namespace Automatica.Core.Plugin.Standalone
 
                 _connection.Dispatcher.MqttDispatch(e.ApplicationMessage.Topic, json);
             }
-            else if (MqttTopicFilterComparer.IsMatch(e.ApplicationMessage.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/*/reinit"))
+            else if (e.ApplicationMessage.Topic == $"{RemoteTopicConstants.SLAVE_TOPIC}/{_connection.NodeId}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}")
             {
                 Logger.LogDebug($"Received re-init event...");
                 Environment.Exit(0);

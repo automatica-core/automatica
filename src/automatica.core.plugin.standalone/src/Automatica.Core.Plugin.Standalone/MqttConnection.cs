@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,13 +90,33 @@ namespace Automatica.Core.Plugin.Standalone
         {
             try
             {
-                var options = new MqttClientOptionsBuilder()
+                var builder = new MqttClientOptionsBuilder()
                     .WithClientId($"{NodeId}") //must be unique, if we have several factories in one dll, this crashed otherwise!
-                    .WithTcpServer(MasterAddress)
                     .WithCredentials(Username, Password)
                     .WithCleanSession()
-                    .WithWillMessage(new MqttApplicationMessage { Topic = $"watchdog/{Username}/{NodeId}" })
-                    .Build();
+                    .WithWillMessage(new MqttApplicationMessage { Topic = $"watchdog/{Username}/{NodeId}" });
+
+                // the satellite passes the core's TLS port and the pinned certificate fingerprint when it uses TLS
+                var tlsFingerprint = BrokerCertificatePin.Normalize(Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_TLS_FINGERPRINT"));
+                int tlsPort;
+                if (tlsFingerprint != null && Int32.TryParse(Environment.GetEnvironmentVariable("AUTOMATICA_SLAVE_TLS_PORT"), out tlsPort) && tlsPort > 0)
+                {
+                    builder = builder
+                        .WithTcpServer(MasterAddress, tlsPort)
+                        .WithTls(new MqttClientOptionsBuilderTlsParameters
+                        {
+                            UseTls = true,
+                            SslProtocol = SslProtocols.Tls12 | SslProtocols.Tls13,
+                            CertificateValidationHandler = context => BrokerCertificatePin.Matches(context.Certificate, context.Chain, tlsFingerprint, Logger)
+                        });
+                    Logger.LogInformation($"Using TLS to {MasterAddress}:{tlsPort}");
+                }
+                else
+                {
+                    builder = builder.WithTcpServer(MasterAddress);
+                }
+
+                var options = builder.Build();
                 _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
 
                 _mqttClient.ApplicationMessageReceivedHandler = new MqttMessageHandlers(Logger, this, _serviceProvider);
@@ -104,11 +125,10 @@ namespace Automatica.Core.Plugin.Standalone
                 Logger.LogInformation($"Connected to mqtt broker {MasterAddress} with clientId {NodeId}");
 
                 Logger.LogDebug($"Subscribe to {RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}");
-                Logger.LogDebug($"Subscribe to {RemoteTopicConstants.DISPATCHER_TOPIC}/#");
-
+                // no dispatcher/# any more: the broker only allows the dispatcher topics of the own nodes, the driver
+                // subscribes to those when it registers them (MqttDispatcher.RegisterDispatch)
                 await _mqttClient.SubscribeAsync(
                     new MqttTopicFilterBuilder().WithTopic($"{RemoteTopicConstants.CONFIG_TOPIC}/{NodeId}").WithExactlyOnceQoS().Build(),
-                    new MqttTopicFilterBuilder().WithTopic($"{RemoteTopicConstants.DISPATCHER_TOPIC}/#").WithAtLeastOnceQoS().Build(),
                     new MqttTopicFilterBuilder().WithTopic($"{RemoteTopicConstants.SLAVE_TOPIC}/{NodeId}/reinit").WithAtLeastOnceQoS().Build());
 
                 _configTimer = new Timer(async state =>
