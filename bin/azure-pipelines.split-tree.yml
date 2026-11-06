@@ -1,0 +1,35 @@
+# Replaces the classic "automatica.core split tree" pipeline (definition 54). That one ran on a
+# self-hosted agent only because of the GitHub SSH key; this runs on a Microsoft-hosted agent and
+# pushes over HTTPS with a token instead. bin/subtree-split-ci is unchanged: its git@github.com:
+# remotes are rewritten to HTTPS by the insteadOf rule below.
+#
+# Needs the Library variable group "github-split-tree" with the secret variable GITHUB_SPLIT_TOKEN:
+# a fine-grained GitHub token (resource owner automatica-core) with "Contents: read and write" on all
+# split repositories.
+
+trigger:
+  branches:
+    include:
+      - develop
+      - master
+pr: none
+
+pool:
+  vmImage: ubuntu-24.04
+
+variables:
+  - group: github-split-tree
+
+steps:
+  - checkout: self
+    fetchDepth: 0           # splitsh-lite walks the full history
+    persistCredentials: false
+
+  - bash: |
+      set -euo pipefail
+      git config --global url."https://x-access-token:${GITHUB_SPLIT_TOKEN}@github.com/".insteadOf "git@github.com:"
+      chmod +x bin/splitsh-lite bin/subtree-split-ci
+      bin/subtree-split-ci "$(Build.SourceBranch)"
+    displayName: Split and push to the split repositories
+    env:
+      GITHUB_SPLIT_TOKEN: $(GITHUB_SPLIT_TOKEN)
