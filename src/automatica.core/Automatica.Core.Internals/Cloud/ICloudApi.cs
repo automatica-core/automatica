@@ -35,6 +35,11 @@ namespace Automatica.Core.Internals.Cloud
 
         Task<FileInfo> DownloadUpdate(IServerVersion update);
         Task<byte[]> DownloadFile(string url);
+
+        /// <summary>
+        /// https and an allow-listed host (see <see cref="CloudDownloadPolicy"/>)
+        /// </summary>
+        bool IsTrustedDownloadUrl(string url, out string reason);
         
         Task<bool> InstallPlugin(Plugin plugin, string fileName);
 

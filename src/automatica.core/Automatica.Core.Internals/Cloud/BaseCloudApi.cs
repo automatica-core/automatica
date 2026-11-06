@@ -22,18 +22,31 @@ namespace Automatica.Core.Internals.Cloud
         protected const string WebApiVersion = "v2";
         protected const string WebApiPrefix = "webapi";
 
+        /// <summary>
+        /// The api key and server guid are also sent as headers. The cloud still reads them from the url path, once every cloud
+        /// accepts the headers the path segments can be dropped.
+        /// </summary>
+        public const string ApiKeyHeader = "X-Automatica-ApiKey";
+        public const string ServerGuidHeader = "X-Automatica-ServerGuid";
+
+        /// <summary>
+        /// One shared client: certificate validation is always on (no custom validation callback)
+        /// </summary>
+        private static readonly HttpClient Client = CreateClient();
+
         public BaseCloudApi(IConfiguration config, ILogger logger)
         {
             _config = config;
             _logger = logger;
         }
-        private string GetUrl()
+
+        protected string GetUrl()
         {
             using var dbContext = new AutomaticaContext(_config);
             return $"{dbContext.Settings.First(a => a.ValueKey == "cloudUrl").ValueText}";
         }
 
-        private string GetApiKey()
+        private string GetApiKeyValue()
         {
             using var dbContext = new AutomaticaContext(_config);
             var apiKey = dbContext.Settings.First(a => a.ValueKey == "apiKey").ValueText;
@@ -43,7 +56,7 @@ namespace Automatica.Core.Internals.Cloud
                 throw new NoApiKeyException();
             }
 
-            return $"{apiKey}/{ServerInfo.ServerUid}";
+            return apiKey;
         }
 
         protected string GetCloudEnvironmentType()
@@ -58,26 +71,47 @@ namespace Automatica.Core.Internals.Cloud
             return $"{cloudEnv.ValueText}";
         }
 
-        private HttpClient SetupClient()
+        private static HttpClient CreateClient()
         {
-            var httpClientHandler = new HttpClientHandler
+            var client = new HttpClient(new SocketsHttpHandler
             {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                PooledConnectionLifetime = TimeSpan.FromMinutes(15),
+                AllowAutoRedirect = false
+            })
+            {
+                Timeout = TimeSpan.FromMinutes(2)
             };
-            // Three versions in one.
-            HttpClient client = new HttpClient(httpClientHandler);
-
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
             return client;
+        }
+
+        /// <summary>
+        /// The api key must never be sent in clear text: https only, plain http only for a local development cloud
+        /// </summary>
+        internal static Uri BuildRequestUri(string cloudUrl, string apiUrl, string apiKey, Guid serverUid)
+        {
+            var baseUri = new Uri(cloudUrl);
+            if (baseUri.Scheme != Uri.UriSchemeHttps && !baseUri.IsLoopback)
+            {
+                throw new InvalidOperationException($"The cloud url must use https ({baseUri.Scheme} is not allowed)");
+            }
+
+            return new Uri(baseUri, $"{apiUrl}/{Uri.EscapeDataString(apiKey)}/{serverUid}");
+        }
+
+        private HttpRequestMessage CreateRequest(HttpMethod method, string apiUrl)
+        {
+            var apiKey = GetApiKeyValue();
+            var request = new HttpRequestMessage(method, BuildRequestUri(GetUrl(), apiUrl, apiKey, ServerInfo.ServerUid));
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.TryAddWithoutValidation(ApiKeyHeader, apiKey);
+            request.Headers.TryAddWithoutValidation(ServerGuidHeader, ServerInfo.ServerUid.ToString());
+            return request;
         }
 
         public async Task<T> GetRequest<T>(string apiUrl) where T : class
         {
-            using var client = SetupClient();
-            var response = await client.GetAsync(new Uri(new Uri(GetUrl()), apiUrl + "/" + GetApiKey()))
-                .ConfigureAwait(false);
+            using var request = CreateRequest(HttpMethod.Get, apiUrl);
+            using var response = await Client.SendAsync(request).ConfigureAwait(false);
 
             if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -99,6 +133,7 @@ namespace Automatica.Core.Internals.Cloud
             }
             catch (Exception e)
             {
+                // never log the request url, it contains the api key
                 _logger.LogError(e, $"Could not execute get request to cloud: {apiUrl}: {responseText}");
             }
 
@@ -107,25 +142,15 @@ namespace Automatica.Core.Internals.Cloud
 
         public async Task<T> PostRequest<T>(string apiUrl, object postObject) where T : class
         {
-            T result = null;
-            using var client = SetupClient();
-            var url = GetUrl();
-            var apiKey = GetApiKey();
-            var response = await client.PostAsync(new Uri(new Uri(url), apiUrl + "/" + apiKey), postObject, new JsonMediaTypeFormatter()).ConfigureAwait(false);
-           
-            await response.Content.ReadAsStringAsync().ContinueWith(x =>
-            {
-                response.EnsureSuccessStatusCode();
-                if (x.IsFaulted)
-                    throw x.Exception;
+            using var request = CreateRequest(HttpMethod.Post, apiUrl);
+            request.Content = new ObjectContent(postObject?.GetType() ?? typeof(object), postObject, new JsonMediaTypeFormatter());
 
-                result = JsonConvert.DeserializeObject<T>(x.Result);
-            });
+            using var response = await Client.SendAsync(request).ConfigureAwait(false);
+            var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
 
-           
-            return result;
+            return JsonConvert.DeserializeObject<T>(responseText);
         }
     }
 }

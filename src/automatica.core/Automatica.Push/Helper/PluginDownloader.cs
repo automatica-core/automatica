@@ -53,9 +53,8 @@ namespace Automatica.Push.Helper
                 return null;
             }
 
-            var updateDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
-            Directory.CreateDirectory(updateDirectory);
-            return Path.Combine(updateDirectory, fileName);
+            // private staging directory (0700), never the world writable temp directory
+            return Path.Combine(ServerInfo.GetPluginUpdateDirectory(), fileName);
         }
 
         public async Task Download()
@@ -64,6 +63,12 @@ namespace Automatica.Push.Helper
             if (automaticaPluginUpdateFile == null)
             {
                 _logger.LogError($"Invalid plugin file name for {_plugin.ComponentName}, plugin is not downloaded");
+                return;
+            }
+
+            if (!_api.IsTrustedDownloadUrl(_plugin.AzureUrl, out var reason))
+            {
+                _logger.LogError($"Plugin {_plugin.ComponentName} is not downloaded: {reason}");
                 return;
             }
 
@@ -90,6 +95,18 @@ namespace Automatica.Push.Helper
 
             if (downloaded)
             {
+                try
+                {
+                    // fail early: a staged plugin is verified again before it is installed
+                    Automatica.Core.Common.Update.Plugin.VerifyPluginPackage(_logger, automaticaPluginUpdateFile, _plugin.ComponentName);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Plugin package for {_plugin.ComponentName} is not trusted, it is not installed");
+                    DeleteFile(automaticaPluginUpdateFile);
+                    return;
+                }
+
                 await DownloadCompleted(automaticaPluginUpdateFile);
             }
         }

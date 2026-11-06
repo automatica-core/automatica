@@ -55,8 +55,6 @@ namespace Automatica.Core.Internals.Cloud
         private readonly Timer _timer;
         private int _emailCounter = 0;
 
-        private const string UpdateFileName = "Automatica.Core.Update.zip";
-
         public event EventHandler<DownloadProgressChangedEventArgs> DownloadUpdateProgressChanged;
         public event EventHandler<EventArgs> DownloadUpdateFinished;
         public event EventHandler<AsyncCompletedEventArgs> DownloadUpdateFailed;
@@ -224,13 +222,13 @@ namespace Automatica.Core.Internals.Cloud
 
         public Task<bool> UpdateAlreadyDownloaded()
         {
-            var fileExists = File.Exists(Path.Combine(ServerInfo.GetTempPath(), UpdateFileName));
+            var fileExists = File.Exists(ServerInfo.GetUpdateFilePath());
             return Task.FromResult(fileExists);
         }
 
         public void DeleteUpdate()
         {
-            var updateFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
+            var updateFile = ServerInfo.GetUpdateFilePath();
 
             if(File.Exists(updateFile))
             {
@@ -247,7 +245,8 @@ namespace Automatica.Core.Internals.Cloud
 
             var updateServerVersion = (ServerVersion)update;
 
-            var tmpFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
+            // private staging directory (0700), never the world writable temp directory
+            var tmpFile = ServerInfo.GetUpdateFilePath();
 
             // a previous (possibly broken) download must not count as "already downloaded" if this one fails
             DeleteUpdate();
@@ -265,13 +264,35 @@ namespace Automatica.Core.Internals.Cloud
             {
                 await stream.WriteAsync(file);
             }
+            ServerInfo.MakeFilePrivate(partFile);
             File.Move(partFile, tmpFile, true);
 
             return new FileInfo(tmpFile);
         }
 
+        public bool IsTrustedDownloadUrl(string url, out string reason)
+        {
+            string cloudUrl = null;
+            try
+            {
+                cloudUrl = GetUrl();
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "Could not read the cloud url");
+            }
+            return CloudDownloadPolicy.IsAllowed(url, cloudUrl, out reason);
+        }
+
         public async Task<byte[]> DownloadFile(string url)
         {
+            if (!IsTrustedDownloadUrl(url, out var reason))
+            {
+                _logger.LogError($"Download refused: {reason}");
+                DownloadUpdateFailed?.Invoke(this, new AsyncCompletedEventArgs(new InvalidOperationException(reason), false, null));
+                return Array.Empty<byte>();
+            }
+
 #pragma warning disable SYSLIB0014 //ignore for now, need to have a download progress
             using var webClient = new WebClient();
 #pragma warning restore SYSLIB0014

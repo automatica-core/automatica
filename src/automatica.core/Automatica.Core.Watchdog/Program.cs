@@ -56,17 +56,19 @@ namespace Automatica.Core.Watchdog
             //    process.Kill();
             //}
 
-            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
+            var tmpPath = ServerInfo.GetUpdateStagingDirectory();
 
             if (Directory.Exists(tmpPath))
             {
                 Directory.Delete(tmpPath, true);
             }
 
-            if(File.Exists(Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName)))
+            if(File.Exists(ServerInfo.GetUpdateFilePath()))
             {
-                File.Delete(Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName));
+                File.Delete(ServerInfo.GetUpdateFilePath());
             }
+
+            RemoveLegacyTempUpdateFiles();
 
             ProcessStartInfo processInfo;
             if (!File.Exists(appName))
@@ -165,6 +167,31 @@ namespace Automatica.Core.Watchdog
             return delay;
         }
 
+        /// <summary>
+        /// Before 2026-11 the update was staged in the world writable temp directory, anything there is ignored and removed
+        /// </summary>
+        private static void RemoveLegacyTempUpdateFiles()
+        {
+            try
+            {
+                var legacyDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateStagingDirectoryName);
+                if (Directory.Exists(legacyDirectory))
+                {
+                    Directory.Delete(legacyDirectory, true);
+                }
+
+                var legacyFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName);
+                if (File.Exists(legacyFile))
+                {
+                    File.Delete(legacyFile);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "Could not remove the legacy update files from the temp directory");
+            }
+        }
+
         private static void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             _logger.LogError(e.Data);
@@ -172,7 +199,8 @@ namespace Automatica.Core.Watchdog
 
         private static bool PrepareUpdateIfExists()
         {
-            var tmpPath = Path.Combine(ServerInfo.GetTempPath(), $"Automatica.Core.Update");
+            // private staging directory (0700), the old world writable /tmp locations are never used
+            var tmpPath = ServerInfo.GetUpdateStagingDirectory();
             _logger.LogInformation($"See if we have an update pending...");
 
             if (Directory.Exists(tmpPath))
@@ -180,7 +208,7 @@ namespace Automatica.Core.Watchdog
                 Directory.Delete(tmpPath, true);
             }
 
-            var updateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.UpdateFileName);
+            var updateFile = ServerInfo.GetUpdateFilePath();
 
             if (!File.Exists(updateFile))
             {
@@ -191,11 +219,16 @@ namespace Automatica.Core.Watchdog
 
             try
             {
+                // verifies the signature before the package is extracted
                 var manifest = Common.Update.Update.GetUpdateManifest(_logger, updateFile, tmpPath);
                 if (manifest == null)
                 {
                     _logger.LogError("Invalid update package");
                     File.Delete(updateFile);
+                    if (Directory.Exists(tmpPath))
+                    {
+                        Directory.Delete(tmpPath, true);
+                    }
                     return false;
                 }
             }
@@ -203,6 +236,10 @@ namespace Automatica.Core.Watchdog
             {
                 _logger.LogError(e, "Could not unpack update package");
                 File.Delete(updateFile);
+                if (Directory.Exists(tmpPath))
+                {
+                    Directory.Delete(tmpPath, true);
+                }
                 return false;
             }
 

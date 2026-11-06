@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Common.Update;
+using Automatica.Core.Common.Update.Signing;
+using Newtonsoft.Json;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Plugins;
 using Microsoft.Extensions.Configuration;
@@ -61,21 +63,30 @@ namespace Automatica.Core.Runtime.Core.Plugins
                 return Task.FromResult(false);
             }
 
-            var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var tmpDirectory = ServerInfo.CreatePrivateTempDirectory();
 
             try
             {
-                Directory.CreateDirectory(tmpDirectory);
-
                 var installDir = Path.Combine(pluginRoot, componentName);
+
+                // verify (signature, anti-rollback) and extract before the installed version is removed
+                _logger.LogDebug($"Extract plugin to {tmpDirectory}");
+                var signature = Common.Update.Plugin.InstallPlugin(_logger, acPkgFilePath, tmpDirectory, componentName);
+                PackageVerifier.EnsureNoDowngrade(signature, GetInstalledSignedVersion(installDir), componentName, _logger);
+
+                var signatureFile = Path.Combine(tmpDirectory, PackageSignatureFormat.SignatureFileName);
+                if (signature != null)
+                {
+                    // the extracted files must be the signed ones
+                    var extracted = PackageVerifier.VerifyDirectory(Path.Combine(tmpDirectory, componentName), PackageSignatureFormat.TypePlugin,
+                        componentName, componentName + "/", false, true, signatureFile);
+                    PackageVerifier.EnsureTrusted(extracted, componentName, _logger);
+                }
 
                 if (Directory.Exists(installDir))
                 {
                     Directory.Delete(installDir, true);
                 }
-
-                _logger.LogDebug($"Extract plugin to {tmpDirectory}");
-                Common.Update.Plugin.InstallPlugin(acPkgFilePath, tmpDirectory);
 
                 if (!Directory.Exists(installDir))
                 {
@@ -92,6 +103,12 @@ namespace Automatica.Core.Runtime.Core.Plugins
                     _logger.LogDebug($"Copy file from {file} to {destination}");
                     File.Copy(file, destination, true);
                 }
+
+                // kept with the plugin: checked when the plugin is loaded and for the anti-rollback check of the next install
+                if (signature != null)
+                {
+                    File.Copy(signatureFile, Path.Combine(installDir, PackageSignatureFormat.SignatureFileName), true);
+                }
                 _logger.LogDebug($"Done install plugin...");
                 return Task.FromResult(true);
             }
@@ -105,6 +122,26 @@ namespace Automatica.Core.Runtime.Core.Plugins
             }
 
             return Task.FromResult(false);
+        }
+
+        /// <returns>the signed version of the installed plugin, null if it is not installed or has no signature</returns>
+        private string GetInstalledSignedVersion(string installDir)
+        {
+            var file = Path.Combine(installDir, PackageSignatureFormat.SignatureFileName);
+            if (!File.Exists(file))
+            {
+                return null;
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<PackageSignature>(File.ReadAllText(file))?.Version;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, $"Could not read {file}");
+                return null;
+            }
         }
 
         internal static bool IsValidComponentName(string componentName)

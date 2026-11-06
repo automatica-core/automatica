@@ -156,9 +156,109 @@ namespace Automatica.Core.Base.Common
             return new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
         }
 
+        /// <summary>
+        /// The shared system temp directory. Never use it for anything that is installed or executed later (world writable),
+        /// use <see cref="GetStagingDirectory()"/> instead.
+        /// </summary>
         public static string GetTempPath()
         {
             return Path.GetTempPath();
+        }
+
+        public const string StagingDirectoryName = ".staging";
+        public const string UpdateStagingDirectoryName = "Automatica.Core.Update";
+
+        /// <summary>
+        /// Private (0700) directory below the persistent directory for update and plugin packages and uploads
+        /// </summary>
+        public static string GetStagingDirectory()
+        {
+            return EnsurePrivateDirectory(Path.Combine(GetPersistentDirectory(), StagingDirectoryName));
+        }
+
+        /// <summary>
+        /// The staging directory of the installation in <paramref name="installDirectory"/> (the bootloader runs from another directory)
+        /// </summary>
+        public static string GetStagingDirectory(string installDirectory)
+        {
+            var persistent = Path.Combine(installDirectory, "persistent");
+            Directory.CreateDirectory(persistent);
+            return EnsurePrivateDirectory(Path.Combine(persistent, StagingDirectoryName));
+        }
+
+        /// <summary>
+        /// Directory the watchdog extracts a verified update to, the bootloader installs it from there
+        /// </summary>
+        public static string GetUpdateStagingDirectory(string installDirectory = null)
+        {
+            var staging = installDirectory == null ? GetStagingDirectory() : GetStagingDirectory(installDirectory);
+            return Path.Combine(staging, UpdateStagingDirectoryName);
+        }
+
+        /// <summary>
+        /// The downloaded update package
+        /// </summary>
+        public static string GetUpdateFilePath()
+        {
+            return Path.Combine(GetStagingDirectory(), UpdateFileName);
+        }
+
+        /// <summary>
+        /// Downloaded plugin packages that are installed on the next start
+        /// </summary>
+        public static string GetPluginUpdateDirectory()
+        {
+            return EnsurePrivateDirectory(Path.Combine(GetStagingDirectory(), PluginUpdateDirectoryName));
+        }
+
+        /// <summary>
+        /// Files uploaded by an administrator (ets import,...)
+        /// </summary>
+        public static string GetUploadDirectory()
+        {
+            return EnsurePrivateDirectory(Path.Combine(GetStagingDirectory(), "uploads"));
+        }
+
+        /// <summary>
+        /// Creates a new, empty, private directory with a random name for extracting packages
+        /// </summary>
+        public static string CreatePrivateTempDirectory(string installDirectory = null)
+        {
+            var staging = installDirectory == null ? GetStagingDirectory() : GetStagingDirectory(installDirectory);
+            var tmp = EnsurePrivateDirectory(Path.Combine(staging, "tmp"));
+            return EnsurePrivateDirectory(Path.Combine(tmp, Guid.NewGuid().ToString("N")));
+        }
+
+        /// <summary>
+        /// Creates the directory if needed and restricts it to the current user (0700, no effect on windows)
+        /// </summary>
+        public static string EnsurePrivateDirectory(string path)
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                Directory.CreateDirectory(path);
+                return path;
+            }
+
+            const UnixFileMode privateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute;
+            Directory.CreateDirectory(path, privateMode);
+            if (File.GetUnixFileMode(path) != privateMode)
+            {
+                File.SetUnixFileMode(path, privateMode);
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Restricts a file to the current user (0600, no effect on windows)
+        /// </summary>
+        public static void MakeFilePrivate(string file)
+        {
+            if (!OperatingSystem.IsWindows() && File.Exists(file))
+            {
+                File.SetUnixFileMode(file, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
         }
 
         public static string GetConfigDirectory()
