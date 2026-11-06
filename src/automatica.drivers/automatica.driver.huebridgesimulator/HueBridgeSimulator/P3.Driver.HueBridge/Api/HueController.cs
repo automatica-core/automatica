@@ -82,7 +82,7 @@ namespace P3.Driver.HueBridge.Api
         {
             LoginUser(apiKey);
 
-            var setLightData = JsonConvert.DeserializeObject<HueSwitchLightData>(data);
+            var setLightData = JsonConvert.DeserializeObject<HueSwitchLightData>(data) ?? new HueSwitchLightData();
 
             return HueDriver.Instance.SetLightState(id, setLightData, true);
         }
@@ -120,13 +120,26 @@ namespace P3.Driver.HueBridge.Api
             if (id == 0)
             {
                 HueDriver.Instance.SetAll(data);
-                return $@"[{{
-                            ""success"": {{
-                                ""address"": ""/groups/0/action/on"",
-                                ""value"": {data.On.ToString().ToLower()}
-                            }}}}]";
+
+                var results = new List<string>();
+                if (data.On.HasValue)
+                {
+                    results.Add($@"{{""success"":{{""/groups/0/action/on"":{data.On.Value.ToString().ToLower()}}}}}");
+                }
+                if (data.Bri.HasValue)
+                {
+                    results.Add($@"{{""success"":{{""/groups/0/action/bri"":{data.Bri.Value}}}}}");
+                }
+                return $"[{string.Join(",", results)}]";
             }
-            throw new NotImplementedException();
+
+            // Only group 0 ("all lights") exists on the simulated bridge.
+            return ResourceNotAvailable($"/groups/{id}");
+        }
+
+        internal static string ResourceNotAvailable(string address)
+        {
+            return $@"[{{""error"":{{""type"":3,""address"":""{address}"",""description"":""resource, {address}, not available""}}}}]";
         }
 
         [HttpGet]

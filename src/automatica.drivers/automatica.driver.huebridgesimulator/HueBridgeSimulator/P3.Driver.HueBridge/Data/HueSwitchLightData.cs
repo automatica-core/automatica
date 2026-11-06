@@ -15,8 +15,13 @@ namespace P3.Driver.HueBridge.Data
             Bri = brightness;
         }
 
+        /// <summary>
+        /// Null when the request does not contain "on" (e.g. a brightness-only request).
+        /// </summary>
         [JsonProperty("on")]
-        public bool On { get; set; }
-        public int Bri { get; set; }
+        public bool? On { get; set; }
+
+        [JsonProperty("bri")]
+        public int? Bri { get; set; }
     }
 }

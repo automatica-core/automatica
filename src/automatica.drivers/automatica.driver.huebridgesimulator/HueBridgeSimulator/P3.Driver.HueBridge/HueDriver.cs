@@ -42,19 +42,37 @@ namespace P3.Driver.HueBridge
 
         public HueLight SetLightState(int light, HueSwitchLightData state, bool invoke)
         {
-            if (invoke)
+            var hueLight = Lights[light];
+
+            if (state.On.HasValue)
             {
-                SwitchLight?.Invoke(this, new HueSwitchLightEventArgs(Lights[light], state.On, state.Bri));
+                var on = state.On.Value;
+                var bri = state.Bri ?? 0;
+                if (on && bri == 0)
+                {
+                    bri = 100;
+                }
+
+                if (invoke)
+                {
+                    SwitchLight?.Invoke(this, new HueSwitchLightEventArgs(hueLight, on, bri));
+                }
+
+                // HueLightState couples on and bri (setting one derives the other), so set "on" first.
+                hueLight.State.On = on;
+                if (on)
+                {
+                    hueLight.State.Bri = bri;
+                }
+            }
+            else if (state.Bri.HasValue && hueLight.State.On)
+            {
+                // Brightness-only request (e.g. {"bri":127}): adjust brightness of a light that is on,
+                // never switch it. Like a real bridge, brightness of a light that is off is ignored.
+                hueLight.State.Bri = Math.Max(1, state.Bri.Value);
             }
 
-            Lights[light].State.On = state.On;
-            if (state.On && state.Bri == 0)
-            {
-                state.Bri = 100;
-            }
-            Lights[light].State.Bri = state.Bri;
-
-            return Lights[light];
+            return hueLight;
         }
 
         internal void SetAll(HueSwitchLightData data)
@@ -92,7 +110,15 @@ namespace P3.Driver.HueBridge
 
         public async Task Stop()
         {
-            await _host.StopAsync();
+            HueDiscoveryService?.Stop();
+            HueDiscoveryService = null;
+
+            if (_host != null)
+            {
+                await _host.StopAsync();
+                _host.Dispose();
+                _host = null;
+            }
         }
 
         public IWebHost BuildWebHost(int port)

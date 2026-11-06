@@ -46,6 +46,11 @@ namespace P3.Driver.HueBridge
 
         public int Port => _port;
 
+        public void Stop()
+        {
+            _publisher?.Dispose();
+        }
+
 
         public void PublishDevice()
         {

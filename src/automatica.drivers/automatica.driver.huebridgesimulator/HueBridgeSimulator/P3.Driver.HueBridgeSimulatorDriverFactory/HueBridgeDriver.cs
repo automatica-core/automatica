@@ -44,6 +44,8 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
+            // Start may be retried on the same instance; never subscribe twice.
+            _driver.SwitchLight -= HueDriverSwitchLight;
             _driver.SwitchLight += HueDriverSwitchLight;
 
             await Task.Factory.StartNew(async () =>
@@ -62,7 +64,7 @@ namespace P3.Driver.HueBridgeSimulatorDriverFactory
 
 
             await _driver.Stop();
-            return await base.Start(token);
+            return await base.Stop(token);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
