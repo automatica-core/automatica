@@ -20,6 +20,11 @@ namespace P3.Knx.Core.Baos.Driver
 
         public const byte FrameEndByte = 0x16;
 
+        /// <summary>
+        /// FT1.2 fixed length frame: start, control field, checksum, end (KNX uses no address field).
+        /// </summary>
+        public const int ShortFrameLength = 4;
+
         public byte ControlField { get; protected set; }
 
         public BaosFrameType FrameType { get; protected set; }

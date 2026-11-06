@@ -49,5 +49,21 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
             return newValue;
         }
+
+        protected override bool ValueRead(object value)
+        {
+            try
+            {
+                var intValue = Convert.ToInt32(value);
+                // WriteOnlyIfChanged compares against the current bus state
+                _value = intValue is < sbyte.MinValue or > sbyte.MaxValue ? null : (sbyte)intValue;
+            }
+            catch (Exception e) when (e is FormatException or InvalidCastException or OverflowException)
+            {
+                _value = null;
+            }
+
+            return true;
+        }
     }
 }

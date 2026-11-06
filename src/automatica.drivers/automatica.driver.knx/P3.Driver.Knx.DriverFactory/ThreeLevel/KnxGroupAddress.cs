@@ -105,10 +105,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 var decodedValue = ToGroupValue(dptValue);
 
                 var result = await Driver.Write(this, GroupAddress, decodedValue, token).ConfigureAwait(false);
-                await writeContext.DispatchValue(value, token);
 
                 if (result)
                 {
+                    await writeContext.DispatchValue(value, token);
                     DriverContext.Logger.LogDebug($"Successfully write value {value} {decodedValue} on {GroupAddress}");
                 }
                 else

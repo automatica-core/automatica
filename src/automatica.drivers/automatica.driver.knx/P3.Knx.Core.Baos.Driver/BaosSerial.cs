@@ -125,7 +125,11 @@ namespace P3.Knx.Core.Baos.Driver
 
                     if (frame is LongFrame longFrame)
                     {
-                        if (frame.UserData.ToArray()[1] == 0xC1 || frame.UserData.ToArray()[1] == 0x85)
+                        // FT1.2: every valid variable length frame from the BAOS module (also DatapointValue.Ind) has to be acknowledged
+                        await SendAck();
+
+                        var userData = frame.UserData.ToArray();
+                        if (userData.Length > 1 && (userData[1] == 0xC1 || userData[1] == 0x85))
                         {
                             Logger.LogDebug($"DatapointValue.Ind");
 
@@ -164,20 +168,7 @@ namespace P3.Knx.Core.Baos.Driver
                 {
                     // Logger.LogDebug("Start parsing short frame...");
                     Thread.Sleep(100);
-                    byte[] shortFrame = new byte[5];
-                    shortFrame[0] = (byte)firstChar;
-                    var bytesRead = _stream.Read(shortFrame, 1, 4);
-
-                    if (bytesRead != 4)
-                    {
-                        Logger.LogDebug($"Could not parse short frame (read bytes {bytesRead}/4)");
-                        return null;
-                    }
-                    Logger.LogHexIn(shortFrame);
-
-                    var frame = BaosFrame.FromByteArray(BaosFrameType.ShortFrame, Logger, shortFrame);
-
-                    return frame;
+                    return ReadShortFrame(_stream.Read, Logger);
                 }
                 if (firstChar == BaosFrame.SingleCharFrame)
                 {
@@ -247,6 +238,32 @@ namespace P3.Knx.Core.Baos.Driver
                 _waitSemaphore.Release();
             }
             return null;
+        }
+
+        /// <summary>
+        /// Reads the rest of a FT1.2 fixed length frame after its start byte: 0x10, control field, checksum, 0x16 (4 bytes, no address field).
+        /// </summary>
+        internal static BaosFrame ReadShortFrame(Func<byte[], int, int, int> read, ILogger logger)
+        {
+            byte[] shortFrame = new byte[BaosFrame.ShortFrameLength];
+            shortFrame[0] = BaosFrame.ShortFrameStart;
+            var expected = shortFrame.Length - 1;
+            var bytesRead = read(shortFrame, 1, expected);
+
+            if (bytesRead != expected)
+            {
+                logger.LogDebug($"Could not parse short frame (read bytes {bytesRead}/{expected})");
+                return null;
+            }
+            logger.LogHexIn(shortFrame);
+
+            if (shortFrame[shortFrame.Length - 1] != BaosFrame.FrameEndByte)
+            {
+                logger.LogDebug("Invalid stop byte of short frame...");
+                return null;
+            }
+
+            return BaosFrame.FromByteArray(BaosFrameType.ShortFrame, logger, shortFrame);
         }
 
         public bool Close()

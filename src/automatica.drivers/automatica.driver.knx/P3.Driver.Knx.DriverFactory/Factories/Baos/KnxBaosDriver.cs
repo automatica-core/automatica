@@ -17,6 +17,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
     public class KnxBaosDriver : KnxDriver, IKnxDriver, IDatapointInd
     {
         private readonly BaosDriver _driver;
+        private CancellationTokenSource _retryCts;
 
         public KnxBaosDriver(IDriverContext driverContext) : base(driverContext, false, KnxLevel.TwoLevel) //move new layer in between, just a quick fix!
         {
@@ -31,15 +32,70 @@ namespace P3.Driver.Knx.DriverFactory.Factories.Baos
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
-            if(await _driver.Start())
+            if (!await StartInterface())
             {
-                return await StartWithoutConnection(token);
+                // root drivers are not retried by the core, keep the driver running and open the interface once it answers
+                DriverContext.Logger.LogWarning($"BAOS interface not reachable at start, retrying in the background...");
+                _retryCts?.Cancel();
+                _retryCts = new CancellationTokenSource();
+                var retryToken = _retryCts.Token;
+                _ = Task.Run(() => RetryStart(retryToken), CancellationToken.None);
             }
-            return false;
+
+            return await StartWithoutConnection(token);
+        }
+
+        private async Task<bool> StartInterface()
+        {
+            try
+            {
+                return await _driver.Start();
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error starting BAOS interface {e}");
+                return false;
+            }
+        }
+
+        private async Task RetryStart(CancellationToken token)
+        {
+            var delay = ReconnectInitialDelay;
+            try
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    await Task.Delay(delay, token);
+                    await _driver.Stop(); // closes the serial port a failed start left open
+
+                    if (await StartInterface())
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            await _driver.Stop();
+                            return;
+                        }
+                        DriverContext.Logger.LogInformation($"Connected to BAOS interface...");
+                        return;
+                    }
+
+                    DriverContext.Logger.LogWarning($"Start of BAOS interface failed, retry in {delay.TotalSeconds}s");
+                    delay = TimeSpan.FromTicks(Math.Min(delay.Ticks * 2, ReconnectMaxDelay.Ticks));
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // driver stopped
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error in BAOS start retry loop {e}");
+            }
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)
         {
+            _retryCts?.Cancel();
             var ret = await _driver.Stop();
             await StopWithoutConnection(token);
 

@@ -44,8 +44,8 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        private static readonly TimeSpan ReconnectInitialDelay = TimeSpan.FromSeconds(5);
-        private static readonly TimeSpan ReconnectMaxDelay = TimeSpan.FromSeconds(60);
+        private protected static readonly TimeSpan ReconnectInitialDelay = TimeSpan.FromSeconds(5);
+        private protected static readonly TimeSpan ReconnectMaxDelay = TimeSpan.FromSeconds(60);
         private CancellationTokenSource _stopCts = new CancellationTokenSource();
         private int _reconnecting;
 
@@ -98,6 +98,10 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             try
             {
                 _connection = CreateConnection();
+
+                // the remote connection tunnel forwards to the same KNX interface the connection uses
+                _remoteIp = IPAddress.Parse(ipAddress);
+                _remotePort = GetPropertyValueInt("knx-port");
 
                 if (useTunnel.HasValue && useTunnel.Value)
                 {
@@ -160,6 +164,13 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         internal void GroupValueReceived(string address, GroupValue value)
         {
+            // keep the answer for read requests current, but only for addresses we already answer (we wrote them),
+            // otherwise we would answer for every group address another device owns
+            if (value != null && _lastGaValues.TryGetValue(address, out var lastValue))
+            {
+                _lastGaValues.TryUpdate(address, value, lastValue);
+            }
+
             DispatchToNotifiers(address, value, value.Value);
         }
 
@@ -203,20 +214,25 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 return Task.CompletedTask;
             }
 
+            StartReconnectLoop();
+            return Task.CompletedTask;
+        }
+
+        private void StartReconnectLoop()
+        {
             if (_stopCts.IsCancellationRequested)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             if (Interlocked.CompareExchange(ref _reconnecting, 1, 0) != 0)
             {
                 DriverContext.Logger.LogDebug($"Reconnect already in progress...");
-                return Task.CompletedTask;
+                return;
             }
 
             var token = _stopCts.Token;
             _ = Task.Run(() => ReconnectLoop(token), CancellationToken.None);
-            return Task.CompletedTask;
         }
 
         private async Task ReconnectLoop(CancellationToken token)
@@ -363,7 +379,16 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
                 _stopCts = new CancellationTokenSource();
             }
 
-            await StartConnection(_connection, token);
+            try
+            {
+                await StartConnection(_connection, token);
+            }
+            catch (Exception)
+            {
+                // root drivers are not retried by the core, keep the driver running and connect once the interface is reachable
+                DriverContext.Logger.LogWarning($"KNX interface not reachable at start, retrying in the background...");
+                StartReconnectLoop();
+            }
 
             return await base.Start(token);
         }

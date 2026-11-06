@@ -30,6 +30,7 @@ namespace P3.Driver.Knx.Tests.Attributes
         {
             public List<(string Address, GroupValue Value)> Writes { get; } = new();
             public List<string> Reads { get; } = new();
+            public bool WriteResult { get; set; } = true;
 
             public override Task<bool> Read(string address)
             {
@@ -40,7 +41,7 @@ namespace P3.Driver.Knx.Tests.Attributes
             public override Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue, CancellationToken token)
             {
                 Writes.Add((address, groupValue));
-                return Task.FromResult(true);
+                return Task.FromResult(WriteResult);
             }
         }
 
@@ -433,6 +434,130 @@ namespace P3.Driver.Knx.Tests.Attributes
 
             await Write(ga, "ö");
             Assert.Equal(0xF6, driver.Writes.Single().Value.Value[0]);
+        }
+
+        [Fact]
+        public async Task Dpt1WriteOnlyIfChangedComparesAgainstTheBusValue()
+        {
+            var dpt1 = CreateByKey("knx-dpt1", 20);
+            dpt1.WriteOnlyIfChanged = true;
+            var (driver, middle) = await CreateDriver(dpt1);
+            var ga = Node<KnxDpt1Attribute>(middle, dpt1);
+
+            await Write(ga, true);
+            await Write(ga, true); // unchanged, suppressed
+            Assert.Single(driver.Writes);
+
+            driver.GroupValueReceived($"{MiddleGroup}/20", new GroupValue(false)); // switched off by a wall switch
+            await Write(ga, true);
+
+            Assert.Equal(2, driver.Writes.Count);
+        }
+
+        [Fact]
+        public async Task Dpt5FirstWriteOfZeroIsSent()
+        {
+            var dpt5 = CreateByKey("knx-dpt5", 21);
+            dpt5.SetProperty("knx-dpt-sub", 10); // 5.010 counter
+            dpt5.WriteOnlyIfChanged = true;
+            var (driver, middle) = await CreateDriver(dpt5);
+            var ga = Node<KnxDpt5Attribute>(middle, dpt5);
+
+            await Write(ga, 0);
+            Assert.Equal("00", Hex(driver.Writes.Single().Value));
+
+            driver.GroupValueReceived($"{MiddleGroup}/21", new GroupValue(new byte[] { 0x07 }));
+            await Write(ga, 0); // bus value is 7 now
+            await Write(ga, 0); // unchanged, suppressed
+
+            Assert.Equal(new[] { "00", "00" }, driver.Writes.Select(a => Hex(a.Value)));
+        }
+
+        [Fact]
+        public async Task Dpt6WriteOnlyIfChangedComparesAgainstTheBusValue()
+        {
+            var dpt6 = CreateByKey("knx-dpt6", 22);
+            dpt6.WriteOnlyIfChanged = true;
+            var (driver, middle) = await CreateDriver(dpt6);
+            var ga = Node<KnxDpt6Attribute>(middle, dpt6);
+
+            await Write(ga, 5);
+            driver.GroupValueReceived($"{MiddleGroup}/22", new GroupValue(new byte[] { 0xF6 })); // -10
+            await Write(ga, 5);
+            await Write(ga, 5); // unchanged, suppressed
+
+            Assert.Equal(new[] { "05", "05" }, driver.Writes.Select(a => Hex(a.Value)));
+        }
+
+        [Fact]
+        public async Task Dpt10WritesTheSameTimeWhenWriteOnlyIfChangedIsOff()
+        {
+            var dpt10 = CreateByKey("knx-dpt10", 23);
+            dpt10.WriteOnlyIfChanged = false;
+            var (driver, middle) = await CreateDriver(dpt10);
+            var ga = Node<KnxDpt10Attribute>(middle, dpt10);
+
+            await Write(ga, new TimeSpan(12, 30, 5));
+            await Write(ga, new TimeSpan(12, 30, 5));
+
+            Assert.Equal(2, driver.Writes.Count);
+        }
+
+        [Fact]
+        public async Task Dpt10SuppressesTheSameTimeWhenWriteOnlyIfChangedIsOn()
+        {
+            var dpt10 = CreateByKey("knx-dpt10", 24);
+            dpt10.WriteOnlyIfChanged = true;
+            var (driver, middle) = await CreateDriver(dpt10);
+            var ga = Node<KnxDpt10Attribute>(middle, dpt10);
+
+            await Write(ga, new TimeSpan(12, 30, 5));
+            await Write(ga, new TimeSpan(12, 30, 5));
+
+            Assert.Single(driver.Writes);
+        }
+
+        [Fact]
+        public async Task FailedWriteIsNotDispatched()
+        {
+            var dpt1 = CreateByKey("knx-dpt1", 25);
+            var (driver, middle) = await CreateDriver(dpt1);
+            driver.WriteResult = false;
+
+            var context = new WriteContextStub();
+            await Assert.ThrowsAsync<ArgumentException>(() => Write(Node<KnxDpt1Attribute>(middle, dpt1), true, context));
+
+            Assert.Empty(context.Values);
+        }
+
+        [Fact]
+        public async Task StartSucceedsWhenTheGatewayIsDown()
+        {
+            var dpt1 = CreateByKey("knx-dpt1", 27);
+            var (driver, _) = await CreateDriver(dpt1);
+            driver.DriverContext.NodeInstance.SetProperty("knx-port", 1); // nothing listens there
+
+            Assert.True(await driver.Init());
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+            try
+            {
+                Assert.True(await driver.Start(cts.Token)); // the reconnect loop keeps trying in the background
+            }
+            finally
+            {
+                await driver.Stop();
+            }
+        }
+
+        [Fact]
+        public async Task ReceivedValuesDoNotMakeTheDriverAnswerReadRequests()
+        {
+            var dpt1 = CreateByKey("knx-dpt1", 26);
+            var (driver, _) = await CreateDriver(dpt1);
+
+            driver.GroupValueReceived($"{MiddleGroup}/26", new GroupValue(true));
+
+            Assert.Null(driver.GetGroupValue(GroupAddress.Parse($"{MiddleGroup}/26")));
         }
     }
 }

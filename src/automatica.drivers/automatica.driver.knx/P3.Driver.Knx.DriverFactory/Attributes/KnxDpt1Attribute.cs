@@ -40,6 +40,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override bool ValueRead(object value)
         {
+            if (value is bool busValue)
+            {
+                _value = busValue; // WriteOnlyIfChanged compares against the current bus state
+            }
+
             return true; //always dispatch dpt1 values (dispatched by the caller)...
         }
     }

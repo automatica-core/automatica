@@ -57,7 +57,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                     {
                         var timeOfDay = new TimeSpan(dt.TimeOfDay.Hours, dt.TimeOfDay.Minutes, dt.TimeOfDay.Seconds);
 
-                        if (timeOfDay != _value)
+                        if (!WriteOnlyIfChanged || timeOfDay != _value)
                         {
                             dpt10Value = new KnxTime(timeOfDay);
                             _value = timeOfDay;
@@ -69,7 +69,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                     {
                         var timeOfDay = new TimeSpan(ts.Hours, ts.Minutes, ts.Seconds);
 
-                        if (timeOfDay != _value)
+                        if (!WriteOnlyIfChanged || timeOfDay != _value)
                         {
 
                             dpt10Value = new KnxTime(timeOfDay, 0);
@@ -82,7 +82,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                     {
                         var timeOfDay = new TimeSpan(ts.Hour, ts.Minute, ts.Second);
 
-                        if (timeOfDay != _value)
+                        if (!WriteOnlyIfChanged || timeOfDay != _value)
                         {
 
                             dpt10Value = new KnxTime(timeOfDay, 0);
@@ -95,7 +95,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                         if (TimeOnly.TryParse(str, CultureInfo.InvariantCulture, out var timeOnly))
                         {
                             var parsedTimeSpan = new TimeSpan(timeOnly.Hour, timeOnly.Minute, timeOnly.Second);
-                            if (parsedTimeSpan != _value)
+                            if (!WriteOnlyIfChanged || parsedTimeSpan != _value)
                             {
 
                                 dpt10Value = new KnxTime(parsedTimeSpan, 0);

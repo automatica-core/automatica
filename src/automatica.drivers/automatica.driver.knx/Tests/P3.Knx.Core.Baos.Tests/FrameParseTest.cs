@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using P3.Knx.Core.Baos.Driver;
 using P3.Knx.Core.Baos.Driver.Frames;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -28,6 +29,28 @@ namespace P3.Knx.Core.Baos.Tests
             Assert.True(frame.ChecksumCheck());
         }
 
+
+        [Fact]
+        public void TestShortFrameIsFourBytes()
+        {
+            // reset indication 10 C0 C0 16 (start byte already read), followed by the start of the next frame
+            var stream = new MemoryStream(new byte[] { 0xC0, 0xC0, 0x16, 0x68 });
+
+            var frame = BaosSerial.ReadShortFrame(stream.Read, NullLogger.Instance);
+
+            Assert.IsType<ShortFrame>(frame);
+            Assert.Equal(0xC0, frame.ControlField);
+            Assert.Equal(3, stream.Position); // the next frame is not consumed
+            Assert.Equal(new byte[] { 0x10, 0x40, 0x40, 0x16 }, ShortFrame.CreateResetFrame().ToByteFrame().ToArray());
+        }
+
+        [Fact]
+        public void TestShortFrameInvalidStopByte()
+        {
+            var stream = new MemoryStream(new byte[] { 0xC0, 0xC0, 0x17 });
+
+            Assert.Null(BaosSerial.ReadShortFrame(stream.Read, NullLogger.Instance));
+        }
 
         [Fact]
         public void TestParseDatapointValues()
