@@ -35,21 +35,41 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             return serialPortStream;
         }
 
-        private static Parity FromString(string parity)
+        /// <summary>
+        /// Maps the stored parity value (meta values "n/ep/o", the template default "even", or the enum names) case-insensitively
+        /// </summary>
+        internal static Parity FromString(string parity)
         {
-            switch (parity)
+            switch (parity?.Trim().ToLowerInvariant())
             {
-                case "NoParity":
+                case "n":
+                case "none":
+                case "noparity":
                     return Parity.None;
-                case "EventParity":
+                case "e":
+                case "ep":
+                case "even":
+                case "evenparity":
+                case "eventparity":
                     return Parity.Even;
-                case "OddParity":
+                case "o":
+                case "odd":
+                case "oddparity":
                     return Parity.Odd;
+                case "m":
+                case "mark":
+                case "markparity":
+                    return Parity.Mark;
+                case "s":
+                case "space":
+                case "spaceparity":
+                    return Parity.Space;
                 default:
+                    ModBus.Logger.LogWarning($"Unknown parity \"{parity}\", using no parity");
                     return Parity.None;
             }
         }
-        private static StopBits FromString(double stopBits)
+        internal static StopBits FromString(double stopBits)
         {
             switch (stopBits)
             {
@@ -142,6 +162,10 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             {
                 return false;
             }
+
+            // drop late/garbage bytes of a previous (timed out) response, they would be read as the answer to this request
+            serialPortStream.DiscardInBuffer();
+
             await serialPortStream.WriteAsync(data, 0, data.Length, cts);
             return true;
         }
@@ -165,65 +189,29 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 
             try
             {
-                var readLength = 5;
-
-                if (function == ModBusFunction.ReadInputRegisters ||
-                    function == ModBusFunction.ReadHoldingRegisters)
-                {
-                    readLength += numberOfRegisters * 2;
-                }
-                else if (function == ModBusFunction.ReadDiscreteInputs ||
-                         function == ModBusFunction.ReadCoils)
-                {
-                    readLength += (numberOfRegisters + 7) / 8;
-                }
-                else if (function == ModBusFunction.WriteMultipleRegisters ||
-                         function == ModBusFunction.WriteSingleRegister)
-                {
-                    readLength += 3;
-                }
-                else if (function == ModBusFunction.WriteMultipleCoils ||
-                         function == ModBusFunction.WriteSingleCoil)
-                {
-                    readLength += 3;
-                }
-
-                var data = new byte[readLength];
                 if (serialPortStream.IsDisposed || !serialPortStream.IsOpen)
                 {
                     _connected = false;
                     throw new Exception("object disposed or closed...");
                 }
 
-                int read;
+                byte[] data;
                 // receive timeout, linked with the callers token
                 using (var timeoutCts = new CancellationTokenSource(Config.Timeout))
                 using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts, timeoutCts.Token))
                 {
-                    read = await serialPortStream.ReadAsync(data, 0, readLength, linkedCts.Token);
+                    // reads until the expected length (or the exception reply length) arrived, checks the crc
+                    data = await ModBusFrameReader.ReadRtuFrameAsync(serialPortStream, function, numberOfRegisters, linkedCts.Token);
                 }
                 ModBus.Logger.LogHexIn(data);
-                if (read == readLength)
+
+                if ((data[1] & 0x80) != 0)
                 {
-
-                    var readCrc = data.Skip(data.Length - 2);
-                    var calcCrc = ModbusUtility.CalculateCrc(data.SkipLast(2).ToArray());
-                    if (!readCrc.SequenceEqual(calcCrc))
-                    {
-                        throw new Exception("Invalid crc...");
-                    }
-
-                    return data;
+                    ModBus.Logger.LogWarning($"ModBus exception reply from {data[0]} for function {function}: {(ModBusExceptionCode)data[2]}");
                 }
-                else
-                {
-                    if (readLength == 5 && data[1] == 0x86)
-                    {
-                        throw new Exception($"modbus exception thrown..({data[3]})");
-                    }
 
-                    throw new Exception("modbus exception thrown..");
-                }
+                // an exception reply is returned as well, the caller surfaces its exception code
+                return data;
             }
             catch (Exception e)
             {

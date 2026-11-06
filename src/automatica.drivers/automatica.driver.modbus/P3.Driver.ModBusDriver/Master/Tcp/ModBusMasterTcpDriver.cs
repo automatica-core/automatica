@@ -4,7 +4,6 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Automatica.Core.Base.TelegramMonitor;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.Driver.Utility;
@@ -17,21 +16,20 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
         private NetworkStream _networkStream;
         private bool _connected;
         private ushort _transactionId;
-        private readonly System.Timers.Timer _receiveTimeoutTimer = new System.Timers.Timer();
+        private ushort _expectedTransactionId;
 
         public override bool Connected => _connected;
 
         public ModBusMasterTcpDriver(ModBusMasterTcpConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
         {
-            _receiveTimeoutTimer.Elapsed += _receiveTimeoutTimer_Elapsed;
-            _receiveTimeoutTimer.Interval = config.Timeout;
         }
         protected override bool OpenConnection()
         {
             try
             {
                 _tcpClient = new TcpClient();
-                _tcpClient.Connect(Config.IpAddress, Config.Port);
+                // Port is a short, ports > 32767 are stored wrapped (negative)
+                _tcpClient.Connect(Config.IpAddress, (ushort)Config.Port);
                 _networkStream = new NetworkStream(_tcpClient.Client);
                 _connected = true;
             }
@@ -55,12 +53,6 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             }
 
             return Task.FromResult(true);
-        }
-
-        private void _receiveTimeoutTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            _receiveTimeoutTimer.Stop();
-            _connected = false;
         }
 
         protected override byte[] UpdateWriteFrame(byte[] frame)
@@ -134,6 +126,12 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
             {
                 return false;
             }
+
+            if (data.Length >= 2)
+            {
+                // the response has to echo the transaction id of this request
+                _expectedTransactionId = Utils.GetUShort(data[0], data[1]);
+            }
             await _networkStream.WriteAsync(data, 0, data.Length, cts);
             return true;
         }
@@ -145,41 +143,71 @@ namespace P3.Driver.ModBusDriver.Master.Tcp
 
         protected virtual int HeaderLength => 6;
 
+        /// <summary>
+        /// Returns true if the response <paramref name="header"/> belongs to the last request (same MBAP transaction id).
+        /// </summary>
+        protected virtual bool IsResponseToLastRequest(byte[] header)
+        {
+            return Utils.GetUShort(header[0], header[1]) == _expectedTransactionId;
+        }
+
         protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters, CancellationToken cts = default)
         {
-            try
+            var networkStream = _networkStream;
+            if (networkStream == null)
             {
-                _receiveTimeoutTimer.Start();
+                return null;
+            }
 
-                byte[] buffer = new byte[HeaderLength];
-                var read = await _networkStream.ReadAsync(buffer, 0, HeaderLength, cts);
-                _receiveTimeoutTimer.Stop();
-
-                if (read == HeaderLength)
+            using (var timeoutCts = new CancellationTokenSource(Config.Timeout))
+            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts, timeoutCts.Token))
+            {
+                try
                 {
-                    ModBus.Logger.LogHexIn(buffer);
-                    var lengthToRead = GetLengthToRead(buffer);
-                    _receiveTimeoutTimer.Start();
-                    byte[] data = new byte[lengthToRead];
-
-                    read = await _networkStream.ReadAsync(data, 0, lengthToRead, cts);
-
-                    _receiveTimeoutTimer.Stop();
-
-                    ModBus.Logger.LogHexIn(data);
-                    if (read == lengthToRead)
+                    while (true)
                     {
+                        // header exactly, then exactly the announced length (unit id + pdu)
+                        var header = new byte[HeaderLength];
+                        if (!await ModBusFrameReader.ReadExactlyAsync(networkStream, header, linkedCts.Token))
+                        {
+                            _connected = false;
+                            throw new IOException("ModBus tcp connection closed by the remote side");
+                        }
+                        ModBus.Logger.LogHexIn(header);
+
+                        var lengthToRead = GetLengthToRead(header);
+                        var data = new byte[lengthToRead];
+                        if (!await ModBusFrameReader.ReadExactlyAsync(networkStream, data, linkedCts.Token))
+                        {
+                            _connected = false;
+                            throw new IOException("ModBus tcp connection closed by the remote side");
+                        }
+                        ModBus.Logger.LogHexIn(data);
+
+                        if (!IsResponseToLastRequest(header))
+                        {
+                            // late answer to an earlier (timed out) request, wait for the matching one
+                            ModBus.Logger.LogWarning($"Dropped ModBus tcp response with transaction id {Utils.GetUShort(header[0], header[1])}, expected {_expectedTransactionId}");
+                            continue;
+                        }
+
                         return data;
                     }
                 }
-            }
-            catch (IOException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
+                catch (IOException)
+                {
+                    throw;
+                }
+                catch (OperationCanceledException)
+                {
+                    // no (complete) response in time, a partial frame would desync the stream, reconnect
+                    _connected = false;
+                    ModBus.Logger.LogError($"Timeout reading ModBus frame from {Config.IpAddress}:{Config.Port}");
+                }
+                catch (Exception e)
+                {
+                    ModBus.Logger.LogError(e, $"Error reading ModBus frame {e}");
+                }
             }
             return null;
         }

@@ -107,35 +107,35 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                 {
                     try
                     {
+                        // a single read may return a part of a frame, read the header and the frame exactly
                         var header = new byte[6];
-                        int read = await ns.ReadAsync(header, 0, 6);
-
-                        if (read == 0)
+                        if (!await Master.ModBusFrameReader.ReadExactlyAsync(ns, header, CancellationToken.None))
                         {
                             // remote side closed the connection
                             break;
                         }
 
-                        if (read == 6)
+                        var frameLength = Automatica.Core.Driver.Utility.Utils.GetUShort(header[4], header[5]);
+                        if (frameLength < 6)
                         {
-                            var frameLength = Automatica.Core.Driver.Utility.Utils.GetUShort(header[4], header[5]);
-                            var frame = new byte[frameLength];
-
-                            read = await ns.ReadAsync(frame, 0, frameLength);
-
-                            if (read == frameLength)
-                            {
-                                var deviceId = frame[0];
-                                var function = frame[1];
-                                var startIndex = Automatica.Core.Driver.Utility.Utils.GetUShort(frame[2], frame[3]);
-                                var length = Automatica.Core.Driver.Utility.Utils.GetUShort(frame[4], frame[5]);
-
-                                var responseData = GetResponseData(deviceId, function, startIndex, length, frame, header).ToArray();
-                                
-                                await ns.WriteAsync(responseData, 0, responseData.Length);
-
-                            }
+                            // too short for unit id, function, address and quantity/value
+                            break;
                         }
+
+                        var frame = new byte[frameLength];
+                        if (!await Master.ModBusFrameReader.ReadExactlyAsync(ns, frame, CancellationToken.None))
+                        {
+                            break;
+                        }
+
+                        var deviceId = frame[0];
+                        var function = frame[1];
+                        var startIndex = Automatica.Core.Driver.Utility.Utils.GetUShort(frame[2], frame[3]);
+                        var length = Automatica.Core.Driver.Utility.Utils.GetUShort(frame[4], frame[5]);
+
+                        var responseData = GetResponseData(deviceId, function, startIndex, length, frame, header).ToArray();
+
+                        await ns.WriteAsync(responseData, 0, responseData.Length);
                     }
                     catch (Exception)
                     {

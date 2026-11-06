@@ -12,13 +12,27 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         {
         }
 
+        /// <summary>
+        /// true for the "±8 Byte" template (two's complement long), false for the "+8 Byte" template (ulong)
+        /// </summary>
+        protected virtual bool IsSigned => false;
+
         protected override byte[] ConvertToBus(object value, out object convertedValue)
         {
             try
             {
-                var intValue = Convert.ToUInt64(value);
-                intValue = ((UInt64)(intValue * Factor) - (UInt64)Offset);
-                convertedValue = intValue;
+                ulong intValue;
+                if (IsSigned)
+                {
+                    var signedValue = (long)ScaleToBusInteger(value, long.MinValue, long.MaxValue);
+                    convertedValue = signedValue;
+                    intValue = unchecked((ulong)signedValue);
+                }
+                else
+                {
+                    intValue = (ulong)ScaleToBusInteger(value, ulong.MinValue, ulong.MaxValue);
+                    convertedValue = intValue;
+                }
 
                 var firstQ = (ushort)(intValue >> 48);
                 var secondQ = (ushort)(intValue >> 32);
@@ -36,15 +50,33 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             catch (Exception e)
             {
                 DriverContext.Logger.LogError(e, $"Could not convert {value} to int64");
-                throw new InvalidInputValueException(e);
+                throw e as InvalidInputValueException ?? new InvalidInputValueException(e);
             }
         }
 
         protected override object ConvertFromBus(byte[] value)
         {
             var intValue = BitConverter.ToUInt64(value, 0);
-            intValue = ((UInt64)(intValue / Factor) + (UInt64)Offset);
-            return intValue;
+
+            if (IsSigned)
+            {
+                var signedValue = unchecked((long)intValue);
+                return ScaleIntegerFromBus(signedValue, signedValue);
+            }
+
+            return ScaleIntegerFromBus(intValue, intValue);
         }
+    }
+
+    /// <summary>
+    /// "±8 Byte" template, the registers hold a two's complement 64 bit value
+    /// </summary>
+    public class ModBus8ByteSignedInteger : ModBus8ByteInteger
+    {
+        public ModBus8ByteSignedInteger(IDriverContext driverContext) : base(driverContext)
+        {
+        }
+
+        protected override bool IsSigned => true;
     }
 }

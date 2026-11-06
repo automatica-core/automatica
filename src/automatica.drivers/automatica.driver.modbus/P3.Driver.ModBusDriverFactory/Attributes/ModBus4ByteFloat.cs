@@ -16,8 +16,8 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         {
             try
             {
-                var dValue = Convert.ToSingle(value);
-                dValue = (float)(dValue * Factor - Offset);
+                // inverse of the read formula (raw / factor + offset)
+                var dValue = IsIdentityScale ? Convert.ToSingle(value) : (float)ScaleToBus(Convert.ToDouble(value));
                 
                 convertedValue = dValue;
 
@@ -42,7 +42,7 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             
             var val = BitConverter.ToSingle(bytes, 0);
 
-            var conVal = (float)(val / Factor + Offset);
+            var conVal = IsIdentityScale ? val : (float)ScaleFromBus(val);
             
             return conVal;
         }

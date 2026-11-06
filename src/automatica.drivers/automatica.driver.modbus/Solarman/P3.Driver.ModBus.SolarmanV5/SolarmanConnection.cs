@@ -50,6 +50,14 @@ namespace P3.Driver.ModBus.SolarmanV5
             return frame.ToArray();
         }
 
+        /// <summary>
+        /// Solarman V5 frames have no MBAP transaction id
+        /// </summary>
+        protected override bool IsResponseToLastRequest(byte[] header)
+        {
+            return true;
+        }
+
         protected override ushort GetLengthToRead(byte[] buffer)
         {
             return (ushort)(Utils.GetUShort(buffer[2], buffer[1]) );

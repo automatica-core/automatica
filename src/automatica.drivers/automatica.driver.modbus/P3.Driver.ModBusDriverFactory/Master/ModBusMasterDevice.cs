@@ -193,16 +193,22 @@ namespace P3.Driver.ModBusDriverFactory.Master
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {
                 case "modbus-+2byte":
-                case "modbus-2byte":
                     t = typeof(ModBus2ByteInteger);
                     break;
+                case "modbus-2byte": // "±2 Byte"
+                    t = typeof(ModBus2ByteSignedInteger);
+                    break;
                 case "modbus-+4byte":
-                case "modbus-4byte":
                     t = typeof(ModBus4ByteInteger);
                     break;
+                case "modbus-4byte": // "±4 Byte"
+                    t = typeof(ModBus4ByteSignedInteger);
+                    break;
                 case "modbus-+8byte":
-                case "modbus-8byte":
                     t = typeof(ModBus8ByteInteger);
+                    break;
+                case "modbus-8byte": // "±8 Byte"
+                    t = typeof(ModBus8ByteSignedInteger);
                     break;
                 case "modbus-4float":
                     t = typeof(ModBus4ByteFloat);

@@ -16,7 +16,8 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
             try
             {
                 var dblValue = Convert.ToDouble(value);
-                dblValue = dblValue * Factor - Offset;
+                // inverse of the read formula (raw / factor + offset)
+                dblValue = ScaleToBus(dblValue);
                 convertedValue = dblValue;
 
                 var bytes = BitConverter.GetBytes(dblValue);
@@ -34,7 +35,10 @@ namespace P3.Driver.ModBusDriverFactory.Attributes
         {
            
             var dblValue = BitConverter.ToDouble(value, 0);
-            dblValue = dblValue / Factor + Offset;
+            if (!IsIdentityScale)
+            {
+                dblValue = ScaleFromBus(dblValue);
+            }
 
             return dblValue;
         }

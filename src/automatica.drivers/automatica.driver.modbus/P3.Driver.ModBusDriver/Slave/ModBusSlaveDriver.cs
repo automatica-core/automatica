@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Automatica.Core.Base.TelegramMonitor;
 using P3.Driver.ModBusDriver.Exceptions;
 using Automatica.Core.Driver.Utility;
+using Microsoft.Extensions.Logging;
 [assembly: InternalsVisibleTo("P3.Driver.ModBus.Tests")]
 
 namespace P3.Driver.ModBusDriver.Slave
@@ -292,8 +293,11 @@ namespace P3.Driver.ModBusDriver.Slave
 
         public Span<byte> GetResponseData(in byte deviceId, in byte functionCode, in ushort startIndex, in ushort length, Span<byte> frame, Span<byte> header) 
         {
+            // change notifications are raised after the store lock is released, handlers read the store again
+            Action notifyChanged = null;
             try
             {
+                Span<byte> response;
                 lock (_lock)
                 {
                     TelegramMonitor.NotifyTelegram(TelegramDirection.Input, deviceId.ToString(), "SLAVE", Utils.ByteArrayToString(frame), "");
@@ -335,13 +339,18 @@ namespace P3.Driver.ModBusDriver.Slave
                             var byteCount = frame[6];
                             var writeData = frame.Slice(7, byteCount);
 
+                            int changedDeviceId = deviceId;
+                            var changedStart = startIndex;
+                            var changedLength = length;
                             if (functionCode == (byte) ModBusFunction.WriteMultipleRegisters)
                             {
                                 SetMultipleRegister(deviceId, startIndex, writeData);
+                                notifyChanged = () => NotifyHoldingRegisterChanged(changedDeviceId, changedStart, changedLength);
                             }
                             else if (functionCode == (byte) ModBusFunction.WriteMultipleCoils)
                             {
                                 SetMultipleCoils(deviceId, startIndex, writeData, length);
+                                notifyChanged = () => NotifyCoilChanged(changedDeviceId, changedStart, changedLength);
                             }
 
                             data = new byte[6];
@@ -359,7 +368,9 @@ namespace P3.Driver.ModBusDriver.Slave
                             bool coilValue = length == 0xFF00;
 
                             SetCoil(deviceId,  startIndex, coilValue);
-                            NotifyCoilChanged(deviceId,  startIndex, 1);
+                            int coilDeviceId = deviceId;
+                            var coilIndex = startIndex;
+                            notifyChanged = () => NotifyCoilChanged(coilDeviceId, coilIndex, 1);
 
                             data = new byte[6];
                             var byteLength = BitConverter.GetBytes((short) startIndex).Reverse().ToArray();
@@ -372,7 +383,9 @@ namespace P3.Driver.ModBusDriver.Slave
                             break;
                         case (byte) ModBusFunction.WriteSingleRegister:
                             SetHoldingRegister(deviceId, startIndex, length);
-                            NotifyCoilChanged(deviceId, startIndex, 1);
+                            int registerDeviceId = deviceId;
+                            var registerIndex = startIndex;
+                            notifyChanged = () => NotifyHoldingRegisterChanged(registerDeviceId, registerIndex, 1);
 
                             data = new byte[6];
                             var bLeng = BitConverter.GetBytes(startIndex).Reverse().ToArray();
@@ -403,8 +416,18 @@ namespace P3.Driver.ModBusDriver.Slave
 
                     TelegramMonitor.NotifyTelegram(TelegramDirection.Output, "SLAVE", deviceId.ToString(), Utils.ByteArrayToString(resp), "");
 
-                    return resp;
+                    response = resp;
                 }
+
+                try
+                {
+                    notifyChanged?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    ModBus.Logger.LogError(e, $"Error notifying register change {e}");
+                }
+                return response;
             }
             catch (ModBusException modBusException)
             {
@@ -420,7 +443,7 @@ namespace P3.Driver.ModBusDriver.Slave
 
         private byte[] CreateResponse(byte[] data)
         {
-            var res = new byte[3 + data.Length * 2];
+            var res = new byte[3 + data.Length]; // device id, function code, byte count, data
             res[0] = 0; //device Id
             res[1] = 0; //functionCode
             res[2] = (byte)(data.Length); //byte count 
