@@ -119,7 +119,8 @@ namespace Automatica.Core.Plugin.Standalone
         {
             try
             {
-                var localization = new LocalizationProvider(new NullLogger<LocalizationProvider>());
+                // no db:language in the plugin container, the provider falls back to the default language
+                var localization = new LocalizationProvider(new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build(), new NullLogger<LocalizationProvider>());
                 var factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
                 var templateFactory = _serviceProvider.GetRequiredService<INodeTemplateFactory>();
 

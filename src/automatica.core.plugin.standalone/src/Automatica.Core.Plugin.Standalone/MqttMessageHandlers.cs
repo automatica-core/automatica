@@ -71,7 +71,7 @@ namespace Automatica.Core.Plugin.Standalone
                 var factory = _connection.Factories.First(a => a.DriverGuid == dto.This2NodeTemplate);
                 var context = new DriverContext(dto, factory, _connection.Dispatcher, _connection.NodeTemplateFactory,
                     new RemoteTelegramMonitor(), new RemoteLicenseState(), Logger, new RemoteLearnMode(_connection),
-                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), _serviceProvider, new RemoteControlContext(), false);
+                    new RemoteServerCloudApi(), new RemoteLicenseContract(), new ConsoleLoggerFactory(), _serviceProvider, new RemoteControlContext(), TimeProvider.System, false);
 
              
 
