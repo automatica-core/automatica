@@ -17,8 +17,7 @@ services:
   timescale_automatica:
     image: timescale/timescaledb:latest-pg15
     restart: always
-    ports:
-      - "5432:5432"
+    # no published port: only the automatica container reaches it (compose network)
     environment:
       - POSTGRES_PASSWORD=postgres
     links:
