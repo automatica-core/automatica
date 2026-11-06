@@ -86,7 +86,7 @@ namespace P3.Driver.Pixoo64.Screens
             if (Meter6.HasValue)
             {
                 pixoo.DrawText(5, meterPos, Palette.White, $"{Meter6Name}");
-                pixoo.DrawText(30, meterPos, Meter5 < 0 ? Palette.Green : Palette.White,
+                pixoo.DrawText(30, meterPos, Meter6 < 0 ? Palette.Green : Palette.White,
                     Meter6.Value.ToString("0", CultureInfo.InvariantCulture));
             }
 
