@@ -1,0 +1,52 @@
+# Builds and pushes the Automatica base images (plugin runtime amd64 + arm32v7, plugin build).
+# Everything else (plugin standalone, satellite, supervisor, core, plugins) starts from these,
+# so run this first whenever the .NET major version or docker/plugins|plugin-sdk change.
+# See docker/build-base-images.sh for the image list and why arm32v7 must be real arm/v7.
+#
+# Lives in the monorepo (automatica-core/automatica), not in a split repo.
+
+trigger: none
+pr: none
+
+parameters:
+  - name: dotnetMajor
+    displayName: .NET major version
+    type: string
+    default: '10'
+  - name: push
+    displayName: Push to Docker Hub
+    type: boolean
+    default: true
+
+pool:
+  vmImage: ubuntu-24.04
+
+steps:
+  - ${{ if eq(parameters.push, true) }}:
+      - task: Docker@2
+        displayName: Docker Hub login
+        inputs:
+          command: login
+          containerRegistry: DockerHub
+
+  - script: docker run --privileged --rm tonistiigi/binfmt:qemu-v10.2.3 --install arm
+    displayName: Register QEMU for arm
+
+  - ${{ if eq(parameters.push, true) }}:
+      - script: bash docker/build-base-images.sh --push
+        displayName: Build, verify and push base images
+        env:
+          DOTNET_MAJOR: ${{ parameters.dotnetMajor }}
+
+      - task: Docker@2
+        displayName: Docker Hub logout
+        condition: always()
+        inputs:
+          command: logout
+          containerRegistry: DockerHub
+
+  - ${{ else }}:
+      - script: bash docker/build-base-images.sh
+        displayName: Build and verify base images (no push)
+        env:
+          DOTNET_MAJOR: ${{ parameters.dotnetMajor }}
