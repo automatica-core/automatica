@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,8 +42,14 @@ namespace Automatica.Core.Supervisor.Runtime
 
         private readonly IConfiguration _config;
         private readonly ILogger _logger;
+        private readonly SupervisedContainerPolicy _policy;
         private string _runningContainer;
         private bool _isPullingImage;
+
+        /// <summary>
+        /// What the container is created from: <c>image@sha256:...</c> once the digest is known, otherwise <c>image:tag</c>
+        /// </summary>
+        private string _imageReference;
 
         public RuntimeSupervisor(IConfiguration config, ILogger<RuntimeSupervisor> logger)
         {
@@ -77,6 +82,12 @@ namespace Automatica.Core.Supervisor.Runtime
             _supervisorImage = config["image"];
             _supervisorImageTag = config["imageTag"];
             _dockerRepositoryUrl = config["dockerRegistry"];
+
+            _policy = new SupervisedContainerPolicy(config);
+            _imageReference = _policy.ImageDigest != null
+                ? $"{_supervisorImage}@{_policy.ImageDigest}"
+                : $"{_supervisorImage}:{_supervisorImageTag}";
+            _logger.LogInformation($"Supervising {_supervisorImage} as {_policy.Role}");
         }
 
         public async Task Start()
@@ -185,21 +196,29 @@ namespace Automatica.Core.Supervisor.Runtime
             return null;
         }
 
+        private bool IsSupervisedContainer(ContainerListResponse container)
+        {
+            if (container.Labels != null && container.Labels.TryGetValue(SupervisedContainerPolicy.ManagedLabel, out var image))
+            {
+                return image == _supervisorImage;
+            }
+            // created by an older supervisor
+            return container.Image == $"{_supervisorImage}:{_supervisorImageTag}";
+        }
+
         private async Task<ContainerListResponse> GetStoppedContainerInstances()
         {
-            var fullImageName = $"{_supervisorImage}:{_supervisorImageTag}";
             var result = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters {All = true});
 
-            var ret = result.SingleOrDefault(a => a.Image == fullImageName && a.State.ToLowerInvariant() == "exited"); 
+            var ret = result.FirstOrDefault(a => IsSupervisedContainer(a) && a.State.ToLowerInvariant() == "exited");
             return ret;
         }
 
         private async Task<ContainerListResponse> GetRunningContainerInstance()
         {
-            var fullImageName = $"{_supervisorImage}:{_supervisorImageTag}";
             var result = await _dockerClient.Containers.ListContainersAsync(new ContainersListParameters());
 
-            var ret = result.SingleOrDefault(a => a.Image == fullImageName && a.State.ToLowerInvariant() == "running");
+            var ret = result.FirstOrDefault(a => IsSupervisedContainer(a) && a.State.ToLowerInvariant() == "running");
 
             return ret;
         }
@@ -275,17 +294,10 @@ namespace Automatica.Core.Supervisor.Runtime
                     } }
                 };
 
-                var envVariables = new List<string>();
-                var envDictionary = new Dictionary<string, string>();  
-
-                foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
-                {
-                    var envVar = $"{env.Key}={env.Value}";
-                    envVariables.Add(envVar);
-                    envDictionary.Add($"{env.Key}", $"{env.Value}");
-
-                    _logger.LogDebug($"Using env variable: {envVar}");
-                }
+                // only application settings, not the supervisor's own environment (PATH, HOSTNAME, DOCKER_SOCKET, ...)
+                var envDictionary = _policy.GetForwardedEnvironment(Environment.GetEnvironmentVariables());
+                var envVariables = envDictionary.Select(a => $"{a.Key}={a.Value}").ToList();
+                _logger.LogDebug($"Forwarding env variables: {String.Join(", ", envDictionary.Keys)}");
 
                 var exposedPorts = new Dictionary<string, EmptyStruct>();
 
@@ -352,7 +364,11 @@ namespace Automatica.Core.Supervisor.Runtime
                 {
                     Name = imgName,
                     Hostname = imgName,
-                    Image = $"{_supervisorImage}:{_supervisorImageTag}",
+                    Image = _imageReference,
+                    Labels = new Dictionary<string, string>
+                    {
+                        { SupervisedContainerPolicy.ManagedLabel, _supervisorImage }
+                    },
                     AttachStderr = false,
                     AttachStdin = false,
                     AttachStdout = false,
@@ -364,18 +380,18 @@ namespace Automatica.Core.Supervisor.Runtime
                     ExposedPorts = exposedPorts
                 };
 
-               
+
 
                 createContainerParams.HostConfig.Mounts = new List<Mount>();
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
                     var mounts = _config.GetSection("mounts").GetChildren().ToArray().Select(c => c.Value).ToArray();
-                    
+
                     foreach (var mount in mounts)
                     {
                         var mountSplit = mount.Split(":", StringSplitOptions.RemoveEmptyEntries);
-                        
+
                         createContainerParams.HostConfig.Mounts.Add(new Mount
                         {
                             Source = mountSplit[0],
@@ -384,28 +400,42 @@ namespace Automatica.Core.Supervisor.Runtime
                         });
                     }
 
-                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    // the docker socket is root on the host: only the satellite needs it, to start the plugin containers
+                    if (_policy.MountDockerSocket)
                     {
-                        Source = $"/var/run/docker.sock",
-                        Target = $"/var/run/docker.sock",
-                        Type = "bind"
-                    });
+                        createContainerParams.HostConfig.Mounts.Add(new Mount
+                        {
+                            Source = $"/var/run/docker.sock",
+                            Target = $"/var/run/docker.sock",
+                            Type = "bind"
+                        });
+                    }
 
-                    createContainerParams.HostConfig.Privileged = true;
+                    createContainerParams.HostConfig.Privileged = _policy.Privileged;
+                    if (_policy.Privileged)
+                    {
+                        _logger.LogWarning("Starting the container privileged (privileged=true)");
+                    }
 
+                    // the core opens the serial/USB devices of its drivers (device cgroup rules instead of privileged),
+                    // the satellite only looks up which devices exist to pass them to the plugin containers
                     createContainerParams.HostConfig.Mounts.Add(new Mount
                     {
                         Source = "/dev",
                         Target = "/dev",
-                        Type = "bind"
+                        Type = "bind",
+                        ReadOnly = _policy.Role == SupervisedRole.Satellite
                     });
-
-                    createContainerParams.HostConfig.Mounts.Add(new Mount
+                    if (_policy.DeviceCgroupRules.Count > 0)
                     {
-                        Source = "/tmp",
-                        Target = "/tmp",
-                        Type = "bind"
-                    });
+                        createContainerParams.HostConfig.DeviceCgroupRules = _policy.DeviceCgroupRules;
+                    }
+                    if (_policy.CapAdd.Count > 0)
+                    {
+                        createContainerParams.HostConfig.CapAdd = _policy.CapAdd;
+                    }
+
+                    // no host /tmp any more; add "/tmp:/tmp" to mounts if an installation relies on it
                     createContainerParams.HostConfig.Mounts.Add(new Mount
                     {
                         Source = "/etc/timezone",
@@ -442,14 +472,53 @@ namespace Automatica.Core.Supervisor.Runtime
 
             var image = await GetImageInformation<ImageInformation>(_dockerRepositoryUrl, _supervisorImage, _supervisorImageTag, _logger);
 
-            //repository image is newer - pull it!
-            if (image.LastUpdated > currentImage.Created && image.Images.Any(a => IsArchitectureCompatible(a.Architecture)))
+            //repository image is newer - it is pulled (and verified) before the container is switched to it
+            if (image != null && image.LastUpdated > currentImage.Created && image.Images.Any(a => IsArchitectureCompatible(a.Architecture)))
             {
                 _logger.LogInformation($"New image found {image.Name} at {image.LastUpdated}\nCurrent local image {currentImage?.Labels.FirstOrDefault()} {currentImage?.Created}");
-                await _dockerClient.Images.DeleteImageAsync($"{_supervisorImage}:{_supervisorImageTag}", new ImageDeleteParameters() { Force = true });
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// The digest to run: the pinned <c>imageDigest</c>, otherwise the registry's current digest of the tag
+        /// </summary>
+        private async Task<string> ResolveDigest()
+        {
+            if (_policy.ImageDigest != null)
+            {
+                return _policy.ImageDigest;
+            }
+            if (String.IsNullOrEmpty(_dockerRepositoryUrl))
+            {
+                return null;
+            }
+
+            var info = await GetImageInformation<ImageInformation>(_dockerRepositoryUrl, _supervisorImage, _supervisorImageTag, _logger);
+            if (info == null || !SupervisedContainerPolicy.IsValidDigest(info.Digest))
+            {
+                return null;
+            }
+            if (info.Images != null && info.Images.Count > 0 && !info.Images.Any(a => IsArchitectureCompatible(a.Architecture)))
+            {
+                _logger.LogWarning($"{_supervisorImage}:{_supervisorImageTag} has no image for this architecture");
+                return null;
+            }
+            return info.Digest;
+        }
+
+        private async Task<bool> HasDigest(string digest)
+        {
+            try
+            {
+                var inspect = await _dockerClient.Images.InspectImageAsync($"{_supervisorImage}@{digest}");
+                return inspect.RepoDigests != null && inspect.RepoDigests.Any(a => a.EndsWith($"@{digest}", StringComparison.Ordinal));
+            }
+            catch (DockerImageNotFoundException)
+            {
+                return false;
+            }
         }
 
         private async Task PullLatestImage()
@@ -478,15 +547,55 @@ namespace Automatica.Core.Supervisor.Runtime
                         }
                     }
 
-                    
 
-                    _logger.LogInformation($"Create image");
-                    await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+
+                    var digest = await ResolveDigest();
+                    if (digest != null)
                     {
-                        Tag = _supervisorImageTag,
-                        FromImage = _supervisorImage
-                    }, null, new Progress(_logger));
+                        // a pull by digest is verified by the docker daemon; the container is only switched once it is there
+                        _logger.LogInformation($"Pull {_supervisorImage}@{digest}");
+                        await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+                        {
+                            Tag = digest,
+                            FromImage = _supervisorImage
+                        }, null, new Progress(_logger));
 
+                        if (await HasDigest(digest))
+                        {
+                            _imageReference = $"{_supervisorImage}@{digest}";
+                            try
+                            {
+                                await _dockerClient.Images.TagImageAsync(_imageReference, new ImageTagParameters
+                                {
+                                    RepositoryName = _supervisorImage,
+                                    Tag = _supervisorImageTag,
+                                    Force = true
+                                });
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.LogWarning(e, $"Could not tag {_imageReference} as {_supervisorImageTag}");
+                            }
+                        }
+                        else
+                        {
+                            _logger.LogError($"Pulled image does not have the digest {digest}, keeping the current image");
+                        }
+                    }
+                    else if (_policy.RequireDigest)
+                    {
+                        _logger.LogError($"No digest for {_supervisorImage}:{_supervisorImageTag} (requireDigest=true), not pulling");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"No digest for {_supervisorImage}:{_supervisorImageTag}, pulling by tag");
+                        await _dockerClient.Images.CreateImageAsync(new ImagesCreateParameters()
+                        {
+                            Tag = _supervisorImageTag,
+                            FromImage = _supervisorImage
+                        }, null, new Progress(_logger));
+                        _imageReference = $"{_supervisorImage}:{_supervisorImageTag}";
+                    }
                 }
                 catch (Exception e)
                 {

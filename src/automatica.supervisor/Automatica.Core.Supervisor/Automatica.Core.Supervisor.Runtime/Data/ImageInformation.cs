@@ -16,6 +16,12 @@ namespace Automatica.Core.Supervisor.Runtime.Data
 
         [JsonProperty("last_updated")]
         public DateTime LastUpdated { get; set; }
+
+        /// <summary>
+        /// Digest of the tag (the manifest list for multi-arch tags)
+        /// </summary>
+        [JsonProperty("digest")]
+        public string Digest { get; set; }
     }
 
     public class Image
@@ -27,5 +33,8 @@ namespace Automatica.Core.Supervisor.Runtime.Data
 
         [JsonProperty("os")]
         public string OperatingSystem { get; set; }
+
+        [JsonProperty("digest")]
+        public string Digest { get; set; }
     }
 }
