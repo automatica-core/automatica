@@ -52,6 +52,9 @@ namespace Automatica.Driver.ShellyFactory.Discovery
                 switch (deviceType.ToLowerInvariant())
                 {
                     case "1":
+                        type = ShellyDeviceType.Shelly1;
+                        break;
+                    case "1pm":
                         type = ShellyDeviceType.Shelly1Pm;
                         break;
                     case "switch25":

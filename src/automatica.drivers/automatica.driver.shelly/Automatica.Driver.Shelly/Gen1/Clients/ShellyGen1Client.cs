@@ -86,7 +86,8 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
         public async Task<double> GetRelayEnergy(int channelId, CancellationToken token = default)
         {
             var status = await GetStatus(token);
-            return status.Value.Meters[channelId].Total;
+            // Gen1 reports meters[].total in watt-minutes, Gen2 reports aenergy.total in Wh: normalize to Wh
+            return status.Value.Meters[channelId].Total / 60d;
         }
 
         public async Task<long> GetRelayEnergyTimestamp(int channelId, CancellationToken token = default)

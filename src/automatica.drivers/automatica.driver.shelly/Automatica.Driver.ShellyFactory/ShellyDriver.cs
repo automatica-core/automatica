@@ -87,8 +87,11 @@ namespace Automatica.Driver.ShellyFactory
                 NodeInstance node;
                 switch (device.Type)
                 {
-                    case ShellyDeviceType.Shelly1Pm:
+                    case ShellyDeviceType.Shelly1:
                         node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly1Device);
+                        break;
+                    case ShellyDeviceType.Shelly1Pm:
+                        node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly1PmDevice);
                         break;
                     case ShellyDeviceType.Shelly25:
                         node = DriverContext.NodeTemplateFactory.CreateNodeInstance(ShellyFactory.Shelly25Device);

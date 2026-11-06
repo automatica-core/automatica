@@ -49,6 +49,10 @@ namespace Automatica.Driver.ShellyFactory
 
         public override async Task<bool> Start(CancellationToken token = new CancellationToken())
         {
+            // Start is retried on the same instance: release what a previous attempt created
+            StopTimer();
+            await ReleaseClient(token);
+
             var useIp = GetPropertyValueBool("shelly-use-ip");
 
             if (useIp.HasValue && useIp.Value)
@@ -108,11 +112,20 @@ namespace Automatica.Driver.ShellyFactory
 
             var shellyInfo = await Client.GetInfo(token);
 
-            if (ShellyId.ToLowerInvariant() != shellyInfo.Mac.ToLowerInvariant().Trim())
+            if (shellyInfo?.Mac == null)
             {
-                DriverContext.Logger.LogError($"Invalid shelly id....");
+                DriverContext.Logger.LogError($"Could not read device info of shelly {ShellyId} at {_ipAddress}, device offline or not reachable");
                 return false;
             }
+
+            if (!String.Equals(ShellyId?.Trim(), shellyInfo.Mac.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                DriverContext.Logger.LogError($"Invalid shelly id, expected {ShellyId} but device at {_ipAddress} reports {shellyInfo.Mac}");
+                return false;
+            }
+
+            // connect first (Gen2: websocket for status notifications), then read the initial values
+            await Client.Connect(token);
 
             try
             {
@@ -123,7 +136,8 @@ namespace Automatica.Driver.ShellyFactory
             }
             catch (Exception e)
             {
-                throw;
+                DriverContext.Logger.LogError(e, $"Could not read initial values from shelly {ShellyId}");
+                return false;
             }
 
             if (Generation == ShellyGeneration.Gen1)
@@ -133,9 +147,6 @@ namespace Automatica.Driver.ShellyFactory
                 _timer.Start();
             }
 
-            await Client.Connect(token);
-
-          
             return true;
         }
 
@@ -159,7 +170,8 @@ namespace Automatica.Driver.ShellyFactory
 
         private async void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            _timer.Elapsed -= _timer_Elapsed;
+            var timer = (Timer)sender;
+            timer.Elapsed -= _timer_Elapsed;
             try
             {
                 var ret = await Poll();
@@ -175,7 +187,7 @@ namespace Automatica.Driver.ShellyFactory
                 if (PollFailCount >= 10)
                 {
                     DriverContext.Logger.LogError($"Stop polling, after 10 tries, we have some errors to check...");
-                    _timer.Stop();
+                    timer.Stop();
                 }
             }
             catch (Exception ex)
@@ -184,7 +196,11 @@ namespace Automatica.Driver.ShellyFactory
             }
             finally
             {
-                _timer.Elapsed += _timer_Elapsed;
+                // do not re-arm a timer that was released by Stop/Start in the meantime
+                if (ReferenceEquals(timer, _timer))
+                {
+                    timer.Elapsed += _timer_Elapsed;
+                }
             }
         }
 
@@ -195,11 +211,28 @@ namespace Automatica.Driver.ShellyFactory
 
         public override async Task<bool> Stop(CancellationToken token = new CancellationToken())
         {
+            StopTimer();
+            await ReleaseClient(token);
+
+            return await base.Stop(token);
+        }
+
+        private void StopTimer()
+        {
             if (_timer != null)
             {
                 _timer.Elapsed -= _timer_Elapsed;
                 _timer.Stop();
                 _timer.Dispose();
+                _timer = null;
+            }
+        }
+
+        private async Task ReleaseClient(CancellationToken token)
+        {
+            if (Client == null)
+            {
+                return;
             }
 
             if (Client is ShellyGen2Client gen2Client)
@@ -207,12 +240,17 @@ namespace Automatica.Driver.ShellyFactory
                 gen2Client.OnNotifyEvent -= Gen2ClientOnOnNotifyEvent;
             }
 
-            if (Client != null)
+            try
             {
                 await Client.Disconnect(token);
             }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogWarning(e, "Error disconnecting shelly client");
+            }
 
-            return await base.Stop(token);
+            (Client as IDisposable)?.Dispose();
+            Client = null;
         }
 
         private async Task<bool> Poll(CancellationToken token = default)

@@ -6,7 +6,8 @@
         Shelly25,
         ShellyPlus2Pm,
         ShellyPlus1Pm,
-        ShellyPlugS
+        ShellyPlugS,
+        Shelly1
     }
 
     public enum ShellyGeneration

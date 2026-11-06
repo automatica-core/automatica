@@ -155,6 +155,7 @@ namespace Automatica.Driver.Shelly.Gen2
             _webSocket.OnOpened -= _webSocket_OnOpened;
             _webSocket.OnMessage -= _webSocket_OnMessage;
             _webSocket.OnClosed -= _webSocket_OnClosed;
+            _webSocket.OnError -= WebSocketOnOnError;
 
             if (_webSocket is { State: WebSocketState.Open })
             {
@@ -178,53 +179,69 @@ namespace Automatica.Driver.Shelly.Gen2
             return true;
         }
 
-        public async Task<bool> GetRelayState(int channelId, CancellationToken token = default)
+        private async Task<SwitchStatus> GetSwitchStatus(int channelId, CancellationToken token)
         {
             var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
                 new Dictionary<string, object> { { "id", channelId } }, token);
 
-            return switchState.Value.Result.Output;
+            if (!switchState.IsSuccess || switchState.Value?.Result == null)
+            {
+                var reason = switchState.Value?.Error?.Message ?? switchState.Message ?? "empty response";
+                throw new InvalidOperationException($"Could not read switch {channelId} status from {_shellyCommonOptions.IpAddress}: {reason}");
+            }
+
+            return switchState.Value.Result;
+        }
+
+        public async Task<bool> GetRelayState(int channelId, CancellationToken token = default)
+        {
+            return (await GetSwitchStatus(channelId, token)).Output;
         }
 
         public async Task<double> GetRelayVoltage(int channelId, CancellationToken token = default)
         {
-            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
-                new Dictionary<string, object> { { "id", channelId } }, token);
-            return switchState.Value.Result.Voltage;
+            return (await GetSwitchStatus(channelId, token)).Voltage;
         }
 
         public async Task<double> GetRelayPower(int channelId, CancellationToken token = default)
         {
-
-            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
-                new Dictionary<string, object> { { "id", channelId } }, token);
-            return switchState.Value.Result.Apower;
+            return (await GetSwitchStatus(channelId, token)).Apower;
         }
 
         public async Task<double> GetRelayCurrent(int channelId, CancellationToken token = default)
         {
-            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
-                new Dictionary<string, object> { { "id", channelId } }, token);
-            return switchState.Value.Result.Current;
+            return (await GetSwitchStatus(channelId, token)).Current;
         }
 
         public async Task<double> GetRelayEnergy(int channelId, CancellationToken token = default)
         {
-            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
-                new Dictionary<string, object> { { "id", channelId } }, token);
-            return switchState.Value.Result.Aenergy.Total;
+            // aenergy.total is in Wh
+            return (await GetSwitchStatus(channelId, token)).Aenergy?.Total ?? 0;
         }
 
         public async Task<long> GetRelayEnergyTimestamp(int channelId, CancellationToken token = default)
         {
-            var switchState = await SendPostMessage<SwitchStatus>("Switch.GetStatus",
-                new Dictionary<string, object> { { "id", channelId } }, token);
-            return switchState.Value.Result.Aenergy.MinuteTs;
+            return (await GetSwitchStatus(channelId, token)).Aenergy?.MinuteTs ?? 0;
         }
 
         public Task<bool> GetHasUpdate(CancellationToken token = default)
         {
             return Task.FromResult(false);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && _webSocket != null)
+            {
+                _webSocket.OnOpened -= _webSocket_OnOpened;
+                _webSocket.OnMessage -= _webSocket_OnMessage;
+                _webSocket.OnClosed -= _webSocket_OnClosed;
+                _webSocket.OnError -= WebSocketOnOnError;
+                _webSocket.Dispose();
+                _webSocket = null;
+            }
+
+            base.Dispose(disposing);
         }
 
     }

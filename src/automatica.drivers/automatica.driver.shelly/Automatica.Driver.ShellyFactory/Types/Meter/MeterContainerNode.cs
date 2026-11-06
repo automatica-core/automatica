@@ -75,7 +75,8 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                             await Task.CompletedTask;
                             return 0;
                         },
-                        async client => await client.GetRelayEnergyTimestamp(RelayId));
+                        async client => await client.GetRelayEnergyTimestamp(RelayId),
+                        async (client, @event) => await client.GetRelayEnergyTimestamp(RelayId));
                 case "meter-total":
                     return new GenericValueNode<double, bool>(ctx, Client,
                         async (o, client) =>
@@ -83,7 +84,8 @@ namespace Automatica.Driver.ShellyFactory.Types.Meter
                             await Task.CompletedTask;
                             return 0;
                         },
-                        async client => await client.GetRelayEnergy(RelayId));
+                        async client => await client.GetRelayEnergy(RelayId),
+                        async (client, @event) => await client.GetRelayEnergy(RelayId));
             }
 
             return null;

@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Automatica.Driver.Shelly.Gen1.Clients
 {
-    public abstract class ShellyClientBase : IShellyCommonClient
+    public abstract class ShellyClientBase : IShellyCommonClient, IDisposable
     {
         protected ITelegramMonitorInstance TelegramMonitor { get; }
         protected readonly HttpClient ShellyHttpClient;
@@ -115,6 +115,20 @@ namespace Automatica.Driver.Shelly.Gen1.Clients
             await TelegramMonitor.NotifyTelegram(TelegramDirection.Input, ShellyHttpClient!.BaseAddress!.AbsoluteUri, "self", readAsStringAsync, "");
             var shelly1Status = JsonConvert.DeserializeObject<T>(readAsStringAsync);
             return ShellyResult<T>.Success(shelly1Status);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ShellyHttpClient.Dispose();
+            }
         }
 
         public async Task<ShellyInfoDto> GetInfo(CancellationToken token = default)
