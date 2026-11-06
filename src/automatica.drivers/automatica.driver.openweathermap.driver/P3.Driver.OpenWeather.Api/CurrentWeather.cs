@@ -102,7 +102,7 @@ public static class CurrentWeather
     /// <returns> The current weather. </returns>
     public static async Task<WeatherModel> GetCurrentWeatherAsync(this WeatherClient client, double latitude, double longitude, Measurement measurement = Measurement.Standard, Language language = Language.English)
     {
-        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={client.ApiKey}&units={measurement.Convert()}&lang={language.Convert()}");
+        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/2.5/weather?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}&appid={client.ApiKey}&units={measurement.Convert()}&lang={language.Convert()}");
         return JsonConvert.DeserializeObject<WeatherModel>(file);
     }
 

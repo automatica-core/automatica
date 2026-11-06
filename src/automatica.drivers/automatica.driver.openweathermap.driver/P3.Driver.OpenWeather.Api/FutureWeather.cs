@@ -109,7 +109,7 @@ public static class FutureWeather
     /// <returns> A list of weather forecasts, with their exact moment. </returns>
     public static async Task<List<WeatherModel>> GetForecastAsync(this WeatherClient client, double latitude, double longitude, int timestampCount = 96, Measurement measurement = Measurement.Standard, Language language = Language.English)
     {
-        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&appid={client.ApiKey}&cnt={timestampCount}&units={measurement.Convert()}&lang={language.Convert()}");
+        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/2.5/forecast?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}&appid={client.ApiKey}&cnt={timestampCount}&units={measurement.Convert()}&lang={language.Convert()}");
         return New(JsonConvert.DeserializeObject<dynamic>(file));
     }
 

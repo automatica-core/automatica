@@ -8,6 +8,7 @@ using System.Timers;
 using System.Threading;
 using P3.Driver.OpenWeather.Api;
 using P3.Driver.OpenWeather.Api.Enums;
+using P3.Driver.OpenWeather.Api.Models.OneCallModel;
 using Timer = System.Timers.Timer;
 using P3.Driver.OpenWeatherMap.DriverFactory.Forecast.Daily;
 using P3.Driver.OpenWeatherMap.DriverFactory.Forecast.Hourly;
@@ -137,8 +138,50 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
 
         public override Task<bool> Stop(CancellationToken token = default)
         {
+            _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
             return base.Stop(token);
+        }
+
+        /// <summary>
+        /// The daily forecasts used for the forecast average values, limited to the configured forecast count
+        /// </summary>
+        internal IReadOnlyList<Daily> ForecastDays(OneCallModel model)
+        {
+            return LimitForecastDays(model.DailyForecasts!, _forecastCount);
+        }
+
+        internal static IReadOnlyList<Daily> LimitForecastDays(IReadOnlyList<Daily> days, int forecastCount)
+        {
+            if (days.Count == 0)
+            {
+                return days;
+            }
+
+            var count = Math.Clamp(forecastCount, 1, days.Count);
+            return days.Take(count).ToList();
+        }
+
+        /// <summary>
+        /// Average of angles in degrees (e.g. 350° and 10° = 0°), result is normalized to 0..360
+        /// </summary>
+        internal static double CircularMeanDegrees(IEnumerable<double> degrees)
+        {
+            double sin = 0, cos = 0;
+            foreach (var degree in degrees)
+            {
+                var rad = degree * Math.PI / 180.0;
+                sin += Math.Sin(rad);
+                cos += Math.Cos(rad);
+            }
+
+            var mean = Math.Atan2(sin, cos) * 180.0 / Math.PI;
+            if (mean < 0)
+            {
+                mean += 360.0;
+            }
+
+            return mean >= 360.0 ? mean - 360.0 : mean;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -196,55 +239,55 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                 case "openweathermap-forecast-humidity":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Average(a => a.HumidityPercentage), 2));
+                        (y) => Math.Round(ForecastDays(y).Average(a => a.HumidityPercentage), 2));
                     break;
                 }
                 case "openweathermap-forecast-pressure":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Average(a => a.AtmosphericPressure), 2));
+                        (y) => Math.Round(ForecastDays(y).Average(a => a.AtmosphericPressure), 2));
                     break;
                 }
                 case "openweathermap-forecast-wind-speed":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Average(a => a.WindSpeed), 2));
+                        (y) => Math.Round(ForecastDays(y).Average(a => a.WindSpeed), 2));
                     break;
                 }
                 case "openweathermap-forecast-wind-direction":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Average(a => a.WindDirection), 2));
+                        (y) => Math.Round(CircularMeanDegrees(ForecastDays(y).Select(a => (double)a.WindDirection)), 2));
                     break;
                 }
                 case "openweathermap-forecast-temperature":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Average(a => a.Temperature.Day), 2));
+                        (y) => Math.Round(ForecastDays(y).Average(a => a.Temperature.Day), 2));
                     break;
                 }
                 case "openweathermap-forecast-temperature-min":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Min(a => a.Temperature.Minimum), 2));
+                        (y) => Math.Round(ForecastDays(y).Min(a => a.Temperature.Minimum), 2));
                     break;
                 }
                 case "openweathermap-forecast-temperature-max":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Max(a => a.Temperature.Maximum), 2));
+                        (y) => Math.Round(ForecastDays(y).Max(a => a.Temperature.Maximum), 2));
                     break;
                 }
                 case "openweathermap-forecast-clouds":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => Math.Round(y.DailyForecasts!.Average(a => a.CloudPercentage), 2));
+                        (y) => Math.Round(ForecastDays(y).Average(a => a.CloudPercentage), 2));
                     break;
                 }
                 case "openweathermap-forecast-clouds-description":
                 {
                     node = new OpenWeatherMapDriverNode(ctx,
-                        (y) => y.DailyForecasts!.Last().Description.First().Description);
+                        (y) => ForecastDays(y).Last().Description.First().Description);
                     break;
                 }
                 case "openweathermap-forecast-precipitation":
@@ -264,7 +307,7 @@ namespace P3.Driver.OpenWeatherMap.DriverFactory
                 }
                 case "openweathermap-forecast-to":
                 {
-                    node = new OpenWeatherMapDriverNode(ctx, (y) => y.DailyForecasts!.Last().AnalysisDate);
+                    node = new OpenWeatherMapDriverNode(ctx, (y) => ForecastDays(y).Last().AnalysisDate);
                     break;
                 }
                 case "openweathermap-forecast-average":

@@ -39,9 +39,9 @@ public static class OneCallApi
     {
         string file;
         if (exclude.Length == 0)
-            file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/3.0/onecall?lat={latitude}&lon={longitude}&appid={client.ApiKey}&units={measurementSystem.Convert()}&lang={language.Convert()}");
+            file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/3.0/onecall?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}&appid={client.ApiKey}&units={measurementSystem.Convert()}&lang={language.Convert()}");
         else
-            file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/3.0/onecall?lat={latitude}&lon={longitude}&exclude={string.Join(',', exclude.Select(x => x.Convert()))}&appid={client.ApiKey}&units={measurementSystem.Convert()}&lang={language.Convert()}");
+            file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/3.0/onecall?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}&exclude={string.Join(',', exclude.Select(x => x.Convert()))}&appid={client.ApiKey}&units={measurementSystem.Convert()}&lang={language.Convert()}");
         return JsonConvert.DeserializeObject<OneCallModel>(file);
     }
 
@@ -78,7 +78,7 @@ public static class OneCallApi
     /// <returns> The OneCallModel response, acting as a "time machine" as a normal OneCall API call but for the requested day. </returns>
     public static async Task<OneCallModel> GetHistoricalOneCallAsync(this WeatherClient client, double latitude, double longitude, long dateUnix, Measurement measurementSystem = Measurement.Standard, Language language = Language.English)
     {
-        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={latitude}&lon={longitude}&dt={dateUnix}&appid={client.ApiKey}&units={measurementSystem.Convert()}&lang={language.Convert()}");
+        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}&dt={dateUnix}&appid={client.ApiKey}&units={measurementSystem.Convert()}&lang={language.Convert()}");
         return JsonConvert.DeserializeObject<OneCallModel>(file);
     }
 }

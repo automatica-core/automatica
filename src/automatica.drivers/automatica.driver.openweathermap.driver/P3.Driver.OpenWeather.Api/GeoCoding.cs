@@ -86,7 +86,7 @@ public static class GeoCoding
     public static async Task<List<GeoCodingModel>> LocationNameByCoordinatesAsync(this WeatherClient client,
         double latitude, double longitude, int limit=0)
     {
-        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/geo/1.0/reverse?lat={latitude}&lon={longitude}{(limit != 0 ? $"&limit={limit}" : "")}&appid={client.ApiKey}");
+        string file = await RestApi.GetWebpageStringAsync($"https://api.openweathermap.org/geo/1.0/reverse?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}{(limit != 0 ? $"&limit={limit}" : "")}&appid={client.ApiKey}");
         return JsonConvert.DeserializeObject<List<GeoCodingModel>>(file);
     }
 
