@@ -90,17 +90,31 @@ namespace Automatica.Core.WebApi.Controllers
 
         internal async Task<IEnumerable<AreaInstance>> ProcessFile(string password, IFormFile formFile)
         {
-            var targetLocation = ServerInfo.GetTempPath();
-            var path = UploadPathHelper.GetSafeFilePath(targetLocation, formFile.FileName);
+            if (formFile.Length > FileUploadController.MaxUploadSize)
+            {
+                throw new ArgumentException("File too large");
+            }
 
-            // Uncomment to save the file
-            await using (var fileStream = System.IO.File.Create(path))
+            // random name in the private upload directory, the client name is never used as a path
+            var path = UploadPathHelper.GetSafeFilePath(ServerInfo.GetUploadDirectory(), UploadPathHelper.CreateRandomFileName(formFile.FileName));
+
+            await using (var fileStream = new FileStream(path, FileMode.CreateNew))
             {
                 await formFile.CopyToAsync(fileStream);
             }
 
-
-            var etsProject = new EtsProjectParser().ParseEtsFile(path, password, GroupAddressStyle.ThreeLevel);
+            EtsProject etsProject;
+            try
+            {
+                etsProject = new EtsProjectParser().ParseEtsFile(path, password, GroupAddressStyle.ThreeLevel);
+            }
+            finally
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+            }
             var instances = new List<AreaInstance>();
             foreach (var b in etsProject.Buildings)
             {

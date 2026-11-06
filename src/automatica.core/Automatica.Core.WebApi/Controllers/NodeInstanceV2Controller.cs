@@ -561,11 +561,11 @@ namespace Automatica.Core.WebApi.Controllers
                 return BadRequest();
             }
 
-            // only a file uploaded to the temp directory (FileUploadController), never a path from the request
+            // only a file uploaded to the private upload directory (FileUploadController returns its random name), never a path from the request
             string uploadedFile;
             try
             {
-                uploadedFile = UploadPathHelper.GetSafeFilePath(ServerInfo.GetTempPath(), config.FileName);
+                uploadedFile = UploadPathHelper.GetSafeFilePath(ServerInfo.GetUploadDirectory(), config.FileName);
             }
             catch (ArgumentException)
             {

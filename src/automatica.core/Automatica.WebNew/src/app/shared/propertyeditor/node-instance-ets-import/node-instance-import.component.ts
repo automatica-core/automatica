@@ -9,6 +9,7 @@ import { PropertyInstance } from "src/app/base/model/property-instance";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { BaseServiceHelper } from "src/app/services/base-server-helper";
+import { getUploadedFileName } from "../../uploaded-file-name";
 
 @Component({
     selector: "node-instance-import",
@@ -66,7 +67,7 @@ export class NodeInstanceImportComponent extends BaseComponent implements OnDest
       return;
     }
     if (this.nodeInstance instanceof NodeInstance) {
-      await this.fileUploaded.emit({ item: this.nodeInstance, file: $event.file, password: this.password });
+      await this.fileUploaded.emit({ item: this.nodeInstance, file: $event.file, fileName: getUploadedFileName($event), password: this.password });
       this.isVisible = false;
     }
   }

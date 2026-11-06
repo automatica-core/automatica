@@ -10,34 +10,53 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/FileUpload")]
     public class FileUploadController: BaseController
     {
+        /// <summary>
+        /// Upload size limit (ets projects,...)
+        /// </summary>
+        public const long MaxUploadSize = 256L * 1024 * 1024;
+
         public FileUploadController(AutomaticaContext dbContext) : base(dbContext)
         {
         }
 
+        /// <summary>
+        /// Stores the file with a random name in the private upload directory, the client name is never used as a path.
+        /// </summary>
+        /// <returns>{ fileName }: the name to pass to the import</returns>
         [HttpPost]
         [Authorize(Policy = Role.AdminRole)]
+        [RequestSizeLimit(MaxUploadSize)]
+        [RequestFormLimits(MultipartBodyLengthLimit = MaxUploadSize)]
         public IActionResult Post()
         {
-            // full path to file in temp location
+            if (Request.Form.Files.Count == 0)
+            {
+                return BadRequest();
+            }
+
             var myFile = Request.Form.Files[0];
-            var targetLocation = ServerInfo.GetTempPath();
+            if (myFile.Length > MaxUploadSize)
+            {
+                return BadRequest("File too large");
+            }
 
             try
             {
-                var path = UploadPathHelper.GetSafeFilePath(targetLocation, myFile.FileName);
+                var fileName = UploadPathHelper.CreateRandomFileName(myFile.FileName);
+                var path = UploadPathHelper.GetSafeFilePath(ServerInfo.GetUploadDirectory(), fileName);
 
-                // Uncomment to save the file
-                using (var fileStream = System.IO.File.Create(path))
+                using (var fileStream = new FileStream(path, FileMode.CreateNew))
                 {
                     myFile.CopyTo(fileStream);
                 }
+                ServerInfo.MakeFilePrivate(path);
+
+                return Ok(new { fileName });
             }
             catch
             {
-                Response.StatusCode = 400;
+                return BadRequest();
             }
-
-            return new EmptyResult();
         }
     }
 }

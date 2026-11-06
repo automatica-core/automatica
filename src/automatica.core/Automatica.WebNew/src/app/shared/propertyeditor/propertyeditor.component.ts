@@ -40,6 +40,7 @@ import { ControlConfiguration } from "src/app/base/model/control-configuration";
 import { Control, ControlGrouped } from "src/app/base/model/control";
 import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 import { VirtualSettingsPropertyInstance } from "src/app/base/model/virtual-props/settings/settings-property-instance";
+import { getUploadedFileName } from "../uploaded-file-name";
 
 function sortProperties(a: PropertyInstance, b: PropertyInstance) {
   if (a.PropertyTemplate.Order < b.PropertyTemplate.Order) {
@@ -728,7 +729,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
       return;
     }
     if (this.item instanceof NodeInstance) {
-      this.fileUploaded.emit({ item: this.item, file: $event.file });
+      this.fileUploaded.emit({ item: this.item, file: $event.file, fileName: getUploadedFileName($event) });
     }
   }
 
