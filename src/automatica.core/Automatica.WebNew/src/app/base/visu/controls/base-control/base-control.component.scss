@@ -11,26 +11,20 @@
 .section_cell {
     height: 180px;
     border-radius: 2px;
-    margin: 0 5px 5px 0;
+    overflow: hidden;
     position: relative;
     background-color: $base-border-color;
 }
 
-.section_cell_180 {
-    width: 180px;
-}
-
+// the width comes from the section grid column (two-wide controls span two, see styles.scss)
+.section_cell_180,
 .section_cell_360 {
-    width: 365px;
+    width: 100%;
 }
 
 @media only screen and (max-width: 400px) {
 
     /* For mobile phones: */
-    [class*="section_cell_180"] {
-        width: 140px;
-    }
-
     [class*="section_cell"] {
         height: 140px;
     }
@@ -92,14 +86,21 @@
     color: white;
     font-size: 17px;
     margin-top: 80px;
-    width: 160px;
+    width: calc(100% - 40px);
+    min-width: 0;
 }
 
 @media only screen and (max-width: 400px) {
 
     /* For mobile phones: */
     [class*="cell_texts"] {
-        width: 120px;
+        margin: 12px;
+        margin-top: 76px;
+        width: calc(100% - 24px);
+    }
+
+    [class*="cell_icon_placeholder"] {
+        margin: 12px;
     }
 }
 

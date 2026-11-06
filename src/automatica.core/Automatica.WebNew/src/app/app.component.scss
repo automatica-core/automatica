@@ -1,5 +1,1 @@
-:host {
-    padding-top: env(safe-area-inset-top);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-}
+// safe areas are handled by the layout and header (styles.scss --app-safe-*)

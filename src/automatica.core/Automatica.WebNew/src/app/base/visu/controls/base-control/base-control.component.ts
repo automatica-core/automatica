@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectionStrategy, ElementRef, NgZone } from "@angular/core";
 import { AggregatedValueRecord } from "src/app/base/model/aggregated-record-value";
 
 @Component({
@@ -8,7 +8,7 @@ import { AggregatedValueRecord } from "src/app/base/model/aggregated-record-valu
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class BaseControlComponent implements OnInit {
+export class BaseControlComponent implements OnInit, OnDestroy {
 
   @Input()
   width: number = 1;
@@ -71,15 +71,29 @@ export class BaseControlComponent implements OnInit {
   }
 
 
-  constructor() { }
+  private resizeObserver: ResizeObserver;
+
+  constructor(private elementRef: ElementRef<HTMLElement>, private zone: NgZone) { }
 
   ngOnInit() {
-    let screenWidth = window.innerWidth; 
+    let screenWidth = window.innerWidth;
 
     if(screenWidth < 400) {
-      this.chartWidth = 120;
       this.chartHeight = 20;
     }
+
+    // the tile width follows the section grid column, the sparkline has to follow it
+    this.resizeObserver = new ResizeObserver(entries => {
+      const width = Math.floor(entries[0].contentRect.width);
+      if (width > 0 && width !== this.chartWidth) {
+        this.zone.run(() => this.chartWidth = width);
+      }
+    });
+    this.resizeObserver.observe(this.elementRef.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.resizeObserver?.disconnect();
   }
 
   preventDefault($event) {

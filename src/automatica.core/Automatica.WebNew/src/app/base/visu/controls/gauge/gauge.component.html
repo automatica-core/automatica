@@ -3,7 +3,7 @@
   <ng-container control_full>
     @if (type == GaugeType.Circular) {
       <dx-circular-gauge class="gauge" id="gauge" [value]="value" [subvalues]="[value]">
-        <dxo-size [height]="160" [width]="160">
+        <dxo-size [height]="gaugeSize" [width]="gaugeSize">
         </dxo-size>
         <dxo-animation [enabled]="true">
         </dxo-animation>
@@ -28,7 +28,7 @@
     }
     @if (type == GaugeType.Linear) {
       <dx-linear-gauge class="gauge" id="gauge" [value]="value">
-        <dxo-size [height]="160" [width]="160">
+        <dxo-size [height]="gaugeSize" [width]="gaugeSize">
         </dxo-size>
         <dxo-value-indicator type="rectangle" color="#325862">
         </dxo-value-indicator>

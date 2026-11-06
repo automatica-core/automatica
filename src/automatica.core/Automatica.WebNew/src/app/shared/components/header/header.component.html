@@ -16,7 +16,7 @@
     @if (title) {
       <dxi-item location="before">
         <div *dxTemplate="let data of 'item'">
-          <span style="margin-left: 20px; font-size: 20px; color: white;" translate>{{ title }}</span>
+          <span class="header-title" translate>{{ title }}</span>
         </div>
       </dxi-item>
     }
@@ -27,7 +27,7 @@
       @if (version) {
         <dxi-item location="before">
           <div *dxTemplate="let data of 'item'">
-            <span>{{ version }}</span>
+            <span class="header-version">{{ version }}</span>
           </div>
         </dxi-item>
       }
@@ -36,7 +36,7 @@
     @if (time) {
       <dxi-item location="after">
         <div *dxTemplate="let data of 'item'">
-          <span style="margin-left: 20px; font-size: 20px; color: white;" translate>{{ time }}</span>
+          <span class="header-time">{{ time }}</span>
         </div>
       </dxi-item>
     }

@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     menuToggleEnabled = false;
 
     time: string = "00:00:00";
+    private readonly narrowScreen = window.matchMedia("(max-width: 599.98px)");
     ticker: NodeJS.Timeout;
     version: string;
 
@@ -132,7 +133,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         this.ticker = setInterval(() => {
             const date = new Date();
-            this.time = date.toLocaleTimeString();
+            // no seconds on phones, the header has no room for them
+            this.time = this.narrowScreen.matches
+                ? date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                : date.toLocaleTimeString();
 
             this.changeRef.detectChanges();
         }, 1000);

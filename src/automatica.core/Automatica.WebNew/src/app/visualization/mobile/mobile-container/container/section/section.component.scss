@@ -29,15 +29,17 @@
 }
 
 .sections_rows {
-    display: -webkit-box;
-    -webkit-box-direction: normal;
-    -webkit-box-orient: horizontal;
-    flex-flow: wrap;
+    // a grid instead of the old -webkit-box: that syntax never wraps, so on WebKit (iOS app)
+    // the tiles ran off the right edge of the screen
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 180px);
+    gap: 5px;
     margin-bottom: 50px;
-}   
+}
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 599.98px) {
     .sections_rows {
-        // -webkit-box-pack: center;
+        // phones: fill the width, at least two columns even on 320px screens
+        grid-template-columns: repeat(auto-fill, minmax(min(140px, calc(50% - 3px)), 1fr));
     }
 } 

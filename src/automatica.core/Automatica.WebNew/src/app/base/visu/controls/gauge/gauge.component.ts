@@ -26,6 +26,9 @@ enum GaugeType {
     standalone: false
 })
 export class GaugeComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
+  // tiles are 140px high on phones up to 400px wide (base-control), 180px otherwise
+  readonly gaugeSize = window.innerWidth <= 400 ? 120 : 160;
+
   GaugeType = GaugeType;
 
   private valueInterface: RuleInterfaceInstance;

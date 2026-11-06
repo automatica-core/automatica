@@ -43,10 +43,57 @@
 :host {
     flex: 0 0 auto;
     z-index: 1;
+    // edge-to-edge: the toolbar colour runs up behind the status bar
+    padding-top: var(--app-safe-top);
+    background: $base-accent2;
 
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
     ::ng-deep .dx-toolbar .dx-toolbar-item-content > .menu-button .dx-icon {
-        color: $base-accent;
+        // the toolbar itself is $base-accent2, an accent-coloured icon on it is barely visible
+        color: white;
     }
 }
+
+.header-title {
+    margin-left: 20px;
+    font-size: 20px;
+    color: white;
+}
+
+.header-version {
+    margin-left: 8px;
+    opacity: .7;
+}
+
+.header-time {
+    margin-left: 20px;
+    font-size: 20px;
+    color: white;
+    font-variant-numeric: tabular-nums;
+}
+
+:host-context(.screen-x-small) {
+    .header-title {
+        margin-left: 4px;
+        font-size: 17px;
+    }
+
+    .header-version {
+        display: none;
+    }
+
+    .header-time {
+        margin-left: 8px;
+        font-size: 17px;
+    }
+
+    ::ng-deep .menu-button {
+        margin: 0 4px;
+    }
+
+    ::ng-deep .dx-toolbar-items-container .dx-toolbar-after {
+        padding: 0 8px;
+    }
+}
+

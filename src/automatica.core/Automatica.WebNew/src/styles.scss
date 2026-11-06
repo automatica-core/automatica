@@ -205,3 +205,18 @@ html, body {
     stroke-dashoffset: 0;
   }
 }
+
+// visu tiles: two-wide controls (media player) span two columns of the section grid.
+// Global because the section's scoped styles cannot reach into the control's template.
+app-visualization-element:has(.section_cell_360) {
+    grid-column: span 2;
+}
+
+// Safe areas (status bar, notch, gesture bar). Capacitor 8 draws the app edge-to-edge and sets
+// --safe-area-inset-* on Android, iOS and newer WebViews provide env(); both are 0 in a browser.
+:root {
+    --app-safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+    --app-safe-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+    --app-safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+    --app-safe-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+}
