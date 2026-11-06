@@ -11,7 +11,8 @@ namespace P3.Driver.Sonos
         private readonly IAvTransportService _avTransportService;
         private readonly IRenderingControlService _renderingControlService;
         private readonly IContentDirectoryService _contentDirectoryService;
-        public const string TuneInMediaUrl = "x-sonosapi-stream:{0}?sid=254&amp;flags=32";
+        // plain '&': the SOAP request builder XML-escapes argument values (SecurityElement.Escape)
+        public const string TuneInMediaUrl = "x-sonosapi-stream:{0}?sid=254&flags=32";
 
         public SonosController(IAvTransportService avTransportService,
             IRenderingControlService renderingControlService,

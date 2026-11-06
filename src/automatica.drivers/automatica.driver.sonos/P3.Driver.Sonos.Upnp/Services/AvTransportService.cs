@@ -185,11 +185,11 @@ namespace P3.Driver.Sonos.Upnp.Services
             return new GetTransportSettingsResponseFactory().CreateFor(ActionXNamespace, xml);
         }
 
-        private string GetRadioMetadata(string uri, string serviceType)
+        private string GetRadioMetadata(string stationId, string serviceType)
         {
             var metadata = $"<DIDL-Lite xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:upnp=\"urn:schemas-upnp-org:metadata-1-0/upnp/\" " +
                            "xmlns:r=\"urn:schemas-rinconnetworks-com:metadata-1-0/\" xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\">" +
-                           $"<item id=\"F00092020s${uri}\" parentID=\"L\"  restricted=\"true\">" +
+                           $"<item id=\"F00092020s{stationId}\" parentID=\"L\"  restricted=\"true\">" +
                            "<dc:title>tunein</dc:title>" +
                            $"<upnp:class>{ItemClass.Stream}</upnp:class>" +
                            $"<desc id=\"cdudn\" nameSpace=\"urn:schemas-rinconnetworks-com:metadata-1-0/\">SA_RINCON{serviceType}_</desc>" +
@@ -201,7 +201,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetMediaUrl(string url)
         {
-            var uriMetadata = new UpnpArgument("CurrentURIMetaData", GetRadioMetadata("", "65031_"));
+            var uriMetadata = new UpnpArgument("CurrentURIMetaData", GetRadioMetadata("", "65031"));
             var xml = await _upnpClient.InvokeFuncWithResultAsync("SetAVTransportURI",
                 new List<UpnpArgument>()
                     {new UpnpArgument("InstanceID", 0), new UpnpArgument("CurrentURI", url), uriMetadata});
@@ -214,9 +214,10 @@ namespace P3.Driver.Sonos.Upnp.Services
         /// <returns></returns>
         public async Task SetTuneInRadio(int radioId)
         {
-            var radioUrl = $"x-sonosapi-stream:s{radioId}?sid=254&amp;flags=32";
+            // plain '&': the SOAP request builder XML-escapes argument values
+            var radioUrl = $"x-sonosapi-stream:s{radioId}?sid=254&flags=32";
 
-            var uriMetadata = new UpnpArgument("CurrentURIMetaData", GetRadioMetadata("", "65031_"));
+            var uriMetadata = new UpnpArgument("CurrentURIMetaData", GetRadioMetadata(radioId.ToString(), "65031"));
                 var xml = await _upnpClient.InvokeFuncWithResultAsync("SetAVTransportURI",
                 new List<UpnpArgument>()
                     {new UpnpArgument("InstanceID", 0), new UpnpArgument("CurrentURI", radioUrl), uriMetadata});
