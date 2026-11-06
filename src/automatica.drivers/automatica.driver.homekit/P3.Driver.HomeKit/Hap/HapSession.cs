@@ -19,5 +19,16 @@ namespace P3.Driver.HomeKit.Hap
         public TcpClient Client { get; set; }
 
         public string ClientUsername { get; set; }
+
+        /// <summary>
+        /// UTF-8 pairing identifier of the verified controller
+        /// </summary>
+        public string ControllerId { get; internal set; }
+        public bool IsAdmin { get; internal set; }
+
+        /// <summary>
+        /// Close the connection once the current response was written (e.g. the pairing was removed)
+        /// </summary>
+        public bool CloseAfterResponse { get; internal set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using SecureRemotePassword;
 
 namespace P3.Driver.HomeKit.Hap.Controllers.Srp
@@ -14,9 +15,8 @@ namespace P3.Driver.HomeKit.Hap.Controllers.Srp
         }
         public byte[] GenerateSalt(int length)
         {
-            var rnd = new Random();
             var salt = new byte[length];
-            rnd.NextBytes(salt);
+            RandomNumberGenerator.Fill(salt);
 
             return salt;
         }

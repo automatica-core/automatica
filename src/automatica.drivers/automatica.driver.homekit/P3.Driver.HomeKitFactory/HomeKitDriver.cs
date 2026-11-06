@@ -108,7 +108,7 @@ namespace P3.Driver.HomeKitFactory
 
             if (String.IsNullOrEmpty(_pairCodeProperty.ValueString))
             {
-                string code = $"{CreateRandom(100, 999)}-{CreateRandom(10, 99)}-{CreateRandom(100, 999)}";
+                var code = HomeKitServer.GenerateSetupCode();
                 DriverContext.NodeTemplateFactory.SetPropertyValue(_pairCodeProperty.ObjId, code); //save to database
                 pairCode = code;
             }
@@ -131,7 +131,7 @@ namespace P3.Driver.HomeKitFactory
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty);
 
             DriverContext.Logger.LogDebug(
-                $"Start homekit server (LTSK {(String.IsNullOrEmpty(_ltskProperty.ValueString) ? "not set" : "loaded")}) and LTPK {_ltpkProperty.Value}");
+                $"Start homekit server (LTSK {(String.IsNullOrEmpty(_ltskProperty.ValueString) ? "not set" : "loaded")}, pairings {(String.IsNullOrEmpty(_ltpkProperty.ValueString) ? "not set" : "loaded")})");
             _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"),
                 DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
                 pairCode, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
@@ -318,6 +318,7 @@ namespace P3.Driver.HomeKitFactory
             if (actionName == HomeKitFactory.ClearPairingsKey)
             {
                 DriverContext.Logger.LogInformation($"Clear pairings...");
+                _server?.ClearPairings();
                 DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, String.Empty);  //save to database
                 DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, String.Empty); //save to database
 
@@ -391,15 +392,9 @@ namespace P3.Driver.HomeKitFactory
             }
         }
 
-        private int CreateRandom(int from, int to)
-        {
-            Random randomNumber = new Random();
-            return randomNumber.Next(from, to);
-        }
-
         private void ServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
-            DriverContext.Logger.LogInformation($"Saving LTSK and LTPK {e.Ltpk} to database...");
+            DriverContext.Logger.LogInformation($"Saving HomeKit pairings to database...");
 
             _ltskProperty.Value = e.Ltsk;
             _ltpkProperty.Value = e.Ltpk;
@@ -407,7 +402,7 @@ namespace P3.Driver.HomeKitFactory
             DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, e.Ltsk);  //save to database
             DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, e.Ltpk); //save to database
 
-            DriverContext.Logger.LogInformation($"Saving LTSK and LTPK {e.Ltpk} to database...done");
+            DriverContext.Logger.LogInformation($"Saving HomeKit pairings to database...done");
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)

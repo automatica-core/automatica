@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using NSec.Cryptography;
@@ -28,9 +29,26 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         }
 
 
-        public PairVerifyReturn Post(Tlv parts, HapSession session)
+        private static PairVerifyReturn Error(int state, ErrorCodes error)
+        {
+            var errorTlv = new Tlv();
+            errorTlv.AddType(Constants.State, state);
+            errorTlv.AddType(Constants.Error, error);
+            return new PairVerifyReturn
+            {
+                TlvData = errorTlv,
+                Ok = false
+            };
+        }
+
+        public PairVerifyReturn Post(Tlv parts, HapSession session, HapPairingStore pairingStore)
         {
             var state = parts.GetTypeAsInt(Constants.State);
+
+            if (!pairingStore.IsPaired)
+            {
+                return Error(state + 1, ErrorCodes.Authentication);
+            }
 
             if (state == 1)
             {
@@ -39,10 +57,13 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 var clientPublicKey = parts.GetType(Constants.PublicKey);
 
-                byte[] privateKey = new byte[32];
+                if (clientPublicKey == null || clientPublicKey.Length != 32)
+                {
+                    return Error(2, ErrorCodes.Authentication);
+                }
 
-                Random random = new Random();
-                random.NextBytes(privateKey);
+                var privateKey = new byte[32];
+                RandomNumberGenerator.Fill(privateKey);
                     
                 var publicKey = Curve25519.GetPublicKey(privateKey);
                 var sharedSecret = Curve25519.GetSharedSecret(privateKey, clientPublicKey);
@@ -50,7 +71,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var serverUsername = Encoding.UTF8.GetBytes(HapControllerServer.HapControllerId);
 
                 var material = publicKey.Concat(serverUsername).Concat(clientPublicKey).ToArray();
-                var accessoryLtsk = StringToByteArray(HapControllerServer.HapControllerLtsk);
+                var accessoryLtsk = StringToByteArray(pairingStore.AccessoryLtsk);
 
                 var proof = Chaos.NaCl.Ed25519.Sign(material, accessoryLtsk);
 
@@ -104,6 +125,11 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 _logger.LogDebug("* Pair Verify Step 3/4");
                 _logger.LogDebug("* Verify Finish Request");
 
+                if (session.HkdfPairEncKey == null || session.ClientPublicKey == null)
+                {
+                    return Error(4, ErrorCodes.Authentication);
+                }
+
                 var encryptedData = parts.GetType(Constants.EncryptedData);
                 var zeros = new byte[] { 0, 0, 0, 0 };
                 var nonce = new Nonce(zeros, Encoding.UTF8.GetBytes("PV-Msg03"));
@@ -127,12 +153,20 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var clientUserName = subData.GetType(Constants.Identifier);
                 var signature = subData.GetType(Constants.Signature);
 
-                var clientPublicKey = StringToByteArray(HapControllerServer.HapControllerLtpk);
+                var controllerId = Encoding.UTF8.GetString(clientUserName);
+                var pairing = pairingStore.Find(controllerId);
+
+                if (pairing == null)
+                {
+                    _logger.LogWarning($"Pair verify from unknown controller");
+                    return Error(4, ErrorCodes.Authentication);
+                }
+
+                var clientPublicKey = StringToByteArray(pairing.PublicKey);
                 var material = session.ClientPublicKey.Concat(clientUserName).Concat(session.PublicKey).ToArray();
 
-                session.ClientUsername = Automatica.Core.Driver.Utility.Utils.ByteArrayToString(in clientUserName);
-              
-                if (!Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
+                if (clientPublicKey.Length != 32 || signature == null || signature.Length != 64 ||
+                    !Chaos.NaCl.Ed25519.Verify(signature, material, clientPublicKey))
                 {
                     _logger.LogWarning($"Error decrypting message...");
                     var errorTlv = new Tlv();
@@ -145,9 +179,17 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     };
                 }
 
+                if (pairing.Identifier == null)
+                {
+                    pairingStore.BindIdentifier(pairing.PublicKey, controllerId);
+                }
+
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 4);
 
+                session.ClientUsername = Automatica.Core.Driver.Utility.Utils.ByteArrayToString(in clientUserName);
+                session.ControllerId = controllerId;
+                session.IsAdmin = pairing.IsAdmin;
                 session.IsVerified = true;
                 session.SkipFirstEncryption = true;
 

@@ -7,7 +7,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers.Ed25519
         public KeyPair GenerateNewPair()
         {
             var seed = new byte[32];
-            RandomNumberGenerator.Create().GetBytes(seed);
+            RandomNumberGenerator.Fill(seed);
             Chaos.NaCl.Ed25519.KeyPairFromSeed(out var publicKey, out var privateKey, seed);
 
             return new KeyPair(publicKey, privateKey);

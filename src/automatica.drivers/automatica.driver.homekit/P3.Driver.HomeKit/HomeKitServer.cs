@@ -54,7 +54,7 @@ namespace P3.Driver.HomeKit
             _bonjour = new BonjourService(logger, Convert.ToUInt16(hapPort), name, deviceId, configVersion);
             _hapServer = new HapControllerServer(logger, this, hapPort, ltsk, ltpk, deviceId, pairCode);
 
-            _bonjour.AlreadyPaired = !string.IsNullOrEmpty(ltpk);
+            _bonjour.AlreadyPaired = _hapServer.PairingStore.IsPaired;
 
             _hapServer.PairingCompleted += HapServerOnPairingCompleted;
 
@@ -139,8 +139,8 @@ namespace P3.Driver.HomeKit
 
         private void HapServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
+            _bonjour.AlreadyPaired = _hapServer.PairingStore.IsPaired;
             PairingCompleted?.Invoke(sender, e);
-            _bonjour.AlreadyPaired = true;
         }
 
         public async Task<bool> Start()
@@ -149,6 +149,21 @@ namespace P3.Driver.HomeKit
             await _hapServer.Start();
            
             return true;
+        }
+
+        public bool IsPaired => _hapServer.PairingStore.IsPaired;
+
+        public static string GenerateSetupCode()
+        {
+            return HomeKitSetup.GenerateSetupCode();
+        }
+
+        /// <summary>
+        /// Removes all controller pairings so the bridge can be paired again
+        /// </summary>
+        public void ClearPairings()
+        {
+            _hapServer.ClearPairings();
         }
 
         public ulong AddAccessory(Accessory accessory)

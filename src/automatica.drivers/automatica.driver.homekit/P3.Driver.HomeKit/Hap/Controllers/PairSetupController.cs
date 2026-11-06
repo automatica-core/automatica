@@ -22,12 +22,17 @@ namespace P3.Driver.HomeKit.Hap.Controllers
         public string Ltsk { get; set; }
         public string Ltpk { get; set; }
 
+        /// <summary>
+        /// UTF-8 pairing identifier of the controller (iOSDevicePairingID)
+        /// </summary>
+        public string Identifier { get; set; }
+
     }
 
     internal sealed class PairSetupController : BaseController
     {
         private readonly ILogger _logger; //todo: log more data
-        private static string _code;
+        private readonly string _code;
 
         public ISrpGenerator SrpGenerator { get; internal set; } = new SrpGenerator(SrpParameters.Create3072<SHA512>());
         public IEd25519KeyGenerator KeyGenerator { get; internal set; } = new Ed25519KeyGenerator();
@@ -78,6 +83,14 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
             if (state == 3) //srp authenticate
             {
+                if (session.ServerEphemeral == null || session.Verifier == null)
+                {
+                    var errorTlv = new Tlv();
+                    errorTlv.AddType(Constants.State, 4);
+                    errorTlv.AddType(Constants.Error, ErrorCodes.Unknown);
+                    return new PairSetupReturn { State = 3, TlvData = errorTlv, Ok = false };
+                }
+
                 _logger.LogDebug("Pair Setup Step 3/5");
                 _logger.LogDebug("SRP Verify Request");
 
@@ -105,7 +118,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 catch(Exception e)
                 {
                     ok = false;
-                    _logger.LogError(e,"Verification failed as iOS provided code was incorrect");
+                    _logger.LogWarning("Pair setup verification failed, the setup code entered on the controller was incorrect");
                     responseTlv.AddType(Constants.Error, ErrorCodes.Authentication);
                 }
                 return new PairSetupReturn
@@ -119,6 +132,14 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
             if (state == 5)
             {
+                if (session.ServerSession == null)
+                {
+                    var errorTlv = new Tlv();
+                    errorTlv.AddType(Constants.State, 6);
+                    errorTlv.AddType(Constants.Error, ErrorCodes.Unknown);
+                    return new PairSetupReturn { State = 5, TlvData = errorTlv, Ok = false };
+                }
+
                 return HandlePairSetupM5(parts, session);
             }
 
@@ -202,8 +223,9 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     proof))
                 {
                     var errorTlv = new Tlv();
+                    errorTlv.AddType(Constants.State, 6);
                     errorTlv.AddType(Constants.Error, ErrorCodes.Authentication);
-                    _logger.LogWarning($"Error decrypting message...");
+                    _logger.LogWarning($"Controller signature in pair setup M5 is invalid");
                     return new PairSetupReturn
                     {
                         State = 5,
@@ -215,7 +237,6 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var m5Response = HandlePairSetupM5Raw(session, out var keyPair);
                 var plaintext = TlvParser.Serialize(m5Response);
 
-                _logger.LogDebug($"Decrypted payload {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(plaintext.AsSpan())}");
 
 
                 var nonce6 = new Nonce(zeros, Encoding.UTF8.GetBytes("PS-Msg06"));
@@ -232,7 +253,8 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     TlvData = responseTlv,
                     Ok = true,
                     Ltsk = ByteArrayToString(keyPair.PrivateKey),
-                    Ltpk = ByteArrayToString(ltpk)
+                    Ltpk = ByteArrayToString(ltpk),
+                    Identifier = Encoding.UTF8.GetString(username)
                 };
             }
             catch (Exception e)

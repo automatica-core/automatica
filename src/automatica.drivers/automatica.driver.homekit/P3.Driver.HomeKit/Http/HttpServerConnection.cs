@@ -135,11 +135,16 @@ namespace P3.Driver.HomeKit.Http
                             }
 
                             var datLen = content.Length;
+                            if (contentLength < 0 || contentLength > datLen)
+                            {
+                                throw new InvalidDataException("Invalid content-length");
+                            }
+
                             var data = content.AsSpan(datLen - contentLength, contentLength).ToArray();
 
 
                             var result = _middleware.Invoke(session, url, method, data, _session);
-                            var response = GetHttpResponse("HTTP/1.1", result.Item1, result.Item2, DateTime.Now);
+                            var response = GetHttpResponse("HTTP/1.1", result.ContentType, result.Body, DateTime.Now, result.StatusCode, result.Reason);
 
                             _logger.LogTrace($"Writing {Encoding.UTF8.GetString(response)}");
 
@@ -164,6 +169,12 @@ namespace P3.Driver.HomeKit.Http
 
                             _logger.LogDebug(
                                 "**************************** REQUEST DONE *************************");
+
+                            if (_connectionSession.CloseAfterResponse)
+                            {
+                                _logger.LogInformation("Closing connection, the pairing of the controller was removed");
+                                break;
+                            }
                         }
                     }
 
@@ -197,7 +208,7 @@ namespace P3.Driver.HomeKit.Http
             }
         }
 
-        internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date)
+        internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date, int statusCode = 200, string reason = "OK")
         {
             var response = Array.Empty<byte>();
             var returnChars = new byte[2];
@@ -206,7 +217,7 @@ namespace P3.Driver.HomeKit.Http
 
             var contentLength = $"Content-Length: {data.Length}";
 
-            if (data.Length == 0)
+            if (data.Length == 0 && statusCode == 200)
             {
                 response = response
                     .Concat(Encoding.ASCII.GetBytes($"{header} 204 No Content"))
@@ -214,7 +225,7 @@ namespace P3.Driver.HomeKit.Http
             }
             else
             {
-                response = response.Concat(Encoding.UTF8.GetBytes($"{header} 200 OK")).Concat(returnChars).ToArray();
+                response = response.Concat(Encoding.UTF8.GetBytes($"{header} {statusCode} {reason}")).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes(contentLength)).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Content-Type: {contentType}")).Concat(returnChars).ToArray();
                 response = response.Concat(Encoding.UTF8.GetBytes($"Date: {date.ToUniversalTime().ToString("r", CultureInfo.InvariantCulture)}")).Concat(returnChars).ToArray();
@@ -276,14 +287,23 @@ namespace P3.Driver.HomeKit.Http
             {
                 // The first type bytes represent the length of the data.
                 //
-                var twoBytes = new Byte[] { content[0], content[1] };
+                if (content.Length - offset < 2 + 16)
+                {
+                    throw new InvalidDataException("Encrypted frame too short");
+                }
+
+                var twoBytes = new Byte[] { content[offset], content[offset + 1] };
 
                 offset += 2;
 
                 var frameLength = BitConverter.ToUInt16(twoBytes, 0);
 
-                var availableDataLength = content.Length - offset;
-                var message = content.AsSpan(offset, availableDataLength);
+                if (frameLength > 1024 || content.Length - offset < frameLength + 16)
+                {
+                    throw new InvalidDataException("Invalid encrypted frame length");
+                }
+
+                var message = content.AsSpan(offset, frameLength + 16);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
                 var nonce = new Nonce(zeros, BitConverter.GetBytes(session.InboundBinaryMessageCount++));
@@ -300,7 +320,7 @@ namespace P3.Driver.HomeKit.Http
 
                 encryptionResult = encryptionResult.Concat(output).ToArray();
 
-                offset += (18 + frameLength);
+                offset += (16 + frameLength);
             }
 
             return encryptionResult;

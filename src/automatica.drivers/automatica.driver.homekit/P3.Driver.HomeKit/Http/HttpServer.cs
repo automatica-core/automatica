@@ -27,12 +27,17 @@ namespace P3.Driver.HomeKit.Http
 
         private readonly List<HttpServerConnection> _connections = new List<HttpServerConnection>();
 
-        public HttpServer(ILogger logger, HomeKitServer homeKitServer, int port, string pairCode)
+        public HttpServer(ILogger logger, HomeKitServer homeKitServer, int port, string pairCode, HapPairingStore pairingStore)
         {
             _logger = logger;
             _port = port;
 
-            _middleware = new HapMiddleware(logger, pairCode, homeKitServer);
+            _middleware = new HapMiddleware(logger, pairCode, homeKitServer, pairingStore);
+        }
+
+        internal void CloseAllConnections()
+        {
+            _middleware.CloseAllSessions();
         }
 
 
