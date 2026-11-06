@@ -28,7 +28,12 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
                 _value = timeOfDay;
 
-                return false;
+                if (ret)
+                {
+                    DispatchRead(timeOfDay);
+                }
+
+                return false; // already dispatched as TimeSpan (time of day), the node is a time node
 
             }
             return false;

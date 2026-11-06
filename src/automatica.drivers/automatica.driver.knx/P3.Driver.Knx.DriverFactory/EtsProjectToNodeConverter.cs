@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using P3.Driver.Knx.DriverFactory.Dpt;
 using P3.Driver.Knx.DriverFactory.Factories;
+using P3.Driver.Knx.DriverFactory.P3.Knx.Core.Driver;
 using P3.Knx.Core.Ets;
 
 namespace P3.Driver.Knx.DriverFactory
@@ -86,7 +87,7 @@ namespace P3.Driver.Knx.DriverFactory
             return Task.FromResult(nodes);
         }
 
-        private static NodeInstance CreateNodeTemplateFromEtsDataPoint(EtsDatapoint dataPoint, INodeTemplateFactory factory)
+        internal static NodeInstance CreateNodeTemplateFromEtsDataPoint(EtsDatapoint dataPoint, INodeTemplateFactory factory)
         {
             if(!dataPoint.DatapointTypesSplitted.Any())
             {
@@ -98,6 +99,7 @@ namespace P3.Driver.Knx.DriverFactory
             NodeInstance nodeInstance = null;
             switch(mainDpt)
             {
+                // knx-dpt holds the main type, the sub type goes to knx-dpt-sub for the types with sub type selection
                 case 1:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt1");
                     nodeInstance.SetProperty("knx-dpt", mainDpt);
@@ -112,39 +114,35 @@ namespace P3.Driver.Knx.DriverFactory
                     break;
                 case 5:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt5");
-                    nodeInstance.SetProperty("knx-dpt", subDpt);
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
+                    if (Enum.IsDefined(typeof(Dpt5Type), subDpt))
+                    {
+                        nodeInstance.SetProperty("knx-dpt-sub", subDpt);
+                    }
                     break;
                 case 6:
-                    if(subDpt == 20)
-                    {
-                        nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt6");
-                        nodeInstance.SetProperty("knx-dpt", subDpt);
-                    }
-                    else
-                    {
-                        nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt6.020");
-                        nodeInstance.SetProperty("knx-dpt", mainDpt);
-                    }
+                    nodeInstance = factory.CreateNodeInstanceByKey(subDpt == 20 ? "knx-dpt6.020" : "knx-dpt6");
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
                     break;
                 case 7:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt7");
-                    nodeInstance.SetProperty("knx-dpt", subDpt);
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
                     break;
                 case 8:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt8");
-                    nodeInstance.SetProperty("knx-dpt", subDpt);
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
                     break;
                 case 9:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt9");
-                    nodeInstance.SetProperty("knx-dpt", subDpt);
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
                     break;
                 case 10:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt10");
-                    nodeInstance.SetProperty("knx-dpt", subDpt);
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
                     break;
                 case 11:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt11");
-                    nodeInstance.SetProperty("knx-dpt", subDpt);
+                    nodeInstance.SetProperty("knx-dpt", mainDpt);
                     break;
                 case 13:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt13");

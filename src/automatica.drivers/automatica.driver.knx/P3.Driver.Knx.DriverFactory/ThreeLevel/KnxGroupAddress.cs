@@ -22,6 +22,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         public abstract int ImplementationDptType { get; }
 
+        /// <summary>
+        /// Sub type used when the node has no sub type selection (knx-dpt-sub), x.001 is the plain value of every main type.
+        /// </summary>
+        internal const int DefaultDptSubType = 1;
+
 
         protected override Task<bool> StartedInternal(CancellationToken token = new CancellationToken())
         {
@@ -50,11 +55,10 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 GroupAddress = $"{Address}";
             }
 
-            var dptValueProp = GetProperty("knx-dpt");
-
             DptType = ImplementationDptType;
-            DptSubType = Convert.ToInt32(dptValueProp.This2PropertyTemplateNavigation.DefaultValue);
-            
+            // the knx-dpt template default is the main type (e.g. 7), as a sub type that would be 7.007 (time period in hours)
+            DptSubType = DefaultDptSubType;
+
             var dptSubType = GetPropertyValue("knx-dpt-sub", DptSubType);
             
             if (dptSubType != null)
@@ -119,6 +123,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         protected void ConvertFromBus(GroupEventArgs datagram)
         {
+            ConvertFromBus(datagram.Value);
+        }
+
+        protected void ConvertFromBus(GroupValue groupValue)
+        {
             if (DptType != ImplementationDptType)
             {
                 DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
@@ -126,7 +135,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
             try
             {
-                var value = FromGroupValue(datagram.Value);
+                var value = FromGroupValue(groupValue);
 
                 if (ValueRead(value))
                 {
@@ -135,7 +144,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
             catch (FormatException fe)
             {
-                DriverContext.Logger.LogError(fe, $"Could not parse DPT correctly from {datagram.DestinationAddress} (Target DPT is {ImplementationDptType}.{DptSubType:000} Value is {datagram.Value.Value.ToHex(true)} {fe}");
+                DriverContext.Logger.LogError(fe, $"Could not parse DPT correctly from {GroupAddress} (Target DPT is {ImplementationDptType}.{DptSubType:000} Value is {groupValue.Value.ToHex(true)} {fe}");
             }
         }
 
@@ -155,6 +164,21 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         {
             var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
             return dpt.ToValue(groupValue);
+        }
+
+        /// <summary>
+        /// Creates the telegram payload from a raw datapoint value (BAOS), values up to 6 bit are sent in the APCI byte.
+        /// </summary>
+        protected virtual GroupValue CreateGroupValue(byte[] data)
+        {
+            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
+            var sizeInBit = (int)dpt.SizeInBit;
+            if (sizeInBit is > 0 and <= 6 && data.Length == 1)
+            {
+                return new GroupValue((byte)(data[0] & ((1 << sizeInBit) - 1)), sizeInBit);
+            }
+
+            return new GroupValue(data);
         }
 
         protected virtual bool ValueRead(object value)
@@ -189,9 +213,20 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
 
         private void TelegramReceivedCallback(object data)
         {
-            if (data is GroupEventArgs knxDatagram)
+            switch (data)
             {
-                ConvertFromBus(knxDatagram);
+                case GroupEventArgs knxDatagram:
+                    ConvertFromBus(knxDatagram);
+                    break;
+                case GroupValue groupValue:
+                    ConvertFromBus(groupValue);
+                    break;
+                case byte[] raw:
+                    ConvertFromBus(CreateGroupValue(raw));
+                    break;
+                case ReadOnlyMemory<byte> memory:
+                    ConvertFromBus(CreateGroupValue(memory.ToArray()));
+                    break;
             }
         }
 

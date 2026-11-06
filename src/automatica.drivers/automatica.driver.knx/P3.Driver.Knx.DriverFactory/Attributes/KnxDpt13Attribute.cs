@@ -36,6 +36,18 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
                 return vlInt;
             }
 
+            if (value is IConvertible and not (string or bool or DateTime))
+            {
+                try
+                {
+                    return Convert.ToInt32(value);
+                }
+                catch (OverflowException)
+                {
+                    // out of range for DPT 13
+                }
+            }
+
             throw new NotImplementedException();
         }
     }

@@ -247,7 +247,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             factory.CreateNodeTemplate(dpt3Guid, "KNX.DPT3.NAME", "KNX.DPT3.DESCRIPTION", "knx-dpt3",
                 parentNode, dpt3InterfaceGuid, false, true, false, true, false,
                 NodeDataType.NoAttribute, int.MaxValue, false);
-            InitDptType((int)DptType.Dpt2, dpt3Guid, factory);
+            InitDptType((int)DptType.Dpt3, dpt3Guid, factory);
 
 
             var dpt3Control = new Guid("40610606-5306-497c-8ebc-f064cc70b005");
@@ -379,7 +379,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories
             var dpt13Guid = new Guid("94d9744e-4677-4d60-b7bc-0638cc355675");
             factory.CreateNodeTemplate(dpt13Guid, "KNX.DPT13.NAME", "KNX.DPT13.DESCRIPTION", "knx-dpt13",
                 parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
-                NodeDataType.Date, int.MaxValue, false);
+                NodeDataType.Integer, int.MaxValue, false);
 
             InitDptType((int)DptType.Dpt13, dpt13Guid, factory);
         }

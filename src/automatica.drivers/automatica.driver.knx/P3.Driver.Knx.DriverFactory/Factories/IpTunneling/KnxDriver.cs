@@ -31,7 +31,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private Knx3Level _knxTree;
 
-        private readonly Dictionary<string, List<Action<GroupEventArgs>>> _callbackMap = new();
+        private readonly Dictionary<string, List<Action<object>>> _callbackMap = new();
         private readonly ConcurrentDictionary<string, KnxGroupAddress> _gaMap = new();
 
         private readonly ConcurrentDictionary<string, GroupValue> _lastGaValues = new();
@@ -155,26 +155,44 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         internal void GroupValueReceived(GroupEventArgs e)
         {
-            if (_callbackMap.TryGetValue(e.DestinationAddress, out var value))
+            GroupValueReceived(e.DestinationAddress, e.Value);
+        }
+
+        internal void GroupValueReceived(string address, GroupValue value)
+        {
+            DispatchToNotifiers(address, value, value.Value);
+        }
+
+        /// <summary>
+        /// Passes a raw datapoint payload (e.g. from the BAOS interface) to the group addresses, they know the size of their datapoint type.
+        /// </summary>
+        internal void RawValueReceived(string address, byte[] data)
+        {
+            DispatchToNotifiers(address, data, data);
+        }
+
+        private void DispatchToNotifiers(string address, object payload, byte[] data)
+        {
+            if (_callbackMap.TryGetValue(address, out var value))
             {
                 foreach (var ac in value)
                 {
                     try
                     {
-                        DriverContext.Logger.LogDebug($"Datagram on GA {e.DestinationAddress}  {e.Value.Value.ToHex(false)} - dispatch to {ac}");
-                        ac.Invoke(e);
+                        DriverContext.Logger.LogDebug($"Datagram on GA {address}  {data.ToHex(false)} - dispatch to {ac}");
+                        ac.Invoke(payload);
 
                     }
                     catch (Exception ex)
                     {
-                        DriverContext.Logger.LogError($"{e.DestinationAddress}: {ex}");
+                        DriverContext.Logger.LogError($"{address}: {ex}");
                     }
                 }
             }
             else
             {
                 DriverContext.Logger.LogInformation(
-                    $"Datagram on GA {e.DestinationAddress} - no callback registered");
+                    $"Datagram on GA {address} - no callback registered");
             }
         }
 
@@ -393,12 +411,25 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return await base.Stop(token);
         }
 
-        internal void AddGroupAddress(string groupAddress, Action<GroupEventArgs> callback)
+        /// <summary>
+        /// For interfaces without the KNXnet/IP connection (BAOS): runs the node handling of <see cref="DriverNoneAttributeBase"/> only.
+        /// </summary>
+        protected Task<bool> InitWithoutConnection(CancellationToken token) => base.Init(token);
+
+        protected Task<bool> StartWithoutConnection(CancellationToken token) => base.Start(token);
+
+        protected Task<bool> StopWithoutConnection(CancellationToken token)
+        {
+            _callbackMap.Clear();
+            return base.Stop(token);
+        }
+
+        internal void AddGroupAddress(string groupAddress, Action<object> callback)
         {
             DriverContext.Logger.LogDebug($"Register for value changes on GA {groupAddress}");
             if (!_callbackMap.ContainsKey(groupAddress))
             {
-                _callbackMap.Add(groupAddress, new List<Action<GroupEventArgs>>());
+                _callbackMap.Add(groupAddress, new List<Action<object>>());
             }
             _callbackMap[groupAddress].Add(callback);
         }
@@ -429,7 +460,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             }
         }
 
-        public Task<bool> Read(string address)
+        public virtual Task<bool> Read(string address)
         {
             var connection = _connection;
             if (connection == null)
@@ -439,7 +470,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             return connection.Read(address);
         }
 
-        public async Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue,
+        public virtual async Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue,
             CancellationToken token)
         {
             var connection = _connection;

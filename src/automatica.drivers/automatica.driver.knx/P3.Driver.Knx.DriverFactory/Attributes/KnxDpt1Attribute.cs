@@ -40,8 +40,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override bool ValueRead(object value)
         {
-            DispatchRead(value);
-            return true; //always dispatch dpt1 values...
+            return true; //always dispatch dpt1 values (dispatched by the caller)...
         }
     }
 }

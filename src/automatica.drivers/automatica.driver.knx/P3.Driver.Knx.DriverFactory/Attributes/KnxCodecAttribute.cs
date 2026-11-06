@@ -68,6 +68,11 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             return KnxDptCatalog.ToGroupValue(Codec, (byte[])dptValue);
         }
 
+        protected sealed override GroupValue CreateGroupValue(byte[] data)
+        {
+            return KnxDptCatalog.ToGroupValue(Codec, data);
+        }
+
         protected sealed override object FromGroupValue(GroupValue groupValue)
         {
             var data = groupValue.Value;

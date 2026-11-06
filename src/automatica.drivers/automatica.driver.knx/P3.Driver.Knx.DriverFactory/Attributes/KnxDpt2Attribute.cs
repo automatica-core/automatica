@@ -12,6 +12,9 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 {
     public class KnxDpt2ValueAttribute : DriverBase
     {
+        internal const int ValueIndex = 0;
+        internal const int ControlIndex = 1;
+
         private readonly KnxDpt2Attribute _parent;
 
         public int Index { get; }
@@ -23,24 +26,39 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
             Index = index;
         }
 
-        protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
+        protected override async Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
         {
             var boolValue = Convert.ToBoolean(value);
 
-            if (boolValue != Value)
+            if (boolValue == Value)
             {
-                _parent.WriteInternal(value, writeContext, token);
+                await writeContext.DispatchValue(boolValue, token);
+                return;
             }
 
-            writeContext.DispatchValue(boolValue, token);
+            // the parent encodes the state of all children, so the new value must be set before writing
+            var oldValue = Value;
             Value = boolValue;
 
-            return Task.CompletedTask;
+            try
+            {
+                await _parent.WriteInternal(boolValue, writeContext, token); // dispatches the value on success
+            }
+            catch
+            {
+                Value = oldValue;
+                throw;
+            }
         }
 
-        protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
+        protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            return Parent.Read(token);
+            if (DriverContext.NodeInstance.IsReadable)
+            {
+                await _parent.ReadFromBus();
+            }
+
+            return false;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
@@ -59,20 +77,40 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         protected override object ConvertToDptValue(object value)
         {
-            var controlAttribute = _children.SingleOrDefault(a => a.Index == 1);
-            var valueAttribute = _children.SingleOrDefault(a => a.Index == 0);
+            var controlAttribute = _children.FirstOrDefault(a => a.Index == KnxDpt2ValueAttribute.ControlIndex);
+            var valueAttribute = _children.FirstOrDefault(a => a.Index == KnxDpt2ValueAttribute.ValueIndex);
 
             var controlValue = controlAttribute?.Value ?? false;
             var valueValue = valueAttribute?.Value ?? false;
-            
+
             var dpt2Value = new Knx1BitControlled(controlValue, valueValue);
             return dpt2Value;
+        }
+
+        protected override bool ValueRead(object value)
+        {
+            if (value is Knx1BitControlled dpt2Value)
+            {
+                foreach (var child in _children)
+                {
+                    var childValue = child.Index == KnxDpt2ValueAttribute.ControlIndex ? dpt2Value.Control : dpt2Value.Value;
+                    child.Value = childValue;
+                    child.DispatchRead(childValue);
+                }
+            }
+
+            return false; // the folder node itself has no value
         }
 
         internal Task WriteInternal(object value, IWriteContext writeContext,
             CancellationToken token = new CancellationToken())
         {
             return Write(value, writeContext, token);
+        }
+
+        internal Task<bool> ReadFromBus()
+        {
+            return Driver.Read(GroupAddress);
         }
 
         protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
@@ -82,7 +120,7 @@ namespace P3.Driver.Knx.DriverFactory.Attributes
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
-            var att = new KnxDpt2ValueAttribute(ctx, this, ctx.NodeInstance.This2NodeTemplateNavigation.Key == "knx-dpt2-value" ? 0 : 1);
+            var att = new KnxDpt2ValueAttribute(ctx, this, ctx.NodeInstance.This2NodeTemplateNavigation.Key == "knx-dpt2-value" ? KnxDpt2ValueAttribute.ValueIndex : KnxDpt2ValueAttribute.ControlIndex);
 
             _children.Add(att);
             return att;

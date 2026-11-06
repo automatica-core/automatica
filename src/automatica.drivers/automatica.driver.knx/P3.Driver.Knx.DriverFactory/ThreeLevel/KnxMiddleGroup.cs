@@ -31,6 +31,9 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 case "knx-dpt6":
                     attribute = new KnxDpt6Attribute(ctx, driver);
                     break;
+                case "knx-dpt6.020":
+                    attribute = new KnxDpt6020Attribute(ctx, driver);
+                    break;
                 case "knx-dpt7":
                     attribute = new KnxDpt7Attribute(ctx, driver);
                     break;
