@@ -18,10 +18,12 @@ namespace P3.Driver.MBus.Udp
         private readonly System.Timers.Timer _receiveTimeoutTimer = new System.Timers.Timer();
         private readonly MBusUdpConfig _tcpConfig;
         private CancellationTokenSource _cts;
+        private int _readTimeout;
 
         public MBusUdp(MBusUdpConfig config, ITelegramMonitorInstance monitor, ILogger logger) : base(config, monitor, logger)
         {
             _tcpConfig = config;
+            _readTimeout = config?.Timeout ?? 5000;
             _receiveTimeoutTimer.Elapsed += _receiveTimeoutTimer_Elapsed;
         }
 
@@ -58,11 +60,20 @@ namespace P3.Driver.MBus.Udp
             if (_tcpConfig != null)
             {
                 _udpClient = new UdpClient();
-                _receiveTimeoutTimer.Interval = _tcpConfig.Timeout;
+                _receiveTimeoutTimer.Interval = _readTimeout;
                 _udpClient.Connect(_tcpConfig.IpAddress, _tcpConfig.Port);
                 _connected = true;
             }
             Thread.Sleep(10);
+        }
+
+        protected override void SetReadTimeout(int timeout)
+        {
+            if (timeout > 0)
+            {
+                _readTimeout = timeout;
+                _receiveTimeoutTimer.Interval = timeout;
+            }
         }
 
         protected override async Task WriteFrame(MBusFrame frame)

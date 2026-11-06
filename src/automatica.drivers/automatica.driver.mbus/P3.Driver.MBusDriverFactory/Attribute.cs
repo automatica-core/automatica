@@ -39,6 +39,9 @@ namespace P3.Driver.MBusDriverFactory
 
         public Unit UnitType { get; private set; }
 
+        /// <summary>
+        /// Tariff key as stored in "mbus-tariff" (= EN 13757-3 tariff number &lt;&lt; 4, see VariableDataBlock.TariffKey).
+        /// </summary>
         public int Tariff { get; private set; }
 
         public int StorageNumber { get; private set; }

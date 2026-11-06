@@ -62,6 +62,14 @@ namespace P3.Driver.MBus.Serial
             return true;
         }
 
+        protected override void SetReadTimeout(int timeout)
+        {
+            if (_stream != null && _stream.IsOpen)
+            {
+                _stream.ReadTimeout = timeout;
+            }
+        }
+
         private void StreamOnDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             _config.DataReceived.Invoke();

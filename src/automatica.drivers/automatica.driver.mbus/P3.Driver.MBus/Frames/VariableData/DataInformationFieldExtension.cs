@@ -31,7 +31,8 @@ namespace P3.Driver.MBus.Frames.VariableData
             HasExtension = Utils.IsBitSet(data, 7);
             DeviceUnit = Utils.IsBitSet(data, 6);
 
-            Tariff = Utils.SetBitsTo0(data, 0xCF);
+            // EN 13757-3: DIFE = E U TT SSSS -> tariff is bits 4-5, shifted down to 0..3
+            Tariff = (byte)(Utils.SetBitsTo0(data, 0xCF) >> 4);
             StorageNumber = Utils.SetBitsTo0(data, 0xF0);
 
 

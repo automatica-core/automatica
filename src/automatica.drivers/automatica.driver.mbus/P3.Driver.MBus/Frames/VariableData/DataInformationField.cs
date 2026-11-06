@@ -98,6 +98,7 @@ namespace P3.Driver.MBus.Frames.VariableData
                     return 1;
 
                 case DataFieldType.VariableLength:
+                    // the real length is given by the LVAR byte after the VIF/VIFEs, see VariableDataBlock
                     return -1;
                 default:
                     return 0;

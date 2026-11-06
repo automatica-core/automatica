@@ -143,7 +143,8 @@ namespace P3.Driver.MBusDriverFactory
                 }
                 foreach (var vdb in dataFrame.DataBlocks)
                 {
-                    var address = $"{(int) vdb.ValueInformationField.Unit}-{vdb.StorageNumber}-{vdb.Tariff}";
+                    // TariffKey keeps the historic key format (tariff << 4) so stored attributes keep matching
+                    var address = $"{(int) vdb.ValueInformationField.Unit}-{vdb.StorageNumber}-{vdb.TariffKey}";
                     SetValue(address, vdb.Value);
                     _logger.LogDebug($"{vdb.DataInformationField.DataFieldType}: {vdb.Value} {vdb.ValueInformationField.Unit} ({Utils.ByteArrayToString(vdb.Data)})");
                 }
@@ -186,7 +187,7 @@ namespace P3.Driver.MBusDriverFactory
                     {
                         attributes.Add(att);
                         att.SetProperty("mbus-storageNumber", d.StorageNumber);
-                        att.SetProperty("mbus-tariff", d.Tariff);
+                        att.SetProperty("mbus-tariff", d.TariffKey);
                         att.SetProperty("mbus-type", (int) d.ValueInformationField.Unit);
 
                         att.Name = $"Attribute {d.ValueInformationField.Unit}-{d.StorageNumber}-{d.Tariff}";

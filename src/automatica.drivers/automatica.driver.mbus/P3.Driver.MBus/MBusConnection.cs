@@ -139,7 +139,8 @@ namespace P3.Driver.MBus
             {
                 Logger.LogDebug($"Reset device {deviceId}...");
                 Open();
-                MBusFrame readFrame = MBusFrame.CreateShortFrame(MBus.ControlMaskSndUd, (byte) deviceId);
+                // reset = SND_NKE short frame (10 40 A CS 16), SND_UD is only valid as long/control frame
+                MBusFrame readFrame = MBusFrame.CreateShortFrame(MBus.ControlMaskSndNke, (byte) deviceId);
 
                 Console.WriteLine(ByteArrayToString(readFrame.ToByteFrame()));
                 await WriteFrame(readFrame);
@@ -158,11 +159,28 @@ namespace P3.Driver.MBus
 
         }
 
+        /// <summary>
+        /// Sets the response timeout (ms) used by <see cref="ReadFrame"/>. Default: no-op.
+        /// </summary>
+        protected virtual void SetReadTimeout(int timeout)
+        {
+        }
+
+        /// <summary>
+        /// Effective response timeout for a device read: the device timeout can extend the connection timeout
+        /// but never shorten it (device timeout default is 300ms, too short for a long frame over a gateway).
+        /// </summary>
+        internal int GetEffectiveTimeout(int deviceTimeout)
+        {
+            return Math.Max(deviceTimeout, _config.Timeout);
+        }
+
         public virtual async Task<MBusFrame> ReadDevice(int deviceId, bool resetBeforeRead, int deviceTimeout)
         {
             try
             {
                 Open();
+                SetReadTimeout(GetEffectiveTimeout(deviceTimeout));
 
                 Logger.LogDebug($"Read device {deviceId}...");
                 if (_config.ResetBeforeRead || resetBeforeRead)
@@ -193,6 +211,10 @@ namespace P3.Driver.MBus
                 Logger.LogError(ex, $"Could not read device {deviceId}: {ex}");
                 Close();
                 throw;
+            }
+            finally
+            {
+                SetReadTimeout(_config.Timeout);
             }
         }
     }

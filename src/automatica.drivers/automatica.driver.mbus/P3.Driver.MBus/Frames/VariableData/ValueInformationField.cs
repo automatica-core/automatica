@@ -75,48 +75,26 @@ namespace P3.Driver.MBus.Frames.VariableData
             return vif;
         }
 
+        /// <summary>
+        /// Applies the first VIFE of the 0xFD (main VIF code extension) table. Only valid when this VIF is 0xFD;
+        /// the 0xFB table is a different table and is left as <see cref="Unit.Unknown"/>.
+        /// Multiplier is the decimal exponent (value * 10^Multiplier).
+        /// </summary>
         public void ParseExtensionUnit(ValueInformationField data)
         {
-            switch (data.UnitAndMultiplier)
+            var code = data.UnitAndMultiplier;
+
+            // E100 nnnn  Volts 10^(nnnn-9) V
+            if (code >= 0x40 && code <= 0x4F)
             {
-                case 0x4:
-                case 0x40 + 1:
-                case 0x40 + 2:
-                case 0x40 + 3:
-                case 0x40 + 4:
-                case 0x40 + 5:
-                case 0x40 + 6:
-                case 0x40 + 7:
-                case 0x40 + 8:
-                case 0x40 + 9:
-                case 0x40 + 10:
-                case 0x40 + 11:
-                case 0x40 + 12:
-                case 0x40 + 13:
-                case 0x40 + 14:
-                case 0x40 + 15:
-                    Multiplier = (int)Math.Pow((data.UnitAndMultiplier & 0x0F), -9);
-                    Unit = Unit.Volt;
-                    break;
-                case 0x5:
-                case 0x50 + 1:
-                case 0x50 + 2:
-                case 0x50 + 3:
-                case 0x50 + 4:
-                case 0x50 + 5:
-                case 0x50 + 6:
-                case 0x50 + 7:
-                case 0x50 + 8:
-                case 0x50 + 9:
-                case 0x50 + 10:
-                case 0x50 + 11:
-                case 0x50 + 12:
-                case 0x50 + 13:
-                case 0x50 + 14:
-                case 0x50 + 15:
-                    Multiplier = (int)Math.Pow((data.UnitAndMultiplier & 0x0F), -12);
-                    Unit = Unit.Ampere;
-                    break;
+                Multiplier = (code & 0x0F) - 9;
+                Unit = Unit.Volt;
+            }
+            // E101 nnnn  Ampere 10^(nnnn-12) A
+            else if (code >= 0x50 && code <= 0x5F)
+            {
+                Multiplier = (code & 0x0F) - 12;
+                Unit = Unit.Ampere;
             }
         }
 

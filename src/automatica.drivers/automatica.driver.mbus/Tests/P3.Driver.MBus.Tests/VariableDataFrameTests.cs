@@ -76,7 +76,7 @@ namespace P3.Driver.MBus.Tests
         [Fact]
         public void Test48BitToLong()
         {
-            byte[] mybytes = new byte[] { 0,0, 0, 0, 0, 25 };
+            byte[] mybytes = new byte[] { 25, 0, 0, 0, 0, 0 }; // little endian
             var longValue = VariableDataBlock.Bit48ToInt64(mybytes);
 
             Assert.Equal(25, longValue);

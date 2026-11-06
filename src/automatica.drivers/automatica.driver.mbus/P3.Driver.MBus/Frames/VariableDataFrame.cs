@@ -48,7 +48,9 @@ namespace P3.Driver.MBus.Frames
             base.FromByteArray(frame, logger);
             try
             {
-                Identifier = BitConverter.ToInt32(UserData.Span);
+                // identification number is 8 digit BCD (EN 13757-3), -1 if it is not valid BCD
+                var ident = VariableDataBlock.DecodeBcd(UserData.Span.Slice(0, 4), false);
+                Identifier = ident.HasValue ? (int)ident.Value : -1;
                 ManufacturerId = BitConverter.ToInt16(UserData.Span.Slice(4, 2));
                 Manufacturer = DecodeManufacturer(UserData.Span[4], UserData.Span[5], ManufacturerId);
                 Version = UserData.Span[6];

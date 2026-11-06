@@ -20,13 +20,14 @@ namespace P3.Driver.OmsDriverFactory
 
         public void SetData(VariableDataFrame data)
         {
-            if (data.DataBlocks.Count >= _dataIndex)
+            if (data.DataBlocks.Count > _dataIndex)
             {
                 var frame = data.DataBlocks[_dataIndex];
 
                 DriverContext.Logger.LogDebug($"{_dataIndex}{Name} value {frame.Value}");
 
-                if (_lastFrame != null && _lastFrame.Value != frame.Value)
+                // dispatch the first value and every change (Value is boxed, compare by value)
+                if (_lastFrame == null || !Equals(_lastFrame.Value, frame.Value))
                 {
                     DispatchRead(frame.Value);
                 }
