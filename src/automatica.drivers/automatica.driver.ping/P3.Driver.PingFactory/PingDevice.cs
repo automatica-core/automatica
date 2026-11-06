@@ -77,7 +77,7 @@ namespace P3.Driver.PingFactory
 
         private void DoPing()
         {
-            var pingSender = new Ping();
+            using var pingSender = new Ping();
             var options = new PingOptions
             {
                 DontFragment = true
