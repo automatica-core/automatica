@@ -340,7 +340,7 @@ namespace P3.Driver.Matter.DataModel.Clusters
             {
                 true => 1,
                 false => 2,
-                null => 0
+                null => null // unknown; 0 would mean NotFullyLocked
             };
             if (state != _lockState)
             {

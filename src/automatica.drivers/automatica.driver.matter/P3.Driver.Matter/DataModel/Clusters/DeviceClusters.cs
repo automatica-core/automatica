@@ -252,22 +252,24 @@ namespace P3.Driver.Matter.DataModel.Clusters
 
         private bool IsOff => Endpoint?.GetCluster<OnOffCluster>() is { OnOff: false };
 
-        private bool ShouldExecute(bool withOnOff, TlvElement f)
+        // OptionsMask/OptionsOverride follow the command's own fields: MoveToLevel and Move carry two
+        // fields before them (tags 2/3), Step carries three (StepMode, StepSize, TransitionTime → tags 3/4).
+        private bool ShouldExecute(bool withOnOff, TlvElement f, int optionsTag = 2)
         {
             if (withOnOff || !IsOff)
             {
                 return true;
             }
 
-            var mask = (byte)(f.GetUIntOrNull(2) ?? 0);
-            var overrideValue = (byte)(f.GetUIntOrNull(3) ?? 0);
+            var mask = (byte)(f.GetUIntOrNull(optionsTag) ?? 0);
+            var overrideValue = (byte)(f.GetUIntOrNull(optionsTag + 1) ?? 0);
             var options = (byte)((_options & ~mask) | (overrideValue & mask));
             return (options & 0x01) != 0;
         }
 
-        private async Task<InvokeResult> MoveToLevel(byte level, bool withOnOff, TlvElement f)
+        private async Task<InvokeResult> MoveToLevel(byte level, bool withOnOff, TlvElement f, int optionsTag = 2)
         {
-            if (!ShouldExecute(withOnOff, f))
+            if (!ShouldExecute(withOnOff, f, optionsTag))
             {
                 return InvokeResult.Success();
             }
@@ -295,7 +297,7 @@ namespace P3.Driver.Matter.DataModel.Clusters
         {
             var current = _currentLevel ?? MinLevel;
             var target = up ? Math.Min(MaxLevel, current + stepSize) : Math.Max(MinLevel, current - stepSize);
-            return MoveToLevel((byte)target, withOnOff, f);
+            return MoveToLevel((byte)target, withOnOff, f, optionsTag: 3);
         }
 
         public void SetLevel(byte level)

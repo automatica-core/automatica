@@ -668,6 +668,9 @@ namespace P3.Driver.Matter
                 backup.Fabric.Icac = backup.Icac;
                 backup.Fabric.OperationalKey = backup.Key;
                 backup.Fabric.Initialize();
+
+                // UpdateNOC already saved the new certificate; save the restored one as well.
+                RequestPersist();
             }
 
             fs.PendingKey?.Dispose();
