@@ -36,7 +36,15 @@ namespace P3.Driver.IkeaTradfriDriverFactory.Devices
                     _value = bValue;
 
                     DriverContext.Logger.LogDebug($"Start write {bValue} to {DriverContext.NodeInstance.Name}...");
-                    if (bValue)
+                    if (DeviceType == DeviceType.Light)
+                    {
+                        // bulbs are switched via the light control, SetOutlet only works for control outlets
+                        if (!await Container.Gateway.Driver.SetLight(Container.DeviceId, bValue))
+                        {
+                            throw new InvalidOperationException("Return code not successful");
+                        }
+                    }
+                    else if (bValue)
                     {
                         if (!await Container.Gateway.Driver.SwitchOn(Container.DeviceId))
                         {

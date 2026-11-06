@@ -17,6 +17,10 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         private string _id;
         private string _secret;
         private string _appKey;
+        private string _identity;
+
+        // the connection-key property stores "<identity>|<psk>": a PSK is only valid together with the identity it was generated for
+        private const char ConnectionKeySeparator = '|';
 
 
         public IIkeaTradfriDriver Driver { get; set; }
@@ -30,6 +34,15 @@ namespace P3.Driver.IkeaTradfriDriverFactory
         {
             _id = DriverContext.NodeInstance.GetPropertyValueString(IkeaTradfriFactory.IdAddressPropertyKey);
             _secret = DriverContext.NodeInstance.GetPropertyValueString(IkeaTradfriFactory.SecretPropertyKey);
+
+            var connectionKey = DriverContext.NodeInstance.GetPropertyValueString(IkeaTradfriFactory.ConnectionPropertyKey);
+            var separatorIndex = connectionKey?.IndexOf(ConnectionKeySeparator) ?? -1;
+            if (separatorIndex > 0 && separatorIndex < connectionKey.Length - 1)
+            {
+                _identity = connectionKey.Substring(0, separatorIndex);
+                _appKey = connectionKey.Substring(separatorIndex + 1);
+            }
+            // a value without identity (older versions stored the bare PSK) cannot be used, a new PSK is generated on start
 
             return base.Init(token);
         }
@@ -109,27 +122,34 @@ namespace P3.Driver.IkeaTradfriDriverFactory
             }
             DriverContext.Logger.LogInformation($"Connecting to tradfri with ip {gw.IpAddress}");
 
-            await Task.Run(async () =>
+            var connected = await Task.Run(async () =>
             {
-                var conName = $"Automatica.Core-{DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds}";
-                if (String.IsNullOrEmpty(_appKey))
+                if (String.IsNullOrEmpty(_appKey) || String.IsNullOrEmpty(_identity))
                 {
+                    var conName = $"Automatica.Core-{(long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds}";
                     var auth = IkeaTradfriDriver.GeneratePsk(gw.IpAddress, conName, _secret);
                     if (auth == null)
                     {
                         DriverContext.Logger.LogError($"Could not generate psk key for tradfri {Name}");
-                        return;
+                        return false;
                     }
+                    _identity = conName;
                     _appKey = auth.PSK;
 
                     var prop = DriverContext.NodeInstance.GetProperty(IkeaTradfriFactory.ConnectionPropertyKey);
 
-                    DriverContext.NodeTemplateFactory.SetPropertyValue(prop.ObjId, _appKey);
+                    DriverContext.NodeTemplateFactory.SetPropertyValue(prop.ObjId, $"{_identity}{ConnectionKeySeparator}{_appKey}");
                 }
 
-                Driver = new IkeaTradfriDriver(gw.IpAddress, conName, _appKey);
+                Driver = new IkeaTradfriDriver(gw.IpAddress, _identity, _appKey);
                 await Driver.Connect();
-            });
+                return true;
+            }, token);
+
+            if (!connected)
+            {
+                return false;
+            }
 
            return await base.Start(token);
         }

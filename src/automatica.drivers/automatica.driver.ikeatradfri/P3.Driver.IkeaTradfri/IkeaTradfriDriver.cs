@@ -78,6 +78,13 @@ namespace P3.Driver.IkeaTradfri
             return true;
         }
 
+        public async Task<bool> SetLight(long id, bool state)
+        {
+            await _tradfri.DeviceController.SetLight(id, state);
+
+            return true;
+        }
+
         public async Task<bool> SetColor(long id, string color)
         {
             await _tradfri.DeviceController.SetColor(id, color);

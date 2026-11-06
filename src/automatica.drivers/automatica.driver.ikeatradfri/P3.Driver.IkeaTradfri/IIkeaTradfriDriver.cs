@@ -10,6 +10,11 @@ namespace P3.Driver.IkeaTradfri
         Task<bool> SwitchOn(long id);
         Task<bool> SwitchOff(long id);
 
+        /// <summary>
+        /// Switches a light (bulb) on or off. Lights use the light control, not the outlet control.
+        /// </summary>
+        Task<bool> SetLight(long id, bool state);
+
         Task<bool> SetDimmer(long id, int dimmer);
 
         Task<bool> SetColor(long id, string color);
