@@ -14,6 +14,9 @@ using Automatica.Core.Internals.Plugins;
 
 namespace Automatica.Push.Helper
 {
+    /// <summary>
+    /// Downloads (and installs) a plugin. The <see cref="Plugin"/> must come from the cloud api, never from a client.
+    /// </summary>
     public class PluginDownloader
     {
         private readonly Plugin _plugin;
@@ -38,72 +41,126 @@ namespace Automatica.Push.Helper
             _restartOnUpdate = restartOnUpdate;
         }
 
+        private IClientProxy Administrators => _updateHub.Clients.Group(HubAccess.AdministratorsGroup);
+
+        /// <returns>the download target in the plugin update directory, null if the file name is not a plain file name</returns>
+        private string GetUpdateFilePath()
+        {
+            var fileName = _plugin.AzureFileName;
+            if (string.IsNullOrWhiteSpace(fileName) || Path.GetFileName(fileName) != fileName ||
+                fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 || fileName == "." || fileName == "..")
+            {
+                return null;
+            }
+
+            var updateDirectory = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName);
+            Directory.CreateDirectory(updateDirectory);
+            return Path.Combine(updateDirectory, fileName);
+        }
+
         public async Task Download()
         {
+            var automaticaPluginUpdateFile = GetUpdateFilePath();
+            if (automaticaPluginUpdateFile == null)
+            {
+                _logger.LogError($"Invalid plugin file name for {_plugin.ComponentName}, plugin is not downloaded");
+                return;
+            }
+
+#pragma warning disable SYSLIB0014 //ignore for now, need to have a download progress
             using var webClient = new WebClient();
-            var automaticaPluginUpdateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
+#pragma warning restore SYSLIB0014
+            var downloaded = false;
 
             try
             {
                 webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-                webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
                 await webClient.DownloadFileTaskAsync(_plugin.AzureUrl, automaticaPluginUpdateFile);
+                downloaded = true;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Could not download file for {_plugin.ComponentName}");
-                File.Delete(automaticaPluginUpdateFile);
+                DeleteFile(automaticaPluginUpdateFile);
             }
             finally
             {
                 webClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                webClient.DownloadFileCompleted -= WebClient_DownloadFileCompleted;
+            }
+
+            if (downloaded)
+            {
+                await DownloadCompleted(automaticaPluginUpdateFile);
             }
         }
 
-        private async void WebClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        private async Task DownloadCompleted(string automaticaPluginUpdateFile)
         {
-            var automaticaPluginUpdateFile = Path.Combine(ServerInfo.GetTempPath(), ServerInfo.PluginUpdateDirectoryName, _plugin.AzureFileName);
+            // awaited by Download (no async void event handler), an install error must not crash the process
             try
             {
-                if (e.Error == null && !e.Cancelled)
+                await Administrators.SendAsync("PluginFinished", new object[] {_plugin.PluginGuid});
+                if (_install)
                 {
-                    await _updateHub.Clients.All.SendAsync("PluginFinished", new object[] {_plugin.PluginGuid});
-                    if (_install)
+                    if(await _api.InstallPlugin(_plugin, automaticaPluginUpdateFile))
                     {
-                        if(await _api.InstallPlugin(_plugin, automaticaPluginUpdateFile))
-                        {
-                            await _pluginLoader.LoadPlugin(_plugin);
-                        }
+                        await _pluginLoader.LoadPlugin(_plugin);
                     }
-                    else
-                    {
-                        if (_restartOnUpdate)
-                        {
-                            _coreServer.Restart();
-                        }
-                    }
-
-                    await _updateHub.Clients.All.SendAsync("PluginLoaded", new object[] { _plugin.PluginGuid });
                 }
+                else
+                {
+                    if (_restartOnUpdate)
+                    {
+                        _coreServer.Restart();
+                    }
+                }
+
+                await Administrators.SendAsync("PluginLoaded", new object[] { _plugin.PluginGuid });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not install plugin {_plugin.ComponentName}");
             }
             finally
             {
-                if (_install && File.Exists(automaticaPluginUpdateFile))
+                if (_install)
                 {
-                    File.Delete(automaticaPluginUpdateFile);
+                    DeleteFile(automaticaPluginUpdateFile);
                     _logger.LogDebug($"Remove update file for {_plugin.ComponentName}: {automaticaPluginUpdateFile}");
                 }
             }
         }
 
+        private void DeleteFile(string file)
+        {
+            try
+            {
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, $"Could not delete {file}");
+            }
+        }
+
         private async void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            if (_previousState != e.ProgressPercentage)
+            // async void event handler: never let an exception escape
+            try
             {
-                _previousState = e.ProgressPercentage;
-                await _updateHub.Clients.All.SendAsync("PluginDownloadProgressChanged", new object[] { _plugin.PluginGuid, e.BytesReceived, e.TotalBytesToReceive });
-                _logger.LogInformation($"Downloading plugin {_plugin.ComponentName} {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
+                if (_previousState != e.ProgressPercentage)
+                {
+                    _previousState = e.ProgressPercentage;
+                    await Administrators.SendAsync("PluginDownloadProgressChanged", new object[] { _plugin.PluginGuid, e.BytesReceived, e.TotalBytesToReceive });
+                    _logger.LogInformation($"Downloading plugin {_plugin.ComponentName} {e.ProgressPercentage} - {e.BytesReceived}/{e.TotalBytesToReceive}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Could not send the plugin download progress");
             }
         }
     }

@@ -19,6 +19,17 @@ namespace Automatica.Core.WebApi.Controllers
     [Route("webapi/settings")]
     public class SettingsController : BaseController
     {
+        /// <summary>
+        /// The settings a non-admin may read (the app header shows the project name and uses the language).
+        /// All other settings (api keys, passwords, hosts, ...) are admin only. A list in code, so it also covers existing databases.
+        /// </summary>
+        public static readonly IReadOnlySet<string> PublicSettingKeys = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "projectName",
+            "language",
+            "timezoneOffset"
+        };
+
         private readonly IAutoUpdateHandler _updateHandler;
         private readonly ISettingsCache _settingsCache;
         private readonly ICoreServer _coreServer;
@@ -63,9 +74,19 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("key/{key}")]
         [Authorize(Policy = Role.ViewerRole)]
-        public Setting GetSetting(string key)
+        public ActionResult<Setting> GetSetting(string key)
         {
-            return _settingsCache.GetByKey(key);
+            if (!PublicSettingKeys.Contains(key) && !IsAdmin)
+            {
+                return Forbid();
+            }
+
+            var setting = _settingsCache.GetByKey(key);
+            if (setting == null)
+            {
+                return NotFound();
+            }
+            return setting;
         }
 
         [HttpPost]
@@ -143,11 +164,12 @@ namespace Automatica.Core.WebApi.Controllers
 
                 if (reloadServer)
                 {
+                    // every changed subsystem, not only the first one (a server reload does not restart the remote connect)
                     if (reloadContext.Contains(SettingReloadContext.Server))
                         await _coreServer.ReInit().ConfigureAwait(false);
-                    else if (reloadContext.Contains(SettingReloadContext.Recorders))
+                    if (reloadContext.Contains(SettingReloadContext.Recorders))
                         await _recorderContext.Reload().ConfigureAwait(false);
-                    else if (reloadContext.Contains(SettingReloadContext.RemoteConnect))
+                    if (reloadContext.Contains(SettingReloadContext.RemoteConnect))
                         await _remoteConnectService.ReloadAsync().ConfigureAwait(false);
                 }
             }

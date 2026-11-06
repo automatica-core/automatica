@@ -48,16 +48,26 @@ namespace Automatica.Core.Runtime.Core.Plugins
 
             _logger.LogDebug($"Start install plugin {componentName} from file {acPkgFilePath}");
 
+            var pluginRoot = Path.GetFullPath(Path.Combine(ServerInfo.PluginDirectory,
+                pluginType == PluginType.Driver
+                    ? ServerInfo.DriversDirectory
+                    : ServerInfo.LogicsDirectory));
+
+            // the component name becomes a directory that is deleted recursively: it must be a plain name below the plugin directory
+            if (!IsValidComponentName(componentName) ||
+                !Path.GetFullPath(Path.Combine(pluginRoot, componentName)).StartsWith(pluginRoot + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+            {
+                _logger.LogError($"Invalid plugin component name {componentName}, plugin is not installed");
+                return Task.FromResult(false);
+            }
+
             var tmpDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
             try
             {
                 Directory.CreateDirectory(tmpDirectory);
 
-                var installDir = Path.Combine(ServerInfo.PluginDirectory,
-                    pluginType == PluginType.Driver
-                        ? ServerInfo.DriversDirectory
-                        : ServerInfo.LogicsDirectory, componentName);
+                var installDir = Path.Combine(pluginRoot, componentName);
 
                 if (Directory.Exists(installDir))
                 {
@@ -95,6 +105,15 @@ namespace Automatica.Core.Runtime.Core.Plugins
             }
 
             return Task.FromResult(false);
+        }
+
+        internal static bool IsValidComponentName(string componentName)
+        {
+            return !string.IsNullOrWhiteSpace(componentName) &&
+                   componentName != "." && componentName != ".." &&
+                   Path.GetFileName(componentName) == componentName &&
+                   componentName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 &&
+                   componentName.IndexOfAny(new[] { '/', '\\', ':' }) < 0;
         }
     }
 }

@@ -26,13 +26,37 @@ namespace Automatica.Core.EF.Backup
             _logger = logger;
         }
 
-        private static int CalculateDiffToMidnight()
+        /// <summary>
+        /// Time until the next local midnight, always positive.
+        /// </summary>
+        private static TimeSpan CalculateDiffToMidnight()
         {
             var now = DateTimeHelper.ProviderInstance.GetLocalNow().DateTime;
+            var nextMidnight = now.Date.AddDays(1);
 
-            var midnight = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 0);
+            var diff = nextMidnight - now;
+            return diff < TimeSpan.FromSeconds(1) ? TimeSpan.FromSeconds(1) : diff;
+        }
 
-            return Convert.ToInt32((midnight - now).TotalMilliseconds);
+        private string GetBackupFile()
+        {
+            return Path.Combine(ServerInfo.GetBackupDirectory(), $"{DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak");
+        }
+
+        /// <summary>
+        /// One shot timer, re-armed after every run: the backup runs once a day at midnight (and once shortly after the
+        /// start if there is no backup of today yet), independent of when the server was started.
+        /// </summary>
+        private void ScheduleNextBackup(TimeSpan dueTime)
+        {
+            try
+            {
+                _backupTimer?.Change(dueTime, Timeout.InfiniteTimeSpan);
+            }
+            catch (ObjectDisposedException)
+            {
+                // stopped
+            }
         }
 
         // the database type is only known to a context after OnConfiguring ran, read it from the configuration instead
@@ -48,7 +72,7 @@ namespace Automatica.Core.EF.Backup
                     Directory.CreateDirectory(ServerInfo.GetBackupDirectory());
                     await _backupService.StartBackup(
                         ConnectionStringHelper.GetConnectionString(_config, _logger).connectionString,
-                        Path.Combine(ServerInfo.GetBackupDirectory(), $"{DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak"));
+                        GetBackupFile());
                 }
 
                 await ClearOldBackups();
@@ -56,6 +80,10 @@ namespace Automatica.Core.EF.Backup
             catch (Exception e)
             {
                 _logger.LogError(e, $"Could not create database backup {e}");
+            }
+            finally
+            {
+                ScheduleNextBackup(CalculateDiffToMidnight());
             }
         }
 
@@ -96,8 +124,24 @@ namespace Automatica.Core.EF.Backup
             if (backupServices.Any(a => a.DbType == databaseType))
             {
                 _backupService = backupServices.First(a => a.DbType == databaseType);
+
+                // a backup of today already exists: the next one at midnight, otherwise one shortly after the start
+                // (not during the start, it must not slow it down)
                 var delay = CalculateDiffToMidnight();
-                _backupTimer = new Timer(BackupCallback, this, 0, delay);
+                try
+                {
+                    if (!File.Exists(GetBackupFile()))
+                    {
+                        delay = TimeSpan.FromMinutes(5);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Could not check for an existing backup {ex}");
+                }
+
+                _backupTimer = new Timer(BackupCallback, this, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+                ScheduleNextBackup(delay);
                 try
                 {
                     await ClearOldBackups();
@@ -107,7 +151,7 @@ namespace Automatica.Core.EF.Backup
                     // e.g. the backup directory could not be created - must not fail the host start
                     _logger.LogError(ex, $"Could not clear old backups {ex}");
                 }
-                _logger.LogInformation($"Backup service started for {databaseType} database type, first backup will be in {delay}ms");
+                _logger.LogInformation($"Backup service started for {databaseType} database type, first backup will be in {delay}");
             }
             else
             {

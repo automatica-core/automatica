@@ -22,8 +22,13 @@ namespace Automatica.Discovery
         [HttpGet]
         [AllowAnonymous] // the SSDP device description must be reachable without login
         [Produces("application/xml")]
-        public ContentResult GetDeviceDescription()
+        public IActionResult GetDeviceDescription()
         {
+            if (_discoveryService.Device == null)
+            {
+                return NotFound();
+            }
+
             string xml = _discoveryService.Device.ToDescriptionDocument();
             return new ContentResult
             {

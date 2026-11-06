@@ -10,7 +10,8 @@ namespace Automatica.Core.Internals.Cache.Common
 {
     internal class SettingsCache : AbstractCache<long, Setting>, ISettingsCache
     {
-        private readonly IDictionary<string, Setting> _byKeyCache = new ConcurrentDictionary<string, Setting>();
+        // replaced as a whole when the cache is (re)filled, readers never see a half filled or cleared dictionary
+        private volatile ConcurrentDictionary<string, Setting> _byKeyCache = new ConcurrentDictionary<string, Setting>();
 
         public SettingsCache(IConfiguration configuration) : base(configuration)
         {
@@ -32,10 +33,12 @@ namespace Automatica.Core.Internals.Cache.Common
                 ObjId = -5000
             });
 
+            var byKey = new ConcurrentDictionary<string, Setting>();
             foreach (var setting in settings)
             {
-                _byKeyCache.Add(setting.ValueKey, setting);
+                byKey[setting.ValueKey] = setting;
             }
+            _byKeyCache = byKey;
 
             var all = settings.OrderBy(a => a.Order).AsQueryable();
 
@@ -49,29 +52,21 @@ namespace Automatica.Core.Internals.Cache.Common
 
         public override void Clear()
         {
+            // the by-key dictionary is replaced on the next access (Initialize runs GetAll again), until then the old values are returned
             base.Clear();
-            _byKeyCache.Clear();
         }
 
         public void UpdateByKey(string key, Setting value)
         {
-            if (_byKeyCache.ContainsKey(key))
-            {
-                _byKeyCache[key] = value;
-            }
-            else
-            {
-                _byKeyCache.Add(key, value);
-            }
+            Initialize();
+            _byKeyCache[key] = value;
         }
 
+        /// <returns>the setting, null if there is no (visible) setting with this key</returns>
         public Setting GetByKey(string key)
         {
-            if (_byKeyCache.Count == 0)
-            {
-                Initialize();
-            }
-            return _byKeyCache[key];
+            Initialize();
+            return key != null && _byKeyCache.TryGetValue(key, out var setting) ? setting : null;
         }
     }
 }

@@ -16,7 +16,8 @@ namespace Automatica.Core.Push.Logging
             if (serviceProvider != null)
             {
                 var loggingHub = serviceProvider.GetRequiredService<IHubContext<LoggingHub, ISerilogHub>>();
-                config.SignalR(loggingHub, facility, restrictedToMinimumLevel: restrictedToMinimumLevel);
+                // logs are admin-only, only the administrator connections are in this group
+                config.SignalR(loggingHub, facility, restrictedToMinimumLevel: restrictedToMinimumLevel, groups: new[] { HubAccess.AdministratorsGroup });
 
             }
 

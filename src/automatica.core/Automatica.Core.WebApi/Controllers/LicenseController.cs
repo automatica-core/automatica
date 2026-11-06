@@ -43,7 +43,8 @@ namespace Automatica.Core.WebApi.Controllers
                 return await GetLicense();
             }
 
-            throw new WebApiException("InvalidLicense", ExceptionSeverity.Error);
+            // same error text as before, mapped to 400 by the exception filter
+            throw new LicenseInvalidException("InvalidLicense");
         }
     }
 }

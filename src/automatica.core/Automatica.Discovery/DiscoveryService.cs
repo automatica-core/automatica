@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
@@ -11,7 +12,7 @@ using Rssdp;
 
 namespace Automatica.Discovery
 {
-    public class DiscoveryService : IHostedService
+    public class DiscoveryService : IHostedService, IDisposable
     {
         private readonly ILogger<DiscoveryService> _logger;
         public string AutomaticaUuid { get;}
@@ -50,7 +51,15 @@ namespace Automatica.Discovery
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-             PublishDevice();
+            try
+            {
+                PublishDevice();
+            }
+            catch (Exception e)
+            {
+                // discovery is optional, it must not stop the server start
+                _logger.LogError(e, $"Could not publish the SSDP device {e}");
+            }
             return Task.CompletedTask;
         }
 
@@ -58,11 +67,18 @@ namespace Automatica.Discovery
 
         public Task<IEnumerable<DiscoveredSsdpDevice>> Scan()
         {
-            return _deviceLocator.SearchAsync();
+            // the constructor failed (e.g. no network): nothing to find
+            return _deviceLocator?.SearchAsync() ?? Task.FromResult(Enumerable.Empty<DiscoveredSsdpDevice>());
         }
 
         public void PublishDevice()
         {
+            if (_publisher == null || Location == null)
+            {
+                _logger.LogWarning("SSDP is not initialized, the device is not published");
+                return;
+            }
+
             // As this is a sample, we are only setting the minimum required properties.
             Device = new SsdpRootDevice()
             {
@@ -110,7 +126,25 @@ namespace Automatica.Discovery
        
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            try
+            {
+                if (Device != null)
+                {
+                    _publisher?.RemoveDevice(Device);
+                }
+                _deviceLocator?.StopListeningForNotifications();
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "Could not stop SSDP");
+            }
             return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _publisher?.Dispose();
+            _deviceLocator?.Dispose();
         }
     }
 }

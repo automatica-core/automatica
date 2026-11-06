@@ -853,7 +853,7 @@ namespace Automatica.Core.Runtime.Database
                 FirstName = "admin",
                 LastName = "admin",
                 Salt = salt,
-                Password = UserHelper.HashPassword("sa", salt),
+                Password = UserHelper.CreatePasswordHash("sa", salt),
                 ObjId = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
                 ModifiedAt = DateTimeOffset.Now
@@ -923,7 +923,7 @@ namespace Automatica.Core.Runtime.Database
                 FirstName = "Visu",
                 LastName = "Visu",
                 Salt = salt,
-                Password = UserHelper.HashPassword("visu", salt),
+                Password = UserHelper.CreatePasswordHash("visu", salt),
                 ObjId = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
                 ModifiedAt = DateTimeOffset.Now

@@ -30,20 +30,12 @@ namespace Automatica.Core.Visu.Cache
 
         protected override IQueryable<VisuPage> GetAll(AutomaticaContext context)
         {
-            var pages = context.VisuPages.AsNoTracking().ToList();
-
-            var ret = new List<VisuPage>();
-            foreach (var page in pages)
-            {
-                var loadedPage = LoadPage(context, page.ObjId);
-                ret.Add(loadedPage);
-            }
-
-            return ret.AsQueryable();
+            // all pages with one (split) query instead of one per page
+            return PagesWithObjects(context).ToList().AsQueryable();
         }
 
 
-        private VisuPage LoadPage(AutomaticaContext context, Guid pageId)
+        private static IQueryable<VisuPage> PagesWithObjects(AutomaticaContext context)
         {
             return context.VisuPages
                 .AsNoTracking()
@@ -67,7 +59,7 @@ namespace Automatica.Core.Visu.Cache
                 .ThenInclude(b => b.PropertyInstance)
                 .ThenInclude(b => b.ValueVisuPageNavigation).Include(a => a.VisuObjectInstances)
                 .ThenInclude(a => a.PropertyInstance)
-                .ThenInclude(a => a.ValueAreaInstanceNavigation).Single(a => a.ObjId == pageId);
+                .ThenInclude(a => a.ValueAreaInstanceNavigation);
         }
 
 

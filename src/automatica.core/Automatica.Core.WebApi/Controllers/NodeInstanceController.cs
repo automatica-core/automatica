@@ -59,9 +59,14 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpGet]
         [Route("single/{guid}")]
         [Authorize(Policy = Role.ViewerRole)]
-        public NodeInstance GetSingle(Guid guid)
+        public ActionResult<NodeInstance> GetSingle(Guid guid)
         {
-            return _nodeInstanceCache.Get(guid);
+            var node = _nodeInstanceCache.Get(guid);
+            if (node == null || !CanAccess(node.This2UserGroup))
+            {
+                return NotFound();
+            }
+            return node;
         }
 
         [HttpGet]

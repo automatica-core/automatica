@@ -247,13 +247,25 @@ namespace Automatica.Core.Internals.Cloud
 
             var updateServerVersion = (ServerVersion)update;
 
+            var tmpFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
+
+            // a previous (possibly broken) download must not count as "already downloaded" if this one fails
+            DeleteUpdate();
+
             var file = await DownloadFile(updateServerVersion.AzureUrl);
 
-            var tmpFile = Path.Combine(ServerInfo.GetTempPath(), UpdateFileName);
-            await using(var stream = new FileStream(tmpFile, FileMode.OpenOrCreate))
+            if (file == null || file.Length == 0)
             {
-                stream.Write(file);
+                throw new IOException($"Could not download the update {updateServerVersion.Version}");
             }
+
+            // write to a temporary file first: the update file only exists once it is complete
+            var partFile = tmpFile + ".part";
+            await using(var stream = new FileStream(partFile, FileMode.Create))
+            {
+                await stream.WriteAsync(file);
+            }
+            File.Move(partFile, tmpFile, true);
 
             return new FileInfo(tmpFile);
         }

@@ -10,7 +10,9 @@ namespace Automatica.Core
         public static LoggerConfiguration ConfigureLogger()
         {
             var logBuild = new LoggerConfiguration()
-                .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "dotnet.log"), retainedFileCountLimit: 10, fileSizeLimitBytes: 1024 * 30)
+                // rolls over at the size limit (without rollOnFileSizeLimit the sink stops writing for good once the file is full)
+                .WriteTo.File(Path.Combine(ServerInfo.GetLogDirectory(), "dotnet.log"), retainedFileCountLimit: 10,
+                    fileSizeLimitBytes: 5 * 1024 * 1024, rollOnFileSizeLimit: true)
                 .MinimumLevel.Verbose();
 
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data

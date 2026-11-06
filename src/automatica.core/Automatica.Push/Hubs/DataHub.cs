@@ -3,11 +3,14 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Calendar;
 using Automatica.Core.Base.IO;
+using Automatica.Core.Base.Templates;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cache.Logic;
+using Automatica.Core.Model.Models.User;
 using Automatica.Push.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Automatica.Push.Hubs
@@ -20,9 +23,11 @@ namespace Automatica.Push.Hubs
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
+        private readonly ILogger<DataHub> _logger;
 
-        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache)
+        public DataHub(IDispatcher dispatcher, INotifyDriver notify, INodeInstanceCache nodeInstanceCache, ILogicInstanceCache logicInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, ILogger<DataHub> logger)
         {
+            _logger = logger;
             _dispatcher = dispatcher;
             _notify = notify;
             _nodeInstanceCache = nodeInstanceCache;
@@ -30,6 +35,10 @@ namespace Automatica.Push.Hubs
             _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
         }
 
+        /// <summary>
+        /// Every value of every node (config and logic editor), admin only.
+        /// </summary>
+        [Authorize(Policy = Role.AdminRole)]
         public async Task SubscribeAll()
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, "All");
@@ -39,21 +48,59 @@ namespace Automatica.Push.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "All");
         }
 
+        /// <summary>
+        /// Values of one node or logic interface, only if the user may see it (user group).
+        /// </summary>
         public async Task Subscribe(string name)
         {
+            if (!CanSubscribe(name))
+            {
+                throw new HubException($"Not allowed to subscribe to {name}");
+            }
             await Groups.AddToGroupAsync(Context.ConnectionId, name);
         }
 
+        private bool CanSubscribe(string name)
+        {
+            if (HubAccess.IsAdmin(Context.User))
+            {
+                return true;
+            }
+
+            // only node or logic interface ids, never one of the special groups (e.g. "All")
+            if (!Guid.TryParse(name, out var id))
+            {
+                return false;
+            }
+
+            var node = _nodeInstanceCache.Get(id);
+            if (node != null)
+            {
+                return HubAccess.CanSee(Context.User, node.This2UserGroup);
+            }
+
+            var logicInterface = _logicInterfaceInstanceCache.Get(id);
+            if (logicInterface != null)
+            {
+                return HubAccess.CanSee(Context.User, _logicInstanceCache.Get(logicInterface.This2RuleInstance)?.This2UserGroup);
+            }
+
+            // nothing is sent to unknown ids
+            return true;
+        }
+
+        [Authorize(Policy = Role.AdminRole)]
         public async Task EnableLearnMode(Guid nodeInstanceId)
         {
-            var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId);
+            var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId) ?? throw new HubException($"Node {nodeInstanceId} not found");
             await _notify.EnableLearnMode(nodeInstance);
             await Subscribe(nodeInstanceId.ToString());
         }
+        [Authorize(Policy = Role.AdminRole)]
         public async Task DisableLearnMode(Guid nodeInstanceId)
         {
 
-            var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId);
+            var nodeInstance = _nodeInstanceCache.Get(nodeInstanceId) ?? throw new HubException($"Node {nodeInstanceId} not found");
             await _notify.DisableLearnMode(nodeInstance);
             await Unsubscribe(nodeInstanceId.ToString());
         }
@@ -106,8 +153,21 @@ namespace Automatica.Push.Hubs
 
             var nodeInstanceValue = _nodeInstanceCache.Get(instanceId);
 
+            // same checks as the MCP write_value tool: user group and writeable flag (admins may write everything they can configure)
             if (nodeInstanceValue != null)
             {
+                if (nodeInstanceValue.IsDeleted || !HubAccess.CanSee(Context.User, nodeInstanceValue.This2UserGroup))
+                {
+                    throw new HubException($"Data point {instanceId} not found");
+                }
+
+                if (!nodeInstanceValue.IsWriteable && !HubAccess.IsAdmin(Context.User))
+                {
+                    // the flag was never enforced for the visualization, existing visu controls may be bound to such
+                    // data points - log it instead of breaking them, the user group check above is the access boundary
+                    _logger.LogWarning($"User {Context.User?.Identity?.Name} writes data point {instanceId}, which is not marked as writeable");
+                }
+
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, nodeInstanceValue.IsRemanent);
                 _dispatcher.DispatchValue(dispatchable,
@@ -115,6 +175,20 @@ namespace Automatica.Push.Hubs
             }
             else
             {
+                var logicInterface = _logicInterfaceInstanceCache.Get(instanceId);
+                if (logicInterface == null ||
+                    !HubAccess.CanSee(Context.User, _logicInstanceCache.Get(logicInterface.This2RuleInstance)?.This2UserGroup))
+                {
+                    throw new HubException($"Data point or logic interface {instanceId} not found");
+                }
+
+                // inputs (and parameters) of a logic, never its outputs
+                if (logicInterface.This2RuleInterfaceTemplateNavigation?.This2RuleInterfaceDirection == (long)LogicInterfaceDirection.Output &&
+                    !HubAccess.IsAdmin(Context.User))
+                {
+                    throw new HubException("Logic outputs cannot be written");
+                }
+
                 var dispatchable = new DispatchableInstance(DispatchableType.Visualization, $"Web", instanceId,
                     DispatchableSource.Visualization, false);
                 _dispatcher.DispatchValue(dispatchable,

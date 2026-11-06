@@ -91,9 +91,15 @@ namespace Automatica.Core.EF.Models
             _extendedLogs = extendedLogs;
         }
 
+        private static bool IsEnabled(string value)
+        {
+            return !string.IsNullOrEmpty(value) && (value == "1" || (bool.TryParse(value, out var enabled) && enabled));
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var databaseLogs = _extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")) || !string.IsNullOrEmpty(Configuration["server:database_logs"]);
+            // "database_logs": false must not enable the logs (it turns on EnableSensitiveDataLogging)
+            var databaseLogs = _extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")) || IsEnabled(Configuration["server:database_logs"]);
 
             if (!optionsBuilder.IsConfigured)
             {

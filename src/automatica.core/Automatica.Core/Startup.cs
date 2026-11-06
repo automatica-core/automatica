@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
+using System.Threading.RateLimiting;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Backup;
@@ -30,7 +33,10 @@ using Automatica.Core.Mcp;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
+using Automatica.Core.WebApi.Authentication;
+using Automatica.Core.WebApi.Controllers;
 using Automatica.Core.WebApi.Converter;
+using Microsoft.AspNetCore.RateLimiting;
 using MQTTnet.AspNetCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -42,9 +48,63 @@ namespace Automatica.Core
        
         public IConfiguration Configuration { get; private set; }
 
-        public Startup(IConfiguration config)
+        private readonly IHostEnvironment _environment;
+
+        public Startup(IConfiguration config, IHostEnvironment environment = null)
         {
             Configuration = config;
+            _environment = environment;
+        }
+
+        /// <summary>
+        /// Browser origins that may call the api cross-origin: the app (Capacitor serves it from https://localhost on
+        /// Android and capacitor://localhost on iOS) and local development servers, plus the comma separated origins
+        /// in <c>server:cors_origins</c>. The web ui served by the server itself is same-origin and needs no CORS.
+        /// </summary>
+        private bool IsCorsOriginAllowed(string origin)
+        {
+            if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+            {
+                return false;
+            }
+
+            if (uri.Host == "localhost" || uri.Host == "127.0.0.1" || uri.Host == "[::1]")
+            {
+                return true;
+            }
+
+            var configured = Configuration["server:cors_origins"];
+            return !string.IsNullOrWhiteSpace(configured) && configured
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Any(a => string.Equals(a.TrimEnd('/'), origin.TrimEnd('/'), StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Replaces the roles and user groups of the token with the current ones and rejects tokens of deleted users.
+        /// </summary>
+        private static Task ValidateTokenUser(TokenValidatedContext context)
+        {
+            if (context.Principal?.Identity is not ClaimsIdentity identity)
+            {
+                context.Fail("Invalid token");
+                return Task.CompletedTask;
+            }
+
+            var idClaim = identity.FindFirst(UserClaimsProvider.UserIdClaimType)?.Value ?? identity.FindFirst("nameid")?.Value;
+            Guid? userId = Guid.TryParse(idClaim, out var id) ? id : null;
+            var userName = identity.Name ?? identity.FindFirst("unique_name")?.Value;
+
+            var provider = context.HttpContext.RequestServices.GetRequiredService<UserClaimsProvider>();
+            var claims = provider.Get(userId, userName);
+
+            if (claims == null)
+            {
+                context.Fail("The user of the token does not exist anymore");
+                return Task.CompletedTask;
+            }
+
+            UserClaimsProvider.Apply(identity, claims);
+            return Task.CompletedTask;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -64,8 +124,25 @@ namespace Automatica.Core
 
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(a => true));
+                // the app sends withCredentials (and SignalR does by default), so credentials stay allowed - but only for known origins
+                options.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(IsCorsOriginAllowed));
             });
+
+            // brute force protection of the login: per client address
+            services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.AddPolicy(AuthenticationController.LoginRateLimitPolicy, context =>
+                    RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 10,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0
+                        }));
+            });
+
+            services.AddSingleton<UserClaimsProvider>();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
@@ -109,7 +186,8 @@ namespace Automatica.Core
                                 context.Token = accessToken;
                             }
                             return Task.CompletedTask;
-                        }
+                        },
+                        OnTokenValidated = ValidateTokenUser
                     };
                 })
                 .AddMcpApiKey();
@@ -168,7 +246,8 @@ namespace Automatica.Core
 
             services.AddSignalR(options =>
             {
-                options.EnableDetailedErrors = true;
+                // exception texts only for developers (HubException messages are always sent)
+                options.EnableDetailedErrors = _environment?.IsDevelopment() ?? false;
             }).AddJsonProtocol(options =>
             {
             });
@@ -214,6 +293,7 @@ namespace Automatica.Core
 
             app.UseCors("CorsPolicy");
             app.UseRouting();
+            app.UseRateLimiter();
 
             app.UseResponseCompression();
 
@@ -242,8 +322,13 @@ namespace Automatica.Core
                 await next();
                 if (context.Response.StatusCode == 404 &&
                     !Path.HasExtension(context.Request.Path.Value) &&
-                    !context.Request.Path.Value.StartsWith("/api/"))
+                    !context.Request.Path.Value.StartsWith("/api/") &&
+                    !context.Request.Path.Value.StartsWith("/webapi/") &&
+                    !context.Request.Path.Value.StartsWith("/signalr/") &&
+                    !context.Response.HasStarted)
                 {
+                    // client side route: serve the app with 200, not the 404 of the first pass
+                    context.Response.StatusCode = StatusCodes.Status200OK;
                     context.Request.Path = "/index.html";
                     context.Response.Cookies.Append("Electron", "false");
                     await next();

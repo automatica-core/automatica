@@ -8,10 +8,13 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
+using Automatica.Core.WebApi.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using User = Automatica.Core.Model.Models.User.User;
 
@@ -21,7 +24,7 @@ namespace Automatica.Core.WebApi.Controllers
     {
         public UserAuthData()
         {
-            
+
         }
 
         public string Username { get; set; }
@@ -33,42 +36,87 @@ namespace Automatica.Core.WebApi.Controllers
     [AllowAnonymous]
     public class AuthenticationController : BaseController
     {
+        /// <summary>
+        /// Name of the rate limiter policy of the login (registered in the startup).
+        /// </summary>
+        public const string LoginRateLimitPolicy = "login";
 
-        public AuthenticationController(AutomaticaContext dbContext) : base(dbContext)
+        private readonly ILogger<AuthenticationController> _logger;
+
+        public AuthenticationController(AutomaticaContext dbContext, ILogger<AuthenticationController> logger) : base(dbContext)
         {
+            _logger = logger;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<User> Login([FromBody]UserAuthData data)
+        [EnableRateLimiting(LoginRateLimitPolicy)]
+        public async Task<ActionResult<User>> Login([FromBody]UserAuthData data)
         {
-            var user = await DbContext.Users.Include(a => a.InverseThis2Roles).ThenInclude(a => a.This2RoleNavigation).SingleOrDefaultAsync(a => a.UserName == data.Username);
-
-            if (user == null)
+            if (data == null || string.IsNullOrEmpty(data.Username) || data.Password == null)
             {
-                return null;
+                return Unauthorized();
             }
 
-            var salt = user.Salt;
+            // user names should be unique, but older databases may contain duplicates: the password decides
+            var candidates = await DbContext.Users.AsNoTracking().Include(a => a.InverseThis2Roles).ThenInclude(a => a.This2RoleNavigation)
+                .Where(a => a.UserName == data.Username).ToListAsync();
 
-            var hash = UserHelper.HashPassword(data.Password, salt);
-
-            if (hash == user.Password)
+            foreach (var user in candidates)
             {
-                user = LoginUser(user);
-                user.Salt = null;
-                user.Password = "";
-                return user;
+                if (!UserHelper.VerifyPassword(data.Password, user.Salt, user.Password, out var needsRehash))
+                {
+                    continue;
+                }
+
+                if (needsRehash)
+                {
+                    await UpgradePasswordHash(user.ObjId, data.Password);
+                }
+
+                var loggedIn = LoginUser(user);
+                loggedIn.Salt = null;
+                loggedIn.Password = "";
+                return loggedIn;
             }
 
-            return null;
+            _logger.LogWarning($"Failed login for user {data.Username} from {HttpContext?.Connection?.RemoteIpAddress}");
+            return Unauthorized();
         }
+
+        /// <summary>
+        /// Stores the password in the current hash format (old hashes are only upgraded on a successful login,
+        /// the plain password is not known otherwise).
+        /// </summary>
+        private async Task UpgradePasswordHash(Guid userId, string password)
+        {
+            try
+            {
+                var stored = await DbContext.Users.SingleOrDefaultAsync(a => a.ObjId == userId);
+                if (stored == null)
+                {
+                    return;
+                }
+
+                var salt = UserHelper.GenerateNewSalt();
+                stored.Salt = salt;
+                stored.Password = UserHelper.CreatePasswordHash(password, salt);
+                await DbContext.SaveChangesAsync();
+                DbContext.Entry(stored).State = EntityState.Detached;
+            }
+            catch (Exception e)
+            {
+                // the login works with the old hash, try again next time
+                _logger.LogError(e, "Could not upgrade the password hash");
+            }
+        }
+
         [HttpPost]
         [Route("logout")]
         public Task<bool> LogOut()
         {
             // JWT is stateless and only the JwtBearer scheme is registered (it cannot sign out),
-            // the client simply drops its token
+            // the client simply drops its token. Removed users and roles are checked on every request (UserClaimsProvider).
             return Task.FromResult(true);
         }
 
@@ -77,35 +125,25 @@ namespace Automatica.Core.WebApi.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("FirstName", user.FirstName),
-                new Claim("LastName", user.LastName)
+                new Claim(UserClaimsProvider.UserIdClaimType, user.ObjId.ToString()),
+                new Claim("FirstName", user.FirstName ?? ""),
+                new Claim("LastName", user.LastName ?? "")
             };
 
-            foreach (var role in user.InverseThis2Roles)
+            // direct roles and the roles of the user groups, one query per table
+            var userClaims = UserClaimsProvider.Load(DbContext, user);
+
+            foreach (var role in userClaims.Roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role.This2RoleNavigation.Key));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var userGroups = DbContext.User2Groups.Where(a => a.This2User == user.ObjId).ToList();
+            // the client reads the roles of the user groups from the user's roles
+            user.InverseThis2Roles.AddRange(userClaims.GroupRoles);
 
-            foreach (var userGroup in userGroups)
+            foreach (var userGroup in userClaims.UserGroups)
             {
-                var roles = DbContext.UserGroup2Roles.Where(a => a.This2UserGroup == userGroup.This2UserGroup)
-                    .Include(a => a.This2RoleNavigation).ToList();
-
-                foreach (var userGroupRoles in roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, userGroupRoles.This2RoleNavigation.Key));
-
-                    user.InverseThis2Roles.Add(new User2Role()
-                    {
-                        This2User = user.ObjId,
-                        This2Role = userGroupRoles.This2Role,
-                        This2RoleNavigation = userGroupRoles.This2RoleNavigation
-                    });
-                }
-
-                claims.Add(new Claim(UserGroup.ClaimType, userGroup.This2UserGroup.ToString()));
+                claims.Add(new Claim(UserGroup.ClaimType, userGroup.ToString()));
             }
 
             var claimsIdentity = new ClaimsIdentity(claims);

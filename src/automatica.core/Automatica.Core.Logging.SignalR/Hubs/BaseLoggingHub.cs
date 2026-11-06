@@ -5,7 +5,7 @@ namespace Automatica.Core.Logging.SignalR.Hubs
 {
     public abstract class BaseLoggingHub : Hub<ISerilogHub>
     {
-        public async Task SubscribeToGroup(string group)
+        public virtual async Task SubscribeToGroup(string group)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, group);
         }

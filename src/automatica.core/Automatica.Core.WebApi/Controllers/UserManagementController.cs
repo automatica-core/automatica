@@ -6,10 +6,12 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
+using Automatica.Core.WebApi.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using User = Automatica.Core.Model.Models.User.User;
 
@@ -38,6 +40,14 @@ namespace Automatica.Core.WebApi.Controllers
         public ICollection<UserGroup> GetUserGroups()
         {
             return _userGroupsCache.All();
+        }
+
+        /// <summary>
+        /// Roles and groups are re-read on every request with a token (cached for a few seconds), apply a change at once.
+        /// </summary>
+        private void InvalidateUserClaims()
+        {
+            HttpContext?.RequestServices?.GetService<UserClaimsProvider>()?.Invalidate();
         }
 
         [HttpDelete]
@@ -77,18 +87,37 @@ namespace Automatica.Core.WebApi.Controllers
             if (deleted)
             {
                 _userGroupsCache.Remove(id);
+                InvalidateUserClaims();
             }
             return Ok();
         }
 
         [HttpPost]
         [Route("usergroup")]
-        public async Task<UserGroup> SaveUserGroup([FromBody] UserGroup instance)
+        public async Task<ActionResult<UserGroup>> SaveUserGroup([FromBody] UserGroup instance)
         {
+            if (instance == null)
+            {
+                return BadRequest();
+            }
+
+            if (WouldRemoveLastAdmin(Array.Empty<Guid>(), GroupsLosingAdminRole(new[] { instance })))
+            {
+                return BadRequest("Cannot remove the administrator role from the last user group with administrator rights");
+            }
+
+            var roles = instance.InverseThis2Roles;
             var strategy = DbContext.Database.CreateExecutionStrategy();
+            var attempt = 0;
             await strategy.ExecuteAsync(async
                 () =>
             {
+                if (attempt++ > 0)
+                {
+                    // retry: the same input as the first attempt, without the entities it tracked
+                    DbContext.ChangeTracker.Clear();
+                    instance.InverseThis2Roles = roles;
+                }
                 await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
@@ -106,7 +135,35 @@ namespace Automatica.Core.WebApi.Controllers
 
             // the posted object has its roles detached, reload the group from the database
             _userGroupsCache.Clear();
+            InvalidateUserClaims();
             return GetUserGroup(instance.ObjId);
+        }
+
+        /// <returns>the posted groups that have the administrator role now, but not after saving them</returns>
+        private ICollection<Guid> GroupsLosingAdminRole(IEnumerable<UserGroup> groups)
+        {
+            var adminRoleIds = DbContext.Roles.AsNoTracking().Where(a => a.Key == Role.AdminRole).Select(a => a.ObjId).ToList();
+            var ret = new List<Guid>();
+
+            foreach (var group in groups)
+            {
+                // without posted roles, the roles of the group are not changed
+                if (group.InverseThis2Roles == null)
+                {
+                    continue;
+                }
+
+                var isAdminGroup = DbContext.UserGroup2Roles.AsNoTracking()
+                    .Any(a => a.This2UserGroup == group.ObjId && adminRoleIds.Contains(a.This2Role));
+                var staysAdminGroup = group.InverseThis2Roles.Any(a => adminRoleIds.Contains(a.This2Role));
+
+                if (isAdminGroup && !staysAdminGroup)
+                {
+                    ret.Add(group.ObjId);
+                }
+            }
+
+            return ret;
         }
 
         private void SaveUserGroupInternal(UserGroup instance)
@@ -175,15 +232,26 @@ namespace Automatica.Core.WebApi.Controllers
                 removedIds = DbContext.UserGroups.AsNoTracking().Where(c => !postedIds.Contains(c.ObjId)).Select(a => a.ObjId).ToList();
             }
 
-            if (WouldRemoveLastAdmin(Array.Empty<Guid>(), removedIds))
+            if (WouldRemoveLastAdmin(Array.Empty<Guid>(), removedIds.Concat(GroupsLosingAdminRole(instances)).ToList()))
             {
                 return BadRequest("Cannot delete the last user group with administrator rights");
             }
 
+            var postedRoles = instances.Select(a => a.InverseThis2Roles).ToList();
             var strategy = DbContext.Database.CreateExecutionStrategy();
+            var attempt = 0;
             await strategy.ExecuteAsync(async
                 () =>
             {
+                if (attempt++ > 0)
+                {
+                    // retry: the same input as the first attempt, without the entities it tracked
+                    DbContext.ChangeTracker.Clear();
+                    for (var i = 0; i < instances.Count; i++)
+                    {
+                        instances[i].InverseThis2Roles = postedRoles[i];
+                    }
+                }
                 await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
@@ -206,6 +274,7 @@ namespace Automatica.Core.WebApi.Controllers
             });
 
             _userGroupsCache.Clear();
+            InvalidateUserClaims();
             return Ok(GetUserGroups());
         }
 
@@ -276,6 +345,7 @@ namespace Automatica.Core.WebApi.Controllers
             if (deleted)
             {
                 _userCache.Remove(id);
+                InvalidateUserClaims();
             }
             return Ok();
         }
@@ -293,8 +363,72 @@ namespace Automatica.Core.WebApi.Controllers
                 return BadRequest("Password and password confirmation do not match");
             }
 
+            var error = CheckUsers(new[] { user });
+            if (error != null)
+            {
+                return BadRequest(error);
+            }
+
             await SaveUserInternal(user);
+            InvalidateUserClaims();
             return GetUser(user.ObjId);
+        }
+
+        /// <returns>an error message if the posted users must not be saved (duplicate user name, last administrator loses the role)</returns>
+        private string CheckUsers(ICollection<User> users, ICollection<Guid> removedUserIds = null)
+        {
+            if (users.Any(a => string.IsNullOrWhiteSpace(a.UserName)))
+            {
+                return "The user name must not be empty";
+            }
+
+            if (users.GroupBy(a => a.UserName).Any(a => a.Count() > 1))
+            {
+                return "The user name already exists";
+            }
+
+            var postedIds = users.Select(a => a.ObjId).ToList();
+            var postedNames = users.Select(a => a.UserName).ToList();
+            var ignoredIds = postedIds.Concat(removedUserIds ?? Array.Empty<Guid>()).ToList();
+            if (DbContext.Users.AsNoTracking().Any(a => postedNames.Contains(a.UserName) && !ignoredIds.Contains(a.ObjId)))
+            {
+                return "The user name already exists";
+            }
+
+            if (WouldRemoveLastAdmin(UsersLosingAdminRights(users).Concat(removedUserIds ?? Array.Empty<Guid>()).ToList(), Array.Empty<Guid>()))
+            {
+                return "Cannot remove the administrator rights of the last administrator";
+            }
+
+            return null;
+        }
+
+        /// <returns>the posted users that are administrators now (directly or through a group), but not after saving them</returns>
+        private ICollection<Guid> UsersLosingAdminRights(IEnumerable<User> users)
+        {
+            var adminRoleIds = DbContext.Roles.AsNoTracking().Where(a => a.Key == Role.AdminRole).Select(a => a.ObjId).ToList();
+            var adminGroupIds = DbContext.UserGroup2Roles.AsNoTracking()
+                .Where(a => adminRoleIds.Contains(a.This2Role))
+                .Select(a => a.This2UserGroup)
+                .ToList();
+            var ret = new List<Guid>();
+
+            foreach (var user in users)
+            {
+                var isAdmin = DbContext.User2Roles.AsNoTracking().Any(a => a.This2User == user.ObjId && adminRoleIds.Contains(a.This2Role)) ||
+                              DbContext.User2Groups.AsNoTracking().Any(a => a.This2User == user.ObjId && adminGroupIds.Contains(a.This2UserGroup));
+
+                // the save replaces the roles and groups with the posted ones (missing lists are saved as empty)
+                var staysAdmin = (user.InverseThis2Roles ?? new List<User2Role>()).Any(a => adminRoleIds.Contains(a.This2Role)) ||
+                                 (user.InverseThis2UserGroups ?? new List<User2Group>()).Any(a => adminGroupIds.Contains(a.This2UserGroup));
+
+                if (isAdmin && !staysAdmin)
+                {
+                    ret.Add(user.ObjId);
+                }
+            }
+
+            return ret;
         }
 
         private static bool HasPasswordMismatch(User user)
@@ -304,100 +438,92 @@ namespace Automatica.Core.WebApi.Controllers
 
         private async Task SaveUserInternal(User user)
         {
+            // everything that is derived from the posted object is computed once: the execution strategy runs the
+            // lambda again on a transient error and must neither hash the hash nor lose the posted groups and roles
+            var userId = user.ObjId;
+            var groupIds = (user.InverseThis2UserGroups ?? new List<User2Group>()).Select(o => o.This2UserGroup).Distinct().ToList();
+            var roleIds = (user.InverseThis2Roles ?? new List<User2Role>()).Select(o => o.This2Role).Distinct().ToList();
+            var newPassword = user.Password;
+            var newSalt = UserHelper.GenerateNewSalt();
+            var newPasswordHash = !String.IsNullOrEmpty(newPassword)
+                // checked by the caller: Password == PasswordConfirm
+                ? UserHelper.CreatePasswordHash(newPassword, newSalt)
+                // only used for a new user without password: a random (hashed) password, login is not possible until one is set
+                : UserHelper.CreatePasswordHash(UserHelper.GenerateNewSalt(), newSalt);
+
             var strategy = DbContext.Database.CreateExecutionStrategy();
+            var attempt = 0;
             await strategy.ExecuteAsync(async
                 () =>
             {
+                if (attempt++ > 0)
+                {
+                    // retry: forget the entities tracked by the failed attempt
+                    DbContext.ChangeTracker.Clear();
+                }
                 await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var user2Groups = user.InverseThis2UserGroups ?? new List<User2Group>();
-                    var roles = user.InverseThis2Roles ?? new List<User2Role>();
-                    user.InverseThis2UserGroups = null;
-                    user.InverseThis2Roles = null;
-
-
-                    var existing = DbContext.Users.AsNoTracking().SingleOrDefault(a => a.ObjId == user.ObjId);
-
-                    if (!String.IsNullOrEmpty(user.Password))
+                    var existing = DbContext.Users.SingleOrDefault(a => a.ObjId == userId);
+                    var target = existing ?? new User
                     {
-                        // checked by the caller: Password == PasswordConfirm
-                        var salt = UserHelper.GenerateNewSalt();
-                        user.Password = UserHelper.HashPassword(user.Password, salt);
-                        user.Salt = salt;
-                    }
-                    else if (existing != null)
+                        ObjId = userId,
+                        CreatedAt = DateTimeOffset.Now
+                    };
+
+                    // only the editable fields, never server side fields like the creation date
+                    target.UserName = user.UserName;
+                    target.FirstName = user.FirstName ?? "";
+                    target.LastName = user.LastName ?? "";
+                    target.Description = user.Description ?? "";
+                    target.ModifiedAt = DateTimeOffset.Now;
+
+                    if (!String.IsNullOrEmpty(newPassword) || existing == null)
                     {
-                        user.Password = existing.Password;
-                        user.Salt = existing.Salt;
+                        target.Password = newPasswordHash;
+                        target.Salt = newSalt;
                     }
-                    else
-                    {
-                        // new user without password: a random (hashed) password, login is not possible until one is set
-                        var salt = UserHelper.GenerateNewSalt();
-                        user.Password = UserHelper.HashPassword(UserHelper.GenerateNewSalt(), salt);
-                        user.Salt = salt;
-                    }
-                    user.PasswordConfirm = null;
 
                     if (existing == null)
                     {
-                        user.CreatedAt = DateTimeOffset.Now;
-                        user.ModifiedAt = DateTimeOffset.Now;
-                        DbContext.Users.Add(user);
-                    }
-                    else
-                    {
-                        user.CreatedAt = existing.CreatedAt;
-                        user.ModifiedAt = DateTimeOffset.Now;
-                        DbContext.Users.Update(user);
+                        DbContext.Users.Add(target);
                     }
 
-                    foreach (var user2Group in user2Groups)
+                    foreach (var groupId in groupIds)
                     {
-                        user2Group.This2User = user.ObjId;
-                        user2Group.This2UserNavigation = null;
-                        user2Group.This2UserGroupNavigation = null;
-
                         var user2GroupExisting = DbContext.User2Groups.SingleOrDefault(a =>
-                            a.This2User == user2Group.This2User && a.This2UserGroup == user2Group.This2UserGroup);
+                            a.This2User == userId && a.This2UserGroup == groupId);
 
                         if (user2GroupExisting != null)
                         {
                             continue;
                         }
 
-                        DbContext.User2Groups.Add(user2Group);
+                        DbContext.User2Groups.Add(new User2Group { This2User = userId, This2UserGroup = groupId });
                     }
 
-                    var groupIds = user2Groups.Select(o => o.This2UserGroup).ToList();
                     var removedUserGroupsList = DbContext.User2Groups
-                        .Where(c => !groupIds.Contains(c.This2UserGroup) && c.This2User == user.ObjId)
+                        .Where(c => !groupIds.Contains(c.This2UserGroup) && c.This2User == userId)
                         .ToList();
                     DbContext.RemoveRange(removedUserGroupsList);
 
 
-                    foreach (var role in roles)
+                    foreach (var roleId in roleIds)
                     {
-                        role.This2User = user.ObjId;
-                        role.This2UserNavigation = null;
-                        role.This2RoleNavigation = null;
-
                         var rolesExisting = DbContext.User2Roles.SingleOrDefault(a =>
-                            a.This2User == role.This2User && a.This2Role == role.This2Role);
+                            a.This2User == userId && a.This2Role == roleId);
 
                         if (rolesExisting != null)
                         {
                             continue;
                         }
 
-                        DbContext.User2Roles.Add(role);
+                        DbContext.User2Roles.Add(new User2Role { This2User = userId, This2Role = roleId });
                     }
 
 
-                    var roleIds = roles.Select(o => o.This2Role).ToList();
                     var removedUserRolesList = DbContext.User2Roles
-                        .Where(c => !roleIds.Contains(c.This2Role) && c.This2User == user.ObjId)
+                        .Where(c => !roleIds.Contains(c.This2Role) && c.This2User == userId)
                         .ToList();
                     DbContext.RemoveRange(removedUserRolesList);
 
@@ -411,8 +537,11 @@ namespace Automatica.Core.WebApi.Controllers
                 }
             });
 
-            // after the commit and never the posted object (it carries the password hash)
-            CacheSanitizedUser(user.ObjId);
+            // the saved entity must not stay tracked with its hash (later saves of this request)
+            DbContext.ChangeTracker.Clear();
+
+            // after the commit and never the posted object (it carries the password)
+            CacheSanitizedUser(userId);
         }
 
         private void CacheSanitizedUser(Guid userId)
@@ -456,7 +585,7 @@ namespace Automatica.Core.WebApi.Controllers
                 removedIds = DbContext.Users.AsNoTracking().Where(c => !postedIds.Contains(c.ObjId)).Select(a => a.ObjId).ToList();
             }
 
-            var guardError = CheckUserRemoval(removedIds);
+            var guardError = CheckUserRemoval(removedIds) ?? CheckUsers(users, removedIds);
             if (guardError != null)
             {
                 return BadRequest(guardError);
@@ -492,6 +621,7 @@ namespace Automatica.Core.WebApi.Controllers
             }
 
             _userCache.Clear();
+            InvalidateUserClaims();
             return Ok(GetUsers());
         }
 

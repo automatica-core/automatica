@@ -51,9 +51,6 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="cert\certificate.pfx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="frp\frpc.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

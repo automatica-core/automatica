@@ -34,7 +34,8 @@ namespace Automatica.Core.Runtime.IO
 
         public async Task NotifyTelegram(ITelegramMessage message)
         {
-            await _telegramHub.Clients.All.SendAsync("OnTelegram", message);
+            // bus traffic is admin-only
+            await _telegramHub.Clients.Group(HubAccess.AdministratorsGroup).SendAsync("OnTelegram", message);
         }
 
         public ITelegramMonitorInstance CreateTelegramMonitor(Guid id, string name, string busType, string description)

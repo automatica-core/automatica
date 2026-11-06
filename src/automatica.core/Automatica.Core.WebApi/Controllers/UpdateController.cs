@@ -79,11 +79,18 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpPost, Route("download")]
-        public async Task<ResultDto> Download([FromBody]ServerVersion version)
+        public async Task<ActionResult<ResultDto>> Download([FromBody]ServerVersion version)
         {
             try
             {
-                var check = await _updateHandler.DownloadUpdate(version);
+                // never the posted version (it carries the download url): download what the cloud offers
+                var update = await _updateHandler.CheckForUpdates();
+                if (update == null || (version != null && version.ObjId != Guid.Empty && update is ServerVersion serverVersion && serverVersion.ObjId != version.ObjId))
+                {
+                    return NotFound();
+                }
+
+                var check = await _updateHandler.DownloadUpdate(update);
                 
                 return new ResultDto
                 {

@@ -651,7 +651,7 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public void Reload()
         {
-            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
+            StopServer(ServerInfo.ExitCodeUpdateInstall);
         }
 
 

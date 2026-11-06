@@ -130,6 +130,20 @@ namespace Automatica.Core.WebApi.Controllers
 
             node.InverseThis2ParentNodeInstanceNavigation = null;
             node.PropertyInstance = null;
+            try
+            {
+                return await AddOrUpdateNodeInstance(node, childs, props, trendingChanges);
+            }
+            finally
+            {
+                // the posted graph stays intact: the execution strategy runs this again on a transient error
+                node.InverseThis2ParentNodeInstanceNavigation = childs;
+                node.PropertyInstance = props;
+            }
+        }
+
+        private async Task<EntityState> AddOrUpdateNodeInstance(NodeInstance node, List<NodeInstance> childs, List<PropertyInstance> props, List<(Guid nodeId, bool trending)> trendingChanges)
+        {
             DetachNavigations(node);
             node.IsDeleted = false;
             node.ModifiedAt = DateTimeOffset.Now;
@@ -144,6 +158,8 @@ namespace Automatica.Core.WebApi.Controllers
             if (entity != null)
             {
                 DbContext.Entry(entity).State = EntityState.Detached;
+                // server side field, never the posted value
+                node.CreatedAt = entity.CreatedAt;
                 DbContext.Entry(node).State = EntityState.Modified;
 
                 DbContext.Update(node);
@@ -294,10 +310,16 @@ namespace Automatica.Core.WebApi.Controllers
             var children = new List<NodeInstance>();
 
             var strategy = DbContext.Database.CreateExecutionStrategy();
+            var attempt = 0;
             await strategy.ExecuteAsync(async
                 () =>
             {
                 trendingChanges.Clear();
+                if (attempt++ > 0)
+                {
+                    // retry: forget the entities tracked by the failed attempt
+                    DbContext.ChangeTracker.Clear();
+                }
                 await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
@@ -455,7 +477,7 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         public void ReInit()
         {
-            Environment.Exit(ServerInfo.ExitCodeUpdateInstall);
+            StopServer(ServerInfo.ExitCodeUpdateInstall);
         }
 
         [Route("update")]
@@ -479,10 +501,16 @@ namespace Automatica.Core.WebApi.Controllers
             var trendingChanges = new List<(Guid nodeId, bool trending)>();
 
             var strategy = DbContext.Database.CreateExecutionStrategy();
+            var attempt = 0;
             await strategy.ExecuteAsync(async
                 () =>
             {
                 trendingChanges.Clear();
+                if (attempt++ > 0)
+                {
+                    // retry: forget the entities tracked by the failed attempt
+                    DbContext.ChangeTracker.Clear();
+                }
                 await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
@@ -526,20 +554,43 @@ namespace Automatica.Core.WebApi.Controllers
         [HttpPost]
         [Route("import")]
         [Authorize(Policy = Role.AdminRole)]
-        public async Task<IList<NodeInstance>> Import([FromBody] ImportConfig config)
+        public async Task<ActionResult<IList<NodeInstance>>> Import([FromBody] ImportConfig config)
         {
-            var data = await _notifyDriver.Import(config);
-
-            if (System.IO.File.Exists(config.FileName))
+            if (config == null)
             {
-                System.IO.File.Delete(config.FileName);
+                return BadRequest();
+            }
+
+            // only a file uploaded to the temp directory (FileUploadController), never a path from the request
+            string uploadedFile;
+            try
+            {
+                uploadedFile = UploadPathHelper.GetSafeFilePath(ServerInfo.GetTempPath(), config.FileName);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest("Invalid file name");
+            }
+            config.FileName = uploadedFile;
+
+            IList<NodeInstance> data;
+            try
+            {
+                data = await _notifyDriver.Import(config);
+            }
+            finally
+            {
+                if (System.IO.File.Exists(uploadedFile))
+                {
+                    System.IO.File.Delete(uploadedFile);
+                }
             }
 
             if (data != null)
             {
-                return await SaveAndReloadNodeInstances(data);
+                return Ok(await SaveAndReloadNodeInstances(data));
             }
-            return new List<NodeInstance>();
+            return Ok(new List<NodeInstance>());
         }
 
         private string ConvertLanguageEnum(Language language)

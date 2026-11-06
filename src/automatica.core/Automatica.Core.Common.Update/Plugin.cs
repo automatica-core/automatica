@@ -105,7 +105,8 @@ namespace Automatica.Core.Common.Update
                     return false;
                 }
 
-                if (checkVersion && new Version(ServerInfo.GetServerVersion()) <= pluginManifest.Automatica.MinCoreServerVersion)
+                // a server with exactly the minimum version is fine
+                if (checkVersion && new Version(ServerInfo.GetServerVersion()) < pluginManifest.Automatica.MinCoreServerVersion)
                 {
                     logger.LogError($"Core server version must be at least {pluginManifest.Automatica.MinCoreServerVersion}! Current version is {ServerInfo.GetServerVersion()}");
                     return false;

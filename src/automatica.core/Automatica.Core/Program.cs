@@ -16,7 +16,6 @@ using Serilog;
 using Automatica.Core.Internals;
 using System.Collections;
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using Automatica.Core.Logging;
 using Microsoft.AspNetCore.Builder;
 
@@ -131,13 +130,15 @@ namespace Automatica.Core
             webHost.Run();
 
             logger.LogInformation("Stopped...");
+
+            // a stop requested with an exit code (restart, update) must end the process even if a driver left a foreground thread behind
+            Environment.Exit(Environment.ExitCode);
         }
 
         public static WebApplication BuildWebHost(string[] args, string port, string sslPort)
         {
             ServerInfo.WebPort = port;
             ServerInfo.SslWebPort = sslPort; 
-            var configDir = new FileInfo(Assembly.GetEntryAssembly()!.Location).DirectoryName;
 
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             builder.Host.UseSerilog();
@@ -154,9 +155,8 @@ namespace Automatica.Core
                     {
                         options.UseHttps(a =>
                         {
-                            var x509Cert = new X509Certificate2(Path.Combine(configDir!, "cert/certificate.pfx"),
-                                "local");
-                            a.ServerCertificate = x509Cert;
+                            // per installation, created on the first start (never a certificate shipped with the software)
+                            a.ServerCertificate = ServerCertificate.Get(SystemLogger.Instance);
                         });
                     });
                 }
@@ -170,7 +170,7 @@ namespace Automatica.Core
             });
             
 
-            var startup = new Startup(builder.Configuration);
+            var startup = new Startup(builder.Configuration, builder.Environment);
             startup.ConfigureServices(builder.Services);
 
             WebApplication app = builder.Build();
