@@ -110,23 +110,19 @@ namespace P3.Logic.Operations.Shutter
                 var moveValue = _direction == 0 ? true : false;
                 ret.Add(new LogicOutputChanged(_moveOutput, moveValue));
                 ret.Add(new LogicOutputChanged(_isMovingOutput, true));
+                _moving = true;
             }
             else if (instance.ObjId == _absolutePositionInput.ObjId)
             {
+                // the position input is the actuator feedback: track it and finish a pending absolute move
                 var dValue = Convert.ToDouble(value);
                 ret.AddRange(MoveAbsolute(dValue, false));
-            }
-            else if (instance.ObjId == _absolutePositionInput.ObjId)
-            {
-                if (_targetPosition.HasValue)
-                {
-                    var intValue = Convert.ToInt32(value);
 
-                    if (_targetPosition == intValue)
-                    {
-                        _moving = false;
-                        ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
-                    }
+                if (_targetPosition.HasValue && _targetPosition == Convert.ToInt32(dValue))
+                {
+                    _targetPosition = null;
+                    _moving = false;
+                    ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
                 }
             }
             
@@ -157,10 +153,10 @@ namespace P3.Logic.Operations.Shutter
             _position = intValue;
             if (setOutput)
             {
-                ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
-                ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
                 _targetPosition = intValue;
                 _moving = moving;
+                ret.Add(new LogicOutputChanged(_isMovingOutput, _moving));
+                ret.Add(new LogicOutputChanged(_absolutePositionOutput, dValue));
             }
 
             return ret;

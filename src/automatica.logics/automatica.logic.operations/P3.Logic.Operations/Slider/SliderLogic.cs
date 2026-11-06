@@ -85,11 +85,12 @@ namespace P3.Logic.Operations.Slider
                 }
 
                 _lastValue = dValue;
-                return SingleOutputChanged(new LogicOutputChanged(_output, value));
+                return SingleOutputChanged(new LogicOutputChanged(_output, dValue));
             }
 
             if (instance.ObjId == _reset.ObjId)
             {
+                _lastValue = 0;
                 return SingleOutputChanged(new LogicOutputChanged(_output, 0));
             }
 

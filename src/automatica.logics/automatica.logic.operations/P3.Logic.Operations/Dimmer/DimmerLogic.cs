@@ -94,7 +94,7 @@ namespace P3.Logic.Operations.Dimmer
             _lastValue = _lastState.Value ? 100 : 0;
 
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
-            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _lastState);
             return Task.FromResult(true);
         }
 
@@ -104,7 +104,7 @@ namespace P3.Logic.Operations.Dimmer
             _lastValue = _lastState.Value ? 100 : 0;
 
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
-            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _lastState);
             return Task.FromResult(true);
         }
 
@@ -114,7 +114,7 @@ namespace P3.Logic.Operations.Dimmer
             _lastValue = _lastState.Value ? 100 : 0;
 
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
-            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _lastState);
             return Task.FromResult(true);
         }
 
@@ -124,7 +124,7 @@ namespace P3.Logic.Operations.Dimmer
             _lastValue = _lastState.Value ? 100 : 0;
 
             Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerValue), _lastValue);
-            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _value);
+            Context.Dispatcher.DispatchValue(new LogicInterfaceInstanceDispatchable(_dimmerState), _lastState);
             return Task.FromResult(true);
         }
 
