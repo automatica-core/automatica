@@ -1,4 +1,5 @@
 ﻿using System;
+using Automatica.Core.Runtime.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -690,7 +691,7 @@ namespace Automatica.Core.WebApi.Controllers
             var logic = _logicCacheFacade.InstanceCache.Get(id);
             if (logic == null || !CanAccess(logic.This2UserGroup))
             {
-                return null;
+                throw new RuleNotFoundException();
             }
 
             return _logicDataHandler.GetDataForRuleInstance(id);
