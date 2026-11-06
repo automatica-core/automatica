@@ -2,6 +2,7 @@
 using Automatica.Core.Driver;
 using Microsoft.Extensions.Logging;
 using P3.Driver.HomeKit.Hap.Model;
+using P3.Driver.HomeKitFactory.Accessories;
 using P3.Driver.HomeKitFactory.NodeInstances.Nodes;
 
 namespace P3.Driver.HomeKitFactory.NodeInstances
@@ -10,12 +11,18 @@ namespace P3.Driver.HomeKitFactory.NodeInstances
     {
         public HomeKitDriver Driver { get; }
         public Accessory Accessory { get; }
+        internal HomeKitAccessoryType AccessoryType { get; }
 
-        public FolderNodeInstance(IDriverContext driverContext, HomeKitDriver driver, Accessory accessory) : base(
+        public FolderNodeInstance(IDriverContext driverContext, HomeKitDriver driver, Accessory accessory) : this(driverContext, driver, accessory, null)
+        {
+        }
+
+        internal FolderNodeInstance(IDriverContext driverContext, HomeKitDriver driver, Accessory accessory, HomeKitAccessoryType accessoryType) : base(
             driverContext)
         {
             Driver = driver;
             Accessory = accessory;
+            AccessoryType = accessoryType;
 
             driverContext.Logger.LogDebug($"Create accessory {Name} with aid {accessory.Id}");
 
@@ -33,6 +40,20 @@ namespace P3.Driver.HomeKitFactory.NodeInstances
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             IDriverNode driverNode = null;
+
+            var dataPoint = AccessoryType?.GetDataPoint(ctx.NodeInstance.This2NodeTemplateNavigation.Key);
+            if (dataPoint != null)
+            {
+                var characteristic = HomeKitAccessoryType.GetCharacteristic(Accessory, dataPoint);
+                var definition = dataPoint.Characteristic;
+
+                if (definition.Type == CharacteristicBase.ProgrammableSwitchEventType)
+                {
+                    return new ProgrammableSwitchEventNode(ctx, characteristic, Driver, definition, dataPoint.DataType);
+                }
+
+                return new CharacteristicNode(ctx, characteristic, Driver, definition, dataPoint.DataType);
+            }
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
             {

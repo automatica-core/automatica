@@ -14,6 +14,7 @@ using P3.Driver.HomeKit;
 using P3.Driver.HomeKit.Hap;
 using P3.Driver.HomeKit.Hap.EventArgs;
 using P3.Driver.HomeKit.Hap.Model;
+using P3.Driver.HomeKitFactory.Accessories;
 using P3.Driver.HomeKitFactory.NodeInstances;
 using P3.Driver.HomeKitFactory.NodeInstances.Nodes;
 
@@ -190,8 +191,7 @@ namespace P3.Driver.HomeKitFactory
                 }
                 else if (control is ISwitch iSwitch)
                 {
-                    var accessory = AccessoryFactory.CreateSwitchAccessory(aid, control.Name, "AutomaticaCore",
-                        control.Id.ToString(), false);
+                    var accessory = CreateSwitchControlAccessory(aid, control);
 
                     accessory.Id = _server.AddAccessory(accessory);
                     var characteristic = accessory.Specific.Characteristics.First();
@@ -244,6 +244,26 @@ namespace P3.Driver.HomeKitFactory
             }
 
             return await base.Start(token);
+        }
+
+        private Accessory CreateSwitchControlAccessory(ulong aid, IControl control)
+        {
+            var switchType = (HomeKitSwitchControlType)(GetProperty(HomeKitFactory.SwitchControlTypePropertyKey)?.ValueInt ?? 0);
+
+            switch (switchType)
+            {
+                case HomeKitSwitchControlType.Outlet:
+                    return AccessoryFactory.CreateServiceAccessory(aid, control.Name, "AutomaticaCore", control.Id.ToString(), AccessoryFactory.OutletType,
+                        HapCharacteristics.On, HapCharacteristics.OutletInUse);
+                case HomeKitSwitchControlType.Light:
+                    return AccessoryFactory.CreateServiceAccessory(aid, control.Name, "AutomaticaCore", control.Id.ToString(), AccessoryFactory.LightBulbType,
+                        HapCharacteristics.On);
+                case HomeKitSwitchControlType.Fan:
+                    return AccessoryFactory.CreateServiceAccessory(aid, control.Name, "AutomaticaCore", control.Id.ToString(), AccessoryFactory.FanType,
+                        HapCharacteristics.On);
+                default:
+                    return AccessoryFactory.CreateSwitchAccessory(aid, control.Name, "AutomaticaCore", control.Id.ToString(), false);
+            }
         }
 
         private int ToHapPosition(int input)
@@ -409,6 +429,7 @@ namespace P3.Driver.HomeKitFactory
             }
 
             Accessory accessory = null;
+            HomeKitAccessoryType accessoryType = null;
             var aid = Convert.ToUInt64(ctx.NodeInstance.GetPropertyValueDouble(HomeKitFactory.AidPropertyKey));
 
             switch (ctx.NodeInstance.This2NodeTemplateNavigation.Key)
@@ -433,6 +454,10 @@ namespace P3.Driver.HomeKitFactory
                     accessory = AccessoryFactory.CreateTemperatureSensorAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore",
                         ctx.NodeInstance.ObjId.ToString(), 0);
                     break;
+                default:
+                    accessoryType = HomeKitAccessoryCatalog.GetByKey(ctx.NodeInstance.This2NodeTemplateNavigation.Key);
+                    accessory = accessoryType?.CreateAccessory(aid, ctx.NodeInstance.Name, "AutomaticaCore", ctx.NodeInstance.ObjId.ToString(), ctx.NodeInstance);
+                    break;
             }
 
             if (accessory == null)
@@ -442,7 +467,7 @@ namespace P3.Driver.HomeKitFactory
 
             _accessories.Add(accessory);
 
-            return new FolderNodeInstance(ctx, this, accessory);
+            return new FolderNodeInstance(ctx, this, accessory, accessoryType);
         }
     }
 }

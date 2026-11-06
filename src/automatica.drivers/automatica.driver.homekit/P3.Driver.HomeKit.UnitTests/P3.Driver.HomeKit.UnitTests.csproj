@@ -15,9 +15,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Automatica.Core.Driver.Utility" Version="10.0.0.2049" />
+    <PackageReference Include="Automatica.Core.UnitTests.Base" Version="10.0.0.2049" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.HomeKit\P3.Driver.HomeKit.csproj" />
+    <ProjectReference Include="..\P3.Driver.HomeKitFactory\P3.Driver.HomeKitFactory.csproj" />
   </ItemGroup>
 </Project>

@@ -62,6 +62,284 @@
         "DESCRIPTION": ""
       }
     },
+    "HUMIDITY_SENSOR": {
+      "NAME": "Feuchtigkeitssensor",
+      "DESCRIPTION": "",
+      "HUMIDITY": {
+        "NAME": "Luftfeuchtigkeit (%)",
+        "DESCRIPTION": "Relative Luftfeuchtigkeit 0-100 %"
+      }
+    },
+    "LIGHT_SENSOR": {
+      "NAME": "Helligkeitssensor",
+      "DESCRIPTION": "",
+      "LIGHT_LEVEL": {
+        "NAME": "Helligkeit (Lux)",
+        "DESCRIPTION": "0,0001-100000 Lux"
+      }
+    },
+    "MOTION_SENSOR": {
+      "NAME": "Bewegungsmelder",
+      "DESCRIPTION": "",
+      "MOTION": {
+        "NAME": "Bewegung",
+        "DESCRIPTION": "true = Bewegung erkannt"
+      }
+    },
+    "OCCUPANCY_SENSOR": {
+      "NAME": "Präsenzmelder",
+      "DESCRIPTION": "",
+      "OCCUPANCY": {
+        "NAME": "Präsenz",
+        "DESCRIPTION": "true = Anwesenheit erkannt"
+      }
+    },
+    "LEAK_SENSOR": {
+      "NAME": "Wassermelder",
+      "DESCRIPTION": "",
+      "LEAK": {
+        "NAME": "Wasser erkannt",
+        "DESCRIPTION": "true = Wasser erkannt"
+      }
+    },
+    "SMOKE_SENSOR": {
+      "NAME": "Rauchmelder",
+      "DESCRIPTION": "",
+      "SMOKE": {
+        "NAME": "Rauch",
+        "DESCRIPTION": "true = Rauch erkannt"
+      }
+    },
+    "CO_SENSOR": {
+      "NAME": "Kohlenmonoxid-Sensor",
+      "DESCRIPTION": "",
+      "DETECTED": {
+        "NAME": "CO-Alarm",
+        "DESCRIPTION": "true = CO-Wert zu hoch"
+      },
+      "LEVEL": {
+        "NAME": "CO-Wert (ppm)",
+        "DESCRIPTION": "0-100 ppm"
+      }
+    },
+    "CO2_SENSOR": {
+      "NAME": "CO2-Sensor",
+      "DESCRIPTION": "",
+      "DETECTED": {
+        "NAME": "CO2-Alarm",
+        "DESCRIPTION": "true = CO2-Wert zu hoch"
+      },
+      "LEVEL": {
+        "NAME": "CO2-Wert (ppm)",
+        "DESCRIPTION": "0-100000 ppm"
+      }
+    },
+    "AIR_QUALITY_SENSOR": {
+      "NAME": "Luftqualitätssensor",
+      "DESCRIPTION": "",
+      "AIR_QUALITY": {
+        "NAME": "Luftqualität",
+        "DESCRIPTION": "0 = unbekannt, 1 = ausgezeichnet, 2 = gut, 3 = mittel, 4 = schlecht, 5 = sehr schlecht"
+      },
+      "PM25": {
+        "NAME": "PM2.5 (µg/m³)",
+        "DESCRIPTION": "0-1000 µg/m³"
+      },
+      "PM10": {
+        "NAME": "PM10 (µg/m³)",
+        "DESCRIPTION": "0-1000 µg/m³"
+      },
+      "VOC": {
+        "NAME": "VOC (µg/m³)",
+        "DESCRIPTION": "0-1000 µg/m³"
+      }
+    },
+    "FAN": {
+      "NAME": "Ventilator",
+      "DESCRIPTION": "",
+      "ON": {
+        "NAME": "Ein/Aus",
+        "DESCRIPTION": ""
+      },
+      "SPEED": {
+        "NAME": "Geschwindigkeit (%)",
+        "DESCRIPTION": "0-100 %"
+      }
+    },
+    "THERMOSTAT": {
+      "NAME": "Thermostat",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Aktueller Modus",
+        "DESCRIPTION": "0 = aus, 1 = heizt, 2 = kühlt"
+      },
+      "TARGET_STATE": {
+        "NAME": "Soll-Modus",
+        "DESCRIPTION": "0 = aus, 1 = heizen, 2 = kühlen, 3 = automatisch"
+      },
+      "CURRENT_TEMPERATURE": {
+        "NAME": "Ist-Temperatur (°C)",
+        "DESCRIPTION": ""
+      },
+      "TARGET_TEMPERATURE": {
+        "NAME": "Soll-Temperatur (°C)",
+        "DESCRIPTION": "10-38 °C in 0,5 °C Schritten"
+      },
+      "HUMIDITY": {
+        "NAME": "Luftfeuchtigkeit (%)",
+        "DESCRIPTION": ""
+      }
+    },
+    "GARAGE_DOOR": {
+      "NAME": "Garagentor",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Aktueller Zustand",
+        "DESCRIPTION": "0 = offen, 1 = geschlossen, 2 = öffnet, 3 = schließt, 4 = gestoppt"
+      },
+      "TARGET_STATE": {
+        "NAME": "Soll-Zustand",
+        "DESCRIPTION": "0 = öffnen, 1 = schließen"
+      },
+      "OBSTRUCTION": {
+        "NAME": "Hindernis",
+        "DESCRIPTION": "true = Hindernis erkannt"
+      }
+    },
+    "LOCK": {
+      "NAME": "Schloss",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Aktueller Zustand",
+        "DESCRIPTION": "0 = entriegelt, 1 = verriegelt, 2 = blockiert, 3 = unbekannt"
+      },
+      "TARGET_STATE": {
+        "NAME": "Verriegeln",
+        "DESCRIPTION": "true = verriegeln, false = entriegeln"
+      }
+    },
+    "DOOR": {
+      "NAME": "Tür",
+      "DESCRIPTION": "",
+      "CURRENT_POSITION": {
+        "NAME": "Aktuelle Position (%)",
+        "DESCRIPTION": "0 = geschlossen, 100 = offen"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Soll-Position (%)",
+        "DESCRIPTION": "0 = geschlossen, 100 = offen"
+      },
+      "POSITION_STATE": {
+        "NAME": "Bewegung",
+        "DESCRIPTION": "0 = schließt, 1 = öffnet, 2 = gestoppt"
+      }
+    },
+    "WINDOW": {
+      "NAME": "Fenster",
+      "DESCRIPTION": "",
+      "CURRENT_POSITION": {
+        "NAME": "Aktuelle Position (%)",
+        "DESCRIPTION": "0 = geschlossen, 100 = offen"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Soll-Position (%)",
+        "DESCRIPTION": "0 = geschlossen, 100 = offen"
+      },
+      "POSITION_STATE": {
+        "NAME": "Bewegung",
+        "DESCRIPTION": "0 = schließt, 1 = öffnet, 2 = gestoppt"
+      }
+    },
+    "WINDOW_COVERING": {
+      "NAME": "Jalousie/Rollladen",
+      "DESCRIPTION": "",
+      "CURRENT_POSITION": {
+        "NAME": "Aktuelle Position (%)",
+        "DESCRIPTION": "0 = geschlossen, 100 = offen"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Soll-Position (%)",
+        "DESCRIPTION": "0 = geschlossen, 100 = offen"
+      },
+      "POSITION_STATE": {
+        "NAME": "Bewegung",
+        "DESCRIPTION": "0 = schließt, 1 = öffnet, 2 = gestoppt"
+      },
+      "HOLD_POSITION": {
+        "NAME": "Stopp",
+        "DESCRIPTION": "true wenn HomeKit die Bewegung stoppt"
+      }
+    },
+    "STATELESS_SWITCH": {
+      "NAME": "Taster",
+      "DESCRIPTION": "",
+      "EVENT": {
+        "NAME": "Tastendruck",
+        "DESCRIPTION": "0 = kurz, 1 = doppelt, 2 = lang"
+      }
+    },
+    "VALVE": {
+      "NAME": "Ventil / Bewässerung",
+      "DESCRIPTION": "",
+      "ACTIVE": {
+        "NAME": "Aktiv",
+        "DESCRIPTION": ""
+      },
+      "IN_USE": {
+        "NAME": "In Betrieb",
+        "DESCRIPTION": "true = Wasser fließt"
+      },
+      "SET_DURATION": {
+        "NAME": "Laufzeit (s)",
+        "DESCRIPTION": "0-3600 s"
+      },
+      "REMAINING_DURATION": {
+        "NAME": "Restlaufzeit (s)",
+        "DESCRIPTION": "0-3600 s"
+      },
+      "VALVE_TYPE": {
+        "NAME": "Ventiltyp",
+        "DESCRIPTION": "Symbol in HomeKit",
+        "GENERIC": "Ventil",
+        "IRRIGATION": "Bewässerung",
+        "SHOWER_HEAD": "Duschkopf",
+        "WATER_FAUCET": "Wasserhahn"
+      }
+    },
+    "SECURITY_SYSTEM": {
+      "NAME": "Alarmanlage",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Aktueller Zustand",
+        "DESCRIPTION": "0 = scharf (zuhause), 1 = scharf (abwesend), 2 = scharf (Nacht), 3 = unscharf, 4 = Alarm ausgelöst"
+      },
+      "TARGET_STATE": {
+        "NAME": "Soll-Zustand",
+        "DESCRIPTION": "0 = scharf (zuhause), 1 = scharf (abwesend), 2 = scharf (Nacht), 3 = unscharf"
+      }
+    },
+    "COMMON": {
+      "LOW_BATTERY": {
+        "NAME": "Batterie schwach",
+        "DESCRIPTION": "true = Batterie schwach"
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Batteriestand (%)",
+        "DESCRIPTION": "0-100 %"
+      },
+      "FAULT": {
+        "NAME": "Störung",
+        "DESCRIPTION": "true = Sensor gestört"
+      }
+    },
+    "SWITCH_CONTROL_TYPE": {
+      "NAME": "Schalter-Controls anzeigen als",
+      "DESCRIPTION": "HomeKit Gerätetyp für Schalter-Controls",
+      "SWITCH": "Schalter",
+      "OUTLET": "Steckdose",
+      "LIGHT": "Licht",
+      "FAN": "Ventilator"
+    },
     "PAIRING_KEY": {
       "NAME": "Code",
       "DESCRIPTION": ""

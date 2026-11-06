@@ -10,6 +10,133 @@
         public const string SwitchType = "49";
         public const string TemperatureSensorType = "8A";
         public const string WindowCoveringType = "8C";
+        public const string HumiditySensorType = "82";
+        public const string LightSensorType = "84";
+        public const string MotionSensorType = "85";
+        public const string OccupancySensorType = "86";
+        public const string LeakSensorType = "83";
+        public const string SmokeSensorType = "87";
+        public const string CarbonMonoxideSensorType = "7F";
+        public const string CarbonDioxideSensorType = "97";
+        public const string AirQualitySensorType = "8D";
+        public const string FanType = "40";
+        public const string ThermostatType = "4A";
+        public const string GarageDoorOpenerType = "41";
+        public const string LockMechanismType = "45";
+        public const string DoorType = "81";
+        public const string WindowType = "8B";
+        public const string StatelessProgrammableSwitchType = "89";
+        public const string ValveType = "D0";
+        public const string SecuritySystemType = "7E";
+        public const string BatteryServiceType = "96";
+
+        /// <summary>
+        /// Instance id of the primary service of accessories created by this factory, the accessory information service uses 1-6.
+        /// </summary>
+        public const int PrimaryServiceId = 7;
+
+        /// <summary>
+        /// Creates an accessory with the accessory information service and one primary service with the given (mandatory) characteristics.
+        /// </summary>
+        public static Accessory CreateServiceAccessory(ulong aid, string name, string manufacturer, string serial, string serviceType,
+            params CharacteristicDefinition[] characteristics)
+        {
+            var accessory = new Accessory
+            {
+                Id = aid
+            };
+
+            accessory.AccessoryInfo = CreateAccessoryInfo(accessory, 1, name, manufacturer, serial);
+            accessory.Services.Add(accessory.AccessoryInfo);
+
+            accessory.Specific = new Service(accessory)
+            {
+                Type = serviceType,
+                Id = PrimaryServiceId
+            };
+            accessory.Services.Add(accessory.Specific);
+
+            foreach (var characteristic in characteristics)
+            {
+                accessory.Specific.AddCharacteristic(characteristic);
+            }
+
+            return accessory;
+        }
+
+        /// <summary>
+        /// Next free instance id, services and characteristics share the instance id space of an accessory.
+        /// </summary>
+        public static int NextInstanceId(this Accessory accessory)
+        {
+            var max = 0;
+            foreach (var service in accessory.Services)
+            {
+                max = System.Math.Max(max, service.Id);
+                foreach (var characteristic in service.Characteristics)
+                {
+                    max = System.Math.Max(max, characteristic.Id);
+                }
+            }
+
+            return max + 1;
+        }
+
+        public static Service AddService(this Accessory accessory, string serviceType, params CharacteristicDefinition[] characteristics)
+        {
+            var service = new Service(accessory)
+            {
+                Type = serviceType,
+                Id = accessory.NextInstanceId()
+            };
+            accessory.Services.Add(service);
+
+            foreach (var characteristic in characteristics)
+            {
+                service.AddCharacteristic(characteristic);
+            }
+
+            return service;
+        }
+
+        /// <summary>
+        /// Returns the characteristic of the given type or adds it (optional characteristics are only added when they are used).
+        /// </summary>
+        public static Characteristic GetOrAddCharacteristic(this Service service, CharacteristicDefinition definition)
+        {
+            foreach (var characteristic in service.Characteristics)
+            {
+                if (characteristic.Type == definition.Type)
+                {
+                    return characteristic;
+                }
+            }
+
+            return service.AddCharacteristic(definition);
+        }
+
+        public static Characteristic AddCharacteristic(this Service service, CharacteristicDefinition definition)
+        {
+            var characteristic = definition.Create(service, service.Accessory.NextInstanceId());
+            service.Characteristics.Add(characteristic);
+            return characteristic;
+        }
+
+        /// <summary>
+        /// Returns the battery service of the accessory or adds it (battery level, charging state and low battery are mandatory).
+        /// </summary>
+        public static Service GetOrAddBatteryService(this Accessory accessory)
+        {
+            foreach (var service in accessory.Services)
+            {
+                if (service.Type == BatteryServiceType)
+                {
+                    return service;
+                }
+            }
+
+            return accessory.AddService(BatteryServiceType, HapCharacteristics.BatteryLevel, HapCharacteristics.ChargingState, HapCharacteristics.StatusLowBattery);
+        }
 
         public static Accessory CreateLightBulbAccessory(ulong aid, string name, string manufacturer, string serial, bool? value, int? dimValue)
         {

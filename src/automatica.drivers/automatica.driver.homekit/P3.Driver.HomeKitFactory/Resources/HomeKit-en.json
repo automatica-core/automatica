@@ -62,6 +62,284 @@
         "DESCRIPTION": ""
       }
     },
+    "HUMIDITY_SENSOR": {
+      "NAME": "Humidity sensor",
+      "DESCRIPTION": "",
+      "HUMIDITY": {
+        "NAME": "Humidity (%)",
+        "DESCRIPTION": "Relative humidity 0-100 %"
+      }
+    },
+    "LIGHT_SENSOR": {
+      "NAME": "Light sensor",
+      "DESCRIPTION": "",
+      "LIGHT_LEVEL": {
+        "NAME": "Illuminance (lux)",
+        "DESCRIPTION": "0.0001-100000 lux"
+      }
+    },
+    "MOTION_SENSOR": {
+      "NAME": "Motion sensor",
+      "DESCRIPTION": "",
+      "MOTION": {
+        "NAME": "Motion",
+        "DESCRIPTION": "true = motion detected"
+      }
+    },
+    "OCCUPANCY_SENSOR": {
+      "NAME": "Occupancy sensor",
+      "DESCRIPTION": "",
+      "OCCUPANCY": {
+        "NAME": "Occupancy",
+        "DESCRIPTION": "true = occupancy detected"
+      }
+    },
+    "LEAK_SENSOR": {
+      "NAME": "Leak sensor",
+      "DESCRIPTION": "",
+      "LEAK": {
+        "NAME": "Leak",
+        "DESCRIPTION": "true = leak detected"
+      }
+    },
+    "SMOKE_SENSOR": {
+      "NAME": "Smoke sensor",
+      "DESCRIPTION": "",
+      "SMOKE": {
+        "NAME": "Smoke",
+        "DESCRIPTION": "true = smoke detected"
+      }
+    },
+    "CO_SENSOR": {
+      "NAME": "Carbon monoxide sensor",
+      "DESCRIPTION": "",
+      "DETECTED": {
+        "NAME": "CO alarm",
+        "DESCRIPTION": "true = abnormal CO level"
+      },
+      "LEVEL": {
+        "NAME": "CO level (ppm)",
+        "DESCRIPTION": "0-100 ppm"
+      }
+    },
+    "CO2_SENSOR": {
+      "NAME": "Carbon dioxide sensor",
+      "DESCRIPTION": "",
+      "DETECTED": {
+        "NAME": "CO2 alarm",
+        "DESCRIPTION": "true = abnormal CO2 level"
+      },
+      "LEVEL": {
+        "NAME": "CO2 level (ppm)",
+        "DESCRIPTION": "0-100000 ppm"
+      }
+    },
+    "AIR_QUALITY_SENSOR": {
+      "NAME": "Air quality sensor",
+      "DESCRIPTION": "",
+      "AIR_QUALITY": {
+        "NAME": "Air quality",
+        "DESCRIPTION": "0 = unknown, 1 = excellent, 2 = good, 3 = fair, 4 = inferior, 5 = poor"
+      },
+      "PM25": {
+        "NAME": "PM2.5 (µg/m³)",
+        "DESCRIPTION": "0-1000 µg/m³"
+      },
+      "PM10": {
+        "NAME": "PM10 (µg/m³)",
+        "DESCRIPTION": "0-1000 µg/m³"
+      },
+      "VOC": {
+        "NAME": "VOC (µg/m³)",
+        "DESCRIPTION": "0-1000 µg/m³"
+      }
+    },
+    "FAN": {
+      "NAME": "Fan",
+      "DESCRIPTION": "",
+      "ON": {
+        "NAME": "On/Off",
+        "DESCRIPTION": ""
+      },
+      "SPEED": {
+        "NAME": "Speed (%)",
+        "DESCRIPTION": "0-100 %"
+      }
+    },
+    "THERMOSTAT": {
+      "NAME": "Thermostat",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Current mode",
+        "DESCRIPTION": "0 = off, 1 = heating, 2 = cooling"
+      },
+      "TARGET_STATE": {
+        "NAME": "Target mode",
+        "DESCRIPTION": "0 = off, 1 = heat, 2 = cool, 3 = auto"
+      },
+      "CURRENT_TEMPERATURE": {
+        "NAME": "Current temperature (°C)",
+        "DESCRIPTION": ""
+      },
+      "TARGET_TEMPERATURE": {
+        "NAME": "Target temperature (°C)",
+        "DESCRIPTION": "10-38 °C in 0.5 °C steps"
+      },
+      "HUMIDITY": {
+        "NAME": "Humidity (%)",
+        "DESCRIPTION": ""
+      }
+    },
+    "GARAGE_DOOR": {
+      "NAME": "Garage door",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Current state",
+        "DESCRIPTION": "0 = open, 1 = closed, 2 = opening, 3 = closing, 4 = stopped"
+      },
+      "TARGET_STATE": {
+        "NAME": "Target state",
+        "DESCRIPTION": "0 = open, 1 = closed"
+      },
+      "OBSTRUCTION": {
+        "NAME": "Obstruction",
+        "DESCRIPTION": "true = obstruction detected"
+      }
+    },
+    "LOCK": {
+      "NAME": "Lock",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Current state",
+        "DESCRIPTION": "0 = unsecured, 1 = secured, 2 = jammed, 3 = unknown"
+      },
+      "TARGET_STATE": {
+        "NAME": "Lock",
+        "DESCRIPTION": "true = lock, false = unlock"
+      }
+    },
+    "DOOR": {
+      "NAME": "Door",
+      "DESCRIPTION": "",
+      "CURRENT_POSITION": {
+        "NAME": "Current position (%)",
+        "DESCRIPTION": "0 = closed, 100 = open"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Target position (%)",
+        "DESCRIPTION": "0 = closed, 100 = open"
+      },
+      "POSITION_STATE": {
+        "NAME": "Movement",
+        "DESCRIPTION": "0 = closing, 1 = opening, 2 = stopped"
+      }
+    },
+    "WINDOW": {
+      "NAME": "Window",
+      "DESCRIPTION": "",
+      "CURRENT_POSITION": {
+        "NAME": "Current position (%)",
+        "DESCRIPTION": "0 = closed, 100 = open"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Target position (%)",
+        "DESCRIPTION": "0 = closed, 100 = open"
+      },
+      "POSITION_STATE": {
+        "NAME": "Movement",
+        "DESCRIPTION": "0 = closing, 1 = opening, 2 = stopped"
+      }
+    },
+    "WINDOW_COVERING": {
+      "NAME": "Window covering",
+      "DESCRIPTION": "",
+      "CURRENT_POSITION": {
+        "NAME": "Current position (%)",
+        "DESCRIPTION": "0 = closed, 100 = open"
+      },
+      "TARGET_POSITION": {
+        "NAME": "Target position (%)",
+        "DESCRIPTION": "0 = closed, 100 = open"
+      },
+      "POSITION_STATE": {
+        "NAME": "Movement",
+        "DESCRIPTION": "0 = closing, 1 = opening, 2 = stopped"
+      },
+      "HOLD_POSITION": {
+        "NAME": "Stop",
+        "DESCRIPTION": "true when HomeKit stops the movement"
+      }
+    },
+    "STATELESS_SWITCH": {
+      "NAME": "Button",
+      "DESCRIPTION": "",
+      "EVENT": {
+        "NAME": "Press",
+        "DESCRIPTION": "0 = single press, 1 = double press, 2 = long press"
+      }
+    },
+    "VALVE": {
+      "NAME": "Valve / irrigation",
+      "DESCRIPTION": "",
+      "ACTIVE": {
+        "NAME": "Active",
+        "DESCRIPTION": ""
+      },
+      "IN_USE": {
+        "NAME": "In use",
+        "DESCRIPTION": "true = water is flowing"
+      },
+      "SET_DURATION": {
+        "NAME": "Duration (s)",
+        "DESCRIPTION": "0-3600 s"
+      },
+      "REMAINING_DURATION": {
+        "NAME": "Remaining time (s)",
+        "DESCRIPTION": "0-3600 s"
+      },
+      "VALVE_TYPE": {
+        "NAME": "Valve type",
+        "DESCRIPTION": "Icon shown in HomeKit",
+        "GENERIC": "Valve",
+        "IRRIGATION": "Irrigation",
+        "SHOWER_HEAD": "Shower head",
+        "WATER_FAUCET": "Water faucet"
+      }
+    },
+    "SECURITY_SYSTEM": {
+      "NAME": "Security system",
+      "DESCRIPTION": "",
+      "CURRENT_STATE": {
+        "NAME": "Current state",
+        "DESCRIPTION": "0 = armed (home), 1 = armed (away), 2 = armed (night), 3 = disarmed, 4 = alarm triggered"
+      },
+      "TARGET_STATE": {
+        "NAME": "Target state",
+        "DESCRIPTION": "0 = arm (home), 1 = arm (away), 2 = arm (night), 3 = disarm"
+      }
+    },
+    "COMMON": {
+      "LOW_BATTERY": {
+        "NAME": "Low battery",
+        "DESCRIPTION": "true = battery low"
+      },
+      "BATTERY_LEVEL": {
+        "NAME": "Battery level (%)",
+        "DESCRIPTION": "0-100 %"
+      },
+      "FAULT": {
+        "NAME": "Fault",
+        "DESCRIPTION": "true = sensor fault"
+      }
+    },
+    "SWITCH_CONTROL_TYPE": {
+      "NAME": "Show switch controls as",
+      "DESCRIPTION": "HomeKit accessory type used for switch controls",
+      "SWITCH": "Switch",
+      "OUTLET": "Outlet",
+      "LIGHT": "Light",
+      "FAN": "Fan"
+    },
     "PAIRING_KEY": {
       "NAME": "Code",
       "DESCRIPTION": ""

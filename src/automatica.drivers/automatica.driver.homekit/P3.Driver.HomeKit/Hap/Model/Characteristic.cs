@@ -32,6 +32,44 @@ namespace P3.Driver.HomeKit.Hap.Model
         
         public const string CurrentHorizontalTiltAngleType = "6C";
         public const string TargetHorizontalTiltAngleType = "7B";
+
+        public const string CurrentRelativeHumidityType = "10";
+        public const string CurrentAmbientLightLevelType = "6B";
+        public const string MotionDetectedType = "22";
+        public const string OccupancyDetectedType = "71";
+        public const string LeakDetectedType = "70";
+        public const string SmokeDetectedType = "76";
+        public const string CarbonMonoxideDetectedType = "69";
+        public const string CarbonMonoxideLevelType = "90";
+        public const string CarbonDioxideDetectedType = "92";
+        public const string CarbonDioxideLevelType = "93";
+        public const string AirQualityType = "95";
+        public const string Pm25DensityType = "C6";
+        public const string Pm10DensityType = "C7";
+        public const string VocDensityType = "C8";
+        public const string RotationSpeedType = "29";
+        public const string CurrentHeatingCoolingStateType = "0F";
+        public const string TargetHeatingCoolingStateType = "33";
+        public const string TargetTemperatureType = "35";
+        public const string TemperatureDisplayUnitsType = "36";
+        public const string CurrentDoorStateType = "0E";
+        public const string TargetDoorStateType = "32";
+        public const string ObstructionDetectedType = "24";
+        public const string LockCurrentStateType = "1D";
+        public const string LockTargetStateType = "1E";
+        public const string ProgrammableSwitchEventType = "73";
+        public const string ActiveType = "B0";
+        public const string InUseType = "D2";
+        public const string ValveTypeType = "D5";
+        public const string SetDurationType = "D3";
+        public const string RemainingDurationType = "D4";
+        public const string SecuritySystemCurrentStateType = "66";
+        public const string SecuritySystemTargetStateType = "67";
+        public const string BatteryLevelType = "68";
+        public const string ChargingStateType = "8F";
+        public const string StatusLowBatteryType = "79";
+        public const string StatusFaultType = "77";
+        public const string StatusTamperedType = "7A";
         
 
         internal CharacteristicBase(Type defaultType)
@@ -100,6 +138,21 @@ namespace P3.Driver.HomeKit.Hap.Model
 
         [JsonProperty("ev")]
         public bool? EventBasedNotification { get; set; }
+
+        [JsonProperty("unit", NullValueHandling = NullValueHandling.Ignore)]
+        public string Unit { get; set; }
+
+        [JsonProperty("minValue", NullValueHandling = NullValueHandling.Ignore)]
+        public double? MinValue { get; set; }
+
+        [JsonProperty("maxValue", NullValueHandling = NullValueHandling.Ignore)]
+        public double? MaxValue { get; set; }
+
+        [JsonProperty("minStep", NullValueHandling = NullValueHandling.Ignore)]
+        public double? MinStep { get; set; }
+
+        [JsonProperty("valid-values", NullValueHandling = NullValueHandling.Ignore)]
+        public List<int> ValidValues { get; set; }
 
         [JsonIgnore] public override ulong? AccessoryId => null;
     }

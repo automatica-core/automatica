@@ -3,6 +3,7 @@ using Automatica.Core.Base.Templates;
 using Automatica.Core.Driver;
 using Automatica.Core.EF.Models;
 using P3.Driver.HomeKit;
+using P3.Driver.HomeKitFactory.Accessories;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
 namespace P3.Driver.HomeKitFactory
@@ -13,6 +14,8 @@ namespace P3.Driver.HomeKitFactory
 
         public const string AidPropertyKey = "aid";
         public const string ClearPairingsKey = "clean_pairings";
+        public const string ValveTypePropertyKey = "valve-type";
+        public const string SwitchControlTypePropertyKey = "switch-control-type";
 
         public override string ImageName => "automaticacore/plugin-p3.driver.homekit";
 
@@ -70,6 +73,37 @@ namespace P3.Driver.HomeKitFactory
             CreateContactSensor(factory);
             CreateSwitch(factory);
             CreateTemperatureSensor(factory);
+
+            factory.CreatePropertyTemplate(HomeKitAccessoryCatalog.SwitchControlTypePropertyGuid, "APPLE_HOMEKIT_SERVER.SWITCH_CONTROL_TYPE.NAME",
+                "APPLE_HOMEKIT_SERVER.SWITCH_CONTROL_TYPE.DESCRIPTION", SwitchControlTypePropertyKey, PropertyTemplateType.Enum, DriverGuid,
+                "COMMON.CATEGORY.CONTROLS", true, false, PropertyHelper.CreateEnumMetaString(typeof(HomeKitSwitchControlType)), (int)HomeKitSwitchControlType.Switch, 0, 1);
+
+            foreach (var accessoryType in HomeKitAccessoryCatalog.AccessoryTypes)
+            {
+                CreateAccessory(factory, accessoryType);
+            }
+
+            factory.CreatePropertyTemplate(HomeKitAccessoryCatalog.ValveTypePropertyGuid, "APPLE_HOMEKIT_SERVER.VALVE.VALVE_TYPE.NAME",
+                "APPLE_HOMEKIT_SERVER.VALVE.VALVE_TYPE.DESCRIPTION", ValveTypePropertyKey, PropertyTemplateType.Enum,
+                HomeKitAccessoryCatalog.GetByKey("valve-folder").InterfaceGuid, "COMMON.CATEGORY.DEVICE", true, false,
+                PropertyHelper.CreateEnumMetaString(typeof(HomeKitValveType)), (int)HomeKitValveType.Generic, 0, 0);
+        }
+
+        private void CreateAccessory(INodeTemplateFactory factory, HomeKitAccessoryType accessoryType)
+        {
+            var interfaceGuid = accessoryType.InterfaceGuid;
+            factory.CreateInterfaceType(interfaceGuid, accessoryType.NameKey, accessoryType.DescriptionKey, accessoryType.DataPoints.Count, int.MaxValue, false);
+
+            factory.CreateNodeTemplate(interfaceGuid, accessoryType.NameKey, accessoryType.DescriptionKey, accessoryType.Key, DriverGuid, interfaceGuid, false, false,
+                true, false, true, NodeDataType.NoAttribute, int.MaxValue, false);
+            AddAidProperty(interfaceGuid, factory);
+
+            foreach (var dataPoint in accessoryType.DataPoints)
+            {
+                factory.CreateNodeTemplate(dataPoint.TemplateGuid, dataPoint.NameKey, dataPoint.DescriptionKey, dataPoint.Key, interfaceGuid,
+                    GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), dataPoint.Mandatory, dataPoint.IsReadable, true, dataPoint.IsWriteable, true,
+                    dataPoint.DataType, 1, false);
+            }
         }
 
         private void AddAidProperty(Guid guid, INodeTemplateFactory factory)
