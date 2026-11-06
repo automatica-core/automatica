@@ -50,7 +50,7 @@ stages:
           projects: '**/*[Tt]ests.csproj'
           arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
-      - task: AutomaticaCorePluginCli@7
+      - task: AutomaticaCorePluginCli@9
         displayName: Plugin ModBus build
         inputs:
           manifest_path: 'P3.Driver.ModBusDriverFactory/automatica-manifest.json'
@@ -116,7 +116,7 @@ stages:
           projects: '**/*[Tt]ests.csproj'
           arguments: '--configuration $(BuildConfiguration) -l trx  /p:CollectCoverage=true /p:CoverletOutputFormat="opencover"'
 
-      - task: AutomaticaCorePluginCli@7
+      - task: AutomaticaCorePluginCli@9
         displayName: Plugin solarman build
         inputs:
           manifest_path: 'Solarman/P3.Driver.ModBus.SolarmanV5.DriverFactory/automatica-manifest.json'
