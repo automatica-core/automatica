@@ -62,8 +62,10 @@ namespace P3.Driver.HomeKitFactory.NodeInstances
                         Accessory.Services[1].Characteristics.Single(a => a.Type == CharacteristicBase.OnType), Driver);
                     break;
                 case "light-bulb-brightness":
-                    var brigthness = Accessory.CreateBrightness();
-                    driverNode = new LightSwitch(ctx, Driver, brigthness);
+                    // the light bulb service is created with a brightness characteristic, a second one breaks the accessory
+                    var brightness = Accessory.Services[1].Characteristics.FirstOrDefault(a => a.Type == CharacteristicBase.BrightnessType)
+                                     ?? Accessory.CreateBrightness();
+                    driverNode = new LightSwitch(ctx, Driver, brightness);
                     break;
                 case "light-bulb-hue":
                     var hue = Accessory.CreateHue();

@@ -211,25 +211,9 @@ namespace P3.Driver.HomeKitFactory
                         control.Id.ToString(), 0);
                     
                     accessory.Id = _server.AddAccessory(accessory);
-                    var characteristic = accessory.Specific.Characteristics.First();
-
-                    accessory.PositionType.Value = ToHapPositionState(iBlind);
-                    accessory.TargetPosition.Value = ToHapPositionState(iBlind);
-                    accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
 
                     _characteristicControlMap.Add(accessory, control);
-                    iBlind.RegisterValueCallback(() =>
-                    {
-                        
-                        accessory.CurrentPosition.Value = ToHapPosition(iBlind.Position);
-                        accessory.PositionType.Value = ToHapPositionState(iBlind);
-                        
-                        DriverContext.Logger.LogInformation($"{control.Name} Blind...moving {iBlind.IsMoving} direction {iBlind.Direction} position {iBlind.Position} ({accessory.CurrentPosition.Value})");
-                        DriverContext.Logger.LogInformation($"{control.Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
-
-
-                        WriteCharacteristic(characteristic);
-                    });
+                    BindBlind(accessory, iBlind, WriteCharacteristic, DriverContext.Logger);
                 }
             }
 
@@ -266,14 +250,49 @@ namespace P3.Driver.HomeKitFactory
             }
         }
 
-        private int ToHapPosition(int input)
+        /// <summary>
+        /// Initializes the window covering from the blind and notifies HomeKit about position and movement changes of the blind.
+        /// </summary>
+        internal static void BindBlind(WindowCovering accessory, IBlind blind, Action<Characteristic> writeCharacteristic, ILogger logger)
+        {
+            accessory.PositionType.Value = ToHapPositionState(blind);
+            accessory.TargetPosition.Value = ToHapPosition(blind.Position);
+            accessory.CurrentPosition.Value = ToHapPosition(blind.Position);
+
+            var wasMoving = blind.IsMoving;
+            blind.RegisterValueCallback(() =>
+            {
+                accessory.CurrentPosition.Value = ToHapPosition(blind.Position);
+                accessory.PositionType.Value = ToHapPositionState(blind);
+
+                // IBlind has no target: when a movement ends (also one started outside of HomeKit, e.g. by a wall switch) the
+                // target is where the blind stopped, otherwise HomeKit keeps showing the blind as opening/closing.
+                // Only on the moving => stopped transition, a HomeKit target must not be overwritten before the blind starts moving.
+                var stopped = wasMoving && !blind.IsMoving;
+                wasMoving = blind.IsMoving;
+
+                logger.LogInformation($"{blind.Name} Blind...moving {blind.IsMoving} direction {blind.Direction} position {blind.Position} ({accessory.CurrentPosition.Value})");
+                logger.LogInformation($"{blind.Name} Updating blind...current pos {accessory.CurrentPosition.Value} and position state {accessory.PositionType.Value}");
+
+                writeCharacteristic(accessory.CurrentPosition);
+                writeCharacteristic(accessory.PositionType);
+
+                if (stopped)
+                {
+                    accessory.TargetPosition.Value = accessory.CurrentPosition.Value;
+                    writeCharacteristic(accessory.TargetPosition);
+                }
+            });
+        }
+
+        private static int ToHapPosition(int input)
         {
             var currentBlind = Convert.ToInt32(input); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
             var hapCurrentBlind = Math.Abs(currentBlind - 100);
             return hapCurrentBlind;
         }
 
-        private int ToHapPositionState(IBlind iBlind)
+        private static int ToHapPositionState(IBlind iBlind)
         {
             int value = 0;
             if (iBlind.IsMoving)
