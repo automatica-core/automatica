@@ -23,6 +23,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
         private readonly IFrpService _frpService;
         private readonly ISettingsCache _settingsCache;
         private readonly ILogger<RemoteConnectService> _logger;
+        private readonly FrpcCredentials _frpcCredentials;
 
         private string? _currentDomainName;
 
@@ -31,8 +32,9 @@ namespace Automatica.Core.Runtime.RemoteConnect
 
         private int _activatedServices;
 
-        public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ISettingsCache settingsCache, ILogger<RemoteConnectService> logger)
+        public RemoteConnectService(IConfiguration config, ICloudApi cloudApi, ILicenseContext licenseContext, IFrpService frpService, ISettingsCache settingsCache, ILogger<RemoteConnectService> logger, FrpcCredentials frpcCredentials)
         {
+            _frpcCredentials = frpcCredentials;
             _config = config;
             _cloudApi = cloudApi;
             _licenseContext = licenseContext;
@@ -218,6 +220,7 @@ namespace Automatica.Core.Runtime.RemoteConnect
                     _logger.LogError($"Could not create target domain {domain}");
                     return;
                 }
+                _frpcCredentials.SetCloudToken(response.FrpsToken);
                 remoteDomain.Value = response.SubDomain;
                 if (response.SubDomain != domain)
                 {

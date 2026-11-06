@@ -32,6 +32,11 @@ namespace Automatica.Core.Internals.Cloud
     {
         public string TunnelUrl { get; set; }
         public string SubDomain { get; set; }
+
+        /// <summary>
+        /// Auth token of the cloud's frps (optional, older clouds do not send it)
+        /// </summary>
+        public string FrpsToken { get; set; }
     }
     public class RemoteConnectPortResponse
     {

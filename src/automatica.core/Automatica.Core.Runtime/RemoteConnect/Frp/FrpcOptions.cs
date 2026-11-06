@@ -11,7 +11,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         public int AdminPort { get; set; } = 7400;
 
         public string LogFile { get; set; } = "console";
-        public string LogLevel { get; set; } = "trace";
+        public string LogLevel { get; set; } = "info";
 
         public bool UseWeb { get; set; }
         public string? LocalIp { get; set; }

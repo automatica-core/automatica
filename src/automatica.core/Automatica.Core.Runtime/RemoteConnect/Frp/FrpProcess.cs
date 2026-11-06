@@ -21,6 +21,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         private readonly IOptionsMonitor<FrpcOptions> _settings;
         private readonly IConfiguration _config;
         private readonly ISettingsCache _settingsCache;
+        private readonly FrpcCredentials _credentials;
         private readonly ILogger _logger;
 
         private readonly string _processName = "frpc";
@@ -28,8 +29,10 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         private readonly Timer _stdTimer = new Timer();
         private Process? _process;
 
-        public FrpProcess(IFrpcApiClient apiClient, IOptionsMonitor<FrpcOptions> settings, IConfiguration config, ISettingsCache settingsCache, ILogger<FrpProcess> logger)
+        public FrpProcess(IFrpcApiClient apiClient, IOptionsMonitor<FrpcOptions> settings, IConfiguration config, ISettingsCache settingsCache,
+            FrpcCredentials credentials, ILogger<FrpProcess> logger)
         {
+            _credentials = credentials;
             _apiClient = apiClient;
             _settings = settings;
             _config = config;
@@ -47,7 +50,9 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
             var processInformation = GetProcessStartInfo();
 
-            _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation.EnvironmentVariables)}, {processInformation.Arguments}");
+            // the environment holds the frps token, the admin password and the cloud api key: never log the values
+            _logger.LogInformation($"Starting frpc process ({processInformation.Arguments}), server {_settings.CurrentValue.ServerAddress}:{_settings.CurrentValue.ServerPort}, " +
+                                   $"token {(string.IsNullOrEmpty(_credentials.FrpsToken) ? "not set" : "set")}");
 
             // EnableRaisingEvents has to be set, otherwise Exited is never raised
             var process = new Process
@@ -154,6 +159,11 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                     {"LOCAL_IP", $"{_settings.CurrentValue.LocalIp}"},
                     {"LOCAL_PORT", $"{localPort}"},
                     {"FRPC_USERNAME", $"{ServerInfo.ServerUid}"},
+                    {"FRPS_TOKEN", _credentials.FrpsToken},
+                    // lets the frps login plugin of the cloud check that the server uid belongs to this installation
+                    {"FRPC_APIKEY", _settingsCache.GetByKey("apiKey")?.ValueText ?? string.Empty},
+                    {"ADMIN_USER", _credentials.AdminUser},
+                    {"ADMIN_PWD", _credentials.AdminPassword},
                     {"SUB_DOMAIN", $"{_settingsCache.GetByKey("remoteDomain").ValueText ?? _config["db:remoteDomain"]}"}
                 }
             };
