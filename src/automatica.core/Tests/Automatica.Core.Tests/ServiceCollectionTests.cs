@@ -30,6 +30,7 @@ using Automatica.Push.LearnMode;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -64,6 +65,8 @@ namespace Automatica.Core.Tests
             moq.AddSingleton<IHyperSeriesRepository, HyperSeriesRepository>();
 
             moq.AddLogging(a => { a.AddConsole(); });
+            // normally provided by the host; MQTTnet 5's hosted server needs it
+            moq.AddSingleton(new Mock<IHostApplicationLifetime>().Object);
 
             moq.AddSingleton<IConfigurationRoot>(mockConfiguration.Object);
             moq.AddSingleton<IConfiguration>(mockConfiguration.Object);

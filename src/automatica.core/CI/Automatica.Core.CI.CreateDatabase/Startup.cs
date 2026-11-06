@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using MQTTnet.Server;
 
 namespace Automatica.Core.CI.CreateDatabase
 {
@@ -34,7 +33,6 @@ namespace Automatica.Core.CI.CreateDatabase
             services.AddSingleton<LocalizationProvider>();
             services.AddSingleton<IVisualisationFactory, VisuTempInit>();
             services.AddSingleton<ILearnMode, EmptyLearnMode>();
-            services.AddSingleton<IMqttServer, EmptyMqttServer>();
 
             services.AddAutomaticaCoreService(Configuration, false);
             services.AddAutomaticaRemoteConnectWithFrp(Configuration);

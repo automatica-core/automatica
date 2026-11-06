@@ -14,16 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
-using MQTTnet.Client;
-using MQTTnet.Client.Options;
-using MqttTopicFilterBuilder = MQTTnet.MqttTopicFilterBuilder;
 using Timer = System.Timers.Timer;
 
 namespace Automatica.Core.Satellite.Runtime
 {
     public class SatelliteRuntime : IHostedService
     {
-        private IMqttClientOptions _options;
+        private MqttClientOptions _options;
         private IMqttClient _mqttClient;
         private readonly DockerClient _dockerClient;
 
@@ -186,8 +183,8 @@ namespace Automatica.Core.Satellite.Runtime
                 .WithCredentials(_slaveId, _clientKey)
                 .WithCleanSession()
                 .Build();
-            _mqttClient = new MqttFactory().CreateMqttClient();
-            _mqttClient.ApplicationMessageReceivedHandler = new ApplicationMessageReceivedHandler(this, _logger);
+            _mqttClient = new MqttClientFactory().CreateMqttClient();
+            _mqttClient.ApplicationMessageReceivedAsync += new ApplicationMessageReceivedHandler(this, _logger).HandleApplicationMessageReceivedAsync;
         }
 
         private async Task StartInternal()
@@ -216,7 +213,8 @@ namespace Automatica.Core.Satellite.Runtime
                 await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(reinit).WithExactlyOnceQoS().Build());
                 await _mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic(watchdog).WithExactlyOnceQoS().Build());
 
-                _mqttClient.DisconnectedHandler = new MqttDisconnectedHandler(this);
+                // Init() creates a fresh client on every (re)start, so this is attached once per client
+                _mqttClient.DisconnectedAsync += _ => Restart();
 
                 _logger.LogInformation($"Try subscribe to mqtt topics...done");
                 _connected = true;

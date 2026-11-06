@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
@@ -10,14 +11,12 @@ using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Runtime.Abstraction.Remote;
-using Automatica.Core.Runtime.Mqtt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
-using MQTTnet.Server.Internal;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.Runtime.Core
@@ -29,7 +28,7 @@ namespace Automatica.Core.Runtime.Core
         private readonly IDictionary<string, NodeInstance> _mqttNodes = new Dictionary<string, NodeInstance>();
         private readonly IDictionary<string, IDictionary<NodeInstance, IDriverFactory>> _mqttSlaves = new Dictionary<string, IDictionary<NodeInstance, IDriverFactory>>();
         private readonly IList<string> _connectedMqttClients = new List<string>();
-        private readonly IMqttServer _mqttServer;
+        private readonly MqttServer _mqttServer;
         private readonly IDispatcher _dispatcher;
         private readonly ILearnMode _learnModeHandler;
 
@@ -37,44 +36,76 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger = services.GetRequiredService<ILogger<MqttService>>();
 
-            _mqttServer = services.GetRequiredService<IMqttServer>();
-            _mqttServer.ClientConnectedHandler = new ClientConnectedHandler(this);
-            _mqttServer.ClientDisconnectedHandler = new ClientDisconnectedHandler(this);
-            _mqttServer.ClientSubscribedTopicHandler = new ClientSubscribedHandler(this);
-            _mqttServer.ApplicationMessageReceivedHandler = new ApplicationMessageHandler(this);
-            _mqttServer.StartedHandler = new ServerStartedHandler(_logger);
-
+            _mqttServer = services.GetRequiredService<MqttServer>();
+            _mqttServer.ClientConnectedAsync += e => ClientConnected(new RemoteConnectedEvent(e.ClientId));
+            _mqttServer.ClientDisconnectedAsync += e => ClientDisconnected(new RemoteDisconnectedEvent(e.ClientId));
+            _mqttServer.ClientSubscribedTopicAsync += e => ClientSubscribedTopic(new RemoteSubscribedEvent(e.ClientId, e.TopicFilter.Topic));
+            _mqttServer.InterceptingPublishAsync += OnClientPublish;
+            _mqttServer.StartedAsync += _ =>
+            {
+                _logger.LogInformation("Remote Server started...");
+                return Task.CompletedTask;
+            };
 
             _learnModeHandler = services.GetRequiredService<ILearnMode>();
             _dispatcher = services.GetRequiredService<IDispatcher>();
         }
 
-        public static void ValidateConnection(MqttConnectionValidatorContext context, IConfiguration config, ILogger logger)
+        private async Task OnClientPublish(InterceptingPublishEventArgs e)
         {
-            logger.LogInformation($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, userName: {context.Username}, password: *****");
+            // Messages the server injects itself (see PublishAsync) pass through here as well, without a client id.
+            if (string.IsNullOrEmpty(e.ClientId))
+            {
+                return;
+            }
+
+            try
+            {
+                await MessageReceived(new RemoteMessageEvent(e.ClientId, e.ApplicationMessage.Topic, e.ApplicationMessage.ConvertPayloadToString()));
+            }
+            catch (Exception)
+            {
+                // already logged in MessageReceived; the message is still delivered to subscribers (as with MQTTnet 3)
+            }
+        }
+
+        private static bool IsMatch(string topic, string filter)
+        {
+            return MqttTopicFilterComparer.Compare(topic, filter) == MqttTopicFilterCompareResult.IsMatch;
+        }
+
+        internal static MqttApplicationMessage BuildMessage(string topic, byte[] payload, MqttQualityOfServiceLevel qos)
+        {
+            var builder = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithQualityOfServiceLevel(qos)
+                .WithRetainFlag();
+
+            if (payload != null)
+            {
+                builder.WithPayload(payload);
+            }
+
+            return builder.Build();
+        }
+
+        private Task PublishAsync(MqttApplicationMessage message)
+        {
+            return _mqttServer.InjectApplicationMessage(new InjectedMqttApplicationMessage(message), CancellationToken.None);
+        }
+
+        public static Task ValidateConnection(ValidatingConnectionEventArgs context, IConfiguration config, ILogger logger)
+        {
+            logger.LogInformation($"Validating connection from {context.RemoteEndPoint} clientId: {context.ClientId}, userName: {context.UserName}, password: *****");
             using var db = new AutomaticaContext(config);
-            if (db.Slaves.Any(a => a.ClientId == context.Username && a.ClientKey == context.Password))
-            {
-                //leave for compatibility reasons
-#pragma warning disable 618
-                context.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
-#pragma warning restore 618
-                context.ReasonCode = MqttConnectReasonCode.Success;
-            }
-            else
-            {
-                //leave for compatibility reasons
-#pragma warning disable 618
-                context.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
-#pragma warning restore 618
 
-                context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
-            }
+            // MQTTnet maps the reason code to the MQTT 3.1.1 return code for older clients
+            context.ReasonCode = db.Slaves.Any(a => a.ClientId == context.UserName && a.ClientKey == context.Password)
+                ? MqttConnectReasonCode.Success
+                : MqttConnectReasonCode.BadUserNameOrPassword;
 
-            //leave for compatibility reasons
-#pragma warning disable 618
-            logger.LogInformation($"Validating connection from {context.Endpoint} clientId: {context.ClientId}, returnCode: {context.ReasonCode} ({context.ReturnCode})");
-#pragma warning restore 618
+            logger.LogInformation($"Validating connection from {context.RemoteEndPoint} clientId: {context.ClientId}, reasonCode: {context.ReasonCode}");
+            return Task.CompletedTask;
         }
 
         public Task ClientConnected(RemoteConnectedEvent connectedEvent)
@@ -101,14 +132,14 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogInformation($"Client {subscribedEvent.ClientId} subscribed to {subscribedEvent.Topic}");
 
-            if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.CONFIG_TOPIC}/#"))
+            if (IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.CONFIG_TOPIC}/#"))
             {
                 if (_mqttNodes.TryGetValue(subscribedEvent.ClientId, out var node))
                 {
                     await PublishConfig(subscribedEvent.ClientId, node);
                 }
             }
-            else if (MqttTopicFilterComparer.IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/+/actions"))
+            else if (IsMatch(subscribedEvent.Topic, $"{RemoteTopicConstants.SLAVE_TOPIC}/+/actions"))
             {
                 if (_mqttSlaves.TryGetValue(subscribedEvent.ClientId, out var factoryNode))
                 {
@@ -131,11 +162,11 @@ namespace Automatica.Core.Runtime.Core
                     _connectedMqttClients.Add(messageEvent.ClientId);
                 }
 
-                if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
+                if (IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
                 {
                     _dispatcher.MqttDispatch(messageEvent.Topic, messageEvent.Message);
                 }
-                else if (MqttTopicFilterComparer.IsMatch(messageEvent.Topic,
+                else if (IsMatch(messageEvent.Topic,
                              $"{RemoteTopicConstants.ACTION_TOPIC_START}/+/{RemoteTopicConstants.NOTIFY_LEARN_MODE}"))
                 {
                     var learnModeDtoJson = messageEvent.Message;
@@ -161,20 +192,12 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task SendAction(Guid client, DriverNodeRemoteAction action, object data)
         {
-            var msg = new MqttApplicationMessage
-            {
-                Topic = $"{RemoteTopicConstants.ACTION_TOPIC_START}/{client}/{action}",
-                QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                Retain = true
-            };
-
-            if (data != null)
-            {
-                msg.Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
-            }
+            var msg = BuildMessage($"{RemoteTopicConstants.ACTION_TOPIC_START}/{client}/{action}",
+                data != null ? Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)) : null,
+                MqttQualityOfServiceLevel.ExactlyOnce);
 
             _logger.LogInformation($"Send action {action} to {client} {JsonConvert.SerializeObject(data)}");
-            await _mqttServer.PublishAsync(msg);
+            await PublishAsync(msg);
         }
 
         public Task Init()
@@ -191,13 +214,7 @@ namespace Automatica.Core.Runtime.Core
             foreach(var client in _connectedMqttClients)
             {
                 _logger.LogInformation($"Send reinit to client {client}");
-                await _mqttServer.PublishAsync(new MqttApplicationMessage
-                {
-                    Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{client}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(""),
-                    Retain = true
-                });
+                await PublishAsync(BuildMessage($"{RemoteTopicConstants.SLAVE_TOPIC}/{client}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}", Encoding.UTF8.GetBytes(""), MqttQualityOfServiceLevel.ExactlyOnce));
             }
         }
 
@@ -241,13 +258,7 @@ namespace Automatica.Core.Runtime.Core
         {
             try
             {
-                await _mqttServer.PublishAsync(new MqttApplicationMessage
-                {
-                    Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTIONS_TOPIC_START}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequests)),
-                    Retain = true
-                });
+                await PublishAsync(BuildMessage($"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTIONS_TOPIC_START}", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequests)), MqttQualityOfServiceLevel.ExactlyOnce));
             }
             catch (Exception e)
             {
@@ -260,13 +271,7 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 _logger.LogInformation($"Send action to client {clientId} {JsonConvert.SerializeObject(actionRequest)}");
-                await _mqttServer.PublishAsync(new MqttApplicationMessage
-                {
-                    Topic = $"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTION_TOPIC_START}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)),
-                    Retain = true
-                });
+                await PublishAsync(BuildMessage($"{RemoteTopicConstants.SLAVE_TOPIC}/{clientId}/{RemoteTopicConstants.ACTION_TOPIC_START}", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(actionRequest)), MqttQualityOfServiceLevel.ExactlyOnce));
             }
             catch (Exception e)
             {
@@ -279,13 +284,7 @@ namespace Automatica.Core.Runtime.Core
             try
             {
                 _logger.LogInformation($"Publish to {RemoteTopicConstants.CONFIG_TOPIC}/{clientId}");
-                await _mqttServer.PublishAsync(new MqttApplicationMessage
-                {
-                    Topic = $"{RemoteTopicConstants.CONFIG_TOPIC}/{clientId}",
-                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce,
-                    Payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)),
-                    Retain = true
-                });
+                await PublishAsync(BuildMessage($"{RemoteTopicConstants.CONFIG_TOPIC}/{clientId}", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(nodeInstance)), MqttQualityOfServiceLevel.ExactlyOnce));
             }
             catch (Exception e)
             {

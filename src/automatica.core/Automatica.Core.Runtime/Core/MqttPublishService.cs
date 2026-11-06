@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Base.Serialization;
-using MQTTnet;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
 
@@ -10,9 +10,9 @@ namespace Automatica.Core.Runtime.Core
 {
     internal class MqttPublishService : IRemoteSender
     {
-        private readonly IMqttServer _mqttServer;
+        private readonly MqttServer _mqttServer;
 
-        public MqttPublishService(IMqttServer mqttServer)
+        public MqttPublishService(MqttServer mqttServer)
         {
             _mqttServer = mqttServer;
         }
@@ -20,13 +20,8 @@ namespace Automatica.Core.Runtime.Core
         public async Task DispatchValue(IDispatchable dispatchable, object value)
         {
             var topic = $"{RemoteTopicConstants.DISPATCHER_TOPIC}/{dispatchable.Type}/{dispatchable.Id}";
-            await _mqttServer.PublishAsync(new MqttApplicationMessage()
-            {
-                Topic = topic,
-                QualityOfServiceLevel = MqttQualityOfServiceLevel.AtLeastOnce,
-                Payload = BinarySerializer.Serialize(value),
-                Retain = true
-            });
+            var message = MqttService.BuildMessage(topic, BinarySerializer.Serialize(value), MqttQualityOfServiceLevel.AtLeastOnce);
+            await _mqttServer.InjectApplicationMessage(new InjectedMqttApplicationMessage(message), CancellationToken.None);
         }
     }
 }

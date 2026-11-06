@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using Automatica.Core.Satellite.Abstraction;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
-using MQTTnet.Client.Receiving;
-using MQTTnet.Server.Internal;
 using Newtonsoft.Json;
 
 namespace Automatica.Core.Satellite.Runtime
 {
-    internal class ApplicationMessageReceivedHandler : IMqttApplicationMessageReceivedHandler
+    internal class ApplicationMessageReceivedHandler
     {
         private readonly SatelliteRuntime _slave;
         private readonly ILogger _logger;
@@ -31,13 +28,19 @@ namespace Automatica.Core.Satellite.Runtime
 
         }
 
+        // same argument order as MqttTopicFilterComparer.IsMatch(topic, filter) in MQTTnet 3
+        private static bool IsMatch(string topic, string filter)
+        {
+            return MqttTopicFilterComparer.Compare(topic, filter) == MqttTopicFilterCompareResult.IsMatch;
+        }
+
         public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
         {
             _logger.LogDebug($"Mqtt message received for topic {e.ApplicationMessage.Topic}");
 
-            if (MqttTopicFilterComparer.IsMatch(_actionTopic, e.ApplicationMessage.Topic))
+            if (IsMatch(_actionTopic, e.ApplicationMessage.Topic))
             {
-                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                var json = e.ApplicationMessage.ConvertPayloadToString();
                 var action = JsonConvert.DeserializeObject<ActionRequest>(json);
                 try
                 {
@@ -48,9 +51,9 @@ namespace Automatica.Core.Satellite.Runtime
                     _logger.LogError(ex, $"Could not execute request");
                 }
             }
-            else if (MqttTopicFilterComparer.IsMatch(_actionTopics, e.ApplicationMessage.Topic))
+            else if (IsMatch(_actionTopics, e.ApplicationMessage.Topic))
             {
-                var json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                var json = e.ApplicationMessage.ConvertPayloadToString();
                 var actions = JsonConvert.DeserializeObject<ActionRequest[]>(json);
                 try
                 {
@@ -64,11 +67,11 @@ namespace Automatica.Core.Satellite.Runtime
                     _logger.LogError(ex, $"Could not execute request");
                 }
             }
-            else if (MqttTopicFilterComparer.IsMatch(_reinitTopic, e.ApplicationMessage.Topic))
+            else if (IsMatch(_reinitTopic, e.ApplicationMessage.Topic))
             {
                 await _slave.ReInit();
             }
-            else if (MqttTopicFilterComparer.IsMatch(_watchdogTopic, e.ApplicationMessage.Topic))
+            else if (IsMatch(_watchdogTopic, e.ApplicationMessage.Topic))
             {
                 await _slave.ReInit();
             }

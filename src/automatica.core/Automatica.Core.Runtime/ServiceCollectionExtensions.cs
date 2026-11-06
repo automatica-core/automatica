@@ -42,7 +42,7 @@ using Automatica.Push.LearnMode;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MQTTnet.AspNetCore.Extensions;
+using MQTTnet.AspNetCore;
 using MQTTnet.Server;
 
 namespace Automatica.Core.Runtime
@@ -128,20 +128,19 @@ namespace Automatica.Core.Runtime
                 services.AddSingleton<DatabaseTrendingValueStore, DatabaseTrendingValueStore>();
             }
 
-            var mqttServerOptions = new MqttServerOptions()
-            {
-                ConnectionValidator = new MqttServerConnectionValidatorDelegate(a => MqttService.ValidateConnection(a, configuration, new CoreLogger(configuration, null)))
-            };
-
-            mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkAddress = IPAddress.Any;
-            mqttServerOptions.DefaultEndpointOptions.BoundInterNetworkV6Address = IPAddress.None;
-            mqttServerOptions.DefaultEndpointOptions.IsEnabled = true;
-
             var mqttServerPort = configuration["server:mqttPort"];
 
-            mqttServerOptions.DefaultEndpointOptions.Port = String.IsNullOrEmpty(mqttServerPort) ? 1883 : Convert.ToInt32(mqttServerPort);
-            mqttServerOptions.DefaultEndpointOptions.ConnectionBacklog = 1000;
+            var mqttServerOptions = new MqttServerOptionsBuilder()
+                .WithDefaultEndpoint()
+                .WithDefaultEndpointBoundIPAddress(IPAddress.Any)
+                .WithDefaultEndpointBoundIPV6Address(IPAddress.None)
+                .WithDefaultEndpointPort(String.IsNullOrEmpty(mqttServerPort) ? 1883 : Convert.ToInt32(mqttServerPort))
+                .WithConnectionBacklog(1000)
+                .Build();
 
+            // Registered before the hosted MQTT server so the connection validator is attached before it starts
+            // (MQTTnet 3 had it in the server options; without it MQTTnet 5 accepts every client).
+            services.AddSingleton<IHostedService>(provider => new MqttConnectionValidation(provider.GetRequiredService<MqttServer>(), configuration));
             services.AddHostedMqttServer(mqttServerOptions);
 
             services.AddAutomaticaVisualization(configuration);

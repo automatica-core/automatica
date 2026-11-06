@@ -30,7 +30,7 @@ using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
 using Automatica.Core.WebApi.Converter;
-using MQTTnet.AspNetCore.Extensions;
+using MQTTnet.AspNetCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

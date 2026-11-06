@@ -84,8 +84,8 @@ namespace Automatica.Core.WebApi.Tests.Base
             
             services.AddSingleton<IRemoteConnectService>(ngrogServiceMock.Object);
 
-            var mqttServerMock = new Mock<IMqttServer>();
-            services.AddSingleton<IMqttServer>(mqttServerMock.Object);
+            // never started; replaces the hosted server (which needs a real host)
+            services.AddSingleton(new MqttServerFactory().CreateMqttServer(new MqttServerOptionsBuilder().Build()));
 
 
             ServiceProvider = services.BuildServiceProvider();
