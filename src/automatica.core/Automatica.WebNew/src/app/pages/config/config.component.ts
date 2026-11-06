@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { ConfigTreeComponent } from "src/app/shared/config-tree/config-tree.component";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { ConfigService } from "src/app/services/config.service";
@@ -17,9 +17,11 @@ import { LogicEditorInstanceService } from "src/app/services/logic-editor-instan
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
-  selector: "app-config",
-  templateUrl: "./config.component.html",
-  styleUrls: ["./config.component.scss"]
+    selector: "app-config",
+    templateUrl: "./config.component.html",
+    styleUrls: ["./config.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy {
 

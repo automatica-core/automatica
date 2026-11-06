@@ -25,10 +25,11 @@ import { InterfaceTypeEnum } from "src/app/base/model/interface-type";
 declare let draw2d: any;
 
 @Component({
-  selector: "p3-ruleeditor",
-  templateUrl: "./ruleeditor.component.html",
-  styleUrls: ["./ruleeditor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "p3-ruleeditor",
+    templateUrl: "./ruleeditor.component.html",
+    styleUrls: ["./ruleeditor.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RuleEditorComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy, ILogicErrorHandler, ILogicInfoHandler {
 

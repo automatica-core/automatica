@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { L10nTranslationService, toNumber } from 'angular-l10n';
 import { DataHubService } from 'src/app/base/communication/hubs/data-hub.service';
 import { RuleInterfaceInstance } from 'src/app/base/model/rule-interface-instance';
@@ -10,9 +10,11 @@ import { LogicInstanceVisuService } from 'src/app/services/logic-visu.service';
 import { BaseMobileRuleComponent } from '../../base-mobile-rule-component';
 
 @Component({
-  selector: 'app-media-player',
-  templateUrl: './media-player.component.html',
-  styleUrls: ['./media-player.component.scss']
+    selector: 'app-media-player',
+    templateUrl: './media-player.component.html',
+    styleUrls: ['./media-player.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 

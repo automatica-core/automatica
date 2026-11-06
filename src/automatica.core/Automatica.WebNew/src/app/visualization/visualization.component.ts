@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { HubConnectionService } from "../base/communication/hubs/hub-connection.service";
 import { AreaService } from "../services/areas.service";
 import { VisuService } from "../services/visu.service";
@@ -11,9 +11,11 @@ import { CategoryInstance } from "../base/model/categories";
 import { DataService } from "../services/data.service";
 
 @Component({
-  selector: "app-visualization",
-  templateUrl: "./visualization.component.html",
-  styleUrls: ["./visualization.component.scss"]
+    selector: "app-visualization",
+    templateUrl: "./visualization.component.html",
+    styleUrls: ["./visualization.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class VisualizationComponent implements OnInit {
 

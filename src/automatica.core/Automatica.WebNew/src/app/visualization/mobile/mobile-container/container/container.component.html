@@ -1,10 +1,8 @@
 <div class="container">
-    <dx-scroll-view [showScrollbar]="'onHover'">
-        <ng-container *ngFor="let section of sections">
+  <dx-scroll-view [showScrollbar]="'onHover'">
+    @for (section of sections; track section) {
+      <app-visualization-section [pageGroupType]="pageGroupType" [page]="page" [title]="section.title" [items]="section.items"></app-visualization-section>
+    }
 
-            <app-visualization-section [pageGroupType]="pageGroupType" [page]="page" [title]="section.title" [items]="section.items"></app-visualization-section>
-
-        </ng-container>
-
-    </dx-scroll-view>
+  </dx-scroll-view>
 </div>

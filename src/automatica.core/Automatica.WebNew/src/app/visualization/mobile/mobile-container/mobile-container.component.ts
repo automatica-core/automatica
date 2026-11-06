@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { VisuPage, VisuPageGroupType } from "src/app/base/model/visu-page";
 import { VisuObjectTemplate } from "src/app/base/model/visu-object-template";
 import { BaseComponent } from "src/app/base/base-component";
@@ -20,9 +20,11 @@ import { PropertyTemplateType } from "src/app/base/model/property-template";
 import { VisuFacadePage } from "src/app/base/model/visu-facade-page";
 
 @Component({
-  selector: "app-mobile-container",
-  templateUrl: "./mobile-container.component.html",
-  styleUrls: ["./mobile-container.component.scss"]
+    selector: "app-mobile-container",
+    templateUrl: "./mobile-container.component.html",
+    styleUrls: ["./mobile-container.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MobileContainerComponent extends BaseComponent implements OnInit, OnDestroy {
 

@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { AggregatedValueRecord } from "src/app/base/model/aggregated-record-value";
 
 @Component({
-  selector: "app-visualization-control",
-  templateUrl: "./base-control.component.html",
-  styleUrls: ["./base-control.component.scss"]
+    selector: "app-visualization-control",
+    templateUrl: "./base-control.component.html",
+    styleUrls: ["./base-control.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class BaseControlComponent implements OnInit {
 

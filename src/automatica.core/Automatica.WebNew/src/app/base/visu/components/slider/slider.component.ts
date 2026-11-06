@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
-  selector: "visu-component-slider",
-  templateUrl: "./slider.component.html",
-  styleUrls: ["./slider.component.scss"]
+    selector: "visu-component-slider",
+    templateUrl: "./slider.component.html",
+    styleUrls: ["./slider.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SliderComponent {
 

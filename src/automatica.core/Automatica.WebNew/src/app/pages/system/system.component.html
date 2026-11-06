@@ -1,54 +1,60 @@
 <div class="content-block panel-height">
-    <div class="dx-card wide-card" style="padding: 20px">
-        <ng-container *ngIf="update">
-            <p translate>SYSTEM.UPDATE_AVAILABLE</p>
-            <span>
-                <div>
-                    <p>{{ 'COMMON.VERSION' | translateAsync }}: {{ update.version }}</p>
-                </div>
-                <br />
-                <div>
-                    <div>
-                        <div class="progress-info" *ngIf="fileMax">
-                            {{ 'COMMON.DOWNLOADING' | translateAsync }} {{downloadValue}}/{{downloadMaxValue}}
-                        </div>
-                        <dx-progress-bar *ngIf="fileMax" [min]="0" [max]="fileMax" [statusFormat]="format"
-                            [value]="fileCurrent"></dx-progress-bar>
-                    </div>
-                    <dx-button *ngIf="!alreadyDownloaded && !fileMax" text="{{ 'COMMON.DOWNLOAD' | translateAsync }}"
-                        (onClick)="downloadClick($event)">
-                    </dx-button>
-                </div>
+  <div class="dx-card wide-card" style="padding: 20px">
+    @if (update) {
+      <p translate>SYSTEM.UPDATE_AVAILABLE</p>
+      <span>
+        <div>
+          <p>{{ 'COMMON.VERSION' | translateAsync }}: {{ update.version }}</p>
+        </div>
+        <br />
+        <div>
+          <div>
+            @if (fileMax) {
+              <div class="progress-info">
+                {{ 'COMMON.DOWNLOADING' | translateAsync }} {{downloadValue}}/{{downloadMaxValue}}
+              </div>
+            }
+            @if (fileMax) {
+              <dx-progress-bar [min]="0" [max]="fileMax" [statusFormat]="format"
+              [value]="fileCurrent"></dx-progress-bar>
+            }
+          </div>
+          @if (!alreadyDownloaded && !fileMax) {
+            <dx-button text="{{ 'COMMON.DOWNLOAD' | translateAsync }}"
+              (onClick)="downloadClick($event)">
+            </dx-button>
+          }
+        </div>
+        @if (alreadyDownloaded) {
+          <dx-button text="{{ 'COMMON.INSTALL' | translateAsync }}"
+            (onClick)="installClick($event)">
+          </dx-button>
+        }
+      </span>
+    }
 
-                <dx-button *ngIf="alreadyDownloaded" text="{{ 'COMMON.INSTALL' | translateAsync }}"
-                    (onClick)="installClick($event)">
-                </dx-button>
-            </span>
-        </ng-container>
+    @if (!update) {
+      <p translate>SYSTEM.NO_UPDATE_AVAILABLE</p>
+      @if (updateError) {
+        <span style="color: red">
+          {{updateError}}
+        </span>
+      }
+    }
+  </div>
 
-        <ng-container *ngIf="!update">
-            <p translate>SYSTEM.NO_UPDATE_AVAILABLE</p>
+  <div class="dx-card wide-card" style="padding: 20px">
 
-            <ng-container *ngIf="updateError">
-                <span style="color: red">
-                    {{updateError}}
-                </span>
-            </ng-container>
-        </ng-container>
-    </div>
+    <p translate>SYSTEM.LICENSE</p>
+    @if (license) {
+      <dx-text-area [height]="500" [readOnly]="true" [value]="license"></dx-text-area>
+    }
+    @if (!license) {
+      <p translate>SYSTEM.NO_LICENSE_FOUND</p>
+    }
 
-    <div class="dx-card wide-card" style="padding: 20px">
-
-        <p translate>SYSTEM.LICENSE</p>
-        <ng-container *ngIf="license">
-            <dx-text-area [height]="500" [readOnly]="true" [value]="license"></dx-text-area>
-        </ng-container>
-        <ng-container *ngIf="!license">
-            <p translate>SYSTEM.NO_LICENSE_FOUND</p>
-        </ng-container>
-
-        <ng-container>
-            <dx-text-area [height]="500" [readOnly]="true" [value]="licenseErrors"></dx-text-area>
-        </ng-container>
-    </div>
+    <ng-container>
+      <dx-text-area [height]="500" [readOnly]="true" [value]="licenseErrors"></dx-text-area>
+    </ng-container>
+  </div>
 </div>

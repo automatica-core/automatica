@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from "@angular/core";
+import { Component, OnInit, NgZone, ChangeDetectionStrategy } from "@angular/core";
 import { AppService } from "src/app/services/app.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -8,9 +8,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HubConnectionService } from "src/app/base/communication/hubs/hub-connection.service";
 
 @Component({
-  selector: "app-starting-overlay",
-  templateUrl: "./starting-overlay.component.html",
-  styleUrls: ["./starting-overlay.component.scss"]
+    selector: "app-starting-overlay",
+    templateUrl: "./starting-overlay.component.html",
+    styleUrls: ["./starting-overlay.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class StartingOverlayComponent extends BaseComponent implements OnInit {
 

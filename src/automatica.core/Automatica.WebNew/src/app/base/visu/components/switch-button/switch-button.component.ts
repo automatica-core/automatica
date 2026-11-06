@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
-  selector: "visu-component-switch-button",
-  templateUrl: "./switch-button.component.html",
-  styleUrls: ["./switch-button.component.scss"]
+    selector: "visu-component-switch-button",
+    templateUrl: "./switch-button.component.html",
+    styleUrls: ["./switch-button.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SwitchButtonComponent {
 

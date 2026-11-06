@@ -139,11 +139,11 @@ export class LearnNodeInstance {
 }
 
 @Component({
-  selector: "p3-propertyeditor",
-  templateUrl: "./propertyeditor.component.html",
-  styleUrls: ["./propertyeditor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+    selector: "p3-propertyeditor",
+    templateUrl: "./propertyeditor.component.html",
+    styleUrls: ["./propertyeditor.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @PropertyTemplateTypeAware
 export class PropertyEditorComponent extends BaseComponent implements OnInit {

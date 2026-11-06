@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
@@ -9,9 +9,11 @@ interface IDimmerComponent {
 }
 
 @Component({
-  selector: "visu-dimmer",
-  templateUrl: "./dimmer.component.html",
-  styleUrls: ["./dimmer.component.scss"]
+    selector: "visu-dimmer",
+    templateUrl: "./dimmer.component.html",
+    styleUrls: ["./dimmer.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class DimmerComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy, IDimmerComponent {
 

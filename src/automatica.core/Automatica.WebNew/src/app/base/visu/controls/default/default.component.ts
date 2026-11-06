@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { DataHubService } from "../../../communication/hubs/data-hub.service";
 import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
@@ -9,9 +9,11 @@ import { HyperSeriesService } from "src/app/services/hyperseries.service";
 import { AggregatedValueRecord, AggregationType } from "src/app/base/model/aggregated-record-value";
 
 @Component({
-  selector: "visu-default",
-  templateUrl: "./default.component.html",
-  styleUrls: ["./default.component.scss"]
+    selector: "visu-default",
+    templateUrl: "./default.component.html",
+    styleUrls: ["./default.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class DefaultComponent extends BaseMobileComponent implements OnInit, OnDestroy {
 

@@ -12,7 +12,7 @@ import { AreaInstance } from "../model/areas";
 import { CategoryInstance } from "../model/categories";
 import { VisuPageGroupType } from "../model/visu-page";
 import { NodeDataTypeEnum } from "../model/node-data-type";
-import * as moment from "moment";
+import moment from "moment";
 
 export interface VisuObjectType {
     This2AreaInstanceNavigation: AreaInstance;

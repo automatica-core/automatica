@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef } from '@angular/core';
+import { Component, ElementRef, forwardRef, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { MouseHandlerOutput } from '../../shared/mouse-handler/mouse-handler-output';
@@ -33,6 +33,8 @@ import { IMAGE } from './circle-hue-image';
             multi: true,
         },
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class CircleHueComponent implements ControlValueAccessor {
     public cursorPosition: Vector;

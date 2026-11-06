@@ -1,4 +1,4 @@
-import { Component, NgModule, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { Component, NgModule, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 import { DxButtonModule } from "devextreme-angular/ui/button";
@@ -32,7 +32,9 @@ config({
 @Component({
     selector: "app-header",
     templateUrl: "header.component.html",
-    styleUrls: ["./header.component.scss"]
+    styleUrls: ["./header.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {

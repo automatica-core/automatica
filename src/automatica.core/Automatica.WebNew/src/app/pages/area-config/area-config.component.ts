@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { DxTreeListComponent } from "devextreme-angular";
 import { AreaService } from "src/app/services/areas.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -11,9 +11,11 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { GroupsService } from "src/app/services/groups.service";
 
 @Component({
-  selector: "app-area-config",
-  templateUrl: "./area-config.component.html",
-  styleUrls: ["./area-config.component.scss"]
+    selector: "app-area-config",
+    templateUrl: "./area-config.component.html",
+    styleUrls: ["./area-config.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AreaConfigComponent extends BaseComponent implements OnInit, OnDestroy {
   selectedNode: AreaInstance;

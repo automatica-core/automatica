@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";
-import * as JSZip from "jszip";
+import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { NotifyService } from "src/app/services/notify.service";
 import { RulePage } from "src/app/base/model/rule-page";
@@ -17,10 +17,11 @@ import { AppService } from "src/app/services/app.service";
 import { UpdateScope } from "src/app/base/model/property-instance";
 
 @Component({
-  selector: "p3-config-menu",
-  templateUrl: "./config-menu.component.html",
-  styleUrls: ["./config-menu.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "p3-config-menu",
+    templateUrl: "./config-menu.component.html",
+    styleUrls: ["./config-menu.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class ConfigMenuComponent implements OnInit {

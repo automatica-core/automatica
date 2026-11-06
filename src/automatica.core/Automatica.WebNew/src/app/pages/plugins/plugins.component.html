@@ -20,17 +20,19 @@
           <dxi-column cellTemplate="installTemplate" caption="{{ 'PLUGINS.PROGRESS' | translateAsync }}"></dxi-column>
 
           <div *dxTemplate="let data of 'installTemplate'" cellTemplate="installTemplate">
-            <dx-progress-bar *ngIf="data.data.downloadMax" [min]="0" [max]="data.data.downloadMax"
+            @if (data.data.downloadMax) {
+              <dx-progress-bar [min]="0" [max]="data.data.downloadMax"
               [value]="data.data.downloadCurrent"></dx-progress-bar>
+            }
           </div>
 
           <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
-            <ng-container *ngIf="data.data.cloudIsNewer && data.data.isInstalled">
+            @if (data.data.cloudIsNewer && data.data.isInstalled) {
               <dx-button text="Update" (onClick)="update($event, data.data)"></dx-button>
-            </ng-container>
-            <ng-container *ngIf="!data.data.isInstalled">
+            }
+            @if (!data.data.isInstalled) {
               <dx-button text="Install" (onClick)="install($event, data.data)"></dx-button>
-            </ng-container>
+            }
           </div>
 
         </dx-data-grid>

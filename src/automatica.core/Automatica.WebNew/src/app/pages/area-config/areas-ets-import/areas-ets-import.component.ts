@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DxTreeListComponent } from "devextreme-angular";
@@ -10,9 +10,11 @@ import { BaseModel } from "src/app/base/model/base-model";
 import { AppService } from "src/app/services/app.service";
 
 @Component({
-  selector: "app-areas-ets-import",
-  templateUrl: "./areas-ets-import.component.html",
-  styleUrls: ["./areas-ets-import.component.scss"]
+    selector: "app-areas-ets-import",
+    templateUrl: "./areas-ets-import.component.html",
+    styleUrls: ["./areas-ets-import.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AreasEtsImportComponent extends BaseComponent implements OnInit, OnDestroy {
 

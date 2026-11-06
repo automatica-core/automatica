@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { UpdateHubService } from "src/app/base/communication/hubs/update-hub.service";
 import { PluginType, PluginState, Version, PluginsService } from "src/app/services/plugins.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -208,9 +208,11 @@ class PluginStateInstance {
 }
 
 @Component({
-  selector: "app-plugins",
-  templateUrl: "./plugins.component.html",
-  styleUrls: ["./plugins.component.scss"]
+    selector: "app-plugins",
+    templateUrl: "./plugins.component.html",
+    styleUrls: ["./plugins.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy {
   menuItems: CustomMenuItem[] = [];

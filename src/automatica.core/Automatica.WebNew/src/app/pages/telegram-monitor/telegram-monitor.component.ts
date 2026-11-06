@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { TelegramMonitorInstance } from "src/app/base/model/telegram-monitor/telegram-monitor-instance";
 import { TelegramHubService } from "src/app/base/communication/hubs/telegram-monitor-hub.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -9,9 +9,11 @@ import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 
 @Component({
-  selector: "app-telegram-monitor",
-  templateUrl: "./telegram-monitor.component.html",
-  styleUrls: ["./telegram-monitor.component.scss"]
+    selector: "app-telegram-monitor",
+    templateUrl: "./telegram-monitor.component.html",
+    styleUrls: ["./telegram-monitor.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class TelegramMonitorComponent extends BaseComponent implements OnInit, OnDestroy {
 

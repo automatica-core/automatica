@@ -1,13 +1,15 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, ChangeDetectionStrategy } from "@angular/core";
 import DataSource from "devextreme/data/data_source";
 import ArrayStore from "devextreme/data/array_store";
 import { VisuService } from "src/app/services/visu.service";
 import { VisuPage } from "src/app/base/model/visu-page";
 
 @Component({
-  selector: "visu-page-list",
-  templateUrl: "./visu-page-list.component.html",
-  styleUrls: ["./visu-page-list.component.scss"]
+    selector: "visu-page-list",
+    templateUrl: "./visu-page-list.component.html",
+    styleUrls: ["./visu-page-list.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class VisuPageListComponent implements OnInit {
 

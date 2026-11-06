@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PropertyInstance } from "../../../model/property-instance";
 import { DataHubService } from "../../../communication/hubs/data-hub.service";
@@ -11,10 +11,12 @@ import { ConfigService } from "src/app/services/config.service";
 import { AppService } from "src/app/services/app.service";
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: "visu-link",
-  templateUrl: "./link.component.html",
-  styleUrls: ["./link.component.scss"]
+    // tslint:disable-next-line:component-selector
+    selector: "visu-link",
+    templateUrl: "./link.component.html",
+    styleUrls: ["./link.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class LinkComponent extends BaseMobileComponent implements OnInit, OnDestroy {
 

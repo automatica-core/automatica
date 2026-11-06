@@ -40,3 +40,4 @@ Thumbs.db
 
 .npmrc
 .angular
+src/devextreme-license.ts

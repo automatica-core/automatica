@@ -20,11 +20,11 @@ import { NodeInstance2RulePage } from "src/app/base/model/node-instance-2-rule-p
 import { LogicEngineService } from "src/app/services/logicengine.service";
 
 @Component({
-  selector: "p3-config-tree",
-  templateUrl: "./config-tree.component.html",
-  styleUrls: ["./config-tree.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+    selector: "p3-config-tree",
+    templateUrl: "./config-tree.component.html",
+    styleUrls: ["./config-tree.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDestroy {
 

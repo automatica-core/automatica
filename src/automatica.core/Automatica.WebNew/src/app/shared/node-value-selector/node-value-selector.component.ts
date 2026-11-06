@@ -1,11 +1,13 @@
-import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy } from "@angular/core";
 import { ConfigService } from "../../services/config.service";
 import { ITreeNode } from "src/app/base/model/ITreeNode";
 
 @Component({
-  selector: "node-value-selector",
-  templateUrl: "./node-value-selector.component.html",
-  styleUrls: ["./node-value-selector.component.scss"]
+    selector: "node-value-selector",
+    templateUrl: "./node-value-selector.component.html",
+    styleUrls: ["./node-value-selector.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class NodeValueSelectorComponent implements OnInit {
 

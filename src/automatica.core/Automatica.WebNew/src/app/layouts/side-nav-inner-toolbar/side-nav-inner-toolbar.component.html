@@ -1,35 +1,37 @@
 <div class="layout" [ngClass]="sizeClasses" [style.background-color]="backgroundColor">
-    <dx-drawer class="drawer" [closeOnOutsideClick]="!this.isLargeScreen" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
-        [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
+  <dx-drawer class="drawer" [closeOnOutsideClick]="!this.isLargeScreen" [openedStateMode]="menuMode" [revealMode]="menuRevealMode"
+    [minSize]="minMenuSize" [shading]="shaderEnabled" [(opened)]="menuOpened" [height]="'100%'">
 
-        <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute"
-            class="dx-swatch-additional" *dxTemplate="let dataMenu of 'panel'"
-            (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick($event)" [(menuOpened)]="menuOpened">
-            <dx-toolbar id="navigation-header">
-                <dxi-item *ngIf="minMenuSize !== 0" location="before" widget="dxButton" [options]="{
+    <app-side-navigation-menu [items]="menuItems" [compactMode]="!menuOpened" [selectedItem]="selectedRoute"
+      class="dx-swatch-additional" *dxTemplate="let dataMenu of 'panel'"
+      (selectedItemChanged)="navigationChanged($event)" (click)="navigationClick($event)" [(menuOpened)]="menuOpened">
+      <dx-toolbar id="navigation-header">
+        @if (minMenuSize !== 0) {
+<dxi-item location="before" widget="dxButton" [options]="{
                             icon: 'menu',
                             stylingMode: 'text',
                             onClick: toggleMenu,
                             elementAttr: { class: 'menu-button' }
                         }">
-                </dxi-item>
-            </dx-toolbar>
-        </app-side-navigation-menu>
+          </dxi-item>
+        }
+      </dx-toolbar>
+    </app-side-navigation-menu>
 
-        <div class="container">
-            <app-header [menuToggleEnabled]="minMenuSize === 0" (menuToggle)="menuOpened = !menuOpened;">
-            </app-header>
+    <div class="container">
+      <app-header [menuToggleEnabled]="minMenuSize === 0" (menuToggle)="menuOpened = !menuOpened;">
+      </app-header>
 
 
-            <div class="content">
-                <ng-content></ng-content>
-            </div>
+      <div class="content">
+        <ng-content></ng-content>
+      </div>
 
-            <div class="footer">
-                <ng-content select="app-footer"></ng-content>
-            </div>
+      <div class="footer">
+        <ng-content select="app-footer"></ng-content>
+      </div>
 
-            <app-footer></app-footer>
-        </div>
-    </dx-drawer>
+      <app-footer></app-footer>
+    </div>
+  </dx-drawer>
 </div>

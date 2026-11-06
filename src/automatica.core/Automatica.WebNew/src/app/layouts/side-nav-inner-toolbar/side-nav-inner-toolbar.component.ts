@@ -17,7 +17,8 @@ import { ThemeService } from "src/app/services/theme.service";
     selector: "app-side-nav-inner-toolbar",
     templateUrl: "./side-nav-inner-toolbar.component.html",
     styleUrls: ["./side-nav-inner-toolbar.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     selectedRoute = "";

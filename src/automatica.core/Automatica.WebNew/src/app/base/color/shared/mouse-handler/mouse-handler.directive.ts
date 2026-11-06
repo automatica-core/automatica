@@ -3,6 +3,7 @@ import { MouseHandlerOutput } from './mouse-handler-output';
 
 @Directive({
     selector: '[appMouseHandler]',
+    standalone: false
 })
 export class MouseHandlerDirective {
     @Output() public newValue = new EventEmitter<MouseHandlerOutput>();

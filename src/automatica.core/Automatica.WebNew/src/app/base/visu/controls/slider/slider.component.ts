@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
@@ -17,9 +17,11 @@ interface SliderData {
 }
 
 @Component({
-  selector: "visu-slider",
-  templateUrl: "./slider.component.html",
-  styleUrls: ["./slider.component.scss"]
+    selector: "visu-slider",
+    templateUrl: "./slider.component.html",
+    styleUrls: ["./slider.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SliderComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 

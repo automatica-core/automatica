@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ChangeDetectionStrategy } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { VisuPage, VisuPageGroupType } from "src/app/base/model/visu-page";
 import { L10nTranslationService } from "angular-l10n";
@@ -11,9 +11,11 @@ interface Section {
 }
 
 @Component({
-  selector: "app-visualization-container",
-  templateUrl: "./container.component.html",
-  styleUrls: ["./container.component.scss"]
+    selector: "app-visualization-container",
+    templateUrl: "./container.component.html",
+    styleUrls: ["./container.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ContainerComponent implements OnInit {
 

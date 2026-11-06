@@ -1,1 +1,1 @@
-<app-visualization-container *ngIf="page" [page]="page" [pageGroupType]="pageGroupType" [items]="page.VisuObjectInstances"></app-visualization-container>
+@if (page) {<app-visualization-container [page]="page" [pageGroupType]="pageGroupType" [items]="page.VisuObjectInstances"></app-visualization-container>}

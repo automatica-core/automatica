@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { DxTreeListComponent } from "devextreme-angular";
 import { NotifyService } from "src/app/services/notify.service";
@@ -10,9 +10,11 @@ import { NodeInstance } from "src/app/base/model/node-instance";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 
 @Component({
-  selector: "node-instance-import",
-  templateUrl: "./node-instance-import.component.html",
-  styleUrls: ["./node-instance-import.component.scss"]
+    selector: "node-instance-import",
+    templateUrl: "./node-instance-import.component.html",
+    styleUrls: ["./node-instance-import.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class NodeInstanceImportComponent extends BaseComponent implements OnDestroy {
 

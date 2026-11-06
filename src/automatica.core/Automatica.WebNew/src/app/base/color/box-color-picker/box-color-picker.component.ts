@@ -1,5 +1,5 @@
 // tslint:disable:component-selector
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import { ColorOutput } from "../shared/color-utility/color-output";
@@ -17,6 +17,8 @@ import { SaturationLightness } from "../shared/hsl/saturation-lightness";
             multi: true,
         },
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class BoxColorPickerComponent implements ControlValueAccessor, OnInit {
     @Input() public startHex: string;

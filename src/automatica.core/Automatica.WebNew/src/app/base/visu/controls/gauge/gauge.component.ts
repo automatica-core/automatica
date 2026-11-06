@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { DataHubService } from "../../../communication/hubs/data-hub.service";
 import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { ConfigService } from "src/app/services/config.service";
 import { NodeDataTypeEnum } from "src/app/base/model/node-data-type";
-import * as moment from "moment";
+import moment from "moment";
 import { AppService } from "src/app/services/app.service";
 import { DefaultComponent } from "../default/default.component";
 import { HyperSeriesService } from "src/app/services/hyperseries.service";
@@ -19,9 +19,11 @@ enum GaugeType {
 }
 
 @Component({
-  selector: "visu-gauge",
-  templateUrl: "./gauge.component.html",
-  styleUrls: ["./gauge.component.scss"]
+    selector: "visu-gauge",
+    templateUrl: "./gauge.component.html",
+    styleUrls: ["./gauge.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class GaugeComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
   GaugeType = GaugeType;

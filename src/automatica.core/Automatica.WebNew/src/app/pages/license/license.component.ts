@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { LicenseService } from "src/app/services/license.service";
 import { AppService } from "src/app/services/app.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -7,9 +7,11 @@ import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 
 @Component({
-  selector: "app-license",
-  templateUrl: "./license.component.html",
-  styleUrls: ["./license.component.scss"]
+    selector: "app-license",
+    templateUrl: "./license.component.html",
+    styleUrls: ["./license.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class LicenseComponent extends BaseComponent implements OnInit {
 

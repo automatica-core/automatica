@@ -1,39 +1,36 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "downlevelIteration": true,
+    "strict": false,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "esModuleInterop": true,
     "declaration": false,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "target": "ES2022",
     "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2022",
-      "dom"
+      "./node_modules/@types"
     ],
     "paths": {
+      "src/*": ["./src/*"],
       "jszip": [
-        "node_modules/jszip/dist/jszip.min.js"
+        "./node_modules/jszip/dist/jszip.min.js"
       ],
       "globalize": [
-        "node_modules/globalize/dist/globalize"
+        "./node_modules/globalize/dist/globalize"
       ],
       "globalize/*": [
-        "node_modules/globalize/dist/globalize/*"
+        "./node_modules/globalize/dist/globalize/*"
       ],
       "cldr": [
-        "node_modules/cldrjs/dist/cldr"
+        "./node_modules/cldrjs/dist/cldr"
       ],
       "cldr/*": [
-        "node_modules/cldrjs/dist/cldr/*"
+        "./node_modules/cldrjs/dist/cldr/*"
       ]
     },
     "useDefineForClassFields": false

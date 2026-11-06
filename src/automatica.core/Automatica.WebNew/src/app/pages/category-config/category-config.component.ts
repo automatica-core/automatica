@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { CategoryService } from "src/app/services/categories.service";
 import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
@@ -10,9 +10,11 @@ import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 import { GroupsService } from "src/app/services/groups.service";
 
 @Component({
-  selector: "app-category-config",
-  templateUrl: "./category-config.component.html",
-  styleUrls: ["./category-config.component.scss"]
+    selector: "app-category-config",
+    templateUrl: "./category-config.component.html",
+    styleUrls: ["./category-config.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class CategoryConfigComponent extends BaseComponent implements OnInit {
   groups: CategoryGroup[] = [];

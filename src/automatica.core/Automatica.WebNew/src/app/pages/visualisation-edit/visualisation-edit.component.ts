@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { IPropertyModel } from "src/app/base/model/interfaces";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -18,9 +18,11 @@ import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { LogicEditorInstanceService } from "src/app/services/logic-editor-instance.service";
 
 @Component({
-  selector: "app-visualisation-edit",
-  templateUrl: "./visualisation-edit.component.html",
-  styleUrls: ["./visualisation-edit.component.scss"]
+    selector: "app-visualisation-edit",
+    templateUrl: "./visualisation-edit.component.html",
+    styleUrls: ["./visualisation-edit.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class VisualisationEditComponent extends BaseComponent implements OnInit, OnDestroy {
 

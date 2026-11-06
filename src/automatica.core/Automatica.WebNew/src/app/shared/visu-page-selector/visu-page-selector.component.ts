@@ -1,9 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
-  selector: "app-visu-page-selector",
-  templateUrl: "./visu-page-selector.component.html",
-  styleUrls: ["./visu-page-selector.component.scss"]
+    selector: "app-visu-page-selector",
+    templateUrl: "./visu-page-selector.component.html",
+    styleUrls: ["./visu-page-selector.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class VisuPageSelectorComponent implements OnInit {
 

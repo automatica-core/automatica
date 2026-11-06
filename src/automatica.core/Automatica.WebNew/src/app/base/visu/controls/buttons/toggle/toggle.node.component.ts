@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
 import { L10nTranslationService } from "angular-l10n";
@@ -8,9 +8,11 @@ import { BaseMobileComponent } from "../../../base-mobile-component";
 
 
 @Component({
-  selector: "visu-toggle-node",
-  templateUrl: "./toggle.component.html",
-  styleUrls: ["./toggle.component.scss"]
+    selector: "visu-toggle-node",
+    templateUrl: "./toggle.component.html",
+    styleUrls: ["./toggle.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ToggleNodeComponent extends BaseMobileComponent implements OnInit, OnDestroy {
 

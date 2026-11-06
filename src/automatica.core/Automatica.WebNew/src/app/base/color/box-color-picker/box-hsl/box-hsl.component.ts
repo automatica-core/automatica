@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef } from '@angular/core';
+import { Component, ElementRef, forwardRef, ChangeDetectionStrategy } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { ColorUtilityService } from '../../shared/color-utility/color-utility.service';
@@ -33,6 +33,8 @@ import { IMAGE } from '../../shared/hsl/hsl-image';
             multi: true,
         },
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class BoxHslComponent extends HslBaseComponent {
     constructor(el: ElementRef, colorService: ColorUtilityService) {

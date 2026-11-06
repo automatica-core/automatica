@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ConfigService } from "src/app/services/config.service";
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
@@ -6,7 +6,9 @@ import { AppService } from "src/app/services/app.service";
 
 @Component({
     templateUrl: "home.component.html",
-    styleUrls: ["./home.component.scss"]
+    styleUrls: ["./home.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 
 export class HomeComponent implements OnInit {

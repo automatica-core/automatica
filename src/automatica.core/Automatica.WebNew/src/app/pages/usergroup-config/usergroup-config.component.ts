@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { DxDataGridComponent } from "devextreme-angular";
 import { UserGroup } from "src/app/base/model/user/user-group";
 import { Role } from "src/app/base/model/user/role";
@@ -11,9 +11,11 @@ import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 
 @Component({
-  selector: "app-usergroup-config",
-  templateUrl: "./usergroup-config.component.html",
-  styleUrls: ["./usergroup-config.component.scss"]
+    selector: "app-usergroup-config",
+    templateUrl: "./usergroup-config.component.html",
+    styleUrls: ["./usergroup-config.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
 import { NotifyService } from "src/app/services/notify.service";
@@ -9,9 +9,11 @@ import { Satellite } from "src/app/base/model/satellites/satellite";
 import { SatelliteService } from "src/app/services/satellite.services";
 
 @Component({
-  selector: "app-satellite-config",
-  templateUrl: "./satellite-config.component.html",
-  styleUrls: ["./satellite-config.component.scss"]
+    selector: "app-satellite-config",
+    templateUrl: "./satellite-config.component.html",
+    styleUrls: ["./satellite-config.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SatelliteConfigComponent extends BaseComponent implements OnInit {
   satellites: Satellite[] = [];

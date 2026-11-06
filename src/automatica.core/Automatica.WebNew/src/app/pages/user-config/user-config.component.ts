@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { DxDataGridComponent } from "devextreme-angular";
 import { User } from "src/app/base/model/user/user";
 import { UserGroup } from "src/app/base/model/user/user-group";
@@ -13,9 +13,11 @@ import { BaseComponent } from "src/app/base/base-component";
 import { CustomMenuItem } from "src/app/base/model/custom-menu-item";
 
 @Component({
-  selector: "app-user-config",
-  templateUrl: "./user-config.component.html",
-  styleUrls: ["./user-config.component.scss"]
+    selector: "app-user-config",
+    templateUrl: "./user-config.component.html",
+    styleUrls: ["./user-config.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class UserConfigComponent extends BaseComponent implements OnInit {
 

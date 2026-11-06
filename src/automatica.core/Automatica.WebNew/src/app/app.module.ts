@@ -8,7 +8,7 @@ import { RouterModule } from "@angular/router";
 import { L10nTranslationModule, L10nLoader, L10nValidationModule } from "angular-l10n";
 import { TranslationConfigService, HttpTranslationLoader, LocalLanguageConfigration } from "./services/translation-config.service";
 import { VisualizationModule } from "./visualization/visualization.module";
-import { HttpClientModule } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import { LoginFormModule } from "./shared/components/login-form/login-form.module";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ServicesModule } from "./services/services.module";
@@ -53,7 +53,6 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
   imports: [
     CommonModule,
     RouterModule,
-    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     L10nTranslationModule.forRoot(LocalLanguageConfigration, {
@@ -96,6 +95,7 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     CacheModule.forRoot({keyPrefix: "cache"})
   ],
   providers: [
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     {
       provide: APP_INITIALIZER,
       useFactory: initL10n,

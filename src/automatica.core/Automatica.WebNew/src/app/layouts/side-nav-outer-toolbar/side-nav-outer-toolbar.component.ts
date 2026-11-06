@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, NgModule, Input, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { DxDrawerModule } from "devextreme-angular/ui/drawer";
 import { DxScrollViewModule } from "devextreme-angular/ui/scroll-view";
@@ -13,7 +13,9 @@ import { Subscription } from "rxjs";
 @Component({
     selector: "app-side-nav-outer-toolbar",
     templateUrl: "./side-nav-outer-toolbar.component.html",
-    styleUrls: ["./side-nav-outer-toolbar.component.scss"]
+    styleUrls: ["./side-nav-outer-toolbar.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SideNavOuterToolbarComponent implements OnInit, OnDestroy {
     selectedRoute = "";

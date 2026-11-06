@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 
 import { Vector } from "../../vector";
 
@@ -18,6 +18,8 @@ import { Vector } from "../../vector";
         }
     `,
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class CursorComponent {
     @Input() public position: Vector;

@@ -1,11 +1,13 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ChangeDetectionStrategy } from "@angular/core";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
 import { VisuPageGroupType } from "src/app/base/model/visu-page";
 
 @Component({
-  selector: "app-visualization-element",
-  templateUrl: "./element.component.html",
-  styleUrls: ["./element.component.scss"]
+    selector: "app-visualization-element",
+    templateUrl: "./element.component.html",
+    styleUrls: ["./element.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ElementComponent implements OnInit {
 

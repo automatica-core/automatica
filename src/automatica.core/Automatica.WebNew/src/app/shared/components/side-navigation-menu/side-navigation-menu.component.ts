@@ -10,7 +10,8 @@ import { DxLoadIndicatorModule, DxScrollViewModule } from "devextreme-angular";
     selector: "app-side-navigation-menu",
     templateUrl: "./side-navigation-menu.component.html",
     styleUrls: ["./side-navigation-menu.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SideNavigationMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 

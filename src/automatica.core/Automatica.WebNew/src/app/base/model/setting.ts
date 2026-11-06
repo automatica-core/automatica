@@ -1,6 +1,6 @@
 import { BaseModel, JsonFieldInfo, JsonProperty, Model, JsonPropertyName } from "./base-model"
 import { PropertyTemplateType } from "./property-template";
-import * as moment from "moment";
+import moment from "moment";
 
 @Model()
 export class Setting extends BaseModel {

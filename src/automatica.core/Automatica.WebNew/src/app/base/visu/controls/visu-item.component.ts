@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Type, ViewEncapsulation, HostBinding, OnDestroy, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, Type, ViewEncapsulation, HostBinding, OnDestroy, ElementRef, ChangeDetectionStrategy } from "@angular/core";
 import { LabelComponent } from "./label/label.component";
 import { DefaultComponent } from "./default/default.component";
 import { LinkComponent } from "./link/link.component";
@@ -23,10 +23,12 @@ import { ThreeRangeGaugeComponent } from "./ThreeRangeGauge/three-range-gauge.co
 import { ShutterComponent } from "./shutter/shutter.component";
 
 @Component({
-  selector: "visu-component",
-  templateUrl: "./visu-item.component.html",
-  styleUrls: ["./visu-item.component.scss"],
-  encapsulation: ViewEncapsulation.None
+    selector: "visu-component",
+    templateUrl: "./visu-item.component.html",
+    styleUrls: ["./visu-item.component.scss"],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class VisuItemComponent extends BaseComponent implements OnInit, OnDestroy {
 

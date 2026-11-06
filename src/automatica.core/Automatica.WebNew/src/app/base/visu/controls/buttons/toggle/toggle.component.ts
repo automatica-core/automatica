@@ -1,13 +1,15 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../../base-mobile-rule-component";
 import { RuleInterfaceType } from "src/app/base/model/rule-interface-template";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 
 
 @Component({
-  selector: "visu-toggle",
-  templateUrl: "./toggle.component.html",
-  styleUrls: ["./toggle.component.scss"]
+    selector: "visu-toggle",
+    templateUrl: "./toggle.component.html",
+    styleUrls: ["./toggle.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ToggleComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 

@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../base-mobile-rule-component";
 import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instance";
 
 @Component({
-  selector: "visu-shutter",
-  templateUrl: "./shutter.component.html",
-  styleUrls: ["./shutter.component.scss"]
+    selector: "visu-shutter",
+    templateUrl: "./shutter.component.html",
+    styleUrls: ["./shutter.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ShutterComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 

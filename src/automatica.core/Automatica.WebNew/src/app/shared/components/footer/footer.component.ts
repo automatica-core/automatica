@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, NgModule, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { ConfigService } from "src/app/services/config.service";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -7,7 +7,9 @@ import { DeviceDetectorService } from "ngx-device-detector";
 @Component({
     selector: "app-footer",
     templateUrl: "./footer.component.html",
-    styleUrls: ["./footer.component.scss"]
+    styleUrls: ["./footer.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 
 export class FooterComponent implements OnInit {

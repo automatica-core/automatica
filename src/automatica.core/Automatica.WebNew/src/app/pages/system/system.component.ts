@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { UpdateHubService } from "src/app/base/communication/hubs/update-hub.service";
 import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
@@ -8,9 +8,11 @@ import { BaseComponent } from "src/app/base/base-component";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
 @Component({
-  selector: "app-system",
-  templateUrl: "./system.component.html",
-  styleUrls: ["./system.component.scss"]
+    selector: "app-system",
+    templateUrl: "./system.component.html",
+    styleUrls: ["./system.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SystemComponent extends BaseComponent implements OnInit, OnDestroy {
 

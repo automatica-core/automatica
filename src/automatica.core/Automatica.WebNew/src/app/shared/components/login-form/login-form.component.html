@@ -1,59 +1,58 @@
 <div id="main" style="width:100vw; height: 100vh">
-    <div class="center">
-        <img class="center_img" src="/assets/images/Logo1.png" />
-        <dx-validation-group #validationGroup class="dx-fieldset">
-            <div class="dx-fieldset-header" style="color: white" translate>LOGIN.NAME</div>
+  <div class="center">
+    <img class="center_img" src="/assets/images/Logo1.png" />
+    <dx-validation-group #validationGroup class="dx-fieldset">
+      <div class="dx-fieldset-header" style="color: white" translate>LOGIN.NAME</div>
 
-            <ng-container *ngIf="!isWeb">
-                <div class="dx-field">
-                    <dx-text-box [(value)]="serverIp" placeholder="{{ 'LOGIN.SERVER_IP' | translateAsync }}"
-                        width="100%">
-                        <dx-validator>
-                            <dxi-validation-rule type="required" message="ServerIp is required"></dxi-validation-rule>
-                        </dx-validator>
-                    </dx-text-box>
+      @if (!isWeb) {
+        <div class="dx-field">
+          <dx-text-box [(value)]="serverIp" placeholder="{{ 'LOGIN.SERVER_IP' | translateAsync }}"
+            width="100%">
+            <dx-validator>
+              <dxi-validation-rule type="required" message="ServerIp is required"></dxi-validation-rule>
+            </dx-validator>
+          </dx-text-box>
+        </div>
+      }
 
-                </div>
-            </ng-container>
+      <div class="dx-field">
+        <dx-text-box [(value)]="login" placeholder="{{ 'LOGIN.USERNAME' | translateAsync }}"
+          (onEnterKey)="onEnterPressed($event)" width="100%">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="User is required"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+      <div class="dx-field">
+        <dx-text-box mode="password" [(value)]="password" placeholder="{{ 'LOGIN.PASSWORD' | translateAsync }}"
+          width="100%" (onEnterKey)="onEnterPressed($event)">
+          <dx-validator>
+            <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+      @if (!isWeb) {
+        <div class="dx-field">
+          <dx-check-box [(value)]="saveLogin" text="{{ 'LOGIN.SAVE' | translateAsync }}"></dx-check-box>
+        </div>
+      }
 
-            <div class="dx-field">
-                <dx-text-box [(value)]="login" placeholder="{{ 'LOGIN.USERNAME' | translateAsync }}"
-                    (onEnterKey)="onEnterPressed($event)" width="100%">
-                    <dx-validator>
-                        <dxi-validation-rule type="required" message="User is required"></dxi-validation-rule>
-                    </dx-validator>
-                </dx-text-box>
-            </div>
-            <div class="dx-field">
-                <dx-text-box mode="password" [(value)]="password" placeholder="{{ 'LOGIN.PASSWORD' | translateAsync }}"
-                    width="100%" (onEnterKey)="onEnterPressed($event)">
-                    <dx-validator>
-                        <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
-                    </dx-validator>
-                </dx-text-box>
-            </div>
-            <ng-container *ngIf="!isWeb">
-                <div class="dx-field">
-                    <dx-check-box [(value)]="saveLogin" text="{{ 'LOGIN.SAVE' | translateAsync }}"></dx-check-box>
-                </div>
-            </ng-container>
-
-            <div class="dx-field">
-                <dx-button type="default" text="{{ 'LOGIN.NAME' | translateAsync }}" (onClick)="onLoginClick($event)"
-                    width="100%"></dx-button>
-            </div>
+      <div class="dx-field">
+        <dx-button type="default" text="{{ 'LOGIN.NAME' | translateAsync }}" (onClick)="onLoginClick($event)"
+        width="100%"></dx-button>
+      </div>
 
 
-            <ng-container *ngIf="!isWeb">
-                <div class="dx-field" style="margin-top:50px;">
-                    <dx-button type="default" text="{{ 'LOGIN.DEMO' | translateAsync }}" (onClick)="onDemoLogin($event)"
-                        width="100%"></dx-button>
-                </div>
-            </ng-container>
+      @if (!isWeb) {
+        <div class="dx-field" style="margin-top:50px;">
+          <dx-button type="default" text="{{ 'LOGIN.DEMO' | translateAsync }}" (onClick)="onDemoLogin($event)"
+          width="100%"></dx-button>
+        </div>
+      }
 
-        </dx-validation-group>
-    </div>
+    </dx-validation-group>
+  </div>
 </div>
 <!-- <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#main1' }" [(visible)]="isLoading"
-    [showIndicator]="true" [showPane]="true" [shading]="true" [hideOnOutsideClick]="false">
+[showIndicator]="true" [showPane]="true" [shading]="true" [hideOnOutsideClick]="false">
 </dx-load-panel> -->

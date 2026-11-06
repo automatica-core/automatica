@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { NotifyService } from "src/app/services/notify.service";
 import { AppService } from "src/app/services/app.service";
@@ -37,9 +37,11 @@ interface LogFile {
 
 
 @Component({
-  selector: "app-logs",
-  templateUrl: "./logs.component.html",
-  styleUrls: ["./logs.component.scss"]
+    selector: "app-logs",
+    templateUrl: "./logs.component.html",
+    styleUrls: ["./logs.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 

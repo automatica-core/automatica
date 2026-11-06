@@ -13,10 +13,12 @@
           <div class="dx-field">
             <div class="dx-field-label" translate>COMMON.FILE</div>
             <div class="dx-field-value-static">
-              <dx-file-uploader *ngIf="parentObjId" (onUploadStarted)="onUploadStarted($event)"
-                (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
-                labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
-              </dx-file-uploader>
+              @if (parentObjId) {
+                <dx-file-uploader (onUploadStarted)="onUploadStarted($event)"
+                  (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
+                  labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
+                </dx-file-uploader>
+              }
             </div>
           </div>
 
@@ -28,7 +30,7 @@
               <dxo-selection mode="multiple" [recursive]="true"></dxo-selection>
 
               <dxi-column dataField="Name" cellTemplate="cellTemplate"
-                caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
+              caption="{{ 'COMMON.NAME' | translateAsync }}"></dxi-column>
               <dxi-column dataField="Description" caption="{{ 'COMMON.DESCRIPTION' | translateAsync }}"></dxi-column>
 
               <div *dxTemplate="let data of 'cellTemplate'" cellTemplate="cellTemplate">
@@ -39,7 +41,7 @@
           </div>
           <div class="dx-field">
             <dx-button style="margin-top:10px" text="{{ 'COMMON.SAVE' | translateAsync }}"
-              (onClick)="saveClick($event)"></dx-button>
+            (onClick)="saveClick($event)"></dx-button>
           </div>
         </div>
       </div>

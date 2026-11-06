@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { BaseMobileRuleComponent } from "../../../base-mobile-rule-component";
 import { DataHubService } from "src/app/base/communication/hubs/data-hub.service";
 import { NotifyService } from "src/app/services/notify.service";
@@ -11,9 +11,11 @@ import { RuleInterfaceInstance } from "src/app/base/model/rule-interface-instanc
 
 
 @Component({
-  selector: "visu-push",
-  templateUrl: "./push.component.html",
-  styleUrls: ["./push.component.scss"]
+    selector: "visu-push",
+    templateUrl: "./push.component.html",
+    styleUrls: ["./push.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class PushComponent extends BaseMobileRuleComponent implements OnInit, OnDestroy {
 

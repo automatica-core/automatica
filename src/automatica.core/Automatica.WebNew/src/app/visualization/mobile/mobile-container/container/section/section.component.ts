@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { BaseComponent } from "src/app/base/base-component";
 import { VisuObjectMobileInstance } from "src/app/base/model/visu";
@@ -8,9 +8,11 @@ import { NotifyService } from "src/app/services/notify.service";
 import { VisuService } from "src/app/services/visu.service";
 
 @Component({
-  selector: "app-visualization-section",
-  templateUrl: "./section.component.html",
-  styleUrls: ["./section.component.scss"]
+    selector: "app-visualization-section",
+    templateUrl: "./section.component.html",
+    styleUrls: ["./section.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SectionComponent extends BaseComponent implements OnInit {
 

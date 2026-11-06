@@ -33,10 +33,11 @@ export class Tab {
 }
 
 @Component({
-  selector: "app-logic-editor",
-  templateUrl: "./logic-editor.component.html",
-  styleUrls: ["./logic-editor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "app-logic-editor",
+    templateUrl: "./logic-editor.component.html",
+    styleUrls: ["./logic-editor.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LogicEditorComponent extends BaseComponent implements OnInit, OnDestroy {
 
