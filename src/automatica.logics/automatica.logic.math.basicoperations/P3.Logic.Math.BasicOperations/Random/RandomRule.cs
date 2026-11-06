@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Automatica.Core.Base.IO;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Logic;
@@ -11,10 +14,10 @@ namespace P3.Logic.Math.BasicOperations.Random
     {
         private double? _i1;
 
-        private readonly RuleInterfaceInstance _output;
-        private readonly RuleInterfaceInstance _minInstance;
-        private readonly RuleInterfaceInstance _maxInstance;
-        
+        private RuleInterfaceInstance _output;
+        private RuleInterfaceInstance _minInstance;
+        private RuleInterfaceInstance _maxInstance;
+
 
         private bool _disabled = false;
 
@@ -22,14 +25,26 @@ namespace P3.Logic.Math.BasicOperations.Random
 
         public RandomRule(ILogicContext context) : base(context)
         {
-            _output = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            ResolveInterfaces(context.RuleInstance);
+        }
+
+        private void ResolveInterfaces(RuleInstance ruleInstance)
+        {
+            _output = ruleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == RandomLogicFactory.RuleOutput);
 
-            _minInstance = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            _minInstance = ruleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == RandomLogicFactory.RuleParamMin);
 
-            _maxInstance = context.RuleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
+            _maxInstance = ruleInstance.RuleInterfaceInstance.SingleOrDefault(a =>
                 a.This2RuleInterfaceTemplate == RandomLogicFactory.RuleParamMax);
+        }
+
+        protected override Task<bool> Start(RuleInstance instance, CancellationToken token = default)
+        {
+            // on a reload the instance is a fresh copy, the cached parameter instances would be stale
+            ResolveInterfaces(instance);
+            return base.Start(instance, token);
         }
 
         public int Min
@@ -57,19 +72,66 @@ namespace P3.Logic.Math.BasicOperations.Random
             }
         }
 
+        private static bool IsTruthy(object value)
+        {
+            switch (value)
+            {
+                case null:
+                    return false;
+                case bool b:
+                    return b;
+                case string s:
+                    if (bool.TryParse(s, out var sb))
+                    {
+                        return sb;
+                    }
+                    return double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var sd) && sd != 0;
+                case IConvertible c:
+                    try
+                    {
+                        return c.ToDouble(CultureInfo.InvariantCulture) != 0;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// A random integer in [Min, Max] - both bounds are inclusive
+        /// </summary>
+        internal int NextValue()
+        {
+            long min = Min;
+            long max = Max;
+            if (max < min)
+            {
+                (min, max) = (max, min);
+            }
+
+            // NextInt64 excludes the upper bound, long arithmetic avoids the overflow for int.MaxValue
+            return (int)_random.NextInt64(min, max + 1);
+        }
+
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
-
             if (instance.This2RuleInterfaceTemplate == RandomLogicFactory.RuleInputDisabled)
             {
-                _disabled = Convert.ToBoolean(value);
+                // only changes the state, nothing to emit
+                _disabled = IsTruthy(value);
+                return new List<ILogicOutputChanged>();
             }
 
-            if (!_disabled && instance.This2RuleInterfaceTemplate == RandomLogicFactory.RuleInputTrigger)
+            if (instance.This2RuleInterfaceTemplate == RandomLogicFactory.RuleInputTrigger && !_disabled && IsTruthy(value))
             {
-                _i1 = _random.Next(Min, Max);
+                _i1 = NextValue();
+                return SingleOutputChanged(new LogicOutputChanged(_output, _i1));
             }
-            return SingleOutputChanged(new LogicOutputChanged(_output,  _i1));
+
+            return new List<ILogicOutputChanged>();
         }
 
     }

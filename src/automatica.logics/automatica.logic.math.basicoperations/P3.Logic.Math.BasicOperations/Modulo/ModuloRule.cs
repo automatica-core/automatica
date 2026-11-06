@@ -29,15 +29,32 @@ namespace P3.Logic.Math.BasicOperations.Modulo
         }
         protected override Task<bool> Stop(RuleInstance logicInstance, CancellationToken token = default)
         {
-            _i1 = 0;
-            _i2 = 0;
+            // keep the last input values - a reload calls Stop and Start on the same instance
             return Task.FromResult(true);
         }
         protected override Task<bool> Start(RuleInstance logicInstance, CancellationToken token = default)
         {
-            var curValue = _i1 + _i2;
-            Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output1, curValue).Instance, curValue);
+            if (_o.HasValue)
+            {
+                var o2 = ToInt(_o);
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output1, _o).Instance, _o);
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output2, o2).Instance, o2);
+            }
             return Task.FromResult(true);
+        }
+
+        /// <summary>
+        /// O2 is the integer part, a non finite result (divisor 0 gives NaN like Division gives NaN/Infinity) has none
+        /// </summary>
+        private static int? ToInt(double? value)
+        {
+            if (!value.HasValue || double.IsNaN(value.Value) || double.IsInfinity(value.Value) ||
+                value.Value > int.MaxValue || value.Value < int.MinValue)
+            {
+                return null;
+            }
+
+            return Convert.ToInt32(value.Value);
         }
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance, IDispatchable source, object value)
         {
@@ -62,7 +79,7 @@ namespace P3.Logic.Math.BasicOperations.Modulo
             return new List<ILogicOutputChanged>
             {
                 new LogicOutputChanged(_output1, _o),
-                new LogicOutputChanged(_output2, _o.HasValue ? Convert.ToInt32(_o.Value) :  (int?)null)
+                new LogicOutputChanged(_output2, ToInt(_o))
             };
         }
 

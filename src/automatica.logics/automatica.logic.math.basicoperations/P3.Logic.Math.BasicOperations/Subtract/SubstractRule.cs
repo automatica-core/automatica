@@ -24,13 +24,12 @@ namespace P3.Logic.Math.BasicOperations.Subtract
         }
         protected override Task<bool> Stop(RuleInstance logicInstance, CancellationToken token = default)
         {
-            _i1 = 0;
-            _i2 = 0;
+            // keep the last input values - a reload calls Stop and Start on the same instance
             return Task.FromResult(true);
         }
         protected override Task<bool> Start(RuleInstance logicInstance, CancellationToken token = default)
         {
-            var curValue = _i1 + _i2 ;
+            var curValue = _i1 - _i2;
             Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, curValue).Instance, curValue);
 
             return Task.FromResult(true);

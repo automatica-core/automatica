@@ -26,10 +26,7 @@ namespace P3.Logic.Math.BasicOperations.Addition
 
         protected override Task<bool> Stop(RuleInstance logicInstance, CancellationToken token = default)
         {
-            _i1 = 0;
-            _i2 = 0;
-            _i3 = 0;
-            _i4 = 0;
+            // keep the last input values - a reload calls Stop and Start on the same instance
             return Task.FromResult(true);
         }
 
