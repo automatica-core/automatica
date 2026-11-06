@@ -1,4 +1,4 @@
-FROM node:18-alpine as node
+FROM node:22-alpine AS node
 WORKDIR /src
 
 # Copy everything else and build
@@ -6,12 +6,13 @@ COPY ./Automatica.WebNew /src
 
 RUN ls -lah
 
-RUN cat .npmrc
 RUN npm install 
-RUN npm run build-docker
+# DevExtreme license (optional): docker build --secret id=devexpress_license,src=<DevExpress_License.txt>
+# Without it the bundle gets the TRIAL key (eval banner). Never pass it as a build-arg: those end up in the image history.
+RUN --mount=type=secret,id=devexpress_license,target=/root/.config/DevExpress/DevExpress_License.txt npm run build-docker
 
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 
 RUN apt-get update 
@@ -53,7 +54,7 @@ RUN mv frp_*/* frp/
 RUN ./frp/frpc --version
 
 
-FROM automaticacore/automatica-plugin-runtime:amd64-8 AS runtime
+FROM automaticacore/automatica-plugin-runtime:amd64-10 AS runtime
 WORKDIR /app/
 
 ARG VERSION

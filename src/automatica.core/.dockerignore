@@ -7,3 +7,8 @@
 */bin
 */obj
 **/.toolstarget
+**/node_modules
+**/.angular
+Automatica.WebNew/dist
+# generated per build from the DevExpress license; keep a local key out of build contexts
+**/devextreme-license.ts
