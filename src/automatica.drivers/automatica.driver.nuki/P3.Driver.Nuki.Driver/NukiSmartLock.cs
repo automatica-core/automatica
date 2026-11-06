@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using P3.Driver.Nuki.Driver.Model;
 
 namespace P3.Driver.Nuki.Driver
@@ -24,6 +25,13 @@ namespace P3.Driver.Nuki.Driver
 
         public void UpdateState(NukiObject nuki)
         {
+            if (nuki?.LastKnownState == null)
+            {
+                // the bridge omits lastKnownState e.g. for locks it has not reached yet: nothing to dispatch
+                DriverContext.Logger.LogDebug($"No last known state for nuki {NukiId}, skipping update");
+                return;
+            }
+
             foreach (var attr in _attributes)
             {
                 var value = attr.GetValue(nuki);

@@ -62,10 +62,14 @@ namespace P3.Driver.Nuki.Driver
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
-            _timer = new Timer(TimeElapsed, this, _pollTime * 1000, _pollTime * 1000);
+            // Start is retried on the same instance and ReadValues can throw: never leave a timer behind
+            _timer?.Dispose();
+            _timer = null;
+
+            await ReadValues(token);
 
             _logger.LogInformation($"Start polling every {_pollTime}s");
-            await ReadValues(token);
+            _timer = new Timer(TimeElapsed, this, _pollTime * 1000, _pollTime * 1000);
 
             return await base.Start(token);
         }
@@ -92,7 +96,7 @@ namespace P3.Driver.Nuki.Driver
                 return;
             }
 
-            var listResponseObj = JsonConvert.DeserializeObject<List<NukiObject>>(response);
+            var listResponseObj = JsonConvert.DeserializeObject<List<NukiObject>>(response) ?? new List<NukiObject>();
 
             foreach (var nuki in listResponseObj)
             {
@@ -108,7 +112,8 @@ namespace P3.Driver.Nuki.Driver
 
         public override Task<bool> Stop(CancellationToken token = default)
         {
-            _timer.Dispose();
+            _timer?.Dispose();
+            _timer = null;
             return base.Stop(token);
         }
 
