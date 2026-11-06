@@ -62,7 +62,7 @@ stages:
           dockerize: true
           outputdirectory: '$(build.artifactstagingdirectory)'
 
-      - task: AutomaticaCoreDockerMultiArchCli@7
+      - task: AutomaticaCoreDockerMultiArchCli@9
         displayName: Docker modbus multi-arch
         inputs:
           dockerRegistryEndpoint: 'DockerHub'
@@ -128,7 +128,7 @@ stages:
           dockerize: true
           outputdirectory: '$(build.artifactstagingdirectory)'
 
-      - task: AutomaticaCoreDockerMultiArchCli@7
+      - task: AutomaticaCoreDockerMultiArchCli@9
         displayName: Docker solarman multi-arch
         inputs:
           dockerRegistryEndpoint: 'DockerHub'

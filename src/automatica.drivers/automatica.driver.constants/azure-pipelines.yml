@@ -52,7 +52,7 @@ steps:
     dockerize: true
     outputdirectory: '$(build.artifactstagingdirectory)'
 
-- task: AutomaticaCoreDockerMultiArchCli@7
+- task: AutomaticaCoreDockerMultiArchCli@9
   displayName: Docker multi-arch
   inputs:
     dockerRegistryEndpoint: 'DockerHub'
