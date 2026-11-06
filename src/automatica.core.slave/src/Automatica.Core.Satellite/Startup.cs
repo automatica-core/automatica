@@ -1,59 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Security.Claims;
-using Automatica.Core.Satellite.Abstraction.Config;
+using System.Threading.RateLimiting;
 using Automatica.Core.Satellite.Abstraction.Model;
 using Automatica.Core.Satellite.Runtime;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Automatica.Core.Satellite
 {
     public static class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public static void ConfigureServices(IServiceCollection services)
+        private const string Issuer = "automatica-satellite";
+        private const string LoginRateLimit = "login";
+
+        private static readonly object SetupLock = new();
+        private static string _setupToken;
+        private static byte[] _jwtKey;
+
+        public static void ConfigureServices(IServiceCollection services, IHostEnvironment environment)
         {
             services.AddSingleton<SatelliteRuntime, SatelliteRuntime>();
             services.AddSingleton<IHostedService>(provider => provider.GetService<SatelliteRuntime>());
 
-            var configurationBuilder = new ConfigurationBuilder();
-            var configuration = configurationBuilder.Add<WritableJsonConfigurationSource>(
-                (Action<WritableJsonConfigurationSource>)(s =>
-                {
-                    s.FileProvider = null;
-                    s.Path = Debugger.IsAttached ? "appsettings.Development.json" : "appsettings.json";
-                    s.Optional = false;
-                    s.ReloadOnChange = true;
-                    s.ResolveFileProvider();
-                })).Build();
-
-
-            var satelliteId = configuration["SatelliteId"];
-            Guid satelliteGuid;
-
-            if (String.IsNullOrEmpty(satelliteId))
-            {
-                satelliteGuid = Guid.NewGuid();
-                configuration["SatelliteId"] = satelliteGuid.ToString();
-            }
-            else
-            {
-                satelliteGuid = Guid.Parse(satelliteId);
-            }
+            // random per-install key (the satellite id used before is not secret)
+            _jwtKey = SatelliteSecrets.GetJwtKey();
 
             services.AddAuthentication(options =>
                 {
@@ -67,9 +50,13 @@ namespace Automatica.Core.Satellite
                     config.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(satelliteGuid.ToByteArray()),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
+                        IssuerSigningKey = new SymmetricSecurityKey(_jwtKey),
+                        ValidateIssuer = true,
+                        ValidIssuer = Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = Issuer,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(1)
                     };
                 });
 
@@ -80,12 +67,32 @@ namespace Automatica.Core.Satellite
                         .RequireRole("admin")
                         .RequireClaim("scope", "admin"));
 
+            // login and setup: 5 attempts per minute and client address
+            services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.AddPolicy(LoginRateLimit, context => RateLimitPartition.GetFixedWindowLimiter(
+                    context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueLimit = 0
+                    }));
+            });
 
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            if (environment.IsDevelopment())
+            {
+                services.AddEndpointsApiExplorer();
+                services.AddSwaggerGen();
+            }
 
             services.AddControllers();
+        }
 
+        private static bool IsSetUp(IConfiguration configuration)
+        {
+            return !String.IsNullOrEmpty(configuration["user"]) && !String.IsNullOrEmpty(configuration["password"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,6 +101,8 @@ namespace Automatica.Core.Satellite
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             string wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "wwwroot");
@@ -102,42 +111,53 @@ namespace Automatica.Core.Satellite
                 wwwrootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
-
+            app.UseRateLimiter();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapGet("/webapi/ready", () =>
+            if (!IsSetUp(app.Configuration))
             {
-                var user = app.Configuration["user"];
-                var password = app.Configuration["password"];
+                // only who can read the satellite's console/log can create the admin account
+                _setupToken = UserAuthData.GenerateToken(18);
+                var message = $"No satellite user configured. Setup token for the first login: {_setupToken}";
+                Console.WriteLine(message);
+                app.Logger.LogWarning(message);
+            }
 
-                if (String.IsNullOrEmpty(user) || String.IsNullOrEmpty(password))
-                {
-                    return Results.Ok(new { Ready = false});
-                }
-                return Results.Ok(new { Ready = true });
-            });
+            app.MapGet("/webapi/ready", () => Results.Ok(new { Ready = IsSetUp(app.Configuration) }));
 
             app.MapPost("/webapi/setup", ([FromBody] UserAuthData authData) =>
             {
-                if (authData == null || String.IsNullOrEmpty(authData.Username) ||
-                    String.IsNullOrEmpty(authData.Password))
+                if (authData == null || String.IsNullOrEmpty(authData.Username) || String.IsNullOrEmpty(authData.Password))
                 {
                     return Results.BadRequest();
                 }
+                if (authData.Password.Length < UserAuthData.MinimumPasswordLength)
+                {
+                    return Results.BadRequest($"The password needs at least {UserAuthData.MinimumPasswordLength} characters");
+                }
 
-                app.Configuration["user"] = authData.Username;
-                var salt = UserAuthData.GenerateNewSalt();
+                lock (SetupLock)
+                {
+                    // setup works exactly once: while no user exists, and only with the token from the log
+                    if (IsSetUp(app.Configuration) || _setupToken == null)
+                    {
+                        return Results.Conflict();
+                    }
+                    if (!UserAuthData.FixedTimeEquals(authData.SetupToken?.Trim(), _setupToken))
+                    {
+                        return Results.Unauthorized();
+                    }
 
-                app.Configuration["salt"] = salt;
-                var hash = UserAuthData.HashPassword(authData.Password, salt);
+                    app.Configuration["user"] = authData.Username;
+                    app.Configuration["salt"] = "";
+                    app.Configuration["password"] = UserAuthData.HashPassword(authData.Password);
+                    _setupToken = null;
+                }
 
-                app.Configuration["password"] = hash;
-
+                app.Logger.LogInformation($"Satellite user {authData.Username} created");
                 return Results.NoContent();
-            });
+            }).RequireRateLimiting(LoginRateLimit);
 
             app.MapPost("/webapi/login", ([FromBody] UserAuthData authData) =>
             {
@@ -155,41 +175,43 @@ namespace Automatica.Core.Satellite
                     return Results.BadRequest();
                 }
 
-                if (authData.Username != user)
+                // the hash is always computed, so a wrong user name takes as long as a wrong password
+                var passwordOk = UserAuthData.VerifyPassword(authData.Password, password, app.Configuration["salt"], out var needsRehash);
+                var userOk = UserAuthData.FixedTimeEquals(authData.Username, user);
+
+                if (!passwordOk || !userOk)
                 {
                     return Results.BadRequest();
                 }
 
-                var salt = app.Configuration["salt"];
-                var hash = UserAuthData.HashPassword(authData.Password, salt);
-
-                if (hash != password)
+                if (needsRehash)
                 {
-                    return Results.BadRequest();
+                    app.Configuration["password"] = UserAuthData.HashPassword(authData.Password);
+                    app.Configuration["salt"] = "";
                 }
 
                 var claimsIdentity = new ClaimsIdentity(new List<Claim>
                 {
                     new(ClaimTypes.Role, "admin"),
-                    new (ClaimTypes.NameIdentifier, authData.Username),
-                    new (ClaimTypes.Name, authData.Username)
+                    new (ClaimTypes.NameIdentifier, user),
+                    new (ClaimTypes.Name, user)
                 });
 
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Guid.Parse(app.Configuration["SatelliteId"]!).ToByteArray();
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = claimsIdentity,
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    Issuer = Issuer,
+                    Audience = Issuer,
+                    Expires = DateTime.UtcNow.AddHours(12),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_jwtKey),
                         SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var userToken = tokenHandler.WriteToken(token);
 
-
                 return Results.Ok(userToken);
-            });
+            }).RequireRateLimiting(LoginRateLimit);
 
             app.MapGet("/webapi/user", [Authorize] (ClaimsPrincipal user) =>
             {
@@ -201,22 +223,52 @@ namespace Automatica.Core.Satellite
                 return Results.Ok(new { user = user.Identity.Name });
             });
 
+            // the broker key is write-only
             app.MapGet("/webapi/config", [Authorize] () => new Config
             {
                 ServerUrl = app.Configuration["server:master"],
                 ClientId = app.Configuration["server:clientId"],
-                ClientKey = app.Configuration["server:clientKey"],
+                ClientKey = null,
+                HasClientKey = !String.IsNullOrEmpty(app.Configuration["server:clientKey"]),
                 DockerTag = app.Configuration["server:dockerTag"],
-                Port = Convert.ToInt32(app.Configuration["server:port"])
+                Port = Int32.TryParse(app.Configuration["server:port"], out var port) ? port : 0,
+                UseTls = Boolean.TryParse(app.Configuration["server:useTls"], out var useTls) ? useTls : null,
+                TlsPort = Int32.TryParse(app.Configuration["server:tlsPort"], out var tlsPort) ? tlsPort : 8883,
+                TlsFingerprint = app.Configuration["server:tlsFingerprint"]
             });
 
             app.MapPost("/webapi/config", [Authorize] async ([FromBody] Config config) =>
             {
+                if (config == null)
+                {
+                    return Results.BadRequest();
+                }
+                if (!String.IsNullOrEmpty(config.ClientKey) && config.ClientKey.Length < 16)
+                {
+                    return Results.BadRequest("The client key needs at least 16 characters");
+                }
+
+                string fingerprint = null;
+                if (!String.IsNullOrWhiteSpace(config.TlsFingerprint))
+                {
+                    fingerprint = SatelliteRuntime.NormalizeFingerprint(config.TlsFingerprint);
+                    if (fingerprint == null)
+                    {
+                        return Results.BadRequest("The fingerprint must be a SHA-256 hash (64 hex characters)");
+                    }
+                }
+
                 app.Configuration["server:master"] = config.ServerUrl;
                 app.Configuration["server:clientId"] = config.ClientId;
-                app.Configuration["server:clientKey"] = config.ClientKey;
+                if (!String.IsNullOrEmpty(config.ClientKey))
+                {
+                    app.Configuration["server:clientKey"] = config.ClientKey;
+                }
                 app.Configuration["server:dockerTag"] = config.DockerTag;
                 app.Configuration["server:port"] = config.Port.ToString();
+                app.Configuration["server:useTls"] = config.UseTls?.ToString().ToLowerInvariant();
+                app.Configuration["server:tlsPort"] = (config.TlsPort > 0 ? config.TlsPort : 8883).ToString();
+                app.Configuration["server:tlsFingerprint"] = fingerprint;
 
                 var satelliteRuntime = app.Services.GetRequiredService<SatelliteRuntime>();
                 await satelliteRuntime.Restart();
@@ -241,7 +293,8 @@ namespace Automatica.Core.Satellite
                 await next();
                 if (context.Response.StatusCode == 404 &&
                     !Path.HasExtension(context.Request.Path.Value) &&
-                    !context.Request.Path.Value.StartsWith("/api/"))
+                    !context.Request.Path.Value.StartsWith("/api/") &&
+                    !context.Request.Path.Value.StartsWith("/webapi/"))
                 {
                     context.Request.Path = "/index.html";
                     await next();

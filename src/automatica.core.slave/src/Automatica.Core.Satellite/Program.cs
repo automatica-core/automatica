@@ -75,9 +75,18 @@ namespace Automatica.Core.Satellite
                     ? 5005
                     : Convert.ToInt32(builder.Configuration["localPort"]);
                 serverOptions.ListenAnyIP(webPort);
+
+                // https with a per-install self-signed certificate; "localHttpsPort": 0 turns it off
+                var localHttpsPort = builder.Configuration["localHttpsPort"];
+                var httpsPort = String.IsNullOrEmpty(localHttpsPort) ? 5443 : Convert.ToInt32(localHttpsPort);
+                if (httpsPort > 0 && httpsPort != webPort)
+                {
+                    var certificate = SatelliteSecrets.GetCertificate();
+                    serverOptions.ListenAnyIP(httpsPort, listen => listen.UseHttps(certificate));
+                }
             });
 
-            Startup.ConfigureServices(builder.Services);
+            Startup.ConfigureServices(builder.Services, builder.Environment);
             var app = builder.Build();
             Startup.Configure(app);
 
