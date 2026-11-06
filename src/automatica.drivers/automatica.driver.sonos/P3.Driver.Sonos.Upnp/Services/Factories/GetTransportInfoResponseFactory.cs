@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Upnp.Services.Models;
 
 namespace P3.Driver.Sonos.Upnp.Services.Factories
@@ -8,7 +9,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
     {
         public GetTransportInfoResponse CreateFor(XNamespace actionXNamespace, string xml)
         {
-            XElement element = XElement.Parse(xml);
+            XElement element = SafeXml.ParseElement(xml);
 
             var responseNode = element.Descendants(actionXNamespace + "GetTransportInfoResponse").First();
 

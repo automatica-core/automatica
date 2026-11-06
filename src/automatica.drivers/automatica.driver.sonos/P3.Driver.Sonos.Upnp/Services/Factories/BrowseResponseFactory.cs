@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Upnp.Services.Models;
 
 namespace P3.Driver.Sonos.Upnp.Services.Factories
@@ -10,7 +11,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
     {
         public BrowseResponse CreateFor(string actionXNamespace, string xml)
         {
-            var xElement = XDocument.Parse(xml);
+            var xElement = SafeXml.ParseDocument(xml);
 
             var browseResponseElement = xElement.Descendants(XName.Get("BrowseResponse", actionXNamespace)).First();
 
@@ -30,7 +31,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
 
             if ((browseResponse.NumberReturned > 0) && (didlElement != null))
             {
-                IEnumerable<XElement> itemElements = XElement.Parse(didlElement).Elements();
+                IEnumerable<XElement> itemElements = SafeXml.ParseElement(didlElement).Elements();
 
                 foreach (var itemElement in itemElements)
                 {

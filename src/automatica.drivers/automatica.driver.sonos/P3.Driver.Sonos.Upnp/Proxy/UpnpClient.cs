@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Upnp.Proxy.Soap;
 
 namespace P3.Driver.Sonos.Upnp.Proxy
@@ -52,7 +53,7 @@ namespace P3.Driver.Sonos.Upnp.Proxy
         {
             string result = await InvokeFuncWithResultAsync(actionName, upnpArgs);
 
-            var singleResult = ((XElement)((XElement)((XElement)XElement.Parse(result).FirstNode).FirstNode).FirstNode).Value;
+            var singleResult = ((XElement)((XElement)((XElement)SafeXml.ParseElement(result).FirstNode).FirstNode).FirstNode).Value;
 
             return (T)Convert.ChangeType(singleResult, typeof(T), CultureInfo.CurrentCulture);
         }

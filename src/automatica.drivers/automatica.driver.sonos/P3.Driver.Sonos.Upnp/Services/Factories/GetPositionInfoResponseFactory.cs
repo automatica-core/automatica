@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Upnp.Services.Models;
 
 namespace P3.Driver.Sonos.Upnp.Services.Factories
@@ -9,7 +10,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
     {
         public GetPositionInfoResponse CreateFor(XNamespace actionXNamespace, string xml)
         {
-            XElement element = XElement.Parse(xml);
+            XElement element = SafeXml.ParseElement(xml);
 
             var responseNode = element.Descendants(actionXNamespace + "GetPositionInfoResponse").First();
 
@@ -50,7 +51,7 @@ namespace P3.Driver.Sonos.Upnp.Services.Factories
                 return CreateTvTrackMetaData();
             }
             
-            XElement didlElement = XElement.Parse(trackMetaDataRaw).FirstNode as XElement;
+            XElement didlElement = SafeXml.ParseElement(trackMetaDataRaw).FirstNode as XElement;
             XElement resElement = didlElement?.FirstNode as XElement;
 
             var trackMetaData = new TrackMetaData

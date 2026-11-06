@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
+using P3.Driver.Sonos.Upnp;
 using P3.Driver.Sonos.Models;
 
 namespace P3.Driver.Sonos.Device
@@ -10,7 +11,7 @@ namespace P3.Driver.Sonos.Device
 
         public SonosDevice CreateFor(string ipAddress, string xml)
         {
-            var xDoc = XDocument.Parse(xml);
+            var xDoc = SafeXml.ParseDocument(xml);
 
             return new SonosDevice(ipAddress)
             {
