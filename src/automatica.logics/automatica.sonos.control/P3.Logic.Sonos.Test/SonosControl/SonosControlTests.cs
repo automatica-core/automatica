@@ -157,6 +157,52 @@ public class SonosControlTests : LogicTest<SonosControlLogicFactory>
         AssertInternal(values, SonosControlLogicFactory.PauseOutputStatus, true);
     }
 
+    [Fact]
+    public async Task Volume_IsClampedToMaxVolume()
+    {
+        await Context.Dispatcher.ClearValues();
+        await Context.Dispatcher.ClearRegistrations();
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.MaxVolume), 30);
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.Volume), 80);
+        var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+        AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus, Convert.ToInt64(30));
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayPauseTrigger), true);
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.Volume), 29);
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.VolumeIncrement), true);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+        // the max itself is reachable
+        AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus, Convert.ToInt64(30));
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.VolumeIncrement), true);
+        values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+        AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus, Convert.ToInt64(30));
+    }
+
+    [Fact]
+    public async Task PlaySound_RestoresPreviousMediaUrl()
+    {
+        await Context.Dispatcher.ClearValues();
+        await Context.Dispatcher.ClearRegistrations();
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlaySoundDuration), 10);
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlaySoundCount), 1);
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayPauseTrigger), true);
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.Volume), 20);
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayMediaUrl), "x-rincon-mp3radio://station");
+
+        LogicInputChanged(GetLogicInterfaceByTemplate(SonosControlLogicFactory.PlayMediaUrlAndStart), "http://host/doorbell.mp3");
+
+        await Task.Delay(500);
+
+        var values = Context.Dispatcher.GetValues(DispatchableType.RuleInstance);
+        AssertInternal(values, SonosControlLogicFactory.PlayMediaUrlOutput, "x-rincon-mp3radio://station");
+        AssertInternal(values, SonosControlLogicFactory.VolumeOutputStatus, Convert.ToInt64(20));
+    }
+
     private void AssertInternal(IDictionary<Guid, DispatchValue> values, Guid guid, object value)
     {
         Assert.Equal(value, values[guid].Value);
