@@ -102,7 +102,7 @@ namespace P3.Driver.VkingBms.Driver
 
             if (expectedCrc != crc)
             {
-                throw new ArgumentException("Invalid crc...");
+                throw new InvalidCrcException($"Invalid crc, expected {expectedCrc} got {crc}");
             }
 
             return retArray;

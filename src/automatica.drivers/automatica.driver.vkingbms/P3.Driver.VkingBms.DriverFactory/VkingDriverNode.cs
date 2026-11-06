@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -8,6 +9,8 @@ using P3.Driver.VkingBms.Driver;
 using P3.Driver.VkingBms.Driver.Exception;
 using P3.Driver.VkingBms.DriverFactory.Nodes;
 using Timer = System.Threading.Timer;
+
+[assembly: InternalsVisibleTo("P3.Driver.VkingBms.Tests")]
 
 namespace P3.Driver.VkingBms.DriverFactory
 {
@@ -38,7 +41,17 @@ namespace P3.Driver.VkingBms.DriverFactory
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
-            _driver.Open();
+            _stopped = false;
+            try
+            {
+                _driver.Open();
+            }
+            catch (Exception e)
+            {
+                // the poll timer reopens the port, a missing port at startup must not stop polling forever
+                DriverContext.Logger.LogError(e, $"Could not open port {_port}, retry on next poll...");
+            }
+
             _timer?.Dispose(); // Start may be retried, never keep a second timer running
             _timer = new Timer(ReadPacks, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
             return await base.Start(token);
@@ -134,6 +147,7 @@ namespace P3.Driver.VkingBms.DriverFactory
                     }
                     catch (DataReadException ex)
                     {
+                        // includes InvalidCrcException, a broken frame of one pack must not abort the other packs
                         DriverContext.Logger.LogError(ex, $"Error reading pack {pack.PackId}...{ex}");
                     }
                 }
