@@ -58,7 +58,7 @@ namespace P3.Driver.FroniusSolarFactory.Categories
                         attr.DispatchRead(data?.Body.Data.FanFrontLeftSpeed?.Value ?? 0);
                         break;
                     case "fan-front-right-speed":
-                        attr.DispatchRead(data?.Body.Data.FanBackRightSpeed?.Value ?? 0);
+                        attr.DispatchRead(data?.Body.Data.FanFrontRightSpeed?.Value ?? 0);
                         break;
                     case "fan-back-left-speed":
                         attr.DispatchRead(data?.Body.Data.FanBackLeftSpeed?.Value ?? 0);

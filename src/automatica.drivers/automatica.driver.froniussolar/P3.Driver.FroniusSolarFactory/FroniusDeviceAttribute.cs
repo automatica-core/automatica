@@ -77,6 +77,15 @@ namespace P3.Driver.FroniusSolarFactory
             return base.Start(token);
         }
 
+        public override Task<bool> Stop(CancellationToken token = default)
+        {
+            // the timer instance is reused on a restart, so only stop it and remove the handler (Start adds it again)
+            _pollTimer.Stop();
+            _pollTimer.Elapsed -= PollTimerOnElapsed;
+
+            return base.Stop(token);
+        }
+
         private async Task PollAll()
         {
             if (_waitSemaphore.CurrentCount == 0)
