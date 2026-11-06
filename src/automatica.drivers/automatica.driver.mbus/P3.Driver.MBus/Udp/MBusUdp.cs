@@ -126,7 +126,7 @@ namespace P3.Driver.MBus.Udp
 
         public override bool Close()
         {
-            _udpClient.Close();
+            _udpClient?.Close();
             _udpClient = null;
             return true;
         }

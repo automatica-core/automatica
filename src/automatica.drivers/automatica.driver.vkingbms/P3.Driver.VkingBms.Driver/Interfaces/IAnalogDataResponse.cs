@@ -5,7 +5,7 @@
         public byte Address { get; }
         public ushort[] CellVoltages { get; }
 
-        public ushort[] Temperatures { get; }
+        public short[] Temperatures { get; }
 
         public short Current { get; }
         public ushort Voltage { get; }

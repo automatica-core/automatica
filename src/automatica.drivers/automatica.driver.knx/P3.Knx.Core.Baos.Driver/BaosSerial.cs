@@ -111,37 +111,44 @@ namespace P3.Knx.Core.Baos.Driver
 
         private async void _stream_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            if (!_eventHandling)
+            try
             {
-                return;
-            }
-
-            var frame = await ReadFrame();
-
-            if (frame != null)
-            {
-
-                if (frame is LongFrame longFrame)
+                if (!_eventHandling)
                 {
-                    if (frame.UserData.ToArray()[1] == 0xC1 || frame.UserData.ToArray()[1] == 0x85)
+                    return;
+                }
+
+                var frame = await ReadFrame();
+
+                if (frame != null)
+                {
+
+                    if (frame is LongFrame longFrame)
                     {
-                        Logger.LogDebug($"DatapointValue.Ind");
+                        if (frame.UserData.ToArray()[1] == 0xC1 || frame.UserData.ToArray()[1] == 0x85)
+                        {
+                            Logger.LogDebug($"DatapointValue.Ind");
 
-                        var data = BaosDriver.ParseDatapointValues(longFrame);
-                        await Driver.DataPointInd(data);
+                            var data = BaosDriver.ParseDatapointValues(longFrame);
+                            await Driver.DataPointInd(data);
+                        }
                     }
-                }
-                else if (frame is ShortFrame)
-                {
-                    await SendResetFrame();
-                }
+                    else if (frame is ShortFrame)
+                    {
+                        await SendResetFrame();
+                    }
 
-                Logger.LogDebug($"End read frame from event handler...{frame.GetType()}");
-                Logger.LogHexIn(frame.ToByteFrame());
+                    Logger.LogDebug($"End read frame from event handler...{frame.GetType()}");
+                    Logger.LogHexIn(frame.ToByteFrame());
+                }
+                else
+                {
+                    Logger.LogDebug($"End read frame from event handler...");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Logger.LogDebug($"End read frame from event handler...");
+                Logger.LogError(ex, $"Error handling BAOS data received event {ex}");
             }
         }
 

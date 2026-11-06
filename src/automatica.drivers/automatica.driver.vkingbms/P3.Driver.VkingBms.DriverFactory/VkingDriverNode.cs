@@ -20,6 +20,8 @@ namespace P3.Driver.VkingBms.DriverFactory
         private int _opCancelledCounter = 0;
 
         private readonly SemaphoreSlim _semaphore = new(1);
+        private readonly object _openLock = new();
+        private volatile bool _stopped;
 
         public VkingDriverNode(IDriverContext driverContext) : base(driverContext)
         {
@@ -37,39 +39,79 @@ namespace P3.Driver.VkingBms.DriverFactory
         public override async Task<bool> Start(CancellationToken token = default)
         {
             _driver.Open();
+            _timer?.Dispose(); // Start may be retried, never keep a second timer running
             _timer = new Timer(ReadPacks, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
             return await base.Start(token);
         }
 
         public override Task<bool> Stop(CancellationToken token = default)
         {
-            _timer?.Dispose();
-            _driver?.Close();
-            return base.Stop(token); 
+            lock (_openLock)
+            {
+                _stopped = true;
+                _timer?.Dispose();
+                try
+                {
+                    _driver?.Close();
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError(e, $"Could not close port {_port}...{e}");
+                }
+            }
+            return base.Stop(token);
         }
 
         private void ReOpen()
         {
-            _driver.Close();
-            _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
-            try
+            lock (_openLock)
             {
-                _driver.Open();
-            }
-            catch
-            {
-                //ignore, timer will recall it anyway
+                // a read that was in flight during Stop must not reopen the port
+                if (_stopped)
+                {
+                    return;
+                }
+
+                try
+                {
+                    _driver.Close();
+                }
+                catch
+                {
+                    //ignore, we create a new instance anyway
+                }
+
+                _driver = new VkingDriver(_port, TelegramMonitor, DriverContext.Logger);
+                try
+                {
+                    _driver.Open();
+                }
+                catch
+                {
+                    //ignore, timer will recall it anyway
+                }
             }
         }
 
         private async void ReadPacks(object state)
         {
+            if (_stopped)
+            {
+                return;
+            }
 
+            var acquired = false;
             try
             {
+                // skip this tick if the previous read is still running, ticks must not pile up
+                acquired = await _semaphore.WaitAsync(TimeSpan.Zero);
+                if (!acquired)
+                {
+                    return;
+                }
+
                 DriverContext.Logger.LogInformation("Start read...");
-                var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
-                await _semaphore.WaitAsync(cancellationTokenSource.Token);
+                using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(10));
                 if (!_driver.IsOpen)
                 {
                     ReOpen();
@@ -77,6 +119,11 @@ namespace P3.Driver.VkingBms.DriverFactory
 
                 foreach (var pack in _packs)
                 {
+                    if (_stopped)
+                    {
+                        return;
+                    }
+
                     try
                     {
                         var version = await _driver.ReadVersionInfo(pack.PackId, cancellationTokenSource.Token);
@@ -109,8 +156,11 @@ namespace P3.Driver.VkingBms.DriverFactory
             }
             finally
             {
-                DriverContext.Logger.LogInformation("Done read...");
-                _semaphore.Release();
+                if (acquired)
+                {
+                    DriverContext.Logger.LogInformation("Done read...");
+                    _semaphore.Release();
+                }
             }
         }
 

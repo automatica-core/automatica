@@ -14,19 +14,25 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 {
     internal abstract class CoinNode(IDriverContext driverContext) : DriverNoneAttributeBase(driverContext)
     {
+        // one client for all coin nodes and driver instances, so reloads don't leak sockets
+        protected static readonly HttpClient SharedClient = new HttpClient(new SocketsHttpHandler
+        {
+            PooledConnectionLifetime = TimeSpan.FromMinutes(5)
+        })
+        {
+            Timeout = TimeSpan.FromSeconds(5)
+        };
+
         internal abstract Task Refresh(CancellationToken token = default);
     }
 
 
     internal abstract class CoinNode<T> : CoinNode where  T : CoinValueNode
     {
-        private readonly HttpClient _client;
         private readonly List<T> _nodes = new();
 
         protected CoinNode(IDriverContext driverContext) : base(driverContext)
         {
-            _client = new HttpClient();
-            _client.Timeout = TimeSpan.FromSeconds(5);
         }
         internal void AddNode(T node)
         {
@@ -42,7 +48,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         {
             try
             {
-                using var response = await _client.GetAsync(GetUrl(), token);
+                using var response = await SharedClient.GetAsync(GetUrl(), token);
                 response.EnsureSuccessStatusCode();
 
                 var res = await response.Content.ReadAsStringAsync(token);

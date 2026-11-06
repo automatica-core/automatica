@@ -6,7 +6,7 @@ namespace P3.Driver.VkingBms.Driver.Data
     {
         public byte Address { get; private set; }
         public ushort[] CellVoltages { get; private set; } = Array.Empty<ushort>();
-        public ushort[] Temperatures { get; private set; } = Array.Empty<ushort>();
+        public short[] Temperatures { get; private set; } = Array.Empty<short>();
         public short Current { get; private set; }
         public ushort Voltage { get; private set; }
         public ushort RemainingCapacity { get; private set; }
@@ -35,12 +35,13 @@ namespace P3.Driver.VkingBms.Driver.Data
                 CellVoltages[index4] = Util.GetUShort(data, index);
                 index += 4;
             }
-            Temperatures = new ushort[Util.GetByte(data, index)];
+            Temperatures = new short[Util.GetByte(data, index)];
             index += 2;
 
             for (int index6 = 0; index6 < Temperatures.Length; ++index6)
             {
-                Temperatures[index6] = (ushort)(Util.GetUShort(data, index) - 40U);
+                // signed, values below 0 °C must not wrap around
+                Temperatures[index6] = (short)(Util.GetUShort(data, index) - 40);
                 index += 4;
             }
 

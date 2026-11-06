@@ -17,6 +17,12 @@ namespace P3.PixooSharp
 
         private Rgb[] _buffer;
 
+        // one shared client for all commands, a new HttpClient per command exhausts sockets over time
+        private static readonly HttpClient HttpClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(1)
+        };
+
         public Pixoo64(string address, int size, bool debug = false, int pushCount = 50)
         {
             _url = string.Format("http://{0}/post", address);
@@ -240,13 +246,10 @@ namespace P3.PixooSharp
                 Console.WriteLine(jsonPayload);
             }
 
-            using var httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromSeconds(1);
-            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(_url, content);
+            using var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+            using var response = await HttpClient.PostAsync(_url, content);
             if (response.IsSuccessStatusCode)
             {
-                var result = response.Content.ReadAsStringAsync();
                 _pushCount++;
             }
             else

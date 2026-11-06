@@ -67,7 +67,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetVolumeAsync(int volume, string channel = "Master")
         {
-            await _upnpClient.InvokeActionAsync("SetVolume", new List<UpnpArgument>
+            using var response = await _upnpClient.InvokeActionAsync("SetVolume", new List<UpnpArgument>
             {
                 new UpnpArgument("Channel", channel),
                 new UpnpArgument("DesiredVolume", volume)
@@ -76,7 +76,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetMuteAsync(bool mute, string channel = "Master")
         {
-            await _upnpClient.InvokeActionAsync("SetMute", new List<UpnpArgument>
+            using var response = await _upnpClient.InvokeActionAsync("SetMute", new List<UpnpArgument>
             {
                 new UpnpArgument("Channel", channel),
                 new UpnpArgument("DesiredMute", mute)
@@ -85,7 +85,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetLoudnessAsync(bool loudness, string channel = "Master")
         {
-            await _upnpClient.InvokeActionAsync("SetLoudness", new List<UpnpArgument>
+            using var response = await _upnpClient.InvokeActionAsync("SetLoudness", new List<UpnpArgument>
             {
                 new UpnpArgument("Channel", channel),
                 new UpnpArgument("DesiredLoudness", loudness)
@@ -94,7 +94,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetBassAsync(int bass)
         {
-            await _upnpClient.InvokeActionAsync("SetBass", new List<UpnpArgument>
+            using var response = await _upnpClient.InvokeActionAsync("SetBass", new List<UpnpArgument>
             {
                 new UpnpArgument("DesiredBass", bass)
             });
@@ -102,7 +102,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task SetTrebleAsync(int treble)
         {
-            await _upnpClient.InvokeActionAsync("SetTreble", new List<UpnpArgument>
+            using var response = await _upnpClient.InvokeActionAsync("SetTreble", new List<UpnpArgument>
             {
                 new UpnpArgument("DesiredTreble", treble)
             });
@@ -124,7 +124,7 @@ namespace P3.Driver.Sonos.Upnp.Services
         {
             // Only relevant for Soundbar
 
-            await _upnpClient.InvokeActionAsync("SetEQ", new List<UpnpArgument>
+            using var response = await _upnpClient.InvokeActionAsync("SetEQ", new List<UpnpArgument>
             {
                 new UpnpArgument("EQType", eqType.ToString()),
                 new UpnpArgument("DesiredValue", value.ToInt())

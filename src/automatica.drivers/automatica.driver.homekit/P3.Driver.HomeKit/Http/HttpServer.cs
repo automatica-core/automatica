@@ -38,7 +38,12 @@ namespace P3.Driver.HomeKit.Http
 
         public HapSession GetClientSession(string clientUserName)
         {
-            var connections = _connections.Where(a => a.Session != null &&  a.Session.ClientUsername == clientUserName);
+            HttpServerConnection[] snapshot;
+            lock (_connections)
+            {
+                snapshot = _connections.ToArray();
+            }
+            var connections = snapshot.Where(a => a.Session != null &&  a.Session.ClientUsername == clientUserName);
             var session = connections.FirstOrDefault(a => a.Session != null && a.Session.Client.Connected);
             return session?.Session;
         }
@@ -61,14 +66,45 @@ namespace P3.Driver.HomeKit.Http
                         _logger.LogDebug("Waiting for new tcp connection");
                         var tcpClient = await _listener.AcceptTcpClientAsync(_cts.Token);
 
-                        _logger.LogDebug(
-                            $"New tcp connection from {((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address}");
+                        try
+                        {
+                            _logger.LogDebug(
+                                $"New tcp connection from {(tcpClient.Client.RemoteEndPoint as IPEndPoint)?.Address}");
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogWarning(e, "Could not read remote endpoint of new tcp connection");
+                        }
 
+                        var token = _cts.Token;
                         ThreadPool.QueueUserWorkItem(async state =>
                         {
-                            var connection = new HttpServerConnection(_middleware, _logger, (TcpClient)state, this);
-                            _connections.Add(connection);
-                            await connection.HandleClient(_cts.Token).ConfigureAwait(false);
+                            HttpServerConnection connection = null;
+                            try
+                            {
+                                connection = new HttpServerConnection(_middleware, _logger, (TcpClient)state, this);
+                                lock (_connections)
+                                {
+                                    _connections.Add(connection);
+                                }
+                                await connection.HandleClient(token).ConfigureAwait(false);
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.LogError(e, "Error handling http client");
+                            }
+                            finally
+                            {
+                                if (connection != null)
+                                {
+                                    connection.Close();
+                                    ConnectionClosed(connection);
+                                }
+                                else
+                                {
+                                    ((TcpClient)state).Dispose();
+                                }
+                            }
                         }, tcpClient);
                     }
                 }
@@ -94,18 +130,32 @@ namespace P3.Driver.HomeKit.Http
 
         internal void ConnectionClosed(HttpServerConnection connection)
         {
-            _logger.LogDebug($"Closed connection from {connection.GetRemoteEndpoint()}");
-            _connections.Remove(connection);
+            bool removed;
+            lock (_connections)
+            {
+                removed = _connections.Remove(connection);
+            }
+
+            if (removed)
+            {
+                _logger.LogDebug($"Closed connection from {connection.GetRemoteEndpoint()}");
+            }
         }
 
         public Task<bool> Stop()
         {
-            foreach (var con in _connections)
+            HttpServerConnection[] connections;
+            lock (_connections)
+            {
+                connections = _connections.ToArray();
+            }
+
+            foreach (var con in connections)
             {
                 con.Close();
             }
 
-            _cts.Cancel();
+            _cts?.Cancel();
 
             _listener?.Stop();
             return Task.FromResult(true);

@@ -24,6 +24,8 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         private readonly SemaphoreSlim _waitSemaphore;
         private CancellationTokenSource _cts;
+        private volatile bool _stopping;
+        private int _pollRunning;
 
         public ModBusMasterDevice(IDriverContext driverContext, IModBusMasterDriver modBusDriver, SemaphoreSlim semaphore) : base(driverContext)
         {
@@ -46,10 +48,12 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         public override Task<bool> Start(CancellationToken token = default)
         {
+            _stopping = false;
+            _cts = new CancellationTokenSource();
+
+            _pollTimer.Elapsed -= PollTimerOnElapsed;
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
-
-            _cts = new CancellationTokenSource();
 
 #pragma warning disable 4014
             PollAttributes();
@@ -59,13 +63,33 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         private async void PollTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            await _waitSemaphore.WaitAsync(_cts.Token);
+            // single-flight: skip this tick if the previous poll of this device is still running
+            if (Interlocked.CompareExchange(ref _pollRunning, 1, 0) != 0)
+            {
+                return;
+            }
+
+            var acquired = false;
             try
             {
-                _cts.Token.ThrowIfCancellationRequested();
+                var cts = _cts;
+                if (_stopping || cts == null)
+                {
+                    return;
+                }
+
+                await _waitSemaphore.WaitAsync(cts.Token);
+                acquired = true;
+
+                cts.Token.ThrowIfCancellationRequested();
 
                 if (!_modBusDriver.Connected)
                 {
+                    if (_stopping)
+                    {
+                        return;
+                    }
+
                     DriverContext.Logger
                         .LogWarning(
                             $"Could not read device {DeviceId}, connection state is false, try to reconnect...");
@@ -81,11 +105,24 @@ namespace P3.Driver.ModBusDriverFactory.Master
             }
             catch (OperationCanceledException)
             {
-                _pollTimer.Dispose();
+                // stopped
+            }
+            catch (ObjectDisposedException)
+            {
+                // stopped
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error polling device {DeviceId} {e}");
             }
             finally
             {
-                _waitSemaphore.Release();
+                if (acquired)
+                {
+                    _waitSemaphore.Release();
+                }
+
+                Interlocked.Exchange(ref _pollRunning, 0);
             }
         }
 
@@ -93,6 +130,11 @@ namespace P3.Driver.ModBusDriverFactory.Master
         {
             foreach (var attribute in Attributes)
             {
+                if (_stopping)
+                {
+                    return;
+                }
+
                 try
                 {
                     if (attribute.DriverContext.NodeInstance.IsReadable)
@@ -104,9 +146,19 @@ namespace P3.Driver.ModBusDriverFactory.Master
                         }
                     }
                 }
+                catch (OperationCanceledException) when (_stopping)
+                {
+                    return;
+                }
                 catch (IOException)
                 {
                     await _modBusDriver.Stop();
+
+                    // do not reopen the connection if the driver is stopping
+                    if (_stopping)
+                    {
+                        return;
+                    }
                     _modBusDriver.Open();
 
                 }
@@ -123,11 +175,15 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         public override async Task<bool> Stop(CancellationToken token = default)
         {
+            _stopping = true;
             _pollTimer.Elapsed -= PollTimerOnElapsed;
             _pollTimer.Dispose();
 
-            await _cts.CancelAsync();
-            
+            if (_cts != null)
+            {
+                await _cts.CancelAsync();
+            }
+
             return await base.Stop(token);
         }
 

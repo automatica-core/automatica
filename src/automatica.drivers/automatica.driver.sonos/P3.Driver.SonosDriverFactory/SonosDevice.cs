@@ -25,6 +25,7 @@ namespace P3.Driver.SonosDriverFactory
         public SonosController Controller => _controller;
         private readonly Timer _readTimer = new Timer();
         private int _errorReadCount = 0;
+        private volatile bool _stopped;
 
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
@@ -39,7 +40,18 @@ namespace P3.Driver.SonosDriverFactory
 
         private async void ReadTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            await Read();
+            try
+            {
+                if (_stopped)
+                {
+                    return;
+                }
+                await Read();
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, "Error reading...");
+            }
         }
 
         protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
@@ -47,7 +59,21 @@ namespace P3.Driver.SonosDriverFactory
             try
             {
                 await _semaphoreSlim.WaitAsync(token);
-                var isPlaying = await _controller.GetIsPlayingAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            try
+            {
+                var controller = _controller;
+                if (controller == null)
+                {
+                    throw new InvalidOperationException($"{Name}: Sonos controller not initialized");
+                }
+
+                var isPlaying = await controller.GetIsPlayingAsync();
 
                 _readTimer.Interval = isPlaying
                     ? TimeSpan.FromSeconds(1).TotalMilliseconds
@@ -65,31 +91,45 @@ namespace P3.Driver.SonosDriverFactory
                 _errorReadCount++;
                 _readTimer.Interval = TimeSpan.FromSeconds(15).TotalMilliseconds;
                 DriverContext.Logger.LogError(ex, "Error reading...");
+
+                if (_errorReadCount >= 10)
+                {
+                    _errorReadCount = 0;
+                    await TryRediscoverDevice();
+                }
                 return false;
             }
             finally
             {
-                if (_errorReadCount >= 10)
-                {
-                    //if we do use a variable ip....
-                    if (_useFixedIp.HasValue && !_useFixedIp.Value)
-                    {
-                        var newDeviceIp = await GetDeviceIp();
-
-                        if (!string.IsNullOrEmpty(newDeviceIp))
-                        {
-                            DriverContext.Logger.LogInformation($"Created a new controller index with ip {newDeviceIp} for device with id {_id}");
-                            _controller = _sonosControllerFactory.Create(newDeviceIp, DriverContext.Logger);
-                        }
-                    }
-                    _errorReadCount = 0;
-                }
-
+                // must never be skipped, otherwise all following reads deadlock
                 _semaphoreSlim.Release();
-
             }
 
             return true;
+        }
+
+        private async Task TryRediscoverDevice()
+        {
+            //if we do use a variable ip....
+            if (_stopped || !_useFixedIp.HasValue || _useFixedIp.Value)
+            {
+                return;
+            }
+
+            try
+            {
+                var newDeviceIp = await GetDeviceIp();
+
+                if (!string.IsNullOrEmpty(newDeviceIp))
+                {
+                    DriverContext.Logger.LogInformation($"Created a new controller index with ip {newDeviceIp} for device with id {_id}");
+                    _controller = _sonosControllerFactory.Create(newDeviceIp, DriverContext.Logger);
+                }
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, $"{Name}: Could not rediscover sonos device with id {_id}..");
+            }
         }
 
         public override Task<bool> Init(CancellationToken token = default)
@@ -148,8 +188,10 @@ namespace P3.Driver.SonosDriverFactory
 
         public override async Task<bool> Stop(CancellationToken token = default)
         {
+            // only stop polling, never send the UPnP transport "Stop" here - a driver reload must not stop the music
+            _stopped = true;
             _readTimer.Stop();
-            await _controller?.StopAsync();
+            _readTimer.Elapsed -= ReadTimerOnElapsed;
             return await base.Stop(token);
         }
 

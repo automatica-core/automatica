@@ -1,7 +1,6 @@
 ﻿using Automatica.Core.Driver;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("P3.Driver.Blockchain.Ticker.Console")]
@@ -11,12 +10,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Bitcoin
     internal class BitcoinNode : CoinNode<BitcoinValueNode>
     {
         private readonly List<BitcoinValueNode> _nodes = new List<BitcoinValueNode>();
-        private readonly HttpClient _client;
 
         public BitcoinNode(IDriverContext driverContext) : base(driverContext)
         {
-            _client = new HttpClient();
-            _client.Timeout = TimeSpan.FromSeconds(5);
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

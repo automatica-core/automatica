@@ -13,6 +13,7 @@ namespace P3.Driver.VkingBms.Driver
         private readonly ITelegramMonitorInstance _monitor;
         private readonly ILogger _logger;
         private readonly SerialPortStream _serialPort;
+        private const int MaxFrameLength = 4096;
 
         public VkingDriver(string port, ITelegramMonitorInstance monitor, ILogger logger)
         {
@@ -28,15 +29,31 @@ namespace P3.Driver.VkingBms.Driver
 
         public void Open()
         {
-            IsOpen = true;
             _serialPort.Open();
+            IsOpen = true;
         }
 
         public void Close()
         {
             IsOpen = false;
+            if (_serialPort.IsDisposed)
+            {
+                return;
+            }
             _serialPort.Close();
             _serialPort.Dispose();
+        }
+
+        private int ReadFrameByte(List<byte> frame, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            var byteValue = _serialPort.ReadByte();
+            if (byteValue < 0 || frame.Count >= MaxFrameLength)
+            {
+                // -1 = read timeout / end of stream, never loop forever
+                throw new DataReadException();
+            }
+            return byteValue;
         }
 
         private async Task<byte[]> ReadData(Command cmd, CancellationToken token)
@@ -51,20 +68,26 @@ namespace P3.Driver.VkingBms.Driver
 
             await _serialPort.WriteAsync(input, 0, input.Length, token);
 
+            // a single read may return less than requested, read until the header is complete
             var header = new byte[13];
-            var read = await _serialPort.ReadAsync(header, token);
-
-            if (read != 13)
+            var read = 0;
+            while (read < header.Length)
             {
-                throw new DataReadException();
+                var r = await _serialPort.ReadAsync(header, read, header.Length - read, token);
+                if (r <= 0)
+                {
+                    // timeout or end of stream
+                    throw new DataReadException();
+                }
+                read += r;
             }
 
             ret.AddRange(header);
-            var byteValue = _serialPort.ReadByte();
+            var byteValue = ReadFrameByte(ret, token);
             ret.Add((byte)byteValue);
             do
             {
-                byteValue = _serialPort.ReadByte();
+                byteValue = ReadFrameByte(ret, token);
                 ret.Add((byte)byteValue);
             } while (byteValue != 13);
 

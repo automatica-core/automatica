@@ -16,7 +16,11 @@ namespace P3.Driver.Sonos.Upnp.Proxy
 
         private string ActionNamespace { get; }
 
-        private static readonly HttpClient HttpClient = new HttpClient();
+        // the sonos device is polled every 1-15 seconds, never wait the default 100 seconds for an answer
+        private static readonly HttpClient HttpClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(5)
+        };
 
         public UpnpClient(Uri upnpUri, string actionNamespace)
         {
@@ -64,7 +68,7 @@ namespace P3.Driver.Sonos.Upnp.Proxy
 
             var content = _upnpRequestContentFactory.CreateFor(soapAction, new UpnpArgumentList(upnpArgs));
             
-            var response = await HttpClient.PostAsync(_upnUri, content);
+            using var response = await HttpClient.PostAsync(_upnUri, content);
 
             var bytes = await response.Content.ReadAsByteArrayAsync();
 

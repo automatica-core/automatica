@@ -100,7 +100,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     responseTlv.AddType(Constants.Proof, StringToByteArray(session.ServerSession.Proof));
 
 
-                    _logger.LogDebug($"return proof {session.ServerSession.Proof}, secret {session.ServerEphemeral.Secret} and state 4");
+                    _logger.LogDebug($"return proof and state 4");
                 }
                 catch(Exception e)
                 {

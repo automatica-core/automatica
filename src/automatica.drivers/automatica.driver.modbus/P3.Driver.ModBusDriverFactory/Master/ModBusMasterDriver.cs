@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,8 +80,36 @@ namespace P3.Driver.ModBusDriverFactory.Master
 
         public override async Task<bool> Stop(CancellationToken token = default)
         {
-            await _modBusDriver.Stop();
-            return await base.Stop(token);
+            // stop the devices first, so no poll reopens the connection after it was closed
+            var ret = await base.Stop(token);
+
+            // wait (bounded) for an in-flight poll to finish before closing the connection
+            var acquired = false;
+            try
+            {
+                acquired = await _waitSemaphore.WaitAsync(TimeSpan.FromSeconds(10), token);
+            }
+            catch (OperationCanceledException)
+            {
+                // ignore, close anyway
+            }
+
+            try
+            {
+                if (_modBusDriver != null)
+                {
+                    await _modBusDriver.Stop();
+                }
+            }
+            finally
+            {
+                if (acquired)
+                {
+                    _waitSemaphore.Release();
+                }
+            }
+
+            return ret;
         }
 
         public override IDriverNode CreateDriverNode(IDriverContext ctx)

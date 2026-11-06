@@ -22,7 +22,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         public async Task RefreshShareIndexAsync()
         {
-            await _upnpClient.InvokeActionAsync("RefreshShareIndex");
+            using var response = await _upnpClient.InvokeActionAsync("RefreshShareIndex");
         }
 
         public async Task<string> GetLastIndexChangeAsync()

@@ -102,7 +102,7 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         public async Task StartConnection(CancellationToken token = default)
         {
             _logger.LogInformation($"Start KNX connection...");
-            _driver.GatewayState.SetGatewayState(false);
+            _driver.GatewayState?.SetGatewayState(false);
             await _semaphore.WaitAsync(token);
             try
             {
@@ -184,41 +184,54 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         private async void _tunneling_ConnectionStateChanged(object sender, EventArgs e)
         {
-            _logger.LogError($"Connection state changed to {_tunneling.ConnectionState}");
+            try
+            {
+                _logger.LogError($"Connection state changed to {_tunneling.ConnectionState}");
 
-            var state = _tunneling.ConnectionState == BusConnectionState.Connected;
-            _driver.GatewayState?.SetGatewayState(state);
+                var state = _tunneling.ConnectionState == BusConnectionState.Connected;
+                _driver.GatewayState?.SetGatewayState(state);
 
-            await _driver.ConnectionStateChanged(_tunneling.ConnectionState);
+                await _driver.ConnectionStateChanged(_tunneling.ConnectionState);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error handling KNX connection state change {ex}");
+            }
         }
 
         private async void _tunneling_GroupMessageReceived(object sender, GroupEventArgs e)
         {
-            _logger.LogDebug($"Datagram on GA {e.DestinationAddress} {e.EventType}");
-
-            if (e.Value is { Value: not null })
+            try
             {
-                await _driver.InternalTelegramMonitorInstance.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress,
-                    e.Value.Value.ToHex(true), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
-            }
+                _logger.LogDebug($"Datagram on GA {e.DestinationAddress} {e.EventType}");
 
-            if (e.EventType == GroupEventType.ValueRead)
-            {
-                var ga = e.DestinationAddress.ToString()!;
-                var retValue = _driver.GetGroupValue(e.DestinationAddress);
-
-                if (retValue != null)
+                if (e.Value is { Value: not null })
                 {
-                    _logger.LogDebug($"Answer read request on GA {e.DestinationAddress}");
+                    await _driver.InternalTelegramMonitorInstance.NotifyTelegram(TelegramDirection.Input, e.SourceAddress, e.DestinationAddress,
+                        e.Value.Value.ToHex(true), Automatica.Core.Driver.Utility.Utils.ByteArrayToString(e.Value.Value.AsSpan()));
+                }
 
-                    await _tunneling.RespondGroupValueAsync(GroupAddress.Parse(ga), retValue);
+                if (e.EventType == GroupEventType.ValueRead)
+                {
+                    var ga = e.DestinationAddress.ToString()!;
+                    var retValue = _driver.GetGroupValue(e.DestinationAddress);
+
+                    if (retValue != null)
+                    {
+                        _logger.LogDebug($"Answer read request on GA {e.DestinationAddress}");
+
+                        await _tunneling.RespondGroupValueAsync(GroupAddress.Parse(ga), retValue);
+                    }
+                }
+                else
+                {
+                    _driver.GroupValueReceived(e);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _driver.GroupValueReceived(e);
+                _logger.LogError(ex, $"Error handling KNX datagram on GA {e?.DestinationAddress} {ex}");
             }
-
         }
 
         public async Task DisposeConnection()

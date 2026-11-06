@@ -17,11 +17,10 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
         private readonly ILogger _logger;
         private readonly TcpListener _listener;
         private readonly List<TcpClient> _connections = new List<TcpClient>();
-        private bool _running = true;
+        private volatile bool _running = true;
 
         private readonly Thread _listenerThread;
         private readonly object _lock = new object();
-        private bool _isClosing;
 
         public ModBusSlaveTcpDriver(ModBusSlaveTcpConfig config, ITelegramMonitorInstance telegramMonitor, ILogger logger) : base(config, telegramMonitor)
         {
@@ -35,21 +34,39 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private void Start()
         {
-            _isClosing  = false;
             ModBus.Logger.LogInformation($"Start tcp listener on port {_config.Port}");
             while (_running)
             {
-                if (_listener.Pending())
+                TcpClient clt = null;
+                try
                 {
-                    var clt = _listener.AcceptTcpClient();
-
-                    var readTask = new Task(async () =>
+                    // Pending/Accept throw once the listener was stopped, never let that escape the listener thread
+                    if (_listener.Pending())
                     {
-                        await WorkOnClient(clt);
+                        clt = _listener.AcceptTcpClient();
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (_running)
+                    {
+                        ModBus.Logger.LogError(e, $"Could not accept tcp client {e}");
+                    }
+                }
 
+                if (clt != null)
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await WorkOnClient(clt);
+                        }
+                        catch (Exception e)
+                        {
+                            ModBus.Logger.LogError(e, $"Error working on tcp client {e}");
+                        }
                     });
-
-                    readTask.Start();
                 }
                 else
                 {
@@ -62,7 +79,28 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         private async Task WorkOnClient(TcpClient client)
         {
-            _connections.Add(client);
+            lock (_connections)
+            {
+                _connections.Add(client);
+            }
+
+            try
+            {
+                await WorkOnClientStream(client);
+            }
+            finally
+            {
+                lock (_connections)
+                {
+                    _connections.Remove(client);
+                }
+
+                client.Dispose();
+            }
+        }
+
+        private async Task WorkOnClientStream(TcpClient client)
+        {
             using (NetworkStream ns = client.GetStream())
             {
                 while (client.Connected)
@@ -71,6 +109,12 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                     {
                         var header = new byte[6];
                         int read = await ns.ReadAsync(header, 0, 6);
+
+                        if (read == 0)
+                        {
+                            // remote side closed the connection
+                            break;
+                        }
 
                         if (read == 6)
                         {
@@ -98,11 +142,6 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
                         break;
                     }
                 }
-            }
-
-            if (!_isClosing)
-            {
-                _connections.Remove(client);
             }
         }
 
@@ -144,13 +183,15 @@ namespace P3.Driver.ModBusDriver.Slave.Tcp
 
         protected override bool CloseConnection()
         {
-            _isClosing = true;
-            foreach (var c in _connections)
-            {
-                c.Close();
-            }
-            _connections.Clear();
             _running = false;
+            lock (_connections)
+            {
+                foreach (var c in _connections)
+                {
+                    c.Close();
+                }
+                _connections.Clear();
+            }
             _listener.Stop();
             return true;
         }

@@ -13,25 +13,26 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
 {
     public class ModBusMasterRtuDriver : ModBusMasterDriver<ModBusMasterRtuConfig>
     {
-        private readonly SerialPortStream _serialPortStream;
+        private SerialPortStream _serialPortStream;
         private bool _connected;
-        private readonly System.Timers.Timer _receiveTimeoutTimer = new System.Timers.Timer();
-        private CancellationTokenSource _cts;
 
-        private Semaphore _semaphore = new Semaphore(1, 1);
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public override bool Connected => _connected;
 
         public ModBusMasterRtuDriver(ModBusMasterRtuConfig config, ITelegramMonitorInstance monitor) : base(config, monitor)
         {
-            _serialPortStream = new SerialPortStream(config.Port, config.Baud, config.DataBits,
-                FromString(config.Parity), FromString(config.StopBits));
+            _serialPortStream = CreateSerialPortStream();
+        }
 
-            _serialPortStream.ReadTimeout = 1000;
-            _serialPortStream.WriteTimeout = 1000;
+        private SerialPortStream CreateSerialPortStream()
+        {
+            var serialPortStream = new SerialPortStream(Config.Port, Config.Baud, Config.DataBits,
+                FromString(Config.Parity), FromString(Config.StopBits));
 
-            _receiveTimeoutTimer.Elapsed += _receiveTimeoutTimer_Elapsed;
-            _receiveTimeoutTimer.Interval = config.Timeout;
+            serialPortStream.ReadTimeout = 1000;
+            serialPortStream.WriteTimeout = 1000;
+            return serialPortStream;
         }
 
         private static Parity FromString(string parity)
@@ -62,12 +63,6 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                     return StopBits.One;
             }
         }
-        private void _receiveTimeoutTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            _cts?.Cancel(true);
-            _receiveTimeoutTimer.Stop();
-        }
-
         protected override byte[] UpdateWriteFrame(byte[] frame)
         {
             var crc = ModbusUtility.CalculateCrc(frame);
@@ -120,6 +115,13 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             try
             {
+                // a closed SerialPortStream is disposed and cannot be reopened, always use a new instance
+                if (_serialPortStream == null || _serialPortStream.IsDisposed || _serialPortStream.IsOpen)
+                {
+                    _serialPortStream?.Dispose();
+                    _serialPortStream = CreateSerialPortStream();
+                }
+
                 _serialPortStream.Open();
                 _connected = true;
             }
@@ -135,22 +137,31 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
         {
             ModBus.Logger.LogHexOut(data);
 
-            if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
+            var serialPortStream = _serialPortStream;
+            if (serialPortStream == null || serialPortStream.IsDisposed || !serialPortStream.IsOpen)
             {
                 return false;
             }
-            await _serialPortStream.WriteAsync(data, 0, data.Length, cts);
+            await serialPortStream.WriteAsync(data, 0, data.Length, cts);
             return true;
         }
 
         protected override async Task<byte[]> ReadFrame(ModBusFunction function, int numberOfRegisters, CancellationToken cts = default)
         {
-            if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
+            var serialPortStream = _serialPortStream;
+            if (serialPortStream == null || serialPortStream.IsDisposed || !serialPortStream.IsOpen)
             {
                 return Array.Empty<byte>();
             }
 
-            _semaphore.WaitOne();
+            try
+            {
+                await _semaphore.WaitAsync(cts);
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
 
             try
             {
@@ -177,17 +188,20 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
                     readLength += 3;
                 }
 
-                _receiveTimeoutTimer.Start();
-                _cts = new CancellationTokenSource();
-
                 var data = new byte[readLength];
-                if (_serialPortStream.IsDisposed || !_serialPortStream.IsOpen)
+                if (serialPortStream.IsDisposed || !serialPortStream.IsOpen)
                 {
                     _connected = false;
                     throw new Exception("object disposed or closed...");
                 }
 
-                var read = await _serialPortStream.ReadAsync(data, 0, readLength, cts);
+                int read;
+                // receive timeout, linked with the callers token
+                using (var timeoutCts = new CancellationTokenSource(Config.Timeout))
+                using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cts, timeoutCts.Token))
+                {
+                    read = await serialPortStream.ReadAsync(data, 0, readLength, linkedCts.Token);
+                }
                 ModBus.Logger.LogHexIn(data);
                 if (read == readLength)
                 {
@@ -221,15 +235,20 @@ namespace P3.Driver.ModBusDriver.Master.Rtu
             }
 
             return null;
-            
+
         }
 
         protected override async Task<bool> Close()
         {
             _connected = false;
-            _serialPortStream.Close();
-            await _serialPortStream.DisposeAsync();
-            
+            var serialPortStream = _serialPortStream;
+            if (serialPortStream == null || serialPortStream.IsDisposed)
+            {
+                return true;
+            }
+            serialPortStream.Close();
+            await serialPortStream.DisposeAsync();
+
             return true;
         }
     }

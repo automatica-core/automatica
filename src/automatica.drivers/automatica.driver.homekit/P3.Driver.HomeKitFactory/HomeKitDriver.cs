@@ -130,7 +130,7 @@ namespace P3.Driver.HomeKitFactory
             DriverContext.NodeTemplateFactory.SetPropertyValue(GetProperty("config-version").ObjId, configProperty);
 
             DriverContext.Logger.LogDebug(
-                $"Start homekit server with LTSK {_ltskProperty.Value} and LTPK {_ltpkProperty.Value}");
+                $"Start homekit server (LTSK {(String.IsNullOrEmpty(_ltskProperty.ValueString) ? "not set" : "loaded")}) and LTPK {_ltpkProperty.Value}");
             _server = new HomeKitServer(DriverContext.Logger, GetPropertyValueInt("port"),
                 DriverContext.NodeInstance.Name, _ltskProperty.ValueString, _ltpkProperty.ValueString, homekitId,
                 pairCode, "AutomaticaCore", "AutomaticaCore" + homekitId, configProperty, "0.0.1");
@@ -291,36 +291,43 @@ namespace P3.Driver.HomeKitFactory
 
         private async void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
         {
-            DriverContext.Logger.LogDebug($"Value changed for {e.Characteristic.Id} to {e.Value}");
-            if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
+            try
             {
-                value.ForEach(a => a.SetValue(e.Value));
+                DriverContext.Logger.LogDebug($"Value changed for {e.Characteristic.Id} to {e.Value}");
+                if (_characteristicNodeMap.TryGetValue(e.Characteristic, out var value))
+                {
+                    value.ForEach(a => a.SetValue(e.Value));
+                }
+                else if (_characteristicControlMap.TryGetValue(e.Characteristic.Accessory, out var control))
+                {
+                    DriverContext.Logger.LogDebug($"Target is a control {control.Name}");
+                    if (control is IDimmer iDimmer)
+                    {
+                        if (e.Value is bool)
+                        {
+                            await Switch(e.Value, iDimmer);
+                        }
+                        else if(e.Value is long or int)
+                        {
+                            DriverContext.Logger.LogDebug($"Dim value to {e.Value}");
+                            await iDimmer.DimAsync(Convert.ToInt32(e.Value));
+                        }
+                    }
+                    else if (control is ISwitch iSwitch)
+                    {
+                        await Switch(e.Value, iSwitch);
+                    }
+                    else if (control is IBlind iBlind)
+                    {
+                        var targetBlind = Convert.ToInt32(e.Value); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
+                        var newTarget = Math.Abs(targetBlind - 100);
+                        await iBlind.MoveAbsoluteAsync(newTarget);
+                    }
+                }
             }
-            else if (_characteristicControlMap.TryGetValue(e.Characteristic.Accessory, out var control))
+            catch (Exception ex)
             {
-                DriverContext.Logger.LogDebug($"Target is a control {control.Name}");
-                if (control is IDimmer iDimmer)
-                {
-                    if (e.Value is bool)
-                    {
-                        await Switch(e.Value, iDimmer);
-                    }
-                    else if(e.Value is long or int)
-                    {
-                        DriverContext.Logger.LogDebug($"Dim value to {e.Value}");
-                        await iDimmer.DimAsync(Convert.ToInt32(e.Value));
-                    }
-                }
-                else if (control is ISwitch iSwitch)
-                {
-                    await Switch(e.Value, iSwitch);
-                }
-                else if (control is IBlind iBlind)
-                {
-                    var targetBlind = Convert.ToInt32(e.Value); //homekit percentage is reversed, this means 100% = fully open and 0% = fully closed
-                    var newTarget = Math.Abs(targetBlind - 100);
-                    await iBlind.MoveAbsoluteAsync(newTarget);
-                }
+                DriverContext.Logger.LogError(ex, $"Error handling homekit value change {ex}");
             }
         }
 
@@ -353,7 +360,7 @@ namespace P3.Driver.HomeKitFactory
 
         private void ServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
-            DriverContext.Logger.LogInformation($"Saving LTSK {e.Ltsk} and LTPK {e.Ltpk} to database...");
+            DriverContext.Logger.LogInformation($"Saving LTSK and LTPK {e.Ltpk} to database...");
 
             _ltskProperty.Value = e.Ltsk;
             _ltpkProperty.Value = e.Ltpk;
@@ -361,7 +368,7 @@ namespace P3.Driver.HomeKitFactory
             DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, e.Ltsk);  //save to database
             DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, e.Ltpk); //save to database
 
-            DriverContext.Logger.LogInformation($"Saving LTSK {e.Ltsk} and LTPK {e.Ltpk} to database...done");
+            DriverContext.Logger.LogInformation($"Saving LTSK and LTPK {e.Ltpk} to database...done");
         }
 
         public override async Task<bool> Stop(CancellationToken token = default)
@@ -369,11 +376,12 @@ namespace P3.Driver.HomeKitFactory
             if (_server != null)
             {
                 _server.PairingCompleted -= ServerOnPairingCompleted;
+                _server.ValueChanged -= ServerOnValueChanged;
                 await _server.Stop();
             }
 
 
-            return true;
+            return await base.Stop(token);
         }
 
         internal void RegisterCharacteristic(Accessory accessory, Characteristic c, BaseNode node)

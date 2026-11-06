@@ -64,6 +64,12 @@ namespace P3.Driver.OmsDriverFactory
             DriverContext.Logger.LogDebug($"Check frame {data?.CiField}");
             if (data != null && data.CiField == 0x5B)
             {
+                if (data.RawData.Length <= 18)
+                {
+                    DriverContext.Logger.LogWarning($"Frame too short ({data.RawData.Length} bytes), ignoring");
+                    return;
+                }
+
                 var controlHigh = data.RawData.Span[18];
 
                 DriverContext.Logger.LogDebug($"Check frame if frame is supported {controlHigh}");

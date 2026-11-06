@@ -27,21 +27,23 @@ namespace P3.Driver.Pixoo64.Screens
         {
             _isRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
-     
+            // capture the token, a later Start() must not revive this loop
+            var token = _cancellationTokenSource.Token;
+
             _logger.LogInformation($"{GetHashCode()} Loop started...");
 
             _ = Task.Run(function: async () =>
             {
-                
+
                 int i = 0;
                 while (true)
                 {
                     try
                     {
-                        if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
+                        if (token.IsCancellationRequested || !_isRunning)
                         {
                             _logger.LogInformation(
-                                $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
+                                $"Cancellation requested... {token.IsCancellationRequested} || {!_isRunning}");
                             _screens.Clear();
                             i = 0;
                             return;
@@ -54,22 +56,24 @@ namespace P3.Driver.Pixoo64.Screens
 
                             do
                             {
-                                if (_cancellationTokenSource.IsCancellationRequested || !_isRunning)
+                                if (token.IsCancellationRequested || !_isRunning)
                                 {
                                     _logger.LogInformation(
-                                        $"Cancellation requested... {_cancellationTokenSource.IsCancellationRequested} || {!_isRunning}");
+                                        $"Cancellation requested... {token.IsCancellationRequested} || {!_isRunning}");
                                     _screens.Clear();
                                     i = 0;
                                     return;
                                 }
 
                                 await screen.Paint();
-                                Thread.Sleep(1000);
+                                await Task.Delay(1000, token);
                             } while (screen.TimeForNextScreen > 0);
                         }
                         else
                         {
                             i = 0;
+                            // no screens configured (yet), do not spin
+                            await Task.Delay(1000, token);
                         }
 
 
@@ -80,10 +84,22 @@ namespace P3.Driver.Pixoo64.Screens
                             i = 0;
                         }
                     }
+                    catch (OperationCanceledException) when (token.IsCancellationRequested)
+                    {
+                        _logger.LogInformation($"{GetHashCode()} Loop cancelled...");
+                        return;
+                    }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, $"Exception occurred {ex}");
-                        Thread.Sleep(2000);
+                        try
+                        {
+                            await Task.Delay(2000, token);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            return;
+                        }
                     }
                 }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +12,9 @@ namespace P3.Driver.Blockchain.Ticker.Driver.Cardano
     internal class CardanoNode : CoinNode<CardanoValueNode>
     {
         private readonly List<CardanoValueNode> _nodes = new();
-        private readonly HttpClient _client;
 
         public CardanoNode(IDriverContext driverContext) : base(driverContext)
         {
-            _client = new HttpClient();
-            _client.Timeout = TimeSpan.FromSeconds(5);
         }
 
         protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())

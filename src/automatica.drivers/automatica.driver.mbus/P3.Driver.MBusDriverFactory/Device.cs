@@ -22,6 +22,7 @@ namespace P3.Driver.MBusDriverFactory
         private readonly Dictionary<string, Attribute> _attributeMap = new Dictionary<string, Attribute>();
 
         private readonly ILogger _logger;
+        private volatile bool _stopped;
 
 
         public Device(IDriverContext driverContext, Driver parent) : base(driverContext)
@@ -36,6 +37,7 @@ namespace P3.Driver.MBusDriverFactory
 
         public override Task<bool> Start(CancellationToken token = default)
         {
+            _stopped = false;
             _pollTimer?.Start();
 
             foreach (var att in _attributes)
@@ -58,6 +60,7 @@ namespace P3.Driver.MBusDriverFactory
 
         public override Task<bool> Stop(CancellationToken token = default)
         {
+            _stopped = true;
             _pollTimer?.Stop();
             if (_pollTimer != null)
             {
@@ -84,24 +87,37 @@ namespace P3.Driver.MBusDriverFactory
 
         private async void _pollTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_attributes.Count > 0)
+            if (_stopped)
             {
-                _pollTimer.Stop();
-                try
-                {
-                    await ReadInternal();
-                }
-                finally
-                {
-                    _pollTimer.Start();
-                }
-            }
-            else
-            {
-                _logger.LogWarning($"{_parent.Name}-{Name} Ignoring device read because no attributes have been configured");
+                return;
             }
 
-           
+            try
+            {
+                if (_attributes.Count > 0)
+                {
+                    _pollTimer.Stop();
+                    try
+                    {
+                        await ReadInternal();
+                    }
+                    finally
+                    {
+                        if (!_stopped)
+                        {
+                            _pollTimer.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    _logger.LogWarning($"{_parent.Name}-{Name} Ignoring device read because no attributes have been configured");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_parent.Name}-{Name} Error polling MBus device {ex}");
+            }
         }
 
         protected override async Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())

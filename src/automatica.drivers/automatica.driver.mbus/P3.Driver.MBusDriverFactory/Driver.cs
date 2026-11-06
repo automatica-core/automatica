@@ -94,6 +94,22 @@ namespace P3.Driver.MBusDriverFactory
             }
         }
 
+        public override async Task<bool> Stop(CancellationToken token = default)
+        {
+            var result = await base.Stop(token);
+
+            try
+            {
+                _connection?.Close();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not close MBus connection {e}");
+            }
+
+            return result;
+        }
+
         public override IDriverNode CreateDriverNode(IDriverContext ctx)
         {
             return new Device(ctx, this);

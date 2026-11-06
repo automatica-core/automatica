@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -31,9 +32,9 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private Knx3Level _knxTree;
 
         private readonly Dictionary<string, List<Action<GroupEventArgs>>> _callbackMap = new();
-        private readonly Dictionary<string, KnxGroupAddress> _gaMap = new();
+        private readonly ConcurrentDictionary<string, KnxGroupAddress> _gaMap = new();
 
-        private readonly Dictionary<string, GroupValue> _lastGaValues = new();
+        private readonly ConcurrentDictionary<string, GroupValue> _lastGaValues = new();
 
         private bool _tunnelingEnabled;
         private IPAddress _remoteIp;
@@ -42,6 +43,11 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         private KnxConnection _connection;
 
         private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
+        private static readonly TimeSpan ReconnectInitialDelay = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan ReconnectMaxDelay = TimeSpan.FromSeconds(60);
+        private CancellationTokenSource _stopCts = new CancellationTokenSource();
+        private int _reconnecting;
 
         internal ITelegramMonitorInstance InternalTelegramMonitorInstance => TelegramMonitor;
 
@@ -172,41 +178,123 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             }
         }
 
-        internal async Task ConnectionStateChanged(BusConnectionState state)
+        internal Task ConnectionStateChanged(BusConnectionState state)
         {
-            if (await _semaphore.WaitAsync(5000))
+            if (state is not (BusConnectionState.Broken or BusConnectionState.Closed))
             {
+                return Task.CompletedTask;
+            }
+
+            if (_stopCts.IsCancellationRequested)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (Interlocked.CompareExchange(ref _reconnecting, 1, 0) != 0)
+            {
+                DriverContext.Logger.LogDebug($"Reconnect already in progress...");
+                return Task.CompletedTask;
+            }
+
+            var token = _stopCts.Token;
+            _ = Task.Run(() => ReconnectLoop(token), CancellationToken.None);
+            return Task.CompletedTask;
+        }
+
+        private async Task ReconnectLoop(CancellationToken token)
+        {
+            try
+            {
+                DriverContext.Logger.LogInformation($"Try to create a new connection...");
+
+                KnxConnection oldConnection;
+                await _semaphore.WaitAsync(token);
                 try
                 {
-                    DriverContext.Logger.LogInformation($"Try to create a new connection...");
-                    if (state is BusConnectionState.Broken or BusConnectionState.Closed)
-                    {
-                        var currentConnection = _connection;
-                        _ = Task.Run(async () =>
-                        {
-
-                            try
-                            {
-                                await currentConnection.DisposeConnection();
-                                DriverContext.Logger.LogInformation($"Closed previous connection...");
-                            }
-                            catch (Exception e)
-                            {
-                                DriverContext.Logger.LogError(e, $"Error disposing connection: {e}");
-                            }
-                        });
-
-                        await Task.Delay(2000);
-                        _connection = null;
-                        var newConnection = CreateConnection();
-                        await StartConnection(newConnection);
-                        _connection = newConnection;
-                    }
+                    oldConnection = _connection;
+                    _connection = null;
                 }
                 finally
                 {
                     _semaphore.Release();
                 }
+
+                await DisposeConnectionSafe(oldConnection);
+
+                var delay = ReconnectInitialDelay;
+                while (!token.IsCancellationRequested)
+                {
+                    await Task.Delay(delay, token);
+
+                    KnxConnection newConnection = null;
+                    try
+                    {
+                        newConnection = CreateConnection();
+                        await StartConnection(newConnection, token);
+                    }
+                    catch (OperationCanceledException) when (token.IsCancellationRequested)
+                    {
+                        await DisposeConnectionSafe(newConnection);
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        DriverContext.Logger.LogWarning($"Reconnect to KNX interface failed, retry in {delay.TotalSeconds}s: {e.Message}");
+                        await DisposeConnectionSafe(newConnection);
+
+                        delay = TimeSpan.FromTicks(Math.Min(delay.Ticks * 2, ReconnectMaxDelay.Ticks));
+                        continue;
+                    }
+
+                    await _semaphore.WaitAsync(CancellationToken.None);
+                    try
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            await DisposeConnectionSafe(newConnection);
+                            return;
+                        }
+
+                        _connection = newConnection;
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
+                    }
+
+                    DriverContext.Logger.LogInformation($"Reconnected to KNX interface...");
+                    return;
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // driver stopped
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error in KNX reconnect loop {e}");
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _reconnecting, 0);
+            }
+        }
+
+        private async Task DisposeConnectionSafe(KnxConnection connection)
+        {
+            if (connection == null)
+            {
+                return;
+            }
+
+            try
+            {
+                await connection.DisposeConnection();
+                DriverContext.Logger.LogInformation($"Closed previous connection...");
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Error disposing connection: {e}");
             }
         }
 
@@ -251,6 +339,12 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
             {
                 return true;
             }
+
+            if (_stopCts.IsCancellationRequested)
+            {
+                _stopCts = new CancellationTokenSource();
+            }
+
             await StartConnection(_connection, token);
 
             return await base.Start(token);
@@ -275,15 +369,25 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
         public override async Task<bool> Stop(CancellationToken token = default)
         {
             DriverContext.Logger.LogInformation($"Stopping KNX driver...");
-            if (_connection != null)
-            {
-                if (!_onlyUseTunnel)
-                {
-                    await _connection.DisposeConnection();
-                }
+            await _stopCts.CancelAsync();
 
-                _callbackMap.Clear();
-                _connection = null;
+            await _semaphore.WaitAsync(CancellationToken.None);
+            try
+            {
+                if (_connection != null)
+                {
+                    if (!_onlyUseTunnel)
+                    {
+                        await _connection.DisposeConnection();
+                    }
+
+                    _callbackMap.Clear();
+                    _connection = null;
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
             }
 
             return await base.Stop(token);
@@ -327,17 +431,23 @@ namespace P3.Driver.Knx.DriverFactory.Factories.IpTunneling
 
         public Task<bool> Read(string address)
         {
-            return _connection?.Read(address);
+            var connection = _connection;
+            if (connection == null)
+            {
+                return Task.FromResult(false);
+            }
+            return connection.Read(address);
         }
 
         public async Task<bool> Write(KnxGroupAddress source, string address, GroupValue groupValue,
             CancellationToken token)
         {
-            if (_connection == null)
+            var connection = _connection;
+            if (connection == null)
             {
                 return false;
             }
-            var ret = await _connection.Write(source, address,groupValue, token);
+            var ret = await connection.Write(source, address,groupValue, token);
             if (ret)
             {
                 _lastGaValues[address] = groupValue;

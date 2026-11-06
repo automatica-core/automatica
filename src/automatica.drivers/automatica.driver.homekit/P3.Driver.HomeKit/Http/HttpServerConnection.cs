@@ -34,7 +34,7 @@ namespace P3.Driver.HomeKit.Http
             _httpServer = httpServer;
         }
 
-        internal Task HandleClient(CancellationToken token)
+        internal async Task HandleClient(CancellationToken token)
         {
             _remoteEndPoint = _client.Client.RemoteEndPoint;
             _logger.LogDebug($"Start client socket on port {_remoteEndPoint}");
@@ -57,9 +57,8 @@ namespace P3.Driver.HomeKit.Http
 
                         _logger.LogDebug("Waiting for more data from the client....");
 
-                        // This is blocking and will wait for data to come from the client.
-                        //
-                        var bytesRead = networkStream.Read(receiveBuffer, 0, _client.ReceiveBufferSize);
+                        // waits for data from the client without blocking a pool thread; cancelled on server stop
+                        var bytesRead = await networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length, token).ConfigureAwait(false);
                         
 
                         lock (_connectionSession)
@@ -169,9 +168,6 @@ namespace P3.Driver.HomeKit.Http
                     }
 
                     _middleware.TerminateSession(session);
-                    _client.Close();
-                    _client.Dispose();
-                    _httpServer.ConnectionClosed(this);
                 }
             }
             catch (IOException)
@@ -194,8 +190,11 @@ namespace P3.Driver.HomeKit.Http
                 _logger.LogError(e, "Error occured in http server");
                 _middleware.TerminateSession(session);
             }
-
-            return Task.CompletedTask;
+            finally
+            {
+                Close();
+                _httpServer.ConnectionClosed(this);
+            }
         }
 
         internal static byte[] GetHttpResponse(string header, string contentType, byte[] data, DateTime date)

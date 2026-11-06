@@ -55,36 +55,42 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
                 _cycleTimes?.DispatchRead(analogData.CycleNumber);
                 //_bmsTime?.DispatchValue(analogData.Voltage);
 
-                var minCell = analogData.CellVoltages.Min();
-                var maxCell = analogData.CellVoltages.Max();
+                var cells = analogData.CellVoltages ?? Array.Empty<ushort>();
+                if (cells.Length > 0)
+                {
+                    var minCell = cells.Min();
+                    var maxCell = cells.Max();
 
-                _minCell?.DispatchRead(minCell);
-                _maxCell?.DispatchRead(maxCell);
-                _cellDiff?.DispatchRead(maxCell - minCell);
+                    _minCell?.DispatchRead(minCell);
+                    _maxCell?.DispatchRead(maxCell);
+                    _cellDiff?.DispatchRead(maxCell - minCell);
+                }
 
-                _cellsNode?.Cell1?.DispatchRead(analogData.CellVoltages[0]);
-                _cellsNode?.Cell2?.DispatchRead(analogData.CellVoltages[1]);
-                _cellsNode?.Cell3?.DispatchRead(analogData.CellVoltages[2]);
-                _cellsNode?.Cell4?.DispatchRead(analogData.CellVoltages[3]);
-                _cellsNode?.Cell5?.DispatchRead(analogData.CellVoltages[4]);
-                _cellsNode?.Cell6?.DispatchRead(analogData.CellVoltages[5]);
-                _cellsNode?.Cell7?.DispatchRead(analogData.CellVoltages[6]);
-                _cellsNode?.Cell8?.DispatchRead(analogData.CellVoltages[7]);
-                _cellsNode?.Cell9?.DispatchRead(analogData.CellVoltages[8]);
-                _cellsNode?.Cell10?.DispatchRead(analogData.CellVoltages[9]);
-                _cellsNode?.Cell11?.DispatchRead(analogData.CellVoltages[10]);
-                _cellsNode?.Cell12?.DispatchRead(analogData.CellVoltages[11]);
-                _cellsNode?.Cell13?.DispatchRead(analogData.CellVoltages[12]);
-                _cellsNode?.Cell14?.DispatchRead(analogData.CellVoltages[13]);
-                _cellsNode?.Cell15?.DispatchRead(analogData.CellVoltages[14]);
-                _cellsNode?.Cell16?.DispatchRead(analogData.CellVoltages[15]);
+                // packs can have less than 16 cells / 6 temperature sensors
+                DispatchAt(_cellsNode?.Cell1, cells, 0);
+                DispatchAt(_cellsNode?.Cell2, cells, 1);
+                DispatchAt(_cellsNode?.Cell3, cells, 2);
+                DispatchAt(_cellsNode?.Cell4, cells, 3);
+                DispatchAt(_cellsNode?.Cell5, cells, 4);
+                DispatchAt(_cellsNode?.Cell6, cells, 5);
+                DispatchAt(_cellsNode?.Cell7, cells, 6);
+                DispatchAt(_cellsNode?.Cell8, cells, 7);
+                DispatchAt(_cellsNode?.Cell9, cells, 8);
+                DispatchAt(_cellsNode?.Cell10, cells, 9);
+                DispatchAt(_cellsNode?.Cell11, cells, 10);
+                DispatchAt(_cellsNode?.Cell12, cells, 11);
+                DispatchAt(_cellsNode?.Cell13, cells, 12);
+                DispatchAt(_cellsNode?.Cell14, cells, 13);
+                DispatchAt(_cellsNode?.Cell15, cells, 14);
+                DispatchAt(_cellsNode?.Cell16, cells, 15);
 
-                _tempsNode.Environment?.DispatchRead(analogData.Temperatures[0]);
-                _tempsNode.Mos?.DispatchRead(analogData.Temperatures[1]);
-                _tempsNode.CellT1?.DispatchRead(analogData.Temperatures[2]);
-                _tempsNode.CellT2?.DispatchRead(analogData.Temperatures[3]);
-                _tempsNode.CellT3?.DispatchRead(analogData.Temperatures[4]);
-                _tempsNode.CellT4?.DispatchRead(analogData.Temperatures[5]);
+                var temps = analogData.Temperatures ?? Array.Empty<short>();
+                DispatchAt(_tempsNode?.Environment, temps, 0);
+                DispatchAt(_tempsNode?.Mos, temps, 1);
+                DispatchAt(_tempsNode?.CellT1, temps, 2);
+                DispatchAt(_tempsNode?.CellT2, temps, 3);
+                DispatchAt(_tempsNode?.CellT3, temps, 4);
+                DispatchAt(_tempsNode?.CellT4, temps, 5);
 
 
                 _lastUpdate?.DispatchRead(DateTime.Now);
@@ -96,6 +102,14 @@ namespace P3.Driver.VkingBms.DriverFactory.Nodes
             }
 
             return true;
+        }
+
+        private static void DispatchAt<T>(VkingBatteryValueNode node, T[] values, int index)
+        {
+            if (node != null && index < values.Length)
+            {
+                node.DispatchRead(values[index]);
+            }
         }
 
 

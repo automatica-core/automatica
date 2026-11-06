@@ -36,23 +36,29 @@ namespace P3.Driver.Blockchain.Ticker.Driver
         {
             try
             {
-                if (await _semaphore.WaitAsync(TimeSpan.FromSeconds(1)))
+                if (!await _semaphore.WaitAsync(TimeSpan.FromSeconds(1)))
+                {
+                    return;
+                }
+
+                try
                 {
                     await ReadValues();
+                }
+                finally
+                {
+                    _semaphore.Release();
                 }
             }
             catch (Exception ex)
             {
                 DriverContext.Logger.LogError(ex, "Error read values...");
             }
-            finally
-            {
-                _semaphore.Release();
-            }
         }
 
         public override async Task<bool> Start(CancellationToken token = default)
         {
+            _timer?.Dispose();
             _timer = new Timer(TimeElapsed, this, _pollTime * 1000, _pollTime * 1000);
 
             _logger.LogInformation($"Start polling every {_pollTime}s");
@@ -80,7 +86,7 @@ namespace P3.Driver.Blockchain.Ticker.Driver
 
         public override Task<bool> Stop(CancellationToken token = default)
         {
-            _timer.Dispose();
+            _timer?.Dispose();
             return base.Stop(token);
         }
 

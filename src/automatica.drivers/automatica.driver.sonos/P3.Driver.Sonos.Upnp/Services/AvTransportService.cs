@@ -52,6 +52,7 @@ namespace P3.Driver.Sonos.Upnp.Services
 
         private async Task LogResponse(string responseType, HttpResponseMessage response)
         {
+            using var _ = response;
             var body = await response.Content.ReadAsStringAsync();
             _logger.LogTrace($"{responseType} returned {response.StatusCode} with body {body}");
         }

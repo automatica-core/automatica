@@ -44,10 +44,10 @@ namespace P3.Driver.EnOcean
                 Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}");
 
                 var readIdBase = await SendTelegram(new CommonCommandPacket(CommonCommands.CO_RD_IDBASE));
-                Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}: {Utils.ByteArrayToString(readIdBase.Data)}");
 
-                if (readIdBase != null)
+                if (readIdBase != null && readIdBase.Data.Length >= 5)
                 {
+                    Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}: {Utils.ByteArrayToString(readIdBase.Data)}");
                     _idBase = readIdBase.Data.Slice(1, 4);
 
                 }
@@ -99,7 +99,7 @@ namespace P3.Driver.EnOcean
         {
             if (_stream != null)
             {
-                _stream.TelegramReceived -= TelegramReceived;
+                _stream.TelegramReceived -= TelegramReceivedEventHandler;
                 _stream.Close();
             }
         }

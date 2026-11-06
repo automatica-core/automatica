@@ -80,11 +80,20 @@ namespace P3.Driver.EnOcean.Serial
                 {
                     Logger.Logger.Instance.LogHexIn(packet.RawData);
                 }
+                catch (Exception ex)
+                {
+                    Logger.Logger.Instance.LogError(ex, $"Could not parse telegram {ex}");
+                    Logger.Logger.Instance.LogHexIn(packet.RawData);
+                }
 
                 if (_stream.BytesToRead > 0)
                 {
                     _stream_DataReceived(sender, e);
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Logger.Instance.LogError(ex, $"Error handling serial data received event {ex}");
             }
             finally
             {

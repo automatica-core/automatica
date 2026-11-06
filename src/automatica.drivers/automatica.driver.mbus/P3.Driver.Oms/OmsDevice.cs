@@ -31,7 +31,14 @@ namespace P3.Driver.Oms
 
         private async void DataReceived()
         {
-            await ReadFrame();
+            try
+            {
+                await ReadFrame();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error reading oms frame {e}");
+            }
         }
 
         public async Task<bool> Start()

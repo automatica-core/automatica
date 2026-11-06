@@ -48,7 +48,7 @@ namespace P3.Driver.HomeKit.Hap
             HapControllerLtsk = e.Ltsk;
             HapControllerLtpk = e.Ltpk;
 
-            _logger.LogInformation($"LTPK {e.Ltpk} AccessoryLtsk {e.Ltsk}");
+            _logger.LogInformation($"LTPK {e.Ltpk}, accessory LTSK generated");
             
 
             PairingCompleted?.Invoke(this, e);

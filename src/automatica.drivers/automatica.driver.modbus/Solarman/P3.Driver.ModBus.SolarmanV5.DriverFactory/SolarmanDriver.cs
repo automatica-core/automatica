@@ -25,6 +25,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
 
         private readonly SemaphoreSlim _waitSemaphore = new SemaphoreSlim(1);
         private SolarmanConnection? _driver;
+        private volatile bool _stopped;
 
         private readonly List<SolarmanGroupAttribute> _groups = new();
         private readonly Dictionary<string, SolarmanAttrribute> _nameMap = new();
@@ -82,13 +83,32 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
             }
         }
 
-        public override Task<bool> Stop(CancellationToken token = default)
+        public override async Task<bool> Stop(CancellationToken token = default)
         {
-            return _driver?.Stop();
+            _stopped = true;
+            _pollTimer.Elapsed -= PollTimerOnElapsed;
+            _pollTimer.Stop();
+            _pollTimer.Dispose();
+
+            try
+            {
+                var driver = _driver;
+                if (driver != null)
+                {
+                    await driver.Stop();
+                }
+            }
+            catch (Exception e)
+            {
+                DriverContext.Logger.LogError(e, $"Could not stop solarman connection {e}");
+            }
+
+            return await base.Stop(token);
         }
 
         public override Task<bool> Start(CancellationToken token = default)
         {
+            _stopped = false;
             Open();
 
             if (_driver == null)
@@ -96,6 +116,7 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                 throw new ArgumentException("Init must be called before start..");
             }
 
+            _pollTimer.Elapsed -= PollTimerOnElapsed;
             _pollTimer.Elapsed += PollTimerOnElapsed;
             _pollTimer.Start();
 
@@ -155,7 +176,11 @@ namespace P3.Driver.ModBus.SolarmanV5.DriverFactory
                     await _driver.Stop();
                 }
 
-                Open();
+                // do not reconnect once the driver was stopped
+                if (!_stopped)
+                {
+                    Open();
+                }
             }
             finally
             {
