@@ -112,13 +112,15 @@ namespace Automatica.Logic.TextToSpeech
             var ret = new List<ILogicOutputChanged>();
             if (_trigger != null && instance.ObjId == _trigger.ObjId)
             {
-              
-                if (String.IsNullOrEmpty(_textValue))
+                if (String.IsNullOrEmpty(_url))
                 {
-                    LoadSynthesizer().RunSynchronously();
+                    // not synthesized yet: LoadSynthesizer dispatches the url and duration itself once the
+                    // cloud call returns. Do not block here, InputValueChanged runs under the logic lock.
+                    _ = Task.Run(LoadSynthesizer);
+                    return ret;
                 }
 
-                ret.Add(new LogicOutputChanged(_text, _textValue));
+                ret.Add(new LogicOutputChanged(_output, _url));
                 if (_duration != null)
                 {
                     ret.Add(new LogicOutputChanged(_duration, _durationValue));
