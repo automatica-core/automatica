@@ -35,7 +35,12 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
         {
             _ip = GetPropertyValueString("ip-address");
             _port = GetPropertyValueInt("port");
-            _miniserver = new LoxoneMiniserverConnection(_ip, _port, GetPropertyValueString("user"), GetPropertyValueString("password"), DriverContext.Logger);
+            var useTls = GetProperty("loxone-use-https")?.ValueBool ?? true;
+            var tlsPort = GetProperty("loxone-https-port")?.ValueInt ?? LoxoneMiniserverConnection.DefaultTlsPort;
+            var allowFallback = GetProperty("loxone-allow-http-fallback")?.ValueBool ?? true;
+
+            _miniserver = new LoxoneMiniserverConnection(_ip, _port, GetPropertyValueString("user"), GetPropertyValueString("password"), DriverContext.Logger,
+                useTls, tlsPort, allowFallback);
             _miniserver.OnConnectionEstablished += _miniserver_OnConnectionEstablished;
             _miniserver.OnConnectionClosed += _miniserver_OnConnectionClosed;
             _miniserver.OnMessage += _miniserver_OnMessage;

@@ -37,14 +37,18 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
     public class LoxoneMiniserverConnection
     {
+        public const int DefaultTlsPort = 443;
+        private const long MaxBinaryMessageLength = 16 * 1024 * 1024;
+
         private readonly string password;
         private readonly ILogger _logger;
-        private readonly LoxoneWebApi webApi;
+        private LoxoneWebApi webApi;
 
         public const string LoxoneUuid = "FF88FFe1-02b4-FFFF-ffffeee000d80cff";
         private byte[] _aesKey;
         private byte[] _aesIv;
-        private readonly PureWebSocket _webSocket;
+        private PureWebSocket _webSocket;
+        private readonly object _connectionLock = new object();
 
         private ConnectionState _connectionState = ConnectionState.Disconnected;
         private byte[] _pubKey;
@@ -65,22 +69,72 @@ namespace P3.Driver.Loxone.Miniserver.Driver
         public event EventHandler<System.EventArgs> OnConnectionClosed;
 
         public LoxoneMiniserverConnection(string address, int port, string username, string password, ILogger logger)
+            : this(address, port, username, password, logger, false, DefaultTlsPort, true)
+        {
+        }
+
+        /// <param name="useTls">try https/wss on <paramref name="tlsPort"/> first (Miniserver Gen2)</param>
+        /// <param name="allowPlainFallback">fall back to http/ws on <paramref name="port"/> if TLS is not available</param>
+        public LoxoneMiniserverConnection(string address, int port, string username, string password, ILogger logger,
+            bool useTls, int tlsPort, bool allowPlainFallback)
         {
             _keepAliveTimer = new Timer(TimeSpan.FromMinutes(4).TotalMilliseconds);
             Address = address;
             Port = port;
+            TlsPort = tlsPort > 0 ? tlsPort : DefaultTlsPort;
+            UseTls = useTls;
+            AllowPlainFallback = allowPlainFallback;
             Username = username;
             this.password = password;
             _logger = logger;
 
-            webApi = new LoxoneWebApi($"http://{address}:{port}", username, password);
-            var socketOptions = new PureWebSocketOptions()
-            {
-                DebugMode = false
-            };
-
-            _webSocket = new PureWebSocket($"ws://{address}:{port}/ws/rfc6455", socketOptions);
+            UseTransport(useTls);
             _keepAliveTimer.Elapsed += _keepAliveTimer_Elapsed;
+        }
+
+        public bool UseTls { get; }
+        public bool AllowPlainFallback { get; }
+        public int TlsPort { get; }
+
+        /// <summary>
+        /// true if the current connection uses https/wss
+        /// </summary>
+        public bool IsTlsActive { get; private set; }
+
+        public static string GetHttpBaseAddress(string address, int port, bool tls) => $"{(tls ? "https" : "http")}://{address}:{port}";
+        public static string GetWebSocketAddress(string address, int port, bool tls) => $"{(tls ? "wss" : "ws")}://{address}:{port}/ws/rfc6455";
+
+        private void UseTransport(bool tls)
+        {
+            lock (_connectionLock)
+            {
+                var port = tls ? TlsPort : Port;
+                IsTlsActive = tls;
+                webApi = new LoxoneWebApi(GetHttpBaseAddress(Address, port, tls), Username, password);
+                var socketOptions = new PureWebSocketOptions()
+                {
+                    DebugMode = false
+                };
+
+                _webSocket = new PureWebSocket(GetWebSocketAddress(Address, port, tls), socketOptions);
+            }
+        }
+
+        /// <summary>
+        /// Loads LoxAPP3.json, over TLS if configured. Falls back to plain http if allowed.
+        /// </summary>
+        private async Task<LoxApp3Data> LoadLoxAppDataWithFallback()
+        {
+            try
+            {
+                return await webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
+            }
+            catch (Exception e) when (IsTlsActive && AllowPlainFallback && (e is System.Net.Http.HttpRequestException || e is TaskCanceledException))
+            {
+                _logger.LogWarning($"Miniserver {Address} is not reachable over https ({e.Message}), falling back to http. Use the certificate host name of the Miniserver or disable the fallback to enforce TLS.");
+                UseTransport(false);
+                return await webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
+            }
         }
 
         private void _keepAliveTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -96,8 +150,13 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         public Task<LoxApp3Data> LoadLoxAppData()
         {
-            return webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
+            return LoadLoxAppDataWithFallback();
         }
+
+        /// <summary>
+        /// true once the websocket is authenticated with the token
+        /// </summary>
+        public bool IsAuthenticated => _connectionState == ConnectionState.Connected;
 
         public Task<LoxoneApiResponse<WriteValueResponse>> WriteValue(string uuid, object value)
         {
@@ -111,28 +170,44 @@ namespace P3.Driver.Loxone.Miniserver.Driver
                 uriParam = value.ToString();
             }
 
-            return webApi.GetRequest<WriteValueResponse>($"/jdev/sps/io/{uuid}/{uriParam}");
+            var command = $"jdev/sps/io/{WebUtility.UrlEncode(uuid)}/{WebUtility.UrlEncode(uriParam)}";
+
+            if (IsAuthenticated && _webSocket.State == System.Net.WebSockets.WebSocketState.Open)
+            {
+                // the websocket is authenticated with the token, no credentials are sent
+                _webSocket.Send(EncryptMessageForMs($"salt/{GenerateSalt()}/{command}", false));
+                return Task.FromResult(new LoxoneApiResponse<WriteValueResponse>
+                {
+                    Data = new WriteValueResponse { Code = 200, Control = command }
+                });
+            }
+
+            return webApi.GetRequest<WriteValueResponse>("/" + command);
         }
 
         public async Task<bool> Connect()
         {
             try
             {
-                _logger.LogInformation($"Try to connect to miniserver {Address}:{Port}");
+                _logger.LogInformation($"Try to connect to miniserver {Address}:{(IsTlsActive ? TlsPort : Port)}");
+
+                try
+                {
+                    // may switch to the plain transport, subscribe to the websocket afterwards
+                    _loxData = await LoadLoxAppDataWithFallback();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogInformation($"Could not connect to miniserver... {e.Message}");
+                    return false;
+                }
+
                 _webSocket.OnStateChanged += _webSocket_OnStateChanged;
                 _webSocket.OnMessage += _webSocket_OnMessage;
                 _webSocket.OnClosed += _webSocket_OnClosed;
                 _webSocket.OnData += _webSocket_OnData;
 
-                try
-                {
-                    _loxData = await webApi.GetBasicAuthRequest<LoxApp3Data>("/data/LoxAPP3.json");
-                }
-                catch
-                {
-                    _logger.LogInformation("Could not connect to miniserver...");
-                    return false;
-                }
+                _logger.LogInformation($"Connecting to miniserver over {(IsTlsActive ? "https/wss" : "http/ws")}");
                 _keepAliveTimer.Start();
                 var connect = await _webSocket.ConnectAsync();
 
@@ -194,6 +269,13 @@ namespace P3.Driver.Loxone.Miniserver.Driver
                     var headerData = dataBuf.Slice(0, 8);
                     var header = new Header(headerData);
 
+                    if (header.DataLength > MaxBinaryMessageLength)
+                    {
+                        _logger.LogWarning($"Dropping binary message of {header.DataLength} bytes from miniserver (limit {MaxBinaryMessageLength})");
+                        _buffer.Clear();
+                        return;
+                    }
+
                     if (header.Identifier == HeaderIdentifier.TextMessage)
                     {
                         //will not be transmitted as OnData 
@@ -211,7 +293,15 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
                         //get the next data out of the buffer
                         var nextData = dataBuf.Slice((int)header.DataLength + 8, _buffer.Count - ((int)header.DataLength + 8));
-                        var msg = BinaryMessage.GenerateBinaryMessage(header, dataBuffer);
+                        BinaryMessage msg = null;
+                        try
+                        {
+                            msg = BinaryMessage.GenerateBinaryMessage(header, dataBuffer);
+                        }
+                        catch (Exception e) when (e is ArgumentException || e is IndexOutOfRangeException)
+                        {
+                            _logger.LogWarning($"Dropping invalid {header.Identifier} message from miniserver: {e.Message}");
+                        }
 
                         //clear the buffer
                         _buffer.Clear();
@@ -247,6 +337,8 @@ namespace P3.Driver.Loxone.Miniserver.Driver
 
         private void _webSocket_OnClosed(object sender, System.Net.WebSockets.WebSocketCloseStatus reason)
         {
+            _connectionState = ConnectionState.Disconnected;
+            _encrypted = false;
             OnConnectionClosed?.Invoke(this, System.EventArgs.Empty);   
             _logger.LogInformation($"Websocket closed {reason}");
         }
@@ -254,6 +346,25 @@ namespace P3.Driver.Loxone.Miniserver.Driver
         private void _webSocket_OnMessage(object sender, string message)
         {
             _logger.LogTrace($"WebSocket received: {message}");
+
+            if (_connectionState == ConnectionState.Connected)
+            {
+                // responses to commands (e.g. writes) on the authenticated socket
+                try
+                {
+                    var response = JsonConvert.DeserializeObject<LoxoneApiResponse<LoxoneApiResponseLL>>(message);
+                    if (response?.Data != null && response.Data.Code != 200)
+                    {
+                        _logger.LogWarning($"Miniserver answered {response.Data.Code} for {response.Data.Control}");
+                    }
+                }
+                catch (JsonException)
+                {
+                    // ignore
+                }
+                return;
+            }
+
             if (_encrypted)
             {
                 var encrypted = DecryptMessage(message);
@@ -307,7 +418,9 @@ namespace P3.Driver.Loxone.Miniserver.Driver
                     }
                     else if(_connectionState == ConnectionState.SendEnableUpdates)
                     {
-                        //do nothing
+                        _encrypted = false;
+                        _connectionState = ConnectionState.Connected;
+                        _logger.LogInformation("Miniserver websocket authenticated with token");
                     }
                 }
             }

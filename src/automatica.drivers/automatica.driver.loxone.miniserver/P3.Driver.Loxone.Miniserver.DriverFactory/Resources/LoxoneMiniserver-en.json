@@ -20,6 +20,18 @@
           "NAME": "Username",
           "DESCRIPTION": ""
         },
+        "USE_HTTPS": {
+          "NAME": "Use https",
+          "DESCRIPTION": "Connect over https/wss (Miniserver Gen2). Use the certificate host name of the Miniserver as address for a valid certificate."
+        },
+        "HTTPS_PORT": {
+          "NAME": "Https port",
+          "DESCRIPTION": "Port for https/wss"
+        },
+        "HTTP_FALLBACK": {
+          "NAME": "Allow http fallback",
+          "DESCRIPTION": "Fall back to unencrypted http/ws if https is not available"
+        },
         "PASSWORD": {
           "NAME": "Password",
           "DESCRIPTION": ""

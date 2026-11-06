@@ -19,7 +19,7 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
 
         public override string DriverName => "loxone-miniserver";
         public override Guid DriverGuid => BusId;
-        public override Version DriverVersion => new Version(0, 4, 0, 3);
+        public override Version DriverVersion => new Version(0, 5, 0, 0);
 
         public static Guid BusId => new Guid("ad2f16c2-3a4a-4de4-8768-caa766b02810");
 
@@ -37,6 +37,9 @@ namespace P3.Driver.Loxone.Miniserver.DriverFactory
             factory.CreatePropertyTemplate(new Guid("251af9bc-a8ab-460f-a7c0-c43493e102c4"), "LOXONE.MINISERVER.PROPERTY.USER.NAME", "LOXONE.MINISERVER.PROPERTY.USER.DESCRIPTION", "user", PropertyTemplateType.Text, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 1, 2);
             factory.CreatePropertyTemplate(new Guid("91c6148a-ce94-4240-abf3-2eec52c46e3e"), "LOXONE.MINISERVER.PROPERTY.PASSWORD.NAME", "LOXONE.MINISERVER.PROPERTY.PASSWORD.DESCRIPTION", "password", PropertyTemplateType.Password, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 1, 3);
 
+            factory.CreatePropertyTemplate(new Guid("c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e41"), "LOXONE.MINISERVER.PROPERTY.USE_HTTPS.NAME", "LOXONE.MINISERVER.PROPERTY.USE_HTTPS.DESCRIPTION", "loxone-use-https", PropertyTemplateType.Bool, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, true, 1, 5);
+            factory.CreatePropertyTemplate(new Guid("d3e5f7a9-2b4c-4d6e-9f8a-0b1c2d3e4f52"), "LOXONE.MINISERVER.PROPERTY.HTTPS_PORT.NAME", "LOXONE.MINISERVER.PROPERTY.HTTPS_PORT.DESCRIPTION", "loxone-https-port", PropertyTemplateType.Range, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, PropertyHelper.CreateRangeMetaString(1, ushort.MaxValue), P3.Driver.Loxone.Miniserver.Driver.LoxoneMiniserverConnection.DefaultTlsPort, 1, 6);
+            factory.CreatePropertyTemplate(new Guid("e4f6a8b0-3c5d-4e7f-a09b-1c2d3e4f5a63"), "LOXONE.MINISERVER.PROPERTY.HTTP_FALLBACK.NAME", "LOXONE.MINISERVER.PROPERTY.HTTP_FALLBACK.DESCRIPTION", "loxone-allow-http-fallback", PropertyTemplateType.Bool, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, true, 1, 7);
             factory.CreatePropertyTemplate(new Guid("f51d380a-2a89-4a70-b63e-35e91ef810b5"), "LOXONE.MINISERVER.PROPERTY.SCAN.NAME", "LOXONE.MINISERVER.PROPERTY.SCAN.DESCRIPTION", "scan", PropertyTemplateType.Scan, DriverGuid, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 1, 4);
             factory.CreatePropertyTemplate(new Guid("31f637b5-35cb-4208-86a6-9d3c472f16a0"), "COMMON.PROPERTY.ENABLE_TUNNEL.NAME", "COMMON.PROPERTY.ENABLE_TUNNEL.DESCRIPTION",
                 "loxone-use-tunnel", PropertyTemplateType.Bool, DriverGuid, "SERVER.REMOTE", true, false, "", false, 1,

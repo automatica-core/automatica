@@ -62,8 +62,13 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Data.Message
         protected override void Parse(Span<byte> data)
         {
             var pos = 0;
-            do
+            while (pos < data.Length)
             {
+                if (data.Length - pos < Daytimer.LoxoneStructLength)
+                {
+                    throw new ArgumentException($"{nameof(EventTableOfDaytimerStates)}: truncated daytimer header at offset {pos}");
+                }
+
                 var uuid = data.Slice(pos + 0, 16);
                 var lUuid = new LoxoneUuid(uuid);
 
@@ -73,6 +78,12 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Data.Message
                 var daytimer = new Daytimer(defaultValueD);
 
                 var entriesCount = BitConverter.ToInt32(data.Slice(pos + 24, 4));
+                var remainingEntries = (data.Length - pos - Daytimer.LoxoneStructLength) / DaytimerEntry.LoxoneStructLength;
+
+                if (entriesCount < 0 || entriesCount > remainingEntries)
+                {
+                    throw new ArgumentException($"{nameof(EventTableOfDaytimerStates)}: invalid daytimer entry count {entriesCount} at offset {pos}");
+                }
 
                 for(int i  = 0; i < entriesCount; i++)
                 {
@@ -82,9 +93,8 @@ namespace P3.Driver.Loxone.Miniserver.Driver.Data.Message
                 }
 
                 pos += (entriesCount * DaytimerEntry.LoxoneStructLength) + Daytimer.LoxoneStructLength;
-                Values.Add(lUuid, daytimer);
-
-            } while (pos != data.Length);
+                Values[lUuid] = daytimer;
+            }
         }
     }
 }
