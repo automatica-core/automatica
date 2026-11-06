@@ -30,6 +30,234 @@
     "STATE": {
       "NAME": "Matter Zustand",
       "DESCRIPTION": "Interner persistenter Zustand des Matter Knotens"
+    },
+    "DEVICE": {
+      "ON_OFF_LIGHT": {
+        "NAME": "Licht (Ein/Aus)",
+        "DESCRIPTION": "Schaltbares Licht"
+      },
+      "DIMMABLE_LIGHT": {
+        "NAME": "Dimmbares Licht",
+        "DESCRIPTION": "Licht mit Ein/Aus und Helligkeit"
+      },
+      "COLOR_TEMPERATURE_LIGHT": {
+        "NAME": "Licht mit Farbtemperatur",
+        "DESCRIPTION": "Licht mit Helligkeit und Farbtemperatur"
+      },
+      "EXTENDED_COLOR_LIGHT": {
+        "NAME": "Farblicht",
+        "DESCRIPTION": "RGB-Licht mit Helligkeit, Farbe und optionaler Farbtemperatur"
+      },
+      "ON_OFF_PLUG": {
+        "NAME": "Steckdose",
+        "DESCRIPTION": "Schaltbare Steckdose / Zwischenstecker"
+      },
+      "DIMMABLE_PLUG": {
+        "NAME": "Dimmbare Steckdose",
+        "DESCRIPTION": "Dimmbarer Zwischenstecker"
+      },
+      "WINDOW_COVERING": {
+        "NAME": "Jalousie / Rollladen",
+        "DESCRIPTION": "Beschattung mit Position (0 % = offen, 100 % = geschlossen) und optional Auf, Ab und Stopp"
+      },
+      "CONTACT_SENSOR": {
+        "NAME": "Kontaktsensor",
+        "DESCRIPTION": "Tür-/Fensterkontakt (true = geschlossen)"
+      },
+      "WATER_LEAK_DETECTOR": {
+        "NAME": "Wassermelder",
+        "DESCRIPTION": "Meldet Wasserlecks"
+      },
+      "RAIN_SENSOR": {
+        "NAME": "Regensensor",
+        "DESCRIPTION": "Meldet Regen"
+      },
+      "OCCUPANCY_SENSOR": {
+        "NAME": "Präsenzmelder",
+        "DESCRIPTION": "Präsenz- / Bewegungsmelder"
+      },
+      "LIGHT_SENSOR": {
+        "NAME": "Helligkeitssensor",
+        "DESCRIPTION": "Beleuchtungsstärke in Lux"
+      },
+      "TEMPERATURE_SENSOR": {
+        "NAME": "Temperatursensor",
+        "DESCRIPTION": "Temperatur in °C"
+      },
+      "HUMIDITY_SENSOR": {
+        "NAME": "Feuchtesensor",
+        "DESCRIPTION": "Relative Luftfeuchtigkeit in %"
+      },
+      "PRESSURE_SENSOR": {
+        "NAME": "Drucksensor",
+        "DESCRIPTION": "Luftdruck in hPa"
+      },
+      "FLOW_SENSOR": {
+        "NAME": "Durchflusssensor",
+        "DESCRIPTION": "Durchfluss in m³/h"
+      },
+      "AIR_QUALITY_SENSOR": {
+        "NAME": "Luftqualitätssensor",
+        "DESCRIPTION": "Luftqualität mit optional CO2, Feinstaub, VOC, Temperatur und Feuchte"
+      },
+      "SMOKE_CO_ALARM": {
+        "NAME": "Rauch- / CO-Melder",
+        "DESCRIPTION": "Rauch- und Kohlenmonoxidmelder"
+      },
+      "THERMOSTAT": {
+        "NAME": "Thermostat (Heizen)",
+        "DESCRIPTION": "Raumthermostat zum Heizen"
+      },
+      "THERMOSTAT_HEAT_COOL": {
+        "NAME": "Thermostat (Heizen & Kühlen)",
+        "DESCRIPTION": "Raumthermostat zum Heizen und Kühlen"
+      },
+      "FAN": {
+        "NAME": "Ventilator",
+        "DESCRIPTION": "Ventilator mit Drehzahl in %"
+      },
+      "DOOR_LOCK": {
+        "NAME": "Türschloss",
+        "DESCRIPTION": "Türschloss (true = verriegelt)"
+      },
+      "WATER_VALVE": {
+        "NAME": "Wasserventil",
+        "DESCRIPTION": "Wasser- / Bewässerungsventil (true = offen)"
+      }
+    },
+    "POINT": {
+      "ON_OFF": {
+        "NAME": "Ein/Aus",
+        "DESCRIPTION": "Schaltzustand, wird von Matter-Controllern und von Automatica gesetzt"
+      },
+      "LEVEL": {
+        "NAME": "Helligkeit",
+        "DESCRIPTION": "Helligkeit in Prozent (1-100)"
+      },
+      "COLOR_TEMPERATURE": {
+        "NAME": "Farbtemperatur",
+        "DESCRIPTION": "Farbtemperatur in Kelvin (2000-6500)"
+      },
+      "COLOR": {
+        "NAME": "Farbe",
+        "DESCRIPTION": "Farbe als #RRGGBB"
+      },
+      "POSITION": {
+        "NAME": "Position",
+        "DESCRIPTION": "Position in Prozent (0 = offen, 100 = geschlossen); geschrieben wird die aktuelle Position, gelesen das angeforderte Ziel"
+      },
+      "OPEN": {
+        "NAME": "Öffnen",
+        "DESCRIPTION": "Öffnen-Befehl / Zustand"
+      },
+      "CLOSE": {
+        "NAME": "Schließen",
+        "DESCRIPTION": "Schließen-Befehl von einem Matter-Controller"
+      },
+      "STOP": {
+        "NAME": "Stopp",
+        "DESCRIPTION": "Stopp-Befehl von einem Matter-Controller"
+      },
+      "CONTACT": {
+        "NAME": "Kontakt",
+        "DESCRIPTION": "true = geschlossen / Kontakt"
+      },
+      "LEAK": {
+        "NAME": "Leck",
+        "DESCRIPTION": "true = Wasser erkannt"
+      },
+      "RAIN": {
+        "NAME": "Regen",
+        "DESCRIPTION": "true = Regen erkannt"
+      },
+      "OCCUPIED": {
+        "NAME": "Belegt",
+        "DESCRIPTION": "true = Präsenz erkannt"
+      },
+      "ILLUMINANCE": {
+        "NAME": "Beleuchtungsstärke",
+        "DESCRIPTION": "Beleuchtungsstärke in Lux"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperatur",
+        "DESCRIPTION": "Temperatur in °C"
+      },
+      "HUMIDITY": {
+        "NAME": "Feuchte",
+        "DESCRIPTION": "Relative Luftfeuchtigkeit in %"
+      },
+      "PRESSURE": {
+        "NAME": "Druck",
+        "DESCRIPTION": "Druck in hPa"
+      },
+      "FLOW": {
+        "NAME": "Durchfluss",
+        "DESCRIPTION": "Durchfluss in m³/h"
+      },
+      "AIR_QUALITY": {
+        "NAME": "Luftqualität",
+        "DESCRIPTION": "0 unbekannt, 1 gut, 2 ausreichend, 3 mäßig, 4 schlecht, 5 sehr schlecht, 6 extrem schlecht"
+      },
+      "CO2": {
+        "NAME": "CO2",
+        "DESCRIPTION": "CO2-Konzentration in ppm"
+      },
+      "PM25": {
+        "NAME": "PM2,5",
+        "DESCRIPTION": "Feinstaub PM2,5 in µg/m³"
+      },
+      "PM10": {
+        "NAME": "PM10",
+        "DESCRIPTION": "Feinstaub PM10 in µg/m³"
+      },
+      "TVOC": {
+        "NAME": "VOC",
+        "DESCRIPTION": "Flüchtige organische Verbindungen in ppb"
+      },
+      "BATTERY": {
+        "NAME": "Batterie",
+        "DESCRIPTION": "Batteriestand in Prozent"
+      },
+      "SMOKE": {
+        "NAME": "Rauch",
+        "DESCRIPTION": "true = Rauchalarm"
+      },
+      "CO": {
+        "NAME": "Kohlenmonoxid",
+        "DESCRIPTION": "true = CO-Alarm"
+      },
+      "LOCAL_TEMPERATURE": {
+        "NAME": "Raumtemperatur",
+        "DESCRIPTION": "Gemessene Raumtemperatur in °C"
+      },
+      "HEATING_SETPOINT": {
+        "NAME": "Sollwert Heizen",
+        "DESCRIPTION": "Sollwert Heizen in °C (5-35)"
+      },
+      "COOLING_SETPOINT": {
+        "NAME": "Sollwert Kühlen",
+        "DESCRIPTION": "Sollwert Kühlen in °C (10-35)"
+      },
+      "SYSTEM_MODE": {
+        "NAME": "Betriebsart",
+        "DESCRIPTION": "0 = aus, 3 = kühlen, 4 = heizen"
+      },
+      "HEATING_ACTIVE": {
+        "NAME": "Heizen aktiv",
+        "DESCRIPTION": "true während geheizt wird"
+      },
+      "COOLING_ACTIVE": {
+        "NAME": "Kühlen aktiv",
+        "DESCRIPTION": "true während gekühlt wird"
+      },
+      "SPEED": {
+        "NAME": "Drehzahl",
+        "DESCRIPTION": "Lüfterdrehzahl in Prozent (0 = aus)"
+      },
+      "LOCKED": {
+        "NAME": "Verriegelt",
+        "DESCRIPTION": "true = verriegelt"
+      }
     }
   }
 }

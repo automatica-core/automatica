@@ -21,6 +21,36 @@ The Matter stack is written in plain C# (`P3.Driver.Matter`, no native SDK). It 
 
 Changes made in Automatica are reported to the controllers through their subscriptions.
 
+## Manual devices
+
+You can also add devices as child nodes of the bridge, the way you add HomeKit accessories. Each device's data
+points are nodes that you link in logic or to other drivers (KNX, Modbus, ...):
+
+- Values *written* to a node are shown in the controllers.
+- Values a controller sets are *read* from the node.
+
+Optional data points can be added to a device later.
+
+| Device | Data points (optional in *italics*) |
+|---|---|
+| On/Off light, outlet | on-off |
+| Dimmable light, dimmable outlet | on-off, level (%) |
+| Tunable white light | on-off, level, color-temperature (K) |
+| Color light | on-off, level, color (`#RRGGBB`), *color-temperature* |
+| Blind / shutter | position (%, 0 = open), *open*, *close*, *stop* |
+| Contact sensor, water leak detector, rain sensor | contact / leak / rain, *battery* |
+| Occupancy sensor | occupied, *battery* |
+| Light, temperature, humidity, pressure, flow sensor | illuminance (lx) / temperature (°C) / humidity (%) / pressure (hPa) / flow (m³/h), *battery* |
+| Air quality sensor | air-quality (0–6), *co2*, *pm25*, *pm10*, *tvoc*, *temperature*, *humidity*, *battery* |
+| Smoke / CO alarm | smoke, *co*, *battery* |
+| Thermostat (heating), thermostat (heating & cooling) | local-temperature, heating-setpoint, (cooling-setpoint), *system-mode*, *heating-active*, *cooling-active* |
+| Fan | speed (%) |
+| Door lock | locked |
+| Water valve | open |
+
+Not bridged yet: generic switches/buttons (they need Matter events), energy metering, robot vacuums, and other
+appliance device types.
+
 ## Setup
 
 1. Add the **Matter Bridge** node and select the controls to publish under *Controls*.

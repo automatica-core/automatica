@@ -11,6 +11,23 @@ namespace P3.Driver.Matter.DataModel
         public static readonly DeviceType WindowCovering = new(0x0202, 3);
         public static readonly DeviceType ContactSensor = new(0x0015, 1);
         public static readonly DeviceType TemperatureSensor = new(0x0302, 2);
+        public static readonly DeviceType PowerSource = new(0x0011, 1);
+        public static readonly DeviceType ColorTemperatureLight = new(0x010C, 4);
+        public static readonly DeviceType ExtendedColorLight = new(0x010D, 4);
+        public static readonly DeviceType DimmablePlugInUnit = new(0x010B, 4);
+        public static readonly DeviceType LightSensor = new(0x0106, 3);
+        public static readonly DeviceType OccupancySensor = new(0x0107, 4);
+        public static readonly DeviceType PressureSensor = new(0x0305, 2);
+        public static readonly DeviceType FlowSensor = new(0x0306, 2);
+        public static readonly DeviceType HumiditySensor = new(0x0307, 2);
+        public static readonly DeviceType WaterLeakDetector = new(0x0043, 1);
+        public static readonly DeviceType RainSensor = new(0x0044, 1);
+        public static readonly DeviceType AirQualitySensor = new(0x002C, 1);
+        public static readonly DeviceType SmokeCoAlarm = new(0x0076, 1);
+        public static readonly DeviceType Thermostat = new(0x0301, 4);
+        public static readonly DeviceType Fan = new(0x002B, 2);
+        public static readonly DeviceType DoorLock = new(0x000A, 3);
+        public static readonly DeviceType WaterValve = new(0x0042, 1);
     }
 
     public sealed class Endpoint

@@ -12,6 +12,7 @@ namespace P3.Driver.Matter.Driver
     public class MatterDriver : DriverNoneAttributeBase
     {
         private readonly Dictionary<string, MatterValueNode> _valueNodes = new();
+        private readonly List<MatterDeviceNode> _deviceNodes = new();
         private MatterBridge _bridge;
         private volatile bool _running;
 
@@ -53,6 +54,18 @@ namespace P3.Driver.Matter.Driver
                     {
                         DriverContext.Logger.LogError(e, "Could not bridge control {Control}", reference);
                     }
+                }
+            }
+
+            foreach (var deviceNode in _deviceNodes)
+            {
+                try
+                {
+                    _bridge.Add(deviceNode.CreateDevice());
+                }
+                catch (Exception e)
+                {
+                    DriverContext.Logger.LogError(e, "Could not bridge device {Name}", deviceNode.Name);
                 }
             }
 
@@ -218,6 +231,14 @@ namespace P3.Driver.Matter.Driver
                 var node = new MatterValueNode(ctx);
                 _valueNodes[key] = node;
                 return node;
+            }
+
+            var kind = MatterDeviceTemplates.KindForFolder(key);
+            if (kind != null)
+            {
+                var deviceNode = new MatterDeviceNode(ctx, kind);
+                _deviceNodes.Add(deviceNode);
+                return deviceNode;
             }
 
             return null;

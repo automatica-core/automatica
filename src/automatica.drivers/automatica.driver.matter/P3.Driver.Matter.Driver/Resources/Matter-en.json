@@ -30,6 +30,234 @@
     "STATE": {
       "NAME": "Matter state",
       "DESCRIPTION": "Internal persistent state of the Matter node"
+    },
+    "DEVICE": {
+      "ON_OFF_LIGHT": {
+        "NAME": "On/Off light",
+        "DESCRIPTION": "Light that can be switched on and off"
+      },
+      "DIMMABLE_LIGHT": {
+        "NAME": "Dimmable light",
+        "DESCRIPTION": "Light with on/off and brightness"
+      },
+      "COLOR_TEMPERATURE_LIGHT": {
+        "NAME": "Tunable white light",
+        "DESCRIPTION": "Light with brightness and color temperature"
+      },
+      "EXTENDED_COLOR_LIGHT": {
+        "NAME": "Color light",
+        "DESCRIPTION": "RGB light with brightness, color and optional color temperature"
+      },
+      "ON_OFF_PLUG": {
+        "NAME": "Outlet",
+        "DESCRIPTION": "Switchable outlet / plug-in unit"
+      },
+      "DIMMABLE_PLUG": {
+        "NAME": "Dimmable outlet",
+        "DESCRIPTION": "Dimmable plug-in unit"
+      },
+      "WINDOW_COVERING": {
+        "NAME": "Blind / shutter",
+        "DESCRIPTION": "Window covering with position (0 % = open, 100 % = closed) and optional up, down and stop"
+      },
+      "CONTACT_SENSOR": {
+        "NAME": "Contact sensor",
+        "DESCRIPTION": "Door/window contact (true = closed)"
+      },
+      "WATER_LEAK_DETECTOR": {
+        "NAME": "Water leak detector",
+        "DESCRIPTION": "Reports water leaks"
+      },
+      "RAIN_SENSOR": {
+        "NAME": "Rain sensor",
+        "DESCRIPTION": "Reports rain"
+      },
+      "OCCUPANCY_SENSOR": {
+        "NAME": "Occupancy sensor",
+        "DESCRIPTION": "Presence / motion detector"
+      },
+      "LIGHT_SENSOR": {
+        "NAME": "Light sensor",
+        "DESCRIPTION": "Illuminance in lux"
+      },
+      "TEMPERATURE_SENSOR": {
+        "NAME": "Temperature sensor",
+        "DESCRIPTION": "Temperature in °C"
+      },
+      "HUMIDITY_SENSOR": {
+        "NAME": "Humidity sensor",
+        "DESCRIPTION": "Relative humidity in %"
+      },
+      "PRESSURE_SENSOR": {
+        "NAME": "Pressure sensor",
+        "DESCRIPTION": "Air pressure in hPa"
+      },
+      "FLOW_SENSOR": {
+        "NAME": "Flow sensor",
+        "DESCRIPTION": "Flow in m³/h"
+      },
+      "AIR_QUALITY_SENSOR": {
+        "NAME": "Air quality sensor",
+        "DESCRIPTION": "Air quality with optional CO2, particulate matter, VOC, temperature and humidity"
+      },
+      "SMOKE_CO_ALARM": {
+        "NAME": "Smoke / CO alarm",
+        "DESCRIPTION": "Smoke and carbon monoxide alarm"
+      },
+      "THERMOSTAT": {
+        "NAME": "Thermostat (heating)",
+        "DESCRIPTION": "Room thermostat for heating"
+      },
+      "THERMOSTAT_HEAT_COOL": {
+        "NAME": "Thermostat (heating & cooling)",
+        "DESCRIPTION": "Room thermostat for heating and cooling"
+      },
+      "FAN": {
+        "NAME": "Fan",
+        "DESCRIPTION": "Fan with speed in %"
+      },
+      "DOOR_LOCK": {
+        "NAME": "Door lock",
+        "DESCRIPTION": "Door lock (true = locked)"
+      },
+      "WATER_VALVE": {
+        "NAME": "Water valve",
+        "DESCRIPTION": "Water / irrigation valve (true = open)"
+      }
+    },
+    "POINT": {
+      "ON_OFF": {
+        "NAME": "On/Off",
+        "DESCRIPTION": "Switching state, set by Matter controllers and by Automatica"
+      },
+      "LEVEL": {
+        "NAME": "Brightness",
+        "DESCRIPTION": "Brightness in percent (1-100)"
+      },
+      "COLOR_TEMPERATURE": {
+        "NAME": "Color temperature",
+        "DESCRIPTION": "Color temperature in Kelvin (2000-6500)"
+      },
+      "COLOR": {
+        "NAME": "Color",
+        "DESCRIPTION": "Color as #RRGGBB"
+      },
+      "POSITION": {
+        "NAME": "Position",
+        "DESCRIPTION": "Position in percent (0 = open, 100 = closed); the written value is the current position, the read value the requested target"
+      },
+      "OPEN": {
+        "NAME": "Open",
+        "DESCRIPTION": "Open command / state"
+      },
+      "CLOSE": {
+        "NAME": "Close",
+        "DESCRIPTION": "Close command from a Matter controller"
+      },
+      "STOP": {
+        "NAME": "Stop",
+        "DESCRIPTION": "Stop command from a Matter controller"
+      },
+      "CONTACT": {
+        "NAME": "Contact",
+        "DESCRIPTION": "true = closed / contact"
+      },
+      "LEAK": {
+        "NAME": "Leak",
+        "DESCRIPTION": "true = water detected"
+      },
+      "RAIN": {
+        "NAME": "Rain",
+        "DESCRIPTION": "true = rain detected"
+      },
+      "OCCUPIED": {
+        "NAME": "Occupied",
+        "DESCRIPTION": "true = presence detected"
+      },
+      "ILLUMINANCE": {
+        "NAME": "Illuminance",
+        "DESCRIPTION": "Illuminance in lux"
+      },
+      "TEMPERATURE": {
+        "NAME": "Temperature",
+        "DESCRIPTION": "Temperature in °C"
+      },
+      "HUMIDITY": {
+        "NAME": "Humidity",
+        "DESCRIPTION": "Relative humidity in %"
+      },
+      "PRESSURE": {
+        "NAME": "Pressure",
+        "DESCRIPTION": "Pressure in hPa"
+      },
+      "FLOW": {
+        "NAME": "Flow",
+        "DESCRIPTION": "Flow in m³/h"
+      },
+      "AIR_QUALITY": {
+        "NAME": "Air quality",
+        "DESCRIPTION": "0 unknown, 1 good, 2 fair, 3 moderate, 4 poor, 5 very poor, 6 extremely poor"
+      },
+      "CO2": {
+        "NAME": "CO2",
+        "DESCRIPTION": "CO2 concentration in ppm"
+      },
+      "PM25": {
+        "NAME": "PM2.5",
+        "DESCRIPTION": "Particulate matter PM2.5 in µg/m³"
+      },
+      "PM10": {
+        "NAME": "PM10",
+        "DESCRIPTION": "Particulate matter PM10 in µg/m³"
+      },
+      "TVOC": {
+        "NAME": "VOC",
+        "DESCRIPTION": "Volatile organic compounds in ppb"
+      },
+      "BATTERY": {
+        "NAME": "Battery",
+        "DESCRIPTION": "Battery level in percent"
+      },
+      "SMOKE": {
+        "NAME": "Smoke",
+        "DESCRIPTION": "true = smoke alarm"
+      },
+      "CO": {
+        "NAME": "Carbon monoxide",
+        "DESCRIPTION": "true = CO alarm"
+      },
+      "LOCAL_TEMPERATURE": {
+        "NAME": "Room temperature",
+        "DESCRIPTION": "Measured room temperature in °C"
+      },
+      "HEATING_SETPOINT": {
+        "NAME": "Heating setpoint",
+        "DESCRIPTION": "Heating setpoint in °C (5-35)"
+      },
+      "COOLING_SETPOINT": {
+        "NAME": "Cooling setpoint",
+        "DESCRIPTION": "Cooling setpoint in °C (10-35)"
+      },
+      "SYSTEM_MODE": {
+        "NAME": "Mode",
+        "DESCRIPTION": "0 = off, 3 = cool, 4 = heat"
+      },
+      "HEATING_ACTIVE": {
+        "NAME": "Heating active",
+        "DESCRIPTION": "true while heating"
+      },
+      "COOLING_ACTIVE": {
+        "NAME": "Cooling active",
+        "DESCRIPTION": "true while cooling"
+      },
+      "SPEED": {
+        "NAME": "Speed",
+        "DESCRIPTION": "Fan speed in percent (0 = off)"
+      },
+      "LOCKED": {
+        "NAME": "Locked",
+        "DESCRIPTION": "true = locked"
+      }
     }
   }
 }

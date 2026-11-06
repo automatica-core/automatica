@@ -24,7 +24,7 @@ namespace P3.Driver.Matter.Driver
 
         public override Guid DriverGuid => new("ce14753c-2010-4314-bb46-1b647879eca1");
 
-        public override Version DriverVersion => new(1, 0, 0, 0);
+        public override Version DriverVersion => new(1, 1, 0, 0);
 
         public override bool InDevelopmentMode => false;
 
@@ -61,6 +61,8 @@ namespace P3.Driver.Matter.Driver
             factory.CreatePropertyTemplate(new Guid("36558a39-6aae-4ea0-9523-21a7ce8c2861"), "MATTER_BRIDGE.RESET_PAIRINGS.NAME",
                 "MATTER_BRIDGE.RESET_PAIRINGS.DESCRIPTION", ResetPairingsKey, PropertyTemplateType.CustomAction,
                 DriverGuid, "MATTER_BRIDGE.PAIRING", true, true, null, null, 1, 2);
+
+            MatterDeviceTemplates.Create(factory, DriverGuid);
         }
 
         private void CreateValueNode(INodeTemplateFactory factory, Guid id, string key, string nodeKey, NodeDataType type)

@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\P3.Driver.Matter\P3.Driver.Matter.csproj" />
+    <ProjectReference Include="..\P3.Driver.Matter.Driver\P3.Driver.Matter.Driver.csproj" />
   </ItemGroup>
 
 </Project>

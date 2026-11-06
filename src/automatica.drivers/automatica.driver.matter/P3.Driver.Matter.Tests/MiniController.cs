@@ -434,6 +434,54 @@ namespace P3.Driver.Matter.Tests
 
         public static byte? InvokeClusterStatus(TlvElement invokeResponseIb) => (byte?)invokeResponseIb.Require(1).Require(1).GetUIntOrNull(1);
 
+        /// <summary>Writes one attribute; returns the status of the write.</summary>
+        public async Task<StatusCode> WriteAsync(ushort endpoint, uint cluster, uint attribute, Action<TlvWriter, byte?> value, bool timed = false)
+        {
+            var ex = NewExchange();
+            if (timed)
+            {
+                var timedResponse = await RequestAsync(ProtocolId.InteractionModel, ImOpcode.TimedRequest, TlvWriter.Encode(w =>
+                {
+                    w.StartStructure();
+                    w.PutUInt(0, 5000);
+                    w.EndContainer();
+                }), ex);
+                Assert.Equal(ImOpcode.StatusResponse, timedResponse.Opcode);
+            }
+
+            var response = await RequestAsync(ProtocolId.InteractionModel, ImOpcode.WriteRequest, TlvWriter.Encode(w =>
+            {
+                w.StartStructure();
+                w.PutBool(0, false);
+                w.PutBool(1, timed);
+                w.StartArray(2);
+                w.StartStructure();
+                w.StartList(1);
+                w.PutUInt(2, endpoint);
+                w.PutUInt(3, cluster);
+                w.PutUInt(4, attribute);
+                w.EndContainer();
+                value(w, 2);
+                w.EndContainer();
+                w.EndContainer();
+                w.PutBool(3, false);
+                w.PutUInt(0xFF, 11);
+                w.EndContainer();
+            }), ex);
+            if (response.Opcode == ImOpcode.StatusResponse)
+            {
+                return (StatusCode)TlvReader.Decode(response.Payload).GetUInt(0);
+            }
+
+            Assert.Equal(ImOpcode.WriteResponse, response.Opcode);
+            var status = TlvReader.Decode(response.Payload).Require(0).Children.Single().Require(1);
+            return (StatusCode)status.GetUInt(0);
+        }
+
+        /// <summary>Reads one concrete attribute and returns its value.</summary>
+        public async Task<TlvElement> ReadValueAsync(ushort endpoint, uint cluster, uint attribute) =>
+            (await ReadAsync((endpoint, cluster, attribute))).Data(endpoint, cluster, attribute);
+
         /// <summary>Reads paths (null = wildcard), following chunked reports; returns all AttributeReportIBs.</summary>
         public async Task<List<TlvElement>> ReadAsync(params (ushort? Endpoint, uint? Cluster, uint? Attribute)[] paths)
         {

@@ -14,6 +14,7 @@
     <None Remove="automatica-manifest.json" />
     <None Remove="Resources\Matter-de.json" />
     <None Remove="Resources\Matter-en.json" />
+    <InternalsVisibleTo Include="P3.Driver.Matter.Tests" />
     <EmbeddedResource Include="automatica-manifest.json" />
     <EmbeddedResource Include="Resources\Matter-de.json" />
     <EmbeddedResource Include="Resources\Matter-en.json" />
