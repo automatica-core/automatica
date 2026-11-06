@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Automatica.Core.Base.Common;
@@ -10,6 +11,11 @@ namespace Automatica.Core.Bootloader
 {
     class Program
     {
+        /// <summary>
+        /// Top level directories of the installation that hold user data, they are never backed up, deleted or restored by the update
+        /// </summary>
+        private static readonly string[] ExcludedDirectories = { "persistent", "logs", "framework" };
+
         static void Main(string[] args)
         {
             try
@@ -88,17 +94,30 @@ namespace Automatica.Core.Bootloader
             var tmpDirectory = Path.Combine(ServerInfo.GetTempPath(), Guid.NewGuid().ToString().Replace("-", ""));
 
             Console.WriteLine("Back up current binaries...");
-            CopyDirectory(targetDir, tmpDirectory);
+            if (!CopyDirectory(targetDir, tmpDirectory, true))
+            {
+                Console.Error.WriteLine("Backup failed...skip update");
+                TryDeleteDirectory(tmpDirectory);
+                TryDeleteDirectory(tmpPath);
+                return;
+            }
 
             // DeleteAllFilesInDirectory(targetDir);
 
             Console.WriteLine("Copy new binaries...");
-            if (!CopyDirectory(sourceDir, targetDir))
+            if (!CopyDirectory(sourceDir, targetDir, false))
             {
                 Console.WriteLine("Copy failed...restore old binaries");
-                Directory.Delete(targetDir, true);
-                CopyDirectory(tmpDirectory, targetDir);
-                Directory.Delete(tmpDirectory, true);
+                DeleteInstallation(targetDir);
+                if (CopyDirectory(tmpDirectory, targetDir, true))
+                {
+                    Directory.Delete(tmpDirectory, true);
+                }
+                else
+                {
+                    // keep the backup, it is the only complete copy of the old binaries
+                    Console.Error.WriteLine($"Restore failed, the backup of the old binaries is kept in {tmpDirectory}");
+                }
             }
             else
             {
@@ -131,23 +150,73 @@ namespace Automatica.Core.Bootloader
         }
 
 
-        private static bool CopyDirectory( string source, string destination)
+        private static bool IsExcluded(string root, string path)
         {
+            var relativePath = Path.GetRelativePath(root, path);
+            var firstSegment = relativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[0];
+            return ExcludedDirectories.Contains(firstSegment, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static void TryDeleteDirectory(string directory)
+        {
+            try
+            {
+                if (Directory.Exists(directory))
+                {
+                    Directory.Delete(directory, true);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"{e}, Could not delete {directory}");
+            }
+        }
+
+        /// <summary>
+        /// Deletes the installed binaries, the excluded directories (user data) are kept
+        /// </summary>
+        private static void DeleteInstallation(string directory)
+        {
+            var di = new DirectoryInfo(directory);
+
+            foreach (var file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (var dir in di.GetDirectories())
+            {
+                if (IsExcluded(directory, dir.FullName))
+                {
+                    continue;
+                }
+                dir.Delete(true);
+            }
+        }
+
+        private static string ToDestination(string source, string destination, string path)
+        {
+            return Path.Combine(destination, Path.GetRelativePath(source, path));
+        }
+
+        /// <param name="skipExcluded">skip the user data directories (backup and restore of the installation)</param>
+        private static bool CopyDirectory(string source, string destination, bool skipExcluded)
+        {
+            Directory.CreateDirectory(destination);
+
             //Now Create all of the directories
             foreach (string dirPath in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
             {
                 try
                 {
-                    if (dirPath == "persistent" || dirPath == "logs" || dirPath == "framework")
+                    if (skipExcluded && IsExcluded(source, dirPath))
                     {
-                        Console.WriteLine("Ignoring logs/framework directory...");
                         continue;
                     }
-                    Directory.CreateDirectory(dirPath.Replace(source, destination));
+                    Directory.CreateDirectory(ToDestination(source, destination, dirPath));
                 }
                 catch(Exception e)
                 {
-                    Console.Error.WriteLine($"{e}, Could not create directory (source: {dirPath}, target: {dirPath.Replace(source, destination)})");
+                    Console.Error.WriteLine($"{e}, Could not create directory (source: {dirPath}, target: {ToDestination(source, destination, dirPath)})");
                     return false;
                 }
             }
@@ -157,6 +226,11 @@ namespace Automatica.Core.Bootloader
             {
                 try
                 {
+                    if (skipExcluded && IsExcluded(source, newPath))
+                    {
+                        continue;
+                    }
+
                     var fileInfo = new FileInfo(newPath);
                     if(fileInfo.Name == "Automatica.Core.Bootloader" )
                     {
@@ -170,13 +244,15 @@ namespace Automatica.Core.Bootloader
                         continue;
                     }
 
-                    var newFile = newPath.Replace(source, destination);
+                    var newFile = ToDestination(source, destination, newPath);
                     Console.WriteLine($"Copy {newPath} to {newFile}");
                     File.Copy(newPath, newFile, true); 
                 }
                 catch (Exception e)
                 {
-                    Console.Error.WriteLine($"{e}, Could not copy file (source: {newPath}, target: newPath.Replace(source, destination))");
+                    // a missing file leaves a half updated installation, the caller restores the backup
+                    Console.Error.WriteLine($"{e}, Could not copy file (source: {newPath}, target: {ToDestination(source, destination, newPath)})");
+                    return false;
                 }
             }
             return true;

@@ -114,6 +114,12 @@ namespace Automatica.Core.Watchdog
                     var exitCode = process.ExitCode;
                     _logger.LogInformation($"{appName} stopped with exit code {exitCode}");
 
+                    if (exitCode == ServerInfo.ExitCodeRestart || exitCode == ServerInfo.ExitCodePluginUpdateInstall)
+                    {
+                        // requested restarts do not count for the crash loop backoff
+                        restartCount = 0;
+                    }
+
                     if (exitCode == ServerInfo.ExitCodeRestart)
                     {
                         _logger.LogInformation($"Core system requested a normal restart....");
@@ -126,7 +132,7 @@ namespace Automatica.Core.Watchdog
 
                     process = null;
 
-                    Thread.Sleep(500);
+                    Thread.Sleep(GetRestartDelay(exitCode, restartCount));
                 }
             }
             catch (TaskCanceledException)
@@ -136,6 +142,27 @@ namespace Automatica.Core.Watchdog
 
             Console.ReadLine();
             //cancelToken.Cancel();
+        }
+
+        /// <summary>
+        /// Crash loop backoff: an unexpected exit within 30 minutes after the start doubles the delay (500ms, 1s, 2s,... max 60s).
+        /// Requested restarts are not delayed.
+        /// </summary>
+        internal static TimeSpan GetRestartDelay(int exitCode, int restartCount)
+        {
+            var defaultDelay = TimeSpan.FromMilliseconds(500);
+            if (exitCode == ServerInfo.ExitCodeRestart || exitCode == ServerInfo.ExitCodePluginUpdateInstall || restartCount <= 1)
+            {
+                return defaultDelay;
+            }
+
+            var exponent = Math.Min(restartCount - 1, 7);
+            var delay = TimeSpan.FromMilliseconds(defaultDelay.TotalMilliseconds * Math.Pow(2, exponent));
+            var maxDelay = TimeSpan.FromSeconds(60);
+            delay = delay > maxDelay ? maxDelay : delay;
+
+            _logger.LogWarning($"Process exited unexpectedly {restartCount} times in a row, restarting in {delay.TotalSeconds}s");
+            return delay;
         }
 
         private static void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs e)

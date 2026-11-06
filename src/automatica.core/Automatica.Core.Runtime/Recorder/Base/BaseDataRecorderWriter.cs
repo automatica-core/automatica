@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,8 +22,13 @@ namespace Automatica.Core.Runtime.Recorder.Base
         private readonly IConfiguration _config;
         private readonly INodeInstanceCache _nodeCache;
 
+        // _recorders, _registrations and _started are guarded by _lock, they are used from the dispatcher, the timers and the config api
+        private readonly object _lock = new object();
         private readonly Dictionary<Guid, List<IDataRecorder>> _recorders = new Dictionary<Guid, List<IDataRecorder>>();
-        protected readonly Dictionary<Guid, string> MetricName = new();
+        private readonly Dictionary<Guid, IDisposable> _registrations = new Dictionary<Guid, IDisposable>();
+        private bool _started;
+
+        protected readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, string> MetricName = new();
         private readonly ILogger _logger;
 
 
@@ -55,18 +61,46 @@ namespace Automatica.Core.Runtime.Recorder.Base
                 return;
             }
 
-            if (!_recorders.ContainsKey(nodeInstance))
+            MetricName.TryAdd(nodeInstance, GetFullNodeName(node));
+
+            var recorder = new TrendingValueRecorder(node, this);
+            List<IDataRecorder> replaced;
+            bool register;
+            bool start;
+            lock (_lock)
             {
-                _recorders.Add(nodeInstance, new List<IDataRecorder>());
+                // one recorder per node, adding a node again replaces the recorder (e.g. changed trending settings)
+                _recorders.TryGetValue(nodeInstance, out replaced);
+                _recorders[nodeInstance] = new List<IDataRecorder> { recorder };
+                register = !_registrations.ContainsKey(nodeInstance);
+                start = _started;
             }
 
-            if (!MetricName.ContainsKey(nodeInstance))
+            if (replaced != null)
             {
-                MetricName.Add(nodeInstance, GetFullNodeName(node));
+                foreach (var rec in replaced)
+                {
+                    await rec.Stop();
+                }
             }
 
-            _recorders[nodeInstance].Add(new TrendingValueRecorder(node, this));
-            await Dispatcher.RegisterDispatch(DispatchableType.NodeInstance, nodeInstance, DataCallback);
+            if (register)
+            {
+                var token = await Dispatcher.Subscribe(DispatchableType.NodeInstance, nodeInstance, DataCallback);
+                lock (_lock)
+                {
+                    if (!_registrations.TryAdd(nodeInstance, token))
+                    {
+                        token.Dispose(); // added concurrently
+                    }
+                }
+            }
+
+            // added at runtime, the writer is already running
+            if (start)
+            {
+                await recorder.Start();
+            }
         }
 
         private string GetFullNodeName(NodeInstance nodeInstance)
@@ -113,15 +147,22 @@ namespace Automatica.Core.Runtime.Recorder.Base
             names.Add(parent.Name);
             GetFullNameRecursive(parent, ref names);
         }
-        private void DataCallback(IDispatchable dispatchable, DispatchValue value)
+        private Task DataCallback(IDispatchable dispatchable, DispatchValue value)
         {
-            if (_recorders.TryGetValue(dispatchable.Id, out var recorder))
+            List<IDataRecorder> recorder;
+            lock (_lock)
             {
-                foreach (var rec in recorder)
+                if (!_recorders.TryGetValue(dispatchable.Id, out recorder))
                 {
-                    rec.ValueChanged(value, dispatchable.Name);
+                    return Task.CompletedTask;
                 }
             }
+
+            foreach (var rec in recorder)
+            {
+                rec.ValueChanged(value, dispatchable.Name);
+            }
+            return Task.CompletedTask;
         }
 
 
@@ -147,38 +188,74 @@ namespace Automatica.Core.Runtime.Recorder.Base
 
         internal abstract Task Save(Trending trend, NodeInstance nodeInstance);
 
-        public Task RemoveAll()
+        public async Task RemoveAll()
         {
-            _recorders.Clear();
-            return Task.CompletedTask;
-        }
+            List<IDataRecorder> recorders;
+            List<IDisposable> registrations;
+            lock (_lock)
+            {
+                recorders = _recorders.Values.SelectMany(a => a).ToList();
+                registrations = _registrations.Values.ToList();
+                _recorders.Clear();
+                _registrations.Clear();
+            }
 
-        public async Task RemoveTrend(Guid nodeInstance)
-        {
-            var recorders = _recorders[nodeInstance];
+            // only our own registrations, links and other recorders of the nodes stay registered
+            foreach (var registration in registrations)
+            {
+                registration.Dispose();
+            }
 
             foreach (var rec in recorders)
             {
                 await rec.Stop();
             }
+        }
 
-            await Dispatcher.UnRegisterDispatch(DispatchableType.NodeInstance, nodeInstance);
-            _recorders.Remove(nodeInstance);
+        public async Task RemoveTrend(Guid nodeInstance)
+        {
+            List<IDataRecorder> recorders;
+            IDisposable registration;
+            lock (_lock)
+            {
+                _recorders.Remove(nodeInstance, out recorders);
+                _registrations.Remove(nodeInstance, out registration);
+            }
+
+            registration?.Dispose();
+
+            if (recorders == null)
+            {
+                return;
+            }
+
+            foreach (var rec in recorders)
+            {
+                await rec.Stop();
+            }
         }
 
         public virtual async Task Start()
         {
-            foreach (var ls in _recorders.Values)
+            List<IDataRecorder> recorders;
+            lock (_lock)
             {
-                foreach (var rec in ls)
-                {
-                    await rec.Start();
-                }
+                _started = true;
+                recorders = _recorders.Values.SelectMany(a => a).ToList();
+            }
+
+            foreach (var rec in recorders)
+            {
+                await rec.Start();
             }
         }
 
         public virtual async Task Stop()
         {
+            lock (_lock)
+            {
+                _started = false;
+            }
             await RemoveAll();
         }
     }

@@ -10,6 +10,8 @@ namespace Automatica.Core.Base.IO.Remanent
 {
     internal class FileRemanentHandler : IRemanentHandler
     {
+        private const string TempFileExtension = ".tmp";
+
         public async Task<IDictionary<Guid, DispatchValue>> GetAllAsync(CancellationToken token = default)
         {
             var dirName = ServerInfo.GetRemanentDirectory();
@@ -24,12 +26,29 @@ namespace Automatica.Core.Base.IO.Remanent
             foreach (var file in files)
             {
                 var fileInfo = new FileInfo(file);
-                var guid = Guid.Parse(fileInfo.Name);
-
-                var value = await GetLastValue(guid, token);
-                if (value != null)
+                if (fileInfo.Name.EndsWith(TempFileExtension, StringComparison.OrdinalIgnoreCase))
                 {
-                    ret.Add(guid, value);
+                    TryDelete(file); // left over from an interrupted write
+                    continue;
+                }
+
+                // ignore stray files, they must not abort the startup
+                if (!Guid.TryParse(fileInfo.Name, out var guid))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    var value = await GetLastValue(guid, token);
+                    if (value != null)
+                    {
+                        ret[guid] = value;
+                    }
+                }
+                catch (Exception) when (!token.IsCancellationRequested)
+                {
+                    // unreadable file, ignore the value
                 }
             }
 
@@ -75,22 +94,44 @@ namespace Automatica.Core.Base.IO.Remanent
                 }
 
                 var valuePath = Path.Combine(dirName, $"{nodeInstanceId}");
-                if (File.Exists(valuePath))
-                {
-                    File.Delete(valuePath);
-                }
+                // unique temp file (concurrent saves of the same node), replaced atomically - a crash never leaves a deleted or half written value
+                var tempPath = Path.Combine(dirName, $"{nodeInstanceId}.{Guid.NewGuid():N}{TempFileExtension}");
 
                 var jsonValue = JsonConvert.SerializeObject(value);
 
-                await using var fileWriter = new StreamWriter(valuePath);
-                await fileWriter.WriteLineAsync(jsonValue);
+                try
+                {
+                    await using (var fileWriter = new StreamWriter(tempPath))
+                    {
+                        await fileWriter.WriteLineAsync(jsonValue);
+                    }
 
-                fileWriter.Close();
+                    File.Move(tempPath, valuePath, true);
+                }
+                finally
+                {
+                    TryDelete(tempPath);
+                }
                 return true;
             }
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        private static void TryDelete(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+            catch
+            {
+                // ignore
             }
         }
     }

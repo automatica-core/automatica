@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -32,14 +33,23 @@ namespace Automatica.Core.Runtime.IO
         private readonly IRuleInstanceVisuNotify _ruleInstanceVisuNotifier;
         private readonly IRemanentHandler _remanentHandler;
         private readonly ILogicNodeInstanceCache _logicNodeInstanceCache;
-        private readonly object _lock = new object();
 
-        private readonly List<(DispatchableType type, Guid id, Guid target)> _dispatchRegistrations =
-            new List<(DispatchableType type, Guid id, Guid target)>(); //we need to add the target id as well, to correctly remove the registrations
+        /// <summary>
+        /// One lock per logic instance, a logic processes one input value after the other and its outputs are dispatched in order.
+        /// Different logics run in parallel.
+        /// </summary>
+        private readonly ConcurrentDictionary<Guid, SemaphoreSlim> _ruleLocks = new();
 
-        public LogicEngineDispatcher(ILinkCache linkCache, 
-            IDispatcher dispatcher, 
-            ILogicInstancesStore logicInstancesStore, 
+        private readonly object _registrationsLock = new object();
+
+        // link is the link id (empty for the visualization registrations of logic interfaces), id the source and target the target of the registration
+        private readonly List<DispatchRegistration> _dispatchRegistrations = new List<DispatchRegistration>();
+
+        private sealed record DispatchRegistration(Guid Link, DispatchableType Type, Guid Id, Guid Target, IDisposable Token);
+
+        public LogicEngineDispatcher(ILinkCache linkCache,
+            IDispatcher dispatcher,
+            ILogicInstancesStore logicInstancesStore,
             IDriverNodesStore driverNodesStore,
             INodeInstanceCache nodeInstanceCache,
             ILogicInterfaceInstanceCache logicInterfaceInstanceCache,
@@ -82,13 +92,17 @@ namespace Automatica.Core.Runtime.IO
         {
             _linkCache.ClearAndLoad();
 
-            foreach (var registration in _dispatchRegistrations)
-            {
-                await _dispatcher.UnRegisterDispatch(registration.type, registration.id);
-            }
-
-            _dispatchRegistrations.Clear();
+            await Unload();
             return await Load();
+        }
+
+        private async Task Register(Guid link, DispatchableType type, Guid id, Guid target, Func<IDispatchable, DispatchValue, Task> callback)
+        {
+            var token = await _dispatcher.Subscribe(type, id, callback);
+            lock (_registrationsLock)
+            {
+                _dispatchRegistrations.Add(new DispatchRegistration(link, type, id, target, token));
+            }
         }
 
         public async Task<bool> Load()
@@ -107,10 +121,9 @@ namespace Automatica.Core.Runtime.IO
                         _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2NodeInstance2RulePageInput}) is empty - invalid configuration ");
                         continue;
                     }
-                    
+
                     _logger.LogInformation($"Node2Node - \"{GetFullName(sourceNode)}\" {sourceNode.ObjId} is mapped to \"{GetFullName(targetNode)}\" {targetNode.ObjId}");
-                    _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId, targetNode.ObjId));
-                    await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, async (dispatchable, o) =>
+                    await Register(entry.ObjId, DispatchableType.NodeInstance, sourceNode.ObjId, targetNode.ObjId, async (dispatchable, o) =>
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
@@ -122,7 +135,10 @@ namespace Automatica.Core.Runtime.IO
                                 dispatchValue.Value = !bValueInt;
                             }
 
-                            await _remanentHandler.SaveValueAsync(targetNode.ObjId, dispatchValue);
+                            if (targetNode.IsRemanent)
+                            {
+                                await _remanentHandler.SaveValueAsync(targetNode.ObjId, dispatchValue);
+                            }
                             await ValueDispatched(dispatchable, dispatchValue, targetNode.ObjId);
                         }
                     });
@@ -140,16 +156,17 @@ namespace Automatica.Core.Runtime.IO
 
                     var inputId = sourceNode.ObjId;
                     _logger.LogInformation($"Rule2Rule - {sourceNode.This2RuleInstanceNavigation.Name} {sourceNode.ObjId} is mapped to {targetNode.This2RuleInstanceNavigation.Name} {targetNode.ObjId}");
-                    _dispatchRegistrations.Add((DispatchableType.RuleInstance, inputId, targetNode.ObjId));
-                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId, (dispatchable, o) =>
+                    await Register(entry.ObjId, DispatchableType.RuleInstance, inputId, targetNode.ObjId, async (dispatchable, o) =>
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
-                            if (targetNode.Inverted && o.Value is bool bValueInt)
+                            // never modify the dispatched value, it is shared with all other registrations and the value store
+                            var value = new DispatchValue(o);
+                            if (targetNode.Inverted && value.Value is bool bValueInt)
                             {
-                                o.Value = !bValueInt;
+                                value.Value = !bValueInt;
                             }
-                            ValueDispatchToRule(dispatchable, o, targetNode.This2RuleInstance, targetNode);
+                            await ValueDispatchToRule(dispatchable, value, targetNode.This2RuleInstance, targetNode);
                         }
                     });
                 }
@@ -159,25 +176,30 @@ namespace Automatica.Core.Runtime.IO
                     var targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
 
 
-                    if (sourceNode == null || targetNode == null)   
+                    if (sourceNode == null || targetNode == null)
                     {
                         _logger.LogError($"{nameof(sourceNode)} - ({entry.This2NodeInstance2RulePageOutput}) || {nameof(targetNode)} - ({entry.This2RuleInterfaceInstanceInput}) is empty - invalid configuration ");
                         continue;
                     }
 
                     _logger.LogInformation($"Node2Rule - \"{GetFullName(sourceNode)}\" {sourceNode.ObjId} is mapped to {targetNode.This2RuleInstanceNavigation.Name} {targetNode.ObjId}");
-                    _dispatchRegistrations.Add((DispatchableType.NodeInstance, sourceNode.ObjId, targetNode.ObjId));
-                    await _dispatcher.RegisterDispatch(DispatchableType.NodeInstance, sourceNode.ObjId, (dispatchable, o) =>
+                    await Register(entry.ObjId, DispatchableType.NodeInstance, sourceNode.ObjId, targetNode.ObjId, async (dispatchable, o) =>
                     {
-                        targetNode = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
+                        var currentTarget = _logicInterfaceInstanceCache.Get(entry.This2RuleInterfaceInstanceInput.Value);
+                        if (currentTarget == null)
+                        {
+                            _logger.LogWarning($"Node2Rule - logic interface {entry.This2RuleInterfaceInstanceInput.Value} not found, ignore value from {dispatchable.Name}");
+                            return;
+                        }
+
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
                             var value = new DispatchValue(o);
-                            if (targetNode.Inverted && value.Value is bool bValueInt)
+                            if (currentTarget.Inverted && value.Value is bool bValueInt)
                             {
                                 value.Value = !bValueInt;
                             }
-                            ValueDispatchToRule(dispatchable, value, targetNode.This2RuleInstance, targetNode);
+                            await ValueDispatchToRule(dispatchable, value, currentTarget.This2RuleInstance, currentTarget);
                         }
                     });
                 }
@@ -195,8 +217,7 @@ namespace Automatica.Core.Runtime.IO
 
                     var inputId = sourceNode.ObjId;
                     _logger.LogInformation($"Rule2Node - {sourceNode.This2RuleInstanceNavigation.Name} {sourceNode.This2RuleInstanceNavigation.ObjId} is mapped to \"{GetFullName(targetNode)} {targetNode.ObjId}\"");
-                    _dispatchRegistrations.Add((DispatchableType.RuleInstance, inputId, targetNode.ObjId));
-                    await _dispatcher.RegisterDispatch(DispatchableType.RuleInstance, inputId,  async (dispatchable, o) =>
+                    await Register(entry.ObjId, DispatchableType.RuleInstance, inputId, targetNode.ObjId, async (dispatchable, o) =>
                     {
                         if (o.ValueSource == DispatchValueSource.Read)
                         {
@@ -217,93 +238,134 @@ namespace Automatica.Core.Runtime.IO
 
             foreach (var logicInterface in logicInterfaces)
             {
-                await _dispatcher.RegisterDispatch(DispatchableType.Visualization, logicInterface.ObjId,
-                    (dispatchable, o) => { ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface); });
+                // tracked like the links, otherwise every reload adds another visualization callback per interface
+                await Register(Guid.Empty, DispatchableType.Visualization, logicInterface.ObjId, logicInterface.ObjId,
+                    (dispatchable, o) => ValueDispatchToRule(dispatchable, o, logicInterface.This2RuleInstance, logicInterface));
             }
 
             return true;
         }
 
-        public async Task Unlink(Guid id)
+        /// <summary>
+        /// Removes all registrations of the link <paramref name="id"/> or of all links from/to the node/logic interface <paramref name="id"/>.
+        /// Registrations of other subscribers (e.g. trendings) are not touched.
+        /// </summary>
+        public Task Unlink(Guid id)
         {
-            (DispatchableType type, Guid id, Guid target) reg;
-            if (_dispatchRegistrations.Any(a => a.id == id))
+            List<DispatchRegistration> registrations;
+            lock (_registrationsLock)
             {
-                reg = _dispatchRegistrations.First(a => a.id == id);
+                registrations = _dispatchRegistrations.Where(a => a.Link == id || a.Id == id || a.Target == id).ToList();
+                foreach (var reg in registrations)
+                {
+                    _dispatchRegistrations.Remove(reg);
+                }
             }
-            else if (_dispatchRegistrations.Any(a => a.target == id))
-            {
-                reg = _dispatchRegistrations.First(a => a.target == id);
-            }
-            else
+
+            if (registrations.Count == 0)
             {
                 _logger.LogWarning($"Could not find dispatcher registration for {id}");
-                return;
+                return Task.CompletedTask;
             }
 
-            _logger.LogInformation($"Unregister Dispatch for {reg.type} from {reg.id} to {reg.target}");
-            await _dispatcher.UnRegisterDispatch(reg.type, reg.id);
-            _dispatchRegistrations.Remove(reg);
-        }
-
-        public async Task Unload()
-        {
-            foreach (var reg in _dispatchRegistrations)
+            foreach (var reg in registrations)
             {
-                await _dispatcher.UnRegisterDispatch(reg.type, reg.id);
+                _logger.LogInformation($"Unregister Dispatch for {reg.Type} from {reg.Id} to {reg.Target}");
+                reg.Token.Dispose();
             }
 
-            _dispatchRegistrations.Clear();
+            return Task.CompletedTask;
         }
 
-
-        private void ValueDispatchToRule(IDispatchable dispatchable, DispatchValue o, Guid toRule, RuleInterfaceInstance toInterface)
+        public Task Unload()
         {
-            lock (_lock)
+            List<DispatchRegistration> registrations;
+            lock (_registrationsLock)
             {
-                Task.Run(async () => { await _ruleInstanceVisuNotifier.NotifyValueChanged(toInterface, o); })
-                    .ConfigureAwait(false);
+                registrations = _dispatchRegistrations.ToList();
+                _dispatchRegistrations.Clear();
+            }
 
+            foreach (var reg in registrations)
+            {
+                reg.Token.Dispose();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private void NotifyRuleInterface(RuleInterfaceInstance instance, DispatchValue value)
+        {
+            _ = Task.Run(async () =>
+            {
                 try
                 {
-                    var rule = _logicInstancesStore.GetByRuleInstanceId(toRule);
-                
-                    _logger.LogDebug(
-                        $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
-
-                    IList<ILogicOutputChanged> logicResults;
-                    if (o is DispatchValue dispatchValue)
-                    {
-                        logicResults = rule.Value.ValueChanged(toInterface, dispatchable, dispatchValue);
-                    }
-                    else
-                    {
-                        logicResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
-                    }
-
-                    foreach (var result in logicResults)
-                    {
-                        var value = result.Value;
-                        var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a => a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
-
-
-                        if (interfaceInstance.Inverted && value is bool bValueInt)
-                        {
-                            value = !bValueInt;
-                        }
-
-                        Task.Run(async () =>
-                        {
-                            await _dispatcher.DispatchValue(result.Instance, value);
-                            await _ruleInstanceVisuNotifier.NotifyValueChanged(interfaceInstance, new DispatchValue(result.Instance.Id, DispatchableType.RuleInstance, value, DateTime.Now, DispatchValueSource.Read));
-                        }).ConfigureAwait(false);
-                    }
+                    await _ruleInstanceVisuNotifier.NotifyValueChanged(instance, value);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+                    _logger.LogError(e, $"Error notifying value change of logic interface {instance.ObjId}");
+                }
+            });
+        }
+
+        private async Task ValueDispatchToRule(IDispatchable dispatchable, DispatchValue o, Guid toRule, RuleInterfaceInstance toInterface)
+        {
+            NotifyRuleInterface(toInterface, o);
+
+            var ruleLock = _ruleLocks.GetOrAdd(toRule, _ => new SemaphoreSlim(1, 1));
+            await ruleLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                var rule = _logicInstancesStore.GetByRuleInstanceId(toRule);
+
+                if (_logger.IsEnabled(LogLevel.Debug))
+                {
+                    _logger.LogDebug(
+                        $"ValueDispatchToRule: {rule.Key.ObjId} {rule.GetHashCode()} {dispatchable.Name} write value {o} to {toInterface.This2RuleInterfaceTemplateNavigation.Name} {toInterface.ObjId}");
                 }
 
+                IList<ILogicOutputChanged> logicResults;
+                if (o is DispatchValue dispatchValue)
+                {
+                    logicResults = rule.Value.ValueChanged(toInterface, dispatchable, dispatchValue);
+                }
+                else
+                {
+                    logicResults = rule.Value.ValueChanged(toInterface, dispatchable, o);
+                }
+
+                foreach (var result in logicResults)
+                {
+                    var value = result.Value;
+                    var interfaceInstance = rule.Key.RuleInterfaceInstance.Single(a => a.ObjId == result.Instance.RuleInterfaceInstance.ObjId);
+
+
+                    if (interfaceInstance.Inverted && value is bool bValueInt)
+                    {
+                        value = !bValueInt;
+                    }
+
+                    try
+                    {
+                        // awaited (inside the logic lock), the outputs of consecutive input values must not overtake each other
+                        await _dispatcher.DispatchValue(result.Instance, value);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Error dispatching output ({value}) of {rule.Key.Name}");
+                    }
+
+                    NotifyRuleInterface(interfaceInstance, new DispatchValue(result.Instance.Id, DispatchableType.RuleInstance, value, DateTime.Now, DispatchValueSource.Read));
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error writing value ({o}) to {dispatchable.Name}");
+            }
+            finally
+            {
+                ruleLock.Release();
             }
         }
 
@@ -318,9 +380,11 @@ namespace Automatica.Core.Runtime.IO
             }
             try
             {
-                var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                _logger.LogInformation(
-                    $"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
+                using var token = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                if (_logger.IsEnabled(LogLevel.Debug))
+                {
+                    _logger.LogDebug($"ValueDispatched: {dispatchable.Name} write value {o} to {node.Name}-{node.Id}");
+                }
                 await node.WriteValue(dispatchable, o, token.Token);
             }
             catch (Exception e)
@@ -331,6 +395,10 @@ namespace Automatica.Core.Runtime.IO
 
         public void Dispose()
         {
+            lock (_registrationsLock)
+            {
+                _dispatchRegistrations.Clear();
+            }
             _dispatcher.ClearRegistrations();
         }
     }

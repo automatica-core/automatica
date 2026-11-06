@@ -121,6 +121,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             {
                 _logger.LogError(e, "Error loading node instances...");
                 Clear();
+                MarkLoadFailed();
                 return new List<NodeInstance>().AsQueryable();
             }
         }
@@ -353,6 +354,7 @@ namespace Automatica.Core.Internals.Cache.Driver
             base.Clear();
 
             _allCache.Clear();
+            _allParentCache.Clear(); // otherwise a reload adds every child a second time to its parent
 
             _areaCache.Clear();
             _categoryCache.Clear(); 

@@ -48,10 +48,9 @@ namespace Automatica.Core.Driver.Loader
             }
 
             _driverNodeStore.AddChild(driver, driver);
-            for(int i = 0; i <= driver.ChildrensCreated; ++i)
-            {
-                _licenseContract.IncrementDriverCount();
-            }
+            // the children are counted in DriverBase.Configure (ChildrensCreated), only count the driver itself here.
+            // CoreServer.StopDriver decrements ChildrensCreated + 1 again
+            _licenseContract.IncrementDriverCount();
 
 
             AddDriverRecursive(driver, driver);

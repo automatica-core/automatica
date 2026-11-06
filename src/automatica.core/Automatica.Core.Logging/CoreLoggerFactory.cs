@@ -11,6 +11,33 @@ namespace Automatica.Core.Logging
         private static readonly object Lock = new();
         private static readonly IDictionary<string, ICoreLogger> LoggerInstances = new ConcurrentDictionary<string, ICoreLogger>();
 
+        static CoreLoggerFactory()
+        {
+            // the file sinks flush to disk only every 30s, flush (dispose) all loggers as late as possible
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => FlushAll();
+        }
+
+        /// <summary>
+        /// Flushes and closes all loggers, log calls afterwards are ignored
+        /// </summary>
+        public static void FlushAll()
+        {
+            lock (Lock)
+            {
+                foreach (var logger in LoggerInstances.Values)
+                {
+                    try
+                    {
+                        (logger as IDisposable)?.Dispose();
+                    }
+                    catch
+                    {
+                        // ignore, we are shutting down
+                    }
+                }
+            }
+        }
+
         private readonly ICoreLoggerSettings _coreLoggerSettings;
         public IConfiguration Configuration { get; }
 

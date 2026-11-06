@@ -15,29 +15,39 @@ namespace Automatica.Core.Base.Extensions
         /// <returns></returns>
         public static async Task<T> WithCancellation<T>(this Task<T> task, CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<bool>();
-            using (cancellationToken.Register(s => ((TaskCompletionSource<bool>)s).TrySetResult(true), tcs))
+            try
             {
-                if (task != await Task.WhenAny(task, tcs.Task))
-                {
-                    throw new OperationCanceledException(cancellationToken);
-                }
+                // rethrows the original exception of the task (not an AggregateException)
+                return await task.WaitAsync(cancellationToken).ConfigureAwait(false);
             }
-
-            return task.Result;
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested && !task.IsCompleted)
+            {
+                ObserveException(task);
+                throw new OperationCanceledException(cancellationToken);
+            }
         }
 
         public static async Task WithCancellation(this Task task, CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<bool>();
-            using (cancellationToken.Register(s => ((TaskCompletionSource<bool>)s).TrySetResult(true), tcs))
+            try
             {
-                if (task != await Task.WhenAny(task, tcs.Task))
-                {
-                    throw new OperationCanceledException(cancellationToken);
-                }
+                // propagates exceptions of the task, they were swallowed before
+                await task.WaitAsync(cancellationToken).ConfigureAwait(false);
             }
-            
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested && !task.IsCompleted)
+            {
+                ObserveException(task);
+                throw new OperationCanceledException(cancellationToken);
+            }
+        }
+
+        /// <summary>
+        /// The abandoned task may still fail, observe it to not raise UnobservedTaskException
+        /// </summary>
+        private static void ObserveException(Task task)
+        {
+            task.ContinueWith(static t => _ = t.Exception, CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
         }
     }
 }

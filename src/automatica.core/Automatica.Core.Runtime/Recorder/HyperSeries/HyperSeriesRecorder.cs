@@ -26,7 +26,8 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
 
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(0);
 
-        private readonly Queue<RecordValue> _queue = new Queue<RecordValue>();
+        // filled from the dispatcher/timer threads, emptied by the worker thread
+        private readonly System.Collections.Concurrent.ConcurrentQueue<RecordValue> _queue = new System.Collections.Concurrent.ConcurrentQueue<RecordValue>();
         private CancellationTokenSource _cancellationTokenSource;
 
         private bool _isRunning;
@@ -87,9 +88,8 @@ namespace Automatica.Core.Runtime.Recorder.HyperSeries
                 {
                     await _semaphore.WaitAsync(token);
 
-                    if (_queue.Count > 0)
+                    if (_queue.TryDequeue(out var record))
                     {
-                        var record = _queue.Dequeue();
                         if (record != null && _repository != null)
                         {
                             Logger.LogDebug($"Adding record to hyperseries db: {record.NodeInstanceId} {record.Value}");

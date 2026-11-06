@@ -11,6 +11,10 @@ namespace Automatica.Core.Internals.Cache
     {
         private readonly IConfiguration _configuration;
         private bool _initialized = false;
+        private bool _loadFailed;
+        // after a failed load (e.g. database not reachable) the next attempt waits a bit, so callers don't all hit the db connect timeout
+        private static readonly TimeSpan LoadRetryDelay = TimeSpan.FromSeconds(10);
+        private DateTime _lastFailedLoad = DateTime.MinValue;
         private readonly object _lock = new object();
 
         public bool Initialized => _initialized;
@@ -24,8 +28,9 @@ namespace Automatica.Core.Internals.Cache
         {
             lock (_lock)
             {
-                if (!_initialized)
+                if (!_initialized && DateTime.UtcNow - _lastFailedLoad >= LoadRetryDelay)
                 {
+                    _loadFailed = false;
                     using (var db = new AutomaticaContext(_configuration))
                     {
                         foreach (var item in GetAll(db))
@@ -34,7 +39,9 @@ namespace Automatica.Core.Internals.Cache
                         }
                     }
 
-                    _initialized = true;
+                    // a failed load is retried on the next access instead of keeping an empty cache forever
+                    _initialized = !_loadFailed;
+                    _lastFailedLoad = _loadFailed ? DateTime.UtcNow : DateTime.MinValue;
                 }
             }
 
@@ -49,6 +56,14 @@ namespace Automatica.Core.Internals.Cache
         }
 
         protected abstract IQueryable<T2> GetAll(AutomaticaContext context);
+
+        /// <summary>
+        /// Called from <see cref="GetAll"/> when loading failed, the cache is not marked as initialized and loads again on the next access
+        /// </summary>
+        protected void MarkLoadFailed()
+        {
+            _loadFailed = true;
+        }
         protected abstract T1 GetKey(T2 obj);
 
         protected void Initialize()
@@ -67,6 +82,7 @@ namespace Automatica.Core.Internals.Cache
             lock (_lock)
             {
                 _initialized = false;
+                _lastFailedLoad = DateTime.MinValue;
                 base.Clear();
             }
         }

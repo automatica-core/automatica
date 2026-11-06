@@ -12,10 +12,11 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Automatica.Core.Logging
 {
-    public class CoreLogger : ICoreLogger
+    public class CoreLogger : ICoreLogger, IDisposable
     {
         private readonly string _logNameFacility;
         private readonly Serilog.ILogger _logger;
+        private volatile bool _disposed;
         private readonly LoggingLevelSwitch _levelSwitch;
         private LogLevel _logLevel;
 
@@ -127,7 +128,8 @@ namespace Automatica.Core.Logging
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(30));
 
-                logBuild.WriteTo.PushSignalR(serviceProvider, "all");
+                // one sink, the sink sends to all connected clients and the clients add every message to their "all" view as well,
+                // a second sink with the facility "all" sent every message twice
                 logBuild.WriteTo.PushSignalR(serviceProvider, facility);
             }
             // enable log to stdout only in docker and if debugger is attached to prevent syslog from writing to much data
@@ -155,6 +157,9 @@ namespace Automatica.Core.Logging
                     return LogLevel.Trace;
                 case "debug":
                     return LogLevel.Debug;
+                case "information":
+                case "info":
+                    return LogLevel.Information;
                 case "warning":
                     return LogLevel.Warning;
                 case "error":
@@ -216,13 +221,26 @@ namespace Automatica.Core.Logging
         {
             var level = ConvertLogLevel(logLevel);
 
-            if (!_logger.IsEnabled(level))
+            if (_disposed || !_logger.IsEnabled(level))
             {
                 return;
             }
 
             var msg = $"{_logNameFacility.ToLower()}: {formatter.Invoke(state, exception!)}";
             _logger.Write(level, exception, msg);
+        }
+
+        /// <summary>
+        /// Flushes and closes the sinks, called on process exit (<see cref="CoreLoggerFactory"/>)
+        /// </summary>
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+            (_logger as IDisposable)?.Dispose();
         }
 
     }

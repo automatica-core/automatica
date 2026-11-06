@@ -34,6 +34,15 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
                 return Task.CompletedTask;
             }
 
+            lock (_lock)
+            {
+                if (_timerStarted)
+                {
+                    return Task.CompletedTask;
+                }
+                _timerStarted = true;
+            }
+
             if (Instance.TrendingInterval == 0)
             {
                 Instance.TrendingInterval = 1;
@@ -43,6 +52,8 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
             _timer.Start();
             return Task.CompletedTask;
         }
+
+        private bool _timerStarted;
 
         private void _timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
@@ -129,6 +140,10 @@ namespace Automatica.Core.Runtime.Recorder.Abstraction
 
         public Task Stop()
         {
+            lock (_lock)
+            {
+                _timerStarted = false;
+            }
             _timer.Elapsed -= _timer_Elapsed;
             _timer.Stop();
             return Task.CompletedTask;

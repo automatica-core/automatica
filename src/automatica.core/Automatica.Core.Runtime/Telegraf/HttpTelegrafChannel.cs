@@ -43,7 +43,11 @@ namespace Automatica.Core.Runtime.Telegraf
             if(authorizationHeaderValue != null)
                 _authorizationHeaderValue = authorizationHeaderValue;
 
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient
+            {
+                // the configured timeout was never applied (default of HttpClient is 100s)
+                Timeout = TimeSpan.FromMilliseconds(_httpTimeout)
+            };
 
             if (!String.IsNullOrEmpty(_authorizationHeaderValue))
             {
@@ -57,15 +61,23 @@ namespace Automatica.Core.Runtime.Telegraf
             if (string.IsNullOrWhiteSpace(metric))
                 return;
 
+            if (_disposing || _disposed)
+                return;
+
             var taskId = Guid.NewGuid();
 
-            var task = Task.Factory.StartNew(
-                () => WriteInternal(metric, taskId),
-                _cancellationTokenSource.Token,
-                TaskCreationOptions.DenyChildAttach,
-                TaskScheduler.Default);
+            // Task.Run unwraps the async WriteInternal, StartNew returned a Task<Task> that completed at the first await,
+            // so Dispose never waited for the http requests
+            var task = Task.Run(() => WriteInternal(metric, taskId), _cancellationTokenSource.Token);
 
             _tasks.TryAdd(taskId, task);
+            // removed after it was added, also if the task completes before TryAdd
+            task.ContinueWith(static (_, state) =>
+                {
+                    var (tasks, id) = ((ConcurrentDictionary<Guid, Task>, Guid))state!;
+                    tasks.TryRemove(id, out _);
+                }, (_tasks, taskId), CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously,
+                TaskScheduler.Default);
         }
 
         public Task WriteAsync(string metric)
@@ -82,20 +94,21 @@ namespace Automatica.Core.Runtime.Telegraf
                 if (_cancellationTokenSource.IsCancellationRequested)
                     return;
 
-                var response = await _httpClient.PostAsync(_uri, new StringContent(metric, Encoding.UTF8, "application/json"));
+                using var content = new StringContent(metric, Encoding.UTF8, "application/json");
+                using var response = await _httpClient.PostAsync(_uri, content, _cancellationTokenSource.Token);
                 response.EnsureSuccessStatusCode();
             }
             catch (WebException e)
             {
                 _logger.Error(e, $"status:{e.Status}, metric:{metric}");
             }
+            catch (OperationCanceledException) when (_cancellationTokenSource.IsCancellationRequested)
+            {
+                // disposed
+            }
             catch (Exception e)
             {
                 _logger.Error(e, $"metric:{metric}");
-            }
-            finally
-            {
-                _tasks.TryRemove(taskId, out _);
             }
         }
 
@@ -133,6 +146,7 @@ namespace Automatica.Core.Runtime.Telegraf
                 _logger.Error(e);
             }
 
+            _httpClient.Dispose();
             _disposed = true;
         }
     }

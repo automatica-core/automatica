@@ -26,6 +26,7 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         private readonly string _processName = "frpc";
 
         private readonly Timer _stdTimer = new Timer();
+        private Process? _process;
 
         public FrpProcess(IFrpcApiClient apiClient, IOptionsMonitor<FrpcOptions> settings, IConfiguration config, ISettingsCache settingsCache, ILogger<FrpProcess> logger)
         {
@@ -48,9 +49,17 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
 
             _logger.LogInformation($"Starting frpc process: {JsonConvert.SerializeObject(processInformation.EnvironmentVariables)}, {processInformation.Arguments}");
 
-            var process =
-                Process.Start(processInformation) ??
-                throw new InvalidOperationException("Could not start process");
+            // EnableRaisingEvents has to be set, otherwise Exited is never raised
+            var process = new Process
+            {
+                StartInfo = processInformation,
+                EnableRaisingEvents = true
+            };
+
+            process.Exited += (sender, args) =>
+            {
+                _logger.LogError("Frp process exited");
+            };
 
             process.OutputDataReceived += (sender, args) =>
             {
@@ -62,13 +71,17 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
                 _logger.LogError($"stderr: {args.Data}");
             };
 
+            if (!process.Start())
+            {
+                process.Dispose();
+                throw new InvalidOperationException("Could not start process");
+            }
+
+            var previous = Interlocked.Exchange(ref _process, process);
+            previous?.Dispose();
+
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
-
-            process.Exited += (sender, args) =>
-            {
-                _logger.LogError("Frp process exited");
-            };
 
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(30)).Token;
             while (!await _apiClient.IsReady(cancellationToken))
@@ -80,6 +93,8 @@ namespace Automatica.Core.Runtime.RemoteConnect.Frp
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             await KillExistingProcessesAsync();
+
+            Interlocked.Exchange(ref _process, null)?.Dispose();
         }
 
         private async Task KillExistingProcessesAsync()

@@ -28,7 +28,9 @@ namespace Automatica.Core.Runtime.Core
 
         private readonly IDictionary<string, NodeInstance> _mqttNodes = new Dictionary<string, NodeInstance>();
         private readonly IDictionary<string, IDictionary<NodeInstance, IDriverFactory>> _mqttSlaves = new Dictionary<string, IDictionary<NodeInstance, IDriverFactory>>();
-        private readonly IList<string> _connectedMqttClients = new List<string>();
+        // MQTTnet raises the client events on its own threads, only access under _clientsLock
+        private readonly List<string> _connectedMqttClients = new List<string>();
+        private readonly object _clientsLock = new object();
         private readonly MqttServer _mqttServer;
         private readonly IDispatcher _dispatcher;
         private readonly ILearnMode _learnModeHandler;
@@ -121,7 +123,7 @@ namespace Automatica.Core.Runtime.Core
         public Task ClientConnected(RemoteConnectedEvent connectedEvent)
         {
             _logger.LogInformation($"Client {connectedEvent.ClientId} connected...");
-            _connectedMqttClients.Add(connectedEvent.ClientId);
+            AddConnectedClient(connectedEvent.ClientId);
 
             return Task.CompletedTask;
         }
@@ -130,7 +132,7 @@ namespace Automatica.Core.Runtime.Core
         {
             _logger.LogInformation($"Client {disconnectedEvent.ClientId} disconnected...");
 
-            if (_connectedMqttClients.Contains(disconnectedEvent.ClientId))
+            lock (_clientsLock)
             {
                 _connectedMqttClients.Remove(disconnectedEvent.ClientId);
             }
@@ -163,14 +165,14 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task MessageReceived(RemoteMessageEvent messageEvent)
         {
-            _logger.LogInformation($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}...");
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug($"Received message on {messageEvent.Topic} from {messageEvent.ClientId} with data {messageEvent.Message}...");
+            }
 
             try
             {
-                if (!_connectedMqttClients.Contains(messageEvent.ClientId))
-                {
-                    _connectedMqttClients.Add(messageEvent.ClientId);
-                }
+                AddConnectedClient(messageEvent.ClientId);
 
                 if (IsMatch(messageEvent.Topic, $"{RemoteTopicConstants.DISPATCHER_TOPIC}/#"))
                 {
@@ -221,7 +223,7 @@ namespace Automatica.Core.Runtime.Core
 
         public async Task ReInit()
         {
-            foreach(var client in _connectedMqttClients)
+            foreach(var client in GetConnectedClients())
             {
                 _logger.LogInformation($"Send reinit to client {client}");
                 await PublishAsync(BuildMessage($"{RemoteTopicConstants.SLAVE_TOPIC}/{client}/{RemoteTopicConstants.ACTIONS_TOPIC_REINIT}", Encoding.UTF8.GetBytes(""), MqttQualityOfServiceLevel.ExactlyOnce));
@@ -246,7 +248,12 @@ namespace Automatica.Core.Runtime.Core
             _mqttSlaves[id].Add(nodeInstance, factory);
 
             // start instance asap
-            if (_connectedMqttClients.Contains(id))
+            bool connected;
+            lock (_clientsLock)
+            {
+                connected = _connectedMqttClients.Contains(id);
+            }
+            if (connected)
             {
                 await StartInstance(id, factory, nodeInstance);
             }
@@ -353,9 +360,26 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
+        private void AddConnectedClient(string clientId)
+        {
+            lock (_clientsLock)
+            {
+                if (!_connectedMqttClients.Contains(clientId))
+                {
+                    _connectedMqttClients.Add(clientId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Snapshot of the connected clients
+        /// </summary>
         public IList<string> GetConnectedClients()
         {
-            return _connectedMqttClients;
+            lock (_clientsLock)
+            {
+                return _connectedMqttClients.ToList();
+            }
         }
 
     }

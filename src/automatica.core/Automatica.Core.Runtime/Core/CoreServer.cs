@@ -66,7 +66,6 @@ namespace Automatica.Core.Runtime.Core
         private readonly IConfiguration _config;
         private readonly IHubContext<DataHub> _dataHub;
         private readonly ILogger _logger;
-        private int _configuredDrivers;
 
 
         private readonly IDispatcher _dispatcher;
@@ -236,9 +235,18 @@ namespace Automatica.Core.Runtime.Core
 
                     RunState = RunState.Loading;
                     await Load(ServerInfo.PluginDirectory, ServerInfo.PluginFilePattern);
-                    await ConfigureAndStart();
 
-                    await _dispatcher.Init(cancellationToken);
+                    // restore the remanent values before drivers and logics start, they are only stored and not dispatched to the links
+                    try
+                    {
+                        await _dispatcher.Init(cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, "Could not restore remanent values");
+                    }
+
+                    await ConfigureAndStart();
 
                     _logicPageCache.All();
 
@@ -497,7 +505,8 @@ namespace Automatica.Core.Runtime.Core
             try
             {
 
-                _licenseContext.DecrementDriverCount(driver.ChildrensCreated);
+                // the driver itself (DriverFactoryLoader) + its children (DriverBase.Configure)
+                _licenseContext.DecrementDriverCount(driver.ChildrensCreated + 1);
                 _logger.LogInformation($"Stopping driver {driver.Id} {driver.Name}...");
 
                 if (await driver.Stop())
@@ -524,16 +533,26 @@ namespace Automatica.Core.Runtime.Core
         {
             await _remoteServerHandler.Stop();
 
-            foreach (var driver in _driverStore.All())
+            // links and logics first, otherwise values are still dispatched into the stopped drivers
+            await StopLogicEngine();
+
+            // StopDriver removes the driver from the store, Stopped() has to be called on a snapshot
+            var drivers = _driverStore.All().ToList();
+            foreach (var driver in drivers)
             {
                 await StopDriver(driver);
             }
 
-            await StopLogicEngine();
-
-            foreach (var driver in _driverStore.All())
+            foreach (var driver in drivers)
             {
-                await driver.Stopped();
+                try
+                {
+                    await driver.Stopped();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error in stopped of driver {driver.Id} {driver.Name}");
+                }
             }
 
 
@@ -657,12 +676,13 @@ namespace Automatica.Core.Runtime.Core
             }
         }
 
-        private bool LicenseExceeded() => _configuredDrivers >= _licenseContext.MaxDataPoints;
+        private bool LicenseExceeded() => _licenseContext.DriverLicenseCountExceeded();
 
         private void AddNodeInstancesRecursive(NodeInstance nodeInstance)
         {
-            if (_configuredDrivers >= _licenseContext.MaxDataPoints)
+            if (nodeInstance.State == NodeInstanceState.New && LicenseExceeded())
             {
+                // not created because of the data point limit (see DriverBase.Configure)
                 nodeInstance.State = NodeInstanceState.OutOfDataPoints;
             }
             if(nodeInstance.State == NodeInstanceState.New)
@@ -726,7 +746,6 @@ namespace Automatica.Core.Runtime.Core
                 _logger.LogError("Can not configure drivers - license is invalid");
                 return;
             }
-            _configuredDrivers = 0;
 
             try
             {
@@ -738,6 +757,11 @@ namespace Automatica.Core.Runtime.Core
             }
 
             var root = _nodeInstanceCache.Root;
+            if (root == null)
+            {
+                // the node instance cache could not be loaded (e.g. database not reachable), it is loaded again on the next access
+                throw new InvalidOperationException("Could not load the node instances, root node is not available");
+            }
             root.State = NodeInstanceState.InUse;
             _loadedNodeInstancesStore.Add(root.ObjId, root);
             await ConfigureDriversRecursive(root);

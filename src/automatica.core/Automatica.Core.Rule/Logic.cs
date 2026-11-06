@@ -176,7 +176,8 @@ namespace Automatica.Core.Logic
                     _inputValueDictionary[instance] = value;
                 }
 
-                if (IgnoreDuplicateValues && _inputValueDictionary[instance] == prevValue)
+                // Equals, the values are boxed - == would compare the references and never match for bool or numbers
+                if (IgnoreDuplicateValues && Equals(_inputValueDictionary[instance], prevValue))
                 {
                     Context.Logger.LogDebug($"Input value did not change, ignore value change...");
                     return new List<ILogicOutputChanged>();
