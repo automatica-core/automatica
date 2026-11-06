@@ -370,6 +370,7 @@ namespace Automatica.Core.Runtime.Database
             AddHostedGrafanaRecorderSettings(context);
             AddRemoteConnectSettings(context);
             AddHyperSeriesRecorderSettings(context, config);
+            AddMcpSettings(context);
 
             var propertyTypes = Enum.GetValues(typeof(PropertyTemplateType));
 
@@ -615,6 +616,58 @@ namespace Automatica.Core.Runtime.Database
             {
                 remoteDomain.NeedsReloadOnChange = true;
                 remoteDomain.ReloadContext = SettingReloadContext.RemoteConnect;
+            }
+        }
+
+        private static void AddMcpSettings(AutomaticaContext context)
+        {
+            // MCP endpoint (/mcp) for AI assistants, off until an administrator enables it
+            var enabled = context.Settings.SingleOrDefault(a => a.ValueKey == "mcpEnabled");
+            if (enabled == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "mcpEnabled",
+                    Type = (long)PropertyTemplateType.Bool,
+                    Value = false,
+                    Group = "SERVER.MCP",
+                    IsVisible = true,
+                    Order = 1,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
+            }
+
+            var apiKey = context.Settings.SingleOrDefault(a => a.ValueKey == "mcpApiKey");
+            if (apiKey == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "mcpApiKey",
+                    Type = (long)PropertyTemplateType.Text,
+                    Value = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)).ToLowerInvariant(),
+                    Group = "SERVER.MCP",
+                    IsVisible = true,
+                    Order = 2,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
+            }
+
+            var allowWrite = context.Settings.SingleOrDefault(a => a.ValueKey == "mcpAllowWrite");
+            if (allowWrite == null)
+            {
+                context.Settings.Add(new Setting
+                {
+                    ValueKey = "mcpAllowWrite",
+                    Type = (long)PropertyTemplateType.Bool,
+                    Value = false,
+                    Group = "SERVER.MCP",
+                    IsVisible = true,
+                    Order = 3,
+                    CreatedAt = DateTimeOffset.Now,
+                    ModifiedAt = DateTimeOffset.Now
+                });
             }
         }
 

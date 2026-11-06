@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.SignalR;
 using Automatica.Core.Push;
 using Automatica.Core.Internals;
 using Automatica.Core.Logging;
+using Automatica.Core.Mcp;
 using Automatica.Core.Model.Models.User;
 using Microsoft.AspNetCore.ResponseCompression;
 using Automatica.Core.Runtime;
@@ -113,7 +114,8 @@ namespace Automatica.Core
                             return Task.CompletedTask;
                         }
                     };
-                });
+                })
+                .AddMcpApiKey();
 
             services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
                 .AddAuthorization(options =>
@@ -147,6 +149,7 @@ namespace Automatica.Core
             services.AddSingleton<DiscoveryService>();
             services.AddAutomaticaCoreService(Configuration, false);
             services.AddCoreLogger(Configuration);
+            services.AddAutomaticaMcp();
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(ServerInfo.GetConfigDirectory())
@@ -228,6 +231,7 @@ namespace Automatica.Core
                 endpoints.MapHub<TelegramHub>("/signalr/telegramHub");
                 endpoints.MapHub<UpdateHub>("/signalr/updateHub");
                 endpoints.MapHub<LoggingHub>("/signalr/loggingHub");
+                endpoints.MapAutomaticaMcp();
 
                 endpoints.MapControllerRoute("webapi", "");
 

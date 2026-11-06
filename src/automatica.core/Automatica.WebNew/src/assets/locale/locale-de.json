@@ -9,7 +9,8 @@
       "HYPERSERIES": "Hyperseries"
     },
     "SETTINGS": "Server Einstellungen",
-    "REMOTE": "Remote Server Einstellungen"
+    "REMOTE": "Remote Server Einstellungen",
+    "MCP": "KI-Assistent (MCP)"
   },
   "COMMON": {
     "LOG": "Log",
@@ -459,6 +460,18 @@
       },
       "VALUE_TIMESTAMP": {
         "NAME": "Zeitstempel"
+      },
+      "MCPENABLED": {
+        "NAME": "MCP-Endpunkt aktivieren",
+        "DESCRIPTION": "Erlaubt KI-Assistenten den Zugriff auf /mcp (Model Context Protocol) mit dem API-Schlüssel oder einem Benutzer-Login."
+      },
+      "MCPAPIKEY": {
+        "NAME": "API-Schlüssel",
+        "DESCRIPTION": "Als \"Authorization: Bearer <Schlüssel>\" oder \"X-Api-Key\" senden. Ändern entzieht den Zugriff."
+      },
+      "MCPALLOWWRITE": {
+        "NAME": "Schreiben erlauben",
+        "DESCRIPTION": "Erlaubt Assistenten mit API-Schlüssel, Werte auf Datenpunkte und Logikeingänge zu schreiben."
       },
       "REMOTEDOMAIN": {
         "NAME": "Domain"

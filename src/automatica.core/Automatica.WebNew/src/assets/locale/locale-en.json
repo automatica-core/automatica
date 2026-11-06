@@ -9,7 +9,8 @@
       "HYPERSERIES": "Hyperseries"
     },
     "SETTINGS": "Server Settings",
-    "REMOTE": "Remote Server Settings"
+    "REMOTE": "Remote Server Settings",
+    "MCP": "AI Assistant (MCP)"
   },
   "COMMON": {
     "LOG": "Log",
@@ -459,6 +460,18 @@
       },
       "VALUE_TIMESTAMP": {
         "NAME": "Timestamp"
+      },
+      "MCPENABLED": {
+        "NAME": "Enable MCP endpoint",
+        "DESCRIPTION": "Lets AI assistants connect to /mcp (Model Context Protocol) with the API key or a user login."
+      },
+      "MCPAPIKEY": {
+        "NAME": "API key",
+        "DESCRIPTION": "Send as \"Authorization: Bearer <key>\" or \"X-Api-Key\". Change it to revoke access."
+      },
+      "MCPALLOWWRITE": {
+        "NAME": "Allow writing values",
+        "DESCRIPTION": "Lets assistants that use the API key write values to data points and logic inputs."
       },
       "REMOTEDOMAIN": {
         "NAME": "Domain"
