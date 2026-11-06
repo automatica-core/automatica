@@ -216,7 +216,7 @@ export class ConfigMenuComponent implements OnInit, OnDestroy {
   }
 
   async onImportFileChanged($event, that: ConfigMenuComponent) {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       if (that.selectedItem instanceof NodeInstance) {
         const files = $event.target.files;
@@ -273,8 +273,12 @@ export class ConfigMenuComponent implements OnInit, OnDestroy {
         }
       }
     }
+    catch (error) {
+      console.error(error);
+      that.notify.notifyError(error?.ErrorText ? "ERROR." + error.ErrorText : "ERROR.UNKNOWN");
+    }
     finally {
-      this.appService.isLoading = false;
+      loadingDone();
     }
   }
 

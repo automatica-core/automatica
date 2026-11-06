@@ -8,6 +8,7 @@ import { BaseComponent } from "src/app/base/base-component";
 import { AreaInstance } from "src/app/base/model/areas";
 import { BaseModel } from "src/app/base/model/base-model";
 import { AppService } from "src/app/services/app.service";
+import { BaseServiceHelper } from "src/app/services/base-server-helper";
 
 @Component({
     selector: "app-areas-ets-import",
@@ -41,7 +42,8 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
 
 
   get uploadUrl(): string {
-    return "/webapi/areas/" + this.parentObjId + "/etsImport";
+    // absolute, the app is served from https://localhost and the server is somewhere else
+    return BaseServiceHelper.getApiBaseUrl() + "/areas/" + this.parentObjId + "/etsImport";
   }
 
   get uploadHeader() {
@@ -72,6 +74,15 @@ export class AreasEtsImportComponent extends BaseComponent implements OnInit, On
 
   onUploadStarted($event) {
     this.isLoading = true;
+  }
+
+  onUploadError($event) {
+    this.isLoading = false;
+    if ($event?.request?.status === 0) {
+      this.notify.notifyError("ERROR.SERVER_NOT_AVAILABLE");
+    } else {
+      this.notify.notifyError($event?.error?.message ?? "ERROR.UNKNOWN");
+    }
   }
 
   onFileUploaded($event) {

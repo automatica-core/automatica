@@ -38,6 +38,9 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
 
   public pageGroupType: VisuPageGroupType = VisuPageGroupType.Favorites;
 
+  // bumped by every page load, a response for an older load is dropped (tap page A, then B)
+  private loadSequence = 0;
+
   constructor(private visuService: VisuService,
     private route: ActivatedRoute,
     notify: NotifyService,
@@ -51,22 +54,26 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
   }
 
   async ngOnInit() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
-    await this.dataService.getAllValues();
-
-    this.visuTemplates = await this.visuService.getVisuTemplates();
-
-    this.registerEvent(this.visuService.reloadedPage, async (page) => {
-      await this.dataService.getAllValues();
-      this.initPage(page, page.ObjId);
-    });
-
-    for (const v of this.visuTemplates) {
-      this.visuTemplatesMap.set(v.ObjId, v);
-    }
-    this.version = await this.configService.getVersion();
     try {
+      await this.dataService.getAllValues();
+
+      this.visuTemplates = await this.visuService.getVisuTemplates();
+
+      this.registerEvent(this.visuService.reloadedPage, async (page) => {
+        try {
+          await this.dataService.getAllValues();
+          this.initPage(page, page.ObjId);
+        } catch (error) {
+          this.handleError(error);
+        }
+      });
+
+      for (const v of this.visuTemplates) {
+        this.visuTemplatesMap.set(v.ObjId, v);
+      }
+      this.version = await this.configService.getVersion();
 
 
       if (!this.page) {
@@ -90,44 +97,54 @@ export class MobileContainerComponent extends BaseComponent implements OnInit, O
             const id = params["id"];
             const type = params["type"];
 
-            await this.loadPageById(id, type);
+            try {
+              await this.loadPageById(id, type);
+            } catch (error) {
+              this.handleError(error);
+            }
 
           });
         }
 
       }
     } catch (error) {
-      this.notifyService.notifyError(error);
-      console.error(error);
+      this.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
   private async loadFavorites() {
-    this.pageGroupType = VisuPageGroupType.Favorites;
+    const sequence = ++this.loadSequence;
     const data = await this.visuService.getFavorites();
+    if (sequence !== this.loadSequence || this.destroyed) {
+      return;
+    }
+    this.pageGroupType = VisuPageGroupType.Favorites;
     this.initPage(data, void 0);
   }
 
   private async loadPageById(id: string, type: string) {
-    this.appService.isLoading = true;
+    if (!type) {
+      return;
+    }
+    const sequence = ++this.loadSequence;
+    const loadingDone = this.appService.beginLoading();
 
-    if (type) {
-
+    try {
       window.localStorage["lastVisuPage"] = id;
       window.localStorage["lastVisuPageType"] = type;
 
-      if (type === "area") {
-        this.pageGroupType = VisuPageGroupType.Area;
-      } else {
-        this.pageGroupType = VisuPageGroupType.Category;
+      const data = await this.visuService.getVisuPage(id);
+      if (sequence !== this.loadSequence || this.destroyed) {
+        // another page was opened meanwhile
+        return;
       }
 
-      const data = await this.visuService.getVisuPage(id);
+      this.pageGroupType = type === "area" ? VisuPageGroupType.Area : VisuPageGroupType.Category;
       this.initPage(data, id);
-
+    } finally {
+      loadingDone();
     }
-    this.appService.isLoading = false;
   }
 
   private initPage(data: VisuPage | VisualizationDataFacade, id: any) {

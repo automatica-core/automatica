@@ -8,6 +8,7 @@ import { AppService } from "src/app/services/app.service";
 import { PropertyInstance } from "src/app/base/model/property-instance";
 import { NodeInstance } from "src/app/base/model/node-instance";
 import { IPropertyModel } from "src/app/base/model/interfaces";
+import { BaseServiceHelper } from "src/app/services/base-server-helper";
 
 @Component({
     selector: "node-instance-import",
@@ -33,6 +34,11 @@ export class NodeInstanceImportComponent extends BaseComponent implements OnDest
 
   @Output()
   public fileUploaded = new EventEmitter<any>();
+
+  get uploadUrl(): string {
+    // absolute, the app is served from https://localhost and the server is somewhere else
+    return BaseServiceHelper.getApiBaseUrl() + "/fileUpload";
+  }
 
   get uploadHeader() {
     return { "Authorization": "Bearer " + localStorage.getItem("jwt"), password: this.password };

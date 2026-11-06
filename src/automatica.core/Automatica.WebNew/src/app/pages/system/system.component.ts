@@ -41,7 +41,7 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   protected async load(): Promise<any> {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       const downloaded = await this.systemService.alreadyDownloaded();
       this.alreadyDownloaded = downloaded.result;
@@ -67,7 +67,7 @@ export class SystemComponent extends BaseComponent implements OnInit, OnDestroy 
       this.handleError(error);
     }
 
-    this.appService.isLoading = false;
+    loadingDone();
   }
 
   async ngOnInit() {

@@ -36,7 +36,7 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     try {
       const [groups, categories] = await Promise.all(
@@ -52,9 +52,37 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
 
     } catch (error) {
       this.handleError(error);
+    } finally {
+      loadingDone();
     }
+  }
 
-    this.appService.isLoading = false;
+  /** true if the category was saved on the server */
+  private async saveCategory(category: CategoryInstance): Promise<boolean> {
+    const loadingDone = this.appService.beginLoading();
+    try {
+      await this.catService.saveCategoryInstance(category);
+      return true;
+    } catch (error) {
+      this.handleError(error);
+      return false;
+    } finally {
+      loadingDone();
+    }
+  }
+
+  /** true if the category was removed on the server */
+  private async removeCategory(category: CategoryInstance): Promise<boolean> {
+    const loadingDone = this.appService.beginLoading();
+    try {
+      await this.catService.removeCategoryInstance(category);
+      return true;
+    } catch (error) {
+      this.handleError(error);
+      return false;
+    } finally {
+      loadingDone();
+    }
   }
 
   colorBoxOnValueChanged($event, cell) {
@@ -64,14 +92,8 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     const data: CategoryInstance = $event.data;
 
     if (data.IsDeleteable) {
-      this.appService.isLoading = true;
-      try {
-        this.catService.removeCategoryInstance(data);
-      } catch (error) {
-        this.handleError(error);
-      } finally {
-        this.appService.isLoading = false;
-      }
+      // the grid keeps the row if the server could not delete it
+      $event.cancel = this.removeCategory(data).then(removed => !removed);
     }
     else {
       $event.cancel = true;
@@ -92,21 +114,13 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     if ($event.newData.DisplayName || $event.newData.DisplayDescription) {
       $event.newData.DisplayName = this.translate.translate(oldData.Name);
       $event.newData.DisplayDescription = ""; // oldData.Description;
-      this.appService.isLoading = true;
-
     }
   }
 
   async onChanged($event) {
     var { item } = $event;
 
-    try {
-      this.catService.saveCategoryInstance(item);
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.appService.isLoading = false;
-    }
+    await this.saveCategory(item);
   }
 
   onInitNewRow($event) {
@@ -128,14 +142,8 @@ export class CategoryConfigComponent extends BaseComponent implements OnInit {
     $event.data = newObject;
     this.selectedNode = newObject;
 
-    this.appService.isLoading = true;
-    try {
-      this.catService.saveCategoryInstance(newObject);
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.appService.isLoading = false;
-    }
+    // the grid drops the new row if the server could not save it
+    $event.cancel = this.saveCategory(newObject).then(saved => !saved);
   }
 
   onRowClicked($event) {

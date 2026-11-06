@@ -27,8 +27,12 @@ export class LoginService extends BaseService {
   }
 
   logout() {
-    localStorage.removeItem("automtica.user");
+    localStorage.removeItem("automatica.user");
     localStorage.removeItem("jwt");
+    // older versions saved the password in plain text
+    localStorage.removeItem("s1pw");
+    // otherwise the guards still see the user after the logout
+    this.currentUser = void 0;
   }
 
   saveToLocalStorage(user: User) {
@@ -64,6 +68,11 @@ export class LoginService extends BaseService {
   }
 
   getUserFromLocalStore() {
+    if (!localStorage.getItem("jwt")) {
+      // no token, no session (logout, expired token, login page)
+      this.currentUser = void 0;
+      return void 0;
+    }
     if (!this.currentUser) {
       const str = localStorage.getItem("automatica.user");
       if (str) {
@@ -92,30 +101,17 @@ export class HasRoleGuard {
       return false;
     }
 
-    const needsRole = route.data.requiresRole;
+    // routes without a role (the admin pages) need the administrator role
+    const needsRole = route.data?.requiresRole ?? Role.ADMIN_ROLE;
 
     if (!this.userService.hasPermission(needsRole)) {
       return false;
     }
     return true;
   }
-}
 
-@Injectable()
-export class HomepageRouteGuard {
-
-  constructor(private router: Router, private loginService: LoginService) {
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.canActivate(childRoute, state);
   }
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (!this.loginService.getUserFromLocalStore()) {
-      // not logged in
-      this.router.navigate(["/login"]);
-      return false;
-    }
-
-    this.router.navigateByUrl("/visualization/page");
-  }
-
 }
 

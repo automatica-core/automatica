@@ -75,7 +75,7 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
     if ($event.Direction === 0) {
       return "INPUT <<";
     }
-    return "OUTPUT <<";
+    return "OUTPUT >>";
   }
 
   private getMonitorInstance(id: string) {

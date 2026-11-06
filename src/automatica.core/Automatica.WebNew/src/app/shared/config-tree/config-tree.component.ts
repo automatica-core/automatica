@@ -103,8 +103,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
         if (data[0] === 0) { // 0 = nodeinstance value
           const id = data[1];
           if(this.nodeInstanceService.setNodeInstanceValue(id, data[2])) {
-            this.changeRef.detectChanges();
-             this.tree.instance.refresh(true);
+            this.scheduleTreeRefresh();
           }
         }
       });
@@ -132,7 +131,28 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   async ngOnDestroy() {
+    clearTimeout(this.treeRefreshTimer);
+    this.treeRefreshTimer = undefined;
     super.baseOnDestroy();
+  }
+
+  private treeRefreshTimer: any;
+
+  /**
+   * Repaints the tree at most every 500ms, a busy bus pushes far more values than that.
+   */
+  private scheduleTreeRefresh() {
+    if (this.treeRefreshTimer) {
+      return;
+    }
+    this.treeRefreshTimer = setTimeout(() => {
+      this.treeRefreshTimer = undefined;
+      if (this.destroyed) {
+        return;
+      }
+      this.changeRef.detectChanges();
+      this.tree?.instance?.refresh(true);
+    }, 500);
   }
 
   sortByName(a, b) {
@@ -148,29 +168,31 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   public async scan(nodeInstance: NodeInstance) {
+    const loadingDone = this.appService.beginLoading();
     try {
-      this.appService.isLoading = true;
       await this.configService.scan(nodeInstance);
 
       await this.load();
     } catch (error) {
       super.handleError(error);
+    } finally {
+      this.changeRef.detectChanges();
+      loadingDone();
     }
-    this.changeRef.detectChanges();
-    this.appService.isLoading = false;
   }
 
   public async fileUploaded(nodeInstance: NodeInstance, fileName: string, password: string) {
+    const loadingDone = this.appService.beginLoading();
     try {
-      this.appService.isLoading = true;
       await this.configService.import(nodeInstance, fileName, password);
       await this.load();
 
     } catch (error) {
       super.handleError(error);
+    } finally {
+      this.changeRef.detectChanges();
+      loadingDone();
     }
-    this.changeRef.detectChanges();
-    this.appService.isLoading = false;
   }
 
 
@@ -262,7 +284,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
   }
 
   async add(nodeInstance: NodeInstance, parent: NodeInstance) {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     nodeInstance.This2ParentNodeInstance = parent.ObjId;
     parent.Children = [...parent.Children, nodeInstance];
 
@@ -283,13 +305,13 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     finally {
       this.changeRef.detectChanges();
       this.tree.instance.refresh(true);
-      this.appService.isLoading = false;
+      loadingDone();
     }
   }
 
 
   private async createItem(parentNode: NodeInstance, nodeTemplate: NodeTemplate, selectNode: boolean = true) {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       const nodeInstance = await this.addItem(parentNode, nodeTemplate, selectNode);
       this.nodeInstanceService.updateNodeInstance(nodeInstance);
@@ -301,7 +323,7 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
     finally {
       this.changeRef.detectChanges();
       this.tree.instance.refresh(true);
-      this.appService.isLoading = false;
+      loadingDone();
     }
   }
 
@@ -330,21 +352,24 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
 
   async deleteItem(item: ITreeNode) {
-    this.nodeInstanceService.removeItem(item);
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     try {
-      this.configService.delete(<NodeInstance>item);
+      // only remove it from the tree once the server deleted it
+      await this.configService.delete(<NodeInstance>item);
+
+      this.nodeInstanceService.removeItem(item);
       if (item.Parent && item.Parent.Children && item.Parent.Children.length > 0) {
         item.Parent.Children = item.Parent.Children.filter(a => a.Id != item.Id);
       }
+      this.selectedNode = item.Parent;
     } catch (error) {
       super.handleError(error);
 
       await this.load();
+    } finally {
+      loadingDone();
     }
-    this.selectedNode = item.Parent;
-    this.appService.isLoading = false;
 
   }
 
@@ -447,23 +472,31 @@ export class ConfigTreeComponent extends BaseComponent implements OnInit, OnDest
 
       this.selectNode(drag);
 
-      this.appService.isLoading = true;
-      this.tree.instance.refresh(true);
-      await this.configService.update(drag, UpdateScope.ParentChanged);
-      this.appService.isLoading = false;
+      const loadingDone = this.appService.beginLoading();
+      try {
+        this.tree.instance.refresh(true);
+        await this.configService.update(drag, UpdateScope.ParentChanged);
+      } catch (error) {
+        this.handleError(error);
+        // the move was not saved, show the server state again
+        await this.load();
+      } finally {
+        loadingDone();
+      }
     }
   }
 
 
   async copy(toCopy: NodeInstance, target: NodeInstance) {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       await this.configService.copy(toCopy, target);
+      await this.load();
     } catch (error) {
       this.handleError(error);
+    } finally {
+      loadingDone();
     }
-    await this.load();
-    this.appService.isLoading = false;
   }
 
   onContextMenuHiding() {

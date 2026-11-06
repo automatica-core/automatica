@@ -26,6 +26,11 @@ export abstract class BaseMobileRuleComponent extends BaseMobileComponent {
         super(dataHubService, notify, translate, configService, appService);
     }
 
+    /** ids of this rule instance's interfaces, for DataHubService.nodeValues() */
+    protected get interfaceIds(): string[] {
+        return (this.ruleInstance?.Interfaces ?? []).map(a => a.ObjId);
+    }
+
     protected getInterfaceByType(type: RuleInterfaceType) {
         if (this.ruleInstance && this.ruleInstance.Interfaces) {
             for (const interf of this.ruleInstance.Interfaces) {

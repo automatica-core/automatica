@@ -18,6 +18,10 @@
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualisierung",
     "ADD": "Hinzufügen",
+    "REQUIRED": "{{ field }} ist erforderlich",
+    "START_DATETIME": "Beginn",
+    "END_DATETIME": "Ende",
+    "VISU_PAGE_SELECT": "Visualisierungsseite auswählen",
     "CANCEL": "Abbrechen",
     "CONFIGURATION": "Config",
     "RULEENGINE": "Logikeditor",
@@ -191,6 +195,10 @@
     "PROPERTY": {
       "CONTROLS": {
         "NAME": "Steuerung",
+        "DESCRIPTION": ""
+      },
+      "READONLY": {
+        "NAME": "Schreibgeschützt",
         "DESCRIPTION": ""
       },
       "TYPE": {

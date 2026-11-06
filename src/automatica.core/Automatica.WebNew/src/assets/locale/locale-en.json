@@ -18,6 +18,10 @@
     "ADMIN": "Administration",
     "VISUALIZATION": "Visualization",
     "ADD": "Add",
+    "REQUIRED": "{{ field }} is required",
+    "START_DATETIME": "Start",
+    "END_DATETIME": "End",
+    "VISU_PAGE_SELECT": "Select visualization page",
     "CANCEL": "Cancel",
     "CONFIGURATION": "Config",
     "RULEENGINE": "Logiceditor",
@@ -191,6 +195,10 @@
     "PROPERTY": {
       "CONTROLS":{
         "NAME": "Controls",
+        "DESCRIPTION": ""
+      },
+      "READONLY": {
+        "NAME": "Read only",
         "DESCRIPTION": ""
       },
       "TYPE": {

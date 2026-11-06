@@ -99,6 +99,10 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
   onValueChanged($event) {
+    // e.event is only set for user input, a value pushed by the server must not be written back to the bus
+    if (!$event?.event) {
+      return;
+    }
     if ($event.value === true) {
       this.state = this.valueMax;
       this.switch(this.valueMax);
@@ -110,6 +114,10 @@ export class SliderComponent extends BaseMobileRuleComponent implements OnInit, 
   }
 
   switch($event) {
+    // called by the slider's onValueChanged too, which also fires when the server pushes a value
+    if ($event && typeof $event === "object" && !$event.event) {
+      return;
+    }
     if (this.valueType)
       this.dataHub.setValue(this.valueType.ObjId, this.state);
   }

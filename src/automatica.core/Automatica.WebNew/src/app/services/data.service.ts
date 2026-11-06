@@ -25,12 +25,11 @@ export class DataService extends BaseService {
     }
 
     public async getAllValues(): Promise<any> {
-        const values = await super.getJson("data/all/current");
-        const that = this;
+        const values = await super.getJson("data/all/current") ?? {};
 
-        Object.keys(values).forEach(function (key) {
-            that._latestValues.set(key, values[key]);
-        });
+        for (const key of Object.keys(values)) {
+            this._latestValues.set(key, values[key]);
+        }
 
         return values;
     }
@@ -40,6 +39,13 @@ export class DataService extends BaseService {
             return this._latestValues.get(id);
         }
         return void 0;
+    }
+
+    /**
+     * Keeps the snapshot current with the pushed values, controls created later start with the latest value.
+     */
+    public setLocalValue(id: string, value: NodeInstanceValue) {
+        this._latestValues.set(id, value);
     }
 
     public getTrendings(nodeId: string, startDate: Date, endDate: Date) {

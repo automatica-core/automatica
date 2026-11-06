@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 
 import { ConfigService } from "./config.service"
 import { LogicEngineService } from "./logicengine.service"
-import { PingService } from "./ping.service";
 import { DataService } from "./data.service";
 import { DesignTimeDataService } from "./design-time-data.service";
 import { CategoryService } from "./categories.service";
@@ -43,7 +42,6 @@ import { ControlsService } from "./controls.service";
     DesignTimeDataService,
     LoginService,
     NotifyService,
-    PingService,
     LogicInstanceVisuService,
     LogicEngineService,
     ServerStateService,

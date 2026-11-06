@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, APP_INITIALIZER, Injectable } from "@angular/core";
+import { NgModule, Injectable, inject, provideAppInitializer } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 
@@ -8,7 +8,7 @@ import { RouterModule } from "@angular/router";
 import { L10nTranslationModule, L10nLoader, L10nValidationModule } from "angular-l10n";
 import { TranslationConfigService, HttpTranslationLoader, LocalLanguageConfigration } from "./services/translation-config.service";
 import { VisualizationModule } from "./visualization/visualization.module";
-import { provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import { LoginFormModule } from "./shared/components/login-form/login-form.module";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { ServicesModule } from "./services/services.module";
@@ -26,10 +26,8 @@ import { DeviceDetectorService  } from "ngx-device-detector";
 import { DeviceService } from "./services/device/device.service";
 import { ThemeService } from "./services/theme.service";
 import { L10nLazyResolver } from "./services/l10n-lazy-resolver";
-import { CacheModule } from "ionic-cache";  
-import { IonicStorageModule } from "@ionic/storage-angular";
-import { Drivers } from '@ionic/storage';
 import { AppService } from "./services/app.service";
+import { apiInterceptor } from "./services/api.interceptor";
 
 @Injectable()
 export class CustomDragDropConfig extends DragDropConfig {
@@ -43,10 +41,6 @@ export class CustomDragDropConfig extends DragDropConfig {
   public dragCursor: string = "move";
   public dragImage: DragImage;
   public defaultCursor: string = "";
-}
-
-export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
-  return (): Promise<void> => l10nLoader.init();
 }
 
 @NgModule({
@@ -87,21 +81,12 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
     DxListModule,
     DxTemplateModule,
     DxHtmlEditorModule,
-    DxTabsModule,
-    IonicStorageModule.forRoot({
-      name: 'localStorage',
-      driverOrder: [Drivers.LocalStorage]
-    }),
-    CacheModule.forRoot({keyPrefix: "cache"})
+    DxTabsModule
   ],
   providers: [
-    provideHttpClient(withXhr(), withInterceptorsFromDi()),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initL10n,
-      deps: [L10nLoader],
-      multi: true
-    },
+    provideHttpClient(withXhr(), withInterceptors([apiInterceptor]), withInterceptorsFromDi()),
+    // loads the translations once before the app starts, the server language is applied after the login (header)
+    provideAppInitializer(() => inject(TranslationConfigService).initLocalization()),
     TranslationConfigService,
     CustomDragDropConfig,
     { provide: DragDropConfig, useValue: new CustomDragDropConfig() },
@@ -124,7 +109,4 @@ export function initL10n(l10nLoader: L10nLoader): () => Promise<void> {
   ]
 })
 export class AppModule {
-  constructor(translate: TranslationConfigService) {
-    translate.init();
-  }
 }

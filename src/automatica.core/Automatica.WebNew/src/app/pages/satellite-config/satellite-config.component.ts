@@ -45,7 +45,7 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit, O
     appService: AppService) {
     super(notify, translate, appService);
 
-    appService.setAppTitle("CATEGORIES.NAME");
+    appService.setAppTitle("COMMON.SATELLITES");
 
     this.menuItems.push(this.menuSave);
     this.menuItems.push(this.menuReload);
@@ -65,28 +65,29 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit, O
   }
 
   async load() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     try {
       this.satellites = await this.catService.getAll();
 
     } catch (error) {
       this.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
-  save(): any {
-    this.appService.isLoading = true;
+  async save() {
+    const loadingDone = this.appService.beginLoading();
 
     try {
-      this.catService.save(this.satellites);
+      // only report "saved" once the server confirmed it
+      await this.catService.save(this.satellites);
       this.notify.notifySuccess("COMMON.SAVED");
     } catch (error) {
       super.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
 
   colorBoxOnValueChanged($event, cell) {

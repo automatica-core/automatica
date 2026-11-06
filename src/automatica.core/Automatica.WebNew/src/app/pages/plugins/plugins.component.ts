@@ -287,7 +287,7 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   }
 
   async ngOnInit() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     this.hubConnectionService.init();
     this.registerObservable(this.translationService.onChange(), () => {
       this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
@@ -329,9 +329,9 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
       });
     } catch (error) {
       super.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
 
   async install($event, data: PluginStateInstance) {

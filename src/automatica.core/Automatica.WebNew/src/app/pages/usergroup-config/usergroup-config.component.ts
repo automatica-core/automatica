@@ -41,7 +41,7 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
   }
 
   async load() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     try {
       var selectedNode = void 0;
@@ -59,30 +59,49 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
     } catch (error) {
       super.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
 
-  async delete() {
-    this.appService.isLoading = true;
+  /** true if the group was deleted on the server */
+  async delete(): Promise<boolean> {
+    const loadingDone = this.appService.beginLoading();
     try {
       await this.userGroupService.deleteUserGroup(this.selectedNode);
+      return true;
     }
     catch (error) {
       super.handleError(error);
+      return false;
+    } finally {
+      loadingDone();
     }
-    this.appService.isLoading = false;
+  }
+
+  /** true if the group was saved on the server */
+  private async saveUserGroup(group: UserGroup): Promise<boolean> {
+    const loadingDone = this.appService.beginLoading();
+    try {
+      await this.userGroupService.saveUserGroup(group);
+      return true;
+    } catch (error) {
+      super.handleError(error);
+      return false;
+    } finally {
+      loadingDone();
+    }
   }
 
   colorBoxOnValueChanged($event, cell) {
     cell.setValue($event.value);
   }
 
-  async onRowRemoving($event) {
+  onRowRemoving($event) {
     const data: UserGroup = $event.data;
     this.selectedNode = data;
-    this.delete();
+    // the grid keeps the row if the server could not delete it
+    $event.cancel = this.delete().then(deleted => !deleted);
   }
 
   itemClick($event) {
@@ -102,7 +121,7 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
   }
 
-  async onRowInserting($event) {
+  onRowInserting($event) {
     const newObject = new UserGroup();
     newObject.addVirtualProperties();
 
@@ -111,30 +130,15 @@ export class UsergroupConfigComponent extends BaseComponent implements OnInit {
 
     this.grid.instance.selectRows([newObject.ObjId], false);
     this.selectedNode = newObject;
-    
 
-    this.appService.isLoading = true;
-
-    try {
-
-      await this.userGroupService.saveUserGroup(this.selectedNode);
-    } catch (error) {
-      super.handleError(error);
-    } finally {
-      this.appService.isLoading = false;
-    }
+    // the grid drops the new row if the server could not save it
+    $event.cancel = this.saveUserGroup(newObject).then(saved => !saved);
   }
    
   async onChanged($event) {
     var { item } = $event;
 
-    try {
-      this.userGroupService.saveUserGroup(item);
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.appService.isLoading = false;
-    }
+    await this.saveUserGroup(item);
   }
 
   onRowClicked($event) {

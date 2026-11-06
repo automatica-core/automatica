@@ -48,7 +48,7 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   }
 
   async load() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
 
       var selectedNode = void 0;
@@ -66,19 +66,24 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
       }
     } catch (error) {
       super.handleError(error);
+    } finally {
+      loadingDone();
     }
-    this.appService.isLoading = false;
   }
 
-  async delete() {
-    this.appService.isLoading = true;
+  /** true if the user was deleted on the server */
+  async delete(): Promise<boolean> {
+    const loadingDone = this.appService.beginLoading();
     try {
       await this.userService.deleteUser(this.selectedNode);
+      return true;
     }
     catch (error) {
       super.handleError(error);
+      return false;
+    } finally {
+      loadingDone();
     }
-    this.appService.isLoading = false;
   }
 
 
@@ -88,7 +93,8 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   onRowRemoving($event) {
     const data: User = $event.data;
     this.selectedNode = data;
-    this.delete();
+    // the grid keeps the row if the server could not delete it
+    $event.cancel = this.delete().then(deleted => !deleted);
   }
 
   itemClick($event) {
@@ -122,13 +128,21 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
     this.grid.instance.selectRows([newObject.ObjId], false);
     this.selectedNode = newObject;
 
-    this.appService.isLoading = true;
+    // the grid drops the new row if the server could not save it
+    $event.cancel = this.saveUser(newObject).then(saved => !saved);
+  }
+
+  /** true if the user was saved on the server */
+  private async saveUser(user: User): Promise<boolean> {
+    const loadingDone = this.appService.beginLoading();
     try {
-      this.userService.saveUser(newObject);
+      await this.userService.saveUser(user);
+      return true;
     } catch (error) {
       this.handleError(error);
+      return false;
     } finally {
-      this.appService.isLoading = false;
+      loadingDone();
     }
   }
 
@@ -144,13 +158,7 @@ export class UserConfigComponent extends BaseComponent implements OnInit {
   async onChanged($event) {
     var { item } = $event;
 
-    try {
-      this.userService.saveUser(item);
-    } catch (error) {
-      this.handleError(error);
-    } finally {
-      this.appService.isLoading = false;
-    }
+    await this.saveUser(item);
   }
 
 }

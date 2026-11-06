@@ -10,13 +10,15 @@ import { HttpErrorResponse } from "@angular/common/http";
 export class BaseComponent {
 
     private subscriptions: Subscription[] = [];
-    private intervals: NodeJS.Timeout[] = [];
+    private intervals: ReturnType<typeof setInterval>[] = [];
     private lastState: boolean = false;
     protected destroyed = false;
     // gutterH = `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");`;
 
 
     private _isLoading: boolean;
+    // this component's reference on the app wide loading spinner
+    private loadingRelease: () => void;
 
     @Input()
     public get isLoading(): boolean {
@@ -24,7 +26,17 @@ export class BaseComponent {
     }
     public set isLoading(v: boolean) {
         this._isLoading = v;
-        this.appService.isLoading = v;
+        if (v && !this.loadingRelease) {
+            this.loadingRelease = this.appService?.beginLoading();
+        } else if (!v && this.loadingRelease) {
+            this.releaseLoading();
+        }
+    }
+
+    private releaseLoading() {
+        const release = this.loadingRelease;
+        this.loadingRelease = undefined;
+        release?.();
     }
 
     constructor(protected notifyService: NotifyService, protected translate: L10nTranslationService, protected appService: AppService) {
@@ -90,6 +102,7 @@ export class BaseComponent {
 
     protected baseOnDestroy() {
         this.destroyed = true;
+        this.releaseLoading();
         this.unregisterAll();
     }
     protected registerEvent(event: EventEmitter<any>, callback: (any)) {

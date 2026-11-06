@@ -76,16 +76,18 @@ export class TranslationConfigService {
     // this.translation.translationError.subscribe((error: any) => console.log(error));
   }
 
+  private dxMessagesLoaded = false;
+
+  /**
+   * Reloads all translations (e.g. after the server started, plugins may bring new ones) and applies the server language.
+   */
   async init() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     try {
       await this.l10Loader.init();
 
-
-
-      loadMessages(deMessages);
-      loadMessages(enMessages);
+      this.loadDxMessages();
 
       try {
         var language = await this.settingsService.getLanguage();
@@ -106,9 +108,37 @@ export class TranslationConfigService {
       }
     }
     finally {
-      this.appService.isLoading = false;
+      loadingDone();
     }
 
+  }
+
+  /**
+   * Loads the translations and the DevExtreme messages once at startup, no server call (the user may not be logged in yet).
+   */
+  async initLocalization() {
+    await this.l10Loader.init();
+    this.loadDxMessages();
+  }
+
+  /**
+   * Switches the app and the DevExtreme widgets to the server language without reloading every translation.
+   */
+  async applyLanguage(language: Language) {
+    this.loadDxMessages();
+
+    const lang = language == Language.German ? "de" : "en";
+    await this.translation.setLocale({ language: lang });
+    locale(lang);
+  }
+
+  private loadDxMessages() {
+    if (this.dxMessagesLoaded) {
+      return;
+    }
+    this.dxMessagesLoaded = true;
+    loadMessages(deMessages);
+    loadMessages(enMessages);
   }
 
 }

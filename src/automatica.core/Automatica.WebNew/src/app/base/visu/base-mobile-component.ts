@@ -13,6 +13,7 @@ import { CategoryInstance } from "../model/categories";
 import { VisuPageGroupType } from "../model/visu-page";
 import { NodeDataTypeEnum } from "../model/node-data-type";
 import moment from "moment";
+import { Subscription } from "rxjs";
 
 export interface VisuObjectType {
     This2AreaInstanceNavigation: AreaInstance;
@@ -209,25 +210,29 @@ export abstract class BaseMobileComponent extends BaseComponent {
 
     public async registerForItemValues(nodeProperty: PropertyInstance) {
 
-        const propertyNodeId = nodeProperty.Value;
-        if (nodeProperty.Value) {
-            const nodeId = this.getPropertyValue("nodeInstance");
-            this.nodeInstanceModel = await this.registerForNodeValues(nodeId);
-            this._primaryNodeInstance = nodeId;
-            
-            await this.registerForNodeValues(propertyNodeId);
+        // nodeProperty is the "nodeInstance" property: fetch and subscribe the node once
+        const nodeId = nodeProperty.Value;
+        if (!nodeId) {
+            return;
         }
 
-        super.registerEvent(this.dataHub.dispatchValue, async (args) => {
-            const nodeId = args[1];
+        this.nodeInstanceModel = await this.registerForNodeValues(nodeId);
+        this._primaryNodeInstance = nodeId;
 
-            if (this._primaryNodeInstance === nodeId) {
+        if (this.itemValueSubscription) {
+            super.unregisterEvent(this.itemValueSubscription);
+        }
+        // only this node's values, not every value the server pushes
+        this.itemValueSubscription = super.registerObservable(this.dataHub.nodeValues(nodeId), async (args) => {
+            if (this._primaryNodeInstance === args[1]) {
                 this.value = args[2].value;
 
-                await this.nodeValueReceived(nodeId, args[2]);
+                await this.nodeValueReceived(args[1], args[2]);
             }
         });
     }
+
+    private itemValueSubscription: Subscription;
 
     protected nodeValueReceived(nodeId: string, value: any): Promise<void> {
         return Promise.resolve();

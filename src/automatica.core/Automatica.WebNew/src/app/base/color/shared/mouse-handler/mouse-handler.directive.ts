@@ -1,11 +1,11 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output } from '@angular/core';
 import { MouseHandlerOutput } from './mouse-handler-output';
 
 @Directive({
     selector: '[appMouseHandler]',
     standalone: false
 })
-export class MouseHandlerDirective {
+export class MouseHandlerDirective implements OnDestroy {
     @Output() public newValue = new EventEmitter<MouseHandlerOutput>();
     @Input() public rgX: number;
     @Input() public rgY: number;
@@ -77,9 +77,11 @@ export class MouseHandlerDirective {
     private start(event: any): void {
         this.setCursor(event);
         document.addEventListener('mousemove', this.listenerMove);
-        document.addEventListener('touchmove', this.listenerMove);
+        // not passive, move() calls preventDefault so the page does not scroll while dragging the picker
+        document.addEventListener('touchmove', this.listenerMove, { passive: false });
         document.addEventListener('mouseup', this.listenerStop);
         document.addEventListener('touchend', this.listenerStop);
+        document.addEventListener('touchcancel', this.listenerStop);
     }
 
     private stop(): void {
@@ -87,6 +89,12 @@ export class MouseHandlerDirective {
         document.removeEventListener('touchmove', this.listenerMove);
         document.removeEventListener('mouseup', this.listenerStop);
         document.removeEventListener('touchend', this.listenerStop);
+        document.removeEventListener('touchcancel', this.listenerStop);
+    }
+
+    public ngOnDestroy(): void {
+        // destroyed while dragging, the document listeners would stay forever
+        this.stop();
     }
 
     private getX(event: any): number {

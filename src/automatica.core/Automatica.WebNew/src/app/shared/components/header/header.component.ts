@@ -12,7 +12,7 @@ import { HubConnectionService } from "src/app/base/communication/hubs/hub-connec
 import { DxSpeedDialActionModule } from "devextreme-angular";
 
 import config from "devextreme/core/config";
-import { SettingsService } from "src/app/services/settings.service";
+import { SettingsService, Language as SettingsLanguage } from "src/app/services/settings.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
 import { App } from "@capacitor/app";
@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     time: string = "00:00:00";
     private readonly narrowScreen = window.matchMedia("(max-width: 599.98px)");
-    ticker: NodeJS.Timeout;
+    ticker: ReturnType<typeof setInterval>;
     version: string;
 
     isAdminAvailable = false;
@@ -112,14 +112,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         const languageProperty = await this.settingsService.getByKey("language");
         const language = <Language>languageProperty.Value;
-        if (language == Language.German) {
-            this.translate.translation.setLocale({ language: "de" });
-        }
-        else {
-
-            this.translate.translation.setLocale({ language: "en" });
-        }
-        await this.translate.init();
+        // the translations are loaded by the app initializer, only the server language has to be applied
+        await this.translate.applyLanguage(language == Language.German ? SettingsLanguage.German : SettingsLanguage.English);
 
         var user = this.loginService.getCurrentUser();
 

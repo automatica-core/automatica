@@ -4,6 +4,7 @@ import { LoginFormComponent } from "./shared/components/login-form/login-form.co
 import { VisualizationComponent } from "./visualization/visualization.component";
 import { AdminComponent } from "./admin/admin.component";
 import { L10nLazyResolver } from "./services/l10n-lazy-resolver";
+import { HasRoleGuard } from "./services/login.service";
 
 const routes: Routes = [
     {
@@ -15,6 +16,8 @@ const routes: Routes = [
         path: "admin",
         component: AdminComponent,
         loadChildren: () => import("./admin/admin.module").then(m => m.AdminModule),
+        // every admin page needs a login and the administrator role (or the role in its route data)
+        canActivateChild: [HasRoleGuard],
         resolve: { l10n: L10nLazyResolver },
         data: {
             l10nProviders: [{ name: "webapi", asset: "./webapi/localization", options: { type: "webapi" } }]

@@ -9,6 +9,7 @@ import { LogsService } from "src/app/services/logs.service";
 import { LogLevel } from "@microsoft/signalr";
 import ArrayStore from "devextreme/data/array_store";
 import CustomStore from "devextreme/data/custom_store";
+import { saveAs } from "file-saver";
 
 interface LogFacility {
   name: string;
@@ -111,7 +112,7 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
     private loggingHub: LogHubService,
     private logsService: LogsService) {
     super(notify, translate, appService);
-    appService.setAppTitle("LOGS.NAME");
+    appService.setAppTitle("COMMON.LOGS");
 
     const logFacility = { name: this.allFacilityName, logs: [] };
     this.logFacilities.set(this.allFacilityName, logFacility);
@@ -145,9 +146,9 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.appService.isLoading = true;
-    await this.load();
+    const loadingDone = this.appService.beginLoading();
     try {
+      await this.load();
 
       super.registerEvent(this.loggingHub.pushEventLog, (data) => {
 
@@ -171,9 +172,9 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
 
     } catch (error) {
       this.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
 
   async load() {
@@ -240,35 +241,43 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
   async onSelectionChanged($event) {
     var logFile = $event.selectedRowsData[0] as LogFile;
 
-    if (!logFile.isFile) {
+    if (!logFile?.isFile) {
       return;
     }
     this.isLoading = true;
 
-    this.selectedLogFile = logFile;
-    var log = (await this.logsService.getLogFile(logFile.path!)).toString();
+    try {
+      this.selectedLogFile = logFile;
+      var log = String(await this.logsService.getLogFile(logFile.path!) ?? "");
 
-    let blob = new Blob([log], { type: "text/plain" });
-    let url = window.URL.createObjectURL(blob);
+      let blob = new Blob([log], { type: "text/plain" });
 
-    var iframe = document.createElement('iframe');
-    var title = document.createElement('title');
-    title.appendChild(document.createTextNode(logFile.name));
+      let pwa = window.open('', '_blank');
+      if (!pwa || pwa.closed || typeof pwa.closed == 'undefined' || !pwa.document) {
+        // pop-up blocked or no windows (app): download the file instead
+        saveAs(blob, logFile.name);
+        return;
+      }
 
-    iframe.src = url;
-    iframe.width = '100%';
-    iframe.height = '100%';
-    iframe.style.border = 'none';
+      let url = window.URL.createObjectURL(blob);
 
-    let pwa = window.open('', '_blank');
-    pwa.document.head.appendChild(title);
-    pwa.document.body.appendChild(iframe);
-    pwa.document.body.style.margin = "0";
-    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-      alert('Please disable your Pop-up blocker and try again.');
+      var iframe = pwa.document.createElement('iframe');
+      var title = pwa.document.createElement('title');
+      title.appendChild(pwa.document.createTextNode(logFile.name));
+
+      iframe.src = url;
+      iframe.width = '100%';
+      iframe.height = '100%';
+      iframe.style.border = 'none';
+
+      pwa.document.head.appendChild(title);
+      pwa.document.body.appendChild(iframe);
+      pwa.document.body.style.margin = "0";
+    } catch (error) {
+      this.handleError(error);
+    } finally {
+      this.isLoading = false;
     }
-
-    this.isLoading = false;
   }
 
   logLevelEnumName(data) {

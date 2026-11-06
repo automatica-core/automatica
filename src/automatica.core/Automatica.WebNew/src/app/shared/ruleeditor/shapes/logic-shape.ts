@@ -658,7 +658,9 @@ export class LogicShapes {
 
             },
             showTooltip: function () {
-                this.tooltip = $('<div class="tooltip">' + this.element.FullName + '</div>')
+                // .text() - the name is user data, never parse it as html
+                this.tooltip = $('<div class="tooltip"></div>')
+                    .text(this.element.FullName ?? "")
                     .appendTo('body');
                 this.positionTooltip();
             },

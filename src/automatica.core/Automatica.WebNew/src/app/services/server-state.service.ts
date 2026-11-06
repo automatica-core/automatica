@@ -39,10 +39,10 @@ export class ServerStateService {
       return state === RunState.Started;
     } catch (error) {
       console.log(error);
-      if (error.status === 401 || error.status === 404) {
+      if (error?.status === 401 || error?.status === 404) {
         await this.router.navigate(["/login"]);
       }
-      else if (error.status === 0 && this.deviceService.isMobileApp) {
+      else if (error?.status === 0 && this.deviceService.isMobileApp) {
         await this.router.navigate(["/login"]);
         await this.notifyService.notifyError("ERROR.SERVER_NOT_AVAILABLE");
       }
@@ -73,15 +73,11 @@ export class ServerStateService {
 
     this.dataHub.connectionStateChanged.subscribe(async (connectionState) => {
       if (connectionState) {
-        const isStarted = await this.isStarted();
-
-        if (!isStarted) {
-          this.init(false);
-        } else {
-          this.init(true);
-        }
+        // connected is not started: keep the overlay until the server reports Started (serverStateChanged)
+        this.init(await this.isStarted());
+      } else {
+        this.init(false);
       }
-      this.init(connectionState);
     });
 
   }

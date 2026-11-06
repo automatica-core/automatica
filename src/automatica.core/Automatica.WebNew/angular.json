@@ -25,9 +25,7 @@
               "moment",
               "file-saver",
               "jszip",
-              "semver",
-              "msgpack-lite",
-              "localforage"
+              "semver"
             ],
             "aot": true,
             "outputPath": {
@@ -85,7 +83,16 @@
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
-              "budgets": []
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "16mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "20kb"
+                }
+              ]
             },
             "development": {
               "sourceMap": true,

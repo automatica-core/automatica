@@ -21,7 +21,7 @@
             <div class="dx-field-value-static">
               <dx-file-uploader (onUploaded)="onFileUploaded($event)"
                 selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}" labelText="" accept="*"
-                uploadUrl="/webapi/fileUpload" [uploadHeaders]="uploadHeader" uploadMode="useButtons"
+                [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="useButtons"
                 [deferRendering]="false">
               </dx-file-uploader>
             </div>

@@ -111,16 +111,17 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
 
   async save() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
 
       await this.visuService.saveVisuPages(this.pages);
       this.notify.notifySuccess("COMMON.SAVED");
 
     } catch (error) {
-      this.notify.notifyError(error);
+      this.handleError(error);
+    } finally {
+      loadingDone();
     }
-    this.appService.isLoading = false;
   }
 
   delete() {
@@ -164,7 +165,7 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
 
   async ngOnInit() {
 
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     this.menuSave.label = this.translate.translate("COMMON.SAVE");
     this.menuAdd.label = this.translate.translate("COMMON.NEW");
@@ -235,13 +236,11 @@ export class VisualisationEditComponent extends BaseComponent implements OnInit,
       }
 
     } catch (error) {
-      console.error(error);
-      this.notify.notifyError(error);
-      throw error;
+      this.handleError(error);
+    } finally {
+      // the spinner must go away on errors too, it is modal
+      loadingDone();
     }
-
-
-    this.appService.isLoading = false;
   }
   addVisuElement(x: VisuObjectTemplate) {
     const instance = VisuObjectMobileInstance.CreateFromTemplate(x, void 0, VisuObjectSourceType.NodeInstance);

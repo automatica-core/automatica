@@ -10,10 +10,6 @@ import { BaseComponent } from "./base/base-component";
 import { FaIconLibrary, FaConfig } from "@fortawesome/angular-fontawesome";
 import { DxLoadPanelComponent } from "devextreme-angular";
 import { ThemeService } from "./services/theme.service";
-import { Capacitor } from '@capacitor/core';
-import { App } from '@capacitor/app';
-import { semver } from 'semver';
-import { CacheService } from "ionic-cache";
 import { Router } from "@angular/router";
 
 @Component({
@@ -38,7 +34,6 @@ export class AppComponent extends BaseComponent implements OnInit {
     private ngZone: NgZone,
     private iconConfig: FaConfig,
     private themeService: ThemeService,
-    private cache: CacheService,
     private router: Router) {
     super(notify, translate, appService);
 
@@ -108,8 +103,6 @@ export class AppComponent extends BaseComponent implements OnInit {
     iconConfig.fallbackIcon = faQuestion;
 
     document.title = this.title;
-
-    this.dogeLog();
   }
 
   private addIcon(icon: IconDefinition) {
@@ -121,39 +114,6 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.library.addIcons(iconDef);
   }
 
-  private dogeLog() {
-    console.log("                   ▄              ▄");
-    console.log("                  ▌▒█           ▄▀▒▌");
-    console.log("                  ▌▒▒█        ▄▀▒▒▒▐");
-    console.log("                 ▐▄▀▒▒▀▀▀▀▄▄▄▀▒▒▒▒▒▐");
-    console.log("               ▄▄▀▒░▒▒▒▒▒▒▒▒▒█▒▒▄█▒▐");
-    console.log("             ▄▀▒▒▒░░░▒▒▒░░░▒▒▒▀██▀▒▌");
-    console.log("            ▐▒▒▒▄▄▒▒▒▒░░░▒▒▒▒▒▒▒▀▄▒▒▌");
-    console.log("            ▌░░▌█▀▒▒▒▒▒▄▀█▄▒▒▒▒▒▒▒█▒▐");
-    console.log("           ▐░░░▒▒▒▒▒▒▒▒▌██▀▒▒░░░▒▒▒▀▄▌");
-    console.log("           ▌░▒▄██▄▒▒▒▒▒▒▒▒▒░░░░░░▒▒▒▒▌");
-    console.log("          ▌▒▀▐▄█▄█▌▄░▀▒▒░░░░░░░░░░▒▒▒▐");
-    console.log("          ▐▒▒▐▀▐▀▒░▄▄▒▄▒▒▒▒▒▒░▒░▒░▒▒▒▒▌");
-    console.log("          ▐▒▒▒▀▀▄▄▒▒▒▄▒▒▒▒▒▒▒▒░▒░▒░▒▒▐");
-    console.log("           ▌▒▒▒▒▒▒▀▀▀▒▒▒▒▒▒░▒░▒░▒░▒▒▒▌");
-    console.log("           ▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▒▄▒▒▐");
-    console.log("            ▀▄▒▒▒▒▒▒▒▒▒▒▒░▒░▒░▒▄▒▒▒▒▌");
-    console.log("              ▀▄▒▒▒▒▒▒▒▒▒▒▄▄▄▀▒▒▒▒▄▀");
-    console.log("                ▀▄▄▄▄▄▄▀▀▀▒▒▒▒▒▄▄▀");
-    console.log("                   ▒▒▒▒▒▒▒▒▒▒▀▀");
-    console.log("");
-    console.log("");
-    console.log("          MUCH WOW, MUCH COOL, MUCH N1");
-    console.log("           MUCH LOVE AUTOMATICA.CORE");
-    console.log("");
-    console.log("            DONATE MUCH BITCOIN TO");
-    console.log("              bc1qcrgffxm2rhl0prcjqnh6lp78n6hu2n084dk2r8");
-    console.log("");
-    console.log("");
-    console.log("");
-
-  }
-
   ngOnInit() {
     this.themeService.applyTheme();
     super.registerEvent(this.appService.isLoadingChanged, (v) => {
@@ -163,32 +123,6 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.dxLoadPanel.instance.hide();
       }
     });
-  }
-
-  clearCache() {
-
-  }
-  private async clearCacheIfAppWasUpdated() {
-    try {
-      if (Capacitor.getPlatform() != "web") {
-        const storedVersion = await localStorage.getItem('appVersion') as string;
-        const { version } = await App.getInfo();
-        // If it's the first start of the app, storedVersion isn't available. So set it.
-        if (!storedVersion) {
-          await localStorage.set('appVersion', version);
-          return;
-        }
-        console.log('STORED VERSION', storedVersion);
-        // Clear cache, if current app version is higher than stored app version
-        if (semver.compare(storedVersion, version) === -1) { // -1 means current version is larger
-          await this.cache.clearAll();
-          await localStorage.setItem('appVersion', version); // Update app version in store
-          console.log('Cache was cleared because App was updated to', version);
-        }
-      }
-    } catch (e) {
-      console.error('Error on function clearCacheIfAppWasUpdated()', e);
-    }
   }
 
 }

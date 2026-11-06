@@ -89,7 +89,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
   }
 
   async loadConfig() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       const [templates, instances] = await Promise.all(
         [
@@ -115,8 +115,9 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
       this.instances = tmpConfig;
     } catch (error) {
       this.handleError(error);
+    } finally {
+      loadingDone();
     }
-    this.appService.isLoading = false;
   }
 
   itemClick($event) {
@@ -202,13 +203,16 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
     this.selectNode(newInstance);
     
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
-      this.areasService.addAreaInstances([newInstance]);
+      await this.areasService.addAreaInstances([newInstance]);
     } catch (error) {
+      // not on the server, don't show it
+      this.instances = this.instances.filter(a => a !== newInstance);
+      this.selectNode(parent);
       this.handleError(error);
     } finally {
-      this.appService.isLoading = false;
+      loadingDone();
     }
   }
 
@@ -223,7 +227,7 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
 
   async saveSingle(instance: AreaInstance) {
 
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       await this.areasService.saveAreaInstance(instance);
     }
@@ -231,24 +235,25 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
       this.handleError(error);
     }
     finally {
-      this.appService.isLoading = false;
+      loadingDone();
     }
   }
 
 
   async deleteItem(item: AreaInstance) {
     const parentNode = item.This2ParentNavigation;
-    this.selectNode(parentNode);
 
-    this.instances = this.instances.filter(a => a.ObjId !== item.ObjId);
-
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       await this.areasService.deleteAreaInstance(item);
+
+      // only remove it once the server deleted it
+      this.selectNode(parentNode);
+      this.instances = this.instances.filter(a => a.ObjId !== item.ObjId);
     } catch (error) {
       super.handleError(error);
     } finally {
-      this.appService.isLoading = false;
+      loadingDone();
     }
 
   }

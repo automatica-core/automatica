@@ -374,7 +374,7 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
   }
 
   async removeRulePage() {
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     try {
       const currentPage = this.selectedPage;
@@ -397,14 +397,14 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
       this.changeRef.detectChanges();
     } catch (error) {
       this.handleError(error);
+    } finally {
+      loadingDone();
     }
-
-    this.appService.isLoading = false;
   }
 
   async addRulePage() {
 
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
 
     const rulePage = new RulePage();
     rulePage.ObjId = Guid.MakeNew().ToString();
@@ -431,10 +431,9 @@ export class LogicEditorComponent extends BaseComponent implements OnInit, OnDes
     } catch (error) {
       this.handleError(error);
       await this.load();
+    } finally {
+      loadingDone();
     }
-
-
-    this.appService.isLoading = false;
   }
 
   async addRule($event) {

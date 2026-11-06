@@ -18,6 +18,21 @@ export function SignalRMethod(target: any, propertyKey: string) {
     list.push(propertyKey);
 }
 
+/**
+ * True if a (re)connect failed because the server rejected the token (expired or from another server).
+ * negotiate wraps the HttpError, so the status code is only left in the message.
+ */
+export function isUnauthorizedHubError(error: any): boolean {
+    if (!error) {
+        return false;
+    }
+    if (error.statusCode === 401) {
+        return true;
+    }
+    const message = String(error.message ?? error);
+    return message.includes("Status code '401'") || message.includes("Unauthorized");
+}
+
 interface CachedProxyRequest {
     methodName: string;
     params?: any;
@@ -34,6 +49,8 @@ export class BaseHub {
     private started = false;
     private stopRequested = false;
     private reconnectTimer: any;
+    // server url + token the current connection was built with
+    private connectionKey: string;
 
 
     private _id : string = uuidv4();
@@ -43,6 +60,11 @@ export class BaseHub {
 
 
     public connectionStateChanged = new EventEmitter<any>();
+
+    /**
+     * Raised when the server rejects the token while (re)connecting, reconnecting stops until start() is called again.
+     */
+    public unauthorized = new EventEmitter<void>();
 
     private _cachedRequests: CachedProxyRequest[] = [];
 
@@ -82,6 +104,8 @@ export class BaseHub {
             old.stop().catch(() => { });
         }
 
+        this.connectionKey = this.buildConnectionKey();
+
         const connection = new signalR.HubConnectionBuilder()
             .withUrl(BaseServiceHelper.getSignalRBaseUrl() + "/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
             .configureLogging(signalR.LogLevel.Warning)
@@ -101,6 +125,10 @@ export class BaseHub {
                 this.scheduleReconnect();
             }
         });
+    }
+
+    private buildConnectionKey() {
+        return BaseServiceHelper.getSignalRBaseUrl() + "|" + (localStorage.getItem("jwt") ?? "");
     }
 
     private scheduleReconnect() {
@@ -127,8 +155,11 @@ export class BaseHub {
 
         if (this.connection.state !== signalR.HubConnectionState.Connected) {
             this.setConnectedState(false);
-            await this.start().catch(() => {
-                this.scheduleReconnect();
+            await this.start().catch((error) => {
+                // a rejected token never becomes valid again, retrying would only hammer the server
+                if (!isUnauthorizedHubError(error) && !this.stopRequested) {
+                    this.scheduleReconnect();
+                }
             });
         }
     }
@@ -142,13 +173,24 @@ export class BaseHub {
 
         this.stopRequested = false;
 
-        if (!this.connection) {
+        // the server url (app: other server or demo) or the user changed, the old connection must not be reused
+        if (!this.connection || this.connectionKey !== this.buildConnectionKey()) {
+            this.setConnectedState(false);
             this.init();
         }
 
         if (this.connection && this.connection.state === signalR.HubConnectionState.Disconnected) {
 
-            await this.connection.start();
+            try {
+                await this.connection.start();
+            } catch (error) {
+                if (isUnauthorizedHubError(error)) {
+                    clearTimeout(this.reconnectTimer);
+                    this.reconnectTimer = undefined;
+                    this.unauthorized.emit();
+                }
+                throw error;
+            }
 
             this.setConnectedState(true);
 
@@ -173,8 +215,13 @@ export class BaseHub {
         this.reconnectTimer = undefined;
         this._cachedRequests = [];
 
-        if (this.connection && this.connection.state !== signalR.HubConnectionState.Disconnected) {
-            await this.connection.stop();
+        const connection = this.connection;
+        // the next start() builds a new connection, the server url or the token may have changed until then
+        this.connection = null;
+        this.connectionKey = undefined;
+
+        if (connection && connection.state !== signalR.HubConnectionState.Disconnected) {
+            await connection.stop();
         }
         this.unregisterAll();
         this.setConnectedState(false);

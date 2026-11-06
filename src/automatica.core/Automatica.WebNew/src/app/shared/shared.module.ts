@@ -12,7 +12,6 @@ import { L10nTranslationModule } from "angular-l10n";
 import { NodeValueSelectorComponent } from "./node-value-selector/node-value-selector.component";
 import { VisuPageSelectorComponent } from "./visu-page-selector/visu-page-selector.component";
 import { VisuPageListComponent } from "./visu-page-list/visu-page-list.component";
-import { provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { NodeInstanceImportComponent } from "./propertyeditor/node-instance-ets-import/node-instance-import.component";
 import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-import/node-instance-import.service";
@@ -67,8 +66,8 @@ import { NodeInstanceImportSerivce } from "./propertyeditor/node-instance-ets-im
         ConfigTreeComponent,
         RuleEditorComponent
     ],
+    // no provideHttpClient here: the lazy admin module would get its own HttpClient without the root interceptors
     providers: [
-    provideHttpClient(withXhr(), withInterceptorsFromDi()),
         NodeInstanceImportSerivce
     ]
 })

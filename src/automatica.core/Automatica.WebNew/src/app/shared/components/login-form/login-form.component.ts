@@ -42,18 +42,20 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         @Inject(L10N_LOCALE) public locale: L10nLocale,
         private deviceService: DeviceService,
         private serverDiscovery: ServerDiscoveryService) {
-        localStorage.removeItem("jwt");
+        // showing the login ends the session (token, cached user, and the plain text password older versions saved)
+        this.loginService.logout();
 
         this.isWeb = deviceService.isWeb;
 
         this.serverIp = BaseServiceHelper.getSignalRBaseUrl();
+        // only the user name is remembered, the password is never stored
         this.login = localStorage.getItem("s1user");
-        this.password = localStorage.getItem("s1pw");
 
     }
 
     ngOnInit(): void {
-        this.appService.isLoading = false;
+        // whatever was loading before belongs to the old session
+        this.appService.resetLoading();
         this.appService.isStarting = false;
         this.changeRef.detectChanges();
 
@@ -105,7 +107,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     }
 
     async onLoginClick(args) {
-        this.appService.isLoading = true;
+        const loadingDone = this.appService.beginLoading();
         this.changeRef.detectChanges();
 
         try {
@@ -120,13 +122,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
             try {
                 const value = await this.loginService.login(this.login, this.password);
                 if (!value) {
-                    this.notifyService.notifyError("Login failed...");
+                    // older servers answer wrong credentials with 204 instead of 401
+                    this.notifyService.notifyError("ERROR.INVALID_CREDENTIALS");
                 } else {
                     this.loginService.saveToLocalStorage(value);
 
                     if (this.saveLogin && !this.isWeb) {
                         localStorage.setItem("s1user", this.login);
-                        localStorage.setItem("s1pw", this.password);
                     }
 
                     this.loginService.userLoggedIn.emit(value);
@@ -140,12 +142,13 @@ export class LoginFormComponent implements OnInit, OnDestroy {
                     this.notifyService.notifyError("ERROR.INVALID_CREDENTIALS");
                 }
                 else {
-                    this.notifyService.notifyError("Login failed..." + error.toString());
+                    console.error(error);
+                    this.notifyService.notifyError("ERROR.LOGIN_FAILED");
                 }
             }
         }
         finally {
-            this.appService.isLoading = false;
+            loadingDone();
         }
     }
 }

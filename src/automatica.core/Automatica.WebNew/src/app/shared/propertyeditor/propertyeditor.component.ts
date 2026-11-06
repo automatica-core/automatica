@@ -594,7 +594,13 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
 
       this.learnModeVisible = true;
       this.isLoading = true;
-      await this.dataHub.enableLearnMode(data.Parent);
+      try {
+        await this.dataHub.enableLearnMode(data.Parent);
+      } catch (error) {
+        this.handleError(error);
+        this.isLoading = false;
+        return;
+      }
       this.learnedNodeInstances = [];
 
       this.learnModeSub = super.registerEvent(this.dataHub.notifyLearnMode, (hubData) => {
@@ -673,14 +679,14 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
       }
     }
 
-    this.appService.isLoading = true;
+    const loadingDone = this.appService.beginLoading();
     try {
       if (this.item instanceof NodeInstance) {
         await this.config.update(this.item, prop.updateScope);
 
         if (!this.item.ParentId && prop instanceof VirtualSettingsPropertyInstance) {
+          await this.nodeInstanceService.saveSetting(prop);
           this.notifyService.notifyInfo(this.translate.translate("COMMON.SERVER_SETTINGS_UPDATE_REQUIRE_REBOOT"));
-          this.nodeInstanceService.saveSetting(prop);
         }
       } else if (this.item instanceof RuleInstance) {
         await this.ruleEngineService.updateItem(this.item);
@@ -692,7 +698,7 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit, On
       this.handleError(error);
     }
     finally {
-      this.appService.isLoading = false;
+      loadingDone();
       this.changeDetection.detectChanges();
     }
 

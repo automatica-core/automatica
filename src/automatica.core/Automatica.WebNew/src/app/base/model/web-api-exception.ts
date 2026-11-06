@@ -12,6 +12,9 @@ export class WebApiException extends BaseModel {
     private _errorText: string;
     private _severity: ExceptionSeverity;
 
+    /** http status of the failed request, not part of the json */
+    public status: number;
+
     @JsonPropertyName("severity")
     public get Severity(): ExceptionSeverity {
         return this._severity;

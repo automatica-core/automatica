@@ -15,7 +15,8 @@
             <div class="dx-field-value-static">
               @if (parentObjId) {
                 <dx-file-uploader (onUploadStarted)="onUploadStarted($event)"
-                  (onUploaded)="onFileUploaded($event)" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
+                  (onUploaded)="onFileUploaded($event)" (onUploadError)="onUploadError($event)"
+                  (onUploadAborted)="isLoading = false" selectButtonText="{{ 'COMMON.SELECT_FILE' | translateAsync }}"
                   labelText="" accept="*" [uploadUrl]="uploadUrl" [uploadHeaders]="uploadHeader" uploadMode="useButtons">
                 </dx-file-uploader>
               }

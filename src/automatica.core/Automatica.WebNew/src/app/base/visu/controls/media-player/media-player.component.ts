@@ -120,7 +120,7 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     this.prevOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "prev");
     this.volumeOutput = this.getInterfaceByTypeAndName(RuleInterfaceType.Output, "volume");
 
-    super.registerEvent(this.dataHub.dispatchValue, async (args) => {
+    super.registerObservable(this.dataHub.nodeValues(this.interfaceIds), async (args) => {
       const nodeId = args[1];
 
       this.onRuleInstanceValueChanged(nodeId, args[2].value);
@@ -178,6 +178,10 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
   }
 
   onVolumeSliderChanged($event) {
+    // only user input, not the value pushed by the server
+    if (!$event?.event) {
+      return;
+    }
     this.dataHub.setValue(this.volumeState.ObjId, $event.value);
   }
 
