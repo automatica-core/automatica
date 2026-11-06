@@ -8,13 +8,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Automatica.Core.Runtime.IO
 {
+    /// <summary>
+    /// Sends logic interface values only to the connections that subscribed the interface (DataHub.Subscribe checks the
+    /// user group of the logic) and to the admins' "All" group, never to every client.
+    /// </summary>
     public class RuleInstanceVisuNotifier(IHubContext<DataHub> hub, ILogger<RuleInstanceVisuNotifier> logger) : IRuleInstanceVisuNotify
     {
+        private Task Send(Guid id, object value)
+        {
+            return hub.Clients.Groups("All", id.ToString()).SendAsync("RuleInstanceValueChanged", id, value);
+        }
+
         public Task NotifyValueChanged(RuleInterfaceInstance instance, DispatchValue value)
         {
             try
             {
-                return hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.ObjId, value.Value);
+                return Send(instance.ObjId, value.Value);
             }
             catch (Exception e)
             {
@@ -28,7 +37,7 @@ namespace Automatica.Core.Runtime.IO
         {
             try
             {
-                return hub.Clients.All.SendAsync("RuleInstanceValueChanged", instance.Id, value.Value);
+                return Send(instance.Id, value.Value);
             }
             catch (Exception e)
             {

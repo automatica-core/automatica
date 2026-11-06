@@ -189,7 +189,18 @@ namespace Automatica.Core
                 })
                 .AddMcpApiKey();
 
-            services.AddMvcCore(config => { config.Filters.Add(new AuthorizeFilter()); })
+            services.AddMvcCore(config =>
+                {
+                    config.Filters.Add(new AuthorizeFilter());
+                    // viewer / visu responses: no password values, nothing of other user groups
+                    config.Filters.Add(new NonAdminResponseFilter(new JsonSerializerSettings
+                    {
+                        // same as AddNewtonsoftJson below
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        Converters = { new ByteArrayToLongConverter() }
+                    }));
+                })
                 .AddAuthorization(options =>
                 {
                     // a token of a user that must change the password (initial or old default password) only

@@ -19,14 +19,16 @@ namespace Automatica.Core.Mcp.Tools
 
         private readonly INodeInstanceCache _nodeInstanceCache;
         private readonly ILogicInterfaceInstanceCache _logicInterfaceInstanceCache;
+        private readonly ILogicInstanceCache _logicInstanceCache;
         private readonly IDispatcher _dispatcher;
         private readonly NodeDescriber _describer;
         private readonly McpAccess _access;
         private readonly ILogger<DataPointTools> _logger;
 
         public DataPointTools(INodeInstanceCache nodeInstanceCache, ILogicInterfaceInstanceCache logicInterfaceInstanceCache, IDispatcher dispatcher,
-            NodeDescriber describer, McpAccess access, ILogger<DataPointTools> logger)
+            NodeDescriber describer, McpAccess access, ILogger<DataPointTools> logger, ILogicInstanceCache logicInstanceCache)
         {
+            _logicInstanceCache = logicInstanceCache;
             _nodeInstanceCache = nodeInstanceCache;
             _logicInterfaceInstanceCache = logicInterfaceInstanceCache;
             _dispatcher = dispatcher;
@@ -145,8 +147,15 @@ namespace Automatica.Core.Mcp.Tools
                     return new IdValue(id, null, null, false);
                 }
 
+                var logicInterface = node == null ? _logicInterfaceInstanceCache.Get(id) : null;
+                if (node == null && (logicInterface == null || !CanSeeLogic(logicInterface)))
+                {
+                    // unknown ids and logics of other user groups look the same
+                    return new IdValue(id, null, null, false);
+                }
+
                 var value = McpValues.ToCurrentValue(_dispatcher.GetValue(id));
-                return new IdValue(id, node?.Name ?? _logicInterfaceInstanceCache.Get(id)?.This2RuleInterfaceTemplateNavigation?.Name, value, node != null || _logicInterfaceInstanceCache.Get(id) != null);
+                return new IdValue(id, node?.Name ?? logicInterface?.This2RuleInterfaceTemplateNavigation?.Name, value, true);
             }).ToList();
         }
 
@@ -190,7 +199,7 @@ namespace Automatica.Core.Mcp.Tools
             else
             {
                 var logicInterface = _logicInterfaceInstanceCache.Get(id);
-                if (logicInterface == null)
+                if (logicInterface == null || !CanSeeLogic(logicInterface))
                 {
                     throw new McpException($"Data point or logic interface {id} not found");
                 }
@@ -211,6 +220,15 @@ namespace Automatica.Core.Mcp.Tools
             _logger.LogInformation($"{_access.CallerName} wrote {converted} to {node?.Name ?? id.ToString()}");
 
             return new WriteResult(id, node?.Name, McpValues.ToJsonValue(converted), previous);
+        }
+
+        /// <summary>
+        /// Same rule as the DataHub: the user group of the logic the interface belongs to
+        /// </summary>
+        private bool CanSeeLogic(RuleInterfaceInstance logicInterface)
+        {
+            var logic = _logicInstanceCache.Get(logicInterface.This2RuleInstance);
+            return logic != null && _access.CanSee(logic.This2UserGroup);
         }
 
         private NodeInstance GetVisibleNode(Guid id)
