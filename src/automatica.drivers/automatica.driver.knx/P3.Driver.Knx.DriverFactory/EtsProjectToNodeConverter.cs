@@ -149,6 +149,7 @@ namespace P3.Driver.Knx.DriverFactory
                     break;
                 case 16:
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt16");
+                    nodeInstance.SetProperty("knx-dpt-sub", (int)(subDpt == 1 ? Dpt16Type.Dpt16_001 : Dpt16Type.Dpt16_000));
                     break;
                 default:
                     nodeInstance = CreateCatalogNodeInstance(factory, mainDpt, subDpt);

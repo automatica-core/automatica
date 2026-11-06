@@ -58,5 +58,17 @@ namespace P3.Driver.Knx.Tests.ETS
 
             Assert.Equal(expectedMainType, Convert.ToInt32(node.GetProperty("knx-dpt").Value));
         }
+
+        [Theory]
+        [InlineData("DPST-16-0", 1)] // 16.000 ASCII
+        [InlineData("DPST-16-1", 2)] // 16.001 ISO 8859-1
+        [InlineData("DPT-16", 1)]
+        public void Dpt16SubTypeIsStoredInTheSubTypeProperty(string datapointType, int expectedSubType)
+        {
+            var node = EtsProjectToNodeConverter.CreateNodeTemplateFromEtsDataPoint(Datapoint(datapointType), Factory);
+
+            Assert.Equal("knx-dpt16", node.This2NodeTemplateNavigation.Key);
+            Assert.Equal(expectedSubType, Convert.ToInt32(node.GetProperty("knx-dpt-sub").Value));
+        }
     }
 }

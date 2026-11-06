@@ -27,6 +27,11 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         /// </summary>
         internal const int DefaultDptSubType = 1;
 
+        /// <summary>
+        /// Falcon sub type used to encode and decode telegrams. It is the stored sub type unless a node numbers its sub type selection differently.
+        /// </summary>
+        protected internal virtual int CodecSubType => DptSubType;
+
 
         protected override Task<bool> StartedInternal(CancellationToken token = new CancellationToken())
         {
@@ -144,7 +149,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
             catch (FormatException fe)
             {
-                DriverContext.Logger.LogError(fe, $"Could not parse DPT correctly from {GroupAddress} (Target DPT is {ImplementationDptType}.{DptSubType:000} Value is {groupValue.Value.ToHex(true)} {fe}");
+                DriverContext.Logger.LogError(fe, $"Could not parse DPT correctly from {GroupAddress} (Target DPT is {ImplementationDptType}.{CodecSubType:000} Value is {groupValue.Value.ToHex(true)} {fe}");
             }
         }
 
@@ -153,7 +158,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         /// </summary>
         protected virtual GroupValue ToGroupValue(object dptValue)
         {
-            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
+            var dpt = DptFactory.Default.Get(ImplementationDptType, CodecSubType);
             return dpt.ToGroupValue(dptValue);
         }
 
@@ -162,7 +167,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         /// </summary>
         protected virtual object FromGroupValue(GroupValue groupValue)
         {
-            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
+            var dpt = DptFactory.Default.Get(ImplementationDptType, CodecSubType);
             return dpt.ToValue(groupValue);
         }
 
@@ -171,7 +176,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
         /// </summary>
         protected virtual GroupValue CreateGroupValue(byte[] data)
         {
-            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
+            var dpt = DptFactory.Default.Get(ImplementationDptType, CodecSubType);
             var sizeInBit = (int)dpt.SizeInBit;
             if (sizeInBit is > 0 and <= 6 && data.Length == 1)
             {

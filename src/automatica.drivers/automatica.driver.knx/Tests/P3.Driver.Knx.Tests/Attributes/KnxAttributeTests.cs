@@ -396,5 +396,43 @@ namespace P3.Driver.Knx.Tests.Attributes
             Assert.Single(dispatched);
             Assert.Equal(true, dispatched[0].Value);
         }
+
+        [Theory]
+        [InlineData(null, 0)] // no selection => 16.000
+        [InlineData(1, 0)] // stored "16.000 ASCII"
+        [InlineData(2, 1)] // stored "16.001 ISO 8859-1"
+        public async Task Dpt16SubTypeSelectionMapsToTheKnxSubType(int? storedSubType, int expectedCodecSubType)
+        {
+            var dpt16 = CreateByKey("knx-dpt16", 11);
+            if (storedSubType.HasValue)
+            {
+                dpt16.SetProperty("knx-dpt-sub", storedSubType.Value);
+            }
+            else
+            {
+                dpt16.PropertyInstance.RemoveAll(a => a.This2PropertyTemplateNavigation.Key == "knx-dpt-sub");
+            }
+            var (_, middle) = await CreateDriver(dpt16);
+
+            Assert.Equal(expectedCodecSubType, Node<KnxDpt16Attribute>(middle, dpt16).CodecSubType);
+        }
+
+        [Fact]
+        public async Task Dpt16Iso88591DecodesAndEncodesLatin1()
+        {
+            var dpt16 = CreateByKey("knx-dpt16", 12);
+            dpt16.SetProperty("knx-dpt-sub", 2);
+            var (driver, middle) = await CreateDriver(dpt16);
+            var ga = Node<KnxDpt16Attribute>(middle, dpt16);
+
+            var payload = new byte[14];
+            payload[0] = 0xE4; // ä
+            payload[1] = (byte)'b';
+            driver.GroupValueReceived($"{MiddleGroup}/12", new GroupValue(payload));
+            Assert.Equal("äb", await WaitForDispatch(dpt16));
+
+            await Write(ga, "ö");
+            Assert.Equal(0xF6, driver.Writes.Single().Value.Value[0]);
+        }
     }
 }
