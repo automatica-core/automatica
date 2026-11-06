@@ -6,9 +6,29 @@
       "ID": "Devcie ID"
     },
     "CATEGORY": {
-      "DEVICE": "Device"
+      "DEVICE": "Device",
+      "SECURITY": "Security"
     },
     "PROPERTY": {
+      "BIND_ADDRESS": {
+        "DESCRIPTION": "IP address the slave listens on, 0.0.0.0 = all interfaces"
+      },
+      "ALLOWED_CLIENTS": {
+        "NAME": "Allowed masters",
+        "DESCRIPTION": "Comma separated IP addresses or networks (e.g. 192.168.1.10, 10.0.0.0/24) that may connect. Empty = all"
+      },
+      "MAX_CONNECTIONS": {
+        "NAME": "Max. connections",
+        "DESCRIPTION": "Maximum number of simultaneous master connections"
+      },
+      "IDLE_TIMEOUT": {
+        "NAME": "Idle timeout (s)",
+        "DESCRIPTION": "Connections without a request for this many seconds are closed"
+      },
+      "READ_ONLY": {
+        "NAME": "Read only",
+        "DESCRIPTION": "Reject all write requests from masters"
+      },
       "BYTEORDER": "Byte order",
       "TABLE": "Table",
       "REGISTER": "Register",

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Driver;
@@ -50,6 +51,39 @@ namespace P3.Driver.ModBusDriverFactory.Slave
                 config.Port = (ushort) port;
                 config.IgnoreDeviceId = ignoreDeviceId;
                 config.DeviceIds = devices;
+
+                var bindAddress = GetProperty("modbus-bind-address")?.ValueString;
+                if (!string.IsNullOrWhiteSpace(bindAddress))
+                {
+                    if (IPAddress.TryParse(bindAddress, out var address))
+                    {
+                        config.BindAddress = address;
+                    }
+                    else
+                    {
+                        DriverContext.Logger.LogWarning($"Invalid modbus bind address {bindAddress}, listening on all interfaces");
+                    }
+                }
+
+                config.AllowedClients = ModBusSlaveTcpConfig.ParseAllowedClients(GetProperty("modbus-allowed-clients")?.ValueString, out var invalidClients);
+                foreach (var invalid in invalidClients)
+                {
+                    DriverContext.Logger.LogWarning($"Ignoring invalid allowed modbus client {invalid}");
+                }
+
+                var maxConnections = GetProperty("modbus-max-connections")?.ValueInt;
+                if (maxConnections.HasValue && maxConnections.Value > 0)
+                {
+                    config.MaxConnections = maxConnections.Value;
+                }
+
+                var idleTimeout = GetProperty("modbus-idle-timeout")?.ValueInt;
+                if (idleTimeout.HasValue && idleTimeout.Value > 0)
+                {
+                    config.IdleTimeout = TimeSpan.FromSeconds(idleTimeout.Value);
+                }
+
+                config.ReadOnly = GetProperty("modbus-read-only")?.ValueBool ?? false;
 
                 _modBusDriver = new ModBusSlaveTcpDriver(config, TelegramMonitor, _logger);
                 ModBus.Logger = DriverContext.Logger;
