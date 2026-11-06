@@ -7,6 +7,8 @@ namespace P3.Driver.Matter.Sessions
     public sealed class SessionManager
     {
         public const int MaxSecureSessions = 32;
+        public const int MaxUnsecuredSessions = 64;
+        private static readonly TimeSpan UnsecuredSessionIdleTimeout = TimeSpan.FromMinutes(2);
 
         private readonly ConcurrentDictionary<ushort, SecureSession> _secure = new();
         private readonly ConcurrentDictionary<ulong, UnsecuredSession> _unsecured = new();
@@ -24,16 +26,31 @@ namespace P3.Driver.Matter.Sessions
             session.Peer = peer;
             session.LastActivity = DateTime.UtcNow;
 
-            if (_unsecured.Count > 64)
+            if (_unsecured.Count > MaxUnsecuredSessions)
             {
-                foreach (var stale in _unsecured.Values.Where(s => DateTime.UtcNow - s.LastActivity > TimeSpan.FromMinutes(2)).ToList())
+                var now = DateTime.UtcNow;
+                foreach (var stale in _unsecured.Values.Where(s => now - s.LastActivity > UnsecuredSessionIdleTimeout).ToList())
                 {
                     _unsecured.TryRemove(stale.EphemeralNodeId, out _);
+                }
+
+                // hard cap, a flood of fresh ephemeral node ids evicts the oldest entries
+                while (_unsecured.Count > MaxUnsecuredSessions)
+                {
+                    var oldest = _unsecured.Values.Where(s => !ReferenceEquals(s, session)).OrderBy(s => s.LastActivity).FirstOrDefault();
+                    if (oldest == null)
+                    {
+                        break;
+                    }
+
+                    _unsecured.TryRemove(oldest.EphemeralNodeId, out _);
                 }
             }
 
             return session;
         }
+
+        public int UnsecuredSessionCount => _unsecured.Count;
 
         public void RemoveUnsecured(UnsecuredSession session) => _unsecured.TryRemove(session.EphemeralNodeId, out _);
 
