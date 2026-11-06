@@ -19,8 +19,6 @@ namespace P3.Logic.Time.AdvancedTimer
         private RuleInterfaceInstance _output;
         private readonly System.Timers.Timer _timer;
         private readonly object _lock = new object();
-        
-        private readonly TimeProvider _timeProvider = DateTimeHelper.ProviderInstance;
 
 
         private bool _value;
@@ -88,7 +86,15 @@ namespace P3.Logic.Time.AdvancedTimer
 
             if (list.Any())
             {
-                var next = list.MinBy(t => Math.Abs((t.startTime - now).Ticks));
+                // an entry that is active right now always wins - otherwise an entry that starts closer to now
+                // than the active one started would switch the output off in the middle of the active entry
+                var active = list
+                    .Where(t => t.startTime != DateTime.MaxValue && t.endTime != DateTime.MaxValue)
+                    .Where(t => now >= t.startTime && now < t.endTime)
+                    .OrderByDescending(t => t.endTime)
+                    .ToList();
+
+                var next = active.Count > 0 ? active[0] : list.MinBy(t => Math.Abs((t.startTime - now).Ticks));
 
                 Context.Logger.LogDebug($"Next is start: {next.startTime} and end: {next.endTime}");
                 if (next.startTime.IsToday() || next.endTime.IsToday())
@@ -135,8 +141,13 @@ namespace P3.Logic.Time.AdvancedTimer
             double timerTickTime;
             if (isDayDif)
             {
-                if (now > start && now < end)
+                if (now >= start && now < end)
                 {
+                    tickTime = (start - now);
+                }
+                else if (now < start)
+                {
+                    // upcoming window that crosses midnight - the next tick is its start, not its end
                     tickTime = (start - now);
                 }
                 else
@@ -160,9 +171,10 @@ namespace P3.Logic.Time.AdvancedTimer
                 }
                 else
                 {
-                    if (now > start && now < end)
+                    if (now >= start && now < end)
                     {
-                        timerTickTime = (now - start).TotalMilliseconds;
+                        // active window - the next tick is when it ends
+                        timerTickTime = (end - now).TotalMilliseconds;
                     }
                     else
                     {
@@ -227,6 +239,10 @@ namespace P3.Logic.Time.AdvancedTimer
                 return (DateTime.MaxValue, DateTime.MaxValue);
             }
 
+            // the time of day of an entry is used as UTC (the UI sends "...Z" values), a local entry has to be converted first
+            var entryStartUtc = entry.StartDate.Kind == DateTimeKind.Local ? entry.StartDate.ToUniversalTime() : entry.StartDate;
+            var entryEndUtc = entry.EndDate.Kind == DateTimeKind.Local ? entry.EndDate.ToUniversalTime() : entry.EndDate;
+
             var startDates = rfcStart.Iterate(Direction.Forward);
 
             if (startDates != null)
@@ -253,45 +269,54 @@ namespace P3.Logic.Time.AdvancedTimer
                     if (startDate.Date == entry.StartDate.Date)
                     {
                         startDate = new DateTime(DateOnly.FromDateTime(localNow),
-                            new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
+                            new TimeOnly(entryStartUtc.Hour, entryStartUtc.Minute, entryStartUtc.Second), DateTimeKind.Utc);
                     }
                     else if (startDate.Date == entry.StartDate.Date.AddDays(-1))
                     {
                         startDate = new DateTime(DateOnly.FromDateTime(localNow),
-                            new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
+                            new TimeOnly(entryStartUtc.Hour, entryStartUtc.Minute, entryStartUtc.Second), DateTimeKind.Utc);
                     }
                     else if (startDate.Date < localNow)
                     {
                         startDate = new DateTime(DateOnly.FromDateTime(localNow),
-                            new TimeOnly(entry.StartDate.Hour, entry.StartDate.Minute, entry.StartDate.Second), DateTimeKind.Utc);
+                            new TimeOnly(entryStartUtc.Hour, entryStartUtc.Minute, entryStartUtc.Second), DateTimeKind.Utc);
                     }
                     if (endDate.Date == entry.EndDate.Date)
                     {
                         endDate = new DateTime(DateOnly.FromDateTime(localNow),
-                            new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
+                            new TimeOnly(entryEndUtc.Hour, entryEndUtc.Minute, entryEndUtc.Second), DateTimeKind.Utc);
                     }
                     else if (endDate.Date == entry.EndDate.Date.AddDays(1))
                     {
                         endDate = new DateTime(DateOnly.FromDateTime(localNow),
-                            new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
+                            new TimeOnly(entryEndUtc.Hour, entryEndUtc.Minute, entryEndUtc.Second), DateTimeKind.Utc);
                     }
                     else if (endDate.Date > localNow)
                     {
                         endDate = new DateTime(DateOnly.FromDateTime(localNow),
-                            new TimeOnly(entry.EndDate.Hour, entry.EndDate.Minute, entry.EndDate.Second), DateTimeKind.Utc);
+                            new TimeOnly(entryEndUtc.Hour, entryEndUtc.Minute, entryEndUtc.Second), DateTimeKind.Utc);
                     }
 
                     if (startDate > endDate)
                     {
-                        startDate = startDate.AddDays(-1);
+                        // the window crosses midnight: before today's end it is yesterday's window,
+                        // after today's end it is the window that starts today and ends tomorrow
+                        if (Context.TimeProvider.GetUtcNow().UtcDateTime >= endDate)
+                        {
+                            endDate = endDate.AddDays(1);
+                        }
+                        else
+                        {
+                            startDate = startDate.AddDays(-1);
+                        }
                     }
 
                     if (rfcStart.Freq.Frequency == Frequency.HOURLY)
                     {
                         startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day,
-                            _timeProvider.GetLocalNow().Hour, startDate.Minute, startDate.Second);
+                            Context.TimeProvider.GetLocalNow().Hour, startDate.Minute, startDate.Second);
                         endDate = new DateTime(endDate.Year, endDate.Month, endDate.Day,
-                            _timeProvider.GetLocalNow().Hour, endDate.Minute, endDate.Second);
+                            Context.TimeProvider.GetLocalNow().Hour, endDate.Minute, endDate.Second);
 
                         if (startDate.AddMinutes(5) < localNow)
                         {
@@ -331,6 +356,18 @@ namespace P3.Logic.Time.AdvancedTimer
         protected override IList<ILogicOutputChanged> InputValueChanged(RuleInterfaceInstance instance,
             IDispatchable source, object value)
         {
+            if (instance.This2RuleInterfaceTemplate == AdvancedTimerRuleFactory.RuleReset && TimerHelper.IsTruthy(value))
+            {
+                // reset: recalculate the state for now, emit it and reschedule the next tick
+                lock (_lock)
+                {
+                    if (_timerPropertyData != null)
+                    {
+                        _timer.Stop();
+                        CalculateTickTime();
+                    }
+                }
+            }
 
             return new List<ILogicOutputChanged>();
         }

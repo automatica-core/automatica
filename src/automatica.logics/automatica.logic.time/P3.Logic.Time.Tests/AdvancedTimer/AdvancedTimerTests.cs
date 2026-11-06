@@ -11,8 +11,15 @@ using Xunit;
 
 namespace P3.Logic.Time.Tests.AdvancedTimer
 {
-    public class AdvancedTimerTests : LogicTest<AdvancedTimerRuleFactory>
+    public class AdvancedTimerTests : LogicTest<AdvancedTimerRuleFactory>, IDisposable
     {
+        public void Dispose()
+        {
+            // the fake time provider is static, don't leak a time zone into the next test
+            Logic.Stop().GetAwaiter().GetResult();
+            FakeTimeProvider.SetTimeZone(TimeZoneInfo.Local);
+        }
+
         [Fact]
         public async void TestTimerRule()
         {
@@ -649,6 +656,77 @@ namespace P3.Logic.Time.Tests.AdvancedTimer
             await Logic.Stop();
         }
 
+        private async Task StartWith(DateTime utcNow, string calendarJson)
+        {
+            FakeTimeProvider.SetTimeZone(TimeZoneInfo.Utc);
+            FakeTimeProvider.SetDateTime(utcNow);
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
+            await Logic.Stop();
+
+            GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleTimerParameter).ValueString = calendarJson;
+            await Logic.Start();
+        }
+
+        [Fact]
+        public async Task TestTimerRule_ActiveEntryWinsOverCloserNextEntry()
+        {
+            // A 08:00-10:00 is active at 09:50, B 10:30-11:00 starts closer to now - A must win
+            await StartWith(new DateTime(2024, 1, 1, 9, 50, 0, DateTimeKind.Utc),
+                "{\"Value\":[{\"Text\":\"A\",\"StartDate\":\"2023-12-14T08:00:00.000Z\",\"EndDate\":\"2023-12-14T10:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false},{\"Text\":\"B\",\"StartDate\":\"2023-12-14T10:30:00.000Z\",\"EndDate\":\"2023-12-14T11:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false}]}");
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+            Assert.Single(values);
+            Assert.Equal(true, values.First().Value.Value);
+            await Logic.Stop();
+        }
+
+        [Fact]
+        public async Task TestTimerRule_OvernightEntryOnBeforeMidnight()
+        {
+            // 23:00-06:00 daily, 23:30 is inside the window that started today
+            await StartWith(new DateTime(2024, 1, 1, 23, 30, 0, DateTimeKind.Utc),
+                "{\"Value\":[{\"Text\":\"Night\",\"StartDate\":\"2023-12-13T23:00:00.000Z\",\"EndDate\":\"2023-12-14T06:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false}]}");
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+            Assert.Single(values);
+            Assert.Equal(true, values.First().Value.Value);
+            await Logic.Stop();
+        }
+
+        [Fact]
+        public async Task TestTimerRule_OvernightEntryTicksAtStart()
+        {
+            // shortly before 23:00 the output is off and the next tick has to be at 23:00 (not at 06:00)
+            await StartWith(new DateTime(2024, 1, 1, 22, 59, 59, 500, DateTimeKind.Utc),
+                "{\"Value\":[{\"Text\":\"Night\",\"StartDate\":\"2023-12-13T23:00:00.000Z\",\"EndDate\":\"2023-12-14T06:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false}]}");
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+            Assert.Equal(false, values.First().Value.Value);
+
+            FakeTimeProvider.SetDateTime(new DateTime(2024, 1, 1, 23, 0, 1, DateTimeKind.Utc));
+            await Task.Delay(1200);
+
+            values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+            Assert.Single(values);
+            Assert.Equal(true, values.First().Value.Value);
+            await Logic.Stop();
+        }
+
+        [Fact]
+        public async Task TestTimerRule_ResetRecalculates()
+        {
+            await StartWith(new DateTime(2024, 1, 1, 9, 0, 0, DateTimeKind.Utc),
+                "{\"Value\":[{\"Text\":\"A\",\"StartDate\":\"2023-12-14T08:00:00.000Z\",\"EndDate\":\"2023-12-14T10:00:00.000Z\",\"RecurrenceRule\":\"FREQ=DAILY\",\"AllDay\":false}]}");
+            await Context.Dispatcher.ClearValues();
+
+            Logic.ValueChanged(GetLogicInterfaceByTemplate(AdvancedTimerRuleFactory.RuleReset), Dispatchable, true);
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+            Assert.Single(values);
+            Assert.Equal(true, values.First().Value.Value);
+            await Logic.Stop();
+        }
     }
 }
 

@@ -48,6 +48,28 @@ namespace P3.Logic.Time.Tests.DelayedOff
 
 
         [Fact]
+        public async Task TestDelayedOffRule_DelayZeroSwitchesOffImmediately()
+        {
+            await Context.Dispatcher.ClearValues();
+            await Context.Dispatcher.ClearRegistrations();
+
+            var paramDelay = GetLogicInterfaceByTemplate(DelayedOffLogicFactory.RuleParamDelay);
+            paramDelay.Value = 0;
+            await Logic.Start();
+
+            Logic.ValueChanged(GetLogicInterfaceByTemplate(DelayedOffLogicFactory.RuleTrigger), Dispatchable, true);
+
+            var values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+
+            Assert.Single(values);
+            Assert.Equal(false, values.First().Value.Value);
+
+            await Task.Delay(200);
+            values = Context.Dispatcher.GetValues(Automatica.Core.Base.IO.DispatchableType.RuleInstance);
+            Assert.Equal(false, values.First().Value.Value);
+        }
+
+        [Fact]
         public async void TestDelayedOffRuleReset()
         {
             await Context.Dispatcher.ClearValues();

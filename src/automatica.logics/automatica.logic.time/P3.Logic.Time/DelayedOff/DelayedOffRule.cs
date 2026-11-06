@@ -107,9 +107,11 @@ namespace P3.Logic.Time.DelayedOff
                     }
                 }
 
+                // switch on first, then (re)start the off timer - with delay 0 the off is dispatched right away
+                // and has to be the last value, otherwise the output would stay on
+                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
                 Context.Logger.LogDebug($">>> Starting timer - ticks in {_delay * 1000} <<<");
                 StartStopTimer();
-                Context.Dispatcher.DispatchValue(new LogicOutputChanged(_output, true).Instance, true);
             }
             else if (instance.This2RuleInterfaceTemplate == DelayedOffLogicFactory.RuleReset)
             {
