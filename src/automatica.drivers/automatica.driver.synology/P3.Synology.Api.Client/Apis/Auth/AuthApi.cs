@@ -30,7 +30,7 @@ namespace P3.Synology.Api.Client.Apis.Auth
                 throw new ArgumentNullException(nameof(password));
             }
 
-            var queryParams = new Dictionary<string, string>
+            var formParams = new Dictionary<string, string>
             {
                 { "account", username },
                 { "passwd", password },
@@ -38,7 +38,8 @@ namespace P3.Synology.Api.Client.Apis.Auth
                 { "otp_code", otpCode }
             };
 
-            return _synologyHttpClient.GetAsync<LoginResponse>(_apiInfo, "login", queryParams);
+            // POST keeps the password out of the URL (proxy and DSM access logs)
+            return _synologyHttpClient.PostFormAsync<LoginResponse>(_apiInfo, "login", formParams);
         }
 
         public Task<BaseApiResponse> LogoutAsync(string sid)

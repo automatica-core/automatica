@@ -53,6 +53,37 @@ namespace P3.Synology.Api.Client
             return await HandleSynologyResponse<T>(response, apiInfo, apiMethod);
         }
 
+        public async Task<T> PostFormAsync<T>(IApiInfo apiInfo, string apiMethod, Dictionary<string, string> formParams, ISynologySession session = null)
+        {
+            var uri = GetBaseUri(_httpClient.BaseAddress, apiInfo.Path);
+
+            var form = new Dictionary<string, string>
+            {
+                ["api"] = apiInfo.Name,
+                ["version"] = apiInfo.Version.ToString(),
+                ["method"] = apiMethod
+            };
+
+            foreach (var curPair in formParams.Where(a => a.Value != null))
+            {
+                form[curPair.Key] = curPair.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(apiInfo.SessionName))
+            {
+                form["session"] = apiInfo.SessionName;
+            }
+
+            if (session != null)
+            {
+                form["_sid"] = session.Sid;
+            }
+
+            using var content = new FormUrlEncodedContent(form);
+            using var response = await _httpClient.PostAsync(uri, content);
+            return await HandleSynologyResponse<T>(response, apiInfo, apiMethod);
+        }
+
         private static Uri GetBaseUri(Uri baseAddress, string apiPath)
         {
             var baseUri = baseAddress.ToString().TrimEnd('/');

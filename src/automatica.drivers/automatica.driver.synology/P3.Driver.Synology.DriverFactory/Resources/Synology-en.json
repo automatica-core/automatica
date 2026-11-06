@@ -30,6 +30,10 @@
       "NAME": "Password",
       "DESCRIPTION": ""
     },
+    "CERTIFICATE_THUMBPRINT": {
+      "NAME": "Certificate thumbprint",
+      "DESCRIPTION": "SHA-256 or SHA-1 thumbprint of the DSM certificate. If set, only this certificate is accepted (also self-signed)."
+    },
     "IGNORE_SSL_ERRORS": {
       "NAME": "Ignore SSL errors",
       "DESCRIPTION": ""

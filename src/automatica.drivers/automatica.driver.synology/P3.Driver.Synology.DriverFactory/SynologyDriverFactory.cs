@@ -17,7 +17,7 @@ namespace P3.Driver.Synology.DriverFactory
         public override string ImageName => "automaticacore/plugin-p3.driver.synology";
 
 
-        public override Version DriverVersion => new Version(0, 0, 1, 3);
+        public override Version DriverVersion => new Version(0, 0, 2, 0);
 
         public override bool InDevelopmentMode => false;
 
@@ -49,7 +49,9 @@ namespace P3.Driver.Synology.DriverFactory
             factory.CreatePropertyTemplate(new Guid("9e5ea4d2-fe43-426d-b68d-53abd2788de8"), "SYNOLOGY.PASSWORD.NAME", "SYNOLOGY.PASSWORD.DESCRIPTION", "password",
                 PropertyTemplateType.Password, SynologyDevice, "COMMON.CATEGORY.ADDRESS", true, false, null, null, 0, 5);
             factory.CreatePropertyTemplate(new Guid("f24a2aa3-722c-42b6-a9c5-b07f48aaea3c"), "SYNOLOGY.IGNORE_SSL_ERRORS.NAME", "SYNOLOGY.IGNORE_SSL_ERRORS.DESCRIPTION", "ignore_ssl_errors",
-                PropertyTemplateType.Bool, SynologyDevice, "COMMON.CATEGORY.ADDRESS", true, false, null, true, 0, 6);
+                PropertyTemplateType.Bool, SynologyDevice, "COMMON.CATEGORY.ADDRESS", true, false, null, false, 0, 6);
+            factory.CreatePropertyTemplate(new Guid("4e1c7b2a-93d5-4f08-b6a1-5c2d8e9f0a17"), "SYNOLOGY.CERTIFICATE_THUMBPRINT.NAME", "SYNOLOGY.CERTIFICATE_THUMBPRINT.DESCRIPTION", "certificate_thumbprint",
+                PropertyTemplateType.Text, SynologyDevice, "COMMON.CATEGORY.ADDRESS", true, false, null, "", 0, 7);
 
             factory.CreatePropertyTemplate(new Guid("a7758436-1415-4564-a5fe-eb74836939dc"), "SYNOLOGY.USE_REMOTE_CONNECT.NAME", "SYNOLOGY.USE_REMOTE_CONNECT.DESCRIPTION", "use_remote_connect", 
                 PropertyTemplateType.Bool, SynologyDevice, "COMMON.CATEGORY.REMOTE", true, false, null, null, 0, 5);

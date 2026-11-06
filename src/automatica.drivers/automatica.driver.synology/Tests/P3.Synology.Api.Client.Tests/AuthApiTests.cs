@@ -67,8 +67,8 @@ namespace P3.Synology.Api.Client.Tests
             };
 
             //expect certain request to server
-            var request = _mockHtttp.Expect(System.Net.Http.HttpMethod.Get, _baseUriWithApiPath.ToString())
-                 .WithQueryString(new Dictionary<string, string>
+            var request = _mockHtttp.Expect(System.Net.Http.HttpMethod.Post, _baseUriWithApiPath.ToString())
+                 .WithFormData(new Dictionary<string, string>
                  {
                     { "api" , _apiInfo.Name },
                     { "version" , _apiInfo.Version.ToString() },
@@ -77,11 +77,12 @@ namespace P3.Synology.Api.Client.Tests
                     { "passwd" , password },
                     { "format" , "sid" },
                     { "otp_code" , otpCode }
-                 });
+                 })
+                 .With(message => string.IsNullOrEmpty(message.RequestUri.Query));
 
             if (!string.IsNullOrWhiteSpace(_apiInfo.SessionName))
             {
-                request = request.WithQueryString("session", _apiInfo.SessionName);
+                request = request.WithFormData("session", _apiInfo.SessionName);
             }
 
             request.Respond(HttpStatusCode.OK, JsonContent.Create(expectedResponse));

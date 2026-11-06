@@ -30,6 +30,10 @@
       "NAME": "Passwort",
       "DESCRIPTION": ""
     },
+    "CERTIFICATE_THUMBPRINT": {
+      "NAME": "Zertifikat-Fingerabdruck",
+      "DESCRIPTION": "SHA-256- oder SHA-1-Fingerabdruck des DSM-Zertifikats. Wenn gesetzt, wird nur dieses Zertifikat akzeptiert (auch selbst signiert)."
+    },
     "IGNORE_SSL_ERRORS": {
       "NAME": "SSL Fehler ignorieren",
       "DESCRIPTION": ""
