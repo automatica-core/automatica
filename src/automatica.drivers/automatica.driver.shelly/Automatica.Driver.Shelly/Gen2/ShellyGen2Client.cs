@@ -96,7 +96,7 @@ namespace Automatica.Driver.Shelly.Gen2
             {
            
                 _authModel = AuthModel.CreateAuthModel(ShellyCommonOptions.Password, ((AuthModel)response.Error.MessageObject).Realm,
-                    ((AuthModel)response.Error.MessageObject).Nonce, new Random().NextInt64(long.MaxValue), "admin", "SHA-256");
+                    ((AuthModel)response.Error.MessageObject).Nonce, BitConverter.ToInt64(RandomNumberGenerator.GetBytes(8)) & long.MaxValue, "admin", "SHA-256");
                 
             }
         }
