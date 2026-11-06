@@ -34,7 +34,8 @@ namespace Automatica.Core.EF.Security
         };
 
         /// <summary>
-        /// Property template id → is a password template (templates never change their type)
+        /// Property template id → is a password template. Plugins may switch a template to Password on init,
+        /// saved templates update the entry.
         /// </summary>
         private static readonly ConcurrentDictionary<Guid, bool> PasswordTemplates = new();
 
@@ -126,6 +127,12 @@ namespace Automatica.Core.EF.Security
             }
 
             List<Pending> pending = null;
+
+            // templates first: a plugin that switches a template to Password and saves values in the same save
+            foreach (var template in context.ChangeTracker.Entries<PropertyTemplate>())
+            {
+                PasswordTemplates[template.Entity.ObjId] = template.Entity.This2PropertyType == (long)PropertyTemplateType.Password;
+            }
 
             foreach (var entry in context.ChangeTracker.Entries())
             {
