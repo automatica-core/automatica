@@ -19,9 +19,10 @@ RUN apt-get update
 RUN apt-get install zip net-tools -y
 
 ARG VERSION
-ARG CLOUD_API_KEY
 ARG CLOUD_URL
 ARG AUTOMATICA_CLOUD_ENVIRONMENT
+# The cloud API key is a BuildKit secret, never a build-arg (build args end up in build logs and
+# image metadata):  docker build --secret id=cloud_api_key,env=CLOUD_API_KEY ...
 
 #install automatica-cli
 RUN dotnet tool install --global automatica-cli
@@ -44,17 +45,29 @@ COPY ./Automatica.Core/appsettings.json .
 
 RUN mkdir -p /app/automatica/persistent/plugins
 RUN echo $VERSION
-RUN automatica-cli InstallLatestPlugins -I /app/automatica/persistent/plugins -M $VERSION -A $CLOUD_API_KEY -C  $CLOUD_URL -Cl $AUTOMATICA_CLOUD_ENVIRONMENT
+RUN --mount=type=secret,id=cloud_api_key,required=true \
+    automatica-cli InstallLatestPlugins -I /app/automatica/persistent/plugins -M $VERSION -A "$(cat /run/secrets/cloud_api_key)" -C  $CLOUD_URL -Cl $AUTOMATICA_CLOUD_ENVIRONMENT
 
 RUN rm -rf /src
 
-RUN curl -L -o frp.tgz https://github.com/fatedier/frp/releases/download/v0.58.0/frp_0.58.0_linux_amd64.tar.gz
-RUN tar xvzf frp.tgz
-RUN mkdir -p frp
-RUN mv frp_*/* frp/
+# frp for Remote Connect. Bump deliberately: version plus the sha256 from that release's
+# frp_sha256_checksums.txt. Keep it compatible with the frps version on the cloud tunnel server.
+ARG FRP_VERSION=0.71.1
+ARG FRP_SHA256=1d9875210972a5d1a62b2dc4c48df45ab0af05d3ca1b5e494a014428259df803
+RUN curl -fsSL -o frp.tgz https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/frp_${FRP_VERSION}_linux_amd64.tar.gz \
+ && echo "${FRP_SHA256}  frp.tgz" | sha256sum -c - \
+ && tar xzf frp.tgz \
+ && mkdir -p frp \
+ && mv frp_${FRP_VERSION}_linux_amd64/* frp/ \
+ && rm -rf frp.tgz frp_${FRP_VERSION}_linux_amd64
 RUN ./frp/frpc --version
 
 
+# Runs as root on purpose. The supervisor starts this container privileged, with the host's
+# docker.sock, /dev and /tmp (RuntimeSupervisor), and the watchdog replaces the files in /app in
+# place on updates. With docker.sock inside, a non-root USER would not contain anything, and it
+# would break updates on installed devices whose bind-mounted host directories are root-owned.
+# Precondition for a USER here: the supervisor stops passing docker.sock and --privileged.
 FROM automaticacore/automatica-plugin-runtime:amd64-10 AS runtime
 WORKDIR /app/
 
