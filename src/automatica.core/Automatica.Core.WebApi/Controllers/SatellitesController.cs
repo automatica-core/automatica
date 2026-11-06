@@ -40,10 +40,17 @@ namespace Automatica.Core.WebApi.Controllers
                     slave.Connected = true;
                     continue;
                 }
-                if(connectedSlaves.Contains(slave.ClientKey))
+                // the broker lists the client ids of the connected satellites
+                if(connectedSlaves.Contains(slave.ClientId))
                 {
                     slave.Connected = true;
                 }
+            }
+
+            // the client key is write only (the broker stores a hash of it): an empty key keeps the stored one on save
+            foreach (var slave in slaves)
+            {
+                slave.ClientKey = null;
             }
 
             return slaves;
@@ -77,6 +84,12 @@ namespace Automatica.Core.WebApi.Controllers
                         }
                         else
                         {
+                            if (string.IsNullOrEmpty(instance.ClientKey))
+                            {
+                                // not sent back by GetAll: keep the stored key
+                                instance.ClientKey = existingArea.ClientKey;
+                            }
+
                             DbContext.Entry(existingArea).State = EntityState.Detached;
                             DbContext.Slaves.Update(instance);
                         }

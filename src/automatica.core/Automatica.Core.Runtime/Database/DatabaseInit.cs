@@ -13,6 +13,7 @@ using Automatica.Core.Internals.UserHelper;
 using Automatica.Core.Model.Models.User;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Automatica.Core.EF.Security;
 using User = Automatica.Core.Model.Models.User.User;
 using Automatica.Core.Base.Common;
 using Automatica.Core.Runtime.BoardTypes;
@@ -564,6 +565,21 @@ namespace Automatica.Core.Runtime.Database
             EnsureSecurityStamps(context);
 
             context.SaveChanges();
+
+            // secrets of older databases (password properties, api keys) are encrypted once
+            try
+            {
+                var encrypted = SecretsInterceptor.EncryptExisting(context);
+                if (encrypted > 0)
+                {
+                    Automatica.Core.Logging.SystemLogger.Instance.LogInformation($"Encrypted {encrypted} stored secrets ({SecretProtector.GetKeyFilePath()})");
+                }
+            }
+            catch (Exception e)
+            {
+                Automatica.Core.Logging.SystemLogger.Instance.LogError(e, "Could not encrypt the stored secrets, they stay unencrypted");
+            }
+
             config.Reload();
         }
 

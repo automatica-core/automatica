@@ -62,7 +62,7 @@ export class Satellite extends BaseModel implements IPropertyModel, INameModel, 
         this.Properties.push(new VirtualDisplayDescriptionPropertyInstance(this, false));
 
         this.Properties.push(new VirtualGenericPropertyInstance("SATELLITE.CLIENTID", 3, this, () => this.ClientId, (v) => this.ClientId = v, false, PropertyTemplateType.Text));
-        this.Properties.push(new VirtualGenericPropertyInstance("SATELLITE.CLIENTKEY", 3, this, () => this.ClientKey, (v) => this.ClientKey = v, false, PropertyTemplateType.Text));
+        this.Properties.push(new VirtualGenericPropertyInstance("SATELLITE.CLIENTKEY", 3, this, () => this.ClientKey, (v) => this.ClientKey = v, false, PropertyTemplateType.Password));
 
     }
 

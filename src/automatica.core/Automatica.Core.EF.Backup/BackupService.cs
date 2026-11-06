@@ -69,10 +69,16 @@ namespace Automatica.Core.EF.Backup
             {
                 if (_backupService != null)
                 {
-                    Directory.CreateDirectory(ServerInfo.GetBackupDirectory());
+                    // backups contain user hashes and (encrypted) secrets: owner only
+                    ServerInfo.EnsurePrivateDirectory(ServerInfo.GetBackupDirectory());
+                    var backupFile = GetBackupFile();
                     await _backupService.StartBackup(
                         ConnectionStringHelper.GetConnectionString(_config, _logger).connectionString,
-                        GetBackupFile());
+                        backupFile);
+                    if (File.Exists(backupFile))
+                    {
+                        ServerInfo.MakeFilePrivate(backupFile);
+                    }
                 }
 
                 await ClearOldBackups();
