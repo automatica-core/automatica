@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Tunneling;
@@ -68,7 +69,7 @@ namespace P3.Driver.Synology.DriverFactory
                 {
                     var httpClientHandler = new HttpClientHandler();
 
-                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => _ignoreSslErrors;
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None || _ignoreSslErrors;
                 var httpClient = new HttpClient(httpClientHandler);
                 _client = new SynologyClient(_uri, httpClient);
 
