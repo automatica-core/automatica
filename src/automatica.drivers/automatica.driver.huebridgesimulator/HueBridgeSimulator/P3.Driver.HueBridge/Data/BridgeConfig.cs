@@ -24,7 +24,10 @@ namespace P3.Driver.HueBridge.Data
         public string Mac { get; set; }
         public string SwVersion => "9999999999";
         public string ApiVersion => "1.19.0";
-        public bool LinkButton => false;
+        [Newtonsoft.Json.JsonIgnore]
+        internal Func<bool> LinkButtonProvider { get; set; }
+
+        public bool LinkButton => LinkButtonProvider?.Invoke() ?? false;
 
         public int ProxyPort => 0;
 
@@ -42,6 +45,9 @@ namespace P3.Driver.HueBridge.Data
         public string BridgeId { get; set; }
         public bool FactoryNew => false;
 
-        public Dictionary<string, HueUser> Whitelist => HueDriver.Instance.WhiteList;
+        /// <summary>
+        /// The whitelist is never sent to clients, every user name is a credential
+        /// </summary>
+        public Dictionary<string, HueUser> Whitelist => new Dictionary<string, HueUser>();
     }
 }

@@ -2,6 +2,22 @@
   "HUE_BRIDGE_SIMULATOR": {
     "NAME": "Hue Bridge Simulator",
     "DESCRIPTION": "",
+    "BIND_ADDRESS": {
+      "DESCRIPTION": "IP-Adresse, auf der die Bridge lauscht, 0.0.0.0 = alle Schnittstellen"
+    },
+    "USERS": {
+      "NAME": "Benutzer",
+      "DESCRIPTION": "Freigegebene Hue-API-Benutzer"
+    },
+    "PAIRING": "Kopplung",
+    "LINK_BUTTON": {
+      "NAME": "Link-Taste drücken",
+      "DESCRIPTION": "Neue Hue-Apps und Sprachassistenten 3 Minuten lang annehmen. Die Gerätesuche in der App starten, solange das Fenster offen ist."
+    },
+    "REMOVE_USERS": {
+      "NAME": "Alle Benutzer entfernen",
+      "DESCRIPTION": "Entfernt alle gekoppelten Hue-Apps und Sprachassistenten. Sie müssen danach über die Link-Taste neu gekoppelt werden."
+    },
     "ON_OFF": {
       "NAME": "Licht Ein/Aus",
       "DESCRIPTION": "",

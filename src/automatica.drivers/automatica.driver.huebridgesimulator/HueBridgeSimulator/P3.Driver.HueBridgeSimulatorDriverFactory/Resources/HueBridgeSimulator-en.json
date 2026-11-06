@@ -2,6 +2,22 @@
   "HUE_BRIDGE_SIMULATOR": {
     "NAME": "Hue Bridge Simulator",
     "DESCRIPTION": "",
+    "BIND_ADDRESS": {
+      "DESCRIPTION": "IP address the bridge listens on, 0.0.0.0 = all interfaces"
+    },
+    "USERS": {
+      "NAME": "Users",
+      "DESCRIPTION": "Whitelisted Hue API users"
+    },
+    "PAIRING": "Pairing",
+    "LINK_BUTTON": {
+      "NAME": "Press link button",
+      "DESCRIPTION": "Accept new Hue apps and voice assistants for 3 minutes. Start the device search in the app while the window is open."
+    },
+    "REMOVE_USERS": {
+      "NAME": "Remove all users",
+      "DESCRIPTION": "Removes all paired Hue apps and voice assistants. They have to be paired again with the link button."
+    },
     "ON_OFF": {
       "NAME": "On/Off",
       "DESCRIPTION": "",
