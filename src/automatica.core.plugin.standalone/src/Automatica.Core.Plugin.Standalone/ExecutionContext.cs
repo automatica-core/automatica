@@ -57,6 +57,11 @@ namespace Automatica.Core.Plugin.Standalone
                 return driverContext => provider.GetRequiredService<ITunnelingProvider>();
             });
 
+            // DriverContext resolves these from the service provider
+            // no db:language in the plugin container, the provider falls back to the default language
+            serviceCollection.AddSingleton<ILocalizationProvider>(new LocalizationProvider(new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build(), new NullLogger<LocalizationProvider>()));
+            serviceCollection.AddSingleton<Automatica.Core.Notification.INotificationManager, RemoteNotificationManager>();
+
             serviceCollection.AddRetryHandler();
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -119,8 +124,8 @@ namespace Automatica.Core.Plugin.Standalone
         {
             try
             {
-                // no db:language in the plugin container, the provider falls back to the default language
-                var localization = new LocalizationProvider(new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build(), new NullLogger<LocalizationProvider>());
+                // same instance the drivers get through their DriverContext, so the plugin's translations are there too
+                var localization = _serviceProvider.GetRequiredService<ILocalizationProvider>();
                 var factories = await Dockerize.Init<DriverFactory>(_pluginDir, _logger, localization);
                 var templateFactory = _serviceProvider.GetRequiredService<INodeTemplateFactory>();
 
