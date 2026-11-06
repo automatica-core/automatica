@@ -19,5 +19,15 @@ namespace P3.Driver.HomeKit.Hap
         public TcpClient Client { get; set; }
 
         public string ClientUsername { get; set; }
+
+        /// <summary>
+        /// Raw pairing identifier of the verified controller.
+        /// </summary>
+        public byte[] ClientIdentifier { get; internal set; }
+
+        /// <summary>
+        /// Set when the controller's pairing was removed, the connection is closed after the response was written.
+        /// </summary>
+        public bool CloseAfterResponse { get; internal set; }
     }
 }

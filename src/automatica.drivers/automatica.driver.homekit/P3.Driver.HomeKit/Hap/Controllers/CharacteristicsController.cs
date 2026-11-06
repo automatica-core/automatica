@@ -73,13 +73,17 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                     continue;
                 }
 
-                if (sendCharacteristic.EventBasedNotification.HasValue && sendCharacteristic.EventBasedNotification.Value)
+                // "ev" is only present when the controller (un)subscribes, a plain value write must not change the subscription
+                if (sendCharacteristic.EventBasedNotification.HasValue)
                 {
-                    server.RegisterNotifications(characteristic, session);
-                }
-                else
-                {
-                    server.RegisterNotifications(characteristic, session);
+                    if (sendCharacteristic.EventBasedNotification.Value)
+                    {
+                        server.RegisterNotifications(characteristic, session);
+                    }
+                    else
+                    {
+                        server.UnregisterNotifications(characteristic, session);
+                    }
                 }
 
                 if (sendCharacteristic.Value != null)

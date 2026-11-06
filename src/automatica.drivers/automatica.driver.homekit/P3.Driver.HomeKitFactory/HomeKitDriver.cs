@@ -145,6 +145,7 @@ namespace P3.Driver.HomeKitFactory
             }
 
             _server.PairingCompleted += ServerOnPairingCompleted;
+            _server.PairingRemoved += ServerOnPairingRemoved;
             _server.ValueChanged += ServerOnValueChanged;
 
             await _server.Start();
@@ -318,14 +319,38 @@ namespace P3.Driver.HomeKitFactory
             if (actionName == HomeKitFactory.ClearPairingsKey)
             {
                 DriverContext.Logger.LogInformation($"Clear pairings...");
-                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, String.Empty);  //save to database
-                DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, String.Empty); //save to database
+                ClearPersistedPairing();
 
-                _ltskProperty.Value = String.Empty;
-                _ltpkProperty.Value = String.Empty;
+                // the running server keeps the keys in memory, it would still verify the old controller and reject a new pair-setup
+                _server?.ClearPairings();
                 DriverContext.Logger.LogInformation($"Clear pairings...done");
             }
             return base.CustomAction(actionName, token);
+        }
+
+        private void ClearPersistedPairing()
+        {
+            DriverContext.NodeTemplateFactory.SetPropertyValue(_ltskProperty.ObjId, String.Empty);  //save to database
+            DriverContext.NodeTemplateFactory.SetPropertyValue(_ltpkProperty.ObjId, String.Empty); //save to database
+
+            _ltskProperty.Value = String.Empty;
+            _ltpkProperty.Value = String.Empty;
+        }
+
+        /// <summary>
+        /// The controller removed its pairing (e.g. the bridge was removed in the Home app), the server already cleared its in-memory keys.
+        /// </summary>
+        private void ServerOnPairingRemoved(object sender, EventArgs e)
+        {
+            try
+            {
+                DriverContext.Logger.LogInformation($"Pairing removed by the controller, clearing persisted pairing...");
+                ClearPersistedPairing();
+            }
+            catch (Exception ex)
+            {
+                DriverContext.Logger.LogError(ex, "Could not clear persisted pairing");
+            }
         }
 
         private async void ServerOnValueChanged(object sender, CharactersiticValueChangedEventArgs e)
@@ -342,11 +367,12 @@ namespace P3.Driver.HomeKitFactory
                     DriverContext.Logger.LogDebug($"Target is a control {control.Name}");
                     if (control is IDimmer iDimmer)
                     {
-                        if (e.Value is bool)
+                        // decide by the characteristic, HomeKit may send "On" as 0/1 and brightness as any number type
+                        if (e.Characteristic.Type == CharacteristicBase.OnType)
                         {
                             await Switch(e.Value, iDimmer);
                         }
-                        else if(e.Value is long or int)
+                        else if (e.Characteristic.Type == CharacteristicBase.BrightnessType)
                         {
                             DriverContext.Logger.LogDebug($"Dim value to {e.Value}");
                             await iDimmer.DimAsync(Convert.ToInt32(e.Value));
@@ -415,6 +441,7 @@ namespace P3.Driver.HomeKitFactory
             if (_server != null)
             {
                 _server.PairingCompleted -= ServerOnPairingCompleted;
+                _server.PairingRemoved -= ServerOnPairingRemoved;
                 _server.ValueChanged -= ServerOnValueChanged;
                 await _server.Stop();
             }

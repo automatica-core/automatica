@@ -303,11 +303,12 @@
 
         public static Characteristic CreateBrightness(this Accessory accessory)
         {
-            return accessory.Create<double>(CharacteristicBase.BrightnessType, 0, "int");
+            // brightness and hue are set by the controller => paired write
+            return accessory.Create<double>(CharacteristicBase.BrightnessType, 0, "int", true);
         }
         public static Characteristic CreateHue(this Accessory accessory)
         {
-            return accessory.Create<float>(CharacteristicBase.HueType, 0, "float");
+            return accessory.Create<float>(CharacteristicBase.HueType, 0, "float", true);
         }
 
         public static Characteristic Create<T>(this Accessory accessory,  string type, object value, string format, bool canWrite=false)

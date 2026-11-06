@@ -137,10 +137,43 @@ namespace P3.Driver.HomeKit
             }
         }
 
+        internal void UnregisterNotifications(Characteristic characteristic, HapSession session)
+        {
+            lock (_eventBasedNotifications)
+            {
+                if (_eventBasedNotifications.TryGetValue(session.ClientUsername, out var characteristics))
+                {
+                    characteristics.Remove(characteristic);
+                }
+            }
+        }
+
         private void HapServerOnPairingCompleted(object sender, PairSetupCompleteEventArgs e)
         {
             PairingCompleted?.Invoke(sender, e);
             _bonjour.AlreadyPaired = true;
+        }
+
+        /// <summary>
+        /// Forgets the controller pairing of the running server (the caller clears the persisted keys), the bridge is advertised as pairable again.
+        /// </summary>
+        public void ClearPairings()
+        {
+            HapControllerServer.ClearPairing();
+            _bonjour.AlreadyPaired = false;
+        }
+
+        /// <summary>
+        /// Raised when the controller removed its own pairing (Remove Pairing), the owner must clear the persisted keys.
+        /// </summary>
+        public event EventHandler PairingRemoved;
+
+        internal bool AdvertisedAsPaired => _bonjour.AlreadyPaired;
+
+        internal void RemovePairing()
+        {
+            ClearPairings();
+            PairingRemoved?.Invoke(this, System.EventArgs.Empty);
         }
 
         public async Task<bool> Start()
@@ -159,29 +192,38 @@ namespace P3.Driver.HomeKit
 
         public void SetCharacteristicValue(Characteristic characteristic, object value)
         {
-            lock (_eventBasedNotifications)
+            var found = false;
+            foreach (var a in _accessoryContainer.Accessories)
             {
-                foreach (var a in _accessoryContainer.Accessories)
+                foreach (var s in a.Services)
                 {
-                    foreach (var s in a.Services)
+                    foreach (var c in s.Characteristics)
                     {
-                        foreach (var c in s.Characteristics)
+                        if (c == characteristic)
                         {
-                            if (c == characteristic)
-                            {
-                                c.Value = value;
-
-                                foreach(var sessions in _eventBasedNotifications) {
-                                    if (sessions.Value.Contains(characteristic))
-                                    {
-                                        _hapServer.SendNotification(characteristic, _hapServer.GetClientSession(sessions.Key));
-                                    }
-                                }
-
-                            }
+                            c.Value = value;
+                            found = true;
                         }
                     }
                 }
+            }
+
+            if (!found)
+            {
+                return;
+            }
+
+            // snapshot the subscribers under the lock and send outside of it: sending takes the session lock, which a
+            // connection holds while it handles a request that (un)registers notifications => lock order inversion
+            List<string> subscribers;
+            lock (_eventBasedNotifications)
+            {
+                subscribers = _eventBasedNotifications.Where(a => a.Value.Contains(characteristic)).Select(a => a.Key).ToList();
+            }
+
+            foreach (var clientUsername in subscribers)
+            {
+                _hapServer.SendNotification(characteristic, _hapServer.GetClientSession(clientUsername));
             }
         }
 

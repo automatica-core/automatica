@@ -142,6 +142,23 @@ namespace P3.Driver.HomeKit.Http
             }
         }
 
+        /// <summary>
+        /// Closes all connections of the controller <paramref name="clientUserName"/> except <paramref name="except"/> (which closes itself).
+        /// </summary>
+        internal void CloseControllerConnections(string clientUserName, HttpServerConnection except)
+        {
+            HttpServerConnection[] snapshot;
+            lock (_connections)
+            {
+                snapshot = _connections.ToArray();
+            }
+
+            foreach (var con in snapshot.Where(a => a != except && a.Session != null && a.Session.ClientUsername == clientUserName))
+            {
+                con.Close();
+            }
+        }
+
         public Task<bool> Stop()
         {
             HttpServerConnection[] connections;

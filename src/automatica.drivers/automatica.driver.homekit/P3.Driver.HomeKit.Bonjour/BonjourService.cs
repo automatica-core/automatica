@@ -30,7 +30,29 @@ namespace P3.Driver.HomeKit.Bonjour
         internal const string HapName = "_hap";
         internal static readonly string DnsHapDomain = $"{HapName}._tcp.local";
 
-        public bool AlreadyPaired { get; set; }
+        private volatile bool _alreadyPaired;
+        private volatile bool _started;
+
+        /// <summary>
+        /// Drives the "sf" (status flag) TXT record: 1 = not paired (discoverable for pairing), 0 = paired.
+        /// A change is announced right away so controllers do not keep a stale TXT record.
+        /// </summary>
+        public bool AlreadyPaired
+        {
+            get => _alreadyPaired;
+            set
+            {
+                var changed = _alreadyPaired != value;
+                _alreadyPaired = value;
+
+                if (changed && _started)
+                {
+                    Announce();
+                }
+            }
+        }
+
+        internal string StatusFlag => _alreadyPaired ? "0" : "1";
 
         public BonjourService(ILogger logger, ushort port, string name, string hapId, int configVersion)
         {
@@ -47,7 +69,7 @@ namespace P3.Driver.HomeKit.Bonjour
             var message = new Message {QR = true};
 
             var txtList = new List<string>();
-            txtList.AddProperty("sf", "1");
+            txtList.AddProperty("sf", StatusFlag);
             txtList.AddProperty("c#", _configVersion.ToString());
             txtList.AddProperty("s#", "1");
             txtList.AddProperty("md", _name);
@@ -131,6 +153,7 @@ namespace P3.Driver.HomeKit.Bonjour
             startMessage.Questions.Add(q);
 
             _mdns.Start();
+            _started = true;
 
 #pragma warning disable 4014
             Task.Run(async () =>
@@ -149,6 +172,7 @@ namespace P3.Driver.HomeKit.Bonjour
 
         public async Task Stop()
         {
+            _started = false;
             var message = new Message();
             message.Answers.Add(new PTRRecord
             {
@@ -174,36 +198,56 @@ namespace P3.Driver.HomeKit.Bonjour
             (e.Message.Questions.Any(a => a.Name.Labels.Contains(HapName))) || 
             e.Message.Questions.Any(a => a.Name == ServiceDiscovery.ServiceName))
             {
-                var localAddresses = MulticastService.GetIpAddresses();
-                var dnsMessage = GenerateQueryResponseMessage();
+                _mdns.SendAnswer(GenerateResponseWithAddresses(), e);
+            }
+        }
 
-                foreach (var localAddress in localAddresses)
+        private Message GenerateResponseWithAddresses()
+        {
+            var localAddresses = MulticastService.GetIpAddresses();
+            var dnsMessage = GenerateQueryResponseMessage();
+
+            foreach (var localAddress in localAddresses)
+            {
+                if (localAddress.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    if (localAddress.AddressFamily == AddressFamily.InterNetwork)
+                    dnsMessage.Answers.Add(new ARecord
                     {
-                        dnsMessage.Answers.Add(new ARecord
-                        {
-                            Name = $"{_hapId.Replace(":", "_")}.local",
-                            Address = localAddress,
-                            Class = DnsClass.IN,
-                            Type = DnsType.A,
-                            TTL = TimeSpan.FromMinutes(2)
-                        });
-                    }
-                    else if (localAddress.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        dnsMessage.Answers.Add(new AAAARecord
-                        {
-                            Name = $"{_hapId.Replace(":", "_")}.local",
-                            Address = localAddress,
-                            Class = DnsClass.IN,
-                            Type = DnsType.AAAA,
-                            TTL = TimeSpan.FromMinutes(2)
-                        });
-                    }
+                        Name = $"{_hapId.Replace(":", "_")}.local",
+                        Address = localAddress,
+                        Class = DnsClass.IN,
+                        Type = DnsType.A,
+                        TTL = TimeSpan.FromMinutes(2)
+                    });
                 }
+                else if (localAddress.AddressFamily == AddressFamily.InterNetworkV6)
+                {
+                    dnsMessage.Answers.Add(new AAAARecord
+                    {
+                        Name = $"{_hapId.Replace(":", "_")}.local",
+                        Address = localAddress,
+                        Class = DnsClass.IN,
+                        Type = DnsType.AAAA,
+                        TTL = TimeSpan.FromMinutes(2)
+                    });
+                }
+            }
 
-                _mdns.SendAnswer(dnsMessage, e);
+            return dnsMessage;
+        }
+
+        /// <summary>
+        /// Sends an unsolicited response with the current records (e.g. after the paired state changed).
+        /// </summary>
+        private void Announce()
+        {
+            try
+            {
+                _mdns.SendAnswer(GenerateResponseWithAddresses(), false);
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "Could not announce updated bonjour records");
             }
         }
 

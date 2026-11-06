@@ -55,6 +55,12 @@ namespace P3.Driver.HomeKit.Hap
         }
 
 
+        internal static void ClearPairing()
+        {
+            HapControllerLtsk = null;
+            HapControllerLtpk = null;
+        }
+
         public async Task<bool> Stop()
         {
             await _httpServer.Stop();

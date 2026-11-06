@@ -18,6 +18,7 @@
     {
         Authentication = 2,
         MaxPeers = 4,
+        Unavailable = 6,
         Busy = 7
     }
 }

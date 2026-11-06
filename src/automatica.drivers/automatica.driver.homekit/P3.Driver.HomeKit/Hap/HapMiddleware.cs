@@ -30,6 +30,8 @@ namespace P3.Driver.HomeKit.Hap
         private readonly HomeKitServer _homeKitServer;
 
         private PairSetupController _pairController;
+        private string _pairControllerConnectionId;
+        private readonly object _pairLock = new object();
 
         public static event EventHandler<PairSetupCompleteEventArgs> PairingCompleted;
         public TlvParser TlvParser { get; }
@@ -70,7 +72,8 @@ namespace P3.Driver.HomeKit.Hap
         {
             _logger.LogDebug($"Return error code: {error} state {state}");
             var tlvData = new Tlv();
-            tlvData.AddType(Constants.State, state++);
+            // errors are returned with the state of the response to the request (M1 => M2)
+            tlvData.AddType(Constants.State, state + 1);
             tlvData.AddType(Constants.Error, error);
             byte[] output = TlvParser.Serialize(tlvData);
 
@@ -110,37 +113,51 @@ namespace P3.Driver.HomeKit.Hap
                         if (url.EndsWith("pair-setup"))
                         {
                             _logger.LogDebug($"Working on pair-setup request");
-                            if (_pairController != null && state == 1)
+
+                            PairSetupController pairController;
+                            lock (_pairLock)
                             {
-                                _logger.LogWarning($"Error busy...");
-                                return ReturnError(state, ErrorCodes.Busy);
+                                if (state == 1 && IsPaired)
+                                {
+                                    _logger.LogWarning($"Already paired, rejecting pair-setup...");
+                                    return ReturnError(state, ErrorCodes.Unavailable);
+                                }
+
+                                if (_pairController != null && state == 1)
+                                {
+                                    _logger.LogWarning($"Error busy...");
+                                    return ReturnError(state, ErrorCodes.Busy);
+                                }
+
+                                if (state == 1 && _pairController == null)
+                                {
+                                    _pairController =
+                                        new PairSetupController(_logger, _pairCode);
+                                    _pairControllerConnectionId = connectionId;
+                                }
+
+                                if (_pairController == null || _pairControllerConnectionId != connectionId)
+                                {
+                                    _logger.LogError($"Something is wrong here, closing tcp connection");
+                                    throw new ArgumentException($"Something is wrong here, closing tcp connection");
+                                }
+
+                                pairController = _pairController;
                             }
 
-                            if (state == 1 && _pairController == null)
-                            {
-                                _pairController =
-                                    new PairSetupController(_logger, _pairCode);
-                            }
-
-                            if (_pairController == null)
-                            {
-                                _logger.LogError($"Something is wrong here, closing tcp connection");
-                                throw new ArgumentException($"Something is wrong here, closing tcp connection");
-                            }
-
-                            var data = _pairController.Post(parts, session);
+                            var data = pairController.Post(parts, session);
 
                             var raw = TlvParser.Serialize(data.TlvData);
 
                             if (!data.Ok)
                             {
-                                _pairController = null;
+                                ResetPairController(connectionId);
                                 _sessions.TryRemove(connectionId, out var _);
                             }
                             else if (data.State == 5)
                             {
                                 PairingCompleted?.Invoke(this, new PairSetupCompleteEventArgs(data.Ltsk, data.Ltpk));
-                                _pairController = null;
+                                ResetPairController(connectionId);
                             }
 
                             return new Tuple<string, byte[]>(PairSetupReturn.ContentType, raw);
@@ -171,7 +188,24 @@ namespace P3.Driver.HomeKit.Hap
                         {
                             _logger.LogDebug($"Working on pairings");
                             var pair = new PairingController(_logger);
-                            var data = pair.Post(parts);
+                            var hapSession = _sessions[connectionId];
+                            var data = pair.Post(parts, hapSession);
+
+                            if (data.PairingRemoved)
+                            {
+                                _logger.LogInformation($"Controller removed its pairing, clearing pairing...");
+                                if (_homeKitServer != null)
+                                {
+                                    _homeKitServer.RemovePairing();
+                                }
+                                else
+                                {
+                                    HapControllerServer.ClearPairing();
+                                }
+
+                                // the response is still sent with the session keys, the controller's connections are closed afterwards
+                                hapSession.CloseAfterResponse = true;
+                            }
 
                             var raw = TlvParser.Serialize(data.TlvData);
                             return new Tuple<string, byte[]>(data.ContentType, raw);
@@ -235,15 +269,33 @@ namespace P3.Driver.HomeKit.Hap
             catch (Exception e)
             {
                 _logger.LogError(e, $"{e}: Error occured while processing request");
-                _pairController = null;
+                ResetPairController(connectionId);
             }
-            
+
             throw new InvalidOperationException();
+        }
+
+        private static bool IsPaired => !string.IsNullOrEmpty(HapControllerServer.HapControllerLtpk);
+
+        /// <summary>
+        /// Drops the pair-setup in progress if it belongs to <paramref name="connectionId"/>, otherwise a dropped connection would leave the accessory busy forever.
+        /// </summary>
+        private void ResetPairController(string connectionId)
+        {
+            lock (_pairLock)
+            {
+                if (_pairControllerConnectionId == connectionId)
+                {
+                    _pairController = null;
+                    _pairControllerConnectionId = null;
+                }
+            }
         }
 
         public void TerminateSession(string session)
         {
             _sessions.TryRemove(session, out var _);
+            ResetPairController(session);
         }
     }
 }

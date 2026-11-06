@@ -39,10 +39,9 @@ namespace P3.Driver.HomeKit.Hap.Controllers
 
                 var clientPublicKey = parts.GetType(Constants.PublicKey);
 
+                // ephemeral X25519 secret, must come from a CSPRNG
                 byte[] privateKey = new byte[32];
-
-                Random random = new Random();
-                random.NextBytes(privateKey);
+                System.Security.Cryptography.RandomNumberGenerator.Fill(privateKey);
                     
                 var publicKey = Curve25519.GetPublicKey(privateKey);
                 var sharedSecret = Curve25519.GetSharedSecret(privateKey, clientPublicKey);
@@ -148,6 +147,7 @@ namespace P3.Driver.HomeKit.Hap.Controllers
                 var responseTlv = new Tlv();
                 responseTlv.AddType(Constants.State, 4);
 
+                session.ClientIdentifier = clientUserName;
                 session.IsVerified = true;
                 session.SkipFirstEncryption = true;
 

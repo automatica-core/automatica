@@ -23,6 +23,7 @@ namespace P3.Driver.HomeKit.Http
         private readonly ConnectionSession _session = new ConnectionSession();
         private EndPoint _remoteEndPoint;
         private HapSession _connectionSession;
+        private byte[] _pendingEncrypted = Array.Empty<byte>();
 
         public HapSession Session => _connectionSession;
 
@@ -76,7 +77,14 @@ namespace P3.Driver.HomeKit.Http
                             {
                                 _logger.LogDebug("Already in a verified state..");
 
-                                var encryptionResult = DecryptData(content, _connectionSession);
+                                // a frame can be split over several reads, keep the incomplete tail for the next read
+                                var encrypted = _pendingEncrypted.Length == 0 ? content : _pendingEncrypted.Concat(content).ToArray();
+                                var encryptionResult = DecryptData(encrypted, _connectionSession, out _pendingEncrypted);
+
+                                if (encryptionResult.Length == 0)
+                                {
+                                    continue;
+                                }
                                 content = encryptionResult;
                             }
 
@@ -164,6 +172,14 @@ namespace P3.Driver.HomeKit.Http
 
                             _logger.LogDebug(
                                 "**************************** REQUEST DONE *************************");
+
+                            if (_connectionSession.CloseAfterResponse)
+                            {
+                                // the pairing was removed: the controller's sessions are no longer valid
+                                _logger.LogInformation("Pairing removed, closing the controller's connections");
+                                _httpServer.CloseControllerConnections(_connectionSession.ClientUsername, this);
+                                break;
+                            }
                         }
                     }
 
@@ -270,26 +286,40 @@ namespace P3.Driver.HomeKit.Http
 
         internal static byte[] DecryptData(byte[] content, HapSession session)
         {
+            return DecryptData(content, session, out _);
+        }
+
+        /// <summary>
+        /// Decrypts all complete frames (2 byte length + encrypted data + 16 byte auth tag) in <paramref name="content"/>.
+        /// The bytes of a trailing incomplete frame are returned in <paramref name="remainder"/> and must be prepended to the next read.
+        /// </summary>
+        internal static byte[] DecryptData(byte[] content, HapSession session, out byte[] remainder)
+        {
+            const int lengthSize = 2;
+            const int authTagSize = 16;
+
             var encryptionResult = Array.Empty<byte>();
+            var offset = 0;
 
-            for (var offset = 0; offset < content.Length;)
+            while (content.Length - offset >= lengthSize)
             {
-                // The first type bytes represent the length of the data.
+                // The first two bytes of each frame represent the length of the data, they are also the additional authenticated data.
                 //
-                var twoBytes = new Byte[] { content[0], content[1] };
-
-                offset += 2;
-
+                var twoBytes = new[] { content[offset], content[offset + 1] };
                 var frameLength = BitConverter.ToUInt16(twoBytes, 0);
 
-                var availableDataLength = content.Length - offset;
-                var message = content.AsSpan(offset, availableDataLength);
+                if (content.Length - offset < lengthSize + frameLength + authTagSize)
+                {
+                    break; // partial frame, wait for more data
+                }
+
+                var message = content.AsSpan(offset + lengthSize, frameLength + authTagSize);
 
                 var zeros = new byte[] { 0, 0, 0, 0 };
                 var nonce = new Nonce(zeros, BitConverter.GetBytes(session.InboundBinaryMessageCount++));
 
 
-                // Use the AccessoryToController key to decrypt the data.
+                // Use the ControllerToAccessory key to decrypt the data.
                 //
                 var decrypt = AeadAlgorithm.ChaCha20Poly1305.Decrypt(Key.Import(AeadAlgorithm.ChaCha20Poly1305, session.ControllerToAccessoryKey, KeyBlobFormat.RawSymmetricKey), nonce, twoBytes, message, out var output);
 
@@ -300,9 +330,10 @@ namespace P3.Driver.HomeKit.Http
 
                 encryptionResult = encryptionResult.Concat(output).ToArray();
 
-                offset += (18 + frameLength);
+                offset += lengthSize + frameLength + authTagSize;
             }
 
+            remainder = content.AsSpan(offset).ToArray();
             return encryptionResult;
         }
 
