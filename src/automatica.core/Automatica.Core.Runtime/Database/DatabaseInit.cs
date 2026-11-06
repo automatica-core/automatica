@@ -26,7 +26,8 @@ namespace Automatica.Core.Runtime.Database
     {
         public static void EnsureDatabaseCreated(IServiceProvider services)
         {
-            var context = services.GetRequiredService<AutomaticaContext>();
+            // own short lived context: this runs on the root provider where the scoped context must not be resolved
+            using var context = services.GetRequiredService<IDbContextFactory<AutomaticaContext>>().CreateDbContext();
             var visuInitFactory = services.GetRequiredService<IVisualisationFactory>();
             var config = services.GetRequiredService<IConfigurationRoot>();
             

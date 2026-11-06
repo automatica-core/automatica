@@ -12,7 +12,6 @@ namespace Automatica.Core.EF.Backup
     public class BackupService : IHostedService
     {
         private readonly IConfiguration _config;
-        private readonly AutomaticaContext _context;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<BackupService> _logger;
         private Timer? _backupTimer;
@@ -20,10 +19,9 @@ namespace Automatica.Core.EF.Backup
 
         private const int BackupRetentionDays = 14;
 
-        public BackupService(IConfiguration config, AutomaticaContext context, IServiceProvider serviceProvider, ILogger<BackupService> logger)
+        public BackupService(IConfiguration config, IServiceProvider serviceProvider, ILogger<BackupService> logger)
         {
             _config = config;
-            _context = context;
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
@@ -37,22 +35,34 @@ namespace Automatica.Core.EF.Backup
             return Convert.ToInt32((midnight - now).TotalMilliseconds);
         }
 
+        // the database type is only known to a context after OnConfiguring ran, read it from the configuration instead
+        private DatabaseTypeEnum DatabaseType => ConnectionStringHelper.GetConnectionString(_config, _logger).dbType;
+
         private async void BackupCallback(object? state)
         {
-            if (_backupService != null)
+            // timer callback: an exception here would crash the process
+            try
             {
-                await _backupService.StartBackup(
-                    ConnectionStringHelper.GetConnectionString(_config, _logger).connectionString,
-                    Path.Combine(ServerInfo.GetBackupDirectory(), $"{_context.DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak"));
-            }
+                if (_backupService != null)
+                {
+                    Directory.CreateDirectory(ServerInfo.GetBackupDirectory());
+                    await _backupService.StartBackup(
+                        ConnectionStringHelper.GetConnectionString(_config, _logger).connectionString,
+                        Path.Combine(ServerInfo.GetBackupDirectory(), $"{DatabaseType}-{DateTimeHelper.ProviderInstance.GetLocalNow().DateTime:yyyy-MM-dd}.bak"));
+                }
 
-            await ClearOldBackups();
+                await ClearOldBackups();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Could not create database backup {e}");
+            }
         }
 
         private async Task ClearOldBackups()
         {
             await Task.CompletedTask;
-            var files = Directory.GetFiles(ServerInfo.GetBackupDirectory(), $"{_context.DatabaseType}-*");
+            var files = Directory.GetFiles(ServerInfo.GetBackupDirectory(), $"{DatabaseType}-*");
             var sortedFiles = files.OrderBy(a => a).ToList();
 
             if (sortedFiles.Count < BackupRetentionDays)
@@ -82,13 +92,22 @@ namespace Automatica.Core.EF.Backup
             }
 
 
-            if (backupServices.Any(a => a.DbType == _context.DatabaseType))
+            var databaseType = DatabaseType;
+            if (backupServices.Any(a => a.DbType == databaseType))
             {
-                _backupService = backupServices.First(a => a.DbType == _context.DatabaseType);
+                _backupService = backupServices.First(a => a.DbType == databaseType);
                 var delay = CalculateDiffToMidnight();
                 _backupTimer = new Timer(BackupCallback, this, 0, delay);
-                await ClearOldBackups();
-                _logger.LogInformation($"Backup service started for {_context.DatabaseType} database type, first backup will be in {delay}ms");
+                try
+                {
+                    await ClearOldBackups();
+                }
+                catch (Exception ex)
+                {
+                    // e.g. the backup directory could not be created - must not fail the host start
+                    _logger.LogError(ex, $"Could not clear old backups {ex}");
+                }
+                _logger.LogInformation($"Backup service started for {databaseType} database type, first backup will be in {delay}ms");
             }
             else
             {

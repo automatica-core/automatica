@@ -11,6 +11,7 @@ using Automatica.Core.Base.Visu;
 using Automatica.Core.Driver;
 using Automatica.Core.Driver.LeanMode;
 using Automatica.Core.Driver.Monitor;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Internals;
 using Automatica.Core.Internals.Cache.Driver;
 using Automatica.Core.Internals.Cloud;
@@ -51,6 +52,8 @@ namespace Automatica.Core.Runtime
     {
         public static void AddAutomaticaCoreService(this IServiceCollection services, IConfiguration configuration, bool isElectronActive)
         {
+            // singletons must not use the scoped AutomaticaContext, they create (and dispose) a context per operation
+            services.AddAutomaticaContextFactory();
             services.AddAutomaticaDrivers();
             services.AddDispatcher();
 

@@ -53,11 +53,16 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<Slave>> SaveInstances([FromBody]IList<Slave> instances)
         {
+            if (instances == null)
+            {
+                return GetAll();
+            }
+
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
                     foreach (var instance in instances)
@@ -77,11 +82,17 @@ namespace Automatica.Core.WebApi.Controllers
                         }
                     }
 
-                    var removedNodes = from c in DbContext.Slaves
-                        where !(from o in instances select o.ObjId).Contains(c.ObjId)
-                        select c;
-                    var removedList = removedNodes.ToList();
-                    DbContext.RemoveRange(removedList);
+                    // the UI always posts the complete list: an empty list is treated as "nothing to delete"
+                    // and the own (local) satellite is never deleted
+                    if (instances.Count > 0)
+                    {
+                        var postedIds = instances.Select(o => o.ObjId).ToList();
+                        var selfSlaveId = ServerInfo.SelfSlaveGuid;
+                        var removedList = DbContext.Slaves
+                            .Where(c => !postedIds.Contains(c.ObjId) && c.ObjId != selfSlaveId)
+                            .ToList();
+                        DbContext.RemoveRange(removedList);
+                    }
 
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
@@ -89,11 +100,11 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
+                    throw;
                 }
-
-                return GetAll();
             });
+
+            return GetAll();
         }
 
     }

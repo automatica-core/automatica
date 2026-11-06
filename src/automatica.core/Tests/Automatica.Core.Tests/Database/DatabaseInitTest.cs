@@ -4,6 +4,7 @@ using Automatica.Core.Base.Visu;
 using Automatica.Core.EF.Models;
 using Automatica.Core.Runtime.Database;
 using Automatica.Core.Visu;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
@@ -31,7 +32,7 @@ namespace Automatica.Core.Tests.Database
             var serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IConfiguration)))).Returns(mockConfiguration.Object);
             serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IConfigurationRoot)))).Returns(mockConfiguration.Object);
-            serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(AutomaticaContext)))).Returns(new AutomaticaContext(mockConfiguration.Object, true));
+            serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IDbContextFactory<AutomaticaContext>)))).Returns(new AutomaticaContextFactory(mockConfiguration.Object));
             serviceProviderMock.Setup(a => a.GetService(It.Is<Type>(s => s == typeof(IVisualisationFactory)))).Returns(new VisuTempInit());
 
             try

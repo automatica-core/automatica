@@ -43,7 +43,11 @@ namespace Automatica.Core.Runtime.Recorder.Base
 
         public async Task AddTrend(Guid nodeInstance)
         {
-            var node = _nodeCache.GetSingle(nodeInstance, new AutomaticaContext(_config));
+            NodeInstance node;
+            await using (var db = new AutomaticaContext(_config))
+            {
+                node = _nodeCache.GetSingle(nodeInstance, db);
+            }
 
             if (node == null)
             {

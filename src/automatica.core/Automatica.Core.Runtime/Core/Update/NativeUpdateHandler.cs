@@ -34,27 +34,46 @@ namespace Automatica.Core.Runtime.Core.Update
 
         private async void _timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            _logger.LogInformation("Check for update");
-            _timer.Stop();
-            var update = await _api.CheckForUpdates();
-
-            if (update != null)
+            // async void timer callback: an unhandled exception here would crash the process
+            try
             {
-                _logger.LogInformation("Download update");
-                var fileInfo = await _api.DownloadUpdate(update);
-                
-                var check = Common.Update.Update.CheckUpdateFile(_logger, fileInfo.FullName, ServerInfo.Rid);
+                _logger.LogInformation("Check for update");
+                _timer.Stop();
+                var update = await _api.CheckForUpdates();
 
-                if (!check)
+                if (update != null)
                 {
-                    _api.DeleteUpdate();
-                }
+                    _logger.LogInformation("Download update");
+                    var fileInfo = await _api.DownloadUpdate(update);
 
-                _logger.LogInformation("Install update");
-                await Update();
+                    var check = Common.Update.Update.CheckUpdateFile(_logger, fileInfo.FullName, ServerInfo.Rid);
+
+                    if (!check)
+                    {
+                        _logger.LogError("The downloaded update file is invalid, update is not installed");
+                        _api.DeleteUpdate();
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Install update");
+                        await Update();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // offline, no api key, missing settings, ...
+                _logger.LogError(ex, $"Could not check for or install updates {ex}");
             }
 
-            await Init();
+            try
+            {
+                await Init();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Could not schedule the next update check {ex}");
+            }
         }
 
         public Task Update()

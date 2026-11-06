@@ -81,10 +81,13 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public IEnumerable<NodeInstance> GetLinkableNodes()
         {
+            var valueInterfaceType = GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value);
+
+            // filter in the database, only the user group check needs the claims
             return DbContext.NodeInstances.AsNoTracking()
-                .Include(a => a.This2NodeTemplateNavigation).ToList()
-                .Where(a =>
-                    a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceType == GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value))
+                .Include(a => a.This2NodeTemplateNavigation)
+                .Where(a => a.This2NodeTemplateNavigation.ProvidesInterface2InterfaceType == valueInterfaceType)
+                .ToList()
                 .Where(a => IsUserInGroup(a.This2UserGroup)).ToList();
         }
 

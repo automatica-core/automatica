@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Core;
 using Automatica.Core.Internals.Recorder;
+using Automatica.Core.Model.Models.User;
 using Automatica.Core.Runtime.RemoteConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,7 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = Role.AdminRole)]
         public ICollection<Setting> LoadSettings()
         {
             return _settingsCache.All();
@@ -60,23 +62,30 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpGet]
         [Route("key/{key}")]
+        [Authorize(Policy = Role.ViewerRole)]
         public Setting GetSetting(string key)
         {
             return _settingsCache.GetByKey(key);
         }
 
         [HttpPost]
+        [Authorize(Policy = Role.AdminRole)]
         public async Task<ICollection<Setting>> SaveSettings([FromBody]IList<Setting> settings)
         {
+            var reloadServer = false;
+            var reloadContext = new List<SettingReloadContext>();
+
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                reloadServer = false;
+                reloadContext.Clear();
+
+                // rolled back on dispose unless committed
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var reloadServer = false;
-                    var reloadContext = new List<SettingReloadContext>();
                     foreach (var s in settings)
                     {
                         var originalSetting = DbContext.Settings.SingleOrDefault(a => a.ValueKey == s.ValueKey);
@@ -115,29 +124,41 @@ namespace Automatica.Core.WebApi.Controllers
                     }
 
                     await DbContext.SaveChangesAsync();
-                    await _updateHandler.ReInitialize().ConfigureAwait(false);
-                    _settingsCache.Clear();
-                    _config.Reload();
                     await transaction.CommitAsync();
-
-                    if (reloadServer)
-                    {
-                        if (reloadContext.Contains(SettingReloadContext.Server))
-                            await _coreServer.ReInit().ConfigureAwait(false);
-                        else if (reloadContext.Contains(SettingReloadContext.Recorders))
-                            await _recorderContext.Reload().ConfigureAwait(false);
-                        else if (reloadContext.Contains(SettingReloadContext.RemoteConnect))
-                            await _remoteConnectService.ReloadAsync().ConfigureAwait(false);
-                    }
                 }
                 catch (Exception e)
                 {
-                    await transaction.RollbackAsync();
                     _logger.LogError(e, $"Could not {nameof(SaveSettings)} {e}");
+                    throw;
                 }
-
-                return LoadSettings();
             });
+
+            try
+            {
+                // after the commit: these read the settings back through their own
+                // connections, which only see committed data (and must not wait on our lock)
+                _settingsCache.Clear();
+                _config.Reload();
+                await _updateHandler.ReInitialize().ConfigureAwait(false);
+
+                if (reloadServer)
+                {
+                    if (reloadContext.Contains(SettingReloadContext.Server))
+                        await _coreServer.ReInit().ConfigureAwait(false);
+                    else if (reloadContext.Contains(SettingReloadContext.Recorders))
+                        await _recorderContext.Reload().ConfigureAwait(false);
+                    else if (reloadContext.Contains(SettingReloadContext.RemoteConnect))
+                        await _remoteConnectService.ReloadAsync().ConfigureAwait(false);
+                }
+            }
+            catch (Exception e)
+            {
+                // the settings are saved, but applying them failed - report it instead of returning success
+                _logger.LogError(e, $"Could not apply the saved settings in {nameof(SaveSettings)} {e}");
+                throw;
+            }
+
+            return LoadSettings();
         }
     }
 }

@@ -5,6 +5,7 @@ using Automatica.Core.Base.Common;
 using Automatica.Core.EF.Models;
 using Automatica.Discovery;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -99,30 +100,31 @@ namespace Automatica.Core
                 logger.LogInformation($"Running in docker mode...");
             }
 
-            var db = webHost.Services.GetRequiredService<AutomaticaContext>();
             DatabaseInit.EnsureDatabaseCreated(webHost.Services);
 
-          
-
-            var serverId = db.Settings.SingleOrDefault(a => a.ValueKey == "ServerUID");
-
-            if (serverId == null)
+            // short lived context, the scoped AutomaticaContext must not be resolved from the root provider
+            using (var db = webHost.Services.GetRequiredService<IDbContextFactory<AutomaticaContext>>().CreateDbContext())
             {
-                var guid = Guid.NewGuid();
-                db.Settings.Add(new Setting
+                var serverId = db.Settings.SingleOrDefault(a => a.ValueKey == "ServerUID");
+
+                if (serverId == null)
                 {
-                    ValueKey = "ServerUID",
-                    Value = guid,
-                    Group = "SERVER.SETTINGS",
-                    IsVisible = false,
-                    Type = (long)PropertyTemplateType.Text
-                });
-                ServerInfo.ServerUid = guid;
-                db.SaveChanges();
-            }
-            else
-            {
-                ServerInfo.ServerUid = new Guid(serverId.ValueText);
+                    var guid = Guid.NewGuid();
+                    db.Settings.Add(new Setting
+                    {
+                        ValueKey = "ServerUID",
+                        Value = guid,
+                        Group = "SERVER.SETTINGS",
+                        IsVisible = false,
+                        Type = (long)PropertyTemplateType.Text
+                    });
+                    ServerInfo.ServerUid = guid;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ServerInfo.ServerUid = new Guid(serverId.ValueText);
+                }
             }
 
             webHost.Services.GetService<DiscoveryService>();

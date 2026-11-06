@@ -29,7 +29,7 @@ namespace Automatica.Core.WebApi.Controllers
             return _dispatcher.GetValues(DispatchableType.NodeInstance);
         }
         [HttpGet]
-        [Route("node/:id")]
+        [Route("node/{id:guid}")]
         [Authorize(Policy = Role.ViewerRole)]
         public DispatchValue GetNodeValue(Guid id)
         {
@@ -44,7 +44,7 @@ namespace Automatica.Core.WebApi.Controllers
             return _dispatcher.GetValues();
         }
         [HttpGet]
-        [Route("all/:id")]
+        [Route("all/{id:guid}")]
         [Authorize(Policy = Role.ViewerRole)]
         public object GetValue(Guid id)
         {
@@ -53,6 +53,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpGet]
         [Route("trend/{id}/{startVisible}/{endVisible}/{startBound}/{endBound}")]
+        [Authorize(Policy = Role.ViewerRole)]
         public IList<Trending> GetTrendingValues(Guid id, DateTime startVisible, DateTime endVisible, DateTime startBound, DateTime endBound)
         {
             return DbContext.Trendings.Where(a => a.This2NodeInstance == id && a.Timestamp >= startBound && a.Timestamp <= endBound).ToList();

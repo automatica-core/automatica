@@ -10,6 +10,7 @@ using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Templates;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Driver;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
     internal class DriverLoader : IDriverLoader
     {
         private readonly ILogger<DriverLoader> _logger;
-        private readonly AutomaticaContext _dbContext;
+        private readonly IDbContextFactory<AutomaticaContext> _contextFactory;
         private readonly ILocalizationProvider _localizationProvider;
         private readonly IConfiguration _config;
         private readonly ILoadedStore _store;
@@ -30,14 +31,14 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
         private readonly IServiceProvider _serviceProvider;
 
         public DriverLoader(
-            ILogger<DriverLoader> logger, AutomaticaContext dbContext, 
+            ILogger<DriverLoader> logger, IDbContextFactory<AutomaticaContext> contextFactory, 
             ILocalizationProvider localizationProvider, IConfiguration config, 
             ILoadedStore store, IDriverFactoryStore driverFactoryStore,
             INodeInstanceService nodeInstanceService,
             IServiceProvider serviceProvider)
         {
             _logger = logger;
-            _dbContext = dbContext;
+            _contextFactory = contextFactory;
             _localizationProvider = localizationProvider;
             _config = config;
             _store = store;
@@ -62,8 +63,9 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 
                 _logger.LogDebug($"Init driver {factory.DriverName} {factory.DriverVersion}...");
 
+                await using var dbContext = _contextFactory.CreateDbContext();
                 var driverDbVersion =
-                    _dbContext.VersionInformations.SingleOrDefault(a => a.DriverGuid == factory.DriverGuid);
+                    dbContext.VersionInformations.SingleOrDefault(a => a.DriverGuid == factory.DriverGuid);
                 var initNodeTemplates = false;
 
                 if (driverDbVersion == null)
@@ -75,7 +77,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                         DriverGuid = factory.DriverGuid
                     };
                     initNodeTemplates = true;
-                    _dbContext.VersionInformations.Add(driverDbVersion);
+                    dbContext.VersionInformations.Add(driverDbVersion);
                 }
                 else if (factory.DriverVersion > driverDbVersion.VersionData)
                 {
@@ -96,7 +98,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                     factory.GetType().Assembly.GetName().Version < new Version(2, 3))
                 {
                     var logicTemplateFactoryProvider = new NodeTemplateFactoryProvider(_serviceProvider);
-                    var nodeTemplateFactory = logicTemplateFactoryProvider.CreateInstance(factory.DriverGuid);
+                    using var nodeTemplateFactory = logicTemplateFactoryProvider.CreateInstance(factory.DriverGuid);
                     
                     nodeTemplateFactory.SetFactory(factory);
                     _logger.LogDebug($"InitNodeTemplates for {factory.DriverName}...");
@@ -108,14 +110,14 @@ namespace Automatica.Core.Runtime.Core.Plugins.Drivers
                 }
                 else
                 {
-                    await using var db = new AutomaticaContext(_config);
-                    factory.InitNodeTemplates(new DoNothingNodeTemplateFactory(db, _config));
+                    using var doNothingFactory = new DoNothingNodeTemplateFactory(_contextFactory.CreateDbContext(), _config);
+                    factory.InitNodeTemplates(doNothingFactory);
                 }
 
 
                 _logger.LogDebug($"Init driver {factory.DriverName} {factory.DriverVersion}...done");
 
-                await _dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
 
             }
             catch (NoManifestFoundException)

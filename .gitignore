@@ -41,3 +41,8 @@ src/automatica.core/Automatica.Web/dist
 
 packages/
 logs/*.log
+# local server runs
+automatica_*.core.db
+automatica_*.core.db-shm
+automatica_*.core.db-wal
+src/automatica.core/Automatica.Core/logs/

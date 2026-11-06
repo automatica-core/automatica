@@ -17,6 +17,10 @@ namespace Automatica.Core.EF.Models
 {
     public class AutomaticaContext : DbContext
     {
+        // one instance for all contexts: EF keys its internal service provider on the logger factory instance,
+        // a new factory per context would create a new service provider for every context
+        private static readonly DatabaseLoggerFactory DbLoggerFactory = new DatabaseLoggerFactory();
+
         private readonly bool _extendedLogs;
 
         public virtual DbSet<BoardInterface> BoardInterfaces { get; set; }
@@ -89,10 +93,11 @@ namespace Automatica.Core.EF.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            var databaseLogs = _extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")) || !string.IsNullOrEmpty(Configuration["server:database_logs"]);
+
             if (!optionsBuilder.IsConfigured)
             {
-                var logger = new DatabaseLoggerFactory();
-                var loggerInstance = logger.CreateLogger("database");
+                var loggerInstance = DbLoggerFactory.CreateLogger("database");
 
                 var dbParams = ConnectionStringHelper.GetConnectionString(Configuration, loggerInstance);
 
@@ -113,14 +118,19 @@ namespace Automatica.Core.EF.Models
                 }
 
 
-                if (_extendedLogs || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_LOGS")) || !string.IsNullOrEmpty(Configuration["server:database_logs"]))
+                if (databaseLogs)
                 {
-                    optionsBuilder.UseLoggerFactory(logger);
+                    optionsBuilder.UseLoggerFactory(DbLoggerFactory);
                    
                 }
             }
             optionsBuilder.EnableDetailedErrors();
-            optionsBuilder.EnableSensitiveDataLogging();
+
+            // parameter values (password hashes, api keys, ...) only end up in the logs when database logging is enabled explicitly
+            if (databaseLogs)
+            {
+                optionsBuilder.EnableSensitiveDataLogging();
+            }
         }
 
         private void ConfigureMariaDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger, string connectionString)

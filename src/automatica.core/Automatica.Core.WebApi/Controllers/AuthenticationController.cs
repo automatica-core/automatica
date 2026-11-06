@@ -65,10 +65,11 @@ namespace Automatica.Core.WebApi.Controllers
         }
         [HttpPost]
         [Route("logout")]
-        public async Task<bool> LogOut()
+        public Task<bool> LogOut()
         {
-            await HttpContext.SignOutAsync();
-            return true;
+            // JWT is stateless and only the JwtBearer scheme is registered (it cannot sign out),
+            // the client simply drops its token
+            return Task.FromResult(true);
         }
 
         private User LoginUser(User user)
@@ -110,10 +111,7 @@ namespace Automatica.Core.WebApi.Controllers
             var claimsIdentity = new ClaimsIdentity(claims);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var serverUid = ServerInfo.ServerUid.ToByteArray();
-            var key = new byte[32];
-            Array.Copy(serverUid, 0, key, 0, 16);
-            Array.Copy(serverUid, 0, key, 16, 16);
+            var key = JwtSigningKey.Get();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Automatica.Core.Base.Common;
 using Automatica.Core.Base.IO;
 using Automatica.Core.Base.Remote;
 using Automatica.Core.Driver;
@@ -97,10 +98,19 @@ namespace Automatica.Core.Runtime.Core
         public static Task ValidateConnection(ValidatingConnectionEventArgs context, IConfiguration config, ILogger logger)
         {
             logger.LogInformation($"Validating connection from {context.RemoteEndPoint} clientId: {context.ClientId}, userName: {context.UserName}, password: *****");
-            using var db = new AutomaticaContext(config);
+            var valid = false;
+
+            // empty credentials would match the seeded self-slave row ("local", ClientId/ClientKey "")
+            if (!string.IsNullOrEmpty(context.UserName) && !string.IsNullOrEmpty(context.Password))
+            {
+                using var db = new AutomaticaContext(config);
+                var selfSlaveId = ServerInfo.SelfSlaveGuid;
+                valid = db.Slaves.Any(a => a.ObjId != selfSlaveId &&
+                                           a.ClientId == context.UserName && a.ClientKey == context.Password);
+            }
 
             // MQTTnet maps the reason code to the MQTT 3.1.1 return code for older clients
-            context.ReasonCode = db.Slaves.Any(a => a.ClientId == context.UserName && a.ClientKey == context.Password)
+            context.ReasonCode = valid
                 ? MqttConnectReasonCode.Success
                 : MqttConnectReasonCode.BadUserNameOrPassword;
 

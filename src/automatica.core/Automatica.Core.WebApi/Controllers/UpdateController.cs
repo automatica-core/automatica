@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.Internals.License;
+using Automatica.Core.Model.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Standard.Licensing.Validation;
 
@@ -17,6 +19,7 @@ namespace Automatica.Core.WebApi.Controllers
         public bool Result { get; set; }
     }
     [Route("webapi/update")]
+    [Authorize(Policy = Role.AdminRole)]
     public class UpdateController : BaseController
     {
         private readonly ILogger<UpdateController> _logger;
@@ -87,12 +90,11 @@ namespace Automatica.Core.WebApi.Controllers
                     Result = check
                 };
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return new ResultDto
-                {
-                    Result = false
-                };
+                // an error status instead of a 200 with Result=false (the global filter maps known exceptions)
+                _logger.LogError(e, "Could not download update");
+                throw;
             }
         }
     }

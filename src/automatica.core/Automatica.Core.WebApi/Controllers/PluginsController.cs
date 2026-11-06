@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Automatica.Core.Model.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -15,6 +17,7 @@ namespace Automatica.Core.WebApi.Controllers
     }
 
     [Route("webapi/plugins")]
+    [Authorize(Policy = Role.AdminRole)]
     public class PluginsController : BaseController
     {
         private readonly ICloudApi _api;

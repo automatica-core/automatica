@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Automatica.Core.Base.Common;
+using Automatica.Core.Model.Models.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Automatica.Core.WebApi.Controllers
 {
@@ -13,6 +15,7 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = Role.AdminRole)]
         public IActionResult Post()
         {
             // full path to file in temp location
@@ -21,7 +24,7 @@ namespace Automatica.Core.WebApi.Controllers
 
             try
             {
-                var path = Path.Combine(targetLocation, myFile.FileName);
+                var path = UploadPathHelper.GetSafeFilePath(targetLocation, myFile.FileName);
 
                 // Uncomment to save the file
                 using (var fileStream = System.IO.File.Create(path))

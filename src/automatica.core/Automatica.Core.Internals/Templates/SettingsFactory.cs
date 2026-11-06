@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
@@ -6,7 +7,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace Automatica.Core.Internals.Templates
 {
-    public class SettingsFactory : ISettingsFactory
+    /// <summary>
+    /// Works on the given <see cref="AutomaticaContext"/>. Disposing the factory disposes that context, so only dispose
+    /// factories that own their context (e.g. the ones created by a TemplateFactoryProvider).
+    /// </summary>
+    public class SettingsFactory : ISettingsFactory, IDisposable
     {
         private readonly IConfiguration _config;
         protected AutomaticaContext Db { get; }
@@ -52,6 +57,12 @@ namespace Automatica.Core.Internals.Templates
         {
             using var db = new AutomaticaContext(_config);
             return db.Settings.SingleOrDefault(a => a.ValueKey == key);
+        }
+
+        public void Dispose()
+        {
+            Db.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

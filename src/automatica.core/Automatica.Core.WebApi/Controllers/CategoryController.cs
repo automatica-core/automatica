@@ -56,16 +56,13 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task RemoveInstance(Guid categoryId)
         {
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var category = _categoryCache.Get(categoryId);
-
                     DbContext.CategoryInstances.Remove(DbContext.CategoryInstances.Single(a => a.ObjId == categoryId));
-                    _categoryCache.Remove(categoryId);
                     await DbContext.SaveChangesAsync();
 
                     await transaction.CommitAsync();
@@ -73,11 +70,12 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
                     throw;
                 }
 
             });
+
+            _categoryCache.Remove(categoryId);
         }
 
         [HttpPut]
@@ -85,44 +83,45 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<CategoryInstance> AddOrUpdateInstance([FromBody] CategoryInstance instance)
         {
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
 
                     var existingArea =
                         await DbContext.CategoryInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
 
+                    // only the category row, not the posted navigations
+                    instance.This2CategoryGroupNavigation = null;
+                    instance.This2UserGroupNavigation = null;
+
                     instance.ModifiedAt = DateTimeOffset.Now;
                     if (existingArea == null)
                     {
                         instance.CreatedAt = DateTimeOffset.Now;
                         await DbContext.CategoryInstances.AddAsync(instance);
-                        _categoryCache.Add(instance.ObjId, instance);
                     }
                     else
                     {
-                        DbContext.Entry(existingArea).State = EntityState.Detached;
                         DbContext.CategoryInstances.Update(instance);
-                        _categoryCache.Update(instance.ObjId, instance);
                     }
 
 
                     await DbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
-                    _categoryCache.Clear();
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
                     throw;
                 }
-
-                return instance;
             });
+
+            // only after the commit, the cache is reloaded from the database
+            _categoryCache.Clear();
+            return instance;
         }
     }
 }

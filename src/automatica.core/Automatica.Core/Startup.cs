@@ -79,10 +79,7 @@ namespace Automatica.Core
                 })
                 .AddJwtBearer(config =>
                 {
-                    var serverUid = ServerInfo.ServerUid.ToByteArray();
-                    var key = new byte[32];
-                    Array.Copy(serverUid, 0, key, 0, 16);
-                    Array.Copy(serverUid, 0, key, 16, 16);
+                    var key = JwtSigningKey.Get();
                     config.RequireHttpsMetadata = false;
                     config.SaveToken = true;
                     config.TokenValidationParameters = new TokenValidationParameters
@@ -147,6 +144,8 @@ namespace Automatica.Core
             });
 
             services.AddSingleton<DiscoveryService>();
+            // same instance as hosted service, otherwise PublishDevice() never runs and webapi/discovery throws
+            services.AddHostedService(sp => sp.GetRequiredService<DiscoveryService>());
             services.AddAutomaticaCoreService(Configuration, false);
             services.AddCoreLogger(Configuration);
             services.AddAutomaticaMcp();

@@ -1,8 +1,9 @@
 ﻿using Automatica.Core.EF.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Automatica.Core.Notification
 {
-    internal class NotificationManager(AutomaticaContext dbContext) : INotificationManager
+    internal class NotificationManager(IDbContextFactory<AutomaticaContext> contextFactory) : INotificationManager
     {
         public Task CreateNotification(NodeInstance nodeInstance, string body, string subject, NotificationSeverity severity, CancellationToken token = default)
         {
@@ -34,27 +35,35 @@ namespace Automatica.Core.Notification
 
         private async Task AddAndSaveNotification(EF.Models.Notification notification, CancellationToken token)
         {
+            await using var dbContext = await contextFactory.CreateDbContextAsync(token);
             dbContext.Notifications.Add(notification);
             await dbContext.SaveChangesAsync(token);
         }
 
-        public Task DismissNotification(Guid notificationId, CancellationToken token = default)
+        public async Task DismissNotification(Guid notificationId, CancellationToken token = default)
         {
-            var notification = dbContext.Notifications.SingleOrDefault(a => a.ObjId == notificationId);
+            await using var dbContext = await contextFactory.CreateDbContextAsync(token);
+            var notification = await dbContext.Notifications.SingleOrDefaultAsync(a => a.ObjId == notificationId, token);
 
             if (notification == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            return DismissNotification(notification, token);
+            notification.DismissDate = DateTime.Now;
+            await dbContext.SaveChangesAsync(token);
         }
 
-        public Task DismissNotification(EF.Models.Notification notification, CancellationToken token = default)
+        public async Task DismissNotification(EF.Models.Notification notification, CancellationToken token = default)
         {
+            await using var dbContext = await contextFactory.CreateDbContextAsync(token);
             notification.DismissDate = DateTime.Now;
-            dbContext.Notifications.Update(notification);
-            return Task.CompletedTask;
+
+            // only the notification row (and only the dismiss date), not the attached navigations
+            var entry = dbContext.Entry(notification);
+            entry.State = EntityState.Unchanged;
+            entry.Property(a => a.DismissDate).IsModified = true;
+            await dbContext.SaveChangesAsync(token);
         }
     }
 }

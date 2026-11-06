@@ -9,6 +9,7 @@ using Automatica.Core.Internals.Templates;
 using Automatica.Core.Logic;
 using Automatica.Core.Runtime.Abstraction.Plugins;
 using Automatica.Core.Runtime.Abstraction.Plugins.Logic;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
     internal class LogicLoader : ILogicLoader
     {
         private readonly ILogger<LogicLoader> _logger;
-        private readonly AutomaticaContext _dbContext;
+        private readonly IDbContextFactory<AutomaticaContext> _contextFactory;
         private readonly ILocalizationProvider _localizationProvider;
         private readonly IConfiguration _config;
         private readonly ILoadedStore _store;
@@ -26,7 +27,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
         private readonly IServiceProvider _serviceProvider;
 
         public LogicLoader(ILogger<LogicLoader> logger, 
-            AutomaticaContext dbContext, 
+            IDbContextFactory<AutomaticaContext> contextFactory, 
             ILocalizationProvider localizationProvider, 
             IConfiguration config, 
             ILoadedStore store, 
@@ -35,7 +36,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
             IServiceProvider serviceProvider)
         {
             _logger = logger;
-            _dbContext = dbContext;
+            _contextFactory = contextFactory;
             _localizationProvider = localizationProvider;
             _config = config;
             _store = store;
@@ -61,8 +62,9 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                 _logicFactoryStore.Add(factory.LogicGuid, factory);
                 _logger.LogDebug($"Init logic {factory.LogicName} {factory.LogicVersion}...");
 
+                await using var dbContext = _contextFactory.CreateDbContext();
                 var driverDbVersion =
-                    _dbContext.VersionInformations.SingleOrDefault(a => a.RuleGuid == factory.LogicGuid);
+                    dbContext.VersionInformations.SingleOrDefault(a => a.RuleGuid == factory.LogicGuid);
                 var initNodeTemplates = false;
 
                 if (driverDbVersion == null)
@@ -74,7 +76,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                         RuleGuid = factory.LogicGuid
                     };
                     initNodeTemplates = true;
-                    _dbContext.VersionInformations.Add(driverDbVersion);
+                    dbContext.VersionInformations.Add(driverDbVersion);
                 }
                 else if (factory.LogicVersion > driverDbVersion.VersionData)
                 {
@@ -89,7 +91,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                     _logger.LogDebug($"Init logic templates for {factory.LogicName}...");
 
                     var logicTemplateFactoryProvider = new LogicTemplateFactoryProvider(_serviceProvider);
-                    var logicTemplateFactory = logicTemplateFactoryProvider.CreateInstance(factory.LogicGuid);
+                    using var logicTemplateFactory = logicTemplateFactoryProvider.CreateInstance(factory.LogicGuid);
 
                     logicTemplateFactory.SetFactory(factory);
 
@@ -105,7 +107,7 @@ namespace Automatica.Core.Runtime.Core.Plugins.Logics
                     _logger.LogDebug($"InitRuleTemplates for {factory.LogicName}...done");
                 }
 
-                await _dbContext.SaveChangesAsync(true);
+                await dbContext.SaveChangesAsync(true);
             }
             catch (NoManifestFoundException)
             {

@@ -1,5 +1,7 @@
 ﻿using Automatica.Core.EF.Models;
 using Automatica.Core.Runtime.Core;
+using Automatica.Core.Model.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Automatica.Core.WebApi.Controllers
@@ -21,6 +23,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpGet]
         [Route("state")]
+        [Authorize(Policy = Role.ViewerRole)]
         public ServerStateObject GetServerStatus()
         {
             var statusObj = new ServerStateObject {Status = _coreServer.RunState};

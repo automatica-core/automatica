@@ -26,7 +26,8 @@ namespace Automatica.Core.Internals.Cache.Common
                 .Include(a => a.This2NodeInstance2RulePageOutputNavigation)
                 .Include(a => a.This2RuleInterfaceInstanceInputNavigation)
                 .Include(a => a.This2RuleInterfaceInstanceOutputNavigation)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToList(); // once, the caller enumerates the result again
 
             foreach (var link in all)
             {
@@ -50,7 +51,7 @@ namespace Automatica.Core.Internals.Cache.Common
                 }
             }
 
-            return all;
+            return all.AsQueryable();
         }
 
         public (Link link, bool isNew) GetSingle(Guid objId, AutomaticaContext context)

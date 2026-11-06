@@ -50,6 +50,7 @@ namespace Automatica.Core.WebApi.Controllers
 
         [HttpPost]
         [Route("{parentObjId}/etsImport")]
+        [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<AreaInstance>> Post(Guid parentObjId)
         {
             // full path to file in temp location
@@ -90,7 +91,7 @@ namespace Automatica.Core.WebApi.Controllers
         internal async Task<IEnumerable<AreaInstance>> ProcessFile(string password, IFormFile formFile)
         {
             var targetLocation = ServerInfo.GetTempPath();
-            var path = Path.Combine(targetLocation, formFile.FileName);
+            var path = UploadPathHelper.GetSafeFilePath(targetLocation, formFile.FileName);
 
             // Uncomment to save the file
             await using (var fileStream = System.IO.File.Create(path))
@@ -172,10 +173,10 @@ namespace Automatica.Core.WebApi.Controllers
         public async Task<IEnumerable<AreaInstance>> AddAreaInstances([FromBody]IEnumerable<AreaInstance> instances)
         {
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                await DbContext.Database.BeginTransactionAsync();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
                     foreach (var instance in instances)
@@ -183,6 +184,7 @@ namespace Automatica.Core.WebApi.Controllers
                         instance.This2AreaTemplateNavigation = null;
                         instance.InverseThis2ParentNavigation = null;
                         instance.This2ParentNavigation = null;
+                        instance.This2UserGroupNavigation = null;
 
                         instance.CreatedAt = DateTimeOffset.Now;
                         instance.ModifiedAt = DateTimeOffset.Now;
@@ -190,16 +192,17 @@ namespace Automatica.Core.WebApi.Controllers
                     }
 
                     await DbContext.SaveChangesAsync();
-
+                    await transaction.CommitAsync();
                 }
-                finally
+                catch (Exception e)
                 {
-                    await DbContext.Database.CommitTransactionAsync();
-                    _areaCache.Clear();
+                    _logger.LogError(e, "Could not save data");
+                    throw;
                 }
-
-                return GetInstances();
             });
+
+            _areaCache.Clear();
+            return GetInstances();
         }
 
         [HttpGet]
@@ -218,7 +221,8 @@ namespace Automatica.Core.WebApi.Controllers
             return _areaCache.All();
         }
 
-        private async Task SaveAreaInstance(AreaInstance instance)
+        /// <returns>true if the instance is new; the cache is updated by the caller after the commit</returns>
+        private async Task<bool> SaveAreaInstance(AreaInstance instance)
         {
             var existingArea = await DbContext.AreaInstances.AsNoTracking().SingleOrDefaultAsync(a => a.ObjId == instance.ObjId);
             instance.InverseThis2ParentNavigation = null;
@@ -231,30 +235,41 @@ namespace Automatica.Core.WebApi.Controllers
             {
                 instance.CreatedAt = DateTimeOffset.Now;
                 await DbContext.AreaInstances.AddAsync(instance);
+                return true;
+            }
+
+            DbContext.Entry(instance).State = EntityState.Modified;
+            DbContext.AreaInstances.Update(instance);
+            return false;
+        }
+
+        private void UpdateAreaCache(AreaInstance instance, bool isNew)
+        {
+            if (isNew)
+            {
                 _areaCache.Add(instance.ObjId, instance);
             }
             else
             {
-                DbContext.Entry(instance).State = EntityState.Modified;
-                DbContext.AreaInstances.Update(instance);
                 _areaCache.Update(instance.ObjId, instance);
             }
-
         }
 
-        private async Task RemoveInstanceRecursive(AreaInstance parent)
+        /// <param name="parent">the area to remove (with all children)</param>
+        /// <param name="removedIds">collects the removed ids, they are removed from the cache after the commit</param>
+        private async Task RemoveInstanceRecursive(AreaInstance parent, List<Guid> removedIds)
         {
             var area = _areaCache.GetSingle(DbContext, parent.ObjId);
             foreach (var child in area.InverseThis2ParentNavigation)
             {
-                await RemoveInstanceRecursive(child);
+                await RemoveInstanceRecursive(child, removedIds);
 
                 child.InverseThis2ParentNavigation = null;
                 child.This2AreaTemplateNavigation = null;
                 child.This2ParentNavigation = null;
 
                 DbContext.Remove(child);
-                _areaCache.Remove(child.ObjId);
+                removedIds.Add(child.ObjId);
             }
 
             parent.This2AreaTemplateNavigation = null;
@@ -262,7 +277,7 @@ namespace Automatica.Core.WebApi.Controllers
             parent.InverseThis2ParentNavigation = null;
 
             DbContext.Remove(parent);
-            _areaCache.Remove(parent.ObjId);
+            removedIds.Add(parent.ObjId);
 
         }
 
@@ -271,16 +286,18 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<AreaInstance>> RemoveInstance(Guid areaInstanceId)
         {
+            var removedIds = new List<Guid>();
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                removedIds.Clear();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
                     var area = _areaCache.GetSingle(DbContext, areaInstanceId);
 
-                    await RemoveInstanceRecursive(area);
+                    await RemoveInstanceRecursive(area, removedIds);
 
                     await DbContext.SaveChangesAsync();
 
@@ -289,11 +306,15 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
                     throw;
                 }
-                return GetInstances();
             });
+
+            foreach (var removedId in removedIds)
+            {
+                _areaCache.Remove(removedId);
+            }
+            return GetInstances();
         }
 
         [HttpPut]
@@ -301,14 +322,15 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<AreaInstance>> SaveInstance([FromBody] AreaInstance area)
         {
+            var isNew = false;
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    await SaveAreaInstance(area);
+                    isNew = await SaveAreaInstance(area);
 
                     await DbContext.SaveChangesAsync();
 
@@ -317,12 +339,12 @@ namespace Automatica.Core.WebApi.Controllers
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
                     throw;
                 }
-
-                return GetInstances();
             });
+
+            UpdateAreaCache(area, isNew);
+            return GetInstances();
         }
 
         [HttpPost]
@@ -330,29 +352,35 @@ namespace Automatica.Core.WebApi.Controllers
         [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<AreaInstance>> SaveInstances([FromBody]IEnumerable<AreaInstance> areas)
         {
+            var saved = new List<(AreaInstance area, bool isNew)>();
             var strategy = DbContext.Database.CreateExecutionStrategy();
-            return await strategy.Execute(async
+            await strategy.ExecuteAsync(async
                 () =>
             {
-                var transaction = await DbContext.Database.BeginTransactionAsync();
+                saved.Clear();
+                await using var transaction = await DbContext.Database.BeginTransactionAsync();
                 try
                 {
                     foreach (var area in areas)
                     {
-                        await SaveAreaInstance(area);
+                        saved.Add((area, await SaveAreaInstance(area)));
                     }
 
                     await DbContext.SaveChangesAsync();
-
+                    await transaction.CommitAsync();
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Could not save data");
-                    await transaction.RollbackAsync();
                     throw;
                 }
-                return GetInstances();
             });
+
+            foreach (var (area, isNew) in saved)
+            {
+                UpdateAreaCache(area, isNew);
+            }
+            return GetInstances();
         }
 
        

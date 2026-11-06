@@ -47,7 +47,7 @@ namespace Automatica.Core.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("categoryLinked/{areaInstance}")]
+        [Route("categoryLinked/{categoryInstance}")]
         [Authorize(Policy = Role.ViewerRole)]
         public VisualizationDataFacade GetAllByCategory(Guid categoryInstance)
         {

@@ -32,7 +32,9 @@ namespace Automatica.Core.Internals.Cache.Logic
 
         protected override IQueryable<RulePage> GetAll(AutomaticaContext context)
         {
-            var pages = context.RulePages;
+            // materialize once: enumerating the DbSet twice ran the query twice and the nested queries below
+            // would run while the outer reader is still open (needs MARS, fails on MySqlConnector)
+            var pages = context.RulePages.ToList();
 
             var ret = new List<RulePage>();
             ret.AddRange(pages);

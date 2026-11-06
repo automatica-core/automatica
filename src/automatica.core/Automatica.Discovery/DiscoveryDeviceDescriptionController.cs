@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Automatica.Core.EF.Models;
+using Automatica.Core.Model.Models.User;
 using Automatica.Core.WebApi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ using Rssdp;
 namespace Automatica.Discovery
 {
     [Route("webapi/discovery")]
-    [AllowAnonymous]
     public class DiscoveryDeviceDescriptionController : BaseController
     {
         private readonly DiscoveryService _discoveryService;
@@ -20,6 +20,7 @@ namespace Automatica.Discovery
         }
 
         [HttpGet]
+        [AllowAnonymous] // the SSDP device description must be reachable without login
         [Produces("application/xml")]
         public ContentResult GetDeviceDescription()
         {
@@ -34,6 +35,7 @@ namespace Automatica.Discovery
 
         [HttpGet]
         [Route("scan")]
+        [Authorize(Policy = Role.AdminRole)]
         public async Task<IEnumerable<DiscoveredSsdpDevice>> StartScan()
         {
             var data = await _discoveryService.Scan();

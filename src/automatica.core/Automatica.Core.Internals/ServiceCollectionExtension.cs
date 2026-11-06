@@ -2,6 +2,7 @@
 using Automatica.Core.Base.Templates;
 using Automatica.Core.Control;
 using Automatica.Core.Control.Cache;
+using Automatica.Core.EF.Models;
 using Automatica.Core.Internals.Cache.Common;
 using Automatica.Core.Internals.Cache.Control;
 using Automatica.Core.Internals.Cache.Driver;
@@ -9,6 +10,7 @@ using Automatica.Core.Internals.Cache.Logic;
 using Automatica.Core.Internals.Cloud;
 using Automatica.Core.Internals.Configuration;
 using Automatica.Core.Internals.Templates;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +26,8 @@ namespace Automatica.Core.Internals
 
         public static void AddInternals(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAutomaticaContextFactory();
+
             services.AddSingleton<INodeInstanceCache, NodeInstanceCache>();
             services.AddSingleton<INodeInstanceService, NodeInstanceService>();
 
@@ -58,7 +62,10 @@ namespace Automatica.Core.Internals
             services.AddTransient<ICloudApi>(a => a.GetRequiredService<CloudApi>());
             services.AddTransient<ITextToSpeechApi>(a => a.GetRequiredService<TextToSpeechApi>());
 
-            services.AddTransient<SettingsFactory>();
+            // own context per factory instance (the factory disposes it), never the scoped/request context
+            services.AddTransient(provider => new SettingsFactory(
+                provider.GetRequiredService<IDbContextFactory<AutomaticaContext>>().CreateDbContext(),
+                provider.GetRequiredService<IConfiguration>()));
 
             services.AddControlContext();
         }
