@@ -1,5 +1,9 @@
 ﻿using Automatica.Core.Driver;
 using System;
+using System.Runtime.CompilerServices;
+using Innovative.SolarCalculator;
+
+[assembly: InternalsVisibleTo("P3.Driver.Times.Tests")]
 
 namespace P3.Driver.Times.DriverFactory.Sun
 {
@@ -41,25 +45,20 @@ namespace P3.Driver.Times.DriverFactory.Sun
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunDusk)
             {
-                return new SunDriverNode(ctx, (a, b) => a.Sunset.AddHours(_timeZoneOffset).AddMinutes(30) > b && b < a.Sunrise.AddMinutes(30));
+                return new SunDriverNode(ctx, (a, b) => IsDusk(a, b));
             }
 
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunDawn)
             {
-                return new SunDriverNode(ctx, (a, b) => a.Sunrise.AddHours(_timeZoneOffset).AddMinutes(30) > b && b < a.Sunset.AddMinutes(30));
+                return new SunDriverNode(ctx, (a, b) => IsDawn(a, b));
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunIsRiseGuid)
             {
-                return new SunDriverNode(ctx, (a, b) => {
-                    return b > a.Sunrise && b < a.Sunset;
-                });
+                return new SunDriverNode(ctx, (a, b) => IsSunRise(a, b));
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.SunIsSetGuid)
             {
-                return new SunDriverNode(ctx, (a, b) =>
-                {
-                    return b < a.Sunset && b < a.Sunrise;
-                });
+                return new SunDriverNode(ctx, (a, b) => IsSunSet(a, b));
             }
             if (ctx.NodeInstance.This2NodeTemplateNavigation.ObjId == SunDriverFactory.IsDaylight)
             {
@@ -78,6 +77,36 @@ namespace P3.Driver.Times.DriverFactory.Sun
             }
 
             return null;
+        }
+
+        // the timezone offset is only applied to the dispatched sunrise/sunset values,
+        // the comparisons use the unshifted solar times because "now" is unshifted as well
+        internal static readonly TimeSpan TwilightDuration = TimeSpan.FromMinutes(30);
+
+        /// <summary>
+        /// Dusk is the time between sunset and sunset + 30 minutes
+        /// </summary>
+        internal static bool IsDusk(SolarTimes solarTimes, System.DateTime now)
+        {
+            return now >= solarTimes.Sunset && now < solarTimes.Sunset.Add(TwilightDuration);
+        }
+
+        /// <summary>
+        /// Dawn is the time between sunrise - 30 minutes and sunrise
+        /// </summary>
+        internal static bool IsDawn(SolarTimes solarTimes, System.DateTime now)
+        {
+            return now >= solarTimes.Sunrise.Subtract(TwilightDuration) && now < solarTimes.Sunrise;
+        }
+
+        internal static bool IsSunRise(SolarTimes solarTimes, System.DateTime now)
+        {
+            return now > solarTimes.Sunrise && now < solarTimes.Sunset;
+        }
+
+        internal static bool IsSunSet(SolarTimes solarTimes, System.DateTime now)
+        {
+            return now >= solarTimes.Sunset || now < solarTimes.Sunrise;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace P3.Driver.Times.DriverFactory.DateTime
 
             if (!EqualityComparer<T>.Default.Equals(value, _prevValue))
             {
-                DispatchRead(_getValue());
+                DispatchRead(value);
                 _prevValue = value;
             }
         }

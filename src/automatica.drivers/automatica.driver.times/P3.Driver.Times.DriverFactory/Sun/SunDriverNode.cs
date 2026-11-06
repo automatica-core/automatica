@@ -15,6 +15,8 @@ namespace P3.Driver.Times.DriverFactory.Sun
         internal static readonly Angle Latitude = new Angle(BaseTimesDriverFactory.Latitude);
         internal static readonly Angle Longitude = new Angle(BaseTimesDriverFactory.Longitude);
         private readonly object _lock = new object();
+        private object _lastValue;
+        private bool _hasValue;
 
         public SunDriverNode(IDriverContext driverContext, Func<SolarTimes, System.DateTime, object> getValueFunc) : base(driverContext)
         {
@@ -25,14 +27,25 @@ namespace P3.Driver.Times.DriverFactory.Sun
         {
             lock (_lock)
             {
-                DispatchSolarValue();
+                // only dispatch if the value changed, the timer ticks every second
+                DispatchSolarValue(true);
             }
         }
 
-        private void DispatchSolarValue()
+        private void DispatchSolarValue(bool onlyOnChange = false)
         {
-            var solarTimes = new SolarTimes(System.DateTime.Now, Latitude, Longitude);
-            DispatchRead(_getValueFunc(solarTimes, System.DateTime.Now));
+            var now = System.DateTime.Now;
+            var solarTimes = new SolarTimes(now, Latitude, Longitude);
+            var value = _getValueFunc(solarTimes, now);
+
+            if (onlyOnChange && _hasValue && Equals(value, _lastValue))
+            {
+                return;
+            }
+
+            _lastValue = value;
+            _hasValue = true;
+            DispatchRead(value);
         }
 
         protected override Task Write(object value, IWriteContext writeContext, CancellationToken token = new CancellationToken())
@@ -47,16 +60,23 @@ namespace P3.Driver.Times.DriverFactory.Sun
 
         protected override Task<bool> Read(IReadContext readContext, CancellationToken token = new CancellationToken())
         {
-            DispatchSolarValue();
+            lock (_lock)
+            {
+                DispatchSolarValue();
+            }
             return Task.FromResult(true);
         }
 
         public override Task<bool> Start(CancellationToken token = default)
         {
-            DispatchSolarValue();
+            lock (_lock)
+            {
+                DispatchSolarValue();
+            }
 
             if (!DriverContext.IsTest)
             {
+                _tickTimer?.Dispose();
                 _tickTimer = new Timer(TimerTick, this, 1000, 1000);
              
             }
@@ -67,7 +87,8 @@ namespace P3.Driver.Times.DriverFactory.Sun
         {
             if (!DriverContext.IsTest)
             {
-                _tickTimer.Dispose();
+                _tickTimer?.Dispose();
+                _tickTimer = null;
             }
             return base.Stop(token);
         }

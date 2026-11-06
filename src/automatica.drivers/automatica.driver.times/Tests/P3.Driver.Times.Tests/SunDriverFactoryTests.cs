@@ -195,6 +195,138 @@ namespace P3.Driver.Times.Tests
         }
 
         [Fact]
+        public async Task TestIsSunSet_Evening()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunIsSetGuid);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = new DateTime(2018, 08, 28, 23, 00, 00);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.IsType<bool>(busDt);
+            Assert.True((bool)busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+        private static SolarTimes SolarTimesFor(DateTime date)
+        {
+            return new SolarTimes(date, LatitudeAngle, LongitudeAngle);
+        }
+
+        [Fact]
+        public void TestIsSunSet_AroundSunset()
+        {
+            var solar = SolarTimesFor(new DateTime(2018, 08, 28, 12, 00, 00));
+
+            Assert.False(SunDriver.IsSunSet(solar, solar.Sunset.AddMinutes(-1)));
+            Assert.True(SunDriver.IsSunSet(solar, solar.Sunset));
+            Assert.True(SunDriver.IsSunSet(solar, solar.Sunset.AddMinutes(1)));
+            Assert.True(SunDriver.IsSunSet(solar, solar.Sunrise.AddMinutes(-1)));
+            Assert.False(SunDriver.IsSunSet(solar, solar.Sunrise.AddMinutes(1)));
+        }
+
+        [Fact]
+        public void TestIsSunRise_AroundSunset()
+        {
+            var solar = SolarTimesFor(new DateTime(2018, 08, 28, 12, 00, 00));
+
+            Assert.True(SunDriver.IsSunRise(solar, solar.Sunset.AddMinutes(-1)));
+            Assert.False(SunDriver.IsSunRise(solar, solar.Sunset.AddMinutes(1)));
+            Assert.False(SunDriver.IsSunRise(solar, solar.Sunrise.AddMinutes(-1)));
+            Assert.True(SunDriver.IsSunRise(solar, solar.Sunrise.AddMinutes(1)));
+        }
+
+        [Fact]
+        public void TestIsDusk()
+        {
+            var solar = SolarTimesFor(new DateTime(2018, 08, 28, 12, 00, 00));
+
+            Assert.False(SunDriver.IsDusk(solar, new DateTime(2018, 08, 28, 12, 00, 00)));
+            Assert.False(SunDriver.IsDusk(solar, solar.Sunset.AddMinutes(-1)));
+            Assert.True(SunDriver.IsDusk(solar, solar.Sunset));
+            Assert.True(SunDriver.IsDusk(solar, solar.Sunset.AddMinutes(10)));
+            Assert.True(SunDriver.IsDusk(solar, solar.Sunset.AddMinutes(29)));
+            Assert.False(SunDriver.IsDusk(solar, solar.Sunset.AddMinutes(31)));
+            Assert.False(SunDriver.IsDusk(solar, solar.Sunrise.AddMinutes(-10)));
+            Assert.False(SunDriver.IsDusk(solar, new DateTime(2018, 08, 28, 23, 30, 00)));
+        }
+
+        [Fact]
+        public void TestIsDawn()
+        {
+            var solar = SolarTimesFor(new DateTime(2018, 08, 28, 12, 00, 00));
+
+            Assert.False(SunDriver.IsDawn(solar, new DateTime(2018, 08, 28, 12, 00, 00)));
+            Assert.False(SunDriver.IsDawn(solar, solar.Sunrise.AddMinutes(-31)));
+            Assert.True(SunDriver.IsDawn(solar, solar.Sunrise.AddMinutes(-29)));
+            Assert.True(SunDriver.IsDawn(solar, solar.Sunrise.AddMinutes(-10)));
+            Assert.False(SunDriver.IsDawn(solar, solar.Sunrise));
+            Assert.False(SunDriver.IsDawn(solar, solar.Sunrise.AddMinutes(10)));
+            Assert.False(SunDriver.IsDawn(solar, solar.Sunset.AddMinutes(10)));
+        }
+
+        [Fact]
+        public async Task TestDusk_AfterSunset()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunDusk);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = SolarTimesFor(new DateTime(2018, 08, 28, 12, 00, 00)).Sunset.AddMinutes(10);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.IsType<bool>(busDt);
+            Assert.True((bool)busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+        [Fact]
+        public async Task TestDawn_Evening()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriver<SunDriver>(SunDriverFactory.DriverGuidId, SunDriverFactory.SunDawn);
+
+            Assert.Single(driver.Children);
+
+            var node = driver.Children.First();
+            var setTime = SolarTimesFor(new DateTime(2018, 08, 28, 12, 00, 00)).Sunset.AddMinutes(10);
+            await ((DriverBase)node).WriteValue(DispatchableMock.Instance, Create(setTime));
+
+            await Task.Delay(200);
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.True(values.Count > 0);
+            var busDt = values.First().Value.Value;
+
+            Assert.IsType<bool>(busDt);
+            Assert.False((bool)busDt);
+
+            await driver.Stop();
+            await Dispatcher.ClearValues();
+        }
+
+        [Fact]
         public async Task TestIsSunRise2()
         {
             await Dispatcher.ClearValues();
