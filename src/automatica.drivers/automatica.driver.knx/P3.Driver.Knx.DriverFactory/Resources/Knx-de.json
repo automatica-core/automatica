@@ -117,7 +117,13 @@
     },
     "DPT4": {
       "NAME": "4.* Zeichensatz",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Zeichen (ASCII)"
+      },
+      "002": {
+        "NAME": "Zeichen (ISO 8859-1)"
+      }
     },
     "DPT5": {
       "NAME": "5.* 8-Bit vorzeichenlos",
@@ -331,6 +337,1053 @@
       },
       "001": {
         "NAME": "8859-1 String"
+      }
+    },
+    "DPT12": {
+      "NAME": "12.* 4-Byte vorzeichenlos",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Zählimpulse (vorzeichenlos)"
+      },
+      "100": {
+        "NAME": "Betriebsdauer (s)"
+      },
+      "101": {
+        "NAME": "Betriebsdauer (min)"
+      },
+      "102": {
+        "NAME": "Betriebsdauer (h)"
+      },
+      "1200": {
+        "NAME": "Flüssigkeitsvolumen (l)"
+      },
+      "1201": {
+        "NAME": "Volumen (m³)"
+      }
+    },
+    "DPT14": {
+      "NAME": "14.* 4-Byte Gleitkommawert",
+      "DESCRIPTION": "",
+      "000": {
+        "NAME": "Beschleunigung (m/s²)"
+      },
+      "001": {
+        "NAME": "Winkelbeschleunigung (rad/s²)"
+      },
+      "002": {
+        "NAME": "Aktivierungsenergie (J/mol)"
+      },
+      "003": {
+        "NAME": "Radioaktivität (1/s)"
+      },
+      "004": {
+        "NAME": "Stoffmenge (mol)"
+      },
+      "005": {
+        "NAME": "Amplitude"
+      },
+      "006": {
+        "NAME": "Winkel (rad)"
+      },
+      "007": {
+        "NAME": "Winkel (°)"
+      },
+      "008": {
+        "NAME": "Drehimpuls (Js)"
+      },
+      "009": {
+        "NAME": "Winkelgeschwindigkeit (rad/s)"
+      },
+      "010": {
+        "NAME": "Fläche (m²)"
+      },
+      "011": {
+        "NAME": "Kapazität (F)"
+      },
+      "012": {
+        "NAME": "Flächenladungsdichte (C/m²)"
+      },
+      "013": {
+        "NAME": "Raumladungsdichte (C/m³)"
+      },
+      "014": {
+        "NAME": "Kompressibilität (m²/N)"
+      },
+      "015": {
+        "NAME": "Leitwert (S)"
+      },
+      "016": {
+        "NAME": "Leitfähigkeit (S/m)"
+      },
+      "017": {
+        "NAME": "Dichte (kg/m³)"
+      },
+      "018": {
+        "NAME": "Elektrische Ladung (C)"
+      },
+      "019": {
+        "NAME": "Elektrischer Strom (A)"
+      },
+      "020": {
+        "NAME": "Stromdichte (A/m²)"
+      },
+      "021": {
+        "NAME": "Elektrisches Dipolmoment (Cm)"
+      },
+      "022": {
+        "NAME": "Elektrische Verschiebung (C/m²)"
+      },
+      "023": {
+        "NAME": "Elektrische Feldstärke (V/m)"
+      },
+      "024": {
+        "NAME": "Elektrischer Fluss (C)"
+      },
+      "025": {
+        "NAME": "Elektrische Flussdichte (C/m²)"
+      },
+      "026": {
+        "NAME": "Elektrische Polarisation (C/m²)"
+      },
+      "027": {
+        "NAME": "Elektrisches Potential (V)"
+      },
+      "028": {
+        "NAME": "Elektrische Spannung (V)"
+      },
+      "029": {
+        "NAME": "Elektromagnetisches Moment (Am²)"
+      },
+      "030": {
+        "NAME": "Elektromotorische Kraft (V)"
+      },
+      "031": {
+        "NAME": "Energie (J)"
+      },
+      "032": {
+        "NAME": "Kraft (N)"
+      },
+      "033": {
+        "NAME": "Frequenz (Hz)"
+      },
+      "034": {
+        "NAME": "Kreisfrequenz (rad/s)"
+      },
+      "035": {
+        "NAME": "Wärmekapazität (J/K)"
+      },
+      "036": {
+        "NAME": "Wärmestrom (W)"
+      },
+      "037": {
+        "NAME": "Wärmemenge (J)"
+      },
+      "038": {
+        "NAME": "Impedanz (Ω)"
+      },
+      "039": {
+        "NAME": "Länge (m)"
+      },
+      "040": {
+        "NAME": "Lichtmenge (J)"
+      },
+      "041": {
+        "NAME": "Leuchtdichte (cd/m²)"
+      },
+      "042": {
+        "NAME": "Lichtstrom (lm)"
+      },
+      "043": {
+        "NAME": "Lichtstärke (cd)"
+      },
+      "044": {
+        "NAME": "Magnetische Feldstärke (A/m)"
+      },
+      "045": {
+        "NAME": "Magnetischer Fluss (Wb)"
+      },
+      "046": {
+        "NAME": "Magnetische Flussdichte (T)"
+      },
+      "047": {
+        "NAME": "Magnetisches Moment (Am²)"
+      },
+      "048": {
+        "NAME": "Magnetische Polarisation (T)"
+      },
+      "049": {
+        "NAME": "Magnetisierung (A/m)"
+      },
+      "050": {
+        "NAME": "Magnetische Durchflutung (A)"
+      },
+      "051": {
+        "NAME": "Masse (kg)"
+      },
+      "052": {
+        "NAME": "Massenstrom (kg/s)"
+      },
+      "053": {
+        "NAME": "Impuls (N/s)"
+      },
+      "054": {
+        "NAME": "Phasenwinkel (rad)"
+      },
+      "055": {
+        "NAME": "Phasenwinkel (°)"
+      },
+      "056": {
+        "NAME": "Leistung (W)"
+      },
+      "057": {
+        "NAME": "Leistungsfaktor"
+      },
+      "058": {
+        "NAME": "Druck (Pa)"
+      },
+      "059": {
+        "NAME": "Blindwiderstand (Ω)"
+      },
+      "060": {
+        "NAME": "Widerstand (Ω)"
+      },
+      "061": {
+        "NAME": "Spezifischer Widerstand (Ωm)"
+      },
+      "062": {
+        "NAME": "Induktivität (H)"
+      },
+      "063": {
+        "NAME": "Raumwinkel (sr)"
+      },
+      "064": {
+        "NAME": "Schallintensität (W/m²)"
+      },
+      "065": {
+        "NAME": "Geschwindigkeit (m/s)"
+      },
+      "066": {
+        "NAME": "Mechanische Spannung (Pa)"
+      },
+      "067": {
+        "NAME": "Oberflächenspannung (N/m)"
+      },
+      "068": {
+        "NAME": "Temperatur (°C)"
+      },
+      "069": {
+        "NAME": "Absolute Temperatur (K)"
+      },
+      "070": {
+        "NAME": "Temperaturdifferenz (K)"
+      },
+      "071": {
+        "NAME": "Wärmekapazität (J/K)"
+      },
+      "072": {
+        "NAME": "Wärmeleitfähigkeit (W/mK)"
+      },
+      "073": {
+        "NAME": "Thermoelektrischer Koeffizient (V/K)"
+      },
+      "074": {
+        "NAME": "Zeit (s)"
+      },
+      "075": {
+        "NAME": "Drehmoment (Nm)"
+      },
+      "076": {
+        "NAME": "Volumen (m³)"
+      },
+      "077": {
+        "NAME": "Volumenstrom (m³/s)"
+      },
+      "078": {
+        "NAME": "Gewichtskraft (N)"
+      },
+      "079": {
+        "NAME": "Arbeit (J)"
+      },
+      "080": {
+        "NAME": "Scheinleistung (VA)"
+      },
+      "1200": {
+        "NAME": "Volumenstrom Zähler (m³/h)"
+      },
+      "1201": {
+        "NAME": "Volumenstrom (l/s)"
+      }
+    },
+    "DPT15": {
+      "NAME": "15.000 Zutrittskontrolle",
+      "DESCRIPTION": "",
+      "CODE": {
+        "NAME": "Zutrittscode"
+      },
+      "ERROR": {
+        "NAME": "Erkennungsfehler"
+      },
+      "PERMISSION": {
+        "NAME": "Zutritt erlaubt"
+      },
+      "DIRECTION": {
+        "NAME": "Leserichtung"
+      },
+      "ENCRYPTED": {
+        "NAME": "Verschlüsselt"
+      },
+      "INDEX": {
+        "NAME": "Code-Index"
+      }
+    },
+    "DPT17": {
+      "NAME": "17.001 Szenennummer (0..63)",
+      "DESCRIPTION": ""
+    },
+    "DPT18": {
+      "NAME": "18.001 Szenensteuerung",
+      "DESCRIPTION": "",
+      "ACTIVATE": {
+        "NAME": "Szene abrufen (0..63)"
+      },
+      "LEARN": {
+        "NAME": "Szene speichern (0..63)"
+      }
+    },
+    "DPT19": {
+      "NAME": "19.001 Datum und Uhrzeit",
+      "DESCRIPTION": ""
+    },
+    "DPT20": {
+      "NAME": "20.* 1-Byte Aufzählung",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "SCLO-Modus"
+      },
+      "002": {
+        "NAME": "Gebäudemodus"
+      },
+      "003": {
+        "NAME": "Belegungsmodus"
+      },
+      "004": {
+        "NAME": "Priorität"
+      },
+      "005": {
+        "NAME": "Licht-Anwendungsmodus"
+      },
+      "006": {
+        "NAME": "Anwendungsbereich"
+      },
+      "007": {
+        "NAME": "Alarmklasse"
+      },
+      "008": {
+        "NAME": "Netzteilmodus"
+      },
+      "011": {
+        "NAME": "Systemfehlerklasse"
+      },
+      "012": {
+        "NAME": "HLK-Fehlerklasse"
+      },
+      "013": {
+        "NAME": "Zeitverzögerung"
+      },
+      "014": {
+        "NAME": "Windstärke (0..12 Beaufort)"
+      },
+      "017": {
+        "NAME": "Sensormodus"
+      },
+      "020": {
+        "NAME": "Aktor-Anschlussart"
+      },
+      "021": {
+        "NAME": "Bewölkung"
+      },
+      "022": {
+        "NAME": "Verhalten bei Spannungswiederkehr"
+      },
+      "100": {
+        "NAME": "Brennstoffart"
+      },
+      "101": {
+        "NAME": "Brennerart"
+      },
+      "102": {
+        "NAME": "HLK-Betriebsmodus"
+      },
+      "103": {
+        "NAME": "Warmwassermodus"
+      },
+      "104": {
+        "NAME": "Lastpriorität"
+      },
+      "105": {
+        "NAME": "HLK-Regelmodus"
+      },
+      "106": {
+        "NAME": "HLK-Notbetrieb"
+      },
+      "107": {
+        "NAME": "Umschaltmodus"
+      },
+      "108": {
+        "NAME": "Ventilmodus"
+      },
+      "109": {
+        "NAME": "Klappenmodus"
+      },
+      "110": {
+        "NAME": "Heizgerätemodus"
+      },
+      "111": {
+        "NAME": "Lüftermodus"
+      },
+      "112": {
+        "NAME": "Master/Slave-Modus"
+      },
+      "113": {
+        "NAME": "Status Raumsollwert"
+      },
+      "114": {
+        "NAME": "Zählertyp"
+      },
+      "115": {
+        "NAME": "Be-/Entfeuchtungsmodus"
+      },
+      "116": {
+        "NAME": "Heiz-/Kühlstufe freigeben"
+      },
+      "120": {
+        "NAME": "ADA-Typ"
+      },
+      "121": {
+        "NAME": "Backup-Modus"
+      },
+      "122": {
+        "NAME": "Startsynchronisation"
+      },
+      "600": {
+        "NAME": "Verhalten bei Sperren/Entsperren"
+      },
+      "601": {
+        "NAME": "Verhalten bei Busspannungsausfall/-wiederkehr"
+      },
+      "602": {
+        "NAME": "DALI Überblendzeit"
+      },
+      "603": {
+        "NAME": "Blinkmodus"
+      },
+      "604": {
+        "NAME": "Lichtsteuermodus"
+      },
+      "605": {
+        "NAME": "Tasterschaltmodus"
+      },
+      "606": {
+        "NAME": "Tasteraktion"
+      },
+      "607": {
+        "NAME": "Tasterdimmmodus"
+      },
+      "608": {
+        "NAME": "Einschaltverhalten"
+      },
+      "609": {
+        "NAME": "Lasttyp"
+      },
+      "610": {
+        "NAME": "Erkannter Lasttyp"
+      },
+      "611": {
+        "NAME": "Konvertertest-Steuerung"
+      },
+      "801": {
+        "NAME": "Jalousieaktor Sonderverhalten"
+      },
+      "802": {
+        "NAME": "Jalousieaktor Verhalten bei Sperren"
+      },
+      "803": {
+        "NAME": "SSSB-Modus"
+      },
+      "804": {
+        "NAME": "Jalousiesteuermodus"
+      },
+      "1000": {
+        "NAME": "Kommunikationsmodus"
+      },
+      "1001": {
+        "NAME": "Zusatzinformationstyp"
+      },
+      "1002": {
+        "NAME": "Funkmodus-Auswahl"
+      },
+      "1003": {
+        "NAME": "Funkfilter-Auswahl"
+      }
+    },
+    "DPT21": {
+      "NAME": "21.* 8-Bit Bitfeld",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Rohwert"
+      },
+      "BIT0": {
+        "NAME": "Bit 0"
+      },
+      "BIT1": {
+        "NAME": "Bit 1"
+      },
+      "BIT2": {
+        "NAME": "Bit 2"
+      },
+      "BIT3": {
+        "NAME": "Bit 3"
+      },
+      "BIT4": {
+        "NAME": "Bit 4"
+      },
+      "BIT5": {
+        "NAME": "Bit 5"
+      },
+      "BIT6": {
+        "NAME": "Bit 6"
+      },
+      "BIT7": {
+        "NAME": "Bit 7"
+      }
+    },
+    "DPT22": {
+      "NAME": "22.* 16-Bit Bitfeld",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Rohwert"
+      },
+      "BIT0": {
+        "NAME": "Bit 0"
+      },
+      "BIT1": {
+        "NAME": "Bit 1"
+      },
+      "BIT2": {
+        "NAME": "Bit 2"
+      },
+      "BIT3": {
+        "NAME": "Bit 3"
+      },
+      "BIT4": {
+        "NAME": "Bit 4"
+      },
+      "BIT5": {
+        "NAME": "Bit 5"
+      },
+      "BIT6": {
+        "NAME": "Bit 6"
+      },
+      "BIT7": {
+        "NAME": "Bit 7"
+      },
+      "BIT8": {
+        "NAME": "Bit 8"
+      },
+      "BIT9": {
+        "NAME": "Bit 9"
+      },
+      "BIT10": {
+        "NAME": "Bit 10"
+      },
+      "BIT11": {
+        "NAME": "Bit 11"
+      },
+      "BIT12": {
+        "NAME": "Bit 12"
+      },
+      "BIT13": {
+        "NAME": "Bit 13"
+      },
+      "BIT14": {
+        "NAME": "Bit 14"
+      },
+      "BIT15": {
+        "NAME": "Bit 15"
+      }
+    },
+    "DPT23": {
+      "NAME": "23.* 2-Bit Aufzählung",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Ein/Aus Aktion"
+      },
+      "002": {
+        "NAME": "Alarmreaktion"
+      },
+      "003": {
+        "NAME": "Auf/Ab Aktion"
+      },
+      "102": {
+        "NAME": "HLK Tasteraktion"
+      }
+    },
+    "DPT24": {
+      "NAME": "24.001 Zeichenkette variabler Länge (ISO 8859-1)",
+      "DESCRIPTION": ""
+    },
+    "DPT25": {
+      "NAME": "25.1000 Busy/NAK Wiederholungen",
+      "DESCRIPTION": "",
+      "BUSY": {
+        "NAME": "Busy Wiederholungen"
+      },
+      "NAK": {
+        "NAME": "NAK Wiederholungen"
+      }
+    },
+    "DPT26": {
+      "NAME": "26.001 Szeneninformation",
+      "DESCRIPTION": "",
+      "SCENE": {
+        "NAME": "Szenennummer (0..63)"
+      },
+      "ACTIVE": {
+        "NAME": "Szene aktiv"
+      }
+    },
+    "DPT27": {
+      "NAME": "27.001 Kombinierte Ein/Aus Info",
+      "DESCRIPTION": "",
+      "OUTPUT1": {
+        "NAME": "Ausgang 1"
+      },
+      "OUTPUT2": {
+        "NAME": "Ausgang 2"
+      },
+      "OUTPUT3": {
+        "NAME": "Ausgang 3"
+      },
+      "OUTPUT4": {
+        "NAME": "Ausgang 4"
+      },
+      "OUTPUT5": {
+        "NAME": "Ausgang 5"
+      },
+      "OUTPUT6": {
+        "NAME": "Ausgang 6"
+      },
+      "OUTPUT7": {
+        "NAME": "Ausgang 7"
+      },
+      "OUTPUT8": {
+        "NAME": "Ausgang 8"
+      },
+      "OUTPUT9": {
+        "NAME": "Ausgang 9"
+      },
+      "OUTPUT10": {
+        "NAME": "Ausgang 10"
+      },
+      "OUTPUT11": {
+        "NAME": "Ausgang 11"
+      },
+      "OUTPUT12": {
+        "NAME": "Ausgang 12"
+      },
+      "OUTPUT13": {
+        "NAME": "Ausgang 13"
+      },
+      "OUTPUT14": {
+        "NAME": "Ausgang 14"
+      },
+      "OUTPUT15": {
+        "NAME": "Ausgang 15"
+      },
+      "OUTPUT16": {
+        "NAME": "Ausgang 16"
+      }
+    },
+    "DPT28": {
+      "NAME": "28.001 Zeichenkette variabler Länge (UTF-8)",
+      "DESCRIPTION": ""
+    },
+    "DPT29": {
+      "NAME": "29.* 8-Byte vorzeichenbehaftet",
+      "DESCRIPTION": "",
+      "010": {
+        "NAME": "Wirkenergie (Wh)"
+      },
+      "011": {
+        "NAME": "Scheinenergie (VAh)"
+      },
+      "012": {
+        "NAME": "Blindenergie (VARh)"
+      }
+    },
+    "DPT206": {
+      "NAME": "206.* Verzögerung & Modus",
+      "DESCRIPTION": "",
+      "DELAY": {
+        "NAME": "Verzögerung (min)"
+      },
+      "MODE": {
+        "NAME": "Modus"
+      },
+      "100": {
+        "NAME": "Verzögerung & HLK-Modus"
+      },
+      "102": {
+        "NAME": "Verzögerung & Warmwasser-Modus"
+      },
+      "104": {
+        "NAME": "Verzögerung & Belegungsmodus"
+      },
+      "105": {
+        "NAME": "Verzögerung & Gebäudemodus"
+      }
+    },
+    "DPT207": {
+      "NAME": "207.600 Status Lichtaktor",
+      "DESCRIPTION": "",
+      "ACTUAL_VALUE": {
+        "NAME": "Istwert (%)"
+      },
+      "FAILURE": {
+        "NAME": "Fehler"
+      },
+      "LOCAL_OVERRIDE": {
+        "NAME": "Lokal übersteuert"
+      },
+      "DIMMING": {
+        "NAME": "Dimmen"
+      },
+      "STAIRCASE": {
+        "NAME": "Treppenlichtfunktion"
+      },
+      "NIGHT_MODE": {
+        "NAME": "Nachtmodus"
+      },
+      "FORCED": {
+        "NAME": "Zwangsführung"
+      },
+      "LOCKED": {
+        "NAME": "Gesperrt"
+      },
+      "ACTUAL_VALUE_VALID": {
+        "NAME": "Istwert gültig"
+      }
+    },
+    "DPT217": {
+      "NAME": "217.001 DPT-Version",
+      "DESCRIPTION": "",
+      "MAGIC": {
+        "NAME": "Magic Number"
+      },
+      "VERSION": {
+        "NAME": "Version"
+      },
+      "REVISION": {
+        "NAME": "Revision"
+      }
+    },
+    "DPT219": {
+      "NAME": "219.001 Alarminformation",
+      "DESCRIPTION": "",
+      "LOG_NUMBER": {
+        "NAME": "Log-Nummer"
+      },
+      "PRIORITY": {
+        "NAME": "Alarmpriorität"
+      },
+      "APPLICATION_AREA": {
+        "NAME": "Anwendungsbereich"
+      },
+      "ERROR_CLASS": {
+        "NAME": "Fehlerklasse"
+      },
+      "ERRORCODE_SUPPORTED": {
+        "NAME": "Fehlercode unterstützt"
+      },
+      "ALARMTEXT_SUPPORTED": {
+        "NAME": "Alarmtext unterstützt"
+      },
+      "TIMESTAMP_SUPPORTED": {
+        "NAME": "Zeitstempel unterstützt"
+      },
+      "ACK_SUPPORTED": {
+        "NAME": "Quittierung unterstützt"
+      },
+      "LOCKED": {
+        "NAME": "Gesperrt"
+      },
+      "ALARM_UNACK": {
+        "NAME": "Alarm nicht quittiert"
+      },
+      "IN_ALARM": {
+        "NAME": "Alarm aktiv"
+      }
+    },
+    "DPT222": {
+      "NAME": "222.* Raumtemperatur-Sollwerte (3x)",
+      "DESCRIPTION": "",
+      "COMFORT": {
+        "NAME": "Komfort"
+      },
+      "STANDBY": {
+        "NAME": "Standby"
+      },
+      "ECONOMY": {
+        "NAME": "Eco"
+      },
+      "100": {
+        "NAME": "Raumtemperatur-Sollwerte"
+      },
+      "101": {
+        "NAME": "Raumtemperatur-Sollwertverschiebungen"
+      }
+    },
+    "DPT229": {
+      "NAME": "229.001 Zählerwert",
+      "DESCRIPTION": "",
+      "COUNT": {
+        "NAME": "Zählerstand"
+      },
+      "VALUE_INFORMATION": {
+        "NAME": "Wertinformation (VIF)"
+      },
+      "ALARM_UNACK": {
+        "NAME": "Alarm nicht quittiert"
+      },
+      "IN_ALARM": {
+        "NAME": "Alarm aktiv"
+      },
+      "OVERRIDDEN": {
+        "NAME": "Übersteuert"
+      },
+      "FAULT": {
+        "NAME": "Störung"
+      },
+      "OUT_OF_SERVICE": {
+        "NAME": "Außer Betrieb"
+      }
+    },
+    "DPT230": {
+      "NAME": "230.1000 M-Bus Adresse",
+      "DESCRIPTION": "",
+      "MANUFACTURER": {
+        "NAME": "Hersteller-ID"
+      },
+      "IDENT_NUMBER": {
+        "NAME": "Identnummer"
+      },
+      "VERSION": {
+        "NAME": "Version"
+      },
+      "MEDIUM": {
+        "NAME": "Medium"
+      }
+    },
+    "DPT232": {
+      "NAME": "232.600 RGB Farbe",
+      "DESCRIPTION": "",
+      "RED": {
+        "NAME": "Rot (0..255)"
+      },
+      "GREEN": {
+        "NAME": "Grün (0..255)"
+      },
+      "BLUE": {
+        "NAME": "Blau (0..255)"
+      },
+      "HEX": {
+        "NAME": "Farbe (#RRGGBB)"
+      }
+    },
+    "DPT234": {
+      "NAME": "234.* Sprach-/Regionscode",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "Sprachcode (ISO 639-1)"
+      },
+      "002": {
+        "NAME": "Regionscode (ISO 3166-1)"
+      }
+    },
+    "DPT235": {
+      "NAME": "235.001 Wirkenergie mit Tarif",
+      "DESCRIPTION": "",
+      "ENERGY": {
+        "NAME": "Wirkenergie (Wh)"
+      },
+      "TARIFF": {
+        "NAME": "Tarif"
+      },
+      "ENERGY_INVALID": {
+        "NAME": "Energie ungültig"
+      },
+      "TARIFF_INVALID": {
+        "NAME": "Tarif ungültig"
+      }
+    },
+    "DPT236": {
+      "NAME": "236.001 Priorisierte Modussteuerung",
+      "DESCRIPTION": "",
+      "DEACTIVATE": {
+        "NAME": "Priorität deaktivieren"
+      },
+      "PRIORITY": {
+        "NAME": "Prioritätsstufe"
+      },
+      "MODE": {
+        "NAME": "Modusstufe"
+      }
+    },
+    "DPT237": {
+      "NAME": "237.600 DALI Betriebsgeräte-Diagnose",
+      "DESCRIPTION": "",
+      "CONVERTER_ERROR": {
+        "NAME": "Konverterfehler"
+      },
+      "BALLAST_FAILURE": {
+        "NAME": "EVG-Fehler"
+      },
+      "LAMP_FAILURE": {
+        "NAME": "Lampenfehler"
+      },
+      "READ_RESPONSE": {
+        "NAME": "Antwort"
+      },
+      "GROUP_ADDRESS": {
+        "NAME": "Gruppenadresse"
+      },
+      "ADDRESS": {
+        "NAME": "DALI Adresse"
+      }
+    },
+    "DPT238": {
+      "NAME": "238.600 DALI Diagnose",
+      "DESCRIPTION": "",
+      "BALLAST_FAILURE": {
+        "NAME": "EVG-Fehler"
+      },
+      "LAMP_FAILURE": {
+        "NAME": "Lampenfehler"
+      },
+      "ADDRESS": {
+        "NAME": "Geräteadresse"
+      }
+    },
+    "DPT240": {
+      "NAME": "240.800 Kombinierte Position",
+      "DESCRIPTION": "",
+      "HEIGHT": {
+        "NAME": "Höhe (%)"
+      },
+      "SLATS": {
+        "NAME": "Lamellen (%)"
+      }
+    },
+    "DPT242": {
+      "NAME": "242.600 Farbe xyY",
+      "DESCRIPTION": "",
+      "X": {
+        "NAME": "x (0..1)"
+      },
+      "Y": {
+        "NAME": "y (0..1)"
+      },
+      "BRIGHTNESS": {
+        "NAME": "Helligkeit (0..255)"
+      }
+    },
+    "DPT246": {
+      "NAME": "246.600 Batterieinformation",
+      "DESCRIPTION": "",
+      "FULLY_CHARGED": {
+        "NAME": "Vollständig geladen"
+      },
+      "DURATION_FAILURE": {
+        "NAME": "Dauertest fehlgeschlagen"
+      },
+      "BATTERY_FAILURE": {
+        "NAME": "Batteriefehler"
+      },
+      "CHARGE_LEVEL": {
+        "NAME": "Ladestand"
+      }
+    },
+    "DPT251": {
+      "NAME": "251.600 RGBW Farbe",
+      "DESCRIPTION": "",
+      "RED": {
+        "NAME": "Rot (0..255)"
+      },
+      "GREEN": {
+        "NAME": "Grün (0..255)"
+      },
+      "BLUE": {
+        "NAME": "Blau (0..255)"
+      },
+      "WHITE": {
+        "NAME": "Weiß (0..255)"
+      },
+      "HEX": {
+        "NAME": "Farbe (#RRGGBBWW)"
+      }
+    },
+    "DPT255": {
+      "NAME": "255.001 Geografische Position",
+      "DESCRIPTION": "",
+      "LONGITUDE": {
+        "NAME": "Längengrad (°)"
+      },
+      "LATITUDE": {
+        "NAME": "Breitengrad (°)"
+      }
+    },
+    "DPT275": {
+      "NAME": "275.* Raumtemperatur-Sollwerte (4x)",
+      "DESCRIPTION": "",
+      "COMFORT": {
+        "NAME": "Komfort"
+      },
+      "STANDBY": {
+        "NAME": "Standby"
+      },
+      "ECONOMY": {
+        "NAME": "Eco"
+      },
+      "PROTECTION": {
+        "NAME": "Gebäudeschutz"
+      },
+      "100": {
+        "NAME": "Raumtemperatur-Sollwerte"
+      },
+      "101": {
+        "NAME": "Raumtemperatur-Sollwertverschiebungen"
+      }
+    },
+    "DPT225": {
+      "001": {
+        "NAME": "225.001 Dimmgeschwindigkeit",
+        "DESCRIPTION": "",
+        "TIME": {
+          "NAME": "Zeitdauer (ms, 100-ms-Schritte)"
+        },
+        "PERCENT": {
+          "NAME": "Wert (%)"
+        }
+      },
+      "002": {
+        "NAME": "225.002 Dimmschrittzeit",
+        "DESCRIPTION": "",
+        "TIME": {
+          "NAME": "Zeitdauer (ms)"
+        },
+        "PERCENT": {
+          "NAME": "Wert (%)"
+        }
       }
     }
   }

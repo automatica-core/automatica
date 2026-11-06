@@ -1,5 +1,6 @@
 ﻿using Automatica.Core.Driver;
 using P3.Driver.Knx.DriverFactory.Attributes;
+using P3.Driver.Knx.DriverFactory.Dpt;
 using P3.Driver.Knx.DriverFactory.Factories.IpTunneling;
 
 namespace P3.Driver.Knx.DriverFactory.ThreeLevel
@@ -23,9 +24,6 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                     break;
                 case "knx-dpt3":
                     attribute = new KnxDpt3Attribute(ctx, driver);
-                    break;
-                case "knx-dpt4":
-                    attribute = new KnxDpt4Attribute(ctx, driver);
                     break;
                 case "knx-dpt5":
                     attribute = new KnxDpt5Attribute(ctx, driver);
@@ -53,6 +51,9 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                     break;
                 case "knx-dpt16":
                     attribute = new KnxDpt16Attribute(ctx, driver);
+                    break;
+                default:
+                    attribute = KnxDptCatalog.CreateAttribute(key, ctx, driver);
                     break;
             }
 

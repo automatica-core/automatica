@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using P3.Driver.Knx.DriverFactory.Dpt;
 using P3.Driver.Knx.DriverFactory.Factories;
 using P3.Knx.Core.Ets;
 
@@ -145,7 +146,15 @@ namespace P3.Driver.Knx.DriverFactory
                     nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt11");
                     nodeInstance.SetProperty("knx-dpt", subDpt);
                     break;
-
+                case 13:
+                    nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt13");
+                    break;
+                case 16:
+                    nodeInstance = factory.CreateNodeInstanceByKey("knx-dpt16");
+                    break;
+                default:
+                    nodeInstance = CreateCatalogNodeInstance(factory, mainDpt, subDpt);
+                    break;
             }
 
             if (nodeInstance != null)
@@ -154,6 +163,23 @@ namespace P3.Driver.Knx.DriverFactory
                 nodeInstance.Description = dataPoint.Description;
                 nodeInstance.SetProperty("knx-address", dataPoint.GetAddress());
             }
+            return nodeInstance;
+        }
+
+        private static NodeInstance CreateCatalogNodeInstance(INodeTemplateFactory factory, int mainDpt, int subDpt)
+        {
+            var entry = KnxDptCatalog.GetByDpt(mainDpt, subDpt);
+            if (entry == null)
+            {
+                return null; // not supported
+            }
+
+            var nodeInstance = factory.CreateNodeInstanceByKey(entry.Key);
+            if (nodeInstance != null && entry.SubTypeEnum != null && Enum.IsDefined(entry.SubTypeEnum, subDpt))
+            {
+                nodeInstance.SetProperty("knx-dpt-sub", subDpt);
+            }
+
             return nodeInstance;
         }
 

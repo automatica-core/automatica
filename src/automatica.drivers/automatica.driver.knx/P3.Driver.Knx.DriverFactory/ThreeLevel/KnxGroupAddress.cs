@@ -93,8 +93,7 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                         $"{GroupAddress} DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
                 }
 
-                var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
-                var decodedValue = dpt.ToGroupValue(dptValue);
+                var decodedValue = ToGroupValue(dptValue);
 
                 var result = await Driver.Write(this, GroupAddress, decodedValue, token).ConfigureAwait(false);
                 await writeContext.DispatchValue(value, token);
@@ -125,10 +124,9 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
                 DriverContext.Logger.LogWarning($"DptType {DptType} does not match implementation {ImplementationDptType}....we prefer the implementation one!");
             }
 
-            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
             try
             {
-                var value = dpt.ToValue(datagram.Value);
+                var value = FromGroupValue(datagram.Value);
 
                 if (ValueRead(value))
                 {
@@ -137,8 +135,26 @@ namespace P3.Driver.Knx.DriverFactory.ThreeLevel
             }
             catch (FormatException fe)
             {
-                DriverContext.Logger.LogError(fe, $"Could not parse DPT correctly from {datagram.DestinationAddress} (Target DPT is {dpt.Name} Value is {datagram.Value.Value.ToHex(true)} {fe}");
+                DriverContext.Logger.LogError(fe, $"Could not parse DPT correctly from {datagram.DestinationAddress} (Target DPT is {ImplementationDptType}.{DptSubType:000} Value is {datagram.Value.Value.ToHex(true)} {fe}");
             }
+        }
+
+        /// <summary>
+        /// Encodes the value returned by <see cref="ConvertToDptValue"/> to the telegram payload.
+        /// </summary>
+        protected virtual GroupValue ToGroupValue(object dptValue)
+        {
+            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
+            return dpt.ToGroupValue(dptValue);
+        }
+
+        /// <summary>
+        /// Decodes a received telegram payload to the value passed to <see cref="ValueRead"/>.
+        /// </summary>
+        protected virtual object FromGroupValue(GroupValue groupValue)
+        {
+            var dpt = DptFactory.Default.Get(ImplementationDptType, DptSubType);
+            return dpt.ToValue(groupValue);
         }
 
         protected virtual bool ValueRead(object value)

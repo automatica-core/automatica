@@ -117,7 +117,13 @@
     },
     "DPT4": {
       "NAME": "4.* character",
-      "DESCRIPTION": ""
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "character (ASCII)"
+      },
+      "002": {
+        "NAME": "character (ISO 8859-1)"
+      }
     },
     "DPT5": {
       "NAME": "5.* 8-bit unsigned value",
@@ -331,6 +337,1053 @@
       },
       "001": {
         "NAME": "8859-1 String"
+      }
+    },
+    "DPT12": {
+      "NAME": "12.* 4-byte unsigned value",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "counter pulses (unsigned)"
+      },
+      "100": {
+        "NAME": "counter time (s)"
+      },
+      "101": {
+        "NAME": "counter time (min)"
+      },
+      "102": {
+        "NAME": "counter time (h)"
+      },
+      "1200": {
+        "NAME": "volume liquid (l)"
+      },
+      "1201": {
+        "NAME": "volume (m³)"
+      }
+    },
+    "DPT14": {
+      "NAME": "14.* 4-byte float value",
+      "DESCRIPTION": "",
+      "000": {
+        "NAME": "acceleration (m/s²)"
+      },
+      "001": {
+        "NAME": "angular acceleration (rad/s²)"
+      },
+      "002": {
+        "NAME": "activation energy (J/mol)"
+      },
+      "003": {
+        "NAME": "radioactive activity (1/s)"
+      },
+      "004": {
+        "NAME": "amount of substance (mol)"
+      },
+      "005": {
+        "NAME": "amplitude"
+      },
+      "006": {
+        "NAME": "angle (rad)"
+      },
+      "007": {
+        "NAME": "angle (°)"
+      },
+      "008": {
+        "NAME": "angular momentum (Js)"
+      },
+      "009": {
+        "NAME": "angular velocity (rad/s)"
+      },
+      "010": {
+        "NAME": "area (m²)"
+      },
+      "011": {
+        "NAME": "capacitance (F)"
+      },
+      "012": {
+        "NAME": "surface charge density (C/m²)"
+      },
+      "013": {
+        "NAME": "charge density (C/m³)"
+      },
+      "014": {
+        "NAME": "compressibility (m²/N)"
+      },
+      "015": {
+        "NAME": "conductance (S)"
+      },
+      "016": {
+        "NAME": "conductivity (S/m)"
+      },
+      "017": {
+        "NAME": "density (kg/m³)"
+      },
+      "018": {
+        "NAME": "electric charge (C)"
+      },
+      "019": {
+        "NAME": "electric current (A)"
+      },
+      "020": {
+        "NAME": "electric current density (A/m²)"
+      },
+      "021": {
+        "NAME": "electric dipole moment (Cm)"
+      },
+      "022": {
+        "NAME": "electric displacement (C/m²)"
+      },
+      "023": {
+        "NAME": "electric field strength (V/m)"
+      },
+      "024": {
+        "NAME": "electric flux (C)"
+      },
+      "025": {
+        "NAME": "electric flux density (C/m²)"
+      },
+      "026": {
+        "NAME": "electric polarization (C/m²)"
+      },
+      "027": {
+        "NAME": "electric potential (V)"
+      },
+      "028": {
+        "NAME": "electric potential difference (V)"
+      },
+      "029": {
+        "NAME": "electromagnetic moment (Am²)"
+      },
+      "030": {
+        "NAME": "electromotive force (V)"
+      },
+      "031": {
+        "NAME": "energy (J)"
+      },
+      "032": {
+        "NAME": "force (N)"
+      },
+      "033": {
+        "NAME": "frequency (Hz)"
+      },
+      "034": {
+        "NAME": "angular frequency (rad/s)"
+      },
+      "035": {
+        "NAME": "heat capacity (J/K)"
+      },
+      "036": {
+        "NAME": "heat flow rate (W)"
+      },
+      "037": {
+        "NAME": "heat quantity (J)"
+      },
+      "038": {
+        "NAME": "impedance (Ω)"
+      },
+      "039": {
+        "NAME": "length (m)"
+      },
+      "040": {
+        "NAME": "light quantity (J)"
+      },
+      "041": {
+        "NAME": "luminance (cd/m²)"
+      },
+      "042": {
+        "NAME": "luminous flux (lm)"
+      },
+      "043": {
+        "NAME": "luminous intensity (cd)"
+      },
+      "044": {
+        "NAME": "magnetic field strength (A/m)"
+      },
+      "045": {
+        "NAME": "magnetic flux (Wb)"
+      },
+      "046": {
+        "NAME": "magnetic flux density (T)"
+      },
+      "047": {
+        "NAME": "magnetic moment (Am²)"
+      },
+      "048": {
+        "NAME": "magnetic polarization (T)"
+      },
+      "049": {
+        "NAME": "magnetization (A/m)"
+      },
+      "050": {
+        "NAME": "magnetomotive force (A)"
+      },
+      "051": {
+        "NAME": "mass (kg)"
+      },
+      "052": {
+        "NAME": "mass flux (kg/s)"
+      },
+      "053": {
+        "NAME": "momentum (N/s)"
+      },
+      "054": {
+        "NAME": "phase angle (rad)"
+      },
+      "055": {
+        "NAME": "phase angle (°)"
+      },
+      "056": {
+        "NAME": "power (W)"
+      },
+      "057": {
+        "NAME": "power factor"
+      },
+      "058": {
+        "NAME": "pressure (Pa)"
+      },
+      "059": {
+        "NAME": "reactance (Ω)"
+      },
+      "060": {
+        "NAME": "resistance (Ω)"
+      },
+      "061": {
+        "NAME": "resistivity (Ωm)"
+      },
+      "062": {
+        "NAME": "self inductance (H)"
+      },
+      "063": {
+        "NAME": "solid angle (sr)"
+      },
+      "064": {
+        "NAME": "sound intensity (W/m²)"
+      },
+      "065": {
+        "NAME": "speed (m/s)"
+      },
+      "066": {
+        "NAME": "stress (Pa)"
+      },
+      "067": {
+        "NAME": "surface tension (N/m)"
+      },
+      "068": {
+        "NAME": "temperature (°C)"
+      },
+      "069": {
+        "NAME": "absolute temperature (K)"
+      },
+      "070": {
+        "NAME": "temperature difference (K)"
+      },
+      "071": {
+        "NAME": "thermal capacity (J/K)"
+      },
+      "072": {
+        "NAME": "thermal conductivity (W/mK)"
+      },
+      "073": {
+        "NAME": "thermoelectric power (V/K)"
+      },
+      "074": {
+        "NAME": "time (s)"
+      },
+      "075": {
+        "NAME": "torque (Nm)"
+      },
+      "076": {
+        "NAME": "volume (m³)"
+      },
+      "077": {
+        "NAME": "volume flux (m³/s)"
+      },
+      "078": {
+        "NAME": "weight (N)"
+      },
+      "079": {
+        "NAME": "work (J)"
+      },
+      "080": {
+        "NAME": "apparent power (VA)"
+      },
+      "1200": {
+        "NAME": "volume flux for meters (m³/h)"
+      },
+      "1201": {
+        "NAME": "volume flux (l/s)"
+      }
+    },
+    "DPT15": {
+      "NAME": "15.000 entrance access",
+      "DESCRIPTION": "",
+      "CODE": {
+        "NAME": "Access code"
+      },
+      "ERROR": {
+        "NAME": "Detection error"
+      },
+      "PERMISSION": {
+        "NAME": "Permission accepted"
+      },
+      "DIRECTION": {
+        "NAME": "Read direction"
+      },
+      "ENCRYPTED": {
+        "NAME": "Encrypted"
+      },
+      "INDEX": {
+        "NAME": "Code index"
+      }
+    },
+    "DPT17": {
+      "NAME": "17.001 scene number (0..63)",
+      "DESCRIPTION": ""
+    },
+    "DPT18": {
+      "NAME": "18.001 scene control",
+      "DESCRIPTION": "",
+      "ACTIVATE": {
+        "NAME": "Activate scene (0..63)"
+      },
+      "LEARN": {
+        "NAME": "Store scene (0..63)"
+      }
+    },
+    "DPT19": {
+      "NAME": "19.001 date time",
+      "DESCRIPTION": ""
+    },
+    "DPT20": {
+      "NAME": "20.* 1-byte enumeration",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "SCLO mode"
+      },
+      "002": {
+        "NAME": "building mode"
+      },
+      "003": {
+        "NAME": "occupancy mode"
+      },
+      "004": {
+        "NAME": "priority"
+      },
+      "005": {
+        "NAME": "light application mode"
+      },
+      "006": {
+        "NAME": "application area"
+      },
+      "007": {
+        "NAME": "alarm class"
+      },
+      "008": {
+        "NAME": "PSU mode"
+      },
+      "011": {
+        "NAME": "system error class"
+      },
+      "012": {
+        "NAME": "HVAC error class"
+      },
+      "013": {
+        "NAME": "time delay"
+      },
+      "014": {
+        "NAME": "wind force scale (0..12)"
+      },
+      "017": {
+        "NAME": "sensor mode"
+      },
+      "020": {
+        "NAME": "actuator connect type"
+      },
+      "021": {
+        "NAME": "cloud cover"
+      },
+      "022": {
+        "NAME": "power return mode"
+      },
+      "100": {
+        "NAME": "fuel type"
+      },
+      "101": {
+        "NAME": "burner type"
+      },
+      "102": {
+        "NAME": "HVAC mode"
+      },
+      "103": {
+        "NAME": "DHW mode"
+      },
+      "104": {
+        "NAME": "load priority"
+      },
+      "105": {
+        "NAME": "HVAC control mode"
+      },
+      "106": {
+        "NAME": "HVAC emergency mode"
+      },
+      "107": {
+        "NAME": "changeover mode"
+      },
+      "108": {
+        "NAME": "valve mode"
+      },
+      "109": {
+        "NAME": "damper mode"
+      },
+      "110": {
+        "NAME": "heater mode"
+      },
+      "111": {
+        "NAME": "fan mode"
+      },
+      "112": {
+        "NAME": "master/slave mode"
+      },
+      "113": {
+        "NAME": "status room setpoint"
+      },
+      "114": {
+        "NAME": "metering device type"
+      },
+      "115": {
+        "NAME": "humidification/dehumidification mode"
+      },
+      "116": {
+        "NAME": "enable heating/cooling stage"
+      },
+      "120": {
+        "NAME": "ADA type"
+      },
+      "121": {
+        "NAME": "backup mode"
+      },
+      "122": {
+        "NAME": "start synchronization"
+      },
+      "600": {
+        "NAME": "behaviour lock/unlock"
+      },
+      "601": {
+        "NAME": "behaviour bus power up/down"
+      },
+      "602": {
+        "NAME": "DALI fade time"
+      },
+      "603": {
+        "NAME": "blinking mode"
+      },
+      "604": {
+        "NAME": "light control mode"
+      },
+      "605": {
+        "NAME": "push button switch mode"
+      },
+      "606": {
+        "NAME": "push button action"
+      },
+      "607": {
+        "NAME": "push button dim mode"
+      },
+      "608": {
+        "NAME": "switch on mode"
+      },
+      "609": {
+        "NAME": "load type"
+      },
+      "610": {
+        "NAME": "load type detected"
+      },
+      "611": {
+        "NAME": "converter test control"
+      },
+      "801": {
+        "NAME": "SAB except behaviour"
+      },
+      "802": {
+        "NAME": "SAB behaviour lock/unlock"
+      },
+      "803": {
+        "NAME": "SSSB mode"
+      },
+      "804": {
+        "NAME": "blinds control mode"
+      },
+      "1000": {
+        "NAME": "communication mode"
+      },
+      "1001": {
+        "NAME": "additional info type"
+      },
+      "1002": {
+        "NAME": "RF mode selection"
+      },
+      "1003": {
+        "NAME": "RF filter selection"
+      }
+    },
+    "DPT21": {
+      "NAME": "21.* 8-bit set",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Raw value"
+      },
+      "BIT0": {
+        "NAME": "Bit 0"
+      },
+      "BIT1": {
+        "NAME": "Bit 1"
+      },
+      "BIT2": {
+        "NAME": "Bit 2"
+      },
+      "BIT3": {
+        "NAME": "Bit 3"
+      },
+      "BIT4": {
+        "NAME": "Bit 4"
+      },
+      "BIT5": {
+        "NAME": "Bit 5"
+      },
+      "BIT6": {
+        "NAME": "Bit 6"
+      },
+      "BIT7": {
+        "NAME": "Bit 7"
+      }
+    },
+    "DPT22": {
+      "NAME": "22.* 16-bit set",
+      "DESCRIPTION": "",
+      "VALUE": {
+        "NAME": "Raw value"
+      },
+      "BIT0": {
+        "NAME": "Bit 0"
+      },
+      "BIT1": {
+        "NAME": "Bit 1"
+      },
+      "BIT2": {
+        "NAME": "Bit 2"
+      },
+      "BIT3": {
+        "NAME": "Bit 3"
+      },
+      "BIT4": {
+        "NAME": "Bit 4"
+      },
+      "BIT5": {
+        "NAME": "Bit 5"
+      },
+      "BIT6": {
+        "NAME": "Bit 6"
+      },
+      "BIT7": {
+        "NAME": "Bit 7"
+      },
+      "BIT8": {
+        "NAME": "Bit 8"
+      },
+      "BIT9": {
+        "NAME": "Bit 9"
+      },
+      "BIT10": {
+        "NAME": "Bit 10"
+      },
+      "BIT11": {
+        "NAME": "Bit 11"
+      },
+      "BIT12": {
+        "NAME": "Bit 12"
+      },
+      "BIT13": {
+        "NAME": "Bit 13"
+      },
+      "BIT14": {
+        "NAME": "Bit 14"
+      },
+      "BIT15": {
+        "NAME": "Bit 15"
+      }
+    },
+    "DPT23": {
+      "NAME": "23.* 2-bit enumeration",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "on/off action"
+      },
+      "002": {
+        "NAME": "alarm reaction"
+      },
+      "003": {
+        "NAME": "up/down action"
+      },
+      "102": {
+        "NAME": "HVAC push button action"
+      }
+    },
+    "DPT24": {
+      "NAME": "24.001 variable string (ISO 8859-1)",
+      "DESCRIPTION": ""
+    },
+    "DPT25": {
+      "NAME": "25.1000 busy/nak repetitions",
+      "DESCRIPTION": "",
+      "BUSY": {
+        "NAME": "Busy repetitions"
+      },
+      "NAK": {
+        "NAME": "NAK repetitions"
+      }
+    },
+    "DPT26": {
+      "NAME": "26.001 scene information",
+      "DESCRIPTION": "",
+      "SCENE": {
+        "NAME": "Scene number (0..63)"
+      },
+      "ACTIVE": {
+        "NAME": "Scene active"
+      }
+    },
+    "DPT27": {
+      "NAME": "27.001 combined info on/off",
+      "DESCRIPTION": "",
+      "OUTPUT1": {
+        "NAME": "Output 1"
+      },
+      "OUTPUT2": {
+        "NAME": "Output 2"
+      },
+      "OUTPUT3": {
+        "NAME": "Output 3"
+      },
+      "OUTPUT4": {
+        "NAME": "Output 4"
+      },
+      "OUTPUT5": {
+        "NAME": "Output 5"
+      },
+      "OUTPUT6": {
+        "NAME": "Output 6"
+      },
+      "OUTPUT7": {
+        "NAME": "Output 7"
+      },
+      "OUTPUT8": {
+        "NAME": "Output 8"
+      },
+      "OUTPUT9": {
+        "NAME": "Output 9"
+      },
+      "OUTPUT10": {
+        "NAME": "Output 10"
+      },
+      "OUTPUT11": {
+        "NAME": "Output 11"
+      },
+      "OUTPUT12": {
+        "NAME": "Output 12"
+      },
+      "OUTPUT13": {
+        "NAME": "Output 13"
+      },
+      "OUTPUT14": {
+        "NAME": "Output 14"
+      },
+      "OUTPUT15": {
+        "NAME": "Output 15"
+      },
+      "OUTPUT16": {
+        "NAME": "Output 16"
+      }
+    },
+    "DPT28": {
+      "NAME": "28.001 variable string (UTF-8)",
+      "DESCRIPTION": ""
+    },
+    "DPT29": {
+      "NAME": "29.* 8-byte signed value",
+      "DESCRIPTION": "",
+      "010": {
+        "NAME": "active energy (Wh)"
+      },
+      "011": {
+        "NAME": "apparent energy (VAh)"
+      },
+      "012": {
+        "NAME": "reactive energy (VARh)"
+      }
+    },
+    "DPT206": {
+      "NAME": "206.* time delay & mode",
+      "DESCRIPTION": "",
+      "DELAY": {
+        "NAME": "Delay (min)"
+      },
+      "MODE": {
+        "NAME": "Mode"
+      },
+      "100": {
+        "NAME": "time delay & HVAC mode"
+      },
+      "102": {
+        "NAME": "time delay & DHW mode"
+      },
+      "104": {
+        "NAME": "time delay & occupancy mode"
+      },
+      "105": {
+        "NAME": "time delay & building mode"
+      }
+    },
+    "DPT207": {
+      "NAME": "207.600 status lighting actuator",
+      "DESCRIPTION": "",
+      "ACTUAL_VALUE": {
+        "NAME": "Actual value (%)"
+      },
+      "FAILURE": {
+        "NAME": "Failure"
+      },
+      "LOCAL_OVERRIDE": {
+        "NAME": "Local override"
+      },
+      "DIMMING": {
+        "NAME": "Dimming"
+      },
+      "STAIRCASE": {
+        "NAME": "Staircase function"
+      },
+      "NIGHT_MODE": {
+        "NAME": "Night mode"
+      },
+      "FORCED": {
+        "NAME": "Forced"
+      },
+      "LOCKED": {
+        "NAME": "Locked"
+      },
+      "ACTUAL_VALUE_VALID": {
+        "NAME": "Actual value valid"
+      }
+    },
+    "DPT217": {
+      "NAME": "217.001 DPT version",
+      "DESCRIPTION": "",
+      "MAGIC": {
+        "NAME": "Magic number"
+      },
+      "VERSION": {
+        "NAME": "Version"
+      },
+      "REVISION": {
+        "NAME": "Revision"
+      }
+    },
+    "DPT219": {
+      "NAME": "219.001 alarm info",
+      "DESCRIPTION": "",
+      "LOG_NUMBER": {
+        "NAME": "Log number"
+      },
+      "PRIORITY": {
+        "NAME": "Alarm priority"
+      },
+      "APPLICATION_AREA": {
+        "NAME": "Application area"
+      },
+      "ERROR_CLASS": {
+        "NAME": "Error class"
+      },
+      "ERRORCODE_SUPPORTED": {
+        "NAME": "Error code supported"
+      },
+      "ALARMTEXT_SUPPORTED": {
+        "NAME": "Alarm text supported"
+      },
+      "TIMESTAMP_SUPPORTED": {
+        "NAME": "Time stamp supported"
+      },
+      "ACK_SUPPORTED": {
+        "NAME": "Acknowledge supported"
+      },
+      "LOCKED": {
+        "NAME": "Locked"
+      },
+      "ALARM_UNACK": {
+        "NAME": "Alarm not acknowledged"
+      },
+      "IN_ALARM": {
+        "NAME": "In alarm"
+      }
+    },
+    "DPT222": {
+      "NAME": "222.* room temperature setpoints (3x)",
+      "DESCRIPTION": "",
+      "COMFORT": {
+        "NAME": "Comfort"
+      },
+      "STANDBY": {
+        "NAME": "Standby"
+      },
+      "ECONOMY": {
+        "NAME": "Economy"
+      },
+      "100": {
+        "NAME": "room temperature setpoints"
+      },
+      "101": {
+        "NAME": "room temperature setpoint shifts"
+      }
+    },
+    "DPT229": {
+      "NAME": "229.001 metering value",
+      "DESCRIPTION": "",
+      "COUNT": {
+        "NAME": "Counter value"
+      },
+      "VALUE_INFORMATION": {
+        "NAME": "Value information (VIF)"
+      },
+      "ALARM_UNACK": {
+        "NAME": "Alarm not acknowledged"
+      },
+      "IN_ALARM": {
+        "NAME": "In alarm"
+      },
+      "OVERRIDDEN": {
+        "NAME": "Overridden"
+      },
+      "FAULT": {
+        "NAME": "Fault"
+      },
+      "OUT_OF_SERVICE": {
+        "NAME": "Out of service"
+      }
+    },
+    "DPT230": {
+      "NAME": "230.1000 M-Bus address",
+      "DESCRIPTION": "",
+      "MANUFACTURER": {
+        "NAME": "Manufacturer ID"
+      },
+      "IDENT_NUMBER": {
+        "NAME": "Ident number"
+      },
+      "VERSION": {
+        "NAME": "Version"
+      },
+      "MEDIUM": {
+        "NAME": "Medium"
+      }
+    },
+    "DPT232": {
+      "NAME": "232.600 RGB colour",
+      "DESCRIPTION": "",
+      "RED": {
+        "NAME": "Red (0..255)"
+      },
+      "GREEN": {
+        "NAME": "Green (0..255)"
+      },
+      "BLUE": {
+        "NAME": "Blue (0..255)"
+      },
+      "HEX": {
+        "NAME": "Colour (#RRGGBB)"
+      }
+    },
+    "DPT234": {
+      "NAME": "234.* language/region code",
+      "DESCRIPTION": "",
+      "001": {
+        "NAME": "language code (ISO 639-1)"
+      },
+      "002": {
+        "NAME": "region code (ISO 3166-1)"
+      }
+    },
+    "DPT235": {
+      "NAME": "235.001 active energy with tariff",
+      "DESCRIPTION": "",
+      "ENERGY": {
+        "NAME": "Active energy (Wh)"
+      },
+      "TARIFF": {
+        "NAME": "Tariff"
+      },
+      "ENERGY_INVALID": {
+        "NAME": "Energy invalid"
+      },
+      "TARIFF_INVALID": {
+        "NAME": "Tariff invalid"
+      }
+    },
+    "DPT236": {
+      "NAME": "236.001 prioritised mode control",
+      "DESCRIPTION": "",
+      "DEACTIVATE": {
+        "NAME": "Deactivate priority"
+      },
+      "PRIORITY": {
+        "NAME": "Priority level"
+      },
+      "MODE": {
+        "NAME": "Mode level"
+      }
+    },
+    "DPT237": {
+      "NAME": "237.600 DALI control gear diagnostic",
+      "DESCRIPTION": "",
+      "CONVERTER_ERROR": {
+        "NAME": "Converter error"
+      },
+      "BALLAST_FAILURE": {
+        "NAME": "Ballast failure"
+      },
+      "LAMP_FAILURE": {
+        "NAME": "Lamp failure"
+      },
+      "READ_RESPONSE": {
+        "NAME": "Response"
+      },
+      "GROUP_ADDRESS": {
+        "NAME": "Group address"
+      },
+      "ADDRESS": {
+        "NAME": "DALI address"
+      }
+    },
+    "DPT238": {
+      "NAME": "238.600 DALI diagnostics",
+      "DESCRIPTION": "",
+      "BALLAST_FAILURE": {
+        "NAME": "Ballast failure"
+      },
+      "LAMP_FAILURE": {
+        "NAME": "Lamp failure"
+      },
+      "ADDRESS": {
+        "NAME": "Device address"
+      }
+    },
+    "DPT240": {
+      "NAME": "240.800 combined position",
+      "DESCRIPTION": "",
+      "HEIGHT": {
+        "NAME": "Height (%)"
+      },
+      "SLATS": {
+        "NAME": "Slats (%)"
+      }
+    },
+    "DPT242": {
+      "NAME": "242.600 colour xyY",
+      "DESCRIPTION": "",
+      "X": {
+        "NAME": "x (0..1)"
+      },
+      "Y": {
+        "NAME": "y (0..1)"
+      },
+      "BRIGHTNESS": {
+        "NAME": "Brightness (0..255)"
+      }
+    },
+    "DPT246": {
+      "NAME": "246.600 battery information",
+      "DESCRIPTION": "",
+      "FULLY_CHARGED": {
+        "NAME": "Fully charged"
+      },
+      "DURATION_FAILURE": {
+        "NAME": "Duration test failure"
+      },
+      "BATTERY_FAILURE": {
+        "NAME": "Battery failure"
+      },
+      "CHARGE_LEVEL": {
+        "NAME": "Charge level"
+      }
+    },
+    "DPT251": {
+      "NAME": "251.600 RGBW colour",
+      "DESCRIPTION": "",
+      "RED": {
+        "NAME": "Red (0..255)"
+      },
+      "GREEN": {
+        "NAME": "Green (0..255)"
+      },
+      "BLUE": {
+        "NAME": "Blue (0..255)"
+      },
+      "WHITE": {
+        "NAME": "White (0..255)"
+      },
+      "HEX": {
+        "NAME": "Colour (#RRGGBBWW)"
+      }
+    },
+    "DPT255": {
+      "NAME": "255.001 geographical location",
+      "DESCRIPTION": "",
+      "LONGITUDE": {
+        "NAME": "Longitude (°)"
+      },
+      "LATITUDE": {
+        "NAME": "Latitude (°)"
+      }
+    },
+    "DPT275": {
+      "NAME": "275.* room temperature setpoints (4x)",
+      "DESCRIPTION": "",
+      "COMFORT": {
+        "NAME": "Comfort"
+      },
+      "STANDBY": {
+        "NAME": "Standby"
+      },
+      "ECONOMY": {
+        "NAME": "Economy"
+      },
+      "PROTECTION": {
+        "NAME": "Building protection"
+      },
+      "100": {
+        "NAME": "room temperature setpoints"
+      },
+      "101": {
+        "NAME": "room temperature setpoint shifts"
+      }
+    },
+    "DPT225": {
+      "001": {
+        "NAME": "225.001 scaling speed",
+        "DESCRIPTION": "",
+        "TIME": {
+          "NAME": "Time period (ms, 100 ms steps)"
+        },
+        "PERCENT": {
+          "NAME": "Value (%)"
+        }
+      },
+      "002": {
+        "NAME": "225.002 scaling step time",
+        "DESCRIPTION": "",
+        "TIME": {
+          "NAME": "Time period (ms)"
+        },
+        "PERCENT": {
+          "NAME": "Value (%)"
+        }
       }
     }
   }

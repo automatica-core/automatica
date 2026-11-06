@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Automatica.Core.Base.Templates;
 using Automatica.Core.EF.Models;
+using P3.Driver.Knx.DriverFactory.Dpt;
 using P3.Driver.Knx.DriverFactory.P3.Knx.Core.Driver;
 using NodeDataType = Automatica.Core.Base.Templates.NodeDataType;
 
@@ -155,6 +157,46 @@ namespace P3.Driver.Knx.DriverFactory.Factories
 
 
             AddDpt16Nodes(factory, KnxInterface3LevelMiddle);
+
+            foreach (var entry in KnxDptCatalog.Entries)
+            {
+                AddCatalogDptNodes(factory, KnxInterface3LevelMiddle, entry);
+            }
+        }
+
+        private void AddCatalogDptNodes(INodeTemplateFactory factory, Guid parentNode, KnxDptCatalogEntry entry)
+        {
+            if (entry.IsComposite)
+            {
+                factory.CreateInterfaceType(entry.InterfaceGuid, entry.NameKey, entry.DescriptionKey, entry.Children.Count,
+                    int.MaxValue, false);
+
+                factory.CreateNodeTemplate(entry.TemplateGuid, entry.NameKey, entry.DescriptionKey, entry.Key,
+                    parentNode, entry.InterfaceGuid, false, true, false, true, false,
+                    NodeDataType.NoAttribute, int.MaxValue, false);
+
+                var codec = entry.CreateCodec(entry.DefaultSubType);
+                foreach (var child in entry.Children)
+                {
+                    var dataType = codec.Values.Single(a => a.Key == child.FieldKey).DataType;
+                    factory.CreateNodeTemplate(child.Guid, child.NameKey(entry), "", child.TemplateKey(entry),
+                        entry.InterfaceGuid, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), true, true, false, true, false,
+                        dataType, 1, false);
+                }
+            }
+            else
+            {
+                factory.CreateNodeTemplate(entry.TemplateGuid, entry.NameKey, entry.DescriptionKey, entry.Key,
+                    parentNode, GuidTemplateTypeAttribute.GetFromEnum(InterfaceTypeEnum.Value), false, true, false, true, false,
+                    entry.DataType, int.MaxValue, false);
+            }
+
+            InitDptType(entry.MainType, entry.TemplateGuid, factory);
+
+            if (entry.SubTypeEnum != null)
+            {
+                InitDptSubType(entry.SubTypeEnum, entry.DefaultSubType, entry.TemplateGuid, factory);
+            }
         }
 
 
