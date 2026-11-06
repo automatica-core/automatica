@@ -72,9 +72,15 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
                     ScaleMin = 0;
                 }
 
-                if (UseRange && UseScale)
+                // a degenerate range/scale (e.g. A5-12 MR: scale 0..0, real scaling depends on DIV/DT)
+                // would map every value to ScaleMin - treat it as "no scale" and dispatch the raw value
+                if (UseRange && UseScale && RangeMax != RangeMin && !ScaleMax.Equals(ScaleMin))
                 {
                     Multiplier = (ScaleMax - ScaleMin) / (RangeMax - RangeMin);
+                }
+                else
+                {
+                    UseScale = false;
                 }
             }
             catch (PropertyNotFoundException)
@@ -103,67 +109,44 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             return base.Init(token);
         }
 
+        /// <summary>
+        /// Reads <see cref="Length"/> bits starting at <see cref="BitOffs"/>, EEP bit numbering:
+        /// the user data is one big-endian bit string, offset 0 is the MSB of the first data byte.
+        /// </summary>
+        /// <returns>null if the field does not fit into the data</returns>
+        internal static long? ExtractBits(ReadOnlySpan<byte> data, int bitOffset, int length)
+        {
+            if (length < 1 || length > 32 || bitOffset < 0 || bitOffset + length > data.Length * 8)
+            {
+                return null;
+            }
+
+            long value = 0;
+            for (var i = 0; i < length; i++)
+            {
+                var bit = bitOffset + i;
+                var bitValue = (data[bit >> 3] >> (7 - (bit & 7))) & 1;
+                value = (value << 1) | (long)bitValue;
+            }
+
+            return value;
+        }
+
         public object GetValueGeneric(ReadOnlyMemory<byte> data)
         {
-            var dif = BitOffs / 8;
-            var mod = BitOffs % Length;
+            var raw = ExtractBits(data.Span, BitOffs, Length);
 
-            var size = Length / 8;
-
-            int index;
-            if (dif > 0)
+            if (!raw.HasValue)
             {
-                index = BitOffs - (dif * 8);
-                index = Math.Abs(index - 7);
-            }
-            else
-            {
-                index = Math.Abs(BitOffs - 7);
+                return null;
             }
 
-            if (!data.IsEmpty && data.Length >= 1)
+            if (Length == 1)
             {
-                if (mod == 0 && size == 1) // full byte
-                {
-                    var b = data.Span[dif];
-                    return ScaleMinMax(b);
-                }
-                if (Length > 8 && Length < 14) //variable byte
-                {
-                    return GetVariableByteLengthValue(index, data.Span[dif + 1], data.Span[dif]);
-                }
-
-                if (Length < 8)
-                {
-                    var bitMask = (byte)0x0;
-                    for (var i = 0; i < Length; i++)
-                    {
-                        var bitIndex = index - i;
-                        bitMask = Automatica.Core.Driver.Utility.Utils.SetBitsTo1(bitMask, (byte)(bitIndex));
-                    }
-
-                    if (BitOffs < 8 && Length > 1)
-                    {
-                        bitMask <<= BitOffs;
-                    }
-
-                    var ret = (data.Span[dif] & bitMask) >> (index - Length + 1);
-                    if (Length == 1)
-                    {
-                        return ret >= 1;
-                    }
-
-                    if (BitOffs < 8 && Length > 1)
-                    {
-                        return ret >> BitOffs;
-                    }
-
-                    return ret;
-                }
-
+                return raw.Value == 1;
             }
 
-            return null;
+            return ScaleMinMax(raw.Value);
         }
 
         public object GetValueGeneric(RadioErp1Packet telegram)
@@ -171,27 +154,12 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             return GetValueGeneric(telegram.Data);
         }
 
-        internal object GetVariableByteLengthValue(int index, byte b1, byte b2)
+        public object ScaleMinMax(long value)
         {
-            var bitMask = (byte)0x0;
-            var b2Len = Length - 8;
-
-            for (var i = 0; i < b2Len; i++)
+            if (!UseScale || !UseRange)
             {
-                var bitIndex = index - i;
-                bitMask = Automatica.Core.Driver.Utility.Utils.SetBitsTo1(bitMask, (byte)(bitIndex));
-            }
-
-
-            var val = b1 + ((b2 & bitMask) << 8);
-            return ScaleMinMax(val);
-        }
-
-        public object ScaleMinMax(int value)
-        {
-            if (!UseScale && !UseRange)
-            {
-                return value;
+                // keep int for everything that fits, the enum/bit nodes match on int
+                return value <= int.MaxValue ? (object)(int)value : value;
             }
             return Multiplier * (value - RangeMin) + ScaleMin;
         }

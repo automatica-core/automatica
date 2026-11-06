@@ -33,7 +33,23 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver
             if (telegram.SenderIdString == _serial)
             {
                 DriverContext.Logger.LogDebug($"Telegram received for {_serial}");
-                base.TelegramReceived(telegram);
+
+                // 1BS/4BS teach-in telegrams (LRN bit cleared) carry EEP/manufacturer info instead of values,
+                // so only the LRN node gets them. RPS has no LRN bit and is always decoded.
+                var isTeachIn = RadioErp1Packet.IsLrnTeachIn(telegram);
+                if (isTeachIn)
+                {
+                    DriverContext.Logger.LogDebug($"Teach-in telegram received for {_serial}, values are not dispatched");
+                }
+
+                foreach (var child in ChildrenT)
+                {
+                    if (isTeachIn && !(child is EnOceanLrnBit))
+                    {
+                        continue;
+                    }
+                    child.TelegramReceived(telegram);
+                }
             }
         }
 

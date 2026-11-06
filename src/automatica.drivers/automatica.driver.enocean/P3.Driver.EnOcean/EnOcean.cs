@@ -13,6 +13,15 @@ namespace P3.Driver.EnOcean
             return _crc8table[crc ^ data];
         }
 
+        public static byte ComputeCrc8(System.ReadOnlySpan<byte> data, byte crc = 0)
+        {
+            foreach (var b in data)
+            {
+                crc = Crc8(crc, b);
+            }
+            return crc;
+        }
+
         public static ushort Crc16(ushort crc, ushort data)
         {
             return _crc16table[crc ^ data];

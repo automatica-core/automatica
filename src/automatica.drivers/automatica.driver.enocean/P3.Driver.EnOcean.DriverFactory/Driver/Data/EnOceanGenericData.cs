@@ -25,7 +25,7 @@ namespace P3.Driver.EnOcean.DriverFactory.Driver.Data
                     {
                         DispatchRead(false);
                     }
-                    else if (dataInt >= EnumSecondMin && dataInt >= EnumSecondMax)
+                    else if (dataInt >= EnumSecondMin && dataInt <= EnumSecondMax)
                     {
                         DispatchRead(true);
                     }

@@ -86,6 +86,26 @@ namespace P3.Driver.EnOcean.Data.Tests
         }
 
         [Fact]
+        public void TestA5_TeachIn_LrnBitCleared()
+        {
+            // A5-02-05 teach-in: DB0 = 0x80 (LRN type = 1, LRN bit DB0.3 = 0)
+            var telegram = CreatePacket("55000A0701EBA5082846800181B7440001FFFFFFFF460069");
+
+            Assert.True(RadioErp1Packet.IsTechIn(telegram));
+            Assert.True(RadioErp1Packet.IsLrnTeachIn(telegram));
+        }
+
+        [Fact]
+        public void TestA5_Data_LrnBitSet()
+        {
+            // DB0 = 0x0E: LRN bit set -> data telegram (the old 0x16 mask flagged this as teach-in)
+            var telegram = CreatePacket("55000A0701EBA50000000E0181B7440001FFFFFFFF46008B");
+
+            Assert.False(RadioErp1Packet.IsTechIn(telegram));
+            Assert.False(RadioErp1Packet.IsLrnTeachIn(telegram));
+        }
+
+        [Fact]
         public async Task TestA5_11_01_DataP2()
         {
             await Dispatcher.ClearValues();
@@ -251,7 +271,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             await Dispatcher.ClearValues();
             var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_05_5_TMP_Guid);
 
-            var telegram = CreatePacket("55000A0701EBA5000000000181B7440001FFFFFFFF2D0075");
+            var telegram = CreatePacket("55000A0701EBA5000000080181B7440001FFFFFFFF4600FA");
             driver.TelegramReceived(telegram);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
@@ -302,7 +322,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             await Dispatcher.ClearValues();
             var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_20_24_TMP_Guid);
 
-            var telegram = CreatePacket("55000A0701EBA5000000000181B7440001FFFFFFFF2D0075");
+            var telegram = CreatePacket("55000A0701EBA5000000080181B7440001FFFFFFFF4600FA");
             driver.TelegramReceived(telegram);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
@@ -355,7 +375,7 @@ namespace P3.Driver.EnOcean.Data.Tests
             await Dispatcher.ClearValues();
             var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_03_3_TMP_Guid);
 
-            var telegram = CreatePacket("55000A0701EBA5000000000181B7440001FFFFFFFF2D0075");
+            var telegram = CreatePacket("55000A0701EBA5000000080181B7440001FFFFFFFF4600FA");
             driver.TelegramReceived(telegram);
 
             var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
@@ -400,6 +420,113 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
             Assert.Equal(81.2d, Math.Round((double)values.First().Value.Value, 1));
+        }
+
+        [Fact]
+        public async Task TestA5_02_05_TeachIn_NotDispatched()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_05_5_TMP_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA5082846800181B7440001FFFFFFFF460069");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Empty(values);
+        }
+
+        [Fact]
+        public async Task TestA5_02_05_TeachIn_LrnNodeStillDispatched()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_02_05_5_LRNB_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA5082846800181B7440001FFFFFFFF460069");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.True((bool)values.First().Value.Value);
+        }
+
+        [Fact]
+        public async Task TestA5_07_03_ILL_10Bit()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_07_03_3_ILL_Guid);
+
+            // ILL offset 8 length 10: DB2 = 0xA9, DB1 = 0x40 -> 10 1010 0101 = 677 lx
+            var telegram = CreatePacket("55000A0701EBA500A940080181B7440001FFFFFFFF4600D0");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(677d, Math.Round(Convert.ToDouble(values.First().Value.Value), 1));
+        }
+
+        [Fact]
+        public async Task TestA5_07_01_PIRS_On()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_07_01_1_PIRS_Guid);
+
+            // PIRS 200 is in the 128..255 "motion detected" range
+            var telegram = CreatePacket("55000A0701EBA50000C8080181B7440001FFFFFFFF4600F1");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.True((bool)values.First().Value.Value);
+        }
+
+        [Fact]
+        public async Task TestA5_12_01_MR_24Bit()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_12_01_2_MR_Guid);
+
+            // MR = DB3..DB1 = 0x012345, DB0 = 0x0E (TI 0, LRN 1, DT 1, DIV 2)
+            var telegram = CreatePacket("55000A0701EBA50123450E0181B7440001FFFFFFFF460004");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(0x012345, Convert.ToInt32(values.First().Value.Value));
+        }
+
+        [Fact]
+        public async Task TestA5_12_01_DIV()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_12_01_2_DIV_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA50123450E0181B7440001FFFFFFFF460004");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(2, values.First().Value.Value);
+        }
+
+        [Fact]
+        public async Task TestA5_12_01_DT()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForA5("0181B744", EnOceanRorgA5Data.DataFieldA5_12_01_2_DT_Guid);
+
+            var telegram = CreatePacket("55000A0701EBA50123450E0181B7440001FFFFFFFF460004");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.True((bool)values.First().Value.Value);
         }
     }
 }

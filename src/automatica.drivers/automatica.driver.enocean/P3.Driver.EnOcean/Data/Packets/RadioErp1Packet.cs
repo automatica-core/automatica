@@ -12,6 +12,7 @@ namespace P3.Driver.EnOcean.Data.Packets
         OneBs = 0xD5,
         FourBs = 0xA5,
         Vld = 0xD2,
+        Ute = 0xD4,
         Msc = 0xD1,
         Adt = 0xA6,
         SmLrnReq = 0xC6,
@@ -55,7 +56,7 @@ namespace P3.Driver.EnOcean.Data.Packets
             Packet = packet;
             Rorg = (Rorg) packet.Data.Span[0];
 
-            var dataLength = GetRorgDataSize(Rorg);
+            var dataLength = GetRorgDataSize(packet.Data.Length);
             
             Data = packet.Data.Slice(1, dataLength);
 
@@ -65,32 +66,47 @@ namespace P3.Driver.EnOcean.Data.Packets
             Logger.Logger.Instance.LogDebug($"RadioERP1 Packet {Rorg} from {Utils.ByteArrayToString(SenderId)}  Data: {Automatica.Core.Driver.Utility.Utils.ByteArrayToString(Data)}");
         }
 
-        private int GetRorgDataSize(Rorg rorg)
+        /// <summary>
+        /// ERP1 payload layout is RORG (1) + user data (n) + sender id (4) + status (1), so the user data length
+        /// follows from the packet length for every RORG (RPS/1BS = 1, 4BS = 4, VLD/UTE/MSC = variable).
+        /// </summary>
+        private static int GetRorgDataSize(int packetDataLength)
         {
-            switch (rorg)
+            const int overhead = 1 + 4 + 1;
+            if (packetDataLength < overhead)
             {
-                case Rorg.OneBs:
-                case Rorg.Rps:
-                    return 1;
-                case Rorg.FourBs:
-                    return 4;
-
-
-                default:
-                    return 0;
+                throw new ArgumentException($"RadioERP1 packet too short ({packetDataLength} bytes)");
             }
+
+            return packetDataLength - overhead;
         }
 
+        /// <summary>
+        /// True if the telegram can be used to teach in a device. RPS has no LRN bit, so every RPS telegram counts.
+        /// </summary>
         public static bool IsTechIn(RadioErp1Packet radio)
         {
+            if (radio.Rorg == Rorg.Rps)
+            {
+                return true;
+            }
+
+            return IsLrnTeachIn(radio);
+        }
+
+        /// <summary>
+        /// True only for 1BS/4BS telegrams whose LRN bit (DB0.3) is cleared, i.e. real teach-in telegrams
+        /// whose data bytes carry no values.
+        /// </summary>
+        public static bool IsLrnTeachIn(RadioErp1Packet radio)
+        {
+            var data = radio.Data.Span;
             switch (radio.Rorg)
             {
-                case Rorg.Rps:
-                    return true;
                 case Rorg.OneBs:
-                    return !Utils.IsBitSet(radio.Data.ToArray()[0], 3);
+                    return data.Length >= 1 && !Utils.IsBitSet(data[0], 3);
                 case Rorg.FourBs:
-                    return (radio.Data.ToArray()[3] & 0x16) > 0;
+                    return data.Length >= 4 && !Utils.IsBitSet(data[3], 3);
             }
 
             return false;

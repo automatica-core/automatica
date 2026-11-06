@@ -45,11 +45,16 @@ namespace P3.Driver.EnOcean
 
                 var readIdBase = await SendTelegram(new CommonCommandPacket(CommonCommands.CO_RD_IDBASE));
 
-                if (readIdBase != null && readIdBase.Data.Length >= 5)
+                // the stream returns whatever frame arrives next, only a RESPONSE with RET_OK carries the base id
+                if (readIdBase != null && readIdBase.PacketType == EnOcean.PacketType.Response &&
+                    readIdBase.Data.Length >= 5 && readIdBase.Data.Span[0] == (byte)ReturnCode.RetOk)
                 {
                     Logger.Logger.Instance.LogDebug($"Read {nameof(CommonCommands.CO_RD_IDBASE)}: {Utils.ByteArrayToString(readIdBase.Data)}");
                     _idBase = readIdBase.Data.Slice(1, 4);
-
+                }
+                else
+                {
+                    Logger.Logger.Instance.LogWarning($"Could not read {nameof(CommonCommands.CO_RD_IDBASE)}, got {(readIdBase == null ? "no answer" : $"{readIdBase.PacketType} {Utils.ByteArrayToString(readIdBase.Data)}")} - id base stays empty");
                 }
 
                 return true;

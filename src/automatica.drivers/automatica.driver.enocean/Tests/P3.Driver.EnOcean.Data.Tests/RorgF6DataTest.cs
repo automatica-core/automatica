@@ -87,7 +87,8 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(1, values.First().Value.Value);
+            // R2 = bits 4-6 of 0x30 -> 0 (SA=0, no second action)
+            Assert.Equal(0, values.First().Value.Value);
         }
 
         [Fact]
@@ -178,7 +179,8 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(3, values.First().Value.Value);
+            // R2 = bits 4-6 of 0x70 -> 0 (SA=0, no second action)
+            Assert.Equal(0, values.First().Value.Value);
         }
 
         [Fact]
@@ -216,10 +218,44 @@ namespace P3.Driver.EnOcean.Data.Tests
 
             Assert.Equal(1, values.Count);
 
-            Assert.Equal(2, values.First().Value.Value);
+            // R2 = bits 4-6 of 0x50 -> 0 (SA=0, no second action)
+            Assert.Equal(0, values.First().Value.Value);
         }
 
 
+
+        [Fact]
+        public async Task TestRockerSwitch_TwoButtons_R1()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForF6("FEF7D96E",
+                EnOceanRorgF6Data.DataFieldF6_02_01_1_R1_Guid);
+
+            // 0x37 = 001 1 011 1 -> R1=1 (A0), EB=1, R2=3 (B0), SA=1
+            var telegram = CreatePacket("55000707017AF637FEF7D96E3001FFFFFFFF4600DC");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(1, values.First().Value.Value);
+        }
+
+        [Fact]
+        public async Task TestRockerSwitch_TwoButtons_R2()
+        {
+            await Dispatcher.ClearValues();
+            var driver = await CreateDriverForF6("FEF7D96E",
+                EnOceanRorgF6Data.DataFieldF6_02_01_1_R2_Guid);
+
+            var telegram = CreatePacket("55000707017AF637FEF7D96E3001FFFFFFFF4600DC");
+            driver.TelegramReceived(telegram);
+
+            var values = Dispatcher.GetValues(DispatchableType.NodeInstance);
+
+            Assert.Equal(1, values.Count);
+            Assert.Equal(3, values.First().Value.Value);
+        }
 
         [Fact]
         public async Task TestWindowHandle_00_0()

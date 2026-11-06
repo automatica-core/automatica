@@ -67,26 +67,26 @@ namespace P3.Driver.EnOcean.Serial
             {
                 var packet = await ReadFrameInternal();
 
-                if (packet == null)
+                if (packet != null)
                 {
-                    return;
-                }
-                try
-                {
-                    var telegram = EnOceanTelegramFactory.FromPacket(packet);
-                    TelegramReceived?.Invoke(this, new PacketReceivedEventArgs(telegram));
-                }
-                catch (NotImplementedException)
-                {
-                    Logger.Logger.Instance.LogHexIn(packet.RawData);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Logger.Instance.LogError(ex, $"Could not parse telegram {ex}");
-                    Logger.Logger.Instance.LogHexIn(packet.RawData);
+                    try
+                    {
+                        var telegram = EnOceanTelegramFactory.FromPacket(packet);
+                        TelegramReceived?.Invoke(this, new PacketReceivedEventArgs(telegram));
+                    }
+                    catch (NotImplementedException)
+                    {
+                        Logger.Logger.Instance.LogHexIn(packet.RawData);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Logger.Instance.LogError(ex, $"Could not parse telegram {ex}");
+                        Logger.Logger.Instance.LogHexIn(packet.RawData);
+                    }
                 }
 
-                if (_stream.BytesToRead > 0)
+                // also after a dropped frame (crc error), the next frame may already be in the buffer
+                if (_stream.IsOpen && _stream.BytesToRead > 0)
                 {
                     _stream_DataReceived(sender, e);
                 }
@@ -133,62 +133,91 @@ namespace P3.Driver.EnOcean.Serial
             return null;
         }
 
+        private byte ReadByteInternal()
+        {
+            return TryTakePending(out var b) ? b : (byte)_stream.ReadByte();
+        }
+
+        private int ReadInternal(byte[] buffer)
+        {
+            var read = TakePending(buffer);
+            // a frame can arrive in several chunks, keep reading until it is complete
+            while (read < buffer.Length)
+            {
+                var chunk = _stream.Read(buffer, read, buffer.Length - read);
+                if (chunk <= 0)
+                {
+                    break;
+                }
+                read += chunk;
+            }
+            return read;
+        }
+
         private async Task<EnOceanPacket> ReadFrameInternal()
         {
             try
             {
-                var firstChar = (byte)_stream.ReadByte();
-                await Task.Delay(100);
+                var firstChar = ReadByteInternal();
 
                 if (firstChar == EnOcean.SyncByte)
                 {
-                    var dataLen = new byte[2];
-                    var dataLenRead = _stream.Read(dataLen, 0, 2);
-
-                    if (dataLenRead == 2)
+                    if (PendingCount == 0)
                     {
-                        var dataLenShort = BitConverter.ToUInt16(dataLen.Reverse().ToArray(), 0);
+                        await Task.Delay(100);
+                    }
 
-                        var optLen = (byte) _stream.ReadByte();
-                        var packetType = (byte) _stream.ReadByte();
-                        var crc8Header = (byte) _stream.ReadByte();
+                    var header = new byte[6];
+                    header[0] = firstChar;
+                    for (var i = 1; i < header.Length; i++)
+                    {
+                        header[i] = ReadByteInternal();
+                    }
 
-                        var header = new byte[] {firstChar, dataLen[0], dataLen[1], optLen, packetType, crc8Header};
+                    if (!CheckHeaderCrc(header))
+                    {
+                        // the header bytes were queued again, look for the next sync byte in them
+                        return await ReadFrameInternal();
+                    }
 
-                        var data = new byte[dataLenShort];
-                        var read = _stream.Read(data, 0, dataLenShort);
-                        Memory<byte> dataMemory = new Memory<byte>(data);
+                    var dataLenShort = (ushort)((header[1] << 8) | header[2]);
+                    var optLen = header[3];
 
-                        if (read == dataLenShort)
+                    var data = new byte[dataLenShort];
+                    var read = ReadInternal(data);
+                    Memory<byte> dataMemory = new Memory<byte>(data);
+
+                    if (read == dataLenShort)
+                    {
+                        var optData = new byte[optLen];
+
+                        read = ReadInternal(optData);
+                        Memory<byte> optMemory = new Memory<byte>(optData);
+
+                        if (read == optLen)
                         {
-                            var optData = new byte[optLen];
+                            var crcData = ReadByteInternal();
 
-                            read = _stream.Read(optData, 0, optLen);
-                            Memory<byte> optMemory = new Memory<byte>(optData);
-
-                            if (read == optLen)
+                            if (!CheckDataCrc(header, data, optData, crcData))
                             {
-                                var crcData = (byte) _stream.ReadByte();
-                                var packet = EnOceanPacket.Parse(new Memory<byte>(header), dataMemory, optMemory, crcData);
-
-                                Logger.Logger.Instance.LogHexIn(packet.RawData);
-                                return packet;
+                                return null;
                             }
-                        }
-                        else
-                        {
-                            Logger.Logger.Instance.LogDebug($"In buffer length to short {read}/{dataLenShort}");
+
+                            var packet = EnOceanPacket.Parse(new Memory<byte>(header), dataMemory, optMemory, crcData);
+
+                            Logger.Logger.Instance.LogHexIn(packet.RawData);
+                            return packet;
                         }
                     }
                     else
                     {
-                        Logger.Logger.Instance.LogDebug($"Could not read length of package");
+                        Logger.Logger.Instance.LogDebug($"In buffer length to short {read}/{dataLenShort}");
                     }
                 }
                 else
                 {
                     Logger.Logger.Instance.LogDebug($"Invalid sync byte received {firstChar}");
-                    if (_stream.BytesToRead > 0)
+                    if (PendingCount > 0 || _stream.BytesToRead > 0)
                     {
                         return await ReadFrameInternal();
                     }
