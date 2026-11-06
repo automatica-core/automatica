@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
+import { Subscription } from "rxjs";
 import { L10nTranslationService } from "angular-l10n";
 import { DxMenuComponent } from "devextreme-angular";
 import JSZip from "jszip";
@@ -24,7 +25,9 @@ import { UpdateScope } from "src/app/base/model/property-instance";
     standalone: false
 })
 
-export class ConfigMenuComponent implements OnInit {
+export class ConfigMenuComponent implements OnInit, OnDestroy {
+
+  private translateChangedSub: Subscription;
 
   @ViewChild("menu")
   menu: DxMenuComponent;
@@ -179,7 +182,7 @@ export class ConfigMenuComponent implements OnInit {
     // this.menuItems.push(this.menuDelete);
     this.menuItems.push(this.menuReload);
 
-    this.translate.onChange().subscribe({
+    this.translateChangedSub = this.translate.onChange().subscribe({
       next: () => {
         this.menuItemNew.label = translate.translate("COMMON.NEW");
         this.export.label = translate.translate("COMMON.EXPORT");
@@ -326,6 +329,10 @@ export class ConfigMenuComponent implements OnInit {
     saveAs(blob, "export.zip");
   }
 
+
+  ngOnDestroy() {
+    this.translateChangedSub?.unsubscribe();
+  }
 
   ngOnInit() {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { L10nTranslationService } from "angular-l10n";
 import { Guid } from "src/app/base/utils/Guid";
 import { NotifyService } from "src/app/services/notify.service";
@@ -15,7 +15,7 @@ import { SatelliteService } from "src/app/services/satellite.services";
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class SatelliteConfigComponent extends BaseComponent implements OnInit {
+export class SatelliteConfigComponent extends BaseComponent implements OnInit, OnDestroy {
   satellites: Satellite[] = [];
   selectedSatellite: Satellite = void 0;
 
@@ -50,16 +50,18 @@ export class SatelliteConfigComponent extends BaseComponent implements OnInit {
     this.menuItems.push(this.menuSave);
     this.menuItems.push(this.menuReload);
 
-    this.translate.onChange().subscribe({
-      next: () => {
-        this.menuSave.label = translate.translate("COMMON.SAVE");
-      }
+    this.registerObservable(this.translate.onChange(), () => {
+      this.menuSave.label = translate.translate("COMMON.SAVE");
     });
 
   }
 
   async ngOnInit() {
     this.load();
+  }
+
+  ngOnDestroy() {
+    super.baseOnDestroy();
   }
 
   async load() {

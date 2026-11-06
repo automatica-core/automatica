@@ -289,13 +289,11 @@ export class PluginsComponent extends BaseComponent implements OnInit, OnDestroy
   async ngOnInit() {
     this.appService.isLoading = true;
     this.hubConnectionService.init();
-    this.translationService.onChange().subscribe({
-      next: () => {
-        this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
-        this.menuInstall.label = this.translationService.translate("PLUGINS.INSTALL_ALL");
-        this.menuInstallUpdate.label = this.translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
-        this.menuReload.label = this.translationService.translate("PLUGINS.RELOAD");
-      }
+    this.registerObservable(this.translationService.onChange(), () => {
+      this.menuUpdate.label = this.translationService.translate("PLUGINS.UPDATE_ALL");
+      this.menuInstall.label = this.translationService.translate("PLUGINS.INSTALL_ALL");
+      this.menuInstallUpdate.label = this.translationService.translate("PLUGINS.INSTALL_UPDATE_ALL");
+      this.menuReload.label = this.translationService.translate("PLUGINS.RELOAD");
     });
 
     this.menuItems.push(this.menuReload);

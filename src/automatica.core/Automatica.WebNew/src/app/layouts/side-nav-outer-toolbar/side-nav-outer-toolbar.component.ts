@@ -35,6 +35,7 @@ export class SideNavOuterToolbarComponent implements OnInit, OnDestroy {
     shaderEnabled = true;
 
     routerSub: Subscription;
+    breakpointSub: Subscription;
 
     constructor(private breakpointObserver: BreakpointObserver, private router: Router, private activatedRoute: ActivatedRoute) { }
 
@@ -47,7 +48,7 @@ export class SideNavOuterToolbarComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.breakpointObserver
+        this.breakpointSub = this.breakpointObserver
             .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
             .subscribe(() => this.updateDrawer());
 
@@ -56,6 +57,7 @@ export class SideNavOuterToolbarComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.routerSub.unsubscribe();
+        this.breakpointSub?.unsubscribe();
     }
 
     updateDrawer() {

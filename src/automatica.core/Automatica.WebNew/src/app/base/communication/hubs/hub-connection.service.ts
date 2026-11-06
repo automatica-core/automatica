@@ -9,6 +9,7 @@ import { HubConnectionState } from "@microsoft/signalr";
 export class HubConnectionService {
 
 private _isInitializing = false;
+private _retryTimer: any;
 
     constructor(private dataHubService: DataHubService, private telegramMonitorService: TelegramHubService, private updateHubService: UpdateHubService, private loggingHubService: LogHubService) {
 
@@ -21,23 +22,33 @@ private _isInitializing = false;
             return;
         }
         this._isInitializing = true;
-        
-        if (this.dataHubService?.Connection?.state !== HubConnectionState.Connected) {
-            await this.dataHubService.start();
+        clearTimeout(this._retryTimer);
+
+        try {
+            if (this.dataHubService?.Connection?.state !== HubConnectionState.Connected) {
+                await this.dataHubService.start();
+            }
+            if (this.telegramMonitorService?.Connection?.state !== HubConnectionState.Connected) {
+                await this.telegramMonitorService.start();
+            }
+            if (this.updateHubService?.Connection?.state !== HubConnectionState.Connected) {
+                await this.updateHubService.start();
+            }
+            if (this.loggingHubService?.Connection?.state !== HubConnectionState.Connected) {
+                await this.loggingHubService.start();
+            }
+        } catch (error) {
+            console.error(error);
+            // a failed first start never raises onclose, so retry from here
+            this._retryTimer = setTimeout(() => this.init(), this.dataHubService.reconnectTime);
+        } finally {
+            this._isInitializing = false;
         }
-        if (this.telegramMonitorService?.Connection?.state !== HubConnectionState.Connected) {
-            await this.telegramMonitorService.start();
-        }
-        if (this.updateHubService?.Connection?.state !== HubConnectionState.Connected) {
-            await this.updateHubService.start();
-        }
-        if (this.loggingHubService?.Connection?.state !== HubConnectionState.Connected) {
-            await this.loggingHubService.start();
-        }
-        this._isInitializing = false;
     }
 
     async stop() {
+        clearTimeout(this._retryTimer);
+        this._retryTimer = undefined;
         await this.dataHubService.stop();
         await this.telegramMonitorService.stop();
         await this.updateHubService.stop();

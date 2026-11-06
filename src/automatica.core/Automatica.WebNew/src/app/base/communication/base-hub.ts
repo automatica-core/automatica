@@ -32,13 +32,15 @@ export class BaseHub {
     private subscriptions: any[] = [];
     private connection: signalR.HubConnection;
     private started = false;
+    private stopRequested = false;
+    private reconnectTimer: any;
 
-    
+
     private _id : string = uuidv4();
     public get Id() : string {
         return this._id;
     }
-    
+
 
     public connectionStateChanged = new EventEmitter<any>();
 
@@ -73,31 +75,60 @@ export class BaseHub {
             return;
         }
 
-        this.connection = new signalR.HubConnectionBuilder()
+        if (this.connection) {
+            // never leave an orphaned connection behind whose handlers keep emitting
+            const old = this.connection;
+            this.connection = null;
+            old.stop().catch(() => { });
+        }
+
+        const connection = new signalR.HubConnectionBuilder()
             .withUrl(BaseServiceHelper.getSignalRBaseUrl() + "/signalr/" + this.hubName, { accessTokenFactory: () => localStorage.getItem("jwt") })
             .configureLogging(signalR.LogLevel.Warning)
             .build();
+        this.connection = connection;
 
         for (const method of methods) {
-            this.connection.on(method, (...args: any[]) => this.methodCalled(method, args));
+            connection.on(method, (...args: any[]) => this.methodCalled(method, args));
         }
 
-        this.connection.onclose((error) => {
-            setTimeout(async () => {
-                await this.reconnect();
-            }, this.reconnectTime);
+        connection.onclose((error) => {
+            if (connection !== this.connection) {
+                return;
+            }
+            this.setConnectedState(false);
+            if (!this.stopRequested) {
+                this.scheduleReconnect();
+            }
         });
+    }
+
+    private scheduleReconnect() {
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = setTimeout(async () => {
+            this.reconnectTimer = undefined;
+            await this.reconnect();
+        }, this.reconnectTime);
+    }
+
+    /**
+     * Called after the connection was (re)established, before cached requests are replayed.
+     */
+    protected onConnected(): Promise<void> {
+        return Promise.resolve();
     }
 
     public async reconnect() {
         console.log("signalr connection lost, try to reinit");
 
+        if (this.stopRequested || !this.connection) {
+            return;
+        }
+
         if (this.connection.state !== signalR.HubConnectionState.Connected) {
             this.setConnectedState(false);
             await this.start().catch(() => {
-                setTimeout(async () => {
-                    await this.reconnect();
-                }, this.reconnectTime);
+                this.scheduleReconnect();
             });
         }
     }
@@ -109,21 +140,27 @@ export class BaseHub {
 
         console.log(`start ${this.Id} ${this.hubName}`);
 
-        this.init();
+        this.stopRequested = false;
 
-        if (!this.started) {
+        if (!this.connection) {
+            this.init();
+        }
 
-            try {
-                await this.connection.start();
+        if (this.connection && this.connection.state === signalR.HubConnectionState.Disconnected) {
 
-                this.setConnectedState(true);
+            await this.connection.start();
 
-                for (const cached of this._cachedRequests) {
+            this.setConnectedState(true);
+
+            await this.onConnected();
+
+            const pending = this._cachedRequests.splice(0);
+            for (const cached of pending) {
+                try {
                     await cached.invoke(cached.methodName, cached.params);
+                } catch (error) {
+                    console.error(error);
                 }
-
-            } catch (error) {
-                throw error;
             }
             return true;
         }
@@ -131,11 +168,20 @@ export class BaseHub {
     }
 
     public async stop() {
-        if (this.started) {
+        this.stopRequested = true;
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = undefined;
+        this._cachedRequests = [];
+
+        if (this.connection && this.connection.state !== signalR.HubConnectionState.Disconnected) {
             await this.connection.stop();
-            this.unregisterAll();
-            this.started = false;
         }
+        this.unregisterAll();
+        this.setConnectedState(false);
+    }
+
+    protected get isOnline() {
+        return this.started && this.connection?.state === signalR.HubConnectionState.Connected;
     }
 
     protected registerEvent(event: EventEmitter<any>, callback: (any)) {
@@ -152,7 +198,7 @@ export class BaseHub {
 
     async callHubProxyWithParam(methodName: string, param: any): Promise<any> {
 
-        if (!this.started) {
+        if (!this.isOnline) {
             this._cachedRequests.push({
                 methodName: methodName,
                 params: param,
@@ -161,18 +207,24 @@ export class BaseHub {
             return;
         }
 
-        const proxy = this.connection;
+        return await this.connection.invoke(methodName, param);
+    }
 
-        if (proxy.state !== signalR.HubConnectionState.Connected) {
-            await proxy.start();
+    /**
+     * Sends immediately and never caches - for writes that must not be replayed after a reconnect.
+     */
+    async sendIfConnected(methodName: string, ...args: any[]): Promise<any> {
+        if (!this.isOnline) {
+            console.warn(`signalr ${this.hubName} not connected, dropping ${methodName}`);
+            return;
         }
 
-        return await proxy.invoke(methodName, param);
+        return await this.connection.send(methodName, ...args);
     }
 
     async callHubProxyWithParams(methodName: string, ...args: any[]): Promise<any> {
 
-        if (!this.started) {
+        if (!this.isOnline) {
             this._cachedRequests.push({
                 methodName: methodName,
                 params: args,
@@ -180,17 +232,13 @@ export class BaseHub {
             });
             return;
         }
-        const proxy = this.connection;
-        if (proxy.state !== signalR.HubConnectionState.Connected) {
-            await proxy.start();
-        }
 
-        return await proxy.send(methodName, ...args);
+        return await this.connection.send(methodName, ...args);
     }
 
     async callHubProxy(methodName: string): Promise<any> {
 
-        if (!this.started) {
+        if (!this.isOnline) {
             this._cachedRequests.push({
                 methodName: methodName,
                 invoke: async () => await this.callHubProxy(methodName)
@@ -198,12 +246,7 @@ export class BaseHub {
             return;
         }
 
-        const proxy = this.connection;
-        if (proxy.state !== signalR.HubConnectionState.Connected) {
-            await proxy.start();
-        }
-
-        return await proxy.send(methodName);
+        return await this.connection.send(methodName);
     }
 
     private methodCalled(methodName: string, args) {

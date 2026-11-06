@@ -12,6 +12,7 @@ export class BaseComponent {
     private subscriptions: Subscription[] = [];
     private intervals: NodeJS.Timeout[] = [];
     private lastState: boolean = false;
+    protected destroyed = false;
     // gutterH = `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");`;
 
 
@@ -88,10 +89,16 @@ export class BaseComponent {
     }
 
     protected baseOnDestroy() {
+        this.destroyed = true;
         this.unregisterAll();
     }
     protected registerEvent(event: EventEmitter<any>, callback: (any)) {
         const subscriber = event.subscribe((data) => callback(data), (error) => console.error(error));
+        if (this.destroyed) {
+            // registered after an await that outlived the component
+            subscriber.unsubscribe();
+            return subscriber;
+        }
         this.subscriptions.push(subscriber);
         return subscriber;
     }
@@ -104,7 +111,12 @@ export class BaseComponent {
 
     protected registerObservable(event: Observable<any>, callback: (any)) {
         const subscriber = event.subscribe((data) => callback(data));
+        if (this.destroyed) {
+            subscriber.unsubscribe();
+            return subscriber;
+        }
         this.subscriptions.push(subscriber);
+        return subscriber;
     }
 
     protected unregisterAll() {
@@ -120,6 +132,9 @@ export class BaseComponent {
     }
 
     protected registerInterval(callback: (any), intervalInMs) {
+        if (this.destroyed) {
+            return;
+        }
         const interval = setInterval(callback, intervalInMs);
         this.intervals.push(interval);
     }

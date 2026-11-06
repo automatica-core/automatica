@@ -39,7 +39,8 @@ export class DefaultComponent extends BaseMobileComponent implements OnInit, OnD
   async ngOnInit() {
     await super.baseOnInit();
 
-    await super.propertyChanged();
+    // baseOnInit already runs propertyChanged, wait for it instead of registering twice
+    await this.itemRegistration;
 
     if(this.nodeInstanceModel && this.nodeInstanceModel.Trending) {
       this.hyperSeriesValues = await this.hyperSeries.getAggregatedValues(AggregationType.Raw, this.nodeInstanceModel.Id, null, null, 10);

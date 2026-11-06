@@ -125,14 +125,16 @@ export class LogicShapes {
 
                 this.setUserData(element);
 
+                // subscriptions on the long-lived models, released by releaseModelSubscriptions (also used by the PortShape child)
+                this.modelSubscriptions = [];
 
                 this.headerLayout = new logic.LogicHeader();
                 this.headerLayout.setText(element.Name);
 
 
-                element.onNameChanged.subscribe((v) => {
+                this.modelSubscriptions.push(element.onNameChanged.subscribe((v) => {
                     this.headerLayout.setText(v);
-                });
+                }));
 
                 const translatedName = linkService.translate.translate(element.RuleTemplateName);
                 this.logicName = new logic.Label({
@@ -171,6 +173,12 @@ export class LogicShapes {
                 this.add(this.logicName);
 
                 this.add(new logic.PortShape({}, element, this, linkService));
+            },
+            releaseModelSubscriptions: function () {
+                for (const sub of this.modelSubscriptions ?? []) {
+                    sub.unsubscribe();
+                }
+                this.modelSubscriptions = [];
             },
             getMinWidth() {
                 if (this.classLabel) {
@@ -324,7 +332,7 @@ export class LogicShapes {
 
                     }
 
-                    portInstance.notifyChangeEvent.subscribe(async (v) => {
+                    this.realParent.modelSubscriptions.push(portInstance.notifyChangeEvent.subscribe(async (v) => {
                         if (v.propertyName === "Inverted") {
                             label.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
 
@@ -340,7 +348,7 @@ export class LogicShapes {
 
                             dataLabel.setText(value);
                         }
-                    });
+                    }));
 
                     port.setMaxFanOut(portInstance.FromMaxLinks);
                     port.setUserData(portInstance);
@@ -380,6 +388,8 @@ export class LogicShapes {
             init: function (attr, element: NodeInstance2RulePage, linkService: LinkService) {
                 this.tooltip = null;
                 this.element = element;
+                // subscriptions on the long-lived models, released by releaseModelSubscriptions
+                this.modelSubscriptions = [];
 
                 if (element.Y < 0) {
                     element.Y *= -1;
@@ -451,14 +461,14 @@ export class LogicShapes {
                 });
 
                 if (element.NodeInstance) {
-                    element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                    this.modelSubscriptions.push(element.NodeInstance.notifyChangeEvent.subscribe((v) => {
                         if (v.propertyName === "Name") {
                             this.label.setText((<any>v.object).Name);
                         }
-                    });
+                    }));
                 }
 
-                element.notifyChangeEvent.subscribe(async (v) => {
+                this.modelSubscriptions.push(element.notifyChangeEvent.subscribe(async (v) => {
                     if (v.propertyName === "Inverted") {
                         this.dataTypeLabel.setFontColor((<any>v.object).Inverted ? "red" : "#4a4a4a");
 
@@ -471,7 +481,7 @@ export class LogicShapes {
                             errorHandler.notifyError(error);
                         }
                     }
-                });
+                }));
 
                 if (element.Inputs.length > 0) {
                     const input = this.createPort("input");
@@ -498,14 +508,14 @@ export class LogicShapes {
                     });
 
                     if (element.NodeInstance) {
-                        element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                        this.modelSubscriptions.push(element.NodeInstance.notifyChangeEvent.subscribe((v) => {
                             if (v.propertyName === "WriteValue") {
                                 let value = ValueHandler.handleValue((<any>v.object).WriteValue);
 
                                 dataLabel.setText(value);
                             }
 
-                        });
+                        }));
                     }
                     input.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginLeft: -30 }));
                     dataLabel.toBack();
@@ -552,12 +562,12 @@ export class LogicShapes {
                     });
 
                     if (element.NodeInstance) {
-                        element.NodeInstance.notifyChangeEvent.subscribe((v) => {
+                        this.modelSubscriptions.push(element.NodeInstance.notifyChangeEvent.subscribe((v) => {
                             if (v.propertyName === "ReadValue") {
                                 let value = ValueHandler.handleValue((<any>v.object).ReadValue);
                                 dataLabel.setText(value);
                             }
-                        });
+                        }));
                     }
                     output.add(dataLabel, new LogicShapeValueLocator({ marginBottom: 12, marginRight: 10 }));
                     dataLabel.toBack();
@@ -627,6 +637,13 @@ export class LogicShapes {
                 }
 
                 this.add(this.label);
+            },
+            releaseModelSubscriptions: function () {
+                for (const sub of this.modelSubscriptions ?? []) {
+                    sub.unsubscribe();
+                }
+                this.modelSubscriptions = [];
+                this.hideTooltip();
             },
             getMinWidth() {
                 if (this.label) {

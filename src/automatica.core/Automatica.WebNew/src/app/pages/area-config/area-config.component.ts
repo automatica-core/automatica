@@ -61,10 +61,8 @@ export class AreaConfigComponent extends BaseComponent implements OnInit, OnDest
     this.menuItems.push(this.menuImportEts);
 
 
-    this.translate.onChange().subscribe({
-      next: () => {
-        this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
-      }
+    this.registerObservable(this.translate.onChange(), () => {
+      this.menuImportEts.label = this.translate.translate("COMMON.ETS_IMPORT");
     });
 
   }

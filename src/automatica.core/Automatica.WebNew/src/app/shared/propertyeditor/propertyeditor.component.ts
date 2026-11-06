@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList } from "@angular/core";
 import { ConfigService } from "../../services/config.service";
 import { L10nTranslationService } from "angular-l10n";
 import { DxDataGridComponent, DxPopupComponent, DxValidatorComponent, DxTreeViewComponent } from "devextreme-angular";
@@ -146,7 +146,7 @@ export class LearnNodeInstance {
     standalone: false
 })
 @PropertyTemplateTypeAware
-export class PropertyEditorComponent extends BaseComponent implements OnInit {
+export class PropertyEditorComponent extends BaseComponent implements OnInit, OnDestroy {
   PropertyTemplateType: typeof PropertyTemplateType = PropertyTemplateType;
 
   @ViewChild(DxTreeViewComponent, { static: false }) treeView;
@@ -632,10 +632,21 @@ export class PropertyEditorComponent extends BaseComponent implements OnInit {
   async onLearnModeClosing($event) {
     if (this.item instanceof NodeInstance) {
       await this.dataHub.disableLearnMode(this.item);
+    }
 
+    if (this.learnModeSub) {
       super.unregisterEvent(this.learnModeSub);
       this.learnModeSub = void 0;
     }
+  }
+
+  ngOnDestroy() {
+    if (this.learnModeSub && this.item instanceof NodeInstance) {
+      // closed without the popup closing, don't leave learn mode enabled on the server
+      this.dataHub.disableLearnMode(this.item).catch((error) => console.error(error));
+    }
+    this.learnModeSub = void 0;
+    super.baseOnDestroy();
   }
   async optionChanged(e, data) {
     if (e.name == "value") {

@@ -19,6 +19,7 @@ export enum RunState {
 export class ServerStateService {
 
   public serverState: RunState;
+  private hubEventsSubscribed = false;
 
   constructor(private configService: ConfigService,
     private dataHub: DataHubService,
@@ -59,6 +60,12 @@ export class ServerStateService {
   }
 
   start() {
+    // called on every admin/visualization init, the hub events only need to be subscribed once
+    if (this.hubEventsSubscribed) {
+      return;
+    }
+    this.hubEventsSubscribed = true;
+
     this.dataHub.serverStateChanged.subscribe((data) => {
       this.init(data[0] === RunState.Started)
       this.serverState = data[0];

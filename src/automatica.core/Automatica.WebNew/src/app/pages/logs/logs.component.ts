@@ -25,6 +25,16 @@ interface LogEntry {
   timestamp: Date;
 }
 
+// keep the live log bounded, oldest entries are dropped in place so the grid binding stays the same array
+const MAX_LOG_ENTRIES = 5000;
+
+function pushCapped<T>(list: T[], entry: T) {
+  list.push(entry);
+  if (list.length > MAX_LOG_ENTRIES) {
+    list.splice(0, list.length - MAX_LOG_ENTRIES);
+  }
+}
+
 interface LogFile {
   name: string;
   path?: string;
@@ -155,8 +165,8 @@ export class LogsComponent extends BaseComponent implements OnInit, OnDestroy {
         if (this.stop) {
           return;
         }
-        this.logFacilities.get(facility).logs.push({ facility: facility, log: log, timestamp: new Date() });
-        this.logFacilities.get(this.allFacilityName).logs.push({ facility: this.allFacilityName, log: log, timestamp: new Date() });
+        pushCapped(this.logFacilities.get(facility).logs, { facility: facility, log: log, timestamp: new Date() });
+        pushCapped(this.logFacilities.get(this.allFacilityName).logs, { facility: this.allFacilityName, log: log, timestamp: new Date() });
       });
 
     } catch (error) {

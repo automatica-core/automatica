@@ -114,6 +114,7 @@ export class ConfigComponent extends BaseComponent implements OnInit, OnDestroy 
   }
 
   async ngOnDestroy() {
+    this.baseOnDestroy();
     await this.dataHub.unSubscribeForAll();
   }
 

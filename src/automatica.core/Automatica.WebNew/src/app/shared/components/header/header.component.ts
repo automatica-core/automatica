@@ -17,6 +17,7 @@ import { ThemeService } from "src/app/services/theme.service";
 import { TranslationConfigService } from "src/app/services/translation-config.service";
 import { App } from "@capacitor/app";
 import { DeviceService } from "src/app/services/device/device.service";
+import { Subscription } from "rxjs";
 
 export enum Language {
     German = 0,
@@ -57,6 +58,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     isAdminAvailable = false;
 
     private projectName: string;
+    private destroyed = false;
+    private themeChangedSub: Subscription;
 
     public themes = [
         {
@@ -122,6 +125,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         var hasAdminRole = user?.InverseThis2Roles.filter(a => a.This2RoleNavigation.Key == "administrator").length > 0;
         this.isAdminAvailable = hasAdminRole;
 
+        if (this.destroyed) {
+            // destroyed while awaiting above, don't start the ticker
+            return;
+        }
+
         this.ticker = setInterval(() => {
             const date = new Date();
             this.time = date.toLocaleTimeString();
@@ -131,7 +139,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         this.currentTheme = this.themeService.getCurrentTheme();
 
-        this.themeService.themeChanged.subscribe((a) => {
+        this.themeChangedSub = this.themeService.themeChanged.subscribe((a) => {
             this.currentTheme = a;
         });
 
@@ -152,7 +160,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.destroyed = true;
         clearInterval(this.ticker);
+        this.themeChangedSub?.unsubscribe();
     }
 
     toggleMenu = () => {

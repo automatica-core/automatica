@@ -20,8 +20,22 @@ export class DataHubService extends BaseHub {
     @SignalRMethod
     public notifyLearnMode: EventEmitter<any> = new EventEmitter<any>();
 
+    // reference count per node id, the server group is only joined/left on the first/last reference
+    private nodeSubscriptions = new Map<string, number>();
+
     constructor(private dataService: DataService) {
         super("dataHub");
+    }
+
+    protected async onConnected(): Promise<void> {
+        // a new connection has no server side groups, re-join all currently referenced nodes
+        for (const nodeId of Array.from(this.nodeSubscriptions.keys())) {
+            try {
+                await super.callHubProxyWithParam("subscribe", nodeId);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     public getCurrentValue(id: string): NodeInstanceValue {
@@ -37,14 +51,33 @@ export class DataHubService extends BaseHub {
     }
 
     public setValue(nodeInstance: string, value: any): Promise<any> {
-        return this.callHubProxyWithParams("setValue", nodeInstance, value);
+        // never cache writes, replaying them after a reconnect would re-actuate devices
+        return this.sendIfConnected("setValue", nodeInstance, value);
     }
 
-    public subscribe(nodeInstance: string) {
-        return super.callHubProxyWithParam("subscribe", nodeInstance);
+    public async subscribe(nodeInstance: string) {
+        const count = this.nodeSubscriptions.get(nodeInstance) ?? 0;
+        this.nodeSubscriptions.set(nodeInstance, count + 1);
+
+        // when offline, onConnected subscribes all referenced nodes
+        if (count === 0 && this.isOnline) {
+            return await super.callHubProxyWithParam("subscribe", nodeInstance);
+        }
     }
-    public unsubscribe(nodeInstance: string) {
-        return super.callHubProxyWithParam("unsubscribe", nodeInstance);
+    public async unsubscribe(nodeInstance: string) {
+        const count = this.nodeSubscriptions.get(nodeInstance);
+        if (!count) {
+            return;
+        }
+        if (count > 1) {
+            this.nodeSubscriptions.set(nodeInstance, count - 1);
+            return;
+        }
+        this.nodeSubscriptions.delete(nodeInstance);
+
+        if (this.isOnline) {
+            return await super.callHubProxyWithParam("unsubscribe", nodeInstance);
+        }
     }
 
     public enableLearnMode(nodeInstance: NodeInstance) {

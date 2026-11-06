@@ -56,6 +56,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     routerSub: Subscription;
 
     themeChangedSub: Subscription;
+    breakpointSub: Subscription;
 
     public get isMobile() {
         return this.deviceService.isMobile();
@@ -84,7 +85,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.breakpointObserver
+        this.breakpointSub = this.breakpointObserver
             .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large])
             .subscribe(() => this.updateDrawer());
 
@@ -94,6 +95,7 @@ export class SideNavInnerToolbarComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.routerSub.unsubscribe();
         this.themeChangedSub.unsubscribe();
+        this.breakpointSub?.unsubscribe();
     }
 
 

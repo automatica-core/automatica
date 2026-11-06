@@ -8,6 +8,9 @@ import { TelegramMonitorService } from "src/app/services/telegram-monitor.servic
 import { AppService } from "src/app/services/app.service";
 import { BaseComponent } from "src/app/base/base-component";
 
+// keep the live telegram list bounded, oldest entries are dropped in place so the grid binding stays the same array
+const MAX_TELEGRAM_MESSAGES = 5000;
+
 @Component({
     selector: "app-telegram-monitor",
     templateUrl: "./telegram-monitor.component.html",
@@ -57,6 +60,9 @@ export class TelegramMonitorComponent extends BaseComponent implements OnInit, O
 
       if (busMon) {
         busMon.Messages.push(telegramMessage);
+        if (busMon.Messages.length > MAX_TELEGRAM_MESSAGES) {
+          busMon.Messages.splice(0, busMon.Messages.length - MAX_TELEGRAM_MESSAGES);
+        }
       }
     });
   }

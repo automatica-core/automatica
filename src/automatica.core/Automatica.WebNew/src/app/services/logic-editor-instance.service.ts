@@ -100,7 +100,8 @@ export class LogicEditorInstanceService {
                 nodeInstance.WriteValue = value.value;
             }
 
-            return curValue != value;
+            // compare with the raw value, value is the {value, timestamp, valueSource} envelope
+            return curValue != value.value;
         }
         return false;
     }

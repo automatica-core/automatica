@@ -168,13 +168,25 @@ export abstract class BaseMobileComponent extends BaseComponent {
         return this.parent.nativeElement.offsetWidth;
     }
 
+    /** resolves once baseOnInit's propertyChanged registration is done */
+    protected itemRegistration: Promise<void> = Promise.resolve();
+
     public baseOnInit() {
 
         if (this.item) {
-            this.propertyChanged();
+            this.itemRegistration = this.propertyChanged();
             const value = this.dataHub.getCurrentValue(this.item.ObjId);;
             if (value)
                 this.value = value.value;
+        }
+    }
+
+    protected baseOnDestroy() {
+        super.baseOnDestroy();
+
+        // release the server side node subscriptions held by this component
+        for (const nodeId of Array.from(this.subscribedNodeInstances.keys())) {
+            this.unregisterForNodeValues(nodeId).catch((error) => console.error(error));
         }
     }
 
@@ -222,25 +234,29 @@ export abstract class BaseMobileComponent extends BaseComponent {
     }
 
     private async unregisterForNodeValues(nodeId: string) {
-        if (nodeId) {
-            await this.dataHub.unsubscribe(nodeId);
+        if (nodeId && this.subscribedNodeInstances.has(nodeId)) {
+            this.subscribedNodeInstances.delete(nodeId);
 
-            if (this.subscribedNodeInstances.has(nodeId)) {
-                this.subscribedNodeInstances.delete(nodeId);
-            }
+            await this.dataHub.unsubscribe(nodeId);
         }
 
     }
 
     protected async registerForNodeValues(nodeId: string) {
-        this.unregisterForNodeValues(nodeId);
-
         if (nodeId) {
             const node = await this.configService.getSingleNodeInstance(nodeId);
 
+            if (this.destroyed) {
+                return node;
+            }
+
+            // the data hub reference counts per node, so hold at most one reference per component
+            const alreadySubscribed = this.subscribedNodeInstances.has(nodeId);
             this.subscribedNodeInstances.set(nodeId, node);
 
-            await this.dataHub.subscribe(nodeId);
+            if (!alreadySubscribed) {
+                await this.dataHub.subscribe(nodeId);
+            }
 
             return node;
         }

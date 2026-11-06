@@ -93,7 +93,7 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
 
 
   ngOnDestroy(): void {
-
+    this.baseOnDestroy();
   }
   ngOnInit(): void {
     this.baseOnInit();
@@ -137,7 +137,8 @@ export class MediaPlayerComponent extends BaseMobileRuleComponent implements OnI
     } else if (interfaceId == this.volumeState.ObjId) {
       this.volume = toNumber(value);
     } else if (interfaceId == this.radioStationState.ObjId) {
-      this.radioStation = value;
+      // value comes from the hub, don't write it back
+      this._radioStation = value;
     } else if (this.titleState && interfaceId == this.titleState.ObjId) {
       if (!value?.includes("tunein.com")) {
         this.title = value;

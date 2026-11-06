@@ -70,6 +70,7 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   private linkService: LinkService;
 
   private themeChangedSubDraw2d: Subscription;
+  private destroying = false;
 
   public height: number;
   public infoPopupVisible: boolean = false;
@@ -156,6 +157,18 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
   ngOnDestroy(): void {
     this.themeChangedSubDraw2d?.unsubscribe();
     super.baseOnDestroy();
+
+    // destroying the canvas removes every figure and connection, which must neither run the
+    // "removed" (delete item) flow nor remove the links (LinkService ignores changes while isInit)
+    this.destroying = true;
+    if (this.linkService) {
+      this.linkService.isInit = true;
+    }
+    if (this.workplace) {
+      this.workplace.getFigures().each((i, figure) => figure.releaseModelSubscriptions?.());
+      // unbinds the $(document) keydown/keyup handlers and removes the paper
+      this.workplace.destroy();
+    }
   }
 
   ngAfterViewInit() {
@@ -269,10 +282,15 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
     d.installEditPolicy(new this.logic.LogicSelectionPolicy());
 
     d.on("removed", async () => {
+      if (this.destroying) {
+        return;
+      }
       let item = { item: element, page: page, removed: false };
       this.removeSelectedItem.emit(item);
       if (!item.removed) {
         this.workplace.add(d);
+      } else {
+        d.releaseModelSubscriptions();
       }
     });
 
@@ -293,11 +311,16 @@ export class RuleEditorComponent extends BaseComponent implements OnInit, AfterV
 
 
     d.on("removed", async () => {
+      if (this.destroying) {
+        return;
+      }
       let item = { item: element, page: page, removed: false };
       this.removeSelectedItem.emit(item);
 
       if (!item.removed) {
         this.workplace.add(d);
+      } else {
+        d.releaseModelSubscriptions();
       }
     });
 
