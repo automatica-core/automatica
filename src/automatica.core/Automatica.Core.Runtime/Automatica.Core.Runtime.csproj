@@ -17,7 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="5.0.0-preview.5.20278.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.12" />
     <PackageReference Include="MQTTnet" Version="5.1.0.1559" />
     <PackageReference Include="MQTTnet.AspNetCore" Version="5.1.0.1559" />
     <PackageReference Include="Telegraf.Channel.Http" Version="1.0.3" />

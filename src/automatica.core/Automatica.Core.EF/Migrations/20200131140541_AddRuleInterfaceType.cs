@@ -11,7 +11,7 @@ namespace Automatica.Core.EF.Migrations
                 name: "InterfaceType",
                 table: "RuleInterfaceTemplates",
                 nullable: false,
-                defaultValue: RuleInterfaceType.Unknown);
+                defaultValue: (int)RuleInterfaceType.Unknown);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -12,6 +12,9 @@ using Automatica.Core.Model.Models.User;
 using Automatica.Core.EF.Models.Trendings;
 using Microsoft.Extensions.Logging;
 using Automatica.Core.EF.Configuration;
+using MySql.EntityFrameworkCore.Extensions;
+using Automatica.Core.EF.Migrations.Internal;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Automatica.Core.EF.Models
 {
@@ -143,13 +146,14 @@ namespace Automatica.Core.EF.Models
         {
             logger.LogInformation($"Using MariaDB database engine...");
             
-            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
-            optionsBuilder.UseMySql(connectionString, serverVersion, a =>
+            // Oracle's provider: Pomelo has no EF Core 10 release
+            optionsBuilder.UseMySQL(connectionString, a =>
             {
                 a.CommandTimeout(300);
                 a.EnableRetryOnFailure(3);
                 a.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-            }).AddInterceptors(new LogQueryTimeInterceptor(logger));
+            }).AddInterceptors(new LogQueryTimeInterceptor(logger), new MariaDbCompatibilityInterceptor())
+              .ReplaceService<IMigrationsSqlGenerator, MariaDbMigrationsSqlGenerator>();
         }
 
         private void ConfigureSqLiteDatabase(DbContextOptionsBuilder optionsBuilder, ILogger logger, string connectionString)

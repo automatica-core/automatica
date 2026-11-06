@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using MySql.EntityFrameworkCore.Metadata;
 
 namespace Automatica.Core.EF.Migrations
 {
@@ -176,7 +177,7 @@ namespace Automatica.Core.EF.Migrations
                 columns: table => new
                 {
                     ObjId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ValueKey = table.Column<string>(nullable: false),
                     ValueText = table.Column<string>(nullable: true),
                     ValueInt = table.Column<int>(nullable: true),
@@ -242,7 +243,7 @@ namespace Automatica.Core.EF.Migrations
                 columns: table => new
                 {
                     ObjId = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     DriverGuid = table.Column<Guid>(maxLength: 36, nullable: true),
                     RuleGuid = table.Column<Guid>(maxLength: 36, nullable: false),
                     Version = table.Column<string>(maxLength: 1024, nullable: false),
@@ -1081,7 +1082,8 @@ namespace Automatica.Core.EF.Migrations
                 {
                     table.PrimaryKey("PK_PropertyTemplateConstraintData", x => x.ObjId);
                     table.ForeignKey(
-                        name: "This2PropertyTemplateConstraintNavigation_PropertyTemplate_Navigation",
+                        // MySQL/MariaDB allow 64 characters; Pomelo cut the name to this, existing databases carry it
+                        name: "This2PropertyTemplateConstraintNavigation_PropertyTemplate_Navig",
                         column: x => x.This2PropertyTemplateConstraint,
                         principalTable: "PropertyTemplateConstraints",
                         principalColumn: "ObjId",
